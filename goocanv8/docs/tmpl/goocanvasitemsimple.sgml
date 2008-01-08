@@ -1,0 +1,240 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasItemSimple
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasItemSimple ##### -->
+<para>
+
+</para>
+
+@canvas: 
+@parent: 
+@model: 
+@simple_data: 
+@bounds: 
+@need_update: 
+@need_entire_subtree_update: 
+
+<!-- ##### ARG GooCanvasItemSimple:antialias ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:clip-fill-rule ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:clip-path ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:fill-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:fill-color-rgba ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:fill-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:fill-pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:fill-rule ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:font-desc ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:hint-metrics ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:line-cap ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:line-dash ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:line-join ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:line-join-miter-limit ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:line-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:operator ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:stroke-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:stroke-color-rgba ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:stroke-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasItemSimple:stroke-pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GooCanvasItemSimpleData ##### -->
+<para>
+
+</para>
+
+@style: 
+@transform: 
+@clip_path_commands: 
+@visibility_threshold: 
+@visibility: 
+@pointer_events: 
+@can_focus: 
+@own_style: 
+@clip_fill_rule: 
+
+<!-- ##### STRUCT GooCanvasItemSimpleClass ##### -->
+<para>
+
+</para>
+
+@simple_create_path: 
+@simple_update: 
+@simple_paint: 
+@simple_is_item_at: 
+
+<!-- ##### FUNCTION goo_canvas_item_simple_check_style ##### -->
+<para>
+
+</para>
+
+@item: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_get_path_bounds ##### -->
+<para>
+
+</para>
+
+@item: 
+@cr: 
+@bounds: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_user_bounds_to_device ##### -->
+<para>
+
+</para>
+
+@item: 
+@cr: 
+@bounds: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_user_bounds_to_parent ##### -->
+<para>
+
+</para>
+
+@item: 
+@cr: 
+@bounds: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_check_in_path ##### -->
+<para>
+
+</para>
+
+@item: 
+@x: 
+@y: 
+@cr: 
+@pointer_events: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_paint_path ##### -->
+<para>
+
+</para>
+
+@item: 
+@cr: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_changed ##### -->
+<para>
+
+</para>
+
+@item: 
+@recompute_bounds: 
+
+
+<!-- ##### FUNCTION goo_canvas_item_simple_set_model ##### -->
+<para>
+
+</para>
+
+@item: 
+@model: 
+
+

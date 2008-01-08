@@ -1,0 +1,41 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasPathModel
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasPathModel ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GooCanvasPathModel:data ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION goo_canvas_path_model_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@path_data: 
+@Varargs: 
+@Returns: 
+
+

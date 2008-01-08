@@ -1,0 +1,648 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasStyle</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch02.html" title="Core Objects">
+<link rel="prev" href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple">
+<link rel="next" href="ch03.html" title="Standard Canvas Items">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasItemModelSimple.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="ch03.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3036022" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3090389" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3090366" class="shortcut">Object Hierarchy</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasStyle"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3036022"></a><span class="refentrytitle">GooCanvasStyle</span>
+</h2>
+<p>GooCanvasStyle &#8212; support for cascading style properties for canvas items.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasStyle.html#GooCanvasStyle-struct">GooCanvasStyle</a>;
+                    <a href="GooCanvasStyle.html#GooCanvasStyleProperty">GooCanvasStyleProperty</a>;
+
+<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     <a href="GooCanvasStyle.html#goo-canvas-style-new">goo_canvas_style_new</a>                (void);
+<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     <a href="GooCanvasStyle.html#goo-canvas-style-copy">goo_canvas_style_copy</a>               (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style);
+
+<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     <a href="GooCanvasStyle.html#goo-canvas-style-get-parent">goo_canvas_style_get_parent</a>         (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style);
+void                <a href="GooCanvasStyle.html#goo-canvas-style-set-parent">goo_canvas_style_set_parent</a>         (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *parent);
+
+<a
+href="../gobject/gobject-Generic-values.html#GValue"
+>GValue</a>*             <a href="GooCanvasStyle.html#goo-canvas-style-get-property">goo_canvas_style_get_property</a>       (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../glib/glib-Quarks.html#GQuark"
+>GQuark</a> property_id);
+void                <a href="GooCanvasStyle.html#goo-canvas-style-set-property">goo_canvas_style_set_property</a>       (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../glib/glib-Quarks.html#GQuark"
+>GQuark</a> property_id,
+                                                         const <a
+href="../gobject/gobject-Generic-values.html#GValue"
+>GValue</a> *value);
+
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a href="GooCanvasStyle.html#goo-canvas-style-set-fill-options">goo_canvas_style_set_fill_options</a>   (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../cairo/cairo-cairo-t.html#cairo-t"
+>cairo_t</a> *cr);
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a href="GooCanvasStyle.html#goo-canvas-style-set-stroke-options">goo_canvas_style_set_stroke_options</a> (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../cairo/cairo-cairo-t.html#cairo-t"
+>cairo_t</a> *cr);
+
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-antialias-id">goo_canvas_style_antialias_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-fill-pattern-id">goo_canvas_style_fill_pattern_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-fill-rule-id">goo_canvas_style_fill_rule_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-font-desc-id">goo_canvas_style_font_desc_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-hint-metrics-id">goo_canvas_style_hint_metrics_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-line-cap-id">goo_canvas_style_line_cap_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-line-dash-id">goo_canvas_style_line_dash_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-line-join-id">goo_canvas_style_line_join_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-line-join-miter-limit-id">goo_canvas_style_line_join_miter_limit_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-line-width-id">goo_canvas_style_line_width_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-operator-id">goo_canvas_style_operator_id</a>;
+extern              GQuark <a href="GooCanvasStyle.html#goo-canvas-style-stroke-pattern-id">goo_canvas_style_stroke_pattern_id</a>;
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3090366"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----GooCanvasStyle
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3090389"></a><h2>Description</h2>
+<p>
+<a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a> provides support for cascading style properties for canvas
+items. It is intended to be used when implementing new canvas items.
+</p>
+<p>
+Style properties are identified by a unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a>, and contain
+arbitrary data stored in a <a
+href="../gobject/gobject-Generic-values.html#GValue"
+><span class="type">GValue</span></a>.
+</p>
+<p>
+<a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a> also provides a few convenience functions such as
+<a href="GooCanvasStyle.html#goo-canvas-style-set-stroke-options"><code class="function">goo_canvas_style_set_stroke_options()</code></a> and
+<a href="GooCanvasStyle.html#goo-canvas-style-set-fill-options"><code class="function">goo_canvas_style_set_fill_options()</code></a> which efficiently apply an item's
+standard style properties to the given cairo_t.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3090469"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3090480"></a><h3>
+<a name="GooCanvasStyle-struct"></a>GooCanvasStyle</h3>
+<a class="indexterm" name="id3090491"></a><pre class="programlisting">typedef struct {
+  GooCanvasStyle *parent;
+  GArray *properties;
+} GooCanvasStyle;
+</pre>
+<p>
+<a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a> holds the style properties of a canvas item, as well as a
+pointer to the parent style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>&#160;*<em class="structfield"><code>parent</code></em>;</span></td>
+<td> the parent style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a
+href="../glib/glib-Arrays.html#GArray"
+>GArray</a>&#160;*<em class="structfield"><code>properties</code></em>;</span></td>
+<td> an array of <a href="GooCanvasStyle.html#GooCanvasStyleProperty"><span class="type">GooCanvasStyleProperty</span></a> property settings.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3092281"></a><h3>
+<a name="GooCanvasStyleProperty"></a>GooCanvasStyleProperty</h3>
+<a class="indexterm" name="id3092292"></a><pre class="programlisting">typedef struct {
+  GQuark id;
+  GValue value;
+} GooCanvasStyleProperty;
+</pre>
+<p>
+<a href="GooCanvasStyle.html#GooCanvasStyleProperty"><span class="type">GooCanvasStyleProperty</span></a> represents a property setting.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a
+href="../glib/glib-Quarks.html#GQuark"
+>GQuark</a>&#160;<em class="structfield"><code>id</code></em>;</span></td>
+<td> the unique property identifier.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a
+href="../gobject/gobject-Generic-values.html#GValue"
+>GValue</a>&#160;<em class="structfield"><code>value</code></em>;</span></td>
+<td> the value of the property.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3092366"></a><h3>
+<a name="goo-canvas-style-new"></a>goo_canvas_style_new ()</h3>
+<a class="indexterm" name="id3092377"></a><pre class="programlisting"><a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     goo_canvas_style_new                (void);</pre>
+<p>
+Creates a new <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3092432"></a><h3>
+<a name="goo-canvas-style-copy"></a>goo_canvas_style_copy ()</h3>
+<a class="indexterm" name="id3092443"></a><pre class="programlisting"><a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     goo_canvas_style_copy               (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style);</pre>
+<p>
+Copies the given <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a>, by copying all of its properties.
+Though the parent of the new style is left unset.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a copy of the given <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3092526"></a><h3>
+<a name="goo-canvas-style-get-parent"></a>goo_canvas_style_get_parent ()</h3>
+<a class="indexterm" name="id3092538"></a><pre class="programlisting"><a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     goo_canvas_style_get_parent         (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style);</pre>
+<p>
+Gets the parent of the style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the parent of the given style, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3092608"></a><h3>
+<a name="goo-canvas-style-set-parent"></a>goo_canvas_style_set_parent ()</h3>
+<a class="indexterm" name="id3092619"></a><pre class="programlisting">void                goo_canvas_style_set_parent         (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *parent);</pre>
+<p>
+Sets the parent of the style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the new parent.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3064795"></a><h3>
+<a name="goo-canvas-style-get-property"></a>goo_canvas_style_get_property ()</h3>
+<a class="indexterm" name="id3064809"></a><pre class="programlisting"><a
+href="../gobject/gobject-Generic-values.html#GValue"
+>GValue</a>*             goo_canvas_style_get_property       (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../glib/glib-Quarks.html#GQuark"
+>GQuark</a> property_id);</pre>
+<p>
+Gets the value of a property.
+</p>
+<p>
+This searches though all the <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a>'s own list of property settings
+and also all ancestor <a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a> objects.
+</p>
+<p>
+Note that it returns a pointer to the internal <a
+href="../gobject/gobject-Generic-values.html#GValue"
+><span class="type">GValue</span></a> setting, which should
+not be changed.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>property_id</code></em>&#160;:</span></td>
+<td> the property identifier.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the property value, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a> if it isn't set.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3064932"></a><h3>
+<a name="goo-canvas-style-set-property"></a>goo_canvas_style_set_property ()</h3>
+<a class="indexterm" name="id3064945"></a><pre class="programlisting">void                goo_canvas_style_set_property       (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../glib/glib-Quarks.html#GQuark"
+>GQuark</a> property_id,
+                                                         const <a
+href="../gobject/gobject-Generic-values.html#GValue"
+>GValue</a> *value);</pre>
+<p>
+Sets a property in the style, replacing any current setting.
+</p>
+<p>
+Note that this will override the property setting in ancestor
+<a href="GooCanvasStyle.html" title="GooCanvasStyle"><span class="type">GooCanvasStyle</span></a> objects.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>property_id</code></em>&#160;:</span></td>
+<td> the property identifier.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>value</code></em>&#160;:</span></td>
+<td> the value of the property.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065051"></a><h3>
+<a name="goo-canvas-style-set-fill-options"></a>goo_canvas_style_set_fill_options ()</h3>
+<a class="indexterm" name="id3065065"></a><pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            goo_canvas_style_set_fill_options   (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../cairo/cairo-cairo-t.html#cairo-t"
+>cairo_t</a> *cr);</pre>
+<p>
+Sets the standard cairo fill options using the given style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cr</code></em>&#160;:</span></td>
+<td> a cairo context.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> <a
+href="../glib/glib-Standard-Macros.html#TRUE:CAPS"
+><code class="literal">TRUE</code></a> if a paint source is set, or <a
+href="../glib/glib-Standard-Macros.html#FALSE:CAPS"
+><code class="literal">FALSE</code></a> if the fill should
+be skipped.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065167"></a><h3>
+<a name="goo-canvas-style-set-stroke-options"></a>goo_canvas_style_set_stroke_options ()</h3>
+<a class="indexterm" name="id3065181"></a><pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            goo_canvas_style_set_stroke_options (<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style,
+                                                         <a
+href="../cairo/cairo-cairo-t.html#cairo-t"
+>cairo_t</a> *cr);</pre>
+<p>
+Sets the standard cairo stroke options using the given style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cr</code></em>&#160;:</span></td>
+<td> a cairo context.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> <a
+href="../glib/glib-Standard-Macros.html#TRUE:CAPS"
+><code class="literal">TRUE</code></a> if a paint source is set, or <a
+href="../glib/glib-Standard-Macros.html#FALSE:CAPS"
+><code class="literal">FALSE</code></a> if the stroke should
+be skipped.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065283"></a><h3>
+<a name="goo-canvas-style-antialias-id"></a>goo_canvas_style_antialias_id</h3>
+<a class="indexterm" name="id3065296"></a><pre class="programlisting">extern GQuark goo_canvas_style_antialias_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard antialias property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065325"></a><h3>
+<a name="goo-canvas-style-fill-pattern-id"></a>goo_canvas_style_fill_pattern_id</h3>
+<a class="indexterm" name="id3065338"></a><pre class="programlisting">extern GQuark goo_canvas_style_fill_pattern_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard fill pattern property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065366"></a><h3>
+<a name="goo-canvas-style-fill-rule-id"></a>goo_canvas_style_fill_rule_id</h3>
+<a class="indexterm" name="id3065379"></a><pre class="programlisting">extern GQuark goo_canvas_style_fill_rule_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard fill rule property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065408"></a><h3>
+<a name="goo-canvas-style-font-desc-id"></a>goo_canvas_style_font_desc_id</h3>
+<a class="indexterm" name="id3065421"></a><pre class="programlisting">extern GQuark goo_canvas_style_font_desc_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard font description property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3065449"></a><h3>
+<a name="goo-canvas-style-hint-metrics-id"></a>goo_canvas_style_hint_metrics_id</h3>
+<a class="indexterm" name="id3065462"></a><pre class="programlisting">extern GQuark goo_canvas_style_hint_metrics_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard hint metrics property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107097"></a><h3>
+<a name="goo-canvas-style-line-cap-id"></a>goo_canvas_style_line_cap_id</h3>
+<a class="indexterm" name="id3107109"></a><pre class="programlisting">extern GQuark goo_canvas_style_line_cap_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard line cap property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107135"></a><h3>
+<a name="goo-canvas-style-line-dash-id"></a>goo_canvas_style_line_dash_id</h3>
+<a class="indexterm" name="id3107147"></a><pre class="programlisting">extern GQuark goo_canvas_style_line_dash_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard line dash property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107173"></a><h3>
+<a name="goo-canvas-style-line-join-id"></a>goo_canvas_style_line_join_id</h3>
+<a class="indexterm" name="id3107185"></a><pre class="programlisting">extern GQuark goo_canvas_style_line_join_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard line join property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107211"></a><h3>
+<a name="goo-canvas-style-line-join-miter-limit-id"></a>goo_canvas_style_line_join_miter_limit_id</h3>
+<a class="indexterm" name="id3107224"></a><pre class="programlisting">extern GQuark goo_canvas_style_line_join_miter_limit_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard miter limit property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107250"></a><h3>
+<a name="goo-canvas-style-line-width-id"></a>goo_canvas_style_line_width_id</h3>
+<a class="indexterm" name="id3107263"></a><pre class="programlisting">extern GQuark goo_canvas_style_line_width_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard line width property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107291"></a><h3>
+<a name="goo-canvas-style-operator-id"></a>goo_canvas_style_operator_id</h3>
+<a class="indexterm" name="id3107305"></a><pre class="programlisting">extern GQuark goo_canvas_style_operator_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard operator property.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107333"></a><h3>
+<a name="goo-canvas-style-stroke-pattern-id"></a>goo_canvas_style_stroke_pattern_id</h3>
+<a class="indexterm" name="id3107346"></a><pre class="programlisting">extern GQuark goo_canvas_style_stroke_pattern_id;
+</pre>
+<p>
+Unique <a
+href="../glib/glib-Quarks.html#GQuark"
+><span class="type">GQuark</span></a> identifier used for the standard stroke pattern property.</p>
+<p>
+
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

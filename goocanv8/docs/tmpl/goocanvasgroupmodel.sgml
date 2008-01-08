@@ -1,0 +1,35 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasGroupModel
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasGroupModel ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION goo_canvas_group_model_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@Varargs: 
+@Returns: 
+
+

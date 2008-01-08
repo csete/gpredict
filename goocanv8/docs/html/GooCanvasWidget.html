@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasWidget</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch03.html" title="Standard Canvas Items">
+<link rel="prev" href="GooCanvasText.html" title="GooCanvasText">
+<link rel="next" href="GooCanvasTable.html" title="GooCanvasTable">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasText.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasTable.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3060981" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3110130" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3110725" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3110755" class="shortcut">Implemented Interfaces</a>
+                  &#160;|&#160;
+                  <a href="#id3110776" class="shortcut">Properties</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasWidget"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3060981"></a><span class="refentrytitle">GooCanvasWidget</span>
+</h2>
+<p>GooCanvasWidget &#8212; an embedded widget item.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasWidget.html#GooCanvasWidget-struct">GooCanvasWidget</a>;
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      <a href="GooCanvasWidget.html#goo-canvas-widget-new">goo_canvas_widget_new</a>               (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../gtk/GtkWidget.html"
+>GtkWidget</a> *widget,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> width,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> height,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110725"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple">GooCanvasItemSimple</a>
+         +----GooCanvasWidget
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110755"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasWidget implements
+ <a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110776"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasWidget.html#GooCanvasWidget--anchor">anchor</a>"                   <a
+href="../gtk/gtk-Standard-Enumerations.html#GtkAnchorType"
+>GtkAnchorType</a>         : Read / Write
+  "<a href="GooCanvasWidget.html#GooCanvasWidget--height">height</a>"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasWidget.html#GooCanvasWidget--widget">widget</a>"                   <a
+href="../gtk/GtkWidget.html"
+>GtkWidget</a>             : Read / Write
+  "<a href="GooCanvasWidget.html#GooCanvasWidget--width">width</a>"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasWidget.html#GooCanvasWidget--x">x</a>"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasWidget.html#GooCanvasWidget--y">y</a>"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110130"></a><h2>Description</h2>
+<p>
+GooCanvasWidget provides support for placing any GtkWidget in the canvas.
+</p>
+<p>
+Note that there are a number of limitations in the use of <span class="type">GooCanvasWidget:</span>
+</p>
+<p>
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+It doesn't support any transformation besides simple translation.
+This means you can't scale a canvas with a <a href="GooCanvasWidget.html" title="GooCanvasWidget"><span class="type">GooCanvasWidget</span></a> in it.
+</p></li>
+<li><p>
+It doesn't support layering, so you can't place other items beneath
+or above the <a href="GooCanvasWidget.html" title="GooCanvasWidget"><span class="type">GooCanvasWidget</span></a>.
+</p></li>
+<li><p>
+It doesn't support rendering of widgets to a given cairo_t, which
+means you can't output the widget to a pdf or postscript file.
+</p></li>
+<li><p>
+It doesn't have a model/view variant like the other standard items,
+so it can only be used in a simple canvas without a model.
+</p></li>
+</ul></div>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110202"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3110213"></a><h3>
+<a name="GooCanvasWidget-struct"></a>GooCanvasWidget</h3>
+<a class="indexterm" name="id3110225"></a><pre class="programlisting">typedef struct _GooCanvasWidget GooCanvasWidget;</pre>
+<p>
+The <a href="GooCanvasWidget.html#GooCanvasWidget-struct"><span class="type">GooCanvasWidget</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3110252"></a><h3>
+<a name="goo-canvas-widget-new"></a>goo_canvas_widget_new ()</h3>
+<a class="indexterm" name="id3111045"></a><pre class="programlisting"><a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      goo_canvas_widget_new               (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../gtk/GtkWidget.html"
+>GtkWidget</a> *widget,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> width,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> height,
+                                                         ...);</pre>
+<p>
+Creates a new widget item.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent item, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>widget</code></em>&#160;:</span></td>
+<td> the widget.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x</code></em>&#160;:</span></td>
+<td> the x coordinate of the item.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y</code></em>&#160;:</span></td>
+<td> the y coordinate of the item.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>width</code></em>&#160;:</span></td>
+<td> the width of the item, or -1 to use the widget's requested width.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>height</code></em>&#160;:</span></td>
+<td> the height of the item, or -1 to use the widget's requested height.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new widget item.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create an entry widget centered at (100.0,
+100.0):
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GtkWidget *entry = gtk_entry_new ();
+ GooCanvasItem *witem = goo_canvas_widget_new (mygroup, entry,
+                                               100, 100, -1, -1,
+                                               "anchor", GTK_ANCHOR_CENTER,
+                                               NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3113568"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3113579"></a><h3>
+<a name="GooCanvasWidget--anchor"></a>The "<code class="literal">anchor</code>" property</h3>
+<a class="indexterm" name="id3113593"></a><pre class="programlisting">  "anchor"                   <a
+href="../gtk/gtk-Standard-Enumerations.html#GtkAnchorType"
+>GtkAnchorType</a>         : Read / Write</pre>
+<p>How to position the widget relative to the item's x and y coordinate settings.</p>
+<p>Default value: GTK_ANCHOR_NORTH_WEST</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3113618"></a><h3>
+<a name="GooCanvasWidget--height"></a>The "<code class="literal">height</code>" property</h3>
+<a class="indexterm" name="id3113632"></a><pre class="programlisting">  "height"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The height of the widget, or -1 to use its requested height.</p>
+<p>Default value: -1</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3113658"></a><h3>
+<a name="GooCanvasWidget--widget"></a>The "<code class="literal">widget</code>" property</h3>
+<a class="indexterm" name="id3113672"></a><pre class="programlisting">  "widget"                   <a
+href="../gtk/GtkWidget.html"
+>GtkWidget</a>             : Read / Write</pre>
+<p>The widget to place in the canvas.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3113692"></a><h3>
+<a name="GooCanvasWidget--width"></a>The "<code class="literal">width</code>" property</h3>
+<a class="indexterm" name="id3113706"></a><pre class="programlisting">  "width"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The width of the widget, or -1 to use its requested width.</p>
+<p>Default value: -1</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3113732"></a><h3>
+<a name="GooCanvasWidget--x"></a>The "<code class="literal">x</code>" property</h3>
+<a class="indexterm" name="id3113747"></a><pre class="programlisting">  "x"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The x coordinate of the widget.</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3109206"></a><h3>
+<a name="GooCanvasWidget--y"></a>The "<code class="literal">y</code>" property</h3>
+<a class="indexterm" name="id3109221"></a><pre class="programlisting">  "y"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The y coordinate of the widget.</p>
+<p>Default value: 0</p>
+</div>
+</div>
+</div>
+</body>
+</html>

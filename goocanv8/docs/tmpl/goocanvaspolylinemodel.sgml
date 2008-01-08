@@ -1,0 +1,86 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasPolylineModel
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasPolylineModel ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GooCanvasPolylineModel:arrow-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasPolylineModel:arrow-tip-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasPolylineModel:arrow-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasPolylineModel:close-path ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasPolylineModel:end-arrow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasPolylineModel:points ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasPolylineModel:start-arrow ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION goo_canvas_polyline_model_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@close_path: 
+@num_points: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_polyline_model_new_line ##### -->
+<para>
+
+</para>
+
+@parent: 
+@x1: 
+@y1: 
+@x2: 
+@y2: 
+@Varargs: 
+@Returns: 
+
+

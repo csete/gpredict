@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="goocanvas-simple-canvas">
+  <refmeta>
+    <refentrytitle>The Simple Canvas</refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>GOOCANVAS Library</refmiscinfo>
+  </refmeta>
+
+  <refnamediv>
+    <refname>The Simple Canvas</refname>
+    <refpurpose>how to create a simple canvas.</refpurpose>
+  </refnamediv>
+
+  <refsect1 id="simple-canvas-example">
+    <title>Simple Canvas Example</title>
+    <para>
+    Here's a complete example application that creates a #GooCanvas with a
+    rectangle and a text item in it:
+    </para>
+
+<informalexample><programlisting>
+  &num;include &lt;stdlib.h&gt;
+  &num;include &lt;goocanvas.h&gt;
+  
+  
+  static gboolean on_rect_button_press (GooCanvasItem  *view,
+                                        GooCanvasItem  *target,
+                                        GdkEventButton *event,
+                                        gpointer        data);
+  
+  static gboolean on_delete_event      (GtkWidget      *window,
+                                        GdkEvent       *event,
+                                        gpointer        unused_data);
+  
+  
+  int
+  main (int argc, char *argv[])
+  {
+    GtkWidget *window, *scrolled_win, *canvas;
+    GooCanvasItem *root, *rect_item, *text_item;
+  
+    /&ast; Initialize GTK+. &ast;/
+    gtk_set_locale&nbsp;();
+    gtk_init (&amp;argc, &amp;argv);
+  
+    /&ast; Create the window and widgets. &ast;/
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_default_size (GTK_WINDOW (window), 640, 600);
+    gtk_widget_show (window);
+    g_signal_connect (window, "delete_event", (GtkSignalFunc) on_delete_event,
+                      NULL);
+  
+    scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win),
+                                         GTK_SHADOW_IN);
+    gtk_widget_show (scrolled_win);
+    gtk_container_add (GTK_CONTAINER (window), scrolled_win);
+  
+    canvas = goo_canvas_new&nbsp;();
+    gtk_widget_set_size_request (canvas, 600, 450);
+    goo_canvas_set_bounds (GOO_CANVAS (canvas), 0, 0, 1000, 1000);
+    gtk_widget_show (canvas);
+    gtk_container_add (GTK_CONTAINER (scrolled_win), canvas);
+  
+    root = goo_canvas_get_root_item (GOO_CANVAS (canvas));
+  
+    /&ast; Add a few simple items. &ast;/
+    rect_item = goo_canvas_rect_new (root, 100, 100, 400, 400,
+                                     "line-width", 10.0,
+                                     "radius-x", 20.0,
+                                     "radius-y", 10.0,
+                                     "stroke-color", "yellow",
+                                     "fill-color", "red",
+                                     NULL);
+  
+    text_item = goo_canvas_text_new (root, "Hello World", 300, 300, -1,
+                                     GTK_ANCHOR_CENTER,
+                                     "font", "Sans 24",
+                                     NULL);
+    goo_canvas_item_rotate (text_item, 45, 300, 300);
+  
+    /&ast; Connect a signal handler for the rectangle item. &ast;/
+    g_signal_connect (rect_item, "button_press_event",
+                      (GtkSignalFunc) on_rect_button_press, NULL);
+  
+    /&ast; Pass control to the GTK+ main event loop. &ast;/
+    gtk_main&nbsp;();
+  
+    return 0;
+  }
+  
+  
+  /&ast; This handles button presses in item views. We simply output a message to
+     the console. &ast;/
+  static gboolean
+  on_rect_button_press (GooCanvasItem  *item,
+                        GooCanvasItem  *target,
+                        GdkEventButton *event,
+                        gpointer        data)
+  {
+    g_print ("rect item received button press event\n");
+    return TRUE;
+  }
+  
+  
+  /&ast; This is our handler for the "delete-event" signal of the window, which
+     is emitted when the 'x' close button is clicked. We just exit here. &ast;/
+  static gboolean
+  on_delete_event (GtkWidget *window,
+                   GdkEvent  *event,
+                   gpointer   unused_data)
+  {
+    exit (0);
+  }
+ </programlisting></informalexample>
+
+
+  </refsect1>
+</refentry>

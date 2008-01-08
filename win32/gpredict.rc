@@ -1,0 +1,5 @@
+#include <windows.h>
+
+/* icon for the program itself */
+icon_0 ICON "icons/gpredict-icon.ico"
+

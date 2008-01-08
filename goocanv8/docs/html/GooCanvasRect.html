@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasRect</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch03.html" title="Standard Canvas Items">
+<link rel="prev" href="GooCanvasPolyline.html" title="GooCanvasPolyline">
+<link rel="next" href="GooCanvasText.html" title="GooCanvasText">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasPolyline.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasText.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3071369" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3111245" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3110287" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3110317" class="shortcut">Implemented Interfaces</a>
+                  &#160;|&#160;
+                  <a href="#id3110338" class="shortcut">Properties</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasRect"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3071369"></a><span class="refentrytitle">GooCanvasRect</span>
+</h2>
+<p>GooCanvasRect &#8212; a rectangle item.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasRect.html#GooCanvasRect-struct">GooCanvasRect</a>;
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      <a href="GooCanvasRect.html#goo-canvas-rect-new">goo_canvas_rect_new</a>                 (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> width,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> height,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110287"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple">GooCanvasItemSimple</a>
+         +----GooCanvasRect
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110317"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasRect implements
+ <a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3110338"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasRect.html#GooCanvasRect--height">height</a>"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasRect.html#GooCanvasRect--radius-x">radius-x</a>"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasRect.html#GooCanvasRect--radius-y">radius-y</a>"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasRect.html#GooCanvasRect--width">width</a>"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasRect.html#GooCanvasRect--x">x</a>"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasRect.html#GooCanvasRect--y">y</a>"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3111245"></a><h2>Description</h2>
+<p>
+GooCanvasRect represents a rectangle item.
+</p>
+<p>
+It is a subclass of <a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple"><span class="type">GooCanvasItemSimple</span></a> and so inherits all of the style
+properties such as "stroke-color", "fill-color" and "line-width".
+</p>
+<p>
+It also implements the <a href="goocanvas-goocanvasitem.html#GooCanvasItem"><span class="type">GooCanvasItem</span></a> interface, so you can use the
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem"><span class="type">GooCanvasItem</span></a> functions such as <a href="goocanvas-goocanvasitem.html#goo-canvas-item-raise"><code class="function">goo_canvas_item_raise()</code></a> and
+<a href="goocanvas-goocanvasitem.html#goo-canvas-item-rotate"><code class="function">goo_canvas_item_rotate()</code></a>.
+</p>
+<p>
+To create a <a href="GooCanvasRect.html" title="GooCanvasRect"><span class="type">GooCanvasRect</span></a> use <a href="GooCanvasRect.html#goo-canvas-rect-new"><code class="function">goo_canvas_rect_new()</code></a>.
+</p>
+<p>
+To get or set the properties of an existing <a href="GooCanvasRect.html" title="GooCanvasRect"><span class="type">GooCanvasRect</span></a>, use
+<a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-get"
+><code class="function">g_object_get()</code></a> and <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-set"
+><code class="function">g_object_set()</code></a>.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3111364"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3111375"></a><h3>
+<a name="GooCanvasRect-struct"></a>GooCanvasRect</h3>
+<a class="indexterm" name="id3111387"></a><pre class="programlisting">typedef struct _GooCanvasRect GooCanvasRect;</pre>
+<p>
+The <a href="GooCanvasRect.html#GooCanvasRect-struct"><span class="type">GooCanvasRect</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3111414"></a><h3>
+<a name="goo-canvas-rect-new"></a>goo_canvas_rect_new ()</h3>
+<a class="indexterm" name="id3111426"></a><pre class="programlisting"><a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      goo_canvas_rect_new                 (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> width,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> height,
+                                                         ...);</pre>
+<p>
+Creates a new rectangle item.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent item, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x</code></em>&#160;:</span></td>
+<td> the x coordinate of the left of the rectangle.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y</code></em>&#160;:</span></td>
+<td> the y coordinate of the top of the rectangle.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>width</code></em>&#160;:</span></td>
+<td> the width of the rectangle.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>height</code></em>&#160;:</span></td>
+<td> the height of the rectangle.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new rectangle item.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create a rectangle at (100,100) with a
+width of 200 and a height of 100.
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GooCanvasItem *rect = goo_canvas_rect_new (mygroup, 100.0, 100.0, 200.0, 100.0,
+                                            "stroke-color", "red",
+                                            "line-width", 5.0,
+                                            "fill-color", "blue",
+                                            NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3108218"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3108229"></a><h3>
+<a name="GooCanvasRect--height"></a>The "<code class="literal">height</code>" property</h3>
+<a class="indexterm" name="id3108243"></a><pre class="programlisting">  "height"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The height of the rectangle.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3108271"></a><h3>
+<a name="GooCanvasRect--radius-x"></a>The "<code class="literal">radius-x</code>" property</h3>
+<a class="indexterm" name="id3108285"></a><pre class="programlisting">  "radius-x"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The horizontal radius to use for rounded corners.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3108313"></a><h3>
+<a name="GooCanvasRect--radius-y"></a>The "<code class="literal">radius-y</code>" property</h3>
+<a class="indexterm" name="id3107388"></a><pre class="programlisting">  "radius-y"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The vertical radius to use for rounded corners.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107417"></a><h3>
+<a name="GooCanvasRect--width"></a>The "<code class="literal">width</code>" property</h3>
+<a class="indexterm" name="id3107431"></a><pre class="programlisting">  "width"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The width of the rectangle.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107459"></a><h3>
+<a name="GooCanvasRect--x"></a>The "<code class="literal">x</code>" property</h3>
+<a class="indexterm" name="id3107474"></a><pre class="programlisting">  "x"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The x coordinate of the rectangle.</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3107501"></a><h3>
+<a name="GooCanvasRect--y"></a>The "<code class="literal">y</code>" property</h3>
+<a class="indexterm" name="id3107516"></a><pre class="programlisting">  "y"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The y coordinate of the rectangle.</p>
+<p>Default value: 0</p>
+</div>
+</div>
+</div>
+</body>
+</html>

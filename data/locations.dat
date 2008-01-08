@@ -1,0 +1,2360 @@
+Africa;Algeria;Annaba;DABB;36.8333;7.8167;4
+Africa;Algeria;Constantine;DABC;36.2833;6.6167;694
+Africa;Algeria;Dar-El-Beida;DAAG;36.7167;3.25;25
+Africa;Algeria;Ghardaia;DAUG;32.3833;3.8167;450
+Africa;Algeria;Hassi-Messaoud;DAUH;31.6667;6.15;142
+Africa;Algeria;In Amenas;DAUZ;28.05;9.6333;562
+Africa;Algeria;Oran;DAOO;35.6333;-0.6;90
+Africa;Algeria;Tamanrasset;DAAT;22.8167;5.4667;0
+Africa;Algeria;Tebessa;DABS;35.4833;8.1333;813
+Africa;Algeria;Tlemcen Zenata;DAON;35.0167;-1.4667;247
+Africa;Egypt;Alexandria/Nouzha;HEAX;31.2;29.95;7
+Africa;Egypt;Asswan;HESN;23.9667;32.7833;194
+Africa;Egypt;Cairo;HECA;30.1333;31.4;74
+Africa;Egypt;Luxor;HELX;25.6667;32.7;99
+Africa;Egypt;Mersa Matruh;HEMM;31.3333;27.2167;30
+Africa;Egypt;Port Said;HEPS;31.2667;32.3;6
+Africa;Egypt;Sharm El Sheikhintl;HESH;27.9667;34.3833;0
+Africa;Libya;Benina;HLLB;32.1;20.2667;132
+Africa;Libya;Tripoli;HLLT;32.6667;13.15;82
+Africa;Morocco;Rabat;GMME;34.05;-6.7667;75
+Africa;South Africa;Bethlehem Airport;FABM;-28.25;28.3333;1700
+Africa;South Africa;Bloemfontein J. B. M. Hertzog;FABL;-29.1;26.3;1400
+Africa;South Africa;Cape Town D. F. Malan;FACT;-33.9833;18.6;0
+Africa;South Africa;Durban Louis Botha;FADN;-29.9667;30.95;0
+Africa;South Africa;East London;FAEL;-33.0333;27.8333;0
+Africa;South Africa;George Airport;FAGG;-34;22.3833;0
+Africa;South Africa;Jan Smuts;FAJS;-26.1333;28.2333;1700
+Africa;South Africa;Langebaanweg;FALW;-32.9667;18.1667;0
+Africa;South Africa;Lichtenburg;FALT;-26.1833;26.1833;0
+Africa;South Africa;Pietersburg;FAPB;-23.8667;29.45;1200
+Africa;South Africa;Port Elizabeth;FAPE;-33.9833;25.6;0
+Africa;South Africa;Pretoria;FAPR;-25.7333;28.1833;1300
+Africa;South Africa;Springbok;FASB;-29.6667;17.8667;1000
+Africa;South Africa;Upington;FAUP;-28.4;21.2667;800
+Asia;Hong Kong;Hong Kong;VHHH;22.3333;114.1833;24
+Asia;India;Ahmadabad;VAAH;23.0667;72.6333;55
+Asia;India;Amritsar;VIAR;31.6333;74.8667;234
+Asia;India;Bombay/Santacruz;VABB;19.1167;72.85;14
+Asia;India;Calcutta/Dum Dum;VECC;22.65;88.45;6
+Asia;India;Hyderabad;VOHY;17.45;78.4667;545
+Asia;India;Madras/Minambakkam;VOMM;13;80.1833;16
+Asia;India;Nagpur Sonegaon;VANP;21.1;79.05;310
+Asia;India;New Delhi/Palam;VIDP;28.5667;77.1167;233
+Asia;India;Patna;VEPT;25.6;85.1;60
+Asia;India;Thiruvananthapuram;VOTV;8.4667;76.95;8
+Asia;India;Tiruchchirapalli;VOTR;10.7667;78.7167;88
+Asia;India;Varanasi/Babatpur;VIBN;25.45;82.8667;85
+Asia;Japan;Akeno Ab;RJOE;34.5333;136.6833;9
+Asia;Japan;Akita Airport;RJSK;39.6167;140.2167;96
+Asia;Japan;Amami Airport;RJKA;28.4333;129.7167;7
+Asia;Japan;Aomori Airport;RJSA;40.7333;140.7;202
+Asia;Japan;Asahikawa Ab;RJCA;43.8;142.3667;118
+Asia;Japan;Asahikawa Airport;RJEC;43.6667;142.45;211
+Asia;Japan;Ashiya Ab;RJFA;33.8833;130.65;33
+Asia;Japan;Atsugi US NAS;RJTA;35.45;139.45;65
+Asia;Japan;Chichijima;RJAO;27.0833;142.1833;8
+Asia;Japan;Chitose Ab;RJCC;42.8;141.6667;30
+Asia;Japan;Chitose ASDF;RJCJ;42.8167;141.6833;0
+Asia;Japan;Chofu Airport;RJTF;35.6667;139.5333;44
+Asia;Japan;Fuji Ab;RJAT;35.3167;138.8667;683
+Asia;Japan;Fukue Airport;RJFE;32.6667;128.8333;80
+Asia;Japan;Fukui Airport;RJNF;36.1333;136.2333;8
+Asia;Japan;Fukuoka Airport;RJFF;33.5833;130.45;12
+Asia;Japan;Gifu Ab;RJNG;35.3833;136.8667;42
+Asia;Japan;Hachijojima Airport;RJTH;33.1167;139.7833;95
+Asia;Japan;Hachinohe Ab;RJSH;40.55;141.4667;49
+Asia;Japan;Hakodate Airport;RJCH;41.7667;140.8167;36
+Asia;Japan;Hamamatsu Ab;RJNH;34.75;137.7;48
+Asia;Japan;Hanamaki Airport;RJSI;39.4333;141.1333;93
+Asia;Japan;Hiroshima Airport;RJOA;34.4333;132.9167;334
+Asia;Japan;Hofu Ab;RJOF;34.0333;131.55;5
+Asia;Japan;Hyakuri Ab;RJAH;36.1833;140.4167;35
+Asia;Japan;Ichikawa;RJAI;35.7333;139.9167;0
+Asia;Japan;Iki Airport;RJDB;33.75;129.7833;16
+Asia;Japan;Iruma Ab;RJTJ;35.8333;139.4167;93
+Asia;Japan;Iwakuni MCAS;RJOI;34.1333;132.2333;5
+Asia;Japan;Iwojima;RJAW;24.7833;141.3167;116
+Asia;Japan;Izumo Airport;RJOC;35.4167;132.9;5
+Asia;Japan;Kadena Ab;RODN;26.35;127.7667;48
+Asia;Japan;Kagoshima Airport;RJFK;31.8;130.7167;275
+Asia;Japan;Kanoya Ab;RJFY;31.3667;130.8333;68
+Asia;Japan;Kansai International Airport;RJBB;34.4167;135.25;8
+Asia;Japan;Kasumigaura Ab;RJAK;36.0333;140.2;29
+Asia;Japan;Kasuminome Ab;RJSU;38.2333;140.9167;10
+Asia;Japan;Kisarazu Ab;RJTK;35.4;139.9167;6
+Asia;Japan;Kitakyushu Airport;RJFR;33.8333;130.95;6
+Asia;Japan;Kochi Airport;RJOK;33.5333;133.6667;10
+Asia;Japan;Komatsu Ab;RJNK;36.3833;136.4167;9
+Asia;Japan;Komatsujima Ab;RJOP;34;134.6333;6
+Asia;Japan;Kumamoto Airport;RJFT;32.8333;130.85;196
+Asia;Japan;Kushiro Airport;RJCK;43.0333;144.2;98
+Asia;Japan;Matsumoto Airport;RJAF;36.1667;137.9333;661
+Asia;Japan;Matsushima Ab;RJST;38.4;141.2167;5
+Asia;Japan;Matsuyama Airport;RJOM;33.8167;132.7;7
+Asia;Japan;Memambetsu Airport;RJCM;43.8833;144.1667;36
+Asia;Japan;Metabaru Ab;RJDM;33.3167;130.4167;19
+Asia;Japan;Miho Ab;RJOH;35.4833;133.25;9
+Asia;Japan;Minamitorishima;RJAM;24.3;153.9667;9
+Asia;Japan;Misawa Ab;RJSM;40.7;141.3833;39
+Asia;Japan;Miyakejima Airport;RJTQ;34.0667;139.5667;23
+Asia;Japan;Miyazaki Airport;RJFM;31.8667;131.45;9
+Asia;Japan;Mombetsu Airport;RJEB;44.25;143.5333;9
+Asia;Japan;Nagasaki Airport;RJFU;32.9167;129.9167;5
+Asia;Japan;Nagoya Airport;RJNN;35.25;136.9333;17
+Asia;Japan;Naha Airport;ROAH;26.1833;127.65;6
+Asia;Japan;Nakashibetsu Airport;RJCN;43.5667;144.9667;69
+Asia;Japan;Nankishirahama Airport;RJBD;33.6667;135.35;108
+Asia;Japan;New Tokyo International Airport;RJAA;35.7667;140.3833;44
+Asia;Japan;Niigata Airport;RJSN;37.95;139.1167;4
+Asia;Japan;Nyutabaru Ab;RJFN;32.0833;131.45;82
+Asia;Japan;Obihiro Airport;RJCB;42.7333;143.2167;152
+Asia;Japan;Oita Airport;RJFO;33.4833;131.7333;8
+Asia;Japan;Okayama Airport;RJOB;34.75;133.85;244
+Asia;Japan;Oki Airport;RJNO;36.1833;133.3333;95
+Asia;Japan;Okinoerabu;RJKB;27.4333;128.7;29
+Asia;Japan;Ominato Ab;RJSO;41.2333;141.1333;10
+Asia;Japan;Osaka International Airport;RJOO;34.7833;135.45;15
+Asia;Japan;Oshima Airport;RJTO;34.7833;139.3667;41
+Asia;Japan;Ozuki Ab;RJOZ;34.05;131.05;7
+Asia;Japan;Sapporo Ab;RJCO;43.1167;141.3833;11
+Asia;Japan;Sendai Airport;RJSS;38.1333;140.9167;4
+Asia;Japan;Shimofusa Ab;RJTL;35.8;140.0167;33
+Asia;Japan;Shizuhama Ab;RJNY;34.8167;138.3;10
+Asia;Japan;Tachikawa Ab;RJTC;35.7;139.4;98
+Asia;Japan;Tajima;RJBT;35.5167;134.8;0
+Asia;Japan;Takamatsu Airport;RJOT;34.2167;134.0167;188
+Asia;Japan;Tanegashima Airport;RJFG;30.55;130.95;95
+Asia;Japan;Tateyama Ab;RJTE;34.9833;139.8333;6
+Asia;Japan;Tokachi GSDF;RJCT;42.9;143.1667;0
+Asia;Japan;Tokunoshima Island;RJKN;27.8333;128.8833;0
+Asia;Japan;Tokushima Ab;RJOS;34.1333;134.6167;11
+Asia;Japan;Tokyo Heliport;RJTI;35.6333;139.85;8
+Asia;Japan;Tokyo International Airport;RJTT;35.55;139.7833;8
+Asia;Japan;Tokyo New International Airport;RJAA;35.7667;140.3833;44
+Asia;Japan;Tottori Airport;RJOR;35.5333;134.1667;18
+Asia;Japan;Toyama Airport;RJNT;36.65;137.1833;27
+Asia;Japan;Tsuiki Ab;RJFZ;33.6833;131.05;20
+Asia;Japan;Tsushima Airport;RJDT;34.2833;129.3333;66
+Asia;Japan;Utsunomiya Ab;RJTU;36.5167;139.8667;105
+Asia;Japan;Wakkanai Airport;RJCW;45.4;141.8;11
+Asia;Japan;Yakushima;RJFC;30.3833;130.6667;38
+Asia;Japan;Yamagata Airport;RJSC;38.4167;140.3667;108
+Asia;Japan;Yamaguchi Ube Airport;RJDC;33.9333;131.2833;8
+Asia;Japan;Yao Airport;RJOY;34.6;135.6;13
+Asia;Japan;Yokosuka Fwf;RJTX;35.2833;139.6667;53
+Asia;Japan;Yokota Ab;RJTY;35.75;139.35;142
+Asia;Japan;Zama Airfield;RJTR;35.5167;139.4;112
+Asia;Korea, Democratic People's Republic of;Pyongyang;ZKPY;39.0333;125.7833;38
+Asia;Korea, Republic of;Camp Stanley/H-207;RKSX;37.7167;127.1;0
+Asia;Korea, Republic of;Cheju;RKPC;33.5;126.5;28
+Asia;Korea, Republic of;Chongju Ab;RKTU;36.7;127.5;66
+Asia;Korea, Republic of;Mangilsan Ab;RKTM;36.9333;126.45;0
+Asia;Korea, Republic of;Osan Ab;RKSO;37.1;127.0333;12
+Asia;Korea, Republic of;Paekado;RKTB;37.0167;126.05;0
+Asia;Korea, Republic of;Paengnyongdo Ab;RKSP;37.9667;124.6667;177
+Asia;Korea, Republic of;Pohang Ab;RKTH;35.9833;129.4167;20
+Asia;Korea, Republic of;Pusan/Kimhae;RKPK;35.1833;128.9333;6
+Asia;Korea, Republic of;Pyongtaek Ab;RKSG;36.9333;127;16
+Asia;Korea, Republic of;Sangju;RKTS;36.4167;128.1667;0
+Asia;Korea, Republic of;Seoul E Ab;RKSM;37.4333;127.1167;20
+Asia;Korea, Republic of;Seoul/Kimp'O International Airport;RKSS;37.55;126.8;18
+Asia;Korea, Republic of;Seoul/Yongdungp'O Rokaf Wc;RKSF;37.5;126.9333;0
+Asia;Korea, Republic of;Songmu Ab;RKTE;36.4;127.5;79
+Asia;Korea, Republic of;Suwon Ab;RKSW;37.25;127;24
+Asia;Korea, Republic of;Taegu Ab;RKTN;35.9;128.65;37
+Asia;Korea, Republic of;Taejon;RKTF;36.3;127.4;78
+Asia;Korea, Republic of;Ulsan;RKPU;35.55;129.3167;33
+Asia;Korea, Republic of;Woong Cheon;RKTW;36.2;126.55;0
+Asia;Korea, Republic of;Yechon Ab;RKTY;36.6333;128.35;120
+Asia;Korea, Republic of;Yeoju Range;RKSU;37.4333;127.6333;43
+Asia;Korea, Republic of;Yongsan/H-208 Hp;RKSY;37.5167;126.9833;0
+Asia;Korea, Republic of;Yosu;RKJY;34.8333;127.6167;20
+Asia;Pakistan;Islamabad;OPRN;33.6167;73.1;508
+Asia;Pakistan;Karachi;OPKC;24.9;67.1333;22
+Asia;Pakistan;Lahore;OPLA;31.5167;74.4;217
+Asia;Pakistan;Nawabshah;OPNH;26.25;68.3667;38
+Asia;People's Republic of China;Beijing;ZBAA;39.9333;116.2833;55
+Asia;People's Republic of China;Chengdu;ZUUU;30.6667;104.0167;508
+Asia;People's Republic of China;Dalian;ZYTL;38.9;121.6333;97
+Asia;People's Republic of China;Guangzhou;ZGGG;23.1667;113.3333;42
+Asia;People's Republic of China;Hangzhou;ZSHC;30.2333;120.1667;43
+Asia;People's Republic of China;Hong Kong;VHHH;22.3333;114.1833;24
+Asia;People's Republic of China;Kunming;ZPPP;25.0167;102.6833;1892
+Asia;People's Republic of China;Lanzhou;ZLLL;36.0167;103.75;0
+Asia;People's Republic of China;Nanning;ZGNN;22.8167;108.35;73
+Asia;People's Republic of China;Shanghai;ZSSS;31.1667;121.4333;3
+Asia;People's Republic of China;Taiyuan;ZBYN;37.7833;112.55;779
+Asia;People's Republic of China;Tianjin;ZBTJ;39.1833;117.35;0
+Asia;People's Republic of China;Urumqi;ZWWW;43.9;87.4667;0
+Asia;People's Republic of China;Xiamen;ZSAM;24.4833;118.0833;139
+Asia;Singapore;Singapore;WSSS;1.3667;103.9833;16
+Asia;Taiwan;Chiang Kai Shek;RCTP;25.0833;121.2167;0
+Asia;Taiwan;Chia Tung;RCFS;22.4167;120.55;0
+Asia;Taiwan;Chiayi;RCKU;23.4667;120.3833;25
+Asia;Taiwan;Chihhang;RCQS;22.8;121.1833;0
+Asia;Taiwan;Chinmem/Shatou;RCBS;24.4333;118.3667;12
+Asia;Taiwan;Hsinchu;RCPO;24.8167;120.9333;0
+Asia;Taiwan;Kaohsiung;RCKH;22.5833;120.35;0
+Asia;Taiwan;Pingtung North;RCSQ;22.7;120.4833;0
+Asia;Taiwan;Sungshan/Taipei;RCSS;25.0667;121.55;0
+Asia;Taiwan;Wuchia Observatory;RCMQ;24.2667;120.6167;203
+Asia;Viet Nam;Da Nang;VVDN;16.0333;108.1833;7
+Asia;Viet Nam;Ha Noi;VVNB;21.0167;105.8;6
+Asia;Viet Nam;Ho Chi Minh;VVTS;10.8167;106.6667;19
+Atlantic;Antigua and Barbuda;Antigua;TAPA;17.1167;-61.7833;10
+Atlantic;Puerto Rico;Aquadilla;TJBQ;18.5;-67.1333;69
+Atlantic;Puerto Rico;Mayaguez;TJMZ;18.2667;-67.15;0
+Atlantic;Puerto Rico;Ponce;TJPS;18.0167;-66.5667;0
+Atlantic;Puerto Rico;San Juan;TJSJ;18.45;-66;0
+Australasia;Australia;Adelaide;YPAD;-34.9333;138.5167;4
+Australasia;Australia;Alice Springs;YBAS;-23.8;133.8833;547
+Australasia;Australia;Brisbane;YBBN;-27.3833;153.1;5
+Australasia;Australia;Broome;YBRM;-17.95;122.2167;9
+Australasia;Australia;Cairns;YBCS;-16.8833;145.75;7
+Australasia;Australia;Canberra;YSCB;-35.3;149.1833;580
+Australasia;Australia;Christmas Island;YPXM;-10.4333;105.6833;262
+Australasia;Australia;Cocos Island;YPCC;-12.1833;96.8167;3
+Australasia;Australia;Dubbo;YSDU;-32.2;148.5667;275
+Australasia;Australia;Hobart;YMHB;-42.8333;147.4833;27
+Australasia;Australia;Learmouth;YPLM;-22.2333;114.0833;6
+Australasia;Australia;Melbourne;YMML;-37.6667;144.8333;141
+Australasia;Australia;Norfolk Island;YSNF;-29.0333;167.9333;109
+Australasia;Australia;Perth;YPPH;-31.9333;115.95;29
+Australasia;Australia;Port Hedland;YPPD;-20.1;119.5667;10
+Australasia;Australia;Sydney;YSSY;-33.95;151.1833;3
+Australasia;Australia;Townsville;YBTL;-19.25;146.75;9
+Australasia;New Zealand;Auckland;NZAA;-37.0167;174.8;6
+Australasia;New Zealand;Christchurch;NZCH;-43.4833;172.55;30
+Australasia;New Zealand;Wellington;NZWN;-41.3333;174.8;8
+Canada;Alberta;Calgary;CYYC;51.1167;-114.0167;1084
+Canada;Alberta;Edmonton;CYEG;53.3;-113.5833;723
+Canada;British Columbia;Abbotsford;CYXX;49.0333;-122.3667;58
+Canada;British Columbia;Comox;CYQQ;49.7167;-124.9;24
+Canada;British Columbia;Port Hardy;CYZT;50.6833;-127.3667;22
+Canada;British Columbia;Smithers;CYYD;54.8167;-127.1833;523
+Canada;British Columbia;Vancouver;CYVR;49.1833;-123.1667;2
+Canada;British Columbia;Victoria;CYYJ;48.65;-123.4333;19
+Canada;Manitoba;Churchill;CYYQ;58.7333;-94.0667;29
+Canada;Manitoba;Winnipeg;CYWG;49.9;-97.2333;239
+Canada;New Brunswick;Chatham;CYCH;47;-65.45;34
+Canada;New Brunswick;Fredericton;CYFC;45.8667;-66.5333;20
+Canada;New Brunswick;Moncton;CYQM;46.1167;-64.6833;71
+Canada;Newfoundland;Gander;CYQX;48.95;-54.5667;151
+Canada;Newfoundland;Goose Bay;CYYR;53.3167;-60.4167;49
+Canada;Newfoundland;Saint Anthony;CYAY;51.4;-56.0833;0
+Canada;Newfoundland;Stephenville;CYJT;48.5333;-58.55;26
+Canada;Newfoundland;St. John's;CYYT;47.6167;-52.7333;140
+Canada;Northwest Territories;Iqaluit;CYFB;63.75;-68.55;34
+Canada;Northwest Territories;Yellowknife;CYZF;62.4667;-114.45;206
+Canada;Nova Scotia;Greenwood;CYZX;44.9833;-64.9167;28
+Canada;Nova Scotia;Halifax;CYHZ;44.8833;-63.5;0
+Canada;Nova Scotia;Shearwater;CYAW;44.6333;-63.5;51
+Canada;Nova Scotia;Sydney;CYQY;46.1667;-60.05;62
+Canada;Ontario;Ottawa;CYOW;45.3167;-75.6667;114
+Canada;Ontario;Toronto;CYYZ;43.6667;-79.6333;173
+Canada;Ontario;Trenton;CYTR;44.1167;-77.5333;86
+Canada;Ontario;Windsor;CYQG;42.2667;-82.9667;190
+Canada;Quebec;Bagotville;CYBG;48.3333;-71;159
+Canada;Quebec;Gatineau;CYND;45.5167;-75.5667;0
+Canada;Quebec;La Grande;CYGL;53.6333;-77.7;195
+Canada;Quebec;Montreal Dorval;CYUL;45.4667;-73.75;36
+Canada;Quebec;Montreal Mirabel;CYMX;45.6833;-74.0333;0
+Canada;Quebec;Montreal Saint-Hubert;CYHU;45.5167;-73.4167;0
+Canada;Quebec;Quebec City;CYQB;46.8;-71.3833;74
+Canada;Quebec;Sept-Iles;CYZV;50.2167;-66.2667;55
+Canada;Saskatchewan;Nipawin;CYBU;53.3333;-104;372
+Canada;Saskatchewan;Regina;CYQR;50.4333;-104.6667;577
+Canada;Saskatchewan;Saskatoon;CYXE;52.1667;-106.6833;504
+Canada;Saskatchewan;Swift Current;CYYN;50.2833;-107.6833;818
+Canada;Yukon;Shingle Point;CYUA;68.95;-137.2167;38
+Central and South America;Argentina;Aeroparque;SABE;-34.5667;-58.4167;6
+Central and South America;Argentina;Bahia Blanca;SAZB;-38.7333;-62.1667;83
+Central and South America;Argentina;Bariloche;SAZS;-41.15;-71.1667;840
+Central and South America;Argentina;Comodoro Rivadavia;SAVC;-45.7833;-67.5;46
+Central and South America;Argentina;Concordia;SAAC;-31.3;-58.0167;38
+Central and South America;Argentina;Cordoba;SACO;-31.3167;-64.2167;474
+Central and South America;Argentina;Corrientes;SARC;-27.45;-58.7667;62
+Central and South America;Argentina;Don Torcuato;SADD;-34.4833;-58.6167;4
+Central and South America;Argentina;Ezeiza;SAEZ;-34.8167;-58.5333;20
+Central and South America;Argentina;Formosa;SARF;-26.2;-58.2333;60
+Central and South America;Argentina;Iguazu;SARI;-25.7333;-54.4667;270
+Central and South America;Argentina;Jujuy;SASJ;-24.3833;-65.0833;905
+Central and South America;Argentina;Mar Del Plata;SAZM;-37.9333;-57.5833;21
+Central and South America;Argentina;Mendoza;SAME;-32.8333;-68.7833;704
+Central and South America;Argentina;Neuquen;SAZN;-38.95;-68.1333;271
+Central and South America;Argentina;Paso De Los Libres;SARL;-29.6833;-57.15;70
+Central and South America;Argentina;Posadas;SARP;-27.3667;-55.9667;133
+Central and South America;Argentina;Resistencia;SARE;-27.45;-59.05;52
+Central and South America;Argentina;Rio Gallegos;SAWG;-51.6167;-69.2833;19
+Central and South America;Argentina;Rio Grande;SAWE;-53.8;-67.75;22
+Central and South America;Argentina;Rosario;SAAR;-32.9167;-60.7833;25
+Central and South America;Argentina;Salta;SASA;-24.85;-65.4833;1221
+Central and South America;Argentina;San Juan;SANU;-31.5667;-68.8667;598
+Central and South America;Argentina;Santiago Del Estero;SANE;-27.7667;-64.3;199
+Central and South America;Argentina;Sauce Viejo;SAAV;-31.7;-60.8167;18
+Central and South America;Argentina;Trelew;SAVT;-43.2;-65.2667;43
+Central and South America;Argentina;Tucuman;SANT;-26.85;-65.1;450
+Central and South America;Argentina;Villa Reynolds;SAOR;-33.7333;-65.3833;486
+Central and South America;Bahamas;Freeport;MYGF;26.55;-78.7;11
+Central and South America;Bahamas;Nassau;MYNN;25.05;-77.4667;7
+Central and South America;Belize;Belize;MZBZ;17.5333;-88.3;5
+Central and South America;Bolivia;Camiri;SLCA;-20;-63.5333;0
+Central and South America;Bolivia;Cobija;SLCO;-11.0333;-68.7833;260
+Central and South America;Bolivia;Cochabamba;SLCB;-17.4167;-66.1833;2570
+Central and South America;Bolivia;Concepcion;SLCP;-16.15;-62.0167;0
+Central and South America;Bolivia;La Paz/Alto;SLLP;-16.5167;-68.1833;4038
+Central and South America;Bolivia;Magdalena;SLMG;-13.3333;-64.1167;0
+Central and South America;Bolivia;Oruro;SLOR;-17.9667;-67.0667;0
+Central and South America;Bolivia;Potosi;SLPO;-19.55;-65.7333;0
+Central and South America;Bolivia;Puerto Suarez;SLPS;-18.9833;-57.8167;0
+Central and South America;Bolivia;Reyes;SLRY;-14.3167;-67.3833;0
+Central and South America;Bolivia;Riberalta;SLRI;-11;-66.1167;0
+Central and South America;Bolivia;Robore;SLRB;-18.3167;-59.7667;0
+Central and South America;Bolivia;Rurrenabaque;SLRQ;-14.4667;-67.5667;274
+Central and South America;Bolivia;San Ignacio De Velasco;SLSI;-16.3833;-60.9667;0
+Central and South America;Bolivia;San Joaquin;SLJO;-13.0667;-64.8167;0
+Central and South America;Bolivia;San Jose De Chiquitos;SLJE;-17.8;-60.7333;0
+Central and South America;Bolivia;Santa Ana;SLSA;-13.7667;-65.4333;0
+Central and South America;Bolivia;Sucre;SLSU;-19.0167;-65.3;0
+Central and South America;Bolivia;Tarija;SLTJ;-21.55;-64.7;0
+Central and South America;Bolivia;Trinidad;SLTR;-14.8167;-64.9167;236
+Central and South America;Bolivia;Villamontes;SLVM;-21.25;-63.45;0
+Central and South America;Bolivia;Viru-Viru;SLVR;-17.6333;-63.1333;0
+Central and South America;Bolivia;Yacuiba;SLYA;-21.95;-63.65;0
+Central and South America;Brazil;Afonsos;SBAF;-22.8667;-43.3667;0
+Central and South America;Brazil;Altamira;SBHT;-3.2;-52.2;0
+Central and South America;Brazil;Aracaju;SBAR;-10.9833;-37.0667;9
+Central and South America;Brazil;Bage;SBBG;-31.35;-54.1167;180
+Central and South America;Brazil;Bauru;SBBU;-22.3167;-49.0667;0
+Central and South America;Brazil;Belem;SBBE;-1.3833;-48.4833;16
+Central and South America;Brazil;Belo Horizonte;SBCF;-19.9333;-43.9333;0
+Central and South America;Brazil;Belo Horizonte Apt;SBBH;-19.85;-43.95;785
+Central and South America;Brazil;Boa Vista;SBBV;2.8333;-60.7;140
+Central and South America;Brazil;Brasilia;SBBR;-15.8667;-47.9333;1061
+Central and South America;Brazil;Campinas;SBKP;-23;-47.1333;661
+Central and South America;Brazil;Campo Grande;SBCG;-20.4667;-54.6667;567
+Central and South America;Brazil;Caravelas;SBCV;-17.6333;-39.25;4
+Central and South America;Brazil;Conceicao Do Araguaia;SBAA;-8.25;-49.2833;0
+Central and South America;Brazil;Corumba;SBCR;-19.0833;-57.5;0
+Central and South America;Brazil;Cuiaba;SBCY;-15.65;-56.1;182
+Central and South America;Brazil;Curitiba;SBBI;-25.4333;-49.2667;0
+Central and South America;Brazil;Curitiba Apt;SBCT;-25.5167;-49.1667;908
+Central and South America;Brazil;Eduardo Gomes International;SBEG;-3.0333;-60.05;0
+Central and South America;Brazil;Fernando De Noronha;SBFN;-3.85;-32.4167;45
+Central and South America;Brazil;Florianopolis;SBFL;-27.6667;-48.55;5
+Central and South America;Brazil;Fortaleza;SBFZ;-3.7833;-38.5333;25
+Central and South America;Brazil;Foz Do Iguacu;SBFI;-25.5167;-54.5833;180
+Central and South America;Brazil;Galeao;SBGL;-22.8167;-43.25;42
+Central and South America;Brazil;Goiania;SBGO;-16.6333;-49.2167;0
+Central and South America;Brazil;Guaratingueta;SBGW;-22.7833;-45.2;537
+Central and South America;Brazil;Guarulhos;SBGR;-23.4333;-46.4667;0
+Central and South America;Brazil;Itaituba;SBIH;-4.25;-56;0
+Central and South America;Brazil;Londrina;SBLO;-23.3333;-51.1333;570
+Central and South America;Brazil;Macae;SBME;-22.35;-41.7667;0
+Central and South America;Brazil;Macapa;SBMQ;0.0333;-50.05;0
+Central and South America;Brazil;Maceio;SBMO;-9.5167;-35.7833;115
+Central and South America;Brazil;Manaus;SBMN;-3.15;-59.9833;84
+Central and South America;Brazil;Maraba;SBMA;-5.35;-49.15;0
+Central and South America;Brazil;Marte;SBMT;-23.5167;-46.6333;0
+Central and South America;Brazil;Natal;SBNT;-5.9167;-35.25;49
+Central and South America;Brazil;Pelotas;SBPK;-31.8667;-52.35;13
+Central and South America;Brazil;Pirassununga;SBYS;-21.9833;-47.3333;598
+Central and South America;Brazil;Pocos De Caldas;SBPC;-21.85;-46.5667;0
+Central and South America;Brazil;Ponta Pora;SBPP;-22.55;-55.7;0
+Central and South America;Brazil;Porto Alegre;SBCO;-30.0167;-51.2167;0
+Central and South America;Brazil;Porto Alegre Apt;SBPA;-30;-51.1833;3
+Central and South America;Brazil;Porto Velho;SBPV;-8.7667;-63.9167;102
+Central and South America;Brazil;Presidente Prudente;SBDN;-22.1167;-51.3833;0
+Central and South America;Brazil;Recife;SBRF;-8.0667;-34.85;0
+Central and South America;Brazil;Rio De Janeiro;SBRJ;-22.9;-43.1667;0
+Central and South America;Brazil;Rio / Jacarepagua;SBJR;-22.9833;-43.3667;0
+Central and South America;Brazil;Salvador;SBSV;-12.9;-38.3333;13
+Central and South America;Brazil;Santa Cruz;SBSC;-22.9333;-43.7167;3
+Central and South America;Brazil;Santa Maria;SBSM;-29.7167;-53.7;0
+Central and South America;Brazil;Santarem;SBSN;-2.4333;-54.7167;72
+Central and South America;Brazil;Santos;SBST;-23.9333;-46.3;3
+Central and South America;Brazil;Sao Jose Dos Campo;SBSJ;-23.2333;-45.8667;0
+Central and South America;Brazil;Sao Luiz;SBSL;-2.6;-44.2333;53
+Central and South America;Brazil;Sao Paulo;SBSP;-23.6167;-46.65;802
+Central and South America;Brazil;Tabatinga;SBTT;-3.6667;-69.6667;0
+Central and South America;Brazil;Teresina;SBTE;-5.05;-42.8167;69
+Central and South America;Brazil;Tucurui;SBTU;-3.7167;-49.7167;0
+Central and South America;Brazil;Uberaba;SBUR;-19.7833;-47.9667;809
+Central and South America;Brazil;Uruguaiana;SBUG;-29.7833;-57.0333;74
+Central and South America;Brazil;Vilhena;SBVH;-12.7;-60.1;652
+Central and South America;Brazil;Vitoria;SBVT;-20.2667;-40.2833;4
+Central and South America;Cayman Islands;Grand Cayman;MWCR;19.2833;-81.35;3
+Central and South America;Chile;Antofagasta;SCFA;-23.4333;-70.4333;137
+Central and South America;Chile;Arica;SCAR;-18.3333;-70.3333;58
+Central and South America;Chile;Concepcion;SCIE;-36.7667;-73.05;0
+Central and South America;Chile;Iquique/Diego Arac;SCDA;-20.5333;-70.1833;0
+Central and South America;Chile;Pudahuel;SCEL;-33.3833;-70.7833;476
+Central and South America;Chile;Puerto Montt;SCTE;-41.4167;-73.0833;84
+Central and South America;Chile;Punta Arenas;SCCI;-53;-70.85;33
+Central and South America;Colombia;Barranquilla/Ernestocortissoz;SKBQ;10.8833;-74.7833;30
+Central and South America;Colombia;Bogota/Eldorado;SKBO;4.7167;-74.15;2548
+Central and South America;Colombia;Bucaramanga/Palonegro;SKBG;7.1;-73.2;0
+Central and South America;Colombia;Cali/Alfonso Bonillaaragon;SKCL;3.55;-76.3833;969
+Central and South America;Colombia;Cartagena/Rafael Nunez;SKCG;10.45;-75.5167;12
+Central and South America;Colombia;Leticia/Vasquez Cobo;SKLT;-4.1667;-69.95;84
+Central and South America;Colombia;Pereira/Matecana;SKPE;4.8167;-75.7333;1342
+Central and South America;Colombia;Rionegro/J.M.Cordova;SKRG;6.1333;-75.4333;2142
+Central and South America;Colombia;San Andres Isla/Sesquicentenario;SKSP;12.5833;-81.7167;6
+Central and South America;Colombia;Santa Marta/Simon Bolivar;SKSM;11.1333;-74.2333;14
+Central and South America;Costa Rica;Chacarita;MRCH;9.9833;-84.7833;0
+Central and South America;Costa Rica;Juan Santamaria;MROC;10;-84.2167;939
+Central and South America;Costa Rica;Liberia;MRLB;10.6167;-85.4333;80
+Central and South America;Costa Rica;Puerto Limon;MRLM;10;-83.05;3
+Central and South America;Costa Rica;Tobias Bolanos;MRPV;9.95;-84.15;0
+Central and South America;Cuba;Baracoa;MUBA;20.35;-74.5;9
+Central and South America;Cuba;Bayamo;MUBY;20.4;-76.6167;0
+Central and South America;Cuba;Camaguey;MUCM;21.4167;-77.85;118
+Central and South America;Cuba;Cayo Largo del Sur;MUCL;21.6167;-81.55;0
+Central and South America;Cuba;Guantanamo;MUGT;20.0833;-75.15;8
+Central and South America;Cuba;Habana;MUHA;22.9833;-82.4;75
+Central and South America;Cuba;Holguin;MUHG;20.7833;-76.3167;0
+Central and South America;Cuba;Las Tunas;MUVT;20.95;-76.95;106
+Central and South America;Cuba;Manzanillo;MUMZ;20.3333;-77.1167;60
+Central and South America;Cuba;Moa;MUMO;20.65;-74.9167;0
+Central and South America;Cuba;Nueva Gerona;MUNG;21.8333;-82.7833;23
+Central and South America;Cuba;Santiago de Cuba;MUCU;19.9667;-75.85;55
+Central and South America;Cuba;Varadero;MUVR;23.1333;-81.2833;3
+Central and South America;Cuba;Venezuela;MUCA;21.7833;-78.7833;26
+Central and South America;Dominican Republic;La Romana;MDLR;18.4167;-68.95;0
+Central and South America;Dominican Republic;Las Americas;MDSD;18.4333;-69.6667;0
+Central and South America;Dominican Republic;Puerto Plata;MDPP;19.75;-70.55;0
+Central and South America;Dominican Republic;Punta Cana;MDPC;18.5667;-68.3667;0
+Central and South America;Dominican Republic;Santiago;MDST;19.45;-70.7;0
+Central and South America;Ecuador;Guayaquil/Simon Bolivar;SEGU;-2.15;-79.8833;9
+Central and South America;Ecuador;Manta;SEMT;-0.95;-80.6833;14
+Central and South America;Ecuador;Quito/Mariscal Sucre;SEQU;-0.15;-78.4833;2812
+Central and South America;El Salvador;Acajutla;MSAC;13.5667;-89.8333;15
+Central and South America;El Salvador;El Salvador Int.;MSLP;13.4333;-89.05;25
+Central and South America;El Salvador;San Miguel;MSSM;13.45;-88.1167;0
+Central and South America;El Salvador;San Salvador;MSSS;13.7;-89.1167;621
+Central and South America;El Salvador;Santa Ana;MSSA;13.9833;-89.5667;0
+Central and South America;Guatemala;Flores;MGFL;16.9167;-89.8833;115
+Central and South America;Guatemala;Guatemala;MGGT;14.5833;-90.5167;1489
+Central and South America;Guatemala;Huehuetenango;MGHT;15.3167;-91.4667;1901
+Central and South America;Guatemala;Puerto Barrios;MGPB;15.7167;-88.6;1
+Central and South America;Guatemala;San Jose;MGSJ;13.9167;-90.8167;2
+Central and South America;Haiti;Port-Au-Prince;MTPP;18.5667;-72.3;34
+Central and South America;Honduras;Amapala;MHAM;13.2667;-87.65;0
+Central and South America;Honduras;Catacamas;MHCA;14.9;-85.9333;442
+Central and South America;Honduras;Choluteca;MHCH;13.3;-87.1833;48
+Central and South America;Honduras;La Ceiba;MHLC;15.7333;-86.8667;26
+Central and South America;Honduras;La Esperanza;MHLE;14.3167;-88.15;1674
+Central and South America;Honduras;La Mesa;MHLM;15.45;-87.9333;31
+Central and South America;Honduras;Nueva Ocotepeque;MHSC;14.3833;-87.6167;628
+Central and South America;Honduras;Puerto Lempira;MHPL;15.2167;-83.8;13
+Central and South America;Honduras;Roatan;MHRO;16.3167;-86.5167;2
+Central and South America;Honduras;Santa Rosa de Copan;MHSR;14.7833;-88.7833;1079
+Central and South America;Honduras;Tegucigalpa;MHTG;14.05;-87.2167;1007
+Central and South America;Honduras;Tela;MHTE;15.7167;-87.4833;3
+Central and South America;Honduras;Yoro;MHYR;15.1667;-87.1167;670
+Central and South America;Jamaica;Kingston;MKJP;17.9333;-76.7833;14
+Central and South America;Nicaragua;Bluefields;MNBL;12;-86.7667;5
+Central and South America;Nicaragua;Chinandega;MNCH;12.6333;-87.1333;60
+Central and South America;Nicaragua;Jinotega;MNJG;13.0833;-85.9833;1032
+Central and South America;Nicaragua;Juigalpa;MNJU;12.1;-85.3667;90
+Central and South America;Nicaragua;Managua;MNMG;12.15;-86.1667;56
+Central and South America;Nicaragua;Puerto Cabezas;MNPC;14.05;-83.3667;20
+Central and South America;Nicaragua;Rivas;MNRS;11.4167;-85.8333;70
+Central and South America;Panama;Bocas del Toro;MPBO;9.35;-82.25;0
+Central and South America;Panama;David;MPDA;8.4;-82.4167;26
+Central and South America;Panama;Panama;MPMG;8.9833;-79.5167;0
+Central and South America;Panama;Santiago;MPSA;8.0833;-80.95;88
+Central and South America;Panama;Tocumen;MPTO;9.05;-79.3667;0
+Central and South America;Paraguay;Asuncion;SGAS;-25.2667;-57.6333;101
+Central and South America;Paraguay;Guarany;SGES;-25.45;-54.85;0
+Central and South America;Peru;Andahuayla;SPHY;-13.7167;-73.35;0
+Central and South America;Peru;Arequipa;SPQU;-16.3167;-71.55;2539
+Central and South America;Peru;Ayacucho;SPHO;-13.1333;-74.2167;2749
+Central and South America;Peru;Chiclayo;SPHI;-6.7833;-79.8333;34
+Central and South America;Peru;Cuzco;SPZO;-13.55;-71.9833;3249
+Central and South America;Peru;Huanuco;SPNC;-9.9;-75.75;1860
+Central and South America;Peru;Iquitos;SPQT;-3.75;-73.25;126
+Central and South America;Peru;Juanjui;SPJI;-7.2167;-76.7167;363
+Central and South America;Peru;Juliaca;SPJL;-15.4833;-70.15;3827
+Central and South America;Peru;Lima-Callao;SPIM;-12;-77.1167;13
+Central and South America;Peru;Pisco;SPSO;-13.75;-76.2833;7
+Central and South America;Peru;Pucallpa;SPCL;-8.4167;-74.6;149
+Central and South America;Peru;Puerto Maldonado;SPTU;-12.6333;-69.2;266
+Central and South America;Peru;Rioja;SPJA;-6.05;-77.15;0
+Central and South America;Peru;Tacna;SPTN;-18.0667;-70.3;469
+Central and South America;Peru;Talara;SPYL;-4.5667;-81.25;90
+Central and South America;Peru;Yurimaguas;SPMS;-5.9;-76.0833;184
+Central and South America;Suriname;Johan A. Pengel;SMJP;5.45;-55.1833;0
+Central and South America;Uruguay;Artigas;SUAG;-30.3833;-56.5;120
+Central and South America;Uruguay;Capitan Corbeta;SULS;-34.8667;-55.1;0
+Central and South America;Uruguay;Colonia;SUCA;-34.45;-57.8333;22
+Central and South America;Uruguay;Durazno;SUDU;-33.35;-56.5;92
+Central and South America;Uruguay;Maldonado/Punta Est;SUPE;-34.9167;-54.9167;0
+Central and South America;Uruguay;Melilla;SUAA;-34.7833;-56.25;48
+Central and South America;Uruguay;Montevideo/Carrasco;SUMU;-34.8333;-56;32
+Central and South America;Uruguay;Paysandu;SUPU;-32.3333;-58.0333;61
+Central and South America;Uruguay;Rivera;SURV;-30.8833;-55.5333;241
+Central and South America;Uruguay;Salto;SUSO;-31.3833;-57.95;33
+Central and South America;Uruguay;Tacuarembo;SUTB;-31.7;-55.9833;134
+Central and South America;Venezuela;Acarigua;SVAC;9.55;-69.2333;225
+Central and South America;Venezuela;Barcelona;SVBC;10.1167;-64.6833;7
+Central and South America;Venezuela;Barinas;SVBI;8.6167;-70.2167;204
+Central and South America;Venezuela;Barquisimeto;SVBM;10.0667;-69.3167;614
+Central and South America;Venezuela;Calabozo;SVCL;8.9333;-67.4167;101
+Central and South America;Venezuela;Caracas La Carlota;SVFM;10.5;-66.8833;835
+Central and South America;Venezuela;Caracas Maiquetia;SVMI;10.6;-66.9833;48
+Central and South America;Venezuela;Ciudad Bolivar;SVCB;8.15;-63.55;48
+Central and South America;Venezuela;Coro;SVCR;11.4167;-69.6833;17
+Central and South America;Venezuela;Cumana;SVCU;10.45;-64.1833;4
+Central and South America;Venezuela;Guanare;SVGU;9.0167;-69.7333;163
+Central and South America;Venezuela;Maracaibo-La Chinita;SVMC;10.5667;-71.7333;65
+Central and South America;Venezuela;Maracay-B.A.Sucre;SVBS;10.25;-67.65;437
+Central and South America;Venezuela;Margarita;SVMG;10.9167;-63.9833;0
+Central and South America;Venezuela;Mene Grande;SVMN;9.8167;-70.9333;28
+Central and South America;Venezuela;Merida;SVMD;8.6;-71.1833;1498
+Central and South America;Venezuela;San Antonio Del Tachira;SVSA;7.85;-72.45;378
+Central and South America;Venezuela;San Fernando De Apure;SVSR;7.9;-67.4167;48
+Central and South America;Venezuela;Valera*;SVVL;9.35;-70.6167;582
+Europe;Albania;Tirana;LATI;41.3333;19.7833;90
+Europe;Austria;Graz;LOWG;47;15.4333;347
+Europe;Austria;Hohenems;LOIH;47.3833;9.7006;0
+Europe;Austria;Innsbruck;LOWI;47.2667;11.35;593
+Europe;Austria;Klagenfurt;LOWK;46.65;14.3333;476
+Europe;Austria;Linz;LOWL;48.2333;14.1833;313
+Europe;Austria;Salzburg;LOWS;47.8;13;450
+Europe;Austria;Voslau;LOAV;47.95;16.2594;0
+Europe;Austria;Wien;LOWW;48.1167;16.5667;190
+Europe;Austria;Zell Am See;LOWZ;47.2833;12.7875;0
+Europe;Belgium;Antwerpen/Deurne;EBAW;51.2;4.4667;14
+Europe;Belgium;Beauvechain;EBBE;50.75;4.7667;127
+Europe;Belgium;Brasschaat;EBBT;51.3333;4.5;23
+Europe;Belgium;Brussels-National Airport;EBBR;50.9;4.5333;58
+Europe;Belgium;Charleroi-Brussels South;EBCI;50.4667;4.45;192
+Europe;Belgium;Chievres;EBCV;50.5667;3.8333;63
+Europe;Belgium;Elsenborn;EBLB;50.4667;6.1833;570
+Europe;Belgium;Florennes;EBFS;50.2333;4.65;299
+Europe;Belgium;Kleine Brogel;EBBL;51.1667;5.4667;64
+Europe;Belgium;Koksijde;EBFN;51.0833;2.65;9
+Europe;Belgium;Liege;EBLG;50.65;5.45;178
+Europe;Belgium;Oostende;EBOS;51.2;2.8667;5
+Europe;Belgium;Schaffen;EBDT;51;5.0667;54
+Europe;Bosnia-Herzegovina;Sarajevo;LQSA;43.8167;18.3333;510
+Europe;Bulgaria;Burgas;LBBG;42.4833;27.4833;28
+Europe;Bulgaria;Plovdiv;LBPD;42.1333;24.75;185
+Europe;Bulgaria;Sofia;LBSF;42.65;23.3833;595
+Europe;Bulgaria;Varna;LBWN;43.2;27.9167;43
+Europe;Croatia;Dubrovnik;LDDU;42.5667;18.2667;165
+Europe;Croatia;Pula;LDPL;45.9;13.9167;63
+Europe;Croatia;Rijeka;LDRI;45.2167;14.5833;0
+Europe;Croatia;Split;LDSP;43.5333;16.3;21
+Europe;Croatia;Zadar;LDZD;44.1;15.35;0
+Europe;Croatia;Zagreb;LDZA;45.7333;16.0667;107
+Europe;Cyprus;Akrotiri;LCRA;34.5833;32.9833;0
+Europe;Cyprus;Ercan;LCEN;35.15;33.5;0
+Europe;Cyprus;Larnaka;LCLK;34.8833;33.6333;2
+Europe;Cyprus;Paphos;LCPH;34.7167;32.4833;8
+Europe;Czech Republic;Brno;LKTB;49.15;16.7;246
+Europe;Czech Republic;Ostrava;LKMT;49.6833;18.1167;256
+Europe;Czech Republic;Praha;LKPR;50.1;14.25;365
+Europe;Denmark;Aarhus/Observatorium;EKAH;56.1272;10.1931;25
+Europe;Denmark;Aarhus/Tirstrup;EKAH;56.3;10.6167;25
+Europe;Denmark;Alborg;EKYT;57.1;9.85;13
+Europe;Denmark;Billund;EKBI;55.7333;9.1667;79
+Europe;Denmark;Bornholm;EKRN;55.0667;14.75;16
+Europe;Denmark;Esbjerg;EKEB;55.5333;8.5667;29
+Europe;Denmark;Karup;EKKA;56.3;9.1167;53
+Europe;Denmark;Kobenhavn/Kastrup;EKCH;55.6167;12.65;5
+Europe;Denmark;Kobenhavn/Roskilde;EKRK;55.5833;12.1333;44
+Europe;Denmark;Kolding/Vandrup;EKVD;55.4333;9.3333;45
+Europe;Denmark;Lolland Falster;EKMB;54.7;11.45;5
+Europe;Denmark;Odense;EKOD;55.4833;10.3333;17
+Europe;Denmark;Sindal;EKSN;57.5;10.2167;28
+Europe;Denmark;Skive;EKSV;56.55;9.1667;21
+Europe;Denmark;Sonderborg;EKSB;54.9667;9.7833;14
+Europe;Denmark;Stauning;EKVJ;56;8.35;5
+Europe;Denmark;Thisted;EKTS;57.0667;8.7167;7
+Europe;Denmark;Vaerlose;EKVL;55.7667;12.3333;31
+Europe;Denmark;Vagar;EKVG;62.0667;-7.2833;92
+Europe;Denmark;Vandel;EKVA;55.7;9.2;76
+Europe;Denmark;Vojens/Skrydstrup;EKSP;55.2333;9.2667;47
+Europe;Finland;Helsinki;EFHK;60.3167;24.9667;56
+Europe;Finland;Tampere;EFTP;61.4167;23.5833;112
+Europe;Finland;Turku;EFTU;60.5167;22.2667;59
+Europe;France;Agen;LFBA;44.1833;0.6;60
+Europe;France;Ajaccio/Campo dell'Oro;LFKJ;41.9167;8.8;9
+Europe;France;Bale-Mulhouse;LFSB;47.6;7.5167;271
+Europe;France;Bastia;LFKB;42.55;9.4833;12
+Europe;France;Beauvais-Tille;LFOB;49.4667;2.1167;111
+Europe;France;Biarritz-Bayonne;LFBZ;43.4667;-1.5333;71
+Europe;France;Bordeaux;LFBD;44.8333;-0.7;61
+Europe;France;Bourges;LFLD;47.0667;2.3667;166
+Europe;France;Brest;LFRB;48.45;-4.4167;103
+Europe;France;Caen-Carpiquet;LFRK;49.1833;-0.45;67
+Europe;France;Calvi-Ste-Catherine;LFKC;42.5333;8.8;58
+Europe;France;Cannes-Mandelieu;LFMD;43.55;6.95;9
+Europe;France;Cazaux;LFBC;44.5333;-1.1333;33
+Europe;France;Chambery;LFLB;45.65;5.8833;239
+Europe;France;Cherbourg;LFRC;49.65;-1.4667;139
+Europe;France;Clermont-Ferrand;LFLC;45.7833;3.1667;330
+Europe;France;Colmar-Meyenheim;LFSC;47.9167;7.4;217
+Europe;France;Dijon;LFSD;47.2667;5.0833;227
+Europe;France;Dinard;LFRD;48.5833;-2.0667;60
+Europe;France;Dole;LFGJ;47.0333;5.435;0
+Europe;France;Evreux-Fauville;LFOE;49.0167;1.2167;146
+Europe;France;Figari;LFKF;41.5;9.1;23
+Europe;France;Grenoble-Saint-Geoirs;LFLS;45.3667;5.3333;386
+Europe;France;Hyeres-Le Palyvestre;LFTH;43.1;6.15;4
+Europe;France;Lannion;LFRO;48.75;-3.4667;0
+Europe;France;Le Havre-Octeville;LFOH;49.5167;0.0667;103
+Europe;France;Le Mans;LFRM;47.9333;0.2;52
+Europe;France;Le Touquet;LFAT;50.5167;1.6167;14
+Europe;France;Lille-Lesquin;LFQQ;50.5667;3.1;52
+Europe;France;Limoges;LFBL;45.8667;1.1833;402
+Europe;France;Lorient-Lann-Bihoue;LFRH;47.7667;-3.45;44
+Europe;France;Luxeuil;LFSX;47.7833;6.35;273
+Europe;France;Lyon-Bron;LFLY;45.7167;4.95;201
+Europe;France;Lyon-Satolas;LFLL;45.7333;5.0833;240
+Europe;France;Marseille-Provence;LFML;43.45;5.2333;36
+Europe;France;Metz-Frescaty;LFSF;49.0833;6.1333;191
+Europe;France;Monpellier-Mediterrannee;LFMT;43.5833;3.9667;6
+Europe;France;Mont-de-Marsan;LFBM;43.9167;-0.5;63
+Europe;France;Nancy-Essey;LFSN;48.6833;6.2167;217
+Europe;France;Nancy-Ochey;LFSO;48.5833;5.9667;350
+Europe;France;Nantes Adlantique;LFRS;47.1667;-1.6;27
+Europe;France;Nice-Cote d'Azur;LFMN;43.65;7.2;10
+Europe;France;Nimes-Garons;LFTW;43.75;4.4167;96
+Europe;France;Paris/Charles De Gaulle;LFPG;49.0167;2.5333;109
+Europe;France;Paris/Le Bourget;LFPB;48.9667;2.45;65
+Europe;France;Paris/Orly;LFPO;48.7333;2.4;96
+Europe;France;Pau/Pyrenees;LFBP;43.3833;-0.4167;185
+Europe;France;Perpignan-Rivesaltes;LFMP;42.7333;2.8667;48
+Europe;France;Poitiers;LFBI;46.5833;0.3167;120
+Europe;France;Quimper;LFRQ;47.9667;-4.1667;94
+Europe;France;Reims-Champagne;LFSR;49.3;4.0333;99
+Europe;France;Rennes;LFRN;48.0667;-1.7333;37
+Europe;France;Rouen-Valle de Seine;LFOP;49.3833;1.1833;157
+Europe;France;Saint-Brieuc-Armor;LFRT;48.5333;-2.85;136
+Europe;France;Saint-Dizier-Robinson;LFSI;48.6333;4.9;140
+Europe;France;Saint-Etienne-Boutheon;LFMH;45.5333;4.3;402
+Europe;France;Saint-Nazaire-Montoir;LFRZ;47.3167;-2.1667;4
+Europe;France;Strasbourg;LFST;48.55;7.6333;154
+Europe;France;Tarbes;LFBT;43.1833;-0;363
+Europe;France;Toulouse;LFBO;43.6333;1.3667;153
+Europe;France;Tours-St-Symphorien;LFOT;47.45;0.7167;112
+Europe;France;Toussus-Le Noble;LFPN;48.7667;1.1;161
+Europe;France;Troyes/Barberey;LFQB;48.3333;4.0167;118
+Europe;France;Vichy-Charmeil;LFLV;46.1667;3.4;251
+Europe;France;Villacoublay;LFPV;48.7667;2.2;179
+Europe;FYR Macedonia;Ohrid;LWOH;41.1167;20.8;761
+Europe;FYR Macedonia;Skopje;LWSK;41.9667;21.65;239
+Europe;Germany;Augsburg;EDMA;48.4333;10.9333;463
+Europe;Germany;Bayreuth;EDQD;49.9833;11.6333;498
+Europe;Germany;Berlin-Tegel;EDDT;52.5667;13.3167;37
+Europe;Germany;Berlin-Tempelhof;EDDI;52.4667;13.4;49
+Europe;Germany;Braunschweig;EDVE;52.3;10.45;88
+Europe;Germany;Bremen;EDDW;53.05;8.8;5
+Europe;Germany;Dortmund-Wickede;EDLW;51.5167;7.6167;0
+Europe;Germany;Dresden-Klotzsche;EDDC;51.1333;13.75;232
+Europe;Germany;Dusseldorf;EDDL;51.3;6.7667;41
+Europe;Germany;Frankfurt/Main;EDDF;50.05;8.6;113
+Europe;Germany;Friedrichshafen;EDNY;47.6667;9.5167;424
+Europe;Germany;Hamburg;EDDH;53.6333;10;15
+Europe;Germany;Hamburg-Finkenwerder;EDHI;53.5333;9.8333;13
+Europe;Germany;Hannover;EDDV;52.4667;9.6833;59
+Europe;Germany;Hof;EDQM;50.3167;11.8833;568
+Europe;Germany;Kassel-Calden;EDVK;51.4;9.3833;283
+Europe;Germany;Koln/Bonn;EDDK;50.8667;7.1667;100
+Europe;Germany;Leipzig-Schkeuditz;EDDP;51.4167;12.2333;149
+Europe;Germany;Lubeck-Blankensee;EDHL;53.8167;10.7;15
+Europe;Germany;Monchengladbach;EDLN;51.2167;6.5044;0
+Europe;Germany;Munchen;EDDM;48.1333;11.7;529
+Europe;Germany;Munster/Osnabruck;EDDG;52.1333;7.7;53
+Europe;Germany;Nurnberg;EDDN;49.5;11.05;318
+Europe;Germany;Oberpfaffenhofen;EDMO;48.0833;11.2833;0
+Europe;Germany;Paderborn-Haxterberg;EDLP;51.6167;8.6167;0
+Europe;Germany;Saarbrucken;EDDR;49.2167;7.1167;320
+Europe;Germany;Stuttgart;EDDS;48.6833;9.2167;391
+Europe;Germany;Westerland;EDXW;54.9167;8.35;20
+Europe;Gibraltar;Gibraltar;LXGB;36.15;-5.35;0
+Europe;Greece;Alexandroupolis;LGAL;40.85;25.9167;3
+Europe;Greece;Andravida;LGAD;37.9167;21.2833;14
+Europe;Greece;Araxos;LGRX;38.15;21.4167;12
+Europe;Greece;Athinai;LGAT;37.9;23.7333;15
+Europe;Greece;Chania;LGSA;35.4833;24.1167;151
+Europe;Greece;Elefsis;LGEL;38.0667;23.55;31
+Europe;Greece;Iraklion;LGIR;35.3333;25.1833;39
+Europe;Greece;Kalamata;LGKL;37.0667;22.0167;8
+Europe;Greece;Kavala;LGKV;40.9833;24.6;5
+Europe;Greece;Kefallinia;LGKF;38.1167;20.5;22
+Europe;Greece;Kerkira;LGKR;39.6167;19.9167;4
+Europe;Greece;Kos;LGKO;36.7833;27.0667;0
+Europe;Greece;Kozani;LGKZ;40.3;21.7833;627
+Europe;Greece;Limnos;LGLM;39.9167;25.2333;4
+Europe;Greece;Mitilini;LGMT;39.0667;26.6;5
+Europe;Greece;Mykonos;LGMK;37.4333;25.3458;0
+Europe;Greece;Preveza;LGPZ;38.6167;20.7667;4
+Europe;Greece;Rodos;LGRP;36.4;28.0833;11
+Europe;Greece;Samos;LGSM;37.7;26.9167;7
+Europe;Greece;Santorini;LGSR;36.4;25.4833;0
+Europe;Greece;Skiathos;LGSK;39.1833;23.5;0
+Europe;Greece;Thessaloniki;LGTS;40.5167;22.9667;4
+Europe;Greece;Zakinthos;LGZA;37.75;20.8833;0
+Europe;Hungary;Budapest;LHBP;47.4333;19.2667;185
+Europe;Hungary;Szombathely;LHSY;47.2667;16.6333;221
+Europe;Iceland;Egilsstadir;BIEG;65.2833;-14.4;23
+Europe;Iceland;Keflavik;BIKF;63.9667;-22.6;54
+Europe;Iceland;Reykjavik;BIRK;64.1333;-21.9;61
+Europe;Ireland;Connaught;EIKN;53.9;-8.8181;0
+Europe;Ireland;Cork;EICK;51.85;-8.4833;162
+Europe;Ireland;Dublin;EIDW;53.4333;-6.25;85
+Europe;Ireland;Shannon;EINN;52.7;-8.9167;20
+Europe;Italy;Albenga;LIMG;44.05;8.1167;49
+Europe;Italy;Alghero;LIEA;40.6333;8.2833;40
+Europe;Italy;Amendola;LIBA;41.5333;15.7167;60
+Europe;Italy;Ancona;LIPY;43.6167;13.3667;10
+Europe;Italy;Aviano;LIPA;46.0333;12.6;128
+Europe;Italy;Bari;LIBD;41.1333;16.7833;49
+Europe;Italy;Bergamo;LIME;45.6667;9.7;237
+Europe;Italy;Bologna;LIPE;44.5333;11.3;49
+Europe;Italy;Bolzano;LIPB;46.4667;11.3333;1461
+Europe;Italy;Brindisi;LIBR;40.65;17.95;10
+Europe;Italy;Cagliari;LIEE;39.25;9.0667;5
+Europe;Italy;Capo Mele;LIMU;43.95;8.1667;221
+Europe;Italy;Catania;LICC;37.4667;15.05;17
+Europe;Italy;Cervia;LIPC;44.2167;12.3;10
+Europe;Italy;Crotone;LIBC;39;17.0667;161
+Europe;Italy;Decimomannu;LIED;39.35;8.9667;28
+Europe;Italy;Dobbiaco;LIVD;46.7333;12.2167;1226
+Europe;Italy;Ferrara;LIPF;44.8333;11.6167;10
+Europe;Italy;Firenze;LIRQ;43.8;11.2;38
+Europe;Italy;Forli;LIPK;44.2;12.0667;32
+Europe;Italy;Frontone;LIVF;43.5167;12.7333;574
+Europe;Italy;Frosinone;LIRH;41.6333;13.3;185
+Europe;Italy;Genova;LIMJ;44.4167;8.85;3
+Europe;Italy;Ghedi;LIPL;45.4167;10.2833;97
+Europe;Italy;Gioia del Colle;LIBV;40.7667;16.9333;350
+Europe;Italy;Grosseto;LIRS;42.75;11.0667;7
+Europe;Italy;Guidonia;LIRG;42;12.7333;89
+Europe;Italy;Lamezia;LICA;38.9;16.25;0
+Europe;Italy;Lampedusa;LICD;35.5;12.6;20
+Europe;Italy;Latina;LIRL;41.55;12.9;26
+Europe;Italy;Lecce;LIBN;40.2333;18.15;61
+Europe;Italy;Marino di Ravenna;LIVM;44.45;12.3;6
+Europe;Italy;Milano/Linate;LIML;45.4333;9.2833;103
+Europe;Italy;Milano/Malpensa;LIMC;45.6167;8.7333;211
+Europe;Italy;Monte Argentario;LIQO;42.3833;11.1667;631
+Europe;Italy;Monte Cimone;LIVC;44.2;10.7;2173
+Europe;Italy;Monte Malanotte;LIMY;44.25;7.8;1742
+Europe;Italy;Monte Scuro;LIBQ;39.3333;16.4;1720
+Europe;Italy;Monte Terminillo;LIRK;42.4667;12.9833;1875
+Europe;Italy;Napoli;LIRN;40.85;14.3;72
+Europe;Italy;Novara/Cameri;LIMN;45.5167;8.6667;169
+Europe;Italy;Olbia;LIEO;40.9;9.5167;13
+Europe;Italy;Paganella;LIVP;46.15;11.0333;2129
+Europe;Italy;Palermo;LICJ;38.1833;13.1;21
+Europe;Italy;Pantelleria;LICG;36.8167;11.9667;170
+Europe;Italy;Passo dei Giovi;LIMV;44.6333;8.9333;475
+Europe;Italy;Passo della Cisa;LIMT;44.4333;9.9333;1040
+Europe;Italy;Passo Resia;LIVE;46.8333;10.5;0
+Europe;Italy;Passo Rolle;LIVR;46.3;11.7833;2006
+Europe;Italy;Perugia;LIRZ;43.0833;12.5;205
+Europe;Italy;Pescara;LIBP;42.4333;14.2;11
+Europe;Italy;Piacenza;LIMS;44.9167;9.7333;138
+Europe;Italy;Pian Rosa;LIMH;45.9333;7.7;3488
+Europe;Italy;Pisa;LIRP;43.6833;10.3833;6
+Europe;Italy;Pratica di Mare;LIRE;41.65;12.45;21
+Europe;Italy;Reggio Calabria;LICR;38.0667;15.65;21
+Europe;Italy;Rieti;LIQN;42.4167;12.85;0
+Europe;Italy;Rimini;LIPR;44.0333;12.6167;13
+Europe;Italy;Rivolto;LIPI;45.9833;13.0333;53
+Europe;Italy;Roma/Ciampino;LIRA;41.7833;12.5833;105
+Europe;Italy;Roma/Fiumicino;LIRF;41.8;12.2333;3
+Europe;Italy;Roma/Urbe;LIRU;41.95;12.5;24
+Europe;Italy;Ronchi de' Legionari;LIPQ;45.8167;13.4833;12
+Europe;Italy;Sarzana;LIQW;44.0833;9.9833;10
+Europe;Italy;Sigonella;LICZ;37.4;14.9167;22
+Europe;Italy;Taranto;LIBG;40.5167;17.4;69
+Europe;Italy;Tarvisio;LIVO;46.5;13.5833;778
+Europe;Italy;Torino/Bric Della Croce;LIMK;45.0333;7.7333;710
+Europe;Italy;Torino/Caselle;LIMF;45.2167;7.65;287
+Europe;Italy;Trapani;LICT;37.9167;12.5;14
+Europe;Italy;Trevico;LIRT;41.05;15.2333;1093
+Europe;Italy;Treviso/Istrana;LIPS;45.6833;12.1;46
+Europe;Italy;Treviso/S.Angelo;LIPH;45.65;12.1833;23
+Europe;Italy;Trieste;LIVT;45.65;13.75;20
+Europe;Italy;Venezia;LIPZ;45.5;12.3333;6
+Europe;Italy;Vicenza;LIPT;45.5667;11.5167;53
+Europe;Italy;Villafranca;LIPX;45.3833;10.8667;68
+Europe;Italy;Viterbo;LIRV;42.4333;12.05;308
+Europe;Luxembourg;Luxembourg;ELLX;49.6167;6.2167;379
+Europe;Malta;Luqa;LMML;35.85;14.4833;91
+Europe;Moldova;Kishineu;LUKK;46.9167;28.9308;0
+Europe;Netherlands;Amsterdam;EHAM;52.3;4.7667;:2
+Europe;Netherlands;Deelen;EHDL;52.0667;5.8833;52
+Europe;Netherlands;Den Helder/De Kooy;EHKD;52.9167;4.7833;14
+Europe;Netherlands;Eindhoven;EHEH;51.45;5.4167;28
+Europe;Netherlands;Gilze-Rijen;EHGR;51.5667;4.9333;24
+Europe;Netherlands;Groningen;EHGG;53.1333;6.5833;4
+Europe;Netherlands;Leeuwarden;EHLW;53.2167;5.7667;11
+Europe;Netherlands;Maastricht;EHBK;50.9167;5.7833;116
+Europe;Netherlands;Rotterdam;EHRD;51.95;4.45;:4
+Europe;Netherlands;Twenthe;EHTW;52.2667;6.9;57
+Europe;Netherlands;Utrecht/Soesterberg;EHSB;52.1333;5.2833;25
+Europe;Netherlands;Valkenburg;EHVB;52.1833;4.4167;2
+Europe;Netherlands;Vlieland;EHVL;53.25;4.9167;12
+Europe;Netherlands;Volkel;EHVK;51.65;5.7;21
+Europe;Netherlands;Woensdrecht;EHWO;51.45;4.3333;17
+Europe;Norway;Alesund;ENAL;62.5667;6.1167;22
+Europe;Norway;Alta;ENAT;69.9833;23.3667;3
+Europe;Norway;Andoya;ENAN;69.3;16.15;14
+Europe;Norway;Banak;ENNA;70.0667;24.9833;8
+Europe;Norway;Bardufoss;ENDU;69.0667;18.5333;79
+Europe;Norway;Bergen;ENBR;60.2833;5.2333;50
+Europe;Norway;Berlevag;ENBV;70.8667;29.0333;13
+Europe;Norway;Bodo;ENBO;67.2667;14.3667;13
+Europe;Norway;Bronnoysund;ENBN;65.4667;12.2167;9
+Europe;Norway;Dagali;ENDI;60.4167;8.5167;0
+Europe;Norway;Ekofisk;ENEK;56.55;3.25;0
+Europe;Norway;Fagernes;ENFG;61;9.3;0
+Europe;Norway;Floro;ENFL;61.5833;5.0333;9
+Europe;Norway;Forde/Bringeland;ENBL;61.45;5.8667;0
+Europe;Norway;Frigg;ENFR;59.9333;2;0
+Europe;Norway;Gullfax C;ENGC;61.0333;2.0333;0
+Europe;Norway;Hammerfest;ENHF;70.6667;23.6667;81
+Europe;Norway;Harstad/Narvik/Evenes;ENEV;68.5167;16.6833;26
+Europe;Norway;Haugesund;ENHD;59.35;5.2167;24
+Europe;Norway;Honningsvag;ENHV;71.0167;25.9833;14
+Europe;Norway;Kirkenes;ENKR;69.7333;29.9;91
+Europe;Norway;Kristiansand/Kjevik;ENCN;58.2;8.0833;17
+Europe;Norway;Kristiansund/Kvernberget;ENKB;63.1167;7.8333;62
+Europe;Norway;Leknes;ENLK;68.15;13.6167;26
+Europe;Norway;Lista;ENLI;58.1;6.6333;10
+Europe;Norway;Mehamn;ENMH;71.0333;27.8333;13
+Europe;Norway;Mo I Rana;ENRA;66.3667;14.3;70
+Europe;Norway;Molde;ENML;62.75;7.2667;3
+Europe;Norway;Mosjoen;ENMS;65.8;13.1333;0
+Europe;Norway;Namsos;ENNM;64.4667;11.5833;2
+Europe;Norway;Narvik;ENNK;68.4667;17.5;23
+Europe;Norway;Notodden;ENNO;59.5667;9.2167;0
+Europe;Norway;Orland;ENOL;63.7;9.6;7
+Europe;Norway;Orsta-Volda;ENOV;62.1833;6.0667;74
+Europe;Norway;Oseberg A;ENOA;59.3167;10.45;0
+Europe;Norway;Oslo/Gardenmoen;ENGM;60.2;11.0833;204
+Europe;Norway;Roros;ENRO;62.5833;11.35;626
+Europe;Norway;Rorvik/Ryum;ENRM;64.8333;11.15;0
+Europe;Norway;Rost;ENRS;67.5167;12.1;0
+Europe;Norway;Rygge;ENRY;59.3833;10.7833;53
+Europe;Norway;Sandane;ENSD;61.8333;6.1167;60
+Europe;Norway;Sandnessjoen/Stokka;ENST;65.9667;12.4667;17
+Europe;Norway;Skien/Geiteryggen;ENSN;59.1833;9.5667;14
+Europe;Norway;Sogndal;ENSG;61.15;7.1333;497
+Europe;Norway;Sorkjosen;ENSR;69.7833;20.9667;6
+Europe;Norway;Stavanger/Sola;ENZV;58.8833;5.6333;9
+Europe;Norway;Stokmarknes/Skagen;ENSK;68.5833;15.0167;3
+Europe;Norway;Stord/Sorstokken;ENSO;59.8;5.35;0
+Europe;Norway;Svalbard;ENSB;78.25;15.4667;29
+Europe;Norway;Svolvaer/Helle;ENSH;68.25;14.6667;9
+Europe;Norway;Torp;ENTO;59.2;10.2667;88
+Europe;Norway;Tromso/Langnes;ENTC;69.6833;18.9167;10
+Europe;Norway;Trondheim/Vaernes;ENVA;63.4667;10.9333;17
+Europe;Norway;Vadso;ENVD;70.0667;29.85;39
+Europe;Poland;Gdansk;EPGD;54.3833;18.4667;138
+Europe;Poland;Katowice;EPKT;50.2333;19.0333;284
+Europe;Poland;Krakow;EPKK;50.0833;19.8;237
+Europe;Poland;Poznan;EPPO;52.4167;16.8333;92
+Europe;Poland;Rzeszow;EPRZ;50.1;22.05;202
+Europe;Poland;Szczecin;EPSC;53.4;14.6167;3
+Europe;Poland;Warszawa;EPWA;52.1667;20.9667;107
+Europe;Portugal;Beja;LPBJ;38.0167;-7.8667;247
+Europe;Portugal;Faro;LPFR;37.0167;-7.9667;8
+Europe;Portugal;Funchal;LPFU;32.6833;-16.7667;49
+Europe;Portugal;Lajes;LPLA;38.7667;-27.1;54
+Europe;Portugal;Lisboa;LPPT;38.7667;-9.1333;123
+Europe;Portugal;Porto;LPPR;41.2333;-8.6833;77
+Europe;Portugal;Porto Santo;LPPS;33.0667;-16.35;82
+Europe;Portugal;Santa Maria;LPAZ;36.9667;-25.1667;100
+Europe;Romania;Arad;LRAR;46.2;21.4;118
+Europe;Romania;Bucuresti;LRBS;44.5;26.1333;91
+Europe;Romania;Bucuresti-Otopeni;LROP;44.55;26.1;95
+Europe;Romania;Iasi;LRIA;47.1667;27.6333;104
+Europe;Romania;Kogalniceanu;LRCK;44.3333;28.4333;102
+Europe;Romania;Timisoara;LRTR;45.7667;21.25;88
+Europe;Romania;Tirgu Mures;LRTM;46.5333;24.5333;309
+Europe;Romania;Tulcea;LRTC;45.1833;28.8167;6
+Europe;Russia;Abakan;UNAA;53.75;91.4;0
+Europe;Russia;Anadyr;UHMA;64.7833;177.5667;61
+Europe;Russia;Anapa;URKA;44.9;37.3167;0
+Europe;Russia;Arkhangelsk;ULAA;64.5;40.7333;8
+Europe;Russia;Barnaul;UNBB;53.4333;83.5167;184
+Europe;Russia;Bratsk;UIBB;56.3667;101.6986;0
+Europe;Russia;Bryansk;UUBP;53.25;34.3167;216
+Europe;Russia;Chelyabinsk;USCC;55.1667;61.4;0
+Europe;Russia;Chita;UIAA;52.0833;113.4833;671
+Europe;Russia;Kazan;UWKD;55.7833;49.2;0
+Europe;Russia;Khabarovsk;UHHH;48.5167;135.1667;76
+Europe;Russia;Kliningrad;UMKK;54.7167;20.5;0
+Europe;Russia;Krasnodar;URKK;45.0333;39.15;34
+Europe;Russia;Magadan;UHMM;59.55;150.7833;116
+Europe;Russia;Mineralnye Vody;URMM;44.2333;43.0667;316
+Europe;Russia;Moscow Sheremetyevo;UUEE;55.9833;37.5;0
+Europe;Russia;Murmansk;ULMM;68.9667;33.05;51
+Europe;Russia;Nizhny Novgorod;UWGG;56.3167;44;0
+Europe;Russia;Omsk;UNOO;54.9667;73.3;0
+Europe;Russia;Orenburg;UWOO;51.7667;55.12;0
+Europe;Russia;Perm;USPP;58;56.25;0
+Europe;Russia;Petropavlovsk-Kamchatsky;UHPP;53.0833;158.5833;84
+Europe;Russia;Rostov-Na-Donu;URRR;47.2667;39.8167;75
+Europe;Russia;Samara;UWWW;53.2;50.15;0
+Europe;Russia;Sankt-Peterburg;ULLI;59.9667;30.3;6
+Europe;Russia;Saratov;UWSS;51.5667;46.07;0
+Europe;Russia;Sochi;URSS;43.4333;39.9;13
+Europe;Russia;Stavropol;URMT;45.3333;42;0
+Europe;Russia;Syktyvkar;UUYY;61.7167;50.8333;119
+Europe;Russia;Ufa;UWUU;54.7167;55.93;0
+Europe;Russia;Ulan-Ude;UIUU;51.8333;107.6;515
+Europe;Russia;Ulyanovsk;UWLW;54.35;48.3833;0
+Europe;Russia;Vladivostok;UHWW;43.1167;131.9333;183
+Europe;Russia;Volgograd;URWW;48.7833;44.3667;134
+Europe;Russia;Voronezh;UUOO;51.65;39.25;104
+Europe;Russia;Yakutsk;UEEE;62.0167;129.7167;101
+Europe;Russia;Yekaterinburg;USSS;56.8333;60.6333;283
+Europe;Russia;Yuzhno-Sakhalinsk;UHSS;46.95;142.7167;24
+Europe;Slovakia;Bratislava;LZIB;48.2;17.2;142
+Europe;Slovakia;Poprad;LZTT;49.0667;20.25;695
+Europe;Slovenia;Ljubljana;LJLJ;46.2167;14.4833;362
+Europe;Slovenia;Maribor;LJMB;46.4833;15.6833;265
+Europe;Slovenia;Portoroz;LJPZ;45.5167;13.5667;0
+Europe;Spain;Alicante;LEAL;38.2833;-0.55;31
+Europe;Spain;Almeria;LEAM;36.85;-2.3833;21
+Europe;Spain;Asturias;LEAS;43.55;-6.0333;130
+Europe;Spain;Barcelona;LEBL;41.2833;2.0667;6
+Europe;Spain;Bilbao;LEBB;43.3;-2.9333;37
+Europe;Spain;Canarias/Fuerteventura;GCFV;28.45;-13.8667;30
+Europe;Spain;Canarias/Gran Canaria;GCLP;27.9333;-15.3833;47
+Europe;Spain;Canarias/Hierro;GCHI;27.8167;-17.8833;32
+Europe;Spain;Canarias/Lanzarote;GCRR;28.95;-13.6;21
+Europe;Spain;Canarias/La Palma;GCLA;28.6167;-17.75;31
+Europe;Spain;Canarias/Tenerife Norte;GCXO;28.4667;-16.3167;617
+Europe;Spain;Canarias/Tenerife Sur;GCTS;28.05;-16.5667;77
+Europe;Spain;Girona;LEGE;41.9;2.7667;129
+Europe;Spain;Granada;LEGR;37.1833;-3.7833;570
+Europe;Spain;Ibiza;LEIB;38.8667;1.3833;12
+Europe;Spain;Jerez;LEJR;36.75;-6.0667;28
+Europe;Spain;La Coruna;LECO;43.3;-8.3833;103
+Europe;Spain;Madrid (Barajas);LEMD;40.45;-3.55;582
+Europe;Spain;Madrid (Cuatro Vientos);LEVS;40.3833;-3.7833;687
+Europe;Spain;Malaga;LEMG;36.6667;-4.4833;7
+Europe;Spain;Melilla;GEML;35.2833;-2.95;55
+Europe;Spain;Menorca;LEMH;39.8667;4.2333;82
+Europe;Spain;Murcia;LELC;37.7833;-0.8;3
+Europe;Spain;Palma de Mallorca;LEPA;39.55;2.7333;8
+Europe;Spain;Pamplona;LEPP;42.7667;-1.6333;453
+Europe;Spain;Reus;LERS;41.15;1.1667;76
+Europe;Spain;San Sebastian;LESO;43.35;-1.8;8
+Europe;Spain;Santander;LEXJ;43.4333;-3.8167;9
+Europe;Spain;Santiago;LEST;42.9;-8.4333;367
+Europe;Spain;Sevilla;LEZL;37.4167;-5.9;31
+Europe;Spain;Valencia;LEVC;39.5;-0.4667;62
+Europe;Spain;Vigo;LEVX;42.2167;-8.6333;255
+Europe;Spain;Vitoria;LEVT;42.8833;-2.7167;510
+Europe;Spain;Zaragoza;LEZG;41.6667;-1.0167;258
+Europe;Sweden;Goteborg (Landvetter);ESGG;57.6667;12.3;0
+Europe;Sweden;Goteborg (Save);ESGP;57.7833;11.8833;53
+Europe;Sweden;Jonkoping;ESGJ;57.7667;14.0833;232
+Europe;Sweden;Kiruna;ESNQ;67.8167;20.3333;0
+Europe;Sweden;Malmo/Sturup;ESMS;55.55;13.3667;0
+Europe;Sweden;Norrkoping;ESSP;58.5833;16.15;0
+Europe;Sweden;Ronneby;ESDF;56.2667;15.2833;74
+Europe;Sweden;Stockholm (Arlanda);ESSA;59.65;17.95;61
+Europe;Sweden;Stockholm (Bromma);ESSB;59.35;17.95;14
+Europe;Sweden;Sundsvall-Harnosand;ESNN;62.5333;17.45;10
+Europe;Sweden;Umea;ESNU;63.8;20.2833;14
+Europe;Sweden;Vasteras;ESOW;59.5833;16.6333;31
+Europe;Sweden;Vaxjo;ESMX;56.85;14.8333;200
+Europe;Sweden;Visby;ESSV;57.6667;18.35;47
+Europe;Switzerland;Bern;LSZB;46.9167;7.5;0
+Europe;Switzerland;Geneve;LSGG;46.25;6.1333;416
+Europe;Switzerland;Lugano;LSZA;46;8.9667;276
+Europe;Switzerland;Zurich;LSZH;47.4833;8.5333;432
+Europe;Turkey;Adana;LTAF;36.9833;35.3;20
+Europe;Turkey;Adana/Incirlik;LTAG;37;35.4167;66
+Europe;Turkey;Amasya;LTAP;40.85;35.5833;535
+Europe;Turkey;Ankara/Esenboga;LTAC;40.1167;32.9833;949
+Europe;Turkey;Ankara/Etimesgut;LTAD;39.95;32.6833;806
+Europe;Turkey;Antalya;LTAI;36.7;30.7333;57
+Europe;Turkey;Balikesir;LTBF;39.6167;27.9167;102
+Europe;Turkey;Balikesir/Bandirma;LTBG;40.3167;27.9667;49
+Europe;Turkey;Batman;LTCJ;37.8667;41.1667;540
+Europe;Turkey;Bursa;LTBE;40.1833;29.0667;100
+Europe;Turkey;Diyarbakir;LTCC;37.8833;40.1833;677
+Europe;Turkey;Elazig;LTCA;38.6;39.2833;882
+Europe;Turkey;Erzurum;LTCE;39.9167;41.2667;1758
+Europe;Turkey;Eskisehir;LTBI;39.7833;30.5667;785
+Europe;Turkey;Gaziantep;LTAJ;37.0833;37.3667;701
+Europe;Turkey;Istanbul;LTBA;40.9667;28.8167;37
+Europe;Turkey;Izmir/Adnan Menderes;LTBJ;38.2667;27.15;120
+Europe;Turkey;Izmir/Cigli;LTBL;38.5;27.0167;5
+Europe;Turkey;Izmit;LTBQ;40.7333;30.0833;0
+Europe;Turkey;Kayseri;LTAU;38.7833;35.4833;1054
+Europe;Turkey;Konya;LTAN;37.9667;32.55;1022
+Europe;Turkey;Malatya;LTAT;38.4333;38.0833;849
+Europe;Turkey;Manisa;LTBT;38.9167;27.85;93
+Europe;Turkey;Mugla/Dalaman;LTBS;36.7;28.7833;2
+Europe;Turkey;Trabzon;LTCG;41;39.7167;30
+Europe;Turkey;Van;LTCI;38.45;43.3167;1661
+Europe;Ukraine;Dnipropetrovsk;UKDD;48.5333;34.6667;0
+Europe;Ukraine;Donetsk;UKCC;48.0833;37.75;0
+Europe;Ukraine;Kharkiv;UKHH;49.9667;36.1333;155
+Europe;Ukraine;Kryviy Rig/Lozovatka;UKDR;48.05;33.22;0
+Europe;Ukraine;Kyiv/Boryspil;UKBB;50.3333;30.9667;122
+Europe;Ukraine;Kyiv/Zhulyany;UKKK;50.4;30.5667;167
+Europe;Ukraine;Lviv;UKLL;49.8167;23.95;323
+Europe;Ukraine;Odesa;UKOO;46.4333;30.7667;42
+Europe;Ukraine;Sympheropol;UKFF;44.6833;34.1333;181
+Europe;United Kingdom;Aberdeen;EGPD;57.2;-2.2167;0
+Europe;United Kingdom;Alderney;EGJA;49.7167;-2.2;0
+Europe;United Kingdom;Belfast/Aldergrove;EGAA;54.65;-6.2167;0
+Europe;United Kingdom;Belfast/Harbour;EGAC;54.6;-5.8833;0
+Europe;United Kingdom;Benbecula;EGPL;57.4667;-7.3667;0
+Europe;United Kingdom;Biggin Hill;EGKB;51.3167;0.0333;0
+Europe;United Kingdom;Birmingham;EGBB;52.45;-1.7333;0
+Europe;United Kingdom;Blackpool;EGNH;53.7667;-3.0333;0
+Europe;United Kingdom;Boscombe Down;EGDM;51.1667;-1.75;0
+Europe;United Kingdom;Boulmer;EGQM;55.4167;-1.6;0
+Europe;United Kingdom;Bournemouth;EGHH;50.7833;-1.8333;0
+Europe;United Kingdom;Bristol;EGGD;51.3833;-2.7167;0
+Europe;United Kingdom;Cambridge;EGSC;52.2;0.1833;0
+Europe;United Kingdom;Cardiff;EGFF;51.4;-3.35;0
+Europe;United Kingdom;Carlisle;EGNC;54.9333;-2.95;0
+Europe;United Kingdom;Coventry;EGBE;52.3667;-1.4833;0
+Europe;United Kingdom;Cranfield;EGTC;52.0667;-0.6167;0
+Europe;United Kingdom;Culdrose;EGDR;50.0833;-5.25;0
+Europe;United Kingdom;Dundee;EGPN;56.45;-3.0167;0
+Europe;United Kingdom;East Midlands;EGNX;52.8333;-1.3333;0
+Europe;United Kingdom;Edinburgh;EGPH;55.95;-3.35;0
+Europe;United Kingdom;Eglington/Londonderry;EGAE;55.05;-7.15;0
+Europe;United Kingdom;Exeter;EGTE;50.7333;-3.4167;0
+Europe;United Kingdom;Glasgow;EGPF;55.8667;-4.4333;0
+Europe;United Kingdom;Guernsey;EGJB;49.4333;-2.6;0
+Europe;United Kingdom;Humberside;EGNJ;53.5833;-0.35;0
+Europe;United Kingdom;Inverness;EGPE;57.5333;-4.05;0
+Europe;United Kingdom;Isle of Man;EGNS;54.0833;-4.6333;0
+Europe;United Kingdom;Jersey;EGJJ;49.2167;-2.2;0
+Europe;United Kingdom;Kinloss;EGQK;57.65;-3.5667;0
+Europe;United Kingdom;Leeds and Bradford;EGNM;53.8667;-1.65;0
+Europe;United Kingdom;Leuchars;EGQL;56.3833;-2.8667;0
+Europe;United Kingdom;Liverpool;EGGP;53.3333;-2.85;0
+Europe;United Kingdom;London/City;EGLC;51.5;-0.5;0
+Europe;United Kingdom;London/Gatwick;EGKK;51.15;-0.1833;0
+Europe;United Kingdom;London/Heathrow;EGLL;51.4833;-0.45;0
+Europe;United Kingdom;London/Stansted;EGSS;51.8833;0.2333;0
+Europe;United Kingdom;Lossiemouth;EGQS;57.7167;-3.3167;0
+Europe;United Kingdom;Luton;EGGW;51.8667;-0.3667;0
+Europe;United Kingdom;Lyneham;EGDL;51.5;-1.9833;0
+Europe;United Kingdom;Manchester;EGCC;53.35;-2.2833;0
+Europe;United Kingdom;Newcastle;EGNT;55.0333;-1.7;0
+Europe;United Kingdom;Norwich;EGSH;52.6333;1.3;0
+Europe;United Kingdom;Plymouth;EGHD;50.4167;-4.1167;0
+Europe;United Kingdom;Prestwick;EGPK;55.5;-4.5833;0
+Europe;United Kingdom;Saint Mawgan;EGDG;50.4333;-5;0
+Europe;United Kingdom;Scatsta;EGPM;60.4333;-1.3;0
+Europe;United Kingdom;Scilly Isles;EGHE;49.9167;-6.3;0
+Europe;United Kingdom;Shawbury;EGOS;52.8;-2.6667;0
+Europe;United Kingdom;Shoreham;EGKA;50.8333;-0.2833;0
+Europe;United Kingdom;Southampton;EGHI;50.9;-1.4;0
+Europe;United Kingdom;Southend;EGMC;51.5667;0.7;0
+Europe;United Kingdom;Staverton;EGBJ;51.9;-2.1667;0
+Europe;United Kingdom;Stornoway;EGPO;58.2167;-6.3167;13
+Europe;United Kingdom;Sumburgh;EGPB;59.8833;-1.3;0
+Europe;United Kingdom;Tees-Side;EGNV;54.5167;-1.4167;0
+Europe;United Kingdom;Tiree;EGPU;56.5;-6.8833;0
+Europe;United Kingdom;Valley;EGOV;53.25;-4.5333;0
+Europe;United Kingdom;Wick;EGPC;58.45;-3.0833;0
+Europe;United Kingdom;Yeovilton;EGDY;51;-2.6333;0
+Europe;Yugoslavia;Beograd;LYBE;44.8167;20.2833;99
+Europe;Yugoslavia;Nis;LYNI;43.3333;21.9;202
+Europe;Yugoslavia;Podgorica;LYPG;42.4333;19.2833;0
+Europe;Yugoslavia;Pristina;LYPR;42.65;21.15;576
+Mexico;Mexico;Acapulco;MMAA;16.7667;-99.75;0
+Mexico;Mexico;Aeropuerto del Norte;MMAN;25.8667;-100.2333;450
+Mexico;Mexico;Aguascaliantes;MMAS;21.8833;-102.3;0
+Mexico;Mexico;Bahias de Huatulco;MMBT;15.7833;-96.2667;0
+Mexico;Mexico;Campeche;MMCP;19.85;-90.55;0
+Mexico;Mexico;Cancun;MMUN;21.0333;-86.8667;0
+Mexico;Mexico;Chetumal;MMCM;18.4833;-88.3;0
+Mexico;Mexico;Chihuahua;MMCU;28.7;-105.9667;0
+Mexico;Mexico;Ciudad del Carmen;MMCE;18.65;-91.8;0
+Mexico;Mexico;Ciudad Juarez;MMCS;31.6333;-106.4333;0
+Mexico;Mexico;Ciudad Obregon;MMCN;27.3167;-112.3;0
+Mexico;Mexico;Ciudad Victoria;MMCV;23.7167;-98.9667;0
+Mexico;Mexico;Colima;MMIA;19.2667;-103.5833;0
+Mexico;Mexico;Cozumel;MMCZ;20.5333;-86.9333;0
+Mexico;Mexico;Cuernavaca;MMCB;18.8833;-99.2333;0
+Mexico;Mexico;Culiacan;MMCL;24.8167;-107.4;0
+Mexico;Mexico;Del Bajio;MMLO;21;-101.4833;0
+Mexico;Mexico;Durango;MMDO;24.1333;-104.5333;0
+Mexico;Mexico;Guadalajara;MMGL;20.5167;-103.3167;0
+Mexico;Mexico;Guaymas;MMGM;27.9667;-110.9333;0
+Mexico;Mexico;Hermosillo;MMHO;29.0667;-110.95;0
+Mexico;Mexico;Ixtapa;MMZH;17.6;-101.4667;0
+Mexico;Mexico;La Paz;MMLP;24.0667;-110.3667;0
+Mexico;Mexico;Los Mochis;MMLM;25.6833;-109.0833;0
+Mexico;Mexico;Manzanillo;MMZO;19.15;-104.5667;0
+Mexico;Mexico;Matamoros;MMMA;25.7667;-97.5333;0
+Mexico;Mexico;Mazatlan;MMMZ;23.1667;-106.2667;0
+Mexico;Mexico;Merida;MMMD;20.9833;-89.65;11
+Mexico;Mexico;Mexicali;MMML;32.6333;-117;0
+Mexico;Mexico;Mexico;MMMX;19.4333;-99.1;0
+Mexico;Mexico;Minatitlan;MMMT;18.1;-94.5833;0
+Mexico;Mexico;Monclova;MMMV;26.8833;-101.4167;586
+Mexico;Mexico;Monterrey;MMMY;25.7833;-100.1;0
+Mexico;Mexico;Morelia;MMMM;19.85;-101.0333;0
+Mexico;Mexico;Nuevo Laredo;MMNL;27.4333;-99.5667;0
+Mexico;Mexico;Oaxaca;MMOX;16.9667;-96.7333;0
+Mexico;Mexico;Piedras Negras;MMPG;28.7;-100.5167;0
+Mexico;Mexico;Poza Rica;MMPA;20.5167;-97.4667;0
+Mexico;Mexico;Puebla;MMPB;19.05;-98.1667;0
+Mexico;Mexico;Puerto Escondido;MMPS;15.8667;-97.0833;0
+Mexico;Mexico;Puerto Vallarta;MMPR;20.6833;-105.25;0
+Mexico;Mexico;Queretaro;MMQT;20.6;-100.3833;0
+Mexico;Mexico;Reynosa;MMRX;26.0167;-98.2333;0
+Mexico;Mexico;Saltillo;MMIO;25.45;-100.9833;0
+Mexico;Mexico;San Jose del Cabo;MMSD;23.15;-109.7;0
+Mexico;Mexico;San Luis Potosi;MMSP;22.15;-100.9833;0
+Mexico;Mexico;Tampico;MMTM;22.2833;-97.8667;0
+Mexico;Mexico;Tapachula;MMTP;14.7833;-92.3833;0
+Mexico;Mexico;Tepic;MMEP;21.5167;-104.9;0
+Mexico;Mexico;Tijuana;MMTJ;32.55;-116.9667;0
+Mexico;Mexico;Toluca;MMTO;19.35;-99.5667;0
+Mexico;Mexico;Torreon;MMTC;25.5333;-103.45;1150
+Mexico;Mexico;Tulancingo;MMTL;20.0833;-98.3667;0
+Mexico;Mexico;Tuxtla Gutierrez;MMTG;16.75;-93.1167;0
+Mexico;Mexico;Uruapan;MMPN;19.4;-102.0333;0
+Mexico;Mexico;Veracruz;MMVR;19.15;-96.1833;0
+Mexico;Mexico;Villahermosa;MMVA;18;-92.8167;0
+Mexico;Mexico;Zacatecas;MMZC;22.9;-102.6833;0
+Middle East;Algeria;Adrar;DAUA;27.8833;-0.2833;263
+Middle East;Algeria;Annaba;DABB;36.8333;7.8167;4
+Middle East;Algeria;Constantine;DABC;36.2833;6.6167;694
+Middle East;Algeria;Dar-El-Beida;DAAG;36.7167;3.25;25
+Middle East;Algeria;Ghardaia;DAUG;32.3833;3.8167;450
+Middle East;Algeria;Hassi-Messaoud;DAUH;31.6667;6.15;142
+Middle East;Algeria;In Amenas;DAUZ;28.05;9.6333;562
+Middle East;Algeria;Oran/Es Senia;DAOO;35.6333;-0.6;90
+Middle East;Algeria;Tamanrasset/Aguenna;DAAT;22.8167;5.4667;0
+Middle East;Algeria;Tebessa;DABS;35.4833;8.1333;813
+Middle East;Algeria;Tlemcen Zenata;DAON;35.0167;-1.4667;247
+Middle East;Bahrain;Bahrain;OBBI;26.2667;50.65;2
+Middle East;Iran, Islamic Republic of;Ahwaz;OIAW;31.3333;48.6667;22
+Middle East;Iran, Islamic Republic of;Bandarabbass;OIKB;27.2167;56.3667;10
+Middle East;Iran, Islamic Republic of;Esfahan;OIFM;32.4667;51.7167;1550
+Middle East;Iran, Islamic Republic of;Kerman;OIKK;30.25;56.9667;1754
+Middle East;Iran, Islamic Republic of;Mashhad;OIMM;36.2667;59.6333;980
+Middle East;Iran, Islamic Republic of;Shiraz;OISS;29.5333;52.5833;1491
+Middle East;Iran, Islamic Republic of;Tabriz;OITT;38.0833;46.2833;1361
+Middle East;Iran, Islamic Republic of;Tehran-Mehrabad;OIII;35.6833;51.35;1191
+Middle East;Israel;Ben Gurion;LLBG;32;34.9;49
+Middle East;Israel;Eilat;LLET;29.55;34.95;12
+Middle East;Israel;Ovda;LLOV;30;34.8333;445
+Middle East;Kuwait;Kuwait;OKBK;29.2167;47.9833;55
+Middle East;Lebanon;Beirut;OLBA;33.8167;35.4833;19
+Middle East;Oman;Masirah;OOMA;20.6667;58.9;19
+Middle East;Oman;Saiq;OOSQ;23.0667;57.65;0
+Middle East;Oman;Salalah;OOSA;17.0333;54.0833;17
+Middle East;Oman;Seeb;OOMS;23.5833;58.2833;17
+Middle East;Oman;Thumrait;OOTH;17.6667;54.0333;0
+Middle East;Qatar;Doha;OTBD;25.25;51.5667;10
+Middle East;Saudi Arabia;Abha;OEAB;18.2333;42.65;2093
+Middle East;Saudi Arabia;Al Ahsa;OEAH;25.3;49.4833;178
+Middle East;Saudi Arabia;Al Baha;OEBA;20.3;41.6333;1662
+Middle East;Saudi Arabia;Al-Jouf;OESK;29.7833;40.1;689
+Middle East;Saudi Arabia;Al Qaysumah;OEPA;28.3167;46.1167;360
+Middle East;Saudi Arabia;Arar;OERR;30.9;41.1333;549
+Middle East;Saudi Arabia;Bisha;OEBH;19.9833;42.6167;1163
+Middle East;Saudi Arabia;Dawadmi;OEDW;24.5;44.35;991
+Middle East;Saudi Arabia;Dhahran;OEDR;26.2667;50.15;17
+Middle East;Saudi Arabia;Gassim;OEGS;26.3;43.7667;650
+Middle East;Saudi Arabia;Gizan;OEGN;16.9;42.5833;7
+Middle East;Saudi Arabia;Guriat;OEGT;31.4;37.2667;504
+Middle East;Saudi Arabia;Hafr Al-Batin;OEKK;27.9;45.5333;414
+Middle East;Saudi Arabia;Hail;OEHL;27.4333;41.6833;1013
+Middle East;Saudi Arabia;Jeddah King Abdul Aziz International Airport;OEJN;21.7;39.1833;17
+Middle East;Saudi Arabia;Khamis Mushait;OEKM;18.3;42.8;2056
+Middle East;Saudi Arabia;King Khaled International Airport;OERK;24.9333;46.7167;612
+Middle East;Saudi Arabia;Madinah;OEMA;24.55;39.7;636
+Middle East;Saudi Arabia;Makkah;OEMK;21.4333;39.7667;240
+Middle East;Saudi Arabia;Najran;OENG;17.6167;44.4167;1210
+Middle East;Saudi Arabia;Rafha;OERF;29.6167;43.4833;444
+Middle East;Saudi Arabia;Riyadh;OERY;24.7167;46.7333;620
+Middle East;Saudi Arabia;Sharurah;OESH;17.4667;47.1167;725
+Middle East;Saudi Arabia;Tabuk;OETB;28.3667;36.6;768
+Middle East;Saudi Arabia;Taif;OETF;21.4833;40.55;1454
+Middle East;Saudi Arabia;Turaif;OETR;31.6833;38.7333;852
+Middle East;Saudi Arabia;Wadi Al Dawasser Airport;OEWD;20.5;45.2;622
+Middle East;Saudi Arabia;Wejh;OEWJ;26.2;36.4667;21
+Middle East;Saudi Arabia;Yenbo;OEYN;24.15;38.0667;10
+Middle East;United Arab Emirates;Abu Dhabi;OMAA;24.4333;54.65;27
+Middle East;United Arab Emirates;Abu Dhabi - Bateen;OMAD;24.4333;54.4667;3
+Middle East;United Arab Emirates;Al Ain;OMAL;24.2667;55.6;262
+Middle East;United Arab Emirates;Dubai;OMDB;25.25;55.3333;5
+Middle East;United Arab Emirates;Fujairah;OMFJ;25.1;56.3333;28
+Middle East;United Arab Emirates;Ras Al Khaimah;OMRK;25.6167;55.9333;31
+Middle East;United Arab Emirates;Sharjah;OMSJ;25.3333;55.5167;33
+Middle East;Yemen;Aden;OYAA;12.6667;45.0333;3
+Middle East;Yemen;Hodeidah;OYHD;14.75;42.9833;115
+Middle East;Yemen;Marib;OYMB;15.4333;45.3333;0
+Middle East;Yemen;Sana'A;OYSN;15.5167;44.1833;2190
+Middle East;Yemen;Sayun;OYSY;15.9667;48.8;0
+Middle East;Yemen;Socotra;OYSQ;12.6333;53.9;47
+Middle East;Yemen;Taiz;OYTZ;13.6833;44.1333;1385
+Misc.;Antarctica;Amundsen-Scott South Pole Station;NZSP;-90;-0;2835
+Misc.;Antarctica;South Pole Ice Runway;NZIR;-77.8667;166.5333;0
+Misc.;Antarctica;Williams Field;NZCM;-77.8667;166.9667;8
+Misc.;Greenland;Constable Pynt;BGCO;70.75;-22.65;10
+Misc.;Greenland;Godthaab / Nuuk;BGGH;64.1667;-51.75;70
+Misc.;Greenland;Jacobshavn Lufthavn;BGJN;69.2333;-51.0667;31
+Misc.;Greenland;Kulusuk Lufthavn;BGKK;65.5833;-37.15;37
+Misc.;Greenland;Narsarsuaq;BGBW;61.1667;-45.4167;32
+Misc.;Greenland;Sdr Stroemfjord;BGSF;67.0167;-50.7;53
+Misc.;Greenland;Thule Air Base;BGTL;76.5333;-68.75;77
+United States;Alabama;Anniston;KANB;33.5833;-85.8475;183
+United States;Alabama;Auburn;KAUO;32.6167;-85.4333;0
+United States;Alabama;Birmingham;KBHM;33.55;-86.745;197
+United States;Alabama;Decatur;KDCU;34.65;-86.9433;176
+United States;Alabama;Dothan;KDHN;31.3167;-85.4497;113
+United States;Alabama;Evergreen;KGZH;31.4167;-87.0481;78
+United States;Alabama;Gadsden;KGAD;33.9667;-86.0833;0
+United States;Alabama;Huntsville;KHSV;34.6333;-86.7856;191
+United States;Alabama;Mobile Downtown;KBFM;30.6;-88.0633;20
+United States;Alabama;Mobile Regional Airport;KMOB;30.6833;-88.2456;67
+United States;Alabama;Montgomery;KMGM;32.3;-86.4061;63
+United States;Alabama;Montgomery-Maxwell AFB;KMXF;32.3833;-86.3667;0
+United States;Alabama;Muscle Shoals;KMSL;34.7333;-87.5994;164
+United States;Alabama;Ozark;KOZR;31.2833;-85.7167;0
+United States;Alabama;Tuscaloosa;KTCL;33.2;-87.6158;49
+United States;Alaska;Adak;PADK;51.8833;-176.6247;4
+United States;Alaska;Ambler;PAFM;67.1;-157.85;0
+United States;Alaska;Anaktuvuk;PAKP;68.1333;-151.7333;0
+United States;Alaska;Anchorage;PANC;61.1667;-149.9961;48
+United States;Alaska;Anchorage - Elmendorf AFB;PAED;61.25;-149.8;59
+United States;Alaska;Aniak;PANI;61.5833;-159.5333;26
+United States;Alaska;Annette;PANT;55.0333;-131.5667;34
+United States;Alaska;Barrow;PABR;71.2833;-156.7781;10
+United States;Alaska;Barter Island;PABA;70.1333;-143.6333;15
+United States;Alaska;Bethel;PABE;60.7833;-161.8333;46
+United States;Alaska;Bettles;PABT;66.9167;-151.5167;196
+United States;Alaska;Big River Lake;PALV;60.8167;-152.3;0
+United States;Alaska;Cantwell;PATW;63.4;-148.95;0
+United States;Alaska;Cape Lisburne;PALU;68.8833;-166.1333;0
+United States;Alaska;Cape Newenham;PAEH;58.65;-162.0667;0
+United States;Alaska;Cape Romanzoff;PACZ;61.7833;-166.0333;0
+United States;Alaska;Chandalar Lake;PALR;67.5;-148.4833;0
+United States;Alaska;Chulitna;PAEC;62.8833;-149.8333;0
+United States;Alaska;Circle City;PACR;65.8333;-144.0667;0
+United States;Alaska;Cold Bay;PACD;55.2167;-162.7278;29
+United States;Alaska;Cordova;PACV;60.4833;-145.4778;13
+United States;Alaska;Dead Horse;PASC;70.2;-148.4667;0
+United States;Alaska;Dillingham;PADL;59.05;-158.5167;29
+United States;Alaska;Dutch Harbor;PADU;53.9;-166.55;0
+United States;Alaska;Elfin Cove;PAEL;58.2;-136.35;0
+United States;Alaska;Emmonak;PAEM;62.7667;-164.5;0
+United States;Alaska;Fairbanks;PAFA;64.8;-147.8761;140
+United States;Alaska;Farbanks/Eielson AFB;PAEI;64.65;-147.0667;167
+United States;Alaska;Fort Greely/Allen AAF;PABI;64;-145.7333;391
+United States;Alaska;Galbraith Lake;PAGB;68.4833;-149.4833;0
+United States;Alaska;Galena;PAGA;64.7333;-156.9333;49
+United States;Alaska;Gambell;PAGM;63.7667;-171.7333;0
+United States;Alaska;Gulkana;PAGK;62.15;-145.45;481
+United States;Alaska;Gustavus;PAGS;58.4167;-135.7333;9
+United States;Alaska;Haines;PAHN;59.25;-135.5167;0
+United States;Alaska;Hayes River;PAHZ;61.9833;-152.0833;0
+United States;Alaska;Healy River;PAHV;63.8833;-149.0167;0
+United States;Alaska;Homer;PAHO;59.65;-151.4833;0
+United States;Alaska;Hoonah;PAOH;58.1167;-135.45;0
+United States;Alaska;Iliamna;PAIL;59.75;-154.9167;49
+United States;Alaska;Juneau;PAJN;58.35;-134.5625;8
+United States;Alaska;Kake;PAFE;56.9667;-133.95;0
+United States;Alaska;Kenai;PAEN;60.5667;-151.2392;25
+United States;Alaska;Ketchikan;PAKT;55.35;-131.7225;25
+United States;Alaska;King Salmon;PAKN;58.6833;-156.6539;10
+United States;Alaska;Klawock;PAKW;55.5833;-133.0833;0
+United States;Alaska;Kodiak;PADQ;57.75;-152.5;34
+United States;Alaska;Kotzebue;PAOT;66.8833;-162.6042;5
+United States;Alaska;Lake Hood;PALH;61.1833;-149.9667;0
+United States;Alaska;McCarthy;PAMX;61.4333;-142.9333;0
+United States;Alaska;McGrath;PAMC;62.9667;-155.6167;103
+United States;Alaska;Mekoryuk;PAMY;60.3667;-166.2667;0
+United States;Alaska;Merril Field;PAMR;61.2167;-149.85;0
+United States;Alaska;Middleton Island;PAMD;59.4333;-146.3333;14
+United States;Alaska;Minchumina;PAMH;63.9;-152.2667;214
+United States;Alaska;Nabesna/Devil Mt.;PABN;62.4;-143;0
+United States;Alaska;Nenana;PANN;64.55;-149.0833;0
+United States;Alaska;Nome;PAOM;64.5;-165.4356;4
+United States;Alaska;Northway;PAOR;62.95;-141.9364;522
+United States;Alaska;Palmer;PAAQ;61.6;-149.0833;0
+United States;Alaska;Paxson;PAXK;63.0333;-145.5;0
+United States;Alaska;Petersburg;PAPG;56.8167;-132.9667;0
+United States;Alaska;Point Hope;PAPO;68.35;-166.8;0
+United States;Alaska;Point Lay;PPIZ;69.8167;-162.9167;0
+United States;Alaska;Port Alexander;PAAP;56.25;-134.65;0
+United States;Alaska;Port Alsworth;PALJ;60.2;-154.3;0
+United States;Alaska;Port Heiden;PAPH;56.95;-158.6167;0
+United States;Alaska;Puntilla Lake;PAPT;62.1;-152.75;0
+United States;Alaska;Saint Mary's;PASM;62.0667;-163.3;0
+United States;Alaska;Saint Paul;PASN;57.15;-170.2167;9
+United States;Alaska;Sand Point;PASD;55.3167;-160.5167;0
+United States;Alaska;Selanik;PASK;66.6167;-160;0
+United States;Alaska;Seward;PAWD;60.1167;-149.45;18
+United States;Alaska;Shishmaref;PASH;66.2667;-166.05;0
+United States;Alaska;Sitka;PASI;57.0333;-135.3647;14
+United States;Alaska;Skagway;PAGY;59.4667;-135.3;5
+United States;Alaska;Skwentna;PASW;61.9667;-151.1833;0
+United States;Alaska;Slana;PADT;62.7;-143.9833;0
+United States;Alaska;Snowshoe Lake;PALK;62.0333;-142.6667;0
+United States;Alaska;Soldotna;PASX;60.4833;-151.0333;0
+United States;Alaska;Sparrevohn;PASV;61.1;-155.5667;0
+United States;Alaska;Sutton;PAJV;61.7167;-148.8833;0
+United States;Alaska;Talkeetna;PATK;62.3167;-150.0936;109
+United States;Alaska;Tanana;PATA;65.1667;-152.1;67
+United States;Alaska;Tatalina;PATL;62.9;-155.9833;0
+United States;Alaska;Tin City;PATC;65.5667;-167.9167;0
+United States;Alaska;Togiak Village;PATG;59.05;-160.4;0
+United States;Alaska;Umiat;PAUM;69.3667;-152.1333;85
+United States;Alaska;Unalakleet;PAUN;63.8833;-160.8;6
+United States;Alaska;Valdez 2;PAVD;61.1333;-146.2667;0
+United States;Alaska;Wainwright;PAFB;64.8333;-147.6167;0
+United States;Alaska;Whittier;PAWR;60.7667;-148.6833;0
+United States;Alaska;Willow Airport;PAUO;61.75;-150.05;0
+United States;Alaska;Wrangell;PAWG;56.4833;-132.3667;13
+United States;Alaska;Yakutat;PAYA;59.5167;-139.6667;9
+United States;Arizona;Casa Granda;KCGZ;32.95;-111.7667;0
+United States;Arizona;Chandler;KIWA;33.3167;-111.65;0
+United States;Arizona;Douglas;KDUG;31.4667;-109.6036;0
+United States;Arizona;Flagstaff;KFLG;35.1333;-111.6722;2134
+United States;Arizona;Fort Huachuca;KFHU;31.5833;-110.3333;1428
+United States;Arizona;Gila Bend;KGBN;32.4333;-112.6833;261
+United States;Arizona;Grand Canyon;KGCN;35.9333;-112.1547;2016
+United States;Arizona;Kingman;KIGM;35.25;-113.9331;1032
+United States;Arizona;Mesa-Falcon Field;KFFZ;33.4667;-111.7333;0
+United States;Arizona;Nogales;K13A;31.4167;-110.85;1198
+United States;Arizona;Page;KPGA;36.9167;-111.4481;1307
+United States;Arizona;Phoenix;KPHX;33.4333;-112.0511;336
+United States;Arizona;Phoenix-Deer Valley;KDVT;33.6833;-112.0656;443
+United States;Arizona;Phoenix-Goodyear;KGYR;33.4167;-112.3833;0
+United States;Arizona;Phoenix-Luke AFB;KLUF;33.5333;-112.3833;332
+United States;Arizona;Prescott;KPRC;34.6333;-112.4222;1524
+United States;Arizona;Safford-Municipal Airport;KSAD;32.85;-109.6356;962
+United States;Arizona;Scottsdale;KSDL;33.6167;-111.9106;447
+United States;Arizona;Show Low;KSOW;34.2667;-110;0
+United States;Arizona;Tucson;KTUS;32.1167;-110.9553;786
+United States;Arizona;Tucson-Davis AFB;KDMA;32.1667;-110.8833;0
+United States;Arizona;Winslow;KINW;35.0167;-110.7208;1490
+United States;Arizona;Yuma MCAS;KNYL;32.6167;-113.7639;63
+United States;Arkansas;Batesville;KBVX;35.7333;-91.65;0
+United States;Arkansas;Bentonville;KVBT;36.35;-94.2167;0
+United States;Arkansas;El Dorado;KELD;33.2167;-92.8133;81
+United States;Arkansas;Fayetteville;KFYV;36;-94.1678;379
+United States;Arkansas;Flippin;KFLP;36.3;-92.4667;0
+United States;Arkansas;Fort Smith;KFSM;35.3333;-94.365;140
+United States;Arkansas;Harrison;KHRO;36.25;-93.1547;417
+United States;Arkansas;Hot Springs;KHOT;34.4667;-93.0961;162
+United States;Arkansas;Jonesboro;KJBR;35.8333;-90.6431;79
+United States;Arkansas;Little Rock;KLIT;34.7167;-92.2361;79
+United States;Arkansas;Little Rock AFB;KLRF;34.9167;-92.15;0
+United States;Arkansas;Pine Bluff;KPBF;34.1667;-91.9347;62
+United States;Arkansas;Rogers;KROG;36.3667;-94.1;0
+United States;Arkansas;Siloam Springs;KSLG;36.2;-94.4833;0
+United States;Arkansas;Stuttgart;KSGT;34.6;-91.5667;0
+United States;Arkansas;Texarkana;KTXK;33.45;-93.9875;111
+United States;Arkansas;Walnut Ridge;KARG;36.1333;-90.9167;0
+United States;California;Arcata;KACV;40.9667;-124.1086;67
+United States;California;Avalon;KAVX;33.4;-118.4158;482
+United States;California;Bakersfield;KBFL;35.4333;-119.0567;151
+United States;California;Beaumont;KBUO;33.9333;-116.9667;0
+United States;California;Bishop;KBIH;37.3667;-118.3581;1253
+United States;California;Blue Canyon;KBLU;39.2667;-120.7081;1609
+United States;California;Blythe;KBLH;33.6167;-114.7169;119
+United States;California;Burbank;KBUR;34.1833;-118.3647;217
+United States;California;Camarillo;KCMA;34.2167;-119.0833;0
+United States;California;Campo;KCZZ;32.6167;-116.4683;807
+United States;California;Carlsbad;KCRQ;33.1167;-117.2758;99
+United States;California;Chico;KCIC;39.8;-121.85;0
+United States;California;China Lake;KNID;35.6833;-117.69;682
+United States;California;Chino;KCNO;33.9667;-117.6236;207
+United States;California;Concord;KCCR;37.9833;-122.0519;11
+United States;California;Crescent City;KCEC;41.7667;-124.2367;0
+United States;California;Daggett;KDAG;34.85;-116.7867;587
+United States;California;Edwards AFB;KEDW;34.9167;-117.9;705
+United States;California;El Centro;KNJK;32.8167;-115.6606;:13
+United States;California;El Monte;KEMT;34.0833;-118.0333;0
+United States;California;Fairfield;KSUU;38.2667;-121.95;22
+United States;California;Fresno;KFAT;36.7667;-119.7194;104
+United States;California;Fullerton;KFUL;33.8667;-117.9847;35
+United States;California;Hawthorne;KHHR;33.9167;-118.3319;18
+United States;California;Hayward;KHWD;37.65;-122.1183;21
+United States;California;Imperial;KIPL;32.8333;-115.5786;:15
+United States;California;Imperial Beach;KNRS;32.55;-117.11;5
+United States;California;Inyokern;KIYK;35.6667;-117.8333;0
+United States;California;Lake Tahoe;KTVL;38.8833;-119.9953;1925
+United States;California;Lancaster;KWJF;34.7333;-118.2189;0
+United States;California;La Verne;KPOC;34.1;-117.7833;0
+United States;California;Lemoore;KNLC;36.3;-119.9381;72
+United States;California;Livermore;KLVK;37.6833;-121.8144;117
+United States;California;Lompoc;KLPC;34.6667;-120.4667;0
+United States;California;Long Beach;KLGB;33.8;-118.1464;10
+United States;California;Los Angeles;KLAX;33.9333;-118.3889;46
+United States;California;Mammoth Lakes;KMMH;37.6167;-118.8333;0
+United States;California;Marysville;KMYV;39.0833;-121.5697;21
+United States;California;Marysville-Beale AFB;KBAB;39.1333;-121.4333;0
+United States;California;McClellan;KMCC;38.6667;-121.4;0
+United States;California;Merced;KMCE;37.2667;-120.5078;47
+United States;California;Modesto;KMOD;37.6167;-120.9506;29
+United States;California;Mojave;KMHV;35.0667;-118.15;0
+United States;California;Montague;KSIY;41.7667;-122.4681;0
+United States;California;Monterey;KMRY;36.5833;-121.8475;66
+United States;California;Mountain View;KNUQ;37.4;-122.0481;19
+United States;California;Mount Shasta;KMHS;41.3;-122.3161;1078
+United States;California;Mount Wilson;KMWS;34.2333;-118.0667;0
+United States;California;Napa;KAPC;38.2;-122.2794;13
+United States;California;Needles;KEED;34.75;-114.6233;0
+United States;California;Oakland;KOAK;37.7167;-122.2353;26
+United States;California;Oceanside;KNFG;33.3;-117.3539;23
+United States;California;Ontario;KONT;34.05;-117.5758;275
+United States;California;Oxnard;KOXR;34.2;-119.2031;20
+United States;California;Palmdale;KPMD;34.6167;-118.0814;780
+United States;California;Palm Springs;KPSP;33.8167;-116.5036;135
+United States;California;Palo Alto;KPAO;37.4667;-122.1167;0
+United States;California;Paso Robles;KPRB;35.6667;-120.6269;245
+United States;California;Point Mugu;KNTD;34.1167;-119.1217;2
+United States;California;Point Piedras Blanca;K87Q;35.65;-121.2847;27
+United States;California;Porterville;KPTV;36.0333;-119.0667;0
+United States;California;Red Bluff;KRBL;40.15;-122.2522;104
+United States;California;Redding;KRDD;40.5;-122.2967;155
+United States;California;Riverside;KRAL;33.95;-117.4506;252
+United States;California;Riverside/March AFB;KRIV;33.9;-117.25;468
+United States;California;Sacramento;KSAC;38.5;-121.495;11
+United States;California;Sacramento-Woodland;KSMF;38.7;-121.5939;6
+United States;California;Salinas;KSNS;36.65;-121.6081;30
+United States;California;San Carlos;KSQL;37.5167;-122.25;0
+United States;California;Sandberg;KSDB;34.7333;-118.7244;1377
+United States;California;San Diego;KSAN;32.7333;-117.1831;12
+United States;California;San Diego-Brown;KSDM;32.5667;-116.9931;159
+United States;California;San Diego-Miramar;KNKX;32.8667;-117.1425;146
+United States;California;San Diego-Montgomery;KMYF;32.8;-117.1364;136
+United States;California;San Diego-North Island;KNZY;32.6833;-117.2089;14
+United States;California;San Diego-Santee;KSEE;32.8333;-116.9667;0
+United States;California;San Francisco;KSFO;37.6167;-122.3647;26
+United States;California;San Jose-Santa Clara;KSJC;37.35;-121.9242;25
+United States;California;San Luis Obispo;KSBP;35.2333;-120.6361;59
+United States;California;San Nicholas Island;KNSI;33.2333;-119.4528;153
+United States;California;Santa Ana;KSNA;33.6667;-117.8664;15
+United States;California;Santa Barbara;KSBA;34.4167;-119.8436;3
+United States;California;Santa Maria;KSMX;34.8833;-120.4486;74
+United States;California;Santa Monica;KSMO;34;-118.4514;57
+United States;California;Santa Rosa;KSTS;38.5;-122.8167;39
+United States;California;Shelter Cove;KO87;40.0167;-124.0667;0
+United States;California;Stockton;KSCK;37.8833;-121.2236;10
+United States;California;Tahoe Valley;KTVL;38.8833;-119.9953;1925
+United States;California;Torrance;KTOA;33.8;-118.3333;0
+United States;California;Truckee;KTRK;39.3167;-120.1333;0
+United States;California;Twentynine Palms;KNXP;34.2833;-116.145;627
+United States;California;Ukiah;KUKI;39.1167;-123.2008;0
+United States;California;Vandenberg AFB;KVBG;34.75;-120.5667;121
+United States;California;Vandenberg Range;KVBG;34.75;-120.5667;121
+United States;California;Van Nuys;KVNY;34.2;-118.4908;245
+United States;California;Visalia;KVIS;36.3167;-119.4;0
+United States;Colorado;Air Force;KAFF;38.9667;-104.8167;1999
+United States;Colorado;Akron;KAKO;40.1667;-103.2144;1421
+United States;Colorado;Alamosa;KALS;37.4333;-105.8614;2299
+United States;Colorado;Aspen;KASE;39.2167;-106.8694;2354
+United States;Colorado;Colorado Springs;KCOS;38.8;-104.7108;1856
+United States;Colorado;Cortez;KCEZ;37.3;-108.6256;1797
+United States;Colorado;Craig;KCAG;40.4833;-107.5236;1887
+United States;Colorado;Denver;KDEN;39.8167;-104.6575;1640
+United States;Colorado;Denver-Aurora;KAPA;39.55;-104.8483;1775
+United States;Colorado;Denver-Broomfield;KBKF;39.7;-104.7581;0
+United States;Colorado;Denver-Cherry Knolls;KBJC;39.9167;-105.1167;0
+United States;Colorado;Durango;KDRO;37.1333;-107.7597;2035
+United States;Colorado;Eagle;KEGE;39.65;-106.9167;0
+United States;Colorado;Fort Carson;KFCS;38.7;-104.7667;1789
+United States;Colorado;Fort Collins/Lovel;KFNL;40.45;-105.0167;0
+United States;Colorado;Grand Junction;KGJT;39.1333;-108.5386;1452
+United States;Colorado;Greeley;KGXY;40.4333;-104.6333;0
+United States;Colorado;Gunnison;KGUC;38.5333;-106.9333;0
+United States;Colorado;Hayden;KHDN;40.4833;-107.2167;0
+United States;Colorado;La Junta;KLHX;38.0333;-103.5122;1277
+United States;Colorado;Leadville;KLXV;39.2167;-106.3161;3028
+United States;Colorado;Limon;KLIC;39.2667;-103.6667;1630
+United States;Colorado;Montrose;KMTJ;38.5;-107.8975;1750
+United States;Colorado;Pueblo;KPUB;38.2833;-104.4983;1420
+United States;Colorado;Trinidad;KTAD;37.2667;-104.4333;0
+United States;Connecticut;Bridgeport;KBDR;41.15;-73.1289;7
+United States;Connecticut;Danbury;KDXR;41.3667;-73.4844;139
+United States;Connecticut;Groton;KGON;41.3167;-72.0494;3
+United States;Connecticut;Hartford;KHFD;41.7333;-72.6517;4
+United States;Connecticut;New Haven;KHVN;41.25;-72.8872;3
+United States;Connecticut;Oxford;KOXC;41.4833;-73.1333;0
+United States;Connecticut;Windsor Locks;KBDL;41.9333;-72.6825;60
+United States;Delaware;Dover;KDOV;39.1333;-75.4667;0
+United States;Delaware;Wilmington;KILG;39.6667;-75.6008;28
+United States;District of Columbia;Washington;KDCA;38.8333;-77.0342;18
+United States;District of Columbia;Washington/Dulles;KIAD;38.9333;-77.4475;93
+United States;Florida;Apalachicola;KAQQ;29.7167;-85.0247;5
+United States;Florida;Bartow;KBOW;27.95;-81.7833;0
+United States;Florida;Brooksville;KBKV;28.4667;-82.4544;20
+United States;Florida;Cocoa Beach;KCOF;28.2333;-80.6;3
+United States;Florida;Crestview;KCEW;30.7667;-86.52;55
+United States;Florida;Cross City;KCTY;29.55;-83.1053;12
+United States;Florida;Daytona Beach;KDAB;29.1667;-81.06;9
+United States;Florida;Destin;KDTS;30.3833;-86.4675;5
+United States;Florida;Fort Lauderdale;KFXE;26.2;-80.1833;6
+United States;Florida;Fort Lauderdale (International);KFLL;26.0667;-80.1525;30
+United States;Florida;Fort Myers (Page Field);KFMY;26.5833;-81.8625;4
+United States;Florida;Fort Myers (Southwest Florida International);KRSW;26.5167;-81.7664;9
+United States;Florida;Gainesville;KGNV;29.6833;-82.2756;45
+United States;Florida;Homestead AFB;KHST;25.4833;-80.3833;0
+United States;Florida;Hurlburt;KHRT;30.4167;-86.6833;11
+United States;Florida;Jacksonville;KJAX;30.4833;-81.6933;7
+United States;Florida;Jacksonville-Craig Airport;KCRG;30.3333;-81.5147;13
+United States;Florida;Jacksonville NAS;KNIP;30.2333;-81.6747;8
+United States;Florida;Key West;KEYW;24.55;-81.7536;5
+United States;Florida;Key West NAS;KNQX;24.5667;-81.6839;6
+United States;Florida;Lakeland;KLAL;27.9833;-82.0167;0
+United States;Florida;Leesburg;KLEE;28.8167;-81.8097;23
+United States;Florida;Marathon;KMTH;24.7167;-81.0478;2
+United States;Florida;Marianna;KMAI;30.8333;-85.1836;32
+United States;Florida;Mayport;KNRB;30.3833;-81.4225;4
+United States;Florida;Melbourne;KMLB;28.1;-80.6458;10
+United States;Florida;Miami;KMIA;25.7833;-80.3164;8
+United States;Florida;Miami-Kendall;KTMB;25.6333;-80.4347;2
+United States;Florida;Miami-Opa Locka;KOPF;25.9;-80.2831;16
+United States;Florida;Milton;KNSE;30.7333;-87.0167;60
+United States;Florida;Naples;KAPF;26.15;-81.7667;0
+United States;Florida;Nasa Shuttle;KTTS;28.6167;-80.7167;0
+United States;Florida;Ocala;KOCF;29.1667;-82.2167;0
+United States;Florida;Orlando;KORL;28.5333;-81.3358;37
+United States;Florida;Orlando (Orlando International);KMCO;28.4167;-81.325;29
+United States;Florida;Panama City;KPFN;30.2;-85.685;12
+United States;Florida;Pensacola;KPNS;30.4667;-87.1869;38
+United States;Florida;Pensacola NAS;KNPA;30.35;-87.3233;10
+United States;Florida;Perry-Foley;K40J;30.0667;-83.5736;13
+United States;Florida;Pompano Beach;KPMP;26.2333;-80.1114;6
+United States;Florida;Punta Gorda;KPGD;26.9167;-81.9936;7
+United States;Florida;Sanford;KSFB;28.7833;-81.25;0
+United States;Florida;Sarasota;KSRQ;27.4;-82.5586;18
+United States;Florida;St Petersburg;KSPG;27.7667;-82.6261;2
+United States;Florida;St Petersburg / Clearwater;KPIE;27.9;-82.6856;4
+United States;Florida;Tallahassee;KTLH;30.3833;-84.3533;16
+United States;Florida;Tampa;KTPA;27.95;-82.5403;11
+United States;Florida;Tampa-Macdill AFB;KMCF;27.85;-82.5;4
+United States;Florida;Titusville;KTIX;28.5167;-80.8;0
+United States;Florida;Tyndall AFB;KPAM;30.0667;-85.5833;13
+United States;Florida;Valparaiso;KVPS;30.4833;-86.5167;29
+United States;Florida;Vero Beach;KVRB;27.65;-80.4181;10
+United States;Florida;West Palm Beach;KPBI;26.6833;-80.0994;6
+United States;Florida;Winter Haven;KGIF;28.05;-81.7575;43
+United States;Georgia;Albany;KABY;31.5333;-84.1944;58
+United States;Georgia;Alma;KAMG;31.5333;-82.5067;59
+United States;Georgia;Athens;KAHN;33.95;-83.3281;244
+United States;Georgia;Atlanta;KATL;33.6167;-84.4422;296
+United States;Georgia;Augusta;KAGS;33.35;-81.9633;44
+United States;Georgia;Brunswick;KSSI;31.15;-81.3914;6
+United States;Georgia;Columbus;KCSG;32.5;-84.9422;135
+United States;Georgia;Columbus-Fort Benning;KLSF;32.3333;-84.8333;130
+United States;Georgia;Dekalb/Peachtree;KPDK;33.8667;-84.2981;302
+United States;Georgia;Fort Benning;KLSF;32.3333;-84.8333;130
+United States;Georgia;Fort Stewart;KLHW;31.8833;-81.5667;14
+United States;Georgia;Hinesville;KLHW;31.8833;-81.5667;14
+United States;Georgia;Macon;KMCN;32.6833;-83.6544;109
+United States;Georgia;Marietta;KMGE;33.9167;-84.5167;326
+United States;Georgia;Rome-Russell;KRMG;34.3333;-85.1611;193
+United States;Georgia;Savannah;KSAV;32.1167;-81.2022;14
+United States;Georgia;Savannah-Hunter AAF;KSVN;32.0167;-81.15;0
+United States;Georgia;St Simon's Island;KSSI;31.15;-81.3914;6
+United States;Georgia;Valdosta;KVLD;30.7833;-83.2833;0
+United States;Georgia;Valdosta-Moody AFB;KVAD;30.9667;-83.2;71
+United States;Georgia;Warner Robins;KWRB;32.6333;-83.6;0
+United States;Georgia;Waycross;KAYS;31.25;-82.4;46
+United States;Georgia;West Atlanta;KFTY;33.7667;-84.5244;263
+United States;Hawaii;Barbers Point;PHNA;21.3;-158.0681;15
+United States;Hawaii;Barking Sand;PHBK;22.0333;-159.7864;3
+United States;Hawaii;Bradshaw Field;PHSF;19.7833;-155.55;0
+United States;Hawaii;Hilo;PHTO;19.7167;-155.0558;12
+United States;Hawaii;Honolulu;PHNL;21.3167;-157.9431;4
+United States;Hawaii;Kahului;PHOG;20.8833;-156.4369;12
+United States;Hawaii;Kailua-Kona;PHKO;19.7333;-156.0506;27
+United States;Hawaii;Kaneohe;PHNG;21.45;-157.7656;1
+United States;Hawaii;Lahaina;PHJH;21.0167;-156.6333;0
+United States;Hawaii;Lanai;PHNY;20.7833;-156.95;0
+United States;Hawaii;Lihue;PHLI;21.9833;-159.3411;31
+United States;Hawaii;Molokai;PHMK;21.15;-157.1;134
+United States;Hawaii;Oahu;PHHI;21.4833;-158.0333;256
+United States;Idaho;Boise;KBOI;43.5667;-116.2406;875
+United States;Idaho;Burley;KBYI;42.5333;-113.7714;1264
+United States;Idaho;Coeur d'Alene;KCOE;47.7667;-116.8167;0
+United States;Idaho;Elk City;KP69;46.1333;-115.5964;480
+United States;Idaho;Hailey-Sun Valley;KSUN;43.5;-114.3;0
+United States;Idaho;Idaho Falls;KIDA;43.5167;-112.0661;1453
+United States;Idaho;Lewiston;KLWS;46.3667;-117.0144;438
+United States;Idaho;Malad City;KMLD;42.1667;-112.3;0
+United States;Idaho;Malta;K77M;42.3167;-113.3333;0
+United States;Idaho;McCall;KMYL;44.8833;-116.0994;1533
+United States;Idaho;Mountain Home;KMUO;43.05;-115.8667;0
+United States;Idaho;Mullan;KS06;47.4667;-115.8;1011
+United States;Idaho;Pocatello;KPIH;42.9167;-112.5711;1359
+United States;Idaho;Salmon;KSMN;45.1167;-113.8833;0
+United States;Idaho;Salmon (2);K27U;45.1833;-113.9;1210
+United States;Idaho;Soda Springs;KU78;42.65;-111.5833;0
+United States;Idaho;Twin Falls;KTWF;42.4667;-114.4761;1266
+United States;Illinois;Alton;KALN;38.9;-90.05;0
+United States;Illinois;Aurora;KARR;41.7667;-88.4814;215
+United States;Illinois;Belleville;KBLV;38.55;-89.85;0
+United States;Illinois;Bloomington;KBMI;40.4833;-88.9167;0
+United States;Illinois;Carbondale;KMDH;37.7667;-89.245;130
+United States;Illinois;Champaign;KCMI;40.0167;-88.2733;228
+United States;Illinois;Chicago-DuPage;KDPA;41.8833;-88.2511;230
+United States;Illinois;Chicago-Lakefront;KCGX;41.8667;-87.6;0
+United States;Illinois;Chicago-Midway;KMDW;41.7833;-87.7553;188
+United States;Illinois;Chicago-O'Hare;KORD;41.9667;-87.9044;200
+United States;Illinois;Danville;KDNV;40.1833;-87.5956;0
+United States;Illinois;Decatur;KDEC;39.8333;-88.8656;207
+United States;Illinois;East St Louis;KCPS;38.5667;-90.1561;126
+United States;Illinois;Galesburg;KGBG;40.9333;-90.4311;0
+United States;Illinois;Marion;KMWA;37.75;-89.0011;0
+United States;Illinois;Mattoon;KMTO;39.4667;-88.2792;214
+United States;Illinois;Moline-Quad Cities;KMLI;41.45;-90.5147;184
+United States;Illinois;Mount Vernon;KMVN;38.3167;-88.8667;0
+United States;Illinois;Peoria;KPIA;40.6667;-89.6839;205
+United States;Illinois;Quincy;KUIN;39.9333;-91.1944;0
+United States;Illinois;Rockford;KRFD;42.1833;-89.0933;221
+United States;Illinois;Salem;KSLO;38.6333;-88.9642;174
+United States;Illinois;Springfield;KSPI;39.8333;-89.6839;181
+United States;Indiana;Bloomington;KBMG;39.1333;-86.6167;257
+United States;Indiana;Elkhart;KEKM;41.7167;-86;0
+United States;Indiana;Evansville;KEVV;38.0333;-87.5203;117
+United States;Indiana;Fort Wayne;KFWA;40.9667;-85.1953;248
+United States;Indiana;Gary;KGYY;41.6167;-87.4167;0
+United States;Indiana;Indianapolis;KIND;39.7167;-86.2819;242
+United States;Indiana;Lafayette;KLAF;40.4;-86.9475;182
+United States;Indiana;Muncie;KMIE;40.2333;-85.3936;285
+United States;Indiana;Peru;KGUS;40.65;-86.15;0
+United States;Indiana;South Bend;KSBN;41.7;-86.3186;237
+United States;Indiana;Terre Haute;KHUF;39.4333;-87.3253;179
+United States;Iowa;Algona;KAXA;43.0833;-94.2667;0
+United States;Iowa;Ames;KAMW;41.9833;-93.6189;279
+United States;Iowa;Atlantic;KAIO;41.4;-95.05;0
+United States;Iowa;Boone;KBNW;42.05;-93.85;0
+United States;Iowa;Burlington;KBRL;40.7667;-91.1253;211
+United States;Iowa;Carroll;KCIN;42.05;-94.7833;0
+United States;Iowa;Cedar Rapids;KCID;41.8667;-91.7239;264
+United States;Iowa;Chariton;KCNC;41.0333;-93.3667;0
+United States;Iowa;Charles City;KCCY;43.0667;-92.6167;0
+United States;Iowa;Clarinda;KICL;40.7167;-95.0333;0
+United States;Iowa;Clarion;KCAV;42.75;-93.7667;0
+United States;Iowa;Clinton;KCWI;41.8333;-90.3333;0
+United States;Iowa;Council Bluffs;KCBF;41.2667;-95.7667;0
+United States;Iowa;Creston;KCSQ;41.0167;-94.3667;0
+United States;Iowa;Davenport;KDVN;41.6;-90.5914;228
+United States;Iowa;Decorah;KDEH;43.2833;-91.7333;0
+United States;Iowa;Denison;KDNS;41.9833;-95.3833;0
+United States;Iowa;Des Moines;KDSM;41.5333;-93.6661;295
+United States;Iowa;Dubuque;KDBQ;42.3833;-90.7036;326
+United States;Iowa;Estherville;KEST;43.4;-94.7472;401
+United States;Iowa;Fairfield;KFFL;41.05;-91.9833;0
+United States;Iowa;Fort Dodge;KFOD;42.55;-94.1833;355
+United States;Iowa;Fort Madison;KFSW;40.6667;-91.3333;0
+United States;Iowa;Iowa City;KIOW;41.6167;-91.5431;198
+United States;Iowa;Keokuk;KEOK;40.4667;-91.4333;0
+United States;Iowa;Knoxville;KOXV;41.3;-93.1167;0
+United States;Iowa;Le Marine;KLRJ;42.7667;-96.1936;0
+United States;Iowa;Marshalltown;KMIW;42.1;-92.9161;296
+United States;Iowa;Mason City;KMCW;43.15;-93.3314;369
+United States;Iowa;Monticello;KMXO;42.2333;-91.1667;0
+United States;Iowa;Muscatine;KMUT;41.3667;-91.15;0
+United States;Iowa;Newton;KTNU;41.6833;-93.0167;0
+United States;Iowa;Oelwen;KOLZ;42.6667;-91.9744;0
+United States;Iowa;Orange City;KORC;42.9833;-96.0667;0
+United States;Iowa;Ottumwa;KOTM;41.1;-92.4481;256
+United States;Iowa;Red Oak;KRDK;41.0167;-95.2667;0
+United States;Iowa;Sheldon;KSHL;43.2167;-95.8333;0
+United States;Iowa;Shenandoah;KSDA;40.75;-95.4167;0
+United States;Iowa;Sioux City;KSUX;42.4;-96.3844;338
+United States;Iowa;Spencer;KSPW;43.15;-95.2028;403
+United States;Iowa;Storm Lake;KSLB;42.6;-95.2333;0
+United States;Iowa;Washington;KAWG;41.2833;-91.6667;0
+United States;Iowa;Waterloo;KALO;42.55;-92.4011;264
+United States;Iowa;Webster City;KEBS;42.4333;-93.8667;0
+United States;Kansas;Chanute;KCNU;37.6667;-95.4842;297
+United States;Kansas;Concordia;KCNK;39.55;-97.6506;447
+United States;Kansas;Dodge City;KDDC;37.7667;-99.9697;789
+United States;Kansas;Emporia;KEMP;38.3167;-96.1939;367
+United States;Kansas;Fort Riley;KFRI;39.1;-96.7667;320
+United States;Kansas;Garden City;KGCK;37.9167;-100.7244;877
+United States;Kansas;Goodland;KGLD;39.3667;-101.6931;1114
+United States;Kansas;Hays;KHYS;38.85;-99.2667;0
+United States;Kansas;Hill City;KHLC;39.3667;-99.8297;669
+United States;Kansas;Hutchinson;KHUT;38.0667;-97.8606;467
+United States;Kansas;Liberal;KLBL;37.05;-100.9667;0
+United States;Kansas;Manhattan;KMHK;39.1333;-96.6778;317
+United States;Kansas;Medicine Lodge;KP28;37.2833;-98.5528;469
+United States;Kansas;Olathe;KOJC;38.85;-94.7392;326
+United States;Kansas;Olathe/Ind.;KIXD;38.8167;-94.8869;342
+United States;Kansas;Russell;KRSL;38.8667;-98.8131;567
+United States;Kansas;Salina;KSLN;38.7667;-97.6442;385
+United States;Kansas;Topeka;KTOP;39.0667;-95.6258;268
+United States;Kansas;Topeka-Forbes Field;KFOE;38.9333;-95.6506;320
+United States;Kansas;Wichita;KICT;37.6333;-97.4294;408
+United States;Kansas;Wichita-Jabara;K3KM;37.7333;-97.2189;434
+United States;Kansas;Wichita-McConnell AFB;KIAB;37.6167;-97.2667;0
+United States;Kentucky;Bowling Green;KBWG;37.95;-86.4239;161
+United States;Kentucky;Covington;KCVG;39.0333;-84.6717;269
+United States;Kentucky;Fort Campbell;KHOP;36.6667;-87.5;174
+United States;Kentucky;Fort Knox;KFTK;37.9;-85.9667;230
+United States;Kentucky;Frankfort;KFFT;38.1833;-84.9033;236
+United States;Kentucky;Henderson;KEHR;37.8167;-87.6833;0
+United States;Kentucky;Jackson;KJKL;37.5833;-83.3144;412
+United States;Kentucky;Lexington;KLEX;38.0333;-84.6058;300
+United States;Kentucky;London;KLOZ;37.0833;-84.0686;362
+United States;Kentucky;Louisville;KLOU;38.2167;-85.6636;164
+United States;Kentucky;Louisville-Standiford Field;KSDF;38.1667;-85.7297;146
+United States;Kentucky;Owensboro;KOWB;37.7333;-87.1667;0
+United States;Kentucky;Paducah;KPAH;37.05;-88.7739;118
+United States;Kentucky;Somerset;KSME;37.05;-84.615;0
+United States;Lousiana;Alexandria;KAEX;31.3333;-92.5586;27
+United States;Lousiana;Alexandria-Esler;KESF;31.3833;-92.2903;28
+United States;Lousiana;Amelia;K7R3;29.7;-91.1;0
+United States;Lousiana;Barksdale;KBAD;32.5;-93.6667;0
+United States;Lousiana;Baton Rouge;KBTR;30.5333;-91.1469;21
+United States;Lousiana;Cameron;K7R5;29.7833;-93.3;0
+United States;Lousiana;Fort Polk-Leesville;KPOE;31.0333;-93.0333;110
+United States;Lousiana;Fourchon;K9F2;29.1;-90.2;0
+United States;Lousiana;Grand Isle;KAXO;29.25;-89.9667;0
+United States;Lousiana;Houma;KHUM;29.5667;-90.6667;0
+United States;Lousiana;Intracoastal;K7R4;29.7833;-92.1333;0
+United States;Lousiana;Lafayette;KLFT;30.2;-91.9931;11
+United States;Lousiana;Lake Charles;KLCH;30.1167;-93.2233;3
+United States;Lousiana;Monroe;KMLU;32.5;-92.0314;29
+United States;Lousiana;New Iberia;KARA;30.0167;-91.8844;18
+United States;Lousiana;New Orleans;KMSY;29.9833;-90.2508;5
+United States;Lousiana;New Orleans-Lakefront;KNEW;30.0333;-90.0289;3
+United States;Lousiana;New Orleans NAS;KNBG;29.8333;-90.0244;0
+United States;Lousiana;Patterson;KPTN;29.7167;-91.3333;0
+United States;Lousiana;Salt point;KP92;29.55;-91.5256;0
+United States;Lousiana;Shreveport Downtown;KDTN;32.5333;-93.7447;53
+United States;Lousiana;Shreveport Regional;KSHV;32.4333;-93.8242;80
+United States;Lousiana;South Marsh Island;K7R8;28.3;-91.9833;0
+United States;Lousiana;South Timbalier;KS58;28.5333;-90.5833;0
+United States;Lousiana;Venice;K7R1;29.25;-89.3633;1
+United States;Lousiana;Vicksburg;KTVR;32.3333;-91.03;26
+United States;Maine;Augusta;KAUG;44.3167;-69.7972;109
+United States;Maine;Bangor;KBGR;44.7833;-68.8186;57
+United States;Maine;Bar Harbor;KBHB;44.45;-68.3667;0
+United States;Maine;Brunswick;KNHZ;43.9;-69.935;23
+United States;Maine;Caribou;KCAR;46.8667;-68.0133;191
+United States;Maine;Clayton Lake;K40B;46.6167;-69.5333;0
+United States;Maine;Frenchville;KFVE;47.2833;-68.3072;301
+United States;Maine;Fryeburg;KIZG;43.9833;-70.9503;135
+United States;Maine;Houlton;KHUL;46.1167;-67.7919;150
+United States;Maine;Lewiston;KLEW;44.05;-70.2833;0
+United States;Maine;Millinocket;KMLT;45.6333;-68.6919;123
+United States;Maine;Portland;KPWM;43.6333;-70.3044;15
+United States;Maine;Presque Isle;KPQI;46.6833;-68.05;146
+United States;Maine;Rockland;KRKD;44.0667;-69.1;0
+United States;Maine;Sanford;KSFM;43.4;-70.7167;0
+United States;Maine;Waterville;KWVL;44.5333;-69.6833;0
+United States;Maine;Wiscasset;KIWI;43.95;-69.7117;20
+United States;Maryland;Aberdeen;KAPG;39.4667;-76.1667;0
+United States;Maryland;Andrews AFB;KADW;38.8167;-76.85;88
+United States;Maryland;Baltimore;KMTN;39.3333;-76.4167;0
+United States;Maryland;Baltimore-Glen Burnie;KBWI;39.1667;-76.6833;59
+United States;Maryland;Hagerstown;KHGR;39.7;-77.73;224
+United States;Maryland;Patuxent River;KNHK;38.2667;-76.4139;6
+United States;Maryland;Salisbury;KSBY;38.3333;-75.5103;19
+United States;Massachusetts;Bedford;KBED;42.4667;-71.2944;50
+United States;Massachusetts;Beverly;KBVY;42.5833;-70.9164;28
+United States;Massachusetts;Boston;KBOS;42.35;-71.0106;54
+United States;Massachusetts;Chatham;KCQX;41.6833;-69.9933;19
+United States;Massachusetts;Chicopee Falls;KCEF;42.2;-72.5333;75
+United States;Massachusetts;Falmouth-Otis AFB;KFMH;41.65;-70.5167;0
+United States;Massachusetts;Fitchburg;KFIT;42.55;-71.7558;103
+United States;Massachusetts;Hyannis;KHYA;41.6667;-70.2697;22
+United States;Massachusetts;Lawrence;KLWM;42.7;-71.1258;54
+United States;Massachusetts;Marthas Vineyard;KMVY;41.3833;-70.6167;16
+United States;Massachusetts;Nantucket;KACK;41.25;-70.0597;16
+United States;Massachusetts;New Bedford;KEWB;41.6667;-70.9569;23
+United States;Massachusetts;Norwood;KOWD;42.1833;-71.1739;19
+United States;Massachusetts;Orange;KORE;42.5667;-72.2775;164
+United States;Massachusetts;Plymouth;KPYM;41.9;-70.7281;43
+United States;Massachusetts;Provincetown;KPVC;42.0667;-70.2167;0
+United States;Massachusetts;Westfield;KBAF;42.15;-72.7128;83
+United States;Massachusetts;Worcester;KORH;42.2667;-71.8731;304
+United States;Michigan;Alpena;KAPN;45.0667;-83.5644;210
+United States;Michigan;Ann Arbor;KARB;42.2167;-83.74;251
+United States;Michigan;Battle Creek;KBTL;42.3;-85.2408;290
+United States;Michigan;Benton Harbor;KBEH;42.1167;-86.4283;191
+United States;Michigan;Chippewa County;KCIU;46.25;-84.4667;0
+United States;Michigan;Copper Harbor;KP59;47.4667;-87.875;190
+United States;Michigan;Detroit;KDET;42.4;-83.01;190
+United States;Michigan;Detroit-Taylor;KDTW;42.2167;-83.3308;195
+United States;Michigan;Detroit/Ypsilanti;KYIP;42.2333;-83.5261;215
+United States;Michigan;Escanaba;KESC;45.75;-87.0333;187
+United States;Michigan;Flint;KFNT;42.9667;-83.7494;233
+United States;Michigan;Grand Rapids;KGRR;42.8667;-85.5228;239
+United States;Michigan;Hancock;KCMX;47.1667;-88.4889;326
+United States;Michigan;Harbor Beach;KP58;44.0167;-82.7931;179
+United States;Michigan;Houghton Lake;KHTL;44.35;-84.6742;351
+United States;Michigan;Iron Mountain;KIMT;45.8;-88.1089;349
+United States;Michigan;Ironwood;KIWD;46.5333;-90.1333;0
+United States;Michigan;Jackson;KJXN;42.25;-84.4594;0
+United States;Michigan;Kalamazoo;KAZO;42.2167;-85.5464;272
+United States;Michigan;Lansing;KLAN;42.7667;-84.5789;264
+United States;Michigan;Manistee;KMBL;44.2667;-86.25;0
+United States;Michigan;Marquette;KMQT;46.5333;-87.55;434
+United States;Michigan;Menominee;KMNM;45.1333;-87.6333;0
+United States;Michigan;Mount Clemens;KMTC;42.6167;-82.8333;0
+United States;Michigan;Muskegon;KMKG;43.1667;-86.2367;191
+United States;Michigan;Oscoda;KOSC;44.45;-83.3667;0
+United States;Michigan;Pellston;KPLN;45.5667;-84.7967;217
+United States;Michigan;Pontiac;KPTK;42.65;-83.41;300
+United States;Michigan;Saginaw;KMBS;43.5333;-84.0806;202
+United States;Michigan;Sawyer AFB;KSAW;46.35;-87.3958;0
+United States;Michigan;Seul Choix Pt;KP75;45.95;-86.2297;178
+United States;Michigan;Traverse City;KTVC;44.7333;-85.57;190
+United States;Michigan;Ypsilanti;KYIP;42.2333;-83.5261;215
+United States;Minnesota;Alexandria;KAXN;45.8667;-95.3942;433
+United States;Minnesota;Bemidji;KBJI;47.5;-94.9333;420
+United States;Minnesota;Brainerd;KBRD;46.4;-94.1308;372
+United States;Minnesota;Detroit Lakes;KDTL;46.8333;-95.8833;0
+United States;Minnesota;Duluth;KDLH;46.8333;-92.2261;435
+United States;Minnesota;Ely;KELO;47.8167;-91.8333;0
+United States;Minnesota;Fairmont;KFRM;43.65;-94.4167;0
+United States;Minnesota;Fergus Falls;KFFM;46.2833;-96.15;0
+United States;Minnesota;Grand Marais;KP61;47.7333;-90.3444;185
+United States;Minnesota;Grand Rapids;KGPZ;47.2167;-93.5167;0
+United States;Minnesota;Hibbing;KHIB;47.3833;-92.8389;412
+United States;Minnesota;International Falls;KINL;48.55;-93.3978;360
+United States;Minnesota;Mankato;KMKT;44.2167;-93.9167;0
+United States;Minnesota;Marshall;KMML;44.45;-95.8167;0
+United States;Minnesota;Minneapolis;KMSP;44.8667;-93.2289;265
+United States;Minnesota;Minneapolis [2];KFCM;44.8167;-93.4703;280
+United States;Minnesota;Minneapolis [3];KMIC;45.05;-93.3508;265
+United States;Minnesota;Redwood Falls;KRWF;44.5333;-95.0822;311
+United States;Minnesota;Rochester;KRST;43.9;-92.4917;403
+United States;Minnesota;St Cloud;KSTC;45.5333;-94.0519;314
+United States;Minnesota;St Paul;KSTP;44.9167;-93.0481;219
+United States;Minnesota;Thief River Falls;KTVF;48.0667;-96.1833;0
+United States;Minnesota;Worthington;KOTG;43.65;-95.5833;0
+United States;Mississippi;Columbus;KGTR;33.45;-88.5833;0
+United States;Mississippi;Columbus-W Point-Starkville;KCBM;33.65;-88.45;0
+United States;Mississippi;Greenville;KGLH;33.4667;-90.9856;45
+United States;Mississippi;Greenwood;KGWO;33.4833;-90.0836;44
+United States;Mississippi;Gulfport;KGPT;30.4;-89.0808;14
+United States;Mississippi;Jackson;KJAN;32.3167;-90.0775;89
+United States;Mississippi;Laurel;KPIB;31.4667;-89.3333;0
+United States;Mississippi;McComb;KMCB;31.1667;-90.4719;124
+United States;Mississippi;Meridian;KMEI;32.3333;-88.7478;89
+United States;Mississippi;Meridian-Lauderdale;KNMM;32.5333;-88.5431;86
+United States;Mississippi;Natchez;KHEZ;31.6167;-91.3;0
+United States;Mississippi;Tupelo;KTUP;34.2667;-88.77;105
+United States;Mississippi;Vicksburg;KTVR;32.3333;-91.03;26
+United States;Missouri;Cape Girardeau;KCGI;37.2167;-89.5783;102
+United States;Missouri;Columbia;KCOU;38.8167;-92.2183;271
+United States;Missouri;Fort Leonard;KTBN;37.7333;-92.1333;0
+United States;Missouri;Jefferson City;KJEF;38.5833;-92.1558;168
+United States;Missouri;Joplin;KJLN;37.15;-94.5006;299
+United States;Missouri;Kansas City;KMKC;39.1167;-94.5969;227
+United States;Missouri;Kansas City-Gladstone;KMCI;39.2833;-94.7306;320
+United States;Missouri;Kirksville;KIRK;40.0833;-92.5433;293
+United States;Missouri;Sedalia;KSZL;38.7333;-93.55;0
+United States;Missouri;Springfield;KSGF;37.2333;-93.3897;389
+United States;Missouri;St Joseph;KSTJ;39.7667;-94.9092;247
+United States;Missouri;St Louis;KSTL;38.75;-90.3736;171
+United States;Missouri;St Louis-Spirit;KSUS;38.65;-90.6558;141
+United States;Missouri;Vichy-Rolla;KVIH;38.1167;-91.7653;333
+United States;Montana;Billings;KBIL;45.8;-108.5422;1091
+United States;Montana;Bozeman;KBZN;45.7833;-111.1608;1361
+United States;Montana;Butte;KBTM;45.95;-112.4975;1688
+United States;Montana;Cut Bank;KCTB;48.6;-112.3761;0
+United States;Montana;Dillon;KDLN;45.25;-112.5544;1591
+United States;Montana;Drummond;K3DU;46.6667;-113.15;0
+United States;Montana;Glasgow;KGGW;48.2;-106.6214;693
+United States;Montana;Glendive;KGDV;47.1333;-104.8;0
+United States;Montana;Great Falls;KGFA;47.5;-111.1833;0
+United States;Montana;Harlowton;K3HT;46.4333;-109.8333;0
+United States;Montana;Havre;KHVR;48.5333;-109.7633;787
+United States;Montana;Helena;KHLN;46.6;-111.9636;1187
+United States;Montana;Jordan;KJDN;47.3167;-106.9475;801
+United States;Montana;Kalispell;KFCA;48.3;-114.2636;908
+United States;Montana;Lewistown;KLWT;47.0333;-109.4664;0
+United States;Montana;Livingston;KLVM;45.6833;-110.4483;1418
+United States;Montana;Miles City;KMLS;46.4167;-105.8864;801
+United States;Montana;Missoula;KMSO;46.9167;-114.0925;975
+United States;Montana;Sidney;KSDY;47.7;-104.2;0
+United States;Montana;Thompson Falls;K3TH;47.6;-115.3667;0
+United States;Montana;West Yellowstone;KWYS;44.6833;-111.1167;0
+United States;Montana;West Yellowstone (2);KWEY;44.65;-111.1;0
+United States;Montana;Wolf Point;KOLF;48.0833;-105.5772;604
+United States;Nebraska;Ainsworth;KANW;42.5833;-100;0
+United States;Nebraska;Alliance;KAIA;42.05;-102.8;1196
+United States;Nebraska;Beatrice;KBIE;40.3;-96.75;0
+United States;Nebraska;Broken Bow;KBBW;41.4333;-99.65;0
+United States;Nebraska;Chadron;KCDR;42.8333;-103.0953;1010
+United States;Nebraska;Columbus;KOLU;41.45;-97.3333;0
+United States;Nebraska;Falls City;KFNB;40.0667;-95.5919;0
+United States;Nebraska;Grand Island;KGRI;40.95;-98.3125;561
+United States;Nebraska;Hastings;KHSI;40.6;-98.4258;591
+United States;Nebraska;Imperial;KIML;40.5167;-101.6167;0
+United States;Nebraska;Kearney;KEAR;40.7333;-99;0
+United States;Nebraska;Lincoln;KLNK;40.8167;-96.7644;364
+United States;Nebraska;McCook;KMCK;40.2;-100.5883;782
+United States;Nebraska;Norfolk;KOFK;41.9667;-97.4369;470
+United States;Nebraska;North Platte;KLBF;41.1167;-100.6683;847
+United States;Nebraska;Omaha;KOMA;41.3;-95.8992;312
+United States;Nebraska;Omaha-Bellevue;KOFF;41.1167;-95.9;315
+United States;Nebraska;O'Neill;KONL;42.4667;-98.6833;0
+United States;Nebraska;Ord-Sharp;KODX;41.6167;-98.9525;0
+United States;Nebraska;Scottsbluff;KBFF;41.8667;-103.5858;1203
+United States;Nebraska;Sidney;KSNY;41.0833;-102.9856;1307
+United States;Nebraska;Valentine;KVTN;42.85;-100.5514;788
+United States;Nevada;Austin;KU31;39.5;-117.0833;0
+United States;Nevada;Caliente;KP38;37.6;-114.5264;1333
+United States;Nevada;Desert Rock;KDRA;36.6167;-116.0278;1006
+United States;Nevada;Elko;KEKO;40.8167;-115.7917;1547
+United States;Nevada;Ely;KELY;39.2833;-114.8453;1906
+United States;Nevada;Eureka;KP68;39.6;-116.0056;1809
+United States;Nevada;Fallon;KNFL;39.4167;-118.6856;1199
+United States;Nevada;Las Vegas;KLAS;36.0667;-115.1553;636
+United States;Nevada;Lovelock;KLOL;40.05;-118.5653;1189
+United States;Nevada;N Las Vegas;KLSV;36.2333;-115.0333;0
+United States;Nevada;Reno;KRNO;39.4833;-119.7711;1342
+United States;Nevada;Tonopah;KTPH;38.05;-117.0872;1652
+United States;Nevada;Winnemucca;KWMC;40.9;-117.8072;1310
+United States;New Hampshire;Berlin;KBML;44.5667;-71.1786;345
+United States;New Hampshire;Concord;KCON;43.1833;-71.5011;103
+United States;New Hampshire;Jaffrey;KAFN;42.8;-72.0006;313
+United States;New Hampshire;Keene;KEEN;42.9;-72.2667;0
+United States;New Hampshire;Laconia;KLCI;43.5667;-71.4167;0
+United States;New Hampshire;Lebanon;KLEB;43.6167;-72.3058;171
+United States;New Hampshire;Manchester;KMHT;42.9167;-71.4358;81
+United States;New Hampshire;Mt Washington;KMWN;44.2667;-71.3;1910
+United States;New Hampshire;Nashua;KASH;42.7833;-71.5167;0
+United States;New Hampshire;Portsmouth;KPSM;43.0833;-70.8167;0
+United States;New Hampshire;Whitefield;KHIE;44.35;-71.5525;318
+United States;New Jersey;Atlantic City;KACY;39.45;-74.5867;35
+United States;New Jersey;Belmar-Farmingdale;KBLM;40.1833;-74.1333;0
+United States;New Jersey;Caldwell;KCDW;40.8667;-74.2831;64
+United States;New Jersey;Lakehurst;KNEL;40.0333;-74.3167;24
+United States;New Jersey;Millville;KMIV;39.35;-75.0783;23
+United States;New Jersey;Morristown;KMMU;40.8;-74.4167;0
+United States;New Jersey;Mount Holly;KVAY;39.9333;-74.8411;15
+United States;New Jersey;Newark;KEWR;40.6667;-74.1694;7
+United States;New Jersey;Teterboro;KTEB;40.85;-74.0567;7
+United States;New Jersey;Trenton;KTTN;40.2667;-74.8164;59
+United States;New Jersey;Wildwood;KWWD;39.0167;-74.9167;0
+United States;New Jersey;Wrightstown / Mcguire AFB;KWRI;40.0167;-74.6;0
+United States;New Mexico;Alamogordo;KHMN;32.85;-106.1;1248
+United States;New Mexico;Albuquerque;KABQ;35.0333;-106.6147;1618
+United States;New Mexico;Carlsbad;KCNM;32.3333;-104.2633;985
+United States;New Mexico;Clayton;KCAO;36.4333;-103.1531;1514
+United States;New Mexico;Clovis-Cannon AFB;KCVS;34.3833;-103.3167;0
+United States;New Mexico;Corona;K4CR;34.1;-105.6833;0
+United States;New Mexico;Cuba Awrs;K4SL;35.8;-107.1833;0
+United States;New Mexico;Deming;KDMN;32.25;-107.7206;1311
+United States;New Mexico;Farmington;KFMN;36.7333;-108.2292;1685
+United States;New Mexico;Gallup;KGUP;35.5;-108.7894;1971
+United States;New Mexico;Grants;KGNT;35.15;-107.9022;1987
+United States;New Mexico;Hobbs;KHOB;32.6833;-103.2167;0
+United States;New Mexico;Las Vegas;KLVS;35.65;-105.1425;2091
+United States;New Mexico;Los Alamos;KLAM;35.8833;-106.0833;2185
+United States;New Mexico;Moriarty;K4MY;34.9833;-106.05;0
+United States;New Mexico;Roswell;KROW;33.3;-104.5078;1112
+United States;New Mexico;Santa Fe;KSAF;35.6;-106.095;1930
+United States;New Mexico;Silver City;KSVC;32.6333;-108.15;0
+United States;New Mexico;Truth or Consequences;KTCS;33.2333;-107.2681;1469
+United States;New Mexico;Tucumcari;KTCC;35.1667;-103.6031;1235
+United States;New York;Albany;KALB;42.7333;-73.7989;92
+United States;New York;Binghamton;KBGM;42.2;-75.9814;492
+United States;New York;Buffalo;KBUF;42.9333;-78.7358;225
+United States;New York;Elmira;KELM;42.15;-76.9028;302
+United States;New York;Farmingdale;KFRG;40.7333;-73.4169;21
+United States;New York;Fort Drum;KGTB;44.05;-75.7333;207
+United States;New York;Glens Falls;KGFL;43.3333;-73.6106;103
+United States;New York;Islip;KISP;40.7833;-73.1017;43
+United States;New York;Ithaca;KITH;42.4833;-76.45;0
+United States;New York;Jamestown;KJHW;42.15;-79.2667;0
+United States;New York;Massena;KMSS;44.9333;-74.8456;66
+United States;New York;Montgomery;KMGJ;41.5;-74.265;108
+United States;New York;Monticello;KMSV;41.7;-74.8;0
+United States;New York;Newburgh;KSWF;41.5;-74.1;0
+United States;New York;New York-JFK Arpt;KJFK;40.6333;-73.7622;9
+United States;New York;New York-La Guardia;KLGA;40.7667;-73.88;11
+United States;New York;Niagara Falls;KIAG;43.1;-78.9453;182
+United States;New York;Ogdensburg;KOGS;44.6833;-75.4667;0
+United States;New York;Penn Yan;KPEO;42.6333;-77.0494;256
+United States;New York;Poughkeepsie;KPOU;41.6167;-73.8842;46
+United States;New York;Rochester;KROC;43.1167;-77.6767;178
+United States;New York;Saranac Lake;KSLK;44.3833;-74.2028;498
+United States;New York;Schenectady;KSCH;42.85;-73.9333;0
+United States;New York;Syracuse;KSYR;43.1;-76.1033;127
+United States;New York;Utica;KUCA;43.1333;-75.3844;228
+United States;New York;Watertown;KART;43.9833;-76.0217;100
+United States;New York;Westhampton;KFOK;40.85;-72.6206;33
+United States;New York;White Plains;KHPN;41.0667;-73.7075;121
+United States;North Carolina;Asheville;KAVL;35.4167;-82.5375;670
+United States;North Carolina;Charlotte;KCLT;35.2;-80.9486;220
+United States;North Carolina;Cherry Point;KNKT;34.8833;-76.8808;9
+United States;North Carolina;Elizabeth City;KECG;36.25;-76.1828;11
+United States;North Carolina;Fayetteville;KFAY;34.9833;-78.88;55
+United States;North Carolina;Fort Bragg;KFBG;35.1333;-78.9333;74
+United States;North Carolina;Goldsboro;KGSB;35.3333;-77.9667;0
+United States;North Carolina;Greensboro;KGSO;36.0833;-79.9436;275
+United States;North Carolina;Hickory;KHKY;35.7333;-81.3822;354
+United States;North Carolina;Hoffman;KHFF;35.0333;-79.5;0
+United States;North Carolina;Jacksonville;KOAJ;34.8333;-77.6167;0
+United States;North Carolina;Kinston;KISO;35.3333;-77.6167;0
+United States;North Carolina;New Bern;KEWN;35.0667;-77.0472;3
+United States;North Carolina;New River;KNCA;34.7;-77.4408;4
+United States;North Carolina;Pope AFB;KPOB;35.1667;-79.0333;61
+United States;North Carolina;Raleigh-Durham;KRDU;35.8667;-78.7864;130
+United States;North Carolina;Rocky Mount;KRWI;35.85;-77.8931;47
+United States;North Carolina;Wilmington;KILM;34.2667;-77.9061;9
+United States;North Carolina;Winston-Salem;KINT;36.1333;-80.2247;291
+United States;North Dakota;Bismark;KBIS;46.7667;-100.7572;503
+United States;North Dakota;Devils Lake;KDVL;48.1167;-98.9167;0
+United States;North Dakota;Dickinson;KDIK;46.7833;-102.8019;788
+United States;North Dakota;Fargo;KFAR;46.9167;-96.8111;277
+United States;North Dakota;Grand Forks;KGFK;47.9333;-97.1825;190
+United States;North Dakota;Jamestown;KJMS;46.9167;-98.6783;455
+United States;North Dakota;Lidgerwood;KP67;46.1;-97.15;0
+United States;North Dakota;Minot;KMOT;48.25;-101.2803;519
+United States;North Dakota;Minot AFB;KMIB;48.4167;-101.35;0
+United States;North Dakota;Williston;KISN;48.1667;-103.6367;579
+United States;Ohio;Akron;KCAK;40.9167;-81.4425;377
+United States;Ohio;Cincinnati;KLUK;39.1;-84.4158;155
+United States;Ohio;Cleveland;KCLE;41.4;-81.8528;236
+United States;Ohio;Cleveland/Cuyahoga;KCGF;41.5667;-81.4833;0
+United States;Ohio;Cleveland-Lakefront;KBKL;41.5167;-81.6689;184
+United States;Ohio;Columbus-Gahanna;KCMH;39.9833;-82.8764;247
+United States;Ohio;Columbus-OSU;KOSU;40.0667;-83.0781;280
+United States;Ohio;Dayton;KDAY;39.9;-84.2186;305
+United States;Ohio;Dayton-Fairborn;KFFO;39.8333;-84.05;251
+United States;Ohio;Dayton-South Airport;KMGY;39.5833;-84.2264;289
+United States;Ohio;Findlay;KFDY;41;-83.6686;0
+United States;Ohio;Hamilton;KHAO;39.35;-84.5208;188
+United States;Ohio;Lancaster;KLHQ;39.75;-82.6633;260
+United States;Ohio;Mansfield;KMFD;40.8167;-82.5178;395
+United States;Ohio;Rickenbacker;KLCK;39.8167;-82.9333;0
+United States;Ohio;Toledo;KTOL;41.5833;-83.8014;210
+United States;Ohio;Wilmington;KILN;39.4167;-83.7792;332
+United States;Ohio;Wooster;KBJJ;40.8667;-81.8867;343
+United States;Ohio;Youngstown;KYNG;41.25;-80.6739;360
+United States;Ohio;Zanesville;KZZV;39.9333;-81.8922;268
+United States;Oklahoma;Altus;KLTS;34.65;-99.2667;420
+United States;Oklahoma;Ardmore;KADM;34.3;-97.0167;0
+United States;Oklahoma;Bartlesville;KBVO;36.7667;-96.0261;210
+United States;Oklahoma;Clinton;KCSM;35.35;-99.2036;588
+United States;Oklahoma;Enid;KEND;36.3333;-97.9167;0
+United States;Oklahoma;Enid/Woodring;KWDG;36.3833;-97.7833;0
+United States;Oklahoma;Fort Sill;KFSI;34.6;-98.4;360
+United States;Oklahoma;Gage;KGAG;36.2833;-99.7689;668
+United States;Oklahoma;Guymon;KGUY;36.6667;-101.5053;948
+United States;Oklahoma;Hobart;KHBR;34.9833;-99.0525;473
+United States;Oklahoma;Lawton;KLAW;34.55;-98.4167;337
+United States;Oklahoma;McAlester;KMLC;34.8667;-95.7831;232
+United States;Oklahoma;Oklahoma City;KOKC;35.3833;-97.6003;390
+United States;Oklahoma;Oklahoma City-Bethany;KPWA;35.5333;-97.6467;397
+United States;Oklahoma;Oklahoma City-Midwest City;KTIK;35.4167;-97.3833;397
+United States;Oklahoma;Ponca City;KPNC;36.7167;-97.0997;308
+United States;Oklahoma;Stillwater;KSWO;36.15;-97.0892;290
+United States;Oklahoma;Tulsa;KTUL;36.1833;-95.8864;207
+United States;Oregon;Astoria;KAST;46.15;-123.8825;3
+United States;Oregon;Baker City;KBKE;44.8333;-117.8092;1024
+United States;Oregon;Brookings;K4BK;42.05;-124.2833;0
+United States;Oregon;Burns;KBNO;43.5833;-118.9564;1264
+United States;Oregon;Cascade;KCZK;45.6667;-121.8833;0
+United States;Oregon;Eugene;KEUG;44.1333;-123.2144;114
+United States;Oregon;Hillsboro;KHIO;45.5333;-122.9544;68
+United States;Oregon;Klamath Falls;KLMT;42.1333;-121.7242;1246
+United States;Oregon;Meacham;KMEH;45.5;-118.4247;1136
+United States;Oregon;Medford;KMFR;42.3667;-122.8722;396
+United States;Oregon;Newport;KONP;44.5667;-124.0581;0
+United States;Oregon;North Bend;KOTH;43.4167;-124.25;0
+United States;Oregon;Ontario;KONO;44.0167;-117.0097;667
+United States;Oregon;Pendleton;KPDT;45.6833;-118.8342;458
+United States;Oregon;Portland;KPDX;45.5833;-122.6003;7
+United States;Oregon;Redmond;KRDM;44.25;-121.1497;0
+United States;Oregon;Roseburg;KRBG;43.2333;-123.3561;154
+United States;Oregon;Salem;KSLE;44.9;-122.995;59
+United States;Oregon;Sexton Summit;KSXT;42.6;-123.3642;1170
+United States;Oregon;The Dalles;KDLS;45.6167;-121.1672;71
+United States;Oregon;Troutdale;KTTD;45.55;-122.4089;14
+United States;Pennsylvania;Allentown;KABE;40.65;-75.4492;114
+United States;Pennsylvania;Altoona;KAOO;40.3;-78.3169;455
+United States;Pennsylvania;Bradford;KBFD;41.7833;-78.6358;647
+United States;Pennsylvania;Du Bois;KDUJ;41.1833;-78.9;0
+United States;Pennsylvania;Erie;KERI;42.0667;-80.1825;222
+United States;Pennsylvania;Franklin;KFKL;41.3833;-79.8667;0
+United States;Pennsylvania;Harrisburg;KCXY;40.2167;-76.8514;106
+United States;Pennsylvania;Johnstown;KJST;40.3;-78.8339;694
+United States;Pennsylvania;Lancaster;KLNS;40.1167;-76.2944;125
+United States;Pennsylvania;Latrobe;KLBE;40.2833;-79.4;0
+United States;Pennsylvania;Middletown;KMDT;40.1833;-76.7633;95
+United States;Pennsylvania;Muir;KMUI;40.4333;-76.5667;0
+United States;Pennsylvania;Northeast Philadelphia;KPNE;40.0667;-75.0136;28
+United States;Pennsylvania;Philadelphia;KPHL;39.8667;-75.2311;18
+United States;Pennsylvania;Pittsburgh;KPIT;40.5;-80.2664;357
+United States;Pennsylvania;Pittsburgh-West Mifflin;KAGC;40.35;-79.9217;389
+United States;Pennsylvania;Reading;KRDG;40.3667;-75.9594;109
+United States;Pennsylvania;Scranton;KAVP;41.3333;-75.7267;291
+United States;Pennsylvania;State College;KUNV;40.85;-77.85;0
+United States;Pennsylvania;Wilkes - Barre;KAVP;41.3333;-75.7267;291
+United States;Pennsylvania;Williamsport;KIPT;41.2333;-76.9217;164
+United States;Rhode Island;Block Island;KBID;41.1667;-71.5833;0
+United States;Rhode Island;North Kingstown;KOQU;41.6;-71.4167;0
+United States;Rhode Island;Providence;KPVD;41.7167;-71.4281;16
+United States;South Carolina;Anderson;KAND;34.4833;-82.7097;239
+United States;South Carolina;Beaufort;KNBC;32.4833;-80.7031;8
+United States;South Carolina;Charleston;KCHS;32.8833;-80.0406;13
+United States;South Carolina;Columbia;KCAE;33.9333;-81.1181;73
+United States;South Carolina;Columbia-McEntire;KMMT;33.9167;-80.8;0
+United States;South Carolina;Florence;KFLO;34.1833;-79.7308;44
+United States;South Carolina;Greenville;KGMU;34.8333;-82.3461;315
+United States;South Carolina;Greenville-Spartanburg;KGSP;34.8833;-82.2208;286
+United States;South Carolina;Myrtle Beach;KMYR;33.6833;-78.9333;8
+United States;South Carolina;N Myrtle Beach;KCRE;33.8;-78.7239;10
+United States;South Carolina;Sumter;KSSC;33.9667;-80.4833;73
+United States;South Dakota;Aberdeen;KABR;45.4333;-98.4131;400
+United States;South Dakota;Brookings;KBKX;44.3;-96.8167;0
+United States;South Dakota;Chamberlain;K9V9;43.7667;-99.3183;519
+United States;South Dakota;Huron;KHON;44.3833;-98.2283;390
+United States;South Dakota;Lemmon;KY22;45.9333;-102.1667;0
+United States;South Dakota;Mitchell;KMHE;43.7667;-98.0333;0
+United States;South Dakota;Philip;KPHP;44.05;-101.6011;672
+United States;South Dakota;Pierre;KPIR;44.3667;-100.2858;526
+United States;South Dakota;Rapid City;KRAP;44.0333;-103.0539;965
+United States;South Dakota;Rapid City-Ellsworth AFB;KRCA;44.15;-103.1;0
+United States;South Dakota;Sioux Falls;KFSD;43.5667;-96.7536;434
+United States;South Dakota;Watertown;KATY;44.9;-97.1494;532
+United States;South Dakota;Yankton;KYKN;42.9167;-97.3833;0
+United States;Tennessee;Bristol;KTRI;36.4667;-82.3989;474
+United States;Tennessee;Chattanooga;KCHA;35.0333;-85.2;210
+United States;Tennessee;Crossville;KCSV;35.95;-85.085;570
+United States;Tennessee;Dyersburg;KDYR;36;-89.4;0
+United States;Tennessee;Jackson;KMKL;35.5833;-88.9167;128
+United States;Tennessee;Knoxville;KTYS;35.8167;-83.9858;302
+United States;Tennessee;Memphis;KMEM;35.05;-89.985;86
+United States;Tennessee;Memphis-NAS;KNQA;35.35;-89.8703;0
+United States;Tennessee;Nashville;KBNA;36.1167;-86.6892;210
+United States;Tennessee;Smyrna;KMQY;36.0167;-86.5167;0
+United States;Texas;Abilene;KABI;32.4;-99.6817;548
+United States;Texas;Alice;KALI;27.7333;-98.0269;53
+United States;Texas;Amarillo;KAMA;35.2167;-101.7172;1093
+United States;Texas;Angleton;KLBX;29.1;-95.4631;6
+United States;Texas;Arlington;KF54;32.65;-97.0958;185
+United States;Texas;Austin;KAUS;30.1833;-97.67;172
+United States;Texas;Beaumont-Port Arthur;KBPT;29.95;-94.0208;5
+United States;Texas;Bergstrom AFB;KBSM;30.1667;-97.6806;172
+United States;Texas;Borger;KBGD;35.6833;-101.395;927
+United States;Texas;Brownsville;KBRO;25.9;-97.4231;5
+United States;Texas;Burnet;KBMQ;30.7333;-98.2353;389
+United States;Texas;Childress;KCDS;34.4167;-100.2833;594
+United States;Texas;College Station;KCLL;30.5667;-96.3617;96
+United States;Texas;Conroe;KCXO;30.35;-95.4139;75
+United States;Texas;Corpus Christi;KCRP;27.7667;-97.5128;16
+United States;Texas;Corpus Christi NAS;KNGP;27.6833;-97.2917;4
+United States;Texas;Corsicana;KCRS;32.0167;-96.3989;133
+United States;Texas;Cotulla;KCOT;28.45;-99.2203;140
+United States;Texas;Dalhart;KDHT;36.0167;-102.5472;1217
+United States;Texas;Dallas-Addison;KADS;32.9667;-96.8333;0
+United States;Texas;Dallas-Fort Worth;KDFW;32.8833;-97.0219;174
+United States;Texas;Dallas-Love Field;KDAL;32.85;-96.8556;158
+United States;Texas;Dallas-Redbird;KRBD;32.6667;-96.8639;203
+United States;Texas;Del Rio;KDRT;29.3667;-100.9236;313
+United States;Texas;Denton;KDTO;33.2;-97.1989;196
+United States;Texas;El Paso;KELP;31.8;-106.3758;1197
+United States;Texas;Fort Stockton;KFST;30.9;-102.9167;918
+United States;Texas;Fort Worth-Alliance;KAFW;32.9667;-97.3181;233
+United States;Texas;Fort Worth-Meacham;KFTW;32.8167;-97.3642;214
+United States;Texas;Fort Worth NAS;KNFW;32.75;-97.4333;187
+United States;Texas;Galveston;KGLS;29.2667;-94.8642;6
+United States;Texas;Georgetown;KGTU;30.6833;-97.6833;0
+United States;Texas;Greenville;KGVT;33.0667;-96.0667;0
+United States;Texas;Guadalupe Pass;KGDP;31.8167;-104.8089;1692
+United States;Texas;Harlingen;KHRL;26.2167;-97.6553;10
+United States;Texas;Hondo;KHDO;29.35;-99.1742;282
+United States;Texas;Houston-Bush;KIAH;29.9833;-95.3639;36
+United States;Texas;Houston-Ellington Field;KEFD;29.6;-95.1667;0
+United States;Texas;Houston-Hobby;KHOU;29.6333;-95.2825;36
+United States;Texas;Houston-Hooks;KDWH;30.0667;-95.5561;46
+United States;Texas;Huntsville;KUTS;30.7333;-95.5861;104
+United States;Texas;Junction;KJCT;30.5;-99.7664;523
+United States;Texas;Killeen;KILE;31.0833;-97.6833;0
+United States;Texas;Killeen-Ft Hood;KHLR;31.1;-97.3333;270
+United States;Texas;Killeen-Gray AAF;KGRK;31.0667;-97.8333;0
+United States;Texas;Kingsville;KNQI;27.5;-97.8117;15
+United States;Texas;Laredo;KLRD;27.55;-99.4667;0
+United States;Texas;Laughlin;KDLF;29.1167;-100.4667;294
+United States;Texas;Longview;KGGG;32.3833;-94.7139;107
+United States;Texas;Lubbock;KLBB;33.6667;-101.8214;992
+United States;Texas;Lufkin;KLFK;31.2333;-94.75;88
+United States;Texas;McAllen;KMFE;26.1667;-98.2444;38
+United States;Texas;Mc Gregor;KPWG;31.4833;-97.3167;0
+United States;Texas;Midland;KMAF;31.9333;-102.2086;872
+United States;Texas;Mineral Wells;KMWL;32.7667;-98.0603;284
+United States;Texas;Nacogdoches;KOCH;31.5833;-94.7167;0
+United States;Texas;Palacios;KPSX;28.7167;-96.2508;0
+United States;Texas;Paris;KPRX;33.6333;-95.45;0
+United States;Texas;Randolph AFB;KRND;29.5333;-98.2833;0
+United States;Texas;Rockport;KRKP;28.0833;-97.0464;6
+United States;Texas;Sabine Pass;KRPE;29.7;-93.95;0
+United States;Texas;San Angelo;KSJT;31.35;-100.4939;581
+United States;Texas;San Antonio;KSAT;29.5167;-98.4636;243
+United States;Texas;San Antonio-Kelly AFB;KSKF;29.3833;-98.5833;0
+United States;Texas;San Antonio-Stinson;KSSF;29.3333;-98.4717;176
+United States;Texas;Sherman-Denison;KF39;33.7167;-96.6667;0
+United States;Texas;Temple;KTPL;31.15;-97.4;0
+United States;Texas;Terrell;KTRL;32.7;-96.2683;144
+United States;Texas;Tyler;KTYR;32.35;-95.4039;165
+United States;Texas;Victoria;KVCT;28.85;-96.9297;31
+United States;Texas;Waco;KACT;31.6167;-97.2278;151
+United States;Texas;Wichita Falls;KSPS;33.9667;-98.4928;308
+United States;Texas;Wink;KINK;31.7667;-103.2014;855
+United States;Utah;Blanding;K4BL;37.6167;-109.4667;0
+United States;Utah;Bryce Canyon;KBCE;37.7;-112.1456;2312
+United States;Utah;Cedar City;KCDC;37.7;-113.0967;1714
+United States;Utah;Delta;KU24;39.3333;-112.5833;0
+United States;Utah;Dugway;KDPG;40.1667;-112.9333;1325
+United States;Utah;Green River;KU28;39;-110.1667;0
+United States;Utah;Hanksville;K4HV;38.3667;-110.7167;0
+United States;Utah;Logan;KLGU;41.7667;-111.8539;1355
+United States;Utah;Milford;KMLF;38.4167;-113.0097;1534
+United States;Utah;Ogden;KOGD;41.1833;-112.0164;1353
+United States;Utah;Ogden-Hill AFB;KHIF;41.1167;-111.9667;0
+United States;Utah;Price-Carbon;KPUC;39.6;-110.7547;2091
+United States;Utah;Provo;KPVU;40.2167;-111.7167;0
+United States;Utah;Salt Lake City;KSLC;40.7667;-111.9694;1286
+United States;Utah;St. George;KSGU;37.0833;-113.6;0
+United States;Utah;Vernal;KVEL;40.4333;-109.5117;1604
+United States;Utah;Wendover;KENV;40.7333;-114.0333;1292
+United States;Vermont;Burlington;KBTV;44.4667;-73.1503;105
+United States;Vermont;Montpelier;KMPV;44.2;-72.5661;343
+United States;Vermont;Rutland;KRUT;43.5333;-72.95;0
+United States;Vermont;Springfield;KVSF;43.3333;-72.5217;175
+United States;Virginia;Abingdon;KVJI;36.6833;-82.0333;0
+United States;Virginia;Ashland;KOFP;37.7;-77.4344;62
+United States;Virginia;Charlottesville;KCHO;38.1333;-78.4558;192
+United States;Virginia;Danville;KDAN;36.5667;-79.3361;175
+United States;Virginia;Dublin;KPSK;37.1333;-80.6833;0
+United States;Virginia;Farmville;KFVX;37.35;-78.4333;0
+United States;Virginia;Fort Belvoir;KDAA;38.7167;-77.1833;0
+United States;Virginia;Fort Eustis;KFAF;37.1333;-76.6167;0
+United States;Virginia;Franklin;KFKN;36.7;-76.9;0
+United States;Virginia;Galax-Hillsville;KHLX;36.7667;-80.8167;0
+United States;Virginia;Hampton;KLFI;37.0833;-76.35;6
+United States;Virginia;Hot Springs;KHSP;37.95;-79.8333;0
+United States;Virginia;Langley AFB;KLFI;37.0833;-76.35;6
+United States;Virginia;Leesburg;KJYO;39.0833;-77.5667;0
+United States;Virginia;Lynchburg;KLYH;37.3167;-79.2067;295
+United States;Virginia;Manassas;KHEF;38.7167;-77.5167;0
+United States;Virginia;Marion-Wytheville;KMKJ;36.9;-81.35;0
+United States;Virginia;Martinsville;KMTV;36.6333;-80.0167;0
+United States;Virginia;Melfa;KMFV;37.65;-75.7667;0
+United States;Virginia;Newport News;KPHF;37.1167;-76.4931;12
+United States;Virginia;Norfolk;KORF;36.9;-76.1919;14
+United States;Virginia;Norfolk NAS;KNGU;36.9333;-76.2958;8
+United States;Virginia;Petersburg;KPTB;37.1833;-77.5167;0
+United States;Virginia;Quantico;KNYG;38.5;-77.2917;3
+United States;Virginia;Richmond;KRIC;37.5;-77.3233;50
+United States;Virginia;Roanoke;KROA;37.3167;-79.9742;362
+United States;Virginia;Shannon;KEZF;38.2667;-77.45;0
+United States;Virginia;Staunton;KSHD;38.2667;-78.9;0
+United States;Virginia;Virginia Beach;KNTU;36.8167;-76.0283;6
+United States;Virginia;Virginia Tech Airport;KBCB;37.2167;-80.4167;0
+United States;Virginia;Wakefield;KAKQ;36.9667;-77.0011;33
+United States;Virginia;Wallops Island;KWAL;37.9333;-75.4631;14
+United States;Virginia;Waynesboro;KSHD;38.2667;-78.9;0
+United States;Virginia;Winchester;KOKV;39.15;-78.15;0
+United States;Virginia;Wise;KLNP;36.9833;-82.5333;0
+United States;Washington;Bellingham;KBLI;48.7833;-122.5392;50
+United States;Washington;Bremerton;KPWT;47.5;-122.75;0
+United States;Washington;Ephrata;KEPH;47.3;-119.5158;383
+United States;Washington;Everett;KPAE;47.9167;-122.2825;180
+United States;Washington;Fairchild;KSKA;47.6167;-117.65;0
+United States;Washington;Fort Lewis;KGRF;47.1167;-122.55;87
+United States;Washington;Friday Harbor;KFHR;48.5167;-123.0253;32
+United States;Washington;Hoquiam;KHQM;46.9667;-123.92;7
+United States;Washington;Moses Lake;KMWH;47.1833;-119.3133;362
+United States;Washington;Oak Harbor;K76S;48.25;-122.6667;0
+United States;Washington;Olympia;KOLM;46.9667;-122.9033;58
+United States;Washington;Pasco;KPSC;46.2667;-119.1167;121
+United States;Washington;Port Angeles;KCLM;48.1167;-123.5053;85
+United States;Washington;Pullman;KPUW;46.7333;-117.1097;773
+United States;Washington;Quillayute;KUIL;47.9333;-124.555;54
+United States;Washington;Renton;KRNT;47.4833;-122.2128;21
+United States;Washington;Seattle;KSEA;47.4333;-122.3136;136
+United States;Washington;Seattle-Boeing;KBFI;47.5333;-122.3136;4
+United States;Washington;Shelton;KSHN;47.2333;-123.1408;82
+United States;Washington;Spokane;KGEG;47.6167;-117.5278;735
+United States;Washington;Spokane-Parkwater;KSFF;47.6833;-117.3203;609
+United States;Washington;Stampede Pass;KSMP;47.2667;-121.3372;1208
+United States;Washington;Tacoma;KTIW;47.2667;-122.5761;96
+United States;Washington;Tacoma-Lakewood;KTCM;47.15;-122.4833;87
+United States;Washington;Toledo;KTDO;46.4833;-122.8;0
+United States;Washington;Walla Walla;KALW;46.0833;-118.2842;363
+United States;Washington;Wenatchee;KEAT;47.3833;-120.2069;377
+United States;Washington;Whidbey Island;KNUW;48.3333;-122.6506;8
+United States;Washington;Yakima;KYKM;46.55;-120.5336;324
+United States;West Virginia;Beckley;KBKW;37.7833;-81.1247;764
+United States;West Virginia;Bluefield;KBLF;37.2833;-81.2078;873
+United States;West Virginia;Charleston;KCRW;38.3667;-81.5914;309
+United States;West Virginia;Clarksburg;KCKB;39.3;-80.2247;360
+United States;West Virginia;Elkins;KEKN;38.8833;-79.8528;603
+United States;West Virginia;Huntington;KHTS;38.35;-82.555;254
+United States;West Virginia;Lewisburg;KLWB;37.8667;-80.4;0
+United States;West Virginia;Martinsburg;KMRB;39.4;-77.9844;164
+United States;West Virginia;Morgantown;KMGW;39.6333;-79.9211;378
+United States;West Virginia;Parkersburg;KPKB;39.3333;-81.4392;0
+United States;West Virginia;Wheeling;KHLG;40.1667;-80.6444;372
+United States;Wisconsin;Antigo;KAIG;45.15;-87.15;0
+United States;Wisconsin;Appleton;KATW;44.25;-88.5167;0
+United States;Wisconsin;Eau Claire;KEAU;44.85;-91.485;0
+United States;Wisconsin;Fond Du Lac;KFLD;43.7667;-88.4864;240
+United States;Wisconsin;Green Bay;KGRB;44.4667;-88.1367;205
+United States;Wisconsin;Hayward;KHYR;46.0167;-91.4503;370
+United States;Wisconsin;Janesville;KJVL;42.6167;-89.0333;0
+United States;Wisconsin;Kenosha;KENW;42.5833;-87.9381;219
+United States;Wisconsin;La Crosse;KLSE;43.8667;-91.2567;200
+United States;Wisconsin;Lone Rock;KLNR;43.2;-90.1814;217
+United States;Wisconsin;Madison;KMSN;43.1333;-89.3453;261
+United States;Wisconsin;Manitowoc;KMTW;44.1333;-87.6833;0
+United States;Wisconsin;Marshfield;KMFI;44.6333;-90.1875;379
+United States;Wisconsin;Milwaukee;KMKE;42.95;-87.9044;206
+United States;Wisconsin;Milwaukee-Timmerman;KMWC;43.1167;-88.0333;0
+United States;Wisconsin;Minocqua;KARV;45.9333;-89.7333;0
+United States;Wisconsin;Mosinee;KCWA;44.7833;-89.6667;0
+United States;Wisconsin;Oshkosh;KOSH;43.9667;-88.5581;248
+United States;Wisconsin;Phillips;KPBH;45.7;-90.4;0
+United States;Wisconsin;Rhinelander;KRHI;45.6167;-89.4822;485
+United States;Wisconsin;Sheboygan;KSBM;43.7667;-87.8497;232
+United States;Wisconsin;Sturgeon Bay;KSUE;44.85;-87.4167;0
+United States;Wisconsin;Superior;KSUW;46.6833;-92.0947;0
+United States;Wisconsin;Volk Field;KVOK;43.9333;-90.2667;0
+United States;Wisconsin;Waukesha;KUES;43.0333;-88.2369;0
+United States;Wisconsin;Wausau;KAUW;44.9167;-89.6267;362
+United States;Wisconsin;Wisconsin Rapids;KISW;44.35;-89.8369;307
+United States;Wyoming;Big Piney;KBPI;42.5667;-110.1031;2117
+United States;Wyoming;Casper;KCPR;42.8833;-106.4731;1621
+United States;Wyoming;Cheyenne;KCYS;41.15;-104.8069;1865
+United States;Wyoming;Cody;KCOD;44.5167;-109.0167;1553
+United States;Wyoming;Evanston;KEVW;41.2667;-111.0306;2177
+United States;Wyoming;Gillette;KGCC;44.3333;-105.5419;1320
+United States;Wyoming;Jackson;KJAC;43.6;-110.7333;0
+United States;Wyoming;Lander;KLND;42.8;-108.7281;1694
+United States;Wyoming;Laramie;KLAR;41.3;-105.675;2216
+United States;Wyoming;Rawlins;KRWL;41.8;-107.1997;0
+United States;Wyoming;Riverton;KRIW;43.05;-108.4464;1664
+United States;Wyoming;Rock Springs;KRKS;41.5833;-109.0653;0
+United States;Wyoming;Sheridan;KSHR;44.7667;-106.9689;1202
+United States;Wyoming;Worland;KWRL;43.95;-107.9508;1271
+United States;Wyoming;Yellowstone;KP60;44.5333;-110.4211;2388

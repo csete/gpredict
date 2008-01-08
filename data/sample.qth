@@ -1,0 +1,7 @@
+[QTH]
+DESCRIPTION=Sample QTH file
+LOCATION=Copenhagen, Denmark
+LAT=55.6167
+LON=12.6500
+ALT=5
+WX=EKCH

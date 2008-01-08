@@ -1,0 +1,182 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasStyle
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasStyle ##### -->
+<para>
+
+</para>
+
+@parent: 
+@properties: 
+
+<!-- ##### STRUCT GooCanvasStyleProperty ##### -->
+<para>
+
+</para>
+
+@id: 
+@value: 
+
+<!-- ##### FUNCTION goo_canvas_style_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_copy ##### -->
+<para>
+
+</para>
+
+@style: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_get_parent ##### -->
+<para>
+
+</para>
+
+@style: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_set_parent ##### -->
+<para>
+
+</para>
+
+@style: 
+@parent: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_get_property ##### -->
+<para>
+
+</para>
+
+@style: 
+@property_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_set_property ##### -->
+<para>
+
+</para>
+
+@style: 
+@property_id: 
+@value: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_set_fill_options ##### -->
+<para>
+
+</para>
+
+@style: 
+@cr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_style_set_stroke_options ##### -->
+<para>
+
+</para>
+
+@style: 
+@cr: 
+@Returns: 
+
+
+<!-- ##### VARIABLE goo_canvas_style_antialias_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_fill_pattern_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_fill_rule_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_font_desc_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_hint_metrics_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_line_cap_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_line_dash_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_line_join_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_line_join_miter_limit_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_line_width_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_operator_id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE goo_canvas_style_stroke_pattern_id ##### -->
+<para>
+
+</para>
+
+

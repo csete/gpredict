@@ -1,0 +1,821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvas Types</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch05.html" title="Miscellaneous">
+<link rel="prev" href="ch05.html" title="Miscellaneous">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="ch05.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch05.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td>&#160;</td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3060544" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3123692" class="shortcut">Description</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="goocanvas-GooCanvas-Types"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3060544"></a><span class="refentrytitle">GooCanvas Types</span>
+</h2>
+<p>GooCanvas Types &#8212; types used in GooCanvas.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="goocanvas-GooCanvas-Types.html#GooCanvasBounds">GooCanvasBounds</a>;
+
+enum                <a href="goocanvas-GooCanvas-Types.html#GooCanvasItemVisibility">GooCanvasItemVisibility</a>;
+
+enum                <a href="goocanvas-GooCanvas-Types.html#GooCanvasPointerEvents">GooCanvasPointerEvents</a>;
+
+enum                <a href="goocanvas-GooCanvas-Types.html#GooCanvasAnimateType">GooCanvasAnimateType</a>;
+
+                    <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>;
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>*    <a href="goocanvas-GooCanvas-Types.html#goo-canvas-points-new">goo_canvas_points_new</a>               (int num_points);
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>*    <a href="goocanvas-GooCanvas-Types.html#goo-canvas-points-ref">goo_canvas_points_ref</a>               (<a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a> *points);
+void                <a href="goocanvas-GooCanvas-Types.html#goo-canvas-points-unref">goo_canvas_points_unref</a>             (<a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a> *points);
+
+                    <a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>;
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>*  <a href="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-new">goo_canvas_line_dash_new</a>            (<a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> num_dashes,
+                                                         ...);
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>*  <a href="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-newv">goo_canvas_line_dash_newv</a>           (<a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> num_dashes,
+                                                         double *dashes);
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>*  <a href="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-ref">goo_canvas_line_dash_ref</a>            (<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a> *dash);
+void                <a href="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-unref">goo_canvas_line_dash_unref</a>          (<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a> *dash);
+
+enum                <a href="goocanvas-GooCanvas-Types.html#GooCanvasPathCommandType">GooCanvasPathCommandType</a>;
+union               <a href="goocanvas-GooCanvas-Types.html#GooCanvasPathCommand">GooCanvasPathCommand</a>;
+<a
+href="../glib/glib-Arrays.html#GArray"
+>GArray</a>*             <a href="goocanvas-GooCanvas-Types.html#goo-canvas-parse-path-data">goo_canvas_parse_path_data</a>          (const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *path_data);
+void                <a href="goocanvas-GooCanvas-Types.html#goo-canvas-create-path">goo_canvas_create_path</a>              (<a
+href="../glib/glib-Arrays.html#GArray"
+>GArray</a> *commands,
+                                                         <a
+href="../cairo/cairo-cairo-t.html#cairo-t"
+>cairo_t</a> *cr);
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3123692"></a><h2>Description</h2>
+<p>
+This section describes the types used throughout GooCanvas.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3123713"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3123723"></a><h3>
+<a name="GooCanvasBounds"></a>GooCanvasBounds</h3>
+<a class="indexterm" name="id3123736"></a><pre class="programlisting">typedef struct {
+  gdouble x1, y1, x2, y2;
+} GooCanvasBounds;
+</pre>
+<p>
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasBounds"><span class="type">GooCanvasBounds</span></a> represents the bounding box of an item in the canvas.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>&#160;<em class="structfield"><code>x1</code></em>;</span></td>
+<td> the left edge.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>&#160;<em class="structfield"><code>y1</code></em>;</span></td>
+<td> the top edge.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>&#160;<em class="structfield"><code>x2</code></em>;</span></td>
+<td> the right edge.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>&#160;<em class="structfield"><code>y2</code></em>;</span></td>
+<td> the bottom edge.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3119118"></a><h3>
+<a name="GooCanvasItemVisibility"></a>enum GooCanvasItemVisibility</h3>
+<a class="indexterm" name="id3119129"></a><pre class="programlisting">typedef enum
+{
+  GOO_CANVAS_ITEM_HIDDEN			= 0,
+  GOO_CANVAS_ITEM_INVISIBLE			= 1,
+  GOO_CANVAS_ITEM_VISIBLE			= 2,
+  GOO_CANVAS_ITEM_VISIBLE_ABOVE_THRESHOLD	= 3,
+} GooCanvasItemVisibility;
+</pre>
+<p>
+The <a href="goocanvas-GooCanvas-Types.html#GooCanvasItemVisibility"><span class="type">GooCanvasItemVisibility</span></a> enumeration is used to specify when a canvas
+item is visible.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ITEM-HIDDEN:CAPS"></a><code class="literal">GOO_CANVAS_ITEM_HIDDEN</code></span></td>
+<td> the item is invisible, and is not allocated any
+ space in layout container items such as <a href="GooCanvasTable.html" title="GooCanvasTable"><span class="type">GooCanvasTable</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ITEM-INVISIBLE:CAPS"></a><code class="literal">GOO_CANVAS_ITEM_INVISIBLE</code></span></td>
+<td> the item is invisible, but it is still allocated
+ space in layout container items.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ITEM-VISIBLE:CAPS"></a><code class="literal">GOO_CANVAS_ITEM_VISIBLE</code></span></td>
+<td> the item is visible.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ITEM-VISIBLE-ABOVE-THRESHOLD:CAPS"></a><code class="literal">GOO_CANVAS_ITEM_VISIBLE_ABOVE_THRESHOLD</code></span></td>
+<td> the item is visible when the
+ canvas scale setting is greater than or equal to the item's visibility
+ threshold setting.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3119259"></a><h3>
+<a name="GooCanvasPointerEvents"></a>enum GooCanvasPointerEvents</h3>
+<a class="indexterm" name="id3119271"></a><pre class="programlisting">typedef enum
+{
+  GOO_CANVAS_EVENTS_VISIBLE_MASK	= 1 &lt;&lt; 0,
+  GOO_CANVAS_EVENTS_PAINTED_MASK	= 1 &lt;&lt; 1,
+  GOO_CANVAS_EVENTS_FILL_MASK		= 1 &lt;&lt; 2,
+  GOO_CANVAS_EVENTS_STROKE_MASK		= 1 &lt;&lt; 3,
+
+  GOO_CANVAS_EVENTS_NONE		= 0,
+  GOO_CANVAS_EVENTS_VISIBLE_PAINTED	= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_PAINTED_MASK | GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_VISIBLE_FILL	= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_FILL_MASK,
+  GOO_CANVAS_EVENTS_VISIBLE_STROKE	= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_VISIBLE		= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_PAINTED		= GOO_CANVAS_EVENTS_PAINTED_MASK | GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_FILL		= GOO_CANVAS_EVENTS_FILL_MASK,
+  GOO_CANVAS_EVENTS_STROKE		= GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_ALL			= GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK
+} GooCanvasPointerEvents;
+</pre>
+<p>
+Specifies when an item receives pointer events such as mouse clicks.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-VISIBLE-MASK:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_VISIBLE_MASK</code></span></td>
+<td> a mask indicating that the item only
+ receives events when it is visible.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-PAINTED-MASK:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_PAINTED_MASK</code></span></td>
+<td> a mask indicating that the item only
+ receives events when the specified parts of it are painted.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-FILL-MASK:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_FILL_MASK</code></span></td>
+<td> a mask indicating that the filled part of
+ the item receives events.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-STROKE-MASK:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_STROKE_MASK</code></span></td>
+<td> a mask indicating that the stroked part
+ of the item receives events.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-NONE:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_NONE</code></span></td>
+<td> the item doesn't receive events at all.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-VISIBLE-PAINTED:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_VISIBLE_PAINTED</code></span></td>
+<td> the item receives events in its
+ painted areas when it is visible (the default).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-VISIBLE-FILL:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_VISIBLE_FILL</code></span></td>
+<td> the item's interior receives events
+ when it is visible.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-VISIBLE-STROKE:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_VISIBLE_STROKE</code></span></td>
+<td> the item's perimeter receives
+ events when it is visible.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-VISIBLE:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_VISIBLE</code></span></td>
+<td> the item receives events when it is visible,
+ whether it is painted or not.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-PAINTED:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_PAINTED</code></span></td>
+<td> the item receives events in its painted areas,
+ whether it is visible or not.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-FILL:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_FILL</code></span></td>
+<td> the item's interior receives events, whether it
+ is visible or painted or not.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-STROKE:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_STROKE</code></span></td>
+<td> the item's perimeter receives events, whether
+ it is visible or painted or not.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-EVENTS-ALL:CAPS"></a><code class="literal">GOO_CANVAS_EVENTS_ALL</code></span></td>
+<td> the item's perimeter and interior receive events,
+ whether it is visible or painted or not.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3121872"></a><h3>
+<a name="GooCanvasAnimateType"></a>enum GooCanvasAnimateType</h3>
+<a class="indexterm" name="id3121884"></a><pre class="programlisting">typedef enum
+{
+  GOO_CANVAS_ANIMATE_FREEZE,
+  GOO_CANVAS_ANIMATE_RESET,
+  GOO_CANVAS_ANIMATE_RESTART,
+  GOO_CANVAS_ANIMATE_BOUNCE
+} GooCanvasAnimateType;
+</pre>
+<p>
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasAnimateType"><span class="type">GooCanvasAnimateType</span></a> is used to specify what happens when the end of an
+animation is reached.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ANIMATE-FREEZE:CAPS"></a><code class="literal">GOO_CANVAS_ANIMATE_FREEZE</code></span></td>
+<td> the item remains in the final position.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ANIMATE-RESET:CAPS"></a><code class="literal">GOO_CANVAS_ANIMATE_RESET</code></span></td>
+<td> the item is moved back to the initial position.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ANIMATE-RESTART:CAPS"></a><code class="literal">GOO_CANVAS_ANIMATE_RESTART</code></span></td>
+<td> the animation is restarted from the initial
+ position.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-ANIMATE-BOUNCE:CAPS"></a><code class="literal">GOO_CANVAS_ANIMATE_BOUNCE</code></span></td>
+<td> the animation bounces back and forth between the
+ start and end positions.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3122007"></a><h3>
+<a name="GooCanvasPoints"></a>GooCanvasPoints</h3>
+<a class="indexterm" name="id3122020"></a><pre class="programlisting">typedef struct {
+  double *coords;
+  int num_points;
+  int ref_count;
+} GooCanvasPoints;
+</pre>
+<p>
+<span class="type">GooCairoPoints</span> represents an array of points.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term">double&#160;*<em class="structfield"><code>coords</code></em>;</span></td>
+<td> the coordinates of the points, in pairs.
+</td>
+</tr>
+<tr>
+<td><span class="term">int&#160;<em class="structfield"><code>num_points</code></em>;</span></td>
+<td> the number of points.
+</td>
+</tr>
+<tr>
+<td><span class="term">int&#160;<em class="structfield"><code>ref_count</code></em>;</span></td>
+<td> the reference count of the struct.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3126786"></a><h3>
+<a name="goo-canvas-points-new"></a>goo_canvas_points_new ()</h3>
+<a class="indexterm" name="id3126796"></a><pre class="programlisting"><a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>*    goo_canvas_points_new               (int num_points);</pre>
+<p>
+Creates a new <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct with space for the given number of
+points. It should be freed with <a href="goocanvas-GooCanvas-Types.html#goo-canvas-points-unref"><code class="function">goo_canvas_points_unref()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>num_points</code></em>&#160;:</span></td>
+<td> the number of points to create space for.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3126872"></a><h3>
+<a name="goo-canvas-points-ref"></a>goo_canvas_points_ref ()</h3>
+<a class="indexterm" name="id3126883"></a><pre class="programlisting"><a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>*    goo_canvas_points_ref               (<a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a> *points);</pre>
+<p>
+Increments the reference count of the given <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>points</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3126956"></a><h3>
+<a name="goo-canvas-points-unref"></a>goo_canvas_points_unref ()</h3>
+<a class="indexterm" name="id3126966"></a><pre class="programlisting">void                goo_canvas_points_unref             (<a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a> *points);</pre>
+<p>
+Decrements the reference count of the given <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct,
+freeing it if the reference count falls to zero.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>points</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints"><span class="type">GooCanvasPoints</span></a> struct.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127025"></a><h3>
+<a name="GooCanvasLineDash"></a>GooCanvasLineDash</h3>
+<a class="indexterm" name="id3127035"></a><pre class="programlisting">typedef struct {
+  int ref_count;
+  int num_dashes;
+  double *dashes;
+  double dash_offset;
+} GooCanvasLineDash;
+</pre>
+<p>
+<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash"><span class="type">GooCanvasLineDash</span></a> specifies a dash pattern to be used when drawing items.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term">int&#160;<em class="structfield"><code>ref_count</code></em>;</span></td>
+<td> the reference count of the struct.
+</td>
+</tr>
+<tr>
+<td><span class="term">int&#160;<em class="structfield"><code>num_dashes</code></em>;</span></td>
+<td> the number of dashes and gaps between them.
+</td>
+</tr>
+<tr>
+<td><span class="term">double&#160;*<em class="structfield"><code>dashes</code></em>;</span></td>
+<td> the sizes of each dash and gap.
+</td>
+</tr>
+<tr>
+<td><span class="term">double&#160;<em class="structfield"><code>dash_offset</code></em>;</span></td>
+<td> the start offset into the dash pattern.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127141"></a><h3>
+<a name="goo-canvas-line-dash-new"></a>goo_canvas_line_dash_new ()</h3>
+<a class="indexterm" name="id3127151"></a><pre class="programlisting"><a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>*  goo_canvas_line_dash_new            (<a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> num_dashes,
+                                                         ...);</pre>
+<p>
+Creates a new dash pattern.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>num_dashes</code></em>&#160;:</span></td>
+<td> the number of dashes and gaps in the pattern.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> the length of each dash and gap.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new dash pattern.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127221"></a><h3>
+<a name="goo-canvas-line-dash-newv"></a>goo_canvas_line_dash_newv ()</h3>
+<a class="indexterm" name="id3127232"></a><pre class="programlisting"><a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>*  goo_canvas_line_dash_newv           (<a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> num_dashes,
+                                                         double *dashes);</pre>
+<p>
+Creates a new dash pattern.  Takes ownership of the <em class="parameter"><code>dashes</code></em> vector.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>num_dashes</code></em>&#160;:</span></td>
+<td> the number of dashes and gaps in the pattern.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>dashes</code></em>&#160;:</span></td>
+<td> a g_new-allocated vector of doubles, the length of each
+dash and gap.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new dash pattern.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127313"></a><h3>
+<a name="goo-canvas-line-dash-ref"></a>goo_canvas_line_dash_ref ()</h3>
+<a class="indexterm" name="id3127323"></a><pre class="programlisting"><a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a>*  goo_canvas_line_dash_ref            (<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a> *dash);</pre>
+<p>
+Increments the reference count of the dash pattern.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dash</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash"><span class="type">GooCanvasLineDash</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the dash pattern.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127384"></a><h3>
+<a name="goo-canvas-line-dash-unref"></a>goo_canvas_line_dash_unref ()</h3>
+<a class="indexterm" name="id3127395"></a><pre class="programlisting">void                goo_canvas_line_dash_unref          (<a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash">GooCanvasLineDash</a> *dash);</pre>
+<p>
+Decrements the reference count of the dash pattern. If it falls to 0
+it is freed.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>dash</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-GooCanvas-Types.html#GooCanvasLineDash"><span class="type">GooCanvasLineDash</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127447"></a><h3>
+<a name="GooCanvasPathCommandType"></a>enum GooCanvasPathCommandType</h3>
+<a class="indexterm" name="id3127458"></a><pre class="programlisting">typedef enum
+{
+  /* Simple commands like moveto and lineto: MmZzLlHhVv. */
+  GOO_CANVAS_PATH_MOVE_TO,
+  GOO_CANVAS_PATH_CLOSE_PATH,
+  GOO_CANVAS_PATH_LINE_TO,
+  GOO_CANVAS_PATH_HORIZONTAL_LINE_TO,
+  GOO_CANVAS_PATH_VERTICAL_LINE_TO,
+
+  /* Bezier curve commands: CcSsQqTt. */
+  GOO_CANVAS_PATH_CURVE_TO,
+  GOO_CANVAS_PATH_SMOOTH_CURVE_TO,
+  GOO_CANVAS_PATH_QUADRATIC_CURVE_TO,
+  GOO_CANVAS_PATH_SMOOTH_QUADRATIC_CURVE_TO,
+
+  /* The elliptical arc commands: Aa. */
+  GOO_CANVAS_PATH_ELLIPTICAL_ARC
+} GooCanvasPathCommandType;
+</pre>
+<p>
+GooCanvasPathCommandType specifies the type of each command in the path.
+See the path element in the <a href="http://www.w3.org/Graphics/SVG/" target="_top">
+Scalable Vector Graphics (SVG) specification</a> for more details.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-MOVE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_MOVE_TO</code></span></td>
+<td> move to the given point.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-CLOSE-PATH:CAPS"></a><code class="literal">GOO_CANVAS_PATH_CLOSE_PATH</code></span></td>
+<td> close the current path, drawing a line from the
+ current position to the start of the path.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-LINE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_LINE_TO</code></span></td>
+<td> draw a line to the given point.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-HORIZONTAL-LINE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_HORIZONTAL_LINE_TO</code></span></td>
+<td> draw a horizontal line to the given
+ x coordinate.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-VERTICAL-LINE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_VERTICAL_LINE_TO</code></span></td>
+<td> draw a vertical line to the given y
+ coordinate.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-CURVE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_CURVE_TO</code></span></td>
+<td> draw a bezier curve using two control
+ points to the given point.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-SMOOTH-CURVE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_SMOOTH_CURVE_TO</code></span></td>
+<td> draw a bezier curve using a reflection
+ of the last control point of the last curve as the first control point,
+ and one new control point, to the given point.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-QUADRATIC-CURVE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_QUADRATIC_CURVE_TO</code></span></td>
+<td> draw a quadratic bezier curve using
+ a single control point to the given point.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-SMOOTH-QUADRATIC-CURVE-TO:CAPS"></a><code class="literal">GOO_CANVAS_PATH_SMOOTH_QUADRATIC_CURVE_TO</code></span></td>
+<td> draw a quadratic bezier curve
+ using a reflection of the control point from the previous curve as the
+ control point, to the given point.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="GOO-CANVAS-PATH-ELLIPTICAL-ARC:CAPS"></a><code class="literal">GOO_CANVAS_PATH_ELLIPTICAL_ARC</code></span></td>
+<td> draw an elliptical arc, using the given
+ 2 radii, the x axis rotation, and the 2 flags to disambiguate the arc,
+ to the given point.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127718"></a><h3>
+<a name="GooCanvasPathCommand"></a>union GooCanvasPathCommand</h3>
+<a class="indexterm" name="id3127728"></a><pre class="programlisting">union GooCanvasPathCommand
+{
+  /* Simple commands like moveto and lineto: MmZzLlHhVv. */
+  struct {
+    guint type : 5; /* GooCanvasPathCommandType */
+    guint relative : 1;
+    gdouble x, y;
+  } simple;
+
+  /* Bezier curve commands: CcSsQqTt. */
+  struct {
+    guint type : 5; /* GooCanvasPathCommandType */
+    guint relative : 1;
+    gdouble x, y, x1, y1, x2, y2;
+  } curve;
+
+  /* The elliptical arc commands: Aa. */
+  struct {
+    guint type : 5; /* GooCanvasPathCommandType */
+    guint relative : 1;
+    guint large_arc_flag : 1;
+    guint sweep_flag : 1;
+    gdouble rx, ry, x_axis_rotation, x, y;
+  } arc;
+};
+</pre>
+<p>
+GooCanvasPathCommand holds the data for each command in the path.
+</p>
+<p>
+The <em class="parameter"><code>relative</code></em> flag specifies that the coordinates for the command are
+relative to the current point. Otherwise they are assumed to be absolute
+coordinates.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127768"></a><h3>
+<a name="goo-canvas-parse-path-data"></a>goo_canvas_parse_path_data ()</h3>
+<a class="indexterm" name="id3127779"></a><pre class="programlisting"><a
+href="../glib/glib-Arrays.html#GArray"
+>GArray</a>*             goo_canvas_parse_path_data          (const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *path_data);</pre>
+<p>
+Parses the given SVG path specification string.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>path_data</code></em>&#160;:</span></td>
+<td> the sequence of path commands, specified as a string using the
+ same syntax as in the <a href="http://www.w3.org/Graphics/SVG/" target="_top">Scalable
+ Vector Graphics (SVG)</a> path element.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a <a
+href="../glib/glib-Arrays.html#GArray"
+><span class="type">GArray</span></a> of <a href="goocanvas-GooCanvas-Types.html#GooCanvasPathCommand"><span class="type">GooCanvasPathCommand</span></a> elements.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3127854"></a><h3>
+<a name="goo-canvas-create-path"></a>goo_canvas_create_path ()</h3>
+<a class="indexterm" name="id3127864"></a><pre class="programlisting">void                goo_canvas_create_path              (<a
+href="../glib/glib-Arrays.html#GArray"
+>GArray</a> *commands,
+                                                         <a
+href="../cairo/cairo-cairo-t.html#cairo-t"
+>cairo_t</a> *cr);</pre>
+<p>
+Creates the path specified by the given <a href="goocanvas-GooCanvas-Types.html#GooCanvasPathCommand"><span class="type">GooCanvasPathCommand</span></a> array.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>commands</code></em>&#160;:</span></td>
+<td> an array of <a href="goocanvas-GooCanvas-Types.html#GooCanvasPathCommand"><span class="type">GooCanvasPathCommand</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cr</code></em>&#160;:</span></td>
+<td> a cairo context.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

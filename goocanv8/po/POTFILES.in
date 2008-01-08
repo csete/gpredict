@@ -1,0 +1,18 @@
+# List of source files containing translatable strings.
+
+src/goocanvasatk.c
+src/goocanvas.c
+src/goocanvasellipse.c
+src/goocanvasgroup.c
+src/goocanvasimage.c
+src/goocanvasitem.c
+src/goocanvasitemmodel.c
+src/goocanvasitemsimple.c
+src/goocanvaspath.c
+src/goocanvaspolyline.c
+src/goocanvasrect.c
+src/goocanvasstyle.c
+src/goocanvastable.c
+src/goocanvastext.c
+src/goocanvasutils.c
+src/goocanvaswidget.c

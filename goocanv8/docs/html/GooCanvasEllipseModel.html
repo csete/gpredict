@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasEllipseModel</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="prev" href="GooCanvasGroupModel.html" title="GooCanvasGroupModel">
+<link rel="next" href="GooCanvasImageModel.html" title="GooCanvasImageModel">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasGroupModel.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch04.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasImageModel.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3048689" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3114587" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3114471" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3114501" class="shortcut">Implemented Interfaces</a>
+                  &#160;|&#160;
+                  <a href="#id3114522" class="shortcut">Properties</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasEllipseModel"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3048689"></a><span class="refentrytitle">GooCanvasEllipseModel</span>
+</h2>
+<p>GooCanvasEllipseModel &#8212; a model for ellipse items.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasEllipseModel.html#GooCanvasEllipseModel-struct">GooCanvasEllipseModel</a>;
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* <a href="GooCanvasEllipseModel.html#goo-canvas-ellipse-model-new">goo_canvas_ellipse_model_new</a>        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> center_x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> center_y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> radius_x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> radius_y,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3114471"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple">GooCanvasItemModelSimple</a>
+         +----GooCanvasEllipseModel
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3114501"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasEllipseModel implements
+ <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3114522"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasEllipseModel.html#GooCanvasEllipseModel--center-x">center-x</a>"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasEllipseModel.html#GooCanvasEllipseModel--center-y">center-y</a>"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasEllipseModel.html#GooCanvasEllipseModel--radius-x">radius-x</a>"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasEllipseModel.html#GooCanvasEllipseModel--radius-y">radius-y</a>"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3114587"></a><h2>Description</h2>
+<p>
+GooCanvasEllipseModel represents a model for ellipse items.
+</p>
+<p>
+It is a subclass of <a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple"><span class="type">GooCanvasItemModelSimple</span></a> and so inherits all of the
+style properties such as "stroke-color", "fill-color" and "line-width".
+</p>
+<p>
+It also implements the <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> interface, so you can use the
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> functions such as <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-raise"><code class="function">goo_canvas_item_model_raise()</code></a> and
+<a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-rotate"><code class="function">goo_canvas_item_model_rotate()</code></a>.
+</p>
+<p>
+To create a <a href="GooCanvasEllipseModel.html" title="GooCanvasEllipseModel"><span class="type">GooCanvasEllipseModel</span></a> use <a href="GooCanvasEllipseModel.html#goo-canvas-ellipse-model-new"><code class="function">goo_canvas_ellipse_model_new()</code></a>.
+</p>
+<p>
+To get or set the properties of an existing <a href="GooCanvasEllipseModel.html" title="GooCanvasEllipseModel"><span class="type">GooCanvasEllipseModel</span></a>, use
+<a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-get"
+><code class="function">g_object_get()</code></a> and <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-set"
+><code class="function">g_object_set()</code></a>.
+</p>
+<p>
+To respond to events such as mouse clicks on the ellipse you must connect
+to the signal handlers of the corresponding <a href="GooCanvasEllipse.html" title="GooCanvasEllipse"><span class="type">GooCanvasEllipse</span></a> objects.
+(See <a href="GooCanvas.html#goo-canvas-get-item"><code class="function">goo_canvas_get_item()</code></a> and <a href="GooCanvas.html#GooCanvas-item-created"><span class="type">GooCanvas::item-created</span></a>.)</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3114738"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3114749"></a><h3>
+<a name="GooCanvasEllipseModel-struct"></a>GooCanvasEllipseModel</h3>
+<a class="indexterm" name="id3114760"></a><pre class="programlisting">typedef struct _GooCanvasEllipseModel GooCanvasEllipseModel;</pre>
+<p>
+The <a href="GooCanvasEllipseModel.html#GooCanvasEllipseModel-struct"><span class="type">GooCanvasEllipseModel</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3114787"></a><h3>
+<a name="goo-canvas-ellipse-model-new"></a>goo_canvas_ellipse_model_new ()</h3>
+<a class="indexterm" name="id3114798"></a><pre class="programlisting"><a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* goo_canvas_ellipse_model_new        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> center_x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> center_y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> radius_x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> radius_y,
+                                                         ...);</pre>
+<p>
+Creates a new ellipse model.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent model, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will
+ assume ownership of the item, and the item will automatically be freed when
+ it is removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>center_x</code></em>&#160;:</span></td>
+<td> the x coordinate of the center of the ellipse.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>center_y</code></em>&#160;:</span></td>
+<td> the y coordinate of the center of the ellipse.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>radius_x</code></em>&#160;:</span></td>
+<td> the horizontal radius of the ellipse.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>radius_y</code></em>&#160;:</span></td>
+<td> the vertical radius of the ellipse.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new ellipse model.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create an ellipse centered at (100.0,
+100.0), with a horizontal radius of 50.0 and a vertical radius of 30.0.
+It is drawn with a red outline with a width of 5.0 and filled with blue:
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GooCanvasItemModel *ellipse = goo_canvas_ellipse_model_new (mygroup, 100.0, 100.0, 50.0, 30.0,
+                                                             "stroke-color", "red",
+                                                             "line-width", 5.0,
+                                                             "fill-color", "blue",
+                                                             NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3115016"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3115027"></a><h3>
+<a name="GooCanvasEllipseModel--center-x"></a>The "<code class="literal">center-x</code>" property</h3>
+<a class="indexterm" name="id3115041"></a><pre class="programlisting">  "center-x"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The x coordinate of the center of the ellipse.</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3115067"></a><h3>
+<a name="GooCanvasEllipseModel--center-y"></a>The "<code class="literal">center-y</code>" property</h3>
+<a class="indexterm" name="id3115083"></a><pre class="programlisting">  "center-y"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The y coordinate of the center of the ellipse.</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3115110"></a><h3>
+<a name="GooCanvasEllipseModel--radius-x"></a>The "<code class="literal">radius-x</code>" property</h3>
+<a class="indexterm" name="id3115126"></a><pre class="programlisting">  "radius-x"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The horizontal radius of the ellipse.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3112555"></a><h3>
+<a name="GooCanvasEllipseModel--radius-y"></a>The "<code class="literal">radius-y</code>" property</h3>
+<a class="indexterm" name="id3112571"></a><pre class="programlisting">  "radius-y"                 <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The vertical radius of the ellipse.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+</div>
+</div>
+</body>
+</html>

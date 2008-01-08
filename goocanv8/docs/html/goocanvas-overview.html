@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Overview</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch01.html" title="Introduction">
+<link rel="prev" href="ch01.html" title="Introduction">
+<link rel="next" href="goocanvas-simple-canvas.html" title="The Simple Canvas">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2"><tr valign="middle">
+<td><a accesskey="p" href="ch01.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="goocanvas-simple-canvas.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry" lang="en">
+<a name="goocanvas-overview"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">Overview</span></h2>
+<p>Overview &#8212; a quick tour of GooCanvas.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1" lang="en">
+<a name="features"></a><h2>Features</h2>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+      Optional model/view split.
+    </p></li>
+<li><p>
+      Uses interfaces for items and views.
+    </p></li>
+<li><p>
+      Basic items - rect/ellipse/polyline/text/image/group.
+    </p></li>
+<li><p>
+      Path item, using SVG path specification strings.
+    </p></li>
+<li><p>
+      Table item for layout of other items (similar to the GtkTable widget).
+      (This also supports items whose requested height changes according to
+      their allocated width, such as text items.)
+    </p></li>
+<li><p>
+      Embedded GTK+ widgets.
+    </p></li>
+<li><p>
+      Layers/stacking order with raise/lower functions.
+    </p></li>
+<li><p>
+      Cascading styles - line width/style/dashes, colors, fill patterns.
+    </p></li>
+<li><p>
+      Affine transformations for all items - rotations/scales/skews.
+    </p></li>
+<li><p>
+      Event handling - button/motion events, "pointer-events" property like SVG.
+    </p></li>
+<li><p>
+      Grabs - support for pointer and keyboard grabs.
+    </p></li>
+<li><p>
+      Keyboard focus traversal.
+    </p></li>
+<li><p>
+      Accessibility (item title and description properties and hierarchy stuff).
+    </p></li>
+<li><p>
+      Printing (output to a given cairo_t).
+    </p></li>
+<li><p>
+      Scrolling.
+    </p></li>
+<li><p>
+      Zooming.
+    </p></li>
+<li><p>
+      Item visibility setting - on/off/above zoom threshold.
+    </p></li>
+<li><p>
+      Simple animation.
+    </p></li>
+<li><p>
+      Scalable - support for thousands of items over a large canvas area.
+    </p></li>
+<li><p>
+      Support for different units - pixels/points/inches/millimeters.
+    </p></li>
+</ul></div>
+</div>
+</div>
+</body>
+</html>

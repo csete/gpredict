@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>GooCanvas Reference Manual</title>
+  </bookinfo>
+
+  <chapter>
+    <title>Introduction</title>
+    <xi:include href="xml/overview.xml"/>
+    <xi:include href="xml/simple-canvas.xml"/>
+    <xi:include href="xml/model-view-canvas.xml"/>
+    <xi:include href="xml/creating-items.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Core Objects</title>
+    <xi:include href="xml/goocanvas.xml"/>
+    <xi:include href="xml/goocanvasitem.xml"/>
+    <xi:include href="xml/goocanvasitemmodel.xml"/>
+    <xi:include href="xml/goocanvasitemsimple.xml"/>
+    <xi:include href="xml/goocanvasitemmodelsimple.xml"/>
+    <xi:include href="xml/goocanvasstyle.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Standard Canvas Items</title>
+    <xi:include href="xml/goocanvasgroup.xml"/>
+    <xi:include href="xml/goocanvasellipse.xml"/>
+    <xi:include href="xml/goocanvasimage.xml"/>
+    <xi:include href="xml/goocanvaspath.xml"/>
+    <xi:include href="xml/goocanvaspolyline.xml"/>
+    <xi:include href="xml/goocanvasrect.xml"/>
+    <xi:include href="xml/goocanvastext.xml"/>
+    <xi:include href="xml/goocanvaswidget.xml"/>
+    <xi:include href="xml/goocanvastable.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Standard Canvas Item Models</title>
+    <xi:include href="xml/goocanvasgroupmodel.xml"/>
+    <xi:include href="xml/goocanvasellipsemodel.xml"/>
+    <xi:include href="xml/goocanvasimagemodel.xml"/>
+    <xi:include href="xml/goocanvaspathmodel.xml"/>
+    <xi:include href="xml/goocanvaspolylinemodel.xml"/>
+    <xi:include href="xml/goocanvasrectmodel.xml"/>
+    <xi:include href="xml/goocanvastextmodel.xml"/>
+    <xi:include href="xml/goocanvastablemodel.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Miscellaneous</title>
+    <xi:include href="xml/goocanvasutils.xml"/>
+  </chapter>
+</book>

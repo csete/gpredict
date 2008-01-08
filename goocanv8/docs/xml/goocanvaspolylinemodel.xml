@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasPolylineModel">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasPolylineModel</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasPolylineModel</refname>
+<refpurpose>a model for polyline items (a series of lines with
+ optional arrows).</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasPolylineModel-struct">GooCanvasPolylineModel</link>;
+<link linkend="GooCanvasItemModel">GooCanvasItemModel</link>* <link linkend="goo-canvas-polyline-model-new">goo_canvas_polyline_model_new</link>       (<link linkend="GooCanvasItemModel">GooCanvasItemModel</link> *parent,
+                                                         <link linkend="gboolean">gboolean</link> close_path,
+                                                         <link linkend="gint">gint</link> num_points,
+                                                         ...);
+<link linkend="GooCanvasItemModel">GooCanvasItemModel</link>* <link linkend="goo-canvas-polyline-model-new-line">goo_canvas_polyline_model_new_line</link>  (<link linkend="GooCanvasItemModel">GooCanvasItemModel</link> *parent,
+                                                         <link linkend="gdouble">gdouble</link> x1,
+                                                         <link linkend="gdouble">gdouble</link> y1,
+                                                         <link linkend="gdouble">gdouble</link> x2,
+                                                         <link linkend="gdouble">gdouble</link> y2,
+                                                         ...);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GooCanvasItemModelSimple">GooCanvasItemModelSimple</link>
+         +----GooCanvasPolylineModel
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasPolylineModel implements
+ <link linkend="GooCanvasItemModel">GooCanvasItemModel</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasPolylineModel--arrow-length">arrow-length</link>&quot;             <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasPolylineModel--arrow-tip-length">arrow-tip-length</link>&quot;         <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasPolylineModel--arrow-width">arrow-width</link>&quot;              <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasPolylineModel--close-path">close-path</link>&quot;               <link linkend="gboolean">gboolean</link>              : Read / Write
+  &quot;<link linkend="GooCanvasPolylineModel--end-arrow">end-arrow</link>&quot;                <link linkend="gboolean">gboolean</link>              : Read / Write
+  &quot;<link linkend="GooCanvasPolylineModel--points">points</link>&quot;                   <link linkend="GooCanvasPoints">GooCanvasPoints</link>       : Read / Write
+  &quot;<link linkend="GooCanvasPolylineModel--start-arrow">start-arrow</link>&quot;              <link linkend="gboolean">gboolean</link>              : Read / Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+GooCanvasPolylineModel represents a model for polyline items, which are a
+series of one or more lines, with optional arrows at either end.
+</para>
+<para>
+It is a subclass of <link linkend="GooCanvasItemModelSimple"><type>GooCanvasItemModelSimple</type></link> and so inherits all of the
+style properties such as "stroke-color", "fill-color" and "line-width".
+</para>
+<para>
+It also implements the <link linkend="GooCanvasItemModel"><type>GooCanvasItemModel</type></link> interface, so you can use the
+<link linkend="GooCanvasItemModel"><type>GooCanvasItemModel</type></link> functions such as <link linkend="goo-canvas-item-model-raise"><function>goo_canvas_item_model_raise()</function></link> and
+<link linkend="goo-canvas-item-model-rotate"><function>goo_canvas_item_model_rotate()</function></link>.
+</para>
+<para>
+To create a <link linkend="GooCanvasPolylineModel"><type>GooCanvasPolylineModel</type></link> use <link linkend="goo-canvas-polyline-model-new"><function>goo_canvas_polyline_model_new()</function></link>, or
+<link linkend="goo-canvas-polyline-model-new-line"><function>goo_canvas_polyline_model_new_line()</function></link> for a simple line between two points.
+</para>
+<para>
+To get or set the properties of an existing <link linkend="GooCanvasPolylineModel"><type>GooCanvasPolylineModel</type></link>, use
+<link linkend="g-object-get"><function>g_object_get()</function></link> and <link linkend="g-object-set"><function>g_object_set()</function></link>.
+</para>
+<para>
+To respond to events such as mouse clicks on the polyline you must connect
+to the signal handlers of the corresponding <link linkend="GooCanvasPolyline"><type>GooCanvasPolyline</type></link> objects.
+(See <link linkend="goo-canvas-get-item"><function>goo_canvas_get_item()</function></link> and <link linkend="GooCanvas-item-created"><type>GooCanvas::item-created</type></link>.)</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasPolylineModel-struct" role="struct"/>GooCanvasPolylineModel</title>
+<indexterm><primary>GooCanvasPolylineModel</primary></indexterm><programlisting>typedef struct _GooCanvasPolylineModel GooCanvasPolylineModel;</programlisting>
+<para>
+The <link linkend="GooCanvasPolylineModel-struct"><type>GooCanvasPolylineModel</type></link> struct contains private data only.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-polyline-model-new" role="function"/>goo_canvas_polyline_model_new ()</title>
+<indexterm><primary>goo_canvas_polyline_model_new</primary></indexterm><programlisting><link linkend="GooCanvasItemModel">GooCanvasItemModel</link>* goo_canvas_polyline_model_new       (<link linkend="GooCanvasItemModel">GooCanvasItemModel</link> *parent,
+                                                         <link linkend="gboolean">gboolean</link> close_path,
+                                                         <link linkend="gint">gint</link> num_points,
+                                                         ...);</programlisting>
+<para>
+Creates a new polyline model.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent model, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>. If a parent is specified, it will
+ assume ownership of the item, and the item will automatically be freed when
+ it is removed from the parent. Otherwise call <link linkend="g-object-unref"><function>g_object_unref()</function></link> to free it.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>close_path</parameter>&nbsp;:</term>
+<listitem><simpara> if the last point should be connected to the first.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>num_points</parameter>&nbsp;:</term>
+<listitem><simpara> the number of points in the polyline.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> the pairs of coordinates for each point in the line, followed by
+ optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new polyline model.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create a filled triangle with vertices
+at (100,100), (300,100), and (200,300).
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItemModel *polyline = goo_canvas_polyline_model_new (mygroup, TRUE, 3,
+                                                               100.0, 100.0,
+                                                               300.0, 100.0,
+                                                               200.0, 300.0,
+                                                               "stroke-color", "red",
+                                                               "line-width", 5.0,
+                                                               "fill-color", "blue",
+                                                               NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-polyline-model-new-line" role="function"/>goo_canvas_polyline_model_new_line ()</title>
+<indexterm><primary>goo_canvas_polyline_model_new_line</primary></indexterm><programlisting><link linkend="GooCanvasItemModel">GooCanvasItemModel</link>* goo_canvas_polyline_model_new_line  (<link linkend="GooCanvasItemModel">GooCanvasItemModel</link> *parent,
+                                                         <link linkend="gdouble">gdouble</link> x1,
+                                                         <link linkend="gdouble">gdouble</link> y1,
+                                                         <link linkend="gdouble">gdouble</link> x2,
+                                                         <link linkend="gdouble">gdouble</link> y2,
+                                                         ...);</programlisting>
+<para>
+Creates a new polyline model with a single line.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent model, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>x1</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the start of the line.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>y1</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the start of the line.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>x2</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the end of the line.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>y2</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the end of the line.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new polyline model.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create a line from (100,100) to (300,300).
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItemModel *polyline = goo_canvas_polyline_model_new_line (mygroup,
+                                                                    100.0, 100.0,
+                                                                    300.0, 300.0,
+                                                                    "stroke-color", "red",
+                                                                    "line-width", 5.0,
+                                                                    NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasPolylineModel--arrow-length"/>The &quot;<literal>arrow-length</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:arrow-length</primary></indexterm><programlisting>  &quot;arrow-length&quot;             <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The length of the arrows, as a multiple of the line width.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 5</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasPolylineModel--arrow-tip-length"/>The &quot;<literal>arrow-tip-length</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:arrow-tip-length</primary></indexterm><programlisting>  &quot;arrow-tip-length&quot;         <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The length of the arrow tip, as a multiple of the line width.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 4</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasPolylineModel--arrow-width"/>The &quot;<literal>arrow-width</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:arrow-width</primary></indexterm><programlisting>  &quot;arrow-width&quot;              <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The width of the arrows, as a multiple of the line width.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 4</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasPolylineModel--close-path"/>The &quot;<literal>close-path</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:close-path</primary></indexterm><programlisting>  &quot;close-path&quot;               <link linkend="gboolean">gboolean</link>              : Read / Write</programlisting>
+<para>If the last point should be connected to the first.</para><para>Default value: FALSE</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasPolylineModel--end-arrow"/>The &quot;<literal>end-arrow</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:end-arrow</primary></indexterm><programlisting>  &quot;end-arrow&quot;                <link linkend="gboolean">gboolean</link>              : Read / Write</programlisting>
+<para>If an arrow should be displayed at the end of the polyline.</para><para>Default value: FALSE</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasPolylineModel--points"/>The &quot;<literal>points</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:points</primary></indexterm><programlisting>  &quot;points&quot;                   <link linkend="GooCanvasPoints">GooCanvasPoints</link>       : Read / Write</programlisting>
+<para>The array of points.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasPolylineModel--start-arrow"/>The &quot;<literal>start-arrow</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPolylineModel:start-arrow</primary></indexterm><programlisting>  &quot;start-arrow&quot;              <link linkend="gboolean">gboolean</link>              : Read / Write</programlisting>
+<para>If an arrow should be displayed at the start of the polyline.</para><para>Default value: FALSE</para>
+</refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

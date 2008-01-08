@@ -1,0 +1,59 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasEllipseModel
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasEllipseModel ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GooCanvasEllipseModel:center-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasEllipseModel:center-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasEllipseModel:radius-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasEllipseModel:radius-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION goo_canvas_ellipse_model_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@center_x: 
+@center_y: 
+@radius_x: 
+@radius_y: 
+@Varargs: 
+@Returns: 
+
+

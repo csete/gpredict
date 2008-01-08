@@ -1,0 +1,190 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvas Types
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasBounds ##### -->
+<para>
+
+</para>
+
+@x1: 
+@y1: 
+@x2: 
+@y2: 
+
+<!-- ##### ENUM GooCanvasItemVisibility ##### -->
+<para>
+
+</para>
+
+@GOO_CANVAS_ITEM_HIDDEN: 
+@GOO_CANVAS_ITEM_INVISIBLE: 
+@GOO_CANVAS_ITEM_VISIBLE: 
+@GOO_CANVAS_ITEM_VISIBLE_ABOVE_THRESHOLD: 
+
+<!-- ##### ENUM GooCanvasPointerEvents ##### -->
+<para>
+
+</para>
+
+@GOO_CANVAS_EVENTS_VISIBLE_MASK: 
+@GOO_CANVAS_EVENTS_PAINTED_MASK: 
+@GOO_CANVAS_EVENTS_FILL_MASK: 
+@GOO_CANVAS_EVENTS_STROKE_MASK: 
+@GOO_CANVAS_EVENTS_NONE: 
+@GOO_CANVAS_EVENTS_VISIBLE_PAINTED: 
+@GOO_CANVAS_EVENTS_VISIBLE_FILL: 
+@GOO_CANVAS_EVENTS_VISIBLE_STROKE: 
+@GOO_CANVAS_EVENTS_VISIBLE: 
+@GOO_CANVAS_EVENTS_PAINTED: 
+@GOO_CANVAS_EVENTS_FILL: 
+@GOO_CANVAS_EVENTS_STROKE: 
+@GOO_CANVAS_EVENTS_ALL: 
+
+<!-- ##### ENUM GooCanvasAnimateType ##### -->
+<para>
+
+</para>
+
+@GOO_CANVAS_ANIMATE_FREEZE: 
+@GOO_CANVAS_ANIMATE_RESET: 
+@GOO_CANVAS_ANIMATE_RESTART: 
+@GOO_CANVAS_ANIMATE_BOUNCE: 
+
+<!-- ##### STRUCT GooCanvasPoints ##### -->
+<para>
+
+</para>
+
+@coords: 
+@num_points: 
+@ref_count: 
+
+<!-- ##### FUNCTION goo_canvas_points_new ##### -->
+<para>
+
+</para>
+
+@num_points: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_points_ref ##### -->
+<para>
+
+</para>
+
+@points: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_points_unref ##### -->
+<para>
+
+</para>
+
+@points: 
+
+
+<!-- ##### STRUCT GooCanvasLineDash ##### -->
+<para>
+
+</para>
+
+@ref_count: 
+@num_dashes: 
+@dashes: 
+@dash_offset: 
+
+<!-- ##### FUNCTION goo_canvas_line_dash_new ##### -->
+<para>
+
+</para>
+
+@num_dashes: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_line_dash_newv ##### -->
+<para>
+
+</para>
+
+@num_dashes: 
+@dashes: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_line_dash_ref ##### -->
+<para>
+
+</para>
+
+@dash: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_line_dash_unref ##### -->
+<para>
+
+</para>
+
+@dash: 
+
+
+<!-- ##### ENUM GooCanvasPathCommandType ##### -->
+<para>
+
+</para>
+
+@GOO_CANVAS_PATH_MOVE_TO: 
+@GOO_CANVAS_PATH_CLOSE_PATH: 
+@GOO_CANVAS_PATH_LINE_TO: 
+@GOO_CANVAS_PATH_HORIZONTAL_LINE_TO: 
+@GOO_CANVAS_PATH_VERTICAL_LINE_TO: 
+@GOO_CANVAS_PATH_CURVE_TO: 
+@GOO_CANVAS_PATH_SMOOTH_CURVE_TO: 
+@GOO_CANVAS_PATH_QUADRATIC_CURVE_TO: 
+@GOO_CANVAS_PATH_SMOOTH_QUADRATIC_CURVE_TO: 
+@GOO_CANVAS_PATH_ELLIPTICAL_ARC: 
+
+<!-- ##### UNION GooCanvasPathCommand ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION goo_canvas_parse_path_data ##### -->
+<para>
+
+</para>
+
+@path_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION goo_canvas_create_path ##### -->
+<para>
+
+</para>
+
+@commands: 
+@cr: 
+
+

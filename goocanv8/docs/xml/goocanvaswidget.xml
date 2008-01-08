@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasWidget">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasWidget</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasWidget</refname>
+<refpurpose>an embedded widget item.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasWidget-struct">GooCanvasWidget</link>;
+<link linkend="GooCanvasItem">GooCanvasItem</link>*      <link linkend="goo-canvas-widget-new">goo_canvas_widget_new</link>               (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="GtkWidget">GtkWidget</link> *widget,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         <link linkend="gdouble">gdouble</link> width,
+                                                         <link linkend="gdouble">gdouble</link> height,
+                                                         ...);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link>
+         +----GooCanvasWidget
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasWidget implements
+ <link linkend="GooCanvasItem">GooCanvasItem</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasWidget--anchor">anchor</link>&quot;                   <link linkend="GtkAnchorType">GtkAnchorType</link>         : Read / Write
+  &quot;<link linkend="GooCanvasWidget--height">height</link>&quot;                   <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasWidget--widget">widget</link>&quot;                   <link linkend="GtkWidget">GtkWidget</link>             : Read / Write
+  &quot;<link linkend="GooCanvasWidget--width">width</link>&quot;                    <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasWidget--x">x</link>&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasWidget--y">y</link>&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+GooCanvasWidget provides support for placing any GtkWidget in the canvas.
+</para>
+<para>
+Note that there are a number of limitations in the use of <link linkend="GooCanvasWidget--"><type>GooCanvasWidget:</type></link>
+</para>
+<para>
+<itemizedlist><listitem><para>
+It doesn't support any transformation besides simple translation.
+This means you can't scale a canvas with a <link linkend="GooCanvasWidget"><type>GooCanvasWidget</type></link> in it.
+</para></listitem><listitem><para>
+It doesn't support layering, so you can't place other items beneath
+or above the <link linkend="GooCanvasWidget"><type>GooCanvasWidget</type></link>.
+</para></listitem><listitem><para>
+It doesn't support rendering of widgets to a given cairo_t, which
+means you can't output the widget to a pdf or postscript file.
+</para></listitem><listitem><para>
+It doesn't have a model/view variant like the other standard items,
+so it can only be used in a simple canvas without a model.
+</para></listitem></itemizedlist></para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasWidget-struct" role="struct"/>GooCanvasWidget</title>
+<indexterm><primary>GooCanvasWidget</primary></indexterm><programlisting>typedef struct _GooCanvasWidget GooCanvasWidget;</programlisting>
+<para>
+The <link linkend="GooCanvasWidget-struct"><type>GooCanvasWidget</type></link> struct contains private data only.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-widget-new" role="function"/>goo_canvas_widget_new ()</title>
+<indexterm><primary>goo_canvas_widget_new</primary></indexterm><programlisting><link linkend="GooCanvasItem">GooCanvasItem</link>*      goo_canvas_widget_new               (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="GtkWidget">GtkWidget</link> *widget,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         <link linkend="gdouble">gdouble</link> width,
+                                                         <link linkend="gdouble">gdouble</link> height,
+                                                         ...);</programlisting>
+<para>
+Creates a new widget item.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <link linkend="g-object-unref"><function>g_object_unref()</function></link> to free it.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>widget</parameter>&nbsp;:</term>
+<listitem><simpara> the widget.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>x</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the item.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>y</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the item.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>width</parameter>&nbsp;:</term>
+<listitem><simpara> the width of the item, or -1 to use the widget's requested width.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>height</parameter>&nbsp;:</term>
+<listitem><simpara> the height of the item, or -1 to use the widget's requested height.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new widget item.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create an entry widget centered at (100.0,
+100.0):
+</para>
+<para>
+<informalexample><programlisting>
+ GtkWidget *entry = gtk_entry_new ();
+ GooCanvasItem *witem = goo_canvas_widget_new (mygroup, entry,
+                                               100, 100, -1, -1,
+                                               "anchor", GTK_ANCHOR_CENTER,
+                                               NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasWidget--anchor"/>The &quot;<literal>anchor</literal>&quot; property</title>
+<indexterm><primary>GooCanvasWidget:anchor</primary></indexterm><programlisting>  &quot;anchor&quot;                   <link linkend="GtkAnchorType">GtkAnchorType</link>         : Read / Write</programlisting>
+<para>How to position the widget relative to the item's x and y coordinate settings.</para><para>Default value: GTK_ANCHOR_NORTH_WEST</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasWidget--height"/>The &quot;<literal>height</literal>&quot; property</title>
+<indexterm><primary>GooCanvasWidget:height</primary></indexterm><programlisting>  &quot;height&quot;                   <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The height of the widget, or -1 to use its requested height.</para><para>Default value: -1</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasWidget--widget"/>The &quot;<literal>widget</literal>&quot; property</title>
+<indexterm><primary>GooCanvasWidget:widget</primary></indexterm><programlisting>  &quot;widget&quot;                   <link linkend="GtkWidget">GtkWidget</link>             : Read / Write</programlisting>
+<para>The widget to place in the canvas.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasWidget--width"/>The &quot;<literal>width</literal>&quot; property</title>
+<indexterm><primary>GooCanvasWidget:width</primary></indexterm><programlisting>  &quot;width&quot;                    <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The width of the widget, or -1 to use its requested width.</para><para>Default value: -1</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasWidget--x"/>The &quot;<literal>x</literal>&quot; property</title>
+<indexterm><primary>GooCanvasWidget:x</primary></indexterm><programlisting>  &quot;x&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The x coordinate of the widget.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasWidget--y"/>The &quot;<literal>y</literal>&quot; property</title>
+<indexterm><primary>GooCanvasWidget:y</primary></indexterm><programlisting>  &quot;y&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The y coordinate of the widget.</para><para>Default value: 0</para>
+</refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

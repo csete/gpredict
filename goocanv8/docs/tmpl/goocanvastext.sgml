@@ -1,0 +1,80 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasText
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasText ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GooCanvasText:alignment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:anchor ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:ellipsize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:use-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasText:y ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION goo_canvas_text_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@string: 
+@x: 
+@y: 
+@width: 
+@anchor: 
+@Varargs: 
+@Returns: 
+
+

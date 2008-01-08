@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasGroupModel</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="prev" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="next" href="GooCanvasEllipseModel.html" title="GooCanvasEllipseModel">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="ch04.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch04.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasEllipseModel.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3051702" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3113936" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3071105" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3113915" class="shortcut">Implemented Interfaces</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasGroupModel"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3051702"></a><span class="refentrytitle">GooCanvasGroupModel</span>
+</h2>
+<p>GooCanvasGroupModel &#8212; a model for a group of items.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasGroupModel.html#GooCanvasGroupModel-struct">GooCanvasGroupModel</a>;
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* <a href="GooCanvasGroupModel.html#goo-canvas-group-model-new">goo_canvas_group_model_new</a>          (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3071105"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple">GooCanvasItemModelSimple</a>
+         +----GooCanvasGroupModel
+               +----<a href="GooCanvasTableModel.html" title="GooCanvasTableModel">GooCanvasTableModel</a>
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3113915"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasGroupModel implements
+ <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3113936"></a><h2>Description</h2>
+<p>
+<a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a> represents a group of items. Groups can be nested to
+any depth, to create a hierarchy of items. Items are ordered within each
+group, with later items being displayed above earlier items.
+</p>
+<p>
+<a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a> is a subclass of <a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple"><span class="type">GooCanvasItemModelSimple</span></a> and so
+inherits all of the style properties such as "stroke-color", "fill-color"
+and "line-width". Setting a style property on a <a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a> will
+affect all children of the <a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a> (unless the children
+override the property setting).
+</p>
+<p>
+<a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a> implements the <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> interface, so you
+can use the <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> functions such as
+<a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-raise"><code class="function">goo_canvas_item_model_raise()</code></a> and <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-rotate"><code class="function">goo_canvas_item_model_rotate()</code></a>, and the
+properties such as "visibility" and "pointer-events".
+</p>
+<p>
+To create a <a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a> use <a href="GooCanvasGroupModel.html#goo-canvas-group-model-new"><code class="function">goo_canvas_group_model_new()</code></a>.
+</p>
+<p>
+To get or set the properties of an existing <a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel"><span class="type">GooCanvasGroupModel</span></a>, use
+<a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-get"
+><code class="function">g_object_get()</code></a> and <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-set"
+><code class="function">g_object_set()</code></a>.
+</p>
+<p>
+To respond to events such as mouse clicks on the group you must connect
+to the signal handlers of the corresponding <a href="GooCanvasGroup.html" title="GooCanvasGroup"><span class="type">GooCanvasGroup</span></a> objects.
+(See <a href="GooCanvas.html#goo-canvas-get-item"><code class="function">goo_canvas_get_item()</code></a> and <a href="GooCanvas.html#GooCanvas-item-created"><span class="type">GooCanvas::item-created</span></a>.)</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3115270"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3115280"></a><h3>
+<a name="GooCanvasGroupModel-struct"></a>GooCanvasGroupModel</h3>
+<a class="indexterm" name="id3115292"></a><pre class="programlisting">typedef struct _GooCanvasGroupModel GooCanvasGroupModel;</pre>
+<p>
+The <a href="GooCanvasGroupModel.html#GooCanvasGroupModel-struct"><span class="type">GooCanvasGroupModel</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3115319"></a><h3>
+<a name="goo-canvas-group-model-new"></a>goo_canvas_group_model_new ()</h3>
+<a class="indexterm" name="id3115330"></a><pre class="programlisting"><a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* goo_canvas_group_model_new          (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent,
+                                                         ...);</pre>
+<p>
+Creates a new group item.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent model, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will
+ assume ownership of the item, and the item will automatically be freed when
+ it is removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new group model.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

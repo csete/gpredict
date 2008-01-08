@@ -1,0 +1,24 @@
+Gpredict has two configuration layers.
+
+1. A global configuration layer accessible via Edit->Preferences, which applies
+   to the whole program.
+
+2. A local configuration layer for modules accessible via the "Sittings" button
+   in the module configuration dialog.
+
+The global configuration layer is implemented in the sat-pref modules and is
+inteded to provide useful parameters that can be used as default values. The
+local layer is implemented in the mod-cfg module and is intended to allow users
+to configure each module individually. If a module does not have its own
+configuration the parameters will fall back to their corresponding default
+values.
+
+When creating a new module, the module should first try to read the local
+configuration parameter using the .mod file and the keys defined in config-keys.h
+If a parameter does not exist the modules should read the value from sat-cfg,
+which always will return a useful value, i.e. sat-cfg has buil-in defaults.
+The mod-cfg-util module provides utility functions to warp all this code into
+ine single function call for all kinds of used parameters (bool, int, char). The
+required parameters for these functions are the local GKeyFile, the local section
+definition from config-keys, the key definition from config-keys and the
+ parameter definition from sat-cfg.

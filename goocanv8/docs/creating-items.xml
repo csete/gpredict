@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="goocanvas-creating-items">
+  <refmeta>
+    <refentrytitle>Creating New Items</refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>GOOCANVAS Library</refmiscinfo>
+  </refmeta>
+
+  <refnamediv>
+    <refname>Creating New Items</refname>
+    <refpurpose>how to create new canvas items.</refpurpose>
+  </refnamediv>
+
+  <refsect1 id="new-items-overview">
+    <title>How to Create New Canvas Items</title>
+    <para>
+    Here's an example of how to create a new simple canvas item. (Note that
+    this item doesn't have a model-view split.)
+    </para>
+    <para>
+    Here's the header file - a fairly standard GObject header file.
+    Our item derives from #GooCanvasItemSimple and just has its own
+    x, y, width and height variables:
+    </para>
+
+<informalexample><programlisting>
+  /&ast;
+   * GooCanvas Demo. Copyright (C) 2006 Damon Chaplin.
+   * Released under the GNU LGPL license. See COPYING for details.
+   *
+   * demo-item.c - a simple demo item.
+   &ast;/
+  &num;ifndef __GOO_DEMO_ITEM_H__
+  &num;define __GOO_DEMO_ITEM_H__
+  
+  &num;include &lt;gtk/gtk.h&gt;
+  &num;include "goocanvasitemsimple.h"
+  
+  G_BEGIN_DECLS
+  
+  
+  &num;define GOO_TYPE_DEMO_ITEM            (goo_demo_item_get_type&nbsp;())
+  &num;define GOO_DEMO_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GOO_TYPE_DEMO_ITEM, GooDemoItem))
+  &num;define GOO_DEMO_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GOO_TYPE_DEMO_ITEM, GooDemoItemClass))
+  &num;define GOO_IS_DEMO_ITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GOO_TYPE_DEMO_ITEM))
+  &num;define GOO_IS_DEMO_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GOO_TYPE_DEMO_ITEM))
+  &num;define GOO_DEMO_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GOO_TYPE_DEMO_ITEM, GooDemoItemClass))
+  
+  
+  typedef struct _GooDemoItem       GooDemoItem;
+  typedef struct _GooDemoItemClass  GooDemoItemClass;
+  
+  struct _GooDemoItem
+  {
+    GooCanvasItemSimple parent_object;
+  
+    gdouble x, y, width, height;
+  };
+  
+  struct _GooDemoItemClass
+  {
+    GooCanvasItemSimpleClass parent_class;
+  };
+  
+  
+  GType               goo_demo_item_get_type  (void) G_GNUC_CONST;
+  
+  GooCanvasItem*      goo_demo_item_new       (GooCanvasItem      *parent,
+                                               gdouble             x,
+                                               gdouble             y,
+                                               gdouble             width,
+                                               gdouble             height,
+                                               ...);
+  
+  
+  G_END_DECLS
+  
+  &num;endif /&ast; __GOO_DEMO_ITEM_H__ &ast;/
+ </programlisting></informalexample>
+
+<para>
+And here's the source file:
+</para>
+
+<informalexample><programlisting>
+  /&ast;
+   * GooCanvas Demo. Copyright (C) 2006 Damon Chaplin.
+   * Released under the GNU LGPL license. See COPYING for details.
+   *
+   * demo-item.c - a simple demo item.
+   &ast;/
+  &num;include &lt;config.h&gt;
+  &num;include "goocanvas.h"
+  &num;include "demo-item.h"
+  
+  
+  /&ast; Use the GLib convenience macro to define the type. GooDemoItem is the
+     class struct, goo_demo_item is the function prefix, and our class is a
+     subclass of GOO_TYPE_CANVAS_ITEM_SIMPLE. &ast;/
+  G_DEFINE_TYPE (GooDemoItem, goo_demo_item, GOO_TYPE_CANVAS_ITEM_SIMPLE)
+  
+  
+  /&ast; The standard object initialization function. &ast;/
+  static void
+  goo_demo_item_init (GooDemoItem *demo_item)
+  {
+    demo_item-&gt;x = 0.0;
+    demo_item-&gt;y = 0.0;
+    demo_item-&gt;width = 0.0;
+    demo_item-&gt;height = 0.0;
+  }
+  
+  
+  /&ast; The convenience function to create new items. This should start with a 
+     parent argument and end with a variable list of object properties to fit
+     in with the standard canvas items. &ast;/
+  GooCanvasItem*
+  goo_demo_item_new (GooCanvasItem      *parent,
+                     gdouble             x,
+                     gdouble             y,
+                     gdouble             width,
+                     gdouble             height,
+                     ...)
+  {
+    GooCanvasItem *item;
+    GooDemoItem *demo_item;
+    const char *first_property;
+    va_list var_args;
+  
+    item = g_object_new (GOO_TYPE_DEMO_ITEM, NULL);
+  
+    demo_item = (GooDemoItem*) item;
+    demo_item-&gt;x = x;
+    demo_item-&gt;y = y;
+    demo_item-&gt;width = width;
+    demo_item-&gt;height = height;
+  
+    va_start (var_args, height);
+    first_property = va_arg (var_args, char*);
+    if (first_property)
+      g_object_set_valist ((GObject*) item, first_property, var_args);
+    va_end (var_args);
+  
+    if (parent)
+      {
+        goo_canvas_item_add_child (parent, item, -1);
+        g_object_unref (item);
+      }
+  
+    return item;
+  }
+  
+  
+  /&ast; The update method. This is called when the canvas is initially shown and
+     also whenever the object is updated and needs to change its size and/or
+     shape. It should calculate its new bounds in its own coordinate space,
+     storing them in simple-&gt;bounds. &ast;/
+  static void
+  goo_demo_item_update  (GooCanvasItemSimple *simple,
+                         cairo_t             *cr)
+  {
+    GooDemoItem *demo_item = (GooDemoItem*) simple;
+  
+    /&ast; Compute the new bounds. &ast;/
+    simple-&gt;bounds.x1 = demo_item-&gt;x;
+    simple-&gt;bounds.y1 = demo_item-&gt;y;
+    simple-&gt;bounds.x2 = demo_item-&gt;x + demo_item-&gt;width;
+    simple-&gt;bounds.y2 = demo_item-&gt;y + demo_item-&gt;height;
+  }
+  
+  
+  /&ast; The paint method. This should draw the item on the given cairo_t, using
+     the item's own coordinate space. &ast;/
+  static void
+  goo_demo_item_paint (GooCanvasItemSimple   *simple,
+                       cairo_t               *cr,
+                       const GooCanvasBounds *bounds)
+  {
+    GooDemoItem *demo_item = (GooDemoItem*) simple;
+  
+    cairo_move_to (cr, demo_item-&gt;x, demo_item-&gt;y);
+    cairo_line_to (cr, demo_item-&gt;x, demo_item-&gt;y + demo_item-&gt;height);
+    cairo_line_to (cr, demo_item-&gt;x + demo_item-&gt;width,
+                   demo_item-&gt;y + demo_item-&gt;height);
+    cairo_line_to (cr, demo_item-&gt;x + demo_item-&gt;width, demo_item-&gt;y);
+    cairo_close_path (cr);
+    goo_canvas_style_set_fill_options (simple-&gt;simple_data-&gt;style, cr);
+    cairo_fill (cr);
+  }
+  
+  
+  /&ast; Hit detection. This should check if the given coordinate (in the item's
+     coordinate space) is within the item. If it is it should return TRUE,
+     otherwise it should return FALSE. &ast;/
+  static gboolean
+  goo_demo_item_is_item_at (GooCanvasItemSimple *simple,
+                            gdouble              x,
+                            gdouble              y,
+                            cairo_t             *cr,
+                            gboolean             is_pointer_event)
+  {
+    GooDemoItem *demo_item = (GooDemoItem*) simple;
+  
+    if (x &lt; demo_item-&gt;x || (x &gt; demo_item-&gt;x + demo_item-&gt;width)
+        || y &lt; demo_item-&gt;y || (y &gt; demo_item-&gt;y + demo_item-&gt;height))
+      return FALSE;
+  
+    return TRUE;
+  }
+  
+  
+  /&ast; The class initialization function. Here we set the class' update(), paint()
+     and is_item_at() methods. &ast;/
+  static void
+  goo_demo_item_class_init (GooDemoItemClass *klass)
+  {
+    GooCanvasItemSimpleClass *simple_class = (GooCanvasItemSimpleClass*) klass;
+  
+    simple_class-&gt;update        = goo_demo_item_update;
+    simple_class-&gt;paint         = goo_demo_item_paint;
+    simple_class-&gt;is_item_at    = goo_demo_item_is_item_at;
+  }
+  
+  
+ </programlisting></informalexample>
+
+  </refsect1>
+</refentry>

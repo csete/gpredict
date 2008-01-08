@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasImage</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch03.html" title="Standard Canvas Items">
+<link rel="prev" href="GooCanvasEllipse.html" title="GooCanvasEllipse">
+<link rel="next" href="GooCanvasPath.html" title="GooCanvasPath">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasEllipse.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasPath.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3077030" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3108647" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3108509" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3108539" class="shortcut">Implemented Interfaces</a>
+                  &#160;|&#160;
+                  <a href="#id3108560" class="shortcut">Properties</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasImage"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3077030"></a><span class="refentrytitle">GooCanvasImage</span>
+</h2>
+<p>GooCanvasImage &#8212; an image item.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasImage.html#GooCanvasImage-struct">GooCanvasImage</a>;
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      <a href="GooCanvasImage.html#goo-canvas-image-new">goo_canvas_image_new</a>                (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"
+>GdkPixbuf</a> *pixbuf,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3108509"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple">GooCanvasItemSimple</a>
+         +----GooCanvasImage
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3108539"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasImage implements
+ <a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3108560"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasImage.html#GooCanvasImage--height">height</a>"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasImage.html#GooCanvasImage--pattern">pattern</a>"                  GooCairoPattern       : Read / Write
+  "<a href="GooCanvasImage.html#GooCanvasImage--pixbuf">pixbuf</a>"                   <a
+href="../gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"
+>GdkPixbuf</a>             : Write
+  "<a href="GooCanvasImage.html#GooCanvasImage--width">width</a>"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasImage.html#GooCanvasImage--x">x</a>"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasImage.html#GooCanvasImage--y">y</a>"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3108647"></a><h2>Description</h2>
+<p>
+GooCanvasImage represents an image item.
+</p>
+<p>
+It is a subclass of <a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple"><span class="type">GooCanvasItemSimple</span></a> and so inherits all of the style
+properties such as "operator" and "pointer-events".
+</p>
+<p>
+It also implements the <a href="goocanvas-goocanvasitem.html#GooCanvasItem"><span class="type">GooCanvasItem</span></a> interface, so you can use the
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem"><span class="type">GooCanvasItem</span></a> functions such as <a href="goocanvas-goocanvasitem.html#goo-canvas-item-raise"><code class="function">goo_canvas_item_raise()</code></a> and
+<a href="goocanvas-goocanvasitem.html#goo-canvas-item-rotate"><code class="function">goo_canvas_item_rotate()</code></a>.
+</p>
+<p>
+To create a <a href="GooCanvasImage.html" title="GooCanvasImage"><span class="type">GooCanvasImage</span></a> use <a href="GooCanvasImage.html#goo-canvas-image-new"><code class="function">goo_canvas_image_new()</code></a>.
+</p>
+<p>
+To get or set the properties of an existing <a href="GooCanvasImage.html" title="GooCanvasImage"><span class="type">GooCanvasImage</span></a>, use
+<a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-get"
+><code class="function">g_object_get()</code></a> and <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-set"
+><code class="function">g_object_set()</code></a>.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3105558"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3105569"></a><h3>
+<a name="GooCanvasImage-struct"></a>GooCanvasImage</h3>
+<a class="indexterm" name="id3105580"></a><pre class="programlisting">typedef struct _GooCanvasImage GooCanvasImage;</pre>
+<p>
+The <a href="GooCanvasImage.html#GooCanvasImage-struct"><span class="type">GooCanvasImage</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3105607"></a><h3>
+<a name="goo-canvas-image-new"></a>goo_canvas_image_new ()</h3>
+<a class="indexterm" name="id3105618"></a><pre class="programlisting"><a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      goo_canvas_image_new                (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"
+>GdkPixbuf</a> *pixbuf,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         ...);</pre>
+<p>
+Creates a new image item.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent item, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pixbuf</code></em>&#160;:</span></td>
+<td> the <a
+href="../gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"
+><span class="type">GdkPixbuf</span></a> containing the image data, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x</code></em>&#160;:</span></td>
+<td> the x coordinate of the image.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y</code></em>&#160;:</span></td>
+<td> the y coordinate of the image.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new image item.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create an image at (100.0, 100.0), using
+the given pixbuf at its natural width and height:
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GooCanvasItem *image = goo_canvas_image_new (mygroup, pixbuf, 100.0, 100.0,
+                                              NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3105825"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3105836"></a><h3>
+<a name="GooCanvasImage--height"></a>The "<code class="literal">height</code>" property</h3>
+<a class="indexterm" name="id3105849"></a><pre class="programlisting">  "height"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The height of the image.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3105877"></a><h3>
+<a name="GooCanvasImage--pattern"></a>The "<code class="literal">pattern</code>" property</h3>
+<a class="indexterm" name="id3105891"></a><pre class="programlisting">  "pattern"                  GooCairoPattern       : Read / Write</pre>
+<p>The cairo pattern to paint.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3105912"></a><h3>
+<a name="GooCanvasImage--pixbuf"></a>The "<code class="literal">pixbuf</code>" property</h3>
+<a class="indexterm" name="id3105926"></a><pre class="programlisting">  "pixbuf"                   <a
+href="../gdk-pixbuf/gdk-pixbuf-gdk-pixbuf.html#GdkPixbuf"
+>GdkPixbuf</a>             : Write</pre>
+<p>The GdkPixbuf to display.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3105947"></a><h3>
+<a name="GooCanvasImage--width"></a>The "<code class="literal">width</code>" property</h3>
+<a class="indexterm" name="id3105961"></a><pre class="programlisting">  "width"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The width of the image.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3105990"></a><h3>
+<a name="GooCanvasImage--x"></a>The "<code class="literal">x</code>" property</h3>
+<a class="indexterm" name="id3106005"></a><pre class="programlisting">  "x"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The x coordinate of the image.</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3106032"></a><h3>
+<a name="GooCanvasImage--y"></a>The "<code class="literal">y</code>" property</h3>
+<a class="indexterm" name="id3106047"></a><pre class="programlisting">  "y"                        <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The y coordinate of the image.</p>
+<p>Default value: 0</p>
+</div>
+</div>
+</div>
+</body>
+</html>

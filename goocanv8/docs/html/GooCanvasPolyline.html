@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasPolyline</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch03.html" title="Standard Canvas Items">
+<link rel="prev" href="GooCanvasPath.html" title="GooCanvasPath">
+<link rel="next" href="GooCanvasRect.html" title="GooCanvasRect">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasPath.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasRect.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3050643" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3107924" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3108478" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3107803" class="shortcut">Implemented Interfaces</a>
+                  &#160;|&#160;
+                  <a href="#id3107824" class="shortcut">Properties</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasPolyline"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3050643"></a><span class="refentrytitle">GooCanvasPolyline</span>
+</h2>
+<p>GooCanvasPolyline &#8212; a polyline item (a series of lines with optional arrows).</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasPolyline.html#GooCanvasPolyline-struct">GooCanvasPolyline</a>;
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      <a href="GooCanvasPolyline.html#goo-canvas-polyline-new">goo_canvas_polyline_new</a>             (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> close_path,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> num_points,
+                                                         ...);
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      <a href="GooCanvasPolyline.html#goo-canvas-polyline-new-line">goo_canvas_polyline_new_line</a>        (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x1,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y1,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x2,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y2,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3108478"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple">GooCanvasItemSimple</a>
+         +----GooCanvasPolyline
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3107803"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasPolyline implements
+ <a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3107824"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--arrow-length">arrow-length</a>"             <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--arrow-tip-length">arrow-tip-length</a>"         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--arrow-width">arrow-width</a>"              <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--close-path">close-path</a>"               <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--end-arrow">end-arrow</a>"                <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--points">points</a>"                   <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>       : Read / Write
+  "<a href="GooCanvasPolyline.html#GooCanvasPolyline--start-arrow">start-arrow</a>"              <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3107924"></a><h2>Description</h2>
+<p>
+GooCanvasPolyline represents a polyline item, which is a series of one or
+more lines, with optional arrows at either end.
+</p>
+<p>
+It is a subclass of <a href="GooCanvasItemSimple.html" title="GooCanvasItemSimple"><span class="type">GooCanvasItemSimple</span></a> and so inherits all of the style
+properties such as "stroke-color", "fill-color" and "line-width".
+</p>
+<p>
+It also implements the <a href="goocanvas-goocanvasitem.html#GooCanvasItem"><span class="type">GooCanvasItem</span></a> interface, so you can use the
+<a href="goocanvas-goocanvasitem.html#GooCanvasItem"><span class="type">GooCanvasItem</span></a> functions such as <a href="goocanvas-goocanvasitem.html#goo-canvas-item-raise"><code class="function">goo_canvas_item_raise()</code></a> and
+<a href="goocanvas-goocanvasitem.html#goo-canvas-item-rotate"><code class="function">goo_canvas_item_rotate()</code></a>.
+</p>
+<p>
+To create a <a href="GooCanvasPolyline.html" title="GooCanvasPolyline"><span class="type">GooCanvasPolyline</span></a> use <a href="GooCanvasPolyline.html#goo-canvas-polyline-new"><code class="function">goo_canvas_polyline_new()</code></a>, or
+<a href="GooCanvasPolyline.html#goo-canvas-polyline-new-line"><code class="function">goo_canvas_polyline_new_line()</code></a> for a simple line between two points.
+</p>
+<p>
+To get or set the properties of an existing <a href="GooCanvasPolyline.html" title="GooCanvasPolyline"><span class="type">GooCanvasPolyline</span></a>, use
+<a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-get"
+><code class="function">g_object_get()</code></a> and <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-set"
+><code class="function">g_object_set()</code></a>.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3106173"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3106184"></a><h3>
+<a name="GooCanvasPolyline-struct"></a>GooCanvasPolyline</h3>
+<a class="indexterm" name="id3106196"></a><pre class="programlisting">typedef struct _GooCanvasPolyline GooCanvasPolyline;</pre>
+<p>
+The <a href="GooCanvasPolyline.html#GooCanvasPolyline-struct"><span class="type">GooCanvasPolyline</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3106222"></a><h3>
+<a name="goo-canvas-polyline-new"></a>goo_canvas_polyline_new ()</h3>
+<a class="indexterm" name="id3106234"></a><pre class="programlisting"><a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      goo_canvas_polyline_new             (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> close_path,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> num_points,
+                                                         ...);</pre>
+<p>
+Creates a new polyline item.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent item, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>close_path</code></em>&#160;:</span></td>
+<td> if the last point should be connected to the first.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>num_points</code></em>&#160;:</span></td>
+<td> the number of points in the polyline.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> the pairs of coordinates for each point in the line, followed by
+ optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new polyline item.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create a filled triangle with vertices
+at (100,100), (300,100), and (200,300).
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GooCanvasItem *polyline = goo_canvas_polyline_new (mygroup, TRUE, 3,
+                                                    100.0, 100.0,
+                                                    300.0, 100.0,
+                                                    200.0, 300.0,
+                                                    "stroke-color", "red",
+                                                    "line-width", 5.0,
+                                                    "fill-color", "blue",
+                                                    NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3039818"></a><h3>
+<a name="goo-canvas-polyline-new-line"></a>goo_canvas_polyline_new_line ()</h3>
+<a class="indexterm" name="id3062909"></a><pre class="programlisting"><a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a>*      goo_canvas_polyline_new_line        (<a href="goocanvas-goocanvasitem.html#GooCanvasItem">GooCanvasItem</a> *parent,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x1,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y1,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x2,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y2,
+                                                         ...);</pre>
+<p>
+Creates a new polyline item with a single line.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent item, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x1</code></em>&#160;:</span></td>
+<td> the x coordinate of the start of the line.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y1</code></em>&#160;:</span></td>
+<td> the y coordinate of the start of the line.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x2</code></em>&#160;:</span></td>
+<td> the x coordinate of the end of the line.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y2</code></em>&#160;:</span></td>
+<td> the y coordinate of the end of the line.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new polyline item.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create a line from (100,100) to (300,300).
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GooCanvasItem *polyline = goo_canvas_polyline_new_line (mygroup,
+                                                         100.0, 100.0,
+                                                         300.0, 300.0,
+                                                         "stroke-color", "red",
+                                                         "line-width", 5.0,
+                                                         NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3106595"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3106606"></a><h3>
+<a name="GooCanvasPolyline--arrow-length"></a>The "<code class="literal">arrow-length</code>" property</h3>
+<a class="indexterm" name="id3106620"></a><pre class="programlisting">  "arrow-length"             <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The length of the arrows, as a multiple of the line width.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 5</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3106650"></a><h3>
+<a name="GooCanvasPolyline--arrow-tip-length"></a>The "<code class="literal">arrow-tip-length</code>" property</h3>
+<a class="indexterm" name="id3106666"></a><pre class="programlisting">  "arrow-tip-length"         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The length of the arrow tip, as a multiple of the line width.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 4</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3106696"></a><h3>
+<a name="GooCanvasPolyline--arrow-width"></a>The "<code class="literal">arrow-width</code>" property</h3>
+<a class="indexterm" name="id3106712"></a><pre class="programlisting">  "arrow-width"              <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The width of the arrows, as a multiple of the line width.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 4</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3108757"></a><h3>
+<a name="GooCanvasPolyline--close-path"></a>The "<code class="literal">close-path</code>" property</h3>
+<a class="indexterm" name="id3108773"></a><pre class="programlisting">  "close-path"               <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the last point should be connected to the first.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3108799"></a><h3>
+<a name="GooCanvasPolyline--end-arrow"></a>The "<code class="literal">end-arrow</code>" property</h3>
+<a class="indexterm" name="id3108815"></a><pre class="programlisting">  "end-arrow"                <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If an arrow should be displayed at the end of the polyline.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3108841"></a><h3>
+<a name="GooCanvasPolyline--points"></a>The "<code class="literal">points</code>" property</h3>
+<a class="indexterm" name="id3108855"></a><pre class="programlisting">  "points"                   <a href="goocanvas-GooCanvas-Types.html#GooCanvasPoints">GooCanvasPoints</a>       : Read / Write</pre>
+<p>The array of points.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3108876"></a><h3>
+<a name="GooCanvasPolyline--start-arrow"></a>The "<code class="literal">start-arrow</code>" property</h3>
+<a class="indexterm" name="id3108892"></a><pre class="programlisting">  "start-arrow"              <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If an arrow should be displayed at the start of the polyline.</p>
+<p>Default value: FALSE</p>
+</div>
+</div>
+</div>
+</body>
+</html>

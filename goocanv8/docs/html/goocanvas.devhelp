@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="GooCanvas Reference Manual" link="index.html" author="" name="goocanvas">
+  <chapters>
+    <sub name="Introduction" link="ch01.html">
+      <sub name="Overview" link="goocanvas-overview.html"/>
+      <sub name="The Simple Canvas" link="goocanvas-simple-canvas.html"/>
+      <sub name="The Model/View Canvas" link="goocanvas-model-view-canvas.html"/>
+      <sub name="Creating New Items" link="goocanvas-creating-items.html"/>
+    </sub>
+    <sub name="Core Objects" link="ch02.html">
+      <sub name="GooCanvas" link="GooCanvas.html"/>
+      <sub name="GooCanvasItem" link="goocanvas-goocanvasitem.html"/>
+      <sub name="GooCanvasItemModel" link="goocanvas-goocanvasitemmodel.html"/>
+      <sub name="GooCanvasItemSimple" link="GooCanvasItemSimple.html"/>
+      <sub name="GooCanvasItemModelSimple" link="GooCanvasItemModelSimple.html"/>
+      <sub name="GooCanvasStyle" link="GooCanvasStyle.html"/>
+    </sub>
+    <sub name="Standard Canvas Items" link="ch03.html">
+      <sub name="GooCanvasGroup" link="GooCanvasGroup.html"/>
+      <sub name="GooCanvasEllipse" link="GooCanvasEllipse.html"/>
+      <sub name="GooCanvasImage" link="GooCanvasImage.html"/>
+      <sub name="GooCanvasPath" link="GooCanvasPath.html"/>
+      <sub name="GooCanvasPolyline" link="GooCanvasPolyline.html"/>
+      <sub name="GooCanvasRect" link="GooCanvasRect.html"/>
+      <sub name="GooCanvasText" link="GooCanvasText.html"/>
+      <sub name="GooCanvasWidget" link="GooCanvasWidget.html"/>
+      <sub name="GooCanvasTable" link="GooCanvasTable.html"/>
+    </sub>
+    <sub name="Standard Canvas Item Models" link="ch04.html">
+      <sub name="GooCanvasGroupModel" link="GooCanvasGroupModel.html"/>
+      <sub name="GooCanvasEllipseModel" link="GooCanvasEllipseModel.html"/>
+      <sub name="GooCanvasImageModel" link="GooCanvasImageModel.html"/>
+      <sub name="GooCanvasPathModel" link="GooCanvasPathModel.html"/>
+      <sub name="GooCanvasPolylineModel" link="GooCanvasPolylineModel.html"/>
+      <sub name="GooCanvasRectModel" link="GooCanvasRectModel.html"/>
+      <sub name="GooCanvasTextModel" link="GooCanvasTextModel.html"/>
+      <sub name="GooCanvasTableModel" link="GooCanvasTableModel.html"/>
+    </sub>
+    <sub name="Miscellaneous" link="ch05.html">
+      <sub name="GooCanvas Types" link="goocanvas-GooCanvas-Types.html"/>
+    </sub>
+  </chapters>
+  <functions>
+    <function name="GooCanvas" link="GooCanvas.html#GooCanvas-struct"/>
+    <function name="GooCanvasClass" link="GooCanvas.html#GooCanvasClass"/>
+    <function name="goo_canvas_new ()" link="GooCanvas.html#goo-canvas-new"/>
+    <function name="goo_canvas_get_root_item ()" link="GooCanvas.html#goo-canvas-get-root-item"/>
+    <function name="goo_canvas_set_root_item ()" link="GooCanvas.html#goo-canvas-set-root-item"/>
+    <function name="goo_canvas_get_root_item_model ()" link="GooCanvas.html#goo-canvas-get-root-item-model"/>
+    <function name="goo_canvas_set_root_item_model ()" link="GooCanvas.html#goo-canvas-set-root-item-model"/>
+    <function name="goo_canvas_get_bounds ()" link="GooCanvas.html#goo-canvas-get-bounds"/>
+    <function name="goo_canvas_set_bounds ()" link="GooCanvas.html#goo-canvas-set-bounds"/>
+    <function name="goo_canvas_get_scale ()" link="GooCanvas.html#goo-canvas-get-scale"/>
+    <function name="goo_canvas_set_scale ()" link="GooCanvas.html#goo-canvas-set-scale"/>
+    <function name="goo_canvas_get_item ()" link="GooCanvas.html#goo-canvas-get-item"/>
+    <function name="goo_canvas_get_item_at ()" link="GooCanvas.html#goo-canvas-get-item-at"/>
+    <function name="goo_canvas_get_items_at ()" link="GooCanvas.html#goo-canvas-get-items-at"/>
+    <function name="goo_canvas_get_items_in_area ()" link="GooCanvas.html#goo-canvas-get-items-in-area"/>
+    <function name="goo_canvas_scroll_to ()" link="GooCanvas.html#goo-canvas-scroll-to"/>
+    <function name="goo_canvas_render ()" link="GooCanvas.html#goo-canvas-render"/>
+    <function name="goo_canvas_convert_to_pixels ()" link="GooCanvas.html#goo-canvas-convert-to-pixels"/>
+    <function name="goo_canvas_convert_from_pixels ()" link="GooCanvas.html#goo-canvas-convert-from-pixels"/>
+    <function name="goo_canvas_convert_to_item_space ()" link="GooCanvas.html#goo-canvas-convert-to-item-space"/>
+    <function name="goo_canvas_convert_from_item_space ()" link="GooCanvas.html#goo-canvas-convert-from-item-space"/>
+    <function name="goo_canvas_pointer_grab ()" link="GooCanvas.html#goo-canvas-pointer-grab"/>
+    <function name="goo_canvas_pointer_ungrab ()" link="GooCanvas.html#goo-canvas-pointer-ungrab"/>
+    <function name="goo_canvas_grab_focus ()" link="GooCanvas.html#goo-canvas-grab-focus"/>
+    <function name="goo_canvas_keyboard_grab ()" link="GooCanvas.html#goo-canvas-keyboard-grab"/>
+    <function name="goo_canvas_keyboard_ungrab ()" link="GooCanvas.html#goo-canvas-keyboard-ungrab"/>
+    <function name="goo_canvas_create_cairo_context ()" link="GooCanvas.html#goo-canvas-create-cairo-context"/>
+    <function name="goo_canvas_create_item ()" link="GooCanvas.html#goo-canvas-create-item"/>
+    <function name="goo_canvas_unregister_item ()" link="GooCanvas.html#goo-canvas-unregister-item"/>
+    <function name="goo_canvas_register_widget_item ()" link="GooCanvas.html#goo-canvas-register-widget-item"/>
+    <function name="goo_canvas_unregister_widget_item ()" link="GooCanvas.html#goo-canvas-unregister-widget-item"/>
+    <function name="goo_canvas_update ()" link="GooCanvas.html#goo-canvas-update"/>
+    <function name="goo_canvas_request_update ()" link="GooCanvas.html#goo-canvas-request-update"/>
+    <function name="goo_canvas_request_redraw ()" link="GooCanvas.html#goo-canvas-request-redraw"/>
+    <function name="goo_canvas_get_default_line_width ()" link="GooCanvas.html#goo-canvas-get-default-line-width"/>
+    <function name="The &quot;anchor&quot; property" link="GooCanvas.html#GooCanvas--anchor"/>
+    <function name="The &quot;background-color&quot; property" link="GooCanvas.html#GooCanvas--background-color"/>
+    <function name="The &quot;background-color-rgb&quot; property" link="GooCanvas.html#GooCanvas--background-color-rgb"/>
+    <function name="The &quot;resolution-x&quot; property" link="GooCanvas.html#GooCanvas--resolution-x"/>
+    <function name="The &quot;resolution-y&quot; property" link="GooCanvas.html#GooCanvas--resolution-y"/>
+    <function name="The &quot;scale&quot; property" link="GooCanvas.html#GooCanvas--scale"/>
+    <function name="The &quot;units&quot; property" link="GooCanvas.html#GooCanvas--units"/>
+    <function name="The &quot;x1&quot; property" link="GooCanvas.html#GooCanvas--x1"/>
+    <function name="The &quot;x2&quot; property" link="GooCanvas.html#GooCanvas--x2"/>
+    <function name="The &quot;y1&quot; property" link="GooCanvas.html#GooCanvas--y1"/>
+    <function name="The &quot;y2&quot; property" link="GooCanvas.html#GooCanvas--y2"/>
+    <function name="The &quot;item-created&quot; signal" link="GooCanvas.html#GooCanvas-item-created"/>
+    <function name="The &quot;set-scroll-adjustments&quot; signal" link="GooCanvas.html#GooCanvas-set-scroll-adjustments"/>
+    <function name="GooCanvasItem" link="goocanvas-goocanvasitem.html#GooCanvasItem-struct"/>
+    <function name="GooCanvasItemIface" link="goocanvas-goocanvasitem.html#GooCanvasItemIface"/>
+    <function name="goo_canvas_item_translate ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-translate"/>
+    <function name="goo_canvas_item_scale ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-scale"/>
+    <function name="goo_canvas_item_rotate ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-rotate"/>
+    <function name="goo_canvas_item_skew_x ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-skew-x"/>
+    <function name="goo_canvas_item_skew_y ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-skew-y"/>
+    <function name="goo_canvas_item_get_transform ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-transform"/>
+    <function name="goo_canvas_item_set_transform ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-transform"/>
+    <function name="goo_canvas_item_set_simple_transform ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-simple-transform"/>
+    <function name="goo_canvas_item_get_bounds ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-bounds"/>
+    <function name="goo_canvas_item_is_visible ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-is-visible"/>
+    <function name="goo_canvas_item_animate ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-animate"/>
+    <function name="goo_canvas_item_stop_animation ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-stop-animation"/>
+    <function name="goo_canvas_item_raise ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-raise"/>
+    <function name="goo_canvas_item_lower ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-lower"/>
+    <function name="goo_canvas_item_remove ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-remove"/>
+    <function name="goo_canvas_item_get_canvas ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-canvas"/>
+    <function name="goo_canvas_item_set_canvas ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-canvas"/>
+    <function name="goo_canvas_item_get_parent ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-parent"/>
+    <function name="goo_canvas_item_set_parent ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-parent"/>
+    <function name="goo_canvas_item_get_model ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-model"/>
+    <function name="goo_canvas_item_set_model ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-model"/>
+    <function name="goo_canvas_item_is_container ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-is-container"/>
+    <function name="goo_canvas_item_get_n_children ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-n-children"/>
+    <function name="goo_canvas_item_get_child ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-child"/>
+    <function name="goo_canvas_item_find_child ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-find-child"/>
+    <function name="goo_canvas_item_add_child ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-add-child"/>
+    <function name="goo_canvas_item_move_child ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-move-child"/>
+    <function name="goo_canvas_item_remove_child ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-remove-child"/>
+    <function name="goo_canvas_item_get_transform_for_child ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-transform-for-child"/>
+    <function name="goo_canvas_item_get_style ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-style"/>
+    <function name="goo_canvas_item_set_style ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-style"/>
+    <function name="goo_canvas_item_request_update ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-request-update"/>
+    <function name="goo_canvas_item_ensure_updated ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-ensure-updated"/>
+    <function name="goo_canvas_item_update ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-update"/>
+    <function name="goo_canvas_item_get_requested_area ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-requested-area"/>
+    <function name="goo_canvas_item_get_requested_height ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-requested-height"/>
+    <function name="goo_canvas_item_allocate_area ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-allocate-area"/>
+    <function name="goo_canvas_item_get_items_at ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-items-at"/>
+    <function name="goo_canvas_item_paint ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-paint"/>
+    <function name="goo_canvas_item_class_install_child_property ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-class-install-child-property"/>
+    <function name="goo_canvas_item_class_list_child_properties ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-class-list-child-properties"/>
+    <function name="goo_canvas_item_class_find_child_property ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-class-find-child-property"/>
+    <function name="goo_canvas_item_get_child_properties ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-child-properties"/>
+    <function name="goo_canvas_item_get_child_properties_valist ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-get-child-properties-valist"/>
+    <function name="goo_canvas_item_set_child_properties ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-child-properties"/>
+    <function name="goo_canvas_item_set_child_properties_valist ()" link="goocanvas-goocanvasitem.html#goo-canvas-item-set-child-properties-valist"/>
+    <function name="The &quot;can-focus&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--can-focus"/>
+    <function name="The &quot;description&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--description"/>
+    <function name="The &quot;parent&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--parent"/>
+    <function name="The &quot;pointer-events&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--pointer-events"/>
+    <function name="The &quot;title&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--title"/>
+    <function name="The &quot;transform&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--transform"/>
+    <function name="The &quot;visibility&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--visibility"/>
+    <function name="The &quot;visibility-threshold&quot; property" link="goocanvas-goocanvasitem.html#GooCanvasItem--visibility-threshold"/>
+    <function name="The &quot;button-press-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-button-press-event"/>
+    <function name="The &quot;button-release-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-button-release-event"/>
+    <function name="The &quot;child-notify&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-child-notify"/>
+    <function name="The &quot;enter-notify-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-enter-notify-event"/>
+    <function name="The &quot;focus-in-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-focus-in-event"/>
+    <function name="The &quot;focus-out-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-focus-out-event"/>
+    <function name="The &quot;grab-broken-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-grab-broken-event"/>
+    <function name="The &quot;key-press-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-key-press-event"/>
+    <function name="The &quot;key-release-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-key-release-event"/>
+    <function name="The &quot;leave-notify-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-leave-notify-event"/>
+    <function name="The &quot;motion-notify-event&quot; signal" link="goocanvas-goocanvasitem.html#GooCanvasItem-motion-notify-event"/>
+    <function name="GooCanvasItemModel" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-struct"/>
+    <function name="GooCanvasItemModelIface" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModelIface"/>
+    <function name="goo_canvas_item_model_translate ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-translate"/>
+    <function name="goo_canvas_item_model_scale ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-scale"/>
+    <function name="goo_canvas_item_model_rotate ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-rotate"/>
+    <function name="goo_canvas_item_model_skew_x ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-skew-x"/>
+    <function name="goo_canvas_item_model_skew_y ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-skew-y"/>
+    <function name="goo_canvas_item_model_get_transform ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-transform"/>
+    <function name="goo_canvas_item_model_set_transform ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-transform"/>
+    <function name="goo_canvas_item_model_set_simple_transform ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-simple-transform"/>
+    <function name="goo_canvas_item_model_animate ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-animate"/>
+    <function name="goo_canvas_item_model_stop_animation ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-stop-animation"/>
+    <function name="goo_canvas_item_model_raise ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-raise"/>
+    <function name="goo_canvas_item_model_lower ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-lower"/>
+    <function name="goo_canvas_item_model_remove ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-remove"/>
+    <function name="goo_canvas_item_model_get_parent ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-parent"/>
+    <function name="goo_canvas_item_model_set_parent ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-parent"/>
+    <function name="goo_canvas_item_model_is_container ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-is-container"/>
+    <function name="goo_canvas_item_model_get_n_children ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-n-children"/>
+    <function name="goo_canvas_item_model_get_child ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-child"/>
+    <function name="goo_canvas_item_model_add_child ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-add-child"/>
+    <function name="goo_canvas_item_model_move_child ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-move-child"/>
+    <function name="goo_canvas_item_model_remove_child ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-remove-child"/>
+    <function name="goo_canvas_item_model_find_child ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-find-child"/>
+    <function name="goo_canvas_item_model_get_style ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-style"/>
+    <function name="goo_canvas_item_model_set_style ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-style"/>
+    <function name="goo_canvas_item_model_class_install_child_property ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-class-install-child-property"/>
+    <function name="goo_canvas_item_model_class_list_child_properties ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-class-list-child-properties"/>
+    <function name="goo_canvas_item_model_class_find_child_property ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-class-find-child-property"/>
+    <function name="goo_canvas_item_model_get_child_properties ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-child-properties"/>
+    <function name="goo_canvas_item_model_get_child_properties_valist ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-child-properties-valist"/>
+    <function name="goo_canvas_item_model_set_child_properties ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-child-properties"/>
+    <function name="goo_canvas_item_model_set_child_properties_valist ()" link="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-child-properties-valist"/>
+    <function name="The &quot;can-focus&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--can-focus"/>
+    <function name="The &quot;description&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--description"/>
+    <function name="The &quot;parent&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--parent"/>
+    <function name="The &quot;pointer-events&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--pointer-events"/>
+    <function name="The &quot;title&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--title"/>
+    <function name="The &quot;transform&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--transform"/>
+    <function name="The &quot;visibility&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--visibility"/>
+    <function name="The &quot;visibility-threshold&quot; property" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--visibility-threshold"/>
+    <function name="The &quot;changed&quot; signal" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-changed"/>
+    <function name="The &quot;child-added&quot; signal" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-added"/>
+    <function name="The &quot;child-moved&quot; signal" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-moved"/>
+    <function name="The &quot;child-notify&quot; signal" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-notify"/>
+    <function name="The &quot;child-removed&quot; signal" link="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-removed"/>
+    <function name="GooCanvasItemSimple" link="GooCanvasItemSimple.html#GooCanvasItemSimple-struct"/>
+    <function name="GooCanvasItemSimpleData" link="GooCanvasItemSimple.html#GooCanvasItemSimpleData"/>
+    <function name="GooCanvasItemSimpleClass" link="GooCanvasItemSimple.html#GooCanvasItemSimpleClass"/>
+    <function name="goo_canvas_item_simple_check_style ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-check-style"/>
+    <function name="goo_canvas_item_simple_get_path_bounds ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-get-path-bounds"/>
+    <function name="goo_canvas_item_simple_user_bounds_to_device ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-user-bounds-to-device"/>
+    <function name="goo_canvas_item_simple_user_bounds_to_parent ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-user-bounds-to-parent"/>
+    <function name="goo_canvas_item_simple_check_in_path ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-check-in-path"/>
+    <function name="goo_canvas_item_simple_paint_path ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-paint-path"/>
+    <function name="goo_canvas_item_simple_changed ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-changed"/>
+    <function name="goo_canvas_item_simple_set_model ()" link="GooCanvasItemSimple.html#goo-canvas-item-simple-set-model"/>
+    <function name="The &quot;antialias&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--antialias"/>
+    <function name="The &quot;clip-fill-rule&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--clip-fill-rule"/>
+    <function name="The &quot;clip-path&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--clip-path"/>
+    <function name="The &quot;fill-color&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--fill-color"/>
+    <function name="The &quot;fill-color-rgba&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--fill-color-rgba"/>
+    <function name="The &quot;fill-pattern&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--fill-pattern"/>
+    <function name="The &quot;fill-pixbuf&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--fill-pixbuf"/>
+    <function name="The &quot;fill-rule&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--fill-rule"/>
+    <function name="The &quot;font&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--font"/>
+    <function name="The &quot;font-desc&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--font-desc"/>
+    <function name="The &quot;hint-metrics&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--hint-metrics"/>
+    <function name="The &quot;line-cap&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--line-cap"/>
+    <function name="The &quot;line-dash&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--line-dash"/>
+    <function name="The &quot;line-join&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--line-join"/>
+    <function name="The &quot;line-join-miter-limit&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--line-join-miter-limit"/>
+    <function name="The &quot;line-width&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--line-width"/>
+    <function name="The &quot;operator&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--operator"/>
+    <function name="The &quot;stroke-color&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--stroke-color"/>
+    <function name="The &quot;stroke-color-rgba&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--stroke-color-rgba"/>
+    <function name="The &quot;stroke-pattern&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--stroke-pattern"/>
+    <function name="The &quot;stroke-pixbuf&quot; property" link="GooCanvasItemSimple.html#GooCanvasItemSimple--stroke-pixbuf"/>
+    <function name="GooCanvasItemModelSimple" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple-struct"/>
+    <function name="The &quot;antialias&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--antialias"/>
+    <function name="The &quot;clip-fill-rule&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--clip-fill-rule"/>
+    <function name="The &quot;clip-path&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--clip-path"/>
+    <function name="The &quot;fill-color&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--fill-color"/>
+    <function name="The &quot;fill-color-rgba&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--fill-color-rgba"/>
+    <function name="The &quot;fill-pattern&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--fill-pattern"/>
+    <function name="The &quot;fill-pixbuf&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--fill-pixbuf"/>
+    <function name="The &quot;fill-rule&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--fill-rule"/>
+    <function name="The &quot;font&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--font"/>
+    <function name="The &quot;font-desc&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--font-desc"/>
+    <function name="The &quot;hint-metrics&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--hint-metrics"/>
+    <function name="The &quot;line-cap&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--line-cap"/>
+    <function name="The &quot;line-dash&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--line-dash"/>
+    <function name="The &quot;line-join&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--line-join"/>
+    <function name="The &quot;line-join-miter-limit&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--line-join-miter-limit"/>
+    <function name="The &quot;line-width&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--line-width"/>
+    <function name="The &quot;operator&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--operator"/>
+    <function name="The &quot;stroke-color&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--stroke-color"/>
+    <function name="The &quot;stroke-color-rgba&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--stroke-color-rgba"/>
+    <function name="The &quot;stroke-pattern&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--stroke-pattern"/>
+    <function name="The &quot;stroke-pixbuf&quot; property" link="GooCanvasItemModelSimple.html#GooCanvasItemModelSimple--stroke-pixbuf"/>
+    <function name="GooCanvasStyle" link="GooCanvasStyle.html#GooCanvasStyle-struct"/>
+    <function name="GooCanvasStyleProperty" link="GooCanvasStyle.html#GooCanvasStyleProperty"/>
+    <function name="goo_canvas_style_new ()" link="GooCanvasStyle.html#goo-canvas-style-new"/>
+    <function name="goo_canvas_style_copy ()" link="GooCanvasStyle.html#goo-canvas-style-copy"/>
+    <function name="goo_canvas_style_get_parent ()" link="GooCanvasStyle.html#goo-canvas-style-get-parent"/>
+    <function name="goo_canvas_style_set_parent ()" link="GooCanvasStyle.html#goo-canvas-style-set-parent"/>
+    <function name="goo_canvas_style_get_property ()" link="GooCanvasStyle.html#goo-canvas-style-get-property"/>
+    <function name="goo_canvas_style_set_property ()" link="GooCanvasStyle.html#goo-canvas-style-set-property"/>
+    <function name="goo_canvas_style_set_fill_options ()" link="GooCanvasStyle.html#goo-canvas-style-set-fill-options"/>
+    <function name="goo_canvas_style_set_stroke_options ()" link="GooCanvasStyle.html#goo-canvas-style-set-stroke-options"/>
+    <function name="goo_canvas_style_antialias_id" link="GooCanvasStyle.html#goo-canvas-style-antialias-id"/>
+    <function name="goo_canvas_style_fill_pattern_id" link="GooCanvasStyle.html#goo-canvas-style-fill-pattern-id"/>
+    <function name="goo_canvas_style_fill_rule_id" link="GooCanvasStyle.html#goo-canvas-style-fill-rule-id"/>
+    <function name="goo_canvas_style_font_desc_id" link="GooCanvasStyle.html#goo-canvas-style-font-desc-id"/>
+    <function name="goo_canvas_style_hint_metrics_id" link="GooCanvasStyle.html#goo-canvas-style-hint-metrics-id"/>
+    <function name="goo_canvas_style_line_cap_id" link="GooCanvasStyle.html#goo-canvas-style-line-cap-id"/>
+    <function name="goo_canvas_style_line_dash_id" link="GooCanvasStyle.html#goo-canvas-style-line-dash-id"/>
+    <function name="goo_canvas_style_line_join_id" link="GooCanvasStyle.html#goo-canvas-style-line-join-id"/>
+    <function name="goo_canvas_style_line_join_miter_limit_id" link="GooCanvasStyle.html#goo-canvas-style-line-join-miter-limit-id"/>
+    <function name="goo_canvas_style_line_width_id" link="GooCanvasStyle.html#goo-canvas-style-line-width-id"/>
+    <function name="goo_canvas_style_operator_id" link="GooCanvasStyle.html#goo-canvas-style-operator-id"/>
+    <function name="goo_canvas_style_stroke_pattern_id" link="GooCanvasStyle.html#goo-canvas-style-stroke-pattern-id"/>
+    <function name="GooCanvasGroup" link="GooCanvasGroup.html#GooCanvasGroup-struct"/>
+    <function name="goo_canvas_group_new ()" link="GooCanvasGroup.html#goo-canvas-group-new"/>
+    <function name="GooCanvasEllipse" link="GooCanvasEllipse.html#GooCanvasEllipse-struct"/>
+    <function name="goo_canvas_ellipse_new ()" link="GooCanvasEllipse.html#goo-canvas-ellipse-new"/>
+    <function name="The &quot;center-x&quot; property" link="GooCanvasEllipse.html#GooCanvasEllipse--center-x"/>
+    <function name="The &quot;center-y&quot; property" link="GooCanvasEllipse.html#GooCanvasEllipse--center-y"/>
+    <function name="The &quot;radius-x&quot; property" link="GooCanvasEllipse.html#GooCanvasEllipse--radius-x"/>
+    <function name="The &quot;radius-y&quot; property" link="GooCanvasEllipse.html#GooCanvasEllipse--radius-y"/>
+    <function name="GooCanvasImage" link="GooCanvasImage.html#GooCanvasImage-struct"/>
+    <function name="goo_canvas_image_new ()" link="GooCanvasImage.html#goo-canvas-image-new"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasImage.html#GooCanvasImage--height"/>
+    <function name="The &quot;pattern&quot; property" link="GooCanvasImage.html#GooCanvasImage--pattern"/>
+    <function name="The &quot;pixbuf&quot; property" link="GooCanvasImage.html#GooCanvasImage--pixbuf"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasImage.html#GooCanvasImage--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasImage.html#GooCanvasImage--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasImage.html#GooCanvasImage--y"/>
+    <function name="GooCanvasPath" link="GooCanvasPath.html#GooCanvasPath-struct"/>
+    <function name="goo_canvas_path_new ()" link="GooCanvasPath.html#goo-canvas-path-new"/>
+    <function name="The &quot;data&quot; property" link="GooCanvasPath.html#GooCanvasPath--data"/>
+    <function name="GooCanvasPolyline" link="GooCanvasPolyline.html#GooCanvasPolyline-struct"/>
+    <function name="goo_canvas_polyline_new ()" link="GooCanvasPolyline.html#goo-canvas-polyline-new"/>
+    <function name="goo_canvas_polyline_new_line ()" link="GooCanvasPolyline.html#goo-canvas-polyline-new-line"/>
+    <function name="The &quot;arrow-length&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--arrow-length"/>
+    <function name="The &quot;arrow-tip-length&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--arrow-tip-length"/>
+    <function name="The &quot;arrow-width&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--arrow-width"/>
+    <function name="The &quot;close-path&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--close-path"/>
+    <function name="The &quot;end-arrow&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--end-arrow"/>
+    <function name="The &quot;points&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--points"/>
+    <function name="The &quot;start-arrow&quot; property" link="GooCanvasPolyline.html#GooCanvasPolyline--start-arrow"/>
+    <function name="GooCanvasRect" link="GooCanvasRect.html#GooCanvasRect-struct"/>
+    <function name="goo_canvas_rect_new ()" link="GooCanvasRect.html#goo-canvas-rect-new"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasRect.html#GooCanvasRect--height"/>
+    <function name="The &quot;radius-x&quot; property" link="GooCanvasRect.html#GooCanvasRect--radius-x"/>
+    <function name="The &quot;radius-y&quot; property" link="GooCanvasRect.html#GooCanvasRect--radius-y"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasRect.html#GooCanvasRect--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasRect.html#GooCanvasRect--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasRect.html#GooCanvasRect--y"/>
+    <function name="GooCanvasText" link="GooCanvasText.html#GooCanvasText-struct"/>
+    <function name="goo_canvas_text_new ()" link="GooCanvasText.html#goo-canvas-text-new"/>
+    <function name="The &quot;alignment&quot; property" link="GooCanvasText.html#GooCanvasText--alignment"/>
+    <function name="The &quot;anchor&quot; property" link="GooCanvasText.html#GooCanvasText--anchor"/>
+    <function name="The &quot;ellipsize&quot; property" link="GooCanvasText.html#GooCanvasText--ellipsize"/>
+    <function name="The &quot;text&quot; property" link="GooCanvasText.html#GooCanvasText--text"/>
+    <function name="The &quot;use-markup&quot; property" link="GooCanvasText.html#GooCanvasText--use-markup"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasText.html#GooCanvasText--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasText.html#GooCanvasText--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasText.html#GooCanvasText--y"/>
+    <function name="GooCanvasWidget" link="GooCanvasWidget.html#GooCanvasWidget-struct"/>
+    <function name="goo_canvas_widget_new ()" link="GooCanvasWidget.html#goo-canvas-widget-new"/>
+    <function name="The &quot;anchor&quot; property" link="GooCanvasWidget.html#GooCanvasWidget--anchor"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasWidget.html#GooCanvasWidget--height"/>
+    <function name="The &quot;widget&quot; property" link="GooCanvasWidget.html#GooCanvasWidget--widget"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasWidget.html#GooCanvasWidget--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasWidget.html#GooCanvasWidget--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasWidget.html#GooCanvasWidget--y"/>
+    <function name="GooCanvasTable" link="GooCanvasTable.html#GooCanvasTable-struct"/>
+    <function name="goo_canvas_table_new ()" link="GooCanvasTable.html#goo-canvas-table-new"/>
+    <function name="The &quot;column-spacing&quot; property" link="GooCanvasTable.html#GooCanvasTable--column-spacing"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasTable.html#GooCanvasTable--height"/>
+    <function name="The &quot;homogeneous-columns&quot; property" link="GooCanvasTable.html#GooCanvasTable--homogeneous-columns"/>
+    <function name="The &quot;homogeneous-rows&quot; property" link="GooCanvasTable.html#GooCanvasTable--homogeneous-rows"/>
+    <function name="The &quot;row-spacing&quot; property" link="GooCanvasTable.html#GooCanvasTable--row-spacing"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasTable.html#GooCanvasTable--width"/>
+    <function name="The &quot;bottom-padding&quot; child property" link="GooCanvasTable.html#GooCanvasTable--bottom-padding"/>
+    <function name="The &quot;column&quot; child property" link="GooCanvasTable.html#GooCanvasTable--column"/>
+    <function name="The &quot;columns&quot; child property" link="GooCanvasTable.html#GooCanvasTable--columns"/>
+    <function name="The &quot;left-padding&quot; child property" link="GooCanvasTable.html#GooCanvasTable--left-padding"/>
+    <function name="The &quot;right-padding&quot; child property" link="GooCanvasTable.html#GooCanvasTable--right-padding"/>
+    <function name="The &quot;row&quot; child property" link="GooCanvasTable.html#GooCanvasTable--row"/>
+    <function name="The &quot;rows&quot; child property" link="GooCanvasTable.html#GooCanvasTable--rows"/>
+    <function name="The &quot;top-padding&quot; child property" link="GooCanvasTable.html#GooCanvasTable--top-padding"/>
+    <function name="The &quot;x-align&quot; child property" link="GooCanvasTable.html#GooCanvasTable--x-align"/>
+    <function name="The &quot;x-expand&quot; child property" link="GooCanvasTable.html#GooCanvasTable--x-expand"/>
+    <function name="The &quot;x-fill&quot; child property" link="GooCanvasTable.html#GooCanvasTable--x-fill"/>
+    <function name="The &quot;x-shrink&quot; child property" link="GooCanvasTable.html#GooCanvasTable--x-shrink"/>
+    <function name="The &quot;y-align&quot; child property" link="GooCanvasTable.html#GooCanvasTable--y-align"/>
+    <function name="The &quot;y-expand&quot; child property" link="GooCanvasTable.html#GooCanvasTable--y-expand"/>
+    <function name="The &quot;y-fill&quot; child property" link="GooCanvasTable.html#GooCanvasTable--y-fill"/>
+    <function name="The &quot;y-shrink&quot; child property" link="GooCanvasTable.html#GooCanvasTable--y-shrink"/>
+    <function name="GooCanvasGroupModel" link="GooCanvasGroupModel.html#GooCanvasGroupModel-struct"/>
+    <function name="goo_canvas_group_model_new ()" link="GooCanvasGroupModel.html#goo-canvas-group-model-new"/>
+    <function name="GooCanvasEllipseModel" link="GooCanvasEllipseModel.html#GooCanvasEllipseModel-struct"/>
+    <function name="goo_canvas_ellipse_model_new ()" link="GooCanvasEllipseModel.html#goo-canvas-ellipse-model-new"/>
+    <function name="The &quot;center-x&quot; property" link="GooCanvasEllipseModel.html#GooCanvasEllipseModel--center-x"/>
+    <function name="The &quot;center-y&quot; property" link="GooCanvasEllipseModel.html#GooCanvasEllipseModel--center-y"/>
+    <function name="The &quot;radius-x&quot; property" link="GooCanvasEllipseModel.html#GooCanvasEllipseModel--radius-x"/>
+    <function name="The &quot;radius-y&quot; property" link="GooCanvasEllipseModel.html#GooCanvasEllipseModel--radius-y"/>
+    <function name="GooCanvasImageModel" link="GooCanvasImageModel.html#GooCanvasImageModel-struct"/>
+    <function name="goo_canvas_image_model_new ()" link="GooCanvasImageModel.html#goo-canvas-image-model-new"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasImageModel.html#GooCanvasImageModel--height"/>
+    <function name="The &quot;pattern&quot; property" link="GooCanvasImageModel.html#GooCanvasImageModel--pattern"/>
+    <function name="The &quot;pixbuf&quot; property" link="GooCanvasImageModel.html#GooCanvasImageModel--pixbuf"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasImageModel.html#GooCanvasImageModel--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasImageModel.html#GooCanvasImageModel--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasImageModel.html#GooCanvasImageModel--y"/>
+    <function name="GooCanvasPathModel" link="GooCanvasPathModel.html#GooCanvasPathModel-struct"/>
+    <function name="goo_canvas_path_model_new ()" link="GooCanvasPathModel.html#goo-canvas-path-model-new"/>
+    <function name="The &quot;data&quot; property" link="GooCanvasPathModel.html#GooCanvasPathModel--data"/>
+    <function name="GooCanvasPolylineModel" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel-struct"/>
+    <function name="goo_canvas_polyline_model_new ()" link="GooCanvasPolylineModel.html#goo-canvas-polyline-model-new"/>
+    <function name="goo_canvas_polyline_model_new_line ()" link="GooCanvasPolylineModel.html#goo-canvas-polyline-model-new-line"/>
+    <function name="The &quot;arrow-length&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--arrow-length"/>
+    <function name="The &quot;arrow-tip-length&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--arrow-tip-length"/>
+    <function name="The &quot;arrow-width&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--arrow-width"/>
+    <function name="The &quot;close-path&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--close-path"/>
+    <function name="The &quot;end-arrow&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--end-arrow"/>
+    <function name="The &quot;points&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--points"/>
+    <function name="The &quot;start-arrow&quot; property" link="GooCanvasPolylineModel.html#GooCanvasPolylineModel--start-arrow"/>
+    <function name="GooCanvasRectModel" link="GooCanvasRectModel.html#GooCanvasRectModel-struct"/>
+    <function name="goo_canvas_rect_model_new ()" link="GooCanvasRectModel.html#goo-canvas-rect-model-new"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasRectModel.html#GooCanvasRectModel--height"/>
+    <function name="The &quot;radius-x&quot; property" link="GooCanvasRectModel.html#GooCanvasRectModel--radius-x"/>
+    <function name="The &quot;radius-y&quot; property" link="GooCanvasRectModel.html#GooCanvasRectModel--radius-y"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasRectModel.html#GooCanvasRectModel--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasRectModel.html#GooCanvasRectModel--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasRectModel.html#GooCanvasRectModel--y"/>
+    <function name="GooCanvasTextModel" link="GooCanvasTextModel.html#GooCanvasTextModel-struct"/>
+    <function name="goo_canvas_text_model_new ()" link="GooCanvasTextModel.html#goo-canvas-text-model-new"/>
+    <function name="The &quot;alignment&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--alignment"/>
+    <function name="The &quot;anchor&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--anchor"/>
+    <function name="The &quot;ellipsize&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--ellipsize"/>
+    <function name="The &quot;text&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--text"/>
+    <function name="The &quot;use-markup&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--use-markup"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--width"/>
+    <function name="The &quot;x&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--x"/>
+    <function name="The &quot;y&quot; property" link="GooCanvasTextModel.html#GooCanvasTextModel--y"/>
+    <function name="GooCanvasTableModel" link="GooCanvasTableModel.html#GooCanvasTableModel-struct"/>
+    <function name="goo_canvas_table_model_new ()" link="GooCanvasTableModel.html#goo-canvas-table-model-new"/>
+    <function name="The &quot;column-spacing&quot; property" link="GooCanvasTableModel.html#GooCanvasTableModel--column-spacing"/>
+    <function name="The &quot;height&quot; property" link="GooCanvasTableModel.html#GooCanvasTableModel--height"/>
+    <function name="The &quot;homogeneous-columns&quot; property" link="GooCanvasTableModel.html#GooCanvasTableModel--homogeneous-columns"/>
+    <function name="The &quot;homogeneous-rows&quot; property" link="GooCanvasTableModel.html#GooCanvasTableModel--homogeneous-rows"/>
+    <function name="The &quot;row-spacing&quot; property" link="GooCanvasTableModel.html#GooCanvasTableModel--row-spacing"/>
+    <function name="The &quot;width&quot; property" link="GooCanvasTableModel.html#GooCanvasTableModel--width"/>
+    <function name="The &quot;bottom-padding&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--bottom-padding"/>
+    <function name="The &quot;column&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--column"/>
+    <function name="The &quot;columns&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--columns"/>
+    <function name="The &quot;left-padding&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--left-padding"/>
+    <function name="The &quot;right-padding&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--right-padding"/>
+    <function name="The &quot;row&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--row"/>
+    <function name="The &quot;rows&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--rows"/>
+    <function name="The &quot;top-padding&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--top-padding"/>
+    <function name="The &quot;x-align&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--x-align"/>
+    <function name="The &quot;x-expand&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--x-expand"/>
+    <function name="The &quot;x-fill&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--x-fill"/>
+    <function name="The &quot;x-shrink&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--x-shrink"/>
+    <function name="The &quot;y-align&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--y-align"/>
+    <function name="The &quot;y-expand&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--y-expand"/>
+    <function name="The &quot;y-fill&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--y-fill"/>
+    <function name="The &quot;y-shrink&quot; child property" link="GooCanvasTableModel.html#GooCanvasTableModel--y-shrink"/>
+    <function name="GooCanvasBounds" link="goocanvas-GooCanvas-Types.html#GooCanvasBounds"/>
+    <function name="enum GooCanvasItemVisibility" link="goocanvas-GooCanvas-Types.html#GooCanvasItemVisibility"/>
+    <function name="enum GooCanvasPointerEvents" link="goocanvas-GooCanvas-Types.html#GooCanvasPointerEvents"/>
+    <function name="enum GooCanvasAnimateType" link="goocanvas-GooCanvas-Types.html#GooCanvasAnimateType"/>
+    <function name="GooCanvasPoints" link="goocanvas-GooCanvas-Types.html#GooCanvasPoints"/>
+    <function name="goo_canvas_points_new ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-points-new"/>
+    <function name="goo_canvas_points_ref ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-points-ref"/>
+    <function name="goo_canvas_points_unref ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-points-unref"/>
+    <function name="GooCanvasLineDash" link="goocanvas-GooCanvas-Types.html#GooCanvasLineDash"/>
+    <function name="goo_canvas_line_dash_new ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-new"/>
+    <function name="goo_canvas_line_dash_newv ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-newv"/>
+    <function name="goo_canvas_line_dash_ref ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-ref"/>
+    <function name="goo_canvas_line_dash_unref ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-line-dash-unref"/>
+    <function name="enum GooCanvasPathCommandType" link="goocanvas-GooCanvas-Types.html#GooCanvasPathCommandType"/>
+    <function name="union GooCanvasPathCommand" link="goocanvas-GooCanvas-Types.html#GooCanvasPathCommand"/>
+    <function name="goo_canvas_parse_path_data ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-parse-path-data"/>
+    <function name="goo_canvas_create_path ()" link="goocanvas-GooCanvas-Types.html#goo-canvas-create-path"/>
+  </functions>
+</book>

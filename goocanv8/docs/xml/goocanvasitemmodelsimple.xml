@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasItemModelSimple">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasItemModelSimple</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasItemModelSimple</refname>
+<refpurpose>the base class for the standard canvas item models.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasItemModelSimple-struct">GooCanvasItemModelSimple</link>;
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----GooCanvasItemModelSimple
+         +----<link linkend="GooCanvasRectModel">GooCanvasRectModel</link>
+         +----<link linkend="GooCanvasGroupModel">GooCanvasGroupModel</link>
+         +----<link linkend="GooCanvasPathModel">GooCanvasPathModel</link>
+         +----<link linkend="GooCanvasEllipseModel">GooCanvasEllipseModel</link>
+         +----<link linkend="GooCanvasTextModel">GooCanvasTextModel</link>
+         +----<link linkend="GooCanvasPolylineModel">GooCanvasPolylineModel</link>
+         +----<link linkend="GooCanvasImageModel">GooCanvasImageModel</link>
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasItemModelSimple implements
+ <link linkend="GooCanvasItemModel">GooCanvasItemModel</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasItemModelSimple--antialias">antialias</link>&quot;                <link linkend="GooCairoAntialias">GooCairoAntialias</link>     : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--clip-fill-rule">clip-fill-rule</link>&quot;           <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--clip-path">clip-path</link>&quot;                <link linkend="gchararray">gchararray</link>            : Write
+  &quot;<link linkend="GooCanvasItemModelSimple--fill-color">fill-color</link>&quot;               <link linkend="gchararray">gchararray</link>            : Write
+  &quot;<link linkend="GooCanvasItemModelSimple--fill-color-rgba">fill-color-rgba</link>&quot;          <link linkend="guint">guint</link>                 : Write
+  &quot;<link linkend="GooCanvasItemModelSimple--fill-pattern">fill-pattern</link>&quot;             <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--fill-pixbuf">fill-pixbuf</link>&quot;              <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write
+  &quot;<link linkend="GooCanvasItemModelSimple--fill-rule">fill-rule</link>&quot;                <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--font">font</link>&quot;                     <link linkend="gchararray">gchararray</link>            : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--font-desc">font-desc</link>&quot;                <link linkend="PangoFontDescription">PangoFontDescription</link>  : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--hint-metrics">hint-metrics</link>&quot;             <link linkend="GooCairoHintMetrics">GooCairoHintMetrics</link>   : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--line-cap">line-cap</link>&quot;                 <link linkend="GooCairoLineCap">GooCairoLineCap</link>       : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--line-dash">line-dash</link>&quot;                <link linkend="GooCairoLineDash">GooCairoLineDash</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--line-join">line-join</link>&quot;                <link linkend="GooCairoLineJoin">GooCairoLineJoin</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--line-join-miter-limit">line-join-miter-limit</link>&quot;    <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--line-width">line-width</link>&quot;               <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--operator">operator</link>&quot;                 <link linkend="GooCairoOperator">GooCairoOperator</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--stroke-color">stroke-color</link>&quot;             <link linkend="gchararray">gchararray</link>            : Write
+  &quot;<link linkend="GooCanvasItemModelSimple--stroke-color-rgba">stroke-color-rgba</link>&quot;        <link linkend="guint">guint</link>                 : Write
+  &quot;<link linkend="GooCanvasItemModelSimple--stroke-pattern">stroke-pattern</link>&quot;           <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write
+  &quot;<link linkend="GooCanvasItemModelSimple--stroke-pixbuf">stroke-pixbuf</link>&quot;            <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+<link linkend="GooCanvasItemModelSimple"><type>GooCanvasItemModelSimple</type></link> is used as a base class for the standard canvas
+item models. It can also be used as the base class for new custom canvas
+item models.
+</para>
+<para>
+It provides default implementations for many of the <link linkend="GooCanvasItemModel"><type>GooCanvasItemModel</type></link>
+methods.
+</para>
+<para>
+Subclasses of <link linkend="GooCanvasItemModelSimple"><type>GooCanvasItemModelSimple</type></link> only need to implement the
+<link linkend="create-item"><function>create_item()</function></link> method of the <link linkend="GooCanvasItemModel"><type>GooCanvasItemModel</type></link> interface, to create
+the default canvas item to view the item model.</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasItemModelSimple-struct" role="struct"/>GooCanvasItemModelSimple</title>
+<indexterm><primary>GooCanvasItemModelSimple</primary></indexterm><programlisting>typedef struct {
+  GooCanvasItemModel *parent;
+  GooCanvasItemSimpleData simple_data;
+} GooCanvasItemModelSimple;
+</programlisting>
+<para>
+The <link linkend="GooCanvasItemModelSimple-struct"><type>GooCanvasItemModelSimple</type></link> struct contains the basic data needed
+to implement canvas item models.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><link linkend="GooCanvasItemModel">GooCanvasItemModel</link>&nbsp;*<structfield>parent</structfield>;</term>
+<listitem><simpara> the parent model.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="GooCanvasItemSimpleData">GooCanvasItemSimpleData</link>&nbsp;<structfield>simple_data</structfield>;</term>
+<listitem><simpara> data used by the canvas item for viewing the model.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--antialias"/>The &quot;<literal>antialias</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:antialias</primary></indexterm><programlisting>  &quot;antialias&quot;                <link linkend="GooCairoAntialias">GooCairoAntialias</link>     : Read / Write</programlisting>
+<para>The antialiasing mode to use.</para><para>Default value: CAIRO_ANTIALIAS_GRAY</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--clip-fill-rule"/>The &quot;<literal>clip-fill-rule</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:clip-fill-rule</primary></indexterm><programlisting>  &quot;clip-fill-rule&quot;           <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write</programlisting>
+<para>The fill rule used to determine which parts of the item are clipped.</para><para>Default value: CAIRO_FILL_RULE_WINDING</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--clip-path"/>The &quot;<literal>clip-path</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:clip-path</primary></indexterm><programlisting>  &quot;clip-path&quot;                <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>
+The sequence of commands describing the clip path of the item, specified
+as a string using the same syntax
+as in the <ulink url="http://www.w3.org/Graphics/SVG/">Scalable Vector
+Graphics (SVG)</ulink> path element.</para>
+<para>
+
+</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--fill-color"/>The &quot;<literal>fill-color</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:fill-color</primary></indexterm><programlisting>  &quot;fill-color&quot;               <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>The color to use to paint the interior of the item. To disable painting set the 'fill-pattern' property to NULL.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--fill-color-rgba"/>The &quot;<literal>fill-color-rgba</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:fill-color-rgba</primary></indexterm><programlisting>  &quot;fill-color-rgba&quot;          <link linkend="guint">guint</link>                 : Write</programlisting>
+<para>The color to use to paint the interior of the item, specified as a 32-bit integer value. To disable painting set the 'fill-pattern' property to NULL.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--fill-pattern"/>The &quot;<literal>fill-pattern</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:fill-pattern</primary></indexterm><programlisting>  &quot;fill-pattern&quot;             <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write</programlisting>
+<para>The pattern to use to paint the interior of the item, or NULL to disable painting.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--fill-pixbuf"/>The &quot;<literal>fill-pixbuf</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:fill-pixbuf</primary></indexterm><programlisting>  &quot;fill-pixbuf&quot;              <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write</programlisting>
+<para>The pixbuf to use to paint the interior of the item. To disable painting set the 'fill-pattern' property to NULL.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--fill-rule"/>The &quot;<literal>fill-rule</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:fill-rule</primary></indexterm><programlisting>  &quot;fill-rule&quot;                <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write</programlisting>
+<para>The fill rule used to determine which parts of the item are filled.</para><para>Default value: CAIRO_FILL_RULE_WINDING</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--font"/>The &quot;<literal>font</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:font</primary></indexterm><programlisting>  &quot;font&quot;                     <link linkend="gchararray">gchararray</link>            : Read / Write</programlisting>
+<para>The base font to use for the text.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--font-desc"/>The &quot;<literal>font-desc</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:font-desc</primary></indexterm><programlisting>  &quot;font-desc&quot;                <link linkend="PangoFontDescription">PangoFontDescription</link>  : Read / Write</programlisting>
+<para>The attributes specifying which font to use.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--hint-metrics"/>The &quot;<literal>hint-metrics</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:hint-metrics</primary></indexterm><programlisting>  &quot;hint-metrics&quot;             <link linkend="GooCairoHintMetrics">GooCairoHintMetrics</link>   : Read / Write</programlisting>
+<para>The hinting to be used for font metrics.</para><para>Default value: CAIRO_HINT_METRICS_OFF</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--line-cap"/>The &quot;<literal>line-cap</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:line-cap</primary></indexterm><programlisting>  &quot;line-cap&quot;                 <link linkend="GooCairoLineCap">GooCairoLineCap</link>       : Read / Write</programlisting>
+<para>The line cap style to use.</para><para>Default value: CAIRO_LINE_CAP_BUTT</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--line-dash"/>The &quot;<literal>line-dash</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:line-dash</primary></indexterm><programlisting>  &quot;line-dash&quot;                <link linkend="GooCairoLineDash">GooCairoLineDash</link>      : Read / Write</programlisting>
+<para>The dash pattern to use.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--line-join"/>The &quot;<literal>line-join</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:line-join</primary></indexterm><programlisting>  &quot;line-join&quot;                <link linkend="GooCairoLineJoin">GooCairoLineJoin</link>      : Read / Write</programlisting>
+<para>The line join style to use.</para><para>Default value: CAIRO_LINE_JOIN_MITER</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--line-join-miter-limit"/>The &quot;<literal>line-join-miter-limit</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:line-join-miter-limit</primary></indexterm><programlisting>  &quot;line-join-miter-limit&quot;    <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The smallest angle to use with miter joins, in degrees. Bevel joins will be used below this limit.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 10</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--line-width"/>The &quot;<literal>line-width</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:line-width</primary></indexterm><programlisting>  &quot;line-width&quot;               <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The line width to use for the item's perimeter.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--operator"/>The &quot;<literal>operator</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:operator</primary></indexterm><programlisting>  &quot;operator&quot;                 <link linkend="GooCairoOperator">GooCairoOperator</link>      : Read / Write</programlisting>
+<para>The compositing operator to use.</para><para>Default value: CAIRO_OPERATOR_OVER</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--stroke-color"/>The &quot;<literal>stroke-color</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:stroke-color</primary></indexterm><programlisting>  &quot;stroke-color&quot;             <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>The color to use for the item's perimeter. To disable painting set the 'stroke-pattern' property to NULL.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--stroke-color-rgba"/>The &quot;<literal>stroke-color-rgba</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:stroke-color-rgba</primary></indexterm><programlisting>  &quot;stroke-color-rgba&quot;        <link linkend="guint">guint</link>                 : Write</programlisting>
+<para>The color to use for the item's perimeter, specified as a 32-bit integer value. To disable painting set the 'stroke-pattern' property to NULL.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--stroke-pattern"/>The &quot;<literal>stroke-pattern</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:stroke-pattern</primary></indexterm><programlisting>  &quot;stroke-pattern&quot;           <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write</programlisting>
+<para>The pattern to use to paint the perimeter of the item, or NULL disable painting.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemModelSimple--stroke-pixbuf"/>The &quot;<literal>stroke-pixbuf</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemModelSimple:stroke-pixbuf</primary></indexterm><programlisting>  &quot;stroke-pixbuf&quot;            <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write</programlisting>
+<para>The pixbuf to use to draw the item's perimeter. To disable painting set the 'stroke-pattern' property to NULL.</para></refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

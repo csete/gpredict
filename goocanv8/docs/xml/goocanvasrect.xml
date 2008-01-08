@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasRect">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasRect</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasRect</refname>
+<refpurpose>a rectangle item.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasRect-struct">GooCanvasRect</link>;
+<link linkend="GooCanvasItem">GooCanvasItem</link>*      <link linkend="goo-canvas-rect-new">goo_canvas_rect_new</link>                 (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         <link linkend="gdouble">gdouble</link> width,
+                                                         <link linkend="gdouble">gdouble</link> height,
+                                                         ...);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link>
+         +----GooCanvasRect
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasRect implements
+ <link linkend="GooCanvasItem">GooCanvasItem</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasRect--height">height</link>&quot;                   <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasRect--radius-x">radius-x</link>&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasRect--radius-y">radius-y</link>&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasRect--width">width</link>&quot;                    <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasRect--x">x</link>&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasRect--y">y</link>&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+GooCanvasRect represents a rectangle item.
+</para>
+<para>
+It is a subclass of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link> and so inherits all of the style
+properties such as "stroke-color", "fill-color" and "line-width".
+</para>
+<para>
+It also implements the <link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> interface, so you can use the
+<link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> functions such as <link linkend="goo-canvas-item-raise"><function>goo_canvas_item_raise()</function></link> and
+<link linkend="goo-canvas-item-rotate"><function>goo_canvas_item_rotate()</function></link>.
+</para>
+<para>
+To create a <link linkend="GooCanvasRect"><type>GooCanvasRect</type></link> use <link linkend="goo-canvas-rect-new"><function>goo_canvas_rect_new()</function></link>.
+</para>
+<para>
+To get or set the properties of an existing <link linkend="GooCanvasRect"><type>GooCanvasRect</type></link>, use
+<link linkend="g-object-get"><function>g_object_get()</function></link> and <link linkend="g-object-set"><function>g_object_set()</function></link>.</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasRect-struct" role="struct"/>GooCanvasRect</title>
+<indexterm><primary>GooCanvasRect</primary></indexterm><programlisting>typedef struct _GooCanvasRect GooCanvasRect;</programlisting>
+<para>
+The <link linkend="GooCanvasRect-struct"><type>GooCanvasRect</type></link> struct contains private data only.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-rect-new" role="function"/>goo_canvas_rect_new ()</title>
+<indexterm><primary>goo_canvas_rect_new</primary></indexterm><programlisting><link linkend="GooCanvasItem">GooCanvasItem</link>*      goo_canvas_rect_new                 (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         <link linkend="gdouble">gdouble</link> width,
+                                                         <link linkend="gdouble">gdouble</link> height,
+                                                         ...);</programlisting>
+<para>
+Creates a new rectangle item.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <link linkend="g-object-unref"><function>g_object_unref()</function></link> to free it.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>x</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the left of the rectangle.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>y</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the top of the rectangle.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>width</parameter>&nbsp;:</term>
+<listitem><simpara> the width of the rectangle.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>height</parameter>&nbsp;:</term>
+<listitem><simpara> the height of the rectangle.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new rectangle item.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create a rectangle at (100,100) with a
+width of 200 and a height of 100.
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItem *rect = goo_canvas_rect_new (mygroup, 100.0, 100.0, 200.0, 100.0,
+                                            "stroke-color", "red",
+                                            "line-width", 5.0,
+                                            "fill-color", "blue",
+                                            NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasRect--height"/>The &quot;<literal>height</literal>&quot; property</title>
+<indexterm><primary>GooCanvasRect:height</primary></indexterm><programlisting>  &quot;height&quot;                   <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The height of the rectangle.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasRect--radius-x"/>The &quot;<literal>radius-x</literal>&quot; property</title>
+<indexterm><primary>GooCanvasRect:radius-x</primary></indexterm><programlisting>  &quot;radius-x&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The horizontal radius to use for rounded corners.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasRect--radius-y"/>The &quot;<literal>radius-y</literal>&quot; property</title>
+<indexterm><primary>GooCanvasRect:radius-y</primary></indexterm><programlisting>  &quot;radius-y&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The vertical radius to use for rounded corners.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasRect--width"/>The &quot;<literal>width</literal>&quot; property</title>
+<indexterm><primary>GooCanvasRect:width</primary></indexterm><programlisting>  &quot;width&quot;                    <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The width of the rectangle.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasRect--x"/>The &quot;<literal>x</literal>&quot; property</title>
+<indexterm><primary>GooCanvasRect:x</primary></indexterm><programlisting>  &quot;x&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The x coordinate of the rectangle.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasRect--y"/>The &quot;<literal>y</literal>&quot; property</title>
+<indexterm><primary>GooCanvasRect:y</primary></indexterm><programlisting>  &quot;y&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The y coordinate of the rectangle.</para><para>Default value: 0</para>
+</refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

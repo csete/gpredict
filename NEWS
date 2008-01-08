@@ -1,0 +1,274 @@
+Changes in version 1.0 (TBD):
+
+x New alarm manager: Notify user ... systray ...
+x Radio doppler tuning (TBD which rigs).
+x Antenna rotator control (TBD which rots).
+x New layout engine allowing any number of views per module.
+x Orbit Lab:
+x SpaceView: New view show the satellites using a movable camera in space.
+x SkyView: 
+x The satellite map can show the range circle of the ground station according to
+  the selected satellite.
+x The satellite map can show day/night side of Earh.
+x Track the Sun and the Moon as if they were satellites.
+x Define obstacles for ground stations.
+x Feature request 1613758: Command Line Interface to Gpredict.
+- Feature request 1705375: Restore main window position and size.
+x Fixed bug 1650251: Groundtracks have discontinuities.
+- Fixed bug 1752908: New satellites in TLE files.
+- Fixed bug 1818144: No log file created at first execution.
+- Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
+- Fixed bug 1848837: Typo in preferences dialogue.
+- Fixed bug 1704133: Blank lines in config file.
+x Windows: New installer instead of ZIP distribution.
+x Updated user manual as PDF and HTML (online).
+x New TechNote: Algo ref.
+
+Changes in version 0.9.0 (2007-09-29):
+
+- Save satellite pass predictions to text file.
+- Fixed bug 1754801: Time Controller Window.
+- Fixed bug 1752910: Modules have no window icon.
+- Fixed bug 1752912: Module window title.
+- Log messages are now saved to $HOME/.gpredict2/logs/gpredict.log
+- Fixed bug 1752915: Pop-up menu in single satellite view.
+- Fixed bug 1763356: Geo sats take a really long time to load.
+- Fixed bug 1763321: Geo sats display very large hour value for AOS/LOS.
+- Fixed bug 1650261: Cloned module only opens in one view.
+- Fixed bug 1772454: Single pass prediction flags are reset to default.
+- Fixed a problem that would prevent gpredcit to be compiled using Gtk+ 2.12.
+- Other minor fixes and cleaning (bugs 1754255, 1752917, 1705238)
+- Fixed bug that caused incorrect calculation of sky tracks in non-realtime
+  cases.
+
+
+Changes in version 0.8.0 (2007-06-03):
+
+- Implemented simulated real-time and manual time control in addition to
+  real-time control. Each module has now its own time controller.
+- Sky at a glance pass prediction mode.
+- Background map selector. Use either stock maps or own maps of any size.
+- Adjust position of satellite names on the map in order to avoid clipping
+  of the labels when the sat is close to the map border.
+- Allow user to explicitly select DEFAULT ground station even after a new
+  ground station is selected as default (bug #1656943).
+- Allow users to specify ground station LAT and LON with up to four decimal
+  digits.
+- Fixed a bug that prohibited showing of satellite names in the single-sat
+  view when the satellite name contained an '&' character (bug #1644926).
+- Fixed a bug that prevented the "Enable rules hint in list views" setting
+  to be disabled (bug #1728575).
+- Fixed a bug in the pass prediction code that could cause crashes when
+  there were no passes with max_el greater than the required elevation.
+- Improved robustness of prediction code to avoid UI freeze when satellites
+  have no passes in the near future.
+- Fixed more memory leaks.
+
+
+Changes in version 0.7.1 (2007-01-20):
+
+- Windows build files are now included in the source tarball.
+- Fixed a bug that prevented TLE to be updated under win32 (bug #1631803).
+- Fixed some severe memory leaks (bug #1636429).
+- Fixed a bug that caused an error message when creating modules with two
+  views (bug #1570195).
+- Fixed a bug with missing arrows on win32 (bug #1580012).
+
+
+Changes in version 0.7.0 (2007-01-03):
+
+- Automatic update of TLE elements from network or local files. Gpredict can
+  either notify the user when TLEs are getting too old, or perform automatic
+  update in the background. The network update requires libcurl.
+- Added optional grid lines to the map view (30 deg resolution).
+- Added possibility to show ground tracks on the map (feature request #557586)
+- Added support for the optional operational status of satellites encoded into
+  the satellite names in TLE coming from CelesTrak.
+- Fixed wrong epoch day in the satellite info dialogue (bug #1586341).
+- Polar and Az/El plots of passes in the single-pass dialogue.
+
+
+Changes in version 0.6.1 (2006-09-05):
+
+- Fixed bug that caused data to be installed into the wrong directory when using
+  'make install DESTDIR=/foo' (patch #1552216 by Denis Leroy).
+- Fixed bug that caused errors when user deleted the sample ground station while
+  one or more modules were still using it (reported by Hamish Moffatt).
+
+
+Changes in version 0.6.0 (2006-09-04):
+
+- New module design: A module is no longer either a list or a map. A module can
+  contain up to three views that can be any combination of map, list, polar and
+  single satellite view.
+- Each module can be configured individually (colours, views, location) or it
+  can use the global default settings.
+- Module have three states: Docked, Window and fullscreen.
+- Improved map view quality and performance with possibility to highlight areas
+  covered by satellites.
+- List View is fully configurable with respect to which columns should be
+  visible. Furthermore, the list view has a lots of new columns.
+- The upcoming passes dialogs can show much more details like TCA, duration and
+  maximum elevation.
+- Context sensitive pop-up menus instead of buttons to access the most important
+  functions.
+- Geographical coordinates can be shown using N, S, E and W suffixes instead
+  og sign. This should settle the debate on whether negative longitude is East
+  or West of Greenwich (I know which one is the correct one ;-).
+- Added support for imperial units (default is still the metric system).
+- Added support for user specified time format strings.
+- No upper limit on the number of satellites.
+- Uses SGP4/SDP4 algorithms for element set propagation.
+- Requires Gtk+ 2.8 or later and GNOME dependencies are gone for good!
+- Gpredict is now much more robust against configuration errors. If something
+  goes wrong you can simply delete all user configuration files and start from
+  fresh. Besides that, gpredict only uses human readable configuration files,
+  which can be edited using a text editor. It should, however, never be necessary
+  to alter the configuration files manually.
+- Draft User Manual and Design Document.
+
+
+Changes in version 0.5.3 (2006-01-19):
+
+- Fixed errors when compiling on NetBSD, thanks to Berndt VK5ABN. This patch
+  actually fixes the i18n installation problems on the other platforms too.
+
+
+Changes in version 0.5.2 (2005-12-22):
+
+- Fixed errors when compiling without hamlib support.
+
+
+Changes in version 0.5.1 (2005-05-25):
+
+- Selecting local time instead of UTC will now show the correct time
+  everywhere in the program, thanks to Thierry F4DWV.
+- Show pass duration in minutes in the "Upcoming Passes" dialog.
+
+
+Changes in version 0.5.0 (2005-01-29):
+
+- It is now possible to specify a minimum elevation for upcoming passes.
+  Passes with max elevation below this limit will be discaded from the list.
+- Hamlib 1.2.0 support. If compiled with hamlib support, gpredict now
+  requires version 1.2.0 or later and will not compile with earlier
+  versions.
+- Possibility for other map sizes. Gpredict will automatically detect
+  the size of the map and scale the canvas accordingly.
+- Improved map display showing QTH, time, upcoming satellite and brief info
+  about a selected satellite. Added buttons for pass prediction for selected
+  satellite.
+- Satellite lists can be sorted automatically at regular intervals
+  (preferences->lists->autosort). Disabled by default.
+- Satmap-druid will now open a warning dialog if the number of
+  selected satellites is greater than 10 (bug #555595).
+- Fixed positioning and alignment errors in AOS prints. Added orbit
+  number to detailed prints. 
+- We now use the standard Gnome data directories (incompatible with
+  previous releases). This means, that the 'configure --prefix=...'
+  and other directory switches should work now.
+- Replaced obsolete ftime function with gettimeofday. The program should
+  now compile on MacOS X and FreeBSD as well.
+- Simple and detailed pass predictions can again be saved to text files
+  (bug #839373).
+- Show rise/set times in Sun and Moon frames.
+
+
+Changes in version 0.4.0 (2003-04-17):
+
+- TLE files are now stored in user's home directory in 
+  $HOME/.gpredict/tle and can be updated automatically at run time.
+  The supplied files are identicale to those at celestrak.com except
+  that the extensions have been changed from .txt to .tle
+- The tracked satellites are organized in a tree when presented to
+  the user, rather than a flat list.
+- Updated locations database with more than 2000 known locations
+  with altitude and weather station info. The known locations
+  are now organized in a tree structure. If Hamlib 1.1.3 is available
+  locator squares are calculated as well.
+- Possibility to have many locations configured and switch between
+  them at runtime.
+- Possibility to use other maps. Gnome Predict comes bundled with 5
+  different maps, but the user can add and use his/her own maps by
+  copying the images into the $HOME/.gpredict/maps/ directory. The maps
+  will automatically be scaled to 800x400 pixels.
+- Notebook tabs/labels are only shown if there are at least
+  two modules in the notebook (the user can override it though).
+- Module names can be up to 50 characters long.
+- Modules can be deleted and edited after creation (right-click in the
+  iconbar).
+- Program is safe if a satellite somehow disappears from the database.
+- Fixed bugs #636186 and #633886.
+
+
+Changes in version 0.3.2 (2002-06-24):
+
+- No more crash when trying to open a deleted map file
+  (bug #554785).
+- Number of satellites in the lists is displayed when
+  the user creates a new module (bug #555595).
+- Updated gpredict.tle
+- Updated gpredict.pot
+- Updated da.po (new strings not translated though).
+
+
+Changes in version 0.3.1 (2002-05-06):
+
+- Added danish translation.
+- Fixed bug #551224.
+
+
+Changes in version 0.3.0 (2002-04-13):
+
+- Configuration is stored using GConf instead of gnome-config.
+- Default prefix is no longer /usr/local/groundstation
+- User configuration files are stored in ~/.gpredict/
+  (previously ~/.groundstation/)
+- Longitude is in the range of -180 to 180 negative
+  being East of Greenwich.
+- Get detailed information about any of the upcoming passes.
+  The plot showing a satellite pass can be saved as an image
+  or printed.
+- New earth map module with the possibility to save and print
+  the map as an image.
+- Anti aliased graphics giving much better quality. The user
+  can disable this feature if the performance is very poor.
+- New shortcut bar.
+- Have as many modules open as your computer can handle.
+- Disabled the possibility to change the TLE file at runtime
+  (obsolete feature).
+
+
+Changes in version 0.2.2 (2001-10-23):
+
+- Program can read custom TLE files even at runtime.
+- New, very flexible functions to predict upcoming
+  passes.
+- Show/Save/Print/Plot detailed info about the upcoming
+  pass.
+- Plot the upcoming pass in polar form (Az/El).
+- Show/Save/Print AOS/LOS times for upcoming passes.
+- Satellites in the satlist can have different colors
+  for practically any state a satellite can have.
+- More options in the preferences box.
+
+
+Changes in version 0.2.1:
+
+- Just added a sentence to INSTALL about not to
+  use ~ in --prefix=...
+
+
+Changes in version 0.2.0 (2001-08-04):
+
+- Abandoned client/server interface and included
+  tracking code from Predict directly into the
+  program
+- Can track a large number of satellites (current
+  limit is at 200, but can be chaged by editing
+  the 'defaults.h' file)
+- Predict AOS and LOS times for upcoming passes
+- The user can change the text colors in the
+  satellite list
+- The user can change the time between satellite
+  list updates

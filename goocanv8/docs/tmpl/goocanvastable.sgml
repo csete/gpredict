@@ -1,0 +1,145 @@
+<!-- ##### SECTION Title ##### -->
+GooCanvasTable
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GooCanvasTable ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GooCanvasTable:column-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:homogeneous-columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:homogeneous-rows ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:row-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:bottom-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:column ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:left-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:right-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:row ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:rows ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:top-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:x-align ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:x-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:x-fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:x-shrink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:y-align ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:y-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:y-fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GooCanvasTable:y-shrink ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION goo_canvas_table_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@Varargs: 
+@Returns: 
+
+

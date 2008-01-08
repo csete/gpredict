@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasImage">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasImage</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasImage</refname>
+<refpurpose>an image item.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasImage-struct">GooCanvasImage</link>;
+<link linkend="GooCanvasItem">GooCanvasItem</link>*      <link linkend="goo-canvas-image-new">goo_canvas_image_new</link>                (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="GdkPixbuf">GdkPixbuf</link> *pixbuf,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         ...);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link>
+         +----GooCanvasImage
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasImage implements
+ <link linkend="GooCanvasItem">GooCanvasItem</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasImage--height">height</link>&quot;                   <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasImage--pattern">pattern</link>&quot;                  <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write
+  &quot;<link linkend="GooCanvasImage--pixbuf">pixbuf</link>&quot;                   <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write
+  &quot;<link linkend="GooCanvasImage--width">width</link>&quot;                    <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasImage--x">x</link>&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasImage--y">y</link>&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+GooCanvasImage represents an image item.
+</para>
+<para>
+It is a subclass of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link> and so inherits all of the style
+properties such as "operator" and "pointer-events".
+</para>
+<para>
+It also implements the <link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> interface, so you can use the
+<link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> functions such as <link linkend="goo-canvas-item-raise"><function>goo_canvas_item_raise()</function></link> and
+<link linkend="goo-canvas-item-rotate"><function>goo_canvas_item_rotate()</function></link>.
+</para>
+<para>
+To create a <link linkend="GooCanvasImage"><type>GooCanvasImage</type></link> use <link linkend="goo-canvas-image-new"><function>goo_canvas_image_new()</function></link>.
+</para>
+<para>
+To get or set the properties of an existing <link linkend="GooCanvasImage"><type>GooCanvasImage</type></link>, use
+<link linkend="g-object-get"><function>g_object_get()</function></link> and <link linkend="g-object-set"><function>g_object_set()</function></link>.</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasImage-struct" role="struct"/>GooCanvasImage</title>
+<indexterm><primary>GooCanvasImage</primary></indexterm><programlisting>typedef struct _GooCanvasImage GooCanvasImage;</programlisting>
+<para>
+The <link linkend="GooCanvasImage-struct"><type>GooCanvasImage</type></link> struct contains private data only.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-image-new" role="function"/>goo_canvas_image_new ()</title>
+<indexterm><primary>goo_canvas_image_new</primary></indexterm><programlisting><link linkend="GooCanvasItem">GooCanvasItem</link>*      goo_canvas_image_new                (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="GdkPixbuf">GdkPixbuf</link> *pixbuf,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         ...);</programlisting>
+<para>
+Creates a new image item.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <link linkend="g-object-unref"><function>g_object_unref()</function></link> to free it.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>pixbuf</parameter>&nbsp;:</term>
+<listitem><simpara> the <link linkend="GdkPixbuf"><type>GdkPixbuf</type></link> containing the image data, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>x</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the image.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>y</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the image.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new image item.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create an image at (100.0, 100.0), using
+the given pixbuf at its natural width and height:
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItem *image = goo_canvas_image_new (mygroup, pixbuf, 100.0, 100.0,
+                                              NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasImage--height"/>The &quot;<literal>height</literal>&quot; property</title>
+<indexterm><primary>GooCanvasImage:height</primary></indexterm><programlisting>  &quot;height&quot;                   <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The height of the image.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasImage--pattern"/>The &quot;<literal>pattern</literal>&quot; property</title>
+<indexterm><primary>GooCanvasImage:pattern</primary></indexterm><programlisting>  &quot;pattern&quot;                  <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write</programlisting>
+<para>The cairo pattern to paint.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasImage--pixbuf"/>The &quot;<literal>pixbuf</literal>&quot; property</title>
+<indexterm><primary>GooCanvasImage:pixbuf</primary></indexterm><programlisting>  &quot;pixbuf&quot;                   <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write</programlisting>
+<para>The GdkPixbuf to display.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasImage--width"/>The &quot;<literal>width</literal>&quot; property</title>
+<indexterm><primary>GooCanvasImage:width</primary></indexterm><programlisting>  &quot;width&quot;                    <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The width of the image.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasImage--x"/>The &quot;<literal>x</literal>&quot; property</title>
+<indexterm><primary>GooCanvasImage:x</primary></indexterm><programlisting>  &quot;x&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The x coordinate of the image.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasImage--y"/>The &quot;<literal>y</literal>&quot; property</title>
+<indexterm><primary>GooCanvasImage:y</primary></indexterm><programlisting>  &quot;y&quot;                        <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The y coordinate of the image.</para><para>Default value: 0</para>
+</refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

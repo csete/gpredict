@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasPath">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasPath</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasPath</refname>
+<refpurpose>a path item (a series of lines and curves).</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasPath-struct">GooCanvasPath</link>;
+<link linkend="GooCanvasItem">GooCanvasItem</link>*      <link linkend="goo-canvas-path-new">goo_canvas_path_new</link>                 (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         const <link linkend="gchar">gchar</link> *path_data,
+                                                         ...);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link>
+         +----GooCanvasPath
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasPath implements
+ <link linkend="GooCanvasItem">GooCanvasItem</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasPath--data">data</link>&quot;                     <link linkend="gchararray">gchararray</link>            : Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+GooCanvasPath represents a path item, which is a series of one or more
+lines, bezier curves, or elliptical arcs.
+</para>
+<para>
+It is a subclass of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link> and so inherits all of the style
+properties such as "stroke-color", "fill-color" and "line-width".
+</para>
+<para>
+It also implements the <link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> interface, so you can use the
+<link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> functions such as <link linkend="goo-canvas-item-raise"><function>goo_canvas_item_raise()</function></link> and
+<link linkend="goo-canvas-item-rotate"><function>goo_canvas_item_rotate()</function></link>.
+</para>
+<para>
+<link linkend="GooCanvasPath"><type>GooCanvasPath</type></link> uses the same path specification strings as the Scalable
+Vector Graphics (SVG) path element. For details see the
+<ulink url="http://www.w3.org/Graphics/SVG/">SVG specification</ulink>.
+</para>
+<para>
+To create a <link linkend="GooCanvasPath"><type>GooCanvasPath</type></link> use <link linkend="goo-canvas-path-new"><function>goo_canvas_path_new()</function></link>.
+</para>
+<para>
+To get or set the properties of an existing <link linkend="GooCanvasPath"><type>GooCanvasPath</type></link>, use
+<link linkend="g-object-get"><function>g_object_get()</function></link> and <link linkend="g-object-set"><function>g_object_set()</function></link>.</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasPath-struct" role="struct"/>GooCanvasPath</title>
+<indexterm><primary>GooCanvasPath</primary></indexterm><programlisting>typedef struct _GooCanvasPath GooCanvasPath;</programlisting>
+<para>
+The <link linkend="GooCanvasPath-struct"><type>GooCanvasPath</type></link> struct contains private data only.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-path-new" role="function"/>goo_canvas_path_new ()</title>
+<indexterm><primary>goo_canvas_path_new</primary></indexterm><programlisting><link linkend="GooCanvasItem">GooCanvasItem</link>*      goo_canvas_path_new                 (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         const <link linkend="gchar">gchar</link> *path_data,
+                                                         ...);</programlisting>
+<para>
+Creates a new path item.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <link linkend="g-object-unref"><function>g_object_unref()</function></link> to free it.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>path_data</parameter>&nbsp;:</term>
+<listitem><simpara> the sequence of path commands, specified as a string using the
+ same syntax as in the <ulink url="http://www.w3.org/Graphics/SVG/">Scalable
+ Vector Graphics (SVG)</ulink> path element.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new path item.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create a red line from (20,20) to (40,40):
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItem *path = goo_canvas_path_new (mygroup,
+                                            "M 20 20 L 40 40",
+                                            "stroke-color", "red",
+                                            NULL);
+</programlisting></informalexample>
+</para>
+<para>
+This example creates a cubic bezier curve from (20,100) to (100,100) with
+the control points at (20,50) and (100,50):
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItem *path = goo_canvas_path_new (mygroup,
+                                            "M20,100 C20,50 100,50 100,100",
+                                            "stroke-color", "blue",
+                                            NULL);
+</programlisting></informalexample>
+</para>
+<para>
+This example uses an elliptical arc to create a filled circle with one
+quarter missing:
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItem *path = goo_canvas_path_new (mygroup,
+                                            "M200,500 h-150 a150,150 0 1,0 150,-150 z",
+                                            "fill-color", "red",
+                                            "stroke-color", "blue",
+                                            "line-width", 5.0,
+                                            NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasPath--data"/>The &quot;<literal>data</literal>&quot; property</title>
+<indexterm><primary>GooCanvasPath:data</primary></indexterm><programlisting>  &quot;data&quot;                     <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>
+The sequence of path commands, specified as a string using the same syntax
+as in the <ulink url="http://www.w3.org/Graphics/SVG/">Scalable Vector
+Graphics (SVG)</ulink> path element.</para>
+<para>
+
+</para><para>Default value: NULL</para>
+</refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

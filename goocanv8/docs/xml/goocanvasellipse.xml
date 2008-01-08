@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasEllipse">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasEllipse</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasEllipse</refname>
+<refpurpose>an ellipse item.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasEllipse-struct">GooCanvasEllipse</link>;
+<link linkend="GooCanvasItem">GooCanvasItem</link>*      <link linkend="goo-canvas-ellipse-new">goo_canvas_ellipse_new</link>              (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="gdouble">gdouble</link> center_x,
+                                                         <link linkend="gdouble">gdouble</link> center_y,
+                                                         <link linkend="gdouble">gdouble</link> radius_x,
+                                                         <link linkend="gdouble">gdouble</link> radius_y,
+                                                         ...);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link>
+         +----GooCanvasEllipse
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasEllipse implements
+ <link linkend="GooCanvasItem">GooCanvasItem</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasEllipse--center-x">center-x</link>&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasEllipse--center-y">center-y</link>&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasEllipse--radius-x">radius-x</link>&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasEllipse--radius-y">radius-y</link>&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+GooCanvasEllipse represents an ellipse item.
+</para>
+<para>
+It is a subclass of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link> and so inherits all of the style
+properties such as "stroke-color", "fill-color" and "line-width".
+</para>
+<para>
+It also implements the <link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> interface, so you can use the
+<link linkend="GooCanvasItem"><type>GooCanvasItem</type></link> functions such as <link linkend="goo-canvas-item-raise"><function>goo_canvas_item_raise()</function></link> and
+<link linkend="goo-canvas-item-rotate"><function>goo_canvas_item_rotate()</function></link>.
+</para>
+<para>
+To create a <link linkend="GooCanvasEllipse"><type>GooCanvasEllipse</type></link> use <link linkend="goo-canvas-ellipse-new"><function>goo_canvas_ellipse_new()</function></link>.
+</para>
+<para>
+To get or set the properties of an existing <link linkend="GooCanvasEllipse"><type>GooCanvasEllipse</type></link>, use
+<link linkend="g-object-get"><function>g_object_get()</function></link> and <link linkend="g-object-set"><function>g_object_set()</function></link>.</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasEllipse-struct" role="struct"/>GooCanvasEllipse</title>
+<indexterm><primary>GooCanvasEllipse</primary></indexterm><programlisting>typedef struct _GooCanvasEllipse GooCanvasEllipse;</programlisting>
+<para>
+The <link linkend="GooCanvasEllipse-struct"><type>GooCanvasEllipse</type></link> struct contains private data only.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-ellipse-new" role="function"/>goo_canvas_ellipse_new ()</title>
+<indexterm><primary>goo_canvas_ellipse_new</primary></indexterm><programlisting><link linkend="GooCanvasItem">GooCanvasItem</link>*      goo_canvas_ellipse_new              (<link linkend="GooCanvasItem">GooCanvasItem</link> *parent,
+                                                         <link linkend="gdouble">gdouble</link> center_x,
+                                                         <link linkend="gdouble">gdouble</link> center_y,
+                                                         <link linkend="gdouble">gdouble</link> radius_x,
+                                                         <link linkend="gdouble">gdouble</link> radius_y,
+                                                         ...);</programlisting>
+<para>
+Creates a new ellipse item.
+</para>
+<variablelist role="params">
+<varlistentry><term><parameter>parent</parameter>&nbsp;:</term>
+<listitem><simpara> the parent item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>. If a parent is specified, it will assume
+ ownership of the item, and the item will automatically be freed when it is
+ removed from the parent. Otherwise call <link linkend="g-object-unref"><function>g_object_unref()</function></link> to free it.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>center_x</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the center of the ellipse.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>center_y</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the center of the ellipse.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>radius_x</parameter>&nbsp;:</term>
+<listitem><simpara> the horizontal radius of the ellipse.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>radius_y</parameter>&nbsp;:</term>
+<listitem><simpara> the vertical radius of the ellipse.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> optional pairs of property names and values, and a terminating <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new ellipse item.
+</simpara></listitem></varlistentry>
+</variablelist>
+<para>
+Here's an example showing how to create an ellipse centered at (100.0,
+100.0), with a horizontal radius of 50.0 and a vertical radius of 30.0.
+It is drawn with a red outline with a width of 5.0 and filled with blue:
+</para>
+<para>
+<informalexample><programlisting>
+ GooCanvasItem *ellipse = goo_canvas_ellipse_new (mygroup, 100.0, 100.0, 50.0, 30.0,
+                                                  "stroke-color", "red",
+                                                  "line-width", 5.0,
+                                                  "fill-color", "blue",
+                                                  NULL);
+</programlisting></informalexample></para>
+<para>
+
+</para></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasEllipse--center-x"/>The &quot;<literal>center-x</literal>&quot; property</title>
+<indexterm><primary>GooCanvasEllipse:center-x</primary></indexterm><programlisting>  &quot;center-x&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The x coordinate of the center of the ellipse.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasEllipse--center-y"/>The &quot;<literal>center-y</literal>&quot; property</title>
+<indexterm><primary>GooCanvasEllipse:center-y</primary></indexterm><programlisting>  &quot;center-y&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The y coordinate of the center of the ellipse.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasEllipse--radius-x"/>The &quot;<literal>radius-x</literal>&quot; property</title>
+<indexterm><primary>GooCanvasEllipse:radius-x</primary></indexterm><programlisting>  &quot;radius-x&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The horizontal radius of the ellipse.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasEllipse--radius-y"/>The &quot;<literal>radius-y</literal>&quot; property</title>
+<indexterm><primary>GooCanvasEllipse:radius-y</primary></indexterm><programlisting>  &quot;radius-y&quot;                 <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The vertical radius of the ellipse.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

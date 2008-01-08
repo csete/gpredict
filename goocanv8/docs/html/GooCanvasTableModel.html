@@ -1,0 +1,533 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasTableModel</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="prev" href="GooCanvasTextModel.html" title="GooCanvasTextModel">
+<link rel="next" href="ch05.html" title="Miscellaneous">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GooCanvasTextModel.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch04.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="ch05.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3040624" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3122637" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3038647" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3120167" class="shortcut">Implemented Interfaces</a>
+                  &#160;|&#160;
+                  <a href="#id3120188" class="shortcut">Properties</a>
+                  &#160;|&#160;
+                  <a href="#id3122427" class="shortcut">Child Properties</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="GooCanvasTableModel"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3040624"></a><span class="refentrytitle">GooCanvasTableModel</span>
+</h2>
+<p>GooCanvasTableModel &#8212; a model for a table container to layout items.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<pre class="synopsis">
+
+
+
+                    <a href="GooCanvasTableModel.html#GooCanvasTableModel-struct">GooCanvasTableModel</a>;
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* <a href="GooCanvasTableModel.html#goo-canvas-table-model-new">goo_canvas_table_model_new</a>          (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent,
+                                                         ...);
+
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3038647"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>
+   +----<a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple">GooCanvasItemModelSimple</a>
+         +----<a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel">GooCanvasGroupModel</a>
+               +----GooCanvasTableModel
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3120167"></a><h2>Implemented Interfaces</h2>
+<p>
+GooCanvasTableModel implements
+ <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3120188"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--column-spacing">column-spacing</a>"           <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--height">height</a>"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--homogeneous-columns">homogeneous-columns</a>"      <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--homogeneous-rows">homogeneous-rows</a>"         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--row-spacing">row-spacing</a>"              <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--width">width</a>"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3122427"></a><h2>Child Properties</h2>
+<pre class="synopsis">
+
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--bottom-padding">bottom-padding</a>"           <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--column">column</a>"                   <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--columns">columns</a>"                  <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--left-padding">left-padding</a>"             <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--right-padding">right-padding</a>"            <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--row">row</a>"                      <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--rows">rows</a>"                     <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--top-padding">top-padding</a>"              <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--x-align">x-align</a>"                  <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--x-expand">x-expand</a>"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--x-fill">x-fill</a>"                   <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--x-shrink">x-shrink</a>"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--y-align">y-align</a>"                  <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--y-expand">y-expand</a>"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--y-fill">y-fill</a>"                   <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="GooCanvasTableModel.html#GooCanvasTableModel--y-shrink">y-shrink</a>"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3122637"></a><h2>Description</h2>
+<p>
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a> is a model for a table container used to lay out other
+canvas items. It is used in a similar way to how the GtkTable widget is used
+to lay out GTK+ widgets.
+</p>
+<p>
+Item models are added to the table using the normal methods, then
+<a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-child-properties"><code class="function">goo_canvas_item_model_set_child_properties()</code></a> is used to specify how each
+child item is to be positioned within the table (i.e. which row and column
+it is in, how much padding it should have and whether it should expand or
+shrink).
+</p>
+<p>
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a> is a subclass of <a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple"><span class="type">GooCanvasItemModelSimple</span></a> and so
+inherits all of the style properties such as "stroke-color", "fill-color"
+and "line-width". Setting a style property on a <a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a> will
+affect all children of the <a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a> (unless the children
+override the property setting).
+</p>
+<p>
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a> implements the <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> interface, so you
+can use the <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> functions such as
+<a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-raise"><code class="function">goo_canvas_item_model_raise()</code></a> and <a href="goocanvas-goocanvasitem.html#goo-canvas-item-rotate"><code class="function">goo_canvas_item_rotate()</code></a>, and the
+properties such as "visibility" and "pointer-events".
+</p>
+<p>
+To create a <a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a> use <a href="GooCanvasTableModel.html#goo-canvas-table-model-new"><code class="function">goo_canvas_table_model_new()</code></a>.
+</p>
+<p>
+To get or set the properties of an existing <a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>, use
+<a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-get"
+><code class="function">g_object_get()</code></a> and <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-set"
+><code class="function">g_object_set()</code></a>.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3120666"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3120677"></a><h3>
+<a name="GooCanvasTableModel-struct"></a>GooCanvasTableModel</h3>
+<a class="indexterm" name="id3120688"></a><pre class="programlisting">typedef struct _GooCanvasTableModel GooCanvasTableModel;</pre>
+<p>
+The <a href="GooCanvasTableModel.html#GooCanvasTableModel-struct"><span class="type">GooCanvasTableModel</span></a> struct contains private data only.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3120716"></a><h3>
+<a name="goo-canvas-table-model-new"></a>goo_canvas_table_model_new ()</h3>
+<a class="indexterm" name="id3120728"></a><pre class="programlisting"><a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* goo_canvas_table_model_new          (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent,
+                                                         ...);</pre>
+<p>
+Creates a new table model.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the parent model, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>. If a parent is specified, it will
+ assume ownership of the item, and the item will automatically be freed when
+ it is removed from the parent. Otherwise call <a
+href="../gobject/gobject-The-Base-Object-Type.html#g-object-unref"
+><code class="function">g_object_unref()</code></a> to free it.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> optional pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a new table model.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>
+Here's an example showing how to create a table with a square, a circle and
+a triangle in it:
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GooCanvasItemModel *table, *square, *circle, *triangle;
+
+ table = goo_canvas_table_model_new (root,
+                                     "row-spacing", 4.0,
+                                     "column-spacing", 4.0,
+                                     NULL);
+ goo_canvas_item_model_translate (table, 400, 200);
+
+ square = goo_canvas_rect_model_new (table, 0.0, 0.0, 50.0, 50.0,
+                                     "fill-color", "red",
+                                     NULL);
+ goo_canvas_item_model_set_child_properties (table, square,
+                                             "row", 0,
+                                             "column", 0,
+                                             NULL);
+
+ circle = goo_canvas_ellipse_model_new (table, 0.0, 0.0, 25.0, 25.0,
+                                        "fill-color", "blue",
+                                        NULL);
+ goo_canvas_item_model_set_child_properties (table, circle,
+                                             "row", 0,
+                                             "column", 1,
+                                             NULL);
+
+ triangle = goo_canvas_polyline_model_new (table, TRUE, 3,
+                                           25.0, 0.0, 0.0, 50.0, 50.0, 50.0,
+                                           "fill-color", "yellow",
+                                           NULL);
+ goo_canvas_item_model_set_child_properties (table, triangle,
+                                             "row", 0,
+                                             "column", 2,
+                                             NULL);
+</pre></div>
+<p>
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3056307"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3040359"></a><h3>
+<a name="GooCanvasTableModel--column-spacing"></a>The "<code class="literal">column-spacing</code>" property</h3>
+<a class="indexterm" name="id3120872"></a><pre class="programlisting">  "column-spacing"           <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The default space between columns.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3120901"></a><h3>
+<a name="GooCanvasTableModel--height"></a>The "<code class="literal">height</code>" property</h3>
+<a class="indexterm" name="id3120915"></a><pre class="programlisting">  "height"                   <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The requested height of the table, or -1 to use the default height.</p>
+<p>Default value: -1</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3120942"></a><h3>
+<a name="GooCanvasTableModel--homogeneous-columns"></a>The "<code class="literal">homogeneous-columns</code>" property</h3>
+<a class="indexterm" name="id3120958"></a><pre class="programlisting">  "homogeneous-columns"      <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If all columns are the same width.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124072"></a><h3>
+<a name="GooCanvasTableModel--homogeneous-rows"></a>The "<code class="literal">homogeneous-rows</code>" property</h3>
+<a class="indexterm" name="id3124087"></a><pre class="programlisting">  "homogeneous-rows"         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If all rows are the same height.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124111"></a><h3>
+<a name="GooCanvasTableModel--row-spacing"></a>The "<code class="literal">row-spacing</code>" property</h3>
+<a class="indexterm" name="id3124125"></a><pre class="programlisting">  "row-spacing"              <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The default space between rows.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124152"></a><h3>
+<a name="GooCanvasTableModel--width"></a>The "<code class="literal">width</code>" property</h3>
+<a class="indexterm" name="id3124165"></a><pre class="programlisting">  "width"                    <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The requested width of the table, or -1 to use the default width.</p>
+<p>Default value: -1</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3124191"></a><h2>Child Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3124201"></a><h3>
+<a name="GooCanvasTableModel--bottom-padding"></a>The "<code class="literal">bottom-padding</code>" child property</h3>
+<a class="indexterm" name="id3124215"></a><pre class="programlisting">  "bottom-padding"           <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>Extra space to add below the item.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124242"></a><h3>
+<a name="GooCanvasTableModel--column"></a>The "<code class="literal">column</code>" child property</h3>
+<a class="indexterm" name="id3124255"></a><pre class="programlisting">  "column"                   <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write</pre>
+<p>The column to place the item in.</p>
+<p>Allowed values: &lt;= 65535</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124282"></a><h3>
+<a name="GooCanvasTableModel--columns"></a>The "<code class="literal">columns</code>" child property</h3>
+<a class="indexterm" name="id3124297"></a><pre class="programlisting">  "columns"                  <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write</pre>
+<p>The number of columns that the item spans.</p>
+<p>Allowed values: &lt;= 65535</p>
+<p>Default value: 1</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124323"></a><h3>
+<a name="GooCanvasTableModel--left-padding"></a>The "<code class="literal">left-padding</code>" child property</h3>
+<a class="indexterm" name="id3124338"></a><pre class="programlisting">  "left-padding"             <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>Extra space to add to the left of the item.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124365"></a><h3>
+<a name="GooCanvasTableModel--right-padding"></a>The "<code class="literal">right-padding</code>" child property</h3>
+<a class="indexterm" name="id3124380"></a><pre class="programlisting">  "right-padding"            <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>Extra space to add to the right of the item.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124407"></a><h3>
+<a name="GooCanvasTableModel--row"></a>The "<code class="literal">row</code>" child property</h3>
+<a class="indexterm" name="id3124420"></a><pre class="programlisting">  "row"                      <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write</pre>
+<p>The row to place the item in.</p>
+<p>Allowed values: &lt;= 65535</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124447"></a><h3>
+<a name="GooCanvasTableModel--rows"></a>The "<code class="literal">rows</code>" child property</h3>
+<a class="indexterm" name="id3124459"></a><pre class="programlisting">  "rows"                     <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a>                 : Read / Write</pre>
+<p>The number of rows that the item spans.</p>
+<p>Allowed values: &lt;= 65535</p>
+<p>Default value: 1</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124487"></a><h3>
+<a name="GooCanvasTableModel--top-padding"></a>The "<code class="literal">top-padding</code>" child property</h3>
+<a class="indexterm" name="id3124501"></a><pre class="programlisting">  "top-padding"              <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>Extra space to add above the item.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124528"></a><h3>
+<a name="GooCanvasTableModel--x-align"></a>The "<code class="literal">x-align</code>" child property</h3>
+<a class="indexterm" name="id3124543"></a><pre class="programlisting">  "x-align"                  <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The horizontal position of the item within its allocated space. 0.0 is left-aligned, 1.0 is right-aligned.</p>
+<p>Allowed values: [0,1]</p>
+<p>Default value: 0.5</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124571"></a><h3>
+<a name="GooCanvasTableModel--x-expand"></a>The "<code class="literal">x-expand</code>" child property</h3>
+<a class="indexterm" name="id3124585"></a><pre class="programlisting">  "x-expand"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item expands horizontally as the table expands.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124610"></a><h3>
+<a name="GooCanvasTableModel--x-fill"></a>The "<code class="literal">x-fill</code>" child property</h3>
+<a class="indexterm" name="id3124622"></a><pre class="programlisting">  "x-fill"                   <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item fills all horizontal allocated space.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124646"></a><h3>
+<a name="GooCanvasTableModel--x-shrink"></a>The "<code class="literal">x-shrink</code>" child property</h3>
+<a class="indexterm" name="id3124661"></a><pre class="programlisting">  "x-shrink"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item can shrink smaller than its requested size horizontally.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124686"></a><h3>
+<a name="GooCanvasTableModel--y-align"></a>The "<code class="literal">y-align</code>" child property</h3>
+<a class="indexterm" name="id3124700"></a><pre class="programlisting">  "y-align"                  <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The vertical position of the item within its allocated space. 0.0 is top-aligned, 1.0 is bottom-aligned.</p>
+<p>Allowed values: [0,1]</p>
+<p>Default value: 0.5</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124728"></a><h3>
+<a name="GooCanvasTableModel--y-expand"></a>The "<code class="literal">y-expand</code>" child property</h3>
+<a class="indexterm" name="id3124742"></a><pre class="programlisting">  "y-expand"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item expands vertically as the table expands.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124767"></a><h3>
+<a name="GooCanvasTableModel--y-fill"></a>The "<code class="literal">y-fill</code>" child property</h3>
+<a class="indexterm" name="id3124779"></a><pre class="programlisting">  "y-fill"                   <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item fills all vertical allocated space.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3124804"></a><h3>
+<a name="GooCanvasTableModel--y-shrink"></a>The "<code class="literal">y-shrink</code>" child property</h3>
+<a class="indexterm" name="id3124818"></a><pre class="programlisting">  "y-shrink"                 <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item can shrink smaller than its requested size vertically.</p>
+<p>Default value: FALSE</p>
+</div>
+</div>
+</div>
+</body>
+</html>

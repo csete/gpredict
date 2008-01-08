@@ -1,0 +1,84 @@
+Notes on time keeping in gpredict
+---------------------------------
+
+The SGP4/SDP4 algorithms require the time since Epoch in minutes (tsince). The
+sat_t data structure, on the other hand, keeps the Epoch time and the current
+time as Julian dates. They can be obtained using the Julian_Date_of_Epoch and
+get_current_daynum functions. To obtain tsince, on can simply multiply the
+difference between these two with the number of minutes per day:
+
+tsince = (sat->jul_utc - sat->jul_epoch) * xmnpd
+
+Similiarly, when predicting passes, a specific Julian date can be obtained from
+tsince by dividing tsince with the number of minutes per day and adding the
+Epoch time as Julian date to it:
+
+jul_day(AOS) = tsince(AOS)/xmnpd + sat->jul_epoch
+
+
+The file sgpsdp/sgp_time.c contains many other functions that can be used to
+convert between calendar date/time and Julian date.
+
+
+Nomenclature
+------------
+
+Julian day
+The Julian day or Julian day number (JDN) is the number of days that have
+elapsed since 12 noon Greenwich Mean Time (UT or TT) on Monday, January 1,
+4713 BC in the proleptic Julian calendar.
+
+Julian date
+The Julian Date (JD) is the Julian day number plus the decimal fraction of the
+day that has elapsed since noon.
+
+
+The Time Manager
+----------------
+Each module has its own built-in time manager, which keeps track of the module
+time. Besides real-time, gpredict also allows the user to use simulated real-time
+and manual time keeping individually for each module. Each of these are described
+in following.
+
+Real-time:
+The clock of the module is synchronised to the system time in a 1:1 relation.
+
+Simulated real-time:
+Also called time-throttling. The clock of the module is synchronised to the
+system time in a 1:N relation, where N is an integer. Thus, if N=2, for every
+second the module time will be incremented by 2 seconds. If N=-2, the module
+time will be decremented with 2 seconds in every second.
+
+Manual:
+When using this option, the time of the module is frozen. The user can then
+scroll forward and backward in time using various controls. The time
+resolution here is 1 second.
+
+By default, each module will use real-time. In irder to enter another time
+keeping state, the user has to open the Time Manager from the module pop-up
+menu.
+
+Fortunately, the implementation of GtkSatModule is very generic where time is
+simply a state variable. A module will thus not care about whether the time
+is acquires is real-time or simulated time.
+
+Time keeping works by using a throttling state variable that indicates how
+the time should be incremented. This state variable is a signed integer with
+following values:
+
+ 0: Paused; in this state the time is kept constant in every cycle but it is
+    adjustable by the user using various controls.
+
+ 1: Real time; in every cycle the time manager reads the current system time
+    and performs the update according to this time.
+
+Any other value indicated simulated real-time indicating the throttling factor
+that is applied to the actual real-time. For example a value of 2 will take
+twice as big steps as the real-time clock. Negative values have the same
+meaning but in backwards direction.
+
+By default, the module starts up in real-time mode, i.e. throttle = 1. Via the
+module pop-up menu, the user can bring up the "Time Controller" window
+containing various widgets to control the throttling state.
+
+

@@ -1,0 +1,38 @@
+
+Bugs
+
+ o Currently the canvas widget must be placed in a GTK+ window before any
+   calls are used that would cause a canvas update.
+   This is because the canvas needs a window to create a cairo_t to do the
+   position calculations. We may use a temporary image cairo_t in future to
+   avoid this issue.
+
+ o I need to check the bounds are being calculated correctly so that they
+   are correct for all zoom settings. Since cairo uses fixed point maths
+   and I think only calculates up to a certain tolerance there might be
+   slight errors in our gdouble results. So as the canvas is scaled this
+   could eventually lead to the bounds being a pixel out, leading to painting
+   errors. Maybe we should extend any bounds returned from cairo slightly to
+   cover the maximum possible errors.
+
+ o GooCanvasImage - redrawing artifacts in demo when zoom>1.
+   Seems to be a bug in cairo, introduced in 1.3.12.
+   See http://bugs.freedesktop.org/show_bug.cgi?id=10508
+
+
+Features definitely needed:
+
+ o Editable text item - a port of GtkTextView.
+ o Tooltips - I have code to support tooltips using the new API in GTK+ 2.12.
+
+
+Possible additional features:
+
+ o Caching of rendered items to improve performance. Items would have a cache
+   option with choices like Never, Always and WhenVisible.
+ o Sticky items that don't move at all as the canvas is scrolled & zoomed.
+ o Filters like in SVG, to add graphical effects.
+ o Support using the same item in different places, like SVG 'use'.
+ o Support using system color names, like SVG, e.g. "ActiveBorder".
+   This helps you write widget-like items that fit in with the rest of GTK+.
+

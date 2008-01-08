@@ -1,0 +1,802 @@
+# Japanese translation for GooCanvas
+# Copyright (C) 2007 Kouhei Sutou <kou@cozmixng.org>
+# This file is distributed under the same license as the GooCanvas package.
+# Kouhei Sutou <kou@cozmixng.org>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GooCanvas CVS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-04-03 10:58+0100\n"
+"PO-Revision-Date: 2007-02-15 23:39+0900\n"
+"Last-Translator: kou@cozmixng.org <kou@cozmixng.org>\n"
+"Language-Team:\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/goocanvas.c:246
+msgid "Scale"
+msgstr "スケール"
+
+#: src/goocanvas.c:247
+msgid "The magnification factor of the canvas"
+msgstr "キャンバスの拡大率"
+
+#: src/goocanvas.c:253 src/goocanvastext.c:117 src/goocanvaswidget.c:549
+msgid "Anchor"
+msgstr "アンカー"
+
+#: src/goocanvas.c:254
+msgid ""
+"Where to place the canvas when it is smaller than the widget's allocated area"
+msgstr "ウィジェットの領域よりも小さくなったときにキャンバスをどこにおくか"
+
+#: src/goocanvas.c:261
+msgid "X1"
+msgstr "X1"
+
+#: src/goocanvas.c:262
+msgid "The x coordinate of the left edge of the canvas bounds, in canvas units"
+msgstr "キャンバス左端の X 座標 (キャンバスの単位で指定)"
+
+#: src/goocanvas.c:269
+msgid "Y1"
+msgstr "Y1"
+
+#: src/goocanvas.c:270
+msgid "The y coordinate of the top edge of the canvas bounds, in canvas units"
+msgstr "キャンバス上端の Y 座標 (キャンバスの単位で指定)"
+
+#: src/goocanvas.c:277
+msgid "X2"
+msgstr "X2"
+
+#: src/goocanvas.c:278
+msgid ""
+"The x coordinate of the right edge of the canvas bounds, in canvas units"
+msgstr "キャンバス右端の X 座標 (キャンバスの単位で指定)"
+
+#: src/goocanvas.c:285
+msgid "Y2"
+msgstr "Y2"
+
+#: src/goocanvas.c:286
+msgid ""
+"The y coordinate of the bottom edge of the canvas bounds, in canvas units"
+msgstr "キャンバス下端の Y 座標 (キャンバスの単位で指定)"
+
+#: src/goocanvas.c:294
+msgid "Units"
+msgstr "単位"
+
+#: src/goocanvas.c:295
+msgid "The units to use for the canvas"
+msgstr "キャンバスで使う単位"
+
+#: src/goocanvas.c:302
+msgid "Resolution X"
+msgstr "X 方向の解像度"
+
+#: src/goocanvas.c:303
+msgid "The horizontal resolution of the display, in dots per inch"
+msgstr "画面の水平解像度 (ドット/インチ、DPI)"
+
+#: src/goocanvas.c:310
+msgid "Resolution Y"
+msgstr "Y 方向の解像度"
+
+#: src/goocanvas.c:311
+msgid "The vertical resolution of the display, in dots per inch"
+msgstr "画面の垂直解像度 (ドット/インチ、DPI)"
+
+#: src/goocanvas.c:319
+msgid "Background Color"
+msgstr ""
+
+#: src/goocanvas.c:320
+#, fuzzy
+msgid "The color to use for the canvas background"
+msgstr "キャンバスで使う単位"
+
+#: src/goocanvas.c:326
+#, fuzzy
+msgid "Background Color RGB"
+msgstr "ストローク用のRGBA表現の色"
+
+#: src/goocanvas.c:327
+#, fuzzy
+msgid ""
+"The color to use for the canvas background, specified as a 24-bit integer "
+"value, 0xRRGGBB"
+msgstr "32ビットの整数値で指定するアイテムの境界線の色"
+
+#: src/goocanvasellipse.c:68
+msgid "Center X"
+msgstr "中心の X 座標"
+
+#: src/goocanvasellipse.c:69
+msgid "The x coordinate of the center of the ellipse"
+msgstr "楕円の中心の X 座標"
+
+#: src/goocanvasellipse.c:76
+msgid "Center Y"
+msgstr "中心の Y 座標"
+
+#: src/goocanvasellipse.c:77
+msgid "The y coordinate of the center of the ellipse"
+msgstr "楕円の中心の Y 座標"
+
+#: src/goocanvasellipse.c:84 src/goocanvasrect.c:100
+msgid "Radius X"
+msgstr "半径の X 座標"
+
+#: src/goocanvasellipse.c:85
+msgid "The horizontal radius of the ellipse"
+msgstr "楕円の水平方向の半径"
+
+#: src/goocanvasellipse.c:91 src/goocanvasrect.c:107
+msgid "Radius Y"
+msgstr "半径の Y 座標"
+
+#: src/goocanvasellipse.c:92
+msgid "The vertical radius of the ellipse"
+msgstr "楕円の垂直方向の半径"
+
+#: src/goocanvasimage.c:72
+msgid "Pattern"
+msgstr "パターン"
+
+#: src/goocanvasimage.c:73
+msgid "The cairo pattern to paint"
+msgstr "塗りつぶし用の cairo のパターン"
+
+#: src/goocanvasimage.c:80
+msgid "The x coordinate of the image"
+msgstr "画像の X 座標"
+
+#: src/goocanvasimage.c:88
+msgid "The y coordinate of the image"
+msgstr "画像の Y 座標"
+
+#: src/goocanvasimage.c:95 src/goocanvasrect.c:86 src/goocanvastable.c:186
+#: src/goocanvastext.c:109 src/goocanvaswidget.c:533
+msgid "Width"
+msgstr "幅"
+
+#: src/goocanvasimage.c:96
+msgid "The width of the image"
+msgstr "画像の幅"
+
+#: src/goocanvasimage.c:102 src/goocanvasrect.c:93 src/goocanvastable.c:193
+#: src/goocanvaswidget.c:541
+msgid "Height"
+msgstr "高さ"
+
+#: src/goocanvasimage.c:103
+msgid "The height of the image"
+msgstr "画像の高さ"
+
+#: src/goocanvasimage.c:109
+msgid "Pixbuf"
+msgstr "Pixbuf"
+
+#: src/goocanvasimage.c:110
+msgid "The GdkPixbuf to display"
+msgstr "表示するGdkPixbuf"
+
+#: src/goocanvasitem.c:379 src/goocanvasitemmodel.c:195
+msgid "Parent"
+msgstr "親"
+
+#: src/goocanvasitem.c:380
+msgid "The parent item"
+msgstr "親アイテム"
+
+#: src/goocanvasitem.c:386 src/goocanvasitemmodel.c:202
+msgid "Visibility"
+msgstr "可視性"
+
+#: src/goocanvasitem.c:387 src/goocanvasitemmodel.c:203
+msgid "When the canvas item is visible"
+msgstr "いつキャンバスアイテムが見えるか"
+
+#: src/goocanvasitem.c:394 src/goocanvasitemmodel.c:210
+msgid "Visibility Threshold"
+msgstr "可視性のしきい値"
+
+#: src/goocanvasitem.c:395 src/goocanvasitemmodel.c:211
+msgid "The scale threshold at which the item becomes visible"
+msgstr "アイテムが見えるようになる倍率のしきい値"
+
+#: src/goocanvasitem.c:403 src/goocanvasitemmodel.c:219
+msgid "Transform"
+msgstr "変換"
+
+#: src/goocanvasitem.c:404 src/goocanvasitemmodel.c:220
+msgid "The transformation matrix of the item"
+msgstr "アイテムの変換行列"
+
+#: src/goocanvasitem.c:410 src/goocanvasitemmodel.c:226
+msgid "Pointer Events"
+msgstr "ポインタイベント"
+
+#: src/goocanvasitem.c:411 src/goocanvasitemmodel.c:227
+msgid "Specifies when the item receives pointer events"
+msgstr "いつアイテムがポインタイベントを受け取るか指定します"
+
+#: src/goocanvasitem.c:418 src/goocanvasitemmodel.c:234
+msgid "Title"
+msgstr "タイトル"
+
+#: src/goocanvasitem.c:419 src/goocanvasitemmodel.c:235
+msgid ""
+"A short context-rich description of the item for use by assistive "
+"technologies"
+msgstr "支援技術用の短い文脈豊富な説明"
+
+#: src/goocanvasitem.c:425 src/goocanvasitemmodel.c:241
+msgid "Description"
+msgstr "説明"
+
+#: src/goocanvasitem.c:426 src/goocanvasitemmodel.c:242
+msgid "A description of the item for use by assistive technologies"
+msgstr "支援技術用の説明"
+
+#: src/goocanvasitem.c:432 src/goocanvasitemmodel.c:248
+msgid "Can Focus"
+msgstr "フォーカス可否"
+
+#: src/goocanvasitem.c:433 src/goocanvasitemmodel.c:249
+msgid "If the item can take the keyboard focus"
+msgstr "アイテムはキーボードフォーカスを受け付けるかどうか"
+
+#: src/goocanvasitemmodel.c:196
+msgid "The parent item model"
+msgstr "親アイテムモデル"
+
+#: src/goocanvasitemsimple.c:110
+msgid "Stroke Pattern"
+msgstr "ストローク用パターン"
+
+#: src/goocanvasitemsimple.c:111
+#, fuzzy
+msgid ""
+"The pattern to use to paint the perimeter of the item, or NULL disable "
+"painting"
+msgstr "アイテムの境界線を塗りつぶすために使うパターン"
+
+#: src/goocanvasitemsimple.c:117
+msgid "Fill Pattern"
+msgstr "塗りつぶし用パターン"
+
+#: src/goocanvasitemsimple.c:118
+#, fuzzy
+msgid ""
+"The pattern to use to paint the interior of the item, or NULL to disable "
+"painting"
+msgstr "アイテムの内側を塗りつぶすためのパターン"
+
+#: src/goocanvasitemsimple.c:124
+msgid "Fill Rule"
+msgstr "塗りつぶし基準"
+
+#: src/goocanvasitemsimple.c:125
+msgid "The fill rule used to determine which parts of the item are filled"
+msgstr "アイテムの一部が塗りつぶされたかを判断するための塗りつぶし基準"
+
+#: src/goocanvasitemsimple.c:132
+msgid "Operator"
+msgstr "演算"
+
+#: src/goocanvasitemsimple.c:133
+msgid "The compositing operator to use"
+msgstr "使用する合成演算"
+
+#: src/goocanvasitemsimple.c:140
+msgid "Antialias"
+msgstr "アンチエイリアス"
+
+#: src/goocanvasitemsimple.c:141
+msgid "The antialiasing mode to use"
+msgstr "使用するアンチエイリアスモード"
+
+#: src/goocanvasitemsimple.c:149
+msgid "Line Width"
+msgstr "線幅"
+
+#: src/goocanvasitemsimple.c:150
+msgid "The line width to use for the item's perimeter"
+msgstr "アイテムの境界線に使う線幅"
+
+#: src/goocanvasitemsimple.c:156
+msgid "Line Cap"
+msgstr "線の頂点"
+
+#: src/goocanvasitemsimple.c:157
+msgid "The line cap style to use"
+msgstr "使用する線の頂点のスタイル"
+
+#: src/goocanvasitemsimple.c:164
+msgid "Line Join"
+msgstr "線の結合"
+
+#: src/goocanvasitemsimple.c:165
+msgid "The line join style to use"
+msgstr "使用する線の結合のスタイル"
+
+#: src/goocanvasitemsimple.c:172
+msgid "Miter Limit"
+msgstr "留め継ぎの境界"
+
+#: src/goocanvasitemsimple.c:173
+msgid ""
+"The smallest angle to use with miter joins, in degrees. Bevel joins will be "
+"used below this limit"
+msgstr ""
+"使用する留め継ぎの最小角度 (度数)。この境界値より低い場合はそぎ継ぎが使われま"
+"す"
+
+#: src/goocanvasitemsimple.c:179
+msgid "Line Dash"
+msgstr "線のダッシュ (-)"
+
+#: src/goocanvasitemsimple.c:180
+msgid "The dash pattern to use"
+msgstr "使用するダッシュ (-) のパターン"
+
+#: src/goocanvasitemsimple.c:187
+msgid "Font"
+msgstr "フォント"
+
+#: src/goocanvasitemsimple.c:188
+msgid "The base font to use for the text"
+msgstr "テキストに使う基底フォント"
+
+#: src/goocanvasitemsimple.c:194
+msgid "Font Description"
+msgstr "フォント記述"
+
+#: src/goocanvasitemsimple.c:195
+msgid "The attributes specifying which font to use"
+msgstr "使用するフォントを特定する属性"
+
+#: src/goocanvasitemsimple.c:201
+msgid "Hint Metrics"
+msgstr ""
+
+#: src/goocanvasitemsimple.c:202
+#, fuzzy
+msgid "The hinting to be used for font metrics"
+msgstr "キャンバスで使う単位"
+
+#: src/goocanvasitemsimple.c:210
+msgid "Stroke Color"
+msgstr "ストローク用の色"
+
+#: src/goocanvasitemsimple.c:211
+#, fuzzy
+msgid ""
+"The color to use for the item's perimeter. To disable painting set the "
+"'stroke-pattern' property to NULL"
+msgstr "32ビットの整数値で指定するアイテムの境界線の色"
+
+#: src/goocanvasitemsimple.c:217
+msgid "Stroke Color RGBA"
+msgstr "ストローク用のRGBA表現の色"
+
+#: src/goocanvasitemsimple.c:218
+#, fuzzy
+msgid ""
+"The color to use for the item's perimeter, specified as a 32-bit integer "
+"value. To disable painting set the 'stroke-pattern' property to NULL"
+msgstr "32ビットの整数値で指定するアイテムの境界線の色"
+
+#: src/goocanvasitemsimple.c:224
+msgid "Stroke Pixbuf"
+msgstr "ストローク用のPixbuf"
+
+#: src/goocanvasitemsimple.c:225
+msgid ""
+"The pixbuf to use to draw the item's perimeter. To disable painting set the "
+"'stroke-pattern' property to NULL"
+msgstr ""
+
+#: src/goocanvasitemsimple.c:231
+msgid "Fill Color"
+msgstr "塗りつぶしの色"
+
+#: src/goocanvasitemsimple.c:232
+#, fuzzy
+msgid ""
+"The color to use to paint the interior of the item. To disable painting set "
+"the 'fill-pattern' property to NULL"
+msgstr "32ビットの整数値で指定するアイテムの内側を塗りつぶすために使う色"
+
+#: src/goocanvasitemsimple.c:238
+msgid "Fill Color RGBA"
+msgstr "塗りつぶし用のRGBA表現の色"
+
+#: src/goocanvasitemsimple.c:239
+#, fuzzy
+msgid ""
+"The color to use to paint the interior of the item, specified as a 32-bit "
+"integer value. To disable painting set the 'fill-pattern' property to NULL"
+msgstr "32ビットの整数値で指定するアイテムの内側を塗りつぶすために使う色"
+
+#: src/goocanvasitemsimple.c:245
+msgid "Fill Pixbuf"
+msgstr "塗りつぶし用Pixbuf"
+
+#: src/goocanvasitemsimple.c:246
+#, fuzzy
+msgid ""
+"The pixbuf to use to paint the interior of the item. To disable painting set "
+"the 'fill-pattern' property to NULL"
+msgstr "アイテムの内側を塗りつぶすために使うPixbuf"
+
+# 「切り抜き用」じゃなくて「クリッピング」の方がいい？
+#: src/goocanvasitemsimple.c:293
+msgid "Clip Path"
+msgstr "切り抜き用パス"
+
+#: src/goocanvasitemsimple.c:294
+msgid "The sequence of path commands specifying the clip path"
+msgstr "切り抜き用パスを指定するパスコマンドのならび"
+
+#: src/goocanvasitemsimple.c:300
+msgid "Clip Fill Rule"
+msgstr "切り抜き用塗りつぶし基準"
+
+#: src/goocanvasitemsimple.c:301
+msgid "The fill rule used to determine which parts of the item are clipped"
+msgstr "アイテムの一部が切り抜かれているかを判断するための塗りつぶし基準"
+
+#: src/goocanvaspath.c:75
+msgid "Path Data"
+msgstr "パスデータ"
+
+#: src/goocanvaspath.c:76
+msgid "The sequence of path commands"
+msgstr "パスコマンドのならび"
+
+#: src/goocanvaspolyline.c:146
+msgid "Points"
+msgstr "点"
+
+#: src/goocanvaspolyline.c:147
+msgid "The array of points"
+msgstr "点の配列"
+
+#: src/goocanvaspolyline.c:153
+msgid "Close Path"
+msgstr "パスを閉じる"
+
+#: src/goocanvaspolyline.c:154
+msgid "If the last point should be connected to the first"
+msgstr "最後の点が最初の点に結び付けるかどうか"
+
+#: src/goocanvaspolyline.c:160
+msgid "Start Arrow"
+msgstr "始点矢印"
+
+#: src/goocanvaspolyline.c:161
+msgid "If an arrow should be displayed at the start of the polyline"
+msgstr "多線形の始点に矢印を表示するかどうか"
+
+#: src/goocanvaspolyline.c:167
+msgid "End Arrow"
+msgstr "終点矢印"
+
+#: src/goocanvaspolyline.c:168
+msgid "If an arrow should be displayed at the end of the polyline"
+msgstr "多線形の終点に矢印を表示するかどうか"
+
+#: src/goocanvaspolyline.c:174
+msgid "Arrow Length"
+msgstr "矢印の長さ"
+
+#: src/goocanvaspolyline.c:175
+msgid "The length of the arrows, as a multiple of the line width"
+msgstr "矢印の長さ (線幅の倍数)"
+
+#: src/goocanvaspolyline.c:181
+msgid "Arrow Width"
+msgstr "矢印の幅"
+
+#: src/goocanvaspolyline.c:182
+msgid "The width of the arrows, as a multiple of the line width"
+msgstr "矢印の幅 (線幅の倍数)"
+
+#: src/goocanvaspolyline.c:188
+msgid "Arrow Tip Length"
+msgstr "矢印の先端の長さ"
+
+#: src/goocanvaspolyline.c:189
+msgid "The length of the arrow tip, as a multiple of the line width"
+msgstr "矢印の先端の長さ (線幅の倍数)"
+
+#: src/goocanvasrect.c:71
+msgid "The x coordinate of the rectangle"
+msgstr "長方形のx座標"
+
+#: src/goocanvasrect.c:79
+msgid "The y coordinate of the rectangle"
+msgstr "長方形のy座標"
+
+#: src/goocanvasrect.c:87
+msgid "The width of the rectangle"
+msgstr "長方形の幅"
+
+#: src/goocanvasrect.c:94
+msgid "The height of the rectangle"
+msgstr "長方形の高さ"
+
+#: src/goocanvasrect.c:101
+msgid "The horizontal radius to use for rounded corners"
+msgstr "丸角で使う水平半径"
+
+#: src/goocanvasrect.c:108
+msgid "The vertical radius to use for rounded corners"
+msgstr "丸角で使う垂直半径<"
+
+#: src/goocanvastable.c:187
+msgid "The requested width of the table, or -1 to use the default width"
+msgstr "要求する表の幅。デフォルトの幅を使うなら -1 です"
+
+#: src/goocanvastable.c:194
+msgid "The requested height of the table, or -1 to use the default height"
+msgstr "要求する表の高さ。デフォルトの高さを使うなら -1 です"
+
+#: src/goocanvastable.c:202
+msgid "Row spacing"
+msgstr "行の間隔"
+
+#: src/goocanvastable.c:203
+msgid "The default space between rows"
+msgstr "行の間のデフォルトの空白"
+
+#: src/goocanvastable.c:209
+msgid "Column spacing"
+msgstr "列の間隔"
+
+#: src/goocanvastable.c:210
+msgid "The default space between columns"
+msgstr "列の間のデフォルトの空白"
+
+#: src/goocanvastable.c:216
+msgid "Homogenous Rows"
+msgstr "均一の行"
+
+#: src/goocanvastable.c:217
+msgid "If all rows are the same height"
+msgstr "全ての行を同じ高さにするかどうか"
+
+#: src/goocanvastable.c:223
+msgid "Homogenous Columns"
+msgstr "均一の列"
+
+#: src/goocanvastable.c:224
+msgid "If all columns are the same width"
+msgstr "全ての列を同じ幅にするかどうか"
+
+#: src/goocanvastable.c:233
+msgid "Left Padding"
+msgstr "左側パディング"
+
+#: src/goocanvastable.c:234
+msgid "Extra space to add to the left of the item"
+msgstr "アイテムの左側に加える余分な空白"
+
+#: src/goocanvastable.c:239
+msgid "Right Padding"
+msgstr "右側パディング"
+
+#: src/goocanvastable.c:240
+msgid "Extra space to add to the right of the item"
+msgstr "アイテムの右側に加える余分な空白"
+
+#: src/goocanvastable.c:245
+msgid "Top Padding"
+msgstr "上部パディング"
+
+#: src/goocanvastable.c:246
+msgid "Extra space to add above the item"
+msgstr "アイテムの上部に加える余分な空白"
+
+#: src/goocanvastable.c:251
+msgid "Bottom Padding"
+msgstr "下部パディング"
+
+#: src/goocanvastable.c:252
+msgid "Extra space to add below the item"
+msgstr "アイテムの下部に加える余分な空白"
+
+#: src/goocanvastable.c:258
+msgid "X Align"
+msgstr "X 方向の配置"
+
+#: src/goocanvastable.c:259
+msgid ""
+"The horizontal position of the item within its allocated space. 0.0 is left-"
+"aligned, 1.0 is right-aligned"
+msgstr "領域中のアイテムの水平位置。0.0 は左詰め、1.0 は右詰めです"
+
+#: src/goocanvastable.c:264
+msgid "Y Align"
+msgstr "Y 方向の配置"
+
+#: src/goocanvastable.c:265
+msgid ""
+"The vertical position of the item within its allocated space. 0.0 is top-"
+"aligned, 1.0 is bottom-aligned"
+msgstr "領域中内でのアイテムの垂直位置。0.0 は上詰め、1.0 は下詰めです"
+
+#: src/goocanvastable.c:271
+msgid "Row"
+msgstr "行"
+
+#: src/goocanvastable.c:272
+msgid "The row to place the item in"
+msgstr "アイテムを置く行"
+
+#: src/goocanvastable.c:277
+msgid "Column"
+msgstr "列"
+
+#: src/goocanvastable.c:278
+msgid "The column to place the item in"
+msgstr "アイテムを置く列"
+
+#: src/goocanvastable.c:283
+msgid "Rows"
+msgstr "行数"
+
+#: src/goocanvastable.c:284
+msgid "The number of rows that the item spans"
+msgstr "アイテムが使う行数"
+
+#: src/goocanvastable.c:289
+msgid "Columns"
+msgstr "列数"
+
+#: src/goocanvastable.c:290
+msgid "The number of columns that the item spans"
+msgstr "アイテムが使う列数"
+
+#: src/goocanvastable.c:296
+msgid "X Expand"
+msgstr "X 方向の伸長"
+
+#: src/goocanvastable.c:297
+msgid "If the item expands horizontally as the table expands"
+msgstr "表が伸長したらアイテムを水平方向に伸長するかどうか"
+
+#: src/goocanvastable.c:302
+msgid "X Fill"
+msgstr "X 方向の充填"
+
+#: src/goocanvastable.c:303
+msgid "If the item fills all horizontal allocated space"
+msgstr "アイテムが水平領域いっぱい使うかどうか"
+
+#: src/goocanvastable.c:308
+msgid "X Shrink"
+msgstr "X 方向の縮小"
+
+#: src/goocanvastable.c:309
+msgid "If the item can shrink smaller than its requested size horizontally"
+msgstr "アイテムが要求された水平方向のサイズよりも縮小できるかどうか"
+
+#: src/goocanvastable.c:314
+msgid "Y Expand"
+msgstr "Y 方向の伸長"
+
+#: src/goocanvastable.c:315
+msgid "If the item expands vertically as the table expands"
+msgstr "表が伸長したらアイテムを垂直方向に伸長するかどうか"
+
+#: src/goocanvastable.c:320
+msgid "Y Fill"
+msgstr "Y 方向の充填"
+
+#: src/goocanvastable.c:321
+msgid "If the item fills all vertical allocated space"
+msgstr "アイテムが垂直領域いっぱい使うかどうか"
+
+#: src/goocanvastable.c:326
+msgid "Y Shrink"
+msgstr "Y 方向の縮小"
+
+#: src/goocanvastable.c:327
+msgid "If the item can shrink smaller than its requested size vertically"
+msgstr "アイテムが要求された垂直方向のサイズよりも縮小できるかどうか"
+
+#: src/goocanvastext.c:70
+msgid "Text"
+msgstr "テキスト"
+
+#: src/goocanvastext.c:71
+msgid "The text to display"
+msgstr "表示するテキスト"
+
+#: src/goocanvastext.c:77
+msgid "Use Markup"
+msgstr "マークアップを使う"
+
+#: src/goocanvastext.c:78
+msgid "Whether to parse PangoMarkup in the text, to support different styles"
+msgstr "異なるスタイルを使うためにテキスト中のPangoMarkupをパースするかどうか"
+
+#: src/goocanvastext.c:84
+msgid "Ellipsize"
+msgstr ""
+
+#: src/goocanvastext.c:85
+msgid ""
+"The preferred place to ellipsize the string, if the label does not have "
+"enough room to display the entire string"
+msgstr ""
+
+#: src/goocanvastext.c:94
+msgid "The x coordinate of the text"
+msgstr "テキストの X 座標"
+
+#: src/goocanvastext.c:102
+msgid "The y coordinate of the text"
+msgstr "テキストの Y 座標"
+
+#: src/goocanvastext.c:110
+msgid "The width to use to layout the text"
+msgstr "テキストを配置するために使用する幅"
+
+#: src/goocanvastext.c:118
+msgid "How to position the text relative to the given x and y coordinates"
+msgstr "与えられた X/Y 座標に対してどのようにテキストを配置するか"
+
+#: src/goocanvastext.c:125
+msgid "Alignment"
+msgstr "配置"
+
+#: src/goocanvastext.c:126
+msgid "How to align the text"
+msgstr "どのようにテキストを配置するか"
+
+#: src/goocanvaswidget.c:510
+msgid "Widget"
+msgstr "ウィジェット"
+
+#: src/goocanvaswidget.c:511
+msgid "The widget to place in the canvas"
+msgstr "キャンバス内に配置するウィジェット"
+
+#: src/goocanvaswidget.c:518
+msgid "The x coordinate of the widget"
+msgstr "ウィジェットの X 座標"
+
+#: src/goocanvaswidget.c:526
+msgid "The y coordinate of the widget"
+msgstr "ウィジェットの Y 座標"
+
+#: src/goocanvaswidget.c:534
+msgid "The width of the widget, or -1 to use its requested width"
+msgstr "ウィジェットの幅。ウィジェットが要求されている幅を使うなら -1 です"
+
+#: src/goocanvaswidget.c:542
+msgid "The height of the widget, or -1 to use its requested height"
+msgstr "ウィジェットの高さ。ウィジェットが要求されている高さを使うなら -1 です"
+
+#: src/goocanvaswidget.c:550
+msgid ""
+"How to position the widget relative to the item's x and y coordinate settings"
+msgstr "アイテムの X/Y座標の設定に対してどのようにウィジェットを配置するか"
+
+#~ msgid "The color to use for the item's perimeter"
+#~ msgstr "アイテムの境界線の色"
+
+#~ msgid "The pixbuf to use to draw the item's perimeter"
+#~ msgstr "アイテムの境界線を描くために使うPixbuf"
+
+#~ msgid "The color to use to paint the interior of the item"
+#~ msgstr "アイテムの内側を塗りつぶすために使う色"

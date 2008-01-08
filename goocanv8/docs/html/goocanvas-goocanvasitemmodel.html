@@ -1,0 +1,1971 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>GooCanvasItemModel</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<link rel="start" href="index.html" title="GooCanvas Reference Manual">
+<link rel="up" href="ch02.html" title="Core Objects">
+<link rel="prev" href="goocanvas-goocanvasitem.html" title="GooCanvasItem">
+<link rel="next" href="GooCanvasItemSimple.html" title="GooCanvasItemSimple">
+<meta name="generator" content="GTK-Doc V1.8 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="ch01.html" title="Introduction">
+<link rel="chapter" href="ch02.html" title="Core Objects">
+<link rel="chapter" href="ch03.html" title="Standard Canvas Items">
+<link rel="chapter" href="ch04.html" title="Standard Canvas Item Models">
+<link rel="chapter" href="ch05.html" title="Miscellaneous">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="goocanvas-goocanvasitem.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">GooCanvas Reference Manual</th>
+<td><a accesskey="n" href="GooCanvasItemSimple.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id3072762" class="shortcut">Top</a>
+                  &#160;|&#160;
+                  <a href="#id3087405" class="shortcut">Description</a>
+                  &#160;|&#160;
+                  <a href="#id3079975" class="shortcut">Object Hierarchy</a>
+                  &#160;|&#160;
+                  <a href="#id3080000" class="shortcut">Prerequisites</a>
+                  &#160;|&#160;
+                  <a href="#id3080022" class="shortcut">Known Implementations</a>
+                  &#160;|&#160;
+                  <a href="#id3080092" class="shortcut">Properties</a>
+                  &#160;|&#160;
+                  <a href="#id3087351" class="shortcut">Signals</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="goocanvas-goocanvasitemmodel"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id3072762"></a><span class="refentrytitle">GooCanvasItemModel</span>
+</h2>
+<p>GooCanvasItemModel &#8212; the interface for canvas item models.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<a name="GooCanvasItemModel"></a><pre class="synopsis">
+
+
+
+                    <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-struct">GooCanvasItemModel</a>;
+                    <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModelIface">GooCanvasItemModelIface</a>;
+
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-translate">goo_canvas_item_model_translate</a>     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> tx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> ty);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-scale">goo_canvas_item_model_scale</a>         (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> sx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> sy);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-rotate">goo_canvas_item_model_rotate</a>        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cy);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-skew-x">goo_canvas_item_model_skew_x</a>        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cy);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-skew-y">goo_canvas_item_model_skew_y</a>        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cy);
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-transform">goo_canvas_item_model_get_transform</a> (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../cairo/cairo-cairo-matrix-t.html#cairo-matrix-t"
+>cairo_matrix_t</a> *transform);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-transform">goo_canvas_item_model_set_transform</a> (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         const <a
+href="../cairo/cairo-cairo-matrix-t.html#cairo-matrix-t"
+>cairo_matrix_t</a> *transform);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-simple-transform">goo_canvas_item_model_set_simple_transform</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> scale,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> rotation);
+
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-animate">goo_canvas_item_model_animate</a>       (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> scale,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> absolute,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> duration,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> step_time,
+                                                         <a href="goocanvas-GooCanvas-Types.html#GooCanvasAnimateType">GooCanvasAnimateType</a> type);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-stop-animation">goo_canvas_item_model_stop_animation</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);
+
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-raise">goo_canvas_item_model_raise</a>         (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *above);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-lower">goo_canvas_item_model_lower</a>         (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *below);
+
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-remove">goo_canvas_item_model_remove</a>        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);
+
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-parent">goo_canvas_item_model_get_parent</a>    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-parent">goo_canvas_item_model_set_parent</a>    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent);
+
+<a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-is-container">goo_canvas_item_model_is_container</a>  (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);
+<a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-n-children">goo_canvas_item_model_get_n_children</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-child">goo_canvas_item_model_get_child</a>     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> child_num);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-add-child">goo_canvas_item_model_add_child</a>     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> position);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-move-child">goo_canvas_item_model_move_child</a>    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> old_position,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> new_position);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-remove-child">goo_canvas_item_model_remove_child</a>  (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> child_num);
+<a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-find-child">goo_canvas_item_model_find_child</a>    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child);
+
+<a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-style">goo_canvas_item_model_get_style</a>     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-style">goo_canvas_item_model_set_style</a>     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style);
+
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-class-install-child-property">goo_canvas_item_model_class_install_child_property</a>
+                                                        (<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+>GObjectClass</a> *mclass,
+                                                         <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a> property_id,
+                                                         <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a> *pspec);
+<a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a>**        <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-class-list-child-properties">goo_canvas_item_model_class_list_child_properties</a>
+                                                        (<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+>GObjectClass</a> *mclass,
+                                                         <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a> *n_properties);
+<a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a>*         <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-class-find-child-property">goo_canvas_item_model_class_find_child_property</a>
+                                                        (<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+>GObjectClass</a> *mclass,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *property_name);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-child-properties">goo_canvas_item_model_get_child_properties</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         ...);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-get-child-properties-valist">goo_canvas_item_model_get_child_properties_valist</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         va_list var_args);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-child-properties">goo_canvas_item_model_set_child_properties</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         ...);
+void                <a href="goocanvas-goocanvasitemmodel.html#goo-canvas-item-model-set-child-properties-valist">goo_canvas_item_model_set_child_properties_valist</a>
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         va_list var_args);
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3079975"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+
+  GInterface
+   +----GooCanvasItemModel
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3080000"></a><h2>Prerequisites</h2>
+<p>
+GooCanvasItemModel requires
+ <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+>GObject</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3080022"></a><h2>Known Implementations</h2>
+<p>
+GooCanvasItemModel is implemented by
+ <a href="GooCanvasRectModel.html" title="GooCanvasRectModel">GooCanvasRectModel</a>,  <a href="GooCanvasEllipseModel.html" title="GooCanvasEllipseModel">GooCanvasEllipseModel</a>,  <a href="GooCanvasPolylineModel.html" title="GooCanvasPolylineModel">GooCanvasPolylineModel</a>,  <a href="GooCanvasTableModel.html" title="GooCanvasTableModel">GooCanvasTableModel</a>,  <a href="GooCanvasItemModelSimple.html" title="GooCanvasItemModelSimple">GooCanvasItemModelSimple</a>,  <a href="GooCanvasTextModel.html" title="GooCanvasTextModel">GooCanvasTextModel</a>,  <a href="GooCanvasPathModel.html" title="GooCanvasPathModel">GooCanvasPathModel</a>,  <a href="GooCanvasImageModel.html" title="GooCanvasImageModel">GooCanvasImageModel</a> and  <a href="GooCanvasGroupModel.html" title="GooCanvasGroupModel">GooCanvasGroupModel</a>.</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3080092"></a><h2>Properties</h2>
+<pre class="synopsis">
+
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--can-focus">can-focus</a>"                <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--description">description</a>"              <a
+href="../gobject/gobject-Standard-Parameter-and-Value-Types.html#gchararray"
+>gchararray</a>            : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--parent">parent</a>"                   <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>    : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--pointer-events">pointer-events</a>"           <a href="goocanvas-GooCanvas-Types.html#GooCanvasPointerEvents">GooCanvasPointerEvents</a>  : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--title">title</a>"                    <a
+href="../gobject/gobject-Standard-Parameter-and-Value-Types.html#gchararray"
+>gchararray</a>            : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--transform">transform</a>"                GooCairoMatrix        : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--visibility">visibility</a>"               <a href="goocanvas-GooCanvas-Types.html#GooCanvasItemVisibility">GooCanvasItemVisibility</a>  : Read / Write
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel--visibility-threshold">visibility-threshold</a>"     <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3087351"></a><h2>Signals</h2>
+<pre class="synopsis">
+
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-changed">changed</a>"                                        : Run Last
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-added">child-added</a>"                                    : Run Last
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-moved">child-moved</a>"                                    : Run Last
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-notify">child-notify</a>"                                   : Run First / No Recursion / Has Details / No Hooks
+  "<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel-child-removed">child-removed</a>"                                  : Run Last
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3087405"></a><h2>Description</h2>
+<p>
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> defines the interface that models for canvas items must
+implement, and contains methods for operating on canvas item models.</p>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3087434"></a><h2>Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3087445"></a><h3>
+<a name="GooCanvasItemModel-struct"></a>GooCanvasItemModel</h3>
+<a class="indexterm" name="id3087456"></a><pre class="programlisting">typedef struct _GooCanvasItemModel GooCanvasItemModel;</pre>
+<p>
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> is a typedef used for objects that implement the
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> interface.
+</p>
+<p>
+(There is no actual <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> struct, since it is only an interface.
+But using '<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>' is more helpful than using '<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObject"
+><span class="type">GObject</span></a>'.)</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3087518"></a><h3>
+<a name="GooCanvasItemModelIface"></a>GooCanvasItemModelIface</h3>
+<a class="indexterm" name="id3087530"></a><pre class="programlisting">typedef struct {
+  /* Virtual methods that group models must implement. */
+  gint		       (* get_n_children)		(GooCanvasItemModel	*model);
+  GooCanvasItemModel*  (* get_child)			(GooCanvasItemModel	*model,
+							 gint			 child_num);
+
+  /* Virtual methods that group models may implement. */
+  void                 (* add_child)			(GooCanvasItemModel	*model,
+							 GooCanvasItemModel	*child,
+							 gint			 position);
+  void                 (* move_child)			(GooCanvasItemModel	*model,
+							 gint			 old_position,
+							 gint			 new_position);
+  void                 (* remove_child)			(GooCanvasItemModel	*model,
+							 gint			 child_num);
+  void                 (* get_child_property)		(GooCanvasItemModel	*model,
+							 GooCanvasItemModel	*child,
+							 guint			 property_id,
+							 GValue			*value,
+							 GParamSpec		*pspec);
+  void                 (* set_child_property)		(GooCanvasItemModel	*item,
+							 GooCanvasItemModel	*child,
+							 guint			 property_id,
+							 const GValue		*value,
+							 GParamSpec		*pspec);
+
+  /* Virtual methods that all item models must implement. */
+  GooCanvasItemModel*  (* get_parent)			(GooCanvasItemModel	*model);
+  void                 (* set_parent)			(GooCanvasItemModel	*model,
+							 GooCanvasItemModel	*parent);
+
+  GooCanvasItem*       (* create_item)			(GooCanvasItemModel	*model,
+							 GooCanvas		*canvas);
+
+  /* Virtual methods that all item models may implement. */
+  gboolean             (* get_transform)		(GooCanvasItemModel	*model,
+							 cairo_matrix_t         *transform);
+  void                 (* set_transform)		(GooCanvasItemModel	*model,
+							 const cairo_matrix_t	*transform);
+  GooCanvasStyle*      (* get_style)			(GooCanvasItemModel	*model);
+  void                 (* set_style)			(GooCanvasItemModel	*model,
+							 GooCanvasStyle		*style);
+
+  /* Signals. */
+  void                 (* child_added)			(GooCanvasItemModel	*model,
+							 gint			 child_num);
+  void                 (* child_moved)			(GooCanvasItemModel	*model,
+							 gint			 old_child_num,
+							 gint			 new_child_num);
+  void                 (* child_removed)		(GooCanvasItemModel	*model,
+							 gint			 child_num);
+  void                 (* changed)			(GooCanvasItemModel	*model,
+							 gboolean		 recompute_bounds);
+  void                 (* child_notify)			(GooCanvasItemModel	*model,
+							 GParamSpec		*pspec);
+} GooCanvasItemModelIface;
+</pre>
+<p>
+<span class="type">GooCanvasItemModelIFace</span> holds the virtual methods that make up the
+<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a> interface.
+</p>
+<p>
+Simple item models only need to implement the <code class="function">get_parent()</code>, <code class="function">set_parent()</code>
+and <code class="function">create_item()</code> methods.
+</p>
+<p>
+Items that support transforms should also implement <code class="function">get_transform()</code> and
+<code class="function">set_transform()</code>. Items that support styles should implement <code class="function">get_style()</code>
+and <code class="function">set_style()</code>.
+</p>
+<p>
+Container items must implement <code class="function">get_n_children()</code> and <code class="function">get_child()</code>.
+Containers that support dynamic changes to their children should implement
+<code class="function">add_child()</code>, <code class="function">move_child()</code> and <code class="function">remove_child()</code>.
+Layout containers like <a href="GooCanvasTable.html" title="GooCanvasTable"><span class="type">GooCanvasTable</span></a> may implement
+<code class="function">get_child_property()</code> and <code class="function">set_child_property()</code>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="structfield"><code>get_n_children</code></em>&#160;()</span></td>
+<td> returns the number of children of the model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>get_child</code></em>&#160;()</span></td>
+<td> returns the child at the given index.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>add_child</code></em>&#160;()</span></td>
+<td> adds a child.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>move_child</code></em>&#160;()</span></td>
+<td> moves a child up or down the stacking order.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>remove_child</code></em>&#160;()</span></td>
+<td> removes a child.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>get_child_property</code></em>&#160;()</span></td>
+<td> gets a child property of a given child model,
+ e.g. the "row" or "column" property of a model in a <a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>set_child_property</code></em>&#160;()</span></td>
+<td> sets a child property for a given child model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>get_parent</code></em>&#160;()</span></td>
+<td> gets the model's parent.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>set_parent</code></em>&#160;()</span></td>
+<td> sets the model's parent.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>create_item</code></em>&#160;()</span></td>
+<td> creates a default canvas item to view the model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>get_transform</code></em>&#160;()</span></td>
+<td> gets the model's transformation matrix.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>set_transform</code></em>&#160;()</span></td>
+<td> sets the model's transformation matrix.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>get_style</code></em>&#160;()</span></td>
+<td> gets the model's style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>set_style</code></em>&#160;()</span></td>
+<td> sets the model's style.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>child_added</code></em>&#160;()</span></td>
+<td> signal emitted when a child is added.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>child_moved</code></em>&#160;()</span></td>
+<td> signal emitted when a child is moved in the stacking order.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>child_removed</code></em>&#160;()</span></td>
+<td> signal emitted when a child is removed.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>changed</code></em>&#160;()</span></td>
+<td> signal emitted when the model has changed.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>child_notify</code></em>&#160;()</span></td>
+<td> signal emitted when a child property has changed.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088027"></a><h3>
+<a name="goo-canvas-item-model-translate"></a>goo_canvas_item_model_translate ()</h3>
+<a class="indexterm" name="id3088040"></a><pre class="programlisting">void                goo_canvas_item_model_translate     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> tx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> ty);</pre>
+<p>
+Translates the origin of the model's coordinate system by the given amounts.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>tx</code></em>&#160;:</span></td>
+<td> the amount to move the origin in the horizontal direction.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>ty</code></em>&#160;:</span></td>
+<td> the amount to move the origin in the vertical direction.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088136"></a><h3>
+<a name="goo-canvas-item-model-scale"></a>goo_canvas_item_model_scale ()</h3>
+<a class="indexterm" name="id3088147"></a><pre class="programlisting">void                goo_canvas_item_model_scale         (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> sx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> sy);</pre>
+<p>
+Scales the model's coordinate system by the given amounts.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sx</code></em>&#160;:</span></td>
+<td> the amount to scale the horizontal axis.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sy</code></em>&#160;:</span></td>
+<td> the amount to scale the vertical axis.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088242"></a><h3>
+<a name="goo-canvas-item-model-rotate"></a>goo_canvas_item_model_rotate ()</h3>
+<a class="indexterm" name="id3088255"></a><pre class="programlisting">void                goo_canvas_item_model_rotate        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cy);</pre>
+<p>
+Rotates the model's coordinate system by the given amount, about the given
+origin.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>degrees</code></em>&#160;:</span></td>
+<td> the clockwise angle of rotation.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cx</code></em>&#160;:</span></td>
+<td> the x coordinate of the origin of the rotation.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cy</code></em>&#160;:</span></td>
+<td> the y coordinate of the origin of the rotation.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088372"></a><h3>
+<a name="goo-canvas-item-model-skew-x"></a>goo_canvas_item_model_skew_x ()</h3>
+<a class="indexterm" name="id3088385"></a><pre class="programlisting">void                goo_canvas_item_model_skew_x        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cy);</pre>
+<p>
+Skews the model's coordinate system along the x axis by the given amount,
+about the given origin.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>degrees</code></em>&#160;:</span></td>
+<td> the skew angle.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cx</code></em>&#160;:</span></td>
+<td> the x coordinate of the origin of the skew transform.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cy</code></em>&#160;:</span></td>
+<td> the y coordinate of the origin of the skew transform.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088502"></a><h3>
+<a name="goo-canvas-item-model-skew-y"></a>goo_canvas_item_model_skew_y ()</h3>
+<a class="indexterm" name="id3088516"></a><pre class="programlisting">void                goo_canvas_item_model_skew_y        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cx,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> cy);</pre>
+<p>
+Skews the model's coordinate system along the y axis by the given amount,
+about the given origin.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>degrees</code></em>&#160;:</span></td>
+<td> the skew angle.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cx</code></em>&#160;:</span></td>
+<td> the x coordinate of the origin of the skew transform.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>cy</code></em>&#160;:</span></td>
+<td> the y coordinate of the origin of the skew transform.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088633"></a><h3>
+<a name="goo-canvas-item-model-get-transform"></a>goo_canvas_item_model_get_transform ()</h3>
+<a class="indexterm" name="id3088647"></a><pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            goo_canvas_item_model_get_transform (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../cairo/cairo-cairo-matrix-t.html#cairo-matrix-t"
+>cairo_matrix_t</a> *transform);</pre>
+<p>
+Gets the transformation matrix of an item model.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>transform</code></em>&#160;:</span></td>
+<td> the place to store the transform.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> <a
+href="../glib/glib-Standard-Macros.html#TRUE:CAPS"
+><code class="literal">TRUE</code></a> if a transform is set.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088739"></a><h3>
+<a name="goo-canvas-item-model-set-transform"></a>goo_canvas_item_model_set_transform ()</h3>
+<a class="indexterm" name="id3088753"></a><pre class="programlisting">void                goo_canvas_item_model_set_transform (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         const <a
+href="../cairo/cairo-cairo-matrix-t.html#cairo-matrix-t"
+>cairo_matrix_t</a> *transform);</pre>
+<p>
+Sets the transformation matrix of an item model.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>transform</code></em>&#160;:</span></td>
+<td> the new transformation matrix, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a> to reset the
+ transformation to the identity matrix.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088836"></a><h3>
+<a name="goo-canvas-item-model-set-simple-transform"></a>goo_canvas_item_model_set_simple_transform ()</h3>
+<a class="indexterm" name="id3088850"></a><pre class="programlisting">void                goo_canvas_item_model_set_simple_transform
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> scale,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> rotation);</pre>
+<p>
+A convenience function to set the item model's transformation matrix.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x</code></em>&#160;:</span></td>
+<td> the x coordinate of the origin of the model's coordinate space.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y</code></em>&#160;:</span></td>
+<td> the y coordinate of the origin of the model's coordinate space.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scale</code></em>&#160;:</span></td>
+<td> the scale of the model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>rotation</code></em>&#160;:</span></td>
+<td> the clockwise rotation of the model, in degrees.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3088989"></a><h3>
+<a name="goo-canvas-item-model-animate"></a>goo_canvas_item_model_animate ()</h3>
+<a class="indexterm" name="id3089003"></a><pre class="programlisting">void                goo_canvas_item_model_animate       (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> x,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> y,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> scale,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a> degrees,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a> absolute,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> duration,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> step_time,
+                                                         <a href="goocanvas-GooCanvas-Types.html#GooCanvasAnimateType">GooCanvasAnimateType</a> type);</pre>
+<p>
+Animates a model from its current position to the given offsets, scale
+and rotation.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>x</code></em>&#160;:</span></td>
+<td> the final x coordinate.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y</code></em>&#160;:</span></td>
+<td> the final y coordinate.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scale</code></em>&#160;:</span></td>
+<td> the final scale.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>degrees</code></em>&#160;:</span></td>
+<td> the final rotation. This can be negative to rotate anticlockwise,
+ and can also be greater than 360 to rotate a number of times.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>absolute</code></em>&#160;:</span></td>
+<td> if the <em class="parameter"><code>x</code></em>, <em class="parameter"><code>y</code></em>, <em class="parameter"><code>scale</code></em> and <em class="parameter"><code>degrees</code></em> values are absolute, or
+ relative to the current transform. Note that absolute animations only work
+ if the model currently has a simple transform. If the model has a shear or
+ some other complicated transform it may result in strange animations.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>duration</code></em>&#160;:</span></td>
+<td> the duration of the animation, in milliseconds (1/1000ths of a
+ second).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>step_time</code></em>&#160;:</span></td>
+<td> the time between each animation step, in milliseconds.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>type</code></em>&#160;:</span></td>
+<td> specifies what happens when the animation finishes.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089256"></a><h3>
+<a name="goo-canvas-item-model-stop-animation"></a>goo_canvas_item_model_stop_animation ()</h3>
+<a class="indexterm" name="id3089270"></a><pre class="programlisting">void                goo_canvas_item_model_stop_animation
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);</pre>
+<p>
+Stops any current animation for the given model, leaving it at its current
+position.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089323"></a><h3>
+<a name="goo-canvas-item-model-raise"></a>goo_canvas_item_model_raise ()</h3>
+<a class="indexterm" name="id3089335"></a><pre class="programlisting">void                goo_canvas_item_model_raise         (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *above);</pre>
+<p>
+Raises a model in the stacking order.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>above</code></em>&#160;:</span></td>
+<td> the item model to raise <em class="parameter"><code>model</code></em> above, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a> to raise <em class="parameter"><code>model</code></em> to the top
+ of the stack.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089427"></a><h3>
+<a name="goo-canvas-item-model-lower"></a>goo_canvas_item_model_lower ()</h3>
+<a class="indexterm" name="id3089439"></a><pre class="programlisting">void                goo_canvas_item_model_lower         (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *below);</pre>
+<p>
+Lowers a model in the stacking order.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>below</code></em>&#160;:</span></td>
+<td> the item model to lower <em class="parameter"><code>model</code></em> below, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a> to lower <em class="parameter"><code>model</code></em> to the
+ bottom of the stack.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089532"></a><h3>
+<a name="goo-canvas-item-model-remove"></a>goo_canvas_item_model_remove ()</h3>
+<a class="indexterm" name="id3089546"></a><pre class="programlisting">void                goo_canvas_item_model_remove        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);</pre>
+<p>
+Removes a model from its parent. If the model is in a canvas it will be
+removed.
+</p>
+<p>
+This would normally also result in the model being freed.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089602"></a><h3>
+<a name="goo-canvas-item-model-get-parent"></a>goo_canvas_item_model_get_parent ()</h3>
+<a class="indexterm" name="id3089615"></a><pre class="programlisting"><a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* goo_canvas_item_model_get_parent    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);</pre>
+<p>
+Gets the parent of the given model.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the parent model, or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a> if the model has no parent.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089686"></a><h3>
+<a name="goo-canvas-item-model-set-parent"></a>goo_canvas_item_model_set_parent ()</h3>
+<a class="indexterm" name="id3089700"></a><pre class="programlisting">void                goo_canvas_item_model_set_parent    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *parent);</pre>
+<p>
+Sets the parent of the model.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td> the new parent item model.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089772"></a><h3>
+<a name="goo-canvas-item-model-is-container"></a>goo_canvas_item_model_is_container ()</h3>
+<a class="indexterm" name="id3089786"></a><pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            goo_canvas_item_model_is_container  (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);</pre>
+<p>
+Tests to see if the given item model is a container.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> <a
+href="../glib/glib-Standard-Macros.html#TRUE:CAPS"
+><code class="literal">TRUE</code></a> if the item model is a container.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089857"></a><h3>
+<a name="goo-canvas-item-model-get-n-children"></a>goo_canvas_item_model_get_n_children ()</h3>
+<a class="indexterm" name="id3089871"></a><pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                goo_canvas_item_model_get_n_children
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);</pre>
+<p>
+Gets the number of children of the container.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the number of children.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3089934"></a><h3>
+<a name="goo-canvas-item-model-get-child"></a>goo_canvas_item_model_get_child ()</h3>
+<a class="indexterm" name="id3089947"></a><pre class="programlisting"><a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>* goo_canvas_item_model_get_child     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> child_num);</pre>
+<p>
+Gets the child at the given stack position.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child_num</code></em>&#160;:</span></td>
+<td> the position of a child in the container's stack.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the child at the given stack position.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102254"></a><h3>
+<a name="goo-canvas-item-model-add-child"></a>goo_canvas_item_model_add_child ()</h3>
+<a class="indexterm" name="id3102266"></a><pre class="programlisting">void                goo_canvas_item_model_add_child     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> position);</pre>
+<p>
+Adds a child at the given stack position.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td> the child to add.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>position</code></em>&#160;:</span></td>
+<td> the position of the child, or -1 to place it last (at the top of
+ the stacking order).
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102352"></a><h3>
+<a name="goo-canvas-item-model-move-child"></a>goo_canvas_item_model_move_child ()</h3>
+<a class="indexterm" name="id3102364"></a><pre class="programlisting">void                goo_canvas_item_model_move_child    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> old_position,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> new_position);</pre>
+<p>
+Moves a child to a new stack position.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>old_position</code></em>&#160;:</span></td>
+<td> the current position of the child.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>new_position</code></em>&#160;:</span></td>
+<td> the new position of the child.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102449"></a><h3>
+<a name="goo-canvas-item-model-remove-child"></a>goo_canvas_item_model_remove_child ()</h3>
+<a class="indexterm" name="id3102462"></a><pre class="programlisting">void                goo_canvas_item_model_remove_child  (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a> child_num);</pre>
+<p>
+Removes the child at the given position.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child_num</code></em>&#160;:</span></td>
+<td> the position of the child to remove.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102527"></a><h3>
+<a name="goo-canvas-item-model-find-child"></a>goo_canvas_item_model_find_child ()</h3>
+<a class="indexterm" name="id3102540"></a><pre class="programlisting"><a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                goo_canvas_item_model_find_child    (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child);</pre>
+<p>
+Attempts to find the given child with the container's stack.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td> the child to find.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the position of the given <em class="parameter"><code>child</code></em>, or -1 if it isn't found.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102619"></a><h3>
+<a name="goo-canvas-item-model-get-style"></a>goo_canvas_item_model_get_style ()</h3>
+<a class="indexterm" name="id3102632"></a><pre class="programlisting"><a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a>*     goo_canvas_item_model_get_style     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model);</pre>
+<p>
+Gets the model's style. If the model doesn't have its own style it will
+return its parent's style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the model's style.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102687"></a><h3>
+<a name="goo-canvas-item-model-set-style"></a>goo_canvas_item_model_set_style ()</h3>
+<a class="indexterm" name="id3102700"></a><pre class="programlisting">void                goo_canvas_item_model_set_style     (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="GooCanvasStyle.html" title="GooCanvasStyle">GooCanvasStyle</a> *style);</pre>
+<p>
+Sets the model's style, by copying the properties from the given style.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> an item model.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>style</code></em>&#160;:</span></td>
+<td> a style.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102765"></a><h3>
+<a name="goo-canvas-item-model-class-install-child-property"></a>goo_canvas_item_model_class_install_child_property ()</h3>
+<a class="indexterm" name="id3102778"></a><pre class="programlisting">void                goo_canvas_item_model_class_install_child_property
+                                                        (<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+>GObjectClass</a> *mclass,
+                                                         <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a> property_id,
+                                                         <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a> *pspec);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It installs a child property on a canvas item class.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>mclass</code></em>&#160;:</span></td>
+<td> a <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+><span class="type">GObjectClass</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>property_id</code></em>&#160;:</span></td>
+<td> the id for the property
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pspec</code></em>&#160;:</span></td>
+<td> the <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+><span class="type">GParamSpec</span></a> for the property
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3102888"></a><h3>
+<a name="goo-canvas-item-model-class-list-child-properties"></a>goo_canvas_item_model_class_list_child_properties ()</h3>
+<a class="indexterm" name="id3102901"></a><pre class="programlisting"><a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a>**        goo_canvas_item_model_class_list_child_properties
+                                                        (<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+>GObjectClass</a> *mclass,
+                                                         <a
+href="../glib/glib-Basic-Types.html#guint"
+>guint</a> *n_properties);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It returns all child properties of a canvas item class.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>mclass</code></em>&#160;:</span></td>
+<td> a <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+><span class="type">GObjectClass</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_properties</code></em>&#160;:</span></td>
+<td> location to return the number of child properties found
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> a newly allocated array of <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+><span class="type">GParamSpec</span></a>*. The array must be 
+          freed with <a
+href="../glib/glib-Memory-Allocation.html#g-free"
+><code class="function">g_free()</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103012"></a><h3>
+<a name="goo-canvas-item-model-class-find-child-property"></a>goo_canvas_item_model_class_find_child_property ()</h3>
+<a class="indexterm" name="id3103026"></a><pre class="programlisting"><a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a>*         goo_canvas_item_model_class_find_child_property
+                                                        (<a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+>GObjectClass</a> *mclass,
+                                                         const <a
+href="../glib/glib-Basic-Types.html#gchar"
+>gchar</a> *property_name);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It finds a child property of a canvas item class by name.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>mclass</code></em>&#160;:</span></td>
+<td> a <a
+href="../gobject/gobject-The-Base-Object-Type.html#GObjectClass"
+><span class="type">GObjectClass</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>property_name</code></em>&#160;:</span></td>
+<td> the name of the child property to find
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Returns</em></span>&#160;:</span></td>
+<td> the <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+><span class="type">GParamSpec</span></a> of the child property or <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a> if <em class="parameter"><code>class</code></em> has no
+  child property with that name.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103141"></a><h3>
+<a name="goo-canvas-item-model-get-child-properties"></a>goo_canvas_item_model_get_child_properties ()</h3>
+<a class="indexterm" name="id3103154"></a><pre class="programlisting">void                goo_canvas_item_model_get_child_properties
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         ...);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It gets the values of one or more child properties of <em class="parameter"><code>child</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td> a child <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> pairs of property names and value pointers, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103273"></a><h3>
+<a name="goo-canvas-item-model-get-child-properties-valist"></a>goo_canvas_item_model_get_child_properties_valist ()</h3>
+<a class="indexterm" name="id3103286"></a><pre class="programlisting">void                goo_canvas_item_model_get_child_properties_valist
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         va_list var_args);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It gets the values of one or more child properties of <em class="parameter"><code>child</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td> a child <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>var_args</code></em>&#160;:</span></td>
+<td> pairs of property names and value pointers, and a terminating
+ <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103410"></a><h3>
+<a name="goo-canvas-item-model-set-child-properties"></a>goo_canvas_item_model_set_child_properties ()</h3>
+<a class="indexterm" name="id3103424"></a><pre class="programlisting">void                goo_canvas_item_model_set_child_properties
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         ...);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It sets the values of one or more child properties of <em class="parameter"><code>child</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td> a child <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103542"></a><h3>
+<a name="goo-canvas-item-model-set-child-properties-valist"></a>goo_canvas_item_model_set_child_properties_valist ()</h3>
+<a class="indexterm" name="id3103556"></a><pre class="programlisting">void                goo_canvas_item_model_set_child_properties_valist
+                                                        (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                         <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *child,
+                                                         va_list var_args);</pre>
+<p>
+This function is only intended to be used when implementing new canvas
+item models, specifically layout container item models such as
+<a href="GooCanvasTableModel.html" title="GooCanvasTableModel"><span class="type">GooCanvasTableModel</span></a>.
+</p>
+<p>
+It sets the values of one or more child properties of <em class="parameter"><code>child</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> a <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td> a child <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel"><span class="type">GooCanvasItemModel</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>var_args</code></em>&#160;:</span></td>
+<td> pairs of property names and values, and a terminating <a
+href="../glib/glib-Standard-Macros.html#NULL:CAPS"
+><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3103681"></a><h2>Property Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3103690"></a><h3>
+<a name="GooCanvasItemModel--can-focus"></a>The "<code class="literal">can-focus</code>" property</h3>
+<a class="indexterm" name="id3103705"></a><pre class="programlisting">  "can-focus"                <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>              : Read / Write</pre>
+<p>If the item can take the keyboard focus.</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103729"></a><h3>
+<a name="GooCanvasItemModel--description"></a>The "<code class="literal">description</code>" property</h3>
+<a class="indexterm" name="id3103743"></a><pre class="programlisting">  "description"              <a
+href="../gobject/gobject-Standard-Parameter-and-Value-Types.html#gchararray"
+>gchararray</a>            : Read / Write</pre>
+<p>A description of the item for use by assistive technologies.</p>
+<p>Default value: NULL</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103767"></a><h3>
+<a name="GooCanvasItemModel--parent"></a>The "<code class="literal">parent</code>" property</h3>
+<a class="indexterm" name="id3103780"></a><pre class="programlisting">  "parent"                   <a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a>    : Read / Write</pre>
+<p>The parent item model.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103799"></a><h3>
+<a name="GooCanvasItemModel--pointer-events"></a>The "<code class="literal">pointer-events</code>" property</h3>
+<a class="indexterm" name="id3103814"></a><pre class="programlisting">  "pointer-events"           <a href="goocanvas-GooCanvas-Types.html#GooCanvasPointerEvents">GooCanvasPointerEvents</a>  : Read / Write</pre>
+<p>Specifies when the item receives pointer events.</p>
+<p>Default value: GOO_CANVAS_EVENTS_VISIBLE_MASK|GOO_CANVAS_EVENTS_PAINTED_MASK|GOO_CANVAS_EVENTS_FILL_MASK|GOO_CANVAS_EVENTS_STROKE_MASK</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103840"></a><h3>
+<a name="GooCanvasItemModel--title"></a>The "<code class="literal">title</code>" property</h3>
+<a class="indexterm" name="id3103852"></a><pre class="programlisting">  "title"                    <a
+href="../gobject/gobject-Standard-Parameter-and-Value-Types.html#gchararray"
+>gchararray</a>            : Read / Write</pre>
+<p>A short context-rich description of the item for use by assistive technologies.</p>
+<p>Default value: NULL</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103876"></a><h3>
+<a name="GooCanvasItemModel--transform"></a>The "<code class="literal">transform</code>" property</h3>
+<a class="indexterm" name="id3103891"></a><pre class="programlisting">  "transform"                GooCairoMatrix        : Read / Write</pre>
+<p>The transformation matrix of the item.</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103911"></a><h3>
+<a name="GooCanvasItemModel--visibility"></a>The "<code class="literal">visibility</code>" property</h3>
+<a class="indexterm" name="id3103926"></a><pre class="programlisting">  "visibility"               <a href="goocanvas-GooCanvas-Types.html#GooCanvasItemVisibility">GooCanvasItemVisibility</a>  : Read / Write</pre>
+<p>When the canvas item is visible.</p>
+<p>Default value: GOO_CANVAS_ITEM_VISIBLE</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3103950"></a><h3>
+<a name="GooCanvasItemModel--visibility-threshold"></a>The "<code class="literal">visibility-threshold</code>" property</h3>
+<a class="indexterm" name="id3103965"></a><pre class="programlisting">  "visibility-threshold"     <a
+href="../glib/glib-Basic-Types.html#gdouble"
+>gdouble</a>               : Read / Write</pre>
+<p>The scale threshold at which the item becomes visible.</p>
+<p>Allowed values: &gt;= 0</p>
+<p>Default value: 0</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id3103993"></a><h2>Signal Details</h2>
+<div class="refsect2" lang="en">
+<a name="id3104003"></a><h3>
+<a name="GooCanvasItemModel-changed"></a>The "changed" signal</h3>
+<a class="indexterm" name="id3104010"></a><pre class="programlisting">void                user_function                      (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gboolean"
+>gboolean</a>            recompute_bounds,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            user_data)             : Run Last</pre>
+<p>
+Emitted when the item model has been changed.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> the item model that received the signal.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>recompute_bounds</code></em>&#160;:</span></td>
+<td> if the bounds of the item need to be recomputed.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3104096"></a><h3>
+<a name="GooCanvasItemModel-child-added"></a>The "child-added" signal</h3>
+<a class="indexterm" name="id3104106"></a><pre class="programlisting">void                user_function                      (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                child_num,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            user_data)      : Run Last</pre>
+<p>
+Emitted when a child has been added.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> the item model that received the signal.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child_num</code></em>&#160;:</span></td>
+<td> the index of the new child.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3104191"></a><h3>
+<a name="GooCanvasItemModel-child-moved"></a>The "child-moved" signal</h3>
+<a class="indexterm" name="id3104200"></a><pre class="programlisting">void                user_function                      (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                old_child_num,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                new_child_num,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            user_data)          : Run Last</pre>
+<p>
+Emitted when a child has been moved in the stacking order.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> the item model that received the signal.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>old_child_num</code></em>&#160;:</span></td>
+<td> the old index of the child.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>new_child_num</code></em>&#160;:</span></td>
+<td> the new index of the child.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3104306"></a><h3>
+<a name="GooCanvasItemModel-child-notify"></a>The "child-notify" signal</h3>
+<a class="indexterm" name="id3104316"></a><pre class="programlisting">void                user_function                      (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *item,
+                                                        <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+>GParamSpec</a>         *pspec,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            user_data)      : Run First / No Recursion / Has Details / No Hooks</pre>
+<p>
+Emitted for each child property that has changed.
+The signal's detail holds the property name.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>item</code></em>&#160;:</span></td>
+<td> the item model that received the signal.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pspec</code></em>&#160;:</span></td>
+<td> the <a
+href="../gobject/gobject-GParamSpec.html#GParamSpec"
+><span class="type">GParamSpec</span></a> of the changed child property.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id3104409"></a><h3>
+<a name="GooCanvasItemModel-child-removed"></a>The "child-removed" signal</h3>
+<a class="indexterm" name="id3104418"></a><pre class="programlisting">void                user_function                      (<a href="goocanvas-goocanvasitemmodel.html#GooCanvasItemModel">GooCanvasItemModel</a> *model,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gint"
+>gint</a>                child_num,
+                                                        <a
+href="../glib/glib-Basic-Types.html#gpointer"
+>gpointer</a>            user_data)      : Run Last</pre>
+<p>
+Emitted when a child has been removed.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>model</code></em>&#160;:</span></td>
+<td> the item model that received the signal.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child_num</code></em>&#160;:</span></td>
+<td> the index of the child that was removed.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="goocanvas-GooCanvas-Types">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvas Types</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvas Types</refname>
+<refpurpose>types used in GooCanvas.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasBounds">GooCanvasBounds</link>;
+
+enum                <link linkend="GooCanvasItemVisibility">GooCanvasItemVisibility</link>;
+
+enum                <link linkend="GooCanvasPointerEvents">GooCanvasPointerEvents</link>;
+
+enum                <link linkend="GooCanvasAnimateType">GooCanvasAnimateType</link>;
+
+                    <link linkend="GooCanvasPoints">GooCanvasPoints</link>;
+<link linkend="GooCanvasPoints">GooCanvasPoints</link>*    <link linkend="goo-canvas-points-new">goo_canvas_points_new</link>               (<link linkend="int">int</link> num_points);
+<link linkend="GooCanvasPoints">GooCanvasPoints</link>*    <link linkend="goo-canvas-points-ref">goo_canvas_points_ref</link>               (<link linkend="GooCanvasPoints">GooCanvasPoints</link> *points);
+<link linkend="void">void</link>                <link linkend="goo-canvas-points-unref">goo_canvas_points_unref</link>             (<link linkend="GooCanvasPoints">GooCanvasPoints</link> *points);
+
+                    <link linkend="GooCanvasLineDash">GooCanvasLineDash</link>;
+<link linkend="GooCanvasLineDash">GooCanvasLineDash</link>*  <link linkend="goo-canvas-line-dash-new">goo_canvas_line_dash_new</link>            (<link linkend="gint">gint</link> num_dashes,
+                                                         ...);
+<link linkend="GooCanvasLineDash">GooCanvasLineDash</link>*  <link linkend="goo-canvas-line-dash-newv">goo_canvas_line_dash_newv</link>           (<link linkend="gint">gint</link> num_dashes,
+                                                         <link linkend="double">double</link> *dashes);
+<link linkend="GooCanvasLineDash">GooCanvasLineDash</link>*  <link linkend="goo-canvas-line-dash-ref">goo_canvas_line_dash_ref</link>            (<link linkend="GooCanvasLineDash">GooCanvasLineDash</link> *dash);
+<link linkend="void">void</link>                <link linkend="goo-canvas-line-dash-unref">goo_canvas_line_dash_unref</link>          (<link linkend="GooCanvasLineDash">GooCanvasLineDash</link> *dash);
+
+enum                <link linkend="GooCanvasPathCommandType">GooCanvasPathCommandType</link>;
+union               <link linkend="GooCanvasPathCommand">GooCanvasPathCommand</link>;
+<link linkend="GArray">GArray</link>*             <link linkend="goo-canvas-parse-path-data">goo_canvas_parse_path_data</link>          (const <link linkend="gchar">gchar</link> *path_data);
+<link linkend="void">void</link>                <link linkend="goo-canvas-create-path">goo_canvas_create_path</link>              (<link linkend="GArray">GArray</link> *commands,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr);
+
+</synopsis>
+</refsynopsisdiv>
+
+
+
+
+
+
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+This section describes the types used throughout GooCanvas.</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasBounds" role="struct"/>GooCanvasBounds</title>
+<indexterm><primary>GooCanvasBounds</primary></indexterm><programlisting>typedef struct {
+  gdouble x1, y1, x2, y2;
+} GooCanvasBounds;
+</programlisting>
+<para>
+<link linkend="GooCanvasBounds"><type>GooCanvasBounds</type></link> represents the bounding box of an item in the canvas.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><link linkend="gdouble">gdouble</link>&nbsp;<structfield>x1</structfield>;</term>
+<listitem><simpara> the left edge.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="gdouble">gdouble</link>&nbsp;<structfield>y1</structfield>;</term>
+<listitem><simpara> the top edge.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="gdouble">gdouble</link>&nbsp;<structfield>x2</structfield>;</term>
+<listitem><simpara> the right edge.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="gdouble">gdouble</link>&nbsp;<structfield>y2</structfield>;</term>
+<listitem><simpara> the bottom edge.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasItemVisibility" role="enum"/>enum GooCanvasItemVisibility</title>
+<indexterm><primary>GooCanvasItemVisibility</primary></indexterm><programlisting>typedef enum
+{
+  GOO_CANVAS_ITEM_HIDDEN			= 0,
+  GOO_CANVAS_ITEM_INVISIBLE			= 1,
+  GOO_CANVAS_ITEM_VISIBLE			= 2,
+  GOO_CANVAS_ITEM_VISIBLE_ABOVE_THRESHOLD	= 3,
+} GooCanvasItemVisibility;
+</programlisting>
+<para>
+The <link linkend="GooCanvasItemVisibility"><type>GooCanvasItemVisibility</type></link> enumeration is used to specify when a canvas
+item is visible.</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ITEM-HIDDEN:CAPS" role="constant"/><literal>GOO_CANVAS_ITEM_HIDDEN</literal></term>
+<listitem><simpara> the item is invisible, and is not allocated any
+ space in layout container items such as <link linkend="GooCanvasTable"><type>GooCanvasTable</type></link>.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ITEM-INVISIBLE:CAPS" role="constant"/><literal>GOO_CANVAS_ITEM_INVISIBLE</literal></term>
+<listitem><simpara> the item is invisible, but it is still allocated
+ space in layout container items.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ITEM-VISIBLE:CAPS" role="constant"/><literal>GOO_CANVAS_ITEM_VISIBLE</literal></term>
+<listitem><simpara> the item is visible.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ITEM-VISIBLE-ABOVE-THRESHOLD:CAPS" role="constant"/><literal>GOO_CANVAS_ITEM_VISIBLE_ABOVE_THRESHOLD</literal></term>
+<listitem><simpara> the item is visible when the
+ canvas scale setting is greater than or equal to the item's visibility
+ threshold setting.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasPointerEvents" role="enum"/>enum GooCanvasPointerEvents</title>
+<indexterm><primary>GooCanvasPointerEvents</primary></indexterm><programlisting>typedef enum
+{
+  GOO_CANVAS_EVENTS_VISIBLE_MASK	= 1 &lt;&lt; 0,
+  GOO_CANVAS_EVENTS_PAINTED_MASK	= 1 &lt;&lt; 1,
+  GOO_CANVAS_EVENTS_FILL_MASK		= 1 &lt;&lt; 2,
+  GOO_CANVAS_EVENTS_STROKE_MASK		= 1 &lt;&lt; 3,
+
+  GOO_CANVAS_EVENTS_NONE		= 0,
+  GOO_CANVAS_EVENTS_VISIBLE_PAINTED	= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_PAINTED_MASK | GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_VISIBLE_FILL	= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_FILL_MASK,
+  GOO_CANVAS_EVENTS_VISIBLE_STROKE	= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_VISIBLE		= GOO_CANVAS_EVENTS_VISIBLE_MASK | GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_PAINTED		= GOO_CANVAS_EVENTS_PAINTED_MASK | GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_FILL		= GOO_CANVAS_EVENTS_FILL_MASK,
+  GOO_CANVAS_EVENTS_STROKE		= GOO_CANVAS_EVENTS_STROKE_MASK,
+  GOO_CANVAS_EVENTS_ALL			= GOO_CANVAS_EVENTS_FILL_MASK | GOO_CANVAS_EVENTS_STROKE_MASK
+} GooCanvasPointerEvents;
+</programlisting>
+<para>
+Specifies when an item receives pointer events such as mouse clicks.</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-VISIBLE-MASK:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_VISIBLE_MASK</literal></term>
+<listitem><simpara> a mask indicating that the item only
+ receives events when it is visible.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-PAINTED-MASK:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_PAINTED_MASK</literal></term>
+<listitem><simpara> a mask indicating that the item only
+ receives events when the specified parts of it are painted.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-FILL-MASK:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_FILL_MASK</literal></term>
+<listitem><simpara> a mask indicating that the filled part of
+ the item receives events.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-STROKE-MASK:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_STROKE_MASK</literal></term>
+<listitem><simpara> a mask indicating that the stroked part
+ of the item receives events.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-NONE:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_NONE</literal></term>
+<listitem><simpara> the item doesn't receive events at all.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-VISIBLE-PAINTED:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_VISIBLE_PAINTED</literal></term>
+<listitem><simpara> the item receives events in its
+ painted areas when it is visible (the default).
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-VISIBLE-FILL:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_VISIBLE_FILL</literal></term>
+<listitem><simpara> the item's interior receives events
+ when it is visible.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-VISIBLE-STROKE:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_VISIBLE_STROKE</literal></term>
+<listitem><simpara> the item's perimeter receives
+ events when it is visible.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-VISIBLE:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_VISIBLE</literal></term>
+<listitem><simpara> the item receives events when it is visible,
+ whether it is painted or not.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-PAINTED:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_PAINTED</literal></term>
+<listitem><simpara> the item receives events in its painted areas,
+ whether it is visible or not.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-FILL:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_FILL</literal></term>
+<listitem><simpara> the item's interior receives events, whether it
+ is visible or painted or not.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-STROKE:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_STROKE</literal></term>
+<listitem><simpara> the item's perimeter receives events, whether
+ it is visible or painted or not.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-EVENTS-ALL:CAPS" role="constant"/><literal>GOO_CANVAS_EVENTS_ALL</literal></term>
+<listitem><simpara> the item's perimeter and interior receive events,
+ whether it is visible or painted or not.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasAnimateType" role="enum"/>enum GooCanvasAnimateType</title>
+<indexterm><primary>GooCanvasAnimateType</primary></indexterm><programlisting>typedef enum
+{
+  GOO_CANVAS_ANIMATE_FREEZE,
+  GOO_CANVAS_ANIMATE_RESET,
+  GOO_CANVAS_ANIMATE_RESTART,
+  GOO_CANVAS_ANIMATE_BOUNCE
+} GooCanvasAnimateType;
+</programlisting>
+<para>
+<link linkend="GooCanvasAnimateType"><type>GooCanvasAnimateType</type></link> is used to specify what happens when the end of an
+animation is reached.</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ANIMATE-FREEZE:CAPS" role="constant"/><literal>GOO_CANVAS_ANIMATE_FREEZE</literal></term>
+<listitem><simpara> the item remains in the final position.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ANIMATE-RESET:CAPS" role="constant"/><literal>GOO_CANVAS_ANIMATE_RESET</literal></term>
+<listitem><simpara> the item is moved back to the initial position.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ANIMATE-RESTART:CAPS" role="constant"/><literal>GOO_CANVAS_ANIMATE_RESTART</literal></term>
+<listitem><simpara> the animation is restarted from the initial
+ position.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-ANIMATE-BOUNCE:CAPS" role="constant"/><literal>GOO_CANVAS_ANIMATE_BOUNCE</literal></term>
+<listitem><simpara> the animation bounces back and forth between the
+ start and end positions.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasPoints" role="struct"/>GooCanvasPoints</title>
+<indexterm><primary>GooCanvasPoints</primary></indexterm><programlisting>typedef struct {
+  double *coords;
+  int num_points;
+  int ref_count;
+} GooCanvasPoints;
+</programlisting>
+<para>
+<link linkend="GooCairoPoints"><type>GooCairoPoints</type></link> represents an array of points.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><link linkend="double">double</link>&nbsp;*<structfield>coords</structfield>;</term>
+<listitem><simpara> the coordinates of the points, in pairs.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="int">int</link>&nbsp;<structfield>num_points</structfield>;</term>
+<listitem><simpara> the number of points.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="int">int</link>&nbsp;<structfield>ref_count</structfield>;</term>
+<listitem><simpara> the reference count of the struct.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-points-new" role="function"/>goo_canvas_points_new ()</title>
+<indexterm><primary>goo_canvas_points_new</primary></indexterm><programlisting><link linkend="GooCanvasPoints">GooCanvasPoints</link>*    goo_canvas_points_new               (<link linkend="int">int</link> num_points);</programlisting>
+<para>
+Creates a new <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct with space for the given number of
+points. It should be freed with <link linkend="goo-canvas-points-unref"><function>goo_canvas_points_unref()</function></link>.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>num_points</parameter>&nbsp;:</term>
+<listitem><simpara> the number of points to create space for.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-points-ref" role="function"/>goo_canvas_points_ref ()</title>
+<indexterm><primary>goo_canvas_points_ref</primary></indexterm><programlisting><link linkend="GooCanvasPoints">GooCanvasPoints</link>*    goo_canvas_points_ref               (<link linkend="GooCanvasPoints">GooCanvasPoints</link> *points);</programlisting>
+<para>
+Increments the reference count of the given <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>points</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> the <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-points-unref" role="function"/>goo_canvas_points_unref ()</title>
+<indexterm><primary>goo_canvas_points_unref</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_points_unref             (<link linkend="GooCanvasPoints">GooCanvasPoints</link> *points);</programlisting>
+<para>
+Decrements the reference count of the given <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct,
+freeing it if the reference count falls to zero.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>points</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasPoints"><type>GooCanvasPoints</type></link> struct.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasLineDash" role="struct"/>GooCanvasLineDash</title>
+<indexterm><primary>GooCanvasLineDash</primary></indexterm><programlisting>typedef struct {
+  int ref_count;
+  int num_dashes;
+  double *dashes;
+  double dash_offset;
+} GooCanvasLineDash;
+</programlisting>
+<para>
+<link linkend="GooCanvasLineDash"><type>GooCanvasLineDash</type></link> specifies a dash pattern to be used when drawing items.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><link linkend="int">int</link>&nbsp;<structfield>ref_count</structfield>;</term>
+<listitem><simpara> the reference count of the struct.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="int">int</link>&nbsp;<structfield>num_dashes</structfield>;</term>
+<listitem><simpara> the number of dashes and gaps between them.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="double">double</link>&nbsp;*<structfield>dashes</structfield>;</term>
+<listitem><simpara> the sizes of each dash and gap.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="double">double</link>&nbsp;<structfield>dash_offset</structfield>;</term>
+<listitem><simpara> the start offset into the dash pattern.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-line-dash-new" role="function"/>goo_canvas_line_dash_new ()</title>
+<indexterm><primary>goo_canvas_line_dash_new</primary></indexterm><programlisting><link linkend="GooCanvasLineDash">GooCanvasLineDash</link>*  goo_canvas_line_dash_new            (<link linkend="gint">gint</link> num_dashes,
+                                                         ...);</programlisting>
+<para>
+Creates a new dash pattern.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>num_dashes</parameter>&nbsp;:</term>
+<listitem><simpara> the number of dashes and gaps in the pattern.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>...</parameter>&nbsp;:</term>
+<listitem><simpara> the length of each dash and gap.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new dash pattern.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-line-dash-newv" role="function"/>goo_canvas_line_dash_newv ()</title>
+<indexterm><primary>goo_canvas_line_dash_newv</primary></indexterm><programlisting><link linkend="GooCanvasLineDash">GooCanvasLineDash</link>*  goo_canvas_line_dash_newv           (<link linkend="gint">gint</link> num_dashes,
+                                                         <link linkend="double">double</link> *dashes);</programlisting>
+<para>
+Creates a new dash pattern.  Takes ownership of the <parameter>dashes</parameter> vector.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>num_dashes</parameter>&nbsp;:</term>
+<listitem><simpara> the number of dashes and gaps in the pattern.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>dashes</parameter>&nbsp;:</term>
+<listitem><simpara> a g_new-allocated vector of doubles, the length of each
+dash and gap.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a new dash pattern.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-line-dash-ref" role="function"/>goo_canvas_line_dash_ref ()</title>
+<indexterm><primary>goo_canvas_line_dash_ref</primary></indexterm><programlisting><link linkend="GooCanvasLineDash">GooCanvasLineDash</link>*  goo_canvas_line_dash_ref            (<link linkend="GooCanvasLineDash">GooCanvasLineDash</link> *dash);</programlisting>
+<para>
+Increments the reference count of the dash pattern.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>dash</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasLineDash"><type>GooCanvasLineDash</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> the dash pattern.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-line-dash-unref" role="function"/>goo_canvas_line_dash_unref ()</title>
+<indexterm><primary>goo_canvas_line_dash_unref</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_line_dash_unref          (<link linkend="GooCanvasLineDash">GooCanvasLineDash</link> *dash);</programlisting>
+<para>
+Decrements the reference count of the dash pattern. If it falls to 0
+it is freed.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>dash</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasLineDash"><type>GooCanvasLineDash</type></link>.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasPathCommandType" role="enum"/>enum GooCanvasPathCommandType</title>
+<indexterm><primary>GooCanvasPathCommandType</primary></indexterm><programlisting>typedef enum
+{
+  /* Simple commands like moveto and lineto: MmZzLlHhVv. */
+  GOO_CANVAS_PATH_MOVE_TO,
+  GOO_CANVAS_PATH_CLOSE_PATH,
+  GOO_CANVAS_PATH_LINE_TO,
+  GOO_CANVAS_PATH_HORIZONTAL_LINE_TO,
+  GOO_CANVAS_PATH_VERTICAL_LINE_TO,
+
+  /* Bezier curve commands: CcSsQqTt. */
+  GOO_CANVAS_PATH_CURVE_TO,
+  GOO_CANVAS_PATH_SMOOTH_CURVE_TO,
+  GOO_CANVAS_PATH_QUADRATIC_CURVE_TO,
+  GOO_CANVAS_PATH_SMOOTH_QUADRATIC_CURVE_TO,
+
+  /* The elliptical arc commands: Aa. */
+  GOO_CANVAS_PATH_ELLIPTICAL_ARC
+} GooCanvasPathCommandType;
+</programlisting>
+<para>
+GooCanvasPathCommandType specifies the type of each command in the path.
+See the path element in the <ulink url="http://www.w3.org/Graphics/SVG/">
+Scalable Vector Graphics (SVG) specification</ulink> for more details.</para>
+<para>
+
+</para><variablelist role="enum">
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-MOVE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_MOVE_TO</literal></term>
+<listitem><simpara> move to the given point.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-CLOSE-PATH:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_CLOSE_PATH</literal></term>
+<listitem><simpara> close the current path, drawing a line from the
+ current position to the start of the path.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-LINE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_LINE_TO</literal></term>
+<listitem><simpara> draw a line to the given point.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-HORIZONTAL-LINE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_HORIZONTAL_LINE_TO</literal></term>
+<listitem><simpara> draw a horizontal line to the given
+ x coordinate.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-VERTICAL-LINE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_VERTICAL_LINE_TO</literal></term>
+<listitem><simpara> draw a vertical line to the given y
+ coordinate.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-CURVE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_CURVE_TO</literal></term>
+<listitem><simpara> draw a bezier curve using two control
+ points to the given point.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-SMOOTH-CURVE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_SMOOTH_CURVE_TO</literal></term>
+<listitem><simpara> draw a bezier curve using a reflection
+ of the last control point of the last curve as the first control point,
+ and one new control point, to the given point.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-QUADRATIC-CURVE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_QUADRATIC_CURVE_TO</literal></term>
+<listitem><simpara> draw a quadratic bezier curve using
+ a single control point to the given point.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-SMOOTH-QUADRATIC-CURVE-TO:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_SMOOTH_QUADRATIC_CURVE_TO</literal></term>
+<listitem><simpara> draw a quadratic bezier curve
+ using a reflection of the control point from the previous curve as the
+ control point, to the given point.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><anchor id="GOO-CANVAS-PATH-ELLIPTICAL-ARC:CAPS" role="constant"/><literal>GOO_CANVAS_PATH_ELLIPTICAL_ARC</literal></term>
+<listitem><simpara> draw an elliptical arc, using the given
+ 2 radii, the x axis rotation, and the 2 flags to disambiguate the arc,
+ to the given point.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasPathCommand" role="union"/>union GooCanvasPathCommand</title>
+<indexterm><primary>GooCanvasPathCommand</primary></indexterm><programlisting>union GooCanvasPathCommand
+{
+  /* Simple commands like moveto and lineto: MmZzLlHhVv. */
+  struct {
+    guint type : 5; /* GooCanvasPathCommandType */
+    guint relative : 1;
+    gdouble x, y;
+  } simple;
+
+  /* Bezier curve commands: CcSsQqTt. */
+  struct {
+    guint type : 5; /* GooCanvasPathCommandType */
+    guint relative : 1;
+    gdouble x, y, x1, y1, x2, y2;
+  } curve;
+
+  /* The elliptical arc commands: Aa. */
+  struct {
+    guint type : 5; /* GooCanvasPathCommandType */
+    guint relative : 1;
+    guint large_arc_flag : 1;
+    guint sweep_flag : 1;
+    gdouble rx, ry, x_axis_rotation, x, y;
+  } arc;
+};
+</programlisting>
+<para>
+GooCanvasPathCommand holds the data for each command in the path.
+</para>
+<para>
+The <parameter>relative</parameter> flag specifies that the coordinates for the command are
+relative to the current point. Otherwise they are assumed to be absolute
+coordinates.</para>
+<para>
+
+</para></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-parse-path-data" role="function"/>goo_canvas_parse_path_data ()</title>
+<indexterm><primary>goo_canvas_parse_path_data</primary></indexterm><programlisting><link linkend="GArray">GArray</link>*             goo_canvas_parse_path_data          (const <link linkend="gchar">gchar</link> *path_data);</programlisting>
+<para>
+Parses the given SVG path specification string.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>path_data</parameter>&nbsp;:</term>
+<listitem><simpara> the sequence of path commands, specified as a string using the
+ same syntax as in the <ulink url="http://www.w3.org/Graphics/SVG/">Scalable
+ Vector Graphics (SVG)</ulink> path element.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> a <link linkend="GArray"><type>GArray</type></link> of <link linkend="GooCanvasPathCommand"><type>GooCanvasPathCommand</type></link> elements.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-create-path" role="function"/>goo_canvas_create_path ()</title>
+<indexterm><primary>goo_canvas_create_path</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_create_path              (<link linkend="GArray">GArray</link> *commands,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr);</programlisting>
+<para>
+Creates the path specified by the given <link linkend="GooCanvasPathCommand"><type>GooCanvasPathCommand</type></link> array.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>commands</parameter>&nbsp;:</term>
+<listitem><simpara> an array of <link linkend="GooCanvasPathCommand"><type>GooCanvasPathCommand</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>cr</parameter>&nbsp;:</term>
+<listitem><simpara> a cairo context.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>

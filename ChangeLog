@@ -1,0 +1,2399 @@
+2008-01-01; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/compat.[ch]:
+    Added function to return user home directory.
+    
+    * src/first-time.[ch]:
+    Added check for /hwconf directory.
+    
+    * src/radio-conf.[ch]:
+    Added files containing functions for reading and writing radio
+    configuration files.
+
+
+2007-12-27; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-cfg.[ch]:
+    Added parameters for adding new satellites to database.
+    Fixed bug that casused boolean parameters to be misaligned in the lookup
+    table.
+    
+    * src/sat-pref-tle.c:
+    Added checkboxes for adding new and deleting obsolete satellites.
+    
+    * src/tle-update.[ch]:
+    New satellites are now added to a file called new.tle
+
+
+2007-12-11; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-log.c:
+    Fixed bug 1818144: No log file created at first execution.
+
+
+2007-11-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sky-glance.c:
+	Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
+	Fixed bug that caused GObject warnings due to invalid typecasts in the
+	size_allocate_cb function.
+
+	* src/menubar.c:
+	Added Tools menu.
+	
+
+2007-08-23;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.c:
+	One more fix for bug 1763321.
+
+	* src/predict-tools.[ch]:
+	Added optional start time parameter to allow correct use of
+	get_current_pass() in non-realtime cases.
+
+	* src/gtk-polar-view.c:
+	Fixed bug that caused incorrect calculation of sky tracks in
+	non-realtime cases.
+	
+
+2007-08-16;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-log-browser.[ch]:
+	Added files containing message log browser.
+
+	* src/menubar.c:
+	Use new log browser.
+
+	* src/sat-log.[ch]:
+	Changed column separator.
+
+	* win32/Makefile:
+	* src/Makefile.am:
+	Include new log browser files.
+	
+
+2007-08-14;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/Makefile.am:
+	Allow deprecated symbols otherwise gpredict will not compile with
+	Gtk+ 2.12 (GtkTooltips deprecated).
+
+	* src/main.c:
+	Print info text when starting gpredict on win32 (bug 1631832).
+	The delay has been located to happen the first time we use GLib
+	file I/O functions, thus the bug is unfixable in gpredict.
+	
+
+2007-08-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-help.[ch]:
+	Added function to show distributed help files (license, news, etc.)
+
+	* src/menubar.c:
+	Added menu entries for License and News.
+
+	* win32/Makefile:
+	Updated with goocanvas 0.8 files.
+	
+
+2007-08-12;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-single-pass.c:
+	Fixed bug 1772454: Single pass prediction flags are reset to default.
+
+
+2007-08-11;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/save-pass.[ch]:
+	* src/pass-to-txt.[ch]:
+	Implemented functions to save pass predictions to text files.
+	
+
+2007-08-04;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.[ch]:
+	Added parameters for saving pass predictions.
+
+
+2007-08-02;	Alexandru Csete <oz9aec@gmail.com>
+
+	* configure.ac:
+	* src/all:
+	Replaced config.h with build-config.h to avoid conflicts with config.h
+	from GooCanvas when building win32 binaries (bug 1631822).
+
+
+2007-07-31;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/predict-tools.[ch]:
+	The AOS and LOS finders (find_aos and find_los) now take an optional
+	upper time limit for calculations (same parameter as for the other
+	get_pass* functions). Should help fixing bugs 1763321 and 1763356.
+
+	* src/gtk-sat-module.c:
+	Use SAT_CFG_INT_PRED_LOOK_AHEAD when calling find_aos and find_los.
+	Should fix bugs 1763321 and 1763356.
+
+	* src/gtk-single-sat.c:
+	Use N/A in Next Event, Next AOS, and Next LOS fields if satellite
+	has no AOS and/or LOS (bug 1763321).
+
+	* src/gtk-polar-view.c:
+	Don't try to display LOS time for selected geostationary satellites
+	(bug 1763321).
+	
+
+2007-07-29;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-utils.[ch]:
+	Added Gtk+ workaround for allowing tooltips on GtkComboBox.
+
+	* src/sat-pref-debug.c:
+	* src/sat-pref-general.c
+	Added widget for configuring the debug message handler.
+
+	* src/gtk-sat-module-popup.[ch]:
+	* src/mod-mgr.c:
+	* src/gtk-sat-module.c:
+	* src/menubar.c:
+	Reopen modules in the same state in which they were last time.
+	
+
+2007-07-27;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* src/gtk-azel-plot.[ch]:
+	* src/gtk-polar-plot.[ch]:
+	* src/gtk-polar-view.[ch]:
+	* src/gtk-polar-view-popup.c:
+	* src/gtk-sat-map-ground-track.c:
+	* src/gtk-sat-map.[ch]:
+	* src/gtk-sky-glance.[ch]:
+	Port to goocanvas-0.8.
+
+	* configure.ac, Makefile.am, src/Makefile.am:
+	Build for goocanvas-0.8.	
+
+
+2007-07-16;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module-popup.c:
+	Added window icon to module windows (bug #1752910).
+	Correctly re-parent time controller window when docking/undocking
+	the modules (bug #1754801).
+	Include program name and QTH name in the window title (bug
+	#1752912).
+
+	* src/gtk-single-sat.c:
+	Changed pop-up menu in single satellite view so that the "Select
+	Satellite" item is the last one (bug #1752915).
+
+	* src/gtk-sky-glance.c:
+	* src/sat-pref-tle.c:
+	* src/sat-pref-qth.c:
+	* src/sat-pref-formats.c:
+	* src/sat-log.c:
+	* src/menubar.c:
+	* src/gtk-sat-map-popup.c:
+	* src/gtk-polar-view-popup.c:
+	Removed unused functions and variables.
+
+	* src/about.c:
+	Updated info.
+
+	* src/gpredcit-url-hook.[ch]:
+	Added files to implement URL hook functions.
+
+	* src/sat-cfg.[ch]:
+	Added parameters for log file management.
+
+	* src/main.c:
+	Remember to initialise and shut down logger.
+
+	* src/sat-log.c:
+	First implementation of log to file, including log rotation
+	and other maintenance operations. Proper configuration is still TBD.
+	
+
+2007-07-15;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/conig-keys.h:
+	Added configuration keys for module state.
+
+	* src/sat-cfg.[ch]:
+	Added configuration parameters for restoring module states.
+
+	* src/mod-mgr.c:
+	Save module configuration when closing module manager.
+
+	* src/gk-sat-module.c:
+	Save module configuration when CLOSE signal is received.
+
+	* src/gtk-sat-module-popup.c:
+	Store state of module when docking or undocking. Use stored
+	positon of module window if requested by configuration.
+
+
+2007-07-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.[ch]:
+	Added configuration parameters for remembering window position.
+
+	* src/main.c:
+	Restore window position if requested by user configuration.
+
+	* src/sat-pref-layout.c:
+	Allow user to select explicit window positioning (restore last
+	powition of the main and module windows).
+	
+
+2007-07-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.[ch]:
+	Added config parameters for main window position.
+	
+	* src/main.c:
+	Store position and size of main window every time it receives a
+	"configure_event" (feature request #1705375).
+	
+
+2007-06-18;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-utils.c:
+	Use g_file_get_contents and g_file_set_contents in file
+	copy function (bug #1575291).
+
+
+2007-06-16;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/loc-tree.c:
+        Enabled rules hint in the location tree.
+
+	* src/menubar.c:
+	Show an error message if gpredict is compiled without libcurl.
+
+
+2007-05-30;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth-editor.c:
+	* src/sat-pref-qth.c:
+	* src/qth-editor.c:
+	* src/loc-tree.c:
+	* src/gtk-sat-data.c:
+	Allow 4 decimal digits for QTH longitude and latitude.
+	Fixed indent.
+
+	* src/sat-pref-list-view.c:
+	Fixed bug that prevented the rules-hint setting to be disabled
+	(#1728575).
+
+
+2007-04-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/map-selector.[ch]:
+	Implementation of the map selector with preview.
+
+	* src/sat-pref-map-view.c:
+	Use new map selector and store map selection in config.
+
+	
+2007-03-22;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module-tmg.[ch]:
+	* src/gtk-sat-module.[ch]:
+	Implemented manual time control.
+
+	* src/gtk-polar-view.[ch]:
+	* src/gtk-sat-map.[ch]:
+	* src/gtk-sat-map-ground-track.c:
+	Use simulated real time for countdown till next AOS.
+
+	* src/gtk-single-sat.h:
+	* src/gtk-sat-list.h:
+	Added tstamp field to store the time of calculations. Although this
+	field is not used by the view, it is consistent with the GtkSatMap
+	and GtkPolarView views.
+
+
+2007-03-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module.c:
+	Allow running in RT mode with time offset. This was not possible
+	until now because the GtkSatModule update functions always used the
+	current time when throttle = 1. Moved tmgWidget update code into
+	gtk-sat-module-tmg.c
+
+	* src/gtk-sat-module.h:
+	Removed signal ID fields and added time reset flag.
+
+	* src/gtk-sat-module-tmg.[ch]:
+	Added fuinction to update time controller widgets. Implemented
+	tmg_reset function.
+	
+
+2007-03-03;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module-tmg.[ch]:
+	New files containing RT/SRT/MAN time controller.
+
+	* src/gtk-sat-module.[ch]:
+	New time management scheme using RT/SRT/MAN time controller.
+	
+	* src/gtk-sat-module-poopup.c:
+	Added menu entry for Time Controller.
+
+
+2007-02-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/predict-tools.c:
+	Added checks to ensure that satellite has AOS before starting
+	calculations (bug #1669535).
+
+	* src/gtk-polar-view-popup.c:
+	Disable "Sky Track" menu item if satellite is in geostationary orbit.
+	In this case sky track makes no sense, since the sat will be at the
+	same position all the time.
+
+
+2007-02-25;	Alexandru Csete <oz9aec@gmail.com>
+
+	* doc/notes/time-keeping.txt:
+	Added info about the gpredict time manager.
+
+	* src/predict-tools.c:
+	Fixed a bug that prevented maximum time limit to be taken into account
+	when predicting multiple passes (get_passes).
+	Fixed get_pass to return NULL in case there are no passes with max_el
+	greater than the required elevation.
+
+	* src/gtk-sky-glance.[ch]:
+	First functional version.
+
+	* src/sat-cfg.c:
+	Use different colours for satellites on sky at glance canvas.
+
+	* src/sat-pref-sky-at-glance.c:
+	Implemented.
+	
+
+2007-02-13;     Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-cfg.c:
+	Allow user to explicitly select "** DEFAULT **" ground station. This
+	will clear the MOD_CFG_QTH_FILE_KEY module configuration key causing the
+	module to always use the default ground station even when a new ground
+	station is selected as default (see bug #1656943).
+	
+
+2007-02-04;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.[ch]:
+	Added configuration parameters for sky at a glance predictions.
+
+	* src/gtk-sky-glance.[ch]:
+	Added files with preliminiary implementation of the sky at a
+	glance wisget.
+
+	* src/gtk-sat-module-popup.c:
+	Enable sky at a glance popup menu item and implement client code.
+
+	* src/Makefile.am, win32/Makefile:
+	Include new files in build.
+
+	* configure.ac:
+	Increment version number.
+	
+
+2007-02-03;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* src/gtk-sat-map.[ch]:
+	Implemented labels for horizontal and vertical grid lines.
+
+
+2007-02-02;	Alexandru Csete <oz9aec@gmail.com>
+
+	* goocanvas, goocanvas-patches:
+	Imported goocanvas 0.4 into gpredict CVS as baseline and removed patches
+	that were previously applied against the CVS version of goocanvas. This
+	closes bug #1631810.
+	
+
+2007-02-01;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* src/sgpsdp/sgp_in.c:
+	Fix for bug 1644926, avoid escaping '&' by using '/' for satellite
+	names.
+	
+	
+2007-01-28;	William J Beksi <wjbeksi@users.sourceforge.net>
+	
+	* src/gtk-sat-map.c:
+	Added support to remap satellite labels. When the satellite marker
+	comes within 50 pixels of the left or right boundary of the map the
+	label will be mapped to GTK_ANCHOR_WEST or GTK_ANCHOR_EAST. Similarly
+	when the marker is within 25 pixels of the bottom map boundary the
+	label will be mapped to GTK_ANCHOR_SOUTH.
+
+
+2006-01-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map-ground-track.c:
+	Explicitly free allocated ssp_t structures when the ground track is
+	deleted (bug #1636429). Miscellaneous cleaning.
+
+	* src/sat-cfg.c:
+	Free keyfile after CFG has been saved (bug #1636429).
+
+	* src/mod-cfg.c:
+	Fixed some memory leaks (bug #1636429).
+
+	* src/tle-update.c:
+	Fixed some memory leaks (bug #1636429).
+	Use binary mode when writing cache files. Fixes bug #1639888.
+
+	* src/sat-log.c:
+	* src/sat-pref-formats.c:
+	* src/time-tools.c:
+	* src/gtk-sat-module.c:
+	Changed to use g_get_current_time instead of gettimeofday (bug #1575214).
+
+	* src/Makefile:
+	No need for libc compat functions anymore.
+
+
+2006-01-19;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/tle-lookup.c:
+	Free allocated TLE lines when no longer needed (bug #1636429).
+	Fixed indent.
+
+	* src/loc-tree.c:
+	* src/gtk-sat-tree.c:
+	Free allocated lines when no longer needed (bug #1636429).
+	Fixed indent.
+
+	* src/gtk-polar-view.c:
+	Use g_hash_table_new_full to ensure that dynamically allocated key is
+	freed when satellite is removed from hash table.
+
+	* src/gtk-sat-module.c:
+	Fixed bug that caused an error message when creates modules with
+	two views (bug #1570195).
+
+	* src/gtk-sat-list.c:
+	Attempt to work around missing arrows on win32 (bug #1580012).
+	Fixed indent.
+	
+
+2006-01-17;	Alexandru Csete <oz9aec@gmail.com>
+
+	* Makefile.am:
+	Include win32 files in source distribution (bug #1631809).
+	
+
+2006-01-09;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/tle-update.c:
+	Fixed bug that prevented TLE files to be updated under windows
+	(bug #1631803).
+	
+
+2006-01-08;	Alexandru Csete <oz9aec@gmail.com>
+
+	* win32:
+	Added files necessary for linux->win32 cross-build.
+	
+
+2006-12-31;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pass-dialogs.c:
+	Show polar and az/el plots of pass in addition to the data. We use a
+	notebook with three pages. Fixed indentation.
+
+	* src/gtk-polar-plot.[ch]:
+	Added files containing static polar plot widget that can be used to
+	plot asingle pass.
+
+	* src/gtk-polar-plot-popup.c:
+	Fixed bug that could have caused buffer overflow under certain
+	circumstances.
+
+	* src/gtk-azel-plot.[ch]:
+	Added files containing static Az/El plot widget that can be used to
+	plot a single pass.
+
+	* src/Makefile.am:
+	* src/Makefile.mingw:
+	Include new files into build list.
+	
+
+2006-12-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.c:
+	Changed default layout to include single satellite view instead of list.
+
+
+2006-12-17;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/menubar.c:
+	Don't set any default window size for TLE update window.
+
+	* src/tle-update.c:
+	Modified status strings to only include file name on remote server and
+	not the complete path.
+
+	* src/gtk-single-sat.[ch]:
+	* src/gtk-polar-view.[ch]:
+	* src/gtk-sat-map.[ch]:
+	* src/gtk-sat-list.[ch]:
+	Added API functions to explicitly reload satellites, for example after 
+	TLE update. This was necessary for the GtkSingleSat and GtkPolarView
+	widgets because they keep their own reference to the satellite data in
+	singly linked lists.
+	
+
+2006-12-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map-ground-track.[ch]:
+	Added files containing function for ground track management.
+
+	* src/gtk-sat-map.h:
+	Updated type definition to include ground tracks.
+
+	* src/gtk-sat-map.c, src/gtk-sat-map-popup.c:
+	Enabled ground tracks.
+
+	* src/sat-pref-map-view.c:
+	Added control to adjust number of orbits for ground tracks.
+	
+
+2006-10-29;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.[ch]:
+	* src/config-keys.h:
+	Added parameter for number of orbits to show ground track for.
+	
+
+2006-10-28;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-popup-menu.c:
+	Fixed wrong epoch day in the satellite info dialogue (bug #1586341).
+	
+
+2006-10-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp/sgp4sdp4.h, src/sgpsdp/sgp_in.c:
+	Added support for operational status encoded in the satellite name
+	available in TLE from celestrak.com
+
+	* src/tle-update.c, src/sat-popup-menu.c:
+	Added support for operational status.
+	
+
+2006-10-17;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.[ch]:
+	Use arrays for grid lines.
+	
+
+2006-10-15;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/main.c:
+	Added code to implement automatic monitoring of TLE age.
+	
+
+2006-10-14;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-tle.c:
+	Finished implementation of TLE configuration module.
+	
+
+2006-10-11;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/tle-lookup.[ch]:
+	Added function tle_lookup_count(), which returns the number of
+	satellites in the link table.
+
+	* src/tle-update.[ch]:
+	Implemented GUI feedback. Store time of last update if process has been
+	successfull. Added function to convert tle_auto_upd_freq_t to gchar.
+
+	* src/menubar.c:
+	Added GUI elements for TLE update menu items.
+
+	* src/gtk-sat-module.c:
+	Added function to reload data for the satellites in the module (reconf
+	after TLE update).
+
+	* src/sat-cfg.[ch]:
+	Added flags for server and proxy authentication.
+
+	* src/Makefile.mingw:
+	Added Curl to Mingw build environment.
+
+
+2006-10-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/tle-update.[ch]:
+	Finished preliminary implementation of TLE update.
+
+	* src/menubar.c:
+	Added calls to tle-update. GUI feedback still TBD.
+
+	* src/mod-mgr.[ch]:
+	Added infrastructure to allow reloading of sats in each module.
+
+
+2006-10-08;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/menubar.c:
+	Added menu items fro TLE update.
+	
+
+2006-10-06;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/first-time.[ch]:
+	Added checks for TLE cache directory.
+	
+
+2006-10-04;	Alexandru Csete <oz9aec@gmail.com>
+
+	* configure.ac:
+	Check for libcurl that is used for automatic TLE update.
+
+	
+2006-10-03;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.[ch]:
+	Added config keys for TLE update.
+	
+
+2006-10-01;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-cfg.c:
+	Added window icon to module configuration windows. Fixed indent.
+
+
+2006-09-24;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-vis.[ch]:
+	* src/predict-tools.c:
+	Use the term daylight instead of sunlight in visibility calculations.
+
+	* src/tle-update.[ch]:
+	Added files.
+
+	* src/Makefile.am:
+	* src/Makefile.mingw:
+	Added new files to list.
+
+	
+2006-09-05;	Alexandru Csete <oz9aec@gmail.com>
+
+	* data/Makefile.am:
+	Don't use $(DESTDIR) because that causes data to be installed into the
+	wrong place when using 'make install DESTDIR=/foo'
+	(patch by Denis Leroy).
+
+	* src/gtk-sat-module.c:
+	Added extra fallback in case user deletes the .qth files that is used
+	by the module. In those cases we use the global default QTH and also
+	delete the module specific QTHFILE setting.
+	
+
+2006-09-02;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* src/sat-pref-map-view.c:
+	Enabled grid lines.
+
+	* src/gtk-sat-map.[ch]:
+	Implemented horizontal and vertical grid lines.
+
+
+2006-09-02;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-polar-view.c:
+	Update positions of time stamp labels when the polar view is resized.
+
+	* src/gtk-sat-map-popup.c:
+	Renamed 'Area Coverage' to 'Highlight foorprint' and disabled not
+	implemented functions.
+
+	* src/gtk-sat-module-popup.c:
+	* src/menubar.c:
+	* src/sat-pref-general.c:
+	Disabled not implemented functions.
+Added GUI elements for TLE update menu items.
+	* src/mod-mgr.c:
+	Don't show tab when there is only one page in the notebook. Show
+	currently selected page title in the main windo title.
+
+	* src/main.c:
+	No need to return window fra gpredict_app_create, since it a global
+	variable.
+
+	* src/sat-pref-list-view.c:
+	Use table instead of list to select visible columns in list view.
+	
+
+2006-08-28;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/predict-tools.[ch]:
+	Added get_current_pass function, which provides the details of the
+	current pass. Also added get_pass_no_min_el to get a pass disregarding
+	any minimum elevation setting.
+	Renamed calc() to predict_calc() and made it public to allow other
+	components to use the SGP4/SDP4 driver, too.
+
+	* src/gtk-polar-view.[ch]:
+	* src/gtk-polar-view-popup.c:
+	Details of the current pass are now calculated when the satelite comes
+	up and stored in the sat_obj_t structure. Showing the sky track is then
+	reduced to create the polyline. Timestamps are not yet re-positioned
+	when the GtkPolarView is resized.
+	Renamed "Show Track" to "Sky track" and disabled "Set target" item.
+	
+
+2006-08-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.c:
+	Fixed remaining issues with erroneous calculation of the range circles,
+	i.e. when SSP longitude was +/- 180 degrees, and when the sat was close
+	to +/- 180 *and* the South pole.
+
+	* src/main.c:
+	Don't include version number in main window title.
+
+	* src/gtk-polar-view.[ch]:
+	* src/gtk-polar-view-popup.c:
+	Implemented sky track.
+
+	* src/predict-tools.[ch]:
+	Added function to calculate AOS time of current pass (in the past).
+
+
+2006-08-26;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.[ch]:
+	Use preferred coverage colour and allow disabling of coverage. Added
+	flags for ground track and targetting. Use correct integer colour
+	for info text background.
+
+	* src/sat-pref-map-view.c:
+	Implemented OK and CANCEL functions.
+
+	* src/sat-pref-polar-view.c:
+	Fixed a few minor mistakes.
+
+	* src/gtk-sat-map-popup.c:
+	* src/gtk-polar-view-popup.c:
+	Implemented toggle items (track, coverage and target). Disabled items
+	that are not yet supported.
+
+	* src/gtk-polar-view.[ch]:
+	Added showtrack and istarget fields.
+
+	* src/gpredict-utils.[ch]:
+	Added rgba2html to allow conversion of 0xRRGGBBAA colours to html,
+	i.e. RRGGBB hex string format that can be used in Pango Markup.
+
+	* src/sat-cfg.[ch]:
+	Added missing parameters and removed string representation of map info
+	background colour.
+	
+
+2006-08-25;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.[ch]:
+	Use GooCanvasPolyline instead of rectangles for footprint. This gives
+	much better performance and allows to highlight the covered areas.
+	Implemented satellite selection and pop-up menu.
+
+	* src/sat-cfg.[ch]:
+	* src/config-keys.h:
+	Added MAP_TICK_COL, MAP_INFO_BGD_COL, and MAP_TRACK_COL parameters.
+
+	* src/sat-pref-map-view.c:
+	Added widgets.
+	
+
+2006-08-23;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-data.c:
+	* src/gtk-sat-moules.c:
+	Added code to ensure that ssplon always stays within -PI and +PI.
+	
+
+2006-08-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.c:
+	Only update satellite if it has moved 2*MARKER_SIZE_HALF (performance).
+	Cast coordinates to gdouble when using g_object_set.
+	Fixed update of next event. Fixed indentation.
+	
+
+2006-08-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list.c:
+	Enabled automatic sorting for all columns.
+
+	* src/gtk-polar-view.[ch]:
+	Use all configuration flags defining extra contents. Only show "Next"
+	if field is enabled and there is an upcoming satellite.
+
+
+2006-08-12;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-vis.c, src/sat-vis.h:
+	Added files to calculate satellite visibility.
+
+	* src/gtk-single-sat.c:
+	* src/gtk-sat-list.c:
+	Implemented visibility fields.
+
+	* src/predict-tools.[ch]:
+	Include visibility in predicted passes.
+
+	* src/pass-predict-dialogs.c:
+	Implemented visibility fields.
+	
+
+2006-08-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list.c:
+	Fixed column alignments.
+
+	* src/gpredict-help.c:
+	* src/gtk-sat-module-popup.c:
+	* src/loc-tree.c:
+	* src/mod-cfg.c:
+	* src/qth-editor.c:
+	* src/sat-pref.c:
+	* src/sat-pref-qth-editor.c
+	* src/menubar.c:
+	Changed button order so that OK button is the last one.
+
+	* src/sat-cfg.c, src/main.c:
+	Changed default window size. Attempt to store actual window size before
+	we exit (does not work).
+	
+
+
+2006-08-09;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* src/gtk-sat-map.[ch]:
+	Implemented satellite range circles. Points are plotted using the
+	goocanvasrect items.
+
+
+2006-08-06;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* src/gtk-polar-view.c:
+	* src/gtk-map-view.c: 
+	Fixed the setting of catnum in update_sat() which was causing some geo 
+	orbit satellites to crash when their next aos was not updated.
+
+
+2006-08-05;	William J Beksi <wjbeksi@users.sourceforge.net>
+
+	* gpredict.doxygen:
+	Added Doxygen configuration file for generating source code
+	documentation.
+
+	* create_docs:
+	Added shell script for calling Doxygen to generate source code
+	documentation and Latex to generate the user manual.
+
+
+2006-07-30;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-tree.c:
+	Added buttons to expand and collapse the GtkSatTree. Expanding the tree
+	will allow the search-as-you-type function to work properly.
+
+	* src/sat-cfg.[ch]:
+	Added support for web browser string. Added sat_cfg_reset_str.
+
+	* src/sat-pref-help.[ch]:
+	Added files for configuring help system.
+
+	* src/gpredict-help.[ch]:
+	Added files containing basic implementation of help system.
+
+	* src/first-time.c:
+	Modified step 3 to copy Amateur.mod into user modules directory.
+	
+
+2006-07-29;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module-popup.c, src/tle-lookup.c:
+	* src/loc-tree.c, src/sat-log.c:
+	Fixed compile warnings.
+
+	* src/menubar.c:
+	Cleaned up a bit.
+
+	* src/pass-popup-menu.[ch]:
+	Require QTH as parameter otherwise qth info can not propagate to the
+	"Show Details" function (bug #1530890).
+
+	* src/sat-pass-dialogs.c:
+	Pass QTH info to pass-popup-menu otherwise show details dialog will
+	crash, see bug #1530890.
+
+	* src/qth-editor.[ch]:
+	Added files containing universal QTH editor. Primary use will be to
+	add new QTH via the "+" button in mod-cfg.
+
+	* src/mod-cfg.c:
+	Use qth-editor to implement "+" button (add QTH).
+	
+
+2006-07-28;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-popup-menu.[ch]:
+	* src/pass-popup-menu.[ch]:
+	* src/gtk-polar-view-popup.[ch]:
+	* src/gtk-sat-map-popup.[ch]:
+	* src/mod-cfg.[ch]:
+	Require top level window as parameter to avoid hiding the dialog windows
+	in fullscreen mode (bug 1530218).
+
+	* src/gtk-sat-list.c:
+	Pass toplevel widget of treeview to sat_popup_menu_exec.
+
+	* src/gtk-single-sat.c:
+	* src/gtk-polar-view.c:
+	Pass toplevel widget as parameter when invoking info and pass dialogs.
+
+	* src/gtk-sat-module.c:
+	Pass toplevel widget as parameter when invoking configure and clone
+	dialogs.
+
+	* src/sat-pass-dialogs.[ch]:
+	Require top level window as parameter to avoid hiding the dialog windows
+	in fullscreen mode (bug 1530218).
+	Implemented missing columns (bugs 1528837, 1530452, 1530454).
+
+	* src/Makefile.am:
+	Changed include path for goocanvas to use $(top_srcdir) to fix
+	make distcheck.
+
+	* Makefile.am:
+	Use $(top_srcdir) for install-data-local so make make distcheck can go
+	all the way and only fail during uninstall #-o
+
+
+2006-07-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/config-keys.h, src/sat-cfg.[ch]:
+	Added font name and extra azimuth ticks flag for GtkPolarView.
+	Implemented sat_cfg_reset_bool.
+
+	* src/gpredict-utils.[ch]:
+	Added function to convert between 0xRRGGBBAA and GdkColor.
+
+	* src/sat-pref-polar-view.c:
+	Finished implementation.
+	
+
+2006-07-26;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-single-sat:
+	Removed unused variables.
+
+	* src/sat-pref-condifrions.c:
+	* src/sat-pref-multi-pass.c:
+	* src/sat-pref-single-pass.c:
+	Added RESET button.
+
+	* src/gtk-sat-tree.c:
+	Implemented ability to handle multiple satellite instances properly.
+	Change message severity of "Already selected" messages from ERROR to
+	MESSAGE.
+
+	* src/sat-cfg.c:
+	Changed default window sizes, default layout (3), and default 3rd
+	view (list).
+	
+
+2006-07-25;	Alexandru Csete <oz9aec@gmail.com>
+
+	* README, src/gtk-sat-map.c, src/sat-pref-qth-editor.c:
+	Spell Maidenhead correctly.
+
+	* src/gtk-sat-map-popup.[ch]:
+	Added files based on gtk-polar-view-popup.
+
+	* src/locator.[ch]:
+	Include files instead of depending on hamlib just for these
+	functions.
+
+	* src/gtk-polar-view.c, src/gtk-sat-list.c, src/gtk-sat-map.c,
+	* src/main.c, src/gtk-single-sat.c, src/sat-pref-qth.c,
+	* src/sat-pref-qth-editor.c, configure.ac:
+	Use built-in locator conversion functions.
+
+	* src/config-keys.h, src/sat-cfg.[ch]:
+	Added parameters for GtkSatMap info background colour.
+
+	* src/sat-pref-qth-editor.c
+	Fixed bug that prevented the E/W combo box to be updated when
+	changing QRA from West to East. Removed unused variables.
+
+	* src/gtk-polar-view-popup.c:
+	Cleaning.
+
+	* src/about.c:
+	Use new website URL.
+
+	* src/pixmaps/maps/nasa-topo_800.png:
+	Added file.
+	
+
+2006-07-24;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth.c:
+	Show QTH location instead of weather station.
+
+	* src/menubar.c, src/gtk-sat-module.c:
+	Fix initial module sizes based on parent (GtkNotebook) size.
+	
+
+2006-07-23;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list-col-sel.[ch]:
+	Added function to set column flags of existing column selector.
+
+	* src/sat-pref-list-view.c, src/sat-pref-single-sat.c:
+	Added RESET button.
+	
+
+2006-07-22;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-mgr.[ch]:
+	New API to support addition of modules without docking.
+
+	* src/gtk-sat-module.c, src/gtk-sat-module-popup.c, src/menubar.c:
+	Use new mod-mgr API.
+
+	* src/gui.c, src/main.c:
+	Removed unused variables.
+
+	* src/cat-cfg.[ch]:
+	Added function to reset parameter to default values.
+
+	* src/sat-pref-layout.c, src/sat-pref-timeout.c:
+	Added RESET button.
+	
+
+2006-07-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pass-dialogs.c, src/sat-popup-menu.c:
+	Use NULL parent for dialog windows to avoid conflicts when using
+	undocked windows as parents.
+
+	* src/gtk-sat-module.c:
+	Implemented close module function when in fullscreen mode.
+
+	* src/gtk-sat-module-popup.c:
+	Re-enabled module config in fullscreen mode.
+	
+
+2006-07-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.[ch]:
+	Optimised resize algorithm. Size allocate callback will simply request
+	a size update using a flag. The request will then be managed by the
+	timeout handler at every GtkSatModule cycle.
+	
+
+2006-07-18;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module.[ch]:
+	Added public wrapper function for fix_child_allocations function
+	to allow size fixing when docking module into notebook. Also added
+	possibility to store last gutter positions in order to work around
+	the zero-allocation when docking back to the notebook.
+
+	* src/gtk-sat-module-popup.c:
+	Store paned positions when docking back to notebook.
+	
+
+2006-07-16;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-mgr.[ch]:
+	Implemented awareness of GtkSatModule states, i.e. docked/undocked.
+
+	* src/gtk-sat-module.c, src-gtk-sat-module-popup.c:
+	Added support for window modes.
+
+	* TODO, NEWS:
+	Updated with info about module states (docked, window, fullscreen).
+	
+
+2006-07-15;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-single-pass.c:
+	Changed widget layout to use three columns instead of two.
+
+	* src/gtk-sat-map.c:
+	Added resizeable background map.
+
+	* src/sat-cfg.[ch]:
+	* src/config-keys.h:
+	Added parameters for enabling/diasabling info on maps and polar plots.
+	Added GtkSatMap colours. Also added window size.
+
+	* src/main.c:
+	Explicitly set default window size instead of size request for map,
+	since this will allow user to shrink the window and scale down the map.	
+	
+
+2006-07-14;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/config-keys.h, src/sat-cfg.[ch]:
+	Added necessary config keys.
+
+	* src/sat-pref-list-view.c:
+	Rules hint only shown in global mode.
+
+	* src/mod-cfg.c:
+	Implemented local module settings.
+
+	* NEWS, TODO:
+	Updated with new info.
+
+	* configure.ac:
+	Require Glib 2.10 because of Goocanvas. Sorry...
+	
+
+2006-07-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-map.[ch]:
+	Added GtkSatMap skeleton based on GtkPolarView.
+
+	* src/gtk-sat-module.c:
+	Use new GtkSatMap widget.
+	
+
+2006-07-12;	Alexandru Csete <oz9aec@gmail.com>
+
+	* goocanvas-patch/src-Makefile.am:
+	Added file that should replace goocanvas/src/Makefile.am
+
+	* goocanvas-patch/Makefile.am:
+	Added file that should replace goocanvas/Makefile.am
+
+	* goocanvas-patch/configure.in:
+	Added file that should replace goocanvas/configure.in
+
+	* get-and-patch-goocanvas.sh:
+	Added shell script to do the fetching and patching opf goocanvas.
+
+	* README.developer:
+	Added file containing instructions for developers.
+
+	* src/Makefile.am:
+	Updated to use internal goocanvas directories.
+
+	* Makefile.am:
+	Enter into goocanvas directory when building.
+
+	* configure.ac:
+	Updated to execute goocanvas/configure. Done some cleanning.
+
+	* src/sat-pass-dialogs.[ch]:
+	Added TCA field.
+
+	* src/predict-tools.[ch]:
+	Implemented TCA calculations.
+
+	* NEWS, TODO, AUTHORS:
+	Updated.
+	
+
+2006-07-09;	Alexandru Csete <oz9aec@gmail.com>
+
+	* doc/notes/configuration.txt:
+	Added notes describing the idea behind the local and global
+	configuration.
+
+	* src/mod-cfg-get-param.[ch]:
+	Added files containing utility functions to read local configuration
+	parameters using sat-cfg parameters as fallbacks.
+
+	* src/sat-pref.c, src/sat-pref-modules, src/sat-pref-layout,
+	* src/sat-pref-refresh, src/sat-pref-list-view, src/sat-pref-map-view,
+	* src/sat-pref-polar-view, src/sat-pref-single-sat:
+	Added GKeyFile parameter to support re-use of the notebook pages in
+	the module configuration dialog. The parameter should be NULL when
+	the pages are used in the global configuration dialog.
+
+	* src/sat-cfg.[ch]:
+	Use correct typedef for int parameter indices.
+
+	* src/gtk-sat-module.c, src/gtk-sat-list.c, src/gtk-polar-view.c:
+	Use new mod-cfg-get-param infrastructure. Very cool :-)
+
+	* src/gtk-single-sat.[ch]:
+	Store reference to configuration data. Use new mod-cfg-get-param
+	infrastructure.
+	
+	* src/config-keys.h:
+	Added more necessary parameters.
+
+	* src/sat-pref-layout.c, src/sat-pref-refresh.c:
+	* src/sat-pref-list-view.c, src/sat-pref-single-sat.c::
+	* src/sat-pref-map-view.c, src/sat-pref-polar-view.c:
+	Use mod-cfg-get-param infrastructure.
+
+	* src/mod-cfg.c:
+	Added button for popping up properties dialog.
+	
+
+2006-07-08;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/Makefile.am:
+	Define PACKAGE_PIXMAPS_DIR.
+
+	* src/compat.c:
+	Use new pixmaps directory.
+
+	* src/sat-pref-layout.c:
+	Implemented module layout settings.
+
+	* src/sat-cfg.[ch]:
+	Added support for module layout.
+
+	* src/config-keys.h:
+	Added module layout related key definitions.
+
+	* src/gtk-sat-module.[ch]:
+	Implemented the module layout.
+	
+
+2006-06-26;	Alexandru Csete <oz9aec@gmail.com>
+
+	* configure.ac:
+	Don't define directories using AC_DEFINE_UNQUOTED (wrong and broken
+	as of autoconf 2.59e).
+
+	* src/Makefile.am:
+	Define locale and data directories as CFLAGS.
+
+	* pixmaps/icons/Makefile.am, pixmaps/maps/Makefile.am:
+	Re-defined pixmap directories to go to
+	/usr/local/share/pixmaps/gpredict by default (same as for gpredcit 0.5)
+	
+
+2006-06-25;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg:
+	Added polar view related parameters.
+
+	* src/gtk-polar-view:
+	Use colours from global configuration.
+	
+
+2006-06-24;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-polar-view:
+	Implemented satellite selection and popup menu. Modified next aos code
+	to show hours only if it is greater than zero.
+
+	* src/gtk-polar-view-popup:
+	Implemented polar view popup menu.
+	
+
+2006-06-23;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-polar-view:
+	Added location name and next event to chart.
+	
+
+2006-06-22;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-polar-view:
+	Finished support for graph orientation (not config though).
+	Implemented cursor tracking.
+	
+
+2006-06-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-polar-view:
+	Done some more work using GooCanvas. This seems to be the way to go!
+	There is now a fully auto-scallable polar coordinate system. Need to
+	add satellites and user config, i.e. orientation and colours.
+
+	
+2006-06-19;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-polar-view:
+	Making an attempt with goocanvas :-)
+	
+
+2006-06-18;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-popup-menu:
+	Made info and predict functions public to allow their use from other
+	components as well.
+
+	* src/gtk-single-sat.c:
+	Finished implementation of field-update. Implemented info, predict and
+	select satellite functions in the popup menu.
+
+	* src/sat-pref-single-sat:
+	Added files to allow configuration of GtkSingleSat.
+
+	* src/sat-pref-modules.c, src/Makefile.am:
+	Include new GtkSingleSat configurator module.
+
+	* src/gtk-sat-module.c:
+	Use gtk_paned_pack instead of gtk_paned_add to get better size
+	allocations.
+
+	* src/gtk-polar-view:
+	Added widget skeleton.
+	
+
+2006-06-17;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-single-sat.c:
+	Implemented periodic update of fields.
+
+	* src/gtk-sat-module.c:
+	Update GtkSingleSat children, too.
+
+	* src/gtk-sat-list.c:
+	"alstr" should be freed outside if-block to avoid memory leak if
+	event time = 0.0
+	
+
+2006-05-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-single-sat:
+	Added fields and popup menu. Not fully functional.
+	
+
+2006-05-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list.c:
+	Sanity checks in gtk_sat_list_update should be done as first thing.
+
+	* src/gtk-single-sat.c, src/gtk-single-sat.h:
+	Added files.
+	
+
+2006-05-12;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/predict-col-defs.h:
+	Changed String arrays to static. This allows inclusion in multiple
+	source files.
+
+	* src/sat-pref-single-pass.c:
+	Implemented.
+
+	* src/sat-pref-multi-pass.c:
+	Implemented.
+
+	* src/sat-pref-conditions.c:
+	Added tooltips.
+	
+
+2006-05-06;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-conditions.c:
+	Added widgets to configure predict conditions.
+	
+
+2006-05-04;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/predict-tools.c:
+	Fixed bug that caused multi-pass predictions to be completely nonsense.
+	Fixed a bug that caused pass details not to be duplicated.
+	Added field where satellite name can be stored. This field is not
+	initialised by predict-tools.
+
+	* src/sat-pass-dialogs:
+	Finished multi-pass dialog. Switched orders of AOS Az and Max El.
+	Added pass popup menu.
+
+	* src/pass-popup-menu.c, src/pass-popup-menu.h:
+	Added pass related popup menu.
+
+	* src/sat-popup-menu.c:
+	Added icons to menu items.
+	
+
+2006-05-03;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/predict-tools:
+	Added functions to copy pass_t and pass_detail_t structures.
+
+	* src/sat-popup-menu.c:
+	Added code to call multi-pass dialog.
+
+	* src/sat-pass-dialogs:
+	Properly free memory when single pass dialog is destroyed.
+	Added multi-pass dialog. Not finished and buggy.
+	
+
+2006-05-02;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg:
+	Added support for SAT_CFG_INT_PRED_SINGLE_COL and
+	SAT_CFG_INT_PRED_MULTI_COL.
+
+	* src/predict-tools:
+	Add all details to the pass_detail_t structure. No need to recalculate
+	the parameters. Also added orbit number to pass_t.
+
+	* src/sat-pass-dialogs:
+	Added files containig dialog to show detailed pass. Multi-pass will
+	follow later.
+	
+
+2006-05-01;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg:
+	Changed SAT_CFG_INT_PRED_LOOK_AHEAD from hours to days. Default is 3.
+	Changed SAT_CFG_INT_PRED_RESOLUTION from 1/10 seconds to seconds.
+
+	* src/predict-tools:
+	Added support for look-ahead.
+
+	* src/predict-col-defs.h:
+	Added file containing column definitions for lists showing both single
+	and multiple passes.
+
+	* src/sat-pref-conditions:
+	Added files for predict pass conditions.
+
+	* src/sat-pref.c:
+	Set parent window properly. Make dialog window reflect which config
+	section we are in.
+	
+	
+2006-04-30;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-formats.c:
+	Implemented time format reset button.
+
+	* src/predict-tools:
+	Fixed bug that caused Next AOS time to be Next LOS time + 20 min if
+	the satellite was in range at the time of calculation.
+	Finished pass prediction functions.
+
+	* src/sat-popup-menu.c:
+	Added callback for "Next Pass" menu item.
+
+	* srt/sat-pref-list-view.c, src/gtk-sat-list.c:
+	Added option to enable rules hint in the GtkSatList.
+	
+
+2006-04-29;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp/sgp4sdp4.h:
+	Added AOS and LOS fields to sat_t.
+
+	* src/gtk-sat-module:
+	Update next event, aos and los.
+
+	* src/gtk-sat-list.c:
+	Implemented AOS, LOS and Next Event columns.
+
+	* src/sat-cfg:
+	Added boolean parameter for enabling GtkSatList rules hint.
+	
+
+2006-04-28;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/orbit-tools.c:
+	Fixed erroneous qth.lat conversion in has_aos.
+
+	* src/sat-cfg:
+	Added pass prediction releated parameters.
+
+	* src/sat-pref.c:
+	Emit "clicked" signal so that the general tabs button becomes
+	highlighted.
+
+	* src/predict-tools:
+	Added files with code to predict upcoming passes.
+	
+
+2006-04-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module-popup.c:
+	Ask user for confirmation before deleting a module permanently.
+
+	* src/gtk-sat-list.c:
+	Fixed rendering formats for footprint, mean anomaly and phase.
+	Cleaned up compile warnings.
+
+	* src/orbit-tools.c:
+	Implemented decayed and has_aos functions.
+
+	* src/gtk-sat-module:
+	Cleaned up compile warnings. Implemented header containing current
+	date and time.
+
+	* src/sat-pref-formats.c, src/sat-cfg.h:
+	Moved TIME_FORMAT_MAX_LENGTH so that everybody can use it.
+
+	* src/sat-pref-interfaces.c:
+	Created notebook with radio and rotator tabs.
+
+	* src/sat-pref-multi-pass, src/sat-pref-single-pass:
+	Created files.
+
+	* src/sat-pref-predict.c:
+	Include all sub-modules.
+
+	* src/first-time.c:
+	Cleaned up compile warnings.
+
+	* src/mod-mgr.c:
+	Make notebook tabs homogeneous.
+
+
+2006-04-26;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module-popup.c, src/gtk-sat-module-popup.h:
+	New files. Implement popup menu for the GtkSatModule widget instead of
+	having too many mini-buttons. Implemented configure, clone, close and
+	delete.
+
+	* src/gtk-sat-module:
+	Rearranged to use popup menu. Made close_cb and config_cb public.
+
+	* src/menubar.c:
+	Some minor modifications in the menu item texts.
+
+	* src/gtk-sat-list.c:
+	Implicitly set cell renderer xalign when creating tree view (individual
+	values may have to be changed later).
+	
+
+2006-04-25;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-popup-menu.c:
+	Use gtk_widget_show instead of gtk_dialog_run in order to return
+	control to toplevel window.
+
+	* src/gtk-sat-data.c:
+	Initialise sat->flags to 0 after sat has been loaded, otherwise
+	the SGP4/SDP4 code may skip the initialisation. (It's those blody
+	flags from the fortran code). This fixes bug #1475691.
+	One should definitely keep in mind that memory allocated with GLib may
+	contain other values than 0's, unless one uses the g_new0-like
+	functions.
+
+	* src/gtk-sat-list:
+	Re-ordered columns to MA, PHASE, VIS.
+	Added calculations for RA and DEC, only in degrees for now.
+
+	* src/about.c:
+	Use old home page until the new one is ready.
+
+	* src/sgpsdp/sgp4sdp4.h:
+	Added new time keeping fields to sat_t so that they are available
+	everywhere.
+
+	* src/gtk-sat-data.c:
+	Initialise new time keeping fields when loading satellite data.
+
+	* src/gtk-sat-module.c:
+	Use new time keeping fields in sat_t.
+	Convert phase to degrees.
+
+	
+2006-04-24;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/orbit-tools.c:
+	Use true mean motion when checking for GEO.
+
+	* src/time-tools.c, src/time-tools.h:
+	Added files containing get_current_daynum.
+
+	* src/gtk-sat-list:
+	Move direction column to right after elevation column.
+
+	* src/Makefile.am:
+	Added defaults.h to file list.
+
+	* src/sgpsdp/sgp4sdp4.h:
+	Added new fields to tle_t to support epoch time in converted form
+	as was done in earlier versions. Added more field descriptions.
+	Added meanmo field to store unconverted mean motion in rev/day.
+
+	* src/sgpsdp/sgp_in.c:
+	Convert epoch to year, day and fraction of day.
+	When selecting ephemeris store original mean motion in sat->meanmo.
+
+	* src/sat-popup-menu.c:
+	Use new converted epoch fields. Finished TLE part.
+
+	* TODO:
+	Added file.
+
+
+2006-04-22;	Alexandru Csete <oz9aec@gmail.com>
+
+	* doc/man/gpredict.1.in:
+	Updated with minimal info.
+
+	* src/about.c:
+	Added more credits and the license info.
+	Use g_object_unref instead og gdk_pixbuf_unref.
+
+	* src/sat-cfg.c:
+	Change default value for LIST_COLUMNS from number to OR'ed value of
+	column flags.
+
+	* src/sat-popup-menu.c:
+	Done some work on the sat info dialog.
+	
+
+2006-04-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-data.c:
+	Store orbit type after reading satellite data. Clean some compile
+	warnings.
+
+	* src/mod-mgr:
+	Added function to check whether a given module is visible or not.
+
+	* src/gtk-sat-list:
+	Require QTH as parameter when creating new lists and keep pointer for
+	later references. Needed to call the popup menu.
+	Added new column for signal delay.
+	Implemented SAT_LIST_COL_SSP, SAT_LIST_COL_DOPPLER, SAT_LIST_COL_LOSS,
+	SAT_LIST_COL_DELAY and improved SAT_LIST_COL_DIR.
+	Convert distances to miles when user want imperial units.
+
+	* src/gtk-sat-module.c:
+	Try to skip some updates when module is not visible. I don't seem to
+	be able to find one function, which can telle me this about a widget,
+	so it is only some hack at the moment.
+	Pass QTH as parameter when creating new lists.
+
+	* src/sat-popup-menu:
+	Add QTH as parameter for popup menu.
+
+	* src/gpredict-utils.h:
+	Added macros to convert between miles and kilometers.
+
+
+2006-04-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list.c:
+	Do not detach model from tree view while updating because that makes
+	scrolling and selecting impossible. Added support for pop-up menu.
+
+	* src/sat-popup-menu.c, src/sat-popup-menu.h:
+	Added files containing common popup menu code so that it can be used
+	by both GtkSatList, GtkSatMap and others.
+	
+
+2006-04-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module.c:
+	Implemented configure on the fly in docked state. Fixed bug with wrong
+	path to QTH file.
+
+	* src/sat-cfg:
+	Added support for MAP_REFRESH, POLAR_REFRESH and SINGLE_SAT_REFRESH.
+	Changed module refresh key to DATA_TIMEOUT.
+
+	* src/sat-pref-refresh.c:
+	Implemented refresh rates.
+
+	* po/POTFILES.in:
+	Added all C files. Explicitly specify UTF-8 encoding.
+
+	* src/about.c:
+	Added logo icon.
+
+	* src/Makefile.am, src/sgpsdp/Makefile.am:
+	Don't build sgp4sdp4 library. Use sources directly instead.
+
+	* src/sgpsdp/sgp4sdp4.h:
+	Added more field descriptions and orbit type.
+
+	
+2006-04-18;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-cfg.c:
+	Add return code to mod_cfg_edit. Make editor dialog the same size as the
+	new module setup dialog. Added code to select satellites and the correct
+	QTH when editing an existing module.
+
+	* src/menubar.c:
+	Fixed a spelling.
+
+	* src/gtk-sat-module.c:
+	Done some work on "module-config" functionality.
+
+	
+2006-04-15;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-tree.c:
+	Sort tree by satellite name in ascending order.
+
+	* src/about.c, src/about.h:
+	Addd files containing code for the "about" dialog.
+	
+
+2006-04-14;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list-col-sel.c:
+	Fixed bug which caused the gtk_sat_list_col_sel_get_flags query to
+	always fail.
+	
+
+2006-04-11;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-cfg.c:
+	Remove "+" button for now.
+
+	* src/gtk-sat-module.c:
+	Wait with starting timeout until all children have been created.
+	Added busy-flag to avoid race conditions in case of high CPU load.
+	Implemented CLOSE button.
+
+	* src/mod-mgr.c:
+	Use mod_mgr_add_module to restore modules instead of duplicating code.
+	Implemented mod_mgr_remove_module.
+
+
+2006-04-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/mod-mgr.c:
+	Set OPEN_MODULES=NULL in sat-cfg when there are no modules open,
+	otherwise the original state at program start would be restored
+	again next time. Added some API description.
+
+	* src/sat-cfg.c:
+	Allow NULL as parameter for set_str. When receiving NULL remove key
+	from the GKeyFile.
+
+	* src/gtk-sat-data.c:
+	Initialise variable fields to 0.0 after laoding TLE data.
+
+	* pixmaps/icons:
+	Added gpredict-mod-attach.png, gpredict-mod-close.png,
+	gpredict-mod-detach.png and gpredict-mod-config.png
+
+	* src/gpredict-utils:
+	Added function to create minature pixmap buttons with no relief or
+	text. Primary use will be dock/close buttons for modules.
+
+	
+2006-04-09;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module.c:
+	Made destuction of the satellite hash table conditional. Appearantly,
+	the destroy signal is emitted twice for some reason and freeing the
+	hash table the second time made	gpredict crash. I will stiil need to
+	do some investigation on why the destroy signal is emitted twice.
+
+	* src/gtk-sat-list.c:
+	Remove satellite from list-store if satellite data is not available
+	anymore. This will allow to remove satellites from a module at run-time.
+	Added support for refresh rate;
+
+	* src/mod-mgr.c, src/mod-mgr.h:
+	Added files. Module manager not finished yet. Need to work out how to
+	implement the switch between notebook/window/fullscreen modes.
+
+	* src/sat-cfg:
+	Added support for OPEN_MODULES. Defaults to NULL.
+
+	* src/menubar.c, src/gui.c, src/main.c:
+	Use new module manager.
+	
+
+2006-04-08;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-utils.c:
+	Allow to create buttons without text.
+
+	* src/mod-cfg.c:
+	Finished module. Fully functional.
+
+	* src/menubar.c:
+	Implemented "Open" function.
+
+
+2006-04-07;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-tree:
+	Widget is now in a useable state. Still needs to be done:
+	Epoch, sort tree in alphabetical order and add a search/lookup func.
+
+	* src/mod-cfg.c:
+	Added contents to dialog.
+
+	* src/menubar.c:
+	Connected "New" menu item to mod-cfg editor.
+
+
+2006-04-06;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-list:
+	Update function is now member in the GtkSatList structure.
+
+	* src/mod-cfg:
+	Added files containing simple API to create and edit module config.
+
+	* src/gtk-sat-tree:
+	Added new widget. Can be used to select satellites.
+	
+
+2006-04-05;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth.c, src/sat-pref-formats.c:
+	Make sure that altitude is handled properly when user changes between
+	metric and imperial units.
+
+	* src/gtk-sat-list-col-sel:
+	Added files conatining GtkSatList column selector widget. This widget
+	can be used to select which columns should be visible for a particular
+	GtkSatList. The widget is generic, ie. uses column info from GtkSatList
+	and reentrant.
+
+	* src/sat-cfg:
+	Added LIST_REFRESH and LIST_COLUMNS parameters.
+
+	* src/sat-pref-layout, src/sat-pref-refresh:
+	Added configuration modules.
+
+	* src/sat-pref-modules.c:
+	Use new configuration modules.
+
+	* src/sat-pref-list-view.c:
+	Added column selector widget. This part should be fully functional.
+
+	* src/gtk-sat-list.c:
+	Use column flags from sat-cfg instead of default specified in
+	gtk-sat-list.h. Minor speed optimisations.
+	
+
+2006-04-04;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth-editor.c:
+	Only allow valid charachters in location name (code stolen from xlog).
+
+	* src/sat-log:
+	Modified to use the same API as grig.
+
+	* src/first-time.c,
+	* src/gtk-sat-data.c,
+	* src/gtk-sat-list.c,
+	* src/gtk-sat-module.c,
+	* src/loc-tree.c,
+	* src/tle-lookup.c,
+	* src/main.c,
+	* src/sat-cfg.c,
+	* src/sat-pref-qth.c,
+	* src/sat-pref-qth-editor.c:
+	Use new sat-log API and fix compile warnings.
+
+	* src/sat-cfg.c:
+	Added integer API and some new keys related to modules.
+
+	* src/gtk-sat-module.c:
+	Use sat-cfg instead of deprecated defaults.h
+
+	* src/gtk-sat-list.c:
+	Adde cell renderer functions for some columns.
+
+	* src/sgpsdp/sgp_in.c:
+	Changed atof calls to g_ascii_strtod to be locale independent when
+	reading tle files.
+
+	
+2006-04-03;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/Makefile.am:
+	Include config-keys.h in list of files.
+
+	* src/tle-lookup.c, src/sat-pref-qth.c:
+	Fix compile warning.
+
+	* src/loc-tree.c:
+	Handle NULL file names properly as claimed by specs.
+
+	* src/sat-pref-qth-editor.c:
+	More or less finished. It is fully functional and only some minor
+	things to be done.
+
+	* src/sat-pref-qth.c, src/sat-pref-qth-data.h:
+	* src/sat-pref-qth-editor.c:
+	Removed column containing separate qth file name. We will simply use
+	the QTH name as we did earlier. Also removed CHGS column, since we will
+	have to write every single QTH to disc again if the name is changed.
+
+	* src/gtk-sat-data.c:
+	Use file name as qth name. Fixed bug which caused the location to be
+	written in the description field.
+
+	* src/sat-pref-qth.c:
+	Changed save procedure to first remove all .qth files and then rewrite
+	data from QTH list. Changed lat/lon column type to G_TYPE_DOUBLE, since
+	with G_TYPE_FLOAT the data got corrupted.
+
+	* data/sample.qth:
+	Removed NAME field.
+	
+
+2006-04-02;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth.c:
+	Only store basic qth file name in qth list. We do not ever need the
+	full path info, since all qth files are located in .gpredict2 in the
+	users home.
+
+
+2006-04-01;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-utils.h:
+	Added macros to convert between feet and meters.
+
+	
+2006-03-31;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth-editor.c, src/sat-pref-qth-editor.h:
+	Added files containing code to edit QTH details.
+	
+	* src/sat-pref-qth.c, sat-pref-qth-data.h:
+	Moved column definitions to header file so that they can be used in
+	sat-pref-qth-editor as well. Connected ADD and EDIT signals to call
+	sat_pref_qth_editor_run.
+
+	* src/Makefile.am:
+	Include new files in files list.
+	
+
+2006-03-29;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth.c:
+	Use g_try_malloc instead of g_try_new, which is not available until
+	glib 2.8. Don't use QRA unless hamlib is available.
+	Delete location function implemented. Added functions to save the
+	locations from the list. Still to do Add and Edit buttons.
+
+	* src/sgpsdp/Makefile.am:
+	Add @PACKAGE_LIBS@ to linker, otherwise mathlib was not available
+	anymore. Go figure...
+
+	* src/gtk-sat-data.c:
+	Added finction to save QTH data.
+	
+
+2006-03-28;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/main.c:
+	Only include rig.h if hamlib is available.
+	
+
+2006-02-05;	Alexandru Csete <oz9aec@gmail.com>
+
+	* configure.ac:
+	Changed check for hamlib so that support is optional.
+
+	* src/sat-cfg.c, src/sat-cfg.h:
+	Added support for default QTH file.
+
+	* src/gtk-sat-data.c, src/gtk-sat-data.h:
+	QTH altitude should be integer, not float.
+
+	* src/sat-pref-qth.c, src/sat-pref-qth.h:
+	Added QTH list and editing functions.
+
+
+2006-02-03;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.c:
+	Fixed bug, which caused the whole program to crash when creating the
+	loc-tree. It was due to a g_free(NULL) in sat_cfg_get_bool.
+
+	* src/loc-tree.c
+	Added debug info and some comments.
+
+	* src/sat-pref.c:
+	Added some more comments.
+
+
+2005-11-09;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-utils:
+	Added function to create horizontal pixmap button using stock pixmaps.
+	Implemented tooltip features for all button functions.
+
+	* src/compat.c:
+	Don't specify gpredict when asking for program installation directory on
+	WIN32 (tip from TML on gtk-app-devel).
+
+
+2005-11-08;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-general.c:
+	Changed tab labels.
+
+	* src/sat-pref-tle, src/sat-pref-debug:
+	Added files.
+
+
+2005-11-05;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/loc-tree.c:
+	Check whether specified location file exists.
+
+	* src/gui.c:
+	Should remember to free location string allocated by loc-tree.
+
+
+
+2005-10-22;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/tle-lookup.c:
+	Send error message to sat-log if there are no tle files in
+	.gpredict2/tle/
+
+	* data/:
+	Added sample.qth file, tle files and update-tle.sh shell script.
+
+	* src/first-time.c, src/first-time.h:
+	Implemented first time checks.
+
+	* src/gpredict-utils.c, gpredict-utils.h:
+	Added function to copy file.
+
+	* src/sat-cfg.c:
+	Don't print message every time a key is not found. It can cause a lot of
+	noise, fx. when creating loc-tree.
+	
+
+2005-10-21;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth.c:
+	Started implementation.
+	
+
+2005-10-20;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-formats.c
+	Implemented automatic update of time preview label. Takes both the
+	time format string and the Local/UTC checkbox into account.
+	
+
+2005-10-19;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.c, src/sat-cfg.h:
+	This is now the only module, which has direct access to gpredict.cfg
+	Currently reads and write boolean and gchar values.
+
+	* src/main.c:
+	Start and shut down sat-cfg.
+
+	* src/sat-pref-*:
+	Use sat-cfg instead of GKeyFile.
+
+	* src/sat-pref-formats.c:
+	Removed time format checkbox. Added "Reset" button and preview label
+	fortime format.
+
+
+2005-10-18;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gpredict-utils.c, src/gpredict-utils.h:
+	Added files.
+
+	* src/sat-pref-*:
+	Use buttons instead of GtkIconBox (bad size request). Reorgansied
+	grouping. Added some new files during this process.
+	Implemented sat-pref-formats.c and added code to save config data
+	back to configuration file.
+
+	* pixmaps/icons/gpredict-layout-x.png:
+	Added new icons.
+
+	* src/config-keys.h:
+	Added SAT_CFG_LOCAL_TIME_KEY, SAT_CFG_TIME_FORMAT_KEY and
+	SAT_CFG_IMPERIAL_KEY.
+
+	* src/defaults.h:
+	Added DEFAULT_TIME_FORMAT.
+
+	* src/tle-lookup.c:
+	Added g_io_channel_unref when channel has been shut down.
+	
+	
+2005-10-17;	Alexandru Csete <oz9aec@gmail.com>
+
+	* data/Makefile.am:
+	Added file.
+
+	* Makefile.am:
+	Include data/ in subdirs.
+
+	* src/compat.c, src/compat.h:
+	Added files.
+
+	* src/sat-pref.c:
+	Use GtkDialog instead of top level window. Also added GtkIconView left
+	of the note book.
+
+	* src/gtk-sat-list.c:
+	Fixed a typo.
+
+	* pixmaps/icons:
+	Added some icons.
+
+
+2005-10-16;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module.c:
+	Inhibit addition of satellite if it is already in hash table. There is
+	still a very strange bug, which causes the program to go up to 100% CPU
+	load if the number of satellites is 5 (6 is OK).
+
+	* src/gtk-sat-list.c, src/gtk-sat-list.h:
+	Added files. Implemented flxible satellite list with user specifiable
+	columns. Custom cell data functions to be added. Does not look good with
+	respect to CPU load during udates... Also need to add sorting.
+	
+
+2005-10-15;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/loc-tree.c:
+	Finished location selector. This is now a complete module incluing a
+	self consistent dialog window. The caller must supply pointers for
+	name, lat, lon, alt and weather station. Call g_io_channel_shutdown
+	before g_io_channel_unref (fixes GLib warning about invalid file
+	descriptor).
+
+	* configure.ac:
+	Don't define pixmaps dir, since we just use datadir/pixmaps.
+
+	* main.c:
+	Use PACKAGE_DATA_DIR instead PACKAGE_PIXMAPS_DIR.
+	
+
+2005-10-12;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp/sgp2sdp4.h:
+	Added some fields to allow direct copy of SGP/SDP driver from ktrack.
+	Changed some field names in obs_set_t to more approproate names.
+
+	* src/sgpsdp/sgp_obs.c:
+	Take sgp4sdp4.h modifications into account.
+
+	* src/gtk-sat-module.c:
+	Added basic unoptimised SGP/SDP driver.
+
+	* src/menubar.c:
+	Added Orbit Lab menu item.
+	
+
+2005-10-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref.c:
+	Create window with signals. Add widgets to window.
+
+	* src/menubar.c:
+	Open sat-pref dialog when Preferences is selected in the menubar.
+
+
+2005-10-07;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref.c, src/sat-pref.h:
+	Created files. Top level preferences dialog.
+
+	* src/sat-pref-*:
+	Created files.
+	
+
+2005-10-06;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/config-keys.h:
+	Added MOD_CFG_SATS_KEY, MOD_CFG_TIMEOUT_KEY and MOD_CFG_WARP_FACTOR_KEY.
+
+	* src/gtk-sat-module.c:
+	Read satellites into hash table. Added timeout handler.
+
+	* src/gtk-sat-data.c:
+	Added function to read TLE data into sat_t structure.
+
+	* src/sgpsdp/sgp_in.c:
+	Reindent.
+
+	* src/tle-lookup.c:
+	Implemented the tle_lookup function.
+
+	* src/Makefile.am:
+	Add libsgp4sdp4.a when linking.
+
+	* src/defaults.h:
+	Added file.
+
+
+2005-10-05;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-monitor.c, src/sat-monitor.h:
+	Added files.
+
+	* src/sgpsdp/sgp4sdp4.h:
+	Added obs_t and obs_astro_t structures to sat_t.
+	
+
+2005-10-04;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-cfg.c, src/sat-cfg.h:
+	Added files. This module will be responsible for reading,
+	storing and saving the global gpredict configuration.
+
+	* data/locations.dat:
+	Added files. Converted the old gpredict data file to use decimal
+	degrees East and sorted the list alphabetically, so there is no need to
+	sort the lists, which display the data.
+
+
+2005-10-03;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/loc-tree.c:
+	Display N, S, W, E instead of sign according to configuration.
+
+
+2005-10-02;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/gtk-sat-module, src/gtk-sat-data:
+	Moved files to src
+
+	* src/Makefile.am:
+	Updated file paths.
+	
+	* src/config-keys.h:
+	Added file to contain key and section definitions in config files.
+
+	* src/loc-tree.c:
+	Only display lat,lon,alt for cities (hack!). Use GError while reading file.
+	Hide columns that are not enabled using the flags parameter. Add degree
+	character for lat and lon fields.
+	
+
+2005-10-01;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/widgets/gtk-sat-data.c, src/widgets/gtk-sat-data.h:
+	Added files containing data structures and utlity functions for	QTH data.
+	
+
+2005-09-22;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/loc-tree.c, src/loc-tree.h:
+	Added files. Not fully implemented yet.
+	
+
+2005-09-18;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp/sgp4sdp4.h:
+	More documentation. Added extra data structure for satellite bearing and
+	astronomical coordinate calculation.
+
+	* src/sgpsdp/sgp_obs_c:
+	Use the new data types instead of the generic vector_t.
+
+
+2005-07-28;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-log.c, src/sat-log.h:
+	Added skeleton.
+
+	* src/tle-lookup.c:
+	Implemented.
+	
+
+2005-07-27;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/main.c, src/gui.c, src/gui.h, src/menubar.c,
+	* src/widgets/gtk-sat-module.c, src/widgets/gtk-sat-module.h,
+	* src/menubar.h:
+	Updated header.
+
+	* src/tle-lookup.c, src/tle-lookup.h:
+	Added files. Contains link between satellites and tle files.
+
+	* src/Makefile.am:
+	Added new files to list.
+	
+
+2005-05-31;	Alexandru Csete <oz9aec@gmail.com>
+
+	* configure.ac:
+	Require Gtk+ 2.6
+
+	* src/widgets/gtk-sat-module.c, src/widgets/gtk-sat-module.h:
+	Added widget skeleton.
+
+
+2005-05-30;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/menubar.c:
+	Added few more menu items.
+
+	* src/gui.c, src/gui.h:
+	Renamed gpredict-gui to plain gui.
+	
+
+2005-05-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/main.c:
+	Pack menubar in vertical box.
+	
+
+2005-04-16;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/menubar.c, menubar.h:
+	Added menubar skeleton.
+	
+
+2005-04-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp/sgp_in.c, sgp4sdp4.h:
+	Change interface for select_ephemeris() so that it takes a pointer to a
+	sat_t structure as parameter. Added some notes and comments.
+
+	* src/sgpsdp/test-001:
+	Fixd checksum error in tle file. Finished test for SGP4. All results
+	are within 0.003% but typically much better.
+
+	* src/sgpsdp/test-002:
+	Added test for SDP4. All results are within 0.0005% most of them
+	better.
+
+	* src/sgpsdp/TR:
+	Created directory to contain test results.
+
+	
+2005-04-10;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp:
+	Added type definition for satellite. Optimized SDP4, SGP4 and
+	Deep for multiple satellite use. Still a lot of work and testing
+	to be done.
+
+
+2005-04-09;	Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sgpsdp:
+	Added code to propagate elements using SGP4 and SDP4 models.
+	
+
+2005-02-13;	Alexandru Csete <oz9aec@gmail.com>
+
+	* gpredict:
+	Created initial code template for the Gtk+ 2 version of
+	gpredict.
+

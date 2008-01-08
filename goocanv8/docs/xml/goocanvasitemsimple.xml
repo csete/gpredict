@@ -1,0 +1,618 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry id="GooCanvasItemSimple">
+<refmeta>
+<refentrytitle role="top_of_page">GooCanvasItemSimple</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GOOCANVAS Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>GooCanvasItemSimple</refname>
+<refpurpose>the base class for the standard canvas items.</refpurpose>
+<!--[<xref linkend="desc" endterm="desc.title"/>]-->
+</refnamediv>
+
+<refsynopsisdiv role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+
+
+
+                    <link linkend="GooCanvasItemSimple-struct">GooCanvasItemSimple</link>;
+                    <link linkend="GooCanvasItemSimpleData">GooCanvasItemSimpleData</link>;
+                    <link linkend="GooCanvasItemSimpleClass">GooCanvasItemSimpleClass</link>;
+
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-check-style">goo_canvas_item_simple_check_style</link>  (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item);
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-get-path-bounds">goo_canvas_item_simple_get_path_bounds</link>
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasBounds">GooCanvasBounds</link> *bounds);
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-user-bounds-to-device">goo_canvas_item_simple_user_bounds_to_device</link>
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasBounds">GooCanvasBounds</link> *bounds);
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-user-bounds-to-parent">goo_canvas_item_simple_user_bounds_to_parent</link>
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasBounds">GooCanvasBounds</link> *bounds);
+<link linkend="gboolean">gboolean</link>            <link linkend="goo-canvas-item-simple-check-in-path">goo_canvas_item_simple_check_in_path</link>
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasPointerEvents">GooCanvasPointerEvents</link> pointer_events);
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-paint-path">goo_canvas_item_simple_paint_path</link>   (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr);
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-changed">goo_canvas_item_simple_changed</link>      (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="gboolean">gboolean</link> recompute_bounds);
+<link linkend="void">void</link>                <link linkend="goo-canvas-item-simple-set-model">goo_canvas_item_simple_set_model</link>    (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="GooCanvasItemModel">GooCanvasItemModel</link> *model);
+
+
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 role="object_hierarchy">
+<title role="object_hierarchy.title">Object Hierarchy</title>
+<synopsis>
+
+  <link linkend="GObject">GObject</link>
+   +----GooCanvasItemSimple
+         +----<link linkend="GooCanvasWidget">GooCanvasWidget</link>
+         +----<link linkend="GooCanvasRect">GooCanvasRect</link>
+         +----<link linkend="GooCanvasGroup">GooCanvasGroup</link>
+         +----<link linkend="GooCanvasPath">GooCanvasPath</link>
+         +----<link linkend="GooCanvasEllipse">GooCanvasEllipse</link>
+         +----<link linkend="GooCanvasText">GooCanvasText</link>
+         +----<link linkend="GooCanvasPolyline">GooCanvasPolyline</link>
+         +----<link linkend="GooCanvasImage">GooCanvasImage</link>
+</synopsis>
+
+</refsect1>
+
+
+
+<refsect1 role="impl_interfaces">
+<title role="impl_interfaces.title">Implemented Interfaces</title>
+<para>
+GooCanvasItemSimple implements
+ <link linkend="GooCanvasItem">GooCanvasItem</link>.</para>
+
+</refsect1>
+
+
+<refsect1 role="properties">
+<title role="properties.title">Properties</title>
+<synopsis>
+
+  &quot;<link linkend="GooCanvasItemSimple--antialias">antialias</link>&quot;                <link linkend="GooCairoAntialias">GooCairoAntialias</link>     : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--clip-fill-rule">clip-fill-rule</link>&quot;           <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--clip-path">clip-path</link>&quot;                <link linkend="gchararray">gchararray</link>            : Write
+  &quot;<link linkend="GooCanvasItemSimple--fill-color">fill-color</link>&quot;               <link linkend="gchararray">gchararray</link>            : Write
+  &quot;<link linkend="GooCanvasItemSimple--fill-color-rgba">fill-color-rgba</link>&quot;          <link linkend="guint">guint</link>                 : Write
+  &quot;<link linkend="GooCanvasItemSimple--fill-pattern">fill-pattern</link>&quot;             <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--fill-pixbuf">fill-pixbuf</link>&quot;              <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write
+  &quot;<link linkend="GooCanvasItemSimple--fill-rule">fill-rule</link>&quot;                <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--font">font</link>&quot;                     <link linkend="gchararray">gchararray</link>            : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--font-desc">font-desc</link>&quot;                <link linkend="PangoFontDescription">PangoFontDescription</link>  : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--hint-metrics">hint-metrics</link>&quot;             <link linkend="GooCairoHintMetrics">GooCairoHintMetrics</link>   : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--line-cap">line-cap</link>&quot;                 <link linkend="GooCairoLineCap">GooCairoLineCap</link>       : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--line-dash">line-dash</link>&quot;                <link linkend="GooCairoLineDash">GooCairoLineDash</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--line-join">line-join</link>&quot;                <link linkend="GooCairoLineJoin">GooCairoLineJoin</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--line-join-miter-limit">line-join-miter-limit</link>&quot;    <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--line-width">line-width</link>&quot;               <link linkend="gdouble">gdouble</link>               : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--operator">operator</link>&quot;                 <link linkend="GooCairoOperator">GooCairoOperator</link>      : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--stroke-color">stroke-color</link>&quot;             <link linkend="gchararray">gchararray</link>            : Write
+  &quot;<link linkend="GooCanvasItemSimple--stroke-color-rgba">stroke-color-rgba</link>&quot;        <link linkend="guint">guint</link>                 : Write
+  &quot;<link linkend="GooCanvasItemSimple--stroke-pattern">stroke-pattern</link>&quot;           <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write
+  &quot;<link linkend="GooCanvasItemSimple--stroke-pixbuf">stroke-pixbuf</link>&quot;            <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write
+</synopsis>
+</refsect1>
+
+
+
+<refsect1 role="desc">
+<title role="desc.title">Description</title>
+<para>
+<link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link> is used as a base class for all of the standard canvas
+items. It can also be used as the base class for new custom canvas items.
+</para>
+<para>
+It provides default implementations for many of the <link linkend="GooCanvasItem"><type>GooCanvasItem</type></link>
+methods.
+</para>
+<para>
+For very simple items, all that is needed is to implement the <link linkend="create-path"><function>create_path()</function></link>
+method. (<link linkend="GooCanvasEllipse"><type>GooCanvasEllipse</type></link>, <link linkend="GooCanvasRect"><type>GooCanvasRect</type></link> and <link linkend="GooCanvasPath"><type>GooCanvasPath</type></link> do this.)
+</para>
+<para>
+More complicated items need to implement the <link linkend="update"><function>update()</function></link>, <link linkend="paint"><function>paint()</function></link> and
+<link linkend="is-item-at"><function>is_item_at()</function></link> methods. (<link linkend="GooCanvasImage"><type>GooCanvasImage</type></link>, <link linkend="GooCanvasPolyline"><type>GooCanvasPolyline</type></link>,
+<link linkend="GooCanvasText"><type>GooCanvasText</type></link> and <link linkend="GooCanvasWidget"><type>GooCanvasWidget</type></link> do this.) They may also need to
+override some of the other GooCanvasItem methods such as <link linkend="set-canvas"><function>set_canvas()</function></link>,
+<link linkend="set-parent"><function>set_parent()</function></link> or <link linkend="allocate-area"><function>allocate_area()</function></link> if special code is needed. (<link linkend="GooCanvasWidget"><type>GooCanvasWidget</type></link>
+does this to make sure the <link linkend="GtkWidget"><type>GtkWidget</type></link> is embedded in the <link linkend="GooCanvas"><type>GooCanvas</type></link> widget
+correctly.)</para>
+<para>
+
+</para>
+</refsect1>
+
+<refsect1 role="details">
+<title role="details.title">Details</title>
+<refsect2>
+<title><anchor id="GooCanvasItemSimple-struct" role="struct"/>GooCanvasItemSimple</title>
+<indexterm><primary>GooCanvasItemSimple</primary></indexterm><programlisting>typedef struct {
+  GooCanvas *canvas;
+  GooCanvasItem *parent;
+  GooCanvasItemModelSimple *model;
+  GooCanvasItemSimpleData *simple_data;
+  GooCanvasBounds bounds;
+  guint	need_update			: 1;
+  guint need_entire_subtree_update      : 1;
+} GooCanvasItemSimple;
+</programlisting>
+<para>
+The <link linkend="GooCanvasItemSimple-struct"><type>GooCanvasItemSimple</type></link> struct contains the basic data needed to
+implement canvas items.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><link linkend="GooCanvas">GooCanvas</link>&nbsp;*<structfield>canvas</structfield>;</term>
+<listitem><simpara> the canvas.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="GooCanvasItem">GooCanvasItem</link>&nbsp;*<structfield>parent</structfield>;</term>
+<listitem><simpara> the parent item.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="GooCanvasItemModelSimple">GooCanvasItemModelSimple</link>&nbsp;*<structfield>model</structfield>;</term>
+<listitem><simpara> the item's model, if it has one.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="GooCanvasItemSimpleData">GooCanvasItemSimpleData</link>&nbsp;*<structfield>simple_data</structfield>;</term>
+<listitem><simpara> data that is common to both the model and view classes. If
+ the canvas item has a model, this will point to the model's
+ <link linkend="GooCanvasItemSimpleData"><type>GooCanvasItemSimpleData</type></link>, otherwise the canvas item will have its own
+ <link linkend="GooCanvasItemSimpleData"><type>GooCanvasItemSimpleData</type></link>.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="GooCanvasBounds">GooCanvasBounds</link>&nbsp;<structfield>bounds</structfield>;</term>
+<listitem><simpara> the bounds of the item, in device space.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>need_update</structfield>&nbsp;:&nbsp;1;</term>
+<listitem><simpara> if the item needs to recompute its bounds and redraw.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>need_entire_subtree_update</structfield>&nbsp;:&nbsp;1;</term>
+<listitem><simpara> if all descendants need to be updated.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasItemSimpleData" role="struct"/>GooCanvasItemSimpleData</title>
+<indexterm><primary>GooCanvasItemSimpleData</primary></indexterm><programlisting>typedef struct {
+  GooCanvasStyle *style;
+  cairo_matrix_t *transform;
+  GArray *clip_path_commands;
+
+  gdouble visibility_threshold;
+  guint visibility			: 2;
+  guint pointer_events			: 4;
+  guint can_focus                       : 1;
+  guint own_style                       : 1;
+  guint clip_fill_rule			: 4;
+} GooCanvasItemSimpleData;
+</programlisting>
+<para>
+This is the data common to both the model and view classes.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><link linkend="GooCanvasStyle">GooCanvasStyle</link>&nbsp;*<structfield>style</structfield>;</term>
+<listitem><simpara> the style to draw with.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="cairo-matrix-t">cairo_matrix_t</link>&nbsp;*<structfield>transform</structfield>;</term>
+<listitem><simpara> the transformation matrix of the item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="GArray">GArray</link>&nbsp;*<structfield>clip_path_commands</structfield>;</term>
+<listitem><simpara> an array of <link linkend="GooCanvasPathCommand"><type>GooCanvasPathCommand</type></link> specifying the clip
+ path of the item, or <link linkend="NULL:CAPS"><literal>NULL</literal></link>.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="gdouble">gdouble</link>&nbsp;<structfield>visibility_threshold</structfield>;</term>
+<listitem><simpara> the threshold scale setting at which to show the item
+ (if the <parameter>visibility</parameter> setting is set to <link linkend="VISIBLE-ABOVE-THRESHOLD:CAPS"><literal>VISIBLE_ABOVE_THRESHOLD</literal></link>).
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>visibility</structfield>&nbsp;:&nbsp;2;</term>
+<listitem><simpara> the <link linkend="GooCanvasItemVisibility"><type>GooCanvasItemVisibility</type></link> setting specifying whether the
+ item is visible, invisible, or visible above a given canvas scale setting.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>pointer_events</structfield>&nbsp;:&nbsp;4;</term>
+<listitem><simpara> the <link linkend="GooCanvasPointerEvents"><type>GooCanvasPointerEvents</type></link> setting specifying the events
+ the item should receive.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>can_focus</structfield>&nbsp;:&nbsp;1;</term>
+<listitem><simpara> if the item can take the keyboard focus.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>own_style</structfield>&nbsp;:&nbsp;1;</term>
+<listitem><simpara> if the item has its own style, rather than using its parent's.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><link linkend="guint">guint</link>&nbsp;<structfield>clip_fill_rule</structfield>&nbsp;:&nbsp;4;</term>
+<listitem><simpara> the <link linkend="cairo-fill-rule-t"><type>cairo_fill_rule_t</type></link> setting specifying the fill rule
+ used for the clip path.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="GooCanvasItemSimpleClass" role="struct"/>GooCanvasItemSimpleClass</title>
+<indexterm><primary>GooCanvasItemSimpleClass</primary></indexterm><programlisting>typedef struct {
+  void		 (* simple_create_path)	(GooCanvasItemSimple   *simple,
+					 cairo_t               *cr);
+
+  void           (* simple_update)	(GooCanvasItemSimple   *simple,
+					 cairo_t               *cr);
+  void           (* simple_paint)	(GooCanvasItemSimple   *simple,
+					 cairo_t               *cr,
+					 const GooCanvasBounds *bounds);
+  gboolean       (* simple_is_item_at)  (GooCanvasItemSimple   *simple,
+					 gdouble                x,
+					 gdouble                y,
+					 cairo_t               *cr,
+					 gboolean               is_pointer_event);
+} GooCanvasItemSimpleClass;
+</programlisting>
+<para>
+The <link linkend="GooCanvasItemSimpleClass-struct"><type>GooCanvasItemSimpleClass</type></link> struct contains several methods that
+subclasses can override.
+</para>
+<para>
+Simple items need only implement the <link linkend="create-path"><function>create_path()</function></link> method. More complex
+items must override the <link linkend="update"><function>update()</function></link>, <link linkend="paint"><function>paint()</function></link> and <link linkend="is-item-at"><function>is_item_at()</function></link> methods.</para>
+<para>
+
+</para><variablelist role="struct">
+<varlistentry>
+<term><structfield>simple_create_path</structfield>&nbsp;()</term>
+<listitem><simpara> simple subclasses that draw basic shapes and paths only
+ need to override this one method. It creates the path for the item.
+ All updating, painting and hit-testing is provided automatically by the
+ <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link> class. (This method is used by the builtin
+ <link linkend="GooCanvasEllipse"><type>GooCanvasEllipse</type></link>, <link linkend="GooCanvasRect"><type>GooCanvasRect</type></link> and <link linkend="GooCanvasPath"><type>GooCanvasPath</type></link> items.)
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><structfield>simple_update</structfield>&nbsp;()</term>
+<listitem><simpara> subclasses should override this to calculate their new
+ bounds, in user space.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><structfield>simple_paint</structfield>&nbsp;()</term>
+<listitem><simpara> subclasses should override this to paint their item.
+</simpara></listitem>
+</varlistentry>
+<varlistentry>
+<term><structfield>simple_is_item_at</structfield>&nbsp;()</term>
+<listitem><simpara> subclasses should override this to do hit-testing.
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-check-style" role="function"/>goo_canvas_item_simple_check_style ()</title>
+<indexterm><primary>goo_canvas_item_simple_check_style</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_check_style  (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>,
+typically in their <link linkend="update"><function>update()</function></link> or <link linkend="get-requested-area"><function>get_requested_area()</function></link> methods.
+</para>
+<para>
+It ensures that the item's style is setup correctly. If the item has its
+own <link linkend="GooCanvasStyle"><type>GooCanvasStyle</type></link> it makes sure the parent is set correctly. If it
+doesn't have its own style it uses the parent item's style.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-get-path-bounds" role="function"/>goo_canvas_item_simple_get_path_bounds ()</title>
+<indexterm><primary>goo_canvas_item_simple_get_path_bounds</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_get_path_bounds
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasBounds">GooCanvasBounds</link> *bounds);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>,
+typically in their <link linkend="update"><function>update()</function></link> or <link linkend="get-requested-area"><function>get_requested_area()</function></link> methods.
+</para>
+<para>
+It calculates the bounds of the current path, using the item's style
+settings, and stores the results in the given <link linkend="GooCanvasBounds"><type>GooCanvasBounds</type></link> struct.
+</para>
+<para>
+The returned bounds contains the bounding box of the path in device space,
+converted to user space coordinates. To calculate the bounds completely in
+user space, use <link linkend="cairo-identity-matrix"><function>cairo_identity_matrix()</function></link> to temporarily reset the current
+transformation matrix to the identity matrix.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>cr</parameter>&nbsp;:</term>
+<listitem><simpara> a cairo context.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>bounds</parameter>&nbsp;:</term>
+<listitem><simpara> the <link linkend="GooCanvasBounds"><type>GooCanvasBounds</type></link> struct to store the resulting bounding box.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-user-bounds-to-device" role="function"/>goo_canvas_item_simple_user_bounds_to_device ()</title>
+<indexterm><primary>goo_canvas_item_simple_user_bounds_to_device</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_user_bounds_to_device
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasBounds">GooCanvasBounds</link> *bounds);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>,
+typically in their <link linkend="update"><function>update()</function></link> or <link linkend="get-requested-area"><function>get_requested_area()</function></link> methods.
+</para>
+<para>
+It converts the item's bounds to a bounding box in device space.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>cr</parameter>&nbsp;:</term>
+<listitem><simpara> a cairo context.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>bounds</parameter>&nbsp;:</term>
+<listitem><simpara> the bounds of the item, in the item's coordinate space.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-user-bounds-to-parent" role="function"/>goo_canvas_item_simple_user_bounds_to_parent ()</title>
+<indexterm><primary>goo_canvas_item_simple_user_bounds_to_parent</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_user_bounds_to_parent
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasBounds">GooCanvasBounds</link> *bounds);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>,
+typically in their <link linkend="get-requested-area"><function>get_requested_area()</function></link> method.
+</para>
+<para>
+It converts the item's bounds to a bounding box in its parent's coordinate
+space. If the item has no transformation matrix set then no conversion is
+needed.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>cr</parameter>&nbsp;:</term>
+<listitem><simpara> a cairo context.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>bounds</parameter>&nbsp;:</term>
+<listitem><simpara> the bounds of the item, in the item's coordinate space.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-check-in-path" role="function"/>goo_canvas_item_simple_check_in_path ()</title>
+<indexterm><primary>goo_canvas_item_simple_check_in_path</primary></indexterm><programlisting><link linkend="gboolean">gboolean</link>            goo_canvas_item_simple_check_in_path
+                                                        (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="gdouble">gdouble</link> x,
+                                                         <link linkend="gdouble">gdouble</link> y,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr,
+                                                         <link linkend="GooCanvasPointerEvents">GooCanvasPointerEvents</link> pointer_events);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</para>
+<para>
+It checks if the given point is in the current path, using the item's
+style settings.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>x</parameter>&nbsp;:</term>
+<listitem><simpara> the x coordinate of the point.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>y</parameter>&nbsp;:</term>
+<listitem><simpara> the y coordinate of the point.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>cr</parameter>&nbsp;:</term>
+<listitem><simpara> a cairo context.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>pointer_events</parameter>&nbsp;:</term>
+<listitem><simpara> specifies which parts of the path to check.
+</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&nbsp;:</term><listitem><simpara> <link linkend="TRUE:CAPS"><literal>TRUE</literal></link> if the given point is in the current path.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-paint-path" role="function"/>goo_canvas_item_simple_paint_path ()</title>
+<indexterm><primary>goo_canvas_item_simple_paint_path</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_paint_path   (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="cairo-t">cairo_t</link> *cr);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</para>
+<para>
+It paints the current path, using the item's style settings.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>cr</parameter>&nbsp;:</term>
+<listitem><simpara> a cairo context.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-changed" role="function"/>goo_canvas_item_simple_changed ()</title>
+<indexterm><primary>goo_canvas_item_simple_changed</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_changed      (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="gboolean">gboolean</link> recompute_bounds);</programlisting>
+<para>
+This function is intended to be used by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</para>
+<para>
+It is used as a callback for the "changed" signal of the item models.
+It requests an update or redraw of the item as appropriate.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>recompute_bounds</parameter>&nbsp;:</term>
+<listitem><simpara> if the item's bounds need to be recomputed.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2>
+<title><anchor id="goo-canvas-item-simple-set-model" role="function"/>goo_canvas_item_simple_set_model ()</title>
+<indexterm><primary>goo_canvas_item_simple_set_model</primary></indexterm><programlisting><link linkend="void">void</link>                goo_canvas_item_simple_set_model    (<link linkend="GooCanvasItemSimple">GooCanvasItemSimple</link> *item,
+                                                         <link linkend="GooCanvasItemModel">GooCanvasItemModel</link> *model);</programlisting>
+<para>
+This function should be called by subclasses of <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>
+in their <link linkend="set-model"><function>set_model()</function></link> method.</para>
+<para>
+
+</para><variablelist role="params">
+<varlistentry><term><parameter>item</parameter>&nbsp;:</term>
+<listitem><simpara> a <link linkend="GooCanvasItemSimple"><type>GooCanvasItemSimple</type></link>.
+</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>model</parameter>&nbsp;:</term>
+<listitem><simpara> the model that <parameter>item</parameter> will view.
+</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+<refsect1 role="property_details">
+<title role="property_details.title">Property Details</title>
+<refsect2><title><anchor id="GooCanvasItemSimple--antialias"/>The &quot;<literal>antialias</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:antialias</primary></indexterm><programlisting>  &quot;antialias&quot;                <link linkend="GooCairoAntialias">GooCairoAntialias</link>     : Read / Write</programlisting>
+<para>The antialiasing mode to use.</para><para>Default value: CAIRO_ANTIALIAS_GRAY</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--clip-fill-rule"/>The &quot;<literal>clip-fill-rule</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:clip-fill-rule</primary></indexterm><programlisting>  &quot;clip-fill-rule&quot;           <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write</programlisting>
+<para>The fill rule used to determine which parts of the item are clipped.</para><para>Default value: CAIRO_FILL_RULE_WINDING</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--clip-path"/>The &quot;<literal>clip-path</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:clip-path</primary></indexterm><programlisting>  &quot;clip-path&quot;                <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>
+The sequence of commands describing the clip path of the item, specified
+as a string using the same syntax
+as in the <ulink url="http://www.w3.org/Graphics/SVG/">Scalable Vector
+Graphics (SVG)</ulink> path element.</para>
+<para>
+
+</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--fill-color"/>The &quot;<literal>fill-color</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:fill-color</primary></indexterm><programlisting>  &quot;fill-color&quot;               <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>The color to use to paint the interior of the item. To disable painting set the 'fill-pattern' property to NULL.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--fill-color-rgba"/>The &quot;<literal>fill-color-rgba</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:fill-color-rgba</primary></indexterm><programlisting>  &quot;fill-color-rgba&quot;          <link linkend="guint">guint</link>                 : Write</programlisting>
+<para>The color to use to paint the interior of the item, specified as a 32-bit integer value. To disable painting set the 'fill-pattern' property to NULL.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--fill-pattern"/>The &quot;<literal>fill-pattern</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:fill-pattern</primary></indexterm><programlisting>  &quot;fill-pattern&quot;             <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write</programlisting>
+<para>The pattern to use to paint the interior of the item, or NULL to disable painting.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--fill-pixbuf"/>The &quot;<literal>fill-pixbuf</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:fill-pixbuf</primary></indexterm><programlisting>  &quot;fill-pixbuf&quot;              <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write</programlisting>
+<para>The pixbuf to use to paint the interior of the item. To disable painting set the 'fill-pattern' property to NULL.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--fill-rule"/>The &quot;<literal>fill-rule</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:fill-rule</primary></indexterm><programlisting>  &quot;fill-rule&quot;                <link linkend="GooCairoFillRule">GooCairoFillRule</link>      : Read / Write</programlisting>
+<para>The fill rule used to determine which parts of the item are filled.</para><para>Default value: CAIRO_FILL_RULE_WINDING</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--font"/>The &quot;<literal>font</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:font</primary></indexterm><programlisting>  &quot;font&quot;                     <link linkend="gchararray">gchararray</link>            : Read / Write</programlisting>
+<para>The base font to use for the text.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--font-desc"/>The &quot;<literal>font-desc</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:font-desc</primary></indexterm><programlisting>  &quot;font-desc&quot;                <link linkend="PangoFontDescription">PangoFontDescription</link>  : Read / Write</programlisting>
+<para>The attributes specifying which font to use.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--hint-metrics"/>The &quot;<literal>hint-metrics</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:hint-metrics</primary></indexterm><programlisting>  &quot;hint-metrics&quot;             <link linkend="GooCairoHintMetrics">GooCairoHintMetrics</link>   : Read / Write</programlisting>
+<para>The hinting to be used for font metrics.</para><para>Default value: CAIRO_HINT_METRICS_OFF</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--line-cap"/>The &quot;<literal>line-cap</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:line-cap</primary></indexterm><programlisting>  &quot;line-cap&quot;                 <link linkend="GooCairoLineCap">GooCairoLineCap</link>       : Read / Write</programlisting>
+<para>The line cap style to use.</para><para>Default value: CAIRO_LINE_CAP_BUTT</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--line-dash"/>The &quot;<literal>line-dash</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:line-dash</primary></indexterm><programlisting>  &quot;line-dash&quot;                <link linkend="GooCairoLineDash">GooCairoLineDash</link>      : Read / Write</programlisting>
+<para>The dash pattern to use.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--line-join"/>The &quot;<literal>line-join</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:line-join</primary></indexterm><programlisting>  &quot;line-join&quot;                <link linkend="GooCairoLineJoin">GooCairoLineJoin</link>      : Read / Write</programlisting>
+<para>The line join style to use.</para><para>Default value: CAIRO_LINE_JOIN_MITER</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--line-join-miter-limit"/>The &quot;<literal>line-join-miter-limit</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:line-join-miter-limit</primary></indexterm><programlisting>  &quot;line-join-miter-limit&quot;    <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The smallest angle to use with miter joins, in degrees. Bevel joins will be used below this limit.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 10</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--line-width"/>The &quot;<literal>line-width</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:line-width</primary></indexterm><programlisting>  &quot;line-width&quot;               <link linkend="gdouble">gdouble</link>               : Read / Write</programlisting>
+<para>The line width to use for the item's perimeter.</para><para>Allowed values: &gt;= 0</para>
+<para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--operator"/>The &quot;<literal>operator</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:operator</primary></indexterm><programlisting>  &quot;operator&quot;                 <link linkend="GooCairoOperator">GooCairoOperator</link>      : Read / Write</programlisting>
+<para>The compositing operator to use.</para><para>Default value: CAIRO_OPERATOR_OVER</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--stroke-color"/>The &quot;<literal>stroke-color</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:stroke-color</primary></indexterm><programlisting>  &quot;stroke-color&quot;             <link linkend="gchararray">gchararray</link>            : Write</programlisting>
+<para>The color to use for the item's perimeter. To disable painting set the 'stroke-pattern' property to NULL.</para><para>Default value: NULL</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--stroke-color-rgba"/>The &quot;<literal>stroke-color-rgba</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:stroke-color-rgba</primary></indexterm><programlisting>  &quot;stroke-color-rgba&quot;        <link linkend="guint">guint</link>                 : Write</programlisting>
+<para>The color to use for the item's perimeter, specified as a 32-bit integer value. To disable painting set the 'stroke-pattern' property to NULL.</para><para>Default value: 0</para>
+</refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--stroke-pattern"/>The &quot;<literal>stroke-pattern</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:stroke-pattern</primary></indexterm><programlisting>  &quot;stroke-pattern&quot;           <link linkend="GooCairoPattern">GooCairoPattern</link>       : Read / Write</programlisting>
+<para>The pattern to use to paint the perimeter of the item, or NULL disable painting.</para></refsect2>
+<refsect2><title><anchor id="GooCanvasItemSimple--stroke-pixbuf"/>The &quot;<literal>stroke-pixbuf</literal>&quot; property</title>
+<indexterm><primary>GooCanvasItemSimple:stroke-pixbuf</primary></indexterm><programlisting>  &quot;stroke-pixbuf&quot;            <link linkend="GdkPixbuf">GdkPixbuf</link>             : Write</programlisting>
+<para>The pixbuf to use to draw the item's perimeter. To disable painting set the 'stroke-pattern' property to NULL.</para></refsect2>
+
+</refsect1>
+
+
+
+
+</refentry>
