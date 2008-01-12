@@ -21,7 +21,7 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
 fi
 
 dnl chack for glib and gtk libraries
-pkg_modules="gtk+-2.0 >= 2.10.0 glib-2.0 >= 2.12.0 gthread-2.0 >= 2.12.0"
+pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.14.0 gthread-2.0 >= 2.14.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
