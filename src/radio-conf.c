@@ -38,6 +38,7 @@
 #define KEY_MFG         "Company"
 #define KEY_MODEL       "Model"
 #define KEY_ID          "ID"
+#define KEY_TYPE        "Type"
 #define KEY_PORT        "Port"
 #define KEY_SPEED       "Speed"
 #define KEY_CIV         "CIV"
@@ -45,12 +46,13 @@
 #define KEY_RTS         "RTS"
 
 
-/** \brief REad radio configuration.
+/** \brief Read radio configuration.
  * \param conf Pointer to a radio_conf_t structure where the data will be
  *             stored.
  * 
+ * This function reads a radio configuration from a .rig file into conf.
  * conf->name must contain the file name of the configuration (no path, just
- * file).
+ * file name).
  */
 gboolean radio_conf_read (radio_conf_t *conf)
 {
@@ -87,6 +89,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     conf->company = g_key_file_get_string (cfg, GROUP, KEY_MFG, NULL);
     conf->model = g_key_file_get_string (cfg, GROUP, KEY_MODEL, NULL);
     conf->id = g_key_file_get_integer (cfg, GROUP, KEY_ID, NULL);
+    conf->type = g_key_file_get_integer (cfg, GROUP, KEY_TYPE, NULL);
     conf->port = g_key_file_get_string (cfg, GROUP, KEY_PORT, NULL);
     conf->speed = g_key_file_get_integer (cfg, GROUP, KEY_SPEED, NULL);
     conf->civ = g_key_file_get_integer (cfg, GROUP, KEY_CIV, NULL);
@@ -99,6 +102,13 @@ gboolean radio_conf_read (radio_conf_t *conf)
 }
 
 
+/** \brief Save radio configuration.
+ * \param conf Pointer to the radio configuration.
+ * 
+ * This function saves the radio configuration stored in conf to a
+ * .rig file. conf->name must contain the file name of the configuration
+ * (no path, just file name).
+ */
 void radio_conf_save (radio_conf_t *conf)
 {
     GKeyFile *cfg = NULL;
@@ -115,7 +125,8 @@ void radio_conf_save (radio_conf_t *conf)
     
     g_key_file_set_string (cfg, GROUP, KEY_MFG, conf->company);
     g_key_file_set_string (cfg, GROUP, KEY_MODEL, conf->model);
-    g_key_file_set_integer (cfg, GROUP, KEY_MFG, conf->id);
+    g_key_file_set_integer (cfg, GROUP, KEY_ID, conf->id);
+    g_key_file_set_integer (cfg, GROUP, KEY_TYPE, conf->type);
     g_key_file_set_string (cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_integer (cfg, GROUP, KEY_SPEED, conf->speed);
     g_key_file_set_integer (cfg, GROUP, KEY_CIV, conf->civ);
