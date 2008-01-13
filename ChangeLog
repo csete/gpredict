@@ -1,3 +1,9 @@
+2008-01-12; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/radio-conf.[ch]:
+    Added parameter for radio type (RX, TX, TRX, FULL_DUPL).
+    
+
 2008-01-01; Alexandru Csete <oz9aec@gmail.com>
 
     * src/compat.[ch]:

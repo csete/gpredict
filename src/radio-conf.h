@@ -36,7 +36,8 @@
 
 /** \brief RS232 control line usage definitions. */
 typedef enum {
-    LINE_OFF = 0,       /*!< Line should be permanently OFF. */
+    LINE_UNDEF = 0,     /*!< Undefined. */
+    LINE_OFF,           /*!< Line should be permanently OFF. */
     LINE_ON,            /*!< Line should be permanently ON. */
     LINE_PTT,           /*!< Line used for PTT control. */
     LINE_CW             /*!< Line used for CW keying. */

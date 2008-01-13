@@ -36,6 +36,7 @@
 #include "compat.h"
 #include "radio-conf.h"
 #include "sat-pref-rig-data.h"
+#include "sat-pref-rig-editor.h"
 #include "sat-pref-rig.h"
 
 
@@ -51,6 +52,11 @@ static void add_cb    (GtkWidget *button, gpointer data);
 static void edit_cb   (GtkWidget *button, gpointer data);
 static void delete_cb (GtkWidget *button, gpointer data);
 
+static void render_name (GtkTreeViewColumn *col,
+                         GtkCellRenderer   *renderer,
+                         GtkTreeModel      *model,
+                         GtkTreeIter       *iter,
+                         gpointer           column);
 static void render_civ (GtkTreeViewColumn *col,
                         GtkCellRenderer   *renderer,
                         GtkTreeModel      *model,
@@ -61,6 +67,11 @@ static void render_dtr_rts (GtkTreeViewColumn *col,
                             GtkTreeModel      *model,
                             GtkTreeIter       *iter,
                             gpointer           column);
+static void render_rig_type (GtkTreeViewColumn *col,
+                             GtkCellRenderer   *renderer,
+                             GtkTreeModel      *model,
+                             GtkTreeIter       *iter,
+                             gpointer           column);
 
 /* global objects */
 static GtkWidget *addbutton;
@@ -107,6 +118,17 @@ static void create_rig_list ()
     gtk_tree_view_set_model (GTK_TREE_VIEW (riglist), model);
     g_object_unref (model);
 
+    /* Conf name */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Config Name"), renderer,
+                                                        "text", RIG_LIST_COL_NAME,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_name,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_NAME),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+
     /* Company */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Company"), renderer,
@@ -119,6 +141,17 @@ static void create_rig_list ()
     column = gtk_tree_view_column_new_with_attributes (_("Model"), renderer,
                                                        "text", RIG_LIST_COL_MODEL,
                                                         NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+    
+    /* Type */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer,
+                                                       "text", RIG_LIST_COL_TYPE,
+                                                       NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_rig_type,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_TYPE),
+                                             NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
     /* Port */
@@ -190,6 +223,7 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_STRING,    // company
                                     G_TYPE_STRING,    // model
                                     G_TYPE_INT,       // hamlib id
+                                    G_TYPE_INT,       // radio type
                                     G_TYPE_STRING,    // port
                                     G_TYPE_INT,       // speed
                                     G_TYPE_INT,       // Icom CI-V
@@ -219,6 +253,7 @@ static GtkTreeModel *create_and_fill_model ()
                                         RIG_LIST_COL_COMP, conf.company,
                                         RIG_LIST_COL_MODEL, conf.model,
                                         RIG_LIST_COL_ID, conf.id,
+                                        RIG_LIST_COL_TYPE, conf.type,
                                         RIG_LIST_COL_PORT, conf.port,
                                         RIG_LIST_COL_SPEED, conf.speed,
                                         RIG_LIST_COL_CIV, conf.civ,
@@ -313,8 +348,7 @@ static GtkWidget *create_buttons (void)
 
 /** \brief User pressed cancel. Any changes to config must be cancelled.
  */
-void
-sat_pref_rig_cancel ()
+void sat_pref_rig_cancel ()
 {
 }
 
@@ -324,12 +358,11 @@ sat_pref_rig_cancel ()
  * First, all .grc files are deleted, whereafter the radio configurations in
  * the riglist are saved one by one.
  */
-void
-sat_pref_rig_ok     ()
+void sat_pref_rig_ok     ()
 {
-    /* delete all .grc files */
+    /* delete all .rig files */
     
-    /* create new .grc files for the radios in the riglist */
+    /* create new .rig files for the radios in the riglist */
     
 }
 
@@ -343,8 +376,9 @@ sat_pref_rig_ok     ()
  */
 static void add_cb    (GtkWidget *button, gpointer data)
 {
-
-    //sat_pref_rig_editor_run (riglist, TRUE);
+    radio_conf_t conf;
+    
+    sat_pref_rig_editor_run (&conf);
 }
 
 
@@ -361,6 +395,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     GtkTreeModel     *selmod;
     GtkTreeSelection *selection;
     GtkTreeIter       iter;
+    radio_conf_t      conf;
 
     
     /* If there are no entries, we have a bug since the button should 
@@ -397,7 +432,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     }
 
     
-    //sat_pref_rig_editor_run (riglist, FALSE);
+    sat_pref_rig_editor_run (&conf);
 }
 
 
@@ -446,7 +481,48 @@ static void delete_cb (GtkWidget *button, gpointer data)
 }
 
 
-/** \brief Render CIV address. */
+/** \brief Render configuration name.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ * This function renders the configuration name onto the riglist. Although
+ * the configuration name is a plain string, it contains the file name of the
+ * configuration file and we want to strip the .rig extension.
+*/
+static void render_name (GtkTreeViewColumn *col,
+                         GtkCellRenderer   *renderer,
+                         GtkTreeModel      *model,
+                         GtkTreeIter       *iter,
+                         gpointer           column)
+{
+    gchar  *fname;
+    gchar **buff;
+    guint   coli = GPOINTER_TO_UINT (column);
+    
+    gtk_tree_model_get (model, iter, coli, &fname, -1);
+
+    buff = g_strsplit (fname, ".rig", 0);
+    g_object_set (renderer, "text", buff[0], NULL);
+    
+    g_strfreev (buff);
+    g_free (fname);
+}
+
+
+/** \brief Render CIV address.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ *
+ * This function is used to render the Icom CI-V address of the radio.
+ * The CI-V adress is store as an integer and we want to display it as a
+ * HEX number.
+ */
 static void render_civ (GtkTreeViewColumn *col,
                         GtkCellRenderer   *renderer,
                         GtkTreeModel      *model,
@@ -468,7 +544,17 @@ static void render_civ (GtkTreeViewColumn *col,
     g_free (buff);
 }
 
-/** \brief Render DTR or RTS columns address. */
+/** \brief Render DTR or RTS columns address.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ * This function renders the DTR and RTS line settings onto the radio list.
+ * The DTR and RTS states are stored as enum; however, we want to display them
+ * using some escriptive text, e.g. "ON", "OFF", "PTT", and so on
+ */
 static void render_dtr_rts (GtkTreeViewColumn *col,
                             GtkCellRenderer   *renderer,
                             GtkTreeModel      *model,
@@ -495,12 +581,65 @@ static void render_dtr_rts (GtkTreeViewColumn *col,
             break;
                             
         default:
-            g_object_set (renderer, "text", "OFF", NULL);
+            g_object_set (renderer, "text", "UNDEF", NULL);
             break;
         
     }
     
 }
+
+
+/** \brief Render radio type.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ * This function renders the radio type onto the radio list.
+ * The radio type is stored as enum; however, we want to display it
+ * using some escriptive text, e.g. "Received", "Full Duplex", and so on
+ */
+static void render_rig_type (GtkTreeViewColumn *col,
+                             GtkCellRenderer   *renderer,
+                             GtkTreeModel      *model,
+                             GtkTreeIter       *iter,
+                             gpointer           column)
+{
+    guint    number;
+    guint   coli = GPOINTER_TO_UINT (column);
+    
+    gtk_tree_model_get (model, iter, coli, &number, -1);
+
+    switch (number) {
+
+        case RADIO_TYPE_RX:
+            g_object_set (renderer, "text", "RX", NULL);
+            break;
+
+        case RADIO_TYPE_TX:
+            g_object_set (renderer, "text", "TX", NULL);
+            break;
+
+        case RADIO_TYPE_TRX:
+            g_object_set (renderer, "text", "RX/TX", NULL);
+            break;
+
+        case RADIO_TYPE_FULL_DUP:
+            g_object_set (renderer, "text", "FULL DUPL", NULL);
+            break;
+
+        default:
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%s: Invalid type: %d. Using RX."),
+                           __FILE__, __FUNCTION__, number);
+            g_object_set (renderer, "text", "RX", NULL);
+            break;
+        
+    }
+    
+}
+
 
 
 

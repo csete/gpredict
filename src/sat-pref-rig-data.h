@@ -34,6 +34,7 @@ typedef enum {
     RIG_LIST_COL_COMP,      /*!< Company, e.g. Yaesu. */
     RIG_LIST_COL_MODEL,     /*!< Model, e.g. FT-847. */
     RIG_LIST_COL_ID,        /*!< Hamlib ID. */
+    RIG_LIST_COL_TYPE,      /*!< Radio type (RX, TX, TRX, FULL_DUP. */
     RIG_LIST_COL_PORT,      /*!< Port / Device, e.g. /dev/ttyS0. */
     RIG_LIST_COL_SPEED,     /*!< Serial speed. */
     RIG_LIST_COL_CIV,       /*!< CI-V address for Icom rigs. */
