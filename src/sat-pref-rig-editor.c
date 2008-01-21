@@ -51,9 +51,13 @@ extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 
 
 /* private widgets */
-static GtkWidget *dialog;         /* dialog window */
-static GtkWidget *name;           /* Configuration name */
-
+static GtkWidget *dialog;   /* dialog window */
+static GtkWidget *name;     /* Configuration name */
+static GtkWidget *model;    /* radio model, e.g. Kenwood TS-2000 */
+static GtkWidget *type;     /* radio type */
+static GtkWidget *port;     /* port selector */
+static GtkWidget *speed;    /* serial speed selector */
+static GtkWidget *dtr,*rts; /* DTR and RTS line states */
 
 
 static GtkWidget *create_editor_widgets (radio_conf_t *conf);
@@ -138,7 +142,7 @@ create_editor_widgets (radio_conf_t *conf)
 	GtkWidget   *label;
 
 
-	table = gtk_table_new (6, 4, FALSE);
+	table = gtk_table_new (5, 5, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -146,7 +150,7 @@ create_editor_widgets (radio_conf_t *conf)
 	/* Config name */
 	label = gtk_label_new (_("Name"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 4, 0, 1);
 	
 	name = gtk_entry_new ();
 	gtk_entry_set_max_length (GTK_ENTRY (name), 25);
@@ -160,35 +164,99 @@ create_editor_widgets (radio_conf_t *conf)
 	*/
 	g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
 
-	/* Manufacturer */
-	label = gtk_label_new (_("Manufacturer"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
-	
-	//gtk_table_attach_defaults (GTK_TABLE (table), desc, 1, 4, 1, 2);
-
 	/* Model */
 	label = gtk_label_new (_("Model"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
 	
 	
 
 	/* Type */
 	label = gtk_label_new (_("Type"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+    type = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Receiver"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Transmitter"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX + TX"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Full Duplex"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
+    gtk_widget_set_tooltip_text (type,
+                               _("Select radio type. Consult the user manual, if unsure"));
+    gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 2, 3);
 
 	/* Port */
 	label = gtk_label_new (_("Port"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    
+    port = gtk_combo_box_entry_new_text ();
+    if (conf->port != NULL) {
+        gtk_combo_box_append_text (GTK_COMBO_BOX (port), conf->port);
+    }
+    gtk_combo_box_append_text (GTK_COMBO_BOX (port), "/dev/ttyS0");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (port), "/dev/ttyS1");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (port), "/dev/ttyS2");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (port), "/dev/ttyUSB0");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (port), "/dev/ttyUSB1");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (port), "/dev/ttyUSB2");
+    gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
+    gtk_widget_set_tooltip_text (port, _("Select or enter communication port"));
+    gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 3, 4);
 
+    /* DTR State */
+    label = gtk_label_new (_("DTR Line"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 3, 4);
+    
+    dtr = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("Undefined"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("OFF"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("ON"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("PTT"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("CW"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
+    gtk_widget_set_tooltip_text (dtr, _("Select status and use of DTR line"));
+    gtk_table_attach_defaults (GTK_TABLE (table), dtr, 4, 5, 3, 4);
+    
+   
 	/* Speed */
 	label = gtk_label_new (_("Rate"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+    speed = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "300");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "1200");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "2400");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "4800");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "9600");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "19200");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "38400");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "57600");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "115200");
+    gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
+    gtk_widget_set_tooltip_text (speed, _("Select serial port speed"));
+    gtk_table_attach_defaults (GTK_TABLE (table), speed, 1, 2, 4, 5);
 
+    /* RTS State */
+    label = gtk_label_new (_("RTS Line"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 4, 5);
+    
+    rts = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("Undefined"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("OFF"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("ON"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("PTT"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("CW"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
+    gtk_widget_set_tooltip_text (rts, _("Select status and use of RTS line"));
+    gtk_table_attach_defaults (GTK_TABLE (table), rts, 4, 5, 4, 5);
+
+    /* separator between port/speed and DTR/RTS */
+    gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 3, 5,
+                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
+    
 	if (conf->name != NULL)
 		update_widgets (conf);
 
@@ -203,6 +271,49 @@ create_editor_widgets (radio_conf_t *conf)
 static void
 update_widgets (radio_conf_t *conf)
 {
+    
+    /* configuration name */
+    gtk_entry_set_text (GTK_ENTRY (name), conf->name);
+    
+    /* model */
+    
+    /* type */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+    
+    /*serial speed */        
+    switch (conf->speed) {
+        case 300:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 0);
+            break;
+        case 1200:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 1);
+            break;
+        case 2400:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 2);
+            break;
+        case 9600:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 3);
+            break;
+        case 19200:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
+            break;
+        case 38400:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 5);
+            break;
+        case 57600:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 6);
+            break;
+        case 115200:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 7);
+            break;
+        default:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
+            break;
+    }
+
+    /* DTR and RTS lines */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), conf->dtr);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), conf->rts);
 }
 
 
