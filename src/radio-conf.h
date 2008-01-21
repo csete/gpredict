@@ -55,8 +55,7 @@ typedef enum {
 /** \brief Radio configuration. */
 typedef struct {
     gchar       *name;      /*!< Configuration file name. */
-    gchar       *company;   /*!< Manufacturer, e.g. ICOM. */
-    gchar       *model;     /*!< Radio model, e.g. IC-910H. */
+    gchar       *model;     /*!< Radio model, e.g. ICOM IC-910H. */
     guint        id;        /*!< Hamlib ID. */
     radio_type_t type;      /*!< Radio type. */
     gchar       *port;      /*!< Device name, e.g. /dev/ttyS0. */

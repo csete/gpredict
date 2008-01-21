@@ -35,7 +35,6 @@
 #include "radio-conf.h"
 
 #define GROUP           "Radio"
-#define KEY_MFG         "Company"
 #define KEY_MODEL       "Model"
 #define KEY_ID          "ID"
 #define KEY_TYPE        "Type"
@@ -86,7 +85,6 @@ gboolean radio_conf_read (radio_conf_t *conf)
     g_free (fname);
     
     /* read parameters */
-    conf->company = g_key_file_get_string (cfg, GROUP, KEY_MFG, NULL);
     conf->model = g_key_file_get_string (cfg, GROUP, KEY_MODEL, NULL);
     conf->id = g_key_file_get_integer (cfg, GROUP, KEY_ID, NULL);
     conf->type = g_key_file_get_integer (cfg, GROUP, KEY_TYPE, NULL);
@@ -123,7 +121,6 @@ void radio_conf_save (radio_conf_t *conf)
     /* create a config structure */
     cfg = g_key_file_new();
     
-    g_key_file_set_string (cfg, GROUP, KEY_MFG, conf->company);
     g_key_file_set_string (cfg, GROUP, KEY_MODEL, conf->model);
     g_key_file_set_integer (cfg, GROUP, KEY_ID, conf->id);
     g_key_file_set_integer (cfg, GROUP, KEY_TYPE, conf->type);

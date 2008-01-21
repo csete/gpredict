@@ -129,13 +129,6 @@ static void create_rig_list ()
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
 
-    /* Company */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Company"), renderer,
-                                                       "text", RIG_LIST_COL_COMP,
-                                                       NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-
     /* Model */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Model"), renderer,
@@ -220,7 +213,6 @@ static GtkTreeModel *create_and_fill_model ()
     /* create a new list store */
     liststore = gtk_list_store_new (RIG_LIST_COL_NUM,
                                     G_TYPE_STRING,    // name
-                                    G_TYPE_STRING,    // company
                                     G_TYPE_STRING,    // model
                                     G_TYPE_INT,       // hamlib id
                                     G_TYPE_INT,       // radio type
@@ -250,7 +242,6 @@ static GtkTreeModel *create_and_fill_model ()
                     gtk_list_store_append (liststore, &item);
                     gtk_list_store_set (liststore, &item,
                                         RIG_LIST_COL_NAME, conf.name,
-                                        RIG_LIST_COL_COMP, conf.company,
                                         RIG_LIST_COL_MODEL, conf.model,
                                         RIG_LIST_COL_ID, conf.id,
                                         RIG_LIST_COL_TYPE, conf.type,
@@ -267,9 +258,6 @@ static GtkTreeModel *create_and_fill_model ()
                     /* clean up memory */
                     if (conf.name)
                         g_free (conf.name);
-                    
-                    if (conf.company)
-                        g_free (conf.company);
                     
                     if (conf.model)
                         g_free (conf.model);
@@ -376,7 +364,18 @@ void sat_pref_rig_ok     ()
  */
 static void add_cb    (GtkWidget *button, gpointer data)
 {
-    radio_conf_t conf;
+    radio_conf_t conf = {
+        .name  = NULL,
+        .model = NULL,
+        .id    = 0,
+        .type  = RADIO_TYPE_RX,
+        .port  = NULL,
+        .speed = 0,
+        .civ   = 0,
+        .dtr   = LINE_UNDEF,
+        .rts   = LINE_UNDEF,
+    };
+    
     
     sat_pref_rig_editor_run (&conf);
 }
