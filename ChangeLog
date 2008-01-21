@@ -2,7 +2,14 @@
 
     * src/radio-conf.[ch]:
     Added parameter for radio type (RX, TX, TRX, FULL_DUPL).
+2008-01-21; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/radio-conf.[ch], src/sat-pref-rig.c:
+    Removed manufacturer field. Will be part of the model.
     
+    * src/sat-pref-rig-editor.c:
+    Added all widgets except the rig model selector.
+
 
 2008-01-01; Alexandru Csete <oz9aec@gmail.com>
 

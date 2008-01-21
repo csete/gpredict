@@ -31,7 +31,6 @@
 /** \brief Coumn definitions for radio list. */
 typedef enum {
     RIG_LIST_COL_NAME = 0,  /*!< File name. */
-    RIG_LIST_COL_COMP,      /*!< Company, e.g. Yaesu. */
     RIG_LIST_COL_MODEL,     /*!< Model, e.g. FT-847. */
     RIG_LIST_COL_ID,        /*!< Hamlib ID. */
     RIG_LIST_COL_TYPE,      /*!< Radio type (RX, TX, TRX, FULL_DUP. */
