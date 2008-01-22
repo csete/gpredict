@@ -39,6 +39,18 @@ PKG_CHECK_MODULES(LIBCURL, libcurl, [
 
 ])
 
+dnl check for hamlib
+PKG_CHECK_MODULES(HAMLIB, hamlib, [
+        CFLAGS="$CFLAGS $HAMLIB_CFLAGS";
+        LIBS="$LIBS $HAMLIB_LIBS"; 
+        havehamlib=true;            
+        AC_DEFINE(HAVE_HAMLIB, 1, [Define if hamlib is available])
+   ], [
+        havehamlib=false;            
+        AC_DEFINE(HAVE_HAMLIB, 0, [Define if hamlib is unvailable])
+
+])
+
 dnl Add the languages which your application supports here.
 dnl Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
 ALL_LINGUAS=
@@ -66,6 +78,9 @@ GTK_V=`pkg-config --modversion gtk+-2.0`
 dnl SQL_V=`pkg-config --modversion sqlite3`
 if test "$havecurl" = true ; then
    CURL_V=`pkg-config --modversion libcurl`
+fi
+if test "$havehamlib" = true ; then
+   HAML_V=`pkg-config --modversion hamlib`
 fi
  
 
@@ -102,6 +117,11 @@ if test "$havecurl" = true ; then
 echo Curl version....... : $CURL_V
 else
 echo Curl version....... : none
+fi
+if test "$havehamlib" = true ; then
+echo Hamlib version..... : $HAML_V
+else
+echo Hamlib version..... : none
 fi
 echo Enable coverage.... : $enable_coverage
 echo
