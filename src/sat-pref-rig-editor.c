@@ -44,6 +44,7 @@
 #include "sat-pref-rig-editor.h"
 
 
+#include <hamlib/rig.h>
 
 
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
@@ -53,18 +54,28 @@ extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 /* private widgets */
 static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* Configuration name */
-static GtkWidget *model;    /* radio model, e.g. Kenwood TS-2000 */
+static GtkWidget *model;    /* radio model, e.g. TS-2000 */
 static GtkWidget *type;     /* radio type */
 static GtkWidget *port;     /* port selector */
 static GtkWidget *speed;    /* serial speed selector */
 static GtkWidget *dtr,*rts; /* DTR and RTS line states */
 
 
-static GtkWidget *create_editor_widgets (radio_conf_t *conf);
-static void       update_widgets        (radio_conf_t *conf);
-static void       clear_widgets         (void);
-static gboolean   apply_changes         (radio_conf_t *conf);
-static void       name_changed          (GtkWidget *widget, gpointer data);
+static GtkWidget    *create_editor_widgets (radio_conf_t *conf);
+static void          update_widgets        (radio_conf_t *conf);
+static void          clear_widgets         (void);
+static gboolean      apply_changes         (radio_conf_t *conf);
+static void          name_changed          (GtkWidget *widget, gpointer data);
+static GtkTreeModel *create_rig_model      (void);
+static gint          rig_list_add          (const struct rig_caps *, void *);
+static gint          rig_list_compare_mfg  (gconstpointer, gconstpointer);
+static gint          rig_list_compare_mod  (gconstpointer, gconstpointer);
+static void          is_rig_model          (GtkCellLayout   *cell_layout,
+                                            GtkCellRenderer *cell,
+                                            GtkTreeModel    *tree_model,
+                                            GtkTreeIter     *iter,
+                                            gpointer         data);
+
 
 /** \brief Add or edit a radio configuration.
  * \param conf Pointer to a radio configuration.
@@ -138,8 +149,10 @@ sat_pref_rig_editor_run (radio_conf_t *conf)
 static GtkWidget *
 create_editor_widgets (radio_conf_t *conf)
 {
-	GtkWidget   *table;
-	GtkWidget   *label;
+	GtkWidget    *table;
+	GtkWidget    *label;
+    GtkTreeModel *riglist;
+    GtkCellRenderer *renderer;
 
 
 	table = gtk_table_new (5, 5, FALSE);
@@ -169,7 +182,22 @@ create_editor_widgets (radio_conf_t *conf)
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
 	
-	
+    riglist = create_rig_model ();
+	model = gtk_combo_box_new_with_model (riglist);
+    g_object_unref (riglist);
+    gtk_table_attach_defaults (GTK_TABLE (table), model, 1, 2, 1, 2);
+    
+    renderer = gtk_cell_renderer_text_new ();
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (model), renderer, TRUE);
+    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (model), renderer,
+                                    "text", 0,
+                                    NULL);
+    gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (model),
+                                        renderer,
+                                        is_rig_model,
+                                        NULL, NULL);
+    gtk_widget_set_tooltip_text (model, _("Click to select a radio."));
+    
 
 	/* Type */
 	label = gtk_label_new (_("Type"));
@@ -401,4 +429,205 @@ name_changed          (GtkWidget *widget, gpointer data)
 }
 
 
+/** \brief Radio info to be used when building the rig model */
+typedef struct {
+    gint    id;       /*!< Model ID. */
+    gchar  *mfg;      /*!< Manufacurer name (eg. KENWOOD). */
+    gchar  *model;    /*!< Radio model (eg. TS-440). */
+} rig_info_t;
 
+
+/** \brief Build tree model containing radios.
+ * \return A tree model where the radios are ordered according to
+ *         manufacturer.
+ * 
+ */
+static GtkTreeModel *create_rig_model ()
+{
+    GArray      *array;
+    rig_info_t  *info;
+    GtkTreeIter  iter1; /* iter used for manufacturer */
+    GtkTreeIter  iter2; /* iter used for model */
+    GtkTreeStore *store;
+    gchar        *buff;
+    gint          status;
+    gint          i;
+
+    
+    /* create araay containing rigs */
+    array = g_array_new (FALSE, FALSE, sizeof (rig_info_t));
+    rig_load_all_backends();
+ 
+    /* fill list using rig_list_foreach */
+    status = rig_list_foreach (rig_list_add, (void *) array);
+    
+    /* sort the array, first by model then by mfg */
+    g_array_sort (array, rig_list_compare_mod);
+    g_array_sort (array, rig_list_compare_mfg);
+
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s:%d: Read %d distinct radios into array."),
+                   __FILE__, __LINE__, array->len);
+    
+    /* create a tree store with two cols (name and ID) */
+    store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+    
+    /* add array contents to treestore */
+    for (i = 0; i < array->len; i++) {
+        
+        /* get rig info struct */
+        info = &g_array_index (array, rig_info_t, i);
+        
+        if (gtk_tree_store_iter_is_valid (store, &iter1)) {
+            /* iter1 is valid, i.e. we already have a manufacturer */
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter1,
+                                0, &buff,
+                                -1);
+            if (g_ascii_strcasecmp (buff, info->mfg)) {
+                /* mfg different, add new mfg */
+                gtk_tree_store_append (store, &iter1, NULL);
+                gtk_tree_store_set (store, &iter1, 0, info->mfg, -1);
+            }
+            /* else: mfg are identical; nothing to do */
+        }
+        else {
+            /* iter1 is not valid, so add the first manufacturer */
+            gtk_tree_store_append (store, &iter1, NULL);
+            gtk_tree_store_set (store, &iter1, 0, info->mfg, -1);
+        }
+        
+        /* iter1 points to the parent mfg; insert this rig */
+        gtk_tree_store_append (store, &iter2, &iter1);
+        gtk_tree_store_set (store, &iter2,
+                            0, info->model,
+                            1, info->id,
+                            -1);
+        
+        /* done with this model */
+        g_free (info->mfg);
+        g_free (info->model);
+    }
+    
+    g_array_free (array,TRUE);
+
+    return GTK_TREE_MODEL (store);
+}
+
+
+/** \brief Add new entry to list of radios.
+ *  \param caps Structure with the capablities of thecurrent radio.
+ *  \param array Pointer to the GArray into which the new entry should be 
+ *               stored.
+ *  \return Always 1 to keep rig_list_foreach running.
+ *
+ * This function is called by the rig_list_foreach hamlib function for each
+ * supported radio. It copies the relevant data into a grig_rig_info_t
+ * structure and adds the new entry to the GArray containing the list of
+ * supported radios.
+ *
+ * \sa rig_list_compare
+ */
+static gint
+rig_list_add (const struct rig_caps *caps, void *array)
+{
+    rig_info_t *info;
+
+    /* create new entry */
+    info = g_malloc (sizeof (rig_info_t));
+
+    /* fill values */
+    info->id      = caps->rig_model;
+    info->mfg     = g_strdup (caps->mfg_name);
+    info->model   = g_strdup (caps->model_name);
+
+    /* append new element to array */
+    array = (void *) g_array_append_vals ((GArray *) array, info, 1);
+
+    /* keep on running */
+    return 1;
+}
+
+
+
+/** \brief Compare two rig info entries.
+ *  \param a Pointer to the first entry.
+ *  \param b Pointer to the second entry.
+ *  \return Negative value if a < b; zero if a = b; positive value if a > b.
+ *
+ * This function is used to compare two rig entries in the list of radios
+ * when the list is sorted. It compares the manufacturer of the two radios.
+ *
+ * \sa rig_list_add
+ */
+static gint
+rig_list_compare_mfg  (gconstpointer a, gconstpointer b)
+{
+    gchar *ida, *idb;
+
+    ida = ((rig_info_t *) a)->mfg;
+    idb = ((rig_info_t *) b)->mfg;
+
+    if (g_ascii_strcasecmp(ida,idb) < 0) {
+        return -1;
+    }
+    else if (g_ascii_strcasecmp(ida,idb) > 0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+
+}
+
+
+
+/** \brief Compare two rig info entries.
+ *  \param a Pointer to the first entry.
+ *  \param b Pointer to the second entry.
+ *  \return Negative value if a < b; zero if a = b; positive value if a > b.
+ *
+ * This function is used to compare two rig entries in the list of radios
+ * when the list is sorted. It compares the model of the two radios.
+ *
+ * \sa rig_list_add
+ */
+static gint
+rig_list_compare_mod  (gconstpointer a, gconstpointer b)
+{
+    gchar *ida, *idb;
+
+    ida = ((rig_info_t *) a)->model;
+    idb = ((rig_info_t *) b)->model;
+
+    if (g_ascii_strcasecmp(ida,idb) < 0) {
+        return -1;
+    }
+    else if (g_ascii_strcasecmp(ida,idb) > 0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+
+}
+
+
+/** \brief Set cell sensitivity.
+ * 
+ * This function is used to disable the sensitive of manifacturer entries
+ * as children. Otherwise, the manufacturer would appear as the first entry
+ * in a submenu.
+ * */
+static void
+is_rig_model (GtkCellLayout   *cell_layout,
+              GtkCellRenderer *cell,
+              GtkTreeModel    *tree_model,
+              GtkTreeIter     *iter,
+              gpointer         data)
+{
+    gboolean sensitive;
+
+    sensitive = !gtk_tree_model_iter_has_child (tree_model, iter);
+
+    g_object_set (cell, "sensitive", sensitive, NULL);
+}
