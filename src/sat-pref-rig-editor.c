@@ -418,6 +418,8 @@ apply_changes         (radio_conf_t *conf)
     if (conf->name)
         g_free (conf->name);
 
+    conf->name = g_strdup (gtk_entry_get_text (GTK_ENTRY (name)));
+    
     /* model */
     if (conf->model)
         g_free (conf->model);
