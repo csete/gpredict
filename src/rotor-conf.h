@@ -55,6 +55,6 @@ typedef struct {
 
 
 gboolean rotor_conf_read (rotor_conf_t *conf);
-void rotor_conf_save (rtor_conf_t *conf);
+void rotor_conf_save (rotor_conf_t *conf);
 
 #endif

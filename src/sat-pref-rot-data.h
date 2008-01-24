@@ -30,13 +30,13 @@
 
 /** \brief Coumn definitions for rotator list. */
 typedef enum {
-    RIG_LIST_COL_NAME = 0,  /*!< File name. */
-    RIG_LIST_COL_MODEL,     /*!< Model */
-    RIG_LIST_COL_ID,        /*!< Hamlib ID. */
-    RIG_LIST_COL_TYPE,      /*!< Rtator type. */
-    RIG_LIST_COL_PORT,      /*!< Port / Device, e.g. /dev/ttyS0. */
-    RIG_LIST_COL_SPEED,     /*!< Serial speed. */
-    RIG_LIST_COL_NUM        /*!< The number of fields in the list. */
+    ROT_LIST_COL_NAME = 0,  /*!< File name. */
+    ROT_LIST_COL_MODEL,     /*!< Model */
+    ROT_LIST_COL_ID,        /*!< Hamlib ID. */
+    ROT_LIST_COL_TYPE,      /*!< Rtator type. */
+    ROT_LIST_COL_PORT,      /*!< Port / Device, e.g. /dev/ttyS0. */
+    ROT_LIST_COL_SPEED,     /*!< Serial speed. */
+    ROT_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rotor_list_col_t;
 
 

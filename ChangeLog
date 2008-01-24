@@ -3,6 +3,17 @@
     * src/sat-pref-rig-editor.[ch]:
     Finished first draft of radio configuration editor.
     
+    * src/sat-pref-rig.c:
+    Finished radio configuration page.
+    
+    * src/rotor-conf.[ch]:
+    * src/sat-pref-rot-editor.[ch]:
+    * src/sat-pref-rot-data.h:
+    Added files with functions to read and save rotator configuration.
+    
+    * src/sat-pref-rot.c:
+    Updated to use new rotator configuration code.
+    
 
 2008-01-12; Alexandru Csete <oz9aec@gmail.com>
 

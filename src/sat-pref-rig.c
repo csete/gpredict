@@ -40,7 +40,7 @@
 #include "sat-pref-rig-editor.h"
 #include "sat-pref-rig.h"
 
-
+#ifdef HAVE_HAMLIB
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 
 
@@ -800,6 +800,4 @@ static void render_rig_type (GtkTreeViewColumn *col,
 }
 
 
-
-
-
+#endif

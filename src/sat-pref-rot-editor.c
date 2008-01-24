@@ -26,7 +26,7 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 
-/** \brief Edit radio configuration.
+/** \brief Edit rotator configuration.
  *
  */
 
@@ -40,11 +40,11 @@
 #include "gpredict-utils.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
-#include "radio-conf.h"
-#include "sat-pref-rig-editor.h"
+#include "rotor-conf.h"
+#include "sat-pref-rot-editor.h"
 
 #ifdef HAVE_HAMLIB
-#  include <hamlib/rig.h>
+#  include <hamlib/rotator.h>
 
 
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
@@ -54,45 +54,43 @@ extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 /* private widgets */
 static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* Configuration name */
-static GtkWidget *model;    /* radio model, e.g. TS-2000 */
-static GtkWidget *civ;      /* Icom CI-V address */
-static GtkWidget *type;     /* radio type */
+static GtkWidget *model;    /* rotor model, e.g. TS-2000 */
+static GtkWidget *type;     /* rotor type */
 static GtkWidget *port;     /* port selector */
 static GtkWidget *speed;    /* serial speed selector */
-static GtkWidget *dtr,*rts; /* DTR and RTS line states */
 
 
-static GtkWidget    *create_editor_widgets (radio_conf_t *conf);
-static void          update_widgets        (radio_conf_t *conf);
+static GtkWidget    *create_editor_widgets (rotor_conf_t *conf);
+static void          update_widgets        (rotor_conf_t *conf);
 static void          clear_widgets         (void);
-static gboolean      apply_changes         (radio_conf_t *conf);
+static gboolean      apply_changes         (rotor_conf_t *conf);
 static void          name_changed          (GtkWidget *widget, gpointer data);
-static GtkTreeModel *create_rig_model      (void);
-static gint          rig_list_add          (const struct rig_caps *, void *);
-static gint          rig_list_compare_mfg  (gconstpointer, gconstpointer);
-static gint          rig_list_compare_mod  (gconstpointer, gconstpointer);
-static void          is_rig_model          (GtkCellLayout   *cell_layout,
+static GtkTreeModel *create_rot_model      (void);
+static gint          rot_list_add          (const struct rot_caps *, void *);
+static gint          rot_list_compare_mfg  (gconstpointer, gconstpointer);
+static gint          rot_list_compare_mod  (gconstpointer, gconstpointer);
+static void          is_rot_model          (GtkCellLayout   *cell_layout,
                                             GtkCellRenderer *cell,
                                             GtkTreeModel    *tree_model,
                                             GtkTreeIter     *iter,
                                             gpointer         data);
-static void          select_rig            (guint rigid);
+static void          select_rot            (guint rotid);
 
 
-/** \brief Add or edit a radio configuration.
- * \param conf Pointer to a radio configuration.
+/** \brief Add or edit a rotor configuration.
+ * \param conf Pointer to a rotator configuration.
  *
- * Of conf->name is not NULL the widgets will be populated with the data.
+ * If conf->name is not NULL the widgets will be populated with the data.
  */
 void
-sat_pref_rig_editor_run (radio_conf_t *conf)
+sat_pref_rot_editor_run (rotor_conf_t *conf)
 {
 	gint       response;
 	gboolean   finished = FALSE;
 
 
 	/* crate dialog and add contents */
-	dialog = gtk_dialog_new_with_buttons (_("Edit radio configuration"),
+	dialog = gtk_dialog_new_with_buttons (_("Edit rotator configuration"),
 										  GTK_WINDOW (window),
 										  GTK_DIALOG_MODAL |
 										  GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -149,14 +147,12 @@ sat_pref_rig_editor_run (radio_conf_t *conf)
 
 /** \brief Create and initialise widgets */
 static GtkWidget *
-create_editor_widgets (radio_conf_t *conf)
+create_editor_widgets (rotor_conf_t *conf)
 {
 	GtkWidget    *table;
 	GtkWidget    *label;
-    GtkTreeModel *riglist;
+    GtkTreeModel *rotlist;
     GtkCellRenderer *renderer;
-    gchar           *buff;
-    guint            i;
 
 
 	table = gtk_table_new (5, 5, FALSE);
@@ -172,7 +168,7 @@ create_editor_widgets (radio_conf_t *conf)
 	name = gtk_entry_new ();
 	gtk_entry_set_max_length (GTK_ENTRY (name), 25);
     gtk_widget_set_tooltip_text (name,
-                                 _("Enter a short name for this configuration, e.g. IC910-1.\n"\
+                                 _("Enter a short name for this configuration, e.g. ROTOR-1.\n"\
                                    "Allowed charachters: 0..9, a..z, A..Z, - and _"));
 	gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
 
@@ -186,9 +182,9 @@ create_editor_widgets (radio_conf_t *conf)
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
 	
-    riglist = create_rig_model ();
-	model = gtk_combo_box_new_with_model (riglist);
-    g_object_unref (riglist);
+    rotlist = create_rot_model ();
+	model = gtk_combo_box_new_with_model (rotlist);
+    g_object_unref (rotlist);
     gtk_table_attach_defaults (GTK_TABLE (table), model, 1, 2, 1, 2);
     
     renderer = gtk_cell_renderer_text_new ();
@@ -198,46 +194,22 @@ create_editor_widgets (radio_conf_t *conf)
                                     NULL);
     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (model),
                                         renderer,
-                                        is_rig_model,
+                                        is_rot_model,
                                         NULL, NULL);
-    gtk_widget_set_tooltip_text (model, _("Click to select a radio."));
-    select_rig (1);
+    gtk_widget_set_tooltip_text (model, _("Click to select a driver."));
+    select_rot (1);
     
-    /* ICOM CI-V adress */
-    label = gtk_label_new (_("ICOM CI-V"));
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 1, 2);
-    
-    civ = gtk_combo_box_new_text ();
-    gtk_widget_set_tooltip_text (civ,
-                                 _("Select ICOM CI-V address of the radio."));
-    
-    /* works, but pretty lame... */
-    gtk_combo_box_append_text (GTK_COMBO_BOX (civ), _("Default"));
-    for (i = 1; i < 0xF0; i++) {
-        if (i < 0x10)
-            buff = g_strdup_printf ("0x0%X", i);
-        else
-            buff = g_strdup_printf ("0x%X", i);
-        gtk_combo_box_append_text (GTK_COMBO_BOX (civ), buff);
-        g_free (buff);
-    }
-    gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
-    gtk_table_attach_defaults (GTK_TABLE (table), civ, 4, 5, 1, 2);
-
-
 	/* Type */
 	label = gtk_label_new (_("Type"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
     type = gtk_combo_box_new_text ();
-    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Receiver"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Transmitter"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX + TX"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Full Duplex"));
-    gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("AZ"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("EL"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("AZ / EL"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), 2);
     gtk_widget_set_tooltip_text (type,
-                               _("Select radio type. Consult the user manual, if unsure"));
+                               _("Select rotor type."));
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 2, 3);
 
 	/* Port */
@@ -259,21 +231,6 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_widget_set_tooltip_text (port, _("Select or enter communication port"));
     gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 3, 4);
 
-    /* DTR State */
-    label = gtk_label_new (_("DTR Line"));
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 3, 4);
-    
-    dtr = gtk_combo_box_new_text ();
-    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("Undefined"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("OFF"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("ON"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("PTT"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("CW"));
-    gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
-    gtk_widget_set_tooltip_text (dtr, _("Select status and use of DTR line"));
-    gtk_table_attach_defaults (GTK_TABLE (table), dtr, 4, 5, 3, 4);
-    
    
 	/* Speed */
 	label = gtk_label_new (_("Rate"));
@@ -293,25 +250,7 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_widget_set_tooltip_text (speed, _("Select serial port speed"));
     gtk_table_attach_defaults (GTK_TABLE (table), speed, 1, 2, 4, 5);
 
-    /* RTS State */
-    label = gtk_label_new (_("RTS Line"));
-    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 4, 5);
-    
-    rts = gtk_combo_box_new_text ();
-    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("Undefined"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("OFF"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("ON"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("PTT"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("CW"));
-    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
-    gtk_widget_set_tooltip_text (rts, _("Select status and use of RTS line"));
-    gtk_table_attach_defaults (GTK_TABLE (table), rts, 4, 5, 4, 5);
 
-    /* separator between port/speed and DTR/RTS */
-    gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 1, 5,
-                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
-    
 	if (conf->name != NULL)
 		update_widgets (conf);
 
@@ -324,17 +263,17 @@ create_editor_widgets (radio_conf_t *conf)
 /** \brief Update widgets from the currently selected row in the treeview
  */
 static void
-update_widgets (radio_conf_t *conf)
+update_widgets (rotor_conf_t *conf)
 {
     
     /* configuration name */
     gtk_entry_set_text (GTK_ENTRY (name), conf->name);
     
     /* model */
-    select_rig (conf->id);
+    select_rot (conf->id);
     
     /* type */
-    gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type-1);
     
     /* port */
     gtk_combo_box_prepend_text (GTK_COMBO_BOX (port), conf->port);
@@ -371,12 +310,6 @@ update_widgets (radio_conf_t *conf)
             break;
     }
 
-    /* CI-V */
-    gtk_combo_box_set_active (GTK_COMBO_BOX (civ), conf->civ);
-    
-    /* DTR and RTS lines */
-    gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), conf->dtr);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), conf->rts);
 }
 
 
@@ -390,13 +323,10 @@ static void
 clear_widgets () 
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
-    select_rig (1);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
+    select_rot (1);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), 2);
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
 }
 
 
@@ -406,10 +336,10 @@ clear_widgets ()
  * This function is usually called when the user clicks the OK button.
  */
 static gboolean
-apply_changes         (radio_conf_t *conf)
+apply_changes         (rotor_conf_t *conf)
 {
     GtkTreeIter   iter1,iter2;
-    GtkTreeModel *riglist;
+    GtkTreeModel *rotlist;
     gchar        *b1,*b2;
     guint         id;
     
@@ -426,22 +356,22 @@ apply_changes         (radio_conf_t *conf)
 
     /* iter1 is needed to construct full model name */
     gtk_combo_box_get_active_iter (GTK_COMBO_BOX (model), &iter2);
-    riglist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
-    gtk_tree_model_iter_parent (riglist, &iter1, &iter2);
+    rotlist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
+    gtk_tree_model_iter_parent (rotlist, &iter1, &iter2);
     
     /* build model string */
-    gtk_tree_model_get (riglist, &iter1, 0, &b1, -1);
-    gtk_tree_model_get (riglist, &iter2, 0, &b2, -1);
+    gtk_tree_model_get (rotlist, &iter1, 0, &b1, -1);
+    gtk_tree_model_get (rotlist, &iter2, 0, &b2, -1);
     conf->model = g_strconcat (b1, " ", b2, NULL);
     g_free (b1);
     g_free (b2);
     
     /* ID */
-    gtk_tree_model_get (riglist, &iter2, 1, &id, -1);
+    gtk_tree_model_get (rotlist, &iter2, 1, &id, -1);
     conf->id = id;
 
-    /* radio type */
-    conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type));
+    /* rotor type */
+    conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type))+1;
     
     /* port / device */
     if (conf->port)
@@ -449,8 +379,6 @@ apply_changes         (radio_conf_t *conf)
     
     conf->port = gtk_combo_box_get_active_text (GTK_COMBO_BOX (port));
 
-    /* CI-V */
-    conf->civ = gtk_combo_box_get_active (GTK_COMBO_BOX (civ));
     
     /* serial speed */
     switch (gtk_combo_box_get_active (GTK_COMBO_BOX (speed))) {
@@ -486,9 +414,6 @@ apply_changes         (radio_conf_t *conf)
             break;
     }
     
-    /* DTR and RTS */
-    conf->dtr = gtk_combo_box_get_active (GTK_COMBO_BOX (dtr));
-    conf->rts = gtk_combo_box_get_active (GTK_COMBO_BOX (rts));
     
 	return TRUE;
 }
@@ -553,23 +478,23 @@ name_changed          (GtkWidget *widget, gpointer data)
 }
 
 
-/** \brief Radio info to be used when building the rig model */
+/** \brief Rotor info to be used when building the rot model */
 typedef struct {
     gint    id;       /*!< Model ID. */
     gchar  *mfg;      /*!< Manufacurer name (eg. KENWOOD). */
-    gchar  *model;    /*!< Radio model (eg. TS-440). */
-} rig_info_t;
+    gchar  *model;    /*!< rotor model (eg. TS-440). */
+} rot_info_t;
 
 
-/** \brief Build tree model containing radios.
- * \return A tree model where the radios are ordered according to
+/** \brief Build tree model containing rotators.
+ * \return A tree model where the rotator are ordered according to
  *         manufacturer.
  * 
  */
-static GtkTreeModel *create_rig_model ()
+static GtkTreeModel *create_rot_model ()
 {
     GArray      *array;
-    rig_info_t  *info;
+    rot_info_t  *info;
     GtkTreeIter  iter1; /* iter used for manufacturer */
     GtkTreeIter  iter2; /* iter used for model */
     GtkTreeStore *store;
@@ -578,19 +503,19 @@ static GtkTreeModel *create_rig_model ()
     gint          i;
 
     
-    /* create araay containing rigs */
-    array = g_array_new (FALSE, FALSE, sizeof (rig_info_t));
-    rig_load_all_backends();
+    /* create araay containing rots */
+    array = g_array_new (FALSE, FALSE, sizeof (rot_info_t));
+    rot_load_all_backends();
  
-    /* fill list using rig_list_foreach */
-    status = rig_list_foreach (rig_list_add, (void *) array);
+    /* fill list using rot_list_foreach */
+    status = rot_list_foreach (rot_list_add, (void *) array);
     
     /* sort the array, first by model then by mfg */
-    g_array_sort (array, rig_list_compare_mod);
-    g_array_sort (array, rig_list_compare_mfg);
+    g_array_sort (array, rot_list_compare_mod);
+    g_array_sort (array, rot_list_compare_mfg);
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                 _("%s:%d: Read %d distinct radios into array."),
+                 _("%s:%d: Read %d distinct rotators into array."),
                    __FILE__, __LINE__, array->len);
     
     /* create a tree store with two cols (name and ID) */
@@ -599,8 +524,8 @@ static GtkTreeModel *create_rig_model ()
     /* add array contents to treestore */
     for (i = 0; i < array->len; i++) {
         
-        /* get rig info struct */
-        info = &g_array_index (array, rig_info_t, i);
+        /* get rotor info struct */
+        info = &g_array_index (array, rot_info_t, i);
         
         if (gtk_tree_store_iter_is_valid (store, &iter1)) {
             /* iter1 is valid, i.e. we already have a manufacturer */
@@ -620,7 +545,7 @@ static GtkTreeModel *create_rig_model ()
             gtk_tree_store_set (store, &iter1, 0, info->mfg, -1);
         }
         
-        /* iter1 points to the parent mfg; insert this rig */
+        /* iter1 points to the parent mfg; insert this rot */
         gtk_tree_store_append (store, &iter2, &iter1);
         gtk_tree_store_set (store, &iter2,
                             0, info->model,
@@ -638,29 +563,28 @@ static GtkTreeModel *create_rig_model ()
 }
 
 
-/** \brief Add new entry to list of radios.
- *  \param caps Structure with the capablities of thecurrent radio.
+/** \brief Add new entry to list of rotators.
+ *  \param caps Structure with the capablities of the current rotator.
  *  \param array Pointer to the GArray into which the new entry should be 
  *               stored.
- *  \return Always 1 to keep rig_list_foreach running.
+ *  \return Always 1 to keep rot_list_foreach running.
  *
- * This function is called by the rig_list_foreach hamlib function for each
- * supported radio. It copies the relevant data into a grig_rig_info_t
+ * This function is called by the rot_list_foreach hamlib function for each
+ * supported rotator. It copies the relevant data into a rot_info_t
  * structure and adds the new entry to the GArray containing the list of
- * supported radios.
+ * supported rotators.
  *
- * \sa rig_list_compare
  */
 static gint
-rig_list_add (const struct rig_caps *caps, void *array)
+rot_list_add (const struct rot_caps *caps, void *array)
 {
-    rig_info_t *info;
+    rot_info_t *info;
 
     /* create new entry */
-    info = g_malloc (sizeof (rig_info_t));
+    info = g_malloc (sizeof (rot_info_t));
 
     /* fill values */
-    info->id      = caps->rig_model;
+    info->id      = caps->rot_model;
     info->mfg     = g_strdup (caps->mfg_name);
     info->model   = g_strdup (caps->model_name);
 
@@ -673,23 +597,22 @@ rig_list_add (const struct rig_caps *caps, void *array)
 
 
 
-/** \brief Compare two rig info entries.
+/** \brief Compare two rot info entries.
  *  \param a Pointer to the first entry.
  *  \param b Pointer to the second entry.
  *  \return Negative value if a < b; zero if a = b; positive value if a > b.
  *
- * This function is used to compare two rig entries in the list of radios
- * when the list is sorted. It compares the manufacturer of the two radios.
+ * This function is used to compare two rot entries in the list of rotators
+ * when the list is sorted. It compares the manufacturer of the two rotators.
  *
- * \sa rig_list_add
  */
 static gint
-rig_list_compare_mfg  (gconstpointer a, gconstpointer b)
+rot_list_compare_mfg  (gconstpointer a, gconstpointer b)
 {
     gchar *ida, *idb;
 
-    ida = ((rig_info_t *) a)->mfg;
-    idb = ((rig_info_t *) b)->mfg;
+    ida = ((rot_info_t *) a)->mfg;
+    idb = ((rot_info_t *) b)->mfg;
 
     if (g_ascii_strcasecmp(ida,idb) < 0) {
         return -1;
@@ -705,23 +628,22 @@ rig_list_compare_mfg  (gconstpointer a, gconstpointer b)
 
 
 
-/** \brief Compare two rig info entries.
+/** \brief Compare two rot info entries.
  *  \param a Pointer to the first entry.
  *  \param b Pointer to the second entry.
  *  \return Negative value if a < b; zero if a = b; positive value if a > b.
  *
- * This function is used to compare two rig entries in the list of radios
- * when the list is sorted. It compares the model of the two radios.
+ * This function is used to compare two rot entries in the list of rotators
+ * when the list is sorted. It compares the model of the two rotators
  *
- * \sa rig_list_add
  */
 static gint
-rig_list_compare_mod  (gconstpointer a, gconstpointer b)
+rot_list_compare_mod  (gconstpointer a, gconstpointer b)
 {
     gchar *ida, *idb;
 
-    ida = ((rig_info_t *) a)->model;
-    idb = ((rig_info_t *) b)->model;
+    ida = ((rot_info_t *) a)->model;
+    idb = ((rot_info_t *) b)->model;
 
     if (g_ascii_strcasecmp(ida,idb) < 0) {
         return -1;
@@ -738,12 +660,12 @@ rig_list_compare_mod  (gconstpointer a, gconstpointer b)
 
 /** \brief Set cell sensitivity.
  * 
- * This function is used to disable the sensitive of manifacturer entries
+ * This function is used to disable the sensitivity of manufacturer entries
  * as children. Otherwise, the manufacturer would appear as the first entry
  * in a submenu.
  * */
 static void
-is_rig_model (GtkCellLayout   *cell_layout,
+is_rot_model (GtkCellLayout   *cell_layout,
               GtkCellRenderer *cell,
               GtkTreeModel    *tree_model,
               GtkTreeIter     *iter,
@@ -757,44 +679,44 @@ is_rig_model (GtkCellLayout   *cell_layout,
 }
 
 
-/** \brief Select a radio in the combo box.
- * \param rigid The hamlib id of the radio.
+/** \brief Select a rotator in the combo box.
+ * \param rotid The hamlib id of the rotator.
  * 
- * This function selects the specified radio in the combobox. This is done
+ * This function selects the specified rotator in the combobox. This is done
  * by looping over all items in the tree model until a match is reached
  * (or there are no more items left).
  */
 static void
-select_rig            (guint rigid)
+select_rot            (guint rotid)
 {
     GtkTreeIter   iter1,iter2;
-    GtkTreeModel *riglist;
+    GtkTreeModel *rotlist;
     guint         i,j,n,m;
-    guint         thisrig = 0;
+    guint         thisrot = 0;
     
     
     /* get the tree model */
-    riglist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
+    rotlist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
     
     /* get the number of toplevel nodes */
-    n = gtk_tree_model_iter_n_children (riglist, NULL);
+    n = gtk_tree_model_iter_n_children (rotlist, NULL);
     for (i = 0; i < n; i++) {
         
         /* get the i'th toplevel node */
-        if (gtk_tree_model_iter_nth_child (riglist, &iter1, NULL, i)) {
+        if (gtk_tree_model_iter_nth_child (rotlist, &iter1, NULL, i)) {
             
             /* get the number of children */
-            m = gtk_tree_model_iter_n_children (riglist, &iter1);
+            m = gtk_tree_model_iter_n_children (rotlist, &iter1);
             for (j = 0; j < m; j++) {
                 
                 /* get the j'th child */
-                if (gtk_tree_model_iter_nth_child (riglist, &iter2, &iter1, j)) {
+                if (gtk_tree_model_iter_nth_child (rotlist, &iter2, &iter1, j)) {
                     
                     /* get ID of this model */
-                    gtk_tree_model_get (riglist, &iter2, 1, &thisrig, -1);
+                    gtk_tree_model_get (rotlist, &iter2, 1, &thisrot, -1);
                     
-                    if (thisrig == rigid) {
-                        /* select this rig and terminate loop */
+                    if (thisrot == rotid) {
+                        /* select this rot and terminate loop */
                         gtk_combo_box_set_active_iter (GTK_COMBO_BOX (model), &iter2);
                         j = m;
                         i = n;

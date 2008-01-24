@@ -101,7 +101,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
  * .rig file. conf->name must contain the file name of the configuration
  * (no path, just file name and without the .rot extension).
  */
-void rotor_conf_save (radio_conf_t *conf)
+void rotor_conf_save (rotor_conf_t *conf)
 {
     GKeyFile *cfg = NULL;
     gchar    *confdir;
