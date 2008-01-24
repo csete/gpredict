@@ -66,7 +66,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     confdir = get_conf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
                          "hwconf", G_DIR_SEPARATOR_S,
-                         conf->name, NULL);
+                         conf->name, ".rig", NULL);
     g_free (confdir);
     
     /* open .grc file */
@@ -136,7 +136,7 @@ void radio_conf_save (radio_conf_t *conf)
     confdir = get_conf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
                          "hwconf", G_DIR_SEPARATOR_S,
-                         conf->name, NULL);
+                         conf->name, ".rig", NULL);
     g_free (confdir);
         
     g_file_set_contents (fname, data, len, NULL);

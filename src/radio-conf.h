@@ -54,7 +54,7 @@ typedef enum {
 
 /** \brief Radio configuration. */
 typedef struct {
-    gchar       *name;      /*!< Configuration file name. */
+    gchar       *name;      /*!< Configuration file name, less .rig. */
     gchar       *model;     /*!< Radio model, e.g. ICOM IC-910H. */
     guint        id;        /*!< Hamlib ID. */
     radio_type_t type;      /*!< Radio type. */
