@@ -290,20 +290,23 @@ update_widgets (rotor_conf_t *conf)
         case 2400:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 2);
             break;
-        case 9600:
+        case 4800:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 3);
             break;
-        case 19200:
+        case 9600:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
             break;
-        case 38400:
+        case 19200:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 5);
             break;
-        case 57600:
+        case 38400:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 6);
             break;
-        case 115200:
+        case 57600:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 7);
+            break;
+        case 115200:
+            gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 8);
             break;
         default:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
