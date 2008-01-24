@@ -31,8 +31,8 @@
 #include <gtk/gtk.h>
 #include "radio-conf.h"
 
-
+#ifdef HAVE_HAMLIB
 void sat_pref_rig_editor_run (radio_conf_t *conf);
-
+#endif
 
 #endif

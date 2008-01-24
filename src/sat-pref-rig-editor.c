@@ -43,8 +43,8 @@
 #include "radio-conf.h"
 #include "sat-pref-rig-editor.h"
 
-
-#include <hamlib/rig.h>
+#ifdef HAVE_HAMLIB
+#  include <hamlib/rig.h>
 
 
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
@@ -55,6 +55,7 @@ extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* Configuration name */
 static GtkWidget *model;    /* radio model, e.g. TS-2000 */
+static GtkWidget *civ;      /* Icom CI-V address */
 static GtkWidget *type;     /* radio type */
 static GtkWidget *port;     /* port selector */
 static GtkWidget *speed;    /* serial speed selector */
@@ -75,6 +76,7 @@ static void          is_rig_model          (GtkCellLayout   *cell_layout,
                                             GtkTreeModel    *tree_model,
                                             GtkTreeIter     *iter,
                                             gpointer         data);
+static void          select_rig            (guint rigid);
 
 
 /** \brief Add or edit a radio configuration.
@@ -153,6 +155,8 @@ create_editor_widgets (radio_conf_t *conf)
 	GtkWidget    *label;
     GtkTreeModel *riglist;
     GtkCellRenderer *renderer;
+    gchar           *buff;
+    guint            i;
 
 
 	table = gtk_table_new (5, 5, FALSE);
@@ -197,7 +201,30 @@ create_editor_widgets (radio_conf_t *conf)
                                         is_rig_model,
                                         NULL, NULL);
     gtk_widget_set_tooltip_text (model, _("Click to select a radio."));
+    select_rig (1);
     
+    /* ICOM CI-V adress */
+    label = gtk_label_new (_("ICOM CI-V"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 1, 2);
+    
+    civ = gtk_combo_box_new_text ();
+    gtk_widget_set_tooltip_text (civ,
+                                 _("Select ICOM CI-V address of the radio."));
+    
+    /* works, but pretty lame... */
+    gtk_combo_box_append_text (GTK_COMBO_BOX (civ), _("Default"));
+    for (i = 1; i < 0xF0; i++) {
+        if (i < 0x10)
+            buff = g_strdup_printf ("0x0%X", i);
+        else
+            buff = g_strdup_printf ("0x%X", i);
+        gtk_combo_box_append_text (GTK_COMBO_BOX (civ), buff);
+        g_free (buff);
+    }
+    gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
+    gtk_table_attach_defaults (GTK_TABLE (table), civ, 4, 5, 1, 2);
+
 
 	/* Type */
 	label = gtk_label_new (_("Type"));
@@ -282,7 +309,7 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_table_attach_defaults (GTK_TABLE (table), rts, 4, 5, 4, 5);
 
     /* separator between port/speed and DTR/RTS */
-    gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 3, 5,
+    gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 1, 5,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
     
 	if (conf->name != NULL)
@@ -304,10 +331,15 @@ update_widgets (radio_conf_t *conf)
     gtk_entry_set_text (GTK_ENTRY (name), conf->name);
     
     /* model */
+    select_rig (conf->id);
     
     /* type */
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
     
+    /* port */
+    gtk_combo_box_prepend_text (GTK_COMBO_BOX (port), conf->port);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
+
     /*serial speed */        
     switch (conf->speed) {
         case 300:
@@ -339,6 +371,9 @@ update_widgets (radio_conf_t *conf)
             break;
     }
 
+    /* CI-V */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (civ), conf->civ);
+    
     /* DTR and RTS lines */
     gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), conf->dtr);
     gtk_combo_box_set_active (GTK_COMBO_BOX (rts), conf->rts);
@@ -354,6 +389,14 @@ update_widgets (radio_conf_t *conf)
 static void
 clear_widgets () 
 {
+    gtk_entry_set_text (GTK_ENTRY (name), "");
+    select_rig (1);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
 }
 
 
@@ -365,7 +408,86 @@ clear_widgets ()
 static gboolean
 apply_changes         (radio_conf_t *conf)
 {
+    GtkTreeIter   iter1,iter2;
+    GtkTreeModel *riglist;
+    gchar        *b1,*b2;
+    guint         id;
+    
+    
+    /* name */
+    if (conf->name)
+        g_free (conf->name);
 
+    /* model */
+    if (conf->model)
+        g_free (conf->model);
+
+    /* iter1 is needed to construct full model name */
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (model), &iter2);
+    riglist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
+    gtk_tree_model_iter_parent (riglist, &iter1, &iter2);
+    
+    /* build model string */
+    gtk_tree_model_get (riglist, &iter1, 0, &b1, -1);
+    gtk_tree_model_get (riglist, &iter2, 0, &b2, -1);
+    conf->model = g_strconcat (b1, " ", b2, NULL);
+    g_free (b1);
+    g_free (b2);
+    
+    /* ID */
+    gtk_tree_model_get (riglist, &iter2, 1, &id, -1);
+    conf->id = id;
+
+    /* radio type */
+    conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type));
+    
+    /* port / device */
+    if (conf->port)
+        g_free (conf->port);
+    
+    conf->port = gtk_combo_box_get_active_text (GTK_COMBO_BOX (port));
+
+    /* CI-V */
+    conf->civ = gtk_combo_box_get_active (GTK_COMBO_BOX (civ));
+    
+    /* serial speed */
+    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (speed))) {
+        case 0:
+            conf->speed = 300;
+            break;
+        case 1:
+            conf->speed = 1200;
+            break;
+        case 2:
+            conf->speed = 2400;
+            break;
+        case 3:
+            conf->speed = 4800;
+            break;
+        case 4:
+            conf->speed = 9600;
+            break;
+        case 5:
+            conf->speed = 19200;
+            break;
+        case 6:
+            conf->speed = 38400;
+            break;
+        case 7:
+            conf->speed = 57600;
+            break;
+        case 8:
+            conf->speed = 115200;
+            break;
+        default:
+            conf->speed = 9600;
+            break;
+    }
+    
+    /* DTR and RTS */
+    conf->dtr = gtk_combo_box_get_active (GTK_COMBO_BOX (dtr));
+    conf->rts = gtk_combo_box_get_active (GTK_COMBO_BOX (rts));
+    
 	return TRUE;
 }
 
@@ -631,3 +753,68 @@ is_rig_model (GtkCellLayout   *cell_layout,
 
     g_object_set (cell, "sensitive", sensitive, NULL);
 }
+
+
+/** \brief Select a radio in the combo box.
+ * \param rigid The hamlib id of the radio.
+ * 
+ * This function selects the specified radio in the combobox. This is done
+ * by looping over all items in the tree model until a match is reached
+ * (or there are no more items left).
+ */
+static void
+select_rig            (guint rigid)
+{
+    GtkTreeIter   iter1,iter2;
+    GtkTreeModel *riglist;
+    guint         i,j,n,m;
+    guint         thisrig = 0;
+    
+    
+    /* get the tree model */
+    riglist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
+    
+    /* get the number of toplevel nodes */
+    n = gtk_tree_model_iter_n_children (riglist, NULL);
+    for (i = 0; i < n; i++) {
+        
+        /* get the i'th toplevel node */
+        if (gtk_tree_model_iter_nth_child (riglist, &iter1, NULL, i)) {
+            
+            /* get the number of children */
+            m = gtk_tree_model_iter_n_children (riglist, &iter1);
+            for (j = 0; j < m; j++) {
+                
+                /* get the j'th child */
+                if (gtk_tree_model_iter_nth_child (riglist, &iter2, &iter1, j)) {
+                    
+                    /* get ID of this model */
+                    gtk_tree_model_get (riglist, &iter2, 1, &thisrig, -1);
+                    
+                    if (thisrig == rigid) {
+                        /* select this rig and terminate loop */
+                        gtk_combo_box_set_active_iter (GTK_COMBO_BOX (model), &iter2);
+                        j = m;
+                        i = n;
+                    }
+                }
+                else {
+                    sat_log_log (SAT_LOG_LEVEL_BUG,
+                                 _("%s:%s: NULL child node at index %d:%d"),
+                                   __FILE__, __FUNCTION__, i, j);
+                    
+                }
+            }
+            
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s:%s: NULL toplevel node at index %d"),
+                           __FILE__, __FUNCTION__, i);
+        }
+    }
+    
+    
+}
+
+#endif
