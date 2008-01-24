@@ -66,6 +66,7 @@ gpredict_SOURCES = \
 	predict-tools.c predict-tools.h \
 	qth-editor.c qth-editor.h \
 	radio-conf.c radio-conf.h \
+	rotor-conf.c rotor-conf.h \
 	rdv.c rdv.h \
 	sat-cfg.c sat-cfg.h \
 	sat-log.c sat-log.h \
@@ -92,6 +93,7 @@ gpredict_SOURCES = \
 	sat-pref-rig.c sat-pref-rig.h sat-pref-rig-data.h \
 	sat-pref-rig-editor.c sat-pref-rig-editor.h \
 	sat-pref-rot.c sat-pref-rot.h \
+	sat-pref-rot-editor.c sat-pref-rot-editor.h \
 	sat-pref-predict.c sat-pref-predict.h \
 	sat-pref-conditions.c sat-pref-conditions.h \
 	sat-pref-multi-pass.c sat-pref-multi-pass.h \
