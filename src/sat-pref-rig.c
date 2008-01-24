@@ -27,6 +27,7 @@
 */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -206,8 +207,8 @@ static GtkTreeModel *create_and_fill_model ()
     GError       *error = NULL; /* error flag and info */
     gchar        *cfgdir;
     gchar        *dirname;      /* directory name */
+    gchar       **vbuff;
     const gchar  *filename;     /* file name */
-    gchar        *buff;
     radio_conf_t  conf;
 
     /* create a new list store */
@@ -236,7 +237,9 @@ static GtkTreeModel *create_and_fill_model ()
             
             if (g_strrstr (filename, ".rig")) {
                 
-                conf.name = g_strdup (filename);
+                vbuff = g_strsplit (filename, ".rig", 0);
+                conf.name = g_strdup (vbuff[0]);
+                g_strfreev (vbuff);
                 if (radio_conf_read (&conf)) {
                     /* insert conf into liststore */
                     gtk_list_store_append (liststore, &item);
@@ -348,9 +351,88 @@ void sat_pref_rig_cancel ()
  */
 void sat_pref_rig_ok     ()
 {
+    GDir         *dir = NULL;   /* directory handle */
+    GError       *error = NULL; /* error flag and info */
+    gchar        *buff,*dirname;
+    const gchar  *filename;
+    GtkTreeIter   iter;      /* new item added to the list store */
+    GtkTreeModel *model;
+    guint         i,n;
+    
+    radio_conf_t conf = {
+        .name  = NULL,
+        .model = NULL,
+        .id    = 0,
+        .type  = RADIO_TYPE_RX,
+        .port  = NULL,
+        .speed = 0,
+        .civ   = 0,
+        .dtr   = LINE_UNDEF,
+        .rts   = LINE_UNDEF,
+    };
+
+    
     /* delete all .rig files */
+    buff = get_conf_dir ();
+    dirname = g_strconcat (buff, G_DIR_SEPARATOR_S,
+                           "hwconf", NULL);
+    g_free (buff);
+    
+    dir = g_dir_open (dirname, 0, &error);
+    if (dir) {
+        /* read each .rig file */
+        while ((filename = g_dir_read_name (dir))) {
+
+            if (g_strrstr (filename, ".rig")) {
+
+                buff = g_strconcat (dirname, G_DIR_SEPARATOR_S, filename, NULL);
+                g_remove (buff);
+                g_free (buff);
+            }
+        }
+    }
+
+    g_free (dirname);
+    g_dir_close (dir);
     
     /* create new .rig files for the radios in the riglist */
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (riglist));
+    n = gtk_tree_model_iter_n_children (model, NULL);
+    for (i = 0; i < n; i++) {
+        
+        /* get radio conf */
+        if (gtk_tree_model_iter_nth_child (model, &iter, NULL, i)) {
+        
+            /* store conf */
+            gtk_tree_model_get (model, &iter,
+                                RIG_LIST_COL_NAME, &conf.name,
+                                RIG_LIST_COL_MODEL, &conf.model,
+                                RIG_LIST_COL_ID, &conf.id,
+                                RIG_LIST_COL_TYPE, &conf.type,
+                                RIG_LIST_COL_PORT, &conf.port,
+                                RIG_LIST_COL_SPEED, &conf.speed,
+                                RIG_LIST_COL_CIV, &conf.civ,
+                                RIG_LIST_COL_DTR, &conf.dtr,
+                                RIG_LIST_COL_RTS, &conf.rts,
+                                -1);
+            radio_conf_save (&conf);
+        
+            /* free conf buffer */
+            if (conf.name)
+                g_free (conf.name);
+            
+            if (conf.model)
+                g_free (conf.model);
+            
+            if (conf.port)
+                g_free (conf.port);
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to get RIG %s"),
+                           __FUNCTION__, i);
+        }
+    }
     
 }
 
@@ -364,6 +446,9 @@ void sat_pref_rig_ok     ()
  */
 static void add_cb    (GtkWidget *button, gpointer data)
 {
+    GtkTreeIter  item;      /* new item added to the list store */
+    GtkListStore *liststore;
+    
     radio_conf_t conf = {
         .name  = NULL,
         .model = NULL,
@@ -376,8 +461,33 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .rts   = LINE_UNDEF,
     };
     
-    
+    /* run rig conf editor */
     sat_pref_rig_editor_run (&conf);
+    
+    /* add new rig to the list */
+    if (conf.name != NULL) {
+        liststore = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (riglist)));
+        gtk_list_store_append (liststore, &item);
+        gtk_list_store_set (liststore, &item,
+                            RIG_LIST_COL_NAME, conf.name,
+                            RIG_LIST_COL_MODEL, conf.model,
+                            RIG_LIST_COL_ID, conf.id,
+                            RIG_LIST_COL_TYPE, conf.type,
+                            RIG_LIST_COL_PORT, conf.port,
+                            RIG_LIST_COL_SPEED, conf.speed,
+                            RIG_LIST_COL_CIV, conf.civ,
+                            RIG_LIST_COL_DTR, conf.dtr,
+                            RIG_LIST_COL_RTS, conf.rts,
+                            -1);
+        
+        g_free (conf.name);
+        
+        if (conf.model != NULL)
+            g_free (conf.model);
+        
+        if (conf.port != NULL)
+            g_free (conf.port);
+    }
 }
 
 
@@ -394,7 +504,18 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     GtkTreeModel     *selmod;
     GtkTreeSelection *selection;
     GtkTreeIter       iter;
-    radio_conf_t      conf;
+    
+    radio_conf_t conf = {
+        .name  = NULL,
+        .model = NULL,
+        .id    = 0,
+        .type  = RADIO_TYPE_RX,
+        .port  = NULL,
+        .speed = 0,
+        .civ   = 0,
+        .dtr   = LINE_UNDEF,
+        .rts   = LINE_UNDEF,
+    };
 
     
     /* If there are no entries, we have a bug since the button should 
@@ -414,6 +535,17 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (riglist));
     if (gtk_tree_selection_get_selected(selection, &selmod, &iter)) {
+        gtk_tree_model_get (model, &iter,
+                            RIG_LIST_COL_NAME, &conf.name,
+                            RIG_LIST_COL_MODEL, &conf.model,
+                            RIG_LIST_COL_ID, &conf.id,
+                            RIG_LIST_COL_TYPE, &conf.type,
+                            RIG_LIST_COL_PORT, &conf.port,
+                            RIG_LIST_COL_SPEED, &conf.speed,
+                            RIG_LIST_COL_CIV, &conf.civ,
+                            RIG_LIST_COL_DTR, &conf.dtr,
+                            RIG_LIST_COL_RTS, &conf.rts,
+                            -1);
 
     }
     else {
@@ -428,10 +560,38 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         gtk_dialog_run (GTK_DIALOG (dialog));
         gtk_widget_destroy (dialog);
 
+        return;
     }
 
-    
+    /* run radio configuration editor */
     sat_pref_rig_editor_run (&conf);
+    
+    /* apply changes */
+    if (conf.name != NULL) {
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter,
+                            RIG_LIST_COL_NAME, conf.name,
+                            RIG_LIST_COL_MODEL, conf.model,
+                            RIG_LIST_COL_ID, conf.id,
+                            RIG_LIST_COL_TYPE, conf.type,
+                            RIG_LIST_COL_PORT, conf.port,
+                            RIG_LIST_COL_SPEED, conf.speed,
+                            RIG_LIST_COL_CIV, conf.civ,
+                            RIG_LIST_COL_DTR, conf.dtr,
+                            RIG_LIST_COL_RTS, conf.rts,
+                            -1);
+        
+    }
+
+    /* clean up memory */
+    if (conf.name)
+        g_free (conf.name);
+        
+    if (conf.model != NULL)
+        g_free (conf.model);
+        
+    if (conf.port != NULL)
+        g_free (conf.port);
+
 }
 
 
