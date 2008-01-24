@@ -1,7 +1,15 @@
+2008-01-24; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-pref-rig-editor.[ch]:
+    Finished first draft of radio configuration editor.
+    
+
 2008-01-12; Alexandru Csete <oz9aec@gmail.com>
 
     * src/radio-conf.[ch]:
     Added parameter for radio type (RX, TX, TRX, FULL_DUPL).
+    
+    
 2008-01-21; Alexandru Csete <oz9aec@gmail.com>
 
     * src/radio-conf.[ch], src/sat-pref-rig.c:
