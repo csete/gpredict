@@ -116,6 +116,7 @@ GPREDICTSRC = \
 	predict-tools.c \
 	qth-editor.c \
 	radio-conf.c \
+	rotor-conf.c \
 	rdv.c \
 	sat-cfg.c \
 	sat-debugger.c \
@@ -142,7 +143,9 @@ GPREDICTSRC = \
 	sat-pref-qth-editor.c \
 	sat-pref-refresh.c \
 	sat-pref-rig.c \
+	sat-pref-rig-editor.c \
 	sat-pref-rot.c \
+	sat-pref-rot-editor.c \
 	sat-pref-single-pass.c \
 	sat-pref-single-sat.c \
 	sat-pref-sky-at-glance.c \
