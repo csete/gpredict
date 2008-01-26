@@ -40,6 +40,10 @@
 #define KEY_TYPE        "Type"
 #define KEY_PORT        "Port"
 #define KEY_SPEED       "Speed"
+#define KEY_MINAZ       "MinAz"
+#define KEY_MAXAZ       "MaxAz"
+#define KEY_MINEL       "MinEl"
+#define KEY_MAXEL       "MaxEl"
 
 
 /** \brief Read rotator configuration.
@@ -87,6 +91,10 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     conf->type = g_key_file_get_integer (cfg, GROUP, KEY_TYPE, NULL);
     conf->port = g_key_file_get_string (cfg, GROUP, KEY_PORT, NULL);
     conf->speed = g_key_file_get_integer (cfg, GROUP, KEY_SPEED, NULL);
+    conf->minaz = g_key_file_get_integer (cfg, GROUP, KEY_MINAZ, NULL);
+    conf->maxaz = g_key_file_get_integer (cfg, GROUP, KEY_MAXAZ, NULL);
+    conf->minel = g_key_file_get_integer (cfg, GROUP, KEY_MINEL, NULL);
+    conf->maxel = g_key_file_get_integer (cfg, GROUP, KEY_MAXEL, NULL);
     
     g_key_file_free (cfg);
     
@@ -120,6 +128,10 @@ void rotor_conf_save (rotor_conf_t *conf)
     g_key_file_set_integer (cfg, GROUP, KEY_TYPE, conf->type);
     g_key_file_set_string (cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_integer (cfg, GROUP, KEY_SPEED, conf->speed);
+    g_key_file_set_integer (cfg, GROUP, KEY_MINAZ, conf->minaz);
+    g_key_file_set_integer (cfg, GROUP, KEY_MAXAZ, conf->maxaz);
+    g_key_file_set_integer (cfg, GROUP, KEY_MINEL, conf->minel);
+    g_key_file_set_integer (cfg, GROUP, KEY_MAXEL, conf->maxel);
     
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);

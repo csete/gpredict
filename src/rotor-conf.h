@@ -51,6 +51,10 @@ typedef struct {
     rotor_type_t type;      /*!< Rotator type. */
     gchar       *port;      /*!< Device name, e.g. /dev/ttyS0. */
     guint        speed;     /*!< Serial speed. */
+    gint         minaz;     /*!< Lower azimuth limit */
+    gint         maxaz;     /*!< Upper azimuth limit */
+    gint         minel;     /*!< Lower elevation limit */
+    gint         maxel;     /*!< Upper elevation limit */
 } rotor_conf_t;
 
 

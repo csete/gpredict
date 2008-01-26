@@ -60,6 +60,11 @@ static void render_rot_type (GtkTreeViewColumn *col,
                              GtkTreeModel      *model,
                              GtkTreeIter       *iter,
                              gpointer           column);
+static void render_angle (GtkTreeViewColumn *col,
+                          GtkCellRenderer   *renderer,
+                          GtkTreeModel      *model,
+                          GtkTreeIter       *iter,
+                          gpointer           column);
 
 /* global objects */
 static GtkWidget *addbutton;
@@ -145,6 +150,46 @@ static void create_rot_list ()
                                                        NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
     
+    /* Az and el limits */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Min Az"), renderer,
+                                                       "text", ROT_LIST_COL_MINAZ,
+                                                       NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_angle,
+                                             GUINT_TO_POINTER(ROT_LIST_COL_MINAZ),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Max Az"), renderer,
+                                                        "text", ROT_LIST_COL_MAXAZ,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_angle,
+                                             GUINT_TO_POINTER(ROT_LIST_COL_MAXAZ),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
+    
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Min El"), renderer,
+                                                        "text", ROT_LIST_COL_MINEL,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_angle,
+                                             GUINT_TO_POINTER(ROT_LIST_COL_MINEL),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Max El"), renderer,
+                                                    "text", ROT_LIST_COL_MAXAZ,
+                                                    NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_angle,
+                                             GUINT_TO_POINTER(ROT_LIST_COL_MAXEL),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
 }
 
 
@@ -168,7 +213,11 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_INT,       // hamlib id
                                     G_TYPE_INT,       // radio type
                                     G_TYPE_STRING,    // port
-                                    G_TYPE_INT        // speed
+                                    G_TYPE_INT,       // speed
+                                    G_TYPE_INT,       // Min Az
+                                    G_TYPE_INT,       // Max Az
+                                    G_TYPE_INT,       // Min El
+                                    G_TYPE_INT        // Max El
                                    );
 
     /* open configuration directory */
@@ -197,6 +246,10 @@ static GtkTreeModel *create_and_fill_model ()
                                         ROT_LIST_COL_TYPE, conf.type,
                                         ROT_LIST_COL_PORT, conf.port,
                                         ROT_LIST_COL_SPEED, conf.speed,
+                                        ROT_LIST_COL_MINAZ, conf.minaz,
+                                        ROT_LIST_COL_MAXAZ, conf.maxaz,
+                                        ROT_LIST_COL_MINEL, conf.minel,
+                                        ROT_LIST_COL_MAXEL, conf.maxel,
                                         -1);
                     
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -309,6 +362,10 @@ void sat_pref_rot_ok     ()
         .type  = ROTOR_TYPE_AZEL,
         .port  = NULL,
         .speed = 0,
+        .minaz = 0,
+        .maxaz = 360,
+        .minel = 0,
+        .maxel = 90,
     };
 
     
@@ -351,6 +408,10 @@ void sat_pref_rot_ok     ()
                                 ROT_LIST_COL_TYPE, &conf.type,
                                 ROT_LIST_COL_PORT, &conf.port,
                                 ROT_LIST_COL_SPEED, &conf.speed,
+                                ROT_LIST_COL_MINAZ, &conf.minaz,
+                                ROT_LIST_COL_MAXAZ, &conf.maxaz,
+                                ROT_LIST_COL_MINEL, &conf.minel,
+                                ROT_LIST_COL_MAXEL, &conf.maxel,
                                 -1);
             rotor_conf_save (&conf);
         
@@ -392,6 +453,11 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .type  = ROTOR_TYPE_AZEL,
         .port  = NULL,
         .speed = 0,
+        .speed = 0,
+        .minaz = 0,
+        .maxaz = 360,
+        .minel = 0,
+        .maxel = 90,
     };
     
     /* run rot conf editor */
@@ -408,6 +474,10 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_TYPE, conf.type,
                             ROT_LIST_COL_PORT, conf.port,
                             ROT_LIST_COL_SPEED, conf.speed,
+                            ROT_LIST_COL_MINAZ, conf.minaz,
+                            ROT_LIST_COL_MAXAZ, conf.maxaz,
+                            ROT_LIST_COL_MINEL, conf.minel,
+                            ROT_LIST_COL_MAXEL, conf.maxel,
                             -1);
         
         g_free (conf.name);
@@ -442,6 +512,10 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .type  = ROTOR_TYPE_AZEL,
         .port  = NULL,
         .speed = 0,
+        .minaz = 0,
+        .maxaz = 360,
+        .minel = 0,
+        .maxel = 90,
     };
 
     
@@ -469,6 +543,10 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_TYPE, &conf.type,
                             ROT_LIST_COL_PORT, &conf.port,
                             ROT_LIST_COL_SPEED, &conf.speed,
+                            ROT_LIST_COL_MINAZ, &conf.minaz,
+                            ROT_LIST_COL_MAXAZ, &conf.maxaz,
+                            ROT_LIST_COL_MINEL, &conf.minel,
+                            ROT_LIST_COL_MAXEL, &conf.maxel,
                             -1);
 
     }
@@ -499,6 +577,10 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_TYPE, conf.type,
                             ROT_LIST_COL_PORT, conf.port,
                             ROT_LIST_COL_SPEED, conf.speed,
+                            ROT_LIST_COL_MINAZ, conf.minaz,
+                            ROT_LIST_COL_MAXAZ, conf.maxaz,
+                            ROT_LIST_COL_MINEL, conf.minel,
+                            ROT_LIST_COL_MAXEL, conf.maxel,
                             -1);
         
     }
@@ -560,6 +642,30 @@ static void delete_cb (GtkWidget *button, gpointer data)
     }
 }
 
+/** \brief Render an angle.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ */
+static void render_angle (GtkTreeViewColumn *col,
+                          GtkCellRenderer   *renderer,
+                          GtkTreeModel      *model,
+                          GtkTreeIter       *iter,
+                          gpointer           column)
+{
+    gint   number;
+    guint   coli = GPOINTER_TO_UINT (column);
+    gchar  *text;
+    
+    gtk_tree_model_get (model, iter, coli, &number, -1);
+
+    text = g_strdup_printf ("%d\302\260", number);
+    g_object_set (renderer, "text", text, NULL);
+    g_free (text);
+}
 
 
 

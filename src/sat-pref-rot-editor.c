@@ -58,6 +58,10 @@ static GtkWidget *model;    /* rotor model, e.g. TS-2000 */
 static GtkWidget *type;     /* rotor type */
 static GtkWidget *port;     /* port selector */
 static GtkWidget *speed;    /* serial speed selector */
+static GtkWidget *minaz;
+static GtkWidget *maxaz;
+static GtkWidget *minel;
+static GtkWidget *maxel;
 
 
 static GtkWidget    *create_editor_widgets (rotor_conf_t *conf);
@@ -75,6 +79,7 @@ static void          is_rot_model          (GtkCellLayout   *cell_layout,
                                             GtkTreeIter     *iter,
                                             gpointer         data);
 static void          select_rot            (guint rotid);
+static void          rot_type_changed      (GtkComboBox *box, gpointer data);
 
 
 /** \brief Add or edit a rotor configuration.
@@ -208,6 +213,8 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("EL"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("AZ / EL"));
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 2);
+    g_signal_connect (G_OBJECT (type), "changed",
+                      G_CALLBACK (rot_type_changed), NULL);
     gtk_widget_set_tooltip_text (type,
                                _("Select rotor type."));
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 2, 3);
@@ -250,8 +257,48 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_widget_set_tooltip_text (speed, _("Select serial port speed"));
     gtk_table_attach_defaults (GTK_TABLE (table), speed, 1, 2, 4, 5);
 
+    /* separator */
+    gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 1, 5,
+                      GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
 
-	if (conf->name != NULL)
+    /* Az and El limits */
+    label = gtk_label_new (_(" Min Az"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 1, 2);
+    minaz = gtk_spin_button_new_with_range (-40, 40, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minaz), TRUE);
+    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minaz), FALSE);
+    gtk_table_attach_defaults (GTK_TABLE (table), minaz, 4, 5, 1, 2);
+    
+    label = gtk_label_new (_(" Max Az"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 2, 3);
+    maxaz = gtk_spin_button_new_with_range (360, 450, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxaz), TRUE);
+    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxaz), FALSE);
+    gtk_table_attach_defaults (GTK_TABLE (table), maxaz, 4, 5, 2, 3);
+    
+    label = gtk_label_new (_(" Min El"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 3, 4);
+    minel = gtk_spin_button_new_with_range (-10, 40, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minel), TRUE);
+    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minel), FALSE);
+    gtk_table_attach_defaults (GTK_TABLE (table), minel, 4, 5, 3, 4);
+    
+    label = gtk_label_new (_(" Max El"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 4, 5);
+    maxel = gtk_spin_button_new_with_range (90, 180, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), 90);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxel), TRUE);
+    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxel), FALSE);
+    gtk_table_attach_defaults (GTK_TABLE (table), maxel, 4, 5, 4, 5);
+    
+    if (conf->name != NULL)
 		update_widgets (conf);
 
 	gtk_widget_show_all (table);
@@ -271,6 +318,12 @@ update_widgets (rotor_conf_t *conf)
     
     /* model */
     select_rot (conf->id);
+    
+    /* az and el limits */
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), conf->minaz);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), conf->maxaz);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), conf->minel);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), conf->maxel);
     
     /* type */
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type-1);
@@ -330,6 +383,10 @@ clear_widgets ()
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 2);
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), 90);
 }
 
 
@@ -417,6 +474,11 @@ apply_changes         (rotor_conf_t *conf)
             break;
     }
     
+    /* az and el ranges */
+    conf->minaz = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (minaz));
+    conf->maxaz = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (maxaz));
+    conf->minel = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (minel));
+    conf->maxel = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (maxel));
     
 	return TRUE;
 }
@@ -743,5 +805,44 @@ select_rot            (guint rotid)
     
     
 }
+
+
+/** \brief Rotor type changed signal handler.
+ * \param box The rotor type selector combo box.
+ * \param data User data; always NULL.
+ * 
+ * This function is called when the user a rotor type. The purpose of this
+ * function is to enable/disable the Az and El range spin buttons depending
+ * on whether we have an Az, El, or AzEl rotator.
+ */
+static void rot_type_changed (GtkComboBox *box, gpointer data)
+{
+    switch (gtk_combo_box_get_active (box)+1) {
+        case ROTOR_TYPE_AZ:
+            gtk_widget_set_sensitive (minaz, TRUE);
+            gtk_widget_set_sensitive (maxaz, TRUE);
+            gtk_widget_set_sensitive (minel, FALSE);
+            gtk_widget_set_sensitive (maxel, FALSE);
+            break;
+            
+        case ROTOR_TYPE_EL:
+            gtk_widget_set_sensitive (minaz, FALSE);
+            gtk_widget_set_sensitive (maxaz, FALSE);
+            gtk_widget_set_sensitive (minel, TRUE);
+            gtk_widget_set_sensitive (maxel, TRUE);
+            break;
+            
+        case ROTOR_TYPE_AZEL:
+            gtk_widget_set_sensitive (minaz, TRUE);
+            gtk_widget_set_sensitive (maxaz, TRUE);
+            gtk_widget_set_sensitive (minel, TRUE);
+            gtk_widget_set_sensitive (maxel, TRUE);
+            
+        default:
+            break;
+            
+    }
+}
+
 
 #endif

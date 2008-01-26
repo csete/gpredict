@@ -36,6 +36,10 @@ typedef enum {
     ROT_LIST_COL_TYPE,      /*!< Rtator type. */
     ROT_LIST_COL_PORT,      /*!< Port / Device, e.g. /dev/ttyS0. */
     ROT_LIST_COL_SPEED,     /*!< Serial speed. */
+    ROT_LIST_COL_MINAZ,     /*!< Lower azimuth limit. */
+    ROT_LIST_COL_MAXAZ,     /*!< Upper azimuth limit. */
+    ROT_LIST_COL_MINEL,     /*!< Lower elevation limit. */
+    ROT_LIST_COL_MAXEL,     /*!< Upper elevation limit. */
     ROT_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rotor_list_col_t;
 
