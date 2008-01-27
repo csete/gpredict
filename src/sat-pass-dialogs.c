@@ -490,7 +490,7 @@ show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *toplevel)
 	dialog = gtk_dialog_new_with_buttons (title,
 										  GTK_WINDOW (toplevel),
 										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  //GTK_STOCK_PRINT, RESPONSE_PRINT,
+										  GTK_STOCK_PRINT, RESPONSE_PRINT,
 										  GTK_STOCK_SAVE, RESPONSE_SAVE,
 										  GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 										  NULL);
@@ -543,6 +543,9 @@ single_pass_response (GtkWidget *dialog, gint response, gpointer data)
 	switch (response) {
 
 	case RESPONSE_PRINT:
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: PRINT not implemented"),
+                       __FUNCTION__);
 		break;
 
 	case RESPONSE_SAVE:
@@ -1088,7 +1091,7 @@ show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *toplev
 	dialog = gtk_dialog_new_with_buttons (title,
 										  GTK_WINDOW (toplevel),
 										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  //GTK_STOCK_PRINT, RESPONSE_PRINT,
+										  GTK_STOCK_PRINT, RESPONSE_PRINT,
 										  GTK_STOCK_SAVE, RESPONSE_SAVE,
 										  GTK_STOCK_CLOSE,
 										  GTK_RESPONSE_CLOSE,
@@ -1141,7 +1144,10 @@ multi_pass_response (GtkWidget *dialog, gint response, gpointer data)
 	switch (response) {
 
 	case RESPONSE_PRINT:
-		break;
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: PRINT not implemented"),
+                       __FUNCTION__);
+        break;
 
 	case RESPONSE_SAVE:
 		save_passes (dialog);
