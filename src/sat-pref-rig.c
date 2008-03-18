@@ -727,6 +727,10 @@ static void render_dtr_rts (GtkTreeViewColumn *col,
 
     switch (number) {
                         
+        case LINE_OFF:
+            g_object_set (renderer, "text", "OFF", NULL);
+            break;
+                        
         case LINE_ON:
             g_object_set (renderer, "text", "ON", NULL);
             break;
