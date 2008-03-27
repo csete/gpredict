@@ -53,6 +53,8 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data);
 static void screen_state_cb  (GtkWidget *menuitem, gpointer data);
 static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data);
 static void tmgr_cb          (GtkWidget *menuitem, gpointer data);
+static void rigctrl_cb       (GtkWidget *menuitem, gpointer data);
+static void rotctrl_cb       (GtkWidget *menuitem, gpointer data);
 static void delete_cb        (GtkWidget *menuitem, gpointer data);
 static void close_cb         (GtkWidget *menuitem, gpointer data);
 static void name_changed     (GtkWidget *widget, gpointer data);
@@ -155,8 +157,29 @@ gtk_sat_module_popup (GtkSatModule *module)
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
 	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 	g_signal_connect (menuitem, "activate", G_CALLBACK (tmgr_cb), module);
+    
+    /* separator */
+    menuitem = gtk_separator_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-
+    /* Radio Control */
+    menuitem = gtk_image_menu_item_new_with_label (_("Radio Control"));
+    buff = icon_file_name ("gpredict-oscilloscope-small.png");
+    image = gtk_image_new_from_file (buff);
+    g_free (buff);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect (menuitem, "activate", G_CALLBACK (rigctrl_cb), module);
+    
+    /* Antenna Control */
+    menuitem = gtk_image_menu_item_new_with_label (_("Antenna Control"));
+    buff = icon_file_name ("gpredict-antenna-small.png");
+    image = gtk_image_new_from_file (buff);
+    g_free (buff);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect (menuitem, "activate", G_CALLBACK (rotctrl_cb), module);
+     
 	/* separator */
 	menuitem = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
@@ -815,6 +838,26 @@ tmgr_cb          (GtkWidget *menuitem, gpointer data)
 
 	tmg_create (module);
 }
+
+/** \brief Open Radio control window. */
+static void
+rigctrl_cb          (GtkWidget *menuitem, gpointer data)
+{
+    GtkSatModule *module = GTK_SAT_MODULE (data);
+
+
+}
+
+/** \brief Open antenna rotator control window. */
+static void
+rotctrl_cb          (GtkWidget *menuitem, gpointer data)
+{
+    GtkSatModule *module = GTK_SAT_MODULE (data);
+
+
+}
+
+
 
 /** \brief Close module.
  *

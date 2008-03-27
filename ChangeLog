@@ -6,7 +6,10 @@
     * src/sat-pref-rig.c:
     * src/sat-pref-rig-editor.c:
     * src/sat-pref-rig-data.h:
-    Added configuration controls for CAT extensions
+    Added configuration controls for CAT extensions.
+    
+    * src/gtk-sat-module-popup.c:
+    Added menu items for radio and rotator control.
     
 
 2008-03-17; Alexandru Csete <oz9aec@gmail.com>
