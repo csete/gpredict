@@ -1,4 +1,22 @@
-2008-01-26; Alexandur Csete <oz9aec@gmail.com>
+2008-03-27; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/radio-conf.[ch]:
+    Added parameter for enabling built-in radio extensions.
+    
+    * src/sat-pref-rig.c:
+    * src/sat-pref-rig-editor.c:
+    * src/sat-pref-rig-data.h:
+    Added configuration controls for CAT extensions
+    
+
+2008-03-17; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-pref-rig.c:
+    Fixed bug that caused incorrect display of DTR and RTS line settings in
+    the radio list.
+    
+
+2008-01-26; Alexandru Csete <oz9aec@gmail.com>
 
     * src/rotor-conf.[ch]:
     * src/sat-pref-rot.c:

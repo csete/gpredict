@@ -56,6 +56,7 @@ static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* Configuration name */
 static GtkWidget *model;    /* radio model, e.g. TS-2000 */
 static GtkWidget *civ;      /* Icom CI-V address */
+static GtkWidget *ext;      /* Built-in extensions */
 static GtkWidget *type;     /* radio type */
 static GtkWidget *port;     /* port selector */
 static GtkWidget *speed;    /* serial speed selector */
@@ -240,6 +241,16 @@ create_editor_widgets (radio_conf_t *conf)
                                _("Select radio type. Consult the user manual, if unsure"));
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 2, 3);
 
+    
+    /* Enable built-in extensions */
+    ext = gtk_check_button_new_with_label (_("Extended CAT"));
+    gtk_widget_set_tooltip_text (ext,
+                                 _("Enable built-in gpredict CAT extensions if they are "\
+                                   "available. This allows the use of commands that are "\
+                                   "not supported by hamlib, but are necessary for full "\
+                                   "duplex operation with IC-910, FT-847, etc."));
+    gtk_table_attach_defaults (GTK_TABLE (table), ext, 3, 5, 2, 3);
+    
 	/* Port */
 	label = gtk_label_new (_("Port"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -377,6 +388,9 @@ update_widgets (radio_conf_t *conf)
     /* CI-V */
     gtk_combo_box_set_active (GTK_COMBO_BOX (civ), conf->civ);
     
+    /* Extension */
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ext), conf->ext);
+    
     /* DTR and RTS lines */
     gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), conf->dtr);
     gtk_combo_box_set_active (GTK_COMBO_BOX (rts), conf->rts);
@@ -398,6 +412,7 @@ clear_widgets ()
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
     gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ext), FALSE);
     gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
 }
@@ -454,6 +469,9 @@ apply_changes         (radio_conf_t *conf)
 
     /* CI-V */
     conf->civ = gtk_combo_box_get_active (GTK_COMBO_BOX (civ));
+    
+    /* Extensions */
+    conf->ext = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ext));
     
     /* serial speed */
     switch (gtk_combo_box_get_active (GTK_COMBO_BOX (speed))) {

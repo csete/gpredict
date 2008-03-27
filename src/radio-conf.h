@@ -61,6 +61,7 @@ typedef struct {
     gchar       *port;      /*!< Device name, e.g. /dev/ttyS0. */
     guint        speed;     /*!< Serial speed. */
     guint        civ;       /*!< ICOM CI-V address. */
+    gboolean     ext;       /*!< Use built in extensions if available. */
     ctrl_stat_t  dtr;       /*!< DTR line usage. */
     ctrl_stat_t  rts;       /*!< PTT line usage. */
 } radio_conf_t;

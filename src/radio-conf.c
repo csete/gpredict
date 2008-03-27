@@ -41,6 +41,7 @@
 #define KEY_PORT        "Port"
 #define KEY_SPEED       "Speed"
 #define KEY_CIV         "CIV"
+#define KEY_EXT         "EXT"
 #define KEY_DTR         "DTR"
 #define KEY_RTS         "RTS"
 
@@ -91,6 +92,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     conf->port = g_key_file_get_string (cfg, GROUP, KEY_PORT, NULL);
     conf->speed = g_key_file_get_integer (cfg, GROUP, KEY_SPEED, NULL);
     conf->civ = g_key_file_get_integer (cfg, GROUP, KEY_CIV, NULL);
+    conf->ext = g_key_file_get_boolean (cfg, GROUP, KEY_EXT, NULL);
     conf->dtr = g_key_file_get_integer (cfg, GROUP, KEY_DTR, NULL);
     conf->rts = g_key_file_get_integer (cfg, GROUP, KEY_RTS, NULL);
     
@@ -127,6 +129,7 @@ void radio_conf_save (radio_conf_t *conf)
     g_key_file_set_string (cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_integer (cfg, GROUP, KEY_SPEED, conf->speed);
     g_key_file_set_integer (cfg, GROUP, KEY_CIV, conf->civ);
+    g_key_file_set_boolean (cfg, GROUP, KEY_EXT, conf->ext);
     g_key_file_set_integer (cfg, GROUP, KEY_DTR, conf->dtr);
     g_key_file_set_integer (cfg, GROUP, KEY_RTS, conf->rts);
     

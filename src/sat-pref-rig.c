@@ -114,6 +114,7 @@ static void create_rig_list ()
 
 
     riglist = gtk_tree_view_new ();
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (riglist), TRUE);
 
     model = create_and_fill_model ();
     gtk_tree_view_set_model (GTK_TREE_VIEW (riglist), model);
@@ -173,6 +174,14 @@ static void create_rig_list ()
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
+    /* Extensions */
+    renderer = gtk_cell_renderer_toggle_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Ext"), renderer,
+             "active", RIG_LIST_COL_EXT,
+             NULL);
+    
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+    
     /* DTR */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("DTR Line"), renderer,
@@ -220,6 +229,7 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_STRING,    // port
                                     G_TYPE_INT,       // speed
                                     G_TYPE_INT,       // Icom CI-V
+                                    G_TYPE_BOOLEAN,   // Extensions
                                     G_TYPE_INT,       // DTR line
                                     G_TYPE_INT        // RTS line
                                    );
@@ -251,6 +261,7 @@ static GtkTreeModel *create_and_fill_model ()
                                         RIG_LIST_COL_PORT, conf.port,
                                         RIG_LIST_COL_SPEED, conf.speed,
                                         RIG_LIST_COL_CIV, conf.civ,
+                                        RIG_LIST_COL_EXT, conf.ext,
                                         RIG_LIST_COL_DTR, conf.dtr,
                                         RIG_LIST_COL_RTS, conf.rts,
                                         -1);
@@ -367,6 +378,7 @@ void sat_pref_rig_ok     ()
         .port  = NULL,
         .speed = 0,
         .civ   = 0,
+        .ext   = FALSE,
         .dtr   = LINE_UNDEF,
         .rts   = LINE_UNDEF,
     };
@@ -412,6 +424,7 @@ void sat_pref_rig_ok     ()
                                 RIG_LIST_COL_PORT, &conf.port,
                                 RIG_LIST_COL_SPEED, &conf.speed,
                                 RIG_LIST_COL_CIV, &conf.civ,
+                                RIG_LIST_COL_EXT, &conf.ext,
                                 RIG_LIST_COL_DTR, &conf.dtr,
                                 RIG_LIST_COL_RTS, &conf.rts,
                                 -1);
@@ -457,6 +470,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .port  = NULL,
         .speed = 0,
         .civ   = 0,
+        .ext   = FALSE,
         .dtr   = LINE_UNDEF,
         .rts   = LINE_UNDEF,
     };
@@ -476,6 +490,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_PORT, conf.port,
                             RIG_LIST_COL_SPEED, conf.speed,
                             RIG_LIST_COL_CIV, conf.civ,
+                            RIG_LIST_COL_EXT, conf.ext,
                             RIG_LIST_COL_DTR, conf.dtr,
                             RIG_LIST_COL_RTS, conf.rts,
                             -1);
@@ -513,6 +528,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .port  = NULL,
         .speed = 0,
         .civ   = 0,
+        .ext   = FALSE,
         .dtr   = LINE_UNDEF,
         .rts   = LINE_UNDEF,
     };
@@ -543,6 +559,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_PORT, &conf.port,
                             RIG_LIST_COL_SPEED, &conf.speed,
                             RIG_LIST_COL_CIV, &conf.civ,
+                            RIG_LIST_COL_EXT, &conf.ext,
                             RIG_LIST_COL_DTR, &conf.dtr,
                             RIG_LIST_COL_RTS, &conf.rts,
                             -1);
@@ -576,6 +593,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_PORT, conf.port,
                             RIG_LIST_COL_SPEED, conf.speed,
                             RIG_LIST_COL_CIV, conf.civ,
+                            RIG_LIST_COL_EXT, conf.ext,
                             RIG_LIST_COL_DTR, conf.dtr,
                             RIG_LIST_COL_RTS, conf.rts,
                             -1);
@@ -702,6 +720,7 @@ static void render_civ (GtkTreeViewColumn *col,
     g_object_set (renderer, "text", buff, NULL);
     g_free (buff);
 }
+
 
 /** \brief Render DTR or RTS columns address.
  * \param col Pointer to the tree view column.
