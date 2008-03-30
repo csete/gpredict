@@ -1,3 +1,9 @@
+2008-03-30; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-freq-ctrl.c, gtk-freq-ctrl.h:
+    Added files.
+    
+
 2008-03-27; Alexandru Csete <oz9aec@gmail.com>
 
     * src/radio-conf.[ch]:
