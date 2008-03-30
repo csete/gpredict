@@ -61,6 +61,8 @@ struct _gtk_rot_ctrl
 {
 	GtkVBox vbox;
 	
+    gfloat min;
+    gfloat max;
     gfloat value;
 };
 
@@ -72,7 +74,7 @@ struct _GtkRotCtrlClass
 
 
 GtkType    gtk_rot_ctrl_get_type  (void);
-GtkWidget* gtk_rot_ctrl_new       (gfloat min, gfloat max);
+GtkWidget* gtk_rot_ctrl_new       (gfloat min, gfloat max, gfloat val);
 void       gtk_rot_ctrl_set_value (GtkRotCtrl *ctrl, gfloat val);
 gfloat     gtk_rot_ctrl_get_value (GtkRotCtrl *ctrl);
 

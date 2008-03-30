@@ -72,7 +72,7 @@ struct _GtkFreqCtrlClass
 
 
 GtkType    gtk_freq_ctrl_get_type  (void);
-GtkWidget* gtk_freq_ctrl_new       (void);
+GtkWidget* gtk_freq_ctrl_new       (gdouble val);
 void       gtk_freq_ctrl_set_value (GtkFreqCtrl *ctrl, gdouble val);
 gdouble    gtk_freq_ctrl_get_value (GtkFreqCtrl *ctrl);
 

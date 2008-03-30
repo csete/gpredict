@@ -119,11 +119,12 @@ gtk_rot_ctrl_destroy (GtkObject *object)
 /** \brief Create a new rotor control widget.
  * \param[in] min The lower limit in decimal degrees.
  * \param[in] max The upper limit in decimal degrees.
+ * \param[in] val The initial value of the control.
  * \return A new rotor control widget.
  * 
  */
 GtkWidget *
-gtk_rot_ctrl_new (gfloat min, gfloat max)
+gtk_rot_ctrl_new (gfloat min, gfloat max, gfloat val)
 {
     GtkWidget *widget;
     GtkWidget *table;
@@ -131,10 +132,16 @@ gtk_rot_ctrl_new (gfloat min, gfloat max)
 
 	widget = g_object_new (GTK_TYPE_ROT_CTRL, NULL);
 
-
+    GTK_ROT_CTRL(widget)->min = min;
+    GTK_ROT_CTRL(widget)->max = max;
+    GTK_ROT_CTRL(widget)->value = val;
+    
+    gtk_rot_ctrl_update (GTK_ROT_CTRL(widget));
 
 	gtk_widget_show_all (widget);
 
+    
+    
 	return widget;
 }
 
@@ -148,7 +155,8 @@ void
 gtk_rot_ctrl_set_value (GtkRotCtrl *ctrl, gfloat val)
 {
     /* set the new value */
-    ctrl->value = val;
+    if ((val >= ctrl->min) && (val <= ctrl->max))
+        ctrl->value = val;
     
     /* update the display */
     gtk_rot_ctrl_update (ctrl);

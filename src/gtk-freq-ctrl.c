@@ -117,11 +117,12 @@ gtk_freq_ctrl_destroy (GtkObject *object)
 
 
 /** \brief Create a new Frequency control widget.
+ * \param[in] val The initial value of the control.
  * \return A new frequency control widget.
  * 
  */
 GtkWidget *
-gtk_freq_ctrl_new ()
+gtk_freq_ctrl_new (gdouble val)
 {
     GtkWidget *widget;
     GtkWidget *table;
@@ -129,7 +130,8 @@ gtk_freq_ctrl_new ()
 
 	widget = g_object_new (GTK_TYPE_FREQ_CTRL, NULL);
 
-
+    GTK_FREQ_CTRL(widget)->value = val;
+    gtk_freq_ctrl_update (GTK_FREQ_CTRL(widget));
 
 	gtk_widget_show_all (widget);
 
