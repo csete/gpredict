@@ -25,63 +25,63 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief FREQ control.
+/** \brief ROTOR control.
  *
  * More info...
  * 
- * \bug This should be a generic widget, not just frequency specific
+ * \bug This should be a generic widget, not just rotor specific
  * 
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "gtk-freq-ctrl.h"
+#include "gtk-rot-ctrl.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
 
 
 
-static void gtk_freq_ctrl_class_init (GtkFreqCtrlClass *class);
-static void gtk_freq_ctrl_init       (GtkFreqCtrl      *list);
-static void gtk_freq_ctrl_destroy    (GtkObject       *object);
+static void gtk_rot_ctrl_class_init (GtkRotCtrlClass *class);
+static void gtk_rot_ctrl_init       (GtkRotCtrl      *list);
+static void gtk_rot_ctrl_destroy    (GtkObject       *object);
 
-static void gtk_freq_ctrl_update     (GtkFreqCtrl *ctrl);
+static void gtk_rot_ctrl_update     (GtkRotCtrl *ctrl);
 
 
 static GtkHBoxClass *parent_class = NULL;
 
 
 GType
-gtk_freq_ctrl_get_type ()
+gtk_rot_ctrl_get_type ()
 {
-	static GType gtk_freq_ctrl_type = 0;
+	static GType gtk_rot_ctrl_type = 0;
 
-	if (!gtk_freq_ctrl_type) {
+	if (!gtk_rot_ctrl_type) {
 
-		static const GTypeInfo gtk_freq_ctrl_info = {
-			sizeof (GtkFreqCtrlClass),
+		static const GTypeInfo gtk_rot_ctrl_info = {
+			sizeof (GtkRotCtrlClass),
 			NULL,  /* base_init */
 			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_freq_ctrl_class_init,
+			(GClassInitFunc) gtk_rot_ctrl_class_init,
 			NULL,  /* class_finalize */
 			NULL,  /* class_data */
-			sizeof (GtkFreqCtrl),
+			sizeof (GtkRotCtrl),
 			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_freq_ctrl_init,
+			(GInstanceInitFunc) gtk_rot_ctrl_init,
 		};
 
-		gtk_freq_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
-												    "GtkFreqCtrl",
-													&gtk_freq_ctrl_info,
+		gtk_rot_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
+												    "GtkRotCtrl",
+													&gtk_rot_ctrl_info,
 													0);
 	}
 
-	return gtk_freq_ctrl_type;
+	return gtk_rot_ctrl_type;
 }
 
 
 static void
-gtk_freq_ctrl_class_init (GtkFreqCtrlClass *class)
+gtk_rot_ctrl_class_init (GtkRotCtrlClass *class)
 {
 	GObjectClass      *gobject_class;
 	GtkObjectClass    *object_class;
@@ -95,39 +95,41 @@ gtk_freq_ctrl_class_init (GtkFreqCtrlClass *class)
 
 	parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_freq_ctrl_destroy;
+	object_class->destroy = gtk_rot_ctrl_destroy;
  
 }
 
 
 
 static void
-gtk_freq_ctrl_init (GtkFreqCtrl *ctrl)
+gtk_rot_ctrl_init (GtkRotCtrl *ctrl)
 {
 
     
 }
 
 static void
-gtk_freq_ctrl_destroy (GtkObject *object)
+gtk_rot_ctrl_destroy (GtkObject *object)
 {
 	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 
 
-/** \brief Create a new Frequency control widget.
- * \return A new frequency control widget.
+/** \brief Create a new rotor control widget.
+ * \param[in] min The lower limit in decimal degrees.
+ * \param[in] max The upper limit in decimal degrees.
+ * \return A new rotor control widget.
  * 
  */
 GtkWidget *
-gtk_freq_ctrl_new ()
+gtk_rot_ctrl_new (gfloat min, gfloat max)
 {
     GtkWidget *widget;
     GtkWidget *table;
 
 
-	widget = g_object_new (GTK_TYPE_FREQ_CTRL, NULL);
+	widget = g_object_new (GTK_TYPE_ROT_CTRL, NULL);
 
 
 
@@ -137,43 +139,43 @@ gtk_freq_ctrl_new ()
 }
 
 
-/** \brief Set the value of the frequency control widget.
- * \param[in] ctrl THe frequency control widget.
+/** \brief Set the value of the rotor control widget.
+ * \param[in] ctrl The rotor control widget.
  * \param[in] val The new value.
  * 
  */
 void
-gtk_freq_ctrl_set_value (GtkFreqCtrl *ctrl, gdouble val)
+gtk_rot_ctrl_set_value (GtkRotCtrl *ctrl, gfloat val)
 {
     /* set the new value */
     ctrl->value = val;
     
     /* update the display */
-    gtk_freq_ctrl_update (ctrl);
+    gtk_rot_ctrl_update (ctrl);
 }
 
 
-/** \brief Get the current value of the frequency control widget.
- *  \param[in] ctrl The frequency control widget.
+/** \brief Get the current value of the rotor control widget.
+ *  \param[in] ctrl The rotor control widget.
  *  \return The current value.
  * 
  * Hint: For reading the value you can also access ctrl->value.
  * 
  */
-gdouble
-gtk_freq_ctrl_get_value (GtkFreqCtrl *ctrl)
+gfloat
+gtk_rot_ctrl_get_value (GtkRotCtrl *ctrl)
 {
     return ctrl->value;
 }
 
 
 
-/** \brief Update frequency display widget.
- *  \param[in] ctrl The frequency control widget.
+/** \brief Update rotor display widget.
+ *  \param[in] ctrl The rottor control widget.
  * 
  */
 static void
-gtk_freq_ctrl_update     (GtkFreqCtrl *ctrl)
+gtk_rot_ctrl_update     (GtkRotCtrl *ctrl)
 {
     
 }

@@ -1,6 +1,7 @@
 2008-03-30; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-freq-ctrl.c, gtk-freq-ctrl.h:
+    * src/gtk-rot-ctrl.c, gtk-rot-ctrl.h:
     Added files.
     
 
