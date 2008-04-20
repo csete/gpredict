@@ -30,6 +30,7 @@ src/pass-to-txt.c
 src/predict-tools.c
 src/radio-conf.c
 src/rdv.c
+src/rig-io.c
 src/rotor-conf.c
 src/sat-cfg.c
 src/sat-log.c

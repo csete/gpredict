@@ -68,6 +68,7 @@ gpredict_SOURCES = \
 	predict-tools.c predict-tools.h \
 	qth-editor.c qth-editor.h \
 	radio-conf.c radio-conf.h \
+	rig-io.c rig-io.h \
 	rotor-conf.c rotor-conf.h \
 	rdv.c rdv.h \
 	sat-cfg.c sat-cfg.h \
