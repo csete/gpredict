@@ -60,6 +60,9 @@ typedef struct _GtkRotCtrlClass   GtkRotCtrlClass;
 struct _gtk_rot_ctrl
 {
 	GtkVBox vbox;
+    
+    GtkWidget *digits[7];   /*!< Labels for the digits */
+    GtkWidget *buttons[10]; /*!< Buttons; 0..4 up; 5..9 down */
 	
     gfloat min;
     gfloat max;
