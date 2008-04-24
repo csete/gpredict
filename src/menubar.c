@@ -57,6 +57,9 @@
 #  include <build-config.h>
 #endif
 
+#include "rot-ctrl-window.h"
+
+
 extern GtkWidget *app;
 
 
@@ -786,7 +789,8 @@ menubar_rot_cb (GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dialog;
 
-
+    rot_ctrl_window_open ();
+#if 0
 	dialog = gtk_message_dialog_new (GTK_WINDOW (app),
 									 GTK_DIALOG_DESTROY_WITH_PARENT,
 									 GTK_MESSAGE_INFO,
@@ -797,8 +801,10 @@ menubar_rot_cb (GtkWidget *widget, gpointer data)
 	g_signal_connect_swapped (dialog, "response",
 							  G_CALLBACK (gtk_widget_destroy),
 							  dialog);
-
-	gtk_widget_show_all (dialog);
+    
+	            
+    gtk_widget_show_all (dialog);
+#endif
 }
 
 
