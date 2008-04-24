@@ -33,8 +33,10 @@
 #  include <build-config.h>
 #endif
 
-#incude "rot-ctrl-window.h"
+#include "rot-ctrl-window.h"
 
+
+static gboolean window_is_open = FALSE;
 
 /** \brief Open rotator control window */
 void rot_ctrl_window_open ()
@@ -46,14 +48,14 @@ void rot_ctrl_window_open ()
     }
     
     /* create the window */
-    
+    window_is_open = TRUE;
 }
 
 /** \brief Close rotator control window */
-void rot_ctrl_window_close (void);
+void rot_ctrl_window_close ()
 {
     if (window_is_open) {
-        
+        window_is_open = FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_BUG,
