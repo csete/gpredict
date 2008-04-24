@@ -28,6 +28,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "sat-log.h"
+#include "compat.h"
 
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
@@ -36,26 +37,75 @@
 #include "rot-ctrl-window.h"
 
 
+/** \brief Flag indicating whether the window is open or not. */
 static gboolean window_is_open = FALSE;
+
+/** \brief The rotor control window widget. */
+static GtkWidget *win;
+
+
+static gint     rot_win_delete  (GtkWidget *, GdkEvent *, gpointer);
+static void     rot_win_destroy (GtkWidget *, gpointer);
+static gboolean rot_win_config  (GtkWidget *, GdkEventConfigure *, gpointer);
+
+static GtkWidget *create_status_widgets (void);
+static GtkWidget *create_setup_widgets (void);
+static GtkWidget *create_control_widgets (void);
+
+
 
 /** \brief Open rotator control window */
 void rot_ctrl_window_open ()
 {
+    GtkWidget *table;
+    gchar     *icon;      /* icon file name */
+    
+    
     if (window_is_open) {
         /* window may be hidden so bring it to front */
-        
+        gtk_window_present (GTK_WINDOW (win));
         return;
     }
     
     /* create the window */
+    win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title (GTK_WINDOW (win), _("GPREDICT Rotator Control"));
+    icon = icon_file_name ("gpredict-antenna.png");
+    if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
+        gtk_window_set_icon_from_file (GTK_WINDOW (win), icon, NULL);
+    }
+    g_free (icon);
+    
+    /* connect delete and destroy signals */
+    g_signal_connect (G_OBJECT (win), "delete_event",
+                      G_CALLBACK (rot_win_delete), NULL);
+    g_signal_connect (G_OBJECT (win), "configure_event",
+                      G_CALLBACK (rot_win_config), NULL);
+    g_signal_connect (G_OBJECT (win), "destroy",
+                      G_CALLBACK (rot_win_destroy), NULL);
+
+    /* create contents */
+    table = gtk_table_new (2, 2, FALSE);
+    gtk_table_attach (GTK_TABLE (table), create_status_widgets (),
+                      0, 2, 0, 1, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 5, 5);
+    gtk_table_attach (GTK_TABLE (table), create_setup_widgets (),
+                      0, 1, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 5, 5);
+    gtk_table_attach (GTK_TABLE (table), create_control_widgets (),
+                      1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 5, 5);
+    
+    gtk_container_add (GTK_CONTAINER (win), table);
+    gtk_widget_show_all (win);
+    
     window_is_open = TRUE;
 }
+
+
 
 /** \brief Close rotator control window */
 void rot_ctrl_window_close ()
 {
     if (window_is_open) {
-        window_is_open = FALSE;
+        gtk_widget_destroy (win);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -65,3 +115,66 @@ void rot_ctrl_window_close ()
 }
 
 
+
+
+/** \brief Manage window delete events. */
+static gint
+rot_win_delete      (GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+    return FALSE;
+}
+
+
+
+/** \brief Manage destroy signals. */
+static void
+rot_win_destroy    (GtkWidget *widget, gpointer   data)
+{
+    /* cloase active hardware connections. */
+    
+    window_is_open = FALSE;
+}
+
+
+/** \brief Manage configure events. */
+static gboolean
+rot_win_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+{
+    return FALSE;
+}
+
+
+/** \brief Create status widgets. */
+static GtkWidget *create_status_widgets ()
+{
+    GtkWidget *frame;
+    
+    frame = gtk_frame_new (_("STATUS"));
+    gtk_frame_set_label_align (GTK_FRAME (frame), 0.5, 0.5);
+    
+    return frame;
+}
+
+
+/** \brief Create setup widgets. */
+static GtkWidget *create_setup_widgets ()
+{
+    GtkWidget *frame;
+    
+    frame = gtk_frame_new (_("SETUP"));
+    gtk_frame_set_label_align (GTK_FRAME (frame), 0.5, 0.5);
+    
+    return frame;
+}
+
+/** \brief Create control buttons. */
+static GtkWidget *create_control_widgets ()
+{
+    GtkWidget *frame;
+    
+    frame = gtk_frame_new (_("CONTROL"));
+    gtk_frame_set_label_align (GTK_FRAME (frame), 0.5, 0.5);
+    
+    return frame;
+}
+      
