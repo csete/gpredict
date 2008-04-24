@@ -31,6 +31,7 @@ src/predict-tools.c
 src/radio-conf.c
 src/rdv.c
 src/rig-io.c
+src/rot-ctrl-window.c
 src/rotor-conf.c
 src/sat-cfg.c
 src/sat-log.c
