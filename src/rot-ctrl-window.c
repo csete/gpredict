@@ -44,6 +44,10 @@ static gboolean window_is_open = FALSE;
 static GtkWidget *win;
 
 
+static GtkWidget *AzSat,*AzDelta,*AzLock,*AzSet,*AzRead;
+static GtkWidget *ElSat,*ElDelta,*ElLock,*ElSet,*ElRead;
+
+
 static gint     rot_win_delete  (GtkWidget *, GdkEvent *, gpointer);
 static void     rot_win_destroy (GtkWidget *, gpointer);
 static gboolean rot_win_config  (GtkWidget *, GdkEventConfigure *, gpointer);
@@ -147,9 +151,41 @@ rot_win_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 /** \brief Create status widgets. */
 static GtkWidget *create_status_widgets ()
 {
-    GtkWidget *frame;
+    GtkWidget *frame,*table,*label,*ctrbut;
+    
+    table = gtk_table_new (3,7, TRUE);
+    
+    /* table header */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<b>SAT</b>");
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
+    
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<b>\316\224</b>");
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 0, 1);
+    
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<b>SET</b>");
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 4, 5, 0, 1);
+    
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<b>READ</b>");
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 5, 6, 0, 1);
+    
+    /* Azimuth widgets */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<b>AZ:</b>");
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    
+    /* Eevation widgets */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<b>EL:</b>");
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+    
+    
     
     frame = gtk_frame_new (_("STATUS"));
+    gtk_container_add (GTK_CONTAINER (frame), table);
     gtk_frame_set_label_align (GTK_FRAME (frame), 0.5, 0.5);
     
     return frame;
