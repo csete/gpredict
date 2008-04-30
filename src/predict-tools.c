@@ -167,11 +167,7 @@ find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 		/* fine steps */
 		while ((aostime == 0.0) && (t <= (start + maxdt))) {
 
-			/* FIXME: should change to el < -0.3?
-			   accuracy seems to be less than +/- 1 sec
-			   except when the sat is around 0.0 EL
-			*/
-			if (fabs (sat->el) < 0.03) {
+			if (fabs (sat->el) < 0.005) {
 				aostime = t;
 			}
 			else {
@@ -195,11 +191,7 @@ find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 		/* fine steps */
 		while (aostime == 0.0) {
 
-			/* FIXME: should change to el < -0.3?
-			   accuracy seems to be less than +/- 1 sec
-			   except when the sat is around 0.0 EL
-			*/
-			if (fabs (sat->el) < 0.03) {
+			if (fabs (sat->el) < 0.005) {
 				aostime = t;
 			}
 			else {
@@ -278,7 +270,7 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 			t += sat->el * sqrt(sat->alt)/502500.0;
 			predict_calc (sat, qth, t);
 			
-			if (fabs(sat->el) < 0.03)
+			if (fabs(sat->el) < 0.005)
 				lostime = t;
 		}
 	}
@@ -298,7 +290,7 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 			t += sat->el * sqrt(sat->alt)/502500.0;
 			predict_calc (sat, qth, t);
 			
-			if (fabs(sat->el) < 0.03)
+			if (fabs(sat->el) < 0.005)
 				lostime = t;
 		}
 	}
