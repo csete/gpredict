@@ -2,6 +2,9 @@
 
     * src/predict-tools.c:
     Fixed bug 1954664: Wrong overpass prediction.
+    
+    * src/gtk-single-sat.c:
+    Fixed bug 1880815: Null pointer dereference causes crash on startup.
 
 
 2008-04-24; Alexandru Csete <oz9aec@gmail.com>
