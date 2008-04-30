@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2007  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2008  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -64,7 +64,8 @@ const gchar license[] = N_("Copyright (C) 2001-2007 Alexandru Csete OZ9AEC\n"\
 						   "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. "\
 						   "See the GNU Library General Public License for more details.\n\n"\
 						   "You should have received a copy of the GNU General Public License "\
-						   "along with this program; if not, you can find a copy on the FSF "\
+						   "along with this program (see Help->License). Otherwise you can find "\
+                           "a copy on the FSF "\
 						   "website http://www.fsf.org/licensing/licenses/gpl.html or you can "\
 						   "write to the\n\n"
 						   "Free Software Foundation, Inc.\n"\
@@ -87,11 +88,11 @@ void about_dialog_create ()
 	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
 	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
 	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
-									_("Copyright (C) 2001-2007 Alexandru Csete OZ9AEC\n\n"\
+									_("Copyright (C) 2001-2008 Alexandru Csete OZ9AEC\n\n"\
 									  "Gpredict is available free of charge from:"));
 	gtk_about_dialog_set_url_hook (gpredict_url_hook_cb, NULL, NULL);
 	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog),
-								  "http://groundstation.sourceforge.net/gpredict/");
+								  "http://gpredict.sourceforge.net/");
 /* 	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (dialog), */
 /* 										_("Gpredict Website")); */
 	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (dialog), license);
