@@ -254,7 +254,7 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 
 	/* create header */
 	sat = SAT (g_slist_nth_data (GTK_SINGLE_SAT (widget)->sats, 0));
-	title = g_strdup_printf ("<b>%s</b>", sat->tle.sat_name);
+	title = g_strdup_printf ("<b>%s</b>", sat ? sat->tle.sat_name : "noname");
 
 	GTK_SINGLE_SAT (widget)->header = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (GTK_SINGLE_SAT (widget)->header), title);
@@ -398,6 +398,13 @@ update_field            (GtkSingleSat *ssat, guint i)
 
 	/* get selected satellite */
 	sat = SAT (g_slist_nth_data (ssat->sats, ssat->selected));
+    
+    if G_UNLIKELY(!sat) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Can not update non-existing sat"),
+                     __FILE__, __LINE__);
+        return;
+    }
 
 	/* update requested field */
 	switch (i) {
