@@ -21,6 +21,7 @@ x Fixed bug 1650251: Groundtracks have discontinuities.
 - Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
 - Fixed bug 1848837: Typo in preferences dialogue.
 - Fixed bug 1704133: Blank lines in config file.
+- Fixed bug 1954664: Wrong overpass prediction.
 x Windows: New installer instead of ZIP distribution.
 x Updated user manual as PDF and HTML (online).
 x New TechNote: Algo ref.

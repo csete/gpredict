@@ -1,3 +1,9 @@
+2008-04-30; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/predict-tools.c:
+    Fixed bug 1954664: Wrong overpass prediction.
+
+
 2008-04-24; Alexandru Csete <oz9aec@gmail.com>
 
     * src/rot-ctrl-window.[ch]:
