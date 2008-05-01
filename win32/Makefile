@@ -90,7 +90,7 @@ GPREDICTSRC = \
 	gtk-polar-plot.c \
 	gtk-polar-view.c \
 	gtk-polar-view-popup.c \
-	gtk-rot-ctrl.c \
+	gtk-rot-knob.c \
 	gtk-sat-data.c \
 	gtk-sat-list.c \
 	gtk-sat-list-col-sel.c \

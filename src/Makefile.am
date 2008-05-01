@@ -40,7 +40,7 @@ gpredict_SOURCES = \
 	gtk-polar-plot.c gtk-polar-plot.h \
 	gtk-polar-view.c gtk-polar-view.h \
 	gtk-polar-view-popup.c gtk-polar-view-popup.h \
-	gtk-rot-ctrl.c gtk-rot-ctrl.h \
+	gtk-rot-knob.c gtk-rot-knob.h \
 	gtk-sat-data.c gtk-sat-data.h \
 	gtk-sat-list.c gtk-sat-list.h \
 	gtk-sat-list-col-sel.c gtk-sat-list-col-sel.h \
