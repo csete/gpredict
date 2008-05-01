@@ -5,6 +5,10 @@
     
     * src/gtk-freq-knob.[ch]:
     New files, previously gtk-freq-ctrl.
+    
+    * src/gtk_sat_module.[ch]:
+    Added hash tables for storing pointers to radio and rotator control
+    windows.
 
 
 2008-04-30; Alexandru Csete <oz9aec@gmail.com>

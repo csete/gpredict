@@ -64,6 +64,7 @@
 #include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
 #include "gtk-met.h"
+
 //#ifdef G_OS_WIN32
 //#  include "libc_internal.h"
 //#  include "libc_interface.h"
@@ -94,6 +95,8 @@ static GtkWidget *create_view                 (GtkSatModule *module, guint num);
 static void     fix_child_allocations   (GtkWidget *widget, gpointer data);
 
 static void     reload_sats_in_child (GtkWidget *widget, GtkSatModule *module);
+
+static void destroy_gtk_widget (gpointer data);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -165,6 +168,16 @@ gtk_sat_module_init (GtkSatModule *module)
 												g_free,
 												g_free);
 	
+    module->rotctrl = g_hash_table_new_full (g_int_hash,
+                                             g_int_equal,
+                                             g_free,
+                                             destroy_gtk_widget);
+    
+    module->rigctrl = g_hash_table_new_full (g_int_hash,
+                                             g_int_equal,
+                                             g_free,
+                                             destroy_gtk_widget);
+
 
 	module->state = GTK_SAT_MOD_STATE_DOCKED;
 	module->busy = FALSE;
@@ -184,6 +197,7 @@ gtk_sat_module_init (GtkSatModule *module)
 	module->tmgPdnum = 0.0;
 	module->tmgCdnum = 0.0;
 	module->tmgReset = FALSE;
+    
 }
 
 
@@ -203,11 +217,25 @@ gtk_sat_module_destroy (GtkObject *object)
 		module->tmgActive = FALSE;
 	}
 
+    /* destroy radio controllers */
+    if (module->rigctrl) {
+        g_hash_table_destroy (module->rigctrl);
+        module->rigctrl = NULL;
+    }
+    
+    /* destroy rotator controllers */
+    if (module->rotctrl) {
+        g_hash_table_destroy (module->rotctrl);
+        module->rotctrl = NULL;
+    }
+    
+    /* clean up QTH */
 	if (module->qth) {
 		gtk_sat_data_free_qth (module->qth);
 		module->qth = NULL;
 	}
 
+    /* clean up satellites */
 	if (module->satellites) {
 		g_hash_table_destroy (module->satellites);
 		module->satellites = NULL;
@@ -1569,3 +1597,15 @@ gtk_sat_module_reconf         (GtkSatModule *module, gboolean local)
 {
 }
 
+
+/** \brief Destroy a Gtk+ widget.
+ * \param data Pointer to the widget to destroy.
+ * 
+ * This function is a simple wrapper for gtk_widget_destroy. The difference is
+ * in the parameter types; this wrapper can be used as a GDestroyNotify callback.
+ */
+static void
+destroy_gtk_widget (gpointer data)
+{
+    gtk_widget_destroy (GTK_WIDGET (data));
+}

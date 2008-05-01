@@ -116,6 +116,8 @@ struct _gtk_sat_module
 	qth_t         *qth;          /*!< QTH information. */
 	
 	GHashTable    *satellites;   /*!< Satellites. */
+    GHashTable    *rotctrl;      /*!< Rotator controllers. */
+    GHashTable    *rigctrl;      /*!< Radio controllers. */
 
 	guint32        timeout;      /*!< Timeout value [msec] */
 
