@@ -57,8 +57,6 @@
 #  include <build-config.h>
 #endif
 
-#include "rot-ctrl-window.h"
-
 
 extern GtkWidget *app;
 
@@ -68,8 +66,6 @@ static void   menubar_new_mod_cb   (GtkWidget *widget, gpointer data);
 static void   menubar_open_mod_cb  (GtkWidget *widget, gpointer data);
 static void   menubar_message_log  (GtkWidget *widget, gpointer data);
 static void   menubar_app_exit_cb  (GtkWidget *widget, gpointer data);
-static void   menubar_rig_cb       (GtkWidget *widget, gpointer data);
-static void   menubar_rot_cb       (GtkWidget *widget, gpointer data);
 static void   menubar_rdv_cb       (GtkWidget *widget, gpointer data);
 static void   menubar_freq_edit_cb (GtkWidget *widget, gpointer data);
 static void   menubar_pref_cb      (GtkWidget *widget, gpointer data);
@@ -131,10 +127,6 @@ static GtkActionEntry entries[] = {
 	  G_CALLBACK (menubar_window_cb)},
 	{ "Predict", GTK_STOCK_DND_MULTIPLE, N_("Advanced Predict"), NULL,
 	  N_("Open advanced pass predictor"), G_CALLBACK (menubar_predict_cb)},
-	{ "Rig", NULL, N_("_Radio Control"), NULL,
-	  N_("Open the radio control window"), G_CALLBACK (menubar_rig_cb)},
-	{ "Rot", NULL, N_("_Antenna Control"), NULL,
-	  N_("Open the antenna rotator control window"), G_CALLBACK (menubar_rot_cb)},
 	{ "Rdv", NULL, N_("_Space Shuttle Tool"), NULL,
 	  N_("Open the space shuttle tool window"), G_CALLBACK (menubar_rdv_cb)},
 
@@ -180,9 +172,6 @@ static const char *menu_desc =
 "      <menu action='ToolsMenu'>"
 "         <menuitem action='Window'/>"
 "         <menuitem action='Predict'/>"
-"         <separator/>"
-"         <menuitem action='Rig'/>"
-"         <menuitem action='Rot'/>"
 "         <separator/>"
 "         <menuitem action='Rdv'/>"
 /* "         <separator/>" */
@@ -242,18 +231,6 @@ menubar_create (GtkWidget *window)
 	}
 
 	/* load custom icons */
-	icon = icon_file_name ("gpredict-oscilloscope-small.png");
-	image = gtk_image_new_from_file (icon);
-	g_free (icon);
-	menuitem = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu/ToolsMenu/Rig");
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-
-	icon = icon_file_name ("gpredict-antenna-small.png");
-	image = gtk_image_new_from_file (icon);
-	g_free (icon);
-	menuitem = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu/ToolsMenu/Rot");
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-
 	icon = icon_file_name ("gpredict-shuttle-small.png");
 	image = gtk_image_new_from_file (icon);
 	g_free (icon);
@@ -761,51 +738,6 @@ menubar_tle_manual_cb       (GtkWidget *widget, gpointer data)
 }
 
 
-
-
-static void
-menubar_rig_cb (GtkWidget *widget, gpointer data)
-{
-	GtkWidget *dialog;
-
-
-	dialog = gtk_message_dialog_new (GTK_WINDOW (app),
-									 GTK_DIALOG_DESTROY_WITH_PARENT,
-									 GTK_MESSAGE_INFO,
-									 GTK_BUTTONS_OK,
-									 _("This function is still under development."));
-
-	/* Destroy the dialog when the user responds to it (e.g. clicks a button) */
-	g_signal_connect_swapped (dialog, "response",
-							  G_CALLBACK (gtk_widget_destroy),
-							  dialog);
-
-	gtk_widget_show_all (dialog);
-}
-
-
-static void
-menubar_rot_cb (GtkWidget *widget, gpointer data)
-{
-	GtkWidget *dialog;
-
-    rot_ctrl_window_open ();
-#if 0
-	dialog = gtk_message_dialog_new (GTK_WINDOW (app),
-									 GTK_DIALOG_DESTROY_WITH_PARENT,
-									 GTK_MESSAGE_INFO,
-									 GTK_BUTTONS_OK,
-									 _("This function is still under development."));
-
-	/* Destroy the dialog when the user responds to it (e.g. clicks a button) */
-	g_signal_connect_swapped (dialog, "response",
-							  G_CALLBACK (gtk_widget_destroy),
-							  dialog);
-    
-	            
-    gtk_widget_show_all (dialog);
-#endif
-}
 
 
 static void

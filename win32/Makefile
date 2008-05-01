@@ -120,7 +120,6 @@ GPREDICTSRC = \
 	qth-editor.c \
 	radio-conf.c \
 	rig-io.c \
-	rot-ctrl-window.c \
 	rotor-conf.c \
 	rdv.c \
 	sat-cfg.c \

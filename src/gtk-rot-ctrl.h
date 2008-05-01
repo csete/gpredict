@@ -61,6 +61,12 @@ struct _gtk_rot_ctrl
 {
 	GtkVBox vbox;
     
+    /* Azimuth labels */
+    GtkWidget *AzSat,*AzDelta,*AzLock,*AzSet,*AzRead;
+    
+    /* Elevation labels */
+    GtkWidget *ElSat,*ElDelta,*ElLock,*ElSet,*ElRead;
+
 };
 
 struct _GtkRotCtrlClass
