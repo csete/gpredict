@@ -86,7 +86,7 @@ GPREDICTSRC = \
 	gpredict-url-hook.c \
 	gpredict-utils.c \
 	gtk-azel-plot.c \
-	gtk-freq-ctrl.c \
+	gtk-freq-knob.c \
 	gtk-polar-plot.c \
 	gtk-polar-view.c \
 	gtk-polar-view-popup.c \
