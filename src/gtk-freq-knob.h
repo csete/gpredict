@@ -25,8 +25,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-#ifndef __GTK_FREQ_CTRL_H__
-#define __GTK_FREQ_CTRL_H__ 1
+#ifndef __GTK_FREQ_KNOB_H__
+#define __GTK_FREQ_KNOB_H__ 1
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -40,41 +40,41 @@ extern "C" {
 
 
 
-#define GTK_TYPE_FREQ_CTRL          (gtk_freq_ctrl_get_type ())
-#define GTK_FREQ_CTRL(obj)          GTK_CHECK_CAST (obj,\
-				                       gtk_freq_ctrl_get_type (),\
-						               GtkFreqCtrl)
+#define GTK_TYPE_FREQ_KNOB          (gtk_freq_knob_get_type ())
+#define GTK_FREQ_KNOB(obj)          GTK_CHECK_CAST (obj,\
+				                       gtk_freq_knob_get_type (),\
+						               GtkFreqKnob)
 
-#define GTK_FREQ_CTRL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_freq_ctrl_get_type (),\
-							 GtkFreqCtrlClass)
+#define GTK_FREQ_KNOB_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+							 gtk_freq_knob_get_type (),\
+							 GtkFreqKnobClass)
 
-#define IS_GTK_FREQ_CTRL(obj)       GTK_CHECK_TYPE (obj, gtk_freq_ctrl_get_type ())
-
-
-typedef struct _gtk_freq_ctrl      GtkFreqCtrl;
-typedef struct _GtkFreqCtrlClass   GtkFreqCtrlClass;
+#define IS_GTK_FREQ_KNOB(obj)       GTK_CHECK_TYPE (obj, gtk_freq_knob_get_type ())
 
 
+typedef struct _gtk_freq_knob      GtkFreqKnob;
+typedef struct _GtkFreqKnobClass   GtkFreqKnobClass;
 
-struct _gtk_freq_ctrl
+
+
+struct _gtk_freq_knob
 {
 	GtkVBox vbox;
 	
     gdouble value;
 };
 
-struct _GtkFreqCtrlClass
+struct _GtkFreqKnobClass
 {
 	GtkVBoxClass parent_class;
 };
 
 
 
-GtkType    gtk_freq_ctrl_get_type  (void);
-GtkWidget* gtk_freq_ctrl_new       (gdouble val);
-void       gtk_freq_ctrl_set_value (GtkFreqCtrl *ctrl, gdouble val);
-gdouble    gtk_freq_ctrl_get_value (GtkFreqCtrl *ctrl);
+GtkType    gtk_freq_knob_get_type  (void);
+GtkWidget* gtk_freq_knob_new       (gdouble val);
+void       gtk_freq_knob_set_value (GtkFreqKnob *knob, gdouble val);
+gdouble    gtk_freq_knob_get_value (GtkFreqKnob *knob);
 
 
 
@@ -83,4 +83,4 @@ gdouble    gtk_freq_ctrl_get_value (GtkFreqCtrl *ctrl);
 }
 #endif /* __cplusplus */
 
-#endif /* __GTK_FREQ_CTRL_H__ */
+#endif /* __GTK_FREQ_KNOB_H__ */

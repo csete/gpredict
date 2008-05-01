@@ -34,54 +34,54 @@
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "gtk-freq-ctrl.h"
+#include "gtk-freq-knob.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
 
 
 
-static void gtk_freq_ctrl_class_init (GtkFreqCtrlClass *class);
-static void gtk_freq_ctrl_init       (GtkFreqCtrl      *list);
-static void gtk_freq_ctrl_destroy    (GtkObject       *object);
+static void gtk_freq_knob_class_init (GtkFreqKnobClass *class);
+static void gtk_freq_knob_init       (GtkFreqKnob      *list);
+static void gtk_freq_knob_destroy    (GtkObject       *object);
 
-static void gtk_freq_ctrl_update     (GtkFreqCtrl *ctrl);
+static void gtk_freq_knob_update     (GtkFreqKnob *knob);
 
 
 static GtkHBoxClass *parent_class = NULL;
 
 
 GType
-gtk_freq_ctrl_get_type ()
+gtk_freq_knob_get_type ()
 {
-	static GType gtk_freq_ctrl_type = 0;
+	static GType gtk_freq_knob_type = 0;
 
-	if (!gtk_freq_ctrl_type) {
+	if (!gtk_freq_knob_type) {
 
-		static const GTypeInfo gtk_freq_ctrl_info = {
-			sizeof (GtkFreqCtrlClass),
+		static const GTypeInfo gtk_freq_knob_info = {
+			sizeof (GtkFreqKnobClass),
 			NULL,  /* base_init */
 			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_freq_ctrl_class_init,
+			(GClassInitFunc) gtk_freq_knob_class_init,
 			NULL,  /* class_finalize */
 			NULL,  /* class_data */
-			sizeof (GtkFreqCtrl),
+			sizeof (GtkFreqKnob),
 			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_freq_ctrl_init,
+			(GInstanceInitFunc) gtk_freq_knob_init,
 		};
 
-		gtk_freq_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
-												    "GtkFreqCtrl",
-													&gtk_freq_ctrl_info,
+		gtk_freq_knob_type = g_type_register_static (GTK_TYPE_VBOX,
+												    "GtkFreqKnob",
+													&gtk_freq_knob_info,
 													0);
 	}
 
-	return gtk_freq_ctrl_type;
+	return gtk_freq_knob_type;
 }
 
 
 static void
-gtk_freq_ctrl_class_init (GtkFreqCtrlClass *class)
+gtk_freq_knob_class_init (GtkFreqKnobClass *class)
 {
 	GObjectClass      *gobject_class;
 	GtkObjectClass    *object_class;
@@ -95,21 +95,21 @@ gtk_freq_ctrl_class_init (GtkFreqCtrlClass *class)
 
 	parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_freq_ctrl_destroy;
+	object_class->destroy = gtk_freq_knob_destroy;
  
 }
 
 
 
 static void
-gtk_freq_ctrl_init (GtkFreqCtrl *ctrl)
+gtk_freq_knob_init (GtkFreqKnob *knob)
 {
 
     
 }
 
 static void
-gtk_freq_ctrl_destroy (GtkObject *object)
+gtk_freq_knob_destroy (GtkObject *object)
 {
 	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -122,16 +122,16 @@ gtk_freq_ctrl_destroy (GtkObject *object)
  * 
  */
 GtkWidget *
-gtk_freq_ctrl_new (gdouble val)
+gtk_freq_knob_new (gdouble val)
 {
     GtkWidget *widget;
     GtkWidget *table;
 
 
-	widget = g_object_new (GTK_TYPE_FREQ_CTRL, NULL);
+	widget = g_object_new (GTK_TYPE_FREQ_KNOB, NULL);
 
-    GTK_FREQ_CTRL(widget)->value = val;
-    gtk_freq_ctrl_update (GTK_FREQ_CTRL(widget));
+    GTK_FREQ_KNOB(widget)->value = val;
+    gtk_freq_knob_update (GTK_FREQ_KNOB(widget));
 
 	gtk_widget_show_all (widget);
 
@@ -140,42 +140,42 @@ gtk_freq_ctrl_new (gdouble val)
 
 
 /** \brief Set the value of the frequency control widget.
- * \param[in] ctrl THe frequency control widget.
+ * \param[in] knob THe frequency control widget.
  * \param[in] val The new value.
  * 
  */
 void
-gtk_freq_ctrl_set_value (GtkFreqCtrl *ctrl, gdouble val)
+gtk_freq_knob_set_value (GtkFreqKnob *knob, gdouble val)
 {
     /* set the new value */
-    ctrl->value = val;
+    knob->value = val;
     
     /* update the display */
-    gtk_freq_ctrl_update (ctrl);
+    gtk_freq_knob_update (knob);
 }
 
 
 /** \brief Get the current value of the frequency control widget.
- *  \param[in] ctrl The frequency control widget.
+ *  \param[in] knob The frequency control widget.
  *  \return The current value.
  * 
- * Hint: For reading the value you can also access ctrl->value.
+ * Hint: For reading the value you can also access knob->value.
  * 
  */
 gdouble
-gtk_freq_ctrl_get_value (GtkFreqCtrl *ctrl)
+gtk_freq_knob_get_value (GtkFreqKnob *knob)
 {
-    return ctrl->value;
+    return knob->value;
 }
 
 
 
 /** \brief Update frequency display widget.
- *  \param[in] ctrl The frequency control widget.
+ *  \param[in] knob The frequency control widget.
  * 
  */
 static void
-gtk_freq_ctrl_update     (GtkFreqCtrl *ctrl)
+gtk_freq_knob_update     (GtkFreqKnob *knob)
 {
     
 }
