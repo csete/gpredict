@@ -25,8 +25,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-#ifndef __GTK_ROT_CTRL_H__
-#define __GTK_ROT_CTRL_H__ 1
+#ifndef __GTK_ROT_KNOB_H__
+#define __GTK_ROT_KNOB_H__ 1
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -40,24 +40,24 @@ extern "C" {
 
 
 
-#define GTK_TYPE_ROT_CTRL          (gtk_rot_ctrl_get_type ())
-#define GTK_ROT_CTRL(obj)          GTK_CHECK_CAST (obj,\
-				                       gtk_rot_ctrl_get_type (),\
-						               GtkRotCtrl)
+#define GTK_TYPE_ROT_KNOB          (gtk_rot_knob_get_type ())
+#define GTK_ROT_KNOB(obj)          GTK_CHECK_CAST (obj,\
+				                   gtk_rot_knob_get_type (),\
+						           GtkRotKnob)
 
-#define GTK_ROT_CTRL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_rot_ctrl_get_type (),\
-							 GtkRotCtrlClass)
+#define GTK_ROT_KNOB_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+							 gtk_rot_knob_get_type (),\
+							 GtkRotKnobClass)
 
-#define IS_GTK_ROT_CTRL(obj)       GTK_CHECK_TYPE (obj, gtk_rot_ctrl_get_type ())
-
-
-typedef struct _gtk_rot_ctrl      GtkRotCtrl;
-typedef struct _GtkRotCtrlClass   GtkRotCtrlClass;
+#define IS_GTK_ROT_KNOB(obj)       GTK_CHECK_TYPE (obj, gtk_rot_knob_get_type ())
 
 
+typedef struct _gtk_rot_knob      GtkRotKnob;
+typedef struct _GtkRotKnobClass   GtkRotKnobClass;
 
-struct _gtk_rot_ctrl
+
+
+struct _gtk_rot_knob
 {
 	GtkVBox vbox;
     
@@ -69,17 +69,17 @@ struct _gtk_rot_ctrl
     gfloat value;
 };
 
-struct _GtkRotCtrlClass
+struct _GtkRotKnobClass
 {
 	GtkVBoxClass parent_class;
 };
 
 
 
-GtkType    gtk_rot_ctrl_get_type  (void);
-GtkWidget* gtk_rot_ctrl_new       (gfloat min, gfloat max, gfloat val);
-void       gtk_rot_ctrl_set_value (GtkRotCtrl *ctrl, gfloat val);
-gfloat     gtk_rot_ctrl_get_value (GtkRotCtrl *ctrl);
+GtkType    gtk_rot_knob_get_type  (void);
+GtkWidget* gtk_rot_knob_new       (gfloat min, gfloat max, gfloat val);
+void       gtk_rot_knob_set_value (GtkRotKnob *knob, gfloat val);
+gfloat     gtk_rot_knob_get_value (GtkRotKnob *knob);
 
 
 
@@ -88,4 +88,4 @@ gfloat     gtk_rot_ctrl_get_value (GtkRotCtrl *ctrl);
 }
 #endif /* __cplusplus */
 
-#endif /* __GTK_ROT_CTRL_H__ */
+#endif /* __GTK_ROT_knob_H__ */
