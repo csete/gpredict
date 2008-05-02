@@ -93,6 +93,10 @@ struct _gtk_sat_module
 
 	GtkWidget     *win;       /*!< Window when module is not docked */
 
+    GtkWidget     *rotctrlwin;  /*!< Rotator controller window */
+    GtkWidget     *rotctrl;
+    GtkWidget     *rigctrlwin;  /*!< Radio controller window */
+                              
 	GtkWidget     *header;
 	guint          head_count;
 	guint          head_timeout;
@@ -116,8 +120,6 @@ struct _gtk_sat_module
 	qth_t         *qth;          /*!< QTH information. */
 	
 	GHashTable    *satellites;   /*!< Satellites. */
-    GHashTable    *rotctrl;      /*!< Rotator controllers. */
-    GHashTable    *rigctrl;      /*!< Radio controllers. */
 
 	guint32        timeout;      /*!< Timeout value [msec] */
 

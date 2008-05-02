@@ -59,6 +59,8 @@ static void rotctrl_cb       (GtkWidget *menuitem, gpointer data);
 static void delete_cb        (GtkWidget *menuitem, gpointer data);
 static void close_cb         (GtkWidget *menuitem, gpointer data);
 static void name_changed     (GtkWidget *widget, gpointer data);
+static void destroy_rotctrl  (GtkWidget *window, gpointer data);
+static void destroy_rigctrl  (GtkWidget *window, gpointer data);
 static gint window_delete    (GtkWidget *widget, GdkEvent *event, gpointer data);
 
 
@@ -243,7 +245,24 @@ gtk_sat_module_popup (GtkSatModule *module)
 static void
 config_cb        (GtkWidget *menuitem, gpointer data)
 {
-	gtk_sat_module_config_cb (menuitem, data);
+    GtkSatModule *module = GTK_SAT_MODULE (data);
+    
+    if (module->rigctrlwin || module->rotctrlwin) {
+        GtkWidget *dialog;
+        /* FIXME: should offer option to close controllers */
+        dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+                                         GTK_MESSAGE_ERROR,
+                                         GTK_BUTTONS_OK,
+                                         _("A module can not be configured while the "\
+                                           "radio or rotator controller is active.\n\n"\
+                                           "Please close the radio and rotator controllers "\
+                                           "and try again."));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+    }
+    else {
+	   gtk_sat_module_config_cb (menuitem, data);
+    }
 }
 
 
@@ -848,29 +867,53 @@ static void
 rigctrl_cb          (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-    GtkWidget *window;
     GtkWidget *rigctrl;
     gchar *buff;
     
+    if (module->rigctrlwin != NULL) {
+        /* there is already a roto controller for this module */
+        gtk_window_present (GTK_WINDOW (module->rigctrlwin));
+        return;
+    }
 
-    //rigctrl = gtk_rig_ctrl_new ();
+    //rigctrl = gtk_rot_ctrl_new ();
     
     /* create a window */
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    buff = g_strdup_printf (_("Gpredict Radio Control (%s)"), module->name);
-    gtk_window_set_title (GTK_WINDOW (window), buff);
+    module->rigctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    buff = g_strdup_printf (_("Gpredict Radio Control: %s"), module->name);
+    gtk_window_set_title (GTK_WINDOW (module->rigctrlwin), buff);
     g_free (buff);
-    g_signal_connect (G_OBJECT (window), "delete_event", G_CALLBACK (window_delete), NULL);    
+    g_signal_connect (G_OBJECT (module->rigctrlwin), "delete_event",
+                      G_CALLBACK (window_delete), NULL);    
+    g_signal_connect (G_OBJECT (module->rigctrlwin), "destroy",
+                      G_CALLBACK (destroy_rigctrl), module);
 
     /* window icon */
     buff = icon_file_name ("gpredict-oscilloscope.png");
-    gtk_window_set_icon_from_file (GTK_WINDOW (window), buff, NULL);
+    gtk_window_set_icon_from_file (GTK_WINDOW (module->rigctrlwin), buff, NULL);
     g_free (buff);
     
-    //gtk_container_add (GTK_CONTAINER (window), rigctrl);
+    //gtk_container_add (GTK_CONTAINER (module->rigctrlwin), rigctrl);
     
-    gtk_widget_show_all (window);
+    gtk_widget_show_all (module->rigctrlwin);
+
 }
+
+
+/** \brief Destroy radio control window.
+ * \param window Pointer to the radio control window.
+ * \param data Pointer to the GtkSatModule to which this controller is attached.
+ * 
+ * This function is called automatically when the window is destroyed.
+ */
+static void
+destroy_rigctrl  (GtkWidget *window, gpointer data)
+{
+    GtkSatModule *module = GTK_SAT_MODULE (data);
+    
+    module->rigctrlwin = NULL;
+}
+
 
 /** \brief Open antenna rotator control window. 
  * \param menuitem The menuitem that was selected.
@@ -880,30 +923,61 @@ static void
 rotctrl_cb          (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-    GtkWidget *window;
     GtkWidget *rotctrl;
     gchar *buff;
     
+    if (module->rotctrlwin != NULL) {
+        /* there is already a roto controller for this module */
+        gtk_window_present (GTK_WINDOW (module->rotctrlwin));
+        return;
+    }
 
-    rotctrl = gtk_rot_ctrl_new ();
+    rotctrl = gtk_rot_ctrl_new (module);
+    module->rotctrl = rotctrl;
     
     /* create a window */
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    buff = g_strdup_printf (_("Gpredict Rotator Control (%s)"), module->name);
-    gtk_window_set_title (GTK_WINDOW (window), buff);
+    module->rotctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    buff = g_strdup_printf (_("Gpredict Rotator Control: %s"), module->name);
+    gtk_window_set_title (GTK_WINDOW (module->rotctrlwin), buff);
     g_free (buff);
-    g_signal_connect (G_OBJECT (window), "delete_event", G_CALLBACK (window_delete), NULL);    
+    g_signal_connect (G_OBJECT (module->rotctrlwin), "delete_event",
+                      G_CALLBACK (window_delete), module);
+    g_signal_connect (G_OBJECT (module->rotctrlwin), "destroy",
+                      G_CALLBACK (destroy_rotctrl), module);
 
     /* window icon */
     buff = icon_file_name ("gpredict-antenna.png");
-    gtk_window_set_icon_from_file (GTK_WINDOW (window), buff, NULL);
+    gtk_window_set_icon_from_file (GTK_WINDOW (module->rotctrlwin), buff, NULL);
     g_free (buff);
     
-    gtk_container_add (GTK_CONTAINER (window), rotctrl);
+    gtk_container_add (GTK_CONTAINER (module->rotctrlwin), rotctrl);
     
-    /* store pointer to window */
+    gtk_widget_show_all (module->rotctrlwin);
+}
+
+
+/** \brief Destroy rotator control window.
+ * \param window Pointer to the rotator control window.
+ * \param data Pointer to the GtkSatModule to which this controller is attached.
+ * 
+ * This function is called automatically when the window is destroyed.
+ */
+static void
+destroy_rotctrl  (GtkWidget *window, gpointer data)
+{
+    GtkSatModule *module = GTK_SAT_MODULE (data);
     
-    gtk_widget_show_all (window);
+    module->rotctrlwin = NULL;
+    module->rotctrl    = NULL;
+}
+
+/* ensure that deleted top-level windows are destroyed */
+static gint
+window_delete      (GtkWidget *widget,
+                    GdkEvent  *event,
+                    gpointer   data)
+{
+    return FALSE;
 }
 
 
@@ -1038,16 +1112,6 @@ name_changed          (GtkWidget *widget, gpointer data)
 }
 
 
-
-
-/* ensure that deleted top-level windows are destroyed */
-static gint
-window_delete      (GtkWidget *widget,
-					GdkEvent  *event,
-					gpointer   data)
-{
-	return FALSE;
-}
 
 
 

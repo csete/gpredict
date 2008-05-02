@@ -31,7 +31,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
+#include "sgpsdp/sgp4sdp4.h"
+#include "gtk-sat-module.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,7 +67,19 @@ struct _gtk_rot_ctrl
     
     /* Elevation labels */
     GtkWidget *ElSat,*ElDelta,*ElLock,*ElSet,*ElRead;
+    
+    /* other widgets */
+    
+    /* satellites */
+    GSList *sats;
+    sat_t  *target;
 
+    guint delay;       /*!< Timeout delay. */
+    guint timerid;     /*!< Timer ID */
+    gdouble tolerance;  /*!< Error tolerance */
+    
+    gboolean tracking;
+    gboolean busy;
 };
 
 struct _GtkRotCtrlClass
@@ -77,7 +90,8 @@ struct _GtkRotCtrlClass
 
 
 GtkType    gtk_rot_ctrl_get_type (void);
-GtkWidget* gtk_rot_ctrl_new      (void);
+GtkWidget* gtk_rot_ctrl_new      (GtkSatModule *module);
+void       gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t);
 
 
 #ifdef __cplusplus

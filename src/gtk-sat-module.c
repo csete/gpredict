@@ -64,6 +64,7 @@
 #include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
 #include "gtk-met.h"
+#include "gtk-rot-ctrl.h"
 
 //#ifdef G_OS_WIN32
 //#  include "libc_internal.h"
@@ -96,7 +97,6 @@ static void     fix_child_allocations   (GtkWidget *widget, gpointer data);
 
 static void     reload_sats_in_child (GtkWidget *widget, GtkSatModule *module);
 
-static void destroy_gtk_widget (gpointer data);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -168,16 +168,9 @@ gtk_sat_module_init (GtkSatModule *module)
 												g_free,
 												g_free);
 	
-    module->rotctrl = g_hash_table_new_full (g_int_hash,
-                                             g_int_equal,
-                                             g_free,
-                                             destroy_gtk_widget);
-    
-    module->rigctrl = g_hash_table_new_full (g_int_hash,
-                                             g_int_equal,
-                                             g_free,
-                                             destroy_gtk_widget);
-
+    module->rotctrlwin = NULL;
+    module->rotctrl    = NULL;
+    module->rigctrlwin = NULL;
 
 	module->state = GTK_SAT_MOD_STATE_DOCKED;
 	module->busy = FALSE;
@@ -190,6 +183,8 @@ gtk_sat_module_init (GtkSatModule *module)
 	module->vpanedpos = -1;
 	module->hpanedpos = -1;
 
+    module->timerid = 0;
+    
 	module->throttle = 1;
 	module->rtNow = 0.0;
 	module->rtPrev = 0.0;
@@ -208,7 +203,7 @@ gtk_sat_module_destroy (GtkObject *object)
 
     
 	/* stop timeout */
-	if (module->timerid != -1)
+	if (module->timerid > 0)
 		g_source_remove (module->timerid);
 
 	/* destroy time controller */
@@ -216,19 +211,15 @@ gtk_sat_module_destroy (GtkObject *object)
 		gtk_widget_destroy (module->tmgWin);
 		module->tmgActive = FALSE;
 	}
+    
+    /* destroy radio and rotator controllers */
+    if (module->rigctrlwin) {
+        gtk_widget_destroy (module->rigctrlwin);
+    }
+    if (module->rotctrlwin) {
+        gtk_widget_destroy (module->rotctrlwin);
+    }
 
-    /* destroy radio controllers */
-    if (module->rigctrl) {
-        g_hash_table_destroy (module->rigctrl);
-        module->rigctrl = NULL;
-    }
-    
-    /* destroy rotator controllers */
-    if (module->rotctrl) {
-        g_hash_table_destroy (module->rotctrl);
-        module->rotctrl = NULL;
-    }
-    
     /* clean up QTH */
 	if (module->qth) {
 		gtk_sat_data_free_qth (module->qth);
@@ -877,6 +868,10 @@ gtk_sat_module_timeout_cb     (gpointer module)
 		if (mod->child_3 != NULL)
 			update_child (mod->child_3, mod->tmgCdnum);
 
+        /* send notice to radio and rotator controller */
+        if (mod->rotctrl)
+            gtk_rot_ctrl_update (GTK_ROT_CTRL (mod->rotctrl), mod->tmgCdnum);
+        
 
 		mod->event_count++;
 
@@ -1545,7 +1540,8 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
 	if (GTK_SAT_MODULE (module)->child_3 != NULL)
 		reload_sats_in_child (GTK_SAT_MODULE (module)->child_3, GTK_SAT_MODULE (module));
 	
-
+    /* FIXME: radio and rotator controller */
+    
 	/* unlock module */
 	module->busy = FALSE;
 
@@ -1597,15 +1593,3 @@ gtk_sat_module_reconf         (GtkSatModule *module, gboolean local)
 {
 }
 
-
-/** \brief Destroy a Gtk+ widget.
- * \param data Pointer to the widget to destroy.
- * 
- * This function is a simple wrapper for gtk_widget_destroy. The difference is
- * in the parameter types; this wrapper can be used as a GDestroyNotify callback.
- */
-static void
-destroy_gtk_widget (gpointer data)
-{
-    gtk_widget_destroy (GTK_WIDGET (data));
-}
