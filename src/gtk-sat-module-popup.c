@@ -41,6 +41,7 @@
 #include "gtk-sat-module.h"
 #include "gtk-sat-module-tmg.h"
 #include "gtk-sat-module-popup.h"
+#include "gtk-rot-ctrl.h"
 #include "config-keys.h"
 
 
@@ -839,22 +840,70 @@ tmgr_cb          (GtkWidget *menuitem, gpointer data)
 	tmg_create (module);
 }
 
-/** \brief Open Radio control window. */
+/** \brief Open Radio control window. 
+ * \param menuitem The menuitem that was selected.
+ * \param data Pointer the GtkSatModule.
+ */
 static void
 rigctrl_cb          (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
+    GtkWidget *window;
+    GtkWidget *rigctrl;
+    gchar *buff;
+    
 
+    //rigctrl = gtk_rig_ctrl_new ();
+    
+    /* create a window */
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    buff = g_strdup_printf (_("Gpredict Radio Control (%s)"), module->name);
+    gtk_window_set_title (GTK_WINDOW (window), buff);
+    g_free (buff);
+    g_signal_connect (G_OBJECT (window), "delete_event", G_CALLBACK (window_delete), NULL);    
 
+    /* window icon */
+    buff = icon_file_name ("gpredict-oscilloscope.png");
+    gtk_window_set_icon_from_file (GTK_WINDOW (window), buff, NULL);
+    g_free (buff);
+    
+    //gtk_container_add (GTK_CONTAINER (window), rigctrl);
+    
+    gtk_widget_show_all (window);
 }
 
-/** \brief Open antenna rotator control window. */
+/** \brief Open antenna rotator control window. 
+ * \param menuitem The menuitem that was selected.
+ * \param data Pointer the GtkSatModule.
+ */
 static void
 rotctrl_cb          (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
+    GtkWidget *window;
+    GtkWidget *rotctrl;
+    gchar *buff;
+    
 
+    rotctrl = gtk_rot_ctrl_new ();
+    
+    /* create a window */
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    buff = g_strdup_printf (_("Gpredict Rotator Control (%s)"), module->name);
+    gtk_window_set_title (GTK_WINDOW (window), buff);
+    g_free (buff);
+    g_signal_connect (G_OBJECT (window), "delete_event", G_CALLBACK (window_delete), NULL);    
 
+    /* window icon */
+    buff = icon_file_name ("gpredict-antenna.png");
+    gtk_window_set_icon_from_file (GTK_WINDOW (window), buff, NULL);
+    g_free (buff);
+    
+    gtk_container_add (GTK_CONTAINER (window), rotctrl);
+    
+    /* store pointer to window */
+    
+    gtk_widget_show_all (window);
 }
 
 
