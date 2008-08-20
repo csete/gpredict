@@ -41,7 +41,7 @@
 #include "sat-pref-rot.h"
 
 
-#ifdef HAVE_HAMLIB
+
 
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 
@@ -718,4 +718,4 @@ static void render_rot_type (GtkTreeViewColumn *col,
 }
 
 
-#endif
+

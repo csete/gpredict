@@ -43,8 +43,6 @@
 #include "radio-conf.h"
 #include "sat-pref-rig-editor.h"
 
-#ifdef HAVE_HAMLIB
-#  include <hamlib/rig.h>
 
 
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
@@ -187,7 +185,7 @@ create_editor_widgets (radio_conf_t *conf)
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
 	
-    riglist = create_rig_model ();
+/*    riglist = create_rig_model ();
 	model = gtk_combo_box_new_with_model (riglist);
     g_object_unref (riglist);
     gtk_table_attach_defaults (GTK_TABLE (table), model, 1, 2, 1, 2);
@@ -203,12 +201,13 @@ create_editor_widgets (radio_conf_t *conf)
                                         NULL, NULL);
     gtk_widget_set_tooltip_text (model, _("Click to select a radio."));
     select_rig (1);
-    
+    */
     /* ICOM CI-V adress */
     label = gtk_label_new (_("ICOM CI-V"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 1, 2);
     
+#if 0
     civ = gtk_combo_box_new_text ();
     gtk_widget_set_tooltip_text (civ,
                                  _("Select ICOM CI-V address of the radio."));
@@ -225,13 +224,13 @@ create_editor_widgets (radio_conf_t *conf)
     }
     gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
     gtk_table_attach_defaults (GTK_TABLE (table), civ, 4, 5, 1, 2);
-
+#endif
 
 	/* Type */
 	label = gtk_label_new (_("Type"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
-    type = gtk_combo_box_new_text ();
+/*    type = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Receiver"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Transmitter"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX + TX"));
@@ -240,23 +239,24 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_widget_set_tooltip_text (type,
                                _("Select radio type. Consult the user manual, if unsure"));
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 2, 3);
-
+*/
     
     /* Enable built-in extensions */
-    ext = gtk_check_button_new_with_label (_("Extended CAT"));
+/*    ext = gtk_check_button_new_with_label (_("Extended CAT"));
     gtk_widget_set_tooltip_text (ext,
                                  _("Enable built-in gpredict CAT extensions if they are "\
                                    "available. This allows the use of commands that are "\
                                    "not supported by hamlib, but are necessary for full "\
                                    "duplex operation with IC-910, FT-847, etc."));
     gtk_table_attach_defaults (GTK_TABLE (table), ext, 3, 5, 2, 3);
+    */
     
 	/* Port */
 	label = gtk_label_new (_("Port"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     
-    port = gtk_combo_box_entry_new_text ();
+/*    port = gtk_combo_box_entry_new_text ();
     if (conf->port != NULL) {
         gtk_combo_box_append_text (GTK_COMBO_BOX (port), conf->port);
     }
@@ -269,13 +269,14 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
     gtk_widget_set_tooltip_text (port, _("Select or enter communication port"));
     gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 3, 4);
-
+*/
+    
     /* DTR State */
     label = gtk_label_new (_("DTR Line"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 3, 4);
     
-    dtr = gtk_combo_box_new_text ();
+/*    dtr = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("Undefined"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("OFF"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (dtr), _("ON"));
@@ -284,13 +285,13 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
     gtk_widget_set_tooltip_text (dtr, _("Select status and use of DTR line"));
     gtk_table_attach_defaults (GTK_TABLE (table), dtr, 4, 5, 3, 4);
-    
+   */ 
    
 	/* Speed */
 	label = gtk_label_new (_("Rate"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
-    speed = gtk_combo_box_new_text ();
+/*    speed = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "300");
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "1200");
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "2400");
@@ -303,13 +304,13 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
     gtk_widget_set_tooltip_text (speed, _("Select serial port speed"));
     gtk_table_attach_defaults (GTK_TABLE (table), speed, 1, 2, 4, 5);
-
+*/
     /* RTS State */
     label = gtk_label_new (_("RTS Line"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 4, 5);
     
-    rts = gtk_combo_box_new_text ();
+/*    rts = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("Undefined"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("OFF"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (rts), _("ON"));
@@ -318,7 +319,7 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
     gtk_widget_set_tooltip_text (rts, _("Select status and use of RTS line"));
     gtk_table_attach_defaults (GTK_TABLE (table), rts, 4, 5, 4, 5);
-
+*/
     /* separator between port/speed and DTR/RTS */
     gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 1, 5,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
@@ -341,6 +342,7 @@ update_widgets (radio_conf_t *conf)
     /* configuration name */
     gtk_entry_set_text (GTK_ENTRY (name), conf->name);
     
+#if 0
     /* model */
     select_rig (conf->id);
     
@@ -394,6 +396,7 @@ update_widgets (radio_conf_t *conf)
     /* DTR and RTS lines */
     gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), conf->dtr);
     gtk_combo_box_set_active (GTK_COMBO_BOX (rts), conf->rts);
+#endif
 }
 
 
@@ -407,14 +410,14 @@ static void
 clear_widgets () 
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
-    select_rig (1);
+/*    select_rig (1);
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
     gtk_combo_box_set_active (GTK_COMBO_BOX (civ), 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ext), FALSE);
     gtk_combo_box_set_active (GTK_COMBO_BOX (dtr), 0);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (rts), 0);*/
 }
 
 
@@ -438,6 +441,7 @@ apply_changes         (radio_conf_t *conf)
 
     conf->name = g_strdup (gtk_entry_get_text (GTK_ENTRY (name)));
     
+#if 0
     /* model */
     if (conf->model)
         g_free (conf->model);
@@ -510,7 +514,7 @@ apply_changes         (radio_conf_t *conf)
     /* DTR and RTS */
     conf->dtr = gtk_combo_box_get_active (GTK_COMBO_BOX (dtr));
     conf->rts = gtk_combo_box_get_active (GTK_COMBO_BOX (rts));
-    
+#endif
 	return TRUE;
 }
 
@@ -573,7 +577,7 @@ name_changed          (GtkWidget *widget, gpointer data)
 	}
 }
 
-
+#if 0
 /** \brief Radio info to be used when building the rig model */
 typedef struct {
     gint    id;       /*!< Model ID. */

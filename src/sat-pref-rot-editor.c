@@ -43,8 +43,6 @@
 #include "rotor-conf.h"
 #include "sat-pref-rot-editor.h"
 
-#ifdef HAVE_HAMLIB
-#  include <hamlib/rotator.h>
 
 
 extern GtkWidget *window; /* dialog window defined in sat-pref.c */
@@ -187,6 +185,7 @@ create_editor_widgets (rotor_conf_t *conf)
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
 	
+/*
     rotlist = create_rot_model ();
 	model = gtk_combo_box_new_with_model (rotlist);
     g_object_unref (rotlist);
@@ -203,6 +202,7 @@ create_editor_widgets (rotor_conf_t *conf)
                                         NULL, NULL);
     gtk_widget_set_tooltip_text (model, _("Click to select a driver."));
     select_rot (1);
+*/
     
 	/* Type */
 	label = gtk_label_new (_("Type"));
@@ -213,8 +213,8 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("EL"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("AZ / EL"));
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 2);
-    g_signal_connect (G_OBJECT (type), "changed",
-                      G_CALLBACK (rot_type_changed), NULL);
+/*    g_signal_connect (G_OBJECT (type), "changed",
+                      G_CALLBACK (rot_type_changed), NULL);*/
     gtk_widget_set_tooltip_text (type,
                                _("Select rotor type."));
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 2, 3);
@@ -243,7 +243,7 @@ create_editor_widgets (rotor_conf_t *conf)
 	label = gtk_label_new (_("Rate"));
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
-    speed = gtk_combo_box_new_text ();
+/*    speed = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "300");
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "1200");
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "2400");
@@ -255,7 +255,7 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_combo_box_append_text (GTK_COMBO_BOX (speed), "115200");
     gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
     gtk_widget_set_tooltip_text (speed, _("Select serial port speed"));
-    gtk_table_attach_defaults (GTK_TABLE (table), speed, 1, 2, 4, 5);
+    gtk_table_attach_defaults (GTK_TABLE (table), speed, 1, 2, 4, 5); */
 
     /* separator */
     gtk_table_attach (GTK_TABLE (table), gtk_vseparator_new(), 2, 3, 1, 5,
@@ -317,7 +317,7 @@ update_widgets (rotor_conf_t *conf)
     gtk_entry_set_text (GTK_ENTRY (name), conf->name);
     
     /* model */
-    select_rot (conf->id);
+/*    select_rot (conf->id);*/
     
     /* az and el limits */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), conf->minaz);
@@ -326,14 +326,14 @@ update_widgets (rotor_conf_t *conf)
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), conf->maxel);
     
     /* type */
-    gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type-1);
+/*    gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type-1);*/
     
     /* port */
-    gtk_combo_box_prepend_text (GTK_COMBO_BOX (port), conf->port);
+/*    gtk_combo_box_prepend_text (GTK_COMBO_BOX (port), conf->port);
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
-
+*/
     /*serial speed */        
-    switch (conf->speed) {
+/*    switch (conf->speed) {
         case 300:
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 0);
             break;
@@ -365,7 +365,7 @@ update_widgets (rotor_conf_t *conf)
             gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
             break;
     }
-
+*/
 }
 
 
@@ -379,10 +379,10 @@ static void
 clear_widgets () 
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
-    select_rot (1);
+/*    select_rot (1);
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 2);
     gtk_combo_box_set_active (GTK_COMBO_BOX (port), 0);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (speed), 4); */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
@@ -411,37 +411,37 @@ apply_changes         (rotor_conf_t *conf)
     conf->name = g_strdup (gtk_entry_get_text (GTK_ENTRY (name)));
     
     /* model */
-    if (conf->model)
+/*    if (conf->model)
         g_free (conf->model);
-
+*/
     /* iter1 is needed to construct full model name */
-    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (model), &iter2);
+/*    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (model), &iter2);
     rotlist = gtk_combo_box_get_model (GTK_COMBO_BOX (model));
     gtk_tree_model_iter_parent (rotlist, &iter1, &iter2);
-    
+    */
     /* build model string */
-    gtk_tree_model_get (rotlist, &iter1, 0, &b1, -1);
+/*    gtk_tree_model_get (rotlist, &iter1, 0, &b1, -1);
     gtk_tree_model_get (rotlist, &iter2, 0, &b2, -1);
     conf->model = g_strconcat (b1, " ", b2, NULL);
     g_free (b1);
     g_free (b2);
-    
+    */
     /* ID */
-    gtk_tree_model_get (rotlist, &iter2, 1, &id, -1);
+/*    gtk_tree_model_get (rotlist, &iter2, 1, &id, -1);
     conf->id = id;
-
+*/
     /* rotor type */
-    conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type))+1;
+/*    conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type))+1;*/
     
     /* port / device */
-    if (conf->port)
+/*    if (conf->port)
         g_free (conf->port);
     
     conf->port = gtk_combo_box_get_active_text (GTK_COMBO_BOX (port));
-
+*/
     
     /* serial speed */
-    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (speed))) {
+/*    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (speed))) {
         case 0:
             conf->speed = 300;
             break;
@@ -473,12 +473,12 @@ apply_changes         (rotor_conf_t *conf)
             conf->speed = 9600;
             break;
     }
-    
+    */
     /* az and el ranges */
-    conf->minaz = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (minaz));
-    conf->maxaz = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (maxaz));
-    conf->minel = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (minel));
-    conf->maxel = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (maxel));
+    conf->minaz = gtk_spin_button_get_value (GTK_SPIN_BUTTON (minaz));
+    conf->maxaz = gtk_spin_button_get_value (GTK_SPIN_BUTTON (maxaz));
+    conf->minel = gtk_spin_button_get_value (GTK_SPIN_BUTTON (minel));
+    conf->maxel = gtk_spin_button_get_value (GTK_SPIN_BUTTON (maxel));
     
 	return TRUE;
 }
@@ -543,6 +543,7 @@ name_changed          (GtkWidget *widget, gpointer data)
 }
 
 
+#if 0
 /** \brief Rotor info to be used when building the rot model */
 typedef struct {
     gint    id;       /*!< Model ID. */
@@ -844,5 +845,5 @@ static void rot_type_changed (GtkComboBox *box, gpointer data)
     }
 }
 
-
 #endif
+

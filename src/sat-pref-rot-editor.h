@@ -31,8 +31,8 @@
 #include <gtk/gtk.h>
 #include "rotor-conf.h"
 
-#ifdef HAVE_HAMLIB
+
 void sat_pref_rot_editor_run (rotor_conf_t *conf);
-#endif
+
 
 #endif

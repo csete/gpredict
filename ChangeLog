@@ -1,3 +1,24 @@
+2008-08-20; Alexandru Csete <oz9aec@gmail.com>
+
+    * configure.ac:
+    Disabled Hamlib checks since we will be using the TCP interface
+    that does not have any build dependencies.
+    
+    * src/sat-pref-rig.[ch]:
+    * src/sat-pref-rot.[ch]:
+    * src/sat-pref-rig-editor.[ch]:
+    * src/sat-pref-rot-editor.[ch]:
+    Removed Hamlib dependencies.
+    
+    * src/radio-conf.[ch]:
+    * src/rotor-conf.[ch]:
+    * src/sat-pref-rig-c:
+    * src/sat-pref-rot.c:
+    * src/sat-pref-rig-editor.c:
+    * src/sat-pref-rot-editor.c:
+    Changed from hamlib C API to TCP based configuration.
+    
+
 2008-05-01; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rot-knob.[ch]:
