@@ -34,40 +34,15 @@
 
 
 
-/** \brief RS232 control line usage definitions. */
-typedef enum {
-    LINE_UNDEF = 0,     /*!< Undefined. */
-    LINE_OFF,           /*!< Line should be permanently OFF. */
-    LINE_ON,            /*!< Line should be permanently ON. */
-    LINE_PTT,           /*!< Line used for PTT control. */
-    LINE_CW             /*!< Line used for CW keying. */
-} ctrl_stat_t;
-
-
-/** \brief Radio type definitions. */
-typedef enum {
-    RADIO_TYPE_RX = 0,      /*!< Radio used as receiver only. */
-    RADIO_TYPE_TX,          /*!< Radio used as TX only. */
-    RADIO_TYPE_TRX,         /*!< Radio use as both TX and RX. */
-    RADIO_TYPE_FULL_DUP     /*!< Full duplex radio. */
-} radio_type_t;
-
 /** \brief Radio configuration. */
 typedef struct {
-    gchar       *name;      /*!< Configuration file name, less .rig. */
-    gchar       *model;     /*!< Radio model, e.g. ICOM IC-910H. */
-    guint        id;        /*!< Hamlib ID. */
-    radio_type_t type;      /*!< Radio type. */
-    gchar       *port;      /*!< Device name, e.g. /dev/ttyS0. */
-    guint        speed;     /*!< Serial speed. */
-    guint        civ;       /*!< ICOM CI-V address. */
-    gboolean     ext;       /*!< Use built in extensions if available. */
-    ctrl_stat_t  dtr;       /*!< DTR line usage. */
-    ctrl_stat_t  rts;       /*!< PTT line usage. */
+    gchar       *name;      /*!< Configuration file name, without .rig. */
+    gchar       *host;      /*!< hostname:port */
 } radio_conf_t;
 
 
 gboolean radio_conf_read (radio_conf_t *conf);
 void radio_conf_save (radio_conf_t *conf);
+
 
 #endif

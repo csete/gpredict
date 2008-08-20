@@ -35,26 +35,14 @@
 
 
 
-/** \brief Rotator type definitions. */
-typedef enum {
-    ROTOR_TYPE_AZ = 1,      /*!< Azimuth rotator. */
-    ROTOR_TYPE_EL = 2,      /*!< Elevation rotator. */
-    ROTOR_TYPE_AZEL = 3     /*!< Both azimuth and elevation rotator. */
-} rotor_type_t;
-
-
 /** \brief Rotator configuration. */
 typedef struct {
     gchar       *name;      /*!< Configuration file name, less .rot */
-    gchar       *model;     /*!< Rotator model. */
-    guint        id;        /*!< Hamlib ID. */
-    rotor_type_t type;      /*!< Rotator type. */
-    gchar       *port;      /*!< Device name, e.g. /dev/ttyS0. */
-    guint        speed;     /*!< Serial speed. */
-    gint         minaz;     /*!< Lower azimuth limit */
-    gint         maxaz;     /*!< Upper azimuth limit */
-    gint         minel;     /*!< Lower elevation limit */
-    gint         maxel;     /*!< Upper elevation limit */
+    gchar       *host;      /*!< hostname:port */
+    gdouble      minaz;     /*!< Lower azimuth limit */
+    gdouble      maxaz;     /*!< Upper azimuth limit */
+    gdouble      minel;     /*!< Lower elevation limit */
+    gdouble      maxel;     /*!< Upper elevation limit */
 } rotor_conf_t;
 
 
