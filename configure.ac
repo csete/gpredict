@@ -39,17 +39,18 @@ PKG_CHECK_MODULES(LIBCURL, libcurl, [
 
 ])
 
+dnl Hamlib not needed if we go for the TCP based I/F
 dnl check for hamlib
-PKG_CHECK_MODULES(HAMLIB, hamlib, [
-        CFLAGS="$CFLAGS $HAMLIB_CFLAGS";
-        LIBS="$LIBS $HAMLIB_LIBS"; 
-        havehamlib=true;            
-        AC_DEFINE(HAVE_HAMLIB, 1, [Define if hamlib is available])
-   ], [
-        havehamlib=false;            
-        AC_DEFINE(HAVE_HAMLIB, 0, [Define if hamlib is unvailable])
+dnl PKG_CHECK_MODULES(HAMLIB, hamlib, [
+dnl        CFLAGS="$CFLAGS $HAMLIB_CFLAGS";
+dnl        LIBS="$LIBS $HAMLIB_LIBS"; 
+dnl        havehamlib=true;            
+dnl        AC_DEFINE(HAVE_HAMLIB, 1, [Define if hamlib is available])
+dnl   ], [
+dnl        havehamlib=false;            
+dnl        AC_DEFINE(HAVE_HAMLIB, 0, [Define if hamlib is unvailable])
 
-])
+dnl])
 
 dnl Add the languages which your application supports here.
 dnl Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
@@ -67,7 +68,7 @@ dnl using gcov
 AC_ARG_ENABLE(coverage, [  --enable-coverage       enable coverge reports],enable_coerage=yes,enable_coverage=no)
 if test "$enable_coverage" = yes ; then
         CFLAGS="$CFLAGS -fprofile-arcs -ftest-coverage";
-	AC_DEFINE(ENABLE_COV, 1, [Define if hardware is disabled.])
+	AC_DEFINE(ENABLE_COV, 1, [Define if code coverage should be enabled.])
 fi
 
 
@@ -79,9 +80,9 @@ dnl SQL_V=`pkg-config --modversion sqlite3`
 if test "$havecurl" = true ; then
    CURL_V=`pkg-config --modversion libcurl`
 fi
-if test "$havehamlib" = true ; then
-   HAML_V=`pkg-config --modversion hamlib`
-fi
+dnl if test "$havehamlib" = true ; then
+dnl    HAML_V=`pkg-config --modversion hamlib`
+dnl fi
  
 
 AC_SUBST(CFLAGS)
@@ -118,11 +119,11 @@ echo Curl version....... : $CURL_V
 else
 echo Curl version....... : none
 fi
-if test "$havehamlib" = true ; then
-echo Hamlib version..... : $HAML_V
-else
-echo Hamlib version..... : none
-fi
-echo Enable coverage.... : $enable_coverage
-echo
+dnl if test "$havehamlib" = true ; then
+dnl echo Hamlib version..... : $HAML_V
+dnl else
+dnl echo Hamlib version..... : none
+dnl fi
+dnl echo Enable coverage.... : $enable_coverage
+dnl echo
 
