@@ -32,6 +32,10 @@
 typedef enum {
     ROT_LIST_COL_NAME = 0,  /*!< File name. */
     ROT_LIST_COL_HOST,      /*!< Hostname */
+    ROT_LIST_COL_MINAZ,     /*!< Lower Az limit. */
+    ROT_LIST_COL_MAXAZ,     /*!< Upper Az limit. */
+    ROT_LIST_COL_MINEL,     /*!< Lower El limit. */
+    ROT_LIST_COL_MAXEL,     /*!< Upper El limit. */
     ROT_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rotor_list_col_t;
 
