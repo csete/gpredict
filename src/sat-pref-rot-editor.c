@@ -171,7 +171,8 @@ create_editor_widgets (rotor_conf_t *conf)
     
     host = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
-    gtk_widget_set_tooltip_text (host, _("Enter hostname:port"));
+    gtk_widget_set_tooltip_text (host,
+                                 _("Enter the host and port where rogctld is running, e.g. 192.168.1.100:15123"));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
 	
     /* Az and El limits */
