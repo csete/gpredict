@@ -229,8 +229,9 @@ update_widgets (rotor_conf_t *conf)
     /* configuration name */
     gtk_entry_set_text (GTK_ENTRY (name), conf->name);
     
-    /* model */
-/*    select_rot (conf->id);*/
+    /* host */
+    if (conf->host)
+        gtk_entry_set_text (GTK_ENTRY (host), conf->host);
     
     /* az and el limits */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), conf->minaz);
@@ -252,6 +253,7 @@ static void
 clear_widgets () 
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
+    gtk_entry_set_text (GTK_ENTRY (host), "");
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
