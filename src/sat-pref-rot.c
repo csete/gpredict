@@ -118,37 +118,13 @@ static void create_rot_list ()
                                                         NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
 
-    /* Model */
+    /* Host */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Model"), renderer,
-                                                       "text", ROT_LIST_COL_MODEL,
+    column = gtk_tree_view_column_new_with_attributes (_("Host"), renderer,
+                                                       "text", ROT_LIST_COL_HOST,
                                                         NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
     
-    /* Type */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer,
-                                                       "text", ROT_LIST_COL_TYPE,
-                                                       NULL);
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-                                             render_rot_type,
-                                             GUINT_TO_POINTER(ROT_LIST_COL_TYPE),
-                                             NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
-    
-    /* Port */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Port"), renderer,
-                                                       "text", ROT_LIST_COL_PORT,
-                                                        NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
-    
-    /* Speed */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Speed"), renderer,
-                                                       "text", ROT_LIST_COL_SPEED,
-                                                       NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
     
     /* Az and el limits */
     renderer = gtk_cell_renderer_text_new ();
@@ -209,11 +185,7 @@ static GtkTreeModel *create_and_fill_model ()
     /* create a new list store */
     liststore = gtk_list_store_new (ROT_LIST_COL_NUM,
                                     G_TYPE_STRING,    // name
-                                    G_TYPE_STRING,    // model
-                                    G_TYPE_INT,       // hamlib id
-                                    G_TYPE_INT,       // radio type
-                                    G_TYPE_STRING,    // port
-                                    G_TYPE_INT,       // speed
+                                    G_TYPE_STRING,    // host
                                     G_TYPE_INT,       // Min Az
                                     G_TYPE_INT,       // Max Az
                                     G_TYPE_INT,       // Min El
@@ -241,11 +213,7 @@ static GtkTreeModel *create_and_fill_model ()
                     gtk_list_store_append (liststore, &item);
                     gtk_list_store_set (liststore, &item,
                                         ROT_LIST_COL_NAME, conf.name,
-                                        ROT_LIST_COL_MODEL, conf.model,
-                                        ROT_LIST_COL_ID, conf.id,
-                                        ROT_LIST_COL_TYPE, conf.type,
-                                        ROT_LIST_COL_PORT, conf.port,
-                                        ROT_LIST_COL_SPEED, conf.speed,
+                                        ROT_LIST_COL_HOST, conf.host,
                                         ROT_LIST_COL_MINAZ, conf.minaz,
                                         ROT_LIST_COL_MAXAZ, conf.maxaz,
                                         ROT_LIST_COL_MINEL, conf.minel,
@@ -259,11 +227,9 @@ static GtkTreeModel *create_and_fill_model ()
                     if (conf.name)
                         g_free (conf.name);
                     
-                    if (conf.model)
-                        g_free (conf.model);
+                    if (conf.host)
+                        g_free (conf.host);
                     
-                    if (conf.port)
-                        g_free (conf.port);
                 }
                 else {
                     /* there was an error */
@@ -357,11 +323,7 @@ void sat_pref_rot_ok     ()
     
     rotor_conf_t conf = {
         .name  = NULL,
-        .model = NULL,
-        .id    = 0,
-        .type  = ROTOR_TYPE_AZEL,
-        .port  = NULL,
-        .speed = 0,
+        .host = NULL,
         .minaz = 0,
         .maxaz = 360,
         .minel = 0,
@@ -403,11 +365,7 @@ void sat_pref_rot_ok     ()
             /* store conf */
             gtk_tree_model_get (model, &iter,
                                 ROT_LIST_COL_NAME, &conf.name,
-                                ROT_LIST_COL_MODEL, &conf.model,
-                                ROT_LIST_COL_ID, &conf.id,
-                                ROT_LIST_COL_TYPE, &conf.type,
-                                ROT_LIST_COL_PORT, &conf.port,
-                                ROT_LIST_COL_SPEED, &conf.speed,
+                                ROT_LIST_COL_HOST, &conf.host,
                                 ROT_LIST_COL_MINAZ, &conf.minaz,
                                 ROT_LIST_COL_MAXAZ, &conf.maxaz,
                                 ROT_LIST_COL_MINEL, &conf.minel,
@@ -419,11 +377,9 @@ void sat_pref_rot_ok     ()
             if (conf.name)
                 g_free (conf.name);
             
-            if (conf.model)
-                g_free (conf.model);
+            if (conf.host)
+                g_free (conf.host);
             
-            if (conf.port)
-                g_free (conf.port);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -448,12 +404,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
     
     rotor_conf_t conf = {
         .name  = NULL,
-        .model = NULL,
-        .id    = 0,
-        .type  = ROTOR_TYPE_AZEL,
-        .port  = NULL,
-        .speed = 0,
-        .speed = 0,
+        .host  = NULL,
         .minaz = 0,
         .maxaz = 360,
         .minel = 0,
@@ -469,11 +420,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         gtk_list_store_append (liststore, &item);
         gtk_list_store_set (liststore, &item,
                             ROT_LIST_COL_NAME, conf.name,
-                            ROT_LIST_COL_MODEL, conf.model,
-                            ROT_LIST_COL_ID, conf.id,
-                            ROT_LIST_COL_TYPE, conf.type,
-                            ROT_LIST_COL_PORT, conf.port,
-                            ROT_LIST_COL_SPEED, conf.speed,
+                            ROT_LIST_COL_HOST, conf.host,
                             ROT_LIST_COL_MINAZ, conf.minaz,
                             ROT_LIST_COL_MAXAZ, conf.maxaz,
                             ROT_LIST_COL_MINEL, conf.minel,
@@ -482,11 +429,9 @@ static void add_cb    (GtkWidget *button, gpointer data)
         
         g_free (conf.name);
         
-        if (conf.model != NULL)
-            g_free (conf.model);
+        if (conf.host != NULL)
+            g_free (conf.host);
         
-        if (conf.port != NULL)
-            g_free (conf.port);
     }
 }
 
@@ -507,11 +452,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     
     rotor_conf_t conf = {
         .name  = NULL,
-        .model = NULL,
-        .id    = 0,
-        .type  = ROTOR_TYPE_AZEL,
-        .port  = NULL,
-        .speed = 0,
+        .host  = NULL,
         .minaz = 0,
         .maxaz = 360,
         .minel = 0,
@@ -538,11 +479,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     if (gtk_tree_selection_get_selected(selection, &selmod, &iter)) {
         gtk_tree_model_get (model, &iter,
                             ROT_LIST_COL_NAME, &conf.name,
-                            ROT_LIST_COL_MODEL, &conf.model,
-                            ROT_LIST_COL_ID, &conf.id,
-                            ROT_LIST_COL_TYPE, &conf.type,
-                            ROT_LIST_COL_PORT, &conf.port,
-                            ROT_LIST_COL_SPEED, &conf.speed,
+                            ROT_LIST_COL_HOST, &conf.host,
                             ROT_LIST_COL_MINAZ, &conf.minaz,
                             ROT_LIST_COL_MAXAZ, &conf.maxaz,
                             ROT_LIST_COL_MINEL, &conf.minel,
@@ -572,11 +509,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     if (conf.name != NULL) {
         gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                             ROT_LIST_COL_NAME, conf.name,
-                            ROT_LIST_COL_MODEL, conf.model,
-                            ROT_LIST_COL_ID, conf.id,
-                            ROT_LIST_COL_TYPE, conf.type,
-                            ROT_LIST_COL_PORT, conf.port,
-                            ROT_LIST_COL_SPEED, conf.speed,
+                            ROT_LIST_COL_HOST, conf.host,
                             ROT_LIST_COL_MINAZ, conf.minaz,
                             ROT_LIST_COL_MAXAZ, conf.maxaz,
                             ROT_LIST_COL_MINEL, conf.minel,
@@ -589,11 +522,9 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     if (conf.name)
         g_free (conf.name);
         
-    if (conf.model != NULL)
-        g_free (conf.model);
+    if (conf.host != NULL)
+        g_free (conf.host);
         
-    if (conf.port != NULL)
-        g_free (conf.port);
 
 }
 
@@ -692,7 +623,7 @@ static void render_rot_type (GtkTreeViewColumn *col,
     
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
-    switch (number) {
+/*    switch (number) {
 
         case ROTOR_TYPE_AZ:
             g_object_set (renderer, "text", "AZ", NULL);
@@ -713,7 +644,7 @@ static void render_rot_type (GtkTreeViewColumn *col,
             g_object_set (renderer, "text", "AZ", NULL);
             break;
         
-    }
+    }*/
     
 }
 

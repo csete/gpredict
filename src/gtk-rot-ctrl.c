@@ -240,6 +240,9 @@ GtkWidget *create_az_widgets (GtkRotCtrl *ctrl)
     
     frame = gtk_frame_new (_("Azimuth"));
     
+    ctrl->AzSet = gtk_rot_knob_new (0.0, 360.0, 180.0);
+    gtk_container_add (GTK_CONTAINER (frame), ctrl->AzSet);
+    
     return frame;
 }
 
