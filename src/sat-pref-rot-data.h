@@ -31,15 +31,7 @@
 /** \brief Coumn definitions for rotator list. */
 typedef enum {
     ROT_LIST_COL_NAME = 0,  /*!< File name. */
-    ROT_LIST_COL_MODEL,     /*!< Model */
-    ROT_LIST_COL_ID,        /*!< Hamlib ID. */
-    ROT_LIST_COL_TYPE,      /*!< Rtator type. */
-    ROT_LIST_COL_PORT,      /*!< Port / Device, e.g. /dev/ttyS0. */
-    ROT_LIST_COL_SPEED,     /*!< Serial speed. */
-    ROT_LIST_COL_MINAZ,     /*!< Lower azimuth limit. */
-    ROT_LIST_COL_MAXAZ,     /*!< Upper azimuth limit. */
-    ROT_LIST_COL_MINEL,     /*!< Lower elevation limit. */
-    ROT_LIST_COL_MAXEL,     /*!< Upper elevation limit. */
+    ROT_LIST_COL_HOST,      /*!< Hostname */
     ROT_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rotor_list_col_t;
 

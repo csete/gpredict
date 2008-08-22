@@ -31,15 +31,7 @@
 /** \brief Coumn definitions for radio list. */
 typedef enum {
     RIG_LIST_COL_NAME = 0,  /*!< File name. */
-    RIG_LIST_COL_MODEL,     /*!< Model, e.g. FT-847. */
-    RIG_LIST_COL_ID,        /*!< Hamlib ID. */
-    RIG_LIST_COL_TYPE,      /*!< Radio type (RX, TX, TRX, FULL_DUP. */
-    RIG_LIST_COL_PORT,      /*!< Port / Device, e.g. /dev/ttyS0. */
-    RIG_LIST_COL_SPEED,     /*!< Serial speed. */
-    RIG_LIST_COL_CIV,       /*!< CI-V address for Icom rigs. */
-    RIG_LIST_COL_EXT,       /*!< Use built-in extensions. */
-    RIG_LIST_COL_DTR,       /*!< DTR line usage */
-    RIG_LIST_COL_RTS,       /*!< RTS line usage */
+    RIG_LIST_COL_HOST,      /*!< Hostname, e.g. localhost:12000 */
     RIG_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rig_list_col_t;
 
