@@ -131,78 +131,13 @@ static void create_rig_list ()
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
 
-    /* Model */
+    /* Host */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Model"), renderer,
-                                                       "text", RIG_LIST_COL_MODEL,
+    column = gtk_tree_view_column_new_with_attributes (_("Host"), renderer,
+                                                       "text", RIG_LIST_COL_HOST,
                                                         NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
-    /* Type */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Type"), renderer,
-                                                       "text", RIG_LIST_COL_TYPE,
-                                                       NULL);
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-                                             render_rig_type,
-                                             GUINT_TO_POINTER(RIG_LIST_COL_TYPE),
-                                             NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-    
-    /* Port */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Port"), renderer,
-                                                       "text", RIG_LIST_COL_PORT,
-                                                        NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-    
-    /* Speed */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Speed"), renderer,
-                                                       "text", RIG_LIST_COL_SPEED,
-                                                       NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-    
-    /* Icom CI-V */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Icom CI-V"), renderer,
-                                                       "text", RIG_LIST_COL_CIV,
-                                                       NULL);
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-                                             render_civ,
-                                             GUINT_TO_POINTER(RIG_LIST_COL_CIV),
-                                             NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-    
-    /* Extensions */
-    renderer = gtk_cell_renderer_toggle_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Ext"), renderer,
-             "active", RIG_LIST_COL_EXT,
-             NULL);
-    
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-    
-    /* DTR */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("DTR Line"), renderer,
-                                                       "text", RIG_LIST_COL_DTR,
-                                                       NULL);
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-                                             render_dtr_rts,
-                                             GUINT_TO_POINTER(RIG_LIST_COL_DTR),
-                                             NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
-    
-    /* RTS */
-    renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("RTS Line"), renderer,
-                                                       "text", RIG_LIST_COL_RTS,
-                                                       NULL);
-    gtk_tree_view_column_set_cell_data_func (column, renderer,
-                                             render_dtr_rts,
-                                             GUINT_TO_POINTER(RIG_LIST_COL_RTS),
-                                             NULL);
-    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
 }
 
@@ -223,15 +158,7 @@ static GtkTreeModel *create_and_fill_model ()
     /* create a new list store */
     liststore = gtk_list_store_new (RIG_LIST_COL_NUM,
                                     G_TYPE_STRING,    // name
-                                    G_TYPE_STRING,    // model
-                                    G_TYPE_INT,       // hamlib id
-                                    G_TYPE_INT,       // radio type
-                                    G_TYPE_STRING,    // port
-                                    G_TYPE_INT,       // speed
-                                    G_TYPE_INT,       // Icom CI-V
-                                    G_TYPE_BOOLEAN,   // Extensions
-                                    G_TYPE_INT,       // DTR line
-                                    G_TYPE_INT        // RTS line
+                                    G_TYPE_STRING     // model
                                    );
 
     /* open configuration directory */
@@ -255,15 +182,7 @@ static GtkTreeModel *create_and_fill_model ()
                     gtk_list_store_append (liststore, &item);
                     gtk_list_store_set (liststore, &item,
                                         RIG_LIST_COL_NAME, conf.name,
-                                        RIG_LIST_COL_MODEL, conf.model,
-                                        RIG_LIST_COL_ID, conf.id,
-                                        RIG_LIST_COL_TYPE, conf.type,
-                                        RIG_LIST_COL_PORT, conf.port,
-                                        RIG_LIST_COL_SPEED, conf.speed,
-                                        RIG_LIST_COL_CIV, conf.civ,
-                                        RIG_LIST_COL_EXT, conf.ext,
-                                        RIG_LIST_COL_DTR, conf.dtr,
-                                        RIG_LIST_COL_RTS, conf.rts,
+                                        RIG_LIST_COL_HOST, conf.host,
                                         -1);
                     
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -273,11 +192,9 @@ static GtkTreeModel *create_and_fill_model ()
                     if (conf.name)
                         g_free (conf.name);
                     
-                    if (conf.model)
-                        g_free (conf.model);
+                    if (conf.host)
+                        g_free (conf.host);
                     
-                    if (conf.port)
-                        g_free (conf.port);
                 }
                 else {
                     /* there was an error */
@@ -372,15 +289,7 @@ void sat_pref_rig_ok     ()
     
     radio_conf_t conf = {
         .name  = NULL,
-        .model = NULL,
-        .id    = 0,
-        .type  = RADIO_TYPE_RX,
-        .port  = NULL,
-        .speed = 0,
-        .civ   = 0,
-        .ext   = FALSE,
-        .dtr   = LINE_UNDEF,
-        .rts   = LINE_UNDEF,
+        .host  = NULL,
     };
 
     
@@ -418,15 +327,7 @@ void sat_pref_rig_ok     ()
             /* store conf */
             gtk_tree_model_get (model, &iter,
                                 RIG_LIST_COL_NAME, &conf.name,
-                                RIG_LIST_COL_MODEL, &conf.model,
-                                RIG_LIST_COL_ID, &conf.id,
-                                RIG_LIST_COL_TYPE, &conf.type,
-                                RIG_LIST_COL_PORT, &conf.port,
-                                RIG_LIST_COL_SPEED, &conf.speed,
-                                RIG_LIST_COL_CIV, &conf.civ,
-                                RIG_LIST_COL_EXT, &conf.ext,
-                                RIG_LIST_COL_DTR, &conf.dtr,
-                                RIG_LIST_COL_RTS, &conf.rts,
+                                RIG_LIST_COL_HOST, &conf.host,
                                 -1);
             radio_conf_save (&conf);
         
@@ -434,11 +335,9 @@ void sat_pref_rig_ok     ()
             if (conf.name)
                 g_free (conf.name);
             
-            if (conf.model)
-                g_free (conf.model);
+            if (conf.host)
+                g_free (conf.host);
             
-            if (conf.port)
-                g_free (conf.port);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -464,15 +363,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
     
     radio_conf_t conf = {
         .name  = NULL,
-        .model = NULL,
-        .id    = 0,
-        .type  = RADIO_TYPE_RX,
-        .port  = NULL,
-        .speed = 0,
-        .civ   = 0,
-        .ext   = FALSE,
-        .dtr   = LINE_UNDEF,
-        .rts   = LINE_UNDEF,
+        .host  = NULL,
     };
     
     /* run rig conf editor */
@@ -484,24 +375,14 @@ static void add_cb    (GtkWidget *button, gpointer data)
         gtk_list_store_append (liststore, &item);
         gtk_list_store_set (liststore, &item,
                             RIG_LIST_COL_NAME, conf.name,
-                            RIG_LIST_COL_MODEL, conf.model,
-                            RIG_LIST_COL_ID, conf.id,
-                            RIG_LIST_COL_TYPE, conf.type,
-                            RIG_LIST_COL_PORT, conf.port,
-                            RIG_LIST_COL_SPEED, conf.speed,
-                            RIG_LIST_COL_CIV, conf.civ,
-                            RIG_LIST_COL_EXT, conf.ext,
-                            RIG_LIST_COL_DTR, conf.dtr,
-                            RIG_LIST_COL_RTS, conf.rts,
+                            RIG_LIST_COL_HOST, conf.host,
                             -1);
         
         g_free (conf.name);
         
-        if (conf.model != NULL)
-            g_free (conf.model);
+        if (conf.host != NULL)
+            g_free (conf.host);
         
-        if (conf.port != NULL)
-            g_free (conf.port);
     }
 }
 
@@ -522,15 +403,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     
     radio_conf_t conf = {
         .name  = NULL,
-        .model = NULL,
-        .id    = 0,
-        .type  = RADIO_TYPE_RX,
-        .port  = NULL,
-        .speed = 0,
-        .civ   = 0,
-        .ext   = FALSE,
-        .dtr   = LINE_UNDEF,
-        .rts   = LINE_UNDEF,
+        .host  = NULL,
     };
 
     
@@ -553,15 +426,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     if (gtk_tree_selection_get_selected(selection, &selmod, &iter)) {
         gtk_tree_model_get (model, &iter,
                             RIG_LIST_COL_NAME, &conf.name,
-                            RIG_LIST_COL_MODEL, &conf.model,
-                            RIG_LIST_COL_ID, &conf.id,
-                            RIG_LIST_COL_TYPE, &conf.type,
-                            RIG_LIST_COL_PORT, &conf.port,
-                            RIG_LIST_COL_SPEED, &conf.speed,
-                            RIG_LIST_COL_CIV, &conf.civ,
-                            RIG_LIST_COL_EXT, &conf.ext,
-                            RIG_LIST_COL_DTR, &conf.dtr,
-                            RIG_LIST_COL_RTS, &conf.rts,
+                            RIG_LIST_COL_HOST, &conf.host,
                             -1);
 
     }
@@ -587,15 +452,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     if (conf.name != NULL) {
         gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                             RIG_LIST_COL_NAME, conf.name,
-                            RIG_LIST_COL_MODEL, conf.model,
-                            RIG_LIST_COL_ID, conf.id,
-                            RIG_LIST_COL_TYPE, conf.type,
-                            RIG_LIST_COL_PORT, conf.port,
-                            RIG_LIST_COL_SPEED, conf.speed,
-                            RIG_LIST_COL_CIV, conf.civ,
-                            RIG_LIST_COL_EXT, conf.ext,
-                            RIG_LIST_COL_DTR, conf.dtr,
-                            RIG_LIST_COL_RTS, conf.rts,
+                            RIG_LIST_COL_HOST, conf.host,
                             -1);
         
     }
@@ -604,11 +461,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     if (conf.name)
         g_free (conf.name);
         
-    if (conf.model != NULL)
-        g_free (conf.model);
-        
-    if (conf.port != NULL)
-        g_free (conf.port);
+    if (conf.host != NULL)
+        g_free (conf.host);
 
 }
 
@@ -744,7 +598,7 @@ static void render_dtr_rts (GtkTreeViewColumn *col,
     
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
-    switch (number) {
+/*    switch (number) {
                         
         case LINE_OFF:
             g_object_set (renderer, "text", "OFF", NULL);
@@ -767,7 +621,7 @@ static void render_dtr_rts (GtkTreeViewColumn *col,
             break;
         
     }
-    
+    */
 }
 
 
@@ -793,7 +647,7 @@ static void render_rig_type (GtkTreeViewColumn *col,
     
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
-    switch (number) {
+/*    switch (number) {
 
         case RADIO_TYPE_RX:
             g_object_set (renderer, "text", "RX", NULL);
@@ -818,7 +672,7 @@ static void render_rig_type (GtkTreeViewColumn *col,
             g_object_set (renderer, "text", "RX", NULL);
             break;
         
-    }
+    }*/
     
 }
 
