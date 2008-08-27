@@ -98,7 +98,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
         return FALSE;
     }
     
-    conf->port = g_key_file_get_string (cfg, GROUP, KEY_PORT, &error);
+    conf->port = g_key_file_get_integer (cfg, GROUP, KEY_PORT, &error);
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading rotor conf from %s (%s)."),
