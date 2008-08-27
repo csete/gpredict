@@ -58,21 +58,12 @@ static void render_name (GtkTreeViewColumn *col,
                          GtkTreeModel      *model,
                          GtkTreeIter       *iter,
                          gpointer           column);
-static void render_civ (GtkTreeViewColumn *col,
+static void render_lo  (GtkTreeViewColumn *col,
                         GtkCellRenderer   *renderer,
                         GtkTreeModel      *model,
                         GtkTreeIter       *iter,
                         gpointer           column);
-static void render_dtr_rts (GtkTreeViewColumn *col,
-                            GtkCellRenderer   *renderer,
-                            GtkTreeModel      *model,
-                            GtkTreeIter       *iter,
-                            gpointer           column);
-static void render_rig_type (GtkTreeViewColumn *col,
-                             GtkCellRenderer   *renderer,
-                             GtkTreeModel      *model,
-                             GtkTreeIter       *iter,
-                             gpointer           column);
+
 
 /* global objects */
 static GtkWidget *addbutton;
@@ -138,6 +129,23 @@ static void create_rig_list ()
                                                         NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
+    /* port */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Port"), renderer,
+                                                       "text", RIG_LIST_COL_PORT,
+                                                        NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+    
+    /* lo */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("LO Freq. (MHz)"), renderer,
+                                                       "text", RIG_LIST_COL_LO,
+                                                       NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_lo,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_LO),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
 }
 
@@ -158,7 +166,9 @@ static GtkTreeModel *create_and_fill_model ()
     /* create a new list store */
     liststore = gtk_list_store_new (RIG_LIST_COL_NUM,
                                     G_TYPE_STRING,    // name
-                                    G_TYPE_STRING     // model
+                                    G_TYPE_STRING,    // host
+                                    G_TYPE_INT,       // port
+                                    G_TYPE_DOUBLE     // LO
                                    );
 
     /* open configuration directory */
@@ -183,6 +193,8 @@ static GtkTreeModel *create_and_fill_model ()
                     gtk_list_store_set (liststore, &item,
                                         RIG_LIST_COL_NAME, conf.name,
                                         RIG_LIST_COL_HOST, conf.host,
+                                        RIG_LIST_COL_PORT, conf.port,
+                                        RIG_LIST_COL_LO, conf.lo,
                                         -1);
                     
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -290,6 +302,8 @@ void sat_pref_rig_ok     ()
     radio_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
+        .port  = 4532,
+        .lo    = 0.0,
     };
 
     
@@ -328,6 +342,8 @@ void sat_pref_rig_ok     ()
             gtk_tree_model_get (model, &iter,
                                 RIG_LIST_COL_NAME, &conf.name,
                                 RIG_LIST_COL_HOST, &conf.host,
+                                RIG_LIST_COL_PORT, &conf.port,
+                                RIG_LIST_COL_LO, &conf.lo,
                                 -1);
             radio_conf_save (&conf);
         
@@ -364,6 +380,8 @@ static void add_cb    (GtkWidget *button, gpointer data)
     radio_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
+        .port  = 4532,
+        .lo    = 0.0,
     };
     
     /* run rig conf editor */
@@ -376,6 +394,8 @@ static void add_cb    (GtkWidget *button, gpointer data)
         gtk_list_store_set (liststore, &item,
                             RIG_LIST_COL_NAME, conf.name,
                             RIG_LIST_COL_HOST, conf.host,
+                            RIG_LIST_COL_PORT, conf.port,
+                            RIG_LIST_COL_LO, conf.lo,
                             -1);
         
         g_free (conf.name);
@@ -404,6 +424,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     radio_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
+        .port  = 4532,
+        .lo    = 0.0,
     };
 
     
@@ -427,6 +449,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         gtk_tree_model_get (model, &iter,
                             RIG_LIST_COL_NAME, &conf.name,
                             RIG_LIST_COL_HOST, &conf.host,
+                            RIG_LIST_COL_PORT, &conf.port,
+                            RIG_LIST_COL_PORT, &conf.lo,
                             -1);
 
     }
@@ -453,6 +477,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         gtk_list_store_set (GTK_LIST_STORE(model), &iter,
                             RIG_LIST_COL_NAME, conf.name,
                             RIG_LIST_COL_HOST, conf.host,
+                            RIG_LIST_COL_PORT, conf.port,
+                            RIG_LIST_COL_LO, conf.lo,
                             -1);
         
     }
@@ -543,138 +569,36 @@ static void render_name (GtkTreeViewColumn *col,
 }
 
 
-/** \brief Render CIV address.
+/** \brief Render Local Oscillator frequency.
  * \param col Pointer to the tree view column.
  * \param renderer Pointer to the renderer.
  * \param model Pointer to the tree model.
  * \param iter Pointer to the tree iterator.
  * \param column The column number in the model.
  *
- * This function is used to render the Icom CI-V address of the radio.
- * The CI-V adress is store as an integer and we want to display it as a
- * HEX number.
+ * This function is used to render the local oscillator frequency. We
+ * need a special renderer so that we can automatically render as MHz
+ * instead of Hz.
  */
-static void render_civ (GtkTreeViewColumn *col,
+static void render_lo (GtkTreeViewColumn *col,
                         GtkCellRenderer   *renderer,
                         GtkTreeModel      *model,
                         GtkTreeIter       *iter,
                         gpointer           column)
 {
-    guint   number;
-    gchar  *buff;
-    guint   coli = GPOINTER_TO_UINT (column);
+    gdouble  number;
+    gchar   *buff;
+    guint    coli = GPOINTER_TO_UINT (column);
     
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
-    if (number > 0)
-        buff = g_strdup_printf ("0x%X", number);
-    else
-        buff = g_strdup_printf (" ");
-        
+    /* convert to MHz */
+    number /= 1000000.0;
+    buff = g_strdup_printf ("%.0f", number);
     g_object_set (renderer, "text", buff, NULL);
     g_free (buff);
 }
 
-
-/** \brief Render DTR or RTS columns address.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
- * 
- * This function renders the DTR and RTS line settings onto the radio list.
- * The DTR and RTS states are stored as enum; however, we want to display them
- * using some escriptive text, e.g. "ON", "OFF", "PTT", and so on
- */
-static void render_dtr_rts (GtkTreeViewColumn *col,
-                            GtkCellRenderer   *renderer,
-                            GtkTreeModel      *model,
-                            GtkTreeIter       *iter,
-                            gpointer           column)
-{
-    guint    number;
-    guint   coli = GPOINTER_TO_UINT (column);
-    
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-/*    switch (number) {
-                        
-        case LINE_OFF:
-            g_object_set (renderer, "text", "OFF", NULL);
-            break;
-                        
-        case LINE_ON:
-            g_object_set (renderer, "text", "ON", NULL);
-            break;
-                            
-        case LINE_PTT:
-            g_object_set (renderer, "text", "PTT", NULL);
-            break;
-                            
-        case LINE_CW:
-            g_object_set (renderer, "text", "CW", NULL);
-            break;
-                            
-        default:
-            g_object_set (renderer, "text", "UNDEF", NULL);
-            break;
-        
-    }
-    */
-}
-
-
-/** \brief Render radio type.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
- * 
- * This function renders the radio type onto the radio list.
- * The radio type is stored as enum; however, we want to display it
- * using some escriptive text, e.g. "Received", "Full Duplex", and so on
- */
-static void render_rig_type (GtkTreeViewColumn *col,
-                             GtkCellRenderer   *renderer,
-                             GtkTreeModel      *model,
-                             GtkTreeIter       *iter,
-                             gpointer           column)
-{
-    guint    number;
-    guint   coli = GPOINTER_TO_UINT (column);
-    
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-/*    switch (number) {
-
-        case RADIO_TYPE_RX:
-            g_object_set (renderer, "text", "RX", NULL);
-            break;
-
-        case RADIO_TYPE_TX:
-            g_object_set (renderer, "text", "TX", NULL);
-            break;
-
-        case RADIO_TYPE_TRX:
-            g_object_set (renderer, "text", "RX/TX", NULL);
-            break;
-
-        case RADIO_TYPE_FULL_DUP:
-            g_object_set (renderer, "text", "FULL DUPL", NULL);
-            break;
-
-        default:
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%s: Invalid type: %d. Using RX."),
-                           __FILE__, __FUNCTION__, number);
-            g_object_set (renderer, "text", "RX", NULL);
-            break;
-        
-    }*/
-    
-}
 
 
 

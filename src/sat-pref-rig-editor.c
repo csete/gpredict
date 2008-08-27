@@ -53,6 +53,8 @@ extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* config name */
 static GtkWidget *host;     /* host */
+static GtkWidget *port;     /* port number */
+static GtkWidget *lo;       /* local oscillator */
 
 
 static GtkWidget    *create_editor_widgets (radio_conf_t *conf);
@@ -139,7 +141,7 @@ create_editor_widgets (radio_conf_t *conf)
 
 
 
-	table = gtk_table_new (2, 4, FALSE);
+	table = gtk_table_new (4, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -172,6 +174,33 @@ create_editor_widgets (radio_conf_t *conf)
                                  _("Enter the host and port where rigctld is running, e.g. 192.168.1.100:15123"));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
 
+    /* port */
+    label = gtk_label_new (_("Port"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+    
+    port = gtk_spin_button_new_with_range (1024, 65535, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); 
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (port), 0);
+    gtk_widget_set_tooltip_text (port,
+                                 _("Enter the port number where rigctld is listening"));
+    gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 3, 2, 3);
+    
+    /* LO frequency */
+    label = gtk_label_new (_("LO"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    
+    lo = gtk_spin_button_new_with_range (-40000, 40000, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lo), 0);
+    gtk_widget_set_tooltip_text (lo,
+                                 _("Enter the frequency of the local oscillator, if any."));
+    gtk_table_attach_defaults (GTK_TABLE (table), lo, 1, 3, 3, 4);
+    
+    label = gtk_label_new (_("MHz"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 3, 4);
     
 	if (conf->name != NULL)
 		update_widgets (conf);
@@ -191,10 +220,18 @@ update_widgets (radio_conf_t *conf)
     /* configuration name */
     gtk_entry_set_text (GTK_ENTRY (name), conf->name);
     
-    /* host name and port */
+    /* host name */
     if (conf->host)
         gtk_entry_set_text (GTK_ENTRY (host), conf->host);
 
+    /* port */
+    if (conf->port > 1023)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), conf->port);
+    else
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
+    
+    /* lo in MHz */
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000);
 }
 
 
@@ -209,7 +246,8 @@ clear_widgets ()
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
     gtk_entry_set_text (GTK_ENTRY (host), "");
-
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
 }
 
 
@@ -235,7 +273,12 @@ apply_changes         (radio_conf_t *conf)
 
     conf->host = g_strdup (gtk_entry_get_text (GTK_ENTRY (host)));
 
-
+    /* port */
+    conf->port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
+    
+    /* lo freq */
+    conf->lo = 1000000*gtk_spin_button_get_value (GTK_SPIN_BUTTON (lo));
+    
 	return TRUE;
 }
 
