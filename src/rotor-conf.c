@@ -176,7 +176,7 @@ void rotor_conf_save (rotor_conf_t *conf)
     cfg = g_key_file_new();
     
     g_key_file_set_string  (cfg, GROUP, KEY_HOST, conf->host);
-    g_key_file_set_integer (cfg, GROUP, KEY_HOST, conf->port);
+    g_key_file_set_integer (cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_double  (cfg, GROUP, KEY_MINAZ, conf->minaz);
     g_key_file_set_double  (cfg, GROUP, KEY_MAXAZ, conf->maxaz);
     g_key_file_set_double  (cfg, GROUP, KEY_MINEL, conf->minel);
