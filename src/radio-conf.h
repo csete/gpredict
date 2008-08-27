@@ -37,7 +37,10 @@
 /** \brief Radio configuration. */
 typedef struct {
     gchar       *name;      /*!< Configuration file name, without .rig. */
-    gchar       *host;      /*!< hostname:port */
+    gchar       *host;      /*!< hostname or IP */
+    gint         port;      /*!< port number */
+    gdouble      lo;        /*!< local oscillator freq in MHz (using double for
+                                 compatibility with rest of code) */
 } radio_conf_t;
 
 

@@ -36,11 +36,15 @@
 
 #define GROUP           "Radio"
 #define KEY_HOST        "Host"
+#define KEY_PORT        "Port"
+#define KEY_LO          "LO"
 
 
 /** \brief Read radio configuration.
  * \param conf Pointer to a radio_conf_t structure where the data will be
  *             stored.
+ * \return TRUE if the configuration was read successfully, FALSe if an
+ *         error has occurred.
  * 
  * This function reads a radio configuration from a .rig file into conf.
  * conf->name must contain the file name of the configuration (no path, just
@@ -48,13 +52,18 @@
  */
 gboolean radio_conf_read (radio_conf_t *conf)
 {
-    GKeyFile *cfg = NULL;
-    gchar    *confdir;
-    gchar    *fname;
+    GKeyFile  *cfg = NULL;
+    gchar     *confdir;
+    gchar     *fname;
+    GError    *error = NULL;
     
     
-    if (conf->name == NULL)
+    if (conf->name == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: NULL configuration name!"),
+                       __FUNCTION__);
         return FALSE;
+    }
     
     confdir = get_conf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
@@ -78,9 +87,41 @@ gboolean radio_conf_read (radio_conf_t *conf)
     g_free (fname);
     
     /* read parameters */
-    conf->host = g_key_file_get_string (cfg, GROUP, KEY_HOST, NULL);
+    conf->host = g_key_file_get_string (cfg, GROUP, KEY_HOST, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading radio conf from %s (%s)."),
+                     __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
     
+    conf->port = g_key_file_get_integer (cfg, GROUP, KEY_PORT, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading radio conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+    
+    conf->lo = g_key_file_get_double (cfg, GROUP, KEY_LO, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading radio conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+
     g_key_file_free (cfg);
+    
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Read radio configuration %s"),
+                 __FUNCTION__, conf->name);
     
     return TRUE;
 }
@@ -101,13 +142,19 @@ void radio_conf_save (radio_conf_t *conf)
     gchar    *data;
     gsize     len;
     
-    if (conf->name == NULL)
+    if (conf->name == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: NULL configuration name!"),
+                     __FUNCTION__);
         return;
+    }
     
     /* create a config structure */
     cfg = g_key_file_new();
     
     g_key_file_set_string (cfg, GROUP, KEY_HOST, conf->host);
+    g_key_file_set_integer (cfg, GROUP, KEY_PORT, conf->port);
+    g_key_file_set_double (cfg, GROUP, KEY_LO, conf->lo);
     
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);
@@ -123,4 +170,8 @@ void radio_conf_save (radio_conf_t *conf)
     g_free (fname);
     g_free (data);
     g_key_file_free (cfg);
+    
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Saved radio configuration %s"),
+                 __FUNCTION__, conf->name);
 }
