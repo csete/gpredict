@@ -1,3 +1,23 @@
+2008-08-27; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/radio-conf.[ch]:
+    Added separate fileds for port number and local oscillator ffrequency.
+    Added error handling.
+    
+    * src/sat-pref-rig-editor.c:
+    * src/sat-pref-rig-data.h:
+    * src/sat-pref-rig.c:
+    Added fields for port number and LO frequency.
+    
+    * src/rotor.conf.[ch]:
+    Added field for port number. Added error handling.
+    
+    * src/sat-pref-rot-data.h:
+    * src/sat-pref-rot-editor.c:
+    * src/sat-pref-rot.c:
+    Added field for port number.
+
+
 2008-08-22; Alexandru Csete <oz9aec@gmail.com>
 
     * src/sat-pref-rig.c:
