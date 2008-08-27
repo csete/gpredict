@@ -52,7 +52,8 @@ extern GtkWidget *window; /* dialog window defined in sat-pref.c */
 /* private widgets */
 static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* Configuration name */
-static GtkWidget *host;     /* rotor model, e.g. TS-2000 */
+static GtkWidget *host;     /* host name or IP */
+static GtkWidget *port;     /* port number */
 static GtkWidget *minaz;
 static GtkWidget *maxaz;
 static GtkWidget *minel;
@@ -142,7 +143,7 @@ create_editor_widgets (rotor_conf_t *conf)
 	GtkWidget    *label;
 
 
-	table = gtk_table_new (4, 4, FALSE);
+	table = gtk_table_new (5, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -175,42 +176,54 @@ create_editor_widgets (rotor_conf_t *conf)
                                  _("Enter the host and port where rogctld is running, e.g. 192.168.1.100:15123"));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
 	
+    /* port */
+    label = gtk_label_new (_("Port"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+    
+    port = gtk_spin_button_new_with_range (1024, 65535, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); 
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (port), 0);
+    gtk_widget_set_tooltip_text (port,
+                                 _("Enter the port number where rotctld is listening"));
+    gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 3, 2, 3);
+
     /* Az and El limits */
     label = gtk_label_new (_(" Min Az"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     minaz = gtk_spin_button_new_with_range (-40, 450, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minaz), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minaz), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), minaz, 1, 2, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), minaz, 1, 2, 3, 4);
     
     label = gtk_label_new (_(" Max Az"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 3, 4);
     maxaz = gtk_spin_button_new_with_range (-40, 450, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxaz), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxaz), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), maxaz, 3, 4, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), maxaz, 3, 4, 3, 4);
     
     label = gtk_label_new (_(" Min El"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
     minel = gtk_spin_button_new_with_range (-10, 180, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minel), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minel), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), minel, 1, 2, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), minel, 1, 2, 4, 5);
     
     label = gtk_label_new (_(" Max El"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 4, 5);
     maxel = gtk_spin_button_new_with_range (-10, 180, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), 90);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxel), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxel), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), maxel, 3, 4, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), maxel, 3, 4, 4, 5);
     
     if (conf->name != NULL)
 		update_widgets (conf);
@@ -234,6 +247,12 @@ update_widgets (rotor_conf_t *conf)
     if (conf->host)
         gtk_entry_set_text (GTK_ENTRY (host), conf->host);
     
+    /* port */
+    if (conf->port > 1023)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), conf->port);
+    else
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); /* hamlib default? */
+    
     /* az and el limits */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), conf->minaz);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), conf->maxaz);
@@ -255,6 +274,7 @@ clear_widgets ()
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
     gtk_entry_set_text (GTK_ENTRY (host), "");
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); /* hamlib default? */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
@@ -283,6 +303,9 @@ apply_changes         (rotor_conf_t *conf)
         g_free (conf->host);
     
     conf->host = g_strdup (gtk_entry_get_text (GTK_ENTRY (host)));
+
+    /* port */
+    conf->port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
 
     /* az and el ranges */
     conf->minaz = gtk_spin_button_get_value (GTK_SPIN_BUTTON (minaz));
