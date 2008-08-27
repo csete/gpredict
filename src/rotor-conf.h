@@ -38,7 +38,8 @@
 /** \brief Rotator configuration. */
 typedef struct {
     gchar       *name;      /*!< Configuration file name, less .rot */
-    gchar       *host;      /*!< hostname:port */
+    gchar       *host;      /*!< hostname */
+    gint         port;      /*!< port number */
     gdouble      minaz;     /*!< Lower azimuth limit */
     gdouble      maxaz;     /*!< Upper azimuth limit */
     gdouble      minel;     /*!< Lower elevation limit */

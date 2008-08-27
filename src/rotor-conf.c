@@ -36,6 +36,7 @@
 
 #define GROUP           "Rotator"
 #define KEY_HOST        "Host"
+#define KEY_PORT        "Port"
 #define KEY_MINAZ       "MinAz"
 #define KEY_MAXAZ       "MaxAz"
 #define KEY_MINEL       "MinEl"
@@ -55,10 +56,15 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     GKeyFile *cfg = NULL;
     gchar    *confdir;
     gchar    *fname;
+    GError   *error = NULL;
     
     
-    if (conf->name == NULL)
+    if (conf->name == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: NULL configuration name!"),
+                       __FUNCTION__);
         return FALSE;
+    }
     
     confdir = get_conf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
@@ -82,11 +88,65 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     g_free (fname);
     
     /* read parameters */
-    conf->host = g_key_file_get_string (cfg, GROUP, KEY_HOST, NULL);
-    conf->minaz = g_key_file_get_double (cfg, GROUP, KEY_MINAZ, NULL);
-    conf->maxaz = g_key_file_get_double (cfg, GROUP, KEY_MAXAZ, NULL);
-    conf->minel = g_key_file_get_double (cfg, GROUP, KEY_MINEL, NULL);
-    conf->maxel = g_key_file_get_double (cfg, GROUP, KEY_MAXEL, NULL);
+    conf->host = g_key_file_get_string (cfg, GROUP, KEY_HOST, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading rotor conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+    
+    conf->port = g_key_file_get_string (cfg, GROUP, KEY_PORT, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading rotor conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+    
+    conf->minaz = g_key_file_get_double (cfg, GROUP, KEY_MINAZ, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading rotor conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+    
+    conf->maxaz = g_key_file_get_double (cfg, GROUP, KEY_MAXAZ, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading rotor conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+    
+    conf->minel = g_key_file_get_double (cfg, GROUP, KEY_MINEL, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading rotor conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+    
+    conf->maxel = g_key_file_get_double (cfg, GROUP, KEY_MAXEL, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading rotor conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
     
     g_key_file_free (cfg);
     
@@ -115,11 +175,12 @@ void rotor_conf_save (rotor_conf_t *conf)
     /* create a config structure */
     cfg = g_key_file_new();
     
-    g_key_file_set_string (cfg, GROUP, KEY_HOST, conf->host);
-    g_key_file_set_double (cfg, GROUP, KEY_MINAZ, conf->minaz);
-    g_key_file_set_double (cfg, GROUP, KEY_MAXAZ, conf->maxaz);
-    g_key_file_set_double (cfg, GROUP, KEY_MINEL, conf->minel);
-    g_key_file_set_double (cfg, GROUP, KEY_MAXEL, conf->maxel);
+    g_key_file_set_string  (cfg, GROUP, KEY_HOST, conf->host);
+    g_key_file_set_integer (cfg, GROUP, KEY_HOST, conf->port);
+    g_key_file_set_double  (cfg, GROUP, KEY_MINAZ, conf->minaz);
+    g_key_file_set_double  (cfg, GROUP, KEY_MAXAZ, conf->maxaz);
+    g_key_file_set_double  (cfg, GROUP, KEY_MINEL, conf->minel);
+    g_key_file_set_double  (cfg, GROUP, KEY_MAXEL, conf->maxel);
     
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);
