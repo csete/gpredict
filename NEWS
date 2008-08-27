@@ -1,11 +1,9 @@
 
 Changes in version 1.0 (TBD):
 
-x New alarm manager: Notify user ... systray ...
-x Radio doppler tuning (TBD which rigs).
-x Antenna rotator control (TBD which rots).
+x Radio doppler tuning via hamlibs rigctld.
+x Antenna rotator control via hamlibs rotctld.
 x New layout engine allowing any number of views per module.
-x Orbit Lab:
 x SpaceView: New view show the satellites using a movable camera in space.
 x SkyView: 
 x The satellite map can show the range circle of the ground station according to
@@ -25,7 +23,7 @@ x Fixed bug 1650251: Groundtracks have discontinuities.
 - Fixed bug 1880815: Null pointer dereference causes crash on startup.
 x Windows: New installer instead of ZIP distribution.
 x Updated user manual as PDF and HTML (online).
-x New TechNote: Algo ref.
+
 
 Changes in version 0.9.0 (2007-09-29):
 
