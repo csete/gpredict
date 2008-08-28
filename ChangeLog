@@ -1,3 +1,12 @@
+2008-08-28; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rot-knob.c:
+    Fixed bug that prevented the knob value to be set to min/max.
+    
+    * src/gtk-rot-ctrl.[ch]:
+    Done some work on rotator control window.
+    
+
 2008-08-27; Alexandru Csete <oz9aec@gmail.com>
 
     * src/radio-conf.[ch]:
