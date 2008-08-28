@@ -303,7 +303,11 @@ void
 gtk_rot_knob_set_value (GtkRotKnob *knob, gfloat val)
 {
     /* set the new value */
-    if ((val >= knob->min) && (val <= knob->max))
+    if (val <= knob->min)
+        knob->value = knob->min;
+    else if (val >= knob->max)
+        knob->value = knob->max;
+    else
         knob->value = val;
     
     /* update the display */
