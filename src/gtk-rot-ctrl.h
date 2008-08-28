@@ -62,13 +62,14 @@ struct _gtk_rot_ctrl
 {
 	GtkVBox vbox;
     
-    /* Azimuth labels */
-    GtkWidget *AzSat,*AzDelta,*AzLock,*AzSet,*AzRead;
+    /* Azimuth widgets */
+    GtkWidget *AzSat,*AzSet,*AzRead,*AzDevSel;
     
-    /* Elevation labels */
-    GtkWidget *ElSat,*ElDelta,*ElLock,*ElSet,*ElRead;
+    /* Elevation widgets */
+    GtkWidget *ElSat,*ElSet,*ElRead,*ElDevSel,*ElDev;
     
     /* other widgets */
+    GtkWidget *DevSel;
     
     /* satellites */
     GSList *sats;
@@ -78,8 +79,9 @@ struct _gtk_rot_ctrl
     guint timerid;     /*!< Timer ID */
     gdouble tolerance;  /*!< Error tolerance */
     
-    gboolean tracking;
-    gboolean busy;
+    gboolean tracking;  /*!< Flag set when we are tracking a target. */
+    gboolean busy;      /*!< Flag set when control algorithm is busy. */
+    gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
 };
 
 struct _GtkRotCtrlClass
