@@ -1,3 +1,12 @@
+2008-09-03; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rot-knob.[ch]:
+    Added API functions to get/set range of the control widget.
+    
+    * src/gtk-rot-ctrl.[ch]:
+    Implemented controller algorithm (except device I/O).
+
+
 2008-08-28; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rot-knob.c:
