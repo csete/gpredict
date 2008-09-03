@@ -130,7 +130,7 @@ gtk_rot_knob_destroy (GtkObject *object)
  * 
  */
 GtkWidget *
-gtk_rot_knob_new (gfloat min, gfloat max, gfloat val)
+gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
 {
     GtkWidget *widget;
     GtkWidget *table;
@@ -300,7 +300,7 @@ gtk_rot_knob_new (gfloat min, gfloat max, gfloat val)
  * 
  */
 void
-gtk_rot_knob_set_value (GtkRotKnob *knob, gfloat val)
+gtk_rot_knob_set_value (GtkRotKnob *knob, gdouble val)
 {
     /* set the new value */
     if (val <= knob->min)
@@ -322,12 +322,71 @@ gtk_rot_knob_set_value (GtkRotKnob *knob, gfloat val)
  * Hint: For reading the value you can also access knob->value.
  * 
  */
-gfloat
+gdouble
 gtk_rot_knob_get_value (GtkRotKnob *knob)
 {
     return knob->value;
 }
 
+
+/** \brief Get the upper limit of the control widget
+ * \param[in] knob The rotor control widget.
+ * \return The upper limit of the control widget.
+ */
+gdouble
+gtk_rot_knob_get_max   (GtkRotKnob *knob)
+{
+    return knob->max;
+}
+
+
+/** \brief Get the lower limit of the control widget
+ * \param[in] knob The rotor control widget.
+ * \return The lower limit of the control widget.
+ */
+gdouble
+gtk_rot_knob_get_min   (GtkRotKnob *knob)
+{
+    return knob->min;
+}
+
+
+/** \brief Set the lower limit of the control widget
+ * \param[in] knob The rotor control widget.
+ * \param[in] min The new lower limit of the control widget.
+ */
+void
+gtk_rot_knob_set_min   (GtkRotKnob *knob, gdouble min)
+{
+    /* just som sanity check we have only 3 digits */
+    if (min < 1000)
+        knob->min = min;
+}
+
+/** \brief Set the upper limit of the control widget
+ * \param[in] knob The rotor control widget.
+ * \param[in] min The new upper limit of the control widget.
+ */
+void
+gtk_rot_knob_set_max (GtkRotKnob *knob, gdouble max)
+{
+    /* just som sanity check we have only 3 digits */
+    if (max < 1000)
+        knob->max = max;
+}
+
+
+/** \brief Set the range of the control widget
+ * \param[in] knob The rotor control widget.
+ * \param[in] min The new lower limit of the control widget.
+ * \param[in] max The new upper limit of the control widget.
+ */
+void
+gtk_rot_knob_set_range (GtkRotKnob *knob, gdouble min, gdouble max)
+{
+    gtk_rot_knob_set_min (knob, min);
+    gtk_rot_knob_set_max (knob, max);
+}
 
 
 /** \brief Update rotor display widget.
@@ -369,7 +428,7 @@ static void
 button_clicked_cb (GtkWidget *button, gpointer data)
 {
     GtkRotKnob *knob = GTK_ROT_KNOB (data);
-    gfloat delta = GPOINTER_TO_INT(g_object_get_data (G_OBJECT (button), "delta")) / 100.0;
+    gdouble delta = GPOINTER_TO_INT(g_object_get_data (G_OBJECT (button), "delta")) / 100.0;
     
     if ((delta > 0.0) && ((knob->value + delta) <= knob->max)) {
         knob->value += delta;
@@ -382,3 +441,5 @@ button_clicked_cb (GtkWidget *button, gpointer data)
     
     g_print ("VAL: %.2f\n", knob->value);
 }
+
+

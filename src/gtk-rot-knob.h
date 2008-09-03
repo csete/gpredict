@@ -64,9 +64,9 @@ struct _gtk_rot_knob
     GtkWidget *digits[7];   /*!< Labels for the digits */
     GtkWidget *buttons[10]; /*!< Buttons; 0..4 up; 5..9 down */
 	
-    gfloat min;
-    gfloat max;
-    gfloat value;
+    gdouble min;
+    gdouble max;
+    gdouble value;
 };
 
 struct _GtkRotKnobClass
@@ -77,9 +77,15 @@ struct _GtkRotKnobClass
 
 
 GtkType    gtk_rot_knob_get_type  (void);
-GtkWidget* gtk_rot_knob_new       (gfloat min, gfloat max, gfloat val);
-void       gtk_rot_knob_set_value (GtkRotKnob *knob, gfloat val);
-gfloat     gtk_rot_knob_get_value (GtkRotKnob *knob);
+GtkWidget* gtk_rot_knob_new       (gdouble min, gdouble max, gdouble val);
+void       gtk_rot_knob_set_value (GtkRotKnob *knob, gdouble val);
+gdouble    gtk_rot_knob_get_value (GtkRotKnob *knob);
+void       gtk_rot_knob_set_max   (GtkRotKnob *knob, gdouble max);
+gdouble    gtk_rot_knob_get_max   (GtkRotKnob *knob);
+gdouble    gtk_rot_knob_get_min   (GtkRotKnob *knob);
+void       gtk_rot_knob_set_min   (GtkRotKnob *knob, gdouble min);
+void       gtk_rot_knob_set_max   (GtkRotKnob *knob, gdouble max);
+void       gtk_rot_knob_set_range (GtkRotKnob *knob, gdouble min, gdouble max);
 
 
 
