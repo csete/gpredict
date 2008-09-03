@@ -40,6 +40,7 @@
 #include <math.h>
 #include "compat.h"
 #include "sat-log.h"
+#include "predict-tools.h"
 #include "gtk-rot-knob.h"
 #include "gtk-rot-ctrl.h"
 #ifdef HAVE_CONFIG_H
@@ -135,6 +136,8 @@ gtk_rot_ctrl_init (GtkRotCtrl *ctrl)
 {
     ctrl->sats = NULL;
     ctrl->target = NULL;
+    ctrl->pass = NULL;
+    ctrl->qth = NULL;
     
     ctrl->tracking = FALSE;
     ctrl->busy = FALSE;
@@ -176,6 +179,14 @@ gtk_rot_ctrl_new (GtkSatModule *module)
     g_hash_table_foreach (module->satellites, store_sats, widget);
     
     GTK_ROT_CTRL (widget)->target = SAT (g_slist_nth_data (GTK_ROT_CTRL (widget)->sats, 0));
+    
+    /* store QTH */
+    GTK_ROT_CTRL (widget)->qth = module->qth;
+    
+    /* get next pass for target satellite */
+    GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
+                                                 GTK_ROT_CTRL (widget)->qth,
+                                                 3.0);
     
     /* initialise custom colors */
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColBlack);
@@ -229,6 +240,21 @@ gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t)
         buff = g_strdup_printf (FMTSTR, ctrl->target->el);
         gtk_label_set_text (GTK_LABEL (ctrl->ElSat), buff);
         g_free (buff);
+        
+        /* update next pass if necessary */
+        if (ctrl->pass != NULL) {
+            if (ctrl->target->aos > ctrl->pass->aos) {
+                /* update pass */
+                free_pass (ctrl->pass);
+                ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
+                /* TODO: update polar plot */
+            }
+        }
+        else {
+            /* we don't have any current pass; store the current one */
+            ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
+            /* TODO: update polar plot */
+        }
     }
 }
 
@@ -530,11 +556,23 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
     i = gtk_combo_box_get_active (satsel);
     if (i >= 0) {
         ctrl->target = SAT (g_slist_nth_data (ctrl->sats, i));
+        
+        /* update next pass */
+        if (ctrl->pass != NULL)
+            free_pass (ctrl->pass);
+        ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Invalid satellite selection: %d"),
                      __FILE__, __FUNCTION__, i);
+        
+        /* clear pass just in case... */
+        if (ctrl->pass != NULL) {
+            free_pass (ctrl->pass);
+            ctrl->pass = NULL;
+        }
+        
     }
 }
 
@@ -603,6 +641,9 @@ rot_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
     
+    /* TODO: update device */
+    
+    /* TODO: update ranges */
 }
 
 
@@ -644,14 +685,36 @@ rot_ctrl_timeout_cb (gpointer data)
     
     ctrl->busy = TRUE;
     
+    /* If we are tracking and the target satellite is within
+       range, set the rotor position controller knob values to
+       the target values. If the target satellite is out of range
+       set the rotor controller to 0 deg El and to the Az where the
+       target sat is expected to come up
+    */
+    if (ctrl->tracking) {
+        if (ctrl->target->el < 0.0) {
+            gdouble aosaz = 0.0;
+            
+            if (ctrl->pass != NULL) {
+                aosaz = ctrl->pass->aos_az;
+            }
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), aosaz);
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), 0.0);
+        }
+        else {
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), ctrl->target->az);
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), ctrl->target->el);
+        }
+        
+        /* TODO: Update controller thread on polar plot */
+    }
 
     if (ctrl->engaged) {
-        
-        
-        
+        /* if tolerance exceeded */
+        /* TODO: send controller values to rotator device */
+        /* TODO: read back current position from device */
+        /* TODO: update polar plot */
     }
-    
-    /* update current pointing marker on polar view */
     
     
     ctrl->busy = FALSE;

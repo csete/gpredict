@@ -72,9 +72,11 @@ struct _gtk_rot_ctrl
     GtkWidget *DevSel;
     
     /* satellites */
-    GSList *sats;
-    sat_t  *target;
-
+    GSList *sats;       /*!< List of sats in parent module */
+    sat_t  *target;     /*!< Target satellite */
+    pass_t *pass;       /*!< Next pass of target satellite */
+    qth_t  *qth;        /*!< The QTH for this module */
+    
     guint delay;       /*!< Timeout delay. */
     guint timerid;     /*!< Timer ID */
     gdouble tolerance;  /*!< Error tolerance */
