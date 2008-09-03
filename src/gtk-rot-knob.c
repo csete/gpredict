@@ -439,7 +439,7 @@ button_clicked_cb (GtkWidget *button, gpointer data)
     
     gtk_rot_knob_update (knob);
     
-    g_print ("VAL: %.2f\n", knob->value);
+    /*g_print ("VAL: %.2f\n", knob->value);*/
 }
 
 
