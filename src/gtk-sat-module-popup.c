@@ -41,6 +41,7 @@
 #include "gtk-sat-module.h"
 #include "gtk-sat-module-tmg.h"
 #include "gtk-sat-module-popup.h"
+#include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
 #include "config-keys.h"
 
@@ -867,7 +868,6 @@ static void
 rigctrl_cb          (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-    GtkWidget *rigctrl;
     gchar *buff;
     
     if (module->rigctrlwin != NULL) {
@@ -876,7 +876,7 @@ rigctrl_cb          (GtkWidget *menuitem, gpointer data)
         return;
     }
 
-    //rigctrl = gtk_rot_ctrl_new ();
+    module->rigctrl = gtk_rig_ctrl_new (module);
     
     /* create a window */
     module->rigctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -884,7 +884,7 @@ rigctrl_cb          (GtkWidget *menuitem, gpointer data)
     gtk_window_set_title (GTK_WINDOW (module->rigctrlwin), buff);
     g_free (buff);
     g_signal_connect (G_OBJECT (module->rigctrlwin), "delete_event",
-                      G_CALLBACK (window_delete), NULL);    
+                      G_CALLBACK (window_delete), NULL);
     g_signal_connect (G_OBJECT (module->rigctrlwin), "destroy",
                       G_CALLBACK (destroy_rigctrl), module);
 
@@ -893,7 +893,7 @@ rigctrl_cb          (GtkWidget *menuitem, gpointer data)
     gtk_window_set_icon_from_file (GTK_WINDOW (module->rigctrlwin), buff, NULL);
     g_free (buff);
     
-    //gtk_container_add (GTK_CONTAINER (module->rigctrlwin), rigctrl);
+    gtk_container_add (GTK_CONTAINER (module->rigctrlwin), module->rigctrl);
     
     gtk_widget_show_all (module->rigctrlwin);
 
@@ -912,6 +912,7 @@ destroy_rigctrl  (GtkWidget *window, gpointer data)
     GtkSatModule *module = GTK_SAT_MODULE (data);
     
     module->rigctrlwin = NULL;
+    module->rigctrl = NULL;
 }
 
 
@@ -923,7 +924,6 @@ static void
 rotctrl_cb          (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-    GtkWidget *rotctrl;
     gchar *buff;
     
     if (module->rotctrlwin != NULL) {
@@ -932,8 +932,7 @@ rotctrl_cb          (GtkWidget *menuitem, gpointer data)
         return;
     }
 
-    rotctrl = gtk_rot_ctrl_new (module);
-    module->rotctrl = rotctrl;
+    module->rotctrl = gtk_rot_ctrl_new (module);
     
     /* create a window */
     module->rotctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -950,7 +949,7 @@ rotctrl_cb          (GtkWidget *menuitem, gpointer data)
     gtk_window_set_icon_from_file (GTK_WINDOW (module->rotctrlwin), buff, NULL);
     g_free (buff);
     
-    gtk_container_add (GTK_CONTAINER (module->rotctrlwin), rotctrl);
+    gtk_container_add (GTK_CONTAINER (module->rotctrlwin), module->rotctrl);
     
     gtk_widget_show_all (module->rotctrlwin);
 }

@@ -96,7 +96,8 @@ struct _gtk_sat_module
     GtkWidget     *rotctrlwin;  /*!< Rotator controller window */
     GtkWidget     *rotctrl;
     GtkWidget     *rigctrlwin;  /*!< Radio controller window */
-                              
+    GtkWidget     *rigctrl;
+
 	GtkWidget     *header;
 	guint          head_count;
 	guint          head_timeout;
