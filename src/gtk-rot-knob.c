@@ -409,7 +409,7 @@ gtk_rot_knob_update     (GtkRotKnob *knob)
         g_free (buff);
     }
     
-    if (knob->value <= 0)
+    if (knob->value < 0)
         buff = g_strdup_printf (FMTSTR, '-');
     else
         buff = g_strdup_printf (FMTSTR, ' ');
