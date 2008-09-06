@@ -137,6 +137,7 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
 {
     GtkWidget *widget;
     GtkWidget *table;
+    GtkWidget *label;
     guint i;
 
 	widget = g_object_new (GTK_TYPE_ROT_KNOB, NULL);
@@ -146,7 +147,7 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
     GTK_ROT_KNOB(widget)->value = val;
     
     /* create table */
-    table = gtk_table_new (3, 7, FALSE);
+    table = gtk_table_new (3, 8, FALSE);
     
     /* create buttons */
     /* +100 deg */
@@ -286,8 +287,13 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
                           i, i+1, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
     }
     
+    /* degree sign */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<span size='xx-large'>\302\260</span>");
+    gtk_table_attach (GTK_TABLE (table), label, 7, 8, 1, 2,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
+    
     gtk_rot_knob_update (GTK_ROT_KNOB(widget));
-
     
     gtk_container_add (GTK_CONTAINER (widget), table);
 	gtk_widget_show_all (widget);
