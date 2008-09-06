@@ -44,7 +44,6 @@
 #include "gpredict-utils.h"
 #include "sat-cfg.h"
 #include "gtk-freq-knob.h"
-#include "gtk-rig-ctrl.h"
 #include "radio-conf.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
@@ -57,6 +56,8 @@
 #include <arpa/inet.h>      /* htons() */
 #include <netdb.h>          /* gethostbyname() */
 /* END */
+#include "gtk-rig-ctrl.h"
+
 
 #define AZEL_FMTSTR "%7.2f\302\260"
 
@@ -79,7 +80,7 @@ static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
-
+static void set_freq (GtkRigCtrl *ctrl, gdouble freq);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -147,7 +148,6 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->pass = NULL;
     ctrl->qth = NULL;
     ctrl->conf = NULL;
-    ctrl->sock = -10;
     ctrl->tracking = FALSE;
     ctrl->busy = FALSE;
     ctrl->engaged = FALSE;
@@ -164,11 +164,6 @@ gtk_rig_ctrl_destroy (GtkObject *object)
     if (ctrl->timerid > 0) 
         g_source_remove (ctrl->timerid);
 
-    /* close network socket */
-    if (ctrl->sock >= 0) {
-        close (ctrl->sock);
-    }
-    
     /* free configuration */
     if (ctrl->conf != NULL) {
         g_free (ctrl->conf->name);
@@ -702,6 +697,7 @@ rig_selected_cb (GtkComboBox *box, gpointer data)
 }
 
 
+
 /** \brief Rig locked.
  * \param button Pointer to the "Engage" button.
  * \param data Pointer to the GtkRigCtrl widget.
@@ -718,11 +714,6 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
         /* close socket */
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
-        
-        if (ctrl->sock >= 0) {
-            close (ctrl->sock);
-            ctrl->sock = -10;
-        }
     }
     else {
         if (ctrl->conf == NULL) {
@@ -733,30 +724,8 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
         
-        gint status;
-        struct sockaddr_in ServAddr;
-        struct hostent *h;
-        
-        ctrl->sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (ctrl->sock < 0) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Failed to create socket"),
-                           __FUNCTION__);
-            return;
-        }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                         _("%s: Network socket created successfully"),
-                           __FUNCTION__);
-        }
-        
-        memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-        ServAddr.sin_family      = AF_INET;             /* Internet address family */
-        h = gethostbyname(ctrl->conf->host);
-        memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-        ServAddr.sin_port        = htons(ctrl->conf->port); /* Server port */
 
-        status = connect(ctrl->sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+/*        status = connect(ctrl->sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
         if (status < 0) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Failed to connect to %s:%d"),
@@ -768,6 +737,7 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
                          _("%s: Connection opened to %s:%d"),
                            __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
         }
+        */
     }
 }
 
@@ -807,24 +777,8 @@ rig_ctrl_timeout_cb (gpointer data)
     }
 
     /* if device is engaged, send freq command to radio */
-    if ((ctrl->engaged) && (ctrl->sock >= 0)) {
-        gchar  *buff;
-        gint    written,size;
-        
-        buff = g_strdup_printf ("F %10.0f\n",
-                                gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreq)));
-        
-        /* number of bytes to write depends on platform (EOL) */
-#ifdef G_OS_WIN32
-        size = 14;
-#else
-        size = 13;
-#endif
-        written = send(ctrl->sock, buff, size, 0);
-        if (written != size) {
-            g_print ("SIZE ERR: %d\n", written);
-        }
-        g_free (buff);
+    if ((ctrl->engaged) && (ctrl->conf != NULL)) {
+        set_freq (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreq)));
     }
     
     
@@ -834,3 +788,73 @@ rig_ctrl_timeout_cb (gpointer data)
 }
 
 
+/** \brief Set frequency
+ * \param[in] ctrl Pointer to the GtkRigCtrl structure.
+ * \param[in] freq The new frequency.
+ * 
+ * \note freq is not strictly necessary for normal use since we could have
+ *       gotten the current frequency from the ctrl; however, the param
+ *       might become useful in the future.
+ */
+static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
+{
+    gchar  *buff;
+    gint    written,size;
+    gint    status;
+    struct hostent *h;
+    struct sockaddr_in ServAddr;
+    gint  sock;          /*!< Network socket */
+        
+    /* create socket */
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to create socket"),
+                       __FUNCTION__);
+        return;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Network socket created successfully"),
+                       __FUNCTION__);
+    }
+        
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(ctrl->conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to connect to %s:%d"),
+                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+        return;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Connection opened to %s:%d"),
+                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+    }
+    
+    /* send command */
+    buff = g_strdup_printf ("F %10.0f\n", freq);
+    
+    /* number of bytes to write depends on platform (EOL) */
+#ifdef G_OS_WIN32
+    size = 14;
+#else
+    size = 13;
+#endif
+    written = send(sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: SIZE ERROR %d / %d"),
+                       __FUNCTION__, written, size);
+    }
+    g_free (buff);
+    close (sock);
+    
+}

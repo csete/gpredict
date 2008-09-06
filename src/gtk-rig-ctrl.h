@@ -75,7 +75,6 @@ struct _gtk_rig_ctrl
     GtkWidget *LO;       /*!< Local oscillator */
     
     radio_conf_t *conf;  /*!< Radio configuration */
-    gint  sock;          /*!< Network socket */
     
     GSList *sats;       /*!< List of sats in parent module */
     sat_t  *target;     /*!< Target satellite */
