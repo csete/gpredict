@@ -33,6 +33,7 @@
 #include <gtk/gtk.h>
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-module.h"
+#include "radio-conf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,11 +64,18 @@ struct _gtk_rig_ctrl
 	GtkVBox vbox;
     
     GtkWidget *SatFreq;
+    GtkWidget *RigFreq;
+    
+    /* target status labels*/
+    GtkWidget *SatAz,*SatEl,*SatCnt;
+    GtkWidget *SatRng,*SatRngRate,*SatDop;
    
     /* other widgets */
     GtkWidget *DevSel;   /*!< Device selector */
     GtkWidget *LO;       /*!< Local oscillator */
     
+    radio_conf_t *conf;  /*!< Radio configuration */
+    gint  sock;          /*!< Network socket */
     
     GSList *sats;       /*!< List of sats in parent module */
     sat_t  *target;     /*!< Target satellite */

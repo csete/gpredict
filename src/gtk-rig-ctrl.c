@@ -41,14 +41,24 @@
 #include "compat.h"
 #include "sat-log.h"
 #include "predict-tools.h"
+#include "gpredict-utils.h"
+#include "sat-cfg.h"
 #include "gtk-freq-knob.h"
 #include "gtk-rig-ctrl.h"
+#include "radio-conf.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
 
+/* NETWORK */
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+/* END */
 
-#define FMTSTR "%7.2f\302\260"
+#define AZEL_FMTSTR "%7.2f\302\260"
 
 
 static void gtk_rig_ctrl_class_init (GtkRigCtrlClass *class);
@@ -136,7 +146,8 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->target = NULL;
     ctrl->pass = NULL;
     ctrl->qth = NULL;
-    
+    ctrl->conf = NULL;
+    ctrl->sock = -10;
     ctrl->tracking = FALSE;
     ctrl->busy = FALSE;
     ctrl->engaged = FALSE;
@@ -149,12 +160,23 @@ gtk_rig_ctrl_destroy (GtkObject *object)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (object);
     
-    
     /* stop timer */
     if (ctrl->timerid > 0) 
         g_source_remove (ctrl->timerid);
 
+    /* close network socket */
+    if (ctrl->sock >= 0) {
+        close (ctrl->sock);
+    }
     
+    /* free configuration */
+    if (ctrl->conf != NULL) {
+        g_free (ctrl->conf->name);
+        g_free (ctrl->conf->host);
+        g_free (ctrl->conf);
+        ctrl->conf = NULL;
+    }
+
 	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -225,23 +247,57 @@ gtk_rig_ctrl_new (GtkSatModule *module)
 void
 gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
 {
+    gdouble satfreq, doppler;
     gchar *buff;
     
     if (ctrl->target) {
         
+        /* update Az/El */
+        buff = g_strdup_printf (AZEL_FMTSTR, ctrl->target->az);
+        gtk_label_set_text (GTK_LABEL (ctrl->SatAz), buff);
+        g_free (buff);
+        buff = g_strdup_printf (AZEL_FMTSTR, ctrl->target->el);
+        gtk_label_set_text (GTK_LABEL (ctrl->SatEl), buff);
+        g_free (buff);
+        
+        /* update range */
+        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
+            buff = g_strdup_printf ("%.0f mi", KM_TO_MI (ctrl->target->range));
+        }
+        else {
+            buff = g_strdup_printf ("%.0f km", ctrl->target->range);
+        }
+        gtk_label_set_text (GTK_LABEL (ctrl->SatRng), buff);
+        g_free (buff);
+        
+        /* update range rate */
+        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
+            buff = g_strdup_printf ("%.3f mi/s", KM_TO_MI (ctrl->target->range_rate));
+        }
+        else {
+            buff = g_strdup_printf ("%.3f km/s", ctrl->target->range_rate);
+        }
+        gtk_label_set_text (GTK_LABEL (ctrl->SatRngRate), buff);
+        g_free (buff);
+        
+        /* doppler shift */
+        satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreq));
+        doppler = -satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
+        buff = g_strdup_printf ("%.0f Hz", doppler);
+        gtk_label_set_text (GTK_LABEL (ctrl->SatDop), buff);
+        g_free (buff);
+
         /* update next pass if necessary */
         if (ctrl->pass != NULL) {
             if (ctrl->target->aos > ctrl->pass->aos) {
                 /* update pass */
                 free_pass (ctrl->pass);
                 ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
-                /* TODO: update polar plot */
             }
         }
         else {
             /* we don't have any current pass; store the current one */
             ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
-            /* TODO: update polar plot */
         }
     }
 }
@@ -258,14 +314,16 @@ static
 GtkWidget *create_sat_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
+    GtkWidget   *label;
     
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Satellite</b>"));
+    frame = gtk_frame_new (NULL);
+    gtk_frame_set_label_align (GTK_FRAME (frame), 0.5, 0.5);
+    gtk_frame_set_label_widget (GTK_FRAME (frame), label);
     
-    frame = gtk_frame_new (_("Satellite"));
-    
-    
-    ctrl->SatFreq = gtk_freq_knob_new (145890000.0);
+    ctrl->SatFreq = gtk_freq_knob_new (145890000.0, TRUE);
     gtk_container_add (GTK_CONTAINER (frame), ctrl->SatFreq);
-    
     
     return frame;
 }
@@ -281,18 +339,16 @@ static
 GtkWidget *create_rig_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
-    GtkWidget   *table;
     GtkWidget   *label;
-
     
-    frame = gtk_frame_new (_("Radio"));
-
-    table = gtk_table_new (2, 2, FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-    gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-    gtk_container_add (GTK_CONTAINER (frame), table);
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Radio</b>"));
+    frame = gtk_frame_new (NULL);
+    gtk_frame_set_label_align (GTK_FRAME (frame), 0.5, 0.5);
+    gtk_frame_set_label_widget (GTK_FRAME (frame), label);
     
+    ctrl->RigFreq = gtk_freq_knob_new (145890000.0, FALSE);
+    gtk_container_add (GTK_CONTAINER (frame), ctrl->RigFreq);
 
     return frame;
 }
@@ -309,9 +365,9 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     sat_t *sat = NULL;
     
 
-    buff = g_strdup_printf (FMTSTR, 0.0);
+    buff = g_strdup_printf (AZEL_FMTSTR, 0.0);
     
-    table = gtk_table_new (4, 3, FALSE);
+    table = gtk_table_new (4, 4, FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (table), 5);
     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -328,33 +384,64 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     gtk_combo_box_set_active (GTK_COMBO_BOX (satsel), 0);
     gtk_widget_set_tooltip_text (satsel, _("Select target object"));
     g_signal_connect (satsel, "changed", G_CALLBACK (sat_selected_cb), ctrl);
-    gtk_table_attach_defaults (GTK_TABLE (table), satsel, 0, 2, 0, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), satsel, 0, 3, 0, 1);
     
     /* tracking button */
     track = gtk_toggle_button_new_with_label (_("Track"));
     gtk_widget_set_tooltip_text (track, _("Track the satellite when it is within range"));
-    gtk_table_attach_defaults (GTK_TABLE (table), track, 2, 3, 0, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), track, 3, 4, 0, 1);
     g_signal_connect (track, "toggled", G_CALLBACK (track_toggle_cb), ctrl);
     
     /* Azimuth */
     label = gtk_label_new (_("Az:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
-    
+    ctrl->SatAz = gtk_label_new (buff);
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatAz), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatAz, 1, 2, 1, 2);
     
     /* Elevation */
     label = gtk_label_new (_("El:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
-    
+    ctrl->SatEl = gtk_label_new (buff);
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatEl), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatEl, 1, 2, 2, 3);
     
     /* count down */
     label = gtk_label_new (_("Time:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    ctrl->SatCnt = gtk_label_new ("00:00:00");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatCnt), 0.5, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatCnt, 1, 2, 3, 4);
+    
+    /* Range */
+    label = gtk_label_new (_(" Range:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 1, 2);
+    ctrl->SatRng = gtk_label_new ("0 km");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatRng), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRng, 3, 4, 1, 2);
+    
+    /* Range rate */
+    label = gtk_label_new (_(" Rate:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
+    ctrl->SatRngRate = gtk_label_new ("0.0 km/s");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatRngRate), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRngRate, 3, 4, 2, 3);
+    
+    /* Doppler shift */
+    label = gtk_label_new (_(" Doppler:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 3, 4);
+    ctrl->SatDop = gtk_label_new ("0 Hz");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatDop), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatDop, 3, 4, 3, 4);
     
     frame = gtk_frame_new (_("Target"));
-;
+
     gtk_container_add (GTK_CONTAINER (frame), table);
     
     g_free (buff);
@@ -366,7 +453,7 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
 static GtkWidget *
 create_conf_widgets (GtkRigCtrl *ctrl)
 {
-    GtkWidget *frame,*table,*label,*timer,*toler;
+    GtkWidget *frame,*table,*label,*timer;
     GtkWidget   *lock;
     GDir        *dir = NULL;   /* directory handle */
     GError      *error = NULL; /* error flag and info */
@@ -422,6 +509,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel), 0);
     g_signal_connect (ctrl->DevSel, "changed", G_CALLBACK (rig_selected_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel, 1, 2, 0, 1);
+    /* config will be force-loaded after LO spin is created */
             
     /* Engage button */
     lock = gtk_toggle_button_new_with_label (_("Engage"));
@@ -429,10 +517,29 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     g_signal_connect (lock, "toggled", G_CALLBACK (rig_locked_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), lock, 2, 3, 0, 1);
     
+    /* Local oscillator value */
+    label = gtk_label_new (_("Local Osc:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    
+    ctrl->LO = gtk_spin_button_new_with_range (-10000, 10000, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctrl->LO), 0);
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (ctrl->LO), 0);
+    gtk_widget_set_tooltip_text (ctrl->LO,
+                                 _("Enter the frequency of the local oscillator, if any."));
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LO, 1, 2, 1, 2);
+    
+    label = gtk_label_new (_("MHz"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 1, 2);
+    
+    /* Now, load config*/
+    rig_selected_cb (GTK_COMBO_BOX (ctrl->DevSel), ctrl);    
+    
     /* Timeout */
     label = gtk_label_new (_("Cycle:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
     
     timer = gtk_spin_button_new_with_range (100, 5000, 10);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (timer), 0);
@@ -441,12 +548,12 @@ create_conf_widgets (GtkRigCtrl *ctrl)
                                    "commands sent to the rigator."));
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (timer), ctrl->delay);
     g_signal_connect (timer, "value-changed", G_CALLBACK (delay_changed_cb), ctrl);
-    gtk_table_attach (GTK_TABLE (table), timer, 1, 2, 1, 2,
+    gtk_table_attach (GTK_TABLE (table), timer, 1, 2, 2, 3,
                       GTK_FILL, GTK_FILL, 0, 0);
     
     label = gtk_label_new (_("msec"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
 
     
     frame = gtk_frame_new (_("Settings"));
@@ -555,8 +662,42 @@ rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
-    /* TODO: update device */
     
+    /* free previous configuration */
+    if (ctrl->conf != NULL) {
+        g_free (ctrl->conf->name);
+        g_free (ctrl->conf->host);
+        g_free (ctrl->conf);
+    }
+    
+    ctrl->conf = g_try_new (radio_conf_t, 1);
+    if (ctrl->conf == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to allocate memory for radio config"),
+                     __FILE__, __LINE__);
+        return;
+    }
+    
+    /* load new configuration */
+    ctrl->conf->name = gtk_combo_box_get_active_text (box);
+    if (radio_conf_read (ctrl->conf)) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("Loaded new radio configuration %s"),
+                     ctrl->conf->name);
+        /* update LO widget */
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctrl->LO), ctrl->conf->lo/1.0e6);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to load radio configuration %s"),
+                     __FILE__, __LINE__, ctrl->conf->name);
+
+        g_free (ctrl->conf->name);
+        if (ctrl->conf->host)
+            g_free (ctrl->conf->host);
+        g_free (ctrl->conf);
+        ctrl->conf = NULL;
+    }
 
 }
 
@@ -571,14 +712,62 @@ static void
 rig_locked_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+
     
-    if (gtk_toggle_button_get_active (button)) {
-        gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
+    if (!gtk_toggle_button_get_active (button)) {
+        /* close socket */
+        gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
+        
+        if (ctrl->sock >= 0) {
+            close (ctrl->sock);
+            ctrl->sock = -10;
+        }
     }
     else {
-        gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
+        if (ctrl->conf == NULL) {
+            /* we don't have a working configuration */
+            return;
+        }
+        
+        gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
+        
+        gint status;
+        struct sockaddr_in ServAddr;
+        struct hostent *h;
+        
+        ctrl->sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (ctrl->sock < 0) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to create socket"),
+                           __FUNCTION__);
+            return;
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                         _("%s: Network socket created successfully"),
+                           __FUNCTION__);
+        }
+        
+        memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+        ServAddr.sin_family      = AF_INET;             /* Internet address family */
+        h = gethostbyname(ctrl->conf->host);
+        memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+        ServAddr.sin_port        = htons(ctrl->conf->port); /* Server port */
+
+        status = connect(ctrl->sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+        if (status < 0) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to connect to %s:%d"),
+                           __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+            return;
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                         _("%s: Connection opened to %s:%d"),
+                           __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+        }
     }
 }
 
@@ -591,6 +780,8 @@ static gboolean
 rig_ctrl_timeout_cb (gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    gdouble satfreq,doppler,lof;
+    
     
     if (ctrl->busy) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
@@ -599,27 +790,41 @@ rig_ctrl_timeout_cb (gpointer data)
     
     ctrl->busy = TRUE;
     
-    /* If we are tracking and the target satellite is within
-       range, set the rig controller knob value to the target 
-       frequency value. If the target satellite is out of range
-       set the rig controller to the frequency which we expect
-       when the target sat comes up.
-       In either case, update the range, delay, loss, rate, and
-       doppler values.
+    /* If we are tracking, calculate the radio freq by applying both dopper shift
+       and tranverter LO frequency.
+       If we are not tracking, apply only LO frequency.
     */
     if (ctrl->tracking) {
-        if (ctrl->target->el < 0.0) {
-            gdouble aosshift = 0.0;
-            
-        }
-        else {
-        }
-        
-
+        satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreq));
+        doppler = -satfreq * (ctrl->target->range_rate / 299792.4580);
+        lof = 1.0e6*gtk_spin_button_get_value (GTK_SPIN_BUTTON (ctrl->LO));
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), satfreq+doppler+lof);
+    }
+    else {
+        satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreq));
+        lof = 1.0e6*gtk_spin_button_get_value (GTK_SPIN_BUTTON (ctrl->LO));
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), satfreq+lof);
     }
 
-    if (ctrl->engaged) {
-        /* TODO: send controller values to radio device */
+    /* if device is engaged, send freq command to radio */
+    if ((ctrl->engaged) && (ctrl->sock >= 0)) {
+        gchar  *buff;
+        gint    written,size;
+        
+        buff = g_strdup_printf ("F %10.0f\n",
+                                gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreq)));
+        
+        /* number of bytes to write depends on platform (EOL) */
+#ifdef G_OS_WIN32
+        size = 14;
+#else
+        size = 13;
+#endif
+        written = send(ctrl->sock, buff, size, 0);
+        if (written != size) {
+            g_print ("SIZE ERR: %d\n", written);
+        }
+        g_free (buff);
     }
     
     
