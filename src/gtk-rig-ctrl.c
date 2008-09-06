@@ -56,11 +56,10 @@ static void gtk_rig_ctrl_init       (GtkRigCtrl      *list);
 static void gtk_rig_ctrl_destroy    (GtkObject       *object);
 
 
-static GtkWidget *create_az_widgets (GtkRigCtrl *ctrl);
-static GtkWidget *create_el_widgets (GtkRigCtrl *ctrl);
+static GtkWidget *create_sat_widgets (GtkRigCtrl *ctrl);
+static GtkWidget *create_rig_widgets (GtkRigCtrl *ctrl);
 static GtkWidget *create_target_widgets (GtkRigCtrl *ctrl);
 static GtkWidget *create_conf_widgets (GtkRigCtrl *ctrl);
-static GtkWidget *create_plot_widget (GtkRigCtrl *ctrl);
 
 static void store_sats (gpointer key, gpointer value, gpointer user_data);
 
@@ -193,20 +192,18 @@ gtk_rig_ctrl_new (GtkSatModule *module)
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColGreen);
 
     /* create contents */
-    table = gtk_table_new (3, 2, TRUE);
+    table = gtk_table_new (2, 2, FALSE);
     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
     gtk_container_set_border_width (GTK_CONTAINER (table), 10);
-    gtk_table_attach (GTK_TABLE (table), create_az_widgets (GTK_RIG_CTRL (widget)),
+    gtk_table_attach (GTK_TABLE (table), create_sat_widgets (GTK_RIG_CTRL (widget)),
                       0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
-    gtk_table_attach (GTK_TABLE (table), create_el_widgets (GTK_RIG_CTRL (widget)),
+    gtk_table_attach (GTK_TABLE (table), create_rig_widgets (GTK_RIG_CTRL (widget)),
                       1, 2, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_target_widgets (GTK_RIG_CTRL (widget)),
                       0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_conf_widgets (GTK_RIG_CTRL (widget)),
-                      0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
-    gtk_table_attach (GTK_TABLE (table), create_plot_widget (GTK_RIG_CTRL (widget)),
-                      1, 2, 1, 3, GTK_FILL, GTK_FILL, 0, 0);
+                      1, 2, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
 
     gtk_container_add (GTK_CONTAINER (widget), table);
     
@@ -250,52 +247,45 @@ gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
 }
 
 
-/** \brief Create azimuth control widgets.
+/** \brief Create Satellite freq control widgets.
  * \param ctrl Pointer to the GtkRigCtrl widget.
  * 
  * This function creates and initialises the widgets for controlling the
- * azimuth of the the rigator.
+ * satellite frequency.
  * 
- * TODO: RENAME!
  */
 static
-GtkWidget *create_az_widgets (GtkRigCtrl *ctrl)
+GtkWidget *create_sat_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
-    GtkWidget   *table;
-    GtkWidget   *label;
     
     
-    frame = gtk_frame_new (_("Azimuth"));
+    frame = gtk_frame_new (_("Satellite"));
     
-    table = gtk_table_new (2, 2, FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-    gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-    gtk_container_add (GTK_CONTAINER (frame), table);
+    
+    ctrl->SatFreq = gtk_freq_knob_new (145890000.0);
+    gtk_container_add (GTK_CONTAINER (frame), ctrl->SatFreq);
     
     
     return frame;
 }
 
 
-/** \brief Create elevation control widgets.
+/** \brief Create radio freq display widgets.
  * \param ctrl Pointer to the GtkRigCtrl widget.
  * 
- * This function creates and initialises the widgets for controlling the
- * elevation of the the rigator.
- * 
- * TODO: RENAME
+ * This function creates and initialises the widgets for displaying the
+ * frequency of the radio.
  */
 static
-GtkWidget *create_el_widgets (GtkRigCtrl *ctrl)
+GtkWidget *create_rig_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
     GtkWidget   *table;
     GtkWidget   *label;
 
     
-    frame = gtk_frame_new (_("Elevation"));
+    frame = gtk_frame_new (_("Radio"));
 
     table = gtk_table_new (2, 2, FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (table), 5);
@@ -466,20 +456,6 @@ create_conf_widgets (GtkRigCtrl *ctrl)
 }
 
 
-/** \brief Create target widgets.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- * 
- * FIXME: REMOVE
- */
-static
-GtkWidget *create_plot_widget (GtkRigCtrl *ctrl)
-{
-    GtkWidget *frame;
-    
-    frame = gtk_frame_new (NULL);
-    
-    return frame;
-}
 
 
 /** \brief Copy satellite from hash table to singly linked list.

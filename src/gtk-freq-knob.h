@@ -60,7 +60,12 @@ typedef struct _GtkFreqKnobClass   GtkFreqKnobClass;
 struct _gtk_freq_knob
 {
 	GtkVBox vbox;
+    
+    GtkWidget *digits[10];   /*!< Labels for the digits */
+    GtkWidget *buttons[20];  /*!< Buttons; 0..9 up; 10..19 down */
 	
+    gdouble min;
+    gdouble max;
     gdouble value;
 };
 

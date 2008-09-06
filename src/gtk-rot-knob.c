@@ -57,6 +57,9 @@ static void button_clicked_cb (GtkWidget *button, gpointer data);
 static GtkHBoxClass *parent_class = NULL;
 
 
+        
+        
+
 GType
 gtk_rot_knob_get_type ()
 {

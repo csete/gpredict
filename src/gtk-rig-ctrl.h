@@ -62,9 +62,12 @@ struct _gtk_rig_ctrl
 {
 	GtkVBox vbox;
     
+    GtkWidget *SatFreq;
    
     /* other widgets */
-    GtkWidget *DevSel;
+    GtkWidget *DevSel;   /*!< Device selector */
+    GtkWidget *LO;       /*!< Local oscillator */
+    
     
     GSList *sats;       /*!< List of sats in parent module */
     sat_t  *target;     /*!< Target satellite */

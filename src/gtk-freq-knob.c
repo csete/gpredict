@@ -29,11 +29,14 @@
  *
  * More info...
  * 
+ *      1 222.333 444 MHz
+ * 
  * \bug This should be a generic widget, not just frequency specific
  * 
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <math.h>
 #include "gtk-freq-knob.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
@@ -44,11 +47,26 @@
 static void gtk_freq_knob_class_init (GtkFreqKnobClass *class);
 static void gtk_freq_knob_init       (GtkFreqKnob      *list);
 static void gtk_freq_knob_destroy    (GtkObject       *object);
-
 static void gtk_freq_knob_update     (GtkFreqKnob *knob);
-
+static void button_clicked_cb        (GtkWidget *button, gpointer data);
 
 static GtkHBoxClass *parent_class = NULL;
+
+#define FMTSTR "<span size='xx-large'>%c</span>"
+
+/* x-index in table for buttons and labels */
+static const guint idx[] = {
+    0,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12
+};
 
 
 GType
@@ -104,7 +122,8 @@ gtk_freq_knob_class_init (GtkFreqKnobClass *class)
 static void
 gtk_freq_knob_init (GtkFreqKnob *knob)
 {
-
+    knob->min = 0.0;
+    knob->max = 9999999999.0;
     
 }
 
@@ -126,14 +145,72 @@ gtk_freq_knob_new (gdouble val)
 {
     GtkWidget *widget;
     GtkWidget *table;
+    GtkWidget *label;
+    guint      i;
+    gint       delta;
 
 
 	widget = g_object_new (GTK_TYPE_FREQ_KNOB, NULL);
 
     GTK_FREQ_KNOB(widget)->value = val;
+    
+    table = gtk_table_new (3, 14, FALSE);
+    
+    /* create buttons and labels */
+    for (i = 0; i < 10; i++) {
+        /* labels */
+        GTK_FREQ_KNOB(widget)->digits[i] = gtk_label_new (NULL);
+        gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->digits[i],
+                          idx[i], idx[i]+1, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    
+        /* UP buttons */
+        GTK_FREQ_KNOB(widget)->buttons[i] = gtk_button_new ();
+        
+        label = gtk_label_new ("\342\226\264");
+        gtk_container_add (GTK_CONTAINER(GTK_FREQ_KNOB(widget)->buttons[i]),
+                           label);
+        gtk_button_set_relief (GTK_BUTTON(GTK_FREQ_KNOB(widget)->buttons[i]),
+                               GTK_RELIEF_NONE);
+        delta = (gint) pow(10,9-i);
+        g_object_set_data (G_OBJECT (GTK_FREQ_KNOB(widget)->buttons[i]),
+                           "delta", GINT_TO_POINTER(delta)); 
+        gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->buttons[i],
+                          idx[i], idx[i]+1, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+        g_signal_connect (GTK_FREQ_KNOB(widget)->buttons[i], "clicked",
+                          G_CALLBACK (button_clicked_cb), widget);
+        
+        /* DOWN buttons */
+        GTK_FREQ_KNOB(widget)->buttons[i+10] = gtk_button_new ();
+        
+        label = gtk_label_new ("\342\226\276");
+        gtk_container_add (GTK_CONTAINER(GTK_FREQ_KNOB(widget)->buttons[i+10]),
+                           label);
+        gtk_button_set_relief (GTK_BUTTON(GTK_FREQ_KNOB(widget)->buttons[i+10]),
+                               GTK_RELIEF_NONE);
+        g_object_set_data (G_OBJECT (GTK_FREQ_KNOB(widget)->buttons[i+10]),
+                           "delta", GINT_TO_POINTER(-delta));
+        gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->buttons[i+10],
+                          idx[i], idx[i]+1, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
+        g_signal_connect (GTK_FREQ_KNOB(widget)->buttons[i+10], "clicked",
+                          G_CALLBACK (button_clicked_cb), widget);
+
+    }
+    
+    /* Add misc labels */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<span size='xx-large'>.</span>");
+    gtk_table_attach (GTK_TABLE (table), label, 5, 6, 1, 2,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<span size='xx-large'> MHz</span>");
+    gtk_table_attach (GTK_TABLE (table), label, 13, 14, 1, 2,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
+    
+    
     gtk_freq_knob_update (GTK_FREQ_KNOB(widget));
 
-	gtk_widget_show_all (widget);
+    gtk_container_add (GTK_CONTAINER (widget), table);
+    gtk_widget_show_all (widget);
 
 	return widget;
 }
@@ -147,11 +224,13 @@ gtk_freq_knob_new (gdouble val)
 void
 gtk_freq_knob_set_value (GtkFreqKnob *knob, gdouble val)
 {
-    /* set the new value */
-    knob->value = val;
+    if ((val >= knob->min) && (val <= knob->max)) {
+        /* set the new value */
+        knob->value = val;
     
-    /* update the display */
-    gtk_freq_knob_update (knob);
+        /* update the display */
+        gtk_freq_knob_update (knob);
+    }
 }
 
 
@@ -177,5 +256,41 @@ gtk_freq_knob_get_value (GtkFreqKnob *knob)
 static void
 gtk_freq_knob_update     (GtkFreqKnob *knob)
 {
+    gchar b[11];
+    gchar *buff;
+    guint i;
     
+    g_ascii_formatd (b, 11, "%10.0f", fabs(knob->value)); 
+    
+    /* set label markups */
+    for (i = 0; i < 10; i++) {
+        buff = g_strdup_printf (FMTSTR, b[i]);
+        gtk_label_set_markup (GTK_LABEL(knob->digits[i]), buff);
+        g_free (buff);
+    }
+
 }
+
+
+/** \brief Button clicked event.
+ * \param button The button that was clicked.
+ * \param data Pointer to the GtkFreqKnob widget.
+ * 
+ */
+static void
+button_clicked_cb (GtkWidget *button, gpointer data)
+{
+    GtkFreqKnob *knob = GTK_FREQ_KNOB (data);
+    gdouble delta = GPOINTER_TO_INT(g_object_get_data (G_OBJECT (button), "delta"));
+    
+    if ((delta > 0.0) && ((knob->value + delta) <= knob->max)) {
+        knob->value += delta;
+    }
+    else if ((delta < 0.0) && ((knob->value + delta) >= knob->min)) {
+        knob->value += delta;
+    }
+    
+    gtk_freq_knob_update (knob);
+
+}
+
