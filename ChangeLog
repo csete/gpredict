@@ -1,3 +1,28 @@
+2008-09-06; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-freq-knob.[ch]:
+    Finished implementation of frequency control knob.
+    
+    * src/gtk-sat-module.c:
+    Include radio controller into module cycle.
+    
+    * src/gtk-rig-ctrl.c:
+    Finished implementation.
+
+
+2008-09-05; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk.rig.ctrl.[ch]:
+    Added files implementing user interface for doppler tuning.
+    
+    * src/gtk-sat-module-popup.c:
+    * src/gtk-sat-module.h:
+    Use new doppler tuning UI widget.
+    
+    * src/gtk-rot-knob.c:
+    Don't show minus when value is 0.
+    
+
 2008-09-03; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rot-knob.[ch]:
