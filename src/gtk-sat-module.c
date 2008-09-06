@@ -64,6 +64,7 @@
 #include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
 #include "gtk-met.h"
+#include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
 
 //#ifdef G_OS_WIN32
@@ -869,6 +870,8 @@ gtk_sat_module_timeout_cb     (gpointer module)
 			update_child (mod->child_3, mod->tmgCdnum);
 
         /* send notice to radio and rotator controller */
+        if (mod->rigctrl)
+            gtk_rig_ctrl_update (GTK_RIG_CTRL (mod->rigctrl), mod->tmgCdnum);
         if (mod->rotctrl)
             gtk_rot_ctrl_update (GTK_ROT_CTRL (mod->rotctrl), mod->tmgCdnum);
         
