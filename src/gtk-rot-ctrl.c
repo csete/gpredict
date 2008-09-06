@@ -660,11 +660,11 @@ rot_locked_cb (GtkToggleButton *button, gpointer data)
     
     if (gtk_toggle_button_get_active (button)) {
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
-        ctrl->engaged = FALSE;
+        ctrl->engaged = TRUE;
     }
     else {
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
-        ctrl->engaged = TRUE;
+        ctrl->engaged = FALSE;
     }
 }
 
