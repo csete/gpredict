@@ -51,11 +51,11 @@
 #endif
 
 /* NETWORK */
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
+//#include <sys/types.h>
+#include <sys/socket.h>     /* socket(), connect(), send() */
+#include <netinet/in.h>     /* struct sockaddr_in */
+#include <arpa/inet.h>      /* htons() */
+#include <netdb.h>          /* gethostbyname() */
 /* END */
 
 #define AZEL_FMTSTR "%7.2f\302\260"
