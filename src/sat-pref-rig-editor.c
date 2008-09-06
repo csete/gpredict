@@ -191,7 +191,7 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     
-    lo = gtk_spin_button_new_with_range (-40000, 40000, 1);
+    lo = gtk_spin_button_new_with_range (-10000, 10000, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lo), 0);
     gtk_widget_set_tooltip_text (lo,
