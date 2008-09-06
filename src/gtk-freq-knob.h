@@ -77,7 +77,7 @@ struct _GtkFreqKnobClass
 
 
 GtkType    gtk_freq_knob_get_type  (void);
-GtkWidget* gtk_freq_knob_new       (gdouble val);
+GtkWidget* gtk_freq_knob_new       (gdouble val, gboolean buttons);
 void       gtk_freq_knob_set_value (GtkFreqKnob *knob, gdouble val);
 gdouble    gtk_freq_knob_get_value (GtkFreqKnob *knob);
 

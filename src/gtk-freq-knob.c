@@ -137,11 +137,12 @@ gtk_freq_knob_destroy (GtkObject *object)
 
 /** \brief Create a new Frequency control widget.
  * \param[in] val The initial value of the control.
+ * \param[in] buttons Flag indicating whether buttons should be shown
  * \return A new frequency control widget.
  * 
  */
 GtkWidget *
-gtk_freq_knob_new (gdouble val)
+gtk_freq_knob_new (gdouble val, gboolean buttons)
 {
     GtkWidget *widget;
     GtkWidget *table;
@@ -161,39 +162,40 @@ gtk_freq_knob_new (gdouble val)
         /* labels */
         GTK_FREQ_KNOB(widget)->digits[i] = gtk_label_new (NULL);
         gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->digits[i],
-                          idx[i], idx[i]+1, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
+                          idx[i], idx[i]+1, 1, 2, GTK_SHRINK, GTK_FILL | GTK_EXPAND, 0, 0);
     
-        /* UP buttons */
-        GTK_FREQ_KNOB(widget)->buttons[i] = gtk_button_new ();
-        
-        label = gtk_label_new ("\342\226\264");
-        gtk_container_add (GTK_CONTAINER(GTK_FREQ_KNOB(widget)->buttons[i]),
-                           label);
-        gtk_button_set_relief (GTK_BUTTON(GTK_FREQ_KNOB(widget)->buttons[i]),
-                               GTK_RELIEF_NONE);
-        delta = (gint) pow(10,9-i);
-        g_object_set_data (G_OBJECT (GTK_FREQ_KNOB(widget)->buttons[i]),
-                           "delta", GINT_TO_POINTER(delta)); 
-        gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->buttons[i],
-                          idx[i], idx[i]+1, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-        g_signal_connect (GTK_FREQ_KNOB(widget)->buttons[i], "clicked",
-                          G_CALLBACK (button_clicked_cb), widget);
-        
-        /* DOWN buttons */
-        GTK_FREQ_KNOB(widget)->buttons[i+10] = gtk_button_new ();
-        
-        label = gtk_label_new ("\342\226\276");
-        gtk_container_add (GTK_CONTAINER(GTK_FREQ_KNOB(widget)->buttons[i+10]),
-                           label);
-        gtk_button_set_relief (GTK_BUTTON(GTK_FREQ_KNOB(widget)->buttons[i+10]),
-                               GTK_RELIEF_NONE);
-        g_object_set_data (G_OBJECT (GTK_FREQ_KNOB(widget)->buttons[i+10]),
-                           "delta", GINT_TO_POINTER(-delta));
-        gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->buttons[i+10],
-                          idx[i], idx[i]+1, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
-        g_signal_connect (GTK_FREQ_KNOB(widget)->buttons[i+10], "clicked",
-                          G_CALLBACK (button_clicked_cb), widget);
-
+        if (buttons) {
+            /* UP buttons */
+            GTK_FREQ_KNOB(widget)->buttons[i] = gtk_button_new ();
+            
+            label = gtk_label_new ("\342\226\264");
+            gtk_container_add (GTK_CONTAINER(GTK_FREQ_KNOB(widget)->buttons[i]),
+                            label);
+            gtk_button_set_relief (GTK_BUTTON(GTK_FREQ_KNOB(widget)->buttons[i]),
+                                GTK_RELIEF_NONE);
+            delta = (gint) pow(10,9-i);
+            g_object_set_data (G_OBJECT (GTK_FREQ_KNOB(widget)->buttons[i]),
+                            "delta", GINT_TO_POINTER(delta)); 
+            gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->buttons[i],
+                            idx[i], idx[i]+1, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+            g_signal_connect (GTK_FREQ_KNOB(widget)->buttons[i], "clicked",
+                            G_CALLBACK (button_clicked_cb), widget);
+            
+            /* DOWN buttons */
+            GTK_FREQ_KNOB(widget)->buttons[i+10] = gtk_button_new ();
+            
+            label = gtk_label_new ("\342\226\276");
+            gtk_container_add (GTK_CONTAINER(GTK_FREQ_KNOB(widget)->buttons[i+10]),
+                            label);
+            gtk_button_set_relief (GTK_BUTTON(GTK_FREQ_KNOB(widget)->buttons[i+10]),
+                                GTK_RELIEF_NONE);
+            g_object_set_data (G_OBJECT (GTK_FREQ_KNOB(widget)->buttons[i+10]),
+                            "delta", GINT_TO_POINTER(-delta));
+            gtk_table_attach (GTK_TABLE (table), GTK_FREQ_KNOB(widget)->buttons[i+10],
+                            idx[i], idx[i]+1, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
+            g_signal_connect (GTK_FREQ_KNOB(widget)->buttons[i+10], "clicked",
+                            G_CALLBACK (button_clicked_cb), widget);
+        }
     }
     
     /* Add misc labels */
