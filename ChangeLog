@@ -1,3 +1,10 @@
+2008-09-07; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    * src/gtk-rot-ctrl.[ch]:
+    Implemented AOS/LOS count down.
+    
+
 2008-09-06; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-freq-knob.[ch]:

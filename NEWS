@@ -1,7 +1,7 @@
 
 Changes in version 1.0 (TBD):
 
-x Radio doppler tuning via hamlibs rigctld.
+- Radio doppler tuning via hamlibs rigctld.
 x Antenna rotator control via hamlibs rotctld.
 x New layout engine allowing any number of views per module.
 x SpaceView: New view show the satellites using a movable camera in space.
