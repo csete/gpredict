@@ -92,7 +92,7 @@ void about_dialog_create ()
 									  "Gpredict is available free of charge from:"));
 	gtk_about_dialog_set_url_hook (gpredict_url_hook_cb, NULL, NULL);
 	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog),
-								  "http://gpredict.sourceforge.net/");
+								  "http://gpredict.oz9aec.net/");
 /* 	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (dialog), */
 /* 										_("Gpredict Website")); */
 	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (dialog), license);
