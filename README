@@ -49,8 +49,7 @@ At the present the following features are implemented:
         * Very detailed information about both the real time data and the
           predicted passes.
 
-Visit the gpredict homepage at http://groundstation.sourceforge.net/gpredict/
-for more info.
+Visit the gpredict homepage at http://gpredcit.oz9aec.net/ for more info.
 
 
 
@@ -93,7 +92,7 @@ on the small sown-arrow in the top right corner and select configure), or create
 a new module (Menubar->File->New Module). You are highly encouraged to have a look
 at the user manual available at
 
-http://groundstation.sourceforge.net/gpredict/documents.php
+http://gpredict.oz9aec.net/documents.php
 
 
 
@@ -115,9 +114,11 @@ LICENSE AND WARRANTY
 Gpredict is released under the GNU General Public License and comes with
 NO WARRANTY whatsoever (well, maybe except that it works for us). See the
 COPYING file for details. If you have problems installing or using Gpredict,
-feel free to ask for support. Comments and bugreports are also welcome. Please
-refer to the project page at SourceForge:
-http://sourceforge.net/projects/groundstation
+feel free to ask for support. There is a web based forum at
+http://forum.oz9aec.net/
+Bug trackers, mailing lists, etc, can be accessed at the project page
+at sourceforge:
+http://sourceforge.net/projects/gpredict
 
 
 Happy Tracking!

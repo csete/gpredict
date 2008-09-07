@@ -10,10 +10,10 @@
 
 
   Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/groundstation/
+  http://sourceforge.net/projects/gpredict/
   More details can be found at the project home page:
 
-  http://groundstation.sourceforge.net/
+  http://gpredict.oz9aec.net/
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
