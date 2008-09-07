@@ -69,6 +69,7 @@ struct _gtk_rot_ctrl
     GtkWidget *ElSat,*ElSet,*ElRead,*ElDevSel,*ElDev;
     
     /* other widgets */
+    GtkWidget *SatCnt;
     GtkWidget *DevSel;
     
     /* satellites */

@@ -71,6 +71,7 @@ static void toler_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rot_selected_cb (GtkComboBox *box, gpointer data);
 static void rot_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rot_ctrl_timeout_cb (gpointer data);
+static void update_count_down (GtkRotCtrl *ctrl, gdouble t);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -241,6 +242,8 @@ gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t)
         gtk_label_set_text (GTK_LABEL (ctrl->ElSat), buff);
         g_free (buff);
         
+        update_count_down (ctrl, t);
+        
         /* update next pass if necessary */
         if (ctrl->pass != NULL) {
             if (ctrl->target->aos > ctrl->pass->aos) {
@@ -386,12 +389,14 @@ GtkWidget *create_target_widgets (GtkRotCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->ElSat, 1, 2, 2, 3);
     
     /* count down */
-    label = gtk_label_new (_("Time:"));
+    label = gtk_label_new (_("\316\224T:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    ctrl->SatCnt = gtk_label_new ("00:00:00");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->SatCnt), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatCnt, 1, 2, 3, 4);
     
     frame = gtk_frame_new (_("Target"));
-    //gtk_container_set_border_width (GTK_CONTAINER (frame), 5);
     gtk_container_add (GTK_CONTAINER (frame), table);
     
     g_free (buff);
@@ -723,3 +728,70 @@ rot_ctrl_timeout_cb (gpointer data)
 }
 
 
+
+/** \brief Update count down label.
+ * \param[in] ctrl Pointer to the RotCtrl widget.
+ * \param[in] t The current time.
+ * 
+ * This function calculates the new time to AOS/LOS of the currently
+ * selected target and updates the ctrl->SatCnt label widget.
+ */
+static void update_count_down (GtkRotCtrl *ctrl, gdouble t)
+{
+    gdouble  targettime;
+    gdouble  delta;
+    gchar   *buff;
+    guint    h,m,s;
+    gchar   *ch,*cm,*cs;
+
+    
+    /* select AOS or LOS time depending on target elevation */
+    if (ctrl->target->el < 0.0)
+        targettime = ctrl->target->aos;
+    else
+        targettime = ctrl->target->los;
+    
+    delta = targettime - t;
+    
+    /* convert julian date to seconds */
+    s = (guint) (delta * 86400);
+
+    /* extract hours */
+    h = (guint) floor (s/3600);
+    s -= 3600*h;
+
+    /* leading zero */
+    if ((h > 0) && (h < 10))
+        ch = g_strdup ("0");
+    else
+        ch = g_strdup ("");
+
+    /* extract minutes */
+    m = (guint) floor (s/60);
+    s -= 60*m;
+
+    /* leading zero */
+    if (m < 10)
+        cm = g_strdup ("0");
+    else
+        cm = g_strdup ("");
+
+    /* leading zero */
+    if (s < 10)
+        cs = g_strdup (":0");
+    else
+        cs = g_strdup (":");
+
+    if (h > 0) 
+        buff = g_strdup_printf ("%s%d:%s%d%s%d", ch, h, cm, m, cs, s);
+    else
+        buff = g_strdup_printf ("%s%d%s%d", cm, m, cs, s);
+
+    gtk_label_set_text (GTK_LABEL (ctrl->SatCnt), buff);
+
+    g_free (buff);
+    g_free (ch);
+    g_free (cm);
+    g_free (cs);
+
+}

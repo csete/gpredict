@@ -81,6 +81,8 @@ static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
 static void set_freq (GtkRigCtrl *ctrl, gdouble freq);
+static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
+
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -255,6 +257,8 @@ gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
         gtk_label_set_text (GTK_LABEL (ctrl->SatEl), buff);
         g_free (buff);
         
+        update_count_down (ctrl, t);
+        
         /* update range */
         if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
             buff = g_strdup_printf ("%.0f mi", KM_TO_MI (ctrl->target->range));
@@ -404,7 +408,7 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatEl, 1, 2, 2, 3);
     
     /* count down */
-    label = gtk_label_new (_("Time:"));
+    label = gtk_label_new (_("\316\224T:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     ctrl->SatCnt = gtk_label_new ("00:00:00");
@@ -723,21 +727,6 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
         
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
-        
-
-/*        status = connect(ctrl->sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-        if (status < 0) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Failed to connect to %s:%d"),
-                           __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-            return;
-        }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                         _("%s: Connection opened to %s:%d"),
-                           __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-        }
-        */
     }
 }
 
@@ -857,4 +846,72 @@ static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
     g_free (buff);
     close (sock);
     
+}
+
+
+/** \brief Update count down label.
+ * \param[in] ctrl Pointer to the RigCtrl widget.
+ * \param[in] t The current time.
+ * 
+ * This function calculates the new time to AOS/LOS of the currently
+ * selected target and updates the ctrl->SatCnt label widget.
+ */
+static void update_count_down (GtkRigCtrl *ctrl, gdouble t)
+{
+    gdouble  targettime;
+    gdouble  delta;
+    gchar   *buff;
+    guint    h,m,s;
+    gchar   *ch,*cm,*cs;
+
+    
+    /* select AOS or LOS time depending on target elevation */
+    if (ctrl->target->el < 0.0)
+        targettime = ctrl->target->aos;
+    else
+        targettime = ctrl->target->los;
+    
+    delta = targettime - t;
+    
+    /* convert julian date to seconds */
+    s = (guint) (delta * 86400);
+
+    /* extract hours */
+    h = (guint) floor (s/3600);
+    s -= 3600*h;
+
+    /* leading zero */
+    if ((h > 0) && (h < 10))
+        ch = g_strdup ("0");
+    else
+        ch = g_strdup ("");
+
+    /* extract minutes */
+    m = (guint) floor (s/60);
+    s -= 60*m;
+
+    /* leading zero */
+    if (m < 10)
+        cm = g_strdup ("0");
+    else
+        cm = g_strdup ("");
+
+    /* leading zero */
+    if (s < 10)
+        cs = g_strdup (":0");
+    else
+        cs = g_strdup (":");
+
+    if (h > 0) 
+        buff = g_strdup_printf ("%s%d:%s%d%s%d", ch, h, cm, m, cs, s);
+    else
+        buff = g_strdup_printf ("%s%d%s%d", cm, m, cs, s);
+
+    gtk_label_set_text (GTK_LABEL (ctrl->SatCnt), buff);
+
+    g_free (buff);
+    g_free (ch);
+    g_free (cm);
+    g_free (cs);
+
 }
