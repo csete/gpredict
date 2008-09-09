@@ -40,6 +40,7 @@ static GtkWidget *numpass;
 static GtkWidget *lookahead;
 static GtkWidget *res;
 static GtkWidget *nument;
+static GtkWidget *twspin;
 
 static gboolean dirty = FALSE;  /* used to check whether any changes have occurred */
 static gboolean reset = FALSE;
@@ -66,7 +67,7 @@ GtkWidget *sat_pref_conditions_create ()
 	dirty = FALSE;
 	reset = FALSE;
 
-	table = gtk_table_new (9, 3, FALSE);
+	table = gtk_table_new (12, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 10);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
@@ -261,7 +262,60 @@ GtkWidget *sat_pref_conditions_create ()
 					  GTK_SHRINK,
 					  0, 0);
 
+    /* separator */
+    gtk_table_attach (GTK_TABLE (table),
+                      gtk_hseparator_new (),
+                      0, 3, 9, 10,
+                      GTK_FILL | GTK_EXPAND,
+                      GTK_SHRINK,
+                      0, 0);
 
+    /* satellite visibility */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Satellite Visibility:</b>"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label,
+                      0, 1, 10, 11,
+                      GTK_FILL,
+                      GTK_SHRINK,
+                      0, 0);
+
+    /* twilight threshold */
+    label = gtk_label_new (_("Twilight threshold"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label,
+                      0, 1, 11, 12,
+                      GTK_FILL,
+                      GTK_SHRINK,
+                      0, 0);
+    twspin = gtk_spin_button_new_with_range (-18, 0, 1);
+    gtk_widget_set_tooltip_text (twspin,
+                          _("Satellites are only considered visible if the elevation "\
+                            "of the Sun is below the specified threshold.\n"\
+                            "  \342\200\242 Astronomical: -18\302\260 to -12\302\260\n"\
+                            "  \342\200\242 Nautical: -12\302\260 to -6\302\260\n"\
+                            "  \342\200\242 Civil: -6\302\260 to 0\302\260"));
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (twspin), 0);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (twspin), TRUE);
+    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (twspin), FALSE);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (twspin),
+                               sat_cfg_get_int (SAT_CFG_INT_PRED_TWILIGHT_THLD));
+    g_signal_connect (G_OBJECT (twspin), "value-changed",
+                      G_CALLBACK (spin_changed_cb), NULL);
+    gtk_table_attach (GTK_TABLE (table), twspin,
+                      1, 2, 11, 12,
+                      GTK_FILL,
+                      GTK_SHRINK,
+                      0, 0);
+    label = gtk_label_new (_("[deg]"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label,
+                      2, 3, 11, 12,
+                      GTK_FILL | GTK_EXPAND,
+                      GTK_SHRINK,
+                      0, 0);
+
+    
 	/* create vertical box */
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
@@ -301,6 +355,8 @@ sat_pref_conditions_ok     ()
 						 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (res)));
 		sat_cfg_set_int (SAT_CFG_INT_PRED_NUM_ENTRIES,
 						 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (nument)));
+        sat_cfg_set_int (SAT_CFG_INT_PRED_TWILIGHT_THLD,
+                         gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (twspin)));
 
 		dirty = FALSE;
 	}
@@ -310,6 +366,7 @@ sat_pref_conditions_ok     ()
 		sat_cfg_reset_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
 		sat_cfg_reset_int (SAT_CFG_INT_PRED_RESOLUTION);
 		sat_cfg_reset_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
+        sat_cfg_reset_int (SAT_CFG_INT_PRED_TWILIGHT_THLD);
 
 		reset = FALSE;
 	}
@@ -380,6 +437,8 @@ reset_cb               (GtkWidget *button, gpointer data)
 							   sat_cfg_get_int_def (SAT_CFG_INT_PRED_RESOLUTION));
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (nument),
 							   sat_cfg_get_int_def (SAT_CFG_INT_PRED_NUM_ENTRIES));
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (twspin),
+                               sat_cfg_get_int_def (SAT_CFG_INT_PRED_TWILIGHT_THLD));
 
 
 	/* reset flags */

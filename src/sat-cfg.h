@@ -100,6 +100,7 @@ typedef enum {
 	SAT_CFG_INT_PRED_MULTI_COL,       /*!< Visible columns in multi-pass dialog */
 	SAT_CFG_INT_PRED_SAVE_FORMAT,     /*!< Last used save format for predictions */
 	SAT_CFG_INT_PRED_SAVE_CONTENTS,   /*!< Last selection for save file contents */
+    SAT_CFG_INT_PRED_TWILIGHT_THLD,   /*!< Twilight zone threshold */
 	SAT_CFG_INT_SKYATGL_TIME,         /*!< Time span for sky at a glance predictions */
 	SAT_CFG_INT_SKYATGL_COL_01,       /*!< Colour 1 in sky at a glance predictions */
 	SAT_CFG_INT_SKYATGL_COL_02,       /*!< Colour 2 in sky at a glance predictions */

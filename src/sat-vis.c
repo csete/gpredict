@@ -31,6 +31,7 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-data.h"
 #include "sat-vis.h"
+#include "sat-cfg.h"
 
 
 static gchar VIS2CHR[SAT_VIS_NUM] = { '-', 'V', 'D', 'E'};
@@ -56,6 +57,7 @@ get_sat_vis (sat_t *sat, qth_t *qth, gdouble jul_utc)
 {
 	gboolean sat_sun_status;
 	gdouble  sun_el;
+    gdouble  threshold;
 	gdouble  eclipse_depth;
 	sat_vis_t vis = SAT_VIS_NONE;
 	vector_t zero_vector = {0,0,0,0};
@@ -86,10 +88,12 @@ get_sat_vis (sat_t *sat, qth_t *qth, gdouble jul_utc)
 		sat_sun_status = TRUE;
 	}
 
-	sun_el = Degrees (solar_set.el);
 
 	if (sat_sun_status) {
-		if (sun_el <= -12.0 && sat->el >= 0.0)
+        sun_el = Degrees (solar_set.el);
+        threshold = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_TWILIGHT_THLD);
+        
+        if (sun_el <= threshold && sat->el >= 0.0)
 			vis = SAT_VIS_VISIBLE;
 		else
 			vis = SAT_VIS_DAYLIGHT;
