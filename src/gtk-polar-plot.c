@@ -56,8 +56,8 @@
 
 
 
-#define POLV_DEFAULT_SIZE 300
-#define POLV_DEFAULT_MARGIN 25
+#define POLV_DEFAULT_SIZE 200
+#define POLV_DEFAULT_MARGIN 20
 
 /* extra size for line outside 0 deg circle (inside margin) */
 #define POLV_LINE_EXTRA 5
@@ -328,7 +328,7 @@ create_canvas_model (GtkPolarPlot *polv)
 										 y,
 										 -1,
 										 anch,
-										 "font", "Sans 10",
+										 "font", "Sans 8",
 										 "fill-color-rgba", col,
 										 NULL);
 
@@ -339,7 +339,7 @@ create_canvas_model (GtkPolarPlot *polv)
 										 y,
 										 -1,
 										 anch,
-										 "font", "Sans 10",
+										 "font", "Sans 8",
 										 "fill-color-rgba", col,
 										 NULL);
 
@@ -350,7 +350,7 @@ create_canvas_model (GtkPolarPlot *polv)
 										 y,
 										 -1,
 										 anch,
-										 "font", "Sans 10",
+										 "font", "Sans 8",
 										 "fill-color-rgba", col,
 										 NULL);
 
@@ -361,7 +361,7 @@ create_canvas_model (GtkPolarPlot *polv)
 										 y,
 										 -1,
 										 anch,
-										 "font", "Sans 10",
+										 "font", "Sans 8",
 										 "fill-color-rgba", col,
 										 NULL);
 
