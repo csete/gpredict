@@ -1,3 +1,14 @@
+2008-09-10; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-polar-plot.[ch]:
+    Added API to add/modify/delete the pass.
+    Changed to create local copy of the pass data.
+    
+    * src/gtk-rot-ctrl.c:
+    Use new polar plot widget for showing status of target satellite
+    and rotator. However, this part has been disabled for now.
+
+
 2008-09-09; Alexandru Csete <oz9aec@gmail.com>
 
     * src/sat-pref-conditions.c:

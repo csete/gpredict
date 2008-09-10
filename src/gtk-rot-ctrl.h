@@ -71,6 +71,7 @@ struct _gtk_rot_ctrl
     /* other widgets */
     GtkWidget *SatCnt;
     GtkWidget *DevSel;
+    GtkWidget *plot;    /*!< Polar plot widget */
     
     /* satellites */
     GSList *sats;       /*!< List of sats in parent module */

@@ -41,6 +41,7 @@
 #include "compat.h"
 #include "sat-log.h"
 #include "predict-tools.h"
+#include "gtk-polar-plot.h"
 #include "gtk-rot-knob.h"
 #include "gtk-rot-ctrl.h"
 #ifdef HAVE_CONFIG_H
@@ -139,6 +140,7 @@ gtk_rot_ctrl_init (GtkRotCtrl *ctrl)
     ctrl->target = NULL;
     ctrl->pass = NULL;
     ctrl->qth = NULL;
+    ctrl->plot = NULL;
     
     ctrl->tracking = FALSE;
     ctrl->busy = FALSE;
@@ -196,21 +198,21 @@ gtk_rot_ctrl_new (GtkSatModule *module)
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColGreen);
 
     /* create contents */
-    table = gtk_table_new (3, 2, TRUE);
-    gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+    table = gtk_table_new (2, 3, FALSE);
+    gtk_table_set_row_spacings (GTK_TABLE (table), 0);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 0);
     gtk_container_set_border_width (GTK_CONTAINER (table), 10);
     gtk_table_attach (GTK_TABLE (table), create_az_widgets (GTK_ROT_CTRL (widget)),
-                      0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+                      0, 1, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_el_widgets (GTK_ROT_CTRL (widget)),
-                      1, 2, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+                      1, 2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_target_widgets (GTK_ROT_CTRL (widget)),
-                      0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+                      0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_conf_widgets (GTK_ROT_CTRL (widget)),
-                      0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
-    gtk_table_attach (GTK_TABLE (table), create_plot_widget (GTK_ROT_CTRL (widget)),
-                      1, 2, 1, 3, GTK_FILL, GTK_FILL, 0, 0);
-
+                      1, 2, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
+/*    gtk_table_attach (GTK_TABLE (table), create_plot_widget (GTK_ROT_CTRL (widget)),
+                      2, 3, 0, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
+*/
     gtk_container_add (GTK_CONTAINER (widget), table);
     
     GTK_ROT_CTRL (widget)->timerid = g_timeout_add (GTK_ROT_CTRL (widget)->delay,
@@ -528,7 +530,10 @@ GtkWidget *create_plot_widget (GtkRotCtrl *ctrl)
 {
     GtkWidget *frame;
     
+    ctrl->plot = gtk_polar_plot_new (ctrl->qth, ctrl->pass);
+    
     frame = gtk_frame_new (NULL);
+    gtk_container_add (GTK_CONTAINER (frame), ctrl->plot);
     
     return frame;
 }
@@ -579,6 +584,10 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
         }
         
     }
+    
+    /* in either case, we set the new pass (even if NULL) on the polar plot */
+    if (ctrl->plot != NULL)
+        gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
 }
 
 

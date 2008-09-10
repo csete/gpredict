@@ -241,8 +241,8 @@ void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass)
 {
     GooCanvasItemModel *root;
     gint idx,i;
-    
-#if 0    
+
+
     /* remove sky track, time ticks and the pass itself */
     if (plot->pass != NULL) {
         /* remove sat from canvas */
@@ -263,9 +263,10 @@ void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass)
     }
 
     if (pass != NULL) {
-        create_track (GTK_POLAR_PLOT (plot));
+        plot->pass = copy_pass (pass);
+        create_track (plot);
     }
-#endif
+
 }
 
 
