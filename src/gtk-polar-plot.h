@@ -122,6 +122,7 @@ GtkWidget*     gtk_polar_plot_new        (qth_t *qth, pass_t *pass);
 
 void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass);
 
+void gtk_polar_plot_show_time_ticks (GtkPolarPlot *plot, gboolean show);
 
 
 #ifdef __cplusplus

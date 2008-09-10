@@ -162,6 +162,11 @@ static void
 gtk_polar_plot_destroy (GtkObject *object)
 {
 
+    if (GTK_POLAR_PLOT (object)->pass != NULL) {
+        free_pass (GTK_POLAR_PLOT (object)->pass);
+        GTK_POLAR_PLOT (object)->pass = NULL;
+    }
+    
 	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -182,7 +187,9 @@ gtk_polar_plot_new (qth_t *qth, pass_t *pass)
 	polv = g_object_new (GTK_TYPE_POLAR_PLOT, NULL);
 
 	GTK_POLAR_PLOT (polv)->qth  = qth;
-	GTK_POLAR_PLOT (polv)->pass = pass;
+    
+    if (pass != NULL)
+        GTK_POLAR_PLOT (polv)->pass = copy_pass (pass);
 
 	/* get settings */
 	GTK_POLAR_PLOT (polv)->swap = sat_cfg_get_int (SAT_CFG_INT_POLAR_ORIENTATION);
@@ -235,7 +242,7 @@ void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass)
     GooCanvasItemModel *root;
     gint idx,i;
     
-    
+#if 0    
     /* remove sky track, time ticks and the pass itself */
     if (plot->pass != NULL) {
         /* remove sat from canvas */
@@ -258,7 +265,20 @@ void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass)
     if (pass != NULL) {
         create_track (GTK_POLAR_PLOT (plot));
     }
+#endif
 }
+
+
+/** \brief Show/hide time tick
+ * \param plot Pointer to the GtkPolarPlot widget
+ * \param show TRUE => show tick. FALSE => don't show
+ * 
+ */
+void gtk_polar_plot_show_time_ticks (GtkPolarPlot *plot, gboolean show)
+{
+    g_print ("NOT IMPLEMENTED %s\n",__FUNCTION__);
+}
+
 
 
 static GooCanvasItemModel *
