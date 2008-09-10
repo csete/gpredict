@@ -44,7 +44,7 @@ extern "C" {
 
 
 /** \brief Number of time ticks. */
-#define TRACK_TICK_NUM 4
+#define TRACK_TICK_NUM 5
 
 
 #define GTK_POLAR_PLOT(obj)          GTK_CHECK_CAST (obj, gtk_polar_plot_get_type (), GtkPolarPlot)
@@ -120,6 +120,7 @@ GtkType        gtk_polar_plot_get_type   (void);
 
 GtkWidget*     gtk_polar_plot_new        (qth_t *qth, pass_t *pass);
 
+void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass);
 
 
 

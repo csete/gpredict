@@ -26,8 +26,17 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 /** \brief Polar Plot Widget.
+ * \ingroup widgets
  *
- * More info...
+ * GtkPolarPlot is a graphical widget that can display a satellite pass
+ * in an Az/El polar plot. The widget was originally created to display
+ * a single satellite pass in the detailed pass predicition dialog.
+ * 
+ * Later, a few utility functions were added in order to make the GtkPolarPlot
+ * more dynamic and useful in other contexts too. In addition to a satellite
+ * pass, GtkPolarPlot can show a target object (small square), a target
+ * position marker (thread), and a current position marker (small circle).
+ * These three objects are very useful in the rotator control window.
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -137,6 +146,7 @@ static void
 gtk_polar_plot_init (GtkPolarPlot *polview)
 {
 	polview->qth       = NULL;
+    polview->pass      = NULL;
 	polview->size      = 0;
 	polview->r         = 0;
 	polview->cx        = 0;
@@ -157,9 +167,10 @@ gtk_polar_plot_destroy (GtkObject *object)
 
 
 /** \brief Create a new GtkPolarPlot widget.
- *  \param cfgdata The configuration data of the parent module.
- *  \param sats Pointer to the hash table containing the asociated satellites.
- *  \param qth Pointer to the ground station data.
+ *  \param qth Pointer to the QTH.
+ *  \param pass Pointer to the satellite pass to display. If NULL no
+ *              pass will be displayed.
+ *
  */
 GtkWidget*
 gtk_polar_plot_new (qth_t *qth, pass_t *pass)
@@ -203,11 +214,50 @@ gtk_polar_plot_new (qth_t *qth, pass_t *pass)
 	goo_canvas_set_root_item_model (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), root);
 
 	g_object_unref (root);
-	create_track (GTK_POLAR_PLOT (polv));
+    
+    if (GTK_POLAR_PLOT (polv)->pass != NULL) {
+	   create_track (GTK_POLAR_PLOT (polv));
+    }
 
 	gtk_container_add (GTK_CONTAINER (polv), GTK_POLAR_PLOT (polv)->canvas);
 
 	return polv;
+}
+
+
+/** \brief Set new pass
+ * \param[in] plot Pointer to the GtkPolarPlot widget.
+ * \param[in] pass Pointer to the new pass data. Use NULL to disable
+ *                 display of pass.
+ */
+void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass)
+{
+    GooCanvasItemModel *root;
+    gint idx,i;
+    
+    
+    /* remove sky track, time ticks and the pass itself */
+    if (plot->pass != NULL) {
+        /* remove sat from canvas */
+        root = goo_canvas_get_root_item_model (GOO_CANVAS (plot->canvas));
+        idx = goo_canvas_item_model_find_child (root, plot->track);
+        
+        if (idx != -1)
+            goo_canvas_item_model_remove_child (root, idx);
+
+        for (i = 0; i < TRACK_TICK_NUM; i++) {
+            idx = goo_canvas_item_model_find_child (root, plot->trtick[i]);
+            if (idx != -1)
+                goo_canvas_item_model_remove_child (root, idx);
+        }
+        
+        free_pass (plot->pass);
+        plot->pass = NULL;
+    }
+
+    if (pass != NULL) {
+        create_track (GTK_POLAR_PLOT (plot));
+    }
 }
 
 
@@ -408,7 +458,9 @@ correct_pole_coor          (GtkPolarPlot *polv,
 		break;
 
 	default:
-		/* FIXME: bug */
+		sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Incorrect polar plot orientation."),
+                     __FILE__, __LINE__);
 		break;
 	}
 }
@@ -524,7 +576,8 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 
 
 		/* sky track */
-		update_track (polv);
+        if (polv->pass != NULL)
+            update_track (polv);
 
 	}
 }
