@@ -722,6 +722,9 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
     else {
         if (ctrl->conf == NULL) {
             /* we don't have a working configuration */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Controller does not have a valid configuration"),
+                           __FUNCTION__);
             return;
         }
         
