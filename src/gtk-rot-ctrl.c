@@ -495,7 +495,7 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel), 0);
     g_signal_connect (ctrl->DevSel, "changed", G_CALLBACK (rot_selected_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel, 1, 2, 0, 1);
-            
+
     /* Engage button */
     lock = gtk_toggle_button_new_with_label (_("Engage"));
     gtk_widget_set_tooltip_text (lock, _("Engage the selcted rotor device"));
@@ -543,6 +543,8 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
     
+    /* load initial rotator configuration */
+    rot_selected_cb (ctrl->DevSel, ctrl);
     
     frame = gtk_frame_new (_("Settings"));
     gtk_container_add (GTK_CONTAINER (frame), table);
@@ -688,9 +690,39 @@ rot_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
     
-    /* TODO: update device */
+    /* free previous configuration */
+    if (ctrl->conf != NULL) {
+        g_free (ctrl->conf->name);
+        g_free (ctrl->conf->host);
+        g_free (ctrl->conf);
+    }
     
-    /* TODO: update ranges */
+    ctrl->conf = g_try_new (rotor_conf_t, 1);
+    if (ctrl->conf == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to allocate memory for rotator config"),
+                       __FILE__, __LINE__);
+        return;
+    }
+    
+    /* load new configuration */
+    ctrl->conf->name = gtk_combo_box_get_active_text (box);
+    if (rotor_conf_read (ctrl->conf)) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("Loaded new rotator configuration %s"),
+                       ctrl->conf->name);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to load rotator configuration %s"),
+                       __FILE__, __LINE__, ctrl->conf->name);
+
+        g_free (ctrl->conf->name);
+        if (ctrl->conf->host)
+            g_free (ctrl->conf->host);
+        g_free (ctrl->conf);
+        ctrl->conf = NULL;
+    }
 }
 
 
