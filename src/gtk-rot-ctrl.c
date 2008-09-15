@@ -160,7 +160,14 @@ gtk_rot_ctrl_destroy (GtkObject *object)
     if (ctrl->timerid > 0) 
         g_source_remove (ctrl->timerid);
 
-    
+    /* free configuration */
+    if (ctrl->conf != NULL) {
+        g_free (ctrl->conf->name);
+        g_free (ctrl->conf->host);
+        g_free (ctrl->conf);
+        ctrl->conf = NULL;
+    }
+
 	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -183,15 +190,26 @@ gtk_rot_ctrl_new (GtkSatModule *module)
     
     GTK_ROT_CTRL (widget)->target = SAT (g_slist_nth_data (GTK_ROT_CTRL (widget)->sats, 0));
     
+    /* store current time (don't know if real or simulated) */
+    GTK_ROT_CTRL (widget)->t = module->tmgCdnum;
+    
     /* store QTH */
     GTK_ROT_CTRL (widget)->qth = module->qth;
     
     /* get next pass for target satellite */
-    GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
-                                                 GTK_ROT_CTRL (widget)->qth,
-                                                 3.0);
-    
-    /* initialise custom colors */
+    if (GTK_ROT_CTRL (widget)->target->el > 0.0) {
+        GTK_ROT_CTRL (widget)->pass = get_current_pass (GTK_ROT_CTRL (widget)->target,
+                                                        GTK_ROT_CTRL (widget)->qth,
+                                                        0.0);
+    }
+    else {
+        GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
+                                                     GTK_ROT_CTRL (widget)->qth,
+                                                     3.0);
+    }
+
+        
+        /* initialise custom colors */
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColBlack);
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColWhite);
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColRed);
@@ -210,9 +228,9 @@ gtk_rot_ctrl_new (GtkSatModule *module)
                       0, 1, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_conf_widgets (GTK_ROT_CTRL (widget)),
                       1, 2, 1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
-/*    gtk_table_attach (GTK_TABLE (table), create_plot_widget (GTK_ROT_CTRL (widget)),
+    gtk_table_attach (GTK_TABLE (table), create_plot_widget (GTK_ROT_CTRL (widget)),
                       2, 3, 0, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
-*/
+
     gtk_container_add (GTK_CONTAINER (widget), table);
     
     GTK_ROT_CTRL (widget)->timerid = g_timeout_add (GTK_ROT_CTRL (widget)->delay,
@@ -235,6 +253,8 @@ gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t)
 {
     gchar *buff;
     
+    ctrl->t = t;
+    
     if (ctrl->target) {
         /* update target displays */
         buff = g_strdup_printf (FMTSTR, ctrl->target->az);
@@ -248,17 +268,26 @@ gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t)
         
         /* update next pass if necessary */
         if (ctrl->pass != NULL) {
-            if (ctrl->target->aos > ctrl->pass->aos) {
-                /* update pass */
+            if ((ctrl->target->aos > ctrl->pass->aos) && (ctrl->target->el <= 0.0)) {
+                /* we need to update the pass */
                 free_pass (ctrl->pass);
-                ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
-                /* TODO: update polar plot */
+                ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
+                
+                /* update polar plot */
+                gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
             }
         }
         else {
             /* we don't have any current pass; store the current one */
-            ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
-            /* TODO: update polar plot */
+            if (ctrl->target->el > 0.0) {
+                ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, t);
+            }
+            else {
+                ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
+            }
+            
+            /* update polar plot */
+            gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
         }
     }
 }
@@ -570,7 +599,11 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
         /* update next pass */
         if (ctrl->pass != NULL)
             free_pass (ctrl->pass);
-        ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
+        
+        if (ctrl->target->el > 0.0)
+            ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, ctrl->t);
+        else
+            ctrl->pass = get_pass (ctrl->target, ctrl->qth, ctrl->t, 3.0);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,

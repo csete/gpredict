@@ -33,6 +33,7 @@
 #include <gtk/gtk.h>
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-module.h"
+#include "rotor-conf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +73,9 @@ struct _gtk_rot_ctrl
     GtkWidget *SatCnt;
     GtkWidget *DevSel;
     GtkWidget *plot;    /*!< Polar plot widget */
+                        
+    rotor_conf_t *conf;
+    gdouble       t;  /*!< Time when sat data last has been updated. */
     
     /* satellites */
     GSList *sats;       /*!< List of sats in parent module */
