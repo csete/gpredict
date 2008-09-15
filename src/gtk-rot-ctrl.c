@@ -742,6 +742,13 @@ rot_locked_cb (GtkToggleButton *button, gpointer data)
         ctrl->engaged = TRUE;
     }
     else {
+        if (ctrl->conf == NULL) {
+            /* we don't have a working configuration */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Controller does not have a valid configuration"),
+                         __FUNCTION__);
+            return;
+        }
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
     }
