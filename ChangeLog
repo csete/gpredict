@@ -1,3 +1,10 @@
+2008-09-16; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rot-ctrl.[ch]:
+    Implemented correct management of next pass taking into account
+    that we may run in simulated time mode. 
+    
+
 2008-09-10; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-polar-plot.[ch]:

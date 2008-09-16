@@ -544,8 +544,8 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
     
-    toler = gtk_spin_button_new_with_range (0.0, 10.0, 0.1);
-    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (toler), 1);
+    toler = gtk_spin_button_new_with_range (0.01, 10.0, 0.01);
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (toler), 2);
     gtk_widget_set_tooltip_text (toler,
                                  _("This parameter controls the tolerance between "\
                                    "the target and rotator values for the rotator.\n"\
@@ -729,6 +729,10 @@ rot_selected_cb (GtkComboBox *box, gpointer data)
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("Loaded new rotator configuration %s"),
                        ctrl->conf->name);
+        
+        /* update new ranges of the Az and El controller widgets */
+        gtk_rot_knob_set_range (GTK_ROT_KNOB (ctrl->AzSet), ctrl->conf->minaz, ctrl->conf->maxaz);
+        gtk_rot_knob_set_range (GTK_ROT_KNOB (ctrl->ElSet), ctrl->conf->minel, ctrl->conf->maxel);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -785,6 +789,7 @@ rot_ctrl_timeout_cb (gpointer data)
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
     gdouble rotaz=0.0, rotel=0.0;
+    gdouble setaz,setel;
     gchar *text;
     
     
@@ -833,7 +838,14 @@ rot_ctrl_timeout_cb (gpointer data)
         g_free (text);
         
         /* if tolerance exceeded */
-        /* TODO: send controller values to rotator device */
+        setaz = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet));
+        setel = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet));
+        if ((fabs(setaz-rotaz) > ctrl->tolerance) ||
+             (fabs(setel-rotel) > ctrl->tolerance)) {
+            /* send controller values to rotator device */
+            set_pos (ctrl, setaz, setel);
+        }
+        
         /* TODO: update polar plot */
     }
     
@@ -956,9 +968,85 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 }
 
 
+/** \brief Send new position to rotator device
+ * \param ctrl Poitner to the GtkRotCtrl widget
+ * \param az The new Azimuth
+ * \param el The new Elevation
+ * 
+ * \note The function does not perform any range check since the GtkRotKnob
+ * should always keep its value within range.
+ */
 static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
 {
+    gchar  *buff;
+    gchar  azstr[8],elstr[8];
+    gint    written,size;
+    gint    status;
+    struct hostent *h;
+    struct sockaddr_in ServAddr;
+    gint  sock;          /*!< Network socket */
+
     
+    /* create socket */
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to create socket"),
+                       __FILE__, __LINE__);
+        return;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%d Network socket created successfully"),
+                       __FILE__, __LINE__);
+    }
+        
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(ctrl->conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to connect to %s:%d"),
+                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+        return;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%d: Connection opened to %s:%d"),
+                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+    }
+    
+    /* send command */
+    g_ascii_formatd (azstr, 8, "%7.2f", az);
+    g_ascii_formatd (elstr, 8, "%7.2f", el);
+    buff = g_strdup_printf ("P %s %s\n", azstr, elstr);
+    
+    /* number of bytes to write depends on platform (EOL) */
+#ifdef G_OS_WIN32
+    size = 19;
+#else
+    size = 18;
+#endif
+    written = send(sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: SIZE ERROR %d / %d"),
+                       __FILE__, __LINE__, written, size);
+    }
+    
+    g_print ("SZ:%d  WR:%d  AZ:%s  EL:%s  STR:%s", size, written, azstr, elstr, buff);
+    
+    g_free (buff);
+    
+    shutdown (sock, SHUT_RDWR);
+    close (sock);
+
+
 }
 
 
