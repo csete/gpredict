@@ -847,6 +847,7 @@ static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
                        __FUNCTION__, written, size);
     }
     g_free (buff);
+    shutdown (sock, SHUT_RDWR);
     close (sock);
     
 }
