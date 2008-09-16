@@ -48,6 +48,13 @@
 #  include <build-config.h>
 #endif
 
+/* NETWORK */
+//#include <sys/types.h>
+#include <sys/socket.h>     /* socket(), connect(), send() */
+#include <netinet/in.h>     /* struct sockaddr_in */
+#include <arpa/inet.h>      /* htons() */
+#include <netdb.h>          /* gethostbyname() */
+/* END */
 
 #define FMTSTR "%7.2f\302\260"
 
@@ -74,6 +81,8 @@ static void rot_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rot_ctrl_timeout_cb (gpointer data);
 static void update_count_down (GtkRotCtrl *ctrl, gdouble t);
 
+static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el);
+static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -316,12 +325,17 @@ GtkWidget *create_az_widgets (GtkRotCtrl *ctrl)
     gtk_container_add (GTK_CONTAINER (frame), table);
     
     ctrl->AzSet = gtk_rot_knob_new (0.0, 360.0, 180.0);
-    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->AzSet, 1, 2, 0, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->AzSet, 0, 2, 0, 1);
                        
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label), _("Read:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                     GTK_SHRINK, GTK_SHRINK, 10, 0);
+    
+    ctrl->AzRead = gtk_label_new (" --- ");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->AzRead), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->AzRead, 1, 2, 1, 2);
     
     return frame;
 }
@@ -350,13 +364,17 @@ GtkWidget *create_el_widgets (GtkRotCtrl *ctrl)
     gtk_container_add (GTK_CONTAINER (frame), table);
     
     ctrl->ElSet = gtk_rot_knob_new (0.0, 90.0, 45.0);
-    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->ElSet, 1, 2, 0, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->ElSet, 0, 2, 0, 1);
                        
     label = gtk_label_new (NULL);
-    gtk_label_set_markup (GTK_LABEL (label), _("Read:"));
+    gtk_label_set_markup (GTK_LABEL (label), _("Read: "));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                     GTK_SHRINK, GTK_SHRINK, 10, 0);
     
+    ctrl->ElRead = gtk_label_new (" --- ");
+    gtk_misc_set_alignment (GTK_MISC (ctrl->ElRead), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->ElRead, 1, 2, 1, 2);
 
     return frame;
 }
@@ -544,7 +562,7 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
     
     /* load initial rotator configuration */
-    rot_selected_cb (ctrl->DevSel, ctrl);
+    rot_selected_cb (GTK_COMBO_BOX (ctrl->DevSel), ctrl);
     
     frame = gtk_frame_new (_("Settings"));
     gtk_container_add (GTK_CONTAINER (frame), table);
@@ -751,6 +769,9 @@ rot_locked_cb (GtkToggleButton *button, gpointer data)
         }
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
+        
+        gtk_label_set_text (GTK_LABEL (ctrl->AzRead), "---");
+        gtk_label_set_text (GTK_LABEL (ctrl->ElRead), "---");
     }
 }
 
@@ -763,6 +784,9 @@ static gboolean
 rot_ctrl_timeout_cb (gpointer data)
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
+    gdouble rotaz=0.0, rotel=0.0;
+    gchar *text;
+    
     
     if (ctrl->busy) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
@@ -795,10 +819,21 @@ rot_ctrl_timeout_cb (gpointer data)
         /* TODO: Update controller thread on polar plot */
     }
 
-    if (ctrl->engaged) {
+    if ((ctrl->engaged) && (ctrl->conf != NULL)) {
+        
+        /* read back current value from device */
+        get_pos (ctrl, &rotaz, &rotel);
+        
+        /* update display widgets */
+        text = g_strdup_printf ("%.2f\302\260", rotaz);
+        gtk_label_set_text (GTK_LABEL (ctrl->AzRead), text);
+        g_free (text);
+        text = g_strdup_printf ("%.2f\302\260", rotel);
+        gtk_label_set_text (GTK_LABEL (ctrl->ElRead), text);
+        g_free (text);
+        
         /* if tolerance exceeded */
         /* TODO: send controller values to rotator device */
-        /* TODO: read back current position from device */
         /* TODO: update polar plot */
     }
     
@@ -807,6 +842,125 @@ rot_ctrl_timeout_cb (gpointer data)
     
     return TRUE;
 }
+
+
+/** \brief Read rotator position from device.
+ * \param ctrl Pointer to the GtkRotCtrl widget.
+ * \param az The current Az as read from the device
+ * \param el The current El as read from the device
+ */
+static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
+{
+    gchar  *buff,**vbuff;
+    gint    written,size;
+    gint    status;
+    struct hostent *h;
+    struct sockaddr_in ServAddr;
+    gint  sock;          /*!< Network socket */
+
+                         
+    if ((az == NULL) || (el == NULL)) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: NULL storage."),
+                     __FILE__, __LINE__);
+        return;
+    }
+    
+    /* create socket */
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to create socket"),
+                       __FILE__, __LINE__);
+        return;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%d Network socket created successfully"),
+                       __FILE__, __LINE__);
+    }
+        
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(ctrl->conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to connect to %s:%d"),
+                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+        return;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%d: Connection opened to %s:%d"),
+                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+    }
+    
+    /* send command */
+    buff = g_strdup_printf ("p\n");
+    
+    /* number of bytes to write depends on platform (EOL) */
+#ifdef G_OS_WIN32
+    size = 3;
+#else
+    size = 2;
+#endif
+    written = send(sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: SIZE ERROR %d / %d"),
+                       __FILE__, __LINE__, written, size);
+    }
+    g_free (buff);
+    
+    
+    /* try to read answer */
+    buff = g_try_malloc (128);
+    if (buff == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
+                       __FILE__, __FUNCTION__);
+        shutdown (sock, SHUT_RDWR);
+        close (sock);
+        return;
+    }
+        
+    size = read (sock, buff, 127);
+    if (size == 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Got 0 bytes from rotctld"),
+                       __FILE__, __FUNCTION__);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%s: Read %d bytes from rotctld"),
+                      __FILE__, __FUNCTION__, size);
+        
+        buff[size] = 0;
+        vbuff = g_strsplit (buff, "\n", 3);
+        *az = g_strtod (vbuff[0], NULL);
+        *el = g_strtod (vbuff[1], NULL);
+                
+        g_free (buff);
+        g_strfreev (vbuff);
+    }
+    
+    shutdown (sock, SHUT_RDWR);
+    close (sock);
+
+    
+}
+
+
+static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
+{
+    
+}
+
 
 
 
