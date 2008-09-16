@@ -368,8 +368,15 @@ void
 gtk_rot_knob_set_min   (GtkRotKnob *knob, gdouble min)
 {
     /* just som sanity check we have only 3 digits */
-    if (min < 1000)
+    if (min < 1000) {
         knob->min = min;
+        
+        /* ensure that current value is within range */
+        if (knob->value < knob->min) {
+            knob->value = knob->min;
+            gtk_rot_knob_update (knob);
+        }
+    }
 }
 
 /** \brief Set the upper limit of the control widget
@@ -380,8 +387,15 @@ void
 gtk_rot_knob_set_max (GtkRotKnob *knob, gdouble max)
 {
     /* just som sanity check we have only 3 digits */
-    if (max < 1000)
+    if (max < 1000) {
         knob->max = max;
+        
+        /* ensure that current value is within range */
+        if (knob->value > knob->max) {
+            knob->value = knob->max;
+            gtk_rot_knob_update (knob);
+        }
+    }
 }
 
 
