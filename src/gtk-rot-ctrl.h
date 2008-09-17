@@ -73,6 +73,7 @@ struct _gtk_rot_ctrl
     GtkWidget *SatCnt;
     GtkWidget *DevSel;
     GtkWidget *plot;    /*!< Polar plot widget */
+    GtkWidget *LockBut;
                         
     rotor_conf_t *conf;
     gdouble       t;  /*!< Time when sat data last has been updated. */
@@ -90,6 +91,8 @@ struct _gtk_rot_ctrl
     gboolean tracking;  /*!< Flag set when we are tracking a target. */
     gboolean busy;      /*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
+                        
+    gint     errcnt;    /*!< Error counter. */
 };
 
 struct _GtkRotCtrlClass

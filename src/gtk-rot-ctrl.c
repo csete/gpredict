@@ -57,6 +57,7 @@
 /* END */
 
 #define FMTSTR "%7.2f\302\260"
+#define MAX_ERROR_COUNT 5
 
 
 static void gtk_rot_ctrl_class_init (GtkRotCtrlClass *class);
@@ -81,8 +82,8 @@ static void rot_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rot_ctrl_timeout_cb (gpointer data);
 static void update_count_down (GtkRotCtrl *ctrl, gdouble t);
 
-static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el);
-static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el);
+static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el);
+static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -157,6 +158,7 @@ gtk_rot_ctrl_init (GtkRotCtrl *ctrl)
     ctrl->delay = 1000;
     ctrl->timerid = 0;
     ctrl->tolerance = 1.0;
+    ctrl->errcnt = 0;
 }
 
 static void
@@ -515,10 +517,10 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel, 1, 2, 0, 1);
 
     /* Engage button */
-    lock = gtk_toggle_button_new_with_label (_("Engage"));
-    gtk_widget_set_tooltip_text (lock, _("Engage the selcted rotor device"));
-    g_signal_connect (lock, "toggled", G_CALLBACK (rot_locked_cb), ctrl);
-    gtk_table_attach_defaults (GTK_TABLE (table), lock, 2, 3, 0, 1);
+    ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
+    gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selcted rotor device"));
+    g_signal_connect (ctrl->LockBut, "toggled", G_CALLBACK (rot_locked_cb), ctrl);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LockBut, 2, 3, 0, 1);
     
     /* Timeout */
     label = gtk_label_new (_("Cycle:"));
@@ -791,6 +793,7 @@ rot_ctrl_timeout_cb (gpointer data)
     gdouble rotaz=0.0, rotel=0.0;
     gdouble setaz,setel;
     gchar *text;
+    gboolean error = FALSE;
     
     
     if (ctrl->busy) {
@@ -827,15 +830,21 @@ rot_ctrl_timeout_cb (gpointer data)
     if ((ctrl->engaged) && (ctrl->conf != NULL)) {
         
         /* read back current value from device */
-        get_pos (ctrl, &rotaz, &rotel);
+        if (get_pos (ctrl, &rotaz, &rotel)) {
         
-        /* update display widgets */
-        text = g_strdup_printf ("%.2f\302\260", rotaz);
-        gtk_label_set_text (GTK_LABEL (ctrl->AzRead), text);
-        g_free (text);
-        text = g_strdup_printf ("%.2f\302\260", rotel);
-        gtk_label_set_text (GTK_LABEL (ctrl->ElRead), text);
-        g_free (text);
+            /* update display widgets */
+            text = g_strdup_printf ("%.2f\302\260", rotaz);
+            gtk_label_set_text (GTK_LABEL (ctrl->AzRead), text);
+            g_free (text);
+            text = g_strdup_printf ("%.2f\302\260", rotel);
+            gtk_label_set_text (GTK_LABEL (ctrl->ElRead), text);
+            g_free (text);
+        }
+        else {
+            gtk_label_set_text (GTK_LABEL (ctrl->AzRead), _("ERROR"));
+            gtk_label_set_text (GTK_LABEL (ctrl->ElRead), _("ERROR"));
+            error = TRUE;
+        }
         
         /* if tolerance exceeded */
         setaz = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet));
@@ -843,9 +852,33 @@ rot_ctrl_timeout_cb (gpointer data)
         if ((fabs(setaz-rotaz) > ctrl->tolerance) ||
              (fabs(setel-rotel) > ctrl->tolerance)) {
             /* send controller values to rotator device */
-            set_pos (ctrl, setaz, setel);
+            if (!set_pos (ctrl, setaz, setel)) {
+                error = TRUE;
+            }
         }
         
+        /* check error status */
+        if (!error) {
+            /* reset error counter */
+            ctrl->errcnt = 0;
+        }
+        else {
+            if (ctrl->errcnt >= MAX_ERROR_COUNT) {
+                /* disengage device */
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
+                ctrl->engaged = FALSE;
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                               __FUNCTION__, MAX_ERROR_COUNT);
+                ctrl->errcnt = 0;
+            }
+            else {
+                /* increment error counter */
+                ctrl->errcnt++;
+            }
+        }
+        
+        g_print ("COUNT: %d\n", ctrl->errcnt);
         /* TODO: update polar plot */
     }
     
@@ -860,8 +893,10 @@ rot_ctrl_timeout_cb (gpointer data)
  * \param ctrl Pointer to the GtkRotCtrl widget.
  * \param az The current Az as read from the device
  * \param el The current El as read from the device
+ * \return TRUE if the position was successfully retrieved, FALSE if an
+ *         error occurred.
  */
-static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
+static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 {
     gchar  *buff,**vbuff;
     gint    written,size;
@@ -875,7 +910,7 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: NULL storage."),
                      __FILE__, __LINE__);
-        return;
+        return FALSE;
     }
     
     /* create socket */
@@ -884,7 +919,7 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to create socket"),
                        __FILE__, __LINE__);
-        return;
+        return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -904,7 +939,7 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
                        __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
-        return;
+        return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -938,7 +973,7 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
                        __FILE__, __FUNCTION__);
         shutdown (sock, SHUT_RDWR);
         close (sock);
-        return;
+        return FALSE;
     }
         
     size = read (sock, buff, 127);
@@ -964,7 +999,7 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
     shutdown (sock, SHUT_RDWR);
     close (sock);
 
-    
+    return TRUE;
 }
 
 
@@ -972,11 +1007,13 @@ static void get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
  * \param ctrl Poitner to the GtkRotCtrl widget
  * \param az The new Azimuth
  * \param el The new Elevation
+ * \return TRUE if the new position has been sent successfully
+ *         FALSE if an error occurred
  * 
  * \note The function does not perform any range check since the GtkRotKnob
  * should always keep its value within range.
  */
-static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
+static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
 {
     gchar  *buff;
     gchar  azstr[8],elstr[8];
@@ -993,7 +1030,7 @@ static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to create socket"),
                        __FILE__, __LINE__);
-        return;
+        return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -1013,7 +1050,7 @@ static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
                        __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
-        return;
+        return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -1046,7 +1083,7 @@ static void set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
     shutdown (sock, SHUT_RDWR);
     close (sock);
 
-
+    return TRUE;
 }
 
 
