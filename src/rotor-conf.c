@@ -111,52 +111,48 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     
     conf->aztype = g_key_file_get_integer (cfg, GROUP, KEY_AZTYPE, &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: Az type not defined for %s. Assuming 0..360\302\260"),
+                       __FUNCTION__, conf->name);
         g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+        
+        conf->aztype = ROT_AZ_TYPE_360;
     }
     
     conf->minaz = g_key_file_get_double (cfg, GROUP, KEY_MINAZ, &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: MinAz not defined for %s. Assuming 0\302\260."),
+                       __FUNCTION__, conf->name);
         g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+        conf->minaz = 0.0;
     }
     
     conf->maxaz = g_key_file_get_double (cfg, GROUP, KEY_MAXAZ, &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: MaxAz not defined for %s. Assuming 360\302\260."),
+                       __FUNCTION__, conf->name);
         g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+        conf->maxaz = 360.0;
     }
     
     conf->minel = g_key_file_get_double (cfg, GROUP, KEY_MINEL, &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: MinEl not defined for %s. Assuming 0\302\260."),
+                       __FUNCTION__, conf->name);
         g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+        conf->minel = 0.0;
     }
     
     conf->maxel = g_key_file_get_double (cfg, GROUP, KEY_MAXEL, &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: MaxEl not defined for %s. Assuming 90\302\260."),
+                       __FUNCTION__, conf->name);
         g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+        conf->maxel = 90.0;
     }
     
     g_key_file_free (cfg);
