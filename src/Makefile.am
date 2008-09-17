@@ -36,7 +36,6 @@ gpredict_SOURCES = \
 	gpredict-utils.c gpredict-utils.h \
 	gtk-azel-plot.c gtk-azel-plot.h \
 	gtk-freq-knob.c gtk-freq-knob.h \
-	gtk-met.c gtk-met.h \
 	gtk-polar-plot.c gtk-polar-plot.h \
 	gtk-polar-view.c gtk-polar-view.h \
 	gtk-polar-view-popup.c gtk-polar-view-popup.h \
@@ -70,9 +69,7 @@ gpredict_SOURCES = \
 	predict-tools.c predict-tools.h \
 	qth-editor.c qth-editor.h \
 	radio-conf.c radio-conf.h \
-	rig-io.c rig-io.h \
 	rotor-conf.c rotor-conf.h \
-	rdv.c rdv.h \
 	sat-cfg.c sat-cfg.h \
 	sat-log.c sat-log.h \
 	sat-log-browser.c sat-log-browser.h \
