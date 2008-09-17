@@ -1,13 +1,8 @@
 Future plans for gpredict development include:
 
-* Add new satellites to database when updating TLE.
-* Print predicted satellite passes.
-* Choose between civil, nautical, and astronomical twilight when predicting
-  satellite visibilities.
 * Show day/night on satmap.
 * Optionally, use simulated time as T0 for predictions.
 * TLE editor.
-* Automated radio and antenna rotator.
 * Advanced pass predictor.
 * Predict communication windows between two ground stations.
 * Determine all orbit types.
@@ -15,8 +10,6 @@ Future plans for gpredict development include:
 * Scheduler / External Hooks (menubar, see 1313635, 724998)
 * Save future pass prediction reports as HTML.
 * Print future pass predictions.
-* Possibility to show geographical coordinates for ground station on map
-  and polar views.
 * Online help.
 * Native Mac OS X port.
 * Dynamic reconfiguration. No need to re-load modules if configuration changes
@@ -28,3 +21,10 @@ Future plans for gpredict development include:
 * Improve time controller to have tuning-like behaviour, i.e. when
    minutes flip from 59 to 0 the hour is incremented.
 * Toggle the ground track on and off for all the satellites on the map.
+* New layout engine allowing any number of views per module.
+* SpaceView: New view show the satellites using a movable camera in space.
+* SkyView: 
+* The satellite map can show the range circle of the ground station according to
+  the selected satellite.
+x Define obstacles for ground stations.
+x Feature request 1613758: Command Line Interface to Gpredict.

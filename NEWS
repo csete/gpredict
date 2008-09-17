@@ -2,19 +2,9 @@
 Changes in version 1.0 (TBD):
 
 - Radio doppler tuning via hamlibs rigctld.
-x Antenna rotator control via hamlibs rotctld.
-x New layout engine allowing any number of views per module.
-x SpaceView: New view show the satellites using a movable camera in space.
-x SkyView: 
-x The satellite map can show the range circle of the ground station according to
-  the selected satellite.
-x The satellite map can show day/night side of Earh.
-x Track the Sun and the Moon as if they were satellites.
+- Antenna rotator control via hamlibs rotctld.
 - User defined twilight threshold for predicting satellite visibility.
-x Define obstacles for ground stations.
-x Feature request 1613758: Command Line Interface to Gpredict.
 - Feature request 1705375: Restore main window position and size.
-x Fixed bug 1650251: Groundtracks have discontinuities.
 - Fixed bug 1752908: New satellites in TLE files.
 - Fixed bug 1818144: No log file created at first execution.
 - Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
@@ -23,7 +13,7 @@ x Fixed bug 1650251: Groundtracks have discontinuities.
 - Fixed bug 1954664: Wrong overpass prediction.
 - Fixed bug 1880815: Null pointer dereference causes crash on startup.
 x Windows: New installer instead of ZIP distribution.
-x Updated user manual as PDF and HTML (online).
+- Updated PDF user manual as PDF.
 
 
 Changes in version 0.9.0 (2007-09-29):
