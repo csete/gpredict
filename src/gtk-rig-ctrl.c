@@ -60,6 +60,7 @@
 
 
 #define AZEL_FMTSTR "%7.2f\302\260"
+#define MAX_ERROR_COUNT 5
 
 
 static void gtk_rig_ctrl_class_init (GtkRigCtrlClass *class);
@@ -80,7 +81,7 @@ static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
-static void set_freq (GtkRigCtrl *ctrl, gdouble freq);
+static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
 
@@ -155,6 +156,7 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
+    ctrl->errcnt = 0;
 }
 
 static void
@@ -453,7 +455,6 @@ static GtkWidget *
 create_conf_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*timer;
-    GtkWidget   *lock;
     GDir        *dir = NULL;   /* directory handle */
     GError      *error = NULL; /* error flag and info */
     gchar       *cfgdir;
@@ -511,10 +512,10 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     /* config will be force-loaded after LO spin is created */
             
     /* Engage button */
-    lock = gtk_toggle_button_new_with_label (_("Engage"));
-    gtk_widget_set_tooltip_text (lock, _("Engage the selcted radio device"));
-    g_signal_connect (lock, "toggled", G_CALLBACK (rig_locked_cb), ctrl);
-    gtk_table_attach_defaults (GTK_TABLE (table), lock, 2, 3, 0, 1);
+    ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
+    gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selcted radio device"));
+    g_signal_connect (ctrl->LockBut, "toggled", G_CALLBACK (rig_locked_cb), ctrl);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LockBut, 2, 3, 0, 1);
     
     /* Local oscillator value */
     label = gtk_label_new (_("Local Osc:"));
@@ -770,7 +771,25 @@ rig_ctrl_timeout_cb (gpointer data)
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ctrl->conf != NULL)) {
-        set_freq (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreq)));
+        if (set_freq (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreq)))) {
+            /* reset error counter */
+            ctrl->errcnt = 0;
+        }
+        else {
+            if (ctrl->errcnt >= MAX_ERROR_COUNT) {
+                /* disengage device */
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
+                ctrl->engaged = FALSE;
+                ctrl->errcnt = 0;
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                               __FUNCTION__, MAX_ERROR_COUNT);
+            }
+            else {
+                /* increment error counter */
+                ctrl->errcnt++;
+            }
+        }
     }
     
     
@@ -781,14 +800,16 @@ rig_ctrl_timeout_cb (gpointer data)
 
 
 /** \brief Set frequency
- * \param[in] ctrl Pointer to the GtkRigCtrl structure.
- * \param[in] freq The new frequency.
+ * \param ctrl Pointer to the GtkRigCtrl structure.
+ * \param freq The new frequency.
+ * \return TRUE if the operation was successful, FALSE if a connection error
+ *         occurred.
  * 
  * \note freq is not strictly necessary for normal use since we could have
  *       gotten the current frequency from the ctrl; however, the param
  *       might become useful in the future.
  */
-static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
+static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq)
 {
     gchar  *buff;
     gint    written,size;
@@ -803,7 +824,7 @@ static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
                        __FUNCTION__);
-        return;
+        return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -823,7 +844,7 @@ static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
                        __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-        return;
+        return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -850,6 +871,7 @@ static void set_freq (GtkRigCtrl *ctrl, gdouble freq)
     shutdown (sock, SHUT_RDWR);
     close (sock);
     
+    return TRUE;
 }
 
 

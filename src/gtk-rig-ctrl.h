@@ -73,6 +73,7 @@ struct _gtk_rig_ctrl
     /* other widgets */
     GtkWidget *DevSel;   /*!< Device selector */
     GtkWidget *LO;       /*!< Local oscillator */
+    GtkWidget *LockBut;
     
     radio_conf_t *conf;  /*!< Radio configuration */
     
@@ -87,6 +88,7 @@ struct _gtk_rig_ctrl
     gboolean tracking;  /*!< Flag set when we are tracking a target. */
     gboolean busy;      /*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rig device is engaged. */
+    gint     errcnt;    /*!< Error counter. */
 };
 
 struct _GtkRigCtrlClass
