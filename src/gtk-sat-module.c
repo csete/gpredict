@@ -63,7 +63,6 @@
 #include "gtk-sat-map.h"
 #include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
-#include "gtk-met.h"
 #include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
 
@@ -509,13 +508,6 @@ create_view (GtkSatModule *module, guint num)
 								   0);
 		break;
 
-	case GTK_SAT_MOD_VIEW_MET:
-		view = gtk_met_new (module->cfgdata,
-							module->satellites,
-							module->qth);
-							
-		break;
-
 	default:
 		sat_log_log (SAT_LOG_LEVEL_BUG,
 					 _("%s:%d: Invalid child type (%d)\nUsing GtkSatList..."),
@@ -924,11 +916,6 @@ update_child (GtkWidget *child, gdouble tstamp)
 		gtk_single_sat_update (child);
 	}
 
-	else if (IS_GTK_MET(child)) {
-		GTK_MET (child)->tstamp = tstamp;
-		gtk_met_update (child);
-	}
-
 	else {
 		sat_log_log (SAT_LOG_LEVEL_BUG,
 					 _("%f:%d: Unknown child type"),
@@ -1002,18 +989,8 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
 	 */
 	/* check that we have a GtkMet child */
 	/**** FIXME: GtkMet may not be child 2.... */
-	if ((sat->tle.catnr == 99122) &&
-		(IS_GTK_MET (module->child_2) &&
-		 (module->tmgCdnum - GTK_MET (module->child_2)->launch) < 0.002778)) {
+	if G_UNLIKELY(FALSE) {
 
-		sat->ssplat = 28.51;
-		sat->ssplon = -80.55;
-		sat->alt = 0.0;
-		sat->footprint = 500.0;
-		sat->phase = 0.0;
-		sat->orbit = 0;
-		sat->range = obs_set.range;
-		sat->range_rate = 0.0;
 	}
 	else {
 
@@ -1572,9 +1549,6 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
 	else if (IS_GTK_SAT_LIST (widget)) {
 	}
 
-	else if (IS_GTK_MET (widget)) {
-		gtk_met_reload_sats (widget, module->satellites);
-	}
 
 	else {
 		sat_log_log (SAT_LOG_LEVEL_BUG,

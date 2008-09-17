@@ -50,7 +50,6 @@
 #include "gpredict-help.h"
 #include "tle-update.h"
 #include "compat.h"
-#include "rdv.h"
 #include "menubar.h"
 #include "config-keys.h"
 #ifdef HAVE_CONFIG_H
@@ -66,7 +65,6 @@ static void   menubar_new_mod_cb   (GtkWidget *widget, gpointer data);
 static void   menubar_open_mod_cb  (GtkWidget *widget, gpointer data);
 static void   menubar_message_log  (GtkWidget *widget, gpointer data);
 static void   menubar_app_exit_cb  (GtkWidget *widget, gpointer data);
-static void   menubar_rdv_cb       (GtkWidget *widget, gpointer data);
 static void   menubar_freq_edit_cb (GtkWidget *widget, gpointer data);
 static void   menubar_pref_cb      (GtkWidget *widget, gpointer data);
 static void   menubar_tle_net_cb   (GtkWidget *widget, gpointer data);
@@ -127,8 +125,6 @@ static GtkActionEntry entries[] = {
 	  G_CALLBACK (menubar_window_cb)},
 	{ "Predict", GTK_STOCK_DND_MULTIPLE, N_("Advanced Predict"), NULL,
 	  N_("Open advanced pass predictor"), G_CALLBACK (menubar_predict_cb)},
-	{ "Rdv", NULL, N_("_Space Shuttle Tool"), NULL,
-	  N_("Open the space shuttle tool window"), G_CALLBACK (menubar_rdv_cb)},
 
 	/* Help menu */
 	{ "GettingStarted", GTK_STOCK_EXECUTE, N_("Getting Started"), NULL,
@@ -172,8 +168,6 @@ static const char *menu_desc =
 "      <menu action='ToolsMenu'>"
 "         <menuitem action='Window'/>"
 "         <menuitem action='Predict'/>"
-"         <separator/>"
-"         <menuitem action='Rdv'/>"
 /* "         <separator/>" */
 /* "         <menuitem action='Lab'/>" */
 "      </menu>"
@@ -739,12 +733,6 @@ menubar_tle_manual_cb       (GtkWidget *widget, gpointer data)
 
 
 
-
-static void
-menubar_rdv_cb (GtkWidget *widget, gpointer data)
-{
-	rdv_open ();
-}
 
 
 static void
