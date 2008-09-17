@@ -91,6 +91,9 @@ struct _GtkPolarPlot
 
 	pass_t             *pass;
 	GooCanvasItemModel *track;                  /*!< Sky track. */
+    GooCanvasItemModel *target;                 /*!< Target object marker */
+    GooCanvasItemModel *ctrl;                   /*!< Position marker for the controller */
+    GooCanvasItemModel *rot1,*rot2,*rot3,*rot4; /*!< Position marker for the rotor */
 	GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
 
 	qth_t      *qth;      /*!< Pointer to current location. */
@@ -121,7 +124,9 @@ GtkType        gtk_polar_plot_get_type   (void);
 GtkWidget*     gtk_polar_plot_new        (qth_t *qth, pass_t *pass);
 
 void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass);
-
+void gtk_polar_plot_set_target_pos (GtkPolarPlot *plot, gdouble az, gdouble el);
+void gtk_polar_plot_set_ctrl_pos (GtkPolarPlot *plot, gdouble az, gdouble el);
+void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el);
 void gtk_polar_plot_show_time_ticks (GtkPolarPlot *plot, gboolean show);
 
 

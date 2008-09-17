@@ -155,6 +155,7 @@ gtk_polar_plot_init (GtkPolarPlot *polview)
 	polview->qthinfo   = FALSE;
 	polview->cursinfo  = FALSE;
 	polview->extratick = FALSE;
+    polview->target    = NULL;
 }
 
 
@@ -267,6 +268,275 @@ void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass)
         create_track (plot);
     }
 
+}
+
+
+
+/** \brief Set target object position
+ * \param plot Pointer to the GtkPolarPlot widget
+ * \param az Azimuth of the target object
+ * \param el Elevation of the target object
+ * 
+ * If either az or el are negative the target object will be hidden
+ */
+void gtk_polar_plot_set_target_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
+{
+    GooCanvasItemModel *root;
+    gint                idx;
+    gfloat              x,y;
+    guint32             col;
+    
+    
+    if (plot == NULL)
+        return;
+    
+    
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (plot->canvas));
+
+    if ((az < 0.0) || (el < 0.0)) {
+        if (plot->target != NULL) {
+            /* the target object is visible; delete it */
+            idx = goo_canvas_item_model_find_child (root, plot->target);
+            if (idx != -1) {
+                goo_canvas_item_model_remove_child (root, idx);
+            }
+            plot->target = NULL;
+        }
+        /* else the target object is not visible; nothing to do */
+    }
+    else {
+        /* we need to either update or create the object */
+        azel_to_xy (plot, az, el, &x, &y);
+        
+        if (plot->target != NULL) {
+            /* the target object already exists; move it */
+            g_object_set (plot->target,
+                          "x", x - MARKER_SIZE_HALF,
+                          "y", y - MARKER_SIZE_HALF,
+                          NULL);
+        }
+        else {
+            /* the target object does not exist; create it */
+            col = sat_cfg_get_int (SAT_CFG_INT_POLAR_SAT_COL);
+            plot->target = goo_canvas_rect_model_new (root,
+                                                      x - MARKER_SIZE_HALF,
+                                                      y - MARKER_SIZE_HALF,
+                                                      2*MARKER_SIZE_HALF,
+                                                      2*MARKER_SIZE_HALF,
+                                                      "fill-color-rgba", col,
+                                                      "stroke-color-rgba", col,
+                                                      NULL);
+        }
+    }
+}
+
+
+/** \brief Set controller object position
+ * \param plot Pointer to the GtkPolarPlot widget
+ * \param az Azimuth of the controller object
+ * \param el Elevation of the controller object
+ * 
+ * If either az or el are negative the controller object will be hidden
+ */
+void gtk_polar_plot_set_ctrl_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
+{
+    GooCanvasItemModel *root;
+    gint                idx;
+    gfloat              x,y;
+    guint32             col;
+    
+    
+    if (plot == NULL)
+        return;
+    
+    
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (plot->canvas));
+
+    if ((az < 0.0) || (el < 0.0)) {
+        if (plot->ctrl != NULL) {
+            /* the target object is visible; delete it */
+            idx = goo_canvas_item_model_find_child (root, plot->ctrl);
+            if (idx != -1) {
+                goo_canvas_item_model_remove_child (root, idx);
+            }
+            plot->ctrl = NULL;
+        }
+        /* else the target object is not visible; nothing to do */
+    }
+    else {
+        /* we need to either update or create the object */
+        azel_to_xy (plot, az, el, &x, &y);
+        
+        if (plot->ctrl != NULL) {
+            /* the target object already exists; move it */
+            g_object_set (plot->ctrl,
+                          "center_x", x,
+                          "center_y", y,
+                          NULL);
+        }
+        else {
+            /* the target object does not exist; create it */
+            col = sat_cfg_get_int (SAT_CFG_INT_POLAR_SAT_COL);
+            plot->ctrl = goo_canvas_ellipse_model_new (root,
+                    x, y, 7, 7,
+                    "fill-color-rgba", 0xFF00000F,
+                    "stroke-color-rgba", col,
+                    "line-width", 0.8,
+                    NULL);
+        }
+    }
+    
+}
+
+
+/** \brief Set rotator object position
+ * \param plot Pointer to the GtkPolarPlot widget
+ * \param az Azimuth of the rotator object
+ * \param el Elevation of the rotator object
+ * 
+ * If either az or el are negative the controller object will be hidden
+ */
+void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
+{
+    GooCanvasItemModel *root;
+    GooCanvasPoints    *prec;
+    gint                idx;
+    gfloat              x,y;
+    guint32             col;
+    
+    
+    if (plot == NULL)
+        return;
+    
+    
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (plot->canvas));
+
+    if ((az < 0.0) || (el <= 0.0)) {
+        if (plot->rot1 != NULL) {
+            /* the target object is visible; delete it */
+            idx = goo_canvas_item_model_find_child (root, plot->rot1);
+            if (idx != -1) {
+                goo_canvas_item_model_remove_child (root, idx);
+            }
+            plot->rot1 = NULL;
+        }
+        if (plot->rot2 != NULL) {
+            /* the target object is visible; delete it */
+            idx = goo_canvas_item_model_find_child (root, plot->rot2);
+            if (idx != -1) {
+                goo_canvas_item_model_remove_child (root, idx);
+            }
+            plot->rot2 = NULL;
+        }
+        if (plot->rot3 != NULL) {
+            /* the target object is visible; delete it */
+            idx = goo_canvas_item_model_find_child (root, plot->rot3);
+            if (idx != -1) {
+                goo_canvas_item_model_remove_child (root, idx);
+            }
+            plot->rot3 = NULL;
+        }
+        if (plot->rot4 != NULL) {
+            /* the target object is visible; delete it */
+            idx = goo_canvas_item_model_find_child (root, plot->rot4);
+            if (idx != -1) {
+                goo_canvas_item_model_remove_child (root, idx);
+            }
+            plot->rot4 = NULL;
+        }
+    }
+    else {
+        /* we need to either update or create the object */
+        azel_to_xy (plot, az, el, &x, &y);
+        col = sat_cfg_get_int (SAT_CFG_INT_POLAR_SAT_COL);
+        
+        
+        if (plot->rot1 != NULL) {
+            /* the target object already exists; move it */
+            prec = goo_canvas_points_new (2);
+            prec->coords[0] = x;
+            prec->coords[1] = y-4;
+            prec->coords[2] = x;
+            prec->coords[3] = y-14;
+            g_object_set (plot->rot1,
+                          "points", prec,
+                          NULL);
+            goo_canvas_points_unref (prec);
+        }
+        else {
+            /* the target object does not exist; create it */
+            plot->rot1 = goo_canvas_polyline_model_new_line (root,
+                    x, y-4, x, y-14,
+                    "fill-color-rgba", col,
+                    "stroke-color-rgba", col,
+                    "line-width", 1.0,
+                    NULL);
+        }
+        if (plot->rot2 != NULL) {
+            /* the target object already exists; move it */
+            prec = goo_canvas_points_new (2);
+            prec->coords[0] = x+4;
+            prec->coords[1] = y;
+            prec->coords[2] = x+14;
+            prec->coords[3] = y;
+            g_object_set (plot->rot2,
+                          "points", prec,
+                          NULL);
+            goo_canvas_points_unref (prec);
+        }
+        else {
+            /* the target object does not exist; create it */
+            plot->rot2 = goo_canvas_polyline_model_new_line (root,
+                    x+4, y, x+14, y,
+                    "fill-color-rgba", col,
+                    "stroke-color-rgba", col,
+                    "line-width", 1.0,
+                    NULL);
+        }
+        if (plot->rot3 != NULL) {
+            /* the target object already exists; move it */
+            prec = goo_canvas_points_new (2);
+            prec->coords[0] = x;
+            prec->coords[1] = y+4;
+            prec->coords[2] = x;
+            prec->coords[3] = y+14;
+            g_object_set (plot->rot3,
+                          "points", prec,
+                          NULL);
+            goo_canvas_points_unref (prec);
+        }
+        else {
+            /* the target object does not exist; create it */
+            plot->rot3 = goo_canvas_polyline_model_new_line (root,
+                    x, y+4, x, y+14,
+                    "fill-color-rgba", col,
+                    "stroke-color-rgba", col,
+                    "line-width", 1.0,
+                    NULL);
+        }
+        if (plot->rot4 != NULL) {
+            /* the target object already exists; move it */
+            prec = goo_canvas_points_new (2);
+            prec->coords[0] = x-4;
+            prec->coords[1] = y;
+            prec->coords[2] = x-14;
+            prec->coords[3] = y;
+            g_object_set (plot->rot4,
+                          "points", prec,
+                          NULL);
+            goo_canvas_points_unref (prec);
+        }
+        else {
+            /* the target object does not exist; create it */
+            plot->rot4 = goo_canvas_polyline_model_new_line (root,
+                    x-4, y, x-14, y,
+                    "fill-color-rgba", col,
+                    "stroke-color-rgba", col,
+                    "line-width", 1.0,
+                    NULL);
+        }
+    }
+    
 }
 
 
@@ -599,6 +869,8 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 		/* sky track */
         if (polv->pass != NULL)
             update_track (polv);
+        
+
 
 	}
 }
