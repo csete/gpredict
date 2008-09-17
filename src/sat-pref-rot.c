@@ -61,6 +61,12 @@ static void render_angle (GtkTreeViewColumn *col,
                           GtkTreeIter       *iter,
                           gpointer           column);
 
+static void render_aztype (GtkTreeViewColumn *col,
+                           GtkCellRenderer   *renderer,
+                           GtkTreeModel      *model,
+                           GtkTreeIter       *iter,
+                           gpointer           column);
+
 /* global objects */
 static GtkWidget *addbutton;
 static GtkWidget *editbutton;
@@ -101,6 +107,7 @@ static void create_rot_list ()
 
 
     rotlist = gtk_tree_view_new ();
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (rotlist), TRUE);
 
     model = create_and_fill_model ();
     gtk_tree_view_set_model (GTK_TREE_VIEW (rotlist), model);
@@ -160,11 +167,22 @@ static void create_rot_list ()
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Max El"), renderer,
-                                                    "text", ROT_LIST_COL_MAXAZ,
+                                                    "text", ROT_LIST_COL_MAXEL,
                                                     NULL);
     gtk_tree_view_column_set_cell_data_func (column, renderer,
                                              render_angle,
                                              GUINT_TO_POINTER(ROT_LIST_COL_MAXEL),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
+    
+    /* Az type */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Azimuth Type"), renderer,
+                                                      "text", ROT_LIST_COL_AZTYPE,
+                                                       NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_aztype,
+                                             GUINT_TO_POINTER(ROT_LIST_COL_AZTYPE),
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
 }
@@ -191,7 +209,8 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_DOUBLE,    // Min Az
                                     G_TYPE_DOUBLE,    // Max Az
                                     G_TYPE_DOUBLE,    // Min El
-                                    G_TYPE_DOUBLE     // Max El
+                                    G_TYPE_DOUBLE,    // Max El
+                                    G_TYPE_INT        // Az type
                                    );
 
     /* open configuration directory */
@@ -221,6 +240,7 @@ static GtkTreeModel *create_and_fill_model ()
                                         ROT_LIST_COL_MAXAZ, conf.maxaz,
                                         ROT_LIST_COL_MINEL, conf.minel,
                                         ROT_LIST_COL_MAXEL, conf.maxel,
+                                        ROT_LIST_COL_AZTYPE, conf.aztype,
                                         -1);
                     
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -332,6 +352,7 @@ void sat_pref_rot_ok     ()
         .maxaz = 360,
         .minel = 0,
         .maxel = 90,
+        .aztype = ROT_AZ_TYPE_360,
     };
 
     
@@ -375,6 +396,7 @@ void sat_pref_rot_ok     ()
                                 ROT_LIST_COL_MAXAZ, &conf.maxaz,
                                 ROT_LIST_COL_MINEL, &conf.minel,
                                 ROT_LIST_COL_MAXEL, &conf.maxel,
+                                ROT_LIST_COL_AZTYPE, &conf.aztype,
                                 -1);
             rotor_conf_save (&conf);
         
@@ -415,6 +437,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .maxaz = 360,
         .minel = 0,
         .maxel = 90,
+        .aztype = ROT_AZ_TYPE_360,
     };
     
     /* run rot conf editor */
@@ -432,6 +455,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_MAXAZ, conf.maxaz,
                             ROT_LIST_COL_MINEL, conf.minel,
                             ROT_LIST_COL_MAXEL, conf.maxel,
+                            ROT_LIST_COL_AZTYPE, conf.aztype,
                             -1);
         
         g_free (conf.name);
@@ -465,6 +489,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .maxaz = 360,
         .minel = 0,
         .maxel = 90,
+        .aztype = ROT_AZ_TYPE_360,
     };
 
     
@@ -493,6 +518,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_MAXAZ, &conf.maxaz,
                             ROT_LIST_COL_MINEL, &conf.minel,
                             ROT_LIST_COL_MAXEL, &conf.maxel,
+                            ROT_LIST_COL_AZTYPE, &conf.aztype,
                             -1);
 
     }
@@ -524,6 +550,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_MAXAZ, conf.maxaz,
                             ROT_LIST_COL_MINEL, conf.minel,
                             ROT_LIST_COL_MAXEL, conf.maxel,
+                            ROT_LIST_COL_AZTYPE, conf.aztype,
                             -1);
         
     }
@@ -609,6 +636,43 @@ static void render_angle (GtkTreeViewColumn *col,
 }
 
 
+/** \brief Render the azimuth type.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ */
+static void render_aztype (GtkTreeViewColumn *col,
+                           GtkCellRenderer   *renderer,
+                           GtkTreeModel      *model,
+                           GtkTreeIter       *iter,
+                           gpointer           column)
+{
+    gint   number;
+    guint   coli = GPOINTER_TO_UINT (column);
+    gchar  *text;
+    
+    gtk_tree_model_get (model, iter, coli, &number, -1);
+
+    switch (number) {
+        case ROT_AZ_TYPE_360:
+            text = g_strdup_printf ("0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
+            break;
+            
+        case ROT_AZ_TYPE_180:
+            text = g_strdup_printf ("-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
+            break;
+            
+        default:
+            text = g_strdup_printf (_("Uknown (%d)"), number);
+            break;
+    }
+    
+    g_object_set (renderer, "text", text, NULL);
+    g_free (text);
+}
 
 
 
