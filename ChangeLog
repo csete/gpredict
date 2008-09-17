@@ -1,8 +1,16 @@
+2008-09-17; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rot-ctrl.[ch]:
+    * src/gtk-rig-ctrl.[ch]:
+    Added error handling. After 5 comm errors the device is disengaged.
+
+
 2008-09-16; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rot-ctrl.[ch]:
     Implemented correct management of next pass taking into account
-    that we may run in simulated time mode. 
+    that we may run in simulated time mode. Finished controller
+    implementation.
     
 
 2008-09-10; Alexandru Csete <oz9aec@gmail.com>

@@ -877,7 +877,6 @@ rot_ctrl_timeout_cb (gpointer data)
             }
         }
         
-        g_print ("COUNT: %d\n", ctrl->errcnt);
         /* TODO: update polar plot */
     }
     
