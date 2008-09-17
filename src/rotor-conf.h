@@ -33,13 +33,17 @@
 #include <glib.h>
 
 
-
+typedef enum {
+    ROT_AZ_TYPE_360 = 0,    /*!< Azimuth in range 0..360 */
+    ROT_AZ_TYPE_180 = 1     /*!< Azimuth in range -180..+180 */
+} rot_az_type_t;
 
 /** \brief Rotator configuration. */
 typedef struct {
     gchar       *name;      /*!< Configuration file name, less .rot */
     gchar       *host;      /*!< hostname */
     gint         port;      /*!< port number */
+    rot_az_type_t aztype;   /*!< Az type */
     gdouble      minaz;     /*!< Lower azimuth limit */
     gdouble      maxaz;     /*!< Upper azimuth limit */
     gdouble      minel;     /*!< Lower elevation limit */
