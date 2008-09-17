@@ -760,9 +760,11 @@ rot_locked_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
     
-    if (gtk_toggle_button_get_active (button)) {
-        gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
-        ctrl->engaged = TRUE;
+    if (!gtk_toggle_button_get_active (button)) {
+        gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
+        ctrl->engaged = FALSE;
+        gtk_label_set_text (GTK_LABEL (ctrl->AzRead), "---");
+        gtk_label_set_text (GTK_LABEL (ctrl->ElRead), "---");
     }
     else {
         if (ctrl->conf == NULL) {
@@ -772,11 +774,11 @@ rot_locked_cb (GtkToggleButton *button, gpointer data)
                          __FUNCTION__);
             return;
         }
-        gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
-        ctrl->engaged = FALSE;
+        gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
+        ctrl->engaged = TRUE;
         
-        gtk_label_set_text (GTK_LABEL (ctrl->AzRead), "---");
-        gtk_label_set_text (GTK_LABEL (ctrl->ElRead), "---");
+        ctrl->wrops = 0;
+        ctrl->rdops = 0;
     }
 }
 
@@ -838,11 +840,15 @@ rot_ctrl_timeout_cb (gpointer data)
             text = g_strdup_printf ("%.2f\302\260", rotel);
             gtk_label_set_text (GTK_LABEL (ctrl->ElRead), text);
             g_free (text);
+            
+            gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), rotaz, rotel);
         }
         else {
             gtk_label_set_text (GTK_LABEL (ctrl->AzRead), _("ERROR"));
             gtk_label_set_text (GTK_LABEL (ctrl->ElRead), _("ERROR"));
             error = TRUE;
+        
+            gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), -1.0, -1.0);
         }
         
         /* if tolerance exceeded */
@@ -870,16 +876,29 @@ rot_ctrl_timeout_cb (gpointer data)
                              _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
                                __FUNCTION__, MAX_ERROR_COUNT);
                 ctrl->errcnt = 0;
+                //g_print ("ERROR. WROPS: %d   RDOPS: %d\n", ctrl->wrops, ctrl->rdops);
             }
             else {
                 /* increment error counter */
                 ctrl->errcnt++;
             }
         }
-        
-        /* TODO: update polar plot */
+    }
+    else {
+        /* ensure rotor pos is not visible on plot */
+        gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), -1.0, -1.0);
     }
     
+    
+    /* update target object on polar plot */
+    if (ctrl->target != NULL) {
+        gtk_polar_plot_set_target_pos (GTK_POLAR_PLOT (ctrl->plot), ctrl->target->az, ctrl->target->el);
+    }
+    
+    /* update controller circle on polar plot */
+    gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+                                 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
+                                 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
     
     ctrl->busy = FALSE;
     
@@ -997,6 +1016,9 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
     shutdown (sock, SHUT_RDWR);
     close (sock);
 
+    ctrl->wrops++;
+    ctrl->rdops++;
+    
     return TRUE;
 }
 
@@ -1074,12 +1096,14 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
                        __FILE__, __LINE__, written, size);
     }
     
-    g_print ("SZ:%d  WR:%d  AZ:%s  EL:%s  STR:%s", size, written, azstr, elstr, buff);
+    //g_print ("SZ:%d  WR:%d  AZ:%s  EL:%s  STR:%s", size, written, azstr, elstr, buff);
     
     g_free (buff);
     
     shutdown (sock, SHUT_RDWR);
     close (sock);
+    
+    ctrl->wrops++;
 
     return TRUE;
 }

@@ -93,6 +93,10 @@ struct _gtk_rot_ctrl
     gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
                         
     gint     errcnt;    /*!< Error counter. */
+    
+    /* debug related */
+    guint    wrops;
+    guint    rdops;
 };
 
 struct _GtkRotCtrlClass

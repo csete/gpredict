@@ -89,6 +89,10 @@ struct _gtk_rig_ctrl
     gboolean busy;      /*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rig device is engaged. */
     gint     errcnt;    /*!< Error counter. */
+                        
+    /* debug related */
+    guint    wrops;
+    guint    rdops;
 };
 
 struct _GtkRigCtrlClass

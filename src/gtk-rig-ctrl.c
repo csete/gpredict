@@ -731,6 +731,7 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
         
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
+        ctrl->wrops = 0;
     }
 }
 
@@ -784,6 +785,8 @@ rig_ctrl_timeout_cb (gpointer data)
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
                                __FUNCTION__, MAX_ERROR_COUNT);
+                
+                //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
             }
             else {
                 /* increment error counter */
@@ -792,6 +795,7 @@ rig_ctrl_timeout_cb (gpointer data)
         }
     }
     
+    //g_print ("       WROPS = %d\n", ctrl->wrops);
     
     ctrl->busy = FALSE;
     
@@ -870,6 +874,8 @@ static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq)
     g_free (buff);
     shutdown (sock, SHUT_RDWR);
     close (sock);
+    
+    ctrl->wrops++;
     
     return TRUE;
 }
