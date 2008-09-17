@@ -460,7 +460,6 @@ static GtkWidget *
 create_conf_widgets (GtkRotCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*timer,*toler;
-    GtkWidget   *lock;
     GDir        *dir = NULL;   /* directory handle */
     GError      *error = NULL; /* error flag and info */
     gchar       *cfgdir;
