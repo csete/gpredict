@@ -6,7 +6,7 @@
 
   Copyright (C)  1992-1999  Dr TS Kelso.
   Copyright (C)  2001 by N. Kyriazis
-  Copyright (C)  2006 Alexandru Csete, OZ9AEC.
+  Copyright (C)  2006-2008 Alexandru Csete, OZ9AEC.
 
 
   Comments, questions and bugreports should be submitted via

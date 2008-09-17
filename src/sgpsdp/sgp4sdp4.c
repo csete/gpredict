@@ -8,6 +8,7 @@
  *        Copyright:  1991-1992, All Rights Reserved 
  *
  *   Ported to C by:  Neoklis Kyriazis  April 10  2001
+ *   Reentrancy mods by Alexandru Csete OZ9AEC
  */
 
 #include "sgp4sdp4.h"
