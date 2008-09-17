@@ -225,12 +225,12 @@ menubar_create (GtkWidget *window)
 	}
 
 	/* load custom icons */
-	icon = icon_file_name ("gpredict-shuttle-small.png");
+/*	icon = icon_file_name ("gpredict-shuttle-small.png");
 	image = gtk_image_new_from_file (icon);
 	g_free (icon);
 	menuitem = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu/ToolsMenu/Rdv");
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-
+*/
 	/* now, finally, get the menubar */
 	menubar = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu");
 
