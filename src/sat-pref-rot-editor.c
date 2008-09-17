@@ -54,6 +54,7 @@ static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* Configuration name */
 static GtkWidget *host;     /* host name or IP */
 static GtkWidget *port;     /* port number */
+static GtkWidget *aztype;
 static GtkWidget *minaz;
 static GtkWidget *maxaz;
 static GtkWidget *minel;
@@ -65,6 +66,7 @@ static void          update_widgets        (rotor_conf_t *conf);
 static void          clear_widgets         (void);
 static gboolean      apply_changes         (rotor_conf_t *conf);
 static void          name_changed          (GtkWidget *widget, gpointer data);
+static void          aztype_changed_cb     (GtkComboBox *box, gpointer data);
 
 
 /** \brief Add or edit a rotor configuration.
@@ -143,7 +145,7 @@ create_editor_widgets (rotor_conf_t *conf)
 	GtkWidget    *label;
 
 
-	table = gtk_table_new (5, 4, FALSE);
+	table = gtk_table_new (7, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -173,7 +175,8 @@ create_editor_widgets (rotor_conf_t *conf)
     host = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
     gtk_widget_set_tooltip_text (host,
-                                 _("Enter the host and port where rogctld is running, e.g. 192.168.1.100:15123"));
+                                 _("Enter the host where rogctld is running. You can use both host name "\
+                                  " and IP address."));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
 	
     /* port */
@@ -185,45 +188,64 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); 
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (port), 0);
     gtk_widget_set_tooltip_text (port,
-                                 _("Enter the port number where rotctld is listening"));
-    gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 3, 2, 3);
+                                 _("Enter the port number where rotctld is listening. Default is 4533."));
+    gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 2, 3);
 
+    gtk_table_attach_defaults (GTK_TABLE (table), gtk_hseparator_new(), 0, 4, 3, 4);
+    
+    /* Az-type */
+    label = gtk_label_new (_("Az type"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+    
+    aztype = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (aztype),
+                               "0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
+    gtk_combo_box_append_text (GTK_COMBO_BOX (aztype),
+                               "-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
+    gtk_widget_set_tooltip_text (aztype,
+                                 _("Select your azimuth range here. Note that gpredict assumes "
+                                  "that 0\302\260 is at North and + direction is clockwise for "\
+                                  "both types"));
+    gtk_table_attach_defaults (GTK_TABLE (table), aztype, 1, 3, 4, 5);
+    g_signal_connect (G_OBJECT (aztype), "changed", G_CALLBACK (aztype_changed_cb), NULL);
+    
     /* Az and El limits */
     label = gtk_label_new (_(" Min Az"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
-    minaz = gtk_spin_button_new_with_range (-40, 450, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+    minaz = gtk_spin_button_new_with_range (-200, 100, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minaz), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minaz), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), minaz, 1, 2, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), minaz, 1, 2, 5, 6);
     
     label = gtk_label_new (_(" Max Az"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 3, 4);
-    maxaz = gtk_spin_button_new_with_range (-40, 450, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 5, 6);
+    maxaz = gtk_spin_button_new_with_range (0, 450, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxaz), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxaz), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), maxaz, 3, 4, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), maxaz, 3, 4, 5, 6);
     
     label = gtk_label_new (_(" Min El"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 6, 7);
     minel = gtk_spin_button_new_with_range (-10, 180, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minel), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minel), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), minel, 1, 2, 4, 5);
+    gtk_table_attach_defaults (GTK_TABLE (table), minel, 1, 2, 6, 7);
     
     label = gtk_label_new (_(" Max El"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 4, 5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 6, 7);
     maxel = gtk_spin_button_new_with_range (-10, 180, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), 90);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxel), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxel), FALSE);
-    gtk_table_attach_defaults (GTK_TABLE (table), maxel, 3, 4, 4, 5);
+    gtk_table_attach_defaults (GTK_TABLE (table), maxel, 3, 4, 6, 7);
     
     if (conf->name != NULL)
 		update_widgets (conf);
@@ -253,6 +275,8 @@ update_widgets (rotor_conf_t *conf)
     else
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); /* hamlib default? */
     
+    gtk_combo_box_set_active (GTK_COMBO_BOX (aztype), conf->aztype);
+    
     /* az and el limits */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), conf->minaz);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), conf->maxaz);
@@ -275,6 +299,7 @@ clear_widgets ()
     gtk_entry_set_text (GTK_ENTRY (name), "");
     gtk_entry_set_text (GTK_ENTRY (host), "");
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); /* hamlib default? */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (aztype), ROT_AZ_TYPE_360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
@@ -307,6 +332,9 @@ apply_changes         (rotor_conf_t *conf)
     /* port */
     conf->port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
 
+    /* az type */
+    conf->aztype = gtk_combo_box_get_active (GTK_COMBO_BOX (aztype));
+    
     /* az and el ranges */
     conf->minaz = gtk_spin_button_get_value (GTK_SPIN_BUTTON (minaz));
     conf->maxaz = gtk_spin_button_get_value (GTK_SPIN_BUTTON (maxaz));
@@ -376,3 +404,28 @@ name_changed          (GtkWidget *widget, gpointer data)
 }
 
 
+
+static void aztype_changed_cb     (GtkComboBox *box, gpointer data)
+{
+    gint type = gtk_combo_box_get_active (box);
+    
+    switch (type) {
+        
+        case ROT_AZ_TYPE_360:
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0.0);
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360.0);
+            break;
+            
+        case ROT_AZ_TYPE_180:
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), -180.0);
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), +180.0);
+            break;
+            
+        default:
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s:%s: Invalid AZ rotator type."),
+                           __FILE__, __FUNCTION__);
+            break;
+    }
+
+}
