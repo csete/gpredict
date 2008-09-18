@@ -1,3 +1,16 @@
+2008-09-19; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/rotor-conf.[ch]:
+    Added field for storing rotator azimuth type, i.e. whether the rotator
+    azimuth goes 0..360 or -180..+180.
+    
+    * src/sat-pref-rot-editor.c:
+    * src/sat-pref-rot-data.h:
+    * src/sat-pref-rot.c:
+    * src/gtk-rot-ctrl.c:
+    Added support for Az-type.
+
+
 2008-09-17; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rot-ctrl.[ch]:
