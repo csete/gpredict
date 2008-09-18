@@ -1,4 +1,15 @@
-2008-09-19; Alexandru Csete <oz9aec@gmail.com>
+2008-09-18; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.[ch]:
+    Implemented active feedback to take into account frequency changes made
+    via radio dial. Removed newline from the end of hamlib commands.
+    Improved controller algorithm to only set frequency if it has changed.
+    
+    * src/gtk-rot-ctrl.c:
+    Removed newline from the end of hamlib commands.
+    
+
+2008-09-18; Alexandru Csete <oz9aec@gmail.com>
 
     * src/rotor-conf.[ch]:
     Added field for storing rotator azimuth type, i.e. whether the rotator
