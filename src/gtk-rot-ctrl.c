@@ -526,7 +526,7 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
     
-    timer = gtk_spin_button_new_with_range (100, 5000, 10);
+    timer = gtk_spin_button_new_with_range (1000, 10000, 10);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (timer), 0);
     gtk_widget_set_tooltip_text (timer,
                                  _("This parameter controls the delay between "\
@@ -816,16 +816,25 @@ rot_ctrl_timeout_cb (gpointer data)
             
             if (ctrl->pass != NULL) {
                 aosaz = ctrl->pass->aos_az;
+                
+                if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (aosaz > 180.0)) {
+                    aosaz -= 360.0;
+                }
             }
             gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), aosaz);
             gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), 0.0);
         }
         else {
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), ctrl->target->az);
+            if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) &&
+                 (ctrl->target->az > 180.0)) {
+                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), ctrl->target->az - 360.0);
+            }
+            else {
+                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), ctrl->target->az);
+            }
             gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), ctrl->target->el);
         }
         
-        /* TODO: Update controller thread on polar plot */
     }
 
     if ((ctrl->engaged) && (ctrl->conf != NULL)) {
@@ -841,14 +850,19 @@ rot_ctrl_timeout_cb (gpointer data)
             gtk_label_set_text (GTK_LABEL (ctrl->ElRead), text);
             g_free (text);
             
-            gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), rotaz, rotel);
+            if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
+                gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), rotaz+360.0, rotel);
+            }
+            else {
+                gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), rotaz, rotel);
+            }
         }
         else {
             gtk_label_set_text (GTK_LABEL (ctrl->AzRead), _("ERROR"));
             gtk_label_set_text (GTK_LABEL (ctrl->ElRead), _("ERROR"));
             error = TRUE;
         
-            gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), -1.0, -1.0);
+            gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), -10.0, -10.0);
         }
         
         /* if tolerance exceeded */
@@ -876,7 +890,7 @@ rot_ctrl_timeout_cb (gpointer data)
                              _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
                                __FUNCTION__, MAX_ERROR_COUNT);
                 ctrl->errcnt = 0;
-                //g_print ("ERROR. WROPS: %d   RDOPS: %d\n", ctrl->wrops, ctrl->rdops);
+                g_print ("ERROR. WROPS: %d   RDOPS: %d\n", ctrl->wrops, ctrl->rdops);
             }
             else {
                 /* increment error counter */
@@ -886,7 +900,7 @@ rot_ctrl_timeout_cb (gpointer data)
     }
     else {
         /* ensure rotor pos is not visible on plot */
-        gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), -1.0, -1.0);
+        gtk_polar_plot_set_rotor_pos (GTK_POLAR_PLOT (ctrl->plot), -10.0, -10.0);
     }
     
     
@@ -896,9 +910,16 @@ rot_ctrl_timeout_cb (gpointer data)
     }
     
     /* update controller circle on polar plot */
-    gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
-                                 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
-                                 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+    if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
+        gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet))+360.0,
+                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+    }
+    else {
+        gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
+                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+    }
     
     ctrl->busy = FALSE;
     
