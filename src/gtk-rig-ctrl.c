@@ -82,6 +82,7 @@ static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
 static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq);
+static gboolean get_freq (GtkRigCtrl *ctrl, gdouble *freq);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
 
@@ -744,7 +745,7 @@ static gboolean
 rig_ctrl_timeout_cb (gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
-    gdouble satfreq,doppler,lof;
+    gdouble satfreq,doppler,lof,readfreq=0,lastfreq;
     
     
     if (ctrl->busy) {
@@ -754,6 +755,39 @@ rig_ctrl_timeout_cb (gpointer data)
     
     ctrl->busy = TRUE;
     
+    lof = 1.0e6*gtk_spin_button_get_value (GTK_SPIN_BUTTON (ctrl->LO));
+
+    /* Dial feedback:
+       If radio device is engaged read frequency from radio and compare it to the
+       last set frequency. If different, it means that user has changed frequency
+       on the radio dial => update transponder knob
+    */
+    if ((ctrl->engaged) && (ctrl->conf != NULL)) {
+        lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreq));
+        
+        /* get current frequency from rig */
+        if (!get_freq (ctrl, &readfreq)) {
+            /* error => use a passive value */
+            readfreq = lastfreq;
+        }
+        
+        if (fabs (readfreq - lastfreq) > 0.99) {
+            /* user might have altered radio frequency => update transponder knob */
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), readfreq);
+            
+            /* doppler shift; only if we are tracking */
+            if (ctrl->tracking) {
+                satfreq = (readfreq+lof) / (1 - (ctrl->target->range_rate/299792.4580));
+            }
+            else {
+                satfreq = readfreq + lof;
+            }
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreq), satfreq);
+        }
+    }
+    
+    /* now, forward tracking */
+    
     /* If we are tracking, calculate the radio freq by applying both dopper shift
        and tranverter LO frequency.
        If we are not tracking, apply only LO frequency.
@@ -761,17 +795,17 @@ rig_ctrl_timeout_cb (gpointer data)
     if (ctrl->tracking) {
         satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreq));
         doppler = -satfreq * (ctrl->target->range_rate / 299792.4580);
-        lof = 1.0e6*gtk_spin_button_get_value (GTK_SPIN_BUTTON (ctrl->LO));
-        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), satfreq+doppler+lof);
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), satfreq+doppler-lof);
     }
     else {
         satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreq));
-        lof = 1.0e6*gtk_spin_button_get_value (GTK_SPIN_BUTTON (ctrl->LO));
-        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), satfreq+lof);
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreq), satfreq-lof);
     }
+    
 
     /* if device is engaged, send freq command to radio */
-    if ((ctrl->engaged) && (ctrl->conf != NULL)) {
+    if ((ctrl->engaged) && (ctrl->conf != NULL) &&
+         (fabs (readfreq-gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreq))) > 0.99)) {
         if (set_freq (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreq)))) {
             /* reset error counter */
             ctrl->errcnt = 0;
@@ -857,14 +891,9 @@ static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq)
     }
     
     /* send command */
-    buff = g_strdup_printf ("F %10.0f\n", freq);
+    buff = g_strdup_printf ("F %10.0f", freq);
     
-    /* number of bytes to write depends on platform (EOL) */
-#ifdef G_OS_WIN32
-    size = 14;
-#else
-    size = 13;
-#endif
+    size = 12;
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -877,6 +906,114 @@ static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq)
     
     ctrl->wrops++;
     
+    return TRUE;
+}
+
+
+/** \brief Get frequency
+ * \param ctrl Pointer to the GtkRigCtrl structure.
+ * \param freq The current frequency of the radio.
+ * \return TRUE if the operation was successful, FALSE if a connection error
+ *         occurred.
+ */
+static gboolean get_freq (GtkRigCtrl *ctrl, gdouble *freq)
+{
+    gchar  *buff,**vbuff;
+    gint    written,size;
+    gint    status;
+    struct hostent *h;
+    struct sockaddr_in ServAddr;
+    gint  sock;          /*!< Network socket */
+
+                         
+    if (freq == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: NULL storage."),
+                       __FILE__, __LINE__);
+        return FALSE;
+    }
+    
+    /* create socket */
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to create socket"),
+                       __FILE__, __LINE__);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%d Network socket created successfully"),
+                       __FILE__, __LINE__);
+    }
+        
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(ctrl->conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to connect to %s:%d"),
+                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%d: Connection opened to %s:%d"),
+                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+    }
+    
+    /* send command */
+    buff = g_strdup_printf ("f");
+    
+    size = 1;
+    written = send(sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: SIZE ERROR %d / %d"),
+                       __FILE__, __LINE__, written, size);
+    }
+    g_free (buff);
+    
+    
+    /* try to read answer */
+    buff = g_try_malloc (128);
+    if (buff == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
+                       __FILE__, __FUNCTION__);
+        shutdown (sock, SHUT_RDWR);
+        close (sock);
+        return FALSE;
+    }
+        
+    size = read (sock, buff, 127);
+    if (size == 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Got 0 bytes from rotctld"),
+                       __FILE__, __FUNCTION__);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%s: Read %d bytes from rotctld"),
+                       __FILE__, __FUNCTION__, size);
+        
+        buff[size] = 0;
+        vbuff = g_strsplit (buff, "\n", 3);
+        *freq = g_strtod (vbuff[0], NULL);
+                
+        g_free (buff);
+        g_strfreev (vbuff);
+    }
+    
+    shutdown (sock, SHUT_RDWR);
+    close (sock);
+
+
     return TRUE;
 }
 
