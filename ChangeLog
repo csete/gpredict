@@ -1,3 +1,9 @@
+2008-09-20; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/tle-update.c:
+    Changed connection timeout from system default to 10 seconds.
+    
+
 2008-09-18; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rig-ctrl.[ch]:
