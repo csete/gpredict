@@ -450,7 +450,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_NAME, &conf.name,
                             RIG_LIST_COL_HOST, &conf.host,
                             RIG_LIST_COL_PORT, &conf.port,
-                            RIG_LIST_COL_PORT, &conf.lo,
+                            RIG_LIST_COL_LO, &conf.lo,
                             -1);
 
     }

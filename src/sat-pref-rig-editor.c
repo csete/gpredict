@@ -231,7 +231,7 @@ update_widgets (radio_conf_t *conf)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     
     /* lo in MHz */
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000.0);
 }
 
 
@@ -277,7 +277,7 @@ apply_changes         (radio_conf_t *conf)
     conf->port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
     
     /* lo freq */
-    conf->lo = 1000000*gtk_spin_button_get_value (GTK_SPIN_BUTTON (lo));
+    conf->lo = 1000000.0*gtk_spin_button_get_value (GTK_SPIN_BUTTON (lo));
     
 	return TRUE;
 }
