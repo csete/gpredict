@@ -473,6 +473,7 @@ tle_update_from_network (gboolean   silent,
 			curl_easy_setopt (curl, CURLOPT_PROXY, proxy);
 
 		curl_easy_setopt (curl, CURLOPT_USERAGENT, "gpredict/curl");
+        curl_easy_setopt (curl, CURLOPT_CONNECTTIMEOUT, 10);
 
 		/* get files */
 		for (i = 0; i < numfiles; i++) {
