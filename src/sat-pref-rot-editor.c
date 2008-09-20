@@ -203,6 +203,7 @@ create_editor_widgets (rotor_conf_t *conf)
                                "0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
     gtk_combo_box_append_text (GTK_COMBO_BOX (aztype),
                                "-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
+    gtk_combo_box_set_active (GTK_COMBO_BOX (aztype), 0);
     gtk_widget_set_tooltip_text (aztype,
                                  _("Select your azimuth range here. Note that gpredict assumes "
                                   "that 0\302\260 is at North and + direction is clockwise for "\
