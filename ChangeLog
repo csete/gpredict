@@ -3,6 +3,14 @@
     * src/tle-update.c:
     Changed connection timeout from system default to 10 seconds.
     
+    * src/sat-pref-rot-editor.c:
+    Added default value to az-type selector.
+    
+    * src/sar-pref-rig.c:
+    * src/sat-pref-rig-editor.c:
+    Fixed bug that caused local oscillator frequency to be 0 when trying to
+    edit a radio configuration.
+    
 
 2008-09-18; Alexandru Csete <oz9aec@gmail.com>
 
