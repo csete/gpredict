@@ -13,7 +13,7 @@ Changes in version 1.0 (TBD):
 - Fixed bug 1954664: Wrong overpass prediction.
 - Fixed bug 1880815: Null pointer dereference causes crash on startup.
 x Windows: New installer instead of ZIP distribution.
-- Updated PDF user manual as PDF.
+- Updated PDF user manual.
 
 
 Changes in version 0.9.0 (2007-09-29):
