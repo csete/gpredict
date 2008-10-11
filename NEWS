@@ -12,6 +12,8 @@ Changes in version 1.0 (TBD):
 - Fixed bug 1704133: Blank lines in config file.
 - Fixed bug 1954664: Wrong overpass prediction.
 - Fixed bug 1880815: Null pointer dereference causes crash on startup.
+- Fixed bug 2139102: rigctld port.
+- Fixed bug 2130912: Crash when no rig or no rotator are defined.
 x Windows: New installer instead of ZIP distribution.
 - Updated PDF user manual.
 

@@ -1,3 +1,15 @@
+2008-10-11; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-pref-rig-editor.c:
+    * src/sat-pref-rot-editor.c:
+    Fixed incorrect tooltip.
+    
+    * src/gtk-sat-module-popup.c:
+    * src/gtk-rot-ctrl.c:
+    * src/gtk-rig-ctrl.c:
+    Fixed bug 2130912: Crash when no rig or no rotator are defined.
+
+
 2008-09-20; Alexandru Csete <oz9aec@gmail.com>
 
     * src/tle-update.c:
