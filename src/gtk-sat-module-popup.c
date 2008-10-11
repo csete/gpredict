@@ -878,6 +878,23 @@ rigctrl_cb          (GtkWidget *menuitem, gpointer data)
 
     module->rigctrl = gtk_rig_ctrl_new (module);
     
+    if (module->rigctrl == NULL) {
+        /* gtk_rot_ctrl_new returned NULL becasue no rotators are configured */
+        GtkWidget *dialog;
+        dialog = gtk_message_dialog_new (GTK_WINDOW (app),
+                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+                                         _("You have no radio configuration!\n"\
+                                           "Please configure a radio first.")
+                                        );
+        g_signal_connect_swapped (dialog, "response", 
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_window_set_title (GTK_WINDOW (dialog), _("ERROR"));
+        gtk_widget_show_all (dialog);
+        
+        return;
+    }
+    
     /* create a window */
     module->rigctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     buff = g_strdup_printf (_("Gpredict Radio Control: %s"), module->name);
@@ -933,6 +950,23 @@ rotctrl_cb          (GtkWidget *menuitem, gpointer data)
     }
 
     module->rotctrl = gtk_rot_ctrl_new (module);
+    
+    if (module->rotctrl == NULL) {
+        /* gtk_rot_ctrl_new returned NULL becasue no rotators are configured */
+        GtkWidget *dialog;
+        dialog = gtk_message_dialog_new (GTK_WINDOW (app),
+                                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+                                         _("You have no rotator configuration!\n"\
+                                           "Please configure an antenna rotator first.")
+                                        );
+        g_signal_connect_swapped (dialog, "response", 
+                                  G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_window_set_title (GTK_WINDOW (dialog), _("ERROR"));
+        gtk_widget_show_all (dialog);
+        
+        return;
+    }
     
     /* create a window */
     module->rotctrlwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);

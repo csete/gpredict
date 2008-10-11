@@ -85,6 +85,7 @@ static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq);
 static gboolean get_freq (GtkRigCtrl *ctrl, gdouble *freq);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
+static gboolean have_conf (void);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -191,6 +192,11 @@ gtk_rig_ctrl_new (GtkSatModule *module)
 {
     GtkWidget *widget;
     GtkWidget *table;
+    
+    /* check that we have rot conf */
+    if (!have_conf()) {
+        return NULL;
+    }
 
 	widget = g_object_new (GTK_TYPE_RIG_CTRL, NULL);
     
@@ -1083,4 +1089,45 @@ static void update_count_down (GtkRigCtrl *ctrl, gdouble t)
     g_free (cm);
     g_free (cs);
 
+}
+
+
+/** \brief Check that we have at least one .rig file */
+static gboolean have_conf ()
+{
+    GDir        *dir = NULL;   /* directory handle */
+    GError      *error = NULL; /* error flag and info */
+    gchar       *cfgdir;
+    gchar       *dirname;      /* directory name */
+    const gchar *filename;     /* file name */
+    gint         i = 0;
+
+    
+    /* open configuration directory */
+    cfgdir = get_conf_dir ();
+    dirname = g_strconcat (cfgdir, G_DIR_SEPARATOR_S,
+                           "hwconf", NULL);
+    g_free (cfgdir);
+    
+    dir = g_dir_open (dirname, 0, &error);
+    if (dir) {
+        /* read each .rig file */
+        while ((filename = g_dir_read_name (dir))) {
+            
+            if (g_strrstr (filename, ".rig")) {
+                i++;
+            }
+        }
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to open hwconf dir (%s)"),
+                       __FILE__, __LINE__, error->message);
+        g_clear_error (&error);
+    }
+
+    g_free (dirname);
+    g_dir_close (dir);
+    
+    return (i > 0) ? TRUE : FALSE;
 }

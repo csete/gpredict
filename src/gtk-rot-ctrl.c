@@ -85,6 +85,8 @@ static void update_count_down (GtkRotCtrl *ctrl, gdouble t);
 static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el);
 static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el);
 
+static gboolean have_conf (void);
+
 static GtkVBoxClass *parent_class = NULL;
 
 static GdkColor ColBlack = { 0, 0, 0, 0};
@@ -194,6 +196,11 @@ gtk_rot_ctrl_new (GtkSatModule *module)
     GtkWidget *widget;
     GtkWidget *table;
 
+    /* check that we have rot conf */
+    if (!have_conf()) {
+        return NULL;
+    }
+    
 	widget = g_object_new (GTK_TYPE_ROT_CTRL, NULL);
     
     /* store satellites */
@@ -490,7 +497,7 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
-        /* read each .rig file */
+        /* read each .rot file */
         while ((filename = g_dir_read_name (dir))) {
             
             if (g_strrstr (filename, ".rot")) {
@@ -1187,4 +1194,45 @@ static void update_count_down (GtkRotCtrl *ctrl, gdouble t)
     g_free (cm);
     g_free (cs);
 
+}
+
+
+/** \brief Check that we have at least one .rot file */
+static gboolean have_conf ()
+{
+    GDir        *dir = NULL;   /* directory handle */
+    GError      *error = NULL; /* error flag and info */
+    gchar       *cfgdir;
+    gchar       *dirname;      /* directory name */
+    const gchar *filename;     /* file name */
+    gint         i = 0;
+
+    
+    /* open configuration directory */
+    cfgdir = get_conf_dir ();
+    dirname = g_strconcat (cfgdir, G_DIR_SEPARATOR_S,
+                           "hwconf", NULL);
+    g_free (cfgdir);
+    
+    dir = g_dir_open (dirname, 0, &error);
+    if (dir) {
+        /* read each .rot file */
+        while ((filename = g_dir_read_name (dir))) {
+            
+            if (g_strrstr (filename, ".rot")) {
+                i++;
+            }
+        }
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to open hwconf dir (%s)"),
+                       __FILE__, __LINE__, error->message);
+        g_clear_error (&error);
+    }
+
+    g_free (dirname);
+    g_dir_close (dir);
+    
+    return (i > 0) ? TRUE : FALSE;
 }
