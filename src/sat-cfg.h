@@ -54,7 +54,8 @@ typedef enum {
 	SAT_CFG_BOOL_TLE_SERVER_AUTH,     /*!< TLE server requires authentication. */
 	SAT_CFG_BOOL_TLE_PROXY_AUTH,      /*!< Proxy requires authentication. */
     SAT_CFG_BOOL_TLE_ADD_NEW,         /*!< Add new satellites to database. */
-	SAT_CFG_BOOL_KEEP_LOG_FILES,      /*!< Whether to keep old log files */
+    SAT_CFG_BOOL_KEEP_LOG_FILES,      /*!< Whether to keep old log files */
+    SAT_CFG_BOOL_PRED_USE_REAL_T0,    /*!< Whether to use current time as T0 fro predictions */
 	SAT_CFG_BOOL_NUM                  /*!< Number of boolean parameters */
 } sat_cfg_bool_e;
 

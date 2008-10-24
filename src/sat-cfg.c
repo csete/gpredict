@@ -132,7 +132,8 @@ sat_cfg_bool_t sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
     { "TLE",     "SERVER_AUTH",        FALSE},
 	{ "TLE",     "PROXY_AUTH",         FALSE},
     { "TLE",     "ADD_NEW_SATS",       TRUE},
-	{ "LOG",     "KEEP_LOG_FILES",     FALSE}
+	{ "LOG",     "KEEP_LOG_FILES",     FALSE},
+    { "PREDICT", "USE_REAL_T0",        FALSE}
 };
 
 
