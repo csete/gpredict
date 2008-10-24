@@ -35,6 +35,7 @@
 
 
 
+static GtkWidget *tzero;
 static GtkWidget *minel;
 static GtkWidget *numpass;
 static GtkWidget *lookahead;
@@ -67,7 +68,7 @@ GtkWidget *sat_pref_conditions_create ()
 	dirty = FALSE;
 	reset = FALSE;
 
-	table = gtk_table_new (12, 3, FALSE);
+	table = gtk_table_new (14, 3, FALSE);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 10);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
@@ -314,7 +315,32 @@ GtkWidget *sat_pref_conditions_create ()
                       GTK_FILL | GTK_EXPAND,
                       GTK_SHRINK,
                       0, 0);
+    
+    /* separator */
+    gtk_table_attach (GTK_TABLE (table),
+                      gtk_hseparator_new (),
+                      0, 3, 12, 13,
+                      GTK_FILL | GTK_EXPAND,
+                      GTK_SHRINK,
+                      0, 0);
 
+    /* T0 for predictions */
+    tzero = gtk_check_button_new_with_label (_("Always use real time for pass predictions"));
+    gtk_widget_set_tooltip_text (tzero,
+                                 _("Check this box if you want Gpredict to always use "\
+                                   "the current (real) time as starting time when predicting "\
+                                   "future satellite passes.\n\n"\
+                                   "If you leave the box unchecked and the time controller is "\
+                                   "active, Gpredict will use the time from the time controller "\
+                                   "as starting time for predicting satellite passes."));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tzero),
+                                  sat_cfg_get_bool (SAT_CFG_BOOL_PRED_USE_REAL_T0));
+    g_signal_connect (G_OBJECT (tzero), "toggled",
+                      G_CALLBACK (spin_changed_cb), NULL);
+     
+    gtk_table_attach (GTK_TABLE (table), tzero, 0, 3, 13, 14,
+                      GTK_FILL, GTK_SHRINK,
+                      0, 0);
     
 	/* create vertical box */
 	vbox = gtk_vbox_new (FALSE, 0);
@@ -357,6 +383,8 @@ sat_pref_conditions_ok     ()
 						 gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (nument)));
         sat_cfg_set_int (SAT_CFG_INT_PRED_TWILIGHT_THLD,
                          gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (twspin)));
+        sat_cfg_set_bool (SAT_CFG_BOOL_PRED_USE_REAL_T0,
+                          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tzero)));
 
 		dirty = FALSE;
 	}
@@ -367,6 +395,7 @@ sat_pref_conditions_ok     ()
 		sat_cfg_reset_int (SAT_CFG_INT_PRED_RESOLUTION);
 		sat_cfg_reset_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
         sat_cfg_reset_int (SAT_CFG_INT_PRED_TWILIGHT_THLD);
+        sat_cfg_reset_bool (SAT_CFG_BOOL_PRED_USE_REAL_T0);
 
 		reset = FALSE;
 	}
@@ -439,7 +468,8 @@ reset_cb               (GtkWidget *button, gpointer data)
 							   sat_cfg_get_int_def (SAT_CFG_INT_PRED_NUM_ENTRIES));
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (twspin),
                                sat_cfg_get_int_def (SAT_CFG_INT_PRED_TWILIGHT_THLD));
-
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tzero),
+                                  sat_cfg_get_bool_def (SAT_CFG_BOOL_PRED_USE_REAL_T0));
 
 	/* reset flags */
 	reset = TRUE;
