@@ -841,7 +841,14 @@ sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
 
 	/* create sky at a glance widget */
 	module->busy = TRUE;
-	skg = gtk_sky_glance_new (module->satellites, module->qth);
+    
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_PRED_USE_REAL_T0)) {
+        skg = gtk_sky_glance_new (module->satellites, module->qth, 0.0);
+    }
+    else {
+        skg = gtk_sky_glance_new (module->satellites, module->qth, module->tmgCdnum);
+    }
+    
 	module->busy = FALSE;
 
 	gtk_container_set_border_width (GTK_CONTAINER (window), 10);
