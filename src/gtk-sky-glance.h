@@ -115,7 +115,7 @@ struct _GtkSkyGlanceClass
 
 
 GtkType        gtk_sky_glance_get_type   (void);
-GtkWidget*     gtk_sky_glance_new        (GHashTable *sats, qth_t *qth);
+GtkWidget*     gtk_sky_glance_new        (GHashTable *sats, qth_t *qth, gdouble ts);
 
 /*
 void           gtk_sky_glance_reconf     (GtkWidget *skg);

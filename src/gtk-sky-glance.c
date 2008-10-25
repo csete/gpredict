@@ -224,7 +224,7 @@ gtk_sky_glance_destroy (GtkObject *object)
  *  \param qth Pointer to the ground station data.
  */
 GtkWidget*
-gtk_sky_glance_new (GHashTable *sats, qth_t *qth)
+gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
 {
 	GtkWidget *skg;
 	GooCanvasItemModel *root;
@@ -239,7 +239,15 @@ gtk_sky_glance_new (GHashTable *sats, qth_t *qth)
 
 	/* get settings */
 	GTK_SKY_GLANCE (skg)->numsat = g_hash_table_size (sats);
-	GTK_SKY_GLANCE (skg)->ts = get_current_daynum ();
+    
+    /* if ts = 0 use current time */
+    if (ts > 0.0) {
+        GTK_SKY_GLANCE (skg)->ts = ts;
+    }
+    else {
+        GTK_SKY_GLANCE (skg)->ts = get_current_daynum ();
+    }
+    
 	GTK_SKY_GLANCE (skg)->te = GTK_SKY_GLANCE (skg)->ts +
 		sat_cfg_get_int (SAT_CFG_INT_SKYATGL_TIME)*(1.0/24.0);
 
