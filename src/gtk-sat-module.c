@@ -506,7 +506,8 @@ create_view (GtkSatModule *module, guint num)
 								   module->satellites,
 								   module->qth,
 								   0);
-		break;
+
+        break;
 
 	default:
 		sat_log_log (SAT_LOG_LEVEL_BUG,
