@@ -31,6 +31,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include "gtk-sat-module.h"
 #include "gtk-sat-data.h"
 
 
@@ -117,6 +118,7 @@ typedef struct _GtkSingleSatClass   GtkSingleSatClass;
 struct _gtk_single_sat
 {
 	GtkVBox vbox;
+    
 	
 	GtkWidget    *header;       /*!< Header label, ie. satellite name. */
 	
@@ -126,10 +128,12 @@ struct _gtk_single_sat
 	GtkWidget    *table;        /*!< table. */
 	
 	GtkWidget    *popup_button; /*!< Popup button. */
+                                
 	
 	GKeyFile     *cfgdata;      /*!< Configuration data. */
 	GSList       *sats;         /*!< Satellites. */
 	qth_t        *qth;          /*!< Pointer to current location. */
+                                
 	
 	guint32       flags;        /*!< Flags indicating which columns are visible. */
 	guint         refresh;      /*!< Refresh rate. */
