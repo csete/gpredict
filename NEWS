@@ -1,10 +1,11 @@
-
-Changes in version 1.0 (TBD):
+Changes in version 1.0 (beta):
 
 - Radio doppler tuning via hamlibs rigctld.
 - Antenna rotator control via hamlibs rotctld.
 - User defined twilight threshold for predicting satellite visibility.
 - Feature request 1705375: Restore main window position and size.
+* Feature request 2192404: Starting time for pass predictions.
+* Feature request 2194621: Data recorder.
 - Fixed bug 1752908: New satellites in TLE files.
 - Fixed bug 1818144: No log file created at first execution.
 - Fixed bug 1839140: Sky at a glance axis incorrectly labelled.

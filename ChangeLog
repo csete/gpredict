@@ -1,3 +1,20 @@
+2008-10-25; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-sky-glance.[ch]:
+    Added start time as parameter.
+    
+    * src/gtk-sat-module-popup.c:
+    Use real time or simulated time for sky at glance start depending
+    on user settings.
+    
+    * src/gtk-single-sat.[ch]:
+    * src/gtk-sat-module.c:
+    * src/gtk-polar-view-popup.c:
+    * src/gtk-sat-map-popup.c:
+    Use real or simulated time for pass predictions. Enabled tooltips for
+    labels in GtkSingleSat.
+
+
 2008-10-24; Alexandru Csete <oz9aec@gmail.com>
 
     * src/sat-cfg.[ch]:

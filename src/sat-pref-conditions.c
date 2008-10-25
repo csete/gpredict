@@ -339,7 +339,7 @@ GtkWidget *sat_pref_conditions_create ()
                       G_CALLBACK (spin_changed_cb), NULL);
      
     gtk_table_attach (GTK_TABLE (table), tzero, 0, 3, 13, 14,
-                      GTK_FILL, GTK_SHRINK,
+                      GTK_FILL | GTK_EXPAND, GTK_SHRINK,
                       0, 0);
     
 	/* create vertical box */
