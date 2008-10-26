@@ -32,12 +32,12 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-data.h"
 
-void sat_popup_menu_exec (sat_t *sat, qth_t *qth,
-			  GdkEventButton *event,
-			  GtkWidget *toplevel);
+//void sat_popup_menu_exec (sat_t *sat, qth_t *qth,
+//			  GdkEventButton *event,
+//			  GtkWidget *toplevel);
 
 void show_sat_info      (GtkWidget *menuitem, gpointer data);
-void show_next_pass     (GtkWidget *menuitem, gpointer data);
-void show_future_passes (GtkWidget *menuitem, gpointer data);
+//void show_next_pass     (GtkWidget *menuitem, gpointer data);
+//void show_future_passes (GtkWidget *menuitem, gpointer data);
 
 #endif

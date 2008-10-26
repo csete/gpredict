@@ -48,7 +48,7 @@
 
 static gchar *epoch_to_str     (sat_t *sat);
 
-
+#if 0
 
 /** \brief Show satellite popup menu.
  *  \param sat Pointer to the satellite data.
@@ -128,7 +128,7 @@ sat_popup_menu_exec (sat_t *sat, qth_t *qth, GdkEventButton *event, GtkWidget *t
 		
 
 }
-
+#endif
 
 
 /** \brief Show satellite info in a dialog 
@@ -487,7 +487,7 @@ epoch_to_str (sat_t *sat)
 	return buff;
 }
 
-
+#if 0
 /** \brief Show details of the next pass.
  *
  */
@@ -619,4 +619,4 @@ show_future_passes (GtkWidget *menuitem, gpointer data)
 }
 
 
-
+#endif
