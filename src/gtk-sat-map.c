@@ -45,8 +45,6 @@
 #include "config-keys.h"
 #include "sat-cfg.h"
 #include "mod-cfg-get-param.h"
-//#include "time-tools.h"
-#include "sat-popup-menu.h"
 #include "gtk-sat-data.h"
 #include "gpredict-utils.h"
 #include "compat.h"
