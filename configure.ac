@@ -2,7 +2,7 @@ AC_INIT(src/main.c)
 
 AM_CONFIG_HEADER(build-config.h)
 
-AM_INIT_AUTOMAKE(gpredict, 1.1_beta)
+AM_INIT_AUTOMAKE(gpredict, 1.0b2)
 
 AM_MAINTAINER_MODE
 AC_PROG_INTLTOOL([0.21])

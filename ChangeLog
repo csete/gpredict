@@ -1,3 +1,20 @@
+2008-10-26; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-sat-list-popup.[ch]:
+    New files containing popup menu for satlist. Satlist was previously
+    using the generic sat-popup-menu, but that has been abandoned due to lack
+    of support for simulated real time.
+    
+    * src/gtk-sat-list.c:
+    Use new gtk-sat-list-popup.
+    
+    * src/sat-info.[ch]:
+    Added files containing functions to show satellite info.
+    
+    * src/sat-popup-menu.[ch]:
+    Deleted.
+    
+
 2008-10-25; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-sky-glance.[ch]:
