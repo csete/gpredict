@@ -56,7 +56,7 @@ void show_future_passes_cb (GtkWidget *menuitem, gpointer data);
  *  \param toplevel The top level window.
  */
 void
-sat_popup_menu_exec (sat_t *sat, qth_t *qth, GdkEventButton *event, GtkSatList *list)
+gtk_sat_list_popup_exec (sat_t *sat, qth_t *qth, GdkEventButton *event, GtkSatList *list)
 {
 	GtkWidget        *menu;
 	GtkWidget        *menuitem;
@@ -85,7 +85,7 @@ sat_popup_menu_exec (sat_t *sat, qth_t *qth, GdkEventButton *event, GtkSatList *
 	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
 	g_signal_connect (menuitem, "activate",
                       G_CALLBACK (show_sat_info),
-                      gtk_widgeT_get_toplevel (GTK_WIDGET (list)));
+                      gtk_widget_get_toplevel (GTK_WIDGET (list)));
 
 	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
@@ -142,7 +142,7 @@ show_next_pass_cb     (GtkWidget *menuitem, gpointer data)
 	qth_t      *qth;
 	pass_t     *pass;
 	GtkWidget  *dialog;
-	GtkWindow  *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (data));
+	GtkWindow  *toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (data)));
     GtkSatList *list = GTK_SAT_LIST (data);
 
 
@@ -207,7 +207,7 @@ void
 show_future_passes_cb (GtkWidget *menuitem, gpointer data)
 {
 	GtkWidget *dialog;
-	GtkWindow *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (data));
+	GtkWindow *toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (data)));
     GtkSatList *list = GTK_SAT_LIST (data);
 	GSList    *passes = NULL;
 	sat_t     *sat;
