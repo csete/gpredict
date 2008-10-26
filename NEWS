@@ -15,6 +15,7 @@ Changes in version 1.0 (beta):
 - Fixed bug 1880815: Null pointer dereference causes crash on startup.
 - Fixed bug 2139102: rigctld port.
 - Fixed bug 2130912: Crash when no rig or no rotator are defined.
+- Fixed bug 2170642: Small error in user manual.
 x Windows: New installer instead of ZIP distribution.
 - Updated PDF user manual.
 
