@@ -37,7 +37,7 @@
 #include "config-keys.h"
 #include "sat-cfg.h"
 #include "mod-cfg-get-param.h"
-#include "sat-popup-menu.h"
+#include "gtk-sat-list-popup.h"
 #include "gtk-sat-data.h"
 #include "gpredict-utils.h"
 #include "locator.h"
@@ -1230,8 +1230,8 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 
 		}
 		else {
-			sat_popup_menu_exec (sat, GTK_SAT_LIST (list)->qth, event,
-								 gtk_widget_get_toplevel (treeview));
+			gtk_sat_list_popup_exec (sat, GTK_SAT_LIST (list)->qth, event,
+                                     GTK_SAT_LIST (list));
 		}
 
 
