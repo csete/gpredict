@@ -40,7 +40,7 @@
 #include "predict-tools.h"
 #include "sat-pass-dialogs.h"
 #include "gtk-sat-list-popup.h"
-#include "sat-popup-menu.h"
+#include "sat-info.h"
 
 
 

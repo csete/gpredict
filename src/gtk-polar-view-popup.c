@@ -43,7 +43,7 @@
 #include "orbit-tools.h"
 #include "predict-tools.h"
 #include "sat-pass-dialogs.h"
-#include "sat-popup-menu.h"
+#include "sat-info.h"
 #include "gtk-polar-view-popup.h"
 
 

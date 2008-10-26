@@ -39,7 +39,7 @@
 #include "mod-cfg-get-param.h"
 #include "gtk-sat-data.h"
 #include "gpredict-utils.h"
-#include "sat-popup-menu.h"
+#include "sat-info.h"
 #include "locator.h"
 #include "sat-vis.h"
 #ifdef HAVE_CONFIG_H

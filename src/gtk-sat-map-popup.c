@@ -41,7 +41,7 @@
 #include "orbit-tools.h"
 #include "predict-tools.h"
 #include "sat-pass-dialogs.h"
-#include "sat-popup-menu.h"
+#include "sat-info.h"
 #include "gtk-sat-map-popup.h"
 #include "gtk-sat-data.h"
 #include "gtk-sat-map-ground-track.h"

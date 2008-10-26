@@ -72,11 +72,11 @@ gpredict_SOURCES = \
 	radio-conf.c radio-conf.h \
 	rotor-conf.c rotor-conf.h \
 	sat-cfg.c sat-cfg.h \
+	sat-info.c sat-info.h \
 	sat-log.c sat-log.h \
 	sat-log-browser.c sat-log-browser.h \
 	sat-monitor.c sat-monitor.h \
 	sat-pass-dialogs.c sat-pass-dialogs.h \
-	sat-popup-menu.c sat-popup-menu.h \
 	sat-pref.c sat-pref.h \
 	sat-pref-general.c sat-pref-general.h \
 	sat-pref-formats.c sat-pref-formats.h \
