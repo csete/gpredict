@@ -20,8 +20,8 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
   CFLAGS="${CFLAGS} -Wall"
 fi
 
-dnl chack for glib and gtk libraries
-pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.14.0 gthread-2.0 >= 2.14.0"
+dnl check for glib, gtk, and goocanvas libraries
+pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.14.0 gthread-2.0 >= 2.14.0 goocanvas >= 0.10"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
@@ -31,10 +31,10 @@ dnl check for libcurl
 PKG_CHECK_MODULES(LIBCURL, libcurl, [
         CFLAGS="$CFLAGS $LIBCURL_CFLAGS";
         LIBS="$LIBS $LIBCURL_LIBS"; 
-        havecurl=true;            
+        havecurl=true;
         AC_DEFINE(HAVE_LIBCURL, 1, [Define if libcurl is available])
    ], [
-        havecurl=false;            
+        havecurl=false;
         AC_DEFINE(HAVE_LIBCURL, 0, [Define if libcurl is unvailable])
 
 ])
@@ -76,6 +76,7 @@ GLIB_V=`pkg-config --modversion glib-2.0`
 GTHR_V=`pkg-config --modversion gthread-2.0`
 GDK_V=`pkg-config --modversion gdk-2.0`
 GTK_V=`pkg-config --modversion gtk+-2.0`
+GOOC_V=`pkg-config --modversion goocanvas`
 dnl SQL_V=`pkg-config --modversion sqlite3`
 if test "$havecurl" = true ; then
    CURL_V=`pkg-config --modversion libcurl`
@@ -88,7 +89,6 @@ dnl fi
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
 
-AC_CONFIG_SUBDIRS(goocanv8)
 
 AC_OUTPUT([
 Makefile
@@ -113,6 +113,7 @@ echo Glib version....... : $GLIB_V
 echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
+echo GooCanvas version.. : $GOOC_V
 dnl echo SQLite version..... : $SQL_V
 if test "$havecurl" = true ; then
 echo Curl version....... : $CURL_V

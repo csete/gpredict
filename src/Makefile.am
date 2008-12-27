@@ -3,7 +3,7 @@
 SUBDIRS = sgpsdp
 
 INCLUDES = \
-	@PACKAGE_CFLAGS@ -I.. -I$(top_srcdir)/goocanv8/src \
+	@PACKAGE_CFLAGS@ -I.. \
 	-DDATADIR=\""$(datadir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(datadir)/gpredict"\" \
 	-DPACKAGE_PIXMAPS_DIR=\""$(datadir)/pixmaps/gpredict"\" \
@@ -113,7 +113,7 @@ gpredict_SOURCES = \
 
 
 ##gpredict_LDADD = ./sgpsdp/libsgp4sdp4.a @PACKAGE_LIBS@
-gpredict_LDADD = @PACKAGE_LIBS@ ../goocanv8/src/.libs/libgoocanvas.a
+gpredict_LDADD = @PACKAGE_LIBS@
 
 ## $(INTLLIBS)
 

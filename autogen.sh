@@ -37,12 +37,6 @@ fi
 # This might not be necessary with newer autotools:
 rm -f config.cache
 
-echo "****** autogen GooCanvas"      && \
-  cd goocanv8    && \
-  ./autogen.sh     && \
-  cd ..          && \
-echo "****** finished GooCanvas"      && \
-
 # We use glib-gettextize, which apparently does not add the intl directory 
 # (containing a local copy of libintl code), and therefore has a slightly different Makefile.
 echo "- glib-gettextize."	&& \

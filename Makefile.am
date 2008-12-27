@@ -1,4 +1,4 @@
-SUBDIRS = goocanv8 src doc pixmaps data po
+SUBDIRS = src doc pixmaps data po
 
 install-data-local:
 	@$(NORMAL_INSTALL)
