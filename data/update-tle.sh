@@ -1,3 +1,4 @@
+#!/bin/sh
 wget http://www.celestrak.com/NORAD/elements/amateur.txt -O amateur.tle
 wget http://www.celestrak.com/NORAD/elements/iridium.txt -O iridium.tle
 wget http://www.celestrak.com/NORAD/elements/military.txt -O military.tle
