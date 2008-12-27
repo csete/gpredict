@@ -1,3 +1,13 @@
+2008-12-27; Alexandru Csete <oz9aec@gmail.com>
+
+    * autogen.sh:
+    * configure.ac:
+    * Makefile.am:
+    * src/Makefile.am:
+    Use sytem wide GooCanvas library instead of built-in copy. Build now
+    requires GooCanvas 0.10 to be installed.
+
+
 2008-10-26; Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-sat-list-popup.[ch]:
