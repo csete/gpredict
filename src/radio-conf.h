@@ -33,6 +33,14 @@
 #include <glib.h>
 
 
+/** \brief Radio types. */
+typedef enum {
+    RIG_TYPE_RX = 0,    /*!< Rig can only be used as receiver */
+    RIG_TYPE_TX,        /*!< Rig can only be used as transmitter */
+    RIG_TYPE_TRX,       /*!< Rig can be used as RX/TX (simplex only) */
+    RIG_TYPE_DUPLEX     /*!< Rig is a full duplex radio, e.g. IC910 */
+} rig_type_t;
+
 
 /** \brief Radio configuration. */
 typedef struct {
@@ -41,6 +49,8 @@ typedef struct {
     gint         port;      /*!< port number */
     gdouble      lo;        /*!< local oscillator freq in Hz (using double for
                                  compatibility with rest of code) */
+    rig_type_t   type;      /*!< Radio type */
+    gboolean     ptt;       /*!< Flag indicating that we should read PTT status (needed for RX, TX, and TRX) */
 } radio_conf_t;
 
 

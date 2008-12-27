@@ -38,6 +38,8 @@
 #define KEY_HOST        "Host"
 #define KEY_PORT        "Port"
 #define KEY_LO          "LO"
+#define KEY_TYPE        "Type"
+#define KEY_PTT         "READ_PTT"
 
 
 /** \brief Read radio configuration.
@@ -117,6 +119,26 @@ gboolean radio_conf_read (radio_conf_t *conf)
         return FALSE;
     }
 
+    conf->type = g_key_file_get_integer (cfg, GROUP, KEY_TYPE, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading radio conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+
+    conf->ptt = g_key_file_get_boolean (cfg, GROUP, KEY_PTT, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading radio conf from %s (%s)."),
+                       __FUNCTION__, conf->name, error->message);
+        g_clear_error (&error);
+        g_key_file_free (cfg);
+        return FALSE;
+    }
+
     g_key_file_free (cfg);
     
     sat_log_log (SAT_LOG_LEVEL_MSG,
@@ -155,6 +177,8 @@ void radio_conf_save (radio_conf_t *conf)
     g_key_file_set_string (cfg, GROUP, KEY_HOST, conf->host);
     g_key_file_set_integer (cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_double (cfg, GROUP, KEY_LO, conf->lo);
+    g_key_file_set_integer (cfg, GROUP, KEY_TYPE, conf->type);
+    g_key_file_set_boolean (cfg, GROUP, KEY_PTT, conf->ptt);
     
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);
