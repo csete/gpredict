@@ -6,6 +6,7 @@ Changes in version 1.0 (beta):
 - Feature request 1705375: Restore main window position and size.
 - Feature request 2192404: Starting time for pass predictions.
 * Feature request 2194621: Data recorder.
+- Feature request 2347471: Use system goocanvas.
 - Fixed bug 1752908: New satellites in TLE files.
 - Fixed bug 1818144: No log file created at first execution.
 - Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
