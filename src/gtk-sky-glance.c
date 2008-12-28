@@ -436,6 +436,9 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 
 		skg->pps = (skg->h - SKG_MARGIN) / skg->numsat - SKG_MARGIN;
 
+        goo_canvas_set_bounds (GOO_CANVAS (GTK_SKY_GLANCE (skg)->canvas), 0, 0,
+                                allocation->width, allocation->height);
+
 
 		/* update cursor tracking line */
 		pts = goo_canvas_points_new (2);
