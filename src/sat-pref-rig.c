@@ -58,6 +58,16 @@ static void render_name (GtkTreeViewColumn *col,
                          GtkTreeModel      *model,
                          GtkTreeIter       *iter,
                          gpointer           column);
+static void render_type (GtkTreeViewColumn *col,
+                         GtkCellRenderer   *renderer,
+                         GtkTreeModel      *model,
+                         GtkTreeIter       *iter,
+                         gpointer           column);
+static void render_ptt (GtkTreeViewColumn *col,
+                        GtkCellRenderer   *renderer,
+                        GtkTreeModel      *model,
+                        GtkTreeIter       *iter,
+                        gpointer           column);
 static void render_lo  (GtkTreeViewColumn *col,
                         GtkCellRenderer   *renderer,
                         GtkTreeModel      *model,
@@ -135,6 +145,28 @@ static void create_rig_list ()
                                                        "text", RIG_LIST_COL_PORT,
                                                         NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+
+    /* rig type */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Rig Type"), renderer,
+                                                       "text", RIG_LIST_COL_TYPE,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_type,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_TYPE),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+
+    /* PTT */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("PTT Status"), renderer,
+                                                       "text", RIG_LIST_COL_PTT,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_ptt,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_PTT),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
     /* lo */
     renderer = gtk_cell_renderer_text_new ();
@@ -168,6 +200,8 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_STRING,    // name
                                     G_TYPE_STRING,    // host
                                     G_TYPE_INT,       // port
+                                    G_TYPE_INT,       // type
+                                    G_TYPE_BOOLEAN,   // PTT
                                     G_TYPE_DOUBLE     // LO
                                    );
 
@@ -194,6 +228,8 @@ static GtkTreeModel *create_and_fill_model ()
                                         RIG_LIST_COL_NAME, conf.name,
                                         RIG_LIST_COL_HOST, conf.host,
                                         RIG_LIST_COL_PORT, conf.port,
+                                        RIG_LIST_COL_TYPE, conf.type,
+                                        RIG_LIST_COL_PTT, conf.ptt,
                                         RIG_LIST_COL_LO, conf.lo,
                                         -1);
                     
@@ -303,6 +339,8 @@ void sat_pref_rig_ok     ()
         .name  = NULL,
         .host  = NULL,
         .port  = 4532,
+        .type  = RIG_TYPE_RX,
+        .ptt   = FALSE,
         .lo    = 0.0,
     };
 
@@ -343,6 +381,8 @@ void sat_pref_rig_ok     ()
                                 RIG_LIST_COL_NAME, &conf.name,
                                 RIG_LIST_COL_HOST, &conf.host,
                                 RIG_LIST_COL_PORT, &conf.port,
+                                RIG_LIST_COL_TYPE, &conf.type,
+                                RIG_LIST_COL_PTT, &conf.ptt,
                                 RIG_LIST_COL_LO, &conf.lo,
                                 -1);
             radio_conf_save (&conf);
@@ -381,6 +421,8 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .name  = NULL,
         .host  = NULL,
         .port  = 4532,
+        .type  = RIG_TYPE_RX,
+        .ptt   = FALSE,
         .lo    = 0.0,
     };
     
@@ -395,6 +437,8 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_NAME, conf.name,
                             RIG_LIST_COL_HOST, conf.host,
                             RIG_LIST_COL_PORT, conf.port,
+                            RIG_LIST_COL_TYPE, conf.type,
+                            RIG_LIST_COL_PTT, conf.ptt,
                             RIG_LIST_COL_LO, conf.lo,
                             -1);
         
@@ -425,6 +469,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .name  = NULL,
         .host  = NULL,
         .port  = 4532,
+        .type  = RIG_TYPE_RX,
+        .ptt   = FALSE,
         .lo    = 0.0,
     };
 
@@ -450,6 +496,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_NAME, &conf.name,
                             RIG_LIST_COL_HOST, &conf.host,
                             RIG_LIST_COL_PORT, &conf.port,
+                            RIG_LIST_COL_TYPE, &conf.type,
+                            RIG_LIST_COL_PTT, &conf.ptt,
                             RIG_LIST_COL_LO, &conf.lo,
                             -1);
 
@@ -478,6 +526,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_NAME, conf.name,
                             RIG_LIST_COL_HOST, conf.host,
                             RIG_LIST_COL_PORT, conf.port,
+                            RIG_LIST_COL_TYPE, conf.type,
+                            RIG_LIST_COL_PTT, conf.ptt,
                             RIG_LIST_COL_LO, conf.lo,
                             -1);
         
@@ -569,6 +619,79 @@ static void render_name (GtkTreeViewColumn *col,
 }
 
 
+/** \brief Render radio type.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ * This function renders the radio type onto the riglist.
+*/
+static void render_type (GtkTreeViewColumn *col,
+                         GtkCellRenderer   *renderer,
+                         GtkTreeModel      *model,
+                         GtkTreeIter       *iter,
+                         gpointer           column)
+{
+    guint   type;
+    guint   coli = GPOINTER_TO_UINT (column);
+    
+    gtk_tree_model_get (model, iter, coli, &type, -1);
+
+    switch (type) {
+        case RIG_TYPE_RX:
+            g_object_set (renderer, "text", _("RX only"), NULL);
+            break;
+            
+        case RIG_TYPE_TX:
+            g_object_set (renderer, "text", _("TX only"), NULL);
+            break;
+
+        case RIG_TYPE_TRX:
+            g_object_set (renderer, "text", _("RX + TX"), NULL);
+            break;
+
+        case RIG_TYPE_DUPLEX:
+            g_object_set (renderer, "text", _("Duplex"), NULL);
+            break;
+
+        default:
+            g_object_set (renderer, "text", _("ERROR"), NULL);
+            break;
+    }
+    
+}
+
+
+/** \brief Render PTT status usage.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ * 
+ * This function renders the PTT status usage onto the riglist.
+*/
+static void render_ptt (GtkTreeViewColumn *col,
+                        GtkCellRenderer   *renderer,
+                        GtkTreeModel      *model,
+                        GtkTreeIter       *iter,
+                        gpointer           column)
+{
+    gboolean   ptt;
+    guint   coli = GPOINTER_TO_UINT (column);
+    
+    gtk_tree_model_get (model, iter, coli, &ptt, -1);
+
+    if (ptt)
+        g_object_set (renderer, "text", _("Monitor"), NULL);
+    else
+        g_object_set (renderer, "text", _("Ignore"), NULL);
+    
+}
+
+
 /** \brief Render Local Oscillator frequency.
  * \param col Pointer to the tree view column.
  * \param renderer Pointer to the renderer.
@@ -598,6 +721,7 @@ static void render_lo (GtkTreeViewColumn *col,
     g_object_set (renderer, "text", buff, NULL);
     g_free (buff);
 }
+
 
 
 
