@@ -781,6 +781,10 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 		polv->cx = allocation->width / 2;
 		polv->cy = allocation->height / 2;
 
+        goo_canvas_set_bounds (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), 0, 0,
+                                allocation->width, allocation->height);
+
+        
 		/* update coordinate system */
 		g_object_set (polv->C00,
 					  "center-x", (gdouble) polv->cx,
