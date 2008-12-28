@@ -33,6 +33,8 @@ typedef enum {
     RIG_LIST_COL_NAME = 0,  /*!< File name. */
     RIG_LIST_COL_HOST,      /*!< Hostname, e.g. localhost */
     RIG_LIST_COL_PORT,      /*!< Port number */
+    RIG_LIST_COL_TYPE,      /*!< Radio type */
+    RIG_LIST_COL_PTT,       /*!< PTT */
     RIG_LIST_COL_LO,        /*!< Local oscillator freq */
     RIG_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rig_list_col_t;
