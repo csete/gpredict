@@ -267,7 +267,8 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
 	goo_canvas_set_bounds (GOO_CANVAS (GTK_SAT_MAP (satmap)->canvas), 0, 0,
 						   gdk_pixbuf_get_width (GTK_SAT_MAP (satmap)->origmap),
 						   gdk_pixbuf_get_height (GTK_SAT_MAP (satmap)->origmap));
-
+    
+                           
 	/* connect size-request signal */
 	g_signal_connect (GTK_SAT_MAP (satmap)->canvas, "size-allocate",
 					  G_CALLBACK (size_allocate_cb), satmap);
@@ -511,6 +512,11 @@ update_map_size (GtkSatMap *satmap)
 											satmap->height,
 											GDK_INTERP_BILINEAR);
 		}
+
+        /* set canvas bounds to match new size */
+        goo_canvas_set_bounds (GOO_CANVAS (GTK_SAT_MAP (satmap)->canvas), 0, 0,
+                                           satmap->width, satmap->height);
+
 
 		/* redraw static elements */
 		g_object_set (satmap->map,
