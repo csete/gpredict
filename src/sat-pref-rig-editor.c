@@ -454,6 +454,7 @@ type_changed (GtkWidget *widget, gpointer data)
         break;
         
     case RIG_TYPE_DUPLEX:
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), FALSE);
         gtk_widget_set_sensitive (ptt, FALSE);
         break;
 
