@@ -232,8 +232,11 @@ gtk_polar_view_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
 	gtk_widget_modify_base (GTK_POLAR_VIEW (polv)->canvas, GTK_STATE_NORMAL, &bg_color);
 	gtk_widget_set_size_request (GTK_POLAR_VIEW (polv)->canvas,
 								 POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    /* if we set canvas bounds resize will cut the image to this size
+       discovered with GooCanvas 0.12
 	goo_canvas_set_bounds (GOO_CANVAS (GTK_POLAR_VIEW (polv)->canvas), 0, 0,
 								POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    */
 
 	/* connect size-request signal */
 	g_signal_connect (GTK_POLAR_VIEW (polv)->canvas, "size-allocate",
