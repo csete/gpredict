@@ -54,6 +54,8 @@ static GtkWidget *dialog;   /* dialog window */
 static GtkWidget *name;     /* config name */
 static GtkWidget *host;     /* host */
 static GtkWidget *port;     /* port number */
+static GtkWidget *type;     /* rig type */
+static GtkWidget *ptt;      /* PTT */
 static GtkWidget *lo;       /* local oscillator */
 
 
@@ -62,6 +64,7 @@ static void          update_widgets        (radio_conf_t *conf);
 static void          clear_widgets         (void);
 static gboolean      apply_changes         (radio_conf_t *conf);
 static void          name_changed          (GtkWidget *widget, gpointer data);
+static void          type_changed          (GtkWidget *widget, gpointer data);
 
 
 /** \brief Add or edit a radio configuration.
@@ -141,7 +144,7 @@ create_editor_widgets (radio_conf_t *conf)
 
 
 
-	table = gtk_table_new (4, 4, FALSE);
+	table = gtk_table_new (6, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -188,21 +191,62 @@ create_editor_widgets (radio_conf_t *conf)
                                  _("Enter the port number where rigctld is listening"));
     gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 3, 2, 3);
     
+    /* radio type */
+    label = gtk_label_new (_("Type"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    
+    type = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX only"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("TX only"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX/TX"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Duplex"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
+    g_signal_connect (type, "changed", G_CALLBACK (type_changed), NULL);
+    gtk_widget_set_tooltip_markup (type,
+                    _("<b>RX only:</b>  The radio shall only be used as receiver. "\
+                    "If <i>Monitor PTT status</i> is checked the doppler tuning "\
+                    "will be suspended while PTT is ON (manual TX). "\
+                    "If not, the controller will always perform doppler tuning and "\
+                    "you cannot use the same RIG for uplink.\n"\
+                    "<b>TX only:</b>  The radio shall only be used for uplink. "\
+                    "If <i>Monitor PTT status</i> is checked the doppler tuning "\
+                    "will be suspended while PTT is OFF (manual RX).\n"\
+                    "<b>RX/TX:</b>  The radio should be used for both up- and downlink "\
+                    "but in simplex mode only. This option requires that the PTT status "\
+                    "is monitored (otherwise gpredict cannot know whether to tune the "\
+                    "RX or the TX).\n"\
+                    "<b>Duplex:</b>  The radio is a full duplex radio, such as the IC910H. "\
+                    "Gpredict will be continuously tuning both uplink and downlink "\
+                    "simultaneously and not care about PTT setting."));
+    gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 3, 3, 4);
+    
+    /* ptt */
+    ptt = gtk_check_button_new_with_label (_("Monitor PTT status"));
+    gtk_widget_set_tooltip_text (ptt,
+                                 _("If checked, the radio controller will monitor the status of"\
+                                 " the PTT and act accordingly. For example, the doppler tuning "\
+                                 "on an RX only radio will be suspended while PTT is active. This"\
+                                 " functionality is also required for radios that are used as both"\
+                                 " TX and RX (simplex)"));
+    gtk_table_attach_defaults (GTK_TABLE (table), ptt, 1, 4, 4, 5);
+    
+    
     /* LO frequency */
     label = gtk_label_new (_("LO"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
     
     lo = gtk_spin_button_new_with_range (-10000, 10000, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lo), 0);
     gtk_widget_set_tooltip_text (lo,
                                  _("Enter the frequency of the local oscillator, if any."));
-    gtk_table_attach_defaults (GTK_TABLE (table), lo, 1, 3, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), lo, 1, 3, 5, 6);
     
     label = gtk_label_new (_("MHz"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 3, 4);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 5, 6);
     
 	if (conf->name != NULL)
 		update_widgets (conf);
@@ -232,6 +276,40 @@ update_widgets (radio_conf_t *conf)
     else
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     
+    /* ptt */
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), conf->ptt);
+
+    /* rig type */
+    switch (conf->type) {
+    case RIG_TYPE_RX:
+        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+        gtk_widget_set_sensitive (ptt, TRUE);
+        break;
+        
+    case RIG_TYPE_TX:
+        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+        gtk_widget_set_sensitive (ptt, TRUE);
+        break;
+        
+    case RIG_TYPE_TRX:
+        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+        /* force ptt to TRUE */
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), TRUE);
+        gtk_widget_set_sensitive (ptt, FALSE);
+        break;
+        
+    case RIG_TYPE_DUPLEX:
+        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+        gtk_widget_set_sensitive (ptt, FALSE);
+        break;
+
+    default:
+        gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
+        gtk_widget_set_sensitive (ptt, TRUE);
+        break;
+    }
+    
+    
     /* lo in MHz */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000.0);
 }
@@ -244,12 +322,14 @@ update_widgets (radio_conf_t *conf)
  *
  */
 static void
-clear_widgets () 
+clear_widgets ()
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
     gtk_entry_set_text (GTK_ENTRY (host), "");
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), FALSE);
 }
 
 
@@ -280,6 +360,12 @@ apply_changes         (radio_conf_t *conf)
     
     /* lo freq */
     conf->lo = 1000000.0*gtk_spin_button_get_value (GTK_SPIN_BUTTON (lo));
+    
+    /* rig type */
+    conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type));
+    
+    /* ptt */
+    conf->ptt = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ptt));
     
 	return TRUE;
 }
@@ -344,3 +430,36 @@ name_changed          (GtkWidget *widget, gpointer data)
 }
 
 
+/** \brief Manage type changed signals.
+ *  \param widget The GtkComboBox that received the signal.
+ *  \param data User data (always NULL).
+ *  
+ *  This function is called when the user selects a new radio type.
+ */
+static void
+type_changed (GtkWidget *widget, gpointer data)
+{
+    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (widget))) {
+    case RIG_TYPE_RX:
+        gtk_widget_set_sensitive (ptt, TRUE);
+        break;
+        
+    case RIG_TYPE_TX:
+        gtk_widget_set_sensitive (ptt, TRUE);
+        break;
+        
+    case RIG_TYPE_TRX:
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), TRUE);
+        gtk_widget_set_sensitive (ptt, FALSE);
+        break;
+        
+    case RIG_TYPE_DUPLEX:
+        gtk_widget_set_sensitive (ptt, FALSE);
+        break;
+
+    default:
+        gtk_widget_set_sensitive (ptt, TRUE);
+        break;
+    }
+
+}
