@@ -466,6 +466,9 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 		polv->width = allocation->width;
 		polv->height = allocation->height;
 
+        goo_canvas_set_bounds (GOO_CANVAS (GTK_AZEL_PLOT (polv)->canvas), 0, 0,
+                               polv->width, polv->height);
+        
 		/* update coordinate system */
 		polv->x0 = POLV_X_MARGIN;
 		polv->xmax = polv->width - POLV_X_MARGIN;
