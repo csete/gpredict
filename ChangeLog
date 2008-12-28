@@ -1,3 +1,15 @@
+2008-12-28; Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-pref-rig-editor.c:
+    Added widgets for editing radio type and ptt.
+    
+    * src/sat-pref-rig-data.h:
+    Updated column definitions to include rig type and ptt.
+    
+    * src/sat-pref-rig.c:
+    Include rig type and ptt fields.
+    
+
 2008-12-27; Alexandru Csete <oz9aec@gmail.com>
 
     * autogen.sh:
@@ -6,6 +18,12 @@
     * src/Makefile.am:
     Use sytem wide GooCanvas library instead of built-in copy. Build now
     requires GooCanvas 0.10 to be installed.
+    
+    * goocan8:
+    Deleted.
+    
+    * src/radio-conf.[ch]:
+    Added management of radio type.
 
 
 2008-10-26; Alexandru Csete <oz9aec@gmail.com>
