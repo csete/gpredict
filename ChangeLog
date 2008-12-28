@@ -9,6 +9,13 @@
     * src/sat-pref-rig.c:
     Include rig type and ptt fields.
     
+    * src/gtk-polar-view.c:
+    * src/gtk-sat-map.c:
+    * src/gtk-sky-at-glance.c:
+    * src/gtk-polar-plot.c:
+    * src/gtk-azel-plot.c:
+    Update canvas bounds when resizing the canvas.
+    
 
 2008-12-27; Alexandru Csete <oz9aec@gmail.com>
 
