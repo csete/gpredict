@@ -19,6 +19,7 @@ Changes in version 1.0 (beta):
 - Fixed bug 2170642: Small error in user manual.
 x Windows: New installer instead of ZIP distribution.
 - Updated PDF user manual.
+- French translation.
 
 
 Changes in version 0.9.0 (2007-09-29):
