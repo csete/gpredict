@@ -1,3 +1,20 @@
+2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
+
+    * src/menubar.c:
+    * src/tle-update.c:
+    Port TLE download to GIO.
+
+    * configure.ac:
+    * README:
+    Remove references to libcurl, add GIO dependency, and bump GLib
+    requirement.
+    
+    * src/about.c:
+    Updated credits.
+    
+    * NEWS:
+    Updated.
+
 2009-03-01; Alexandru Csete <oz9aec@gmail.com>
 
     * configure.ac:

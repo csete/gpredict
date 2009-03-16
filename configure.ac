@@ -21,23 +21,10 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
 fi
 
 dnl check for glib, gtk, and goocanvas libraries
-pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.14.0 gthread-2.0 >= 2.14.0 goocanvas >= 0.9"
+pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.16.0 gio-2.0 >= 2.16.0 gthread-2.0 >= 2.14.0 goocanvas >= 0.9"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
-
-
-dnl check for libcurl
-PKG_CHECK_MODULES(LIBCURL, libcurl, [
-        CFLAGS="$CFLAGS $LIBCURL_CFLAGS";
-        LIBS="$LIBS $LIBCURL_LIBS"; 
-        havecurl=true;
-        AC_DEFINE(HAVE_LIBCURL, 1, [Define if libcurl is available])
-   ], [
-        havecurl=false;
-        AC_DEFINE(HAVE_LIBCURL, 0, [Define if libcurl is unvailable])
-
-])
 
 dnl Hamlib not needed if we go for the TCP based I/F
 dnl check for hamlib
@@ -73,14 +60,12 @@ fi
 
 
 GLIB_V=`pkg-config --modversion glib-2.0`
+GIO_V=`pkg-config --modversion gio-2.0`
 GTHR_V=`pkg-config --modversion gthread-2.0`
 GDK_V=`pkg-config --modversion gdk-2.0`
 GTK_V=`pkg-config --modversion gtk+-2.0`
 GOOC_V=`pkg-config --modversion goocanvas`
 dnl SQL_V=`pkg-config --modversion sqlite3`
-if test "$havecurl" = true ; then
-   CURL_V=`pkg-config --modversion libcurl`
-fi
 dnl if test "$havehamlib" = true ; then
 dnl    HAML_V=`pkg-config --modversion hamlib`
 dnl fi
@@ -110,16 +95,12 @@ echo SUMMARY:
 echo
 echo Gpredict version... : $VERSION
 echo Glib version....... : $GLIB_V
+echo Gio version........ : $GIO_V
 echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
 dnl echo SQLite version..... : $SQL_V
-if test "$havecurl" = true ; then
-echo Curl version....... : $CURL_V
-else
-echo Curl version....... : none
-fi
 dnl if test "$havehamlib" = true ; then
 dnl echo Hamlib version..... : $HAML_V
 dnl else

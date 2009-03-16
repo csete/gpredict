@@ -36,20 +36,21 @@
 
 
 const gchar *authors[] = {
-	"Alexandru Csete, OZ9AEC (design and development)",
-	"",
-	"Contributors:",
-	"Damon Chaplin (GooCanvas)",
-	"Dr. T.S. Kelso (SGP4/SDP4 algorithms)",
-	"John A. Magliacane, KD2BD (prediction code)",
-	"Neoklis Kyriazis, 5B4AZ (SGP4/SDP4 in C)",
-	"William J Beksi, KC2EXL (GtkSatMap)",
-	"Stephane Fillod (locator.c)",
-	"Nate Bargmann (locator.c)",
-	"Dave Hines (locator.c)",
-	"Mirko Caserta (locator.c)",
-	"S. R. Sampson (locator.c)",
-	NULL
+    "Alexandru Csete, OZ9AEC (design and development)",
+    "",
+    "Contributors:",
+    "Bruce Cowan (Gio port of TLE updater)",
+    "Damon Chaplin (GooCanvas)",
+    "Dr. T.S. Kelso (SGP4/SDP4 algorithms)",
+    "John A. Magliacane, KD2BD (prediction code)",
+    "Neoklis Kyriazis, 5B4AZ (SGP4/SDP4 in C)",
+    "William J Beksi, KC2EXL (GtkSatMap)",
+    "Stephane Fillod (locator.c)",
+    "Nate Bargmann (locator.c)",
+    "Dave Hines (locator.c)",
+    "Mirko Caserta (locator.c)",
+    "S. R. Sampson (locator.c)",
+    NULL
 };
 
 

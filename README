@@ -49,7 +49,6 @@ Unix like operating systems, Mac and Windows. Following libraries are required
 for successful compilation of Gpredict:
 
 - Gtk+ 2.12 or later
-- Curl and libcurl (optional but highly recommended)
 - Hamlib (runtime only, not required for build)
 
 If you compile Gpredict from source you will also need the development parts

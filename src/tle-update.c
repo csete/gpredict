@@ -32,9 +32,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
-#if HAVE_LIBCURL
-#  include <curl/curl.h>
-#endif
+#include <gio/gio.h>
 #include "sgpsdp/sgp4sdp4.h"
 #include "sat-log.h"
 #include "sat-cfg.h"
@@ -58,7 +56,6 @@ static tle_t  *gchar_to_tle (tle_type_t type, const gchar *lines);
 static gchar  *tle_to_gchar (tle_type_t type, tle_t *tle);
 #endif
 
-static size_t  my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream);
 static gint    read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *data);
 
 static void    update_tle_in_file (const gchar *ldname,
@@ -414,20 +411,16 @@ tle_update_from_network (gboolean   silent,
 						 GtkWidget *label1,
 						 GtkWidget *label2)
 {
-
-#if HAVE_LIBCURL
 	gchar       *server;
-	gchar       *proxy = NULL;
 	gchar       *files_tmp;
 	gchar      **files;
 	guint        numfiles,i;
 	gchar       *curfile;
 	gchar       *locfile;
-	CURL        *curl;
-	CURLcode     res;
+	GFile       *file;
 	gboolean     error = FALSE;
 	gdouble      fraction,start=0;
-	FILE        *outfile;
+	GFile       *outfile;
 	GDir        *dir;
 	gchar       *cache;
 	const gchar *fname;
@@ -443,9 +436,8 @@ tle_update_from_network (gboolean   silent,
 
 	tle_in_progress = TRUE;
 
-	/* get server, proxy, and list of files */
+	/* get server and list of files */
 	server = sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER);
-	proxy  = sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY);
 	files_tmp = sat_cfg_get_str (SAT_CFG_STR_TLE_FILES);
 	files = g_strsplit (files_tmp, ";", 0);
 	numfiles = g_strv_length (files);
@@ -467,20 +459,13 @@ tle_update_from_network (gboolean   silent,
 		if (!silent && (progress != NULL))
 			start = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (progress));
 
-		/* initialise curl */
-		curl = curl_easy_init();
-		if (proxy != NULL)
-			curl_easy_setopt (curl, CURLOPT_PROXY, proxy);
-
-		curl_easy_setopt (curl, CURLOPT_USERAGENT, "gpredict/curl");
-        curl_easy_setopt (curl, CURLOPT_CONNECTTIMEOUT, 10);
 
 		/* get files */
 		for (i = 0; i < numfiles; i++) {
 
 			/* set URL */
 			curfile = g_strconcat (server, files[i], NULL);
-			curl_easy_setopt (curl, CURLOPT_URL, curfile);
+			file = g_file_new_for_uri (curfile);
 
 			/* set activity message */
 			if (!silent && (label1 != NULL)) {
@@ -502,18 +487,15 @@ tle_update_from_network (gboolean   silent,
 								   "tle", G_DIR_SEPARATOR_S,
 								   "cache", G_DIR_SEPARATOR_S,
 								   files[i], NULL);
-			outfile = g_fopen (locfile, "wb");
-			curl_easy_setopt (curl, CURLOPT_WRITEDATA, outfile);
-			curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, my_write_func);
+			outfile = g_file_new_for_path (locfile);
 
-			/* get file */
-			res = curl_easy_perform (curl);
+			g_file_copy (file, outfile, G_FILE_COPY_NONE, NULL, NULL, NULL, &err);
 
-			if (res != CURLE_OK) {
+			if (error) {
 				sat_log_log (SAT_LOG_LEVEL_ERROR,
 							 _("%s: Error fetching %s (%s)"),
-							 __FUNCTION__, curfile, curl_easy_strerror (res));
-				error = TRUE;
+							 __FUNCTION__, curfile, err->message);
+							 g_clear_error (&err);
 			}
 			else {
 				sat_log_log (SAT_LOG_LEVEL_MSG,
@@ -539,10 +521,7 @@ tle_update_from_network (gboolean   silent,
 
 			g_free (curfile);
 			g_free (locfile);
-			fclose (outfile);
 		}
-
-		curl_easy_cleanup (curl);
 
 		/* continue update if we have fetched at least one file */
 		if (success > 0) {
@@ -561,8 +540,6 @@ tle_update_from_network (gboolean   silent,
 	g_free (server);
 	g_strfreev (files);
 	g_free (files_tmp);
-	if (proxy != NULL)
-		g_free (proxy);
 
 	/* open cache */
 	cache = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
@@ -596,34 +573,7 @@ tle_update_from_network (gboolean   silent,
 
 	/* clear busy flag */
 	tle_in_progress = FALSE;
-
-#else
-	sat_log_log (SAT_LOG_LEVEL_BUG,
-				 _("%s: This version of gpredict has been compiled without network support.\n"
-				   "To update TLE data, download NASA 2-line files manually, then run Update from files."),
-				 __FUNCTION__);
-#endif
-
 }
-
-
-/** \brief Write TLE data block to file.
- *  \param ptr Pointer to the data block to be written.
- *  \param size Size of data block.
- *  \param nmemb Size multiplier?
- *  \param stream Pointer to the file handle.
- *  \return The number of bytes actually written.
- *
- * This function writes the received data to the file pointed to by stream.
- * It is used as write callback by to curl exec function.
- */
-static size_t
-my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream)
-{
-	/*** FIXME: TBC whether this works in wintendo */
-	return fwrite (ptr, size, nmemb, stream);
-}
-
 
 
 /** \brief Read fresh TLE data into hash table.

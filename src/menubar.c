@@ -436,7 +436,6 @@ static void
 menubar_tle_net_cb       (GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dialog;          /* dialog window  */
-#if HAVE_LIBCURL
 	GtkWidget *label;           /* misc labels */
 	GtkWidget *progress;        /* progress indicator */
 	GtkWidget *label1,*label2;  /* activitity and stats labels */
@@ -514,24 +513,6 @@ menubar_tle_net_cb       (GtkWidget *widget, gpointer data)
 
 	/* reload satellites */
 	mod_mgr_reload_sats ();
-
-#else
-    
-    dialog = gtk_message_dialog_new (GTK_WINDOW (app),
-                                     GTK_DIALOG_MODAL |
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-									 GTK_MESSAGE_ERROR,
-									 GTK_BUTTONS_OK,
-									 _("This version of gpredict has been compiled "\
-									   "without network support. Therefore, TLE update "\
-									   "from network is not available.\n\n"\
-									   "Consult the user manual for details."));
-                              
-    gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
-
-#endif
-    
 }
 
 
