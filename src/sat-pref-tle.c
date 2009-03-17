@@ -42,7 +42,7 @@ static GtkWidget *freq;
 static GtkWidget *warn,*autom;
 
 /* internet updates */
-static GtkWidget *server,*proxy,*files;
+static GtkWidget *server,*files;
 
 /* add new sats */
 static GtkWidget *addnew;
@@ -134,10 +134,6 @@ sat_pref_tle_ok     ()
 		sat_cfg_set_str (SAT_CFG_STR_TLE_SERVER,
 						 gtk_entry_get_text (GTK_ENTRY (server)));
 
-		/* proxy */
-		sat_cfg_set_str (SAT_CFG_STR_TLE_PROXY,
-						 gtk_entry_get_text (GTK_ENTRY (proxy)));
-
 		/* files */
 		sat_cfg_set_str (SAT_CFG_STR_TLE_FILES,
 						 gtk_entry_get_text (GTK_ENTRY (files)));
@@ -154,7 +150,6 @@ sat_pref_tle_ok     ()
 		sat_cfg_reset_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ);
 		sat_cfg_reset_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION);
 		sat_cfg_reset_str (SAT_CFG_STR_TLE_SERVER);
-		sat_cfg_reset_str (SAT_CFG_STR_TLE_PROXY);
 		sat_cfg_reset_str (SAT_CFG_STR_TLE_FILES);
         sat_cfg_reset_bool (SAT_CFG_BOOL_TLE_ADD_NEW);
 
@@ -254,23 +249,6 @@ create_network (GtkWidget *vbox)
 						  NULL); 
 	g_signal_connect (server, "changed", G_CALLBACK (value_changed_cb), NULL);
 	gtk_table_attach (GTK_TABLE (table), server, 1, 2, 0, 1,
-					  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
-	/* proxy */
-	label = gtk_label_new (_("Proxy server:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
-	
-	proxy = gtk_entry_new ();
-	if (sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY))
-		gtk_entry_set_text (GTK_ENTRY (proxy), sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY));
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, proxy,
-						  _("Enter URL for local proxy server. e.g.\n"\
-							"http://my.proxy.com"),
-						  NULL); 
-	g_signal_connect (proxy, "changed", G_CALLBACK (value_changed_cb), NULL);
-	gtk_table_attach (GTK_TABLE (table), proxy, 1, 2, 1, 2,
 					  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 	
 	/* Files */
@@ -395,9 +373,6 @@ reset_cb               (GtkWidget *button, gpointer data)
 
 	/* server */
 	gtk_entry_set_text (GTK_ENTRY (server), sat_cfg_get_str_def (SAT_CFG_STR_TLE_SERVER));
-
-	/* proxy */
-	gtk_entry_set_text (GTK_ENTRY (proxy), "");
 
 	/* files */
 	gtk_entry_set_text (GTK_ENTRY (files), sat_cfg_get_str_def (SAT_CFG_STR_TLE_FILES));

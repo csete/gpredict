@@ -130,7 +130,6 @@ sat_cfg_bool_t sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
 	{ "MODULES", "POLAR_CURSOR_TRACK", TRUE},
     { "MODULES", "POLAR_EXTRA_AZ_TICKS", FALSE},
     { "TLE",     "SERVER_AUTH",        FALSE},
-	{ "TLE",     "PROXY_AUTH",         FALSE},
     { "TLE",     "ADD_NEW_SATS",       TRUE},
 	{ "LOG",     "KEEP_LOG_FILES",     FALSE},
     { "PREDICT", "USE_REAL_T0",        FALSE}
@@ -215,7 +214,6 @@ sat_cfg_str_t sat_cfg_str[SAT_CFG_STR_NUM] = {
 	{ "TLE",     "SERVER", "http://www.celestrak.com/NORAD/elements/"},
 	{ "TLE",     "FILES", "amateur.txt;cubesat.txt;galileo.txt;geo.txt;gps-ops.txt;"\
 	  "iridium.txt;military.txt;radar.txt;science.txt;weather.txt"},
-	{ "TLE",     "PROXY", NULL},
 	{ "TLE",     "FILE_DIR", NULL},
 	{ "TLE",     "EXTENSION", "*.*"},
 	{ "PREDICT", "SAVE_DIR", NULL}

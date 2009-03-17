@@ -1,5 +1,12 @@
 2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
 
+    * src/sat-cfg.[ch]:
+    * src/sat-pref-tle.c:
+    Remove proxy configuration item, taken care by GVFS.
+
+
+2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
+
     * src/menubar.c:
     * src/tle-update.c:
     Port TLE download to GIO.
@@ -14,6 +21,7 @@
     
     * NEWS:
     Updated.
+
 
 2009-03-01; Alexandru Csete <oz9aec@gmail.com>
 

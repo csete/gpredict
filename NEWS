@@ -18,6 +18,7 @@ Changes in version 1.0 (beta):
 - Fixed bug 2130912: Crash when no rig or no rotator are defined.
 - Fixed bug 2170642: Small error in user manual.
 - Applied patch 2688135: Use GIO instead of libcurl for TLE download.
+  Note: This removes proxy management from gpredict.
 x Windows: New installer instead of ZIP distribution.
 - Updated PDF user manual.
 - French translation.
