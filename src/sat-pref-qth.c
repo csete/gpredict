@@ -558,7 +558,7 @@ delete_cb (GtkWidget *button, gpointer data)
 										 GTK_BUTTONS_OK,
 										 _("Can not delete ground station!\n\n"\
 										   "You need to have at least one ground\n"\
-										   "statiob set up, otherwise gpredict may\n"\
+										   "station set up, otherwise gpredict may\n"\
 										   "not work properly."));
 
 		gtk_dialog_run (GTK_DIALOG (dialog));

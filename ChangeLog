@@ -1,3 +1,9 @@
+2009-03-18 Alexandru Csete <oz9aec@gmail.com>
+
+	* src/sat-pref-qth.c:
+	Fixed typo (Debian bug #520203).
+
+
 2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
 
     * src/sat-cfg.[ch]:
@@ -23,14 +29,14 @@
     Updated.
 
 
-2009-03-01; Alexandru Csete <oz9aec@gmail.com>
+2009-03-01 Alexandru Csete <oz9aec@gmail.com>
 
     * configure.ac:
     Changed required GooCanvas version from 0.10 to 0.9 to be vompatible
     with older linux distributions, too (e.g. Ubuntu 8.04).
     
 
-2009-02-19; Stephane Fillod <fillods@users.sf.net>
+2009-02-19 Stephane Fillod <fillods@users.sf.net>
 
     * po/POTFILES.in:
     Remove goocanv8 files. Update list of C files.
@@ -42,7 +48,7 @@
     * src/Makefile.am:
     Fixed a typo.
 
-2008-12-28; Alexandru Csete <oz9aec@gmail.com>
+2008-12-28 Alexandru Csete <oz9aec@gmail.com>
 
     * src/sat-pref-rig-editor.c:
     Added widgets for editing radio type and ptt.
