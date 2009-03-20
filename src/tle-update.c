@@ -418,7 +418,6 @@ tle_update_from_network (gboolean   silent,
 	gchar       *curfile;
 	gchar       *locfile;
 	GFile       *file;
-	gboolean     error = FALSE;
 	gdouble      fraction,start=0;
 	GFile       *outfile;
 	GDir        *dir;
@@ -491,11 +490,12 @@ tle_update_from_network (gboolean   silent,
 
 			g_file_copy (file, outfile, G_FILE_COPY_NONE, NULL, NULL, NULL, &err);
 
-			if (error) {
+			if (err != NULL) {
 				sat_log_log (SAT_LOG_LEVEL_ERROR,
 							 _("%s: Error fetching %s (%s)"),
 							 __FUNCTION__, curfile, err->message);
-							 g_clear_error (&err);
+				g_clear_error (&err);
+				err = NULL;
 			}
 			else {
 				sat_log_log (SAT_LOG_LEVEL_MSG,
@@ -552,8 +552,9 @@ tle_update_from_network (gboolean   silent,
 		/* send an error message */
 		sat_log_log (SAT_LOG_LEVEL_ERROR,
 					 _("%s: Error opening %s (%s)"),
-					 __FUNCTION__, dir, err->message);
+					 __FUNCTION__, cache, err->message);
 		g_clear_error (&err);
+		err = NULL;
 	}
 	else {
 		/* delete files in cache one by one */
