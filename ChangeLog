@@ -1,7 +1,7 @@
 2009-03-21 Alexandru Csete <oz9aec@gmail.com>
 
     * src/radio-conf.[ch]:
-    Added config field for uplink transverter LO.
+    Added config field for uplink transverter LO. LO values are now optional.
     
 
 2009-03-21 Stephane Fillod <fillods@users.sf.net>

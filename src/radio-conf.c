@@ -110,24 +110,36 @@ gboolean radio_conf_read (radio_conf_t *conf)
         return FALSE;
     }
     
-    conf->lo = g_key_file_get_double (cfg, GROUP, KEY_LO, &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading radio conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
-        g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+    /* KEY_LO is optional */
+    if (g_key_file_has_key (cfg, GROUP, KEY_LO, NULL)) {
+        conf->lo = g_key_file_get_double (cfg, GROUP, KEY_LO, &error);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading radio conf from %s (%s)."),
+                        __FUNCTION__, conf->name, error->message);
+            g_clear_error (&error);
+            g_key_file_free (cfg);
+            return FALSE;
+        }
+    }
+    else {
+        conf->lo = 0.0;
     }
     
-    conf->loup = g_key_file_get_double (cfg, GROUP, KEY_LOUP, &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading radio conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
-        g_clear_error (&error);
-        g_key_file_free (cfg);
-        return FALSE;
+    /* KEY_LOUP is optional */
+    if (g_key_file_has_key (cfg, GROUP, KEY_LOUP, NULL)) {
+        conf->loup = g_key_file_get_double (cfg, GROUP, KEY_LOUP, &error);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading radio conf from %s (%s)."),
+                        __FUNCTION__, conf->name, error->message);
+            g_clear_error (&error);
+            g_key_file_free (cfg);
+            return FALSE;
+        }
+    }
+    else {
+        conf->loup = 0.0;
     }
 
     conf->type = g_key_file_get_integer (cfg, GROUP, KEY_TYPE, &error);
