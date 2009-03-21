@@ -199,8 +199,8 @@ create_editor_widgets (radio_conf_t *conf)
     type = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX only"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("TX only"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("RX/TX"));
-    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Duplex"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Simplex TRX"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Duplex TRX"));
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
     g_signal_connect (type, "changed", G_CALLBACK (type_changed), NULL);
     gtk_widget_set_tooltip_markup (type,
