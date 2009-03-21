@@ -48,7 +48,8 @@ typedef struct {
     gchar       *host;      /*!< hostname or IP */
     gint         port;      /*!< port number */
     gdouble      lo;        /*!< local oscillator freq in Hz (using double for
-                                 compatibility with rest of code) */
+                                 compatibility with rest of code). Downlink. */
+    gdouble      loup;      /*!< local oscillator freq in Hz for uplink. */
     rig_type_t   type;      /*!< Radio type */
     gboolean     ptt;       /*!< Flag indicating that we should read PTT status (needed for RX, TX, and TRX) */
 } radio_conf_t;
