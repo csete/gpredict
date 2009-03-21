@@ -123,6 +123,6 @@ vis_to_chr       (sat_vis_t vis)
 gchar *
 vis_to_str       (sat_vis_t vis)
 {
-	return g_strdup (VIS2STR[vis]);
+	return g_strdup (_(VIS2STR[vis]));
 }
 

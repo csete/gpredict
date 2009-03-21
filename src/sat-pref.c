@@ -220,6 +220,6 @@ button_press_cb (GtkWidget *widget, gpointer nbook)
 
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
-	gtk_window_set_title (GTK_WINDOW (window), WINDOW_TITLE[page]);
+	gtk_window_set_title (GTK_WINDOW (window), _(WINDOW_TITLE[page]));
 }
 

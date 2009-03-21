@@ -355,7 +355,7 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
 						  NULL);
 #endif
 
-		column = gtk_tree_view_column_new_with_attributes (SAT_LIST_COL_TITLE[i],
+		column = gtk_tree_view_column_new_with_attributes (_(SAT_LIST_COL_TITLE[i]),
 														   renderer,
 														   "text", i,
 														   NULL);

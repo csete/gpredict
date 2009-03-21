@@ -971,5 +971,5 @@ tle_update_freq_to_str (tle_auto_upd_freq_t freq)
 
 	}
 
-	return freq_to_str[freq];
+	return _(freq_to_str[freq]);
 }

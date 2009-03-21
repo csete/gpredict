@@ -202,10 +202,19 @@ menubar_create (GtkWidget *window)
 	GtkWidget      *menuitem;
 	GtkWidget      *image;
 	gchar          *icon;
+	gint           i;
 
 
 	/* create action group */
 	actgrp = gtk_action_group_new ("MenuActions");
+	/* i18n */
+       for (i=0; i<G_N_ELEMENTS (entries); i++) {
+		if (entries[i].label)
+			entries[i].label = _(entries[i].label);
+		if (entries[i].tooltip)
+			entries[i].tooltip = _(entries[i].tooltip);
+	}
+
 	gtk_action_group_add_actions (actgrp, entries, G_N_ELEMENTS (entries), NULL);
 
 	/* create UI manager */

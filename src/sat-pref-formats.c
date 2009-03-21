@@ -97,13 +97,13 @@ GtkWidget *sat_pref_formats_create ()
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tzcheck),
 								  sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME));
 	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, tzcheck, tztips, NULL);
+	gtk_tooltips_set_tip (tips, tzcheck, _(tztips), NULL);
 
 	/* time format */
 	tfentry = gtk_entry_new ();
 	gtk_entry_set_max_length (GTK_ENTRY (tfentry), TIME_FORMAT_MAX_LENGTH);
 	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, tfentry, tftips, NULL);
+	gtk_tooltips_set_tip (tips, tfentry, _(tftips), NULL);
 
 	text = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 	gtk_entry_set_text (GTK_ENTRY (tfentry), text);
@@ -132,14 +132,14 @@ GtkWidget *sat_pref_formats_create ()
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (nsewcheck),
 								  sat_cfg_get_bool (SAT_CFG_BOOL_USE_NSEW));	
 	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, nsewcheck, nsewtips, NULL);
+	gtk_tooltips_set_tip (tips, nsewcheck, _(nsewtips), NULL);
 
 	/* unit */
 	useimporg = sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL);
 	impcheck = gtk_check_button_new_with_label (_("Use Imperial units instead of Metric."));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (impcheck), useimporg);	
 	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, impcheck, imptips, NULL);
+	gtk_tooltips_set_tip (tips, impcheck, _(imptips), NULL);
 	/* connect sat-pref-qth hook */
 	g_signal_connect (impcheck, "toggled", G_CALLBACK (systog_cb), NULL);
 			 

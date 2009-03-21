@@ -218,7 +218,7 @@ pass_to_txt_tblheader (pass_t *pass, qth_t *qth, gint fields)
 
 	/* add time column */
 	buff = g_strnfill (size - 4, ' ');
-	line = g_strconcat (SPCT[0], buff, NULL);
+	line = g_strconcat (_(SPCT[0]), buff, NULL);
 	linelength = size + 1;
 	g_free (buff);
 
@@ -228,7 +228,7 @@ pass_to_txt_tblheader (pass_t *pass, qth_t *qth, gint fields)
 		if (fields & (1 << i)) {
 
 			/* add column to line */
-			buff = g_strconcat (line, " ", SPCT[i], NULL);
+			buff = g_strconcat (line, " ", _(SPCT[i]), NULL);
 			g_free (line);
 			line = g_strdup (buff);
 			g_free (buff);
@@ -519,7 +519,7 @@ passes_to_txt_tblheader (GSList *passes, qth_t *qth, gint fields)
 
 	/* add AOS, TCA, and LOS columns */
 	buff = g_strnfill (size - 3, ' ');
-	line = g_strconcat (MPCT[0], buff, MPCT[1], buff, MPCT[2], buff,  NULL);
+	line = g_strconcat (_(MPCT[0]), buff, _(MPCT[1]), buff, _(MPCT[2]), buff,  NULL);
 	linelength = 3 * (size + 2);
 	g_free (buff);
 
@@ -529,7 +529,7 @@ passes_to_txt_tblheader (GSList *passes, qth_t *qth, gint fields)
 		if (fields & (1 << i)) {
 
 			/* add column to line */
-			buff = g_strconcat (line, "  ", MPCT[i], NULL);
+			buff = g_strconcat (line, "  ", _(MPCT[i]), NULL);
 			g_free (line);
 			line = g_strdup (buff);
 			g_free (buff);

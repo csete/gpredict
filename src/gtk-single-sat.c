@@ -280,7 +280,7 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 
 		if (GTK_SINGLE_SAT (widget)->flags & (1 << i)) {
 
-			label1 = gtk_label_new (SINGLE_SAT_FIELD_TITLE[i]);
+			label1 = gtk_label_new (_(SINGLE_SAT_FIELD_TITLE[i]));
 			gtk_misc_set_alignment (GTK_MISC (label1), 1.0, 0.5);
 			gtk_table_attach (GTK_TABLE (GTK_SINGLE_SAT (widget)->table), label1,
 							  0, 1, i, i+1,
@@ -294,8 +294,8 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 							  GTK_FILL,  GTK_SHRINK, 0, 0);
 
             /* add tooltips */
-            gtk_widget_set_tooltip_text (label1, SINGLE_SAT_FIELD_HINT[i]);
-            gtk_widget_set_tooltip_text (label2, SINGLE_SAT_FIELD_HINT[i]);
+            gtk_widget_set_tooltip_text (label1, _(SINGLE_SAT_FIELD_HINT[i]));
+            gtk_widget_set_tooltip_text (label2, _(SINGLE_SAT_FIELD_HINT[i]));
             
 			/* store reference */
 			GTK_SINGLE_SAT (widget)->labels[i] = label2;

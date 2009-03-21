@@ -130,7 +130,7 @@ GtkWidget *sat_pref_list_view_create (GKeyFile *cfg)
 	gtk_container_add (GTK_CONTAINER (frame1), colsel);
 
 	/* Colours */
-	frame2 = gtk_frame_new (_(""));
+	frame2 = gtk_frame_new ("");
 	gtk_frame_set_label_align (GTK_FRAME (frame2), 0.5, 0.5);
 
 	hbox = gtk_hbox_new (FALSE, 5);

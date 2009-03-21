@@ -716,10 +716,10 @@ gtk_polar_view_update          (GtkWidget  *widget)
 						cs = g_strdup (":");
 					
 					if (h > 0) 
-						buff = g_strdup_printf ("Next: %s\nin %s%d:%s%d%s%d",
+						buff = g_strdup_printf (_("Next: %s\nin %s%d:%s%d%s%d"),
 												sat->tle.sat_name, ch, h, cm, m, cs, s);
 					else
-						buff = g_strdup_printf ("Next: %s\nin %s%d%s%d",
+						buff = g_strdup_printf (_("Next: %s\nin %s%d%s%d"),
 												sat->tle.sat_name, cm, m, cs, s);
 					
 					

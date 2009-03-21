@@ -1,3 +1,24 @@
+2009-03-21 Stephane Fillod <fillods@users.sf.net>
+
+	* src/about.c:
+	* src/gtk-polar-view.c:
+	* src/gtk-sat-list.c:
+	* src/gtk-sat-map.c:
+	* src/gtk-single-sat.c:
+	* src/menubar.c:
+	* src/pass-to-txt.c:
+	* src/sat-log-browser.c:
+	* src/sat-pass-dialogs.c:
+	* src/sat-pref-formats.c:
+	* src/sat-pref-list-view.c:
+	* src/sat-pref.c:
+	* src/sat-vis.c:
+	* src/tle-update.c:
+	Make gettext() do its job on static strings at runtime.
+
+	* po/fr.po: update
+
+
 2009-03-18 Alexandru Csete <oz9aec@gmail.com>
 
 	* src/sat-pref-qth.c:
@@ -32,7 +53,7 @@
 2009-03-01 Alexandru Csete <oz9aec@gmail.com>
 
     * configure.ac:
-    Changed required GooCanvas version from 0.10 to 0.9 to be vompatible
+    Changed required GooCanvas version from 0.10 to 0.9 to be compatible
     with older linux distributions, too (e.g. Ubuntu 8.04).
     
 

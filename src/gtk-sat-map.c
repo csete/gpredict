@@ -668,14 +668,14 @@ gtk_sat_map_update (GtkWidget  *widget)
 						cs = g_strdup (":");
 
 					if (h > 0) 
-						buff = g_strdup_printf ("<span background=\"#%s\"> "\
-												"Next: %s in %s%d:%s%d%s%d </span>",
+						buff = g_strdup_printf (_("<span background=\"#%s\"> "\
+												"Next: %s in %s%d:%s%d%s%d </span>"),
 												satmap->infobgd,
 												sat->tle.sat_name,
 												ch, h, cm, m, cs, s);
 					else 
-						buff = g_strdup_printf ("<span background=\"#%s\"> " \
-												"Next: %s in %s%d%s%d </span>",
+						buff = g_strdup_printf (_("<span background=\"#%s\"> " \
+												"Next: %s in %s%d%s%d </span>"),
 												satmap->infobgd,
 												sat->tle.sat_name,
 												cm, m, cs, s);

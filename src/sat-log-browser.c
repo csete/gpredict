@@ -233,7 +233,7 @@ add_debug_message (const gchar *datetime,
 	gtk_list_store_set (GTK_LIST_STORE (model), &item,
 			    MSG_LIST_COL_TIME, datetime,
 			    MSG_LIST_COL_SOURCE, str,
-			    MSG_LIST_COL_LEVEL, DEBUG_STR[debug_level],
+			    MSG_LIST_COL_LEVEL, _(DEBUG_STR[debug_level]),
 			    MSG_LIST_COL_MSG, message,
 			    -1);
 
@@ -554,7 +554,7 @@ create_message_list    ()
 	for (i = 0; i < MSG_LIST_COL_NUMBER; i++) {
 
 		renderer = gtk_cell_renderer_text_new ();
-		column = gtk_tree_view_column_new_with_attributes (MSG_LIST_COL_TITLE[i],
+		column = gtk_tree_view_column_new_with_attributes (_(MSG_LIST_COL_TITLE[i]),
 								   renderer,
 								   "text", i,
 								   NULL);

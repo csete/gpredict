@@ -302,7 +302,7 @@ show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *toplevel)
 
 		renderer = gtk_cell_renderer_text_new ();
 		g_object_set (G_OBJECT (renderer), "xalign", SINGLE_PASS_COL_XALIGN[i], NULL);
-		column = gtk_tree_view_column_new_with_attributes (SINGLE_PASS_COL_TITLE[i],
+		column = gtk_tree_view_column_new_with_attributes (_(SINGLE_PASS_COL_TITLE[i]),
 														   renderer,
 														   "text", i,
 														   NULL);
@@ -1001,7 +1001,7 @@ show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *toplev
 
 		renderer = gtk_cell_renderer_text_new ();
 		g_object_set (G_OBJECT (renderer), "xalign", MULTI_PASS_COL_XALIGN[i], NULL);
-		column = gtk_tree_view_column_new_with_attributes (MULTI_PASS_COL_TITLE[i],
+		column = gtk_tree_view_column_new_with_attributes (_(MULTI_PASS_COL_TITLE[i]),
 														   renderer,
 														   "text", i,
 														   NULL);
