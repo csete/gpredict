@@ -56,7 +56,8 @@ static GtkWidget *host;     /* host */
 static GtkWidget *port;     /* port number */
 static GtkWidget *type;     /* rig type */
 static GtkWidget *ptt;      /* PTT */
-static GtkWidget *lo;       /* local oscillator */
+static GtkWidget *lo;       /* local oscillator of downconverter */
+static GtkWidget *loup;     /* local oscillator of upconverter */
 
 
 static GtkWidget    *create_editor_widgets (radio_conf_t *conf);
@@ -144,7 +145,7 @@ create_editor_widgets (radio_conf_t *conf)
 
 
 
-	table = gtk_table_new (6, 4, FALSE);
+	table = gtk_table_new (7, 4, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -212,7 +213,7 @@ create_editor_widgets (radio_conf_t *conf)
                     "<b>TX only:</b>  The radio shall only be used for uplink. "\
                     "If <i>Monitor PTT status</i> is checked the doppler tuning "\
                     "will be suspended while PTT is OFF (manual RX).\n"\
-                    "<b>RX/TX:</b>  The radio should be used for both up- and downlink "\
+                    "<b>Simplex TRX:</b>  The radio should be used for both up- and downlink "\
                     "but in simplex mode only. This option requires that the PTT status "\
                     "is monitored (otherwise gpredict cannot know whether to tune the "\
                     "RX or the TX).\n"\
@@ -232,8 +233,8 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_table_attach_defaults (GTK_TABLE (table), ptt, 1, 4, 4, 5);
     
     
-    /* LO frequency */
-    label = gtk_label_new (_("LO"));
+    /* Downconverter LO frequency */
+    label = gtk_label_new (_("LO Down:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
     
@@ -241,12 +242,31 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lo), 0);
     gtk_widget_set_tooltip_text (lo,
-                                 _("Enter the frequency of the local oscillator, if any."));
+                                 _("Enter the frequency of the local oscillator "\
+                                         " of the downconverter, if any."));
     gtk_table_attach_defaults (GTK_TABLE (table), lo, 1, 3, 5, 6);
     
     label = gtk_label_new (_("MHz"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 5, 6);
+    
+    /* Upconverter LO frequency */
+    label = gtk_label_new (_("LO Up:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 6, 7);
+    
+    loup = gtk_spin_button_new_with_range (-10000, 10000, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), 0);
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (loup), 0);
+    gtk_widget_set_tooltip_text (loup,
+                                 _("Enter the frequency of the local oscillator "\
+                                  "of the upconverter, if any."));
+    gtk_table_attach_defaults (GTK_TABLE (table), loup, 1, 3, 6, 7);
+    
+    label = gtk_label_new (_("MHz"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 6, 7);
+    
     
 	if (conf->name != NULL)
 		update_widgets (conf);
@@ -310,8 +330,12 @@ update_widgets (radio_conf_t *conf)
     }
     
     
-    /* lo in MHz */
+    /* lo down in MHz */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000.0);
+    
+    /* lo up in MHz */
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), conf->loup / 1000000.0);
+
 }
 
 
@@ -328,6 +352,7 @@ clear_widgets ()
     gtk_entry_set_text (GTK_ENTRY (host), "");
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), FALSE);
 }
@@ -358,8 +383,11 @@ apply_changes         (radio_conf_t *conf)
     /* port */
     conf->port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
     
-    /* lo freq */
+    /* lo down freq */
     conf->lo = 1000000.0*gtk_spin_button_get_value (GTK_SPIN_BUTTON (lo));
+    
+    /* lo up freq */
+    conf->loup = 1000000.0*gtk_spin_button_get_value (GTK_SPIN_BUTTON (loup));
     
     /* rig type */
     conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type));

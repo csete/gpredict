@@ -168,9 +168,9 @@ static void create_rig_list ()
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
-    /* lo */
+    /* transverter down */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("LO Freq. (MHz)"), renderer,
+    column = gtk_tree_view_column_new_with_attributes (_("Downconverter LO"), renderer,
                                                        "text", RIG_LIST_COL_LO,
                                                        NULL);
     gtk_tree_view_column_set_cell_data_func (column, renderer,
@@ -179,6 +179,17 @@ static void create_rig_list ()
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
+    /* transverter up */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Upconverter LO"), renderer,
+                                                    "text", RIG_LIST_COL_LOUP,
+                                                    NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_lo,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_LOUP),
+                                                     NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+
 }
 
 
@@ -202,7 +213,8 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_INT,       // port
                                     G_TYPE_INT,       // type
                                     G_TYPE_BOOLEAN,   // PTT
-                                    G_TYPE_DOUBLE     // LO
+                                    G_TYPE_DOUBLE,    // LO DOWN
+                                    G_TYPE_DOUBLE     // LO UO
                                    );
 
     /* open configuration directory */
@@ -231,6 +243,7 @@ static GtkTreeModel *create_and_fill_model ()
                                         RIG_LIST_COL_TYPE, conf.type,
                                         RIG_LIST_COL_PTT, conf.ptt,
                                         RIG_LIST_COL_LO, conf.lo,
+                                        RIG_LIST_COL_LOUP, conf.loup,
                                         -1);
                     
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -342,6 +355,7 @@ void sat_pref_rig_ok     ()
         .type  = RIG_TYPE_RX,
         .ptt   = FALSE,
         .lo    = 0.0,
+        .loup  = 0.0,
     };
 
     
@@ -384,6 +398,7 @@ void sat_pref_rig_ok     ()
                                 RIG_LIST_COL_TYPE, &conf.type,
                                 RIG_LIST_COL_PTT, &conf.ptt,
                                 RIG_LIST_COL_LO, &conf.lo,
+                                RIG_LIST_COL_LOUP, &conf.loup,
                                 -1);
             radio_conf_save (&conf);
         
@@ -424,6 +439,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .type  = RIG_TYPE_RX,
         .ptt   = FALSE,
         .lo    = 0.0,
+        .loup  = 0.0,
     };
     
     /* run rig conf editor */
@@ -440,6 +456,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_TYPE, conf.type,
                             RIG_LIST_COL_PTT, conf.ptt,
                             RIG_LIST_COL_LO, conf.lo,
+                            RIG_LIST_COL_LOUP, conf.loup,
                             -1);
         
         g_free (conf.name);
@@ -472,6 +489,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .type  = RIG_TYPE_RX,
         .ptt   = FALSE,
         .lo    = 0.0,
+        .loup  = 0.0,
     };
 
     
@@ -499,6 +517,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_TYPE, &conf.type,
                             RIG_LIST_COL_PTT, &conf.ptt,
                             RIG_LIST_COL_LO, &conf.lo,
+                            RIG_LIST_COL_LOUP, &conf.loup,
                             -1);
 
     }
@@ -529,6 +548,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_TYPE, conf.type,
                             RIG_LIST_COL_PTT, conf.ptt,
                             RIG_LIST_COL_LO, conf.lo,
+                            RIG_LIST_COL_LOUP, conf.loup,
                             -1);
         
     }
@@ -717,7 +737,7 @@ static void render_lo (GtkTreeViewColumn *col,
 
     /* convert to MHz */
     number /= 1000000.0;
-    buff = g_strdup_printf ("%.0f", number);
+    buff = g_strdup_printf ("%.0f MHz", number);
     g_object_set (renderer, "text", buff, NULL);
     g_free (buff);
 }

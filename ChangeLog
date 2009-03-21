@@ -3,6 +3,11 @@
     * src/radio-conf.[ch]:
     Added config field for uplink transverter LO. LO values are now optional.
     
+    * src/sat-pref-rig-data.h:
+    * src/sat-pref-rig.c:
+    * src/sat-pref-rig-editor.c:
+    Update code to include upconverter LO frequency.
+    
 
 2009-03-21 Stephane Fillod <fillods@users.sf.net>
 
