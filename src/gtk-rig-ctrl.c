@@ -195,7 +195,7 @@ gtk_rig_ctrl_new (GtkSatModule *module)
     GtkWidget *widget;
     GtkWidget *table;
     
-    /* check that we have rot conf */
+    /* check that we have rig conf */
     if (!have_conf()) {
         return NULL;
     }
@@ -850,7 +850,7 @@ rig_ctrl_timeout_cb (gpointer data)
        last set frequency. If different, it means that user has changed frequency
        on the radio dial => update transponder knob
     */
-    if ((ctrl->engaged) && (ctrl->conf != NULL)) {
+    if (ctrl->engaged) {
         lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreqDown));
         
         /* get current frequency from rig */
@@ -892,7 +892,7 @@ rig_ctrl_timeout_cb (gpointer data)
     
 
     /* if device is engaged, send freq command to radio */
-    if ((ctrl->engaged) && (ctrl->conf != NULL) &&
+    if ((ctrl->engaged) && 
          (fabs (readfreq-gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown))) > 0.99)) {
         if (set_freq_simplex (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown)))) {
             /* reset error counter */
@@ -925,7 +925,7 @@ rig_ctrl_timeout_cb (gpointer data)
 }
 
 
-/** \brief Set frequency
+/** \brief Set frequency in 
  * \param ctrl Pointer to the GtkRigCtrl structure.
  * \param freq The new frequency.
  * \return TRUE if the operation was successful, FALSE if a connection error
