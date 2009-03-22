@@ -63,8 +63,14 @@ struct _gtk_rig_ctrl
 {
 	GtkVBox vbox;
     
-    GtkWidget *SatFreq;
-    GtkWidget *RigFreq;
+    GtkWidget *SatFreqDown;
+    GtkWidget *RigFreqDown;
+    GtkWidget *SatFreqUp;
+    GtkWidget *RigFreqUp;
+    GtkWidget *SatDopDown;  /*!< Doppler shift down */
+    GtkWidget *SatDopUp;    /*!< Doppler shift up */
+    GtkWidget *LoDown;      /*!< LO of downconverter */
+    GtkWidget *LoUp;        /*!z LO of upconverter */
     
     /* target status labels*/
     GtkWidget *SatAz,*SatEl,*SatCnt;
@@ -72,7 +78,6 @@ struct _gtk_rig_ctrl
    
     /* other widgets */
     GtkWidget *DevSel;   /*!< Device selector */
-    GtkWidget *LO;       /*!< Local oscillator */
     GtkWidget *LockBut;
     
     radio_conf_t *conf;  /*!< Radio configuration */

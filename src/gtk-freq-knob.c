@@ -204,7 +204,12 @@ gtk_freq_knob_new (gdouble val, gboolean buttons)
     gtk_table_attach (GTK_TABLE (table), label, 5, 6, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     label = gtk_label_new (NULL);
-    gtk_label_set_markup (GTK_LABEL (label), "<span size='xx-large'> MHz</span>");
+    gtk_label_set_markup (GTK_LABEL (label), "<span size='xx-large'>.</span>");
+    gtk_table_attach (GTK_TABLE (table), label, 9, 10, 1, 2,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
+
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), "<span size='xx-large'> Hz</span>");
     gtk_table_attach (GTK_TABLE (table), label, 13, 14, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     

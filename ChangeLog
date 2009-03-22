@@ -8,6 +8,9 @@
     * src/sat-pref-rig-editor.c:
     Update code to include upconverter LO frequency.
     
+    * src/rig-ctrl.[ch]:
+    Begun implementation of new controller.
+    
 
 2009-03-21 Stephane Fillod <fillods@users.sf.net>
 
