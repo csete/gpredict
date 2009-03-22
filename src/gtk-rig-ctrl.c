@@ -83,8 +83,8 @@ static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
-static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq);
-static gboolean get_freq (GtkRigCtrl *ctrl, gdouble *freq);
+static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gdouble freq);
+static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
 static gboolean have_conf (void);
@@ -854,7 +854,7 @@ rig_ctrl_timeout_cb (gpointer data)
         lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreqDown));
         
         /* get current frequency from rig */
-        if (!get_freq (ctrl, &readfreq)) {
+        if (!get_freq_simplex (ctrl, &readfreq)) {
             /* error => use a passive value */
             readfreq = lastfreq;
         }
@@ -894,7 +894,7 @@ rig_ctrl_timeout_cb (gpointer data)
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ctrl->conf != NULL) &&
          (fabs (readfreq-gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown))) > 0.99)) {
-        if (set_freq (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown)))) {
+        if (set_freq_simplex (ctrl, gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown)))) {
             /* reset error counter */
             ctrl->errcnt = 0;
         }
@@ -935,7 +935,7 @@ rig_ctrl_timeout_cb (gpointer data)
  *       gotten the current frequency from the ctrl; however, the param
  *       might become useful in the future.
  */
-static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq)
+static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gdouble freq)
 {
     gchar  *buff;
     gint    written,size;
@@ -1004,7 +1004,7 @@ static gboolean set_freq (GtkRigCtrl *ctrl, gdouble freq)
  * \return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  */
-static gboolean get_freq (GtkRigCtrl *ctrl, gdouble *freq)
+static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq)
 {
     gchar  *buff,**vbuff;
     gint    written,size;
