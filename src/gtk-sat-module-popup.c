@@ -886,7 +886,7 @@ rigctrl_cb          (GtkWidget *menuitem, gpointer data)
     module->rigctrl = gtk_rig_ctrl_new (module);
     
     if (module->rigctrl == NULL) {
-        /* gtk_rot_ctrl_new returned NULL becasue no rotators are configured */
+        /* gtk_rot_ctrl_new returned NULL becasue no radios are configured */
         GtkWidget *dialog;
         dialog = gtk_message_dialog_new (GTK_WINDOW (app),
                                          GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,

@@ -1082,12 +1082,12 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq)
     size = read (sock, buff, 127);
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Got 0 bytes from rotctld"),
+                     _("%s:%s: Got 0 bytes from rigctld"),
                        __FILE__, __FUNCTION__);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%s: Read %d bytes from rotctld"),
+                     _("%s:%s: Read %d bytes from rigctld"),
                        __FILE__, __FUNCTION__, size);
         
         buff[size] = 0;
