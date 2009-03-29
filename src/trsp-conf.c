@@ -40,12 +40,18 @@
 #define KEY_DOWN_HIGH   "DOWN_HIGH"
 #define KEY_INV         "INVERT"
 
-
+/** \brief Read transponder data file.
+ *  \param catnum The catalog number of the satellite to read transponders for.
+ *  \return A newly allocated GSList containing trsp_t structures.
+ */
 GSList *read_tranponders (guint catnum)
 {
+    GSList    *trsp = NULL;
     GKeyFile  *cfg = NULL;
     GError    *error = NULL;
-    gchar *name,*fname,*confdir;
+    gchar     *name,*fname,*confdir;
+    gchar    **groups;
+    gsize      numgrp,i;
     
     name = g_strdup_printf ("%d.tsrp", catnum);
     confdir = get_conf_dir();
@@ -59,9 +65,29 @@ GSList *read_tranponders (guint catnum)
                      _("%s: Error reading %s: %s"),
                      __FILE__, fname, error->message);
         g_clear_error (&error);
+
         g_key_file_free (cfg);
+        
+        return NULL;
     }
     
+    /* get list of transponders */
+    groups = g_key_file_get_groups (cfg, &numgrp);
+    
+    /* load each transponder */
+    if (numgrp == 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: %s contains 0 transponders"),
+                     __FUNCTION__, fname);
+    }
+    else {
+        for (i = 0; i < numgrp; i++) {
+            
+            
+        }
+    }
+    
+    g_strfreev (groups);
     g_key_file_free (cfg);
     g_free (name);
     g_free (confdir);
@@ -71,8 +97,14 @@ GSList *read_tranponders (guint catnum)
     return NULL;
 }
 
+
+/** \brief Write transponder list for satellite.
+ *  \param catnum The catlog number of the satellite.
+ *  \param transp Pointer to a GSList of trsp_t structures.
+ */
 void write_transponders (guint catnum, GSList *transp)
 {
-    
+    // FIXME
+    sat_log_log (SAT_LOG_LEVEL_BUG, _("%s: Not implemented!"), __FUNCTION__);
 }
 
