@@ -1,3 +1,12 @@
+2009-03-29 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.[ch]:
+    Implemented new controller (RX and TX). Pending transponder management.
+    
+    * src/trsp-conf.[ch]:
+    Added files for transpoder data file I/O.
+    
+
 2009-03-21 Alexandru Csete <oz9aec@gmail.com>
 
     * src/radio-conf.[ch]:
