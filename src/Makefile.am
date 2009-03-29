@@ -71,6 +71,7 @@ gpredict_SOURCES = \
 	qth-editor.c qth-editor.h \
 	radio-conf.c radio-conf.h \
 	rotor-conf.c rotor-conf.h \
+    trsp-conf.c trsp-conf.h \
 	sat-cfg.c sat-cfg.h \
 	sat-info.c sat-info.h \
 	sat-log.c sat-log.h \

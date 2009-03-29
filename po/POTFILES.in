@@ -103,3 +103,4 @@ src/sat-vis.c
 src/save-pass.c
 src/tle-tools.c
 src/tle-update.c
+src/trsp-conf.c
