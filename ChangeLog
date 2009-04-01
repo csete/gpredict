@@ -1,3 +1,9 @@
+2009-04-01 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/trsp-conf.c:
+    Implemented read_transponders().
+    
+
 2009-03-29 Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rig-ctrl.[ch]:
