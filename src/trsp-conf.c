@@ -38,7 +38,7 @@
 #define KEY_UP_HIGH     "UP_HIGH"
 #define KEY_DOWN_LOW    "DOWN_LOW"
 #define KEY_DOWN_HIGH   "DOWN_HIGH"
-#define KEY_INV         "INVERT"
+#define KEY_INVERT      "INVERT"
 
 /** \brief Read transponder data file.
  *  \param catnum The catalog number of the satellite to read transponders for.
@@ -46,7 +46,8 @@
  */
 GSList *read_tranponders (guint catnum)
 {
-    GSList    *trsp = NULL;
+    GSList    *trsplist = NULL;
+    trsp_t    *trsp;
     GKeyFile  *cfg = NULL;
     GError    *error = NULL;
     gchar     *name,*fname,*confdir;
@@ -82,7 +83,64 @@ GSList *read_tranponders (guint catnum)
     }
     else {
         for (i = 0; i < numgrp; i++) {
-            
+            trsp = g_try_new (trsp_t, 1);
+            if G_UNLIKELY(trsp == NULL) {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                              _("%s: Failed to allocate memory for transponder data :-("),
+                              __FUNCTION__);
+            }
+            else {
+                /* read transponder data */
+                trsp->name = g_strdup (groups[i]);
+                
+                trsp->uplow = g_key_file_get_double (cfg, groups[i], KEY_UP_LOW, &error);
+                if (error != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                  _("%s: Error reading %s:%s from %s"),
+                                  __FUNCTION__, groups[i], KEY_UP_LOW, name);
+                    g_clear_error (&error);
+                    trsp->uplow = 0.0;
+                }
+                
+                trsp->uphigh = g_key_file_get_double (cfg, groups[i], KEY_UP_HIGH, &error);
+                if (error != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                  _("%s: Error reading %s:%s from %s"),
+                                  __FUNCTION__, groups[i], KEY_UP_HIGH, name);
+                    g_clear_error (&error);
+                    trsp->uphigh = trsp->uplow;
+                }
+                
+                trsp->downlow = g_key_file_get_double (cfg, groups[i], KEY_DOWN_LOW, &error);
+                if (error != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                  _("%s: Error reading %s:%s from %s"),
+                                  __FUNCTION__, groups[i], KEY_DOWN_LOW, name);
+                    g_clear_error (&error);
+                    trsp->downlow = 0.0;
+                }
+                
+                trsp->downhigh = g_key_file_get_double (cfg, groups[i], KEY_DOWN_HIGH, &error);
+                if (error != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                  _("%s: Error reading %s:%s from %s"),
+                                  __FUNCTION__, groups[i], KEY_DOWN_HIGH, name);
+                    g_clear_error (&error);
+                    trsp->downhigh = trsp->downlow;
+                }
+                
+                trsp->invert = g_key_file_get_boolean (cfg, groups[i], KEY_INVERT, &error);
+                if (error != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                  _("%s: Error reading %s:%s from %s"),
+                                  __FUNCTION__, groups[i], KEY_INVERT, name);
+                    g_clear_error (&error);
+                    trsp->invert = FALSE;
+                }
+                
+                /* add transponder to list */
+                trsplist = g_slist_append (trsplist, trsp);
+            }
             
         }
     }
@@ -93,8 +151,7 @@ GSList *read_tranponders (guint catnum)
     g_free (confdir);
     g_free (fname);
 
-
-    return NULL;
+    return trsplist;
 }
 
 
