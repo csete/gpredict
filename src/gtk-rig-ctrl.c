@@ -45,6 +45,7 @@
 #include "sat-cfg.h"
 #include "gtk-freq-knob.h"
 #include "radio-conf.h"
+#include "trsp-conf.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -675,6 +676,7 @@ static void
 sat_selected_cb (GtkComboBox *satsel, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    GSList *trsplist = NULL;
     gint i;
     
     i = gtk_combo_box_get_active (satsel);
@@ -685,6 +687,11 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
         if (ctrl->pass != NULL)
             free_pass (ctrl->pass);
         ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
+        
+        /* get transponders */
+        //trsplist = read_tranponders (ctrl->target->tle.catnr);
+        
+        //g_print ("**** %d \n", g_slist_length (trsplist));
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
