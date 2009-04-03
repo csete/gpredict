@@ -42,7 +42,7 @@
 
 /** \brief Read transponder data file.
  *  \param catnum The catalog number of the satellite to read transponders for.
- *  \return A newly allocated GSList containing trsp_t structures.
+ *  \return  The new transponder list.
  */
 GSList *read_tranponders (guint catnum)
 {
@@ -53,6 +53,7 @@ GSList *read_tranponders (guint catnum)
     gchar     *name,*fname,*confdir;
     gchar    **groups;
     gsize      numgrp,i;
+    
     
     name = g_strdup_printf ("%d.trsp", catnum);
     confdir = get_conf_dir();
@@ -137,7 +138,7 @@ GSList *read_tranponders (guint catnum)
                     g_clear_error (&error);
                     trsp->invert = FALSE;
                 }
-                
+
                 /* add transponder to list */
                 trsplist = g_slist_append (trsplist, trsp);
             }
@@ -151,17 +152,36 @@ GSList *read_tranponders (guint catnum)
     g_free (confdir);
     g_free (fname);
 
+    
     return trsplist;
 }
 
 
 /** \brief Write transponder list for satellite.
  *  \param catnum The catlog number of the satellite.
- *  \param transp Pointer to a GSList of trsp_t structures.
+ *  \param trsplist Pointer to a GSList of trsp_t structures.
  */
-void write_transponders (guint catnum, GSList *transp)
+void write_transponders (guint catnum, GSList *trsplist)
 {
     // FIXME
     sat_log_log (SAT_LOG_LEVEL_BUG, _("%s: Not implemented!"), __FUNCTION__);
 }
 
+/** \brief Free transponder list.
+ *  \param trsplist Pointer to a GSList of trsp_t structures.
+ *
+ * This functions free all memory occupied by the transponder list.
+ */
+void free_transponders (GSList *trsplist)
+{
+    gint i, n;
+    trsp_t *trsp;
+    
+    n = g_slist_length (trsplist);
+    for (i = 0; i < n; i++) {
+        trsp = (trsp_t *) g_slist_nth_data (trsplist, i);
+        g_free (trsp->name);
+        g_free (trsp);
+    }
+    g_slist_free (trsplist);
+}

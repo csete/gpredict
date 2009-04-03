@@ -45,8 +45,8 @@ typedef struct {
 /* The actual data would then be a singly linked list with pointers to transponder_t structures */
 
 GSList *read_tranponders (guint catnum);
-void write_transponders (guint catnum, GSList *transp);
-
+void write_transponders (guint catnum, GSList *trsplist);
+void free_transponders (GSList *trsplist);
 
 
 #endif
