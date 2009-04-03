@@ -54,7 +54,7 @@ GSList *read_tranponders (guint catnum)
     gchar    **groups;
     gsize      numgrp,i;
     
-    name = g_strdup_printf ("%d.tsrp", catnum);
+    name = g_strdup_printf ("%d.trsp", catnum);
     confdir = get_conf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
                          "trsp", G_DIR_SEPARATOR_S,
