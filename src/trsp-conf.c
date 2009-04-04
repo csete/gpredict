@@ -184,4 +184,5 @@ void free_transponders (GSList *trsplist)
         g_free (trsp);
     }
     g_slist_free (trsplist);
+    trsplist = NULL;
 }
