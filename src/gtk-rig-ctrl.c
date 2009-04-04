@@ -81,6 +81,7 @@ static void track_toggle_cb (GtkToggleButton *button, gpointer data);
 static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
+static void trsp_selected_cb (GtkComboBox *box, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
 
 /* radio control functions */
@@ -94,6 +95,7 @@ static gboolean get_ptt (GtkRigCtrl *ctrl);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
 /* misc utility functions */
+static void load_trsp_list (GtkRigCtrl *ctrl);
 static void store_sats (gpointer key, gpointer value, gpointer user_data);
 static gboolean have_conf (void);
 
@@ -109,48 +111,48 @@ static GdkColor ColGreen = {0, 0, 0xFFFF, 0};
 GType
 gtk_rig_ctrl_get_type ()
 {
-	static GType gtk_rig_ctrl_type = 0;
+    static GType gtk_rig_ctrl_type = 0;
 
-	if (!gtk_rig_ctrl_type) {
+    if (!gtk_rig_ctrl_type) {
 
-		static const GTypeInfo gtk_rig_ctrl_info = {
-			sizeof (GtkRigCtrlClass),
-			NULL,  /* base_init */
-			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_rig_ctrl_class_init,
-			NULL,  /* class_finalize */
-			NULL,  /* class_data */
-			sizeof (GtkRigCtrl),
-			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_rig_ctrl_init,
-		};
+        static const GTypeInfo gtk_rig_ctrl_info = {
+            sizeof (GtkRigCtrlClass),
+            NULL,  /* base_init */
+            NULL,  /* base_finalize */
+            (GClassInitFunc) gtk_rig_ctrl_class_init,
+            NULL,  /* class_finalize */
+            NULL,  /* class_data */
+            sizeof (GtkRigCtrl),
+            2,     /* n_preallocs */
+            (GInstanceInitFunc) gtk_rig_ctrl_init,
+        };
 
-		gtk_rig_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
-												    "GtkRigCtrl",
-													&gtk_rig_ctrl_info,
-													0);
-	}
+        gtk_rig_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                    "GtkRigCtrl",
+                                                    &gtk_rig_ctrl_info,
+                                                     0);
+    }
 
-	return gtk_rig_ctrl_type;
+    return gtk_rig_ctrl_type;
 }
 
 
 static void
 gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
 {
-	GObjectClass      *gobject_class;
-	GtkObjectClass    *object_class;
-	GtkWidgetClass    *widget_class;
-	GtkContainerClass *container_class;
+    GObjectClass      *gobject_class;
+    GtkObjectClass    *object_class;
+    GtkWidgetClass    *widget_class;
+    GtkContainerClass *container_class;
 
-	gobject_class   = G_OBJECT_CLASS (class);
-	object_class    = (GtkObjectClass*) class;
-	widget_class    = (GtkWidgetClass*) class;
-	container_class = (GtkContainerClass*) class;
+    gobject_class   = G_OBJECT_CLASS (class);
+    object_class    = (GtkObjectClass*) class;
+    widget_class    = (GtkWidgetClass*) class;
+    container_class = (GtkContainerClass*) class;
 
-	parent_class = g_type_class_peek_parent (class);
+    parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_rig_ctrl_destroy;
+    object_class->destroy = gtk_rig_ctrl_destroy;
  
 }
 
@@ -164,6 +166,8 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->pass = NULL;
     ctrl->qth = NULL;
     ctrl->conf = NULL;
+    ctrl->trsp = NULL;
+    ctrl->trsplist = NULL;
     ctrl->tracking = FALSE;
     ctrl->busy = FALSE;
     ctrl->engaged = FALSE;
@@ -190,8 +194,13 @@ gtk_rig_ctrl_destroy (GtkObject *object)
         g_free (ctrl->conf);
         ctrl->conf = NULL;
     }
+    
+    /* free transponder */
+    if (ctrl->trsplist != NULL) {
+        free_transponders (ctrl->trsplist);
+    }
 
-	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 
@@ -211,7 +220,7 @@ gtk_rig_ctrl_new (GtkSatModule *module)
         return NULL;
     }
 
-	widget = g_object_new (GTK_TYPE_RIG_CTRL, NULL);
+    widget = g_object_new (GTK_TYPE_RIG_CTRL, NULL);
     
     /* store satellites */
     g_hash_table_foreach (module->satellites, store_sats, widget);
@@ -496,37 +505,45 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), track, 3, 4, 0, 1);
     g_signal_connect (track, "toggled", G_CALLBACK (track_toggle_cb), ctrl);
     
+    /* Transponder selector */
+    ctrl->TrspSel = gtk_combo_box_new_text ();
+    gtk_widget_set_tooltip_text (ctrl->TrspSel, _("Select a transponder"));
+    load_trsp_list (ctrl);
+    //gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->TrspSel), 0);
+    g_signal_connect (ctrl->TrspSel, "changed", G_CALLBACK (trsp_selected_cb), ctrl);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->TrspSel, 0, 3, 1, 2);
+    
     /* Azimuth */
     label = gtk_label_new (_("Az:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
     ctrl->SatAz = gtk_label_new (buff);
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatAz), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatAz, 1, 2, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatAz, 1, 2, 2, 3);
     
     /* Elevation */
     label = gtk_label_new (_("El:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     ctrl->SatEl = gtk_label_new (buff);
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatEl), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatEl, 1, 2, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatEl, 1, 2, 3, 4);
     
     /* Range */
     label = gtk_label_new (_(" Range:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
     ctrl->SatRng = gtk_label_new ("0 km");
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatRng), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRng, 3, 4, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRng, 3, 4, 2, 3);
     
     /* Range rate */
     label = gtk_label_new (_(" Rate:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 3, 4);
     ctrl->SatRngRate = gtk_label_new ("0.0 km/s");
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatRngRate), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRngRate, 3, 4, 2, 3);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRngRate, 3, 4, 3, 4);
     
     frame = gtk_frame_new (_("Target"));
 
@@ -597,7 +614,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     g_signal_connect (ctrl->DevSel, "changed", G_CALLBACK (rig_selected_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel, 1, 2, 0, 1);
     /* config will be force-loaded after LO spin is created */
-            
+
     /* Engage button */
     ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
     gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selcted radio device"));
@@ -605,7 +622,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LockBut, 2, 3, 0, 1);
     
     /* Now, load config*/
-    rig_selected_cb (GTK_COMBO_BOX (ctrl->DevSel), ctrl);    
+    rig_selected_cb (GTK_COMBO_BOX (ctrl->DevSel), ctrl);
     
     /* Timeout */
     label = gtk_label_new (_("Cycle:"));
@@ -677,7 +694,8 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     GSList *trsplist = NULL;
-    gint i;
+    trsp_t *trsp;
+    gint i,n;
     
     i = gtk_combo_box_get_active (satsel);
     if (i >= 0) {
@@ -688,10 +706,27 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
             free_pass (ctrl->pass);
         ctrl->pass = get_next_pass (ctrl->target, ctrl->qth, 3.0);
         
-        /* get transponders */
-        //trsplist = read_tranponders (ctrl->target->tle.catnr);
+        /* read transponders for new target */
+        load_trsp_list (ctrl);
         
-        //g_print ("**** %d \n", g_slist_length (trsplist));
+#if 0
+        /* get transponders */
+        trsplist = read_transponders (ctrl->target->tle.catnr);
+        
+        n = g_slist_length (trsplist);
+        //g_print ("*** %d\n", n);
+        for (i = 0; i < n; i++) {
+            trsp = (trsp_t *) g_slist_nth_data (trsplist, i);
+            g_print ("%s: %.0f/%.0f/%.0f/%.0f/%s\n",
+                      trsp->name,
+                      trsp->uplow, trsp->uphigh,
+                      trsp->downlow, trsp->downhigh,
+                      trsp->invert ? "INV" : "NONINV");
+            
+        }
+        
+        free_transponders (trsplist);
+#endif
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -707,6 +742,35 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
     }
 }
 
+
+/** \brief Manage transponder selections.
+ *  \param box Pointer to the transponder selector widget.
+ *  \param data Pointer to the GtkRigCtrl structure
+ *
+ * This function is called when the user selects a new transponder.
+ * It updates ctrl->trsp with the new selection.
+ */
+static void trsp_selected_cb (GtkComboBox *box, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    gint i, n;
+    
+    i = gtk_combo_box_get_active (box) - 1; /* 0th element is "Transponder" */
+    n = g_slist_length (ctrl->trsplist);
+    
+    if (i == -1) {
+        /* clear transponder data */
+        ctrl->trsp = NULL;
+    }
+    else if (i < n) {
+        ctrl->trsp = (trsp_t *) g_slist_nth_data (ctrl->trsplist, i);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                      _("%s: Inconsistency detected in internal transponder data (%d,%d)"),
+                      __FUNCTION__, i, n);
+    }
+}
 
 /** \brief Manage toggle signals (tracking)
  * \param button Pointer to the GtkToggle button.
@@ -1530,6 +1594,60 @@ static void update_count_down (GtkRigCtrl *ctrl, gdouble t)
     g_free (cm);
     g_free (cs);
 
+}
+
+
+/** \brief Load the transponder list for the target satellite.
+ *  \param ctrl Pointer to the GtkRigCtrl structure.
+ *
+ * This function loads the transponder list for the currently selected
+ * satellite. The transponder list is loaded into ctrl->trsplist and the
+ * transponder names are added to the ctrl->TrspSel combo box. If any of
+ * these already contain data, it is cleared. The combo box is also cleared
+ * if there are no transponders for the current target, or if there is no
+ * target.
+ */
+static void load_trsp_list (GtkRigCtrl *ctrl)
+{
+    trsp_t *trsp = NULL;
+    guint i,n;
+    
+    if (ctrl->trsplist != NULL) {
+        /* clear combo box */
+        n = g_slist_length (ctrl->trsplist);
+        for (i = 0; i < n; i++) {
+            gtk_combo_box_remove_text (GTK_COMBO_BOX (ctrl->TrspSel), 0);
+        }
+        
+        /* clear transponder list */
+        free_transponders (ctrl->trsplist);
+    }
+
+    /* check if there is a target satellite */
+    if G_UNLIKELY (ctrl->target == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                      _("%s:%s: GtkSatModule has no target satellite."),
+                      __FILE__, __FUNCTION__);
+        return;
+    }
+
+    /* read transponders for new target */
+    ctrl->trsplist = read_transponders (ctrl->target->tle.catnr);
+    
+    /* append transponder names to combo box */
+    n = g_slist_length (ctrl->trsplist);
+    
+    if (n == 0)
+        return;
+    
+    for (i = 0; i < n; i++) {
+        trsp = (trsp_t *) g_slist_nth_data (ctrl->trsplist, i);
+        gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->TrspSel), trsp->name);
+    }
+    
+    /* make an initial selection */
+    ctrl->trsp = (trsp_t *) g_slist_nth_data (ctrl->trsplist, 0);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->TrspSel), 0);
 }
 
 

@@ -34,6 +34,7 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-module.h"
 #include "radio-conf.h"
+#include "trsp-conf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,12 +45,12 @@ extern "C" {
 
 #define GTK_TYPE_RIG_CTRL          (gtk_rig_ctrl_get_type ())
 #define GTK_RIG_CTRL(obj)          GTK_CHECK_CAST (obj,\
-				                   gtk_rig_ctrl_get_type (),\
-						           GtkRigCtrl)
+                                   gtk_rig_ctrl_get_type (),\
+                                   GtkRigCtrl)
 
 #define GTK_RIG_CTRL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_rig_ctrl_get_type (),\
-							 GtkRigCtrlClass)
+                                   gtk_rig_ctrl_get_type (),\
+                                   GtkRigCtrlClass)
 
 #define IS_GTK_RIG_CTRL(obj)       GTK_CHECK_TYPE (obj, gtk_rig_ctrl_get_type ())
 
@@ -61,7 +62,7 @@ typedef struct _GtkRigCtrlClass   GtkRigCtrlClass;
 
 struct _gtk_rig_ctrl
 {
-	GtkVBox vbox;
+    GtkVBox vbox;
     
     GtkWidget *SatFreqDown;
     GtkWidget *RigFreqDown;
@@ -77,10 +78,13 @@ struct _gtk_rig_ctrl
     GtkWidget *SatRng,*SatRngRate,*SatDop;
    
     /* other widgets */
+    GtkWidget *TrspSel;  /*!< Transponder selector */
     GtkWidget *DevSel;   /*!< Device selector */
     GtkWidget *LockBut;
     
     radio_conf_t *conf;  /*!< Radio configuration */
+    GSList       *trsplist;  /*!< List of available transponders */
+    trsp_t       *trsp;  /*!< Current transponder configuration */
     
     GSList *sats;       /*!< List of sats in parent module */
     sat_t  *target;     /*!< Target satellite */
@@ -105,7 +109,7 @@ struct _gtk_rig_ctrl
 
 struct _GtkRigCtrlClass
 {
-	GtkVBoxClass parent_class;
+    GtkVBoxClass parent_class;
 };
 
 
