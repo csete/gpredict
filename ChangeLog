@@ -1,3 +1,16 @@
+2009-04-04 Alexandru Csete <oz9aec.gmail.com>
+
+    * src/gtk-rig-ctrl.[ch]:
+    Added transponder selector combo box. Not fully functional.
+    
+
+2009-04-03 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/trsp-conf.[ch]:
+    Added function for freeing transponder list. Fixed a small typo in file
+    extension.
+
+
 2009-04-01 Alexandru Csete <oz9aec@gmail.com>
 
     * src/trsp-conf.c:
