@@ -44,7 +44,7 @@
  *  \param catnum The catalog number of the satellite to read transponders for.
  *  \return  The new transponder list.
  */
-GSList *read_tranponders (guint catnum)
+GSList *read_transponders (guint catnum)
 {
     GSList    *trsplist = NULL;
     trsp_t    *trsp;
