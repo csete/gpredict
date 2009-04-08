@@ -198,6 +198,7 @@ gtk_rig_ctrl_destroy (GtkObject *object)
     /* free transponder */
     if (ctrl->trsplist != NULL) {
         free_transponders (ctrl->trsplist);
+        ctrl->trsplist = NULL;   /* destroy might is called twice (?) so we need to NULL it */
     }
 
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
