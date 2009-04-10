@@ -68,6 +68,8 @@ static const guint idx[] = {
     12
 };
 
+static guint freq_changed_signal = 0;
+
 
 GType
 gtk_freq_knob_get_type ()
@@ -114,6 +116,17 @@ gtk_freq_knob_class_init (GtkFreqKnobClass *class)
 	parent_class = g_type_class_peek_parent (class);
 
 	object_class->destroy = gtk_freq_knob_destroy;
+    
+    /* create freq changed signal */
+    freq_changed_signal = g_signal_new ("freq_changed",
+                                         G_TYPE_FROM_CLASS (class),
+                                         G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                         0, //G_STRUCT_OFFSET (GtkFreqKnobClass, tictactoe),
+                                         NULL,
+                                         NULL,
+                                         g_cclosure_marshal_VOID__VOID,
+                                         G_TYPE_NONE, 0);
+
  
 }
 
@@ -298,6 +311,8 @@ button_clicked_cb (GtkWidget *button, gpointer data)
     }
     
     gtk_freq_knob_update (knob);
-
+    
+    /* emit "freq_changed" signal */
+    g_signal_emit (G_OBJECT (data), freq_changed_signal, 0);
 }
 
