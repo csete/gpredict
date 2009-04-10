@@ -85,6 +85,9 @@ static void trsp_selected_cb (GtkComboBox *box, gpointer data);
 static void trsp_tune_cb (GtkButton *button, gpointer data);
 static void trsp_lock_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
+static void downlink_changed_cb (GtkFreqKnob *knob, gpointer data);
+static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data);
+
 
 /* radio control functions */
 static void exec_rx_cycle (GtkRigCtrl *ctrl);
@@ -376,6 +379,7 @@ GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
     
     /* satellite downlink frequency */
     ctrl->SatFreqDown = gtk_freq_knob_new (145890000.0, TRUE);
+    g_signal_connect (ctrl->SatFreqDown, "freq_changed", G_CALLBACK (downlink_changed_cb), ctrl);
     gtk_box_pack_start_defaults (GTK_BOX (vbox), ctrl->SatFreqDown);
     
     /* Downlink doppler */
@@ -437,6 +441,7 @@ GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
     
     /* satellite uplink frequency */
     ctrl->SatFreqUp = gtk_freq_knob_new (145890000.0, TRUE);
+    g_signal_connect (ctrl->SatFreqUp, "freq_changed", G_CALLBACK (uplink_changed_cb), ctrl);
     gtk_box_pack_start_defaults (GTK_BOX (vbox), ctrl->SatFreqUp);
     
     /* Uplink doppler */
@@ -865,7 +870,7 @@ static void trsp_tune_cb (GtkButton *button, gpointer data)
 static void trsp_lock_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
-    gdouble     offset;
+
     
     ctrl->trsplock = gtk_toggle_button_get_active (button);
     
@@ -1041,6 +1046,40 @@ rig_locked_cb (GtkToggleButton *button, gpointer data)
 }
 
 
+/** \brief Manage downlink frequency change callbacks.
+ *  \param knob Pointer to the GtkFreqKnob widget that received the signal.
+ *  \param data Pointer to the GtkRigCtrl structure.
+ *
+ * This function is called when the user changes the downlink frequency in the controller.
+ * The function checks if the the transponder is locked, if yes it calls track_downlink().
+ */
+static void downlink_changed_cb (GtkFreqKnob *knob, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    
+    if (ctrl->trsplock) {
+        track_downlink (ctrl);
+    }
+}
+
+/** \brief Manage uplink frequency change callbacks.
+ *  \param knob Pointer to the GtkFreqKnob widget that received the signal.
+ *  \param data Pointer to the GtkRigCtrl structure.
+ *
+ * This function is called when the user changes the uplink frequency in the controller.
+ * The function checks if the the transponder is locked, if yes it calls track_uplink().
+ */
+static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    
+    if (ctrl->trsplock) {
+        track_uplink (ctrl);
+    }
+}
+
+
+
 /** \brief Rigator controller timeout function
  * \param data Pointer to the GtkRigCtrl widget.
  * \return Always TRUE to let the timer continue.
@@ -1146,11 +1185,12 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
             }
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), satfreqd);
             
-            /* TODO Update uplink if locked to downlink */
+            /* Update uplink if locked to downlink */
+            if (ctrl->trsplock) {
+                track_downlink (ctrl);
+            }
         }
     }
-
-    /* TODO: Follow with uplink if transponder is locked */
 
     /* now, forward tracking */
     if (dialchanged) {
@@ -1261,12 +1301,13 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
                 satfrequ = readfreq + ctrl->conf->loup;
             }
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), satfrequ);
-            
-            /* TODO Update downlink if locked to uplink */
+
+            /* Follow with downlink if transponder is locked */
+            if (ctrl->trsplock) {
+                track_uplink (ctrl);
+            }
         }
     }
-
-    /* TODO: Follow with downlink if transponder is locked */
 
     /* now, forward tracking */
     if (dialchanged) {
