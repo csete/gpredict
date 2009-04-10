@@ -7,6 +7,7 @@ Changes in version 1.0 (beta):
 - Feature request 2192404: Starting time for pass predictions.
 * Feature request 2194621: Data recorder.
 - Feature request 2347471: Use system goocanvas.
+* Feature request 2130940: Transponder info in gpredict.
 - Fixed bug 1752908: New satellites in TLE files.
 - Fixed bug 1818144: No log file created at first execution.
 - Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
@@ -17,6 +18,7 @@ Changes in version 1.0 (beta):
 - Fixed bug 2139102: rigctld port.
 - Fixed bug 2130912: Crash when no rig or no rotator are defined.
 - Fixed bug 2170642: Small error in user manual.
+- Fixed bug 2750119: Unable to set the time correctly in Time Controller.
 - Applied patch 2688135: Use GIO instead of libcurl for TLE download.
   Note: This removes proxy management from gpredict.
 x Windows: New installer instead of ZIP distribution.
