@@ -862,7 +862,7 @@ static void trsp_tune_cb (GtkButton *button, gpointer data)
  *  \param button Pointer to the GtkToggleButton that received the signal.
  *  \param data Pointer to the GtkRigCtrl structure.
  *
- * This finction is called when the user toggles the "Lock Transponder" button.
+ * This function is called when the user toggles the "Lock Transponder" button.
  * When ON, the uplink and downlink are locked according to the current transponder
  * data, i.e. when user changes the downlink, the uplink will follow automatically
  * taking into account whether the transponder is inverting or not.
@@ -871,7 +871,6 @@ static void trsp_lock_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
 
-    
     ctrl->trsplock = gtk_toggle_button_get_active (button);
     
     /* set uplink according to downlink */
@@ -1859,17 +1858,21 @@ static void track_downlink (GtkRigCtrl *ctrl)
         return;
     }
     
-    down = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
-    delta = down - ctrl->trsp->downlow;
+    /* ensure that we have a useable transponder config */
+    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->uplow > 0.0)) {
     
-    if (ctrl->trsp->invert) {
-        up = ctrl->trsp->uphigh - delta;
-    }
-    else {
-        up = ctrl->trsp->uplow + delta;
-    }
+        down = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
+        delta = down - ctrl->trsp->downlow;
     
-    gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), up);
+        if (ctrl->trsp->invert) {
+            up = ctrl->trsp->uphigh - delta;
+        }
+        else {
+            up = ctrl->trsp->uplow + delta;
+        }
+    
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), up);
+    }
 }
 
 
@@ -1886,16 +1889,20 @@ static void track_uplink (GtkRigCtrl *ctrl)
     if (ctrl->trsp == NULL) {
         return;
     }
+
+    /* ensure that we have a useable transponder config */
+    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->uplow > 0.0)) {
+
+        up = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
+        delta = up - ctrl->trsp->uplow;
     
-    up = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
-    delta = up - ctrl->trsp->uplow;
+        if (ctrl->trsp->invert) {
+            down = ctrl->trsp->downhigh - delta;
+        }
+        else {
+            down = ctrl->trsp->downlow + delta;
+        }
     
-    if (ctrl->trsp->invert) {
-        down = ctrl->trsp->downhigh - delta;
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), down);
     }
-    else {
-        down = ctrl->trsp->downlow + delta;
-    }
-    
-    gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), down);
 }
