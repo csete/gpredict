@@ -379,7 +379,7 @@ GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
     
     /* satellite downlink frequency */
     ctrl->SatFreqDown = gtk_freq_knob_new (145890000.0, TRUE);
-    g_signal_connect (ctrl->SatFreqDown, "freq_changed", G_CALLBACK (downlink_changed_cb), ctrl);
+    g_signal_connect (ctrl->SatFreqDown, "freq-changed", G_CALLBACK (downlink_changed_cb), ctrl);
     gtk_box_pack_start_defaults (GTK_BOX (vbox), ctrl->SatFreqDown);
     
     /* Downlink doppler */
@@ -441,7 +441,7 @@ GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
     
     /* satellite uplink frequency */
     ctrl->SatFreqUp = gtk_freq_knob_new (145890000.0, TRUE);
-    g_signal_connect (ctrl->SatFreqUp, "freq_changed", G_CALLBACK (uplink_changed_cb), ctrl);
+    g_signal_connect (ctrl->SatFreqUp, "freq-changed", G_CALLBACK (uplink_changed_cb), ctrl);
     gtk_box_pack_start_defaults (GTK_BOX (vbox), ctrl->SatFreqUp);
     
     /* Uplink doppler */

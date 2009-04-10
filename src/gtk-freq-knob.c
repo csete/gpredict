@@ -118,7 +118,7 @@ gtk_freq_knob_class_init (GtkFreqKnobClass *class)
 	object_class->destroy = gtk_freq_knob_destroy;
     
     /* create freq changed signal */
-    freq_changed_signal = g_signal_new ("freq_changed",
+    freq_changed_signal = g_signal_new ("freq-changed",
                                          G_TYPE_FROM_CLASS (class),
                                          G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                          0, //G_STRUCT_OFFSET (GtkFreqKnobClass, tictactoe),
