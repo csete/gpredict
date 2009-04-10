@@ -82,6 +82,8 @@ static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_locked_cb (GtkToggleButton *button, gpointer data);
 static void trsp_selected_cb (GtkComboBox *box, gpointer data);
+static void trsp_tune_cb (GtkButton *button, gpointer data);
+static void trsp_lock_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
 
 /* radio control functions */
@@ -98,6 +100,8 @@ static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 static void load_trsp_list (GtkRigCtrl *ctrl);
 static void store_sats (gpointer key, gpointer value, gpointer user_data);
 static gboolean have_conf (void);
+static void track_downlink (GtkRigCtrl *ctrl);
+static void track_uplink (GtkRigCtrl *ctrl);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -168,6 +172,7 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->conf = NULL;
     ctrl->trsp = NULL;
     ctrl->trsplist = NULL;
+    ctrl->trsplock = FALSE;
     ctrl->tracking = FALSE;
     ctrl->busy = FALSE;
     ctrl->engaged = FALSE;
@@ -198,7 +203,7 @@ gtk_rig_ctrl_destroy (GtkObject *object)
     /* free transponder */
     if (ctrl->trsplist != NULL) {
         free_transponders (ctrl->trsplist);
-        ctrl->trsplist = NULL;   /* destroy might is called twice (?) so we need to NULL it */
+        ctrl->trsplist = NULL;   /* destroy might be called twice (?) so we need to NULL it */
     }
 
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -474,6 +479,7 @@ static
 GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*satsel,*track;
+    GtkWidget *tune,*trsplock,*hbox;
     gchar *buff;
     guint i, n;
     sat_t *sat = NULL;
@@ -506,13 +512,42 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), track, 3, 4, 0, 1);
     g_signal_connect (track, "toggled", G_CALLBACK (track_toggle_cb), ctrl);
     
-    /* Transponder selector */
+    /* Transponder selector, tune, and trsplock buttons */
     ctrl->TrspSel = gtk_combo_box_new_text ();
     gtk_widget_set_tooltip_text (ctrl->TrspSel, _("Select a transponder"));
     load_trsp_list (ctrl);
     //gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->TrspSel), 0);
     g_signal_connect (ctrl->TrspSel, "changed", G_CALLBACK (trsp_selected_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->TrspSel, 0, 3, 1, 2);
+    
+    /* buttons */
+    tune = gtk_button_new_with_label (_("T"));
+    gtk_widget_set_tooltip_text (tune,
+                                  _("Tune the radio to this transponder. "\
+                                  "The uplink and downlink will be set to the center of "\
+                                  "the transponder passband. In case of beacons, only the "\
+                                  "downlink will be tuned to the beacon frequency."));
+    g_signal_connect (tune, "clicked", G_CALLBACK (trsp_tune_cb), ctrl);
+    
+    trsplock = gtk_toggle_button_new_with_label (_("L"));
+    gtk_widget_set_tooltip_text (trsplock,
+                                  _("Lock the uplink and the downlink to each other. "\
+                                  "Whenever you change the downlink (in the controller "\
+                                  "or on the dial, the uplink will track it according "\
+                                  "to whether the transponder is inverting or not. "\
+                                  "Similarly, if you change the uplink the downlink "\
+                                  "will track it automatically.\n\n"\
+                                  "If the downlink and uplink are initially out of sync "\
+                                  "when you enable this function, "\
+                                  "the current downlink frequency will be used as "\
+                                  "baseline for setting the new uplink frequency."));
+    g_signal_connect (trsplock, "toggled", G_CALLBACK (trsp_lock_cb), ctrl);
+    
+    /* box for packing buttons */
+    hbox = gtk_hbox_new (FALSE, 5);
+    gtk_box_pack_start (GTK_BOX (hbox), tune, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hbox), trsplock, TRUE, TRUE, 0);
+    gtk_table_attach_defaults (GTK_TABLE (table), hbox, 3, 4, 1, 2);
     
     /* Azimuth */
     label = gtk_label_new (_("Az:"));
@@ -756,7 +791,7 @@ static void trsp_selected_cb (GtkComboBox *box, gpointer data)
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gint i, n;
     
-    i = gtk_combo_box_get_active (box) - 1; /* 0th element is "Transponder" */
+    i = gtk_combo_box_get_active (box);
     n = g_slist_length (ctrl->trsplist);
     
     if (i == -1) {
@@ -772,6 +807,76 @@ static void trsp_selected_cb (GtkComboBox *box, gpointer data)
                       __FUNCTION__, i, n);
     }
 }
+
+
+/** \brief Manage "Tune" events
+ *  \param button Pointer to the GtkButton that received the signal.
+ *  \param data Pointer to the GtkRigCtrl structure.
+ *
+ * This function is called when the user clicks on the Tune button next to the
+ * transponder selector. When clicked, the radio controller will set the RX and TX
+ * frequencies to the middle of the transponder uplink/downlink bands.
+ *
+ * To avoid conflicts with manual frequency changes on the radio, the sync between
+ * RIG and GPREDICT is invalidated after the tuning operation is performed.
+ *
+ */
+static void trsp_tune_cb (GtkButton *button, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    gdouble     freq;
+    
+    if (ctrl->trsp == NULL)
+        return;
+    
+    /* tune downlink */
+    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->downhigh > 0.0)) {
+        
+        freq = ctrl->trsp->downlow + fabs (ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), freq);
+        
+        /* invalidate RIG<->GPREDICT sync */
+        ctrl->lastrxf = 0.0;
+    }
+    
+    /* tune uplink */
+    if ((ctrl->trsp->uplow > 0.0) && (ctrl->trsp->uphigh > 0.0)) {
+        
+        freq = ctrl->trsp->uplow + fabs (ctrl->trsp->uphigh - ctrl->trsp->uplow) / 2;
+        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), freq);
+        
+        /* invalidate RIG<->GPREDICT sync */
+        ctrl->lasttxf = 0.0;
+    }
+    
+    
+}
+
+
+/** \brief Manage lock transponder signals.
+ *  \param button Pointer to the GtkToggleButton that received the signal.
+ *  \param data Pointer to the GtkRigCtrl structure.
+ *
+ * This finction is called when the user toggles the "Lock Transponder" button.
+ * When ON, the uplink and downlink are locked according to the current transponder
+ * data, i.e. when user changes the downlink, the uplink will follow automatically
+ * taking into account whether the transponder is inverting or not.
+ */
+static void trsp_lock_cb (GtkToggleButton *button, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    gdouble     offset;
+    
+    ctrl->trsplock = gtk_toggle_button_get_active (button);
+    
+    /* set uplink according to downlink */
+    if (ctrl->trsplock) {
+        track_downlink (ctrl);
+    }
+}
+
+
+
 
 /** \brief Manage toggle signals (tracking)
  * \param button Pointer to the GtkToggle button.
@@ -1005,10 +1110,11 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
        If radio device is engaged read frequency from radio and compare it to the
        last set frequency. If different, it means that user has changed frequency
        on the radio dial => update transponder knob
+       
+       Note: If ctrl->lastrxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
+             and no need to execute the dial feedback.
     */
-    if (ctrl->engaged) {
-        // This is no good because it gets out of sync while PTT = ON
-        //lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreqDown));
+    if ((ctrl->engaged) && (ctrl->lastrxf > 0.0)) {
         
         /* check whether PTT is ON */
         ptt = ctrl->conf->ptt ? get_ptt (ctrl) : FALSE;
@@ -1118,8 +1224,11 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
        If radio device is engaged read frequency from radio and compare it to the
        last set frequency. If different, it means that user has changed frequency
        on the radio dial => update transponder knob
+       
+       Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
+             and no need to execute the dial feedback.
     */
-    if (ctrl->engaged) {
+    if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
         // This is no good because it gets out of sync while PTT = ON
         //lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreqDown));
         
@@ -1223,7 +1332,7 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
-
+    // FIXME implement
 }
 
 
@@ -1622,8 +1731,10 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
         
         /* clear transponder list */
         free_transponders (ctrl->trsplist);
+        
+        ctrl->trsp = NULL;
     }
-
+    
     /* check if there is a target satellite */
     if G_UNLIKELY (ctrl->target == NULL) {
         sat_log_log (SAT_LOG_LEVEL_MSG,
@@ -1690,4 +1801,60 @@ static gboolean have_conf ()
     g_dir_close (dir);
     
     return (i > 0) ? TRUE : FALSE;
+}
+
+
+/** \brief Track the downlink frequency.
+ *  \param ctrl Pointer to the GtkRigCtrl structure.
+ *
+ * This function tracks the downlink frequency by setting the uplink frequency
+ * according to the lower limit of the downlink passband.
+ */
+static void track_downlink (GtkRigCtrl *ctrl)
+{
+    gdouble delta,down,up;
+    
+    if (ctrl->trsp == NULL) {
+        return;
+    }
+    
+    down = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
+    delta = down - ctrl->trsp->downlow;
+    
+    if (ctrl->trsp->invert) {
+        up = ctrl->trsp->uphigh - delta;
+    }
+    else {
+        up = ctrl->trsp->uplow + delta;
+    }
+    
+    gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), up);
+}
+
+
+/** \brief Track the uplink frequency.
+ *  \param ctrl Pointer to the GtkRigCtrl structure.
+ *
+ * This function tracks the uplink frequency by setting the downlink frequency
+ * according to the offset from the lower limit on the uplink passband.
+ */
+static void track_uplink (GtkRigCtrl *ctrl)
+{
+    gdouble delta,down,up;
+    
+    if (ctrl->trsp == NULL) {
+        return;
+    }
+    
+    up = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
+    delta = up - ctrl->trsp->uplow;
+    
+    if (ctrl->trsp->invert) {
+        down = ctrl->trsp->downhigh - delta;
+    }
+    else {
+        down = ctrl->trsp->downlow + delta;
+    }
+    
+    gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), down);
 }

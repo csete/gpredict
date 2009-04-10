@@ -82,9 +82,10 @@ struct _gtk_rig_ctrl
     GtkWidget *DevSel;   /*!< Device selector */
     GtkWidget *LockBut;
     
-    radio_conf_t *conf;  /*!< Radio configuration */
+    radio_conf_t *conf;      /*!< Radio configuration */
     GSList       *trsplist;  /*!< List of available transponders */
-    trsp_t       *trsp;  /*!< Current transponder configuration */
+    trsp_t       *trsp;      /*!< Pointer to the current transponder configuration */
+    gboolean      trsplock;  /*!< Flag indicating whether uplink and downlink are lockled */
     
     GSList *sats;       /*!< List of sats in parent module */
     sat_t  *target;     /*!< Target satellite */
