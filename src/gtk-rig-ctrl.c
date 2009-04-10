@@ -80,7 +80,7 @@ static void sat_selected_cb (GtkComboBox *satsel, gpointer data);
 static void track_toggle_cb (GtkToggleButton *button, gpointer data);
 static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
 static void rig_selected_cb (GtkComboBox *box, gpointer data);
-static void rig_locked_cb (GtkToggleButton *button, gpointer data);
+static void rig_engaged_cb (GtkToggleButton *button, gpointer data);
 static void trsp_selected_cb (GtkComboBox *box, gpointer data);
 static void trsp_tune_cb (GtkButton *button, gpointer data);
 static void trsp_lock_cb (GtkToggleButton *button, gpointer data);
@@ -659,7 +659,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     /* Engage button */
     ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
     gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selcted radio device"));
-    g_signal_connect (ctrl->LockBut, "toggled", G_CALLBACK (rig_locked_cb), ctrl);
+    g_signal_connect (ctrl->LockBut, "toggled", G_CALLBACK (rig_engaged_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LockBut, 2, 3, 0, 1);
     
     /* Now, load config*/
@@ -980,14 +980,14 @@ rig_selected_cb (GtkComboBox *box, gpointer data)
 
 
 
-/** \brief Rig locked.
+/** \brief Manage Engage button signals.
  * \param button Pointer to the "Engage" button.
  * \param data Pointer to the GtkRigCtrl widget.
  * 
  * This function is called when the user toggles the "Engage" button.
  */
 static void
-rig_locked_cb (GtkToggleButton *button, gpointer data)
+rig_engaged_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
 
