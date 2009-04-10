@@ -440,48 +440,68 @@ tmg_throttle (GtkWidget *widget, gpointer data)
 }
 
 
-
+/** \brief Set new date and time callback.
+ *  \param widget The widget that was modified.
+ *  \param data Pointer to the GtkSatModule structure.
+ *
+ * This function is called when the user changes the date or time in the time
+ * controller. If we are in manual time control mode, the function reads the
+ * date and time set in the control widget and calculates the new time for
+ * the module. The function does nothing in real time and suimulated real
+ * time modes.
+ */
 static void
 tmg_time_set (GtkWidget *widget, gpointer data)
 {
     GtkSatModule *mod = GTK_SAT_MODULE (data);
-	guint year, month, day;
-	gint  hr, min, sec, msec;
-	struct tm tim;
-	gdouble jd;
+    guint year, month, day;
+    gint  hr, min, sec, msec;
+    struct tm tim,utim;
+    gdouble jd;
 
-	/* update time only if we are in manual time control */
-	if (!mod->throttle && !mod->reset) {
+    /* update time only if we are in manual time control */
+    if (!mod->throttle && !mod->reset) {
 
-		/* get date and time from widgets */
-		gtk_calendar_get_date (GTK_CALENDAR (mod->tmgCal),
-							   &year, &month, &day);
+        /* get date and time from widgets */
+        gtk_calendar_get_date (GTK_CALENDAR (mod->tmgCal),
+                                &year, &month, &day);
 
-		hr = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgHour));
-		min = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMin));
-		sec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgSec));
-		msec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMsec));
+        hr = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgHour));
+        min = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMin));
+        sec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgSec));
+        msec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMsec));
 
-		/* build struct_tm */
-		tim.tm_year = (int) (year);
-		tim.tm_mon = (int) (month+1);
-		tim.tm_mday = (int) day;
-		tim.tm_hour = (int) hr;
-		tim.tm_min = (int) min;
-		tim.tm_sec = (int) sec;
+        /* build struct_tm */
+        tim.tm_year = (int) (year);
+        tim.tm_mon = (int) (month+1);
+        tim.tm_mday = (int) day;
+        tim.tm_hour = (int) hr;
+        tim.tm_min = (int) min;
+        tim.tm_sec = (int) sec;
 
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s: %d/%d/%d %d:%d:%d.%d"),
-					 __FUNCTION__,
-					 tim.tm_year, tim.tm_mon, tim.tm_mday,
-					 tim.tm_hour, tim.tm_min, tim.tm_sec, msec);
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                        _("%s: %d/%d/%d %d:%d:%d.%d"),
+                        __FUNCTION__,
+                        tim.tm_year, tim.tm_mon, tim.tm_mday,
+                        tim.tm_hour, tim.tm_min, tim.tm_sec, msec);
 
-		/* convert to Julian Date (FIXME: only UTC?) */
-		jd = Julian_Date (&tim);
-		jd = jd + (gdouble)msec/8.64e+7;
+        /* convert UTC time to Julian Date  */
+        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
+            /* convert local time to UTC */
+            utim = Time_to_UTC (&tim);
 
-		mod->tmgCdnum = jd;
-	}
+            /* Convert to JD */
+            jd = Julian_Date (&utim);
+        }
+        else {
+            /* Already UTC, just convert to JD */
+            jd = Julian_Date (&tim);
+        }
+
+        jd = jd + (gdouble)msec/8.64e+7;
+
+        mod->tmgCdnum = jd;
+    }
 }
 
 
