@@ -33,6 +33,11 @@
  * popup menu and each module can have several radio control windows
  * attached to it. Note, however, that current implementation only
  * allows one control window per module.
+ *
+ * TODO Simplex TRX
+ * TODO Duplex TRX
+ * TODO Separate uplink rig
+ * TODO Transponder passband display somewhere
  * 
  */
 #include <gtk/gtk.h>
@@ -79,7 +84,8 @@ static GtkWidget *create_count_down_widgets (GtkRigCtrl *ctrl);
 static void sat_selected_cb (GtkComboBox *satsel, gpointer data);
 static void track_toggle_cb (GtkToggleButton *button, gpointer data);
 static void delay_changed_cb (GtkSpinButton *spin, gpointer data);
-static void rig_selected_cb (GtkComboBox *box, gpointer data);
+static void primary_rig_selected_cb (GtkComboBox *box, gpointer data);
+static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data);
 static void rig_engaged_cb (GtkToggleButton *button, gpointer data);
 static void trsp_selected_cb (GtkComboBox *box, gpointer data);
 static void trsp_tune_cb (GtkButton *button, gpointer data);
@@ -94,9 +100,10 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl);
 static void exec_tx_cycle (GtkRigCtrl *ctrl);
 static void exec_trx_cycle (GtkRigCtrl *ctrl);
 static void exec_duplex_cycle (GtkRigCtrl *ctrl);
-static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gdouble freq);
-static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq);
-static gboolean get_ptt (GtkRigCtrl *ctrl);
+static void exec_dual_rig_cycle (GtkRigCtrl *ctrl);
+static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
+static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
+static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
 /* misc utility functions */
@@ -173,6 +180,7 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->pass = NULL;
     ctrl->qth = NULL;
     ctrl->conf = NULL;
+    ctrl->conf2 = NULL;
     ctrl->trsp = NULL;
     ctrl->trsplist = NULL;
     ctrl->trsplock = FALSE;
@@ -201,6 +209,12 @@ gtk_rig_ctrl_destroy (GtkObject *object)
         g_free (ctrl->conf->host);
         g_free (ctrl->conf);
         ctrl->conf = NULL;
+    }
+    if (ctrl->conf2 != NULL) {
+        g_free (ctrl->conf2->name);
+        g_free (ctrl->conf2->host);
+        g_free (ctrl->conf2);
+        ctrl->conf2 = NULL;
     }
     
     /* free transponder */
@@ -609,18 +623,18 @@ create_conf_widgets (GtkRigCtrl *ctrl)
 
     
     
-    table = gtk_table_new (3, 3, FALSE);
+    table = gtk_table_new (4, 3, FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (table), 5);
     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
     
-    
-    label = gtk_label_new (_("Device:"));
+    /* Primary device */
+    label = gtk_label_new (_("1. Device:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
     
     ctrl->DevSel = gtk_combo_box_new_text ();
-    gtk_widget_set_tooltip_text (ctrl->DevSel, _("Select radio device"));
+    gtk_widget_set_tooltip_text (ctrl->DevSel, _("Select primary radio device."));
     
     /* open configuration directory */
     cfgdir = get_conf_dir ();
@@ -652,10 +666,30 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     g_dir_close (dir);
 
     gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel), 0);
-    g_signal_connect (ctrl->DevSel, "changed", G_CALLBACK (rig_selected_cb), ctrl);
+    g_signal_connect (ctrl->DevSel, "changed", G_CALLBACK (primary_rig_selected_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel, 1, 2, 0, 1);
     /* config will be force-loaded after LO spin is created */
 
+    /* Secondary device */
+    label = gtk_label_new (_("2. Device:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    
+    ctrl->DevSel2 = gtk_combo_box_new_text ();
+    gtk_widget_set_tooltip_text (ctrl->DevSel2, _("Select secondary radio device, if you want "\
+                                                  "to use a transmitter other than the primary "\
+                                                  "device."));
+    
+    /* load config */
+    gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel2), _("None"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel2), 0);
+    
+    //gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel), 0);
+    g_signal_connect (ctrl->DevSel2, "changed", G_CALLBACK (secondary_rig_selected_cb), ctrl);
+    gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel2, 1, 2, 1, 2);
+    
+    
+    
     /* Engage button */
     ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
     gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selcted radio device"));
@@ -663,28 +697,27 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LockBut, 2, 3, 0, 1);
     
     /* Now, load config*/
-    rig_selected_cb (GTK_COMBO_BOX (ctrl->DevSel), ctrl);
+    primary_rig_selected_cb (GTK_COMBO_BOX (ctrl->DevSel), ctrl);
     
     /* Timeout */
     label = gtk_label_new (_("Cycle:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     
     timer = gtk_spin_button_new_with_range (100, 5000, 10);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (timer), 0);
     gtk_widget_set_tooltip_text (timer,
                                  _("This parameter controls the delay between "\
-                                   "commands sent to the rigator."));
+                                   "commands sent to the rig."));
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (timer), ctrl->delay);
     g_signal_connect (timer, "value-changed", G_CALLBACK (delay_changed_cb), ctrl);
-    gtk_table_attach (GTK_TABLE (table), timer, 1, 2, 1, 2,
+    gtk_table_attach (GTK_TABLE (table), timer, 1, 2, 3, 4,
                       GTK_FILL, GTK_FILL, 0, 0);
     
     label = gtk_label_new (_("msec"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 3, 4);
 
-    
     frame = gtk_frame_new (_("Settings"));
     gtk_container_add (GTK_CONTAINER (frame), table);
     
@@ -919,7 +952,7 @@ delay_changed_cb (GtkSpinButton *spin, gpointer data)
 
 
 
-/** \brief New rig device selected.
+/** \brief New primary rig device selected.
  * \param box Pointer to the rigor selector combo box.
  * \param data Pointer to the GtkRigCtrl widget.
  * 
@@ -927,7 +960,7 @@ delay_changed_cb (GtkSpinButton *spin, gpointer data)
  * device.
  */
 static void
-rig_selected_cb (GtkComboBox *box, gpointer data)
+primary_rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gchar      *buff;
@@ -958,9 +991,12 @@ rig_selected_cb (GtkComboBox *box, gpointer data)
         buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->lo/1.0e6);
         gtk_label_set_text (GTK_LABEL (ctrl->LoDown), buff);
         g_free (buff);
-        buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->loup/1.0e6);
-        gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
-        g_free (buff);
+        /* uplink LO only if single device */
+        if (ctrl->conf2 == NULL) {
+            buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->loup/1.0e6);
+            gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
+            g_free (buff);
+        }
 
         //gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctrl->LO), ctrl->conf->lo/1.0e6);
     }
@@ -979,6 +1015,82 @@ rig_selected_cb (GtkComboBox *box, gpointer data)
 }
 
 
+/** \brief New secondary rig device selected.
+ * \param box Pointer to the rigor selector combo box.
+ * \param data Pointer to the GtkRigCtrl widget.
+ * 
+ * This function is called when the user selects a new rig controller
+ * device for the secondary radio. This radio is used for uplink only.
+ */
+static void
+secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    gchar      *buff;
+    
+    
+    /* free previous configuration */
+    if (ctrl->conf2 != NULL) {
+        g_free (ctrl->conf2->name);
+        g_free (ctrl->conf2->host);
+        g_free (ctrl->conf2);
+        ctrl->conf2 = NULL;
+    }
+    
+    if (gtk_combo_box_get_active (box) == 0) {
+        /* first entry is "None" */
+        
+        /* reset uplink LO to what's in ctrl->conf */
+        if (ctrl->conf != NULL) {
+            buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->loup/1.0e6);
+            gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
+            g_free (buff);
+        }
+        
+        return;
+    }
+    
+    /* else load new device */
+    ctrl->conf2 = g_try_new (radio_conf_t, 1);
+    if (ctrl->conf2 == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to allocate memory for radio config"),
+                     __FILE__, __LINE__);
+        return;
+    }
+    
+    /* load new configuration */
+    ctrl->conf2->name = gtk_combo_box_get_active_text (box);
+    if (radio_conf_read (ctrl->conf2)) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("Loaded new radio configuration %s"),
+                     ctrl->conf2->name);
+        /* update LO widgets */
+        //buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf2->lo/1.0e6);
+        //gtk_label_set_text (GTK_LABEL (ctrl->LoDown), buff);
+        //g_free (buff);
+        buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf2->loup/1.0e6);
+        gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
+        g_free (buff);
+
+        //gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctrl->LO), ctrl->conf->lo/1.0e6);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to load radio configuration %s"),
+                     __FILE__, __LINE__, ctrl->conf->name);
+
+        g_free (ctrl->conf2->name);
+        if (ctrl->conf2->host)
+            g_free (ctrl->conf2->host);
+        g_free (ctrl->conf2);
+        ctrl->conf2 = NULL;
+    }
+
+}
+
+
+
 
 /** \brief Manage Engage button signals.
  * \param button Pointer to the "Engage" button.
@@ -995,6 +1107,7 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
     if (!gtk_toggle_button_get_active (button)) {
         /* close socket */
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
+        gtk_widget_set_sensitive (ctrl->DevSel2, TRUE);
         ctrl->engaged = FALSE;
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
@@ -1009,37 +1122,46 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
         }
         
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
+        gtk_widget_set_sensitive (ctrl->DevSel2, FALSE);
         ctrl->engaged = TRUE;
         ctrl->wrops = 0;
         
         /* set initial frequency */
-
-        switch (ctrl->conf->type) {
-            case RIG_TYPE_RX:
-                ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                set_freq_simplex (ctrl, ctrl->lastrxf);
-                break;
-            case RIG_TYPE_TX:
-                ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
-                set_freq_simplex (ctrl, ctrl->lasttxf);
-                break;
-            case RIG_TYPE_TRX:
-            case RIG_TYPE_DUPLEX:
-                if (get_ptt (ctrl)) {
-                    ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
-                    set_freq_simplex (ctrl, ctrl->lasttxf);
-                }
-                else {
+        if (ctrl->conf2 != NULL) {
+            /* set initial dual mode */
+            ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
+            set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+            ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
+            set_freq_simplex (ctrl, ctrl->conf2, ctrl->lasttxf);
+        }
+        else {
+            switch (ctrl->conf->type) {
+                case RIG_TYPE_RX:
                     ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                    set_freq_simplex (ctrl, ctrl->lastrxf);
-                }
-                break;
-            default:
-                /* this is an error! */
-                ctrl->conf->type = RIG_TYPE_RX;
-                ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                set_freq_simplex (ctrl, ctrl->lastrxf);
-                break;
+                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+                    break;
+                case RIG_TYPE_TX:
+                    ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
+                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
+                    break;
+                case RIG_TYPE_TRX:
+                case RIG_TYPE_DUPLEX:
+                    if (get_ptt (ctrl, ctrl->conf)) {
+                        ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
+                        set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
+                    }
+                    else {
+                        ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
+                        set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+                    }
+                    break;
+                default:
+                    /* this is an error! */
+                    ctrl->conf->type = RIG_TYPE_RX;
+                    ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
+                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+                    break;
+            }
         }
     }
 }
@@ -1096,32 +1218,37 @@ rig_ctrl_timeout_cb (gpointer data)
     
     ctrl->busy = TRUE;
     
-    /* Execute controller cycle depending on radio type */
-    switch (ctrl->conf->type) {
+    if (ctrl->conf2 != NULL) {
+        exec_dual_rig_cycle (ctrl);
+    }
+    else {
+        /* Execute controller cycle depending on primary radio type */
+        switch (ctrl->conf->type) {
         
-        case RIG_TYPE_RX:
-            exec_rx_cycle (ctrl);
-            break;
+            case RIG_TYPE_RX:
+                exec_rx_cycle (ctrl);
+                break;
             
-        case RIG_TYPE_TX:
-            exec_tx_cycle (ctrl);
-            break;
+            case RIG_TYPE_TX:
+                exec_tx_cycle (ctrl);
+                break;
             
-        case RIG_TYPE_TRX:
-            exec_trx_cycle (ctrl);
-            break;
+            case RIG_TYPE_TRX:
+                exec_trx_cycle (ctrl);
+                break;
             
-        case RIG_TYPE_DUPLEX:
-            exec_duplex_cycle (ctrl);
-            break;
+            case RIG_TYPE_DUPLEX:
+                exec_duplex_cycle (ctrl);
+                break;
             
-        default:
-            /* invalid mode */
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                          _("%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"),
-                          __FUNCTION__, ctrl->conf->type);
-            ctrl->conf->type = RIG_TYPE_RX;
+            default:
+                /* invalid mode */
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                            _("%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"),
+                            __FUNCTION__, ctrl->conf->type);
+                ctrl->conf->type = RIG_TYPE_RX;
             
+        }
     }
     
     //g_print ("       WROPS = %d\n", ctrl->wrops);
@@ -1136,6 +1263,7 @@ rig_ctrl_timeout_cb (gpointer data)
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
  * This function executes a controller cycle when the device is of RIG_TYPE_RX.
+ * This function is not used dual-rig mode.
  */
 static void exec_rx_cycle (GtkRigCtrl *ctrl)
 {
@@ -1155,10 +1283,10 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     if ((ctrl->engaged) && (ctrl->lastrxf > 0.0)) {
         
         /* check whether PTT is ON */
-        ptt = ctrl->conf->ptt ? get_ptt (ctrl) : FALSE;
+        ptt = ctrl->conf->ptt ? get_ptt (ctrl, ctrl->conf) : FALSE;
         
         if (ptt == FALSE) {
-            if (!get_freq_simplex (ctrl, &readfreq)) {
+            if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
                 /* error => use a passive value */
                 readfreq = ctrl->lastrxf;
                 ctrl->errcnt++;
@@ -1210,20 +1338,20 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
         /* uplink */
         doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + doppler - ctrl->conf->lo);
+                                  satfrequ + doppler - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
                                   satfreqd - ctrl->conf->lo);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ - ctrl->conf->lo);
+                                  satfrequ - ctrl->conf->loup );
     }
 
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ptt == FALSE) && (fabs(ctrl->lastrxf - tmpfreq) > 0.99)) {
-        if (set_freq_simplex (ctrl, tmpfreq)) {
+        if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
             ctrl->lastrxf = tmpfreq;
@@ -1250,7 +1378,8 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
 /** \brief Execute TX mode cycle.
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
- * This function executes a controller cycle when the device is of RIG_TYPE_TX.
+ * This function executes a controller cycle when the primary device is of RIG_TYPE_TX.
+ * This function is not used in dual-rig mode.
  */
 static void exec_tx_cycle (GtkRigCtrl *ctrl)
 {
@@ -1272,10 +1401,10 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
         //lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreqDown));
         
         /* check whether PTT is ON */
-        ptt = ctrl->conf->ptt ? get_ptt (ctrl) : FALSE;
+        ptt = ctrl->conf->ptt ? get_ptt (ctrl, ctrl->conf) : FALSE;
         
         if (ptt == TRUE) {
-            if (!get_freq_simplex (ctrl, &readfreq)) {
+            if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
                 /* error => use a passive value */
                 readfreq = ctrl->lasttxf;
                 ctrl->errcnt++;
@@ -1327,20 +1456,20 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
         /* uplink */
         doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + doppler - ctrl->conf->lo);
+                                  satfrequ + doppler - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
                                   satfreqd - ctrl->conf->lo);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ - ctrl->conf->lo);
+                                  satfrequ - ctrl->conf->loup);
     }
 
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ptt == TRUE) && (fabs(ctrl->lasttxf - tmpfreq) > 0.99)) {
-        if (set_freq_simplex (ctrl, tmpfreq)) {
+        if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
             ctrl->lasttxf = tmpfreq;
@@ -1369,10 +1498,17 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
  * This function executes a controller cycle when the device is of RIG_TYPE_TRX (simplex).
+ * Technically, the function simply checks the PTT status and executes either exec_tx_cycle()
+ * or exec_rx_cycle().
  */
 static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
-    // FIXME implement
+    if (get_ptt (ctrl, ctrl->conf) == TRUE) {
+        exec_tx_cycle (ctrl);
+    }
+    else {
+        exec_rx_cycle (ctrl);
+    }
 }
 
 
@@ -1387,13 +1523,29 @@ static void exec_duplex_cycle (GtkRigCtrl *ctrl)
     exec_trx_cycle (ctrl);
 }
 
+/** \brief Execute dual-rig cycle.
+ *  \param ctrl Pointer to the GtkRigCtrl widget.
+ *
+ * This function executes a controller cycle when we use a primary device for
+ * downlink and a secondary device for uplink.
+ */
+static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
+{
+    //FIXME implement
+    
+    /* Execute downlink cycle using ctrl->conf */
+    
+    
+    /* Execute uplink cycle using ctrl->conf2 */
+}
+
 
 /** \brief Get PTT status
  *  \param ctrl Pointer to the GtkRigVtrl widget.
  *  \return TRUE if PTT is ON, FALSE if PTT is OFF or an error occurred.
  *
  */
-static gboolean get_ptt (GtkRigCtrl *ctrl)
+static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
 {
     gchar  *buff,**vbuff;
     gint    written,size;
@@ -1420,22 +1572,22 @@ static gboolean get_ptt (GtkRigCtrl *ctrl)
         
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
+    h = gethostbyname(conf->host);
     memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+    ServAddr.sin_port = htons(conf->port); /* Server port */
 
     /* establish connection */
     status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
-                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+                       __FILE__, __LINE__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d: Connection opened to %s:%d"),
-                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+                       __FILE__, __LINE__, conf->host, conf->port);
     }
     
     /* send command (get_ptt: t) */
@@ -1500,7 +1652,7 @@ static gboolean get_ptt (GtkRigCtrl *ctrl)
  *       gotten the current frequency from the ctrl; however, the param
  *       might become useful in the future.
  */
-static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gdouble freq)
+static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq)
 {
     gchar  *buff;
     gint    written,size;
@@ -1525,22 +1677,22 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gdouble freq)
         
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
+    h = gethostbyname(conf->host);
     memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+    ServAddr.sin_port = htons(conf->port); /* Server port */
 
     /* establish connection */
     status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                       __FUNCTION__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                       __FUNCTION__, conf->host, conf->port);
     }
     
     /* send command */
@@ -1569,7 +1721,7 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gdouble freq)
  * \return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  */
-static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq)
+static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq)
 {
     gchar  *buff,**vbuff;
     gint    written,size;
@@ -1578,7 +1730,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq)
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
 
-                         
+
     if (freq == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: NULL storage."),
@@ -1602,22 +1754,22 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gdouble *freq)
         
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
+    h = gethostbyname(conf->host);
     memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+    ServAddr.sin_port = htons(conf->port); /* Server port */
 
     /* establish connection */
     status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
-                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+                       __FILE__, __LINE__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d: Connection opened to %s:%d"),
-                       __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
+                       __FILE__, __LINE__, conf->host, conf->port);
     }
     
     /* send command */

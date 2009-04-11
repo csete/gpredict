@@ -80,9 +80,11 @@ struct _gtk_rig_ctrl
     /* other widgets */
     GtkWidget *TrspSel;  /*!< Transponder selector */
     GtkWidget *DevSel;   /*!< Device selector */
+    GtkWidget *DevSel2;  /*!< Second device selector */
     GtkWidget *LockBut;
     
     radio_conf_t *conf;      /*!< Radio configuration */
+    radio_conf_t *conf2;     /*!< Secondary radio configuration */
     GSList       *trsplist;  /*!< List of available transponders */
     trsp_t       *trsp;      /*!< Pointer to the current transponder configuration */
     gboolean      trsplock;  /*!< Flag indicating whether uplink and downlink are lockled */
