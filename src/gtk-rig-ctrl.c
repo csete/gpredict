@@ -1392,7 +1392,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
 static void exec_tx_cycle (GtkRigCtrl *ctrl)
 {
     gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ, doppler;
-    gboolean ptt = FALSE;
+    gboolean ptt = TRUE;
     gboolean dialchanged = FALSE;
     
     /* get PTT status */
