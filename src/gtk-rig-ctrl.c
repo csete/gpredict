@@ -1395,7 +1395,10 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     gboolean ptt = FALSE;
     gboolean dialchanged = FALSE;
     
-    
+    /* get PTT status */
+    if (ctrl->engaged && ctrl->conf->ptt)
+        ptt = get_ptt (ctrl, ctrl->conf);
+
     /* Dial feedback:
        If radio device is engaged read frequency from radio and compare it to the
        last set frequency. If different, it means that user has changed frequency
@@ -1405,11 +1408,6 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
              and no need to execute the dial feedback.
     */
     if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
-        // This is no good because it gets out of sync while PTT = ON
-        //lastfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->RigFreqDown));
-        
-        /* check whether PTT is ON */
-        ptt = ctrl->conf->ptt ? get_ptt (ctrl, ctrl->conf) : FALSE;
         
         if (ptt == TRUE) {
             if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
@@ -1422,11 +1420,12 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
             readfreq = ctrl->lasttxf;
         }
         
-        if (fabs (readfreq - ctrl->lasttxf) > 0.99) {
+        if (fabs (readfreq - ctrl->lasttxf) >= 1.0) {
             dialchanged = TRUE;
             
             /* user might have altered radio frequency => update transponder knob */
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp), readfreq);
+            ctrl->lasttxf = readfreq;
             
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
@@ -1476,10 +1475,16 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
 
     /* if device is engaged, send freq command to radio */
-    if ((ctrl->engaged) && (ptt == TRUE) && (fabs(ctrl->lasttxf - tmpfreq) > 0.99)) {
+    if ((ctrl->engaged) && (ptt == TRUE) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
         if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
+
+            /* The actual frequency migh be different from what we have set because
+               the tuning step is larger than what we work with (e.g. FT-817 has a
+               smallest tuning step of 10 Hz). Therefore we read back the actual
+               frequency from the rig. */
+            get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
             ctrl->lasttxf = tmpfreq;
         }
         else {
