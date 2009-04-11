@@ -200,7 +200,7 @@ void radio_conf_save (radio_conf_t *conf)
     g_key_file_set_string (cfg, GROUP, KEY_HOST, conf->host);
     g_key_file_set_integer (cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_double (cfg, GROUP, KEY_LO, conf->lo);
-    g_key_file_set_double (cfg, GROUP, KEY_LO, conf->loup);
+    g_key_file_set_double (cfg, GROUP, KEY_LOUP, conf->loup);
     g_key_file_set_integer (cfg, GROUP, KEY_TYPE, conf->type);
     g_key_file_set_boolean (cfg, GROUP, KEY_PTT, conf->ptt);
     
