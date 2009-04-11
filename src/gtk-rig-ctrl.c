@@ -34,7 +34,6 @@
  * attached to it. Note, however, that current implementation only
  * allows one control window per module.
  *
- * TODO Simplex TRX
  * TODO Duplex TRX
  * TODO Separate uplink rig
  * TODO Transponder passband display somewhere
@@ -1516,11 +1515,13 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
-    if (get_ptt (ctrl, ctrl->conf) == TRUE) {
-        exec_tx_cycle (ctrl);
-    }
-    else {
-        exec_rx_cycle (ctrl);
+    if (ctrl->engaged) {
+        if (get_ptt (ctrl, ctrl->conf) == TRUE) {
+            exec_tx_cycle (ctrl);
+        }
+        else {
+            exec_rx_cycle (ctrl);
+        }
     }
 }
 
