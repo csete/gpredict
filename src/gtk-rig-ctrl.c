@@ -1271,6 +1271,10 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     gboolean ptt = FALSE;
     gboolean dialchanged = FALSE;
     
+    /* get PTT status */
+    if (ctrl->engaged && ctrl->conf->ptt)
+        ptt = get_ptt (ctrl, ctrl->conf);
+    
     
     /* Dial feedback:
        If radio device is engaged read frequency from radio and compare it to the
@@ -1281,9 +1285,6 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
              and no need to execute the dial feedback.
     */
     if ((ctrl->engaged) && (ctrl->lastrxf > 0.0)) {
-        
-        /* check whether PTT is ON */
-        ptt = ctrl->conf->ptt ? get_ptt (ctrl, ctrl->conf) : FALSE;
         
         if (ptt == FALSE) {
             if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
@@ -1296,11 +1297,12 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
             readfreq = ctrl->lastrxf;
         }
         
-        if (fabs (readfreq - ctrl->lastrxf) > 0.99) {
+        if (fabs (readfreq - ctrl->lastrxf) >= 1.0) {
             dialchanged = TRUE;
             
             /* user might have altered radio frequency => update transponder knob */
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown), readfreq);
+            ctrl->lastrxf = readfreq;
             
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
@@ -1350,10 +1352,16 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
 
     /* if device is engaged, send freq command to radio */
-    if ((ctrl->engaged) && (ptt == FALSE) && (fabs(ctrl->lastrxf - tmpfreq) > 0.99)) {
+    if ((ctrl->engaged) && (ptt == FALSE) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
         if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
+            
+            /* The actual frequency migh be different from what we have set because
+               the tuning step is larger than what we work with (e.g. FT-817 has a
+               smallest tuning step of 10 Hz). Therefore we read back the actual
+               frequency from the rig. */
+            get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
             ctrl->lastrxf = tmpfreq;
         }
         else {
