@@ -1547,9 +1547,11 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
     if (ctrl->engaged) {
         if (get_ptt (ctrl, ctrl->conf) == TRUE) {
+            g_print ("TX CYCLE\n");
             exec_tx_cycle (ctrl);
         }
         else {
+            g_print ("RX CYCLE\n");
             exec_rx_cycle (ctrl);
         }
     }
@@ -1840,10 +1842,17 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
                        __FILE__, __LINE__, conf->host, conf->port);
     }
     
-    /* send command (get_ptt: t) */
-    buff = g_strdup_printf ("t");
+    if (conf->ptt == PTT_TYPE_CAT) {
+        /* send command get_ptt (t) */
+        buff = g_strdup_printf ("t");
+        size = 1;
+    }
+    else {
+        /* send command \get_dcd */
+        buff = g_strdup_printf ("%c",0x8b);
+        size = 1;
+    }
     
-    size = 1;
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
