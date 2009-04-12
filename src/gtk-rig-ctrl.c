@@ -634,7 +634,9 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
     
     ctrl->DevSel = gtk_combo_box_new_text ();
-    gtk_widget_set_tooltip_text (ctrl->DevSel, _("Select primary radio device."));
+    gtk_widget_set_tooltip_text (ctrl->DevSel, _("Select primary radio device."\
+                                                 "This device will be used for downlink and uplink "\
+                                                 "unless you select a secondary device for uplink"));
     
     /* open configuration directory */
     cfgdir = get_conf_dir ();
@@ -675,9 +677,8 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
     
     ctrl->DevSel2 = gtk_combo_box_new_text ();
-    gtk_widget_set_tooltip_text (ctrl->DevSel2, _("Select secondary radio device, if you want "\
-                                                  "to use a transmitter other than the primary "\
-                                                  "device."));
+    gtk_widget_set_tooltip_text (ctrl->DevSel2, _("Select secondary radio device\n"\
+                                                  "This device will be used for uplink"));
     
     /* load config */
     gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel2), _("None"));
@@ -993,6 +994,11 @@ primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     gchar      *buff;
     
     
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s:%s: Primary device selected: %d"),
+                 __FILE__, __FUNCTION__, gtk_combo_box_get_active (box));
+
+    
     /* free previous configuration */
     if (ctrl->conf != NULL) {
         g_free (ctrl->conf->name);
@@ -1012,8 +1018,8 @@ primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     ctrl->conf->name = gtk_combo_box_get_active_text (box);
     if (radio_conf_read (ctrl->conf)) {
         sat_log_log (SAT_LOG_LEVEL_MSG,
-                     _("Loaded new radio configuration %s"),
-                     ctrl->conf->name);
+                     _("%s:%s: Loaded new radio configuration %s"),
+                     __FILE__, __FUNCTION__, ctrl->conf->name);
         /* update LO widgets */
         buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->lo/1.0e6);
         gtk_label_set_text (GTK_LABEL (ctrl->LoDown), buff);
@@ -1027,8 +1033,8 @@ primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to load radio configuration %s"),
-                     __FILE__, __LINE__, ctrl->conf->name);
+                     _("%s:%s: Failed to load radio configuration %s"),
+                     __FILE__, __FUNCTION__, ctrl->conf->name);
 
         g_free (ctrl->conf->name);
         if (ctrl->conf->host)
@@ -1054,6 +1060,10 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     gchar      *buff;
     gchar      *name1, *name2;
     
+    
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s:%s: Secondary device selected: %d"),
+                 __FILE__, __FUNCTION__, gtk_combo_box_get_active (box));
     
     /* free previous configuration */
     if (ctrl->conf2 != NULL) {
@@ -1100,8 +1110,8 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     ctrl->conf2 = g_try_new (radio_conf_t, 1);
     if (ctrl->conf2 == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to allocate memory for radio config"),
-                     __FILE__, __LINE__);
+                     _("%s:%s: Failed to allocate memory for radio config"),
+                     __FILE__, __FUNCTION__);
         return;
     }
     
@@ -1109,8 +1119,8 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     ctrl->conf2->name = gtk_combo_box_get_active_text (box);
     if (radio_conf_read (ctrl->conf2)) {
         sat_log_log (SAT_LOG_LEVEL_MSG,
-                     _("Loaded new radio configuration %s"),
-                     ctrl->conf2->name);
+                     _("%s:%s: Loaded new radio configuration %s"),
+                     __FILE__, __FUNCTION__, ctrl->conf2->name);
         /* update LO widgets */
         buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf2->loup/1.0e6);
         gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
@@ -1118,8 +1128,8 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to load radio configuration %s"),
-                     __FILE__, __LINE__, ctrl->conf->name);
+                     _("%s:%s: Failed to load radio configuration %s"),
+                     __FILE__, __FUNCTION__, ctrl->conf->name);
 
         g_free (ctrl->conf2->name);
         if (ctrl->conf2->host)
@@ -2210,12 +2220,20 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
     /* append transponder names to combo box */
     n = g_slist_length (ctrl->trsplist);
     
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s:%s: Satellite %d has %d transponder modes."),
+                 __FILE__, __FUNCTION__, ctrl->target->tle.catnr, n);
+    
     if (n == 0)
         return;
     
     for (i = 0; i < n; i++) {
         trsp = (trsp_t *) g_slist_nth_data (ctrl->trsplist, i);
         gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->TrspSel), trsp->name);
+        
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:&s: Read transponder '%s' for satellite %d"),
+                     __FILE__, __FUNCTION__, trsp->name, ctrl->target->tle.catnr);
     }
     
     /* make an initial selection */
