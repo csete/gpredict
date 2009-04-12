@@ -793,9 +793,7 @@ static void
 sat_selected_cb (GtkComboBox *satsel, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
-    GSList *trsplist = NULL;
-    trsp_t *trsp;
-    gint i,n;
+    gint i;
     
     i = gtk_combo_box_get_active (satsel);
     if (i >= 0) {
@@ -808,25 +806,6 @@ sat_selected_cb (GtkComboBox *satsel, gpointer data)
         
         /* read transponders for new target */
         load_trsp_list (ctrl);
-        
-#if 0
-        /* get transponders */
-        trsplist = read_transponders (ctrl->target->tle.catnr);
-        
-        n = g_slist_length (trsplist);
-        //g_print ("*** %d\n", n);
-        for (i = 0; i < n; i++) {
-            trsp = (trsp_t *) g_slist_nth_data (trsplist, i);
-            g_print ("%s: %.0f/%.0f/%.0f/%.0f/%s\n",
-                      trsp->name,
-                      trsp->uplow, trsp->uphigh,
-                      trsp->downlow, trsp->downhigh,
-                      trsp->invert ? "INV" : "NONINV");
-            
-        }
-        
-        free_transponders (trsplist);
-#endif
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -1609,9 +1588,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             readfreq = ctrl->lastrxf;
             ctrl->errcnt++;
         }
-        else {
-            readfreq = ctrl->lastrxf;
-        }
         
         if (fabs (readfreq - ctrl->lastrxf) >= 1.0) {
             dialchanged = TRUE;
@@ -1711,10 +1687,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                 /* error => use a passive value */
                 readfreq = ctrl->lasttxf;
                 ctrl->errcnt++;
-            }
-
-            else {
-                readfreq = ctrl->lasttxf;
             }
         
             if (fabs (readfreq - ctrl->lasttxf) >= 1.0) {
