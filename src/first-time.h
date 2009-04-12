@@ -31,13 +31,15 @@
 
 /** \brief Bit fields in the returned error code */
 enum {
-	FTC_ERROR_STEP_01 = 1 << 1,
-	FTC_ERROR_STEP_02 = 1 << 2,
-	FTC_ERROR_STEP_03 = 1 << 3,
-	FTC_ERROR_STEP_04 = 1 << 4,
-	FTC_ERROR_STEP_05 = 1 << 5,
-	FTC_ERROR_STEP_06 = 1 << 6,
-    FTC_ERROR_STEP_07 = 1 << 7
+    FTC_ERROR_STEP_01 = 1 << 1,
+    FTC_ERROR_STEP_02 = 1 << 2,
+    FTC_ERROR_STEP_03 = 1 << 3,
+    FTC_ERROR_STEP_04 = 1 << 4,
+    FTC_ERROR_STEP_05 = 1 << 5,
+    FTC_ERROR_STEP_06 = 1 << 6,
+    FTC_ERROR_STEP_07 = 1 << 7,
+    FTC_ERROR_STEP_08 = 1 << 8,
+    FTC_ERROR_STEP_09 = 1 << 9
 };
 
 guint first_time_check_run (void);
