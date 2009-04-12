@@ -41,6 +41,11 @@ typedef enum {
     RIG_TYPE_DUPLEX     /*!< Rig is a full duplex radio, e.g. IC910 */
 } rig_type_t;
 
+typedef enum {
+    PTT_TYPE_NONE = 0,  /*!< Don't read PTT */
+    PTT_TYPE_CAT,       /*!< Read PTT using get_ptt CAT command */
+    PTT_TYPE_DCD        /*!< Read PTT using get_dcd */
+} ptt_type_t;
 
 /** \brief Radio configuration. */
 typedef struct {
@@ -51,7 +56,7 @@ typedef struct {
                                  compatibility with rest of code). Downlink. */
     gdouble      loup;      /*!< local oscillator freq in Hz for uplink. */
     rig_type_t   type;      /*!< Radio type */
-    gboolean     ptt;       /*!< Flag indicating that we should read PTT status (needed for RX, TX, and TRX) */
+    ptt_type_t   ptt;       /*!< PTT type (needed for RX, TX, and TRX) */
 } radio_conf_t;
 
 

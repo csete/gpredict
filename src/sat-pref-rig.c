@@ -212,7 +212,7 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_STRING,    // host
                                     G_TYPE_INT,       // port
                                     G_TYPE_INT,       // type
-                                    G_TYPE_BOOLEAN,   // PTT
+                                    G_TYPE_INT,       // PTT
                                     G_TYPE_DOUBLE,    // LO DOWN
                                     G_TYPE_DOUBLE     // LO UO
                                    );
@@ -353,7 +353,7 @@ void sat_pref_rig_ok     ()
         .host  = NULL,
         .port  = 4532,
         .type  = RIG_TYPE_RX,
-        .ptt   = FALSE,
+        .ptt   = 0,
         .lo    = 0.0,
         .loup  = 0.0,
     };
@@ -437,7 +437,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .host  = NULL,
         .port  = 4532,
         .type  = RIG_TYPE_RX,
-        .ptt   = FALSE,
+        .ptt   = 0,
         .lo    = 0.0,
         .loup  = 0.0,
     };
@@ -487,7 +487,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .host  = NULL,
         .port  = 4532,
         .type  = RIG_TYPE_RX,
-        .ptt   = FALSE,
+        .ptt   = 0,
         .lo    = 0.0,
         .loup  = 0.0,
     };
@@ -699,16 +699,25 @@ static void render_ptt (GtkTreeViewColumn *col,
                         GtkTreeIter       *iter,
                         gpointer           column)
 {
-    gboolean   ptt;
+    gint    ptt;
     guint   coli = GPOINTER_TO_UINT (column);
     
     gtk_tree_model_get (model, iter, coli, &ptt, -1);
 
-    if (ptt)
-        g_object_set (renderer, "text", _("Monitor"), NULL);
-    else
-        g_object_set (renderer, "text", _("Ignore"), NULL);
-    
+    switch (ptt) {
+        case PTT_TYPE_NONE:
+            g_object_set (renderer, "text", _("None"), NULL);
+            break;
+        case PTT_TYPE_CAT:
+            g_object_set (renderer, "text", _("PTT"), NULL);
+            break;
+        case PTT_TYPE_DCD:
+            g_object_set (renderer, "text", _("DCD"), NULL);
+            break;
+        default:
+            g_object_set (renderer, "text", _("None"), NULL);
+            break;
+    }
 }
 
 

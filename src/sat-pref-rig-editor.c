@@ -66,6 +66,7 @@ static void          clear_widgets         (void);
 static gboolean      apply_changes         (radio_conf_t *conf);
 static void          name_changed          (GtkWidget *widget, gpointer data);
 static void          type_changed          (GtkWidget *widget, gpointer data);
+static void          ptt_changed           (GtkWidget *widget, gpointer data);
 
 
 /** \brief Add or edit a radio configuration.
@@ -76,63 +77,63 @@ static void          type_changed          (GtkWidget *widget, gpointer data);
 void
 sat_pref_rig_editor_run (radio_conf_t *conf)
 {
-	gint       response;
-	gboolean   finished = FALSE;
+    gint       response;
+    gboolean   finished = FALSE;
 
 
-	/* crate dialog and add contents */
-	dialog = gtk_dialog_new_with_buttons (_("Edit radio configuration"),
-										  GTK_WINDOW (window),
-										  GTK_DIALOG_MODAL |
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_STOCK_CLEAR,
-										  GTK_RESPONSE_REJECT,
-										  GTK_STOCK_CANCEL,
-										  GTK_RESPONSE_CANCEL,
-										  GTK_STOCK_OK,
-										  GTK_RESPONSE_OK,
-										  NULL);
+    /* crate dialog and add contents */
+    dialog = gtk_dialog_new_with_buttons (_("Edit radio configuration"),
+                                            GTK_WINDOW (window),
+                                            GTK_DIALOG_MODAL |
+                                            GTK_DIALOG_DESTROY_WITH_PARENT,
+                                            GTK_STOCK_CLEAR,
+                                            GTK_RESPONSE_REJECT,
+                                            GTK_STOCK_CANCEL,
+                                            GTK_RESPONSE_CANCEL,
+                                            GTK_STOCK_OK,
+                                            GTK_RESPONSE_OK,
+                                            NULL);
 
-	/* disable OK button to begin with */
-	gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-									   GTK_RESPONSE_OK,
-									   FALSE);
+    /* disable OK button to begin with */
+    gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                        GTK_RESPONSE_OK,
+                                        FALSE);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
-					   create_editor_widgets (conf));
+    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
+                        create_editor_widgets (conf));
 
-	/* this hacky-thing is to keep the dialog running in case the
-	   CLEAR button is plressed. OK and CANCEL will exit the loop
-	*/
-	while (!finished) {
+    /* this hacky-thing is to keep the dialog running in case the
+        CLEAR button is plressed. OK and CANCEL will exit the loop
+    */
+    while (!finished) {
 
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+        response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-		switch (response) {
+        switch (response) {
 
-			/* OK */
-		case GTK_RESPONSE_OK:
-			if (apply_changes (conf)) {
-				finished = TRUE;
-			}
-			else {
-				finished = FALSE;
-			}
-			break;
+            /* OK */
+        case GTK_RESPONSE_OK:
+            if (apply_changes (conf)) {
+                finished = TRUE;
+            }
+            else {
+                finished = FALSE;
+            }
+            break;
 
-			/* CLEAR */
-		case GTK_RESPONSE_REJECT:
-			clear_widgets ();
-			break;
+            /* CLEAR */
+        case GTK_RESPONSE_REJECT:
+            clear_widgets ();
+            break;
 
-			/* Everything else is considered CANCEL */
-		default:
-			finished = TRUE;
-			break;
-		}
-	}
+            /* Everything else is considered CANCEL */
+        default:
+            finished = TRUE;
+            break;
+        }
+    }
 
-	gtk_widget_destroy (dialog);
+    gtk_widget_destroy (dialog);
 }
 
 
@@ -140,38 +141,38 @@ sat_pref_rig_editor_run (radio_conf_t *conf)
 static GtkWidget *
 create_editor_widgets (radio_conf_t *conf)
 {
-	GtkWidget    *table;
-	GtkWidget    *label;
+    GtkWidget    *table;
+    GtkWidget    *label;
 
 
 
-	table = gtk_table_new (7, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+    table = gtk_table_new (7, 4, FALSE);
+    gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+    gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 
-	/* Config name */
-	label = gtk_label_new (_("Name"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
-	
-	name = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (name), 25);
+    /* Config name */
+    label = gtk_label_new (_("Name"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+
+    name = gtk_entry_new ();
+    gtk_entry_set_max_length (GTK_ENTRY (name), 25);
     gtk_widget_set_tooltip_text (name,
                                  _("Enter a short name for this configuration, e.g. IC910-1.\n"\
-                                   "Allowed charachters: 0..9, a..z, A..Z, - and _"));
-	gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
+                                    "Allowed charachters: 0..9, a..z, A..Z, - and _"));
+    gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
 
-	/* attach changed signal so that we can enable OK button when
-	   a proper name has been entered
-	*/
-	g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
+    /* attach changed signal so that we can enable OK button when
+        a proper name has been entered
+    */
+    g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
 
-	/* Host */
-	label = gtk_label_new (_("Host"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
-	
+    /* Host */
+    label = gtk_label_new (_("Host"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+
     host = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
     gtk_widget_set_tooltip_text (host,
@@ -193,7 +194,7 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 3, 2, 3);
     
     /* radio type */
-    label = gtk_label_new (_("Type"));
+    label = gtk_label_new (_("Radio type"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
     
@@ -223,14 +224,26 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 3, 3, 4);
     
     /* ptt */
-    ptt = gtk_check_button_new_with_label (_("Monitor PTT status"));
-    gtk_widget_set_tooltip_text (ptt,
-                                 _("If checked, the radio controller will monitor the status of"\
-                                 " the PTT and act accordingly. For example, the doppler tuning "\
-                                 "on an RX only radio will be suspended while PTT is active. This"\
-                                 " functionality is also required for radios that are used as both"\
-                                 " TX and RX (simplex)"));
-    gtk_table_attach_defaults (GTK_TABLE (table), ptt, 1, 4, 4, 5);
+    label = gtk_label_new (_("PTT status"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+
+    ptt = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (ptt), _("None"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (ptt), _("Read PTT"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (ptt), _("Read DCD"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), 0);
+    g_signal_connect (ptt, "changed", G_CALLBACK (ptt_changed), NULL);
+    gtk_widget_set_tooltip_markup (ptt,
+                            _("Select PTT type.\n\n"\
+                            "<b>None:</b>\nDon't read PTT status from this radio.\n\n"\
+                            "<b>Read PTT:</b>\nRead PTT status using get_ptt CAT command. "\
+                            "You have to check that your radio and hamlib supports this.\n\n"\
+                            "<b>Read DCD:</b>\nRead PTT status using get_dcd command. "\
+                            "This can be used if your radio does not support the read_ptt "\
+                            "CAT command and you have a special interface that can "\
+                            "read squelch status and send it via CTS."));
+    gtk_table_attach_defaults (GTK_TABLE (table), ptt, 1, 3, 4, 5);
     
     
     /* Downconverter LO frequency */
@@ -268,12 +281,12 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 6, 7);
     
     
-	if (conf->name != NULL)
-		update_widgets (conf);
+    if (conf->name != NULL)
+        update_widgets (conf);
 
-	gtk_widget_show_all (table);
+    gtk_widget_show_all (table);
 
-	return table;
+    return table;
 }
 
 
@@ -297,39 +310,8 @@ update_widgets (radio_conf_t *conf)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     
     /* ptt */
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), conf->ptt);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), conf->ptt);
 
-    /* rig type */
-    switch (conf->type) {
-    case RIG_TYPE_RX:
-        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
-        gtk_widget_set_sensitive (ptt, TRUE);
-        break;
-        
-    case RIG_TYPE_TX:
-        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
-        gtk_widget_set_sensitive (ptt, TRUE);
-        break;
-        
-    case RIG_TYPE_TRX:
-        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
-        /* force ptt to TRUE */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), TRUE);
-        gtk_widget_set_sensitive (ptt, FALSE);
-        break;
-        
-    case RIG_TYPE_DUPLEX:
-        gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
-        gtk_widget_set_sensitive (ptt, FALSE);
-        break;
-
-    default:
-        gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
-        gtk_widget_set_sensitive (ptt, TRUE);
-        break;
-    }
-    
-    
     /* lo down in MHz */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000.0);
     
@@ -354,6 +336,7 @@ clear_widgets ()
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), PTT_TYPE_NONE);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), FALSE);
 }
 
@@ -393,9 +376,9 @@ apply_changes         (radio_conf_t *conf)
     conf->type = gtk_combo_box_get_active (GTK_COMBO_BOX (type));
     
     /* ptt */
-    conf->ptt = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ptt));
+    conf->ptt = gtk_combo_box_get_active (GTK_COMBO_BOX (ptt));
     
-	return TRUE;
+    return TRUE;
 }
 
 
@@ -409,56 +392,56 @@ apply_changes         (radio_conf_t *conf)
 static void
 name_changed          (GtkWidget *widget, gpointer data)
 {
-	const gchar *text;
-	gchar *entry, *end, *j;
-	gint len, pos;
+    const gchar *text;
+    gchar *entry, *end, *j;
+    gint len, pos;
 
 
-	/* step 1: ensure that only valid characters are entered
-	   (stolen from xlog, tnx pg4i)
-	*/
-	entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
-	if ((len = g_utf8_strlen (entry, -1)) > 0)
-		{
-			end = entry + g_utf8_strlen (entry, -1);
-			for (j = entry; j < end; ++j)
-				{
-					switch (*j)
-						{
-						case '0' ... '9':
-						case 'a' ... 'z':
-						case 'A' ... 'Z':
-						case '-':
-						case '_':
-							break;
-						default:
-							gdk_beep ();
-							pos = gtk_editable_get_position (GTK_EDITABLE (widget));
-							gtk_editable_delete_text (GTK_EDITABLE (widget),
-													  pos, pos+1);
-							break;
-						}
-				}
-		}
+    /* step 1: ensure that only valid characters are entered
+        (stolen from xlog, tnx pg4i)
+    */
+    entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
+    if ((len = g_utf8_strlen (entry, -1)) > 0)
+        {
+            end = entry + g_utf8_strlen (entry, -1);
+            for (j = entry; j < end; ++j)
+                {
+                    switch (*j)
+                        {
+                        case '0' ... '9':
+                        case 'a' ... 'z':
+                        case 'A' ... 'Z':
+                        case '-':
+                        case '_':
+                            break;
+                        default:
+                            gdk_beep ();
+                            pos = gtk_editable_get_position (GTK_EDITABLE (widget));
+                            gtk_editable_delete_text (GTK_EDITABLE (widget),
+                                                        pos, pos+1);
+                            break;
+                        }
+                }
+        }
 
 
-	/* step 2: if name seems all right, enable OK button */
-	text = gtk_entry_get_text (GTK_ENTRY (widget));
+    /* step 2: if name seems all right, enable OK button */
+    text = gtk_entry_get_text (GTK_ENTRY (widget));
 
-	if (g_utf8_strlen (text, -1) > 0) {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   TRUE);
-	}
-	else {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   FALSE);
-	}
+    if (g_utf8_strlen (text, -1) > 0) {
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                            GTK_RESPONSE_OK,
+                                            TRUE);
+    }
+    else {
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                            GTK_RESPONSE_OK,
+                                            FALSE);
+    }
 }
 
 
-/** \brief Manage type changed signals.
+/** \brief Manage rig type changed signals.
  *  \param widget The GtkComboBox that received the signal.
  *  \param data User data (always NULL).
  *  
@@ -467,28 +450,31 @@ name_changed          (GtkWidget *widget, gpointer data)
 static void
 type_changed (GtkWidget *widget, gpointer data)
 {
-    switch (gtk_combo_box_get_active (GTK_COMBO_BOX (widget))) {
-    case RIG_TYPE_RX:
-        gtk_widget_set_sensitive (ptt, TRUE);
-        break;
-        
-    case RIG_TYPE_TX:
-        gtk_widget_set_sensitive (ptt, TRUE);
-        break;
-        
-    case RIG_TYPE_TRX:
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), TRUE);
-        gtk_widget_set_sensitive (ptt, FALSE);
-        break;
-        
-    case RIG_TYPE_DUPLEX:
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), FALSE);
-        gtk_widget_set_sensitive (ptt, FALSE);
-        break;
-
-    default:
-        gtk_widget_set_sensitive (ptt, TRUE);
-        break;
+    
+    if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TRX) {
+        if (gtk_combo_box_get_active (GTK_COMBO_BOX (ptt)) == PTT_TYPE_NONE) {
+            gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), PTT_TYPE_CAT);
+        }
     }
-
 }
+
+/** \brief Manage ptt type changed signals.
+ *  \param widget The GtkComboBox that received the signal.
+ *  \param data User data (always NULL).
+ *  
+ *  This function is called when the user selects a new ptt type.
+ */
+static void
+ptt_changed (GtkWidget *widget, gpointer data)
+{
+    
+    if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == PTT_TYPE_NONE) {
+        if (gtk_combo_box_get_active (GTK_COMBO_BOX (type)) == RIG_TYPE_TRX) {
+            /* not good, we need to have PTT for this type */
+            gtk_combo_box_set_active (GTK_COMBO_BOX (widget), PTT_TYPE_CAT);
+        }
+    }
+}
+
+
+

@@ -40,7 +40,7 @@
 #define KEY_LO          "LO"
 #define KEY_LOUP        "LO_UP"
 #define KEY_TYPE        "Type"
-#define KEY_PTT         "READ_PTT"
+#define KEY_PTT         "PTT"
 
 
 /** \brief Read radio configuration.
@@ -152,7 +152,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
         return FALSE;
     }
 
-    conf->ptt = g_key_file_get_boolean (cfg, GROUP, KEY_PTT, &error);
+    conf->ptt = g_key_file_get_integer (cfg, GROUP, KEY_PTT, &error);
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading radio conf from %s (%s)."),
@@ -202,7 +202,7 @@ void radio_conf_save (radio_conf_t *conf)
     g_key_file_set_double (cfg, GROUP, KEY_LO, conf->lo);
     g_key_file_set_double (cfg, GROUP, KEY_LOUP, conf->loup);
     g_key_file_set_integer (cfg, GROUP, KEY_TYPE, conf->type);
-    g_key_file_set_boolean (cfg, GROUP, KEY_PTT, conf->ptt);
+    g_key_file_set_integer (cfg, GROUP, KEY_PTT, conf->ptt);
     
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);
