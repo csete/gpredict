@@ -309,6 +309,9 @@ update_widgets (radio_conf_t *conf)
     else
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     
+    /* radio type */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (type), conf->type);
+    
     /* ptt */
     gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), conf->ptt);
 
