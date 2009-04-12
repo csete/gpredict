@@ -39,6 +39,7 @@
 #define KEY_DOWN_LOW    "DOWN_LOW"
 #define KEY_DOWN_HIGH   "DOWN_HIGH"
 #define KEY_INVERT      "INVERT"
+#define KEY_MODE        "MODE"
 
 /** \brief Read transponder data file.
  *  \param catnum The catalog number of the satellite to read transponders for.
@@ -138,6 +139,14 @@ GSList *read_transponders (guint catnum)
                     g_clear_error (&error);
                     trsp->invert = FALSE;
                 }
+                
+                trsp->mode = g_key_file_get_string (cfg, groups[i], KEY_MODE, &error);
+                if (error != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                  _("%s: Error reading %s:%s from %s"),
+                                  __FUNCTION__, groups[i], KEY_MODE, name);
+                    g_clear_error (&error);
+                }
 
                 /* add transponder to list */
                 trsplist = g_slist_append (trsplist, trsp);
@@ -182,6 +191,8 @@ void free_transponders (GSList *trsplist)
         trsp = (trsp_t *) g_slist_nth_data (trsplist, i);
         g_free (trsp->name);
         g_free (trsp);
+        if (trsp->mode)
+            g_free (trsp->mode);
     }
     g_slist_free (trsplist);
     trsplist = NULL;
