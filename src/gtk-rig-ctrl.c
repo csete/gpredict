@@ -111,6 +111,7 @@ static void store_sats (gpointer key, gpointer value, gpointer user_data);
 static gboolean have_conf (void);
 static void track_downlink (GtkRigCtrl *ctrl);
 static void track_uplink (GtkRigCtrl *ctrl);
+static gboolean is_rig_tx_capable (const gchar *confname);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -661,7 +662,6 @@ create_conf_widgets (GtkRigCtrl *ctrl)
         g_clear_error (&error);
     }
 
-    g_free (dirname);
     g_dir_close (dir);
 
     gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel), 0);
@@ -683,11 +683,37 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel2), _("None"));
     gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel2), 0);
     
+    dir = g_dir_open (dirname, 0, &error);
+    if (dir) {
+        /* read each .rig file */
+        while ((filename = g_dir_read_name (dir))) {
+            
+            if (g_strrstr (filename, ".rig")) {
+                
+                /* only add TX capable rigs */
+                vbuff = g_strsplit (filename, ".rig", 0);
+                if (is_rig_tx_capable (vbuff[0])) {
+                    gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel2), vbuff[0]);
+                }
+                g_strfreev (vbuff);
+            }
+        }
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to open hwconf dir (%s)"),
+                       __FILE__, __LINE__, error->message);
+        g_clear_error (&error);
+    }
+
+    g_free (dirname);
+    g_dir_close (dir);
+    
+    
     //gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel), 0);
     g_signal_connect (ctrl->DevSel2, "changed", G_CALLBACK (secondary_rig_selected_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->DevSel2, 1, 2, 1, 2);
-    
-    
+
     
     /* Engage button */
     ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
@@ -957,6 +983,8 @@ delay_changed_cb (GtkSpinButton *spin, gpointer data)
  * 
  * This function is called when the user selects a new rigor controller
  * device.
+ *
+ * BUG Doesn't prevent user to select same radio as in the secondary conf.
  */
 static void
 primary_rig_selected_cb (GtkComboBox *box, gpointer data)
@@ -996,8 +1024,6 @@ primary_rig_selected_cb (GtkComboBox *box, gpointer data)
             gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
             g_free (buff);
         }
-
-        //gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctrl->LO), ctrl->conf->lo/1.0e6);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -1026,6 +1052,7 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gchar      *buff;
+    gchar      *name1, *name2;
     
     
     /* free previous configuration */
@@ -1049,6 +1076,26 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
         return;
     }
     
+    /* ensure that selected secondary rig is not the same as the primary */
+    name1 = gtk_combo_box_get_active_text (GTK_COMBO_BOX (ctrl->DevSel));
+    name2 = gtk_combo_box_get_active_text (GTK_COMBO_BOX (ctrl->DevSel2));
+    if (!g_strcmp0 (name1, name2)) {
+        /* selected conf is the same as the primary one */
+        g_free (name1);
+        g_free (name2);
+        if (ctrl->conf != NULL) {
+            buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->loup/1.0e6);
+            gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
+            g_free (buff);
+        }
+        gtk_combo_box_set_active (GTK_COMBO_BOX (ctrl->DevSel2), 0);
+        
+        return;
+    }
+    
+    g_free (name1);
+    g_free (name2);
+    
     /* else load new device */
     ctrl->conf2 = g_try_new (radio_conf_t, 1);
     if (ctrl->conf2 == NULL) {
@@ -1065,14 +1112,9 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
                      _("Loaded new radio configuration %s"),
                      ctrl->conf2->name);
         /* update LO widgets */
-        //buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf2->lo/1.0e6);
-        //gtk_label_set_text (GTK_LABEL (ctrl->LoDown), buff);
-        //g_free (buff);
         buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf2->loup/1.0e6);
         gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
         g_free (buff);
-
-        //gtk_spin_button_set_value (GTK_SPIN_BUTTON (ctrl->LO), ctrl->conf->lo/1.0e6);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -1085,7 +1127,6 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
         g_free (ctrl->conf2);
         ctrl->conf2 = NULL;
     }
-
 }
 
 
@@ -1395,8 +1436,9 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     gboolean dialchanged = FALSE;
     
     /* get PTT status */
-    if (ctrl->engaged && ctrl->conf->ptt)
+    if (ctrl->engaged && ctrl->conf->ptt) {
         ptt = get_ptt (ctrl, ctrl->conf);
+    }
 
     /* Dial feedback:
        If radio device is engaged read frequency from radio and compare it to the
@@ -1545,12 +1587,225 @@ static void exec_duplex_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 {
-    //FIXME implement
+    gdouble tmpfreq,readfreq,satfreqd,satfrequ,doppler;
+    gboolean dialchanged = FALSE;
     
     /* Execute downlink cycle using ctrl->conf */
+    if (ctrl->engaged && (ctrl->lastrxf > 0.0)) {
+        
+        /* get frequency from receiver */
+        if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
+            /* error => use a passive value */
+            readfreq = ctrl->lastrxf;
+            ctrl->errcnt++;
+        }
+        else {
+            readfreq = ctrl->lastrxf;
+        }
+        
+        if (fabs (readfreq - ctrl->lastrxf) >= 1.0) {
+            dialchanged = TRUE;
+            
+            /* user might have altered radio frequency => update transponder knob */
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown), readfreq);
+            ctrl->lastrxf = readfreq;
+            
+            /* doppler shift; only if we are tracking */
+            if (ctrl->tracking) {
+                satfreqd = (readfreq + ctrl->conf->lo) /
+                           (1 - (ctrl->target->range_rate/299792.4580));
+            }
+            else {
+                satfreqd = readfreq + ctrl->conf->lo;
+            }
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), satfreqd);
+            
+            /* Update uplink if locked to downlink */
+            if (ctrl->trsplock) {
+                track_downlink (ctrl);
+            }
+        }
+    }
     
+    if (dialchanged) {
+        /* update uplink */
+        satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
+        if (ctrl->tracking) {
+            doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
+                                     satfrequ + doppler - ctrl->conf2->loup);
+        }
+        else {
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
+                                     satfrequ - ctrl->conf2->loup);
+        }
+
+        tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
+        
+        /* if device is engaged, send freq command to radio */
+        if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
+            if (set_freq_simplex (ctrl, ctrl->conf2, tmpfreq)) {
+                /* reset error counter */
+                ctrl->errcnt = 0;
+
+                /* The actual frequency migh be different from what we have set */
+                get_freq_simplex (ctrl, ctrl->conf2, &tmpfreq);
+                ctrl->lasttxf = tmpfreq;
+            }
+            else {
+                ctrl->errcnt++;
+            }
+        }
+        
+    }  /* dialchanged on downlink */
+    else {
+        /* if no dial change on downlink perform forward tracking on downlink
+           and execute uplink controller too.
+        */
     
-    /* Execute uplink cycle using ctrl->conf2 */
+        satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
+        if (ctrl->tracking) {
+            /* downlink */
+            doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
+                                     satfreqd + doppler - ctrl->conf->lo);
+        }
+        else {
+            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
+                                     satfreqd - ctrl->conf->lo);
+        }
+
+        tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
+
+        /* if device is engaged, send freq command to radio */
+        if ((ctrl->engaged) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
+            if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
+                /* reset error counter */
+                ctrl->errcnt = 0;
+            
+                /* The actual frequency migh be different from what we have set */
+                get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
+                ctrl->lastrxf = tmpfreq;
+            }
+            else {
+                ctrl->errcnt++;
+            }
+        }
+
+        /*** Now execute uplink controller ***/
+        
+        /* check if uplink dial has changed */
+        if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
+        
+            if (!get_freq_simplex (ctrl, ctrl->conf2, &readfreq)) {
+                /* error => use a passive value */
+                readfreq = ctrl->lasttxf;
+                ctrl->errcnt++;
+            }
+
+            else {
+                readfreq = ctrl->lasttxf;
+            }
+        
+            if (fabs (readfreq - ctrl->lasttxf) >= 1.0) {
+                dialchanged = TRUE;
+            
+                gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp), readfreq);
+                ctrl->lasttxf = readfreq;
+            
+                /* doppler shift; only if we are tracking */
+                if (ctrl->tracking) {
+                    satfrequ = (readfreq + ctrl->conf2->loup) /
+                                (1 - (ctrl->target->range_rate/299792.4580));
+                }
+                else {
+                    satfrequ = readfreq + ctrl->conf2->loup;
+                }
+                gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), satfrequ);
+
+                /* Follow with downlink if transponder is locked */
+                if (ctrl->trsplock) {
+                    track_uplink (ctrl);
+                }
+            }
+        }
+        
+        if (dialchanged) {  /* on uplink */
+            /* update downlink */
+            satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
+            if (ctrl->tracking) {
+                doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+                gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
+                                         satfreqd + doppler - ctrl->conf->lo);
+            }
+            else {
+                gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
+                                         satfreqd - ctrl->conf->lo);
+            }
+
+            tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
+        
+            /* if device is engaged, send freq command to radio */
+            if ((ctrl->engaged) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
+                if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
+                    /* reset error counter */
+                    ctrl->errcnt = 0;
+
+                    /* The actual frequency migh be different from what we have set */
+                    get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
+                    ctrl->lastrxf = tmpfreq;
+                }
+                else {
+                    ctrl->errcnt++;
+                }
+            }
+        } /* dialchanged on uplink */
+        else {
+            /* perform forward tracking on uplink */
+            satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
+            if (ctrl->tracking) {
+                doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+                gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
+                                         satfrequ + doppler - ctrl->conf2->loup);
+            }
+            else {
+                gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
+                                         satfrequ - ctrl->conf2->loup);
+            }
+
+            tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
+
+            /* if device is engaged, send freq command to radio */
+            if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
+                if (set_freq_simplex (ctrl, ctrl->conf2, tmpfreq)) {
+                    /* reset error counter */
+                    ctrl->errcnt = 0;
+
+                    /* The actual frequency migh be different from what we have set. */
+                    get_freq_simplex (ctrl, ctrl->conf2, &tmpfreq);
+                    ctrl->lasttxf = tmpfreq;
+                }
+                else {
+                    ctrl->errcnt++;
+                }
+            }
+        } /* else dialchange on uplink */
+
+    } /* else dialchange on downlink */
+
+    /* perform error count checking */
+    if (ctrl->errcnt >= MAX_ERROR_COUNT) {
+        /* disengage device */
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
+        ctrl->engaged = FALSE;
+        ctrl->errcnt = 0;
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                        _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                        __FUNCTION__, MAX_ERROR_COUNT);
+        
+        //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
+    }
+
 }
 
 
@@ -2071,4 +2326,44 @@ static void track_uplink (GtkRigCtrl *ctrl)
     
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), down);
     }
+}
+
+
+/** \brief Check whether a radio configuration is TX capable.
+ *  \param confname The name of the configuration to check.
+ *  \return TRUE if the radio is TX capable, FALSE otherwise.
+ */
+static gboolean is_rig_tx_capable (const gchar *confname)
+{
+    radio_conf_t *conf = NULL;
+    gboolean cantx = FALSE;
+    
+    conf = g_try_new (radio_conf_t, 1);
+    if (conf == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to allocate memory for radio config"),
+                     __FILE__, __LINE__);
+        return FALSE;
+    }
+    
+    /* load new configuration */
+    conf->name = g_strdup (confname);
+    if (radio_conf_read (conf)) {
+        cantx = (conf->type == RIG_TYPE_RX) ? FALSE : TRUE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Error reading radio configuration %s"),
+                     __FILE__, __LINE__, confname);
+        
+        
+        cantx = FALSE;
+    }
+ 
+    g_free (conf->name);
+    if (conf->host)
+        g_free (conf->host);
+    g_free (conf);
+    
+    return cantx;
 }
