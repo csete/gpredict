@@ -10,6 +10,23 @@
     * data/Makefile.am:
     Include some transponder data in distribution.
     
+    * src/sat-info.c:
+    Show transponder data when avaialble.
+    
+    * src/trsp-conf.[ch]:
+    Added mode string.
+    
+    * src/radio-conf.[ch]:
+    * src/sat-pref-rig.c:
+    * src/sat-pref-rig-editor.c:
+    Changed PTT parameter to integer to allow specifying the PTT type. This
+    allows reading PTT from classic ICOM radios if PTT (or SQL) is acquired
+    by special CAT interface feeding the signal to CTS (e.g. Microham USB II)
+    and using get_dcd().
+    
+    * src/gtk-rig-ctrl.c:
+    Implemented new PTT option.
+    
 
 2009-04-11 Alexandru Csete <oz9aec@gmail.com>
 
