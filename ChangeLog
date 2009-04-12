@@ -1,3 +1,44 @@
+2009-04-12 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    Implemented dual-rig controller. Tested with FT-817/IC-765 pair.
+    
+    * src/first-time.[ch]:
+    Added first-time checks for transponder data.
+    
+    * data/*.trsp:
+    * data/Makefile.am:
+    Include some transponder data in distribution.
+    
+
+2009-04-11 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/radio-conf.c:
+    Fixed bug that prevented correct saving of the LO frequencies.
+    
+
+2009-04-10 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-sat-module-tmg.c:
+    Fixed bug 2750119: Unable to set the time correctly in Time Controller.
+
+    * src/gtk-freq-knob.c:
+    Added signal that is emitted when the value of the knob changes.
+
+    * src/gtk-rig-ctrl.[ch]:
+    Added controls and functions for tuning and locking transponders.
+    Use new "freq-changed" signal of GtkFreqKnob widgets for tracking uplink and
+    downlink changes.
+    Added secondary device for uplink.
+    
+
+2009-04-08 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.[ch]:
+    Fixed crash when closing rig controller window with an active transponder
+    list.
+
+
 2009-04-04 Alexandru Csete <oz9aec.gmail.com>
 
     * src/gtk-rig-ctrl.[ch]:

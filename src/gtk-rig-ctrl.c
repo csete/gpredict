@@ -35,8 +35,7 @@
  * allows one control window per module.
  *
  * TODO Duplex TRX
- * TODO Separate uplink rig
- * TODO Transponder passband display somewhere
+ * TODO Transponder passband display somewhere, below Sat freq?
  * 
  */
 #include <gtk/gtk.h>

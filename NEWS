@@ -1,13 +1,36 @@
-Changes in version 1.0 (beta):
+Changes in version 1.0 (final):
+* Feature request 2691964: Doppler tuning on uplink (duplex TRX)
+* Feature request 2194621: Data recorder.
+* Windows: New installer instead of ZIP distribution.
+* Mac OS X package.
+
+
+Changes in version 1.0 beta 2 (TBD Apr 2009):
+
+- Improved implementation of the radio controller to include uplink.
+- Added transponder data management (GUI editor to be added in beta 3).
+- Feature request 2756021: Doppler tuning using two radios (duplex)
+- Feature request 2691963: Doppler tuning on uplink (Simplex TRX)
+- Feature request 2192404: Starting time for pass predictions.
+- Feature request 2347471: Use system goocanvas.
+- Feature request 2130940: Transponder info in gpredict.
+- Fixed bug 2139102: rigctld port.
+- Fixed bug 2130912: Crash when no rig or no rotator are defined.
+- Fixed bug 2130914: Gpredict doesn't handle PTT.
+- Fixed bug 2170642: Small error in user manual.
+- Fixed bug 2750119: Unable to set the time correctly in Time Controller.
+- Applied patch 2688135: Use GIO instead of libcurl for TLE download.
+  Note: This removes proxy management from gpredict.
+- Updated PDF user manual.
+- French translation.
+
+
+Changes in version 1.0 beta 1 (21 Sep 2008):
 
 - Radio doppler tuning via hamlibs rigctld.
 - Antenna rotator control via hamlibs rotctld.
 - User defined twilight threshold for predicting satellite visibility.
 - Feature request 1705375: Restore main window position and size.
-- Feature request 2192404: Starting time for pass predictions.
-* Feature request 2194621: Data recorder.
-- Feature request 2347471: Use system goocanvas.
-* Feature request 2130940: Transponder info in gpredict.
 - Fixed bug 1752908: New satellites in TLE files.
 - Fixed bug 1818144: No log file created at first execution.
 - Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
@@ -15,18 +38,10 @@ Changes in version 1.0 (beta):
 - Fixed bug 1704133: Blank lines in config file.
 - Fixed bug 1954664: Wrong overpass prediction.
 - Fixed bug 1880815: Null pointer dereference causes crash on startup.
-- Fixed bug 2139102: rigctld port.
-- Fixed bug 2130912: Crash when no rig or no rotator are defined.
-- Fixed bug 2170642: Small error in user manual.
-- Fixed bug 2750119: Unable to set the time correctly in Time Controller.
-- Applied patch 2688135: Use GIO instead of libcurl for TLE download.
-  Note: This removes proxy management from gpredict.
-x Windows: New installer instead of ZIP distribution.
 - Updated PDF user manual.
-- French translation.
 
 
-Changes in version 0.9.0 (2007-09-29):
+Changes in version 0.9.0 (29 Sep 2007):
 
 - Save satellite pass predictions to text file.
 - Fixed bug 1754801: Time Controller Window.
@@ -44,7 +59,7 @@ Changes in version 0.9.0 (2007-09-29):
   cases.
 
 
-Changes in version 0.8.0 (2007-06-03):
+Changes in version 0.8.0 (3 Jun 2007):
 
 - Implemented simulated real-time and manual time control in addition to
   real-time control. Each module has now its own time controller.
@@ -67,7 +82,7 @@ Changes in version 0.8.0 (2007-06-03):
 - Fixed more memory leaks.
 
 
-Changes in version 0.7.1 (2007-01-20):
+Changes in version 0.7.1 (20 Jan 2007):
 
 - Windows build files are now included in the source tarball.
 - Fixed a bug that prevented TLE to be updated under win32 (bug #1631803).
@@ -77,7 +92,7 @@ Changes in version 0.7.1 (2007-01-20):
 - Fixed a bug with missing arrows on win32 (bug #1580012).
 
 
-Changes in version 0.7.0 (2007-01-03):
+Changes in version 0.7.0 (3 Jan 2007):
 
 - Automatic update of TLE elements from network or local files. Gpredict can
   either notify the user when TLEs are getting too old, or perform automatic
@@ -90,7 +105,7 @@ Changes in version 0.7.0 (2007-01-03):
 - Polar and Az/El plots of passes in the single-pass dialogue.
 
 
-Changes in version 0.6.1 (2006-09-05):
+Changes in version 0.6.1 (5 Sep 2006):
 
 - Fixed bug that caused data to be installed into the wrong directory when using
   'make install DESTDIR=/foo' (patch #1552216 by Denis Leroy).
@@ -98,7 +113,7 @@ Changes in version 0.6.1 (2006-09-05):
   one or more modules were still using it (reported by Hamish Moffatt).
 
 
-Changes in version 0.6.0 (2006-09-04):
+Changes in version 0.6.0 (4 Sep 2006):
 
 - New module design: A module is no longer either a list or a map. A module can
   contain up to three views that can be any combination of map, list, polar and
@@ -130,25 +145,25 @@ Changes in version 0.6.0 (2006-09-04):
 - Draft User Manual and Design Document.
 
 
-Changes in version 0.5.3 (2006-01-19):
+Changes in version 0.5.3 (19 Jan 2006):
 
 - Fixed errors when compiling on NetBSD, thanks to Berndt VK5ABN. This patch
   actually fixes the i18n installation problems on the other platforms too.
 
 
-Changes in version 0.5.2 (2005-12-22):
+Changes in version 0.5.2 (22 Dec 2005):
 
 - Fixed errors when compiling without hamlib support.
 
 
-Changes in version 0.5.1 (2005-05-25):
+Changes in version 0.5.1 (25 May 2005):
 
 - Selecting local time instead of UTC will now show the correct time
   everywhere in the program, thanks to Thierry F4DWV.
 - Show pass duration in minutes in the "Upcoming Passes" dialog.
 
 
-Changes in version 0.5.0 (2005-01-29):
+Changes in version 0.5.0 (29 Jan 2005):
 
 - It is now possible to specify a minimum elevation for upcoming passes.
   Passes with max elevation below this limit will be discaded from the list.
@@ -176,7 +191,7 @@ Changes in version 0.5.0 (2005-01-29):
 - Show rise/set times in Sun and Moon frames.
 
 
-Changes in version 0.4.0 (2003-04-17):
+Changes in version 0.4.0 (17 Apr 2003):
 
 - TLE files are now stored in user's home directory in 
   $HOME/.gpredict/tle and can be updated automatically at run time.
@@ -203,7 +218,7 @@ Changes in version 0.4.0 (2003-04-17):
 - Fixed bugs #636186 and #633886.
 
 
-Changes in version 0.3.2 (2002-06-24):
+Changes in version 0.3.2 (24 Jun 2002):
 
 - No more crash when trying to open a deleted map file
   (bug #554785).
@@ -214,13 +229,13 @@ Changes in version 0.3.2 (2002-06-24):
 - Updated da.po (new strings not translated though).
 
 
-Changes in version 0.3.1 (2002-05-06):
+Changes in version 0.3.1 (6 May 2002):
 
 - Added danish translation.
 - Fixed bug #551224.
 
 
-Changes in version 0.3.0 (2002-04-13):
+Changes in version 0.3.0 (13 Apr 2002):
 
 - Configuration is stored using GConf instead of gnome-config.
 - Default prefix is no longer /usr/local/groundstation
@@ -241,7 +256,7 @@ Changes in version 0.3.0 (2002-04-13):
   (obsolete feature).
 
 
-Changes in version 0.2.2 (2001-10-23):
+Changes in version 0.2.2 (23 Oct 2001):
 
 - Program can read custom TLE files even at runtime.
 - New, very flexible functions to predict upcoming
@@ -261,7 +276,7 @@ Changes in version 0.2.1:
   use ~ in --prefix=...
 
 
-Changes in version 0.2.0 (2001-08-04):
+Changes in version 0.2.0 (4 Aug 2001):
 
 - Abandoned client/server interface and included
   tracking code from Predict directly into the
