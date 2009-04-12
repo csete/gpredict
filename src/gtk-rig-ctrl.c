@@ -1547,11 +1547,9 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
     if (ctrl->engaged) {
         if (get_ptt (ctrl, ctrl->conf) == TRUE) {
-            g_print ("TX CYCLE\n");
             exec_tx_cycle (ctrl);
         }
         else {
-            g_print ("RX CYCLE\n");
             exec_rx_cycle (ctrl);
         }
     }
