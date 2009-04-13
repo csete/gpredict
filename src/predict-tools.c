@@ -51,58 +51,58 @@
 void
 predict_calc (sat_t *sat, qth_t *qth, gdouble t)
 {
-	obs_set_t     obs_set;
-	geodetic_t    sat_geodetic;
-	geodetic_t    obs_geodetic;
-	double        age;
+    obs_set_t     obs_set;
+    geodetic_t    sat_geodetic;
+    geodetic_t    obs_geodetic;
+    double        age;
 
 
-	obs_geodetic.lon = qth->lon * de2ra;
-	obs_geodetic.lat = qth->lat * de2ra;
-	obs_geodetic.alt = qth->alt / 1000.0;
-	obs_geodetic.theta = 0;
+    obs_geodetic.lon = qth->lon * de2ra;
+    obs_geodetic.lat = qth->lat * de2ra;
+    obs_geodetic.alt = qth->alt / 1000.0;
+    obs_geodetic.theta = 0;
 
-	sat->jul_utc = t;
-	sat->tsince = (sat->jul_utc - sat->jul_epoch) * xmnpda;
+    sat->jul_utc = t;
+    sat->tsince = (sat->jul_utc - sat->jul_epoch) * xmnpda;
 
-	/* call the norad routines according to the deep-space flag */
-	if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
-		SDP4 (sat, sat->tsince);
-	else
-		SGP4 (sat, sat->tsince);
+    /* call the norad routines according to the deep-space flag */
+    if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
+        SDP4 (sat, sat->tsince);
+    else
+        SGP4 (sat, sat->tsince);
 
-	Convert_Sat_State (&sat->pos, &sat->vel);
+    Convert_Sat_State (&sat->pos, &sat->vel);
 
-	/* get the velocity of the satellite */
-	Magnitude (&sat->vel);
-	sat->velo = sat->vel.w;
-	Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
-	Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
+    /* get the velocity of the satellite */
+    Magnitude (&sat->vel);
+    sat->velo = sat->vel.w;
+    Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
+    Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
 
-	while (sat_geodetic.lon < -pi)
-		sat_geodetic.lon += twopi;
-	
-	while (sat_geodetic.lon > (pi))
-		sat_geodetic.lon -= twopi;
+    while (sat_geodetic.lon < -pi)
+        sat_geodetic.lon += twopi;
 
-	sat->az = Degrees (obs_set.az);
-	sat->el = Degrees (obs_set.el);
-	sat->range = obs_set.range;
-	sat->range_rate = obs_set.range_rate;
-	sat->ssplat = Degrees (sat_geodetic.lat);
-	sat->ssplon = Degrees (sat_geodetic.lon);
-	sat->alt = sat_geodetic.alt;
-	sat->ma = Degrees (sat->phase);
-	sat->ma *= 256.0/360.0;
-	sat->phase = Degrees (sat->phase);
+    while (sat_geodetic.lon > (pi))
+        sat_geodetic.lon -= twopi;
 
-	/* same formulas, but the one from predict is nicer */
-	//sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
-	sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
-	age = sat->jul_utc - sat->jul_epoch;
-	sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
-				   age * sat->tle.bstar * ae) * age +
-				  sat->tle.xmo/twopi) + sat->tle.revnum - 1;
+    sat->az = Degrees (obs_set.az);
+    sat->el = Degrees (obs_set.el);
+    sat->range = obs_set.range;
+    sat->range_rate = obs_set.range_rate;
+    sat->ssplat = Degrees (sat_geodetic.lat);
+    sat->ssplon = Degrees (sat_geodetic.lon);
+    sat->alt = sat_geodetic.alt;
+    sat->ma = Degrees (sat->phase);
+    sat->ma *= 256.0/360.0;
+    sat->phase = Degrees (sat->phase);
+
+    /* same formulas, but the one from predict is nicer */
+    //sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
+    sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
+    age = sat->jul_utc - sat->jul_epoch;
+    sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
+                    age * sat->tle.bstar * ae) * age +
+                    sat->tle.xmo/twopi) + sat->tle.revnum - 1;
 }
 
 
@@ -125,84 +125,84 @@ predict_calc (sat_t *sat, qth_t *qth, gdouble t)
 gdouble
 find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 {
-	gdouble t = start;
-	gdouble aostime = 0.0;
+    gdouble t = start;
+    gdouble aostime = 0.0;
 
 
-	/* make sure current sat values are
-	   in sync with the time
-	*/
-	predict_calc (sat, qth, start);
+    /* make sure current sat values are
+        in sync with the time
+    */
+    predict_calc (sat, qth, start);
 
-	/* check whether satellite has aos */
-	if ((sat->otype == ORBIT_TYPE_GEO) || 
-		(sat->otype == ORBIT_TYPE_DECAYED) ||
-	    !has_aos (sat, qth)) {
+    /* check whether satellite has aos */
+    if ((sat->otype == ORBIT_TYPE_GEO) || 
+        (sat->otype == ORBIT_TYPE_DECAYED) ||
+        !has_aos (sat, qth)) {
 
-		return 0.0;
+        return 0.0;
 
-	}
-
-
-	if (sat->el > 0.0)
-		t = find_los (sat, qth, start, maxdt) + 0.014; // +20 min
-
-	/* invalid time (potentially returned by find_los) */
-	if (t < 0.1)
-		return 0.0;
-
-	/* update satellite data */
-	predict_calc (sat, qth, t);
-
-	/* use upper time limit */
-	if (maxdt > 0.0) {
-
-		/* coarse time steps */
-		while ((sat->el < -1.0) && (t <= (start + maxdt))) {
-			t -= 0.00035 * (sat->el * ((sat->alt / 8400.0) + 0.46) - 2.0);
-			predict_calc (sat, qth, t);
-		}
-
-		/* fine steps */
-		while ((aostime == 0.0) && (t <= (start + maxdt))) {
-
-			if (fabs (sat->el) < 0.005) {
-				aostime = t;
-			}
-			else {
-				t -= sat->el * sqrt (sat->alt) / 530000.0;
-				predict_calc (sat, qth, t);
-			}
-
-		}
-
-	}
-	/* don't use upper time limit */
-	else {
-
-		/* coarse time steps */
-		while (sat->el < -1.0) {
-
-			t -= 0.00035 * (sat->el * ((sat->alt / 8400.0) + 0.46) - 2.0);
-			predict_calc (sat, qth, t);
-		}
-
-		/* fine steps */
-		while (aostime == 0.0) {
-
-			if (fabs (sat->el) < 0.005) {
-				aostime = t;
-			}
-			else {
-				t -= sat->el * sqrt (sat->alt) / 530000.0;
-				predict_calc (sat, qth, t);
-			}
-
-		}
-	}
+    }
 
 
-	return aostime;
+    if (sat->el > 0.0)
+        t = find_los (sat, qth, start, maxdt) + 0.014; // +20 min
+
+    /* invalid time (potentially returned by find_los) */
+    if (t < 0.1)
+        return 0.0;
+
+    /* update satellite data */
+    predict_calc (sat, qth, t);
+
+    /* use upper time limit */
+    if (maxdt > 0.0) {
+
+        /* coarse time steps */
+        while ((sat->el < -1.0) && (t <= (start + maxdt))) {
+            t -= 0.00035 * (sat->el * ((sat->alt / 8400.0) + 0.46) - 2.0);
+            predict_calc (sat, qth, t);
+        }
+
+        /* fine steps */
+        while ((aostime == 0.0) && (t <= (start + maxdt))) {
+
+            if (fabs (sat->el) < 0.005) {
+                aostime = t;
+            }
+            else {
+                t -= sat->el * sqrt (sat->alt) / 530000.0;
+                predict_calc (sat, qth, t);
+            }
+
+        }
+
+    }
+    /* don't use upper time limit */
+    else {
+
+        /* coarse time steps */
+        while (sat->el < -1.0) {
+
+            t -= 0.00035 * (sat->el * ((sat->alt / 8400.0) + 0.46) - 2.0);
+            predict_calc (sat, qth, t);
+        }
+
+        /* fine steps */
+        while (aostime == 0.0) {
+
+            if (fabs (sat->el) < 0.005) {
+                aostime = t;
+            }
+            else {
+                t -= sat->el * sqrt (sat->alt) / 530000.0;
+                predict_calc (sat, qth, t);
+            }
+
+        }
+    }
+
+
+    return aostime;
 }
 
 
@@ -227,75 +227,75 @@ find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 gdouble
 find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 {
-	gdouble t = start;
-	gdouble lostime = 0.0;
-
-	
-	predict_calc (sat, qth, start);
-
-	/* check whether satellite has aos */
-	if ((sat->otype == ORBIT_TYPE_GEO) || 
-		(sat->otype == ORBIT_TYPE_DECAYED) ||
-	    !has_aos (sat, qth)) {
-
-		return 0.0;
-
-	}
+    gdouble t = start;
+    gdouble lostime = 0.0;
 
 
-	if (sat->el < 0.0)
-		t = find_aos (sat, qth, start, maxdt) + 0.001; // +1.5 min
+    predict_calc (sat, qth, start);
 
-	/* invalid time (potentially returned by find_aos) */
-	if (t < 0.01)
-		return 0.0;
+    /* check whether satellite has aos */
+    if ((sat->otype == ORBIT_TYPE_GEO) || 
+        (sat->otype == ORBIT_TYPE_DECAYED) ||
+        !has_aos (sat, qth)) {
 
-	/* update satellite data */
-	predict_calc (sat, qth, t);
+        return 0.0;
+
+    }
 
 
-	/* use upper time limit */
-	if (maxdt > 0.0) {
+    if (sat->el < 0.0)
+        t = find_aos (sat, qth, start, maxdt) + 0.001; // +1.5 min
 
-		/* coarse steps */
-		while ((sat->el >= 1.0) && (t <= (start + maxdt))) {
-			t += cos((sat->el - 1.0) * de2ra) * sqrt(sat->alt) / 25000.0;
-			predict_calc (sat, qth, t);
-		}
+    /* invalid time (potentially returned by find_aos) */
+    if (t < 0.01)
+        return 0.0;
 
-		/* fine steps */
-		while ((lostime == 0.0) && (t <= (start + maxdt)))  {
-			
-			t += sat->el * sqrt(sat->alt)/502500.0;
-			predict_calc (sat, qth, t);
-			
-			if (fabs(sat->el) < 0.005)
-				lostime = t;
-		}
-	}
+    /* update satellite data */
+    predict_calc (sat, qth, t);
 
-	/* don't use upper limit */
-	else {
 
-		/* coarse steps */
-		while (sat->el >= 1.0) {
-			t += cos((sat->el - 1.0) * de2ra) * sqrt(sat->alt) / 25000.0;
-			predict_calc (sat, qth, t);
-		}
+    /* use upper time limit */
+    if (maxdt > 0.0) {
 
-		/* fine steps */
-		while (lostime == 0.0) {
-			
-			t += sat->el * sqrt(sat->alt)/502500.0;
-			predict_calc (sat, qth, t);
-			
-			if (fabs(sat->el) < 0.005)
-				lostime = t;
-		}
-	}
-	
+        /* coarse steps */
+        while ((sat->el >= 1.0) && (t <= (start + maxdt))) {
+            t += cos((sat->el - 1.0) * de2ra) * sqrt(sat->alt) / 25000.0;
+            predict_calc (sat, qth, t);
+        }
 
-	return lostime;
+        /* fine steps */
+        while ((lostime == 0.0) && (t <= (start + maxdt)))  {
+            
+            t += sat->el * sqrt(sat->alt)/502500.0;
+            predict_calc (sat, qth, t);
+            
+            if (fabs(sat->el) < 0.005)
+                lostime = t;
+        }
+    }
+
+    /* don't use upper limit */
+    else {
+
+        /* coarse steps */
+        while (sat->el >= 1.0) {
+            t += cos((sat->el - 1.0) * de2ra) * sqrt(sat->alt) / 25000.0;
+            predict_calc (sat, qth, t);
+        }
+
+        /* fine steps */
+        while (lostime == 0.0) {
+            
+            t += sat->el * sqrt(sat->alt)/502500.0;
+            predict_calc (sat, qth, t);
+            
+            if (fabs(sat->el) < 0.005)
+                lostime = t;
+        }
+    }
+
+
+    return lostime;
 }
 
 
@@ -311,29 +311,29 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 gdouble
 find_prev_aos (sat_t *sat, qth_t *qth, gdouble start)
 {
-	gdouble aostime = start;
+    gdouble aostime = start;
 
 
-	/* make sure current sat values are
-	   in sync with the time
-	*/
-	predict_calc (sat, qth, start);
+    /* make sure current sat values are
+        in sync with the time
+    */
+    predict_calc (sat, qth, start);
 
-	/* check whether satellite has aos */
-	if ((sat->otype == ORBIT_TYPE_GEO) || 
-		(sat->otype == ORBIT_TYPE_DECAYED) ||
-	    !has_aos (sat, qth)) {
+    /* check whether satellite has aos */
+    if ((sat->otype == ORBIT_TYPE_GEO) || 
+        (sat->otype == ORBIT_TYPE_DECAYED) ||
+        !has_aos (sat, qth)) {
 
-		return 0.0;
+        return 0.0;
 
-	}
+    }
 
-	while (sat->el >= 0.0) {
-		aostime -= 0.0005; // 0.75 min
-		predict_calc (sat, qth, aostime);
-	}
+    while (sat->el >= 0.0) {
+        aostime -= 0.0005; // 0.75 min
+        predict_calc (sat, qth, aostime);
+    }
 
-	return aostime;
+    return aostime;
 }
 
 /** \brief Predict the next pass.
@@ -355,14 +355,14 @@ find_prev_aos (sat_t *sat, qth_t *qth, gdouble start)
 pass_t *
 get_next_pass   (sat_t *sat, qth_t *qth, gdouble maxdt)
 {
-	gdouble now;
+    gdouble now;
 
 
-	/* get the current time and call
-	   the get_pass function */
-	now = get_current_daynum ();
+    /* get the current time and call
+        the get_pass function */
+    now = get_current_daynum ();
 
-	return get_pass (sat, qth, now, maxdt);
+    return get_pass (sat, qth, now, maxdt);
 }
 
 
@@ -385,14 +385,14 @@ get_next_pass   (sat_t *sat, qth_t *qth, gdouble maxdt)
 GSList *
 get_next_passes (sat_t *sat, qth_t *qth, gdouble maxdt, guint num)
 {
-	gdouble now;
+    gdouble now;
 
 
-	/* get the current time and call
-	   the get_pass function */
-	now = get_current_daynum ();
+    /* get the current time and call
+        the get_pass function */
+    now = get_current_daynum ();
 
-	return get_passes (sat, qth, now, maxdt, num);
+    return get_passes (sat, qth, now, maxdt, num);
 }
 
 
@@ -420,165 +420,165 @@ get_next_passes (sat_t *sat, qth_t *qth, gdouble maxdt, guint num)
 pass_t *
 get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 {
-	gdouble        aos = 0.0;    /* time of AOS */
-	gdouble        tca = 0.0;    /* time of TCA */
-	gdouble        los = 0.0;    /* time of LOS */
-	gdouble        dt = 0.0;     /* time diff */
-	gdouble        step = 0.0;   /* time step */
-	gdouble        t0 = start;
-	gdouble        t;            /* current time counter */
-	gdouble        tres = 0.0; /* required time resolution */
-	gdouble        max_el = 0.0; /* maximum elevation */
-	pass_t        *pass = NULL;
-	pass_detail_t *detail = NULL;
-	gboolean       done = FALSE;
-	guint          iter = 0;      /* number of iterations */
+    gdouble        aos = 0.0;    /* time of AOS */
+    gdouble        tca = 0.0;    /* time of TCA */
+    gdouble        los = 0.0;    /* time of LOS */
+    gdouble        dt = 0.0;     /* time diff */
+    gdouble        step = 0.0;   /* time step */
+    gdouble        t0 = start;
+    gdouble        t;            /* current time counter */
+    gdouble        tres = 0.0; /* required time resolution */
+    gdouble        max_el = 0.0; /* maximum elevation */
+    pass_t        *pass = NULL;
+    pass_detail_t *detail = NULL;
+    gboolean       done = FALSE;
+    guint          iter = 0;      /* number of iterations */
 
-	/* FIXME: watchdog */
+    /* FIXME: watchdog */
 
-	/* get time resolution; sat-cfg stores it in seconds */
-	tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
+    /* get time resolution; sat-cfg stores it in seconds */
+    tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
 
-	/* loop until we find a pass with elevation > SAT_CFG_INT_PRED_MIN_EL
-	   or we run out of time
-	   FIXME: we should have a safety break
-	*/
-	while (!done) {
+    /* loop until we find a pass with elevation > SAT_CFG_INT_PRED_MIN_EL
+        or we run out of time
+        FIXME: we should have a safety break
+    */
+    while (!done) {
 
-		aos = find_aos (sat, qth, t0, maxdt);
+        aos = find_aos (sat, qth, t0, maxdt);
 
-		/* aos = 0.0 means no aos */
-		if (aos == 0.0) {
-			done = TRUE;
-		}
+        /* aos = 0.0 means no aos */
+        if (aos == 0.0) {
+            done = TRUE;
+        }
 
-		/* check whether we are within time limits;
-		   maxdt = 0 mean no time limit.
-		*/
-		else if ((maxdt > 0.0) && (aos > (start + maxdt)) ) {
-			done = TRUE;
-		}
-		else {
-			los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
-			dt = los - aos;
-	
-			/* get time step, which will give us the max number of entries */
-			step = dt / sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
-	
-			/* but if this is smaller than the required resolution
-			   we go with the resolution
-			*/
-			if (step < tres)
-				step = tres;
+        /* check whether we are within time limits;
+            maxdt = 0 mean no time limit.
+        */
+        else if ((maxdt > 0.0) && (aos > (start + maxdt)) ) {
+            done = TRUE;
+        }
+        else {
+            los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
+            dt = los - aos;
 
-			/* create a pass_t entry; FIXME: g_try_new in 2.8 */
-			pass = g_new (pass_t, 1);
-			
-			pass->aos = aos;
-			pass->los = los;
-			pass->max_el = 0.0;
-			pass->aos_az = 0.0;
-			pass->los_az = 0.0;
-			pass->maxel_az = 0.0;
-			pass->vis[0] = '-';
-			pass->vis[1] = '-';
-			pass->vis[2] = '-';
-			pass->vis[3] = 0;
-			pass->satname = g_strdup (sat->tle.sat_name);
-			pass->details = NULL;
+            /* get time step, which will give us the max number of entries */
+            step = dt / sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
 
-			/* iterate over each time step */
-			for (t = pass->aos; t <= pass->los; t += step) {
-			
-				/* calculate satellite data */
-				predict_calc (sat, qth, t);
+            /* but if this is smaller than the required resolution
+                we go with the resolution
+            */
+            if (step < tres)
+                step = tres;
 
-				/* in the first iter we want to store
-				   pass->aos_az
-				*/
-				if (t == pass->aos) {
-					pass->aos_az = sat->az;
-					pass->orbit = sat->orbit;
-				}
+            /* create a pass_t entry; FIXME: g_try_new in 2.8 */
+            pass = g_new (pass_t, 1);
+            
+            pass->aos = aos;
+            pass->los = los;
+            pass->max_el = 0.0;
+            pass->aos_az = 0.0;
+            pass->los_az = 0.0;
+            pass->maxel_az = 0.0;
+            pass->vis[0] = '-';
+            pass->vis[1] = '-';
+            pass->vis[2] = '-';
+            pass->vis[3] = 0;
+            pass->satname = g_strdup (sat->tle.sat_name);
+            pass->details = NULL;
 
-				/* append details to sat->details */
-				detail = g_new (pass_detail_t, 1);
-				detail->time = t;
-				detail->pos.x = sat->pos.x;
-				detail->pos.y = sat->pos.y;
-				detail->pos.z = sat->pos.z;
-				detail->pos.w = sat->pos.w;
-				detail->vel.x = sat->vel.x;
-				detail->vel.y = sat->vel.y;
-				detail->vel.z = sat->vel.z;
-				detail->vel.w = sat->vel.w;
-				detail->velo = sat->velo;
-				detail->az = sat->az;
-				detail->el = sat->el;
-				detail->range = sat->range;
-				detail->range_rate = sat->range_rate;
-				detail->lat = sat->ssplat;
-				detail->lon = sat->ssplon;
-				detail->alt = sat->alt;
-				detail->ma = sat->ma;
-				detail->phase = sat->phase;
-				detail->footprint = sat->footprint;
-				detail->orbit = sat->orbit;
-				detail->vis = get_sat_vis (sat, qth, t);
+            /* iterate over each time step */
+            for (t = pass->aos; t <= pass->los; t += step) {
+            
+                /* calculate satellite data */
+                predict_calc (sat, qth, t);
 
-				/* also store visibility "bit" */
-				switch (detail->vis) {
-				case SAT_VIS_VISIBLE:
-					pass->vis[0] = 'V';
-					break;
-				case SAT_VIS_DAYLIGHT:
-					pass->vis[1] = 'D';
-					break;
-				case SAT_VIS_ECLIPSED:
-					pass->vis[2] = 'E';
-					break;
-				default:
-					break;
-				}
+                /* in the first iter we want to store
+                    pass->aos_az
+                */
+                if (t == pass->aos) {
+                    pass->aos_az = sat->az;
+                    pass->orbit = sat->orbit;
+                }
 
-				pass->details = g_slist_prepend (pass->details, detail);
+                /* append details to sat->details */
+                detail = g_new (pass_detail_t, 1);
+                detail->time = t;
+                detail->pos.x = sat->pos.x;
+                detail->pos.y = sat->pos.y;
+                detail->pos.z = sat->pos.z;
+                detail->pos.w = sat->pos.w;
+                detail->vel.x = sat->vel.x;
+                detail->vel.y = sat->vel.y;
+                detail->vel.z = sat->vel.z;
+                detail->vel.w = sat->vel.w;
+                detail->velo = sat->velo;
+                detail->az = sat->az;
+                detail->el = sat->el;
+                detail->range = sat->range;
+                detail->range_rate = sat->range_rate;
+                detail->lat = sat->ssplat;
+                detail->lon = sat->ssplon;
+                detail->alt = sat->alt;
+                detail->ma = sat->ma;
+                detail->phase = sat->phase;
+                detail->footprint = sat->footprint;
+                detail->orbit = sat->orbit;
+                detail->vis = get_sat_vis (sat, qth, t);
 
-				/* store elevation if greater than the
-				   previously stored one
-				*/
-				if (sat->el > max_el) {
-					max_el = sat->el;
-					tca = t;
-					pass->maxel_az = sat->az;
-				}
+                /* also store visibility "bit" */
+                switch (detail->vis) {
+                case SAT_VIS_VISIBLE:
+                    pass->vis[0] = 'V';
+                    break;
+                case SAT_VIS_DAYLIGHT:
+                    pass->vis[1] = 'D';
+                    break;
+                case SAT_VIS_ECLIPSED:
+                    pass->vis[2] = 'E';
+                    break;
+                default:
+                    break;
+                }
 
-				/*	g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
-				/*		 t, sat->az, sat->el, max_el); */
-			}
+                pass->details = g_slist_prepend (pass->details, detail);
 
-			pass->details = g_slist_reverse (pass->details);
+                /* store elevation if greater than the
+                    previously stored one
+                */
+                if (sat->el > max_el) {
+                    max_el = sat->el;
+                    tca = t;
+                    pass->maxel_az = sat->az;
+                }
 
-			/* store los_az, max_el and tca */
-			pass->los_az = sat->az;
-			pass->max_el = max_el;
-			pass->tca    = tca;
+                /*	g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
+                /*		 t, sat->az, sat->el, max_el); */
+            }
 
-			/* check whether this pass is good */
-			if (max_el >= sat_cfg_get_int (SAT_CFG_INT_PRED_MIN_EL)) {
-				done = TRUE;
-			}
-			else {
-				done = FALSE;
-				t0 = los + 0.014; // +20 min
-				free_pass (pass);
-				pass = NULL;
-			}
+            pass->details = g_slist_reverse (pass->details);
 
-			iter++;
-		}
-	}
+            /* store los_az, max_el and tca */
+            pass->los_az = sat->az;
+            pass->max_el = max_el;
+            pass->tca    = tca;
 
-	return pass;
+            /* check whether this pass is good */
+            if (max_el >= sat_cfg_get_int (SAT_CFG_INT_PRED_MIN_EL)) {
+                done = TRUE;
+            }
+            else {
+                done = FALSE;
+                t0 = los + 0.014; // +20 min
+                free_pass (pass);
+                pass = NULL;
+            }
+
+            iter++;
+        }
+    }
+
+    return pass;
 }
 
 
@@ -606,45 +606,44 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 GSList *
 get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
 {
-	GSList *passes = NULL;
-	pass_t *pass = NULL;
-	guint   i;
-	gdouble t;
+    GSList *passes = NULL;
+    pass_t *pass = NULL;
+    guint   i;
+    gdouble t;
 
-	/* if no number has been specified
-	   set it to something big */
-	if (num == 0)
-		num = 100;
+    /* if no number has been specified
+        set it to something big */
+    if (num == 0)
+        num = 100;
 
-	t = start;
+    t = start;
 
-	for (i = 0; i < num; i++) {
+    for (i = 0; i < num; i++) {
 
-		pass = get_pass (sat, qth, t, maxdt);
-        g_print ("%s: %d\n", __FUNCTION__, i);
+        pass = get_pass (sat, qth, t, maxdt);
 
-		if (pass != NULL) {
-			passes = g_slist_prepend (passes, pass);
-			t = pass->los + 0.014; // +20 min
+        if (pass != NULL) {
+            passes = g_slist_prepend (passes, pass);
+            t = pass->los + 0.014; // +20 min
 
-			/* if maxdt > 0.0 check whether we have reached t = start+maxdt
-			   if yes finish predictions
-			*/
-			if ((maxdt > 0.0) && (t >= (start+maxdt))) {
-				i = num;
-			}
-		}
-		else {
-			/* we can't get any more passes */
-			i = num;
-		}
+            /* if maxdt > 0.0 check whether we have reached t = start+maxdt
+                if yes finish predictions
+            */
+            if ((maxdt > 0.0) && (t >= (start+maxdt))) {
+                i = num;
+            }
+        }
+        else {
+            /* we can't get any more passes */
+            i = num;
+        }
 
-	}
+    }
 
-	if (passes != NULL)
-		passes = g_slist_reverse (passes);
+    if (passes != NULL)
+        passes = g_slist_reverse (passes);
 
-	return passes;
+    return passes;
 }
 
 
@@ -652,85 +651,85 @@ get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
 pass_t *
 copy_pass         (pass_t *pass)
 {
-	pass_t *new;
+    pass_t *new;
 
-	new = g_try_new (pass_t, 1);
+    new = g_try_new (pass_t, 1);
 
-	if (new != NULL) {
-		new->aos = pass->aos;
-		new->los = pass->los;
-		new->max_el = pass->max_el;
-		new->aos_az = pass->aos_az;
-		new->los_az = pass->los_az;
-		new->orbit = pass->orbit;
-		new->maxel_az = pass->maxel_az;
-		new->vis[0] = pass->vis[0];
-		new->vis[1] = pass->vis[1];
-		new->vis[2] = pass->vis[2];
-		new->vis[3] = pass->vis[3];
-		new->details = copy_pass_details (pass->details);
-		
-		if (pass->satname != NULL)
-			new->satname = g_strdup (pass->satname);
-		else
-			new->satname = NULL;
-	}
+    if (new != NULL) {
+        new->aos = pass->aos;
+        new->los = pass->los;
+        new->max_el = pass->max_el;
+        new->aos_az = pass->aos_az;
+        new->los_az = pass->los_az;
+        new->orbit = pass->orbit;
+        new->maxel_az = pass->maxel_az;
+        new->vis[0] = pass->vis[0];
+        new->vis[1] = pass->vis[1];
+        new->vis[2] = pass->vis[2];
+        new->vis[3] = pass->vis[3];
+        new->details = copy_pass_details (pass->details);
+        
+        if (pass->satname != NULL)
+            new->satname = g_strdup (pass->satname);
+        else
+            new->satname = NULL;
+    }
 
-	return new;
+    return new;
 }
 
 
 GSList *
 copy_pass_details (GSList *details)
 {
-	GSList *new = NULL;
-	guint   i,n;
+    GSList *new = NULL;
+    guint   i,n;
 
 
-	n = g_slist_length (details);
-	for (i = 0; i < n; i++) {
-		new = g_slist_prepend (new, 
-				       copy_pass_detail (PASS_DETAIL (g_slist_nth_data (details, i))));
-	}
+    n = g_slist_length (details);
+    for (i = 0; i < n; i++) {
+        new = g_slist_prepend (new, 
+                        copy_pass_detail (PASS_DETAIL (g_slist_nth_data (details, i))));
+    }
 
-	new = g_slist_reverse (new);
+    new = g_slist_reverse (new);
 
-	return new;
+    return new;
 }
 
 
 pass_detail_t *
 copy_pass_detail  (pass_detail_t *detail)
 {
-	pass_detail_t *new;
+    pass_detail_t *new;
 
-	/* create a pass_t entry; FIXME: g_try_new in 2.8 */
-	new = g_new (pass_detail_t, 1);
+    /* create a pass_t entry; FIXME: g_try_new in 2.8 */
+    new = g_new (pass_detail_t, 1);
 
-	new->time = detail->time;
-	new->pos.x = detail->pos.x;
-	new->pos.y = detail->pos.y;
-	new->pos.z = detail->pos.z;
-	new->pos.w = detail->pos.w;
-	new->vel.x = detail->vel.x;
-	new->vel.y = detail->vel.y;
-	new->vel.z = detail->vel.z;
-	new->vel.w = detail->vel.w;
-	new->velo = detail->velo;
-	new->az = detail->az;
-	new->el = detail->el;
-	new->range = detail->range;
-	new->range_rate = detail->range_rate;
-	new->lat = detail->lat;
-	new->lon = detail->lon;
-	new->alt = detail->alt;
-	new->ma = detail->ma;
-	new->phase = detail->phase;
-	new->footprint = detail->footprint;
-	new->orbit = detail->orbit;
-	new->vis = detail->vis;
+    new->time = detail->time;
+    new->pos.x = detail->pos.x;
+    new->pos.y = detail->pos.y;
+    new->pos.z = detail->pos.z;
+    new->pos.w = detail->pos.w;
+    new->vel.x = detail->vel.x;
+    new->vel.y = detail->vel.y;
+    new->vel.z = detail->vel.z;
+    new->vel.w = detail->vel.w;
+    new->velo = detail->velo;
+    new->az = detail->az;
+    new->el = detail->el;
+    new->range = detail->range;
+    new->range_rate = detail->range_rate;
+    new->lat = detail->lat;
+    new->lon = detail->lon;
+    new->alt = detail->alt;
+    new->ma = detail->ma;
+    new->phase = detail->phase;
+    new->footprint = detail->footprint;
+    new->orbit = detail->orbit;
+    new->vis = detail->vis;
 
-	return new;
+    return new;
 }
 
 
@@ -739,15 +738,15 @@ copy_pass_detail  (pass_detail_t *detail)
 void
 free_pass   (pass_t *pass)
 {
-	free_pass_details (pass->details);
+    free_pass_details (pass->details);
 
-	if (pass->satname != NULL) {
-		g_free (pass->satname);
-		pass->satname = NULL;
-	}
+    if (pass->satname != NULL) {
+        g_free (pass->satname);
+        pass->satname = NULL;
+    }
 
-	g_free (pass);
-	pass = NULL;
+    g_free (pass);
+    pass = NULL;
 }
 
 
@@ -755,23 +754,23 @@ free_pass   (pass_t *pass)
 void
 free_passes (GSList *passes)
 {
-	guint n,i;
-	gpointer pass;
+    guint n,i;
+    gpointer pass;
 
-	n = g_slist_length (passes);
+    n = g_slist_length (passes);
 
-	for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
 
-		pass = g_slist_nth_data (passes, i);
+        pass = g_slist_nth_data (passes, i);
 
-		/* free element data */
-		free_pass (PASS (pass));
+        /* free element data */
+        free_pass (PASS (pass));
 
-	}
+    }
 
-	/* now free the list elements */
-	g_slist_free (passes);
-	passes = NULL;
+    /* now free the list elements */
+    g_slist_free (passes);
+    passes = NULL;
 }
 
 
@@ -784,8 +783,8 @@ free_passes (GSList *passes)
 void
 free_pass_detail (pass_detail_t *detail)
 {
-	g_free (detail);
-	detail = NULL;
+    g_free (detail);
+    detail = NULL;
 }
 
 
@@ -796,22 +795,22 @@ free_pass_detail (pass_detail_t *detail)
 void
 free_pass_details (GSList *details)
 {
-	guint n,i;
-	gpointer detail;
+    guint n,i;
+    gpointer detail;
 
-	n = g_slist_length (details);
+    n = g_slist_length (details);
 
-	for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
 
-		detail = g_slist_nth_data (details, i);
+        detail = g_slist_nth_data (details, i);
 
-		/* free element data */
-		free_pass_detail (PASS_DETAIL (detail));
-	}
+        /* free element data */
+        free_pass_detail (PASS_DETAIL (detail));
+    }
 
-	/* free list elements */
-	g_slist_free (details);
-	details = NULL;
+    /* free list elements */
+    g_slist_free (details);
+    details = NULL;
 }
 
 
@@ -842,148 +841,148 @@ free_pass_details (GSList *details)
 pass_t *
 get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 {
-	gdouble        aos = 0.0;    /* time of AOS */
-	gdouble        tca = 0.0;    /* time of TCA */
-	gdouble        los = 0.0;    /* time of LOS */
-	gdouble        dt = 0.0;     /* time diff */
-	gdouble        step = 0.0;   /* time step */
-	gdouble        t0 = start;
-	gdouble        t;            /* current time counter */
-	gdouble        tres = 0.0; /* required time resolution */
-	gdouble        max_el = 0.0; /* maximum elevation */
-	pass_t        *pass = NULL;
-	pass_detail_t *detail = NULL;
-	gboolean       done = FALSE;
+    gdouble        aos = 0.0;    /* time of AOS */
+    gdouble        tca = 0.0;    /* time of TCA */
+    gdouble        los = 0.0;    /* time of LOS */
+    gdouble        dt = 0.0;     /* time diff */
+    gdouble        step = 0.0;   /* time step */
+    gdouble        t0 = start;
+    gdouble        t;            /* current time counter */
+    gdouble        tres = 0.0; /* required time resolution */
+    gdouble        max_el = 0.0; /* maximum elevation */
+    pass_t        *pass = NULL;
+    pass_detail_t *detail = NULL;
+    gboolean       done = FALSE;
 
 
-	/* FIXME: watchdog */
+    /* FIXME: watchdog */
 
-	/* get time resolution; sat-cfg stores it in seconds */
-	tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
-
-
-	aos = find_aos (sat, qth, t0, maxdt);
+    /* get time resolution; sat-cfg stores it in seconds */
+    tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
 
 
-	/* aos = 0.0 means no aos */
-	if (aos == 0.0) {
-		done = TRUE;
-	}
-	
-	/* check whether we are within time limits;
-	   maxdt = 0 mean no time limit.
-	*/
-	else if ((maxdt > 0.0) && (aos > (start + maxdt))) {
-		done = TRUE;
-	}
-	else {
-		los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
-		dt = los - aos;
-	
-		/* get time step, which will give us the max number of entries */
-		step = dt / sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
-	
-		/* but if this is smaller than the required resolution
-		   we go with the resolution
-		*/
-		if (step < tres)
-			step = tres;
+    aos = find_aos (sat, qth, t0, maxdt);
 
-		/* create a pass_t entry; FIXME: g_try_new in 2.8 */
-		pass = g_new (pass_t, 1);
-			
-		pass->aos = aos;
-		pass->los = los;
-		pass->max_el = 0.0;
-		pass->aos_az = 0.0;
-		pass->los_az = 0.0;
-		pass->maxel_az = 0.0;
-		pass->vis[0] = '-';
-		pass->vis[1] = '-';
-		pass->vis[2] = '-';
-		pass->vis[3] = 0;
-		pass->satname = g_strdup (sat->tle.sat_name);
-		pass->details = NULL;
 
-		/* iterate over each time step */
-		for (t = pass->aos; t <= pass->los; t += step) {
-			
-			/* calculate satellite data */
-			predict_calc (sat, qth, t);
+    /* aos = 0.0 means no aos */
+    if (aos == 0.0) {
+        done = TRUE;
+    }
 
-			/* in the first iter we want to store
-			   pass->aos_az
-			*/
-			if (t == pass->aos) {
-				pass->aos_az = sat->az;
-				pass->orbit = sat->orbit;
-			}
+    /* check whether we are within time limits;
+        maxdt = 0 mean no time limit.
+    */
+    else if ((maxdt > 0.0) && (aos > (start + maxdt))) {
+        done = TRUE;
+    }
+    else {
+        los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
+        dt = los - aos;
 
-			/* append details to sat->details */
-			detail = g_new (pass_detail_t, 1);
-			detail->time = t;
-			detail->pos.x = sat->pos.x;
-			detail->pos.y = sat->pos.y;
-			detail->pos.z = sat->pos.z;
-			detail->pos.w = sat->pos.w;
-			detail->vel.x = sat->vel.x;
-			detail->vel.y = sat->vel.y;
-			detail->vel.z = sat->vel.z;
-			detail->vel.w = sat->vel.w;
-			detail->velo = sat->velo;
-			detail->az = sat->az;
-			detail->el = sat->el;
-			detail->range = sat->range;
-			detail->range_rate = sat->range_rate;
-			detail->lat = sat->ssplat;
-			detail->lon = sat->ssplon;
-			detail->alt = sat->alt;
-			detail->ma = sat->ma;
-			detail->phase = sat->phase;
-			detail->footprint = sat->footprint;
-			detail->orbit = sat->orbit;
-			detail->vis = get_sat_vis (sat, qth, t);
+        /* get time step, which will give us the max number of entries */
+        step = dt / sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
 
-			/* also store visibility "bit" */
-			switch (detail->vis) {
-			case SAT_VIS_VISIBLE:
-				pass->vis[0] = 'V';
-				break;
-			case SAT_VIS_DAYLIGHT:
-				pass->vis[1] = 'D';
-				break;
-			case SAT_VIS_ECLIPSED:
-				pass->vis[2] = 'E';
-				break;
-			default:
-				break;
-			}
+        /* but if this is smaller than the required resolution
+            we go with the resolution
+        */
+        if (step < tres)
+            step = tres;
 
-			pass->details = g_slist_prepend (pass->details, detail);
+        /* create a pass_t entry; FIXME: g_try_new in 2.8 */
+        pass = g_new (pass_t, 1);
+            
+        pass->aos = aos;
+        pass->los = los;
+        pass->max_el = 0.0;
+        pass->aos_az = 0.0;
+        pass->los_az = 0.0;
+        pass->maxel_az = 0.0;
+        pass->vis[0] = '-';
+        pass->vis[1] = '-';
+        pass->vis[2] = '-';
+        pass->vis[3] = 0;
+        pass->satname = g_strdup (sat->tle.sat_name);
+        pass->details = NULL;
 
-			/* store elevation if greater than the
-			   previously stored one
-			*/
-			if (sat->el > max_el) {
-				max_el = sat->el;
-				tca = t;
-				pass->maxel_az = sat->az;
-			}
+        /* iterate over each time step */
+        for (t = pass->aos; t <= pass->los; t += step) {
+            
+            /* calculate satellite data */
+            predict_calc (sat, qth, t);
 
-			/*	g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
-			/*		 t, sat->az, sat->el, max_el); */
-		}
+            /* in the first iter we want to store
+                pass->aos_az
+            */
+            if (t == pass->aos) {
+                pass->aos_az = sat->az;
+                pass->orbit = sat->orbit;
+            }
 
-		pass->details = g_slist_reverse (pass->details);
+            /* append details to sat->details */
+            detail = g_new (pass_detail_t, 1);
+            detail->time = t;
+            detail->pos.x = sat->pos.x;
+            detail->pos.y = sat->pos.y;
+            detail->pos.z = sat->pos.z;
+            detail->pos.w = sat->pos.w;
+            detail->vel.x = sat->vel.x;
+            detail->vel.y = sat->vel.y;
+            detail->vel.z = sat->vel.z;
+            detail->vel.w = sat->vel.w;
+            detail->velo = sat->velo;
+            detail->az = sat->az;
+            detail->el = sat->el;
+            detail->range = sat->range;
+            detail->range_rate = sat->range_rate;
+            detail->lat = sat->ssplat;
+            detail->lon = sat->ssplon;
+            detail->alt = sat->alt;
+            detail->ma = sat->ma;
+            detail->phase = sat->phase;
+            detail->footprint = sat->footprint;
+            detail->orbit = sat->orbit;
+            detail->vis = get_sat_vis (sat, qth, t);
 
-		/* store los_az, max_el and tca */
-		pass->los_az = sat->az;
-		pass->max_el = max_el;
-		pass->tca    = tca;
+            /* also store visibility "bit" */
+            switch (detail->vis) {
+            case SAT_VIS_VISIBLE:
+                pass->vis[0] = 'V';
+                break;
+            case SAT_VIS_DAYLIGHT:
+                pass->vis[1] = 'D';
+                break;
+            case SAT_VIS_ECLIPSED:
+                pass->vis[2] = 'E';
+                break;
+            default:
+                break;
+            }
 
-	}
+            pass->details = g_slist_prepend (pass->details, detail);
 
-	return pass;
+            /* store elevation if greater than the
+                previously stored one
+            */
+            if (sat->el > max_el) {
+                max_el = sat->el;
+                tca = t;
+                pass->maxel_az = sat->az;
+            }
+
+            /*	g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
+            /*		 t, sat->az, sat->el, max_el); */
+        }
+
+        pass->details = g_slist_reverse (pass->details);
+
+        /* store los_az, max_el and tca */
+        pass->los_az = sat->az;
+        pass->max_el = max_el;
+        pass->tca    = tca;
+
+    }
+
+    return pass;
 }
 
 
@@ -1008,20 +1007,20 @@ get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 pass_t *
 get_current_pass (sat_t *sat, qth_t *qth, gdouble start)
 {
-	gdouble t;
+    gdouble t;
 
 
-	if (start > 0.0)
-		t = start;
-	else
-		t = get_current_daynum ();
-	predict_calc (sat, qth, t);	
+    if (start > 0.0)
+        t = start;
+    else
+        t = get_current_daynum ();
+    predict_calc (sat, qth, t);	
 
-	/* find a time before AOS */
-	while (sat->el > -2.0) {
-		predict_calc (sat, qth, t);
-		t -= 0.007; // +10 min
-	}
+    /* find a time before AOS */
+    while (sat->el > -2.0) {
+        predict_calc (sat, qth, t);
+        t -= 0.007; // +10 min
+    }
 
-	return get_pass_no_min_el (sat, qth, t, 0.0);
+    return get_pass_no_min_el (sat, qth, t, 0.0);
 }

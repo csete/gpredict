@@ -56,9 +56,9 @@ typedef struct _GtkSkyGlanceClass   GtkSkyGlanceClass;
 
 /** \brief Satellite object on graph. */
 typedef struct {
-	guint              catnum;  /*!< Catalogue number of satellite */
-	pass_t             *pass;    /*!< Details of the corresponding pass. */
-	GooCanvasItemModel *box;     /*!< Canvas item showing the pass */
+    guint              catnum;  /*!< Catalogue number of satellite */
+    pass_t             *pass;    /*!< Details of the corresponding pass. */
+    GooCanvasItemModel *box;     /*!< Canvas item showing the pass */
 } sky_pass_t;
 
 
@@ -68,48 +68,48 @@ typedef struct {
 
 struct _GtkSkyGlance
 {
-	GtkVBox vbox;
+    GtkVBox vbox;
 
-	GtkWidget  *canvas;   /*!< The canvas widget */
+    GtkWidget  *canvas;   /*!< The canvas widget */
 
-	GHashTable *sats;     /*!< Copy of satellites. */
-	qth_t      *qth;      /*!< Pointer to current location. */
+    GHashTable *sats;     /*!< Copy of satellites. */
+    qth_t      *qth;      /*!< Pointer to current location. */
 
-	GSList *passes;      /*!< Canvas items representing each pass.
-						      Each element in the list is of type sky_pass_t.
-						 */
-	GSList *satlab;      /*!< Canvas items showing satellite names. */
+    GSList *passes;      /*!< Canvas items representing each pass.
+                                Each element in the list is of type sky_pass_t.
+                            */
+    GSList *satlab;      /*!< Canvas items showing satellite names. */
 
 
-	guint       x0;       /*!< X0 */
-	guint       y0;       /*!< Y0 */
-	guint       w;        /*!< width of the plot */
-	guint       h;        /*!< height of the plot */
-	guint       pps;      /*!< pixels per satellite */
+    guint       x0;       /*!< X0 */
+    guint       y0;       /*!< Y0 */
+    guint       w;        /*!< width of the plot */
+    guint       h;        /*!< height of the plot */
+    guint       pps;      /*!< pixels per satellite */
 
-	guint       numsat;   /*!< Number of satellites */
-	guint       satcnt;   /*!< Counter to keep track of how many satellites we have
-							   plotted so far when creating the boxes.
-							   This is needed to ensure that we do not plot more
-							   than 10 satellites and to know which colour to fetch
-							   from sat-cfg.
-						  */
-	gdouble     ts,te;    /*!< Start and end times (Julian date) */
+    guint       numsat;   /*!< Number of satellites */
+    guint       satcnt;   /*!< Counter to keep track of how many satellites we have
+                                plotted so far when creating the boxes.
+                                This is needed to ensure that we do not plot more
+                                than 10 satellites and to know which colour to fetch
+                                from sat-cfg.
+                            */
+    gdouble     ts,te;    /*!< Start and end times (Julian date) */
 
-	GSList     *majors;   /*!< Major ticks for every hour */
-	GSList     *minors;   /*!< Minor ticks for every 30 min */
-	GSList     *labels;   /*!< Tick labels for every hour */
-	
-	GooCanvasItemModel *footer;  /*!< Footer area with time ticks and labels */
-	GooCanvasItemModel *axisl;   /*!< Axis label */
-	GooCanvasItemModel *cursor;  /*!< Vertical line tracking the cursor */
-	GooCanvasItemModel *timel;   /*!< Label showing time under cursor */
+    GSList     *majors;   /*!< Major ticks for every hour */
+    GSList     *minors;   /*!< Minor ticks for every 30 min */
+    GSList     *labels;   /*!< Tick labels for every hour */
+
+    GooCanvasItemModel *footer;  /*!< Footer area with time ticks and labels */
+    GooCanvasItemModel *axisl;   /*!< Axis label */
+    GooCanvasItemModel *cursor;  /*!< Vertical line tracking the cursor */
+    GooCanvasItemModel *timel;   /*!< Label showing time under cursor */
 
 };
 
 struct _GtkSkyGlanceClass
 {
-	GtkVBoxClass parent_class;
+    GtkVBoxClass parent_class;
 };
 
 

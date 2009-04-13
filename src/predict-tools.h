@@ -38,17 +38,17 @@
 
 /** \brief Brief satellite pass info. */
 typedef struct {
-	gchar      *satname;  /*!< satellite name */
-	gdouble     aos;      /*!< AOS time in "jul_utc" */
-	gdouble     tca;      /*!< TCA time in "jul_utc" */
-	gdouble     los;      /*!< LOS time in "jul_utc" */
-	gdouble     max_el;   /*!< Maximum elevation during pass */
-	gdouble     aos_az;   /*!< Azimuth at AOS */
-	gdouble     los_az;   /*!< Azimuth at LOS */
-	guint       orbit;    /*!< Orbit number */
-	gdouble     maxel_az; /*!< Azimuth at maximum elevation */
-	gchar       vis[4];   /*!< Visibility string, e.g. VSE, -S-, V-- */
-	GSList     *details;  /*!< List of pass_detail_t entries */
+    gchar      *satname;  /*!< satellite name */
+    gdouble     aos;      /*!< AOS time in "jul_utc" */
+    gdouble     tca;      /*!< TCA time in "jul_utc" */
+    gdouble     los;      /*!< LOS time in "jul_utc" */
+    gdouble     max_el;   /*!< Maximum elevation during pass */
+    gdouble     aos_az;   /*!< Azimuth at AOS */
+    gdouble     los_az;   /*!< Azimuth at LOS */
+    guint       orbit;    /*!< Orbit number */
+    gdouble     maxel_az; /*!< Azimuth at maximum elevation */
+    gchar       vis[4];   /*!< Visibility string, e.g. VSE, -S-, V-- */
+    GSList     *details;  /*!< List of pass_detail_t entries */
 } pass_t;
 
 
@@ -61,22 +61,22 @@ typedef struct {
  * without having too much overhead and complexity in the low level code.
  */
 typedef struct {
-	gdouble   time;   /*!< time in "jul_utc" */
-	vector_t  pos;    /*!< Raw unprocessed position at time */
-	vector_t  vel;    /*!< Raw unprocessed velocity at time */
-	gdouble   velo;
-	gdouble   az;
-	gdouble   el;
-	gdouble   range;
-	gdouble   range_rate;
-	gdouble   lat;
-	gdouble   lon;
-	gdouble   alt;
-	gdouble   ma;
-	gdouble   phase;
-	gdouble   footprint;
-	sat_vis_t vis;
-	guint     orbit;
+    gdouble   time;   /*!< time in "jul_utc" */
+    vector_t  pos;    /*!< Raw unprocessed position at time */
+    vector_t  vel;    /*!< Raw unprocessed velocity at time */
+    gdouble   velo;
+    gdouble   az;
+    gdouble   el;
+    gdouble   range;
+    gdouble   range_rate;
+    gdouble   lat;
+    gdouble   lon;
+    gdouble   alt;
+    gdouble   ma;
+    gdouble   phase;
+    gdouble   footprint;
+    sat_vis_t vis;
+    guint     orbit;
 } pass_detail_t;
 
 
