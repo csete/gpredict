@@ -1,3 +1,9 @@
+2009-04-13 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/predict-tools.c:
+    Fixed a bug that could cause find_aos() to go into infinite loop.
+
+
 2009-04-12 Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rig-ctrl.c:

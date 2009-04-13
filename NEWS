@@ -14,6 +14,7 @@ Changes in version 1.0 beta 2 (TBD Apr 2009):
 - Feature request 2192404: Starting time for pass predictions.
 - Feature request 2347471: Use system goocanvas.
 - Feature request 2130940: Transponder info in gpredict.
+- Fixed a bug that could cause gpredict to hang during pass predictions.
 - Fixed bug 2139102: rigctld port.
 - Fixed bug 2130912: Crash when no rig or no rotator are defined.
 - Fixed bug 2130914: Gpredict doesn't handle PTT.

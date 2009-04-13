@@ -1,9 +1,4 @@
 
-
-TO BE UPDATED BEFORE NEXT RELEASE
-
-
-
 WHAT IS GPREDICT?
 =================
 
@@ -49,10 +44,13 @@ Unix like operating systems, Mac and Windows. Following libraries are required
 for successful compilation of Gpredict:
 
 - Gtk+ 2.12 or later
+- GLib 2.16 or later
+- Gio 2.16 or later (including gvfs)
+- GooCanvas 0.9 or later
 - Hamlib (runtime only, not required for build)
 
 If you compile Gpredict from source you will also need the development parts
-of the above mentioned libraries, i.e. gtk+-dev or gtk+-devel and so on.
+of the above mentioned libraries, e.g. gtk+-dev or gtk+-devel and so on.
 
 To install gpredict from source unpack the source package with:
 
@@ -67,7 +65,11 @@ Change to the gpredict-x.y.z directory and build gpredict:
 The last step usually requires you to become root, otherwise you may not have
 the required permissions to install gpredict. If you can not or do not want to
 install gpredict as root, you can install gpredict into a custom directory by
- adding --prefix=somedir to the ./configure step.
+adding --prefix=somedir to the ./configure step. For example
+
+  ./configure --prefix=/home/alexc/predict
+  
+will configure the build to install the files into /home/alexc/gpredict folder.
 
 If the configure step fails with an error, examine the output. It will usually
 tell you which package or libraries you need in order to build gpredict. Please
@@ -96,10 +98,11 @@ LICENSE AND WARRANTY
 ====================
 
 Gpredict is released under the GNU General Public License and comes with
-NO WARRANTY whatsoever (well, maybe except that it works for us). See the
+NO WARRANTY whatsoever (well, maybe except that it works for me). See the
 COPYING file for details. If you have problems installing or using Gpredict,
 feel free to ask for support. There is a web based forum at
 http://forum.oz9aec.net/
+
 Bug trackers, mailing lists, etc, can be accessed at the project page
 at sourceforge:
 http://sourceforge.net/projects/gpredict

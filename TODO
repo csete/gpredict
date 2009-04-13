@@ -1,7 +1,6 @@
 Future plans for gpredict development include:
 
 * Show day/night on satmap.
-* Optionally, use simulated time as T0 for predictions.
 * TLE editor.
 * Advanced pass predictor.
 * Predict communication windows between two ground stations.
