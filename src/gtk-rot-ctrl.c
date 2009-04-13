@@ -98,48 +98,48 @@ static GdkColor ColGreen = {0, 0, 0xFFFF, 0};
 GType
 gtk_rot_ctrl_get_type ()
 {
-	static GType gtk_rot_ctrl_type = 0;
+    static GType gtk_rot_ctrl_type = 0;
 
-	if (!gtk_rot_ctrl_type) {
+    if (!gtk_rot_ctrl_type) {
 
-		static const GTypeInfo gtk_rot_ctrl_info = {
-			sizeof (GtkRotCtrlClass),
-			NULL,  /* base_init */
-			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_rot_ctrl_class_init,
-			NULL,  /* class_finalize */
-			NULL,  /* class_data */
-			sizeof (GtkRotCtrl),
-			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_rot_ctrl_init,
-		};
+        static const GTypeInfo gtk_rot_ctrl_info = {
+            sizeof (GtkRotCtrlClass),
+            NULL,  /* base_init */
+            NULL,  /* base_finalize */
+            (GClassInitFunc) gtk_rot_ctrl_class_init,
+            NULL,  /* class_finalize */
+            NULL,  /* class_data */
+            sizeof (GtkRotCtrl),
+            5,     /* n_preallocs */
+            (GInstanceInitFunc) gtk_rot_ctrl_init,
+        };
 
-		gtk_rot_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
-												    "GtkRotCtrl",
-													&gtk_rot_ctrl_info,
-													0);
-	}
+        gtk_rot_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                    "GtkRotCtrl",
+                                                    &gtk_rot_ctrl_info,
+                                                    0);
+    }
 
-	return gtk_rot_ctrl_type;
+    return gtk_rot_ctrl_type;
 }
 
 
 static void
 gtk_rot_ctrl_class_init (GtkRotCtrlClass *class)
 {
-	GObjectClass      *gobject_class;
-	GtkObjectClass    *object_class;
-	GtkWidgetClass    *widget_class;
-	GtkContainerClass *container_class;
+    GObjectClass      *gobject_class;
+    GtkObjectClass    *object_class;
+    GtkWidgetClass    *widget_class;
+    GtkContainerClass *container_class;
 
-	gobject_class   = G_OBJECT_CLASS (class);
-	object_class    = (GtkObjectClass*) class;
-	widget_class    = (GtkWidgetClass*) class;
-	container_class = (GtkContainerClass*) class;
+    gobject_class   = G_OBJECT_CLASS (class);
+    object_class    = (GtkObjectClass*) class;
+    widget_class    = (GtkWidgetClass*) class;
+    container_class = (GtkContainerClass*) class;
 
-	parent_class = g_type_class_peek_parent (class);
+    parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_rot_ctrl_destroy;
+    object_class->destroy = gtk_rot_ctrl_destroy;
  
 }
 
@@ -159,7 +159,7 @@ gtk_rot_ctrl_init (GtkRotCtrl *ctrl)
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
-    ctrl->tolerance = 1.0;
+    ctrl->tolerance = 5.0;
     ctrl->errcnt = 0;
 }
 
@@ -255,7 +255,7 @@ gtk_rot_ctrl_new (GtkSatModule *module)
                                                     rot_ctrl_timeout_cb,
                                                     GTK_ROT_CTRL (widget));
     
-	return widget;
+    return widget;
 }
 
 
@@ -552,7 +552,7 @@ create_conf_widgets (GtkRotCtrl *ctrl)
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
     
-    toler = gtk_spin_button_new_with_range (0.01, 10.0, 0.01);
+    toler = gtk_spin_button_new_with_range (0.01, 50.0, 0.01);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (toler), 2);
     gtk_widget_set_tooltip_text (toler,
                                  _("This parameter controls the tolerance between "\
