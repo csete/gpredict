@@ -148,7 +148,7 @@ find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 		t = find_los (sat, qth, start, maxdt) + 0.014; // +20 min
 
 	/* invalid time (potentially returned by find_los) */
-	if (t < 0.014)
+	if (t < 0.1)
 		return 0.0;
 
 	/* update satellite data */
@@ -159,7 +159,6 @@ find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 
 		/* coarse time steps */
 		while ((sat->el < -1.0) && (t <= (start + maxdt))) {
-
 			t -= 0.00035 * (sat->el * ((sat->alt / 8400.0) + 0.46) - 2.0);
 			predict_calc (sat, qth, t);
 		}
@@ -622,6 +621,7 @@ get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
 	for (i = 0; i < num; i++) {
 
 		pass = get_pass (sat, qth, t, maxdt);
+        g_print ("%s: %d\n", __FUNCTION__, i);
 
 		if (pass != NULL) {
 			passes = g_slist_prepend (passes, pass);
