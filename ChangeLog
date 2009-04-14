@@ -1,3 +1,14 @@
+2009-04-14 Alexandru Csete <oz9aec@gmail.com>
+
+    * configure.ac:
+    Require libcur 7.16.0 or later as mandatory dependency.
+    
+    * src/tle-update.c:
+    * src/sat-cfg.[ch]:
+    * src/sat-pref-tle.c:
+    Reverted TLE update to libcurl version.
+
+
 2009-04-13 Alexandru Csete <oz9aec@gmail.com>
 
     * src/predict-tools.c:

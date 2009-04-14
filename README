@@ -45,7 +45,7 @@ for successful compilation of Gpredict:
 
 - Gtk+ 2.12 or later
 - GLib 2.16 or later
-- Gio 2.16 or later (including gvfs)
+- Libcurl 7.16.0 or later
 - GooCanvas 0.9 or later
 - Hamlib (runtime only, not required for build)
 

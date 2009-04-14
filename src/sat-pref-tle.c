@@ -42,7 +42,7 @@ static GtkWidget *freq;
 static GtkWidget *warn,*autom;
 
 /* internet updates */
-static GtkWidget *server,*files;
+static GtkWidget *server,*proxy,*files;
 
 /* add new sats */
 static GtkWidget *addnew;
@@ -76,28 +76,27 @@ static void value_changed_cb    (GtkWidget *widget, gpointer data);
 GtkWidget *sat_pref_tle_create ()
 {
 
-	GtkWidget   *vbox;
+    GtkWidget   *vbox;
 
-	
-	/* vertical box */
-	vbox = gtk_vbox_new (FALSE, 10);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
+    /* vertical box */
+    vbox = gtk_vbox_new (FALSE, 10);
+    gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
 
-	/* add contents */
-	create_auto_update (vbox);
-	gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 0);
-	create_network (vbox);
-	gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 0);
+    /* add contents */
+    create_auto_update (vbox);
+    gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 0);
+    create_network (vbox);
+    gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 0);
     create_misc (vbox);
 
 #if 0
 	create_local (vbox);
 #endif
 
-	/* create RESET button */
-	create_reset_button (GTK_BOX (vbox));
+    /* create RESET button */
+    create_reset_button (GTK_BOX (vbox));
 
-	return vbox;
+    return vbox;
 }
 
 
@@ -106,8 +105,8 @@ GtkWidget *sat_pref_tle_create ()
 void
 sat_pref_tle_cancel ()
 {
-	dirty = FALSE;
-	reset = FALSE;
+    dirty = FALSE;
+    reset = FALSE;
 }
 
 
@@ -116,45 +115,50 @@ sat_pref_tle_cancel ()
 void
 sat_pref_tle_ok     ()
 {
-	if (dirty) {
-		
-		/* save settings */
+    if (dirty) {
+        
+        /* save settings */
 
-		/* update frequency */
-		sat_cfg_set_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ,
-						 gtk_combo_box_get_active (GTK_COMBO_BOX (freq)));
+        /* update frequency */
+        sat_cfg_set_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ,
+                            gtk_combo_box_get_active (GTK_COMBO_BOX (freq)));
 
-		/* action to take */
-		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (autom)))
-			sat_cfg_set_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION, TLE_AUTO_UPDATE_GOAHEAD);
-		else
-			sat_cfg_set_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION, TLE_AUTO_UPDATE_NOTIFY);
+        /* action to take */
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (autom)))
+            sat_cfg_set_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION, TLE_AUTO_UPDATE_GOAHEAD);
+        else
+            sat_cfg_set_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION, TLE_AUTO_UPDATE_NOTIFY);
 
-		/* server */
-		sat_cfg_set_str (SAT_CFG_STR_TLE_SERVER,
-						 gtk_entry_get_text (GTK_ENTRY (server)));
+        /* server */
+        sat_cfg_set_str (SAT_CFG_STR_TLE_SERVER,
+                            gtk_entry_get_text (GTK_ENTRY (server)));
 
-		/* files */
-		sat_cfg_set_str (SAT_CFG_STR_TLE_FILES,
-						 gtk_entry_get_text (GTK_ENTRY (files)));
+        /* proxy */
+        sat_cfg_set_str (SAT_CFG_STR_TLE_PROXY,
+                            gtk_entry_get_text (GTK_ENTRY (proxy)));
+
+        /* files */
+        sat_cfg_set_str (SAT_CFG_STR_TLE_FILES,
+                            gtk_entry_get_text (GTK_ENTRY (files)));
         
         /* add new sats */
         sat_cfg_set_bool (SAT_CFG_BOOL_TLE_ADD_NEW,
-                          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (addnew)));
+                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (addnew)));
 
-		dirty = FALSE;
-	}
-	else if (reset) {
+        dirty = FALSE;
+    }
+    else if (reset) {
 
-		/* use sat_cfg_reset */
-		sat_cfg_reset_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ);
-		sat_cfg_reset_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION);
-		sat_cfg_reset_str (SAT_CFG_STR_TLE_SERVER);
-		sat_cfg_reset_str (SAT_CFG_STR_TLE_FILES);
+        /* use sat_cfg_reset */
+        sat_cfg_reset_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ);
+        sat_cfg_reset_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION);
+        sat_cfg_reset_str (SAT_CFG_STR_TLE_SERVER);
+        sat_cfg_reset_str (SAT_CFG_STR_TLE_PROXY);
+        sat_cfg_reset_str (SAT_CFG_STR_TLE_FILES);
         sat_cfg_reset_bool (SAT_CFG_BOOL_TLE_ADD_NEW);
 
-		reset = FALSE;
-	}
+        reset = FALSE;
+    }
 }
 
 
@@ -162,53 +166,53 @@ sat_pref_tle_ok     ()
 static void
 create_auto_update (GtkWidget *vbox)
 {
-	GtkWidget   *label;
-	GtkWidget   *box;
-	guint i;
+    GtkWidget   *label;
+    GtkWidget   *box;
+    guint i;
 
-	/* auto update */
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (label), _("<b>Auto-Update:</b>"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+    /* auto update */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Auto-Update:</b>"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
-	/* frequency */
-	freq = gtk_combo_box_new_text ();
-	for (i = 0; i < TLE_AUTO_UPDATE_NUM; i++) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (freq),
-								   tle_update_freq_to_str (i));
-	}
-	gtk_combo_box_set_active (GTK_COMBO_BOX (freq),
-							  sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ));
-	g_signal_connect (freq, "changed", G_CALLBACK (value_changed_cb), NULL);
+    /* frequency */
+    freq = gtk_combo_box_new_text ();
+    for (i = 0; i < TLE_AUTO_UPDATE_NUM; i++) {
+        gtk_combo_box_append_text (GTK_COMBO_BOX (freq),
+                                    tle_update_freq_to_str (i));
+    }
+    gtk_combo_box_set_active (GTK_COMBO_BOX (freq),
+                                sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ));
+    g_signal_connect (freq, "changed", G_CALLBACK (value_changed_cb), NULL);
 
-	label = gtk_label_new (_("Check the age of TLE data:"));
+    label = gtk_label_new (_("Check the age of TLE data:"));
 
-	box = gtk_hbox_new (FALSE, 5);
-	gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (box), freq, FALSE, FALSE, 0);
+    box = gtk_hbox_new (FALSE, 5);
+    gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (box), freq, FALSE, FALSE, 0);
 
-	gtk_box_pack_start (GTK_BOX (vbox), box, FALSE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), box, FALSE, TRUE, 0);
 
-	/* radio buttons selecting action */
-	label = gtk_label_new (_("If TLEs are too old:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-	warn = gtk_radio_button_new_with_label (NULL,
-											_("Notify me"));
-	gtk_box_pack_start (GTK_BOX (vbox), warn, FALSE, TRUE, 0);
-	autom = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (warn),
-														 _("Perform automatic update in the background"));
-	gtk_box_pack_start (GTK_BOX (vbox), autom, FALSE, TRUE, 0);
+    /* radio buttons selecting action */
+    label = gtk_label_new (_("If TLEs are too old:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+    warn = gtk_radio_button_new_with_label (NULL,
+                                            _("Notify me"));
+    gtk_box_pack_start (GTK_BOX (vbox), warn, FALSE, TRUE, 0);
+    autom = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (warn),
+                                                            _("Perform automatic update in the background"));
+    gtk_box_pack_start (GTK_BOX (vbox), autom, FALSE, TRUE, 0);
 
-	/* warn is selected automatically by default */
-	if (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (autom), TRUE);
-	}
-	
+    /* warn is selected automatically by default */
+    if (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (autom), TRUE);
+    }
 
-	g_signal_connect (warn, "toggled", G_CALLBACK (value_changed_cb), NULL);
-	g_signal_connect (autom, "toggled", G_CALLBACK (value_changed_cb), NULL);
+
+    g_signal_connect (warn, "toggled", G_CALLBACK (value_changed_cb), NULL);
+    g_signal_connect (autom, "toggled", G_CALLBACK (value_changed_cb), NULL);
 }
 
 
@@ -218,58 +222,75 @@ create_auto_update (GtkWidget *vbox)
 static void
 create_network (GtkWidget *vbox)
 {
-	GtkWidget   *label;
-	GtkWidget   *table;
-	GtkTooltips *tips;
+    GtkWidget   *label;
+    GtkWidget   *table;
+    GtkTooltips *tips;
 
-	/* auto update */
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (label), _("<b>Update from the Internet:</b>"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
+    /* auto update */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Update from the Internet:</b>"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
-	/* create table */
-	table = gtk_table_new (3, 3, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+    /* create table */
+    table = gtk_table_new (3, 3, FALSE);
+    gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
-	/* server */
-	label = gtk_label_new (_("Remote server:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
-	
-	server = gtk_entry_new ();
-	if (sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER))
-		gtk_entry_set_text (GTK_ENTRY (server), sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER));
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, server,
-						  _("Enter URL for remote server including directory, i.e.\n"\
-							"protocol://servername/directory\n"\
-							"Protocol can be both http and ftp."),
-						  NULL); 
-	g_signal_connect (server, "changed", G_CALLBACK (value_changed_cb), NULL);
-	gtk_table_attach (GTK_TABLE (table), server, 1, 2, 0, 1,
-					  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-	
-	/* Files */
-	label = gtk_label_new (_("Files to fetch:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
-	
-	files = gtk_entry_new ();
-	if (sat_cfg_get_str (SAT_CFG_STR_TLE_FILES))
-		gtk_entry_set_text (GTK_ENTRY (files), sat_cfg_get_str (SAT_CFG_STR_TLE_FILES));
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, files,
-						  _("Enter list of files to fetch from remote server.\n"\
-							"The files should be separated with ; (semicolon)"),
-						  NULL); 
-	g_signal_connect (files, "changed", G_CALLBACK (value_changed_cb), NULL);
-	gtk_table_attach (GTK_TABLE (table), files, 1, 2, 2, 3,
-					  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    /* server */
+    label = gtk_label_new (_("Remote server:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
 
-	/* put table into vbox */
-	gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
+    server = gtk_entry_new ();
+    if (sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER))
+        gtk_entry_set_text (GTK_ENTRY (server), sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER));
+    tips = gtk_tooltips_new ();
+    gtk_tooltips_set_tip (tips, server,
+                            _("Enter URL for remote server including directory, i.e.\n"\
+                            "protocol://servername/directory\n"\
+                            "Protocol can be both http and ftp."),
+                            NULL); 
+    g_signal_connect (server, "changed", G_CALLBACK (value_changed_cb), NULL);
+    gtk_table_attach (GTK_TABLE (table), server, 1, 2, 0, 1,
+                        GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+
+    /* proxy */
+    label = gtk_label_new (_("Proxy server:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+
+    proxy = gtk_entry_new ();
+    if (sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY))
+        gtk_entry_set_text (GTK_ENTRY (proxy), sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY));
+    tips = gtk_tooltips_new ();
+    gtk_tooltips_set_tip (tips, proxy,
+                            _("Enter URL for local proxy server. e.g.\n"\
+                            "http://my.proxy.com"),
+                            NULL); 
+    g_signal_connect (proxy, "changed", G_CALLBACK (value_changed_cb), NULL);
+    gtk_table_attach (GTK_TABLE (table), proxy, 1, 2, 1, 2,
+                        GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+
+    /* Files */
+    label = gtk_label_new (_("Files to fetch:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+
+    files = gtk_entry_new ();
+    if (sat_cfg_get_str (SAT_CFG_STR_TLE_FILES))
+        gtk_entry_set_text (GTK_ENTRY (files), sat_cfg_get_str (SAT_CFG_STR_TLE_FILES));
+    tips = gtk_tooltips_new ();
+    gtk_tooltips_set_tip (tips, files,
+                            _("Enter list of files to fetch from remote server.\n"\
+                            "The files should be separated with ; (semicolon)"),
+                            NULL); 
+    g_signal_connect (files, "changed", G_CALLBACK (value_changed_cb), NULL);
+    gtk_table_attach (GTK_TABLE (table), files, 1, 2, 2, 3,
+                        GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+
+    /* put table into vbox */
+    gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
 }
 
 
@@ -299,14 +320,13 @@ create_misc (GtkWidget *vbox)
 static void
 create_local (GtkWidget *vbox)
 {
-	GtkWidget   *label;
+    GtkWidget   *label;
 
-	/* auto update */
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (label), _("<b>Update from Local Files:</b>"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
-
+    /* auto update */
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Update from Local Files:</b>"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
 
 }
 #endif
@@ -320,25 +340,25 @@ create_local (GtkWidget *vbox)
 static void
 create_reset_button (GtkBox *vbox)
 {
-	GtkWidget   *button;
-	GtkWidget   *butbox;
-	GtkTooltips *tips;
+    GtkWidget   *button;
+    GtkWidget   *butbox;
+    GtkTooltips *tips;
 
 
-	button = gtk_button_new_with_label (_("Reset"));
-	g_signal_connect (G_OBJECT (button), "clicked",
-					  G_CALLBACK (reset_cb), NULL);
+    button = gtk_button_new_with_label (_("Reset"));
+    g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (reset_cb), NULL);
 
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, button,
-						  _("Reset settings to the default values."),
-						  NULL);
+    tips = gtk_tooltips_new ();
+    gtk_tooltips_set_tip (tips, button,
+                            _("Reset settings to the default values."),
+                            NULL);
 
-	butbox = gtk_hbutton_box_new ();
-	gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
-	gtk_box_pack_end (GTK_BOX (butbox), button, FALSE, TRUE, 10);
+    butbox = gtk_hbutton_box_new ();
+    gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
+    gtk_box_pack_end (GTK_BOX (butbox), button, FALSE, TRUE, 10);
 
-	gtk_box_pack_end (vbox, butbox, FALSE, TRUE, 0);
+    gtk_box_pack_end (vbox, butbox, FALSE, TRUE, 0);
 
 }
 
@@ -357,35 +377,38 @@ static void
 reset_cb               (GtkWidget *button, gpointer data)
 {
 
-	/* get defaults */
+    /* get defaults */
 
-	/* update frequency */
-	gtk_combo_box_set_active (GTK_COMBO_BOX (freq),
-							  sat_cfg_get_int_def (SAT_CFG_INT_TLE_AUTO_UPD_FREQ));
+    /* update frequency */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (freq),
+                                sat_cfg_get_int_def (SAT_CFG_INT_TLE_AUTO_UPD_FREQ));
 
-	/* action */
-	if (sat_cfg_get_int_def (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (autom), TRUE);
-	}
-	else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (warn), TRUE);
-	}
+    /* action */
+    if (sat_cfg_get_int_def (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (autom), TRUE);
+    }
+    else {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (warn), TRUE);
+    }
 
-	/* server */
-	gtk_entry_set_text (GTK_ENTRY (server), sat_cfg_get_str_def (SAT_CFG_STR_TLE_SERVER));
+    /* server */
+    gtk_entry_set_text (GTK_ENTRY (server), sat_cfg_get_str_def (SAT_CFG_STR_TLE_SERVER));
 
-	/* files */
-	gtk_entry_set_text (GTK_ENTRY (files), sat_cfg_get_str_def (SAT_CFG_STR_TLE_FILES));
+    /* proxy */
+    gtk_entry_set_text (GTK_ENTRY (proxy), "");
+
+    /* files */
+    gtk_entry_set_text (GTK_ENTRY (files), sat_cfg_get_str_def (SAT_CFG_STR_TLE_FILES));
 
 
     /* add new sats */
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (addnew),
-                                  sat_cfg_get_bool_def (SAT_CFG_BOOL_TLE_ADD_NEW));
+                                    sat_cfg_get_bool_def (SAT_CFG_BOOL_TLE_ADD_NEW));
 
-    
-	/* reset flags */
-	reset = TRUE;
-	dirty = FALSE;
+
+    /* reset flags */
+    reset = TRUE;
+    dirty = FALSE;
 }
 
 
@@ -400,6 +423,6 @@ reset_cb               (GtkWidget *button, gpointer data)
 static void
 value_changed_cb    (GtkWidget *widget, gpointer data)
 {
-	dirty = TRUE;
+    dirty = TRUE;
 }
 

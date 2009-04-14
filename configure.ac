@@ -21,10 +21,11 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
 fi
 
 dnl check for glib, gtk, and goocanvas libraries
-pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.16.0 gio-2.0 >= 2.16.0 gthread-2.0 >= 2.14.0 goocanvas >= 0.9"
+pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.16.0 gthread-2.0 >= 2.14.0 goocanvas >= 0.9 libcurl >= 7.16.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
+
 
 dnl Hamlib not needed if we go for the TCP based I/F
 dnl check for hamlib
@@ -65,6 +66,7 @@ GTHR_V=`pkg-config --modversion gthread-2.0`
 GDK_V=`pkg-config --modversion gdk-2.0`
 GTK_V=`pkg-config --modversion gtk+-2.0`
 GOOC_V=`pkg-config --modversion goocanvas`
+CURL_V=`pkg-config --modversion libcurl`
 dnl SQL_V=`pkg-config --modversion sqlite3`
 dnl if test "$havehamlib" = true ; then
 dnl    HAML_V=`pkg-config --modversion hamlib`
@@ -100,6 +102,7 @@ echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
+echo Liburl version..... : $CURL_V
 dnl echo SQLite version..... : $SQL_V
 dnl if test "$havehamlib" = true ; then
 dnl echo Hamlib version..... : $HAML_V
