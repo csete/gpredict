@@ -150,8 +150,8 @@
 
 2009-03-18 Alexandru Csete <oz9aec@gmail.com>
 
-	* src/sat-pref-qth.c:
-	Fixed typo (Debian bug #520203).
+    * src/sat-pref-qth.c:
+    Fixed typo (Debian bug #520203).
 
 
 2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
