@@ -5,12 +5,13 @@ Changes in version 1.0 (final):
 * Mac OS X package.
 
 
-Changes in version 1.0 beta 2 (TBD Apr 2009):
+Changes in version 1.0 beta 2 (15 Apr 2009):
 
 - Improved implementation of the radio controller to include uplink.
 - Added transponder data management (GUI editor to be added in beta 3).
-- Feature request 2756021: Doppler tuning using two radios (duplex)
-- Feature request 2691963: Doppler tuning on uplink (Simplex TRX)
+- Libcurl is now required to build.
+- Feature request 2756021: Doppler tuning using two radios (duplex).
+- Feature request 2691963: Doppler tuning on uplink (Simplex TRX).
 - Feature request 2192404: Starting time for pass predictions.
 - Feature request 2347471: Use system goocanvas.
 - Feature request 2130940: Transponder info in gpredict.
