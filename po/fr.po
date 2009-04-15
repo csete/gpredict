@@ -60,7 +60,7 @@ msgstr ""
 
 #: ../src/about.c:109
 msgid "translator-credits"
-msgstr ""
+msgstr "Stéphane Fillod"
 
 #: ../src/first-time.c:132 ../src/first-time.c:267 ../src/first-time.c:338
 #: ../src/first-time.c:492 ../src/first-time.c:538 ../src/first-time.c:583
