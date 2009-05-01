@@ -75,17 +75,17 @@ static void     gtk_sat_module_class_init     (GtkSatModuleClass   *class);
 static void     gtk_sat_module_init           (GtkSatModule        *module);
 static void     gtk_sat_module_destroy        (GtkObject           *object);
 static void     gtk_sat_module_read_cfg_data  (GtkSatModule *module,
-											   const gchar *cfgfile);
+                                               const gchar *cfgfile);
 
 static void     gtk_sat_module_load_sats      (GtkSatModule *module);
 /* static gboolean gtk_sat_module_sats_are_equal (gconstpointer a, */
-/* 					       gconstpointer b); */
+/*                            gconstpointer b); */
 static gboolean gtk_sat_module_timeout_cb     (gpointer module);
 static void     gtk_sat_module_update_sat     (gpointer key,
-											   gpointer val,
-											   gpointer data);
+                                               gpointer val,
+                                               gpointer data);
 static void     gtk_sat_module_popup_cb       (GtkWidget *button,
-											   gpointer data);
+                                               gpointer data);
 
 static void     update_header                 (GtkSatModule *module);
 static void     update_child                  (GtkWidget *child, gdouble tstamp);
@@ -105,47 +105,47 @@ static GtkVBoxClass *parent_class = NULL;
 GType
 gtk_sat_module_get_type ()
 {
-	static GType gtk_sat_module_type = 0;
+    static GType gtk_sat_module_type = 0;
 
-	if (!gtk_sat_module_type) {
-		static const GTypeInfo gtk_sat_module_info = {
-			sizeof (GtkSatModuleClass),
-			NULL,  /* base_init */
-			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_sat_module_class_init,
-			NULL,  /* class_finalize */
-			NULL,  /* class_data */
-			sizeof (GtkSatModule),
-			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_sat_module_init,
-		};
+    if (!gtk_sat_module_type) {
+        static const GTypeInfo gtk_sat_module_info = {
+            sizeof (GtkSatModuleClass),
+            NULL,  /* base_init */
+            NULL,  /* base_finalize */
+            (GClassInitFunc) gtk_sat_module_class_init,
+            NULL,  /* class_finalize */
+            NULL,  /* class_data */
+            sizeof (GtkSatModule),
+            5,     /* n_preallocs */
+            (GInstanceInitFunc) gtk_sat_module_init,
+        };
 
-		gtk_sat_module_type = g_type_register_static (GTK_TYPE_VBOX,
-													  "GtkSatModule",
-													  &gtk_sat_module_info,
-													  0);
-	}
+        gtk_sat_module_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                      "GtkSatModule",
+                                                      &gtk_sat_module_info,
+                                                      0);
+    }
 
-	return gtk_sat_module_type;
+    return gtk_sat_module_type;
 }
 
 
 static void
 gtk_sat_module_class_init (GtkSatModuleClass *class)
 {
-	GObjectClass      *gobject_class;
-	GtkObjectClass    *object_class;
-	GtkWidgetClass    *widget_class;
-	GtkContainerClass *container_class;
+    GObjectClass      *gobject_class;
+    GtkObjectClass    *object_class;
+    GtkWidgetClass    *widget_class;
+    GtkContainerClass *container_class;
 
-	gobject_class   = G_OBJECT_CLASS (class);
-	object_class    = (GtkObjectClass*) class;
-	widget_class    = (GtkWidgetClass*) class;
-	container_class = (GtkContainerClass*) class;
+    gobject_class   = G_OBJECT_CLASS (class);
+    object_class    = (GtkObjectClass*) class;
+    widget_class    = (GtkWidgetClass*) class;
+    container_class = (GtkContainerClass*) class;
 
-	parent_class = g_type_class_peek_parent (class);
+    parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_sat_module_destroy;
+    object_class->destroy = gtk_sat_module_destroy;
 
 }
 
@@ -155,43 +155,43 @@ static void
 gtk_sat_module_init (GtkSatModule *module)
 {
 
-	/* initialise data structures */
-	module->win = NULL;
+    /* initialise data structures */
+    module->win = NULL;
 
-	module->qth = g_try_new0 (qth_t, 1);
-	module->qth->lat = 0.0;
-	module->qth->lon = 0.0;
-	module->qth->alt = 0;
+    module->qth = g_try_new0 (qth_t, 1);
+    module->qth->lat = 0.0;
+    module->qth->lon = 0.0;
+    module->qth->alt = 0;
 
-	module->satellites = g_hash_table_new_full (g_int_hash,
-												g_int_equal,
-												g_free,
-												g_free);
-	
+    module->satellites = g_hash_table_new_full (g_int_hash,
+                                                g_int_equal,
+                                                g_free,
+                                                g_free);
+    
     module->rotctrlwin = NULL;
     module->rotctrl    = NULL;
     module->rigctrlwin = NULL;
 
-	module->state = GTK_SAT_MOD_STATE_DOCKED;
-	module->busy = FALSE;
+    module->state = GTK_SAT_MOD_STATE_DOCKED;
+    module->busy = FALSE;
 
-	module->layout = GTK_SAT_MOD_LAYOUT_1;
-	module->view_1 = GTK_SAT_MOD_VIEW_MAP;
-	module->view_2 = GTK_SAT_MOD_VIEW_POLAR;
-	module->view_3 = GTK_SAT_MOD_VIEW_SINGLE;
+    module->layout = GTK_SAT_MOD_LAYOUT_1;
+    module->view_1 = GTK_SAT_MOD_VIEW_MAP;
+    module->view_2 = GTK_SAT_MOD_VIEW_POLAR;
+    module->view_3 = GTK_SAT_MOD_VIEW_SINGLE;
 
-	module->vpanedpos = -1;
-	module->hpanedpos = -1;
+    module->vpanedpos = -1;
+    module->hpanedpos = -1;
 
     module->timerid = 0;
     
-	module->throttle = 1;
-	module->rtNow = 0.0;
-	module->rtPrev = 0.0;
-	module->tmgActive = FALSE;
-	module->tmgPdnum = 0.0;
-	module->tmgCdnum = 0.0;
-	module->tmgReset = FALSE;
+    module->throttle = 1;
+    module->rtNow = 0.0;
+    module->rtPrev = 0.0;
+    module->tmgActive = FALSE;
+    module->tmgPdnum = 0.0;
+    module->tmgCdnum = 0.0;
+    module->tmgReset = FALSE;
     
 }
 
@@ -199,18 +199,18 @@ gtk_sat_module_init (GtkSatModule *module)
 static void
 gtk_sat_module_destroy (GtkObject *object)
 {
-	GtkSatModule *module = GTK_SAT_MODULE (object);
+    GtkSatModule *module = GTK_SAT_MODULE (object);
 
     
-	/* stop timeout */
-	if (module->timerid > 0)
-		g_source_remove (module->timerid);
+    /* stop timeout */
+    if (module->timerid > 0)
+        g_source_remove (module->timerid);
 
-	/* destroy time controller */
-	if (module->tmgActive) {
-		gtk_widget_destroy (module->tmgWin);
-		module->tmgActive = FALSE;
-	}
+    /* destroy time controller */
+    if (module->tmgActive) {
+        gtk_widget_destroy (module->tmgWin);
+        module->tmgActive = FALSE;
+    }
     
     /* destroy radio and rotator controllers */
     if (module->rigctrlwin) {
@@ -221,31 +221,31 @@ gtk_sat_module_destroy (GtkObject *object)
     }
 
     /* clean up QTH */
-	if (module->qth) {
-		gtk_sat_data_free_qth (module->qth);
-		module->qth = NULL;
-	}
+    if (module->qth) {
+        gtk_sat_data_free_qth (module->qth);
+        module->qth = NULL;
+    }
 
     /* clean up satellites */
-	if (module->satellites) {
-		g_hash_table_destroy (module->satellites);
-		module->satellites = NULL;
-	}
+    if (module->satellites) {
+        g_hash_table_destroy (module->satellites);
+        module->satellites = NULL;
+    }
 
-	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 
 /* static void dump_data(gpointer key, */
-/* 		      gpointer value, */
-/* 		      gpointer user_data) */
+/*               gpointer value, */
+/*               gpointer user_data) */
 /* { */
-/* 	gint *catnum = key; */
+/*     gint *catnum = key; */
 
-/* 	g_print ("SATELLITE: %5d\t%s\t%d\n", */
-/* 		 *catnum, */
-/* 		 SAT(value)->tle.sat_name, */
-/* 		 SAT(value)->flags); */
+/*     g_print ("SATELLITE: %5d\t%s\t%d\n", */
+/*          *catnum, */
+/*          SAT(value)->tle.sat_name, */
+/*          SAT(value)->flags); */
 /* } */
 
 /**** FIXME: Program goes into infinite loop when there is something
@@ -253,115 +253,115 @@ gtk_sat_module_destroy (GtkObject *object)
 GtkWidget *
 gtk_sat_module_new (const gchar *cfgfile)
 {
-	GtkWidget *widget;
-	GtkWidget *butbox;
+    GtkWidget *widget;
+    GtkWidget *butbox;
 
 
-	/* Read configuration data.
-	   If cfgfile is not existing or is NULL, start the wizard
-	   in order to create a new configuration.
-	*/
-	if ((cfgfile == NULL) || !g_file_test (cfgfile, G_FILE_TEST_EXISTS)) {
+    /* Read configuration data.
+       If cfgfile is not existing or is NULL, start the wizard
+       in order to create a new configuration.
+    */
+    if ((cfgfile == NULL) || !g_file_test (cfgfile, G_FILE_TEST_EXISTS)) {
 
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Module %s is not valid."),
-					 __FUNCTION__, cfgfile);
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Module %s is not valid."),
+                     __FUNCTION__, cfgfile);
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/* create module widget */
-	widget = g_object_new (GTK_TYPE_SAT_MODULE, NULL);
+    /* create module widget */
+    widget = g_object_new (GTK_TYPE_SAT_MODULE, NULL);
 
-	g_signal_connect (widget, "realize",
-					  G_CALLBACK (fix_child_allocations), NULL);
+    g_signal_connect (widget, "realize",
+                      G_CALLBACK (fix_child_allocations), NULL);
 
-	/* load configuration; note that this will also set the module name */
-	gtk_sat_module_read_cfg_data (GTK_SAT_MODULE (widget), cfgfile);
+    /* load configuration; note that this will also set the module name */
+    gtk_sat_module_read_cfg_data (GTK_SAT_MODULE (widget), cfgfile);
 
-	/* module state */
-	if ((g_key_file_has_key (GTK_SAT_MODULE (widget)->cfgdata,
-							 MOD_CFG_GLOBAL_SECTION,
-							 MOD_CFG_STATE, NULL)) &&
-		sat_cfg_get_bool (SAT_CFG_BOOL_MOD_STATE)) {
+    /* module state */
+    if ((g_key_file_has_key (GTK_SAT_MODULE (widget)->cfgdata,
+                             MOD_CFG_GLOBAL_SECTION,
+                             MOD_CFG_STATE, NULL)) &&
+        sat_cfg_get_bool (SAT_CFG_BOOL_MOD_STATE)) {
 
-		GTK_SAT_MODULE (widget)->state =
-			g_key_file_get_integer (GTK_SAT_MODULE (widget)->cfgdata,
-									MOD_CFG_GLOBAL_SECTION,
-									MOD_CFG_STATE, NULL);
-	}
-	else {
-		GTK_SAT_MODULE (widget)->state = GTK_SAT_MOD_STATE_DOCKED;
-	}
+        GTK_SAT_MODULE (widget)->state =
+            g_key_file_get_integer (GTK_SAT_MODULE (widget)->cfgdata,
+                                    MOD_CFG_GLOBAL_SECTION,
+                                    MOD_CFG_STATE, NULL);
+    }
+    else {
+        GTK_SAT_MODULE (widget)->state = GTK_SAT_MOD_STATE_DOCKED;
+    }
 
-	/* initialise time keeping vars to current time */
-	GTK_SAT_MODULE (widget)->rtNow = get_current_daynum ();
-	GTK_SAT_MODULE (widget)->rtPrev = get_current_daynum ();
-	GTK_SAT_MODULE (widget)->tmgPdnum = get_current_daynum ();
-	GTK_SAT_MODULE (widget)->tmgCdnum = get_current_daynum ();
-
-
-	/* load satellites */
-	gtk_sat_module_load_sats (GTK_SAT_MODULE (widget));
-	
-	/* create buttons */
-	GTK_SAT_MODULE (widget)->popup_button =
-		gpredict_mini_mod_button ("gpredict-mod-popup.png",
-								  _("Module options / shortcuts"));
-	g_signal_connect (GTK_SAT_MODULE (widget)->popup_button, "clicked",
-					  G_CALLBACK (gtk_sat_module_popup_cb), widget);
-
-	GTK_SAT_MODULE (widget)->close_button =
-		gpredict_mini_mod_button ("gpredict-mod-close.png",
-								  _("Close this module."));
-	g_signal_connect (GTK_SAT_MODULE (widget)->close_button, "clicked",
-					  G_CALLBACK (gtk_sat_module_close_cb), widget);
-
-	/* create header; header should not be updated more than
-	   once pr. second.
-	*/
-	GTK_SAT_MODULE (widget)->header = gtk_label_new (NULL);
-	GTK_SAT_MODULE (widget)->head_count = 0;
-	GTK_SAT_MODULE (widget)->head_timeout = 
-		(GTK_SAT_MODULE(widget)->timeout > 1000 ? 1 : 
-		 (guint) floor (1000/GTK_SAT_MODULE(widget)->timeout));
-
-	/* Event timeout
-	   Update every minute FIXME: user configurable
-	*/
-	GTK_SAT_MODULE (widget)->event_timeout = 
-		(GTK_SAT_MODULE(widget)->timeout > 60000 ? 1 : 
-		 (guint) floor (60000/GTK_SAT_MODULE(widget)->timeout));
-	/* force update the first time */
-	GTK_SAT_MODULE (widget)->event_count = GTK_SAT_MODULE (widget)->event_timeout;
+    /* initialise time keeping vars to current time */
+    GTK_SAT_MODULE (widget)->rtNow = get_current_daynum ();
+    GTK_SAT_MODULE (widget)->rtPrev = get_current_daynum ();
+    GTK_SAT_MODULE (widget)->tmgPdnum = get_current_daynum ();
+    GTK_SAT_MODULE (widget)->tmgCdnum = get_current_daynum ();
 
 
-	butbox = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (butbox),
-						GTK_SAT_MODULE (widget)->header,
-						FALSE, FALSE, 10);
-	gtk_box_pack_end (GTK_BOX (butbox),
-					  GTK_SAT_MODULE (widget)->close_button,
-					  FALSE, FALSE, 0);
-	gtk_box_pack_end (GTK_BOX (butbox),
-					  GTK_SAT_MODULE (widget)->popup_button,
-					  FALSE, FALSE, 0);
+    /* load satellites */
+    gtk_sat_module_load_sats (GTK_SAT_MODULE (widget));
+    
+    /* create buttons */
+    GTK_SAT_MODULE (widget)->popup_button =
+        gpredict_mini_mod_button ("gpredict-mod-popup.png",
+                                  _("Module options / shortcuts"));
+    g_signal_connect (GTK_SAT_MODULE (widget)->popup_button, "clicked",
+                      G_CALLBACK (gtk_sat_module_popup_cb), widget);
 
-	gtk_box_pack_start (GTK_BOX (widget), butbox, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (widget), gtk_hseparator_new (), FALSE, FALSE, 0);
+    GTK_SAT_MODULE (widget)->close_button =
+        gpredict_mini_mod_button ("gpredict-mod-close.png",
+                                  _("Close this module."));
+    g_signal_connect (GTK_SAT_MODULE (widget)->close_button, "clicked",
+                      G_CALLBACK (gtk_sat_module_close_cb), widget);
 
-	create_module_layout (GTK_SAT_MODULE (widget));
+    /* create header; header should not be updated more than
+       once pr. second.
+    */
+    GTK_SAT_MODULE (widget)->header = gtk_label_new (NULL);
+    GTK_SAT_MODULE (widget)->head_count = 0;
+    GTK_SAT_MODULE (widget)->head_timeout = 
+        (GTK_SAT_MODULE(widget)->timeout > 1000 ? 1 : 
+         (guint) floor (1000/GTK_SAT_MODULE(widget)->timeout));
+
+    /* Event timeout
+       Update every minute FIXME: user configurable
+    */
+    GTK_SAT_MODULE (widget)->event_timeout = 
+        (GTK_SAT_MODULE(widget)->timeout > 60000 ? 1 : 
+         (guint) floor (60000/GTK_SAT_MODULE(widget)->timeout));
+    /* force update the first time */
+    GTK_SAT_MODULE (widget)->event_count = GTK_SAT_MODULE (widget)->event_timeout;
 
 
-	gtk_widget_show_all (widget);
+    butbox = gtk_hbox_new (FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (butbox),
+                        GTK_SAT_MODULE (widget)->header,
+                        FALSE, FALSE, 10);
+    gtk_box_pack_end (GTK_BOX (butbox),
+                      GTK_SAT_MODULE (widget)->close_button,
+                      FALSE, FALSE, 0);
+    gtk_box_pack_end (GTK_BOX (butbox),
+                      GTK_SAT_MODULE (widget)->popup_button,
+                      FALSE, FALSE, 0);
 
-	/* start timeout */
-	GTK_SAT_MODULE(widget)->timerid = g_timeout_add (GTK_SAT_MODULE(widget)->timeout,
-													 gtk_sat_module_timeout_cb,
-													 widget);
-	
+    gtk_box_pack_start (GTK_BOX (widget), butbox, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (widget), gtk_hseparator_new (), FALSE, FALSE, 0);
 
-	return widget;
+    create_module_layout (GTK_SAT_MODULE (widget));
+
+
+    gtk_widget_show_all (widget);
+
+    /* start timeout */
+    GTK_SAT_MODULE(widget)->timerid = g_timeout_add (GTK_SAT_MODULE(widget)->timeout,
+                                                     gtk_sat_module_timeout_cb,
+                                                     widget);
+    
+
+    return widget;
 }
 
 
@@ -374,156 +374,156 @@ static void
 create_module_layout (GtkSatModule *module)
 {
 
-	switch (module->layout) {
-		
-		/* one child, no setup needed here */
-	case GTK_SAT_MOD_LAYOUT_1:
-		module->child_1 = create_view (module, 1);
-		module->child_2 = NULL;
-		module->child_3 = NULL;
-		gtk_container_add (GTK_CONTAINER (module), module->child_1);
-		break;
+    switch (module->layout) {
+        
+        /* one child, no setup needed here */
+    case GTK_SAT_MOD_LAYOUT_1:
+        module->child_1 = create_view (module, 1);
+        module->child_2 = NULL;
+        module->child_3 = NULL;
+        gtk_container_add (GTK_CONTAINER (module), module->child_1);
+        break;
 
-		/* two children, we need a vpaned
-		   child_1 on top */
-	case GTK_SAT_MOD_LAYOUT_2:
-		module->vpaned = gtk_vpaned_new ();
-		gtk_container_add (GTK_CONTAINER (module), module->vpaned);
+        /* two children, we need a vpaned
+           child_1 on top */
+    case GTK_SAT_MOD_LAYOUT_2:
+        module->vpaned = gtk_vpaned_new ();
+        gtk_container_add (GTK_CONTAINER (module), module->vpaned);
 
-		module->child_1 = create_view (module, 1);
-		module->child_2 = create_view (module, 2);
-		module->child_3 = NULL;
+        module->child_1 = create_view (module, 1);
+        module->child_2 = create_view (module, 2);
+        module->child_3 = NULL;
 
-		gtk_paned_pack1 (GTK_PANED (module->vpaned),
-						 module->child_1, TRUE, TRUE);
-		gtk_paned_pack2 (GTK_PANED (module->vpaned),
-						 module->child_2, TRUE, TRUE);
+        gtk_paned_pack1 (GTK_PANED (module->vpaned),
+                         module->child_1, TRUE, TRUE);
+        gtk_paned_pack2 (GTK_PANED (module->vpaned),
+                         module->child_2, TRUE, TRUE);
 
-		break;
+        break;
 
-		/* one child on top, two at the bottom */
-	case GTK_SAT_MOD_LAYOUT_3:
-		module->vpaned = gtk_vpaned_new ();
-		module->hpaned = gtk_hpaned_new ();
-		gtk_container_add (GTK_CONTAINER (module), module->vpaned);
-		gtk_paned_pack2 (GTK_PANED (module->vpaned),
-						 module->hpaned,
-						 TRUE, TRUE);
+        /* one child on top, two at the bottom */
+    case GTK_SAT_MOD_LAYOUT_3:
+        module->vpaned = gtk_vpaned_new ();
+        module->hpaned = gtk_hpaned_new ();
+        gtk_container_add (GTK_CONTAINER (module), module->vpaned);
+        gtk_paned_pack2 (GTK_PANED (module->vpaned),
+                         module->hpaned,
+                         TRUE, TRUE);
 
-		module->child_1 = create_view (module, 1);
-		module->child_2 = create_view (module, 2);
-		module->child_3 = create_view (module, 3);
+        module->child_1 = create_view (module, 1);
+        module->child_2 = create_view (module, 2);
+        module->child_3 = create_view (module, 3);
 
-		gtk_paned_pack1 (GTK_PANED (module->vpaned),
-						 module->child_1, TRUE, TRUE);
-		gtk_paned_pack1 (GTK_PANED (module->hpaned),
-						 module->child_2, TRUE, TRUE);
-		gtk_paned_pack2 (GTK_PANED (module->hpaned),
-						 module->child_3, TRUE, TRUE);
+        gtk_paned_pack1 (GTK_PANED (module->vpaned),
+                         module->child_1, TRUE, TRUE);
+        gtk_paned_pack1 (GTK_PANED (module->hpaned),
+                         module->child_2, TRUE, TRUE);
+        gtk_paned_pack2 (GTK_PANED (module->hpaned),
+                         module->child_3, TRUE, TRUE);
 
-		break;
+        break;
 
-		/* two childre on top, on at the bottom */
-	case GTK_SAT_MOD_LAYOUT_4:
-		module->vpaned = gtk_vpaned_new ();
-		module->hpaned = gtk_hpaned_new ();
-		gtk_container_add (GTK_CONTAINER (module), module->vpaned);
-		gtk_paned_pack1 (GTK_PANED (module->vpaned),
-						 module->hpaned,
-						 TRUE, TRUE);
+        /* two childre on top, on at the bottom */
+    case GTK_SAT_MOD_LAYOUT_4:
+        module->vpaned = gtk_vpaned_new ();
+        module->hpaned = gtk_hpaned_new ();
+        gtk_container_add (GTK_CONTAINER (module), module->vpaned);
+        gtk_paned_pack1 (GTK_PANED (module->vpaned),
+                         module->hpaned,
+                         TRUE, TRUE);
 
-		module->child_1 = create_view (module, 1);
-		module->child_2 = create_view (module, 2);
-		module->child_3 = create_view (module, 3);
+        module->child_1 = create_view (module, 1);
+        module->child_2 = create_view (module, 2);
+        module->child_3 = create_view (module, 3);
 
-		gtk_paned_pack1 (GTK_PANED (module->hpaned),
-						 module->child_1, TRUE, TRUE);
-		gtk_paned_pack2 (GTK_PANED (module->hpaned),
-						 module->child_2, TRUE, TRUE);
-		gtk_paned_pack2 (GTK_PANED (module->vpaned),
-						 module->child_3, TRUE, TRUE);
+        gtk_paned_pack1 (GTK_PANED (module->hpaned),
+                         module->child_1, TRUE, TRUE);
+        gtk_paned_pack2 (GTK_PANED (module->hpaned),
+                         module->child_2, TRUE, TRUE);
+        gtk_paned_pack2 (GTK_PANED (module->vpaned),
+                         module->child_3, TRUE, TRUE);
 
-		break;
+        break;
 
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Invalid module layout (%d)"),
-					 __FILE__, __LINE__, module->layout);
-		break;
+    default:
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Invalid module layout (%d)"),
+                     __FILE__, __LINE__, module->layout);
+        break;
 
-	}
+    }
 }
 
 
 static GtkWidget *
 create_view (GtkSatModule *module, guint num)
 {
-	GtkWidget *view;
-	gtk_sat_mod_view_t viewt = GTK_SAT_MOD_VIEW_LIST;
+    GtkWidget *view;
+    gtk_sat_mod_view_t viewt = GTK_SAT_MOD_VIEW_LIST;
 
-	/* get view type */
-	switch (num) {
-	case 1:
-		viewt = module->view_1;
-		break;
-	case 2:
-		viewt = module->view_2;
-		break;
-	case 3:
-		viewt = module->view_3;
-		break;
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Invalid child number (%d)"),
-					 __FILE__, __LINE__, num);
-		break;
-	}
+    /* get view type */
+    switch (num) {
+    case 1:
+        viewt = module->view_1;
+        break;
+    case 2:
+        viewt = module->view_2;
+        break;
+    case 3:
+        viewt = module->view_3;
+        break;
+    default:
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Invalid child number (%d)"),
+                     __FILE__, __LINE__, num);
+        break;
+    }
 
-	/* create the corresponding child widget */
-	switch (viewt) {
+    /* create the corresponding child widget */
+    switch (viewt) {
 
-	case GTK_SAT_MOD_VIEW_LIST:
-		view = gtk_sat_list_new (module->cfgdata,
-								 module->satellites,
-								 module->qth,
-								 0);
-		break;
+    case GTK_SAT_MOD_VIEW_LIST:
+        view = gtk_sat_list_new (module->cfgdata,
+                                 module->satellites,
+                                 module->qth,
+                                 0);
+        break;
 
-	case GTK_SAT_MOD_VIEW_MAP:
-		view = gtk_sat_map_new (module->cfgdata,
-								module->satellites,
-								module->qth);
-		break;
+    case GTK_SAT_MOD_VIEW_MAP:
+        view = gtk_sat_map_new (module->cfgdata,
+                                module->satellites,
+                                module->qth);
+        break;
 
-	case GTK_SAT_MOD_VIEW_POLAR:
-		view = gtk_polar_view_new (module->cfgdata,
-								   module->satellites,
-								   module->qth);
-		break;
+    case GTK_SAT_MOD_VIEW_POLAR:
+        view = gtk_polar_view_new (module->cfgdata,
+                                   module->satellites,
+                                   module->qth);
+        break;
 
-	case GTK_SAT_MOD_VIEW_SINGLE:
-		view = gtk_single_sat_new (module->cfgdata,
-								   module->satellites,
-								   module->qth,
-								   0);
+    case GTK_SAT_MOD_VIEW_SINGLE:
+        view = gtk_single_sat_new (module->cfgdata,
+                                   module->satellites,
+                                   module->qth,
+                                   0);
 
         break;
 
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Invalid child type (%d)\nUsing GtkSatList..."),
-					 __FILE__, __LINE__, num);
+    default:
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Invalid child type (%d)\nUsing GtkSatList..."),
+                     __FILE__, __LINE__, num);
 
-		view = gtk_sat_list_new (module->cfgdata,
-								 module->satellites,
-								 module->qth,
-								 0);
-		break;
+        view = gtk_sat_list_new (module->cfgdata,
+                                 module->satellites,
+                                 module->qth,
+                                 0);
+        break;
 
-	}
+    }
 
 
-	return view;
+    return view;
 }
 
 
@@ -535,120 +535,120 @@ create_view (GtkSatModule *module, guint num)
 static void
 gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
 {
-	gchar   *buffer = NULL;
-	gchar   *qthfile;
-	gchar  **buffv;
-	GError  *error = NULL;
+    gchar   *buffer = NULL;
+    gchar   *qthfile;
+    gchar  **buffv;
+    GError  *error = NULL;
 
-	module->cfgdata = g_key_file_new ();
-	g_key_file_set_list_separator (module->cfgdata, ';');
+    module->cfgdata = g_key_file_new ();
+    g_key_file_set_list_separator (module->cfgdata, ';');
 
-	/* Bail out with error message if data can not be read */
-	if (!g_key_file_load_from_file (module->cfgdata, cfgfile,
-									G_KEY_FILE_KEEP_COMMENTS, &error)) {
+    /* Bail out with error message if data can not be read */
+    if (!g_key_file_load_from_file (module->cfgdata, cfgfile,
+                                    G_KEY_FILE_KEEP_COMMENTS, &error)) {
 
-		g_key_file_free (module->cfgdata);
+        g_key_file_free (module->cfgdata);
 
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Could not load config data from %s (%s)."),
-					 __FUNCTION__, cfgfile, error->message);
-		
-		g_clear_error (&error);
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not load config data from %s (%s)."),
+                     __FUNCTION__, cfgfile, error->message);
+        
+        g_clear_error (&error);
 
-		return;
-	}
+        return;
+    }
 
-	/* debug message */
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Reading configuration from %s"),
-				 __FUNCTION__, cfgfile);
+    /* debug message */
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s: Reading configuration from %s"),
+                 __FUNCTION__, cfgfile);
 
-	/* set module name */
-	buffer = g_path_get_basename (cfgfile);
-	buffv = g_strsplit (buffer, ".mod", 0);
-	module->name = g_strdup (buffv[0]);
-	g_free (buffer);
-	g_strfreev(buffv);
+    /* set module name */
+    buffer = g_path_get_basename (cfgfile);
+    buffv = g_strsplit (buffer, ".mod", 0);
+    module->name = g_strdup (buffv[0]);
+    g_free (buffer);
+    g_strfreev(buffv);
 
-	/* get qth file */
-	buffer = mod_cfg_get_str (module->cfgdata,
-							  MOD_CFG_GLOBAL_SECTION,
-							  MOD_CFG_QTH_FILE_KEY,
-							  SAT_CFG_STR_DEF_QTH);
+    /* get qth file */
+    buffer = mod_cfg_get_str (module->cfgdata,
+                              MOD_CFG_GLOBAL_SECTION,
+                              MOD_CFG_QTH_FILE_KEY,
+                              SAT_CFG_STR_DEF_QTH);
 
-	qthfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						   ".gpredict2",  G_DIR_SEPARATOR_S,
-						   buffer, NULL);
-	/* load QTH data */
-	if (!gtk_sat_data_read_qth (qthfile, module->qth)) {
+    qthfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
+                           ".gpredict2",  G_DIR_SEPARATOR_S,
+                           buffer, NULL);
+    /* load QTH data */
+    if (!gtk_sat_data_read_qth (qthfile, module->qth)) {
 
-		/* QTH file was not found for some reason */
-		g_free (buffer);
-		g_free (qthfile);
+        /* QTH file was not found for some reason */
+        g_free (buffer);
+        g_free (qthfile);
 
-		/* remove cfg key */
-		g_key_file_remove_key (module->cfgdata,
-							   MOD_CFG_GLOBAL_SECTION,
-							   MOD_CFG_QTH_FILE_KEY,
-							   NULL);
+        /* remove cfg key */
+        g_key_file_remove_key (module->cfgdata,
+                               MOD_CFG_GLOBAL_SECTION,
+                               MOD_CFG_QTH_FILE_KEY,
+                               NULL);
 
-		/* save modified cfg data to file */
-		mod_cfg_save (module->name, module->cfgdata);
+        /* save modified cfg data to file */
+        mod_cfg_save (module->name, module->cfgdata);
 
-		/* try SAT_CFG_STR_DEF_QTH */
-		buffer = sat_cfg_get_str (SAT_CFG_STR_DEF_QTH);
-		qthfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-							   ".gpredict2",  G_DIR_SEPARATOR_S,
-							   buffer, NULL);
+        /* try SAT_CFG_STR_DEF_QTH */
+        buffer = sat_cfg_get_str (SAT_CFG_STR_DEF_QTH);
+        qthfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
+                               ".gpredict2",  G_DIR_SEPARATOR_S,
+                               buffer, NULL);
 
-		if (!gtk_sat_data_read_qth (qthfile, module->qth)) {
+        if (!gtk_sat_data_read_qth (qthfile, module->qth)) {
 
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: Can not load default QTH file %s; using built-in defaults"),
-						 __FUNCTION__, buffer);
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Can not load default QTH file %s; using built-in defaults"),
+                         __FUNCTION__, buffer);
 
-			/* settings are really screwed up; we need some safe values here */
-			module->qth->name = g_strdup (_("Error"));
-			module->qth->loc  = g_strdup (_("Error"));
-			module->qth->lat  = 0.0;
-			module->qth->lon  = 0.0;
-			module->qth->alt  = 0;
-		}
-	}
+            /* settings are really screwed up; we need some safe values here */
+            module->qth->name = g_strdup (_("Error"));
+            module->qth->loc  = g_strdup (_("Error"));
+            module->qth->lat  = 0.0;
+            module->qth->lon  = 0.0;
+            module->qth->alt  = 0;
+        }
+    }
 
-	g_free (buffer);
-	g_free (qthfile);
+    g_free (buffer);
+    g_free (qthfile);
 
 
-	/* get timeout value */
-	module->timeout = mod_cfg_get_int (module->cfgdata,
-									   MOD_CFG_GLOBAL_SECTION,
-									   MOD_CFG_TIMEOUT_KEY,
-									   SAT_CFG_INT_MODULE_TIMEOUT);
+    /* get timeout value */
+    module->timeout = mod_cfg_get_int (module->cfgdata,
+                                       MOD_CFG_GLOBAL_SECTION,
+                                       MOD_CFG_TIMEOUT_KEY,
+                                       SAT_CFG_INT_MODULE_TIMEOUT);
 
-	/* layout */
-	module->layout = mod_cfg_get_int (module->cfgdata,
-									  MOD_CFG_GLOBAL_SECTION,
-									  MOD_CFG_LAYOUT,
-									  SAT_CFG_INT_MODULE_LAYOUT);
+    /* layout */
+    module->layout = mod_cfg_get_int (module->cfgdata,
+                                      MOD_CFG_GLOBAL_SECTION,
+                                      MOD_CFG_LAYOUT,
+                                      SAT_CFG_INT_MODULE_LAYOUT);
 
-	/* view 1 */
-	module->view_1 = mod_cfg_get_int (module->cfgdata,
-									  MOD_CFG_GLOBAL_SECTION,
-									  MOD_CFG_VIEW_1,
-									  SAT_CFG_INT_MODULE_VIEW_1);
+    /* view 1 */
+    module->view_1 = mod_cfg_get_int (module->cfgdata,
+                                      MOD_CFG_GLOBAL_SECTION,
+                                      MOD_CFG_VIEW_1,
+                                      SAT_CFG_INT_MODULE_VIEW_1);
 
-	/* view 2 */
-	module->view_2 = mod_cfg_get_int (module->cfgdata,
-									  MOD_CFG_GLOBAL_SECTION,
-									  MOD_CFG_VIEW_2,
-									  SAT_CFG_INT_MODULE_VIEW_2);
+    /* view 2 */
+    module->view_2 = mod_cfg_get_int (module->cfgdata,
+                                      MOD_CFG_GLOBAL_SECTION,
+                                      MOD_CFG_VIEW_2,
+                                      SAT_CFG_INT_MODULE_VIEW_2);
 
-	/* view 3 */
-	module->view_3 = mod_cfg_get_int (module->cfgdata,
-									  MOD_CFG_GLOBAL_SECTION,
-									  MOD_CFG_VIEW_3,
-									  SAT_CFG_INT_MODULE_VIEW_3);
+    /* view 3 */
+    module->view_3 = mod_cfg_get_int (module->cfgdata,
+                                      MOD_CFG_GLOBAL_SECTION,
+                                      MOD_CFG_VIEW_3,
+                                      SAT_CFG_INT_MODULE_VIEW_3);
 
 }
 
@@ -661,93 +661,93 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
 static void
 gtk_sat_module_load_sats      (GtkSatModule *module)
 {
-	gint   *sats = NULL;
-	gsize   length;
-	GError *error = NULL;
-	guint   i;
-	sat_t  *sat;
-	guint  *key = NULL;
-	guint   succ = 0;
+    gint   *sats = NULL;
+    gsize   length;
+    GError *error = NULL;
+    guint   i;
+    sat_t  *sat;
+    guint  *key = NULL;
+    guint   succ = 0;
 
-	/* get list of satellites from config file; abort in case of error */
-	sats = g_key_file_get_integer_list (module->cfgdata,
-										MOD_CFG_GLOBAL_SECTION,
-										MOD_CFG_SATS_KEY,
-										&length,
-										&error);
-			
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Failed to get list of satellites (%s)"),
-					 __FUNCTION__, error->message);
+    /* get list of satellites from config file; abort in case of error */
+    sats = g_key_file_get_integer_list (module->cfgdata,
+                                        MOD_CFG_GLOBAL_SECTION,
+                                        MOD_CFG_SATS_KEY,
+                                        &length,
+                                        &error);
+            
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to get list of satellites (%s)"),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		/* GLib API says nothing about the contents in case of error */
-		if (sats) {
-			g_free (sats);
-		}
+        /* GLib API says nothing about the contents in case of error */
+        if (sats) {
+            g_free (sats);
+        }
 
-		return;
-	}
-		    
-	/* read each satellite into hash table */
-	for (i = 0; i < length; i++) {
+        return;
+    }
+            
+    /* read each satellite into hash table */
+    for (i = 0; i < length; i++) {
 
-		sat = g_new (sat_t, 1);
+        sat = g_new (sat_t, 1);
 
-		if (gtk_sat_data_read_sat (sats[i], sat)) {
+        if (gtk_sat_data_read_sat (sats[i], sat)) {
 
-			/* the satellite could not be read */
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: Error reading data for #%d"),
-						 __FUNCTION__, sats[i]);
+            /* the satellite could not be read */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Error reading data for #%d"),
+                         __FUNCTION__, sats[i]);
 
-			g_free (sat);
-		}
-		else {
-			/* check whether satellite is already in list
-			   in order to avoid duplicates
-			*/
+            g_free (sat);
+        }
+        else {
+            /* check whether satellite is already in list
+               in order to avoid duplicates
+            */
 
-			key = g_new0 (guint, 1);
-			*key = sats[i];
+            key = g_new0 (guint, 1);
+            *key = sats[i];
 
-			if (g_hash_table_lookup (module->satellites, key) == NULL) {
+            if (g_hash_table_lookup (module->satellites, key) == NULL) {
 
-				gtk_sat_data_init_sat (sat, module->qth);
+                gtk_sat_data_init_sat (sat, module->qth);
 
-				g_hash_table_insert (module->satellites,
-									 key,
-									 sat);
+                g_hash_table_insert (module->satellites,
+                                     key,
+                                     sat);
 
-				succ++;
+                succ++;
 
-				sat_log_log (SAT_LOG_LEVEL_DEBUG,
-							 _("%s: Read data for #%d"),
-							 __FUNCTION__, sats[i]);
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s: Read data for #%d"),
+                             __FUNCTION__, sats[i]);
 
 
-			}
-			else {
-				sat_log_log (SAT_LOG_LEVEL_WARN,
-							 _("%s: Sat #%d already in list"),
-							 __FUNCTION__, sats[i]);
+            }
+            else {
+                sat_log_log (SAT_LOG_LEVEL_WARN,
+                             _("%s: Sat #%d already in list"),
+                             __FUNCTION__, sats[i]);
 
-				/* it is not needed in this case */
-				g_free (sat);
-			}
+                /* it is not needed in this case */
+                g_free (sat);
+            }
 
-		}
-	}
+        }
+    }
 
-	sat_log_log (SAT_LOG_LEVEL_MSG,
-				 _("%s: Read %d out of %d satellites"),
-				 __FUNCTION__,
-				 succ,
-				 length);
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Read %d out of %d satellites"),
+                 __FUNCTION__,
+                 succ,
+                 length);
 
-	g_free (sats);
+    g_free (sats);
 
 }
 
@@ -761,7 +761,7 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
 /* static gboolean */
 /* gtk_sat_module_sats_are_equal (gconstpointer sat1, gconstpointer sat2) */
 /* { */
-/* 	return ( SAT(sat1)->tle.catnr == SAT(sat2)->tle.catnr ); */
+/*     return ( SAT(sat1)->tle.catnr == SAT(sat2)->tle.catnr ); */
 
 /* } */
 
@@ -771,96 +771,96 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
 static gboolean
 gtk_sat_module_timeout_cb     (gpointer module)
 {
-	GtkSatModule *mod = GTK_SAT_MODULE (module);
-	gboolean       needupdate = FALSE;
-	GdkWindowState state;
-	gdouble   delta;
+    GtkSatModule *mod = GTK_SAT_MODULE (module);
+    gboolean       needupdate = FALSE;
+    GdkWindowState state;
+    gdouble   delta;
 
 
-	if (mod->busy) {
+    if (mod->busy) {
 
-		sat_log_log (SAT_LOG_LEVEL_WARN,
-					 _("%s: Previous cycle missed it's deadline."),
-					 __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: Previous cycle missed it's deadline."),
+                     __FUNCTION__);
 
-		return TRUE;
+        return TRUE;
 
-	}
-
-
-	/* in docked state, update only if tab is visible */
-	switch (mod->state) {
-
-	case GTK_SAT_MOD_STATE_DOCKED:
-
-		if (mod_mgr_mod_is_visible (GTK_WIDGET (module))) {
-			needupdate = TRUE;
-		}
-		break;
-
-	default:
-		state = gdk_window_get_state (GDK_WINDOW (GTK_WIDGET (module)->window));
-
-		if (state & GDK_WINDOW_STATE_ICONIFIED) {
-			needupdate = FALSE;
-		}
-		else {
-			needupdate = TRUE;
-		}
-		break;
-	}
-
-	if (needupdate) {
-
-		mod->busy = TRUE;
+    }
 
 
-		mod->rtNow = get_current_daynum ();
+    /* in docked state, update only if tab is visible */
+    switch (mod->state) {
 
-		/* Update time if throttle != 0 */
-		if (mod->throttle) {
+    case GTK_SAT_MOD_STATE_DOCKED:
 
-			delta = mod->throttle * (mod->rtNow - mod->rtPrev);
-			mod->tmgCdnum = mod->tmgPdnum + delta;
+        if (mod_mgr_mod_is_visible (GTK_WIDGET (module))) {
+            needupdate = TRUE;
+        }
+        break;
 
-		}
-		/* else nothing to do since tmg_time_set updates
-		   mod->tmgCdnum every time
-		*/
+    default:
+        state = gdk_window_get_state (GDK_WINDOW (GTK_WIDGET (module)->window));
 
-		/* time to update header? */
-		mod->head_count++;
-		if (mod->head_count == mod->head_timeout) {
+        if (state & GDK_WINDOW_STATE_ICONIFIED) {
+            needupdate = FALSE;
+        }
+        else {
+            needupdate = TRUE;
+        }
+        break;
+    }
 
-			/* reset counter */
-			mod->head_count = 0;
-			
-			update_header (mod);
-		}
+    if (needupdate) {
 
-		/* time to update events? */
-		if (mod->event_count == mod->event_timeout) {
+        mod->busy = TRUE;
 
-			/* reset counter, this will make gtk_sat_module_update_sat
-			   recalculate events
-			*/
-			mod->event_count = 0;
-		}
 
-		/* update satellite data */
-		g_hash_table_foreach (mod->satellites,
-							  gtk_sat_module_update_sat,
-							  module);
+        mod->rtNow = get_current_daynum ();
 
-		/* update children */
-		if (mod->child_1 != NULL)
-			update_child (mod->child_1, mod->tmgCdnum);
+        /* Update time if throttle != 0 */
+        if (mod->throttle) {
 
-		if (mod->child_2 != NULL)
-			update_child (mod->child_2, mod->tmgCdnum);
+            delta = mod->throttle * (mod->rtNow - mod->rtPrev);
+            mod->tmgCdnum = mod->tmgPdnum + delta;
 
-		if (mod->child_3 != NULL)
-			update_child (mod->child_3, mod->tmgCdnum);
+        }
+        /* else nothing to do since tmg_time_set updates
+           mod->tmgCdnum every time
+        */
+
+        /* time to update header? */
+        mod->head_count++;
+        if (mod->head_count == mod->head_timeout) {
+
+            /* reset counter */
+            mod->head_count = 0;
+            
+            update_header (mod);
+        }
+
+        /* time to update events? */
+        if (mod->event_count == mod->event_timeout) {
+
+            /* reset counter, this will make gtk_sat_module_update_sat
+               recalculate events
+            */
+            mod->event_count = 0;
+        }
+
+        /* update satellite data */
+        g_hash_table_foreach (mod->satellites,
+                              gtk_sat_module_update_sat,
+                              module);
+
+        /* update children */
+        if (mod->child_1 != NULL)
+            update_child (mod->child_1, mod->tmgCdnum);
+
+        if (mod->child_2 != NULL)
+            update_child (mod->child_2, mod->tmgCdnum);
+
+        if (mod->child_3 != NULL)
+            update_child (mod->child_3, mod->tmgCdnum);
 
         /* send notice to radio and rotator controller */
         if (mod->rigctrl)
@@ -869,59 +869,59 @@ gtk_sat_module_timeout_cb     (gpointer module)
             gtk_rot_ctrl_update (GTK_ROT_CTRL (mod->rotctrl), mod->tmgCdnum);
         
 
-		mod->event_count++;
+        mod->event_count++;
 
-		/* store time keeping variables */
-		mod->rtPrev = mod->rtNow;
-		mod->tmgPdnum = mod->tmgCdnum;
+        /* store time keeping variables */
+        mod->rtPrev = mod->rtNow;
+        mod->tmgPdnum = mod->tmgCdnum;
 
-		if (mod->tmgActive) {
+        if (mod->tmgActive) {
 
-			/* update time control spin buttons when we are
-			   in RT or SRT mode */
-			if (mod->throttle) {
-				tmg_update_widgets (mod);
-			}
+            /* update time control spin buttons when we are
+               in RT or SRT mode */
+            if (mod->throttle) {
+                tmg_update_widgets (mod);
+            }
 
-		}
+        }
 
 
-		mod->busy = FALSE;
+        mod->busy = FALSE;
 
-	}
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 
 static void
 update_child (GtkWidget *child, gdouble tstamp)
 {
-	if (IS_GTK_SAT_LIST(child)) {
-		GTK_SAT_LIST (child)->tstamp = tstamp;
-		gtk_sat_list_update (child);
-	}
+    if (IS_GTK_SAT_LIST(child)) {
+        GTK_SAT_LIST (child)->tstamp = tstamp;
+        gtk_sat_list_update (child);
+    }
 
-	else if (IS_GTK_SAT_MAP(child)) {
-		GTK_SAT_MAP (child)->tstamp = tstamp;
-		gtk_sat_map_update (child);
-	}
+    else if (IS_GTK_SAT_MAP(child)) {
+        GTK_SAT_MAP (child)->tstamp = tstamp;
+        gtk_sat_map_update (child);
+    }
 
-	else if (IS_GTK_POLAR_VIEW(child)) {
-		GTK_POLAR_VIEW (child)->tstamp = tstamp;
-		gtk_polar_view_update (child);
-	}
+    else if (IS_GTK_POLAR_VIEW(child)) {
+        GTK_POLAR_VIEW (child)->tstamp = tstamp;
+        gtk_polar_view_update (child);
+    }
 
-	else if (IS_GTK_SINGLE_SAT(child)) {
-		GTK_SINGLE_SAT (child)->tstamp = tstamp;
-		gtk_single_sat_update (child);
-	}
+    else if (IS_GTK_SINGLE_SAT(child)) {
+        GTK_SINGLE_SAT (child)->tstamp = tstamp;
+        gtk_single_sat_update (child);
+    }
 
-	else {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%f:%d: Unknown child type"),
-					 __FILE__, __LINE__);
-	}
+    else {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%f:%d: Unknown child type"),
+                     __FILE__, __LINE__);
+    }
 }
 
 
@@ -936,110 +936,110 @@ update_child (GtkWidget *child, gdouble tstamp)
 static void
 gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
 {
-	sat_t        *sat;
-	GtkSatModule *module;
-	gdouble       daynum;
-	double        age;
-	obs_set_t     obs_set = {0,0,0,0};
-	geodetic_t    sat_geodetic = {0,0,0,0};
-	geodetic_t    obs_geodetic = {0,0,0,0};
-	gdouble       maxdt;
+    sat_t        *sat;
+    GtkSatModule *module;
+    gdouble       daynum;
+    double        age;
+    obs_set_t     obs_set = {0,0,0,0};
+    geodetic_t    sat_geodetic = {0,0,0,0};
+    geodetic_t    obs_geodetic = {0,0,0,0};
+    gdouble       maxdt;
 
-	g_return_if_fail ((val != NULL) && (data != NULL));
+    g_return_if_fail ((val != NULL) && (data != NULL));
 
-	sat = SAT(val);
-	module = GTK_SAT_MODULE (data);
-
-
-	/* get current time (real or simulated */
-	daynum = module->tmgCdnum;
-
-	/* update events if the event counter has been reset
-	   and the other requirements are fulfilled
-	*/
-	if ((GTK_SAT_MODULE (module)->event_count == 0) &&
-	    (sat->otype != ORBIT_TYPE_GEO) &&
-	    (sat->otype != ORBIT_TYPE_DECAYED) &&
-	    has_aos (sat, module->qth))	{
-
-		/* Note that has_aos may return TRUE for geostationary sats
-		   whose orbit deviate from a true-geostat orbit, however,
-		   find_aos and find_los will not go beyond the time limit
-		   we specify (in those cases they return 0.0 for AOS/LOS times.
-		   We use SAT_CFG_INT_PRED_LOOK_AHEAD for upper time limit
-		*/
-		maxdt = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
-		sat->aos = find_aos (sat, module->qth, daynum, maxdt);
-		sat->los = find_los (sat, module->qth, daynum, maxdt);
-
-	}
+    sat = SAT(val);
+    module = GTK_SAT_MODULE (data);
 
 
-	/*** FIXME: we don't need to do this every time! */
-	obs_geodetic.lon = module->qth->lon * de2ra;
-	obs_geodetic.lat = module->qth->lat * de2ra;
-	obs_geodetic.alt = module->qth->alt / 1000.0;
-	obs_geodetic.theta = 0;
+    /* get current time (real or simulated */
+    daynum = module->tmgCdnum;
+
+    /* update events if the event counter has been reset
+       and the other requirements are fulfilled
+    */
+    if ((GTK_SAT_MODULE (module)->event_count == 0) &&
+        (sat->otype != ORBIT_TYPE_GEO) &&
+        (sat->otype != ORBIT_TYPE_DECAYED) &&
+        has_aos (sat, module->qth))    {
+
+        /* Note that has_aos may return TRUE for geostationary sats
+           whose orbit deviate from a true-geostat orbit, however,
+           find_aos and find_los will not go beyond the time limit
+           we specify (in those cases they return 0.0 for AOS/LOS times.
+           We use SAT_CFG_INT_PRED_LOOK_AHEAD for upper time limit
+        */
+        maxdt = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
+        sat->aos = find_aos (sat, module->qth, daynum, maxdt);
+        sat->los = find_los (sat, module->qth, daynum, maxdt);
+
+    }
 
 
-	sat->jul_utc = daynum;
-	sat->tsince = (sat->jul_utc - sat->jul_epoch) * xmnpda;
-
-	/*** FIXME: STS-122 FIX: Shuttle is fixed at launch site before launch
-		 Actually, first TLE set seem invalid before MET = 00:03:?? = 00:04:00
-	 */
-	/* check that we have a GtkMet child */
-	/**** FIXME: GtkMet may not be child 2.... */
-	if G_UNLIKELY(FALSE) {
-
-	}
-	else {
-
-		/* call the norad routines according to the deep-space flag */
-		if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
-			SDP4 (sat, sat->tsince);
-		else
-			SGP4 (sat, sat->tsince);
-
-		/* scale position and velocity to km and km/sec */
-		Convert_Sat_State (&sat->pos, &sat->vel);
-
-		/* get the velocity of the satellite */
-		Magnitude (&sat->vel);
-		sat->velo = sat->vel.w;
-		Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
-		Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
-		
-		/*** FIXME: should we ensure sat_geodetic.lon stays between -pi and pi? */
-		while (sat_geodetic.lon < -pi)
-			sat_geodetic.lon += twopi;
-		
-		while (sat_geodetic.lon > (pi))
-			sat_geodetic.lon -= twopi;
-		
-		sat->az = Degrees (obs_set.az);
-		sat->el = Degrees (obs_set.el);
-		sat->range = obs_set.range;
-		sat->range_rate = obs_set.range_rate;
-		sat->ssplat = Degrees (sat_geodetic.lat);
-		sat->ssplon = Degrees (sat_geodetic.lon);
-		sat->alt = sat_geodetic.alt;
-		sat->ma = Degrees (sat->phase);
-		sat->ma *= 256.0/360.0;
-		sat->phase = Degrees (sat->phase);
-
-		/* same formulas, but the one from predict is nicer */
-		//sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
-		sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
-		age = sat->jul_utc - sat->jul_epoch;
-		sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
-								   age * sat->tle.bstar * ae) * age +
-								  sat->tle.xmo/twopi) + sat->tle.revnum - 1;
+    /*** FIXME: we don't need to do this every time! */
+    obs_geodetic.lon = module->qth->lon * de2ra;
+    obs_geodetic.lat = module->qth->lat * de2ra;
+    obs_geodetic.alt = module->qth->alt / 1000.0;
+    obs_geodetic.theta = 0;
 
 
-		/*** FIXME: Squint + AOS / LOS code */
+    sat->jul_utc = daynum;
+    sat->tsince = (sat->jul_utc - sat->jul_epoch) * xmnpda;
 
-	}
+    /*** FIXME: STS-122 FIX: Shuttle is fixed at launch site before launch
+         Actually, first TLE set seem invalid before MET = 00:03:?? = 00:04:00
+     */
+    /* check that we have a GtkMet child */
+    /**** FIXME: GtkMet may not be child 2.... */
+    if G_UNLIKELY(FALSE) {
+
+    }
+    else {
+
+        /* call the norad routines according to the deep-space flag */
+        if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
+            SDP4 (sat, sat->tsince);
+        else
+            SGP4 (sat, sat->tsince);
+
+        /* scale position and velocity to km and km/sec */
+        Convert_Sat_State (&sat->pos, &sat->vel);
+
+        /* get the velocity of the satellite */
+        Magnitude (&sat->vel);
+        sat->velo = sat->vel.w;
+        Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
+        Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
+        
+        /*** FIXME: should we ensure sat_geodetic.lon stays between -pi and pi? */
+        while (sat_geodetic.lon < -pi)
+            sat_geodetic.lon += twopi;
+        
+        while (sat_geodetic.lon > (pi))
+            sat_geodetic.lon -= twopi;
+        
+        sat->az = Degrees (obs_set.az);
+        sat->el = Degrees (obs_set.el);
+        sat->range = obs_set.range;
+        sat->range_rate = obs_set.range_rate;
+        sat->ssplat = Degrees (sat_geodetic.lat);
+        sat->ssplon = Degrees (sat_geodetic.lon);
+        sat->alt = sat_geodetic.alt;
+        sat->ma = Degrees (sat->phase);
+        sat->ma *= 256.0/360.0;
+        sat->phase = Degrees (sat->phase);
+
+        /* same formulas, but the one from predict is nicer */
+        //sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
+        sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
+        age = sat->jul_utc - sat->jul_epoch;
+        sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
+                                   age * sat->tle.bstar * ae) * age +
+                                  sat->tle.xmo/twopi) + sat->tle.revnum - 1;
+
+
+        /*** FIXME: Squint + AOS / LOS code */
+
+    }
 }
 
 
@@ -1051,7 +1051,7 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
 static void
 gtk_sat_module_popup_cb       (GtkWidget *button, gpointer data)
 {
-	gtk_sat_module_popup (GTK_SAT_MODULE (data));
+    gtk_sat_module_popup (GTK_SAT_MODULE (data));
 }
 
 
@@ -1072,110 +1072,110 @@ gtk_sat_module_popup_cb       (GtkWidget *button, gpointer data)
 void
 gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
 {
-	GtkSatModule *module = GTK_SAT_MODULE (data);
-	gchar        *name;
-	gint          retcode;
+    GtkSatModule *module = GTK_SAT_MODULE (data);
+    gchar        *name;
+    gint          retcode;
 
-	name = g_strdup (module->name);
+    name = g_strdup (module->name);
 
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Module %s recevied CLOSE signal."),
-				 __FUNCTION__, name);
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s: Module %s recevied CLOSE signal."),
+                 __FUNCTION__, name);
 
     /* save configuration to ensure that dynamic data like state is stored */
     mod_cfg_save (module->name, module->cfgdata);
 
-	switch (module->state) {
+    switch (module->state) {
 
-	case GTK_SAT_MOD_STATE_DOCKED:
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s: Module %s is in DOCKED state."),
-					 __FUNCTION__, name);
+    case GTK_SAT_MOD_STATE_DOCKED:
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Module %s is in DOCKED state."),
+                     __FUNCTION__, name);
 
-		retcode = mod_mgr_remove_module (GTK_WIDGET (module));
+        retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
-		if (retcode) {
-			sat_log_log (SAT_LOG_LEVEL_BUG,
-						 _("%s: Module %s was not found in mod-mgr (%d)\n"\
-						   "Internal state is corrupt?"),
-						 __FUNCTION__, name, retcode);
-		}
+        if (retcode) {
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s: Module %s was not found in mod-mgr (%d)\n"\
+                           "Internal state is corrupt?"),
+                         __FUNCTION__, name, retcode);
+        }
 
-		break;
+        break;
 
-	case GTK_SAT_MOD_STATE_WINDOW:
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s: Module %s is in WINDOW state."),
-					 __FUNCTION__, name);
+    case GTK_SAT_MOD_STATE_WINDOW:
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Module %s is in WINDOW state."),
+                     __FUNCTION__, name);
 
-		retcode = mod_mgr_remove_module (GTK_WIDGET (module));
+        retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
-		if (retcode) {
-			sat_log_log (SAT_LOG_LEVEL_BUG,
-						 _("%s: Module %s was not found in mod-mgr (%d)\n"\
-						   "Internal state is corrupt?"),
-						 __FUNCTION__, name, retcode);
-		}
+        if (retcode) {
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s: Module %s was not found in mod-mgr (%d)\n"\
+                           "Internal state is corrupt?"),
+                         __FUNCTION__, name, retcode);
+        }
 
-		/* increase referene count */
-		g_object_ref (module);
+        /* increase referene count */
+        g_object_ref (module);
 
-		/* remove module from window, destroy window */
-		gtk_container_remove (GTK_CONTAINER (GTK_SAT_MODULE (module)->win),
-							  GTK_WIDGET (module));
-		gtk_widget_destroy (GTK_SAT_MODULE (module)->win);
-		GTK_SAT_MODULE (module)->win = NULL;
+        /* remove module from window, destroy window */
+        gtk_container_remove (GTK_CONTAINER (GTK_SAT_MODULE (module)->win),
+                              GTK_WIDGET (module));
+        gtk_widget_destroy (GTK_SAT_MODULE (module)->win);
+        GTK_SAT_MODULE (module)->win = NULL;
 
-		/* release module */
-		g_object_unref (module);
+        /* release module */
+        g_object_unref (module);
 
-		break;
+        break;
 
-	case GTK_SAT_MOD_STATE_FULLSCREEN:
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s: Module %s is in FULLSCREEN state."),
-					 __FUNCTION__, name);
+    case GTK_SAT_MOD_STATE_FULLSCREEN:
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Module %s is in FULLSCREEN state."),
+                     __FUNCTION__, name);
 
-		retcode = mod_mgr_remove_module (GTK_WIDGET (module));
+        retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
-		if (retcode) {
-			sat_log_log (SAT_LOG_LEVEL_BUG,
-						 _("%s: Module %s was not found in mod-mgr (%d)\n"\
-						   "Internal state is corrupt?"),
-						 __FUNCTION__, name, retcode);
-		}
+        if (retcode) {
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s: Module %s was not found in mod-mgr (%d)\n"\
+                           "Internal state is corrupt?"),
+                         __FUNCTION__, name, retcode);
+        }
 
 
-		/* increase referene count */
-		g_object_ref (module);
+        /* increase referene count */
+        g_object_ref (module);
 
-		/* remove module from window, destroy window */
-		gtk_container_remove (GTK_CONTAINER (GTK_SAT_MODULE (module)->win),
-							  GTK_WIDGET (module));
-		gtk_widget_destroy (GTK_SAT_MODULE (module)->win);
-		GTK_SAT_MODULE (module)->win = NULL;
+        /* remove module from window, destroy window */
+        gtk_container_remove (GTK_CONTAINER (GTK_SAT_MODULE (module)->win),
+                              GTK_WIDGET (module));
+        gtk_widget_destroy (GTK_SAT_MODULE (module)->win);
+        GTK_SAT_MODULE (module)->win = NULL;
 
-		/* release module */
-		g_object_unref (module);
+        /* release module */
+        g_object_unref (module);
 
-		break;
+        break;
 
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Module %s has unknown state: %d"),
-					 __FUNCTION__, name, module->state);
-		break;
-	}
+    default:
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Module %s has unknown state: %d"),
+                     __FUNCTION__, name, module->state);
+        break;
+    }
 
-	/* appearantly, module will be destroyed when removed from notebook */
-	/* gtk_widget_destroy (GTK_WIDGET (module)); */
+    /* appearantly, module will be destroyed when removed from notebook */
+    /* gtk_widget_destroy (GTK_WIDGET (module)); */
 
-	sat_log_log (SAT_LOG_LEVEL_MSG,
-				 _("%s: Module %s closed."),
-				 __FUNCTION__, name);
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Module %s closed."),
+                 __FUNCTION__, name);
 
-	g_free (name);
-		     
+    g_free (name);
+             
 }
 
 
@@ -1194,164 +1194,164 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
 void
 gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 {
-	GtkSatModule        *module = GTK_SAT_MODULE (data);
-	GtkWidget           *parent;
-	GtkWidget           *toplevel;
-	gchar               *name;
-	gchar               *cfgfile;
-	mod_cfg_status_t     retcode;
-	gtk_sat_mod_state_t  laststate;
-	gint w,h;
+    GtkSatModule        *module = GTK_SAT_MODULE (data);
+    GtkWidget           *parent;
+    GtkWidget           *toplevel;
+    gchar               *name;
+    gchar               *cfgfile;
+    mod_cfg_status_t     retcode;
+    gtk_sat_mod_state_t  laststate;
+    gint w,h;
 
 
-	if (module->win != NULL)
-		toplevel = module->win;
-	else
-		toplevel = gtk_widget_get_toplevel (GTK_WIDGET (data));
+    if (module->win != NULL)
+        toplevel = module->win;
+    else
+        toplevel = gtk_widget_get_toplevel (GTK_WIDGET (data));
 
-	name = g_strdup (module->name);
+    name = g_strdup (module->name);
 
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Module %s recevied CONFIG signal."),
-				 __FUNCTION__, name);
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s: Module %s recevied CONFIG signal."),
+                 __FUNCTION__, name);
 
-	/* stop timeout */
-	if (!g_source_remove (module->timerid)) {
-		/* internal error, since the timerid appears
-		   to be invalid.
-		*/
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Could not stop timeout callback\n"\
-					   "%s: Source ID %d seems invalid."),
-					 __FUNCTION__, __FUNCTION__, module->timerid);
+    /* stop timeout */
+    if (!g_source_remove (module->timerid)) {
+        /* internal error, since the timerid appears
+           to be invalid.
+        */
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Could not stop timeout callback\n"\
+                       "%s: Source ID %d seems invalid."),
+                     __FUNCTION__, __FUNCTION__, module->timerid);
 
-	}
-	else {
-		module->timerid = -1;
+    }
+    else {
+        module->timerid = -1;
 
-		retcode = mod_cfg_edit (name, module->cfgdata, toplevel);
+        retcode = mod_cfg_edit (name, module->cfgdata, toplevel);
 
-		if (retcode == MOD_CFG_OK) {
-			/* save changes */
-			retcode = mod_cfg_save (name, module->cfgdata);
+        if (retcode == MOD_CFG_OK) {
+            /* save changes */
+            retcode = mod_cfg_save (name, module->cfgdata);
 
-			if (retcode != MOD_CFG_OK) {
+            if (retcode != MOD_CFG_OK) {
 
-				/**** FIXME: error message + dialog */
+                /**** FIXME: error message + dialog */
 
-				/* don't try to reload config since it may be
-				   invalid; keep original
-				*/
+                /* don't try to reload config since it may be
+                   invalid; keep original
+                */
 
-			}
-			else {
+            }
+            else {
 
-				/* store state and size */
-				laststate = module->state;
-				w = GTK_WIDGET (module)->allocation.width;
-				h = GTK_WIDGET (module)->allocation.height;
+                /* store state and size */
+                laststate = module->state;
+                w = GTK_WIDGET (module)->allocation.width;
+                h = GTK_WIDGET (module)->allocation.height;
 
-				gtk_sat_module_close_cb (NULL, module);
+                gtk_sat_module_close_cb (NULL, module);
 
-				cfgfile = g_strconcat (g_get_home_dir (),
-									   G_DIR_SEPARATOR_S,
-									   ".gpredict2",
-									   G_DIR_SEPARATOR_S,
-									   "modules",
-									   G_DIR_SEPARATOR_S,
-									   name, ".mod",
-									   NULL);
+                cfgfile = g_strconcat (g_get_home_dir (),
+                                       G_DIR_SEPARATOR_S,
+                                       ".gpredict2",
+                                       G_DIR_SEPARATOR_S,
+                                       "modules",
+                                       G_DIR_SEPARATOR_S,
+                                       name, ".mod",
+                                       NULL);
 
-				module = GTK_SAT_MODULE (gtk_sat_module_new (cfgfile));
-				module->state = laststate;
-				
-				switch (laststate) {
+                module = GTK_SAT_MODULE (gtk_sat_module_new (cfgfile));
+                module->state = laststate;
+                
+                switch (laststate) {
 
-				case GTK_SAT_MOD_STATE_DOCKED:
+                case GTK_SAT_MOD_STATE_DOCKED:
 
-					/* re-open module by adding it to the mod-mgr */
-					mod_mgr_add_module (GTK_WIDGET (module), TRUE);
+                    /* re-open module by adding it to the mod-mgr */
+                    mod_mgr_add_module (GTK_WIDGET (module), TRUE);
 
-					/* get size allocation from parent and set some reasonable
-					   initial GtkPaned positions */
-					parent = gtk_widget_get_parent (GTK_WIDGET (module));
-					module->hpanedpos = parent->allocation.width / 2;
-					module->vpanedpos = parent->allocation.height / 2;
-					gtk_sat_module_fix_size (GTK_WIDGET (module));
+                    /* get size allocation from parent and set some reasonable
+                       initial GtkPaned positions */
+                    parent = gtk_widget_get_parent (GTK_WIDGET (module));
+                    module->hpanedpos = parent->allocation.width / 2;
+                    module->vpanedpos = parent->allocation.height / 2;
+                    gtk_sat_module_fix_size (GTK_WIDGET (module));
 
-					break;
+                    break;
 
-				case GTK_SAT_MOD_STATE_WINDOW:
+                case GTK_SAT_MOD_STATE_WINDOW:
 
-					/* add to module manager */
-					mod_mgr_add_module (GTK_WIDGET (module), FALSE);
+                    /* add to module manager */
+                    mod_mgr_add_module (GTK_WIDGET (module), FALSE);
 
-					/* create window */
-					module->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-					gtk_window_set_title (GTK_WINDOW (module->win),
-										  module->name);
-					gtk_window_set_default_size (GTK_WINDOW (module->win),
-												 w, h);
+                    /* create window */
+                    module->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+                    gtk_window_set_title (GTK_WINDOW (module->win),
+                                          module->name);
+                    gtk_window_set_default_size (GTK_WINDOW (module->win),
+                                                 w, h);
 
-					/** FIXME: window icon and such */
+                    /** FIXME: window icon and such */
 
-					/* add module to window */
-					gtk_container_add (GTK_CONTAINER (module->win),
-									   GTK_WIDGET (module));
+                    /* add module to window */
+                    gtk_container_add (GTK_CONTAINER (module->win),
+                                       GTK_WIDGET (module));
 
-					/* show window */
-					gtk_widget_show_all (module->win);
+                    /* show window */
+                    gtk_widget_show_all (module->win);
 
-					break;
+                    break;
 
-				case GTK_SAT_MOD_STATE_FULLSCREEN:
+                case GTK_SAT_MOD_STATE_FULLSCREEN:
 
-					/* add to module manager */
-					mod_mgr_add_module (GTK_WIDGET (module), FALSE);
+                    /* add to module manager */
+                    mod_mgr_add_module (GTK_WIDGET (module), FALSE);
 
-					/* create window */
-					module->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-					gtk_window_set_title (GTK_WINDOW (module->win),
-										  module->name);
-					gtk_window_set_default_size (GTK_WINDOW (module->win),
-												 w, h);
+                    /* create window */
+                    module->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+                    gtk_window_set_title (GTK_WINDOW (module->win),
+                                          module->name);
+                    gtk_window_set_default_size (GTK_WINDOW (module->win),
+                                                 w, h);
 
-					/** FIXME: window icon and such */
+                    /** FIXME: window icon and such */
 
-					/* add module to window */
-					gtk_container_add (GTK_CONTAINER (module->win),
-									   GTK_WIDGET (module));
+                    /* add module to window */
+                    gtk_container_add (GTK_CONTAINER (module->win),
+                                       GTK_WIDGET (module));
 
-					/* show window */
-					gtk_widget_show_all (module->win);
+                    /* show window */
+                    gtk_widget_show_all (module->win);
 
-					gtk_window_fullscreen (GTK_WINDOW (module->win));
+                    gtk_window_fullscreen (GTK_WINDOW (module->win));
 
-					break;
+                    break;
 
-				default:
-					sat_log_log (SAT_LOG_LEVEL_BUG,
-								 _("%s: Module %s has unknown state: %d"),
-								 __FUNCTION__, name, module->state);
-					break;
-				}
-					
+                default:
+                    sat_log_log (SAT_LOG_LEVEL_BUG,
+                                 _("%s: Module %s has unknown state: %d"),
+                                 __FUNCTION__, name, module->state);
+                    break;
+                }
+                    
 
-				g_free (cfgfile);
+                g_free (cfgfile);
 
-			}
+            }
 
-		}
-		else {
-			/* user cancelled => just re-start timer */
-			module->timerid = g_timeout_add (module->timeout,
-											 gtk_sat_module_timeout_cb,
-											 data);
-			
-		}
-	}
+        }
+        else {
+            /* user cancelled => just re-start timer */
+            module->timerid = g_timeout_add (module->timeout,
+                                             gtk_sat_module_timeout_cb,
+                                             data);
+            
+        }
+    }
 
-	g_free (name);
+    g_free (name);
 
 }
 
@@ -1359,33 +1359,33 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 static void
 update_header (GtkSatModule *module)
 {
-	gchar *fmtstr;
-	time_t t;
-	guint size;
-	gchar buff[TIME_FORMAT_MAX_LENGTH+1];
+    gchar *fmtstr;
+    time_t t;
+    guint size;
+    gchar buff[TIME_FORMAT_MAX_LENGTH+1];
 
 
 
-	t = (module->tmgCdnum - 2440587.5)*86400.;
+    t = (module->tmgCdnum - 2440587.5)*86400.;
 
-	fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-	
-	/* format either local time or UTC depending on check box */
-	if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-		size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-	else
-		size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
+    fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
+    
+    /* format either local time or UTC depending on check box */
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
+        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
+    else
+        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
 
-	if (size < TIME_FORMAT_MAX_LENGTH)
-		buff[size]='\0';
-	else
-		buff[TIME_FORMAT_MAX_LENGTH]='\0';
+    if (size < TIME_FORMAT_MAX_LENGTH)
+        buff[size]='\0';
+    else
+        buff[TIME_FORMAT_MAX_LENGTH]='\0';
 
-	gtk_label_set_text (GTK_LABEL (module->header), buff);
-	g_free (fmtstr);
+    gtk_label_set_text (GTK_LABEL (module->header), buff);
+    g_free (fmtstr);
 
-	if (module->tmgActive)
-		tmg_update_state (module);
+    if (module->tmgActive)
+        tmg_update_state (module);
 }
 
 
@@ -1404,55 +1404,55 @@ update_header (GtkSatModule *module)
 static void
 fix_child_allocations            (GtkWidget *widget, gpointer data)
 {
-	GtkSatModule *module = GTK_SAT_MODULE (widget);
+    GtkSatModule *module = GTK_SAT_MODULE (widget);
 
 
-	switch (module->layout) {
-		
-		/* nothing to do */
-	case GTK_SAT_MOD_LAYOUT_1:
-		break;
+    switch (module->layout) {
+        
+        /* nothing to do */
+    case GTK_SAT_MOD_LAYOUT_1:
+        break;
 
-	case GTK_SAT_MOD_LAYOUT_2:
-		if (module->vpanedpos != -1) {
-			gtk_paned_set_position (GTK_PANED (module->vpaned),
-									module->vpanedpos);
-		}
-		else if (widget->allocation.height > 0) {
-			gtk_paned_set_position (GTK_PANED (module->vpaned),
-									widget->allocation.height / 2);
-		}
-		else {
-		}
-		break;
+    case GTK_SAT_MOD_LAYOUT_2:
+        if (module->vpanedpos != -1) {
+            gtk_paned_set_position (GTK_PANED (module->vpaned),
+                                    module->vpanedpos);
+        }
+        else if (widget->allocation.height > 0) {
+            gtk_paned_set_position (GTK_PANED (module->vpaned),
+                                    widget->allocation.height / 2);
+        }
+        else {
+        }
+        break;
 
-		/* one child on top, two at the bottom */
-	case GTK_SAT_MOD_LAYOUT_3:
-	case GTK_SAT_MOD_LAYOUT_4:
-		if (module->vpanedpos == -1) {
-			gtk_paned_set_position (GTK_PANED (module->vpaned),
-									widget->allocation.height / 2);
-		}
-		else {
-			gtk_paned_set_position (GTK_PANED (module->vpaned),
-									module->vpanedpos);
-		}
+        /* one child on top, two at the bottom */
+    case GTK_SAT_MOD_LAYOUT_3:
+    case GTK_SAT_MOD_LAYOUT_4:
+        if (module->vpanedpos == -1) {
+            gtk_paned_set_position (GTK_PANED (module->vpaned),
+                                    widget->allocation.height / 2);
+        }
+        else {
+            gtk_paned_set_position (GTK_PANED (module->vpaned),
+                                    module->vpanedpos);
+        }
 
-		if (module->hpanedpos == -1) {
-			gtk_paned_set_position (GTK_PANED (module->hpaned),
-									widget->allocation.width / 2);
-		}
-		else {
-			gtk_paned_set_position (GTK_PANED (module->hpaned),
-									module->hpanedpos);
-		}
+        if (module->hpanedpos == -1) {
+            gtk_paned_set_position (GTK_PANED (module->hpaned),
+                                    widget->allocation.width / 2);
+        }
+        else {
+            gtk_paned_set_position (GTK_PANED (module->hpaned),
+                                    module->hpanedpos);
+        }
 
-		break;
+        break;
 
-	default:
-		break;
+    default:
+        break;
 
-	}
+    }
 }
 
 
@@ -1464,15 +1464,15 @@ fix_child_allocations            (GtkWidget *widget, gpointer data)
 void
 gtk_sat_module_fix_size (GtkWidget *module)
 {
-	fix_child_allocations (module, NULL);
+    fix_child_allocations (module, NULL);
 }
 
 
 
 static gboolean empty (gpointer key, gpointer val, gpointer data)
 {
-	/* TRUE => sat removed from hash table */
-	return TRUE;
+    /* TRUE => sat removed from hash table */
+    return TRUE;
 }
 
 
@@ -1493,38 +1493,38 @@ void
 gtk_sat_module_reload_sats    (GtkSatModule *module)
 {
 
-	g_return_if_fail (IS_GTK_SAT_MODULE (module));
+    g_return_if_fail (IS_GTK_SAT_MODULE (module));
 
-	/* lock module */
-	module->busy = TRUE;
+    /* lock module */
+    module->busy = TRUE;
 
-	sat_log_log (SAT_LOG_LEVEL_MSG,
-				 _("%s: Reloading satellites for module %s"),
-				 __FUNCTION__, module->name);
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Reloading satellites for module %s"),
+                 __FUNCTION__, module->name);
 
-	/* remove each element from the hash table, but keep the hash table */
-	g_hash_table_foreach_remove (module->satellites, empty, NULL);
+    /* remove each element from the hash table, but keep the hash table */
+    g_hash_table_foreach_remove (module->satellites, empty, NULL);
 
-	/* reset event counter so that next AOS/LOS gets re-calculated */
-	module->event_count = 0;	   
+    /* reset event counter so that next AOS/LOS gets re-calculated */
+    module->event_count = 0;       
 
-	/* load satellites */
-	gtk_sat_module_load_sats (module);
+    /* load satellites */
+    gtk_sat_module_load_sats (module);
 
-	/* update children */
-	if (GTK_SAT_MODULE (module)->child_1 != NULL)
-		reload_sats_in_child (GTK_SAT_MODULE (module)->child_1, GTK_SAT_MODULE (module));
-	
-	if (GTK_SAT_MODULE (module)->child_2 != NULL)
-		reload_sats_in_child (GTK_SAT_MODULE (module)->child_2, GTK_SAT_MODULE (module));
-	
-	if (GTK_SAT_MODULE (module)->child_3 != NULL)
-		reload_sats_in_child (GTK_SAT_MODULE (module)->child_3, GTK_SAT_MODULE (module));
-	
+    /* update children */
+    if (GTK_SAT_MODULE (module)->child_1 != NULL)
+        reload_sats_in_child (GTK_SAT_MODULE (module)->child_1, GTK_SAT_MODULE (module));
+    
+    if (GTK_SAT_MODULE (module)->child_2 != NULL)
+        reload_sats_in_child (GTK_SAT_MODULE (module)->child_2, GTK_SAT_MODULE (module));
+    
+    if (GTK_SAT_MODULE (module)->child_3 != NULL)
+        reload_sats_in_child (GTK_SAT_MODULE (module)->child_3, GTK_SAT_MODULE (module));
+    
     /* FIXME: radio and rotator controller */
     
-	/* unlock module */
-	module->busy = FALSE;
+    /* unlock module */
+    module->busy = FALSE;
 
 }
 
@@ -1535,27 +1535,27 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
 {
  
  
-	if (IS_GTK_SINGLE_SAT (G_OBJECT (widget))) {
-		gtk_single_sat_reload_sats (widget, module->satellites);
-	}
+    if (IS_GTK_SINGLE_SAT (G_OBJECT (widget))) {
+        gtk_single_sat_reload_sats (widget, module->satellites);
+    }
 
-	else if (IS_GTK_POLAR_VIEW (widget)) {
-		gtk_polar_view_reload_sats (widget, module->satellites);
-	}
+    else if (IS_GTK_POLAR_VIEW (widget)) {
+        gtk_polar_view_reload_sats (widget, module->satellites);
+    }
 
-	else if (IS_GTK_SAT_MAP (widget)) {
-		gtk_sat_map_reload_sats (widget, module->satellites);
-	}
+    else if (IS_GTK_SAT_MAP (widget)) {
+        gtk_sat_map_reload_sats (widget, module->satellites);
+    }
 
-	else if (IS_GTK_SAT_LIST (widget)) {
-	}
+    else if (IS_GTK_SAT_LIST (widget)) {
+    }
 
 
-	else {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%f:%d: Unknown child type"),
-					 __FILE__, __LINE__);
-	}
+    else {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%f:%d: Unknown child type"),
+                     __FILE__, __LINE__);
+    }
 
 }
 
