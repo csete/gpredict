@@ -1237,7 +1237,10 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 
             if (retcode != MOD_CFG_OK) {
 
-                /**** FIXME: error message + dialog */
+                /**** FIXME: dialog */
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Module configuration failed for some reason."),
+                             __FUNCTION__);
 
                 /* don't try to reload config since it may be
                    invalid; keep original

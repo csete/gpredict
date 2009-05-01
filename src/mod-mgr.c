@@ -207,9 +207,7 @@ sat_log_log (SAT_LOG_LEVEL_MSG,
                                              module,
                                              gtk_label_new (GTK_SAT_MODULE (module)->name));
 
-                                             sat_log_log (SAT_LOG_LEVEL_MSG,
-                         _("%s: Entered 3."),
-                         __FUNCTION__);
+            sat_log_log (SAT_LOG_LEVEL_MSG, _("%s: Entered 3."), __FUNCTION__);
 
             gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
