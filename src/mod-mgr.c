@@ -199,11 +199,11 @@ sat_log_log (SAT_LOG_LEVEL_MSG,
         modules = g_slist_append (modules, module);
 
         if (dock) {
-sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_MSG,
                          _("%s: Entered 2."),
                          __FUNCTION__);
             /* add module to notebook if state = DOCKED */
-            page = gtk_notebook_prepend_page (GTK_NOTEBOOK (nbook),
+            page = gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
                                              module,
                                              gtk_label_new (GTK_SAT_MODULE (module)->name));
 
