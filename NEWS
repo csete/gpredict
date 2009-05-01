@@ -4,6 +4,12 @@ Changes in version 1.0 (final):
 * Windows: New installer instead of ZIP distribution.
 * Mac OS X package.
 
+Changes in version 1.0 beta 3 (TBD)
+
+* Implemented full-duplex controller.
+- Fixed a bug that caused long delays when opening or reconfiguring modules
+  containing a polar view.
+
 
 Changes in version 1.0 beta 2 (15 Apr 2009):
 

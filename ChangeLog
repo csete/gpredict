@@ -1,7 +1,18 @@
+2009-05-01 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-sat-module.c:
+    Fixed indent. Log an error message if module configuration fails.
+    
+    * src/gtk-polar-view.c:
+    Changed resizing scheme to be the same as for GtkSatMap. This fixed the
+    long delay (many seconds) problem when a module containing a polar view
+    is opened or reconfigured.
+
+
 2009-04-14 Alexandru Csete <oz9aec@gmail.com>
 
     * configure.ac:
-    Require libcur 7.16.0 or later as mandatory dependency.
+    Require libcurl 7.16.0 or later as mandatory dependency.
     
     * src/tle-update.c:
     * src/sat-cfg.[ch]:

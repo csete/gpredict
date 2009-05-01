@@ -190,24 +190,17 @@ mod_mgr_add_module     (GtkWidget *module, gboolean dock)
     gint       retcode = 0;
     gint       page;
 
-sat_log_log (SAT_LOG_LEVEL_MSG,
-                         _("%s: Entered 1."),
-                         __FUNCTION__);
+
     if (module) {
 
         /* add module to internal list */
         modules = g_slist_append (modules, module);
 
         if (dock) {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
-                         _("%s: Entered 2."),
-                         __FUNCTION__);
             /* add module to notebook if state = DOCKED */
             page = gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
                                              module,
                                              gtk_label_new (GTK_SAT_MODULE (module)->name));
-
-            sat_log_log (SAT_LOG_LEVEL_MSG, _("%s: Entered 3."), __FUNCTION__);
 
             gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
