@@ -59,82 +59,83 @@ typedef struct _GtkPolarViewClass   GtkPolarViewClass;
 
 /** \brief Satellite object on graph. */
 typedef struct {
-	gboolean            selected;               /*!< Satellite is selected. */
-	gboolean            showtrack;              /*!< Show ground track. */
-	gboolean            istarget;               /*!< Is this object the target. */
-	pass_t             *pass;                   /*!< Details of the current pass. */
-	GooCanvasItemModel *marker;                 /*!< Item showing position of satellite. */
-	GooCanvasItemModel *label;                  /*!< Item showing the satellite name. */
-	GooCanvasItemModel *track;                  /*!< Sky track. */
-	GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
+    gboolean            selected;               /*!< Satellite is selected. */
+    gboolean            showtrack;              /*!< Show ground track. */
+    gboolean            istarget;               /*!< Is this object the target. */
+    pass_t             *pass;                   /*!< Details of the current pass. */
+    GooCanvasItemModel *marker;                 /*!< Item showing position of satellite. */
+    GooCanvasItemModel *label;                  /*!< Item showing the satellite name. */
+    GooCanvasItemModel *track;                  /*!< Sky track. */
+    GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
 } sat_obj_t;
 
 #define SAT_OBJ(obj) ((sat_obj_t *)obj)
 
 
-	/* graph orientation; start at 12
-	   o'clock and go clockwise */
+    /* graph orientation; start at 12
+       o'clock and go clockwise */
 typedef enum {
-	POLAR_VIEW_NESW = 0,  /*!< Normal / usual */
-	POLAR_VIEW_NWSE = 1,
-	POLAR_VIEW_SENW = 2,
-	POLAR_VIEW_SWNE = 3
+    POLAR_VIEW_NESW = 0,  /*!< Normal / usual */
+    POLAR_VIEW_NWSE = 1,
+    POLAR_VIEW_SENW = 2,
+    POLAR_VIEW_SWNE = 3
 } polar_view_swap_t;
 
 
-	/* pole identifier */
+    /* pole identifier */
 typedef enum {
-	POLAR_VIEW_POLE_N = 0,
-	POLAR_VIEW_POLE_E = 1,
-	POLAR_VIEW_POLE_S = 2,
-	POLAR_VIEW_POLE_W = 3
+    POLAR_VIEW_POLE_N = 0,
+    POLAR_VIEW_POLE_E = 1,
+    POLAR_VIEW_POLE_S = 2,
+    POLAR_VIEW_POLE_W = 3
 } polar_view_pole_t;
 
 
 struct _GtkPolarView
 {
-	GtkVBox vbox;
+    GtkVBox vbox;
 
-	GtkWidget  *canvas;   /*!< The canvas widget */
+    GtkWidget  *canvas;   /*!< The canvas widget */
 
-	GooCanvasItemModel *C00, *C30, *C60; /*!< 0, 30 and 60 deg elevation circles */
-	GooCanvasItemModel *hl, *vl;         /*!< horizontal and vertical lines */
-	GooCanvasItemModel *N,*S,*E,*W;      /*!< North, South, East and West labels */
-	GooCanvasItemModel *locnam;          /*!< Location name */
-	GooCanvasItemModel *curs;            /*!< cursor tracking text */
-	GooCanvasItemModel *next;            /*!< next event text */
-	GooCanvasItemModel *sel;             /*!< Text showing info about selected satellite. */
+    GooCanvasItemModel *C00, *C30, *C60; /*!< 0, 30 and 60 deg elevation circles */
+    GooCanvasItemModel *hl, *vl;         /*!< horizontal and vertical lines */
+    GooCanvasItemModel *N,*S,*E,*W;      /*!< North, South, East and West labels */
+    GooCanvasItemModel *locnam;          /*!< Location name */
+    GooCanvasItemModel *curs;            /*!< cursor tracking text */
+    GooCanvasItemModel *next;            /*!< next event text */
+    GooCanvasItemModel *sel;             /*!< Text showing info about selected satellite. */
 
-	gdouble     naos;     /*!< Next event time */
-	gint        ncat;     /*!< Next event catnum */
-	
-	gdouble     tstamp;   /*!< Time stamp for calculations; set by GtkSatModule */
+    gdouble     naos;     /*!< Next event time */
+    gint        ncat;     /*!< Next event catnum */
+    
+    gdouble     tstamp;   /*!< Time stamp for calculations; set by GtkSatModule */
 
-	GKeyFile   *cfgdata;  /*!< module configuration data */
-	GHashTable *sats;     /*!< Satellites. */
-	qth_t      *qth;      /*!< Pointer to current location. */
+    GKeyFile   *cfgdata;  /*!< module configuration data */
+    GHashTable *sats;     /*!< Satellites. */
+    qth_t      *qth;      /*!< Pointer to current location. */
 
-	GHashTable *obj;      /*!< Canvas items representing each visible satellite */
+    GHashTable *obj;      /*!< Canvas items representing each visible satellite */
 
-	guint       cx;       /*!< center X */
-	guint       cy;       /*!< center Y */
-	guint       r;        /*!< radius */
-	guint       size;     /*!< Size of the box = min(h,w) */
+    guint       cx;       /*!< center X */
+    guint       cy;       /*!< center Y */
+    guint       r;        /*!< radius */
+    guint       size;     /*!< Size of the box = min(h,w) */
 
-	guint       refresh;  /*!< Refresh rate. */
-	guint       counter;  /*!< cycle counter. */
+    guint       refresh;  /*!< Refresh rate. */
+    guint       counter;  /*!< cycle counter. */
 
-	polar_view_swap_t swap;
+    polar_view_swap_t swap;
 
-	gboolean    qthinfo;     /*!< Show the QTH info. */
-	gboolean    eventinfo;   /*!< Show info about the next event. */
-	gboolean    cursinfo;    /*!< Track the mouse cursor. */
-	gboolean    extratick;   /*!< Show extra ticks */
+    gboolean    qthinfo;     /*!< Show the QTH info. */
+    gboolean    eventinfo;   /*!< Show info about the next event. */
+    gboolean    cursinfo;    /*!< Track the mouse cursor. */
+    gboolean    extratick;   /*!< Show extra ticks */
+    gboolean    resize;      /*!< Flag indicating that the view has been resized. */
 };
 
 struct _GtkPolarViewClass
 {
-	GtkVBoxClass parent_class;
+    GtkVBoxClass parent_class;
 };
 
 
@@ -142,8 +143,8 @@ struct _GtkPolarViewClass
 GtkType        gtk_polar_view_get_type   (void);
 
 GtkWidget*     gtk_polar_view_new        (GKeyFile   *cfgdata,
-					  GHashTable *sats,
-					  qth_t      *qth);
+                      GHashTable *sats,
+                      qth_t      *qth);
 
 void           gtk_polar_view_update     (GtkWidget  *widget);
 void           gtk_polar_view_reconf     (GtkWidget  *widget, GKeyFile *cfgdat);
