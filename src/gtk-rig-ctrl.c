@@ -1278,6 +1278,19 @@ rig_ctrl_timeout_cb (gpointer data)
             
         }
     }
+
+    /* perform error count checking */
+    if (ctrl->errcnt >= MAX_ERROR_COUNT) {
+        /* disengage device */
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
+        ctrl->engaged = FALSE;
+        ctrl->errcnt = 0;
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                        _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                        __FUNCTION__, MAX_ERROR_COUNT);
+        
+        //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
+    }
     
     //g_print ("       WROPS = %d\n", ctrl->wrops);
     
@@ -1397,17 +1410,6 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
         }
     }
     
-    if (ctrl->errcnt >= MAX_ERROR_COUNT) {
-        /* disengage device */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
-        ctrl->engaged = FALSE;
-        ctrl->errcnt = 0;
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                        _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                        __FUNCTION__, MAX_ERROR_COUNT);
-        
-        //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
-    }
 }
 
 
@@ -1521,18 +1523,6 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
         }
     }
     
-    if (ctrl->errcnt >= MAX_ERROR_COUNT) {
-        /* disengage device */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
-        ctrl->engaged = FALSE;
-        ctrl->errcnt = 0;
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                        _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                        __FUNCTION__, MAX_ERROR_COUNT);
-        
-        //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
-    }
-
 }
 
 
@@ -1774,18 +1764,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 
     } /* else dialchange on downlink */
 
-    /* perform error count checking */
-    if (ctrl->errcnt >= MAX_ERROR_COUNT) {
-        /* disengage device */
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ctrl->LockBut), FALSE);
-        ctrl->engaged = FALSE;
-        ctrl->errcnt = 0;
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                        _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                        __FUNCTION__, MAX_ERROR_COUNT);
-        
-        //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
-    }
 
 }
 
