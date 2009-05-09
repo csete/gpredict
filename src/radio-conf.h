@@ -47,6 +47,13 @@ typedef enum {
     PTT_TYPE_DCD        /*!< Read PTT using get_dcd */
 } ptt_type_t;
 
+typedef enum {
+    VFO_A = 0,
+    VFO_B,
+    VFO_MAIN,
+    VFO_SUB
+} vfo_t;
+
 /** \brief Radio configuration. */
 typedef struct {
     gchar       *name;      /*!< Configuration file name, without .rig. */
@@ -57,6 +64,8 @@ typedef struct {
     gdouble      loup;      /*!< local oscillator freq in Hz for uplink. */
     rig_type_t   type;      /*!< Radio type */
     ptt_type_t   ptt;       /*!< PTT type (needed for RX, TX, and TRX) */
+    vfo_t        vfoDown;   /*!< Downlink VFO for full-duplex radios */
+    vfo_t        vfoUp;     /*!< Uplink VFO for full-duplex radios */
 } radio_conf_t;
 
 
