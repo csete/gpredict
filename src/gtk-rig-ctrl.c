@@ -102,6 +102,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl);
 static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
 static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
 static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf);
+static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
 /* misc utility functions */
@@ -1553,8 +1554,16 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_duplex_cycle (GtkRigCtrl *ctrl)
 {
-    //FIXME implement
-    exec_trx_cycle (ctrl);
+	if (ctrl->engaged) {
+	
+		/* Downlink */
+		set_vfo (ctrl, ctrl->conf->vfoDown);
+		exec_rx_cycle (ctrl);
+		
+		/* Uplink */
+		set_vfo (ctrl, ctrl->conf->vfoUp);
+		exec_tx_cycle (ctrl);
+    }
 }
 
 /** \brief Execute dual-rig cycle.
@@ -2054,6 +2063,103 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     close (sock);
 
 
+    return TRUE;
+}
+
+/** \brief Select target VFO
+ * \param ctrl Pointer to the GtkRigCtrl structure.
+ * \param vfo The VFO to select
+ * \return TRUE if the operation was successful, FALSE if a connection error
+ *         occurred.
+ * 
+ */
+static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
+{
+    gchar  *buff;
+    gint    written,size;
+    gint    status;
+    struct hostent *h;
+    struct sockaddr_in ServAddr;
+    gint  sock;          /*!< Network socket */
+        
+    /* create socket */
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to create socket"),
+                       __FUNCTION__);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Network socket created successfully"),
+                       __FUNCTION__);
+    }
+        
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(ctrl->conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to connect to %s:%d"),
+                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Connection opened to %s:%d"),
+                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+    }
+    
+    /* prepare command */
+    switch (vfo) {
+    case VFO_A:
+    	buff = g_strdup_printf ("V VFOA");
+        size = 6;
+        break;
+        
+    case VFO_B:
+    	buff = g_strdup_printf ("V VFOB");
+        size = 6;
+        break;
+        
+    case VFO_MAIN:
+    	buff = g_strdup_printf ("V Main");
+        size = 6;
+        break;
+        
+    case VFO_SUB:
+    	buff = g_strdup_printf ("V Sub");
+        size = 5;
+        break;
+        
+     default:
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Invalid VFO argument. Using VFOA."),
+                     __FUNCTION__);
+    	buff = g_strdup_printf ("V VFOA");
+        size = 6;
+        break;
+	}    
+	
+    /* send command */
+    written = send(sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: SIZE ERROR %d / %d"),
+                       __FUNCTION__, written, size);
+    }
+    g_free (buff);
+    shutdown (sock, SHUT_RDWR);
+    close (sock);
+    
+    ctrl->wrops++;
+    
     return TRUE;
 }
 
