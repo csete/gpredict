@@ -48,7 +48,8 @@ typedef enum {
 } ptt_type_t;
 
 typedef enum {
-    VFO_A = 0,
+    VFO_NONE = 0,
+    VFO_A,
     VFO_B,
     VFO_MAIN,
     VFO_SUB
