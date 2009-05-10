@@ -197,7 +197,7 @@ static void create_rig_list ()
     
     /* transverter down */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Downconverter LO"), renderer,
+    column = gtk_tree_view_column_new_with_attributes (_("LO Down"), renderer,
                                                        "text", RIG_LIST_COL_LO,
                                                        NULL);
     gtk_tree_view_column_set_cell_data_func (column, renderer,
@@ -208,7 +208,7 @@ static void create_rig_list ()
     
     /* transverter up */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Upconverter LO"), renderer,
+    column = gtk_tree_view_column_new_with_attributes (_("LO Up"), renderer,
                                                     "text", RIG_LIST_COL_LOUP,
                                                     NULL);
     gtk_tree_view_column_set_cell_data_func (column, renderer,
