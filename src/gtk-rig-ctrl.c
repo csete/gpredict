@@ -1165,16 +1165,18 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
         }
         else {
             switch (ctrl->conf->type) {
+                
                 case RIG_TYPE_RX:
                     ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
                     set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
                     break;
+                    
                 case RIG_TYPE_TX:
                     ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
                     set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
                     break;
+                    
                 case RIG_TYPE_TRX:
-                case RIG_TYPE_DUPLEX:
                     if (get_ptt (ctrl, ctrl->conf)) {
                         ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
                         set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
@@ -1184,6 +1186,15 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
                         set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
                     }
                     break;
+                    
+                case RIG_TYPE_DUPLEX:
+                    ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
+                    set_vfo (ctrl, ctrl->conf->vfoDown);
+                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+                    ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
+                    set_vfo (ctrl, ctrl->conf->vfoUp);
+                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
+                    
                 default:
                     /* this is an error! */
                     ctrl->conf->type = RIG_TYPE_RX;
