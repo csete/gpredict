@@ -97,8 +97,8 @@ GSList *read_transponders (guint catnum)
                 
                 trsp->uplow = g_key_file_get_double (cfg, groups[i], KEY_UP_LOW, &error);
                 if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                  _("%s: Error reading %s:%s from %s"),
+                    sat_log_log (SAT_LOG_LEVEL_WARN,
+                                  _("%s: Error reading %s:%s from %s. Using defult."),
                                   __FUNCTION__, groups[i], KEY_UP_LOW, name);
                     g_clear_error (&error);
                     trsp->uplow = 0.0;
@@ -106,8 +106,8 @@ GSList *read_transponders (guint catnum)
                 
                 trsp->uphigh = g_key_file_get_double (cfg, groups[i], KEY_UP_HIGH, &error);
                 if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                  _("%s: Error reading %s:%s from %s"),
+                    sat_log_log (SAT_LOG_LEVEL_WARN,
+                                  _("%s: Error reading %s:%s from %s. Using defult."),
                                   __FUNCTION__, groups[i], KEY_UP_HIGH, name);
                     g_clear_error (&error);
                     trsp->uphigh = trsp->uplow;
@@ -115,8 +115,8 @@ GSList *read_transponders (guint catnum)
                 
                 trsp->downlow = g_key_file_get_double (cfg, groups[i], KEY_DOWN_LOW, &error);
                 if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                  _("%s: Error reading %s:%s from %s"),
+                    sat_log_log (SAT_LOG_LEVEL_WARN,
+                                  _("%s: Error reading %s:%s from %s. Using defult."),
                                   __FUNCTION__, groups[i], KEY_DOWN_LOW, name);
                     g_clear_error (&error);
                     trsp->downlow = 0.0;
@@ -124,8 +124,8 @@ GSList *read_transponders (guint catnum)
                 
                 trsp->downhigh = g_key_file_get_double (cfg, groups[i], KEY_DOWN_HIGH, &error);
                 if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                  _("%s: Error reading %s:%s from %s"),
+                    sat_log_log (SAT_LOG_LEVEL_WARN,
+                                  _("%s: Error reading %s:%s from %s. Using defult."),
                                   __FUNCTION__, groups[i], KEY_DOWN_HIGH, name);
                     g_clear_error (&error);
                     trsp->downhigh = trsp->downlow;
@@ -133,8 +133,8 @@ GSList *read_transponders (guint catnum)
                 
                 trsp->invert = g_key_file_get_boolean (cfg, groups[i], KEY_INVERT, &error);
                 if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                  _("%s: Error reading %s:%s from %s"),
+                    sat_log_log (SAT_LOG_LEVEL_WARN,
+                                  _("%s: Error reading %s:%s from %s. Assume non-inverting."),
                                   __FUNCTION__, groups[i], KEY_INVERT, name);
                     g_clear_error (&error);
                     trsp->invert = FALSE;
@@ -142,7 +142,7 @@ GSList *read_transponders (guint catnum)
                 
                 trsp->mode = g_key_file_get_string (cfg, groups[i], KEY_MODE, &error);
                 if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                    sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s"),
                                   __FUNCTION__, groups[i], KEY_MODE, name);
                     g_clear_error (&error);
