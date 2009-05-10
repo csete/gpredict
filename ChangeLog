@@ -1,3 +1,26 @@
+2009-05-10 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-pref-rig-data.h:
+    * src/sat-pref-rig.c:
+    Added VFO UP/DOWN columns.
+    
+    * src/trsp-conf.c:
+    Changed error messages severity to WARNING when reading transponder data.
+
+2009-05-09 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/radio-conf.[ch]:
+    Added parameter to store uplink and downlink VFOs for full-duplex capable
+    radios.
+    
+    * src/sat-pref-rig-editor.c:
+    Added selector for VFO up/down combination for duplex radios.
+
+    * src/gtk-rig-ctrl.c:
+    Moved error checking to cycle controlled.
+    Implemented full-duplex controller.
+    
+
 2009-05-01 Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-sat-module.c:

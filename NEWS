@@ -6,7 +6,7 @@ Changes in version 1.0 (final):
 
 Changes in version 1.0 beta 3 (TBD)
 
-* Implemented full-duplex controller.
+- Feature request 2691964: Full-duplex controller.
 - Fixed a bug that caused long delays when opening or reconfiguring modules
   containing a polar view.
 
