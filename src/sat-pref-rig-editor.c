@@ -56,6 +56,7 @@ static GtkWidget *host;     /* host */
 static GtkWidget *port;     /* port number */
 static GtkWidget *type;     /* rig type */
 static GtkWidget *ptt;      /* PTT */
+static GtkWidget *vfo;      /* VFO Up/Down selector */
 static GtkWidget *lo;       /* local oscillator of downconverter */
 static GtkWidget *loup;     /* local oscillator of upconverter */
 
@@ -67,6 +68,7 @@ static gboolean      apply_changes         (radio_conf_t *conf);
 static void          name_changed          (GtkWidget *widget, gpointer data);
 static void          type_changed          (GtkWidget *widget, gpointer data);
 static void          ptt_changed           (GtkWidget *widget, gpointer data);
+static void          vfo_changed           (GtkWidget *widget, gpointer data);
 
 
 /** \brief Add or edit a radio configuration.
@@ -146,7 +148,7 @@ create_editor_widgets (radio_conf_t *conf)
 
 
 
-    table = gtk_table_new (7, 4, FALSE);
+    table = gtk_table_new (8, 4, FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (table), 5);
     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
@@ -178,7 +180,9 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_widget_set_tooltip_text (host,
                                  _("Enter the host where rigctld is running. "\
                                  "You can use both host name and IP address, "\
-                                 "e.g. 192.168.1.100"));
+                                 "e.g. 192.168.1.100\n\n"\
+                                 "If gpredict and rigctld are running on the "\
+                                 "same computer use localhost"));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
 
     /* port */
@@ -245,11 +249,32 @@ create_editor_widgets (radio_conf_t *conf)
                             "read squelch status and send it via CTS."));
     gtk_table_attach_defaults (GTK_TABLE (table), ptt, 1, 3, 4, 5);
     
+    /* VFO Up/Down */
+    label = gtk_label_new (_("VFO Up/Down"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
     
+    vfo = gtk_combo_box_new_text ();
+    gtk_combo_box_append_text (GTK_COMBO_BOX (vfo), _("Not applicable"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (vfo), _("MAIN \342\206\221 / SUB \342\206\223"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (vfo), _("SUB \342\206\221 / MAIN \342\206\223"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (vfo), _("A \342\206\221 / B \342\206\223"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (vfo), _("B \342\206\221 / A \342\206\223"));
+    gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 0);
+    g_signal_connect (vfo, "changed", G_CALLBACK (vfo_changed), NULL);
+    gtk_widget_set_tooltip_markup (vfo,
+    							   _("Select which VFO to use for uplink and downlink. "\
+    							     "This setting is used for full-duplex radios only, "\
+    							     "such as the IC-910H, FT-847 and the TS-2000.\n\n"\
+    							     "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"\
+    							     "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"\
+    							     "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
+    gtk_table_attach_defaults (GTK_TABLE (table), vfo, 1, 3, 5, 6);
+        
     /* Downconverter LO frequency */
     label = gtk_label_new (_("LO Down:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 6, 7);
     
     lo = gtk_spin_button_new_with_range (-10000, 10000, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
@@ -257,16 +282,16 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_widget_set_tooltip_text (lo,
                                  _("Enter the frequency of the local oscillator "\
                                          " of the downconverter, if any."));
-    gtk_table_attach_defaults (GTK_TABLE (table), lo, 1, 3, 5, 6);
+    gtk_table_attach_defaults (GTK_TABLE (table), lo, 1, 3, 6, 7);
     
     label = gtk_label_new (_("MHz"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 5, 6);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 6, 7);
     
     /* Upconverter LO frequency */
     label = gtk_label_new (_("LO Up:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 6, 7);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 7, 8);
     
     loup = gtk_spin_button_new_with_range (-10000, 10000, 1);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), 0);
@@ -274,11 +299,11 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_widget_set_tooltip_text (loup,
                                  _("Enter the frequency of the local oscillator "\
                                   "of the upconverter, if any."));
-    gtk_table_attach_defaults (GTK_TABLE (table), loup, 1, 3, 6, 7);
+    gtk_table_attach_defaults (GTK_TABLE (table), loup, 1, 3, 7, 8);
     
     label = gtk_label_new (_("MHz"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 6, 7);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 3, 4, 7, 8);
     
     
     if (conf->name != NULL)
@@ -314,6 +339,18 @@ update_widgets (radio_conf_t *conf)
     
     /* ptt */
     gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), conf->ptt);
+    
+    /* vfo up/down */
+    if (conf->type == RIG_TYPE_DUPLEX) {
+    	if (conf->vfoUp == VFO_MAIN)
+    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 1);
+        else if (conf->vfoUp == VFO_SUB)
+    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 2);
+        else if (conf->vfoUp == VFO_A)
+    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 3);
+    	else
+    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 4);
+    }
 
     /* lo down in MHz */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), conf->lo / 1000000.0);
@@ -340,6 +377,7 @@ clear_widgets ()
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
     gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), PTT_TYPE_NONE);
+    gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 0);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ptt), FALSE);
 }
 
@@ -381,6 +419,37 @@ apply_changes         (radio_conf_t *conf)
     /* ptt */
     conf->ptt = gtk_combo_box_get_active (GTK_COMBO_BOX (ptt));
     
+    /* vfo up/down */
+    if (conf->type == RIG_TYPE_DUPLEX) {
+		switch (gtk_combo_box_get_active (GTK_COMBO_BOX (vfo))) {
+		
+		case 1:
+			conf->vfoUp = VFO_MAIN;
+			conf->vfoDown = VFO_SUB;
+			break;    	
+		
+		case 2:
+			conf->vfoUp = VFO_SUB;
+			conf->vfoDown = VFO_MAIN;
+			break;
+		
+		case 3:
+			conf->vfoUp = VFO_A;
+			conf->vfoDown = VFO_B;
+			break;    	
+		
+		case 4:
+			conf->vfoUp = VFO_B;
+			conf->vfoDown = VFO_A;
+			break;    	
+		
+		default:
+			conf->vfoUp = VFO_MAIN;
+			conf->vfoDown = VFO_SUB;
+			break;    	
+		}
+    }
+
     return TRUE;
 }
 
@@ -453,12 +522,20 @@ name_changed          (GtkWidget *widget, gpointer data)
 static void
 type_changed (GtkWidget *widget, gpointer data)
 {
-    
+	/* PTT consistency */    
     if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TRX) {
         if (gtk_combo_box_get_active (GTK_COMBO_BOX (ptt)) == PTT_TYPE_NONE) {
             gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), PTT_TYPE_CAT);
         }
     }
+    
+    /* VFO consistency */
+    if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_DUPLEX) {
+        if (gtk_combo_box_get_active (GTK_COMBO_BOX (vfo)) == 0) {
+            gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 1);
+        }
+    }
+    
 }
 
 /** \brief Manage ptt type changed signals.
@@ -479,5 +556,22 @@ ptt_changed (GtkWidget *widget, gpointer data)
     }
 }
 
+/** \brief Manage VFO changed signals.
+ *  \param widget The GtkComboBox that received the signal.
+ *  \param data User data (always NULL).
+ *  
+ *  This function is called when the user selects a new VFO up/down combination.
+ */
+static void
+vfo_changed (GtkWidget *widget, gpointer data)
+{
+    
+    if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == 0) {
+        if (gtk_combo_box_get_active (GTK_COMBO_BOX (type)) == RIG_TYPE_DUPLEX) {
+            /* not good, we need to have proper VFO combi for this type */
+            gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 1);
+        }
+    }
+}
 
 
