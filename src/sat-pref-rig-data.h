@@ -35,6 +35,8 @@ typedef enum {
     RIG_LIST_COL_PORT,      /*!< Port number */
     RIG_LIST_COL_TYPE,      /*!< Radio type */
     RIG_LIST_COL_PTT,       /*!< PTT */
+    RIG_LIST_COL_VFOUP,     /*!< VFO Up */
+    RIG_LIST_COL_VFODOWN,   /*!< VFO down */
     RIG_LIST_COL_LO,        /*!< Local oscillator freq (downlink) */
     RIG_LIST_COL_LOUP,      /*!< Local oscillato freq (uplink) */
     RIG_LIST_COL_NUM        /*!< The number of fields in the list. */

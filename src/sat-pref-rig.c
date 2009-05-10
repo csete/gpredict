@@ -73,6 +73,11 @@ static void render_lo  (GtkTreeViewColumn *col,
                         GtkTreeModel      *model,
                         GtkTreeIter       *iter,
                         gpointer           column);
+static void render_vfo (GtkTreeViewColumn *col,
+                        GtkCellRenderer   *renderer,
+                        GtkTreeModel      *model,
+                        GtkTreeIter       *iter,
+                        gpointer           column);
 
 
 /* global objects */
@@ -168,6 +173,28 @@ static void create_rig_list ()
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
     
+    /* VFO Up */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("VFO Up"), renderer,
+                                                       "text", RIG_LIST_COL_VFOUP,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_vfo,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_VFOUP),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+    
+    /* VFO Down */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("VFO Down"), renderer,
+                                                       "text", RIG_LIST_COL_VFODOWN,
+                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer,
+                                             render_vfo,
+                                             GUINT_TO_POINTER(RIG_LIST_COL_VFODOWN),
+                                             NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
+    
     /* transverter down */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Downconverter LO"), renderer,
@@ -213,6 +240,8 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_INT,       // port
                                     G_TYPE_INT,       // type
                                     G_TYPE_INT,       // PTT
+                                    G_TYPE_INT,       // VFO Up
+                                    G_TYPE_INT,       // VFO Down
                                     G_TYPE_DOUBLE,    // LO DOWN
                                     G_TYPE_DOUBLE     // LO UO
                                    );
@@ -242,6 +271,8 @@ static GtkTreeModel *create_and_fill_model ()
                                         RIG_LIST_COL_PORT, conf.port,
                                         RIG_LIST_COL_TYPE, conf.type,
                                         RIG_LIST_COL_PTT, conf.ptt,
+                                        RIG_LIST_COL_VFOUP, conf.vfoUp,
+                                        RIG_LIST_COL_VFODOWN, conf.vfoDown,
                                         RIG_LIST_COL_LO, conf.lo,
                                         RIG_LIST_COL_LOUP, conf.loup,
                                         -1);
@@ -354,6 +385,8 @@ void sat_pref_rig_ok     ()
         .port  = 4532,
         .type  = RIG_TYPE_RX,
         .ptt   = 0,
+        .vfoUp = 0,
+        .vfoDown = 0,
         .lo    = 0.0,
         .loup  = 0.0,
     };
@@ -397,6 +430,8 @@ void sat_pref_rig_ok     ()
                                 RIG_LIST_COL_PORT, &conf.port,
                                 RIG_LIST_COL_TYPE, &conf.type,
                                 RIG_LIST_COL_PTT, &conf.ptt,
+                                RIG_LIST_COL_VFOUP, &conf.vfoUp,
+                                RIG_LIST_COL_VFODOWN, &conf.vfoDown,
                                 RIG_LIST_COL_LO, &conf.lo,
                                 RIG_LIST_COL_LOUP, &conf.loup,
                                 -1);
@@ -438,6 +473,8 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .port  = 4532,
         .type  = RIG_TYPE_RX,
         .ptt   = 0,
+        .vfoUp = 0,
+        .vfoDown = 0,
         .lo    = 0.0,
         .loup  = 0.0,
     };
@@ -455,6 +492,8 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_PORT, conf.port,
                             RIG_LIST_COL_TYPE, conf.type,
                             RIG_LIST_COL_PTT, conf.ptt,
+                            RIG_LIST_COL_VFOUP, conf.vfoUp,
+                            RIG_LIST_COL_VFODOWN, conf.vfoDown,
                             RIG_LIST_COL_LO, conf.lo,
                             RIG_LIST_COL_LOUP, conf.loup,
                             -1);
@@ -488,6 +527,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .port  = 4532,
         .type  = RIG_TYPE_RX,
         .ptt   = 0,
+        .vfoUp = 0,
+        .vfoDown = 0,
         .lo    = 0.0,
         .loup  = 0.0,
     };
@@ -516,6 +557,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_PORT, &conf.port,
                             RIG_LIST_COL_TYPE, &conf.type,
                             RIG_LIST_COL_PTT, &conf.ptt,
+                            RIG_LIST_COL_VFOUP, &conf.vfoUp,
+                            RIG_LIST_COL_VFODOWN, &conf.vfoDown,
                             RIG_LIST_COL_LO, &conf.lo,
                             RIG_LIST_COL_LOUP, &conf.loup,
                             -1);
@@ -547,6 +590,8 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             RIG_LIST_COL_PORT, conf.port,
                             RIG_LIST_COL_TYPE, conf.type,
                             RIG_LIST_COL_PTT, conf.ptt,
+                            RIG_LIST_COL_VFOUP, conf.vfoUp,
+                            RIG_LIST_COL_VFODOWN, conf.vfoDown,
                             RIG_LIST_COL_LO, conf.lo,
                             RIG_LIST_COL_LOUP, conf.loup,
                             -1);
@@ -751,6 +796,54 @@ static void render_lo (GtkTreeViewColumn *col,
     g_free (buff);
 }
 
+/** \brief Render VFO selection.
+ * \param col Pointer to the tree view column.
+ * \param renderer Pointer to the renderer.
+ * \param model Pointer to the tree model.
+ * \param iter Pointer to the tree iterator.
+ * \param column The column number in the model.
+ *
+ * This function is used to render the VFO up/down selections for
+ * full duplex radios.
+ */
+static void render_vfo (GtkTreeViewColumn *col,
+                        GtkCellRenderer   *renderer,
+                        GtkTreeModel      *model,
+                        GtkTreeIter       *iter,
+                        gpointer           column)
+{
+    gint     number;
+    gchar   *buff;
+    guint    coli = GPOINTER_TO_UINT (column);
+    
+    gtk_tree_model_get (model, iter, coli, &number, -1);
+
+    switch (number) {
+        
+        case VFO_A:
+            buff = g_strdup_printf ("VFO A");
+            break;
+        
+        case VFO_B:
+            buff = g_strdup_printf ("VFO B");
+            break;
+        
+        case VFO_MAIN:
+            buff = g_strdup_printf ("Main");
+            break;
+        
+        case VFO_SUB:
+            buff = g_strdup_printf ("Sub");
+            break;
+            
+        default:
+            buff = g_strdup_printf ("-");
+            break;
+    }
+
+    g_object_set (renderer, "text", buff, NULL);
+    g_free (buff);
+}
 
 
 
