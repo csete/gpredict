@@ -876,11 +876,15 @@ time_cell_data_function (GtkTreeViewColumn *col,
 		else
 			size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
 		
+        if (size == 0)
+            /* size > MAX_LENGTH */
+            buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+        /*
 		if (size < TIME_FORMAT_MAX_LENGTH)
 			buff[size]='\0';
 		else
 			buff[TIME_FORMAT_MAX_LENGTH]='\0';
-
+*/
 		g_object_set (renderer,
 					  "text", buff,
 					  NULL);
