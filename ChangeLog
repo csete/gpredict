@@ -3,6 +3,24 @@
     * src/gtk-rig-ctrl.c:
     Fixed bug that caused rig type to switch from DUPLEX -> RX after first cycle.
     
+    * src/sat-pass-dialogs.c:
+    Fixed bug 2691797: Potential array index out of range.
+    
+    * src/pass-to-txt.c:
+    Fixed bug 2691795: Potential array index out of range.
+    
+    * src/gtk-single-sat.c:
+    Fixed bug 2691794: Potential array index out of range.
+    
+    * src/gtk-sat-list.c:
+    Fixed bug 2691792: Potential array index out of range.
+    
+    * src/tle-update.c:
+    * src/gtk-sat-data.c:
+    * src/sgpsdp/test-001.c:
+    * src/sgpsdp/test-002.c:
+    Fixed compile warnings.
+    
 
 2009-05-10 Alexandru Csete <oz9aec@gmail.com>
 

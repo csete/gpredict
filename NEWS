@@ -7,7 +7,13 @@ Changes in version 1.0 (final):
 Changes in version 1.0 beta 4 (13 May 2009)
 
 - Fixed a bug that cause rig type to switch from DUPLEX -> RX
-  (Thanks Thomas DL1JBE=.
+  (Thanks Thomas DL1JBE).
+- Fixed bug 2691797: Potential array index out of range.
+- Fixed bug 2691795: Potential array index out of range.
+- Fixed bug 2691794: Potential array index out of range.
+- Fixed bug 2691792: Potential array index out of range.
+- Fixed other compile warnings (bugs 2691799, 2691787 and 2691790).
+
 
 Changes in version 1.0 beta 3 (10 May 2009)
 

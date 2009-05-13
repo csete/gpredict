@@ -54,61 +54,61 @@ const gchar *authors[] = {
 };
 
 
-const gchar license[] = N_("Copyright (C) 2001-2008 Alexandru Csete OZ9AEC\n"\
-						   "Contact: oz9aec at googlemail.com\n\n"\
-						   "Gpredict is free software; you can redistribute it and "\
-						   "mofdify it under the terms of the GNU General Public License "\
-						   "as published by the Free Software Foundation; either version 2 "\
-						   "of the License, or (at your option) any later version.\n\n"\
-						   "This program is distributed free of charge in the hope that it will "\
-						   "be useful, but WITHOUT ANY WARRANTY; without even the implied "\
-						   "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. "\
-						   "See the GNU Library General Public License for more details.\n\n"\
-						   "You should have received a copy of the GNU General Public License "\
-						   "along with this program (see Help->License). Otherwise you can find "\
+const gchar license[] = N_("Copyright (C) 2001-2009 Alexandru Csete OZ9AEC\n"\
+                           "Contact: oz9aec at googlemail.com\n\n"\
+                           "Gpredict is free software; you can redistribute it and "\
+                           "mofdify it under the terms of the GNU General Public License "\
+                           "as published by the Free Software Foundation; either version 2 "\
+                           "of the License, or (at your option) any later version.\n\n"\
+                           "This program is distributed free of charge in the hope that it will "\
+                           "be useful, but WITHOUT ANY WARRANTY; without even the implied "\
+                           "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. "\
+                           "See the GNU Library General Public License for more details.\n\n"\
+                           "You should have received a copy of the GNU General Public License "\
+                           "along with this program (see Help->License). Otherwise you can find "\
                            "a copy on the FSF "\
-						   "website http://www.fsf.org/licensing/licenses/gpl.html or you can "\
-						   "write to the\n\n"
-						   "Free Software Foundation, Inc.\n"\
-						   "59 Temple Place - Suite 330\n"
-						   "Boston\n"\
-						   "MA 02111-1307\n"
-						   "USA.\n");
+                           "website http://www.fsf.org/licensing/licenses/gpl.html or you can "\
+                           "write to the\n\n"
+                           "Free Software Foundation, Inc.\n"\
+                           "59 Temple Place - Suite 330\n"
+                           "Boston\n"\
+                           "MA 02111-1307\n"
+                           "USA.\n");
 
 
 
 /** \brief Create and run the gpredict about dialog. */
 void about_dialog_create ()
 {
-	GtkWidget *dialog;
-	GdkPixbuf *icon;
-	gchar     *iconfile;
+    GtkWidget *dialog;
+    GdkPixbuf *icon;
+    gchar     *iconfile;
 
 
-	dialog = gtk_about_dialog_new ();
-	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
-	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
-	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
-									_("Copyright (C) 2001-2008 Alexandru Csete OZ9AEC\n\n"\
-									  "Gpredict is available free of charge from:"));
-	gtk_about_dialog_set_url_hook (gpredict_url_hook_cb, NULL, NULL);
-	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog),
-								  "http://gpredict.oz9aec.net/");
-/* 	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (dialog), */
-/* 										_("Gpredict Website")); */
-	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (dialog), _(license));
-	gtk_about_dialog_set_wrap_license (GTK_ABOUT_DIALOG (dialog), TRUE);
-	iconfile = icon_file_name ("gpredict-icon.png");
-	icon = gdk_pixbuf_new_from_file (iconfile, NULL);
-	gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), icon);
-	g_free (iconfile);
-	g_object_unref (icon);
+    dialog = gtk_about_dialog_new ();
+    gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
+    gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
+    gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
+                                    _("Copyright (C) 2001-2008 Alexandru Csete OZ9AEC\n\n"\
+                                      "Gpredict is available free of charge from:"));
+    gtk_about_dialog_set_url_hook (gpredict_url_hook_cb, NULL, NULL);
+    gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog),
+                                  "http://gpredict.oz9aec.net/");
+/*     gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (dialog), */
+/*                                         _("Gpredict Website")); */
+    gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (dialog), _(license));
+    gtk_about_dialog_set_wrap_license (GTK_ABOUT_DIALOG (dialog), TRUE);
+    iconfile = icon_file_name ("gpredict-icon.png");
+    icon = gdk_pixbuf_new_from_file (iconfile, NULL);
+    gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), icon);
+    g_free (iconfile);
+    g_object_unref (icon);
 
-	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (dialog), authors);
-	gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (dialog),
-											 _("translator-credits"));
+    gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (dialog), authors);
+    gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (dialog),
+                                             _("translator-credits"));
 
-	gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_dialog_run (GTK_DIALOG (dialog));
 
-	gtk_widget_destroy (dialog);
+    gtk_widget_destroy (dialog);
 }
