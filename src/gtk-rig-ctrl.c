@@ -1194,6 +1194,7 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
                     ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
                     set_vfo (ctrl, ctrl->conf->vfoUp);
                     set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
+                    break;
                     
                 default:
                     /* this is an error! */

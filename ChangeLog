@@ -1,3 +1,9 @@
+2009-05-13 Alexadnru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    Fixed bug that caused rig type to switch from DUPLEX -> RX after first cycle.
+    
+
 2009-05-10 Alexandru Csete <oz9aec@gmail.com>
 
     * src/sat-pref-rig-data.h:
