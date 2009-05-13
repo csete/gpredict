@@ -50,168 +50,168 @@
 gint
 gtk_sat_data_read_qth (const gchar *filename, qth_t *qth)
 {
-	GError *error = NULL;
-	gchar  *buff;
-	gchar  **buffv;
+    GError *error = NULL;
+    gchar  *buff;
+    gchar  **buffv;
 
-	qth->data = g_key_file_new ();
-	g_key_file_set_list_separator (qth->data, ';');
+    qth->data = g_key_file_new ();
+    g_key_file_set_list_separator (qth->data, ';');
 
-	/* bail out with error message if data can not be read */
-	if (!g_key_file_load_from_file (qth->data, filename,
-									G_KEY_FILE_KEEP_COMMENTS, &error)) {
+    /* bail out with error message if data can not be read */
+    if (!g_key_file_load_from_file (qth->data, filename,
+                                    G_KEY_FILE_KEEP_COMMENTS, &error)) {
 
-		g_key_file_free (qth->data);
+        g_key_file_free (qth->data);
 
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Could not load data from %s (%s)"),
-					 __FUNCTION__, filename, error->message);
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not load data from %s (%s)"),
+                     __FUNCTION__, filename, error->message);
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
-	/* send a debug message, then read data */
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: QTH data: %s"),
-				 __FUNCTION__, filename);
+    /* send a debug message, then read data */
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s: QTH data: %s"),
+                 __FUNCTION__, filename);
 
-	/*** FIXME: should check that strings are UTF-8? */
-	/* QTH Name */
-	buff = g_path_get_basename (filename);
-	buffv = g_strsplit (buff, ".qth", 0);
-	qth->name = g_strdup (buffv[0]);
+    /*** FIXME: should check that strings are UTF-8? */
+    /* QTH Name */
+    buff = g_path_get_basename (filename);
+    buffv = g_strsplit (buff, ".qth", 0);
+    qth->name = g_strdup (buffv[0]);
 
-	g_free (buff);
-	g_strfreev (buffv);
-	/* g_key_file_get_string (qth->data, */
-	/* 					   QTH_CFG_MAIN_SECTION, */
-	/* 					   QTH_CFG_NAME_KEY, */
-	/* 					   &error); */
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR, 
-					 _("%s: Error reading QTH name (%s)."),
-					 __FUNCTION__, error->message);
+    g_free (buff);
+    g_strfreev (buffv);
+    /* g_key_file_get_string (qth->data, */
+    /*                        QTH_CFG_MAIN_SECTION, */
+    /*                        QTH_CFG_NAME_KEY, */
+    /*                        &error); */
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                     _("%s: Error reading QTH name (%s)."),
+                     __FUNCTION__, error->message);
 
-		qth->name = g_strdup (_("ERROR"));
-		g_clear_error (&error);
-	}
+        qth->name = g_strdup (_("ERROR"));
+        g_clear_error (&error);
+    }
 
-	/* QTH location */
-	qth->loc = g_key_file_get_string (qth->data,
-									  QTH_CFG_MAIN_SECTION,
-									  QTH_CFG_LOC_KEY,
-									  &error);
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-					 _("%s: QTH has no location (%s)."),
-					 __FUNCTION__, error->message);
+    /* QTH location */
+    qth->loc = g_key_file_get_string (qth->data,
+                                      QTH_CFG_MAIN_SECTION,
+                                      QTH_CFG_LOC_KEY,
+                                      &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: QTH has no location (%s)."),
+                     __FUNCTION__, error->message);
 
-		qth->loc = g_strdup ("");
-		g_clear_error (&error);
-	}
+        qth->loc = g_strdup ("");
+        g_clear_error (&error);
+    }
 
-	/* QTH description */
-	qth->desc = g_key_file_get_string (qth->data,
-									   QTH_CFG_MAIN_SECTION,
-									   QTH_CFG_DESC_KEY,
-									   &error);
-	if ((qth->desc == NULL) || (error != NULL)) {
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-					 _("%s: QTH has no description."),
-					 __FUNCTION__);
+    /* QTH description */
+    qth->desc = g_key_file_get_string (qth->data,
+                                       QTH_CFG_MAIN_SECTION,
+                                       QTH_CFG_DESC_KEY,
+                                       &error);
+    if ((qth->desc == NULL) || (error != NULL)) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: QTH has no description."),
+                     __FUNCTION__);
 
-		qth->desc = g_strdup ("");
-		g_clear_error (&error);
-	}
+        qth->desc = g_strdup ("");
+        g_clear_error (&error);
+    }
 
-	/* Weather station */
-	qth->wx = g_key_file_get_string (qth->data,
-									 QTH_CFG_MAIN_SECTION,
-									 QTH_CFG_WX_KEY,
-									 &error);
-	if ((qth->wx == NULL) || (error != NULL)) {
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-					 _("%s: QTH has no weather station."),
-					 __FUNCTION__);
+    /* Weather station */
+    qth->wx = g_key_file_get_string (qth->data,
+                                     QTH_CFG_MAIN_SECTION,
+                                     QTH_CFG_WX_KEY,
+                                     &error);
+    if ((qth->wx == NULL) || (error != NULL)) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: QTH has no weather station."),
+                     __FUNCTION__);
 
-		qth->wx = g_strdup ("");
-		g_clear_error (&error);
-	}
+        qth->wx = g_strdup ("");
+        g_clear_error (&error);
+    }
 
-	/* QTH Latitude */
-	buff = g_key_file_get_string (qth->data,
-								  QTH_CFG_MAIN_SECTION,
-								  QTH_CFG_LAT_KEY,
-								  &error);
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Error reading QTH latitude (%s)."),
-					 __FUNCTION__, error->message);
+    /* QTH Latitude */
+    buff = g_key_file_get_string (qth->data,
+                                  QTH_CFG_MAIN_SECTION,
+                                  QTH_CFG_LAT_KEY,
+                                  &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading QTH latitude (%s)."),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		if (buff != NULL)
-			g_free (buff);
+        if (buff != NULL)
+            g_free (buff);
 
-		qth->lat = 0.0;
-	}
-	else {
-		qth->lat = g_ascii_strtod (buff, NULL);
-		g_free (buff);
-	}
+        qth->lat = 0.0;
+    }
+    else {
+        qth->lat = g_ascii_strtod (buff, NULL);
+        g_free (buff);
+    }
 
-	/* QTH Longitude */
-	buff = g_key_file_get_string (qth->data,
-								  QTH_CFG_MAIN_SECTION,
-								  QTH_CFG_LON_KEY,
-								  &error);
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Error reading QTH longitude (%s)."),
-					 __FUNCTION__, error->message);
+    /* QTH Longitude */
+    buff = g_key_file_get_string (qth->data,
+                                  QTH_CFG_MAIN_SECTION,
+                                  QTH_CFG_LON_KEY,
+                                  &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading QTH longitude (%s)."),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		if (buff != NULL)
-			g_free (buff);
+        if (buff != NULL)
+            g_free (buff);
 
-		qth->lon = 0.0;
-	}
-	else {
-		qth->lon = g_ascii_strtod (buff, NULL);
-		g_free (buff);
-	}
+        qth->lon = 0.0;
+    }
+    else {
+        qth->lon = g_ascii_strtod (buff, NULL);
+        g_free (buff);
+    }
 
-	/* QTH Altitude */
-	qth->alt = g_key_file_get_integer (qth->data,
-									   QTH_CFG_MAIN_SECTION,
-									   QTH_CFG_ALT_KEY,
-									   &error);
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Error reading QTH altitude (%s)."),
-					 __FUNCTION__, error->message);
+    /* QTH Altitude */
+    qth->alt = g_key_file_get_integer (qth->data,
+                                       QTH_CFG_MAIN_SECTION,
+                                       QTH_CFG_ALT_KEY,
+                                       &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Error reading QTH altitude (%s)."),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		if (buff != NULL)
-			g_free (buff);
+        if (buff != NULL)
+            g_free (buff);
 
-		qth->alt = 0;
-	}
-	else {
-	}
+        qth->alt = 0;
+    }
+    else {
+    }
 
-	/* Now, send debug message and return */
-	sat_log_log (SAT_LOG_LEVEL_MSG,
-				 _("%s: QTH data: %s, %.4f, %.4f, %d"),
-				 __FUNCTION__,
-				 qth->name,
-				 qth->lat,
-				 qth->lon,
-				 qth->alt);
+    /* Now, send debug message and return */
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: QTH data: %s, %.4f, %.4f, %d"),
+                 __FUNCTION__,
+                 qth->name,
+                 qth->lat,
+                 qth->lon,
+                 qth->alt);
 
-	return TRUE;
+    return TRUE;
 }
 
 
@@ -222,141 +222,141 @@ gtk_sat_data_read_qth (const gchar *filename, qth_t *qth)
 gint
 gtk_sat_data_save_qth (const gchar *filename, qth_t *qth)
 {
-	GError     *error = NULL;
-	gchar      *buff;
-	GIOChannel *cfgfile;
-	gsize       length;
-	gsize       written;
-	gchar      *cfgstr;
-	gint        ok = 1;
+    GError     *error = NULL;
+    gchar      *buff;
+    GIOChannel *cfgfile;
+    gsize       length;
+    gsize       written;
+    gchar      *cfgstr;
+    gint        ok = 1;
 
-	qth->data = g_key_file_new ();
-	g_key_file_set_list_separator (qth->data, ';');
+    qth->data = g_key_file_new ();
+    g_key_file_set_list_separator (qth->data, ';');
 
-	/* name */
-	/* 	if (qth->name) { */
-	/* 		g_key_file_set_string (qth->data, */
-	/* 				       QTH_CFG_MAIN_SECTION, */
-	/* 				       QTH_CFG_NAME_KEY, */
-	/* 				       qth->name); */
-	/* 	} */
+    /* name */
+    /*     if (qth->name) { */
+    /*         g_key_file_set_string (qth->data, */
+    /*                        QTH_CFG_MAIN_SECTION, */
+    /*                        QTH_CFG_NAME_KEY, */
+    /*                        qth->name); */
+    /*     } */
 
-	/* description */
-	if (qth->desc && (g_utf8_strlen (qth->desc, -1) > 0)) {
-		g_key_file_set_string (qth->data,
-							   QTH_CFG_MAIN_SECTION,
-							   QTH_CFG_DESC_KEY,
-							   qth->desc);
-	}
-	
-	/* location */
-	if (qth->loc && (g_utf8_strlen (qth->loc, -1) > 0)) {
-		g_key_file_set_string (qth->data,
-							   QTH_CFG_MAIN_SECTION,
-							   QTH_CFG_LOC_KEY,
-							   qth->loc);
-	}
+    /* description */
+    if (qth->desc && (g_utf8_strlen (qth->desc, -1) > 0)) {
+        g_key_file_set_string (qth->data,
+                               QTH_CFG_MAIN_SECTION,
+                               QTH_CFG_DESC_KEY,
+                               qth->desc);
+    }
+    
+    /* location */
+    if (qth->loc && (g_utf8_strlen (qth->loc, -1) > 0)) {
+        g_key_file_set_string (qth->data,
+                               QTH_CFG_MAIN_SECTION,
+                               QTH_CFG_LOC_KEY,
+                               qth->loc);
+    }
 
-	/* latitude */
-	/*	buff = g_strdup_printf ("%.4f", qth->lat);*/
-	buff = g_malloc (10);
-	buff = g_ascii_dtostr (buff, 9, qth->lat);
-	g_key_file_set_string (qth->data,
-						   QTH_CFG_MAIN_SECTION,
-						   QTH_CFG_LAT_KEY,
-						   buff);
-	g_free (buff);
+    /* latitude */
+    /*    buff = g_strdup_printf ("%.4f", qth->lat);*/
+    buff = g_malloc (10);
+    buff = g_ascii_dtostr (buff, 9, qth->lat);
+    g_key_file_set_string (qth->data,
+                           QTH_CFG_MAIN_SECTION,
+                           QTH_CFG_LAT_KEY,
+                           buff);
+    g_free (buff);
 
-	/* longitude */
-	/* 	buff = g_strdup_printf ("%.4f", qth->lon); */
-	buff = g_malloc (10);
-	buff = g_ascii_dtostr (buff, 9, qth->lon);
-	g_key_file_set_string (qth->data,
-						   QTH_CFG_MAIN_SECTION,
-						   QTH_CFG_LON_KEY,
-						   buff);
-	g_free (buff);
+    /* longitude */
+    /*     buff = g_strdup_printf ("%.4f", qth->lon); */
+    buff = g_malloc (10);
+    buff = g_ascii_dtostr (buff, 9, qth->lon);
+    g_key_file_set_string (qth->data,
+                           QTH_CFG_MAIN_SECTION,
+                           QTH_CFG_LON_KEY,
+                           buff);
+    g_free (buff);
 
-	/* altitude */
-	g_key_file_set_integer (qth->data,
-							QTH_CFG_MAIN_SECTION,
-							QTH_CFG_ALT_KEY,
-							qth->alt);
+    /* altitude */
+    g_key_file_set_integer (qth->data,
+                            QTH_CFG_MAIN_SECTION,
+                            QTH_CFG_ALT_KEY,
+                            qth->alt);
 
-	/* weather station */
-	if (qth->wx && (g_utf8_strlen (qth->wx, -1) > 0)) {
-		g_key_file_set_string (qth->data,
-							   QTH_CFG_MAIN_SECTION,
-							   QTH_CFG_WX_KEY,
-							   qth->wx);
-	}
+    /* weather station */
+    if (qth->wx && (g_utf8_strlen (qth->wx, -1) > 0)) {
+        g_key_file_set_string (qth->data,
+                               QTH_CFG_MAIN_SECTION,
+                               QTH_CFG_WX_KEY,
+                               qth->wx);
+    }
 
-	/* saving code */
+    /* saving code */
 
-	/* convert configuration data struct to charachter string */
-	cfgstr = g_key_file_to_data (qth->data, &length, &error);
+    /* convert configuration data struct to charachter string */
+    cfgstr = g_key_file_to_data (qth->data, &length, &error);
 
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Could not create QTH data (%s)."),
-					 __FUNCTION__, error->message);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not create QTH data (%s)."),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		ok = 0;
-	}
-	else {
+        ok = 0;
+    }
+    else {
 
-		cfgfile = g_io_channel_new_file (filename, "w", &error);
+        cfgfile = g_io_channel_new_file (filename, "w", &error);
 
-		if (error != NULL) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: Could not create QTH file %s\n%s."),
-						 __FUNCTION__, filename, error->message);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Could not create QTH file %s\n%s."),
+                         __FUNCTION__, filename, error->message);
 
-			g_clear_error (&error);
+            g_clear_error (&error);
 
-			ok = 0;
-		}
-		else {
-			g_io_channel_write_chars (cfgfile,
-									  cfgstr,
-									  length,
-									  &written,
-									  &error);
+            ok = 0;
+        }
+        else {
+            g_io_channel_write_chars (cfgfile,
+                                      cfgstr,
+                                      length,
+                                      &written,
+                                      &error);
 
-			g_io_channel_shutdown (cfgfile, TRUE, NULL);
-			g_io_channel_unref (cfgfile);
+            g_io_channel_shutdown (cfgfile, TRUE, NULL);
+            g_io_channel_unref (cfgfile);
 
-			if (error != NULL) {
-				sat_log_log (SAT_LOG_LEVEL_ERROR,
-							 _("%s: Error writing QTH data (%s)."),
-							 __FUNCTION__, error->message);
+            if (error != NULL) {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Error writing QTH data (%s)."),
+                             __FUNCTION__, error->message);
 
-				g_clear_error (&error);
+                g_clear_error (&error);
 
-				ok = 0;
-			}
-			else if (length != written) {
-				sat_log_log (SAT_LOG_LEVEL_WARN,
-							 _("%s: Wrote only %d out of %d chars."),
-							 __FUNCTION__, written, length);
+                ok = 0;
+            }
+            else if (length != written) {
+                sat_log_log (SAT_LOG_LEVEL_WARN,
+                             _("%s: Wrote only %d out of %d chars."),
+                             __FUNCTION__, written, length);
 
-				ok = 0;
-			}
-			else {
-				sat_log_log (SAT_LOG_LEVEL_MSG,
-							 _("%s: QTH data saved."),
-							 __FUNCTION__);
+                ok = 0;
+            }
+            else {
+                sat_log_log (SAT_LOG_LEVEL_MSG,
+                             _("%s: QTH data saved."),
+                             __FUNCTION__);
 
-				ok = 1;
-			}
-		}
+                ok = 1;
+            }
+        }
 
-		g_free (cfgstr);
-	}
+        g_free (cfgstr);
+    }
 
-	return ok;
+    return ok;
 }
 
 
@@ -366,37 +366,37 @@ gtk_sat_data_save_qth (const gchar *filename, qth_t *qth)
 void
 gtk_sat_data_free_qth (qth_t *qth)
 {
-	if (qth->name) {
-		g_free (qth->name);
-		qth->name = NULL;
-	}
+    if (qth->name) {
+        g_free (qth->name);
+        qth->name = NULL;
+    }
 
-	if (qth->loc) {
-		g_free (qth->loc);
-		qth->loc = NULL;
-	}
+    if (qth->loc) {
+        g_free (qth->loc);
+        qth->loc = NULL;
+    }
 
-	if (qth->desc) {
-		g_free (qth->desc);
-		qth->desc = NULL;
-	}
+    if (qth->desc) {
+        g_free (qth->desc);
+        qth->desc = NULL;
+    }
 
-	if (qth->qra) {
-		g_free (qth->qra);
-		qth->qra = NULL;
-	}
+    if (qth->qra) {
+        g_free (qth->qra);
+        qth->qra = NULL;
+    }
 
-	if (qth->wx) {
-		g_free (qth->wx);
-		qth->wx = NULL;
-	}
+    if (qth->wx) {
+        g_free (qth->wx);
+        qth->wx = NULL;
+    }
 
-	if (qth->data) {
-		g_key_file_free (qth->data);
-		qth->data = NULL;
-	}
+    if (qth->data) {
+        g_key_file_free (qth->data);
+        qth->data = NULL;
+    }
 
-	g_free (qth);
+    g_free (qth);
 }
 
 
@@ -413,128 +413,129 @@ gtk_sat_data_free_qth (qth_t *qth)
 gint
 gtk_sat_data_read_sat (gint catnum, sat_t *sat)
 {
-	FILE    *fp;
-	gchar    tle_str[3][80];
-	gchar   *filename = NULL, *path = NULL;
-	gchar    catstr[6];
-	guint    i;
-	guint    catnr;
-	gboolean found = FALSE;
-	guint    errorcode = 0;
+    FILE    *fp;
+    gchar    tle_str[3][80];
+    gchar   *filename = NULL, *path = NULL;
+    gchar   *b;
+    gchar    catstr[6];
+    guint    i;
+    guint    catnr;
+    gboolean found = FALSE;
+    guint    errorcode = 0;
 
-	filename = tle_lookup (catnum);
+    filename = tle_lookup (catnum);
 
-	if (!filename) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Can not find #%d in any .tle file."),
-					 __FUNCTION__, catnum);
+    if (!filename) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Can not find #%d in any .tle file."),
+                     __FUNCTION__, catnum);
 
-		return 1;
-	}
+        return 1;
+    }
 
-	/* create full file path */
-	path = g_strdup_printf ("%s%s.gpredict2%stle%s%s",
-							g_get_home_dir (),
-							G_DIR_SEPARATOR_S,
-							G_DIR_SEPARATOR_S,
-							G_DIR_SEPARATOR_S,
-							filename);
+    /* create full file path */
+    path = g_strdup_printf ("%s%s.gpredict2%stle%s%s",
+                            g_get_home_dir (),
+                            G_DIR_SEPARATOR_S,
+                            G_DIR_SEPARATOR_S,
+                            G_DIR_SEPARATOR_S,
+                            filename);
 
-	fp = fopen (path, "r");
+    fp = fopen (path, "r");
 
-	if (fp != NULL) {
+    if (fp != NULL) {
  
-		while (fgets (tle_str[0], 80, fp) && !found) {
-			
-			/* read second and third lines */
-			fgets (tle_str[1], 80, fp);
-			fgets (tle_str[2], 80, fp);
+        while (fgets (tle_str[0], 80, fp) && !found) {
+            
+            /* read second and third lines */
+            b = fgets (tle_str[1], 80, fp);
+            b = fgets (tle_str[2], 80, fp);
 
-			/* copy catnum and convert to integer */
-			for (i = 2; i < 7; i++) {
-				catstr[i-2] = tle_str[1][i];
-			}
-			catstr[5] = '\0';
-			catnr = (guint) g_ascii_strtod (catstr, NULL);
+            /* copy catnum and convert to integer */
+            for (i = 2; i < 7; i++) {
+                catstr[i-2] = tle_str[1][i];
+            }
+            catstr[5] = '\0';
+            catnr = (guint) g_ascii_strtod (catstr, NULL);
 
-			if (catnr == catnum) {
+            if (catnr == catnum) {
 
-				sat_log_log (SAT_LOG_LEVEL_DEBUG,
-							 _("%s: Found #%d in %s"),
-							 __FUNCTION__,
-							 catnum,
-							 path);
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s: Found #%d in %s"),
+                             __FUNCTION__,
+                             catnum,
+                             path);
 
-				found = TRUE;
+                found = TRUE;
 
-				if (Get_Next_Tle_Set (tle_str, &sat->tle) != 1) {
-					/* TLE data not good */
-					sat_log_log (SAT_LOG_LEVEL_ERROR,
-								 _("%s: Invalid data for #%d"),
-								 __FUNCTION__,
-								 catnum);
+                if (Get_Next_Tle_Set (tle_str, &sat->tle) != 1) {
+                    /* TLE data not good */
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                 _("%s: Invalid data for #%d"),
+                                 __FUNCTION__,
+                                 catnum);
 
-					errorcode = 2;
-				}
-				else {
-					/* DATA OK, phew... */
-					sat_log_log (SAT_LOG_LEVEL_DEBUG,
-								 _("%s: Good data for #%d"),
-								 __FUNCTION__,
-								 catnum);
+                    errorcode = 2;
+                }
+                else {
+                    /* DATA OK, phew... */
+                    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                                 _("%s: Good data for #%d"),
+                                 __FUNCTION__,
+                                 catnum);
 
-					/* VERY, VERY important! If not done, some sats
-					   will not get initialised, the first time SGP4/SDP4
-					   is called. Consequently, the resulting data will 
-					   be NAN, INF or similar nonsense.
-					   For some reason, not even using g_new0 seems to
-					   be enough.
-					*/
-					sat->flags = 0;
+                    /* VERY, VERY important! If not done, some sats
+                       will not get initialised, the first time SGP4/SDP4
+                       is called. Consequently, the resulting data will 
+                       be NAN, INF or similar nonsense.
+                       For some reason, not even using g_new0 seems to
+                       be enough.
+                    */
+                    sat->flags = 0;
 
-					select_ephemeris (sat);
+                    select_ephemeris (sat);
 
-					/* initialise variable fields */
-					sat->jul_utc = 0.0;
-					sat->tsince = 0.0;
-					sat->az = 0.0;
-					sat->el = 0.0;
-					sat->range = 0.0;
-					sat->range_rate = 0.0;
-					sat->ra = 0.0;
-					sat->dec = 0.0;
-					sat->ssplat = 0.0;
-					sat->ssplon = 0.0;
-					sat->alt = 0.0;
-					sat->velo = 0.0;
-					sat->ma = 0.0;
-					sat->footprint = 0.0;
-					sat->phase = 0.0;
-					sat->aos = 0.0;
-					sat->los = 0.0;
+                    /* initialise variable fields */
+                    sat->jul_utc = 0.0;
+                    sat->tsince = 0.0;
+                    sat->az = 0.0;
+                    sat->el = 0.0;
+                    sat->range = 0.0;
+                    sat->range_rate = 0.0;
+                    sat->ra = 0.0;
+                    sat->dec = 0.0;
+                    sat->ssplat = 0.0;
+                    sat->ssplon = 0.0;
+                    sat->alt = 0.0;
+                    sat->velo = 0.0;
+                    sat->ma = 0.0;
+                    sat->footprint = 0.0;
+                    sat->phase = 0.0;
+                    sat->aos = 0.0;
+                    sat->los = 0.0;
 
-					/* calculate satellite data at epoch */
-					gtk_sat_data_init_sat (sat, NULL);
+                    /* calculate satellite data at epoch */
+                    gtk_sat_data_init_sat (sat, NULL);
 
-				}
-			}
+                }
+            }
 
-		}
+        }
 
-		fclose (fp);
-	}
-	else {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Failed to open %s"),
-					 __FUNCTION__, path);
+        fclose (fp);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to open %s"),
+                     __FUNCTION__, path);
 
-		errorcode = 3;
-	}
+        errorcode = 3;
+    }
 
-	g_free (path);
-	g_free (filename);
+    g_free (path);
+    g_free (filename);
 
-	return errorcode;
+    return errorcode;
 }
 
 
@@ -548,66 +549,66 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
 void
 gtk_sat_data_init_sat (sat_t *sat, qth_t *qth)
 {
-	geodetic_t obs_geodetic;
-	obs_set_t obs_set;
-	geodetic_t sat_geodetic;
-	double jul_utc, age;
+    geodetic_t obs_geodetic;
+    obs_set_t obs_set;
+    geodetic_t sat_geodetic;
+    double jul_utc, age;
 
-	g_return_if_fail (sat != NULL);
+    g_return_if_fail (sat != NULL);
 
-	jul_utc = Julian_Date_of_Epoch (sat->tle.epoch); // => tsince = 0.0
-	sat->jul_epoch = jul_utc;
+    jul_utc = Julian_Date_of_Epoch (sat->tle.epoch); // => tsince = 0.0
+    sat->jul_epoch = jul_utc;
 
-	/* initialise observer location */
-	if (qth != NULL) {
-		obs_geodetic.lon = qth->lon * de2ra;
-		obs_geodetic.lat = qth->lat * de2ra;
-		obs_geodetic.alt = qth->alt / 1000.0;
-		obs_geodetic.theta = 0;
-	}
-	else {
-		obs_geodetic.lon = 0.0;
-		obs_geodetic.lat = 0.0;
-		obs_geodetic.alt = 0.0;
-		obs_geodetic.theta = 0;
-	}
+    /* initialise observer location */
+    if (qth != NULL) {
+        obs_geodetic.lon = qth->lon * de2ra;
+        obs_geodetic.lat = qth->lat * de2ra;
+        obs_geodetic.alt = qth->alt / 1000.0;
+        obs_geodetic.theta = 0;
+    }
+    else {
+        obs_geodetic.lon = 0.0;
+        obs_geodetic.lat = 0.0;
+        obs_geodetic.alt = 0.0;
+        obs_geodetic.theta = 0;
+    }
 
-	/* execute computations */
-	if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
-		SDP4 (sat, 0.0);
-	else
-		SGP4 (sat, 0.0);
+    /* execute computations */
+    if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
+        SDP4 (sat, 0.0);
+    else
+        SGP4 (sat, 0.0);
 
-	/* scale position and velocity to km and km/sec */
-	Convert_Sat_State (&sat->pos, &sat->vel);
+    /* scale position and velocity to km and km/sec */
+    Convert_Sat_State (&sat->pos, &sat->vel);
 
-	/* get the velocity of the satellite */
-	Magnitude (&sat->vel);
-	sat->velo = sat->vel.w;
-	Calculate_Obs (jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
-	Calculate_LatLonAlt (jul_utc, &sat->pos, &sat_geodetic);
+    /* get the velocity of the satellite */
+    Magnitude (&sat->vel);
+    sat->velo = sat->vel.w;
+    Calculate_Obs (jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
+    Calculate_LatLonAlt (jul_utc, &sat->pos, &sat_geodetic);
 
-	while (sat_geodetic.lon < -pi)
-		sat_geodetic.lon += twopi;
-	
-	while (sat_geodetic.lon > (pi))
-		sat_geodetic.lon -= twopi;
+    while (sat_geodetic.lon < -pi)
+        sat_geodetic.lon += twopi;
+    
+    while (sat_geodetic.lon > (pi))
+        sat_geodetic.lon -= twopi;
 
-	sat->az = Degrees (obs_set.az);
-	sat->el = Degrees (obs_set.el);
-	sat->range = obs_set.range;
-	sat->range_rate = obs_set.range_rate;
-	sat->ssplat = Degrees (sat_geodetic.lat);
-	sat->ssplon = Degrees (sat_geodetic.lon);
-	sat->alt = sat_geodetic.alt;
-	sat->ma = Degrees (sat->phase);
-	sat->ma *= 256.0/360.0;
-	sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
-	age = 0.0;
-	sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
-							   age * sat->tle.bstar * ae) * age +
-							  sat->tle.xmo/twopi) + sat->tle.revnum - 1;
+    sat->az = Degrees (obs_set.az);
+    sat->el = Degrees (obs_set.el);
+    sat->range = obs_set.range;
+    sat->range_rate = obs_set.range_rate;
+    sat->ssplat = Degrees (sat_geodetic.lat);
+    sat->ssplon = Degrees (sat_geodetic.lon);
+    sat->alt = sat_geodetic.alt;
+    sat->ma = Degrees (sat->phase);
+    sat->ma *= 256.0/360.0;
+    sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
+    age = 0.0;
+    sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
+                               age * sat->tle.bstar * ae) * age +
+                              sat->tle.xmo/twopi) + sat->tle.revnum - 1;
 
-	/* orbit type */
-	sat->otype = get_orbit_type (sat);
+    /* orbit type */
+    sat->otype = get_orbit_type (sat);
 }
