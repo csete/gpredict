@@ -629,6 +629,7 @@ read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *data)
     gchar     *path;
     gchar      tle_str[3][80];
     gchar      catstr[6];
+    gchar     *b;
     FILE      *fp;
     gint       retcode = 0;
     guint      catnr,i;
@@ -644,8 +645,8 @@ read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *data)
         /* read 3 lines at a time */
         while (fgets (tle_str[0], 80, fp)) {
             /* read second and third lines */
-            fgets (tle_str[1], 80, fp);
-            fgets (tle_str[2], 80, fp);
+            b = fgets (tle_str[1], 80, fp);
+            b = fgets (tle_str[2], 80, fp);
 
             /* copy catnum and convert to integer */
             for (i = 2; i < 7; i++) {
@@ -746,6 +747,7 @@ update_tle_in_file (const gchar *ldname,
     guint      total   = 0;  /* total no. of sats in gpredict tle file */
     gchar      tle_str[3][80];
     gchar      catstr[6];
+    gchar     *b;
     FILE      *fp;
     FILE      *tmp;
     guint      catnr,i;
@@ -770,8 +772,8 @@ update_tle_in_file (const gchar *ldname,
             /* read 3 lines at a time */
             while (fgets (tle_str[0], 80, fp)) {
                 /* read second and third lines */
-                fgets (tle_str[1], 80, fp);
-                fgets (tle_str[2], 80, fp);
+                b = fgets (tle_str[1], 80, fp);
+                b = fgets (tle_str[2], 80, fp);
 
                 /* stats */
                 total++;
