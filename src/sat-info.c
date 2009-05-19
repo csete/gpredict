@@ -424,7 +424,7 @@ static GtkWidget *create_transponder_table (guint catnum)
     
     trsplist = read_transponders (catnum);
     if (trsplist == NULL) {
-        vbox = gtk_label_new ("No transponders");
+        vbox = gtk_label_new (_("No transponders"));
     }
     else {
         vbox = gtk_vbox_new (FALSE, 0);
