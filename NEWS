@@ -4,6 +4,11 @@ Changes in version 1.0 (final):
 * Windows: New installer instead of ZIP distribution.
 * Mac OS X package.
 
+Changes in version 1.0 beta 5 (TBD)
+
+- Added new transponder files received from David VK5DG.
+
+
 Changes in version 1.0 beta 4 (13 May 2009)
 
 - Fixed a bug that cause rig type to switch from DUPLEX -> RX

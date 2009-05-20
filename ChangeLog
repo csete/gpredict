@@ -1,3 +1,9 @@
+2009-05-20 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/data:
+    Added new transponder files received from David VK5DG.
+    
+
 2009-05-13 Alexadnru Csete <oz9aec@gmail.com>
 
     * src/gtk-rig-ctrl.c:
