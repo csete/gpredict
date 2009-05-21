@@ -612,3 +612,48 @@ gtk_sat_data_init_sat (sat_t *sat, qth_t *qth)
     /* orbit type */
     sat->otype = get_orbit_type (sat);
 }
+
+/** \brief Copy satellite data.
+  * \param source Pointer to the source satellite to copy data from.
+  * \param dest Pointer to the destination satellite to copy data into.
+  * \param qth Pointer to the observer data (needed to initialize sat)
+  *
+  * This function copies the satellite data from a source sat_t structure into
+  * the destination. The function copies the tle_t data and calls gtk_sat_data_inti_sat()
+  * function for initializing the other fields.
+  *
+  */
+void gtk_sat_data_copy_sat (sat_t *source, sat_t *dest, qth_t *qth)
+{
+    guint i;
+
+    g_return_if_fail ((source != NULL) && (dest != NULL));
+
+    dest->tle.epoch = source->tle.epoch;
+    dest->tle.epoch_year = source->tle.epoch_year;
+    dest->tle.epoch_day = source->tle.epoch_day;
+    dest->tle.epoch_fod = source->tle.epoch_fod;
+    dest->tle.xndt2o = source->tle.xndt2o;
+    dest->tle.xndd6o = source->tle.xndd6o;
+    dest->tle.bstar = source->tle.bstar;
+    dest->tle.xincl = source->tle.xincl;
+    dest->tle.xnodeo = source->tle.xnodeo;
+    dest->tle.eo = source->tle.eo;
+    dest->tle.omegao = source->tle.omegao;
+    dest->tle.xmo = source->tle.xmo;
+    dest->tle.xno = source->tle.xno;
+    dest->tle.catnr = source->tle.catnr;
+    dest->tle.elset = source->tle.elset;
+    dest->tle.revnum = source->tle.revnum;
+
+    for (i = 0; i < 25; i++)
+        dest->tle.sat_name[i] = source->tle.sat_name[i];
+    for (i = 0; i < 9; i++)
+        dest->tle.idesg[i] = source->tle.idesg[i];
+
+    dest->tle.status = source->tle.status;
+    dest->tle.xincl1 = source->tle.xincl1;
+    dest->tle.omegao1 = source->tle.omegao1;
+
+    gtk_sat_data_init_sat (dest, qth);
+}
