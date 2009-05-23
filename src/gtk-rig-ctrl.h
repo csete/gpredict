@@ -104,6 +104,7 @@ struct _gtk_rig_ctrl
     
     gdouble lastrxf;    /*!< Last frequency sent to receiver. */
     gdouble lasttxf;    /*!< Last frequency sent to tranmitter. */
+    gdouble du,dd;      /*!< Last computed up/down Doppler shift; computed in update() */
     
     /* debug related */
     guint    wrops;

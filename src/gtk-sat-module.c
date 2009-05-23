@@ -862,12 +862,17 @@ gtk_sat_module_timeout_cb     (gpointer module)
         if (mod->child_3 != NULL)
             update_child (mod->child_3, mod->tmgCdnum);
 
+        /* update satellite data (it may have got out of sync during child updates) */
+        g_hash_table_foreach (mod->satellites,
+                              gtk_sat_module_update_sat,
+                              module);
+
         /* send notice to radio and rotator controller */
         if (mod->rigctrl)
             gtk_rig_ctrl_update (GTK_RIG_CTRL (mod->rigctrl), mod->tmgCdnum);
         if (mod->rotctrl)
             gtk_rot_ctrl_update (GTK_ROT_CTRL (mod->rotctrl), mod->tmgCdnum);
-        
+
 
         mod->event_count++;
 

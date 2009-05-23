@@ -337,15 +337,15 @@ gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
         
         /* Doppler shift down */
         satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
-        doppler = -satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
-        buff = g_strdup_printf ("%.0f Hz", doppler);
+        ctrl->dd = -satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
+        buff = g_strdup_printf ("%.0f Hz", ctrl->dd);
         gtk_label_set_text (GTK_LABEL (ctrl->SatDopDown), buff);
         g_free (buff);
         
         /* Doppler shift up */
         satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
-        doppler = -satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
-        buff = g_strdup_printf ("%.0f Hz", doppler);
+        ctrl->du = -satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
+        buff = g_strdup_printf ("%.0f Hz", ctrl->du);
         gtk_label_set_text (GTK_LABEL (ctrl->SatDopUp), buff);
         g_free (buff);
 
@@ -398,6 +398,9 @@ GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
     
     /* Downlink doppler */
     label = gtk_label_new (_("Doppler:"));
+    gtk_widget_set_tooltip_text (label,
+                                 _("The Doppler shift according to the range rate and "\
+                                   "the currently selected downlink frequency"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox1), label, FALSE, FALSE, 0);
     ctrl->SatDopDown = gtk_label_new ("---- Hz");
@@ -460,6 +463,9 @@ GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
     
     /* Uplink doppler */
     label = gtk_label_new (_("Doppler:"));
+    gtk_widget_set_tooltip_text (label,
+                                 _("The Doppler shift according to the range rate and "\
+                                   "the currently selected downlink frequency"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox1), label, FALSE, FALSE, 0);
     ctrl->SatDopUp = gtk_label_new ("---- Hz");
@@ -527,7 +533,9 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     
     /* tracking button */
     track = gtk_toggle_button_new_with_label (_("Track"));
-    gtk_widget_set_tooltip_text (track, _("Track the satellite when it is within range"));
+    gtk_widget_set_tooltip_text (track, _("Track the satellite transponder.\n"\
+                                          "Enabling this button will apply Dopper correction "\
+                                          "to the frequency of the radio."));
     gtk_table_attach_defaults (GTK_TABLE (table), track, 3, 4, 0, 1);
     g_signal_connect (track, "toggled", G_CALLBACK (track_toggle_cb), ctrl);
     
@@ -591,7 +599,14 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     ctrl->SatRng = gtk_label_new ("0 km");
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatRng), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRng, 3, 4, 2, 3);
-    
+
+    gtk_widget_set_tooltip_text (label,
+                                 _("This is the current distance between the satellite "\
+                                   "and the observer."));
+    gtk_widget_set_tooltip_text (ctrl->SatRng,
+                                 _("This is the current distance between the satellite "\
+                                   "and the observer."));
+
     /* Range rate */
     label = gtk_label_new (_(" Rate:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
@@ -599,7 +614,14 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     ctrl->SatRngRate = gtk_label_new ("0.0 km/s");
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatRngRate), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->SatRngRate, 3, 4, 3, 4);
-    
+
+    gtk_widget_set_tooltip_text (label,
+                                 _("The rate of change for the distance between "
+                                   "the satellite and the observer."));
+    gtk_widget_set_tooltip_text (ctrl->SatRngRate,
+                                 _("The rate of change for the distance between "
+                                   "the satellite and the observer."));
+
     frame = gtk_frame_new (_("Target"));
 
     gtk_container_add (GTK_CONTAINER (frame), table);
@@ -762,6 +784,9 @@ create_count_down_widgets (GtkRigCtrl *ctrl)
     gtk_misc_set_alignment (GTK_MISC (ctrl->SatCnt), 0.5, 0.5);
     gtk_label_set_markup (GTK_LABEL (ctrl->SatCnt),
                           _("<span size='large'><b>\316\224T: 00:00:00</b></span>"));
+    gtk_widget_set_tooltip_text (ctrl->SatCnt,
+                                 _("The time remaining until the next AOS or LOS event, "\
+                                   "depending on which one comes first."));
     
     frame = gtk_frame_new (NULL);
     gtk_container_add (GTK_CONTAINER (frame), ctrl->SatCnt);
@@ -930,6 +955,10 @@ track_toggle_cb (GtkToggleButton *button, gpointer data)
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
     ctrl->tracking = gtk_toggle_button_get_active (button);
+
+    /* invalidate sync with radio */
+    ctrl->lastrxf = 0.0;
+    ctrl->lasttxf = 0.0;
 }
 
 
@@ -1158,49 +1187,31 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
         /* set initial frequency */
         if (ctrl->conf2 != NULL) {
             /* set initial dual mode */
-            ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-            set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
-            ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
-            set_freq_simplex (ctrl, ctrl->conf2, ctrl->lasttxf);
+            exec_dual_rig_cycle (ctrl);
         }
         else {
             switch (ctrl->conf->type) {
                 
                 case RIG_TYPE_RX:
-                    ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+                    exec_rx_cycle (ctrl);
                     break;
                     
                 case RIG_TYPE_TX:
-                    ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
-                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
+                    exec_tx_cycle (ctrl);
                     break;
                     
                 case RIG_TYPE_TRX:
-                    if (get_ptt (ctrl, ctrl->conf)) {
-                        ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
-                        set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
-                    }
-                    else {
-                        ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                        set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
-                    }
+                    exec_trx_cycle (ctrl);
                     break;
                     
                 case RIG_TYPE_DUPLEX:
-                    ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                    set_vfo (ctrl, ctrl->conf->vfoDown);
-                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
-                    ctrl->lasttxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqUp));
-                    set_vfo (ctrl, ctrl->conf->vfoUp);
-                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lasttxf);
+                    exec_duplex_cycle (ctrl);
                     break;
                     
                 default:
                     /* this is an error! */
                     ctrl->conf->type = RIG_TYPE_RX;
-                    ctrl->lastrxf = gtk_freq_knob_get_value (GTK_FREQ_KNOB(ctrl->RigFreqDown));
-                    set_freq_simplex (ctrl, ctrl->conf, ctrl->lastrxf);
+                    exec_rx_cycle (ctrl);
                     break;
             }
         }
@@ -1360,8 +1371,10 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
             
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
-                satfreqd = (readfreq + ctrl->conf->lo) /
-                           (1 - (ctrl->target->range_rate/299792.4580));
+                /*satfreqd = (readfreq + ctrl->conf->lo) /
+                           (1.0 - (ctrl->target->range_rate/299792.4580));*/
+                satfreqd = (readfreq - ctrl->dd + ctrl->conf->lo);
+
             }
             else {
                 satfreqd = readfreq + ctrl->conf->lo;
@@ -1388,13 +1401,15 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
     if (ctrl->tracking) {
         /* downlink */
-        doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+        /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+        g_print ("Doppler D:%.0f:%.0f ",doppler,ctrl->dd); */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd + doppler - ctrl->conf->lo);
+                                  satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
-        doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+        /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+        g_print ("U:%.0f:%.0f\n",doppler,ctrl->du); */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + doppler - ctrl->conf->loup);
+                                  satfrequ + ctrl->du - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
@@ -1411,7 +1426,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
             /* reset error counter */
             ctrl->errcnt = 0;
             
-            /* The actual frequency migh be different from what we have set because
+            /* The actual frequency might be different from what we have set because
                the tuning step is larger than what we work with (e.g. FT-817 has a
                smallest tuning step of 10 Hz). Therefore we read back the actual
                frequency from the rig. */
@@ -1473,8 +1488,9 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
             
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
-                satfrequ = (readfreq + ctrl->conf->loup) /
-                           (1 - (ctrl->target->range_rate/299792.4580));
+                satfrequ = readfreq - ctrl->du + ctrl->conf->loup;
+                /*satfrequ = (readfreq + ctrl->conf->loup) /
+                           (1.0 - (ctrl->target->range_rate/299792.4580));*/
             }
             else {
                 satfrequ = readfreq + ctrl->conf->loup;
@@ -1501,13 +1517,13 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
     if (ctrl->tracking) {
         /* downlink */
-        doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+        /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);*/
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd + doppler - ctrl->conf->lo);
+                                  satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
-        doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+        /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);*/
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + doppler - ctrl->conf->loup);
+                                  satfrequ + ctrl->du - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
@@ -1548,6 +1564,7 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
+    /*
     if (ctrl->engaged) {
         if (get_ptt (ctrl, ctrl->conf) == TRUE) {
             exec_tx_cycle (ctrl);
@@ -1555,7 +1572,10 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
         else {
             exec_rx_cycle (ctrl);
         }
-    }
+    }*/
+
+    exec_rx_cycle (ctrl);
+    exec_tx_cycle (ctrl);
 }
 
 
@@ -1575,6 +1595,12 @@ static void exec_duplex_cycle (GtkRigCtrl *ctrl)
 		/* Uplink */
 		set_vfo (ctrl, ctrl->conf->vfoUp);
 		exec_tx_cycle (ctrl);
+    }
+    else {
+        /* still execute cycles to update UI widgets
+           no data will be sent to RIG */
+        exec_rx_cycle (ctrl);
+        exec_tx_cycle (ctrl);
     }
 }
 
@@ -1608,8 +1634,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
-                satfreqd = (readfreq + ctrl->conf->lo) /
-                           (1 - (ctrl->target->range_rate/299792.4580));
+                satfreqd = readfreq - ctrl->dd + ctrl->conf->lo;
+                /*satfreqd = (readfreq + ctrl->conf->lo) /
+                           (1.0 - (ctrl->target->range_rate/299792.4580));*/
             }
             else {
                 satfreqd = readfreq + ctrl->conf->lo;
@@ -1627,9 +1654,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         /* update uplink */
         satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
         if (ctrl->tracking) {
-            doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+            /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);*/
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                     satfrequ + doppler - ctrl->conf2->loup);
+                                     satfrequ + ctrl->du - ctrl->conf2->loup);
         }
         else {
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
@@ -1662,9 +1689,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
         if (ctrl->tracking) {
             /* downlink */
-            doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+            /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);*/
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                     satfreqd + doppler - ctrl->conf->lo);
+                                     satfreqd + ctrl->dd - ctrl->conf->lo);
         }
         else {
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
@@ -1707,8 +1734,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             
                 /* doppler shift; only if we are tracking */
                 if (ctrl->tracking) {
-                    satfrequ = (readfreq + ctrl->conf2->loup) /
-                                (1 - (ctrl->target->range_rate/299792.4580));
+                    satfrequ = readfreq - ctrl->du + ctrl->conf2->loup;
+                    /*satfrequ = (readfreq + ctrl->conf2->loup) /
+                                (1.0 - (ctrl->target->range_rate/299792.4580));*/
                 }
                 else {
                     satfrequ = readfreq + ctrl->conf2->loup;
@@ -1726,9 +1754,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             /* update downlink */
             satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
             if (ctrl->tracking) {
-                doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
+                /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);*/
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                         satfreqd + doppler - ctrl->conf->lo);
+                                         satfreqd + ctrl->dd - ctrl->conf->lo);
             }
             else {
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
@@ -1756,9 +1784,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             /* perform forward tracking on uplink */
             satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
             if (ctrl->tracking) {
-                doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
+                /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);*/
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                         satfrequ + doppler - ctrl->conf2->loup);
+                                         satfrequ + ctrl->du - ctrl->conf2->loup);
             }
             else {
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),

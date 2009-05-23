@@ -1,3 +1,19 @@
+2009-05-23 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    Fixed some bugs that caused the Doppler shift to be calculated incorrectly
+    in some cases.
+
+    * src/gtk-single-sat.c:
+    Improved tooltip texts.
+
+
+2009-05-21 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/gtk-sat-data.[ch]:
+    Added function to copy satellite data from one sat_t structure to another.
+
+
 2009-05-20 Alexandru Csete <oz9aec@gmail.com>
 
     * src/data:
@@ -7,7 +23,8 @@
 2009-05-13 Alexadnru Csete <oz9aec@gmail.com>
 
     * src/gtk-rig-ctrl.c:
-    Fixed bug that caused rig type to switch from DUPLEX -> RX after first cycle.
+    Fixed bug that caused rig type to switch from DUPLEX -> RX after first
+    cycle.
     
     * src/sat-pass-dialogs.c:
     Fixed bug 2691797: Potential array index out of range.

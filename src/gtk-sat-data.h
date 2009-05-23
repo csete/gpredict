@@ -53,6 +53,6 @@ gint gtk_sat_data_save_qth (const gchar *filename, qth_t *qth);
 void gtk_sat_data_free_qth (qth_t *qth);
 gint gtk_sat_data_read_sat (gint catnum, sat_t *sat);
 void gtk_sat_data_init_sat (sat_t *sat, qth_t *qth);
-void gtk_sat_data_copy_sat (sat_t *source, sat_t *dest, qth_t *qth);
+void gtk_sat_data_copy_sat (const sat_t *source, sat_t *dest, qth_t *qth);
 
 #endif

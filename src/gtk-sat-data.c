@@ -623,7 +623,7 @@ gtk_sat_data_init_sat (sat_t *sat, qth_t *qth)
   * function for initializing the other fields.
   *
   */
-void gtk_sat_data_copy_sat (sat_t *source, sat_t *dest, qth_t *qth)
+void gtk_sat_data_copy_sat (const sat_t *source, sat_t *dest, qth_t *qth)
 {
     guint i;
 
@@ -654,6 +654,31 @@ void gtk_sat_data_copy_sat (sat_t *source, sat_t *dest, qth_t *qth)
     dest->tle.status = source->tle.status;
     dest->tle.xincl1 = source->tle.xincl1;
     dest->tle.omegao1 = source->tle.omegao1;
+
+    dest->otype = source->otype;
+
+    /* very important */
+    dest->flags = 0;
+    select_ephemeris (dest);
+
+    /* initialise variable fields */
+    dest->jul_utc = 0.0;
+    dest->tsince = 0.0;
+    dest->az = 0.0;
+    dest->el = 0.0;
+    dest->range = 0.0;
+    dest->range_rate = 0.0;
+    dest->ra = 0.0;
+    dest->dec = 0.0;
+    dest->ssplat = 0.0;
+    dest->ssplon = 0.0;
+    dest->alt = 0.0;
+    dest->velo = 0.0;
+    dest->ma = 0.0;
+    dest->footprint = 0.0;
+    dest->phase = 0.0;
+    dest->aos = 0.0;
+    dest->los = 0.0;
 
     gtk_sat_data_init_sat (dest, qth);
 }

@@ -7,6 +7,8 @@ Changes in version 1.0 (final):
 Changes in version 1.0 beta 5 (TBD)
 
 - Added new transponder files received from David VK5DG.
+- Fixed some bugs that caused the Doppler shift to be calculated
+  incorrectly in some cases.
 
 
 Changes in version 1.0 beta 4 (13 May 2009)
