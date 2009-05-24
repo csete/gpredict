@@ -1,9 +1,3 @@
-Changes in version 1.0 (final):
-* Feature request 2691964: Doppler tuning on uplink (duplex TRX)
-* Feature request 2194621: Data recorder.
-* Windows: New installer instead of ZIP distribution.
-* Mac OS X package.
-
 Changes in version 1.0 beta 5 (24 May 2005)
 
 - Added new transponder files received from David VK5DG.

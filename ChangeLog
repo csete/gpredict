@@ -1,4 +1,4 @@
-2009-05-24 Alexandru Csete <oz9aec@gmail.com>
+2009-05-24 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-single-sat.c:
     Use field text instead of field hint for checkbox label. Use the hints for
@@ -12,7 +12,7 @@
     too soon. Changed packing options to include GTK_EXPAND.
 
 
-2009-05-23 Alexandru Csete <oz9aec@gmail.com>
+2009-05-23 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
     Fixed some bugs that caused the Doppler shift to be calculated incorrectly
@@ -22,19 +22,19 @@
     Improved tooltip texts.
 
 
-2009-05-21 Alexandru Csete <oz9aec@gmail.com>
+2009-05-21 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-data.[ch]:
     Added function to copy satellite data from one sat_t structure to another.
 
 
-2009-05-20 Alexandru Csete <oz9aec@gmail.com>
+2009-05-20 Alexandru Csete <oz9aec at gmail.com>
 
     * src/data:
     Added new transponder files received from David VK5DG.
     
 
-2009-05-13 Alexadnru Csete <oz9aec@gmail.com>
+2009-05-13 Alexadnru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
     Fixed bug that caused rig type to switch from DUPLEX -> RX after first
@@ -59,7 +59,7 @@
     Fixed compile warnings.
     
 
-2009-05-10 Alexandru Csete <oz9aec@gmail.com>
+2009-05-10 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig-data.h:
     * src/sat-pref-rig.c:
@@ -68,7 +68,7 @@
     * src/trsp-conf.c:
     Changed error messages severity to WARNING when reading transponder data.
 
-2009-05-09 Alexandru Csete <oz9aec@gmail.com>
+2009-05-09 Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.[ch]:
     Added parameter to store uplink and downlink VFOs for full-duplex capable
@@ -82,7 +82,7 @@
     Implemented full-duplex controller.
     
 
-2009-05-01 Alexandru Csete <oz9aec@gmail.com>
+2009-05-01 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module.c:
     Fixed indent. Log an error message if module configuration fails.
@@ -93,7 +93,7 @@
     is opened or reconfigured.
 
 
-2009-04-14 Alexandru Csete <oz9aec@gmail.com>
+2009-04-14 Alexandru Csete <oz9aec at gmail.com>
 
     * configure.ac:
     Require libcurl 7.16.0 or later as mandatory dependency.
@@ -104,13 +104,13 @@
     Reverted TLE update to libcurl version.
 
 
-2009-04-13 Alexandru Csete <oz9aec@gmail.com>
+2009-04-13 Alexandru Csete <oz9aec at gmail.com>
 
     * src/predict-tools.c:
     Fixed a bug that could cause find_aos() to go into infinite loop.
 
 
-2009-04-12 Alexandru Csete <oz9aec@gmail.com>
+2009-04-12 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
     Implemented dual-rig controller. Tested with FT-817/IC-765 pair.
@@ -140,13 +140,13 @@
     Implemented new PTT option.
     
 
-2009-04-11 Alexandru Csete <oz9aec@gmail.com>
+2009-04-11 Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.c:
     Fixed bug that prevented correct saving of the LO frequencies.
     
 
-2009-04-10 Alexandru Csete <oz9aec@gmail.com>
+2009-04-10 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module-tmg.c:
     Fixed bug 2750119: Unable to set the time correctly in Time Controller.
@@ -161,7 +161,7 @@
     Added secondary device for uplink.
     
 
-2009-04-08 Alexandru Csete <oz9aec@gmail.com>
+2009-04-08 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.[ch]:
     Fixed crash when closing rig controller window with an active transponder
@@ -174,20 +174,20 @@
     Added transponder selector combo box. Not fully functional.
     
 
-2009-04-03 Alexandru Csete <oz9aec@gmail.com>
+2009-04-03 Alexandru Csete <oz9aec at gmail.com>
 
     * src/trsp-conf.[ch]:
     Added function for freeing transponder list. Fixed a small typo in file
     extension.
 
 
-2009-04-01 Alexandru Csete <oz9aec@gmail.com>
+2009-04-01 Alexandru Csete <oz9aec at gmail.com>
 
     * src/trsp-conf.c:
     Implemented read_transponders().
     
 
-2009-03-29 Alexandru Csete <oz9aec@gmail.com>
+2009-03-29 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.[ch]:
     Implemented new controller (RX and TX). Pending transponder management.
@@ -196,7 +196,7 @@
     Added files for transpoder data file I/O.
     
 
-2009-03-21 Alexandru Csete <oz9aec@gmail.com>
+2009-03-21 Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.[ch]:
     Added config field for uplink transverter LO. LO values are now optional.
@@ -210,7 +210,7 @@
     Begun implementation of new controller.
     
 
-2009-03-21 Stephane Fillod <fillods@users.sf.net>
+2009-03-21 Stephane Fillod <fillods at users.sf.net>
 
     * src/about.c:
     * src/gtk-polar-view.c:
@@ -231,32 +231,32 @@
     * po/fr.po: update
 
 
-2009-03-20 Alexandru Csete <oz9aec@gmail.com>
+2009-03-20 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig-editor.c:
     Changed radio type labels.
 
 
-2009-03-20 Stephane Fillod <fillods@users.sf.net>
+2009-03-20 Stephane Fillod <fillods at users.sf.net>
 
     * src/tle-update.c:
     Added Gio error checking and reporting.
 
 
-2009-03-18 Alexandru Csete <oz9aec@gmail.com>
+2009-03-18 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-qth.c:
     Fixed typo (Debian bug #520203).
 
 
-2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
+2009-03-16 Bruce Cowan <bcowan at fastmail.co.uk>
 
     * src/sat-cfg.[ch]:
     * src/sat-pref-tle.c:
     Remove proxy configuration item, taken care by GVFS.
 
 
-2009-03-16 Bruce Cowan <bcowan@fastmail.co.uk>
+2009-03-16 Bruce Cowan <bcowan at fastmail.co.uk>
 
     * src/menubar.c:
     * src/tle-update.c:
@@ -274,14 +274,14 @@
     Updated.
 
 
-2009-03-01 Alexandru Csete <oz9aec@gmail.com>
+2009-03-01 Alexandru Csete <oz9aec at gmail.com>
 
     * configure.ac:
     Changed required GooCanvas version from 0.10 to 0.9 to be compatible
     with older linux distributions, too (e.g. Ubuntu 8.04).
     
 
-2009-02-19 Stephane Fillod <fillods@users.sf.net>
+2009-02-19 Stephane Fillod <fillods at users.sf.net>
 
     * po/POTFILES.in:
     Remove goocanv8 files. Update list of C files.
@@ -293,7 +293,7 @@
     * src/Makefile.am:
     Fixed a typo.
 
-2008-12-28 Alexandru Csete <oz9aec@gmail.com>
+2008-12-28 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig-editor.c:
     Added widgets for editing radio type and ptt.
@@ -312,7 +312,7 @@
     Update canvas bounds when resizing the canvas.
     
 
-2008-12-27; Alexandru Csete <oz9aec@gmail.com>
+2008-12-27; Alexandru Csete <oz9aec at gmail.com>
 
     * autogen.sh:
     * configure.ac:
@@ -328,7 +328,7 @@
     Added management of radio type.
 
 
-2008-10-26; Alexandru Csete <oz9aec@gmail.com>
+2008-10-26; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-list-popup.[ch]:
     New files containing popup menu for satlist. Satlist was previously
@@ -345,7 +345,7 @@
     Deleted.
     
 
-2008-10-25; Alexandru Csete <oz9aec@gmail.com>
+2008-10-25; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sky-glance.[ch]:
     Added start time as parameter.
@@ -362,7 +362,7 @@
     labels in GtkSingleSat.
 
 
-2008-10-24; Alexandru Csete <oz9aec@gmail.com>
+2008-10-24; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-cfg.[ch]:
     Added parameter for pass prediction T0.
@@ -371,7 +371,7 @@
     Added widgets to configure pass prediction T0.
 
 
-2008-10-11; Alexandru Csete <oz9aec@gmail.com>
+2008-10-11; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig-editor.c:
     * src/sat-pref-rot-editor.c:
@@ -383,7 +383,7 @@
     Fixed bug 2130912: Crash when no rig or no rotator are defined.
 
 
-2008-09-20; Alexandru Csete <oz9aec@gmail.com>
+2008-09-20; Alexandru Csete <oz9aec at gmail.com>
 
     * src/tle-update.c:
     Changed connection timeout from system default to 10 seconds.
@@ -397,7 +397,7 @@
     edit a radio configuration.
     
 
-2008-09-18; Alexandru Csete <oz9aec@gmail.com>
+2008-09-18; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.[ch]:
     Implemented active feedback to take into account frequency changes made
@@ -408,7 +408,7 @@
     Removed newline from the end of hamlib commands.
     
 
-2008-09-18; Alexandru Csete <oz9aec@gmail.com>
+2008-09-18; Alexandru Csete <oz9aec at gmail.com>
 
     * src/rotor-conf.[ch]:
     Added field for storing rotator azimuth type, i.e. whether the rotator
@@ -421,14 +421,14 @@
     Added support for Az-type.
 
 
-2008-09-17; Alexandru Csete <oz9aec@gmail.com>
+2008-09-17; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-ctrl.[ch]:
     * src/gtk-rig-ctrl.[ch]:
     Added error handling. After 5 comm errors the device is disengaged.
 
 
-2008-09-16; Alexandru Csete <oz9aec@gmail.com>
+2008-09-16; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-ctrl.[ch]:
     Implemented correct management of next pass taking into account
@@ -436,7 +436,7 @@
     implementation.
     
 
-2008-09-10; Alexandru Csete <oz9aec@gmail.com>
+2008-09-10; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-polar-plot.[ch]:
     Added API to add/modify/delete the pass.
@@ -447,7 +447,7 @@
     and rotator. However, this part has been disabled for now.
 
 
-2008-09-09; Alexandru Csete <oz9aec@gmail.com>
+2008-09-09; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-conditions.c:
     * src/sat-cfg.[ch]:
@@ -456,14 +456,14 @@
     satellite visibility.
 
 
-2008-09-07; Alexandru Csete <oz9aec@gmail.com>
+2008-09-07; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
     * src/gtk-rot-ctrl.[ch]:
     Implemented AOS/LOS count down.
     
 
-2008-09-06; Alexandru Csete <oz9aec@gmail.com>
+2008-09-06; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-freq-knob.[ch]:
     Finished implementation of frequency control knob.
@@ -475,7 +475,7 @@
     Finished implementation.
 
 
-2008-09-05; Alexandru Csete <oz9aec@gmail.com>
+2008-09-05; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk.rig.ctrl.[ch]:
     Added files implementing user interface for doppler tuning.
@@ -488,7 +488,7 @@
     Don't show minus when value is 0.
     
 
-2008-09-03; Alexandru Csete <oz9aec@gmail.com>
+2008-09-03; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-knob.[ch]:
     Added API functions to get/set range of the control widget.
@@ -497,7 +497,7 @@
     Implemented controller algorithm (except device I/O).
 
 
-2008-08-28; Alexandru Csete <oz9aec@gmail.com>
+2008-08-28; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-knob.c:
     Fixed bug that prevented the knob value to be set to min/max.
@@ -506,7 +506,7 @@
     Done some work on rotator control window.
     
 
-2008-08-27; Alexandru Csete <oz9aec@gmail.com>
+2008-08-27; Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.[ch]:
     Added separate fileds for port number and local oscillator ffrequency.
@@ -526,7 +526,7 @@
     Added field for port number.
 
 
-2008-08-22; Alexandru Csete <oz9aec@gmail.com>
+2008-08-22; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig.c:
     * src/sat-pref-rig-editor.c:
@@ -537,7 +537,7 @@
     Removed unnecessary data fields.
     
 
-2008-08-20; Alexandru Csete <oz9aec@gmail.com>
+2008-08-20; Alexandru Csete <oz9aec at gmail.com>
 
     * configure.ac:
     Disabled Hamlib checks since we will be using the TCP interface
@@ -558,7 +558,7 @@
     Changed from hamlib C API to TCP based configuration.
     
 
-2008-05-01; Alexandru Csete <oz9aec@gmail.com>
+2008-05-01; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-knob.[ch]:
     New files, previously gtk-rot-ctrl.
@@ -571,7 +571,7 @@
     windows.
 
 
-2008-04-30; Alexandru Csete <oz9aec@gmail.com>
+2008-04-30; Alexandru Csete <oz9aec at gmail.com>
 
     * src/predict-tools.c:
     Fixed bug 1954664: Wrong overpass prediction.
@@ -580,32 +580,32 @@
     Fixed bug 1880815: Null pointer dereference causes crash on startup.
 
 
-2008-04-24; Alexandru Csete <oz9aec@gmail.com>
+2008-04-24; Alexandru Csete <oz9aec at gmail.com>
 
     * src/rot-ctrl-window.[ch]:
     Added files.
     
 
-2008-04-22; Alexandru Csete <oz9aec@gmail.com>
+2008-04-22; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-ctrl.[ch]:
     First fully functional implementation.
     
 
-2008-04-20; Alexandru Csete <oz9aec@gmail.com>
+2008-04-20; Alexandru Csete <oz9aec at gmail.com>
 
     * src/rig-io.[ch]:
     Added generic interface to hardware drivers.
 
 
-2008-03-30; Alexandru Csete <oz9aec@gmail.com>
+2008-03-30; Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-freq-ctrl.c, gtk-freq-ctrl.h:
     * src/gtk-rot-ctrl.c, gtk-rot-ctrl.h:
     Added files.
     
 
-2008-03-27; Alexandru Csete <oz9aec@gmail.com>
+2008-03-27; Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.[ch]:
     Added parameter for enabling built-in radio extensions.
@@ -619,14 +619,14 @@
     Added menu items for radio and rotator control.
     
 
-2008-03-17; Alexandru Csete <oz9aec@gmail.com>
+2008-03-17; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig.c:
     Fixed bug that caused incorrect display of DTR and RTS line settings in
     the radio list.
     
 
-2008-01-26; Alexandru Csete <oz9aec@gmail.com>
+2008-01-26; Alexandru Csete <oz9aec at gmail.com>
 
     * src/rotor-conf.[ch]:
     * src/sat-pref-rot.c:
@@ -635,7 +635,7 @@
     Added support for Az and El limits.
 
 
-2008-01-24; Alexandru Csete <oz9aec@gmail.com>
+2008-01-24; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-rig-editor.[ch]:
     Finished first draft of radio configuration editor.
@@ -652,13 +652,13 @@
     Updated to use new rotator configuration code.
     
 
-2008-01-12; Alexandru Csete <oz9aec@gmail.com>
+2008-01-12; Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.[ch]:
     Added parameter for radio type (RX, TX, TRX, FULL_DUPL).
     
     
-2008-01-21; Alexandru Csete <oz9aec@gmail.com>
+2008-01-21; Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.[ch], src/sat-pref-rig.c:
     Removed manufacturer field. Will be part of the model.
@@ -667,7 +667,7 @@
     Added all widgets except the rig model selector.
 
 
-2008-01-01; Alexandru Csete <oz9aec@gmail.com>
+2008-01-01; Alexandru Csete <oz9aec at gmail.com>
 
     * src/compat.[ch]:
     Added function to return user home directory.
@@ -680,7 +680,7 @@
     configuration files.
 
 
-2007-12-27; Alexandru Csete <oz9aec@gmail.com>
+2007-12-27; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-cfg.[ch]:
     Added parameters for adding new satellites to database.
@@ -694,13 +694,13 @@
     New satellites are now added to a file called new.tle
 
 
-2007-12-11; Alexandru Csete <oz9aec@gmail.com>
+2007-12-11; Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-log.c:
     Fixed bug 1818144: No log file created at first execution.
 
 
-2007-11-27;	Alexandru Csete <oz9aec@gmail.com>
+2007-11-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sky-glance.c:
 	Fixed bug 1839140: Sky at a glance axis incorrectly labelled.
@@ -711,7 +711,7 @@
 	Added Tools menu.
 	
 
-2007-08-23;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-23;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.c:
 	One more fix for bug 1763321.
@@ -725,7 +725,7 @@
 	non-realtime cases.
 	
 
-2007-08-16;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-16;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-log-browser.[ch]:
 	Added files containing message log browser.
@@ -741,7 +741,7 @@
 	Include new log browser files.
 	
 
-2007-08-14;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-14;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/Makefile.am:
 	Allow deprecated symbols otherwise gpredict will not compile with
@@ -753,7 +753,7 @@
 	file I/O functions, thus the bug is unfixable in gpredict.
 	
 
-2007-08-13;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-help.[ch]:
 	Added function to show distributed help files (license, news, etc.)
@@ -765,26 +765,26 @@
 	Updated with goocanvas 0.8 files.
 	
 
-2007-08-12;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-12;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-single-pass.c:
 	Fixed bug 1772454: Single pass prediction flags are reset to default.
 
 
-2007-08-11;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-11;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/save-pass.[ch]:
 	* src/pass-to-txt.[ch]:
 	Implemented functions to save pass predictions to text files.
 	
 
-2007-08-04;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-04;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.[ch]:
 	Added parameters for saving pass predictions.
 
 
-2007-08-02;	Alexandru Csete <oz9aec@gmail.com>
+2007-08-02;	Alexandru Csete <oz9aec at gmail.com>
 
 	* configure.ac:
 	* src/all:
@@ -792,7 +792,7 @@
 	from GooCanvas when building win32 binaries (bug 1631822).
 
 
-2007-07-31;	Alexandru Csete <oz9aec@gmail.com>
+2007-07-31;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/predict-tools.[ch]:
 	The AOS and LOS finders (find_aos and find_los) now take an optional
@@ -812,7 +812,7 @@
 	(bug 1763321).
 	
 
-2007-07-29;	Alexandru Csete <oz9aec@gmail.com>
+2007-07-29;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-utils.[ch]:
 	Added Gtk+ workaround for allowing tooltips on GtkComboBox.
@@ -828,7 +828,7 @@
 	Reopen modules in the same state in which they were last time.
 	
 
-2007-07-27;	William J Beksi <wjbeksi@users.sourceforge.net>
+2007-07-27;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* src/gtk-azel-plot.[ch]:
 	* src/gtk-polar-plot.[ch]:
@@ -843,7 +843,7 @@
 	Build for goocanvas-0.8.	
 
 
-2007-07-16;	Alexandru Csete <oz9aec@gmail.com>
+2007-07-16;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module-popup.c:
 	Added window icon to module windows (bug #1752910).
@@ -883,7 +883,7 @@
 	and other maintenance operations. Proper configuration is still TBD.
 	
 
-2007-07-15;	Alexandru Csete <oz9aec@gmail.com>
+2007-07-15;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/conig-keys.h:
 	Added configuration keys for module state.
@@ -902,7 +902,7 @@
 	positon of module window if requested by configuration.
 
 
-2007-07-13;	Alexandru Csete <oz9aec@gmail.com>
+2007-07-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.[ch]:
 	Added configuration parameters for remembering window position.
@@ -915,7 +915,7 @@
 	powition of the main and module windows).
 	
 
-2007-07-10;	Alexandru Csete <oz9aec@gmail.com>
+2007-07-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.[ch]:
 	Added config parameters for main window position.
@@ -925,14 +925,14 @@
 	"configure_event" (feature request #1705375).
 	
 
-2007-06-18;	Alexandru Csete <oz9aec@gmail.com>
+2007-06-18;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-utils.c:
 	Use g_file_get_contents and g_file_set_contents in file
 	copy function (bug #1575291).
 
 
-2007-06-16;	Alexandru Csete <oz9aec@gmail.com>
+2007-06-16;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/loc-tree.c:
         Enabled rules hint in the location tree.
@@ -941,7 +941,7 @@
 	Show an error message if gpredict is compiled without libcurl.
 
 
-2007-05-30;	Alexandru Csete <oz9aec@gmail.com>
+2007-05-30;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth-editor.c:
 	* src/sat-pref-qth.c:
@@ -956,7 +956,7 @@
 	(#1728575).
 
 
-2007-04-21;	Alexandru Csete <oz9aec@gmail.com>
+2007-04-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/map-selector.[ch]:
 	Implementation of the map selector with preview.
@@ -965,7 +965,7 @@
 	Use new map selector and store map selection in config.
 
 	
-2007-03-22;	Alexandru Csete <oz9aec@gmail.com>
+2007-03-22;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module-tmg.[ch]:
 	* src/gtk-sat-module.[ch]:
@@ -983,7 +983,7 @@
 	and GtkPolarView views.
 
 
-2007-03-21;	Alexandru Csete <oz9aec@gmail.com>
+2007-03-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module.c:
 	Allow running in RT mode with time offset. This was not possible
@@ -999,7 +999,7 @@
 	tmg_reset function.
 	
 
-2007-03-03;	Alexandru Csete <oz9aec@gmail.com>
+2007-03-03;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module-tmg.[ch]:
 	New files containing RT/SRT/MAN time controller.
@@ -1011,7 +1011,7 @@
 	Added menu entry for Time Controller.
 
 
-2007-02-27;	Alexandru Csete <oz9aec@gmail.com>
+2007-02-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/predict-tools.c:
 	Added checks to ensure that satellite has AOS before starting
@@ -1023,7 +1023,7 @@
 	same position all the time.
 
 
-2007-02-25;	Alexandru Csete <oz9aec@gmail.com>
+2007-02-25;	Alexandru Csete <oz9aec at gmail.com>
 
 	* doc/notes/time-keeping.txt:
 	Added info about the gpredict time manager.
@@ -1044,7 +1044,7 @@
 	Implemented.
 	
 
-2007-02-13;     Alexandru Csete <oz9aec@gmail.com>
+2007-02-13;     Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-cfg.c:
 	Allow user to explicitly select "** DEFAULT **" ground station. This
@@ -1053,7 +1053,7 @@
 	station is selected as default (see bug #1656943).
 	
 
-2007-02-04;	Alexandru Csete <oz9aec@gmail.com>
+2007-02-04;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.[ch]:
 	Added configuration parameters for sky at a glance predictions.
@@ -1072,13 +1072,13 @@
 	Increment version number.
 	
 
-2007-02-03;	William J Beksi <wjbeksi@users.sourceforge.net>
+2007-02-03;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* src/gtk-sat-map.[ch]:
 	Implemented labels for horizontal and vertical grid lines.
 
 
-2007-02-02;	Alexandru Csete <oz9aec@gmail.com>
+2007-02-02;	Alexandru Csete <oz9aec at gmail.com>
 
 	* goocanvas, goocanvas-patches:
 	Imported goocanvas 0.4 into gpredict CVS as baseline and removed patches
@@ -1086,14 +1086,14 @@
 	closes bug #1631810.
 	
 
-2007-02-01;	William J Beksi <wjbeksi@users.sourceforge.net>
+2007-02-01;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* src/sgpsdp/sgp_in.c:
 	Fix for bug 1644926, avoid escaping '&' by using '/' for satellite
 	names.
 	
 	
-2007-01-28;	William J Beksi <wjbeksi@users.sourceforge.net>
+2007-01-28;	William J Beksi <wjbeksi at users.sourceforge.net>
 	
 	* src/gtk-sat-map.c:
 	Added support to remap satellite labels. When the satellite marker
@@ -1103,7 +1103,7 @@
 	label will be mapped to GTK_ANCHOR_SOUTH.
 
 
-2006-01-20;	Alexandru Csete <oz9aec@gmail.com>
+2006-01-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map-ground-track.c:
 	Explicitly free allocated ssp_t structures when the ground track is
@@ -1129,7 +1129,7 @@
 	No need for libc compat functions anymore.
 
 
-2006-01-19;	Alexandru Csete <oz9aec@gmail.com>
+2006-01-19;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/tle-lookup.c:
 	Free allocated TLE lines when no longer needed (bug #1636429).
@@ -1153,26 +1153,26 @@
 	Fixed indent.
 	
 
-2006-01-17;	Alexandru Csete <oz9aec@gmail.com>
+2006-01-17;	Alexandru Csete <oz9aec at gmail.com>
 
 	* Makefile.am:
 	Include win32 files in source distribution (bug #1631809).
 	
 
-2006-01-09;	Alexandru Csete <oz9aec@gmail.com>
+2006-01-09;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/tle-update.c:
 	Fixed bug that prevented TLE files to be updated under windows
 	(bug #1631803).
 	
 
-2006-01-08;	Alexandru Csete <oz9aec@gmail.com>
+2006-01-08;	Alexandru Csete <oz9aec at gmail.com>
 
 	* win32:
 	Added files necessary for linux->win32 cross-build.
 	
 
-2006-12-31;	Alexandru Csete <oz9aec@gmail.com>
+2006-12-31;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pass-dialogs.c:
 	Show polar and az/el plots of pass in addition to the data. We use a
@@ -1195,13 +1195,13 @@
 	Include new files into build list.
 	
 
-2006-12-27;	Alexandru Csete <oz9aec@gmail.com>
+2006-12-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.c:
 	Changed default layout to include single satellite view instead of list.
 
 
-2006-12-17;	Alexandru Csete <oz9aec@gmail.com>
+2006-12-17;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/menubar.c:
 	Don't set any default window size for TLE update window.
@@ -1220,7 +1220,7 @@
 	singly linked lists.
 	
 
-2006-12-10;	Alexandru Csete <oz9aec@gmail.com>
+2006-12-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map-ground-track.[ch]:
 	Added files containing function for ground track management.
@@ -1235,20 +1235,20 @@
 	Added control to adjust number of orbits for ground tracks.
 	
 
-2006-10-29;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-29;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.[ch]:
 	* src/config-keys.h:
 	Added parameter for number of orbits to show ground track for.
 	
 
-2006-10-28;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-28;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-popup-menu.c:
 	Fixed wrong epoch day in the satellite info dialogue (bug #1586341).
 	
 
-2006-10-21;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp/sgp4sdp4.h, src/sgpsdp/sgp_in.c:
 	Added support for operational status encoded in the satellite name
@@ -1258,25 +1258,25 @@
 	Added support for operational status.
 	
 
-2006-10-17;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-17;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.[ch]:
 	Use arrays for grid lines.
 	
 
-2006-10-15;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-15;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/main.c:
 	Added code to implement automatic monitoring of TLE age.
 	
 
-2006-10-14;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-14;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-tle.c:
 	Finished implementation of TLE configuration module.
 	
 
-2006-10-11;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-11;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/tle-lookup.[ch]:
 	Added function tle_lookup_count(), which returns the number of
@@ -1300,7 +1300,7 @@
 	Added Curl to Mingw build environment.
 
 
-2006-10-10;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/tle-update.[ch]:
 	Finished preliminary implementation of TLE update.
@@ -1312,37 +1312,37 @@
 	Added infrastructure to allow reloading of sats in each module.
 
 
-2006-10-08;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-08;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/menubar.c:
 	Added menu items fro TLE update.
 	
 
-2006-10-06;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-06;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/first-time.[ch]:
 	Added checks for TLE cache directory.
 	
 
-2006-10-04;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-04;	Alexandru Csete <oz9aec at gmail.com>
 
 	* configure.ac:
 	Check for libcurl that is used for automatic TLE update.
 
 	
-2006-10-03;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-03;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.[ch]:
 	Added config keys for TLE update.
 	
 
-2006-10-01;	Alexandru Csete <oz9aec@gmail.com>
+2006-10-01;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-cfg.c:
 	Added window icon to module configuration windows. Fixed indent.
 
 
-2006-09-24;	Alexandru Csete <oz9aec@gmail.com>
+2006-09-24;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-vis.[ch]:
 	* src/predict-tools.c:
@@ -1356,7 +1356,7 @@
 	Added new files to list.
 
 	
-2006-09-05;	Alexandru Csete <oz9aec@gmail.com>
+2006-09-05;	Alexandru Csete <oz9aec at gmail.com>
 
 	* data/Makefile.am:
 	Don't use $(DESTDIR) because that causes data to be installed into the
@@ -1369,7 +1369,7 @@
 	delete the module specific QTHFILE setting.
 	
 
-2006-09-02;	William J Beksi <wjbeksi@users.sourceforge.net>
+2006-09-02;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* src/sat-pref-map-view.c:
 	Enabled grid lines.
@@ -1378,7 +1378,7 @@
 	Implemented horizontal and vertical grid lines.
 
 
-2006-09-02;	Alexandru Csete <oz9aec@gmail.com>
+2006-09-02;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-polar-view.c:
 	Update positions of time stamp labels when the polar view is resized.
@@ -1404,7 +1404,7 @@ Added GUI elements for TLE update menu items.
 	Use table instead of list to select visible columns in list view.
 	
 
-2006-08-28;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-28;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/predict-tools.[ch]:
 	Added get_current_pass function, which provides the details of the
@@ -1422,7 +1422,7 @@ Added GUI elements for TLE update menu items.
 	Renamed "Show Track" to "Sky track" and disabled "Set target" item.
 	
 
-2006-08-27;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.c:
 	Fixed remaining issues with erroneous calculation of the range circles,
@@ -1440,7 +1440,7 @@ Added GUI elements for TLE update menu items.
 	Added function to calculate AOS time of current pass (in the past).
 
 
-2006-08-26;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-26;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.[ch]:
 	Use preferred coverage colour and allow disabling of coverage. Added
@@ -1470,7 +1470,7 @@ Added GUI elements for TLE update menu items.
 	background colour.
 	
 
-2006-08-25;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-25;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.[ch]:
 	Use GooCanvasPolyline instead of rectangles for footprint. This gives
@@ -1485,14 +1485,14 @@ Added GUI elements for TLE update menu items.
 	Added widgets.
 	
 
-2006-08-23;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-23;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-data.c:
 	* src/gtk-sat-moules.c:
 	Added code to ensure that ssplon always stays within -PI and +PI.
 	
 
-2006-08-20;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.c:
 	Only update satellite if it has moved 2*MARKER_SIZE_HALF (performance).
@@ -1500,7 +1500,7 @@ Added GUI elements for TLE update menu items.
 	Fixed update of next event. Fixed indentation.
 	
 
-2006-08-13;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list.c:
 	Enabled automatic sorting for all columns.
@@ -1510,7 +1510,7 @@ Added GUI elements for TLE update menu items.
 	if field is enabled and there is an upcoming satellite.
 
 
-2006-08-12;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-12;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-vis.c, src/sat-vis.h:
 	Added files to calculate satellite visibility.
@@ -1526,7 +1526,7 @@ Added GUI elements for TLE update menu items.
 	Implemented visibility fields.
 	
 
-2006-08-10;	Alexandru Csete <oz9aec@gmail.com>
+2006-08-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list.c:
 	Fixed column alignments.
@@ -1547,14 +1547,14 @@ Added GUI elements for TLE update menu items.
 	
 
 
-2006-08-09;	William J Beksi <wjbeksi@users.sourceforge.net>
+2006-08-09;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* src/gtk-sat-map.[ch]:
 	Implemented satellite range circles. Points are plotted using the
 	goocanvasrect items.
 
 
-2006-08-06;	William J Beksi <wjbeksi@users.sourceforge.net>
+2006-08-06;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* src/gtk-polar-view.c:
 	* src/gtk-map-view.c: 
@@ -1562,7 +1562,7 @@ Added GUI elements for TLE update menu items.
 	orbit satellites to crash when their next aos was not updated.
 
 
-2006-08-05;	William J Beksi <wjbeksi@users.sourceforge.net>
+2006-08-05;	William J Beksi <wjbeksi at users.sourceforge.net>
 
 	* gpredict.doxygen:
 	Added Doxygen configuration file for generating source code
@@ -1573,7 +1573,7 @@ Added GUI elements for TLE update menu items.
 	documentation and Latex to generate the user manual.
 
 
-2006-07-30;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-30;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-tree.c:
 	Added buttons to expand and collapse the GtkSatTree. Expanding the tree
@@ -1592,7 +1592,7 @@ Added GUI elements for TLE update menu items.
 	Modified step 3 to copy Amateur.mod into user modules directory.
 	
 
-2006-07-29;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-29;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module-popup.c, src/tle-lookup.c:
 	* src/loc-tree.c, src/sat-log.c:
@@ -1617,7 +1617,7 @@ Added GUI elements for TLE update menu items.
 	Use qth-editor to implement "+" button (add QTH).
 	
 
-2006-07-28;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-28;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-popup-menu.[ch]:
 	* src/pass-popup-menu.[ch]:
@@ -1652,7 +1652,7 @@ Added GUI elements for TLE update menu items.
 	all the way and only fail during uninstall #-o
 
 
-2006-07-27;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/config-keys.h, src/sat-cfg.[ch]:
 	Added font name and extra azimuth ticks flag for GtkPolarView.
@@ -1665,7 +1665,7 @@ Added GUI elements for TLE update menu items.
 	Finished implementation.
 	
 
-2006-07-26;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-26;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-single-sat:
 	Removed unused variables.
@@ -1685,7 +1685,7 @@ Added GUI elements for TLE update menu items.
 	view (list).
 	
 
-2006-07-25;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-25;	Alexandru Csete <oz9aec at gmail.com>
 
 	* README, src/gtk-sat-map.c, src/sat-pref-qth-editor.c:
 	Spell Maidenhead correctly.
@@ -1719,7 +1719,7 @@ Added GUI elements for TLE update menu items.
 	Added file.
 	
 
-2006-07-24;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-24;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth.c:
 	Show QTH location instead of weather station.
@@ -1728,7 +1728,7 @@ Added GUI elements for TLE update menu items.
 	Fix initial module sizes based on parent (GtkNotebook) size.
 	
 
-2006-07-23;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-23;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list-col-sel.[ch]:
 	Added function to set column flags of existing column selector.
@@ -1737,7 +1737,7 @@ Added GUI elements for TLE update menu items.
 	Added RESET button.
 	
 
-2006-07-22;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-22;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-mgr.[ch]:
 	New API to support addition of modules without docking.
@@ -1755,7 +1755,7 @@ Added GUI elements for TLE update menu items.
 	Added RESET button.
 	
 
-2006-07-21;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pass-dialogs.c, src/sat-popup-menu.c:
 	Use NULL parent for dialog windows to avoid conflicts when using
@@ -1768,7 +1768,7 @@ Added GUI elements for TLE update menu items.
 	Re-enabled module config in fullscreen mode.
 	
 
-2006-07-20;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.[ch]:
 	Optimised resize algorithm. Size allocate callback will simply request
@@ -1776,7 +1776,7 @@ Added GUI elements for TLE update menu items.
 	timeout handler at every GtkSatModule cycle.
 	
 
-2006-07-18;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-18;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module.[ch]:
 	Added public wrapper function for fix_child_allocations function
@@ -1788,7 +1788,7 @@ Added GUI elements for TLE update menu items.
 	Store paned positions when docking back to notebook.
 	
 
-2006-07-16;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-16;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-mgr.[ch]:
 	Implemented awareness of GtkSatModule states, i.e. docked/undocked.
@@ -1800,7 +1800,7 @@ Added GUI elements for TLE update menu items.
 	Updated with info about module states (docked, window, fullscreen).
 	
 
-2006-07-15;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-15;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-single-pass.c:
 	Changed widget layout to use three columns instead of two.
@@ -1818,7 +1818,7 @@ Added GUI elements for TLE update menu items.
 	since this will allow user to shrink the window and scale down the map.	
 	
 
-2006-07-14;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-14;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/config-keys.h, src/sat-cfg.[ch]:
 	Added necessary config keys.
@@ -1836,7 +1836,7 @@ Added GUI elements for TLE update menu items.
 	Require Glib 2.10 because of Goocanvas. Sorry...
 	
 
-2006-07-13;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-map.[ch]:
 	Added GtkSatMap skeleton based on GtkPolarView.
@@ -1845,7 +1845,7 @@ Added GUI elements for TLE update menu items.
 	Use new GtkSatMap widget.
 	
 
-2006-07-12;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-12;	Alexandru Csete <oz9aec at gmail.com>
 
 	* goocanvas-patch/src-Makefile.am:
 	Added file that should replace goocanvas/src/Makefile.am
@@ -1881,7 +1881,7 @@ Added GUI elements for TLE update menu items.
 	Updated.
 	
 
-2006-07-09;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-09;	Alexandru Csete <oz9aec at gmail.com>
 
 	* doc/notes/configuration.txt:
 	Added notes describing the idea behind the local and global
@@ -1920,7 +1920,7 @@ Added GUI elements for TLE update menu items.
 	Added button for popping up properties dialog.
 	
 
-2006-07-08;	Alexandru Csete <oz9aec@gmail.com>
+2006-07-08;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/Makefile.am:
 	Define PACKAGE_PIXMAPS_DIR.
@@ -1941,7 +1941,7 @@ Added GUI elements for TLE update menu items.
 	Implemented the module layout.
 	
 
-2006-06-26;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-26;	Alexandru Csete <oz9aec at gmail.com>
 
 	* configure.ac:
 	Don't define directories using AC_DEFINE_UNQUOTED (wrong and broken
@@ -1955,7 +1955,7 @@ Added GUI elements for TLE update menu items.
 	/usr/local/share/pixmaps/gpredict by default (same as for gpredcit 0.5)
 	
 
-2006-06-25;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-25;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg:
 	Added polar view related parameters.
@@ -1964,7 +1964,7 @@ Added GUI elements for TLE update menu items.
 	Use colours from global configuration.
 	
 
-2006-06-24;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-24;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-polar-view:
 	Implemented satellite selection and popup menu. Modified next aos code
@@ -1974,20 +1974,20 @@ Added GUI elements for TLE update menu items.
 	Implemented polar view popup menu.
 	
 
-2006-06-23;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-23;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-polar-view:
 	Added location name and next event to chart.
 	
 
-2006-06-22;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-22;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-polar-view:
 	Finished support for graph orientation (not config though).
 	Implemented cursor tracking.
 	
 
-2006-06-20;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-polar-view:
 	Done some more work using GooCanvas. This seems to be the way to go!
@@ -1995,13 +1995,13 @@ Added GUI elements for TLE update menu items.
 	add satellites and user config, i.e. orientation and colours.
 
 	
-2006-06-19;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-19;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-polar-view:
 	Making an attempt with goocanvas :-)
 	
 
-2006-06-18;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-18;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-popup-menu:
 	Made info and predict functions public to allow their use from other
@@ -2025,7 +2025,7 @@ Added GUI elements for TLE update menu items.
 	Added widget skeleton.
 	
 
-2006-06-17;	Alexandru Csete <oz9aec@gmail.com>
+2006-06-17;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-single-sat.c:
 	Implemented periodic update of fields.
@@ -2038,13 +2038,13 @@ Added GUI elements for TLE update menu items.
 	event time = 0.0
 	
 
-2006-05-20;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-single-sat:
 	Added fields and popup menu. Not fully functional.
 	
 
-2006-05-13;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list.c:
 	Sanity checks in gtk_sat_list_update should be done as first thing.
@@ -2053,7 +2053,7 @@ Added GUI elements for TLE update menu items.
 	Added files.
 	
 
-2006-05-12;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-12;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/predict-col-defs.h:
 	Changed String arrays to static. This allows inclusion in multiple
@@ -2069,13 +2069,13 @@ Added GUI elements for TLE update menu items.
 	Added tooltips.
 	
 
-2006-05-06;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-06;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-conditions.c:
 	Added widgets to configure predict conditions.
 	
 
-2006-05-04;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-04;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/predict-tools.c:
 	Fixed bug that caused multi-pass predictions to be completely nonsense.
@@ -2094,7 +2094,7 @@ Added GUI elements for TLE update menu items.
 	Added icons to menu items.
 	
 
-2006-05-03;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-03;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/predict-tools:
 	Added functions to copy pass_t and pass_detail_t structures.
@@ -2107,7 +2107,7 @@ Added GUI elements for TLE update menu items.
 	Added multi-pass dialog. Not finished and buggy.
 	
 
-2006-05-02;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-02;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg:
 	Added support for SAT_CFG_INT_PRED_SINGLE_COL and
@@ -2122,7 +2122,7 @@ Added GUI elements for TLE update menu items.
 	follow later.
 	
 
-2006-05-01;	Alexandru Csete <oz9aec@gmail.com>
+2006-05-01;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg:
 	Changed SAT_CFG_INT_PRED_LOOK_AHEAD from hours to days. Default is 3.
@@ -2143,7 +2143,7 @@ Added GUI elements for TLE update menu items.
 	section we are in.
 	
 	
-2006-04-30;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-30;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-formats.c:
 	Implemented time format reset button.
@@ -2160,7 +2160,7 @@ Added GUI elements for TLE update menu items.
 	Added option to enable rules hint in the GtkSatList.
 	
 
-2006-04-29;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-29;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp/sgp4sdp4.h:
 	Added AOS and LOS fields to sat_t.
@@ -2175,7 +2175,7 @@ Added GUI elements for TLE update menu items.
 	Added boolean parameter for enabling GtkSatList rules hint.
 	
 
-2006-04-28;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-28;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/orbit-tools.c:
 	Fixed erroneous qth.lat conversion in has_aos.
@@ -2191,7 +2191,7 @@ Added GUI elements for TLE update menu items.
 	Added files with code to predict upcoming passes.
 	
 
-2006-04-27;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module-popup.c:
 	Ask user for confirmation before deleting a module permanently.
@@ -2226,7 +2226,7 @@ Added GUI elements for TLE update menu items.
 	Make notebook tabs homogeneous.
 
 
-2006-04-26;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-26;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module-popup.c, src/gtk-sat-module-popup.h:
 	New files. Implement popup menu for the GtkSatModule widget instead of
@@ -2244,7 +2244,7 @@ Added GUI elements for TLE update menu items.
 	values may have to be changed later).
 	
 
-2006-04-25;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-25;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-popup-menu.c:
 	Use gtk_widget_show instead of gtk_dialog_run in order to return
@@ -2277,7 +2277,7 @@ Added GUI elements for TLE update menu items.
 	Convert phase to degrees.
 
 	
-2006-04-24;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-24;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/orbit-tools.c:
 	Use true mean motion when checking for GEO.
@@ -2307,7 +2307,7 @@ Added GUI elements for TLE update menu items.
 	Added file.
 
 
-2006-04-22;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-22;	Alexandru Csete <oz9aec at gmail.com>
 
 	* doc/man/gpredict.1.in:
 	Updated with minimal info.
@@ -2324,7 +2324,7 @@ Added GUI elements for TLE update menu items.
 	Done some work on the sat info dialog.
 	
 
-2006-04-21;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-data.c:
 	Store orbit type after reading satellite data. Clean some compile
@@ -2354,7 +2354,7 @@ Added GUI elements for TLE update menu items.
 	Added macros to convert between miles and kilometers.
 
 
-2006-04-21;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list.c:
 	Do not detach model from tree view while updating because that makes
@@ -2365,7 +2365,7 @@ Added GUI elements for TLE update menu items.
 	by both GtkSatList, GtkSatMap and others.
 	
 
-2006-04-20;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module.c:
 	Implemented configure on the fly in docked state. Fixed bug with wrong
@@ -2391,7 +2391,7 @@ Added GUI elements for TLE update menu items.
 	Added more field descriptions and orbit type.
 
 	
-2006-04-18;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-18;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-cfg.c:
 	Add return code to mod_cfg_edit. Make editor dialog the same size as the
@@ -2405,7 +2405,7 @@ Added GUI elements for TLE update menu items.
 	Done some work on "module-config" functionality.
 
 	
-2006-04-15;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-15;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-tree.c:
 	Sort tree by satellite name in ascending order.
@@ -2414,14 +2414,14 @@ Added GUI elements for TLE update menu items.
 	Addd files containing code for the "about" dialog.
 	
 
-2006-04-14;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-14;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list-col-sel.c:
 	Fixed bug which caused the gtk_sat_list_col_sel_get_flags query to
 	always fail.
 	
 
-2006-04-11;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-11;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-cfg.c:
 	Remove "+" button for now.
@@ -2436,7 +2436,7 @@ Added GUI elements for TLE update menu items.
 	Implemented mod_mgr_remove_module.
 
 
-2006-04-10;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/mod-mgr.c:
 	Set OPEN_MODULES=NULL in sat-cfg when there are no modules open,
@@ -2459,7 +2459,7 @@ Added GUI elements for TLE update menu items.
 	text. Primary use will be dock/close buttons for modules.
 
 	
-2006-04-09;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-09;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module.c:
 	Made destuction of the satellite hash table conditional. Appearantly,
@@ -2483,7 +2483,7 @@ Added GUI elements for TLE update menu items.
 	Use new module manager.
 	
 
-2006-04-08;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-08;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-utils.c:
 	Allow to create buttons without text.
@@ -2495,7 +2495,7 @@ Added GUI elements for TLE update menu items.
 	Implemented "Open" function.
 
 
-2006-04-07;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-07;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-tree:
 	Widget is now in a useable state. Still needs to be done:
@@ -2508,7 +2508,7 @@ Added GUI elements for TLE update menu items.
 	Connected "New" menu item to mod-cfg editor.
 
 
-2006-04-06;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-06;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-list:
 	Update function is now member in the GtkSatList structure.
@@ -2520,7 +2520,7 @@ Added GUI elements for TLE update menu items.
 	Added new widget. Can be used to select satellites.
 	
 
-2006-04-05;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-05;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth.c, src/sat-pref-formats.c:
 	Make sure that altitude is handled properly when user changes between
@@ -2549,7 +2549,7 @@ Added GUI elements for TLE update menu items.
 	gtk-sat-list.h. Minor speed optimisations.
 	
 
-2006-04-04;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-04;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth-editor.c:
 	Only allow valid charachters in location name (code stolen from xlog).
@@ -2583,7 +2583,7 @@ Added GUI elements for TLE update menu items.
 	reading tle files.
 
 	
-2006-04-03;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-03;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/Makefile.am:
 	Include config-keys.h in list of files.
@@ -2617,7 +2617,7 @@ Added GUI elements for TLE update menu items.
 	Removed NAME field.
 	
 
-2006-04-02;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-02;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth.c:
 	Only store basic qth file name in qth list. We do not ever need the
@@ -2625,13 +2625,13 @@ Added GUI elements for TLE update menu items.
 	users home.
 
 
-2006-04-01;	Alexandru Csete <oz9aec@gmail.com>
+2006-04-01;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-utils.h:
 	Added macros to convert between feet and meters.
 
 	
-2006-03-31;	Alexandru Csete <oz9aec@gmail.com>
+2006-03-31;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth-editor.c, src/sat-pref-qth-editor.h:
 	Added files containing code to edit QTH details.
@@ -2645,7 +2645,7 @@ Added GUI elements for TLE update menu items.
 	Include new files in files list.
 	
 
-2006-03-29;	Alexandru Csete <oz9aec@gmail.com>
+2006-03-29;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth.c:
 	Use g_try_malloc instead of g_try_new, which is not available until
@@ -2654,20 +2654,20 @@ Added GUI elements for TLE update menu items.
 	locations from the list. Still to do Add and Edit buttons.
 
 	* src/sgpsdp/Makefile.am:
-	Add @PACKAGE_LIBS@ to linker, otherwise mathlib was not available
+	Add  at PACKAGE_LIBS at  to linker, otherwise mathlib was not available
 	anymore. Go figure...
 
 	* src/gtk-sat-data.c:
 	Added finction to save QTH data.
 	
 
-2006-03-28;	Alexandru Csete <oz9aec@gmail.com>
+2006-03-28;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/main.c:
 	Only include rig.h if hamlib is available.
 	
 
-2006-02-05;	Alexandru Csete <oz9aec@gmail.com>
+2006-02-05;	Alexandru Csete <oz9aec at gmail.com>
 
 	* configure.ac:
 	Changed check for hamlib so that support is optional.
@@ -2682,7 +2682,7 @@ Added GUI elements for TLE update menu items.
 	Added QTH list and editing functions.
 
 
-2006-02-03;	Alexandru Csete <oz9aec@gmail.com>
+2006-02-03;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.c:
 	Fixed bug, which caused the whole program to crash when creating the
@@ -2695,7 +2695,7 @@ Added GUI elements for TLE update menu items.
 	Added some more comments.
 
 
-2005-11-09;	Alexandru Csete <oz9aec@gmail.com>
+2005-11-09;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-utils:
 	Added function to create horizontal pixmap button using stock pixmaps.
@@ -2706,7 +2706,7 @@ Added GUI elements for TLE update menu items.
 	WIN32 (tip from TML on gtk-app-devel).
 
 
-2005-11-08;	Alexandru Csete <oz9aec@gmail.com>
+2005-11-08;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-general.c:
 	Changed tab labels.
@@ -2715,7 +2715,7 @@ Added GUI elements for TLE update menu items.
 	Added files.
 
 
-2005-11-05;	Alexandru Csete <oz9aec@gmail.com>
+2005-11-05;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/loc-tree.c:
 	Check whether specified location file exists.
@@ -2725,7 +2725,7 @@ Added GUI elements for TLE update menu items.
 
 
 
-2005-10-22;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-22;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/tle-lookup.c:
 	Send error message to sat-log if there are no tle files in
@@ -2745,20 +2745,20 @@ Added GUI elements for TLE update menu items.
 	noise, fx. when creating loc-tree.
 	
 
-2005-10-21;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-21;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-qth.c:
 	Started implementation.
 	
 
-2005-10-20;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-20;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref-formats.c
 	Implemented automatic update of time preview label. Takes both the
 	time format string and the Local/UTC checkbox into account.
 	
 
-2005-10-19;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-19;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.c, src/sat-cfg.h:
 	This is now the only module, which has direct access to gpredict.cfg
@@ -2775,7 +2775,7 @@ Added GUI elements for TLE update menu items.
 	fortime format.
 
 
-2005-10-18;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-18;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gpredict-utils.c, src/gpredict-utils.h:
 	Added files.
@@ -2800,7 +2800,7 @@ Added GUI elements for TLE update menu items.
 	Added g_io_channel_unref when channel has been shut down.
 	
 	
-2005-10-17;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-17;	Alexandru Csete <oz9aec at gmail.com>
 
 	* data/Makefile.am:
 	Added file.
@@ -2822,7 +2822,7 @@ Added GUI elements for TLE update menu items.
 	Added some icons.
 
 
-2005-10-16;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-16;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module.c:
 	Inhibit addition of satellite if it is already in hash table. There is
@@ -2835,7 +2835,7 @@ Added GUI elements for TLE update menu items.
 	respect to CPU load during udates... Also need to add sorting.
 	
 
-2005-10-15;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-15;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/loc-tree.c:
 	Finished location selector. This is now a complete module incluing a
@@ -2851,7 +2851,7 @@ Added GUI elements for TLE update menu items.
 	Use PACKAGE_DATA_DIR instead PACKAGE_PIXMAPS_DIR.
 	
 
-2005-10-12;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-12;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp/sgp2sdp4.h:
 	Added some fields to allow direct copy of SGP/SDP driver from ktrack.
@@ -2867,7 +2867,7 @@ Added GUI elements for TLE update menu items.
 	Added Orbit Lab menu item.
 	
 
-2005-10-10;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref.c:
 	Create window with signals. Add widgets to window.
@@ -2876,7 +2876,7 @@ Added GUI elements for TLE update menu items.
 	Open sat-pref dialog when Preferences is selected in the menubar.
 
 
-2005-10-07;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-07;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-pref.c, src/sat-pref.h:
 	Created files. Top level preferences dialog.
@@ -2885,7 +2885,7 @@ Added GUI elements for TLE update menu items.
 	Created files.
 	
 
-2005-10-06;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-06;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/config-keys.h:
 	Added MOD_CFG_SATS_KEY, MOD_CFG_TIMEOUT_KEY and MOD_CFG_WARP_FACTOR_KEY.
@@ -2909,7 +2909,7 @@ Added GUI elements for TLE update menu items.
 	Added file.
 
 
-2005-10-05;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-05;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-monitor.c, src/sat-monitor.h:
 	Added files.
@@ -2918,7 +2918,7 @@ Added GUI elements for TLE update menu items.
 	Added obs_t and obs_astro_t structures to sat_t.
 	
 
-2005-10-04;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-04;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-cfg.c, src/sat-cfg.h:
 	Added files. This module will be responsible for reading,
@@ -2930,13 +2930,13 @@ Added GUI elements for TLE update menu items.
 	sort the lists, which display the data.
 
 
-2005-10-03;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-03;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/loc-tree.c:
 	Display N, S, W, E instead of sign according to configuration.
 
 
-2005-10-02;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-02;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/gtk-sat-module, src/gtk-sat-data:
 	Moved files to src
@@ -2953,19 +2953,19 @@ Added GUI elements for TLE update menu items.
 	character for lat and lon fields.
 	
 
-2005-10-01;	Alexandru Csete <oz9aec@gmail.com>
+2005-10-01;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/widgets/gtk-sat-data.c, src/widgets/gtk-sat-data.h:
 	Added files containing data structures and utlity functions for	QTH data.
 	
 
-2005-09-22;	Alexandru Csete <oz9aec@gmail.com>
+2005-09-22;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/loc-tree.c, src/loc-tree.h:
 	Added files. Not fully implemented yet.
 	
 
-2005-09-18;	Alexandru Csete <oz9aec@gmail.com>
+2005-09-18;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp/sgp4sdp4.h:
 	More documentation. Added extra data structure for satellite bearing and
@@ -2975,7 +2975,7 @@ Added GUI elements for TLE update menu items.
 	Use the new data types instead of the generic vector_t.
 
 
-2005-07-28;	Alexandru Csete <oz9aec@gmail.com>
+2005-07-28;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sat-log.c, src/sat-log.h:
 	Added skeleton.
@@ -2984,7 +2984,7 @@ Added GUI elements for TLE update menu items.
 	Implemented.
 	
 
-2005-07-27;	Alexandru Csete <oz9aec@gmail.com>
+2005-07-27;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/main.c, src/gui.c, src/gui.h, src/menubar.c,
 	* src/widgets/gtk-sat-module.c, src/widgets/gtk-sat-module.h,
@@ -2998,7 +2998,7 @@ Added GUI elements for TLE update menu items.
 	Added new files to list.
 	
 
-2005-05-31;	Alexandru Csete <oz9aec@gmail.com>
+2005-05-31;	Alexandru Csete <oz9aec at gmail.com>
 
 	* configure.ac:
 	Require Gtk+ 2.6
@@ -3007,7 +3007,7 @@ Added GUI elements for TLE update menu items.
 	Added widget skeleton.
 
 
-2005-05-30;	Alexandru Csete <oz9aec@gmail.com>
+2005-05-30;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/menubar.c:
 	Added few more menu items.
@@ -3016,19 +3016,19 @@ Added GUI elements for TLE update menu items.
 	Renamed gpredict-gui to plain gui.
 	
 
-2005-05-13;	Alexandru Csete <oz9aec@gmail.com>
+2005-05-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/main.c:
 	Pack menubar in vertical box.
 	
 
-2005-04-16;	Alexandru Csete <oz9aec@gmail.com>
+2005-04-16;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/menubar.c, menubar.h:
 	Added menubar skeleton.
 	
 
-2005-04-13;	Alexandru Csete <oz9aec@gmail.com>
+2005-04-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp/sgp_in.c, sgp4sdp4.h:
 	Change interface for select_ephemeris() so that it takes a pointer to a
@@ -3046,7 +3046,7 @@ Added GUI elements for TLE update menu items.
 	Created directory to contain test results.
 
 	
-2005-04-10;	Alexandru Csete <oz9aec@gmail.com>
+2005-04-10;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp:
 	Added type definition for satellite. Optimized SDP4, SGP4 and
@@ -3054,13 +3054,13 @@ Added GUI elements for TLE update menu items.
 	to be done.
 
 
-2005-04-09;	Alexandru Csete <oz9aec@gmail.com>
+2005-04-09;	Alexandru Csete <oz9aec at gmail.com>
 
 	* src/sgpsdp:
 	Added code to propagate elements using SGP4 and SDP4 models.
 	
 
-2005-02-13;	Alexandru Csete <oz9aec@gmail.com>
+2005-02-13;	Alexandru Csete <oz9aec at gmail.com>
 
 	* gpredict:
 	Created initial code template for the Gtk+ 2 version of
