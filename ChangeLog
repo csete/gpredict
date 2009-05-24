@@ -1,3 +1,17 @@
+2009-05-24 Alexandru Csete <oz9aec@gmail.com>
+
+    * src/sat-pref-single-sat.c:
+    Use field text instead of field hint for checkbox label. Use the hints for
+    tooltip text.
+
+    * src/gtk-single-sat.c:
+    Don't include ":" in field label since it is also used in preferences dialog.
+
+    * src/gtk-rig-ctrl.c:
+    Added delay between set_freq() and get_freq() to avoid reading back the frequency
+    too soon. Changed packing options to include GTK_EXPAND.
+
+
 2009-05-23 Alexandru Csete <oz9aec@gmail.com>
 
     * src/gtk-rig-ctrl.c:

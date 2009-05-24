@@ -4,11 +4,13 @@ Changes in version 1.0 (final):
 * Windows: New installer instead of ZIP distribution.
 * Mac OS X package.
 
-Changes in version 1.0 beta 5 (TBD)
+Changes in version 1.0 beta 5 (24 May 2005)
 
 - Added new transponder files received from David VK5DG.
 - Fixed some bugs that caused the Doppler shift to be calculated
   incorrectly in some cases.
+- Fixed a bug that could cause the transponder frequency to "drift"
+  away from the set frequencies.
 
 
 Changes in version 1.0 beta 4 (13 May 2009)
