@@ -65,6 +65,7 @@
 
 #define AZEL_FMTSTR "%7.2f\302\260"
 #define MAX_ERROR_COUNT 5
+#define WR_DEL 5000 /* delay in usec to wait between write and read commands */
 
 
 static void gtk_rig_ctrl_class_init (GtkRigCtrlClass *class);
@@ -270,15 +271,15 @@ gtk_rig_ctrl_new (GtkSatModule *module)
     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
     gtk_container_set_border_width (GTK_CONTAINER (table), 10);
     gtk_table_attach (GTK_TABLE (table), create_downlink_widgets (GTK_RIG_CTRL (widget)),
-                      0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+                      0, 1, 0, 1, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_uplink_widgets (GTK_RIG_CTRL (widget)),
-                      1, 2, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
+                      1, 2, 0, 1, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_target_widgets (GTK_RIG_CTRL (widget)),
-                      0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+                      0, 1, 1, 2, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_conf_widgets (GTK_RIG_CTRL (widget)),
-                      1, 2, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
+                      1, 2, 1, 2, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
     gtk_table_attach (GTK_TABLE (table), create_count_down_widgets (GTK_RIG_CTRL (widget)),
-                      0, 2, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
+                      0, 2, 2, 3, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
 
     gtk_container_add (GTK_CONTAINER (widget), table);
     
@@ -300,7 +301,7 @@ gtk_rig_ctrl_new (GtkSatModule *module)
 void
 gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
 {
-    gdouble satfreq, doppler;
+    gdouble satfreq;
     gchar *buff;
     
     if (ctrl->target) {
@@ -1332,7 +1333,7 @@ rig_ctrl_timeout_cb (gpointer data)
  */
 static void exec_rx_cycle (GtkRigCtrl *ctrl)
 {
-    gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ, doppler;
+    gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ;
     gboolean ptt = FALSE;
     gboolean dialchanged = FALSE;
     
@@ -1361,7 +1362,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
         else {
             readfreq = ctrl->lastrxf;
         }
-        
+
         if (fabs (readfreq - ctrl->lastrxf) >= 1.0) {
             dialchanged = TRUE;
             
@@ -1371,8 +1372,6 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
             
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
-                /*satfreqd = (readfreq + ctrl->conf->lo) /
-                           (1.0 - (ctrl->target->range_rate/299792.4580));*/
                 satfreqd = (readfreq - ctrl->dd + ctrl->conf->lo);
 
             }
@@ -1401,13 +1400,9 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
     if (ctrl->tracking) {
         /* downlink */
-        /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);
-        g_print ("Doppler D:%.0f:%.0f ",doppler,ctrl->dd); */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
                                   satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
-        /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);
-        g_print ("U:%.0f:%.0f\n",doppler,ctrl->du); */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
                                   satfrequ + ctrl->du - ctrl->conf->loup);
     }
@@ -1420,12 +1415,16 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
 
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
 
+
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ptt == FALSE) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
         if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
             
+            /* give radio a chance to set frequency */
+            g_usleep (WR_DEL);
+
             /* The actual frequency might be different from what we have set because
                the tuning step is larger than what we work with (e.g. FT-817 has a
                smallest tuning step of 10 Hz). Therefore we read back the actual
@@ -1449,7 +1448,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_tx_cycle (GtkRigCtrl *ctrl)
 {
-    gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ, doppler;
+    gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ;
     gboolean ptt = TRUE;
     gboolean dialchanged = FALSE;
     
@@ -1489,8 +1488,6 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
                 satfrequ = readfreq - ctrl->du + ctrl->conf->loup;
-                /*satfrequ = (readfreq + ctrl->conf->loup) /
-                           (1.0 - (ctrl->target->range_rate/299792.4580));*/
             }
             else {
                 satfrequ = readfreq + ctrl->conf->loup;
@@ -1517,11 +1514,9 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
     if (ctrl->tracking) {
         /* downlink */
-        /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);*/
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
                                   satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
-        /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);*/
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
                                   satfrequ + ctrl->du - ctrl->conf->loup);
     }
@@ -1539,6 +1534,9 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
         if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
+
+            /* give radio a chance to set frequency */
+            g_usleep (WR_DEL);
 
             /* The actual frequency migh be different from what we have set because
                the tuning step is larger than what we work with (e.g. FT-817 has a
@@ -1564,16 +1562,6 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_trx_cycle (GtkRigCtrl *ctrl)
 {
-    /*
-    if (ctrl->engaged) {
-        if (get_ptt (ctrl, ctrl->conf) == TRUE) {
-            exec_tx_cycle (ctrl);
-        }
-        else {
-            exec_rx_cycle (ctrl);
-        }
-    }*/
-
     exec_rx_cycle (ctrl);
     exec_tx_cycle (ctrl);
 }
@@ -1612,7 +1600,7 @@ static void exec_duplex_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 {
-    gdouble tmpfreq,readfreq,satfreqd,satfrequ,doppler;
+    gdouble tmpfreq,readfreq,satfreqd,satfrequ;
     gboolean dialchanged = FALSE;
     
     /* Execute downlink cycle using ctrl->conf */
@@ -1635,8 +1623,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             /* doppler shift; only if we are tracking */
             if (ctrl->tracking) {
                 satfreqd = readfreq - ctrl->dd + ctrl->conf->lo;
-                /*satfreqd = (readfreq + ctrl->conf->lo) /
-                           (1.0 - (ctrl->target->range_rate/299792.4580));*/
             }
             else {
                 satfreqd = readfreq + ctrl->conf->lo;
@@ -1654,7 +1640,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         /* update uplink */
         satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
         if (ctrl->tracking) {
-            /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);*/
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
                                      satfrequ + ctrl->du - ctrl->conf2->loup);
         }
@@ -1670,6 +1655,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             if (set_freq_simplex (ctrl, ctrl->conf2, tmpfreq)) {
                 /* reset error counter */
                 ctrl->errcnt = 0;
+
+                /* give radio a chance to set frequency */
+                g_usleep (WR_DEL);
 
                 /* The actual frequency migh be different from what we have set */
                 get_freq_simplex (ctrl, ctrl->conf2, &tmpfreq);
@@ -1689,7 +1677,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
         if (ctrl->tracking) {
             /* downlink */
-            /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);*/
             gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
                                      satfreqd + ctrl->dd - ctrl->conf->lo);
         }
@@ -1705,7 +1692,10 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
                 /* reset error counter */
                 ctrl->errcnt = 0;
-            
+
+                /* give radio a chance to set frequency */
+                g_usleep (WR_DEL);
+
                 /* The actual frequency migh be different from what we have set */
                 get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
                 ctrl->lastrxf = tmpfreq;
@@ -1735,8 +1725,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                 /* doppler shift; only if we are tracking */
                 if (ctrl->tracking) {
                     satfrequ = readfreq - ctrl->du + ctrl->conf2->loup;
-                    /*satfrequ = (readfreq + ctrl->conf2->loup) /
-                                (1.0 - (ctrl->target->range_rate/299792.4580));*/
                 }
                 else {
                     satfrequ = readfreq + ctrl->conf2->loup;
@@ -1754,7 +1742,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             /* update downlink */
             satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
             if (ctrl->tracking) {
-                /*doppler = -satfreqd * (ctrl->target->range_rate / 299792.4580);*/
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
                                          satfreqd + ctrl->dd - ctrl->conf->lo);
             }
@@ -1771,6 +1758,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                     /* reset error counter */
                     ctrl->errcnt = 0;
 
+                    /* give radio a chance to set frequency */
+                    g_usleep (WR_DEL);
+
                     /* The actual frequency migh be different from what we have set */
                     get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
                     ctrl->lastrxf = tmpfreq;
@@ -1784,7 +1774,6 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             /* perform forward tracking on uplink */
             satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
             if (ctrl->tracking) {
-                /*doppler = -satfrequ * (ctrl->target->range_rate / 299792.4580);*/
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
                                          satfrequ + ctrl->du - ctrl->conf2->loup);
             }
@@ -1800,6 +1789,9 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                 if (set_freq_simplex (ctrl, ctrl->conf2, tmpfreq)) {
                     /* reset error counter */
                     ctrl->errcnt = 0;
+
+                    /* give radio a chance to set frequency */
+                    g_usleep (WR_DEL);
 
                     /* The actual frequency migh be different from what we have set. */
                     get_freq_simplex (ctrl, ctrl->conf2, &tmpfreq);
@@ -2093,7 +2085,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
         
         buff[size] = 0;
         vbuff = g_strsplit (buff, "\n", 3);
-        *freq = g_strtod (vbuff[0], NULL);
+        *freq = g_ascii_strtod (vbuff[0], NULL);
                 
         g_free (buff);
         g_strfreev (vbuff);
