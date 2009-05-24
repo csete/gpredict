@@ -53,29 +53,29 @@
 
 /** \brief Column titles indexed with column symb. refs. */
 const gchar *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
-    N_("Azimuth :"),
-    N_("Elevation :"),
-    N_("Direction :"),
-    N_("Right Asc. :"),
-    N_("Declination :"),
-    N_("Slant Range :"),
-    N_("Range Rate :"),
-    N_("Next Event :"),
-    N_("Next AOS :"),
-    N_("Next LOS :"),
-    N_("SSP Lat. :"),
-    N_("SSP Lon. :"),
-    N_("SSP Loc. :"),
-    N_("Footprint :"),
-    N_("Altitude :"),
-    N_("Velocity :"),
-    N_("Doppler@100 :"),
-    N_("Sig. Loss :"),
-    N_("Sig. Delay :"),
-    N_("Mean Anom. :"),
-    N_("Orbit Phase :"),
-    N_("Orbit Num. :"),
-    N_("Visibility :")
+    N_("Azimuth"),
+    N_("Elevation"),
+    N_("Direction"),
+    N_("Right Asc."),
+    N_("Declination"),
+    N_("Slant Range"),
+    N_("Range Rate"),
+    N_("Next Event"),
+    N_("Next AOS"),
+    N_("Next LOS"),
+    N_("SSP Lat."),
+    N_("SSP Lon."),
+    N_("SSP Loc."),
+    N_("Footprint"),
+    N_("Altitude"),
+    N_("Velocity"),
+    N_("Doppler@100M"),
+    N_("Sig. Loss"),
+    N_("Sig. Delay"),
+    N_("Mean Anom."),
+    N_("Orbit Phase"),
+    N_("Orbit Num."),
+    N_("Visibility")
 };
 
 
@@ -270,10 +270,10 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
     gtk_box_pack_start (GTK_BOX (widget), hbox, FALSE, FALSE, 0);
 
     /* create and initialise table  */
-    GTK_SINGLE_SAT (widget)->table = gtk_table_new (SINGLE_SAT_FIELD_NUMBER, 2, FALSE);
+    GTK_SINGLE_SAT (widget)->table = gtk_table_new (SINGLE_SAT_FIELD_NUMBER, 3, FALSE);
     gtk_container_set_border_width (GTK_CONTAINER (GTK_SINGLE_SAT (widget)->table), 5);
     gtk_table_set_row_spacings (GTK_TABLE (GTK_SINGLE_SAT (widget)->table), 0);
-    gtk_table_set_col_spacings (GTK_TABLE (GTK_SINGLE_SAT (widget)->table), 10);
+    gtk_table_set_col_spacings (GTK_TABLE (GTK_SINGLE_SAT (widget)->table), 5);
 
     /* create and add label widgets */
     for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++) {
@@ -290,13 +290,18 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
             label2 = gtk_label_new ("-");
             gtk_misc_set_alignment (GTK_MISC (label2), 0.0, 0.5);
             gtk_table_attach (GTK_TABLE (GTK_SINGLE_SAT (widget)->table), label2,
-                              1, 2, i, i+1,
+                              2, 3, i, i+1,
                               GTK_FILL,  GTK_SHRINK, 0, 0);
 
             /* add tooltips */
             gtk_widget_set_tooltip_text (label1, _(SINGLE_SAT_FIELD_HINT[i]));
             gtk_widget_set_tooltip_text (label2, _(SINGLE_SAT_FIELD_HINT[i]));
             
+            label1 = gtk_label_new (":");
+            gtk_table_attach (GTK_TABLE (GTK_SINGLE_SAT (widget)->table), label1,
+                              1, 2, i, i+1,
+                              GTK_FILL,  GTK_SHRINK, 0, 0);
+
             /* store reference */
             GTK_SINGLE_SAT (widget)->labels[i] = label2;
         }
