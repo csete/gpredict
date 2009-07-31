@@ -1,3 +1,9 @@
+2009-07-31 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-list.c:
+    Fixed sorting algorithm for AOS and LOS columns (bug #2116693).
+
+
 2009-05-24 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-single-sat.c:
