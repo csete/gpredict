@@ -194,6 +194,12 @@ static void          event_cell_data_function (GtkTreeViewColumn *col,
                                                GtkTreeIter       *iter,
                                                gpointer           column);
 
+static gint event_cell_compare_function (GtkTreeModel *model,
+                                         GtkTreeIter  *a,
+                                         GtkTreeIter  *b,
+                                         gpointer user_data);
+
+
 static gboolean   popup_menu_cb   (GtkWidget *treeview,
                                    gpointer list);
 
@@ -383,12 +389,24 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
     model = create_and_fill_model (GTK_SAT_LIST (widget)->satellites);
     gtk_tree_view_set_model (GTK_TREE_VIEW (GTK_SAT_LIST (widget)->treeview), model);
 
+    /* We need a special sort function for AOS/LOS events that works
+       with all date and time formats (see bug #1861323)
+    */
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
+                                     SAT_LIST_COL_AOS,
+                                     event_cell_compare_function,
+                                     NULL, NULL);
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
+                                     SAT_LIST_COL_LOS,
+                                     event_cell_compare_function,
+                                     NULL, NULL);
+
     /* satellite name should be initial sorting criteria */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
                                           SAT_LIST_COL_NAME,
                                           GTK_SORT_ASCENDING),
 
-        g_object_unref (model);
+    g_object_unref (model);
 
     g_signal_connect (GTK_SAT_LIST (widget)->treeview, "button-press-event",
                       G_CALLBACK (button_press_cb), widget);
@@ -1122,10 +1140,60 @@ event_cell_data_function (GtkTreeViewColumn *col,
 }
 
 
+/** \brief Function to compare to Event cells.
+  * \param model Pointer to the GtkTreeModel.
+  * \param a Pointer to the first element.
+  * \param b Pointer to the second element.
+  * \param user_data Always NULL (TBC).
+  * \return See detailed description.
+  *
+  * This function is used by the SatList sort function to determine whether
+  * AOS/LOS cell a is greater than b or not. The cells a and b contain the
+  * time of the event in Julian days, thus the result can be computed by a
+  * simple comparison between the two numbers contained in the cells.
+  *
+  * The function returns -1 if a < b; +1 if a > b; 0 otherwise.
+  */
+static gint event_cell_compare_function (GtkTreeModel *model,
+                                         GtkTreeIter  *a,
+                                         GtkTreeIter  *b,
+                                         gpointer user_data)
+{
+    gint result;
+    gdouble ta,tb;
+    gint sort_col;
+    GtkSortType sort_type;
+
+
+    /* Since this function is used for both AOS and LOS columns,
+       we need to get the sort column */
+    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+                                          &sort_col,
+                                          &sort_type);
+
+    /* get a and b */
+    gtk_tree_model_get (model, a, sort_col, &ta, -1);
+    gtk_tree_model_get (model, b, sort_col, &tb, -1);
+
+    if (ta < tb) {
+        result = -1;
+    }
+    else if (ta > tb) {
+        result = 1;
+    }
+    else {
+        result = 0;
+    }
+
+    return result;
+}
+
+
 /** \brief Reload configuration */
 void
 gtk_sat_list_reconf          (GtkWidget *widget, GKeyFile *cfgdat)
 {
+    sat_log_log (SAT_LOG_LEVEL_WARN, _("%s: FIXME I am not implemented"));
 }
 
 
