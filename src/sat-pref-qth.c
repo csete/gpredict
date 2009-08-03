@@ -34,7 +34,7 @@
 #include "gpredict-utils.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
-#include "gtk-sat-data.h"
+#include "qth-data.h"
 #include "sat-pref-qth.h"
 #include "sat-pref-qth-data.h"
 #include "sat-pref-qth-editor.h"
@@ -380,7 +380,7 @@ read_qth_file (GtkListStore *liststore, gchar *filename)
 	}
 
 	/* read data from file */
-	if (!gtk_sat_data_read_qth (filename, qth)) {
+    if (!qth_data_read (filename, qth)) {
 		g_free (qth);
 		return FALSE;
 	}
@@ -454,7 +454,7 @@ read_qth_file (GtkListStore *liststore, gchar *filename)
 	g_free (fname);
 
 	/* we are finished with this qth, free it */
-	gtk_sat_data_free_qth (qth);
+    qth_data_free (qth);
 
 	return TRUE;
 }
@@ -856,7 +856,7 @@ save_qth (GtkTreeModel *model,
 		qth.alt = (guint) FT_TO_M(qth.alt);
 	}	
 	
-	if (gtk_sat_data_save_qth (filename, &qth)) {
+    if (qth_data_save (filename, &qth)) {
 		
 		/* saved ok, go on check whether qth is default */
 		if (def) {

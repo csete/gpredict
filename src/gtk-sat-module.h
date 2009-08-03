@@ -32,6 +32,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkvbox.h>
 #include "gtk-sat-data.h"
+#include "qth-data.h"
 
 
 #ifdef __cplusplus

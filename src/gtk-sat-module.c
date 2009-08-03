@@ -222,7 +222,7 @@ gtk_sat_module_destroy (GtkObject *object)
 
     /* clean up QTH */
     if (module->qth) {
-        gtk_sat_data_free_qth (module->qth);
+        qth_data_free (module->qth);
         module->qth = NULL;
     }
 
@@ -580,7 +580,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                            ".gpredict2",  G_DIR_SEPARATOR_S,
                            buffer, NULL);
     /* load QTH data */
-    if (!gtk_sat_data_read_qth (qthfile, module->qth)) {
+    if (!qth_data_read (qthfile, module->qth)) {
 
         /* QTH file was not found for some reason */
         g_free (buffer);
@@ -601,7 +601,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                                ".gpredict2",  G_DIR_SEPARATOR_S,
                                buffer, NULL);
 
-        if (!gtk_sat_data_read_qth (qthfile, module->qth)) {
+        if (!qth_data_read (qthfile, module->qth)) {
 
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Can not load default QTH file %s; using built-in defaults"),

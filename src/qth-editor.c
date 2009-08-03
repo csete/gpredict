@@ -533,7 +533,7 @@ apply_changes         (qth_t *qth)
 						 ".qth",
 						 NULL);
 
-	retcode = gtk_sat_data_save_qth (fname, qth);
+    retcode = qth_data_save (fname, qth);
 	g_free (fname);
 
 	return retcode;
