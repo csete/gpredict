@@ -195,7 +195,8 @@ icon_file_name (const gchar *icon)
  * On linux it corresponds to $HOME/.gpredict2
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
- */gchar *get_conf_dir   (void)
+ */
+gchar *get_conf_dir   (void)
 {
     gchar *dir;
     
