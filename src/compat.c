@@ -190,16 +190,106 @@ icon_file_name (const gchar *icon)
 }
 
 
-/** \brief Get user configuration directory.
+/** \brief Get the old user configuration directory.
  *
  * On linux it corresponds to $HOME/.gpredict2
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
  */
-gchar *get_conf_dir   (void)
+gchar *get_old_conf_dir   (void)
 {
     gchar *dir;
     
     dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S, ".gpredict2", NULL);
     return dir;
+}
+
+
+/** \brief Get user configuration directory.
+ *
+ * Linux: $HOME/.config/Gpredict
+ * Windows: C:\Documents and Settings\username\Gpredict
+ * Mac OS X: /home/username/Library/Application Support/Gpredict
+ *
+ * The function returns a newly allocated gchar * which must be free when
+ * it is no longer needed.
+ */
+gchar *get_user_conf_dir (void)
+{
+    gchar *dir = NULL;
+
+#ifdef G_OS_UNIX
+    dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
+                       ".config", G_DIR_SEPARATOR_S,
+                       "Gpredict", NULL);
+                       "icons", NULL);
+#endif
+#ifdef G_OS_WIN32
+                       // FIXME: does this work?
+    dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
+                       "Gpredict", NULL);
+#endif
+/* see gtk-osx.sourceforge.net -> Integration */
+#ifdef MAC_INTEGRATION
+        dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
+                           "Library", G_DIR_SEPARATOR_S,
+                           "Application Support", G_DIR_SEPARATOR_S,
+                           "Gpredict", NULL);
+#endif
+
+    return dir;
+
+}
+
+
+/** \brief Get full path of a .sat or .cat file
+  * \param satfile The file name for the satellite
+  * \return A newly allocated gchar * that should be freed when no longer needed
+  */
+gchar *sat_file_name  (const gchar *satfile)
+{
+    gchar *filename = NULL;
+    gchar *buff;
+
+    buff = get_user_conf_dir ();
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, satdata, G_DIR_SEPARATOR_S, satfile, NULL);
+    g_free (buff);
+
+    return filename;
+
+}
+
+/** \brief Get full path of a .trsp file
+  * \param trspfile The file name for the satellite
+  * \return A newly allocated gchar * that should be freed when no longer needed
+  */
+gchar *trsp_file_name (const gchar *trspfile)
+{
+    gchar *filename = NULL;
+    gchar *buff;
+
+    buff = get_user_conf_dir ();
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, trsp, G_DIR_SEPARATOR_S, trspfile, NULL);
+    g_free (buff);
+
+    return filename;
+
+}
+
+
+/** \brief Get full path of a .rig or .rot file
+  * \param hwfile The file name for the configuration
+  * \return A newly allocated gchar * that should be freed when no longer needed
+  */
+gchar *hw_file_name   (const gchar *hwfile)
+{
+    gchar *filename = NULL;
+    gchar *buff;
+
+    buff = get_user_conf_dir ();
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, hwconf, G_DIR_SEPARATOR_S, hwfile, NULL);
+    g_free (buff);
+
+    return filename;
+
 }
