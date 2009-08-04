@@ -89,6 +89,8 @@ pixmaps/Makefile
 pixmaps/maps/Makefile
 pixmaps/icons/Makefile
 data/Makefile
+data/satdata/Makefile
+data/trsp/Makefile
 po/Makefile.in
 ])
 
