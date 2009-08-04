@@ -1,5 +1,7 @@
 #!/usr/bin/python
-
+#
+# This script was used to convert Celestrak TLE files into individual .sat and .cat files
+#
 import os
 import string
 
