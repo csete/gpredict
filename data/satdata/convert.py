@@ -25,8 +25,8 @@ for file in os.listdir("./in/"):
         line2 = tlefile.readline().strip()
         line3 = tlefile.readline().strip()
 
-        # catalog number
-        catnum = line2[2:7]
+        # catalog number; strip leading zeroes
+        catnum = line2[2:7].lstrip('0')
         print " ... "+catnum
 
         # add satellite to category
