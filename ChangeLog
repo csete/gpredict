@@ -1,3 +1,19 @@
+2009-08-04 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/satdata/*.sat:
+    * data/satdata/*.cat:
+    New satellite data files. Old TLE files removed.
+    
+    * data/trsp/*.trsp:
+    Moved TRSP files.
+    
+    * configure.ac:
+    * data/Makefile.am
+    * data/satdata/Makefile.am:
+    * data/trsp/Makefile.am:
+    Updated to take new data files and organization into account.
+
+
 2009-08-03 Alexandru Csete <oz9aec at gmail.com>
 
     * src/Makefile.am:
