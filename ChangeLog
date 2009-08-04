@@ -1,3 +1,16 @@
+2009-08-03 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/Makefile.am:
+    * src/qth-data.[ch]:
+    * src/gtk-sat-module.[ch]:
+    * src/qth-editor.[ch]:
+    * src/sat-pref-qth.c:
+    Separate QTH data I/O from SAT data I/O.
+
+    * src/sat-data.[ch]:
+    New files implementing the new .sat file I/O (replacing gtk-sat-data).
+
+
 2009-07-31 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-list.c:
