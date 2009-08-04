@@ -222,7 +222,6 @@ gchar *get_user_conf_dir (void)
     dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
                        ".config", G_DIR_SEPARATOR_S,
                        "Gpredict", NULL);
-                       "icons", NULL);
 #endif
 #ifdef G_OS_WIN32
                        // FIXME: does this work?
@@ -252,7 +251,7 @@ gchar *sat_file_name  (const gchar *satfile)
     gchar *buff;
 
     buff = get_user_conf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, satdata, G_DIR_SEPARATOR_S, satfile, NULL);
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, satfile, NULL);
     g_free (buff);
 
     return filename;
@@ -269,7 +268,7 @@ gchar *trsp_file_name (const gchar *trspfile)
     gchar *buff;
 
     buff = get_user_conf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, trsp, G_DIR_SEPARATOR_S, trspfile, NULL);
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, "trsp", G_DIR_SEPARATOR_S, trspfile, NULL);
     g_free (buff);
 
     return filename;
@@ -287,7 +286,7 @@ gchar *hw_file_name   (const gchar *hwfile)
     gchar *buff;
 
     buff = get_user_conf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, hwconf, G_DIR_SEPARATOR_S, hwfile, NULL);
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, "hwconf", G_DIR_SEPARATOR_S, hwfile, NULL);
     g_free (buff);
 
     return filename;
