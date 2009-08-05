@@ -42,7 +42,7 @@ dnl])
 
 dnl Add the languages which your application supports here.
 dnl Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
-ALL_LINGUAS=fr
+ALL_LINGUAS="en_GB en_US fr"
 GETTEXT_PACKAGE=gpredict
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
