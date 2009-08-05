@@ -317,10 +317,10 @@ clone_cb         (GtkWidget *menuitem, gpointer data)
 	tooltips = gtk_tooltips_new ();
 	gtk_tooltips_set_tip (tooltips, entry,
 						  _("Enter a short name for this module.\n"\
-							"Allowed charachters: 0..9, a..z, A..Z, - and _"),
+							"Allowed characters: 0..9, a..z, A..Z, - and _"),
 						  _("The name will be used to identify the module "\
 							"and it is also used a file name for saving the data."\
-							"Max length is 25 charachters."));
+							"Max length is 25 characters."));
 
 	/* attach changed signal so that we can enable OK button when
 	   a proper name has been entered
@@ -656,7 +656,7 @@ docking_state_cb (GtkWidget *menuitem, gpointer data)
 	default:
 
 		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Unknown module satate: %d"),
+					 _("%s:%d: Unknown module state: %d"),
 					 __FILE__, __LINE__, GTK_SAT_MODULE (module)->state);
 		break;
 
@@ -799,7 +799,7 @@ screen_state_cb  (GtkWidget *menuitem, gpointer data)
 	default:
 
 		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Unknown module satate: %d"),
+					 _("%s:%d: Unknown module state: %d"),
 					 __FILE__, __LINE__, GTK_SAT_MODULE (module)->state);
 		break;
 

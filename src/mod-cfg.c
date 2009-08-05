@@ -513,10 +513,10 @@ mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *tople
 		tooltips = gtk_tooltips_new ();
 		gtk_tooltips_set_tip (tooltips, namew,
 							  _("Enter a short name for this module.\n"\
-								"Allowed charachters: 0..9, a..z, A..Z, - and _"),
+								"Allowed characters: 0..9, a..z, A..Z, - and _"),
 							  _("The name will be used to identify the module "\
 								"and it is also used a file name for saving the data."\
-								"Max length is 25 charachters."));
+								"Max length is 25 characters."));
 
 		/* attach changed signal so that we can enable OK button when
 		   a proper name has been entered

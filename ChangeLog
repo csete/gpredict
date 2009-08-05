@@ -1,3 +1,21 @@
+2009-08-05 Michael Stephenson <mickstephenson at googlemail.com>
+
+    * src/gtk-sat-module-popup.c:
+    * src/sat-pref-rot-editor.c:
+    * src/trsp-conf.c:
+    * src/save-pass.c:
+    * src/sat-pref-qth-editor.c:
+    * src/gtk-rig-ctrl.c:
+    * src/mod-cfg.c:
+    * src/qth-editor.c:
+    * src/sat-pref-rig-editor.c:
+    * src/gtk-rot-ctrl.c:
+    Spelling corrections.
+
+    * po/en_US.po:
+    * po/en_GB.po:
+    US and British translations.
+
 2009-08-04 Alexandru Csete <oz9aec at gmail.com>
 
     * data/satdata/*.sat:

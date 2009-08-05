@@ -98,7 +98,7 @@ GSList *read_transponders (guint catnum)
                 trsp->uplow = g_key_file_get_double (cfg, groups[i], KEY_UP_LOW, &error);
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
-                                  _("%s: Error reading %s:%s from %s. Using defult."),
+                                  _("%s: Error reading %s:%s from %s. Using default."),
                                   __FUNCTION__, groups[i], KEY_UP_LOW, name);
                     g_clear_error (&error);
                     trsp->uplow = 0.0;
@@ -107,7 +107,7 @@ GSList *read_transponders (guint catnum)
                 trsp->uphigh = g_key_file_get_double (cfg, groups[i], KEY_UP_HIGH, &error);
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
-                                  _("%s: Error reading %s:%s from %s. Using defult."),
+                                  _("%s: Error reading %s:%s from %s. Using default."),
                                   __FUNCTION__, groups[i], KEY_UP_HIGH, name);
                     g_clear_error (&error);
                     trsp->uphigh = trsp->uplow;
@@ -116,7 +116,7 @@ GSList *read_transponders (guint catnum)
                 trsp->downlow = g_key_file_get_double (cfg, groups[i], KEY_DOWN_LOW, &error);
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
-                                  _("%s: Error reading %s:%s from %s. Using defult."),
+                                  _("%s: Error reading %s:%s from %s. Using default."),
                                   __FUNCTION__, groups[i], KEY_DOWN_LOW, name);
                     g_clear_error (&error);
                     trsp->downlow = 0.0;
@@ -125,7 +125,7 @@ GSList *read_transponders (guint catnum)
                 trsp->downhigh = g_key_file_get_double (cfg, groups[i], KEY_DOWN_HIGH, &error);
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
-                                  _("%s: Error reading %s:%s from %s. Using defult."),
+                                  _("%s: Error reading %s:%s from %s. Using default."),
                                   __FUNCTION__, groups[i], KEY_DOWN_HIGH, name);
                     g_clear_error (&error);
                     trsp->downhigh = trsp->downlow;

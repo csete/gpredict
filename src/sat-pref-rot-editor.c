@@ -159,7 +159,7 @@ create_editor_widgets (rotor_conf_t *conf)
 	gtk_entry_set_max_length (GTK_ENTRY (name), 25);
     gtk_widget_set_tooltip_text (name,
                                  _("Enter a short name for this configuration, e.g. ROTOR-1.\n"\
-                                   "Allowed charachters: 0..9, a..z, A..Z, - and _"));
+                                   "Allowed characters: 0..9, a..z, A..Z, - and _"));
 	gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
 
 	/* attach changed signal so that we can enable OK button when

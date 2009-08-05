@@ -688,7 +688,7 @@ save_to_file (GtkWidget *parent, const gchar *fname, const gchar *data)
 	g_io_channel_write_chars (chan, data, -1, &count, &err);
 	if (err != NULL) {
 		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: An error occured while saving data to %s (%s)"),
+					 _("%s: An error occurred while saving data to %s (%s)"),
 					 __FUNCTION__, fname, err->message);
 		
 		dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
@@ -696,7 +696,7 @@ save_to_file (GtkWidget *parent, const gchar *fname, const gchar *data)
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_MESSAGE_ERROR,
 										 GTK_BUTTONS_CLOSE,
-										 _("An error occured while saving data to %s\n\n%s"),
+										 _("An error occurred while saving data to %s\n\n%s"),
 										 fname, err->message);
 		gtk_dialog_run (GTK_DIALOG (dialog));
 		gtk_widget_destroy (dialog);
@@ -704,7 +704,7 @@ save_to_file (GtkWidget *parent, const gchar *fname, const gchar *data)
 	}
 	else {
 		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s: Written %d charaters to %s"),
+					 _("%s: Written %d characters to %s"),
 					 __FUNCTION__, count, fname);
 	}
 	

@@ -741,7 +741,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     
     /* Engage button */
     ctrl->LockBut = gtk_toggle_button_new_with_label (_("Engage"));
-    gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selcted radio device"));
+    gtk_widget_set_tooltip_text (ctrl->LockBut, _("Engage the selected radio device"));
     g_signal_connect (ctrl->LockBut, "toggled", G_CALLBACK (rig_engaged_cb), ctrl);
     gtk_table_attach_defaults (GTK_TABLE (table), ctrl->LockBut, 2, 3, 0, 1);
     
