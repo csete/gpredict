@@ -13,6 +13,9 @@
     * data/trsp/Makefile.am:
     Updated to take new data files and organization into account.
 
+    * src/compat.[ch]:
+    Changed functions to transition to new configuration files.
+
 
 2009-08-03 Alexandru Csete <oz9aec at gmail.com>
 
