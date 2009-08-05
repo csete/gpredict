@@ -85,7 +85,7 @@ msgstr ""
 
 #: ../src/about.c:110
 msgid "translator-credits"
-msgstr "translator-credits"
+msgstr "Michael Stephenson"
 
 #: ../src/first-time.c:132 ../src/first-time.c:267 ../src/first-time.c:338
 #: ../src/first-time.c:492 ../src/first-time.c:538 ../src/first-time.c:583
