@@ -240,6 +240,61 @@ gchar *get_user_conf_dir (void)
 
 }
 
+/** \brief Get USER_CONF_DIR/modules */
+gchar *get_modules_dir (void)
+{
+    gchar *confdir;
+    gchar *dir;
+
+    confdir = get_user_conf_dir ();
+    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "modules", NULL);
+    g_free (confdir);
+
+    return dir;
+}
+
+/** \brief Get USER_CONF_DIR/satdata */
+gchar *get_satdata_dir (void)
+{
+    gchar *confdir;
+    gchar *dir;
+
+    confdir = get_user_conf_dir ();
+    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "satdata", NULL);
+    g_free (confdir);
+
+    return dir;
+}
+
+
+/** \brief Get USER_CONF_DIR/trsp */
+gchar *get_trsp_dir (void)
+{
+    gchar *confdir;
+    gchar *dir;
+
+    confdir = get_user_conf_dir ();
+    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "trsp", NULL);
+    g_free (confdir);
+
+    return dir;
+}
+
+
+/** \brief Get USER_CONF_DIR/hwconf */
+gchar *get_hwconf_dir (void)
+{
+    gchar *confdir;
+    gchar *dir;
+
+    confdir = get_user_conf_dir ();
+    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "hwconf", NULL);
+    g_free (confdir);
+
+    return dir;
+}
+
+
 
 /** \brief Get full path of a .sat or .cat file
   * \param satfile The file name for the satellite
@@ -250,8 +305,8 @@ gchar *sat_file_name  (const gchar *satfile)
     gchar *filename = NULL;
     gchar *buff;
 
-    buff = get_user_conf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, satfile, NULL);
+    buff = get_satdata_dir ();
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, satfile, NULL);
     g_free (buff);
 
     return filename;
@@ -267,8 +322,8 @@ gchar *trsp_file_name (const gchar *trspfile)
     gchar *filename = NULL;
     gchar *buff;
 
-    buff = get_user_conf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, "trsp", G_DIR_SEPARATOR_S, trspfile, NULL);
+    buff = get_trsp_dir ();
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, trspfile, NULL);
     g_free (buff);
 
     return filename;
@@ -285,8 +340,8 @@ gchar *hw_file_name   (const gchar *hwfile)
     gchar *filename = NULL;
     gchar *buff;
 
-    buff = get_user_conf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, "hwconf", G_DIR_SEPARATOR_S, hwfile, NULL);
+    buff = get_hwconf_dir ();
+    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, hwfile, NULL);
     g_free (buff);
 
     return filename;

@@ -32,7 +32,11 @@
 gchar *get_data_dir   (void);
 gchar *get_maps_dir   (void);
 gchar *get_icon_dir   (void);
-gchar *get_user_conf_dir   (void);
+gchar *get_user_conf_dir (void);
+gchar *get_modules_dir (void);
+gchar *get_satdata_dir (void);
+gchar *get_trsp_dir    (void);
+gchar *get_hwconf_dir  (void);
 gchar *get_old_conf_dir (void);
 gchar *map_file_name  (const gchar *map);
 gchar *icon_file_name (const gchar *icon);
