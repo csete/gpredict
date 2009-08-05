@@ -177,6 +177,7 @@ create_editor_widgets (radio_conf_t *conf)
 
     host = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
+    gtk_entry_set_text (GTK_ENTRY (host), "localhost");
     gtk_widget_set_tooltip_text (host,
                                  _("Enter the host where rigctld is running. "\
                                  "You can use both host name and IP address, "\
@@ -371,7 +372,7 @@ static void
 clear_widgets ()
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
-    gtk_entry_set_text (GTK_ENTRY (host), "");
+    gtk_entry_set_text (GTK_ENTRY (host), "localhost");
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4532); /* hamlib default? */
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lo), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (loup), 0);

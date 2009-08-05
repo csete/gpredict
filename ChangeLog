@@ -1,3 +1,10 @@
+2009-08-05 Stephane Fillod <fillods at users.sf.net>
+
+    * src/sat-pref-rig-editor.c:
+    * src/sat-pref-rot-editor.c:
+    Set default host to localhost for rigctld/rotctld, working around
+    a crash when field is left empty.
+
 2009-08-05 Michael Stephenson <mickstephenson at googlemail.com>
 
     * src/gtk-sat-module-popup.c:
@@ -12,6 +19,7 @@
     * src/gtk-rot-ctrl.c:
     Spelling corrections.
 
+    * configure.ac:
     * po/en_US.po:
     * po/en_GB.po:
     US and British translations.

@@ -174,9 +174,13 @@ create_editor_widgets (rotor_conf_t *conf)
     
     host = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
+    gtk_entry_set_text (GTK_ENTRY (host), "localhost");
     gtk_widget_set_tooltip_text (host,
-                                 _("Enter the host where rogctld is running. You can use both host name "\
-                                  " and IP address, e.g. 192.168.1.100"));
+                                 _("Enter the host where rigctld is running. "\
+                                 "You can use both host name and IP address, "\
+                                 "e.g. 192.168.1.100\n\n"\
+                                 "If gpredict and rotctld are running on the "\
+                                 "same computer, use localhost"));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
 	
     /* port */
@@ -298,7 +302,7 @@ static void
 clear_widgets () 
 {
     gtk_entry_set_text (GTK_ENTRY (name), "");
-    gtk_entry_set_text (GTK_ENTRY (host), "");
+    gtk_entry_set_text (GTK_ENTRY (host), "localhost");
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), 4533); /* hamlib default? */
     gtk_combo_box_set_active (GTK_COMBO_BOX (aztype), ROT_AZ_TYPE_360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0);
