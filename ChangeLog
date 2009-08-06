@@ -13,6 +13,12 @@
     * src/menubar.c:
     * src/mod-mgr.c:
     * src/qth-editor.c:
+    * src/sat-pref-debug.c:
+    * src/sat-log-browser.c:
+    * src/sat-log.c:
+    * src/sat-cfg.c:
+    * src/sat-pref-qth.c:
+    * src/mod-cfg.c:
     Migrated to new user configuration.
 
     * src/sgpsdp/sgp4sdp4.h:
@@ -24,6 +30,22 @@
 
     * stc/gtk-sat-data.c:
     Migrated to new satdata config.
+
+    * src/gtk-polar-view.c:
+    * src/gtk-polar-view-popup.c:
+    * src/gtk-sat-list-popup.c:
+    * src/gtk-sat-map-popup.c:
+    * src/gtk-sat-map.c:
+    * src/gtk-sat-map-ground-track.c:
+    * src/gtk-single-sat.c:
+    * src/gtk-rig-ctrl.c:
+    * gtk/gtk-rot-ctrl.c:
+    * src/gtk-sat-data.c:
+    * src/gtk-sat-list.c:
+    * src/gtk-sky-glance.c:
+    * src/predict-tools.c:
+    * src/sat-info.c:
+    Uset sat->nickname instead of sat->tle.sat_name.
 
 
 2009-08-05 Alexandru Csete <oz9aec at gmail.com>
