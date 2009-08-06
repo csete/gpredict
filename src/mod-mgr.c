@@ -99,6 +99,7 @@ mod_mgr_create (void)
     gint    count,i;
     GtkWidget *module;
     gchar     *modfile;
+    gchar     *confdir;
 
     /* create notebook */
     nbook = gtk_notebook_new ();
@@ -118,11 +119,10 @@ mod_mgr_create (void)
         for (i = 0; i < count; i++) {
 
             /* get data file name */
-            modfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-                                   ".gpredict2", G_DIR_SEPARATOR_S,
-                                   "modules", G_DIR_SEPARATOR_S,
-                                   mods[i],
-                                   ".mod", NULL);
+            confdir = get_modules_dir ();
+            modfile = g_strconcat (confdir, G_DIR_SEPARATOR_S,
+                                   mods[i], ".mod", NULL);
+            g_free (confdir);
             
             /* create module */
             module = gtk_sat_module_new (modfile);
