@@ -67,7 +67,7 @@ typedef struct {
 	int    elset;            /*!< Element Set number. */
 	int    revnum;           /*!< Revolution Number at epoch. */
 
-	char   sat_name[25];     /*!< Satellite name string. */
+        char   sat_name[25];     /*!< Satellite name string. */
 	char   idesg[9];         /*!< International Designator. */
 	op_stat_t status;        /*!< Operational status. */
 
@@ -154,6 +154,9 @@ typedef struct {
  *
  */
 typedef struct {
+        char           *name;
+        char           *nickname;
+        char           *website;
 	tle_t           tle;     /*!< Keplerian elements */
 	int             flags;   /*!< Flags for algo ctrl */
 	sgpsdp_static_t sgps;
