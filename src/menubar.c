@@ -258,6 +258,7 @@ menubar_new_mod_cb  (GtkWidget *widget, gpointer data)
 {
     gchar *modnam = NULL;
     gchar *modfile;
+    gchar *confdir;
     GtkWidget *module = NULL;
     GtkWidget *parent;
 
@@ -274,11 +275,10 @@ menubar_new_mod_cb  (GtkWidget *widget, gpointer data)
                      _("%s: New module name is %s."),
                      __FUNCTION__, modnam);
 
-        modfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-                               ".gpredict2", G_DIR_SEPARATOR_S,
-                               "modules", G_DIR_SEPARATOR_S,
-                               modnam,
-                               ".mod", NULL);
+        confdir = get_modules_dir ();
+        modfile = g_strconcat (confdir, G_DIR_SEPARATOR_S,
+                               modnam, ".mod", NULL);
+        g_free (confdir);
 
         /* create new module */
         module = gtk_sat_module_new (modfile);
@@ -327,6 +327,7 @@ menubar_open_mod_cb  (GtkWidget *widget, gpointer data)
 {
     gchar *modnam = NULL;
     gchar *modfile;
+    gchar *confdir;
     GtkWidget *module = NULL;
     GtkWidget *parent;
 
@@ -342,11 +343,10 @@ menubar_open_mod_cb  (GtkWidget *widget, gpointer data)
                      _("%s: Open module %s."),
                      __FUNCTION__, modnam);
 
-        modfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-                               ".gpredict2", G_DIR_SEPARATOR_S,
-                               "modules", G_DIR_SEPARATOR_S,
-                               modnam,
-                               ".mod", NULL);
+        confdir = get_modules_dir ();
+        modfile = g_strconcat (confdir, G_DIR_SEPARATOR_S,
+                               modnam, ".mod", NULL);
+        g_free (confdir);
 
         /* create new module */
         module = gtk_sat_module_new (modfile);
@@ -805,7 +805,7 @@ menubar_about_cb (GtkWidget *widget, gpointer data)
 /** \brief Select an existing module.
  *
  * This function creates a dialog with a list of existing modules
- * from /homedir/.gpredict2/modules/ and lets the user select one
+ * from /homedir/.config/Gpredict/modules/ and lets the user select one
  * of them. The function will return the name of the selected module
  * without the .mod suffix.
  */
@@ -833,10 +833,7 @@ select_module        ()
     /* scan for .qth files in the user config directory and
        add the contents of each .qth file to the list store
     */
-    dirname = g_strconcat (g_get_home_dir (),
-                           G_DIR_SEPARATOR_S, ".gpredict2",
-                           G_DIR_SEPARATOR_S, "modules",
-                           NULL);
+    dirname = get_modules_dir ();
     dir = g_dir_open (dirname, 0, &error);
 
     if (dir) {
