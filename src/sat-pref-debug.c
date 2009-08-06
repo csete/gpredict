@@ -33,6 +33,7 @@
 #include "sat-cfg.h"
 #include "gpredict-utils.h"
 #include "sat-pref-debug.h"
+#include "compat.h"
 
 
 #define SEC_PER_DAY 86400
@@ -65,6 +66,7 @@ GtkWidget *sat_pref_debug_create ()
 	GtkWidget   *label;
 	GtkWidget   *butbox;
 	gchar       *msg;
+    gchar       *confdir;
 
 
 	vbox = gtk_vbox_new (FALSE, 10);
@@ -121,17 +123,15 @@ GtkWidget *sat_pref_debug_create ()
 	gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
 	/* info label */
+    confdir = get_user_conf_dir ();
 	msg = g_strdup_printf (_("Gpredict stores all run-time messages "
-							 "in the %s%s.gpredict2%slogs%s folder. The "
+                             "in the %s%slogs%s folder. The "
 							 "current log file is called gpredict.log and the "
 							 "file is always kept until the next execution so "
 							 "that you can examine it in case of a failure. "
 							 "If old log files are kept, they are called "
 							 "gpredict-XYZ.log where XYZ is a uniques timestamp."),
-						   g_get_home_dir (),
-						   G_DIR_SEPARATOR_S,
-						   G_DIR_SEPARATOR_S,
-						   G_DIR_SEPARATOR_S);
+                           confdir, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
 	label = gtk_label_new (msg);
 	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
