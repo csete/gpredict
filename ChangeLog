@@ -1,4 +1,32 @@
-2009-08-05 alexandru Csete <oz9aec at gmail.com>
+2009-08-06 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    * src/gtk-rot-ctrl.c:
+    * src/radio-conf.c:
+    * src/rotor-conf.c:
+    * src/trsp-conf.c:
+    * src/sat-pref-rig.c:
+    * src/sat-pref-rot.c:
+    * src/gtk-sat-module.c:
+    * src/gtk-sat-module-popup.c:
+    * src/main.c:
+    * src/menubar.c:
+    * src/mod-mgr.c:
+    * src/qth-editor.c:
+    Migrated to new user configuration.
+
+    * src/sgpsdp/sgp4sdp4.h:
+    Add new name fields to sat_t structure.
+
+    * src/compat.[ch]:
+    Added utility function to build satellite data file path from catalog
+    number.
+
+    * stc/gtk-sat-data.c:
+    Migrated to new satdata config.
+
+
+2009-08-05 Alexandru Csete <oz9aec at gmail.com>
 
     * src/compat.[ch]:
     Added more configuration related utility functions.
