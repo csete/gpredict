@@ -313,6 +313,27 @@ gchar *sat_file_name  (const gchar *satfile)
 
 }
 
+
+/** \brief Build satellite file path from catnum */
+gchar *sat_file_name_from_catnum (guint catnum)
+{
+    gchar *filename;
+    gchar *buff;
+    gchar *dir;
+
+    buff = g_strdup_printf ("%d.sat", catnum);
+    dir = get_satdata_dir ();
+
+    filename = g_strconcat (dir, G_DIR_SEPARATOR_S, buff, NULL);
+
+    g_free (buff);
+    g_free (dir);
+
+    return filename;
+}
+
+
+
 /** \brief Get full path of a .trsp file
   * \param trspfile The file name for the satellite
   * \return A newly allocated gchar * that should be freed when no longer needed

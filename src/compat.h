@@ -45,4 +45,6 @@ gchar *sat_file_name  (const gchar *satfile);
 gchar *trsp_file_name (const gchar *trspfile);
 gchar *hw_file_name   (const gchar *hwfile);
 
+gchar *sat_file_name_from_catnum (guint catnum);
+
 #endif
