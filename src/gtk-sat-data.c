@@ -31,154 +31,131 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-data.h"
 #include "sat-log.h"
-#include "config-keys.h"
-#include "tle-lookup.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
 #include "orbit-tools.h"
 #include "time-tools.h"
+#include "compat.h"
 
 
 
 
 /** \brief Read TLE data for a given satellite into memory.
  *  \param catnum The catalog number of the satellite.
- *  \param sat Pointerto a valid sat_t structure.
- *  \return 0 if successfull, 1 if the satellite could not
- *          be found in any of the data files, 2 if the tle
- *          data has wrong checksum and finally 3 if the tle file
- *          in which the satellite should be, could not be read or opened.
+ *  \param sat Pointer to a valid sat_t structure.
+ *  \return 0 if successfull, 1 if an I/O error occurred,
+ *          2 if the TLE data appears to be bad.
  *
- * \bug We should use g_io_channel
  */
 gint
 gtk_sat_data_read_sat (gint catnum, sat_t *sat)
 {
-    FILE    *fp;
-    gchar    tle_str[3][80];
-    gchar   *filename = NULL, *path = NULL;
-    gchar   *b;
-    gchar    catstr[6];
-    guint    i;
-    guint    catnr;
-    gboolean found = FALSE;
     guint    errorcode = 0;
+    GError   *error = NULL;
+    GKeyFile *data;
+    gchar   *filename = NULL, *path = NULL;
+    gchar   *tlestr1,*tlestr2,*rawtle;
 
-    filename = tle_lookup (catnum);
 
-    if (!filename) {
+    /* ensure that sat != NULL */
+    g_return_val_if_fail (sat != NULL, 1);
+
+    /* .sat file names */
+    filename = g_strdup_printf ("%d.sat", catnum);
+    path = sat_file_name_from_catnum (catnum);
+
+    /* open .sat file */
+    data = g_key_file_new ();
+    if (!g_key_file_load_from_file (data, path, G_KEY_FILE_KEEP_COMMENTS, &error)) {
+        /* an error occurred */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Can not find #%d in any .tle file."),
-                     __FUNCTION__, catnum);
+                     _("%s: Failed to load data from %s (%s)"),
+                     __FUNCTION__, path, error->message);
 
-        return 1;
-    }
+        g_clear_error (&error);
 
-    /* create full file path */
-    path = g_strdup_printf ("%s%s.gpredict2%stle%s%s",
-                            g_get_home_dir (),
-                            G_DIR_SEPARATOR_S,
-                            G_DIR_SEPARATOR_S,
-                            G_DIR_SEPARATOR_S,
-                            filename);
-
-    fp = fopen (path, "r");
-
-    if (fp != NULL) {
- 
-        while (fgets (tle_str[0], 80, fp) && !found) {
-            
-            /* read second and third lines */
-            b = fgets (tle_str[1], 80, fp);
-            b = fgets (tle_str[2], 80, fp);
-
-            /* copy catnum and convert to integer */
-            for (i = 2; i < 7; i++) {
-                catstr[i-2] = tle_str[1][i];
-            }
-            catstr[5] = '\0';
-            catnr = (guint) g_ascii_strtod (catstr, NULL);
-
-            if (catnr == catnum) {
-
-                sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                             _("%s: Found #%d in %s"),
-                             __FUNCTION__,
-                             catnum,
-                             path);
-
-                found = TRUE;
-
-                if (Get_Next_Tle_Set (tle_str, &sat->tle) != 1) {
-                    /* TLE data not good */
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                 _("%s: Invalid data for #%d"),
-                                 __FUNCTION__,
-                                 catnum);
-
-                    errorcode = 2;
-                }
-                else {
-                    /* DATA OK, phew... */
-                    sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                                 _("%s: Good data for #%d"),
-                                 __FUNCTION__,
-                                 catnum);
-
-                    /* VERY, VERY important! If not done, some sats
-                       will not get initialised, the first time SGP4/SDP4
-                       is called. Consequently, the resulting data will 
-                       be NAN, INF or similar nonsense.
-                       For some reason, not even using g_new0 seems to
-                       be enough.
-                    */
-                    sat->flags = 0;
-
-                    select_ephemeris (sat);
-
-                    /* initialise variable fields */
-                    sat->jul_utc = 0.0;
-                    sat->tsince = 0.0;
-                    sat->az = 0.0;
-                    sat->el = 0.0;
-                    sat->range = 0.0;
-                    sat->range_rate = 0.0;
-                    sat->ra = 0.0;
-                    sat->dec = 0.0;
-                    sat->ssplat = 0.0;
-                    sat->ssplon = 0.0;
-                    sat->alt = 0.0;
-                    sat->velo = 0.0;
-                    sat->ma = 0.0;
-                    sat->footprint = 0.0;
-                    sat->phase = 0.0;
-                    sat->aos = 0.0;
-                    sat->los = 0.0;
-
-                    /* calculate satellite data at epoch */
-                    gtk_sat_data_init_sat (sat, NULL);
-
-                }
-            }
-
-        }
-
-        fclose (fp);
+        errorcode = 1;
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to open %s"),
-                     __FUNCTION__, path);
+        /* read name, nickname, and website */
+        sat->name = g_key_file_get_string (data, NULL, "NAME", &error);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Error reading NAME from %s (%s)"),
+                         __FUNCTION__, path, error->message);
+            g_clear_error (&error);
+            sat->name = g_strdup ("Error");
+        }
+        sat->nickname = g_key_file_get_string (data, NULL, "NICKNAME", &error);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s: Satellite %d has no NICKNAME"),
+                         __FUNCTION__, catnum);
+            g_clear_error (&error);
+            sat->nickname = g_strdup (sat->name);
+        }
+        sat->website = g_key_file_get_string (data, NULL, "WEBSITE", NULL); /* website may be NULL */
 
-        errorcode = 3;
+        /* get TLE data */
+        tlestr1 = g_key_file_get_string (data, NULL, "TLE1", NULL);
+        tlestr2 = g_key_file_get_string (data, NULL, "TLE2", NULL);
+        rawtle = g_strconcat (tlestr1, tlestr2, NULL);
+
+        if (!Good_Elements (rawtle)) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: TLE data for %d appears to be bad"),
+                         __FUNCTION__, catnum);
+            errorcode = 2;
+        }
+        Convert_Satellite_Data (rawtle, &sat->tle);
+
+        g_free (tlestr1);
+        g_free (tlestr2);
+        g_free (rawtle);
+
+
+        /* VERY, VERY important! If not done, some sats
+           will not get initialised, the first time SGP4/SDP4
+           is called. Consequently, the resulting data will
+           be NAN, INF or similar nonsense.
+           For some reason, not even using g_new0 seems to
+           be enough.
+        */
+        sat->flags = 0;
+
+        select_ephemeris (sat);
+
+        /* initialise variable fields */
+        sat->jul_utc = 0.0;
+        sat->tsince = 0.0;
+        sat->az = 0.0;
+        sat->el = 0.0;
+        sat->range = 0.0;
+        sat->range_rate = 0.0;
+        sat->ra = 0.0;
+        sat->dec = 0.0;
+        sat->ssplat = 0.0;
+        sat->ssplon = 0.0;
+        sat->alt = 0.0;
+        sat->velo = 0.0;
+        sat->ma = 0.0;
+        sat->footprint = 0.0;
+        sat->phase = 0.0;
+        sat->aos = 0.0;
+        sat->los = 0.0;
+
+        /* calculate satellite data at epoch */
+        gtk_sat_data_init_sat (sat, NULL);
     }
 
-    g_free (path);
     g_free (filename);
+    g_free (path);
+    g_key_file_free (data);
 
     return errorcode;
 }
+
 
 
 /** \brief Initialise satellite data.
