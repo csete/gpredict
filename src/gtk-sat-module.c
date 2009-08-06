@@ -537,6 +537,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
 {
     gchar   *buffer = NULL;
     gchar   *qthfile;
+    gchar   *confdir;
     gchar  **buffv;
     GError  *error = NULL;
 
@@ -576,9 +577,9 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                               MOD_CFG_QTH_FILE_KEY,
                               SAT_CFG_STR_DEF_QTH);
 
-    qthfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-                           ".gpredict2",  G_DIR_SEPARATOR_S,
-                           buffer, NULL);
+    confdir = get_user_conf_dir ();
+    qthfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, buffer, NULL);
+
     /* load QTH data */
     if (!qth_data_read (qthfile, module->qth)) {
 
@@ -597,9 +598,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
 
         /* try SAT_CFG_STR_DEF_QTH */
         buffer = sat_cfg_get_str (SAT_CFG_STR_DEF_QTH);
-        qthfile = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-                               ".gpredict2",  G_DIR_SEPARATOR_S,
-                               buffer, NULL);
+        qthfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, buffer, NULL);
 
         if (!qth_data_read (qthfile, module->qth)) {
 
@@ -617,6 +616,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     }
 
     g_free (buffer);
+    g_free (confdir);
     g_free (qthfile);
 
 
@@ -1261,14 +1261,9 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 
                 gtk_sat_module_close_cb (NULL, module);
 
-                cfgfile = g_strconcat (g_get_home_dir (),
-                                       G_DIR_SEPARATOR_S,
-                                       ".gpredict2",
-                                       G_DIR_SEPARATOR_S,
-                                       "modules",
-                                       G_DIR_SEPARATOR_S,
-                                       name, ".mod",
-                                       NULL);
+                gchar *confdir = get_modules_dir ();
+                cfgfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, name, ".mod", NULL);
+                g_free (confdir);
 
                 module = GTK_SAT_MODULE (gtk_sat_module_new (cfgfile));
                 module->state = laststate;
