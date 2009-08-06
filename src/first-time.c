@@ -492,7 +492,7 @@ first_time_check_step_05 (guint *error)
 
             if (!g_file_test (target, G_FILE_TEST_EXISTS)) {
                 /* copy file to target dir */
-                gchar *source = g_strconcat (srcdirname, G_DIR_SEPARATOR_S, filename);
+                gchar *source = g_strconcat (srcdirname, G_DIR_SEPARATOR_S, filename, NULL);
                 if (gpredict_file_copy (source, target)) {
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s: Failed to copy %s"),
