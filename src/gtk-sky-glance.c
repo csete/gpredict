@@ -885,7 +885,7 @@ create_sat (gpointer key, gpointer value, gpointer data)
     n = g_slist_length (passes);
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                     _("%s:%d: %s has %d passes within %.4f days\n"),
-                    __FILE__, __LINE__, sat->tle.sat_name, n, maxdt);
+                    __FILE__, __LINE__, sat->nickname, n, maxdt);
 
     /* add sky_pass_t items to skg->passes */
     if (passes != NULL) {
@@ -920,7 +920,7 @@ create_sat (gpointer key, gpointer value, gpointer data)
         free_passes (passes);
 
         /* add satellite label */
-        lab = goo_canvas_text_model_new (root, sat->tle.sat_name,
+        lab = goo_canvas_text_model_new (root, sat->nickname,
                                             5, 0, -1, GTK_ANCHOR_W,
                                             "font", "Sans 8",
                                             "fill-color-rgba", bcol,

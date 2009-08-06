@@ -483,7 +483,7 @@ sat_list_add_satellites (gpointer key, gpointer value, gpointer user_data)
 
     gtk_list_store_append (store, &item);
     gtk_list_store_set (store, &item,
-                        SAT_LIST_COL_NAME, sat->tle.sat_name,
+                        SAT_LIST_COL_NAME, sat->nickname,
                         SAT_LIST_COL_CATNUM, sat->tle.catnr,
                         SAT_LIST_COL_AZ, sat->az,
                         SAT_LIST_COL_EL, sat->el,

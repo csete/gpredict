@@ -237,18 +237,6 @@ gtk_sat_module_destroy (GtkObject *object)
 }
 
 
-/* static void dump_data(gpointer key, */
-/*               gpointer value, */
-/*               gpointer user_data) */
-/* { */
-/*     gint *catnum = key; */
-
-/*     g_print ("SATELLITE: %5d\t%s\t%d\n", */
-/*          *catnum, */
-/*          SAT(value)->tle.sat_name, */
-/*          SAT(value)->flags); */
-/* } */
-
 /**** FIXME: Program goes into infinite loop when there is something
       wrong with cfg file. */
 GtkWidget *

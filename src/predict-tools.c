@@ -484,7 +484,7 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
             pass->vis[1] = '-';
             pass->vis[2] = '-';
             pass->vis[3] = 0;
-            pass->satname = g_strdup (sat->tle.sat_name);
+            pass->satname = g_strdup (sat->nickname);
             pass->details = NULL;
 
             /* iterate over each time step */
@@ -901,7 +901,7 @@ get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
         pass->vis[1] = '-';
         pass->vis[2] = '-';
         pass->vis[3] = 0;
-        pass->satname = g_strdup (sat->tle.sat_name);
+        pass->satname = g_strdup (sat->nickname);
         pass->details = NULL;
 
         /* iterate over each time step */

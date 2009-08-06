@@ -84,8 +84,7 @@ static gpointer update_tle_thread     (gpointer data);
 static void test_ui (void);
 
 
-int
-        main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     guint  error = 0;
 
@@ -108,6 +107,7 @@ int
     /* check that user settings are ok */
     error = first_time_check_run ();
 
+
     if (error) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: User config check failed (code %d). This is fatal.\n"\
@@ -116,15 +116,6 @@ int
                      __FUNCTION__, error);
 
         return 1;
-    }
-
-    /* initialise sub-systems */
-    if (tle_lookup_init (NULL) != TLE_LOOKUP_INIT_OK) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: TLE check failed! This is fatal."),
-                     __FUNCTION__);
-
-        return -1;
     }
 
     sat_cfg_load ();
@@ -141,7 +132,7 @@ int
     /* launch TLE monitoring task; 10 min interval */
     tle_mon_id = g_timeout_add (600000, tle_mon_task, NULL);
 
-    test_ui ();
+    //test_ui ();
     
     gtk_main ();
 
@@ -236,7 +227,7 @@ static void
  * to make a clean exit.
  */
 static void
-        gpredict_sig_handler (int sig)
+gpredict_sig_handler (int sig)
 {
     /* 	satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
     /* 	satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
@@ -258,9 +249,9 @@ static void
  *
  */
 static gint
-        gpredict_app_delete      (GtkWidget *widget,
-                                  GdkEvent  *event,
-                                  gpointer   data)
+gpredict_app_delete      (GtkWidget *widget,
+                          GdkEvent  *event,
+                          gpointer   data)
 {
     return FALSE;
 }
@@ -277,8 +268,8 @@ static gint
  *
  */
 static void
-        gpredict_app_destroy    (GtkWidget *widget,
-                                 gpointer   data)
+gpredict_app_destroy    (GtkWidget *widget,
+                         gpointer   data)
 {
 
     /* stop TLE monitoring task */
@@ -325,7 +316,7 @@ static void
  *
  */
 static gboolean
-        gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
     gint x, y;
 
@@ -375,7 +366,7 @@ static gboolean
  * avoid a new notification the next time the taks would be run.
  */
 static gboolean
-        tle_mon_task          (gpointer data)
+tle_mon_task          (gpointer data)
 {
     glong last,now,thrld;
     GTimeVal   tval;
@@ -474,7 +465,7 @@ static gboolean
 
 /** \brief Stop TLE monitoring and any pending updates. */
 static void
-        tle_mon_stop          ()
+tle_mon_stop          ()
 {
     gboolean retcode;
 
@@ -498,7 +489,7 @@ static void
 
 /** \brief Thread function which invokes TLE update */
 static gpointer
-        update_tle_thread     (gpointer data)
+update_tle_thread     (gpointer data)
 {
     tle_upd_running = TRUE;
 

@@ -80,7 +80,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
 	sat_log_log (SAT_LOG_LEVEL_DEBUG,
 				 _("%s: Creating ground track for %s"),
-				 __FUNCTION__, sat->tle.sat_name);
+                 __FUNCTION__, sat->nickname);
 
 	/* just to be safe... if empty GSList is not NULL => segfault */
 	obj->track_data.latlon = NULL;
@@ -189,7 +189,7 @@ ground_track_update (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 {
 	sat_log_log (SAT_LOG_LEVEL_DEBUG,
 				 _("%s: Updating ground track for %s"),
-				 __FUNCTION__, sat->tle.sat_name);
+                 __FUNCTION__, sat->nickname);
 
 	if (recalc == TRUE) {
 		ground_track_delete (satmap, sat, qth, obj, TRUE);
@@ -219,7 +219,7 @@ ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
 	sat_log_log (SAT_LOG_LEVEL_DEBUG,
 				 _("%s: Deleting ground track for %s"),
-				 __FUNCTION__, sat->tle.sat_name);
+                 __FUNCTION__, sat->nickname);
 
 	root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
 

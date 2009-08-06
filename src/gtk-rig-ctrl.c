@@ -524,7 +524,7 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     for (i = 0; i < n; i++) {
         sat = SAT (g_slist_nth_data (ctrl->sats, i));
         if (sat) {
-            gtk_combo_box_append_text (GTK_COMBO_BOX (satsel), sat->tle.sat_name);
+            gtk_combo_box_append_text (GTK_COMBO_BOX (satsel), sat->nickname);
         }
     }
     gtk_combo_box_set_active (GTK_COMBO_BOX (satsel), 0);

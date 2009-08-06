@@ -265,8 +265,8 @@ void gtk_sat_data_copy_sat (const sat_t *source, sat_t *dest, qth_t *qth)
     dest->tle.elset = source->tle.elset;
     dest->tle.revnum = source->tle.revnum;
 
-    for (i = 0; i < 25; i++)
-        dest->tle.sat_name[i] = source->tle.sat_name[i];
+    dest->name = g_strdup (source->name);
+    dest->nickname = g_strdup (source->nickname);
     for (i = 0; i < 9; i++)
         dest->tle.idesg[i] = source->tle.idesg[i];
 

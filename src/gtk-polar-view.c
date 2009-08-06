@@ -731,10 +731,10 @@ gtk_polar_view_update          (GtkWidget  *widget)
                     
                     if (h > 0) 
                         buff = g_strdup_printf (_("Next: %s\nin %s%d:%s%d%s%d"),
-                                                sat->tle.sat_name, ch, h, cm, m, cs, s);
+                                                sat->nickname, ch, h, cm, m, cs, s);
                     else
                         buff = g_strdup_printf (_("Next: %s\nin %s%d%s%d"),
-                                                sat->tle.sat_name, cm, m, cs, s);
+                                                sat->nickname, cm, m, cs, s);
                     
                     
                     g_object_set (polv->next,
@@ -914,18 +914,18 @@ update_sat    (gpointer key, gpointer value, gpointer data)
 
                     if (h > 0) {
                         text = g_strdup_printf (_("%s\nLOS in %s%d:%s%d%s%d"),
-                                                sat->tle.sat_name, ch, h, cm, m, cs, s);
+                                                sat->nickname, ch, h, cm, m, cs, s);
                     }
                     else {
                         text = g_strdup_printf (_("%s\nLOS in %s%d%s%d"),
-                                                sat->tle.sat_name, cm, m, cs, s);
+                                                sat->nickname, cm, m, cs, s);
                     }
                     g_free (ch);
                     g_free (cm);
                     g_free (cs);
                 }
                 else {
-                    text = g_strdup_printf (_("%s\nAlways in range"), sat->tle.sat_name);
+                    text = g_strdup_printf (_("%s\nAlways in range"), sat->nickname);
                 }
                 g_object_set (polv->sel, "text", text, NULL);
 
@@ -956,7 +956,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                                      "fill-color-rgba", colour,
                                                      "stroke-color-rgba", colour,
                                                      NULL);
-            obj->label = goo_canvas_text_model_new (root, sat->tle.sat_name,
+            obj->label = goo_canvas_text_model_new (root, sat->nickname,
                                                     x,
                                                     y+2,
                                                     -1,

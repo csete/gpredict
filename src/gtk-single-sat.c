@@ -258,7 +258,7 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 
     /* create header */
     sat = SAT (g_slist_nth_data (GTK_SINGLE_SAT (widget)->sats, 0));
-    title = g_strdup_printf ("<b>%s</b>", sat ? sat->tle.sat_name : "noname");
+    title = g_strdup_printf ("<b>%s</b>", sat ? sat->nickname : "noname");
 
     GTK_SINGLE_SAT (widget)->header = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (GTK_SINGLE_SAT (widget)->header), title);
@@ -812,7 +812,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     menuitem = gtk_image_menu_item_new ();
     label = gtk_label_new (NULL);
     gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-    buff = g_strdup_printf ("<b>%s</b>", sat->tle.sat_name);
+    buff = g_strdup_printf ("<b>%s</b>", sat->nickname);
     gtk_label_set_markup (GTK_LABEL (label), buff);
     g_free (buff);
     gtk_container_add (GTK_CONTAINER (menuitem), label);
@@ -938,7 +938,7 @@ select_satellite        (GtkWidget *menuitem, gpointer data)
 
         sat = SAT (g_slist_nth_data (ssat->sats, i));
 
-        title = g_strdup_printf ("<b>%s</b>", sat->tle.sat_name);
+        title = g_strdup_printf ("<b>%s</b>", sat->nickname);
         gtk_label_set_markup (GTK_LABEL (ssat->header), title);
         g_free (title);
 
@@ -1042,7 +1042,7 @@ show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
         }
 
         if (pass != NULL) {
-            show_pass (sat->tle.sat_name, qth, pass, GTK_WIDGET (toplevel));
+            show_pass (sat->nickname, qth, pass, GTK_WIDGET (toplevel));
         }
         else {
             /* show dialog that there are no passes within time frame */
@@ -1053,7 +1053,7 @@ show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
                                              GTK_BUTTONS_OK,
                                              _("Satellite %s has no passes\n"\
                                                "within the next %d days"),
-                                             sat->tle.sat_name,
+                                             sat->nickname,
                                              sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
 
             gtk_dialog_run (GTK_DIALOG (dialog));
@@ -1072,7 +1072,7 @@ show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
                                            "This can be because the satellite\n"\
                                            "is geostationary, decayed or simply\n"\
                                            "never comes above the horizon"),
-                                          sat->tle.sat_name);
+                                          sat->nickname);
 
          gtk_dialog_run (GTK_DIALOG (dialog));
          gtk_widget_destroy (dialog);
@@ -1113,7 +1113,7 @@ show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
 
 
         if (passes != NULL) {
-            show_passes (sat->tle.sat_name, qth, passes, GTK_WIDGET (toplevel));
+            show_passes (sat->nickname, qth, passes, GTK_WIDGET (toplevel));
         }
         else {
             /* show dialog that there are no passes within time frame */
@@ -1124,7 +1124,7 @@ show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
                                              GTK_BUTTONS_OK,
                                             _("Satellite %s has no passes\n"\
                                               "within the next %d days"),
-                                             sat->tle.sat_name,
+                                             sat->nickname,
                                              sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
 
             gtk_dialog_run (GTK_DIALOG (dialog));
@@ -1143,7 +1143,7 @@ show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
                                           GTK_BUTTONS_OK,
                                           _("Satellite %s has no passes for\n"\
                                             "the current ground station!"),
-                                          sat->tle.sat_name);
+                                          sat->nickname);
 
          gtk_dialog_run (GTK_DIALOG (dialog));
          gtk_widget_destroy (dialog);

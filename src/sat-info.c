@@ -86,7 +86,7 @@ show_sat_info (GtkWidget *menuitem, gpointer data)
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
 
     label = gtk_label_new (NULL);
-    str = g_strdup_printf (_("<b>%s</b>"), sat->tle.sat_name);
+    str = g_strdup_printf (_("<b>%s</b>"), sat->nickname);
     gtk_label_set_markup (GTK_LABEL (label), str);
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 2, 0, 1);
