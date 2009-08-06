@@ -11,7 +11,7 @@
   More details can be found at the project home page:
 
   http://gpredict.oz9aec.net/
- 
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -85,67 +85,67 @@ static void test_ui (void);
 
 
 int
-main (int argc, char *argv[])
+        main (int argc, char *argv[])
 {
-	guint  error = 0;
+    guint  error = 0;
 
 #ifdef G_OS_WIN32
-	printf ("Starting gpredict. This may take some time...\n");
+    printf ("Starting gpredict. This may take some time...\n");
 #endif
 
 
 #ifdef ENABLE_NLS
-	bindtextdomain (PACKAGE, PACKAGE_LOCALE_DIR);
-	bind_textdomain_codeset (PACKAGE, "UTF-8");
-	textdomain (PACKAGE);
+    bindtextdomain (PACKAGE, PACKAGE_LOCALE_DIR);
+    bind_textdomain_codeset (PACKAGE, "UTF-8");
+    textdomain (PACKAGE);
 #endif
-	gtk_set_locale ();
-	gtk_init (&argc, &argv);
+    gtk_set_locale ();
+    gtk_init (&argc, &argv);
 
-	/* start logger first, so that we can catch error messages if any */
-	sat_log_init ();
+    /* start logger first, so that we can catch error messages if any */
+    sat_log_init ();
 
-	/* check that user settings are ok */
-	error = first_time_check_run ();
+    /* check that user settings are ok */
+    error = first_time_check_run ();
 
-	if (error) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: User config check failed (code %d). This is fatal.\n"\
-					   "A possible solution would be to remove the .gpredict2 data dir\n"\
-					   "in your home directory"),
-					 __FUNCTION__, error);
+    if (error) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: User config check failed (code %d). This is fatal.\n"\
+                       "A possible solution would be to remove the .config/Gpredict data dir\n"\
+                       "in your home directory"),
+                     __FUNCTION__, error);
 
-		return 1;
-	}
+        return 1;
+    }
 
-	/* initialise sub-systems */
-	if (tle_lookup_init (NULL) != TLE_LOOKUP_INIT_OK) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: TLE check failed! This is fatal."),
-					 __FUNCTION__);
+    /* initialise sub-systems */
+    if (tle_lookup_init (NULL) != TLE_LOOKUP_INIT_OK) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: TLE check failed! This is fatal."),
+                     __FUNCTION__);
 
-		return -1;
-	}
+        return -1;
+    }
 
-	sat_cfg_load ();
+    sat_cfg_load ();
 
-	/* get logging level */
-	sat_log_set_level (sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
+    /* get logging level */
+    sat_log_set_level (sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
 
-	/* create application */
-	gpredict_app_create ();
-	gtk_widget_show_all (app);
+    /* create application */
+    gpredict_app_create ();
+    gtk_widget_show_all (app);
 
-	//sat_debugger_run ();
+    //sat_debugger_run ();
 
-	/* launch TLE monitoring task; 10 min interval */
-	tle_mon_id = g_timeout_add (600000, tle_mon_task, NULL);
+    /* launch TLE monitoring task; 10 min interval */
+    tle_mon_id = g_timeout_add (600000, tle_mon_task, NULL);
 
     test_ui ();
     
-	gtk_main ();
+    gtk_main ();
 
-	return 0;
+    return 0;
 }
 
 static void test_ui (void)
@@ -168,60 +168,60 @@ static void test_ui (void)
  *
  */
 static void
-gpredict_app_create ()
+        gpredict_app_create ()
 {
-	gchar     *title;     /* window title */
-	gchar     *icon;      /* icon file name */
-	
-	/* create window title and file name for window icon  */
-	title = g_strdup (_("GPREDICT"));
-	icon = icon_file_name ("gpredict-icon.png");
+    gchar     *title;     /* window title */
+    gchar     *icon;      /* icon file name */
 
-	/* ceate window, add title and icon, restore size and position */
-	app = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    /* create window title and file name for window icon  */
+    title = g_strdup (_("GPREDICT"));
+    icon = icon_file_name ("gpredict-icon.png");
 
-	gtk_window_set_title (GTK_WINDOW (app), title);
+    /* ceate window, add title and icon, restore size and position */
+    app = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-	/* restore window position and size if requested by config */
-	/* trunk/gtk/gtkblist.c */
-	/* size is always restored */
-	gtk_window_set_default_size (GTK_WINDOW (app),
-								 sat_cfg_get_int (SAT_CFG_INT_WINDOW_WIDTH),
-								 sat_cfg_get_int (SAT_CFG_INT_WINDOW_HEIGHT));
+    gtk_window_set_title (GTK_WINDOW (app), title);
 
-	/* position restored only if requested in config */
-	if (sat_cfg_get_bool (SAT_CFG_BOOL_MAIN_WIN_POS)) {
-		gtk_window_move (GTK_WINDOW (app),
-						 sat_cfg_get_int (SAT_CFG_INT_WINDOW_POS_X),
-						 sat_cfg_get_int (SAT_CFG_INT_WINDOW_POS_Y));
-	}
+    /* restore window position and size if requested by config */
+    /* trunk/gtk/gtkblist.c */
+    /* size is always restored */
+    gtk_window_set_default_size (GTK_WINDOW (app),
+                                 sat_cfg_get_int (SAT_CFG_INT_WINDOW_WIDTH),
+                                 sat_cfg_get_int (SAT_CFG_INT_WINDOW_HEIGHT));
 
-	gtk_container_add (GTK_CONTAINER (app),
-					   gui_create (app));
+    /* position restored only if requested in config */
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_MAIN_WIN_POS)) {
+        gtk_window_move (GTK_WINDOW (app),
+                         sat_cfg_get_int (SAT_CFG_INT_WINDOW_POS_X),
+                         sat_cfg_get_int (SAT_CFG_INT_WINDOW_POS_Y));
+    }
 
-	if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
-		gtk_window_set_icon_from_file (GTK_WINDOW (app),
-									   icon,
-									   NULL);
-	}
+    gtk_container_add (GTK_CONTAINER (app),
+                       gui_create (app));
 
-	g_free (title);
-	g_free (icon);
+    if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
+        gtk_window_set_icon_from_file (GTK_WINDOW (app),
+                                       icon,
+                                       NULL);
+    }
 
-	/* connect delete and destroy signals */
-	g_signal_connect (G_OBJECT (app), "delete_event",
-					  G_CALLBACK (gpredict_app_delete), NULL);    
-	g_signal_connect (G_OBJECT (app), "configure_event",
-					  G_CALLBACK (gpredict_app_config), NULL);    
-	g_signal_connect (G_OBJECT (app), "destroy",
-					  G_CALLBACK (gpredict_app_destroy), NULL);
+    g_free (title);
+    g_free (icon);
 
-	/* register UNIX signals as well so that we 
-	   have a chance to clean up external resources.
-	*/
-	signal (SIGTERM, (void *) gpredict_sig_handler);
-	signal (SIGINT,  (void *) gpredict_sig_handler);
-	signal (SIGABRT, (void *) gpredict_sig_handler);
+    /* connect delete and destroy signals */
+    g_signal_connect (G_OBJECT (app), "delete_event",
+                      G_CALLBACK (gpredict_app_delete), NULL);
+    g_signal_connect (G_OBJECT (app), "configure_event",
+                      G_CALLBACK (gpredict_app_config), NULL);
+    g_signal_connect (G_OBJECT (app), "destroy",
+                      G_CALLBACK (gpredict_app_destroy), NULL);
+
+    /* register UNIX signals as well so that we
+           have a chance to clean up external resources.
+        */
+    signal (SIGTERM, (void *) gpredict_sig_handler);
+    signal (SIGINT,  (void *) gpredict_sig_handler);
+    signal (SIGABRT, (void *) gpredict_sig_handler);
 
 }
 
@@ -236,12 +236,12 @@ gpredict_app_create ()
  * to make a clean exit.
  */
 static void
-gpredict_sig_handler (int sig)
+        gpredict_sig_handler (int sig)
 {
-	/* 	satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
-	/* 	satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
+    /* 	satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
+    /* 	satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
 
-	gtk_widget_destroy (app);
+    gtk_widget_destroy (app);
 }
 
 
@@ -258,11 +258,11 @@ gpredict_sig_handler (int sig)
  *
  */
 static gint
-gpredict_app_delete      (GtkWidget *widget,
-						  GdkEvent  *event,
-						  gpointer   data)
+        gpredict_app_delete      (GtkWidget *widget,
+                                  GdkEvent  *event,
+                                  gpointer   data)
 {
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -277,34 +277,34 @@ gpredict_app_delete      (GtkWidget *widget,
  *
  */
 static void
-gpredict_app_destroy    (GtkWidget *widget,
-						 gpointer   data)
+        gpredict_app_destroy    (GtkWidget *widget,
+                                 gpointer   data)
 {
 
-	/* stop TLE monitoring task */
-	tle_mon_stop ();
+    /* stop TLE monitoring task */
+    tle_mon_stop ();
 
-	/* GUI timers are stopped automatically */
+    /* GUI timers are stopped automatically */
 
-	/* stop timeouts */
+    /* stop timeouts */
 
-	/* stop other sub-systems */
-	tle_lookup_close ();
+    /* stop other sub-systems */
+    tle_lookup_close ();
 
-	/* configuration data */
-	mod_mgr_save_state ();
+    /* configuration data */
+    mod_mgr_save_state ();
 
-	/* not good, have to use configure event instead (see API doc) */
-	/*	gtk_window_get_size (GTK_WINDOW (app), &w, &h);
-		sat_cfg_set_int (SAT_CFG_INT_WINDOW_WIDTH, w);
-		sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, h);	
-	*/
-	sat_cfg_save ();
-	sat_log_close ();
-	sat_cfg_close ();
+    /* not good, have to use configure event instead (see API doc) */
+    /*	gtk_window_get_size (GTK_WINDOW (app), &w, &h);
+                sat_cfg_set_int (SAT_CFG_INT_WINDOW_WIDTH, w);
+                sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, h);
+        */
+    sat_cfg_save ();
+    sat_log_close ();
+    sat_cfg_close ();
 
-	/* exit Gtk+ */
-	gtk_main_quit ();
+    /* exit Gtk+ */
+    gtk_main_quit ();
 }
 
 
@@ -325,40 +325,40 @@ gpredict_app_destroy    (GtkWidget *widget,
  *
  */
 static gboolean
-gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+        gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
-	gint x, y;
+    gint x, y;
 
 
-	/* data is only useful when window is visible */
-	if (GTK_WIDGET_VISIBLE (widget))
- 		gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
-	else
- 		return FALSE; /* carry on normally */
- 
+    /* data is only useful when window is visible */
+    if (GTK_WIDGET_VISIBLE (widget))
+        gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
+    else
+        return FALSE; /* carry on normally */
+
 #ifdef G_OS_WIN32
-	/* Workaround for GTK+ bug # 169811 - "configure_event" is fired
-	   when the window is being maximized */
- 	if (gdk_window_get_state (widget->window) & GDK_WINDOW_STATE_MAXIMIZED) {
- 		return FALSE;
-	}
+    /* Workaround for GTK+ bug # 169811 - "configure_event" is fired
+           when the window is being maximized */
+    if (gdk_window_get_state (widget->window) & GDK_WINDOW_STATE_MAXIMIZED) {
+        return FALSE;
+    }
 #endif
 
-	/* don't save off-screen positioning */
-   	if (x + event->width < 0 || y + event->height < 0 ||
-		x > gdk_screen_width() || y > gdk_screen_height()) {
+    /* don't save off-screen positioning */
+    if (x + event->width < 0 || y + event->height < 0 ||
+        x > gdk_screen_width() || y > gdk_screen_height()) {
 
- 		return FALSE; /* carry on normally */
-	}
+        return FALSE; /* carry on normally */
+    }
 
- 	/* store the position and size */
-	sat_cfg_set_int (SAT_CFG_INT_WINDOW_POS_X, x);
-	sat_cfg_set_int (SAT_CFG_INT_WINDOW_POS_Y, y);
-	sat_cfg_set_int (SAT_CFG_INT_WINDOW_WIDTH, event->width);
-	sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, event->height);
+    /* store the position and size */
+    sat_cfg_set_int (SAT_CFG_INT_WINDOW_POS_X, x);
+    sat_cfg_set_int (SAT_CFG_INT_WINDOW_POS_Y, y);
+    sat_cfg_set_int (SAT_CFG_INT_WINDOW_WIDTH, event->width);
+    sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, event->height);
 
-	/* continue to handle event normally */
-	return FALSE;
+    /* continue to handle event normally */
+    return FALSE;
 }
 
 
@@ -375,136 +375,136 @@ gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer dat
  * avoid a new notification the next time the taks would be run.
  */
 static gboolean
-tle_mon_task          (gpointer data)
+        tle_mon_task          (gpointer data)
 {
-	glong last,now,thrld;
-	GTimeVal   tval;
-	GtkWidget *dialog;
-	GError    *err = NULL;
+    glong last,now,thrld;
+    GTimeVal   tval;
+    GtkWidget *dialog;
+    GError    *err = NULL;
 
 
-	/* 	sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-	/* 				 _("%s: Checking whether TLE check should be executed..."), */
-	/* 				 __FUNCTION__); */
+    /* 	sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+    /* 				 _("%s: Checking whether TLE check should be executed..."), */
+    /* 				 __FUNCTION__); */
 
-	/* get time of last update */
-	last = sat_cfg_get_int (SAT_CFG_INT_TLE_LAST_UPDATE);
-				
-	/* get current time */
-	g_get_current_time (&tval);
-	now = tval.tv_sec;
-	
-	/* threshold */
-	switch (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ)) {
+    /* get time of last update */
+    last = sat_cfg_get_int (SAT_CFG_INT_TLE_LAST_UPDATE);
 
-	case TLE_AUTO_UPDATE_MONTHLY:
-		thrld = 2592000;
-		break;
+    /* get current time */
+    g_get_current_time (&tval);
+    now = tval.tv_sec;
 
-	case TLE_AUTO_UPDATE_WEEKLY:
-		thrld = 604800;
-		break;
+    /* threshold */
+    switch (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_FREQ)) {
 
-	case TLE_AUTO_UPDATE_DAILY:
-		thrld = 86400;
-		break;
+    case TLE_AUTO_UPDATE_MONTHLY:
+        thrld = 2592000;
+        break;
 
-		/* set default to "infinite" */
-	default:
-		thrld = G_MAXLONG;
-		break;
-	}
+    case TLE_AUTO_UPDATE_WEEKLY:
+        thrld = 604800;
+        break;
 
-	if ((now - last) < thrld) {
-		/* too early */
-		/* 		sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-		/* 					 _("%s: Threshold has not been passed yet."), */
-		/* 					 __FUNCTION__, last, now, thrld); */
-	}
-	else {
-		/* time to update */
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s: Time threshold has been passed."),
-					 __FUNCTION__);
+    case TLE_AUTO_UPDATE_DAILY:
+        thrld = 86400;
+        break;
 
-		/* find out what to do */
-		if (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
+        /* set default to "infinite" */
+    default:
+        thrld = G_MAXLONG;
+        break;
+    }
 
-			/* start update process in separate thread */
-			sat_log_log (SAT_LOG_LEVEL_DEBUG,
-						 _("%s: Starting new update thread."),
-						 __FUNCTION__);
+    if ((now - last) < thrld) {
+        /* too early */
+        /* 		sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+        /* 					 _("%s: Threshold has not been passed yet."), */
+        /* 					 __FUNCTION__, last, now, thrld); */
+    }
+    else {
+        /* time to update */
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Time threshold has been passed."),
+                     __FUNCTION__);
 
-			if (!g_thread_supported ())
-				g_thread_init (NULL);
+        /* find out what to do */
+        if (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
 
-			g_thread_create (update_tle_thread, NULL, FALSE, &err);
+            /* start update process in separate thread */
+            sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                         _("%s: Starting new update thread."),
+                         __FUNCTION__);
 
-			if (err != NULL)
-				sat_log_log (SAT_LOG_LEVEL_ERROR,
-							 _("%s: Failed to create TLE update thread (%s)"),
-							 __FUNCTION__, err->message);
+            if (!g_thread_supported ())
+                g_thread_init (NULL);
 
-		}
-		else if (!tle_upd_note_sent) {
-			/* notify user */
-			dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (app),
-														 GTK_DIALOG_DESTROY_WITH_PARENT,
-														 GTK_MESSAGE_INFO,
-														 GTK_BUTTONS_OK,
-														 _("Your TLE files are getting out of date.\n"\
-														   "You can update them by selecting\n"\
-														   "<b>Edit -> Update TLE</b>\n"\
-														   "in the menubar."));
+            g_thread_create (update_tle_thread, NULL, FALSE, &err);
 
-			/* Destroy the dialog when the user responds to it (e.g. clicks a button) */
-			g_signal_connect_swapped (dialog, "response",
-									  G_CALLBACK (gtk_widget_destroy),
-									  dialog);
+            if (err != NULL)
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Failed to create TLE update thread (%s)"),
+                             __FUNCTION__, err->message);
 
-			gtk_widget_show_all (dialog);
+        }
+        else if (!tle_upd_note_sent) {
+            /* notify user */
+            dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (app),
+                                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                         GTK_MESSAGE_INFO,
+                                                         GTK_BUTTONS_OK,
+                                                         _("Your TLE files are getting out of date.\n"\
+                                                           "You can update them by selecting\n"\
+                                                           "<b>Edit -> Update TLE</b>\n"\
+                                                           "in the menubar."));
 
-			tle_upd_note_sent = TRUE;
-		}
-	}
+            /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
+            g_signal_connect_swapped (dialog, "response",
+                                      G_CALLBACK (gtk_widget_destroy),
+                                      dialog);
 
-	return TRUE;
+            gtk_widget_show_all (dialog);
+
+            tle_upd_note_sent = TRUE;
+        }
+    }
+
+    return TRUE;
 }
 
 
 /** \brief Stop TLE monitoring and any pending updates. */
 static void
-tle_mon_stop          ()
+        tle_mon_stop          ()
 {
-	gboolean retcode;
+    gboolean retcode;
 
-	if (tle_mon_id) {
-		retcode = g_source_remove (tle_mon_id);
+    if (tle_mon_id) {
+        retcode = g_source_remove (tle_mon_id);
 
-		if (!retcode)
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: Could not find TLE monitoring task (ID = %d)"),
-						 __FUNCTION__, tle_mon_id);
+        if (!retcode)
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Could not find TLE monitoring task (ID = %d)"),
+                         __FUNCTION__, tle_mon_id);
 
-	}
+    }
 
-	/* if TLE update is running wait until it is finished */
-	while (tle_upd_running) {
-		g_usleep (1000);
-	}
+    /* if TLE update is running wait until it is finished */
+    while (tle_upd_running) {
+        g_usleep (1000);
+    }
 }
 
 
 
 /** \brief Thread function which invokes TLE update */
 static gpointer
-update_tle_thread     (gpointer data)
+        update_tle_thread     (gpointer data)
 {
-	tle_upd_running = TRUE;
+    tle_upd_running = TRUE;
 
-	tle_update_from_network (TRUE, NULL, NULL, NULL);
+    tle_update_from_network (TRUE, NULL, NULL, NULL);
 
-	tle_upd_running = FALSE;
+    tle_upd_running = FALSE;
 
-	return NULL;
+    return NULL;
 }
