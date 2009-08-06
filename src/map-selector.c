@@ -95,7 +95,7 @@ select_map (const gchar *curmap)
     
     /* select current map file */
     if (g_path_is_absolute (curmap)) {
-        /* map is user specific, ie. in $HOME/.gpredict2/maps/ */
+        /* map is user specific, ie. in USER_CONF_DIR/maps/ */
         selection = g_strdup (curmap);
     }
     else {
