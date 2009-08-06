@@ -131,15 +131,15 @@ mod_cfg_new    ()
 			
 			if (num > 0) {
 				/* we have at least one sat selected */
-				gchar *filename;
+                gchar *filename,*confdir;
 				gboolean save = TRUE;
 
 				/* check if there is already a module with this name */
-				filename = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-										".gpredict2", G_DIR_SEPARATOR_S,
-										"modules", G_DIR_SEPARATOR_S,
+                confdir = get_modules_dir ();
+                filename = g_strconcat (confdir, G_DIR_SEPARATOR_S,
 										gtk_entry_get_text (GTK_ENTRY (namew)),
 										".mod", NULL);
+                g_free (confdir);
 
 				if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
 					GtkWidget *warn;
@@ -325,7 +325,7 @@ mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
  *
  * This function saves the module configuration data from cfgdata
  * into a module configuration file called modname.mod placed in
- * the /home/username/.gpredict2/modules/ directory.
+ * the USER_CONF_DIR/modules/ directory.
  */
 mod_cfg_status_t
 mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
@@ -334,6 +334,7 @@ mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
 	gchar      *datastream;    /* cfgdata string */
 	GIOChannel *cfgfile;       /* .mod file */
 	gchar      *filename;      /* file name */
+    gchar      *confdir;
 	gsize       length;        /* length of the data stream */
 	gsize       written;       /* number of bytes actually written */
 	gboolean    err;
@@ -368,10 +369,9 @@ mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
 	}
 
 	/* create file and write data stream */
-	filename = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-							".gpredict2", G_DIR_SEPARATOR_S,
-							"modules", G_DIR_SEPARATOR_S,
-							modname, ".mod", NULL);
+    confdir = get_modules_dir ();
+    filename = g_strconcat (confdir, G_DIR_SEPARATOR_S, modname, ".mod", NULL);
+    g_free (confdir);
 
 	cfgfile = g_io_channel_new_file (filename, "w", &error);
 
@@ -434,7 +434,7 @@ mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
  *  \param needcfm Flag indicating whether the user should confirm th eoperation.
  *
  * This function deletes the module configuration file
- * /home/username/.gpredict2/modules/modname.mod from the disk. If needcfm is
+ * USER_CONF_DIR/modules/modname.mod from the disk. If needcfm is
  * TRUE the user will be asked for confirmation first. The function returns
  * MOD_CFG_CANCEL if the user has cancelled the operation.
  */
@@ -705,8 +705,7 @@ create_loc_selector   (GKeyFile *cfgdata)
 	/* scan for .qth files in the user config directory and
 	   add the contents of each .qth file to the list store
 	*/
-	dirname = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						   ".gpredict2", NULL);
+    dirname = get_user_conf_dir ();
 	dir = g_dir_open (dirname, 0, &error);
 
 	if (dir) {
