@@ -30,7 +30,7 @@
  *
  * This component is responsible for logging the debug messages
  * coming from gpredict and hamlib. Debug messages are stored
- * in $HOME/.gpredict2/logs/gpredict.log during runtime.
+ * in USER_CONF_DIR/logs/gpredict.log during runtime.
  *
  * During initialisation, gpredict removes the previous gpredict.log
  * file to allow the creation of the new one. However, the user can
@@ -48,6 +48,7 @@
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
+#include "compat.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
 
@@ -75,7 +76,7 @@ static void clean_log_dir (const gchar *dirname, glong age);
 /** \brief Initialise message logger.
  *
  * This function initialises the debug message logger. First, it
- * checks that the directory $HOME/.gpredict2/logs/ exists, if not it
+ * checks that the directory USER_CONF_DIR/logs/ exists, if not it
  * creates it.
  * Then, if there is a gpredict.log file it is either deleted or
  * renamed, depending on the sat-cfg settings.
@@ -84,16 +85,16 @@ static void clean_log_dir (const gchar *dirname, glong age);
 void
 sat_log_init        ()
 {
-	gchar *dirname,*filename;
+    gchar *dirname,*filename,*confdir;
 	gboolean err = FALSE;
 	GError *error = NULL;
  
 
 
 	/* Check whether log directory exists, if not, create it */
-	dirname = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						   ".gpredict2", G_DIR_SEPARATOR_S,
-						   "logs", NULL);
+    confdir = get_user_conf_dir ();
+    dirname = g_strconcat (confdir, G_DIR_SEPARATOR_S, "logs", NULL);
+    g_free (confdir);
 
 	if (!g_file_test (dirname, G_FILE_TEST_IS_DIR)) {
 		if (g_mkdir_with_parents (dirname, 0755)) {
@@ -287,14 +288,14 @@ log_rotate ()
 	GTimeVal  now;   /* current time */
 	glong     age;   /* age for cleaning */
 	glong     then;  /* time in sec corresponding to age */
-	gchar    *dirname,*fname1,*fname2;
+    gchar    *confdir,*dirname,*fname1,*fname2;
 
 
 	/* initialise some vars */
 	g_get_current_time (&now);
-	dirname = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						   ".gpredict2", G_DIR_SEPARATOR_S,
-						   "logs", NULL);
+    confdir = get_user_conf_dir ();
+    dirname = g_strconcat (confdir, G_DIR_SEPARATOR_S, "logs", NULL);
+
 	fname1 = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
 	fname2 = g_strdup_printf ("%s%sgpredict-%ld.log",
 							  dirname, G_DIR_SEPARATOR_S, now.tv_sec);
@@ -315,7 +316,7 @@ log_rotate ()
 	g_free (dirname);
 	g_free (fname1);
 	g_free (fname2);
-
+    g_free (confdir);
 }
 
 
