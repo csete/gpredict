@@ -62,9 +62,10 @@ static void first_time_check_step_09 (guint *error);
  *
  * Check logic:
  *
- * 1. Check for USER_CONF_DIR (use get_user_conf_dir()) and create dir if it
- *    does not exist. If we create the directory, check if there is a
- *    gpredict.cfg in the old configuration directory.
+ * 0. USER_CONF_DIR already exists because sat_log_init() initializes it.
+ *
+ * 1. Check for USER_CONF_DIR/gpredict.cfg - if not found, check if there is a
+ *    gpredict.cfg in the old configuration directory and copy it to the new location.
  * 2. Check for the existence of at least one .qth file in USER_CONF_DIR
  *    If no such file found, check if there are any in the pre-1.1 configuration.
  *    If still none, copy PACKAGE_DATA_DIR/data/sample.qth to this
@@ -121,60 +122,40 @@ first_time_check_run ()
 
 /** \brief Execute step 1 of the first time checks.
  *
- * 1. Check for USER_CONF_DIR (use get_user_conf_dir()) and create dir if it
- *    does not exist. If we create the directory, check if there is a
- *    gpredict.cfg in the old configuration directory.
+ * 1. Check for USER_CONF_DIR/gpredict.cfg - if not found, check if there is a
+ *    gpredict.cfg in the old configuration directory and copy it to the new location.
  *
  */
 static void
 first_time_check_step_01 (guint *error)
 {
-    gchar *dir;
-    gchar *cfgfile;
-    int    status;
+    gchar *newdir,*olddir;
+    gchar *source,*target;
 
-    dir = get_user_conf_dir ();
+    newdir = get_user_conf_dir ();
+    target = g_strconcat (newdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    g_free (newdir);
 
-    if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                        _("%s: Check successful."), __FUNCTION__);
-    }
-    else {
-        /* try to create directory */
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check failed. Creating %s"),
-                        __FUNCTION__,
-                        dir);
+    if (g_file_test (target, G_FILE_TEST_EXISTS)) {
+        /* already have config file => return */
+        g_free (target);
 
-        status = g_mkdir_with_parents (dir, 0755);
-
-        if (status) {
-            /* set error flag */
-            *error |= FTC_ERROR_STEP_01;
-
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                            _("%s: Failed to create %s"),
-                            __FUNCTION__, dir );
-        }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                            _("%s: Created %s."),
-                            __FUNCTION__, dir);
-
-            /* now check if there is a gpredict.cfg in the pre-1.1 config
-               folder. */
-            cfgfile = g_strconcat (dir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-            if (g_file_test (cfgfile, G_FILE_TEST_EXISTS)) {
-                /* copy cfg file to USER_CONF_DIR */
-                gchar *target = g_strconcat (dir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-                gpredict_file_copy (cfgfile, target); /* FIXME: Error ignored */
-                g_free (target);
-            }
-            g_free (cfgfile);
-        }
+        return;
     }
 
-    g_free (dir);
+    /* check if we have old configuration */
+    olddir = get_old_conf_dir ();
+    source = g_strconcat (olddir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    g_free (olddir);
+
+    if (g_file_test (source, G_FILE_TEST_EXISTS)) {
+        /* copy old config file to new location */
+        gpredict_file_copy (source, target);
+
+    }
+
+    g_free (source);
+    g_free (target);
 }
 
 
@@ -247,18 +228,22 @@ first_time_check_step_02 (guint *error)
                     */
                     if (g_strrstr (datafile, ".qth")) {
 
+                        gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
+
                         /* copy .qth file to USER_CONF_DIR */
                         target = g_strconcat (dirname, G_DIR_SEPARATOR_S, datafile, NULL);
-                        if (!gpredict_file_copy (datafile, target)) {
+                        if (!gpredict_file_copy (source, target)) {
                             /* success */
                             foundqth = TRUE;
                         }
                         g_free (target);
+                        g_free (source);
                     }
 
                 }
 
                 g_dir_close (dir);
+
             }
             else if (!foundqth) {
                 /* try to copy sample.qth */
@@ -281,7 +266,7 @@ first_time_check_step_02 (guint *error)
                 g_free (target);
                 g_free (filename);
             }
-
+            g_free (olddir);
         }
     }
 
@@ -348,7 +333,6 @@ first_time_check_step_03 (guint *error)
             dir = g_dir_open (olddir, 0, NULL);
 
             g_free (buff);
-            g_free (olddir);
 
             if (dir) {
                 /* read files, if any; count number of .qth files */
@@ -358,19 +342,22 @@ first_time_check_step_03 (guint *error)
                        so we must not free it
                     */
                     if (g_strrstr (datafile, ".mod")) {
+                        gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
 
                         /* copy .qth file to USER_CONF_DIR */
                         target = g_strconcat (confdir, G_DIR_SEPARATOR_S, datafile, NULL);
-                        if (!gpredict_file_copy (datafile, target)) {
+                        if (!gpredict_file_copy (source, target)) {
                             /* success */
                             foundmod = TRUE;
                         }
                         g_free (target);
+                        g_free (source);
                     }
 
                 }
 
                 g_dir_close (dir);
+
             }
             else if (!foundmod) {
                 /* copy Amateur.mod to this directory */
@@ -393,6 +380,7 @@ first_time_check_step_03 (guint *error)
                 g_free (target);
                 g_free (filename);
             }
+            g_free (olddir);
         }
     }
 
@@ -625,11 +613,12 @@ static void first_time_check_step_07 (guint *error)
             dir = g_dir_open (olddir, 0, NULL);
 
             g_free (buff);
-            g_free (olddir);
 
             if (dir) {
                 /* read files, if any; count number of .qth files */
                 while ((datafile = g_dir_read_name (dir))) {
+
+                    gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
 
                     /* note: filename is not a newly allocated gchar *,
                        so we must not free it
@@ -637,12 +626,14 @@ static void first_time_check_step_07 (guint *error)
 
                     /* copy file to USER_CONF_DIR */
                     target = g_strconcat (confdir, G_DIR_SEPARATOR_S, datafile, NULL);
-                    gpredict_file_copy (datafile, target);
+                    gpredict_file_copy (source, target);
 
                     g_free (target);
+                    g_free (source);
                 }
-
+                g_dir_close (dir);
             }
+            g_free (olddir);
         }
     }
 
