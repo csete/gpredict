@@ -70,9 +70,8 @@ gboolean radio_conf_read (radio_conf_t *conf)
         return FALSE;
     }
     
-    confdir = get_conf_dir();
+    confdir = get_hwconf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
-                         "hwconf", G_DIR_SEPARATOR_S,
                          conf->name, ".rig", NULL);
     g_free (confdir);
     
@@ -245,9 +244,8 @@ void radio_conf_save (radio_conf_t *conf)
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);
     
-    confdir = get_conf_dir();
+    confdir = get_hwconf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
-                         "hwconf", G_DIR_SEPARATOR_S,
                          conf->name, ".rig", NULL);
     g_free (confdir);
         

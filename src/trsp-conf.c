@@ -51,16 +51,13 @@ GSList *read_transponders (guint catnum)
     trsp_t    *trsp;
     GKeyFile  *cfg = NULL;
     GError    *error = NULL;
-    gchar     *name,*fname,*confdir;
+    gchar     *name,*fname;
     gchar    **groups;
     gsize      numgrp,i;
     
     
     name = g_strdup_printf ("%d.trsp", catnum);
-    confdir = get_conf_dir();
-    fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
-                         "trsp", G_DIR_SEPARATOR_S,
-                         name, NULL);
+    fname = trsp_file_name (name);
     
     cfg = g_key_file_new ();
     if (!g_key_file_load_from_file (cfg, fname, G_KEY_FILE_KEEP_COMMENTS, &error)) {
@@ -158,7 +155,6 @@ GSList *read_transponders (guint catnum)
     g_strfreev (groups);
     g_key_file_free (cfg);
     g_free (name);
-    g_free (confdir);
     g_free (fname);
 
     

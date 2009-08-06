@@ -639,7 +639,6 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     GtkWidget *frame,*table,*label,*timer;
     GDir        *dir = NULL;   /* directory handle */
     GError      *error = NULL; /* error flag and info */
-    gchar       *cfgdir;
     gchar       *dirname;      /* directory name */
     gchar      **vbuff;
     const gchar *filename;     /* file name */
@@ -662,10 +661,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
                                                  "unless you select a secondary device for uplink"));
     
     /* open configuration directory */
-    cfgdir = get_conf_dir ();
-    dirname = g_strconcat (cfgdir, G_DIR_SEPARATOR_S,
-                           "hwconf", NULL);
-    g_free (cfgdir);
+    dirname = get_hwconf_dir ();
     
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
@@ -2341,17 +2337,13 @@ static gboolean have_conf ()
 {
     GDir        *dir = NULL;   /* directory handle */
     GError      *error = NULL; /* error flag and info */
-    gchar       *cfgdir;
     gchar       *dirname;      /* directory name */
     const gchar *filename;     /* file name */
     gint         i = 0;
 
     
     /* open configuration directory */
-    cfgdir = get_conf_dir ();
-    dirname = g_strconcat (cfgdir, G_DIR_SEPARATOR_S,
-                           "hwconf", NULL);
-    g_free (cfgdir);
+    dirname = get_hwconf_dir ();
     
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {

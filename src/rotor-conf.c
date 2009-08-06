@@ -67,9 +67,8 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
         return FALSE;
     }
     
-    confdir = get_conf_dir();
+    confdir = get_hwconf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
-                         "hwconf", G_DIR_SEPARATOR_S,
                          conf->name, ".rot", NULL);
     g_free (confdir);
     
@@ -193,9 +192,8 @@ void rotor_conf_save (rotor_conf_t *conf)
     /* convert to text sdata */
     data = g_key_file_to_data (cfg, &len, NULL);
     
-    confdir = get_conf_dir();
+    confdir = get_hwconf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
-                         "hwconf", G_DIR_SEPARATOR_S,
                          conf->name, ".rot", NULL);
     g_free (confdir);
         

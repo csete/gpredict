@@ -195,7 +195,6 @@ static GtkTreeModel *create_and_fill_model ()
     GtkTreeIter  item;      /* new item added to the list store */
     GDir         *dir = NULL;   /* directory handle */
     GError       *error = NULL; /* error flag and info */
-    gchar        *cfgdir;
     gchar        *dirname;      /* directory name */
     gchar       **vbuff;
     const gchar  *filename;     /* file name */
@@ -214,10 +213,7 @@ static GtkTreeModel *create_and_fill_model ()
                                    );
 
     /* open configuration directory */
-    cfgdir = get_conf_dir ();
-    dirname = g_strconcat (cfgdir, G_DIR_SEPARATOR_S,
-                           "hwconf", NULL);
-    g_free (cfgdir);
+    dirname = get_hwconf_dir ();
     
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
@@ -357,10 +353,7 @@ void sat_pref_rot_ok     ()
 
     
     /* delete all .rot files */
-    buff = get_conf_dir ();
-    dirname = g_strconcat (buff, G_DIR_SEPARATOR_S,
-                           "hwconf", NULL);
-    g_free (buff);
+    dirname = get_hwconf_dir ();
     
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
