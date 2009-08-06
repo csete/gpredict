@@ -34,7 +34,7 @@ for file in os.listdir("./in/"):
 
         # satellite file
         satfile = open('./out/'+catnum+'.sat','w')
-
+        satfile.write('[Satellite]\n')
         satfile.write('VERSION=1.1\n')
         satfile.write('NAME='+line1+'\n')
         satfile.write('NICKNAME='+line1+'\n')
