@@ -65,6 +65,7 @@
 #include "gtk-single-sat.h"
 #include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
+#include "compat.h"
 
 //#ifdef G_OS_WIN32
 //#  include "libc_internal.h"
