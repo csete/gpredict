@@ -146,7 +146,7 @@ create_map_selector  (GKeyFile *cfg, GtkBox *vbox)
 		mapf = sat_cfg_get_str (SAT_CFG_STR_MAP_FILE);
 	}
 	if (g_path_is_absolute (mapf)) {
-		/* map is user specific, ie. in $HOME/.gpredict2/maps/ */
+        /* map is user specific, ie. in USER_CONF_DIR/maps/ */
 		mapfile = g_strdup (mapf);
 	}
 	else {
@@ -1177,7 +1177,7 @@ update_map_icon ()
 
 
 	if (g_path_is_absolute (mapf)) {
-		/* map is user specific, ie. in $HOME/.gpredict2/maps/ */
+        /* map is user specific, ie. in USER_CONF_DIR/maps/ */
 		mapfile = g_strdup (mapf);
 	}
 	else {

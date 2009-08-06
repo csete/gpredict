@@ -39,6 +39,7 @@
 #include "sat-pref-qth-data.h"
 #include "sat-pref-qth-editor.h"
 #include "locator.h"
+#include "compat.h"
 
 
 
@@ -100,7 +101,7 @@ static gboolean convert_qth_altitude (GtkTreeModel *model,
 /** \brief Create and initialise widgets for the locations prefs tab.
  *
  * The QTH tab consists of two main parts: A list showing the configured
- * locations (.qth files in $HOME/.gpredict2/ and three buttons beside the list:
+ * locations (.qth files in USER_CONF_DIR/ and three buttons beside the list:
  *    Add      Add a new location to the list
  *    Edit     Edit selected location
  *    Delete   Delete selected location
@@ -298,8 +299,7 @@ create_and_fill_model ()
 	/* scan for .qth files in the user config directory and
 	   add the contents of each .qth file to the list store
 	*/
-	dirname = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						   ".gpredict2", NULL);
+    dirname = get_user_conf_dir ();
 	dir = g_dir_open (dirname, 0, &error);
 
 
@@ -824,8 +824,8 @@ save_qth (GtkTreeModel *model,
 		  gpointer      data)
 {
 	qth_t     qth;
-	gboolean  def     = FALSE;
-	gchar    *filename;
+    gboolean  def = FALSE;
+    gchar    *filename,*confdir;
 	gchar    *buff;
 
 
@@ -840,13 +840,9 @@ save_qth (GtkTreeModel *model,
 						QTH_LIST_COL_WX, &qth.wx,
 						-1);
 
-	filename = g_strconcat (g_get_home_dir (),
-							G_DIR_SEPARATOR_S,
-							".gpredict2",
-							G_DIR_SEPARATOR_S,
-							qth.name,
-							".qth",
-							NULL);
+    confdir = get_user_conf_dir ();
+    filename = g_strconcat (confdir, G_DIR_SEPARATOR_S,	qth.name, ".qth", NULL);
+    g_free (confdir);
 	
 	/* check wehter we are using imperial or metric system;
 	   in case of imperial we have to convert altitude from
@@ -900,8 +896,7 @@ delete_location_files ()
 	/* scan for .qth files in the user config directory and
 	   add the contents of each .qth file to the list store
 	*/
-	dirname = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						   ".gpredict2", NULL);
+    dirname = get_user_conf_dir ();
 	dir = g_dir_open (dirname, 0, &error);
 
 
