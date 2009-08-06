@@ -360,15 +360,12 @@ clone_cb         (GtkWidget *menuitem, gpointer data)
 					 gtk_entry_get_text (GTK_ENTRY (entry)));
 
 		/* build full file names */
-		source = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-							  ".gpredict2", G_DIR_SEPARATOR_S,
-							  "modules", G_DIR_SEPARATOR_S,
-							  module->name, ".mod", NULL);
-		target = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-							  ".gpredict2", G_DIR_SEPARATOR_S,
-							  "modules", G_DIR_SEPARATOR_S,
-							  gtk_entry_get_text (GTK_ENTRY (entry)),
-							  ".mod", NULL);
+                gchar *moddir = get_modules_dir ();
+                source = g_strconcat (moddir, G_DIR_SEPARATOR_S,
+                                      module->name, ".mod", NULL);
+                target = g_strconcat (moddir, G_DIR_SEPARATOR_S,
+                                      gtk_entry_get_text (GTK_ENTRY (entry)), ".mod", NULL);
+                g_free (moddir);
 
 		/* copy file */
 		if (gpredict_file_copy (source, target)) {
@@ -377,9 +374,9 @@ clone_cb         (GtkWidget *menuitem, gpointer data)
 						 __FILE__, __LINE__, module->name);
 		}
 		else {
-			sat_log_log (SAT_LOG_LEVEL_MSG,
-						 _("%s:%d: Successfully cloned %s."),
-						 __FILE__, __LINE__, module->name);
+                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                                     _("%s:%d: Successfully cloned %s."),
+                                     __FILE__, __LINE__, module->name);
 
 			/* open module if requested */
 			if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle))) {
@@ -1046,13 +1043,12 @@ delete_cb         (GtkWidget *menuitem, gpointer data)
 {
 	gchar *file;
 	GtkWidget *dialog;
-	//GtkWidget *parent = gtk_widget_get_toplevel (GTK_WIDGET (data));
+        gchar *moddir;
 
-
-	file = g_strconcat (g_get_home_dir (), G_DIR_SEPARATOR_S,
-						".gpredict2", G_DIR_SEPARATOR_S,
-						"modules", G_DIR_SEPARATOR_S,
-						GTK_SAT_MODULE (data)->name, ".mod", NULL);
+        moddir = get_modules_dir ();
+        file = g_strconcat (moddir, G_DIR_SEPARATOR_S,
+                            GTK_SAT_MODULE (data)->name, ".mod", NULL);
+        g_free (moddir);
 
 	gtk_sat_module_close_cb (menuitem, data);
 
