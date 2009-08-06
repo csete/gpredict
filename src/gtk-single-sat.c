@@ -885,7 +885,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
 
         sati = SAT (g_slist_nth_data (single_sat->sats, i));
 
-        menuitem = gtk_radio_menu_item_new_with_label (group, sati->tle.sat_name);
+        menuitem = gtk_radio_menu_item_new_with_label (group, sati->nickname);
         group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
         if (i == single_sat->selected) {
