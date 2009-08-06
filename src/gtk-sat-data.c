@@ -79,7 +79,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
     }
     else {
         /* read name, nickname, and website */
-        sat->name = g_key_file_get_string (data, NULL, "NAME", &error);
+        sat->name = g_key_file_get_string (data, "Satellite", "NAME", &error);
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error reading NAME from %s (%s)"),
@@ -87,7 +87,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
             g_clear_error (&error);
             sat->name = g_strdup ("Error");
         }
-        sat->nickname = g_key_file_get_string (data, NULL, "NICKNAME", &error);
+        sat->nickname = g_key_file_get_string (data, "Satellite", "NICKNAME", &error);
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_MSG,
                          _("%s: Satellite %d has no NICKNAME"),
@@ -95,11 +95,11 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
             g_clear_error (&error);
             sat->nickname = g_strdup (sat->name);
         }
-        sat->website = g_key_file_get_string (data, NULL, "WEBSITE", NULL); /* website may be NULL */
+        sat->website = g_key_file_get_string (data, "Satellite", "WEBSITE", NULL); /* website may be NULL */
 
         /* get TLE data */
-        tlestr1 = g_key_file_get_string (data, NULL, "TLE1", NULL);
-        tlestr2 = g_key_file_get_string (data, NULL, "TLE2", NULL);
+        tlestr1 = g_key_file_get_string (data, "Satellite", "TLE1", NULL);
+        tlestr2 = g_key_file_get_string (data, "Satellite", "TLE2", NULL);
         rawtle = g_strconcat (tlestr1, tlestr2, NULL);
 
         if (!Good_Elements (rawtle)) {
