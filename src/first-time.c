@@ -572,6 +572,7 @@ first_time_check_step_05 (guint *error)
                 g_key_file_free (target);
 
                 g_free (cfgstr);
+                g_free (cfgver);
                 g_free (name);
                 g_free (nickname);
                 g_free (tle1);

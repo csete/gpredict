@@ -1,3 +1,17 @@
+2009-08-09 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/compat.[ch]:
+    Added sat_file_name_from_catnum_s (gchar *catnum).
+
+
+
+2009-08-07 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/satdata/*.sat:
+    Packaged .sat files into one satellites.dat file for distribution because
+    SF subversion was useless with many small files.
+
+
 2009-08-06 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
