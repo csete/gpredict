@@ -77,8 +77,9 @@ static void first_time_check_step_09 (guint *error);
  *    USER_CONF_DIR/modules/
  * 4. Check for the existence of USER_CONF_DIR/satdata directory and create it if
  *    it does not exist.
- * 5. Copy PACKAGE_DATA_DIR/data/satdata/xxx.sat to USER_CONF_DIR/satdata/ if it
- *    does not already exist. Do the same with .cat files.
+ * 5. Check if there are any .sat files in USER_CONF_DIR/satdata/ - if not extract
+ *    PACKAGE_DATA_DIR/data/satdata/satellites.dat to .sat files.
+ *    Do the same with .cat files.
  * 6. Check for the existence of USER_CONF_DIR/satdata/cache directory. This
  *    directory is used to store temporary TLE files when updating from
  *    network.
@@ -436,76 +437,209 @@ first_time_check_step_04 (guint *error)
 
 /** \brief Execute step 5 of the first time checks.
  *
- * 5. Copy PACKAGE_DATA_DIR/data/satdata/xxx.sat to USER_CONF_DIR/satdata/ if it
- *    does not already exist. Do the same with .cat files.
+ * 5. Check if there are any .sat files in USER_CONF_DIR/satdata/ - if not extract
+ *    PACKAGE_DATA_DIR/data/satdata/satellites.dat to .sat files.
+ *    Do the same with .cat files.
+ *
+ * \bug Thus function could probably need some clean-up
  *
  */
 static void
 first_time_check_step_05 (guint *error)
 {
+    gchar     *satfilename,*targetfilename;
+    gchar     *datadir;
+    gchar    **satellites;
+    gchar     *cfgstr;
+    GKeyFile  *satfile,*target;
+    gsize      length;
+    gsize      written;
+    gsize      num;
+    GError    *err = NULL;
+    guint      i;
+    guint      newsats = 0;
+
+    gdouble    cfgver;
+    gchar     *name, *nickname, *website, *tle1, *tle2;
+    GIOChannel *cfgfile;
+
     GDir *srcdir;
-    gchar *buff,*srcdirname,*targetdirname;
+    gchar *srcdirname;
     const gchar *filename;
-    guint i = 0;
 
 
-    /* source directory */
-    buff = get_data_dir ();
-    srcdirname = g_strconcat (buff, G_DIR_SEPARATOR_S, "satdata", NULL);
-    g_free (buff);
+    /* open datellites.dat and load into memory */
+    datadir = get_data_dir ();
+    satfilename = g_strconcat (datadir, G_DIR_SEPARATOR_S, "satdata",
+                               G_DIR_SEPARATOR_S, "satellites.dat", NULL);
 
-    /* target directory */
-    targetdirname = get_satdata_dir ();
+    satfile = g_key_file_new ();
+    if (!g_key_file_load_from_file (satfile, satfilename, G_KEY_FILE_KEEP_COMMENTS, &err)) {
+        /* an error occurred */
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to load data from %s (%s)"),
+                     __FUNCTION__, satfilename, err->message);
 
-    srcdir = g_dir_open (srcdirname, 0, NULL);
-
-    /* directory does not exist, something went wrong in step 4 */
-    if (!srcdir) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                        _("%s: Could not open %s."),
-                        __FUNCTION__, srcdirname);
-        
-        /* no reason to continue */
+        g_clear_error (&err);
         *error |= FTC_ERROR_STEP_05;
     }
     else {
+        g_print ("read sats\n");
+        satellites = g_key_file_get_groups (satfile, &num);
+                g_print ("read sats %d\n", num);
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: Found %d satellites in %s"),
+                     __FUNCTION__, num, satfilename);
+
+        for (i = 0; i < num; i++) {
+            /* first, check if this satellite already has a .sat file */
+            targetfilename = sat_file_name_from_catnum_s (satellites[i]);
+            if (g_file_test (targetfilename, G_FILE_TEST_EXISTS)) {
+                sat_log_log (SAT_LOG_LEVEL_MSG,
+                             _("%s: %s.sat already exists. Skipped."),
+                             __FUNCTION__, satellites[i]);
+            }
+            else {
+                /* read data for this satellite */
+                cfgver = g_key_file_get_double (satfile, satellites[i], "VERSION", NULL);
+                name = g_key_file_get_string (satfile, satellites[i], "NAME", NULL);
+                nickname = g_key_file_get_string (satfile, satellites[i], "NICKNAME", NULL);
+                website = g_key_file_get_string (satfile, satellites[i], "WEBSITE", NULL);
+                tle1 = g_key_file_get_string (satfile, satellites[i], "TLE1", NULL);
+                tle2 = g_key_file_get_string (satfile, satellites[i], "TLE2", NULL);
+
+                /* create output .sat file */
+                target = g_key_file_new ();
+                g_key_file_set_double (target, "Satellite", "VERSION", cfgver);
+                g_key_file_set_string (target, "Satellite", "NAME", name);
+                g_key_file_set_string (target, "Satellite", "NICKNAME", nickname);
+                g_key_file_set_string (target, "Satellite", "WEBSITE", website);
+                g_key_file_set_string (target, "Satellite", "TLE1", tle1);
+                g_key_file_set_string (target, "Satellite", "TLE2", tle2);
+
+
+                /* convert configuration data struct to charachter string */
+                cfgstr = g_key_file_to_data (target, &length, &err);
+
+                if (err != NULL) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                 _("%s: Could not create satellite data file (%s)."),
+                                 __FUNCTION__, err->message);
+                    g_clear_error (&err);
+                    *error |= FTC_ERROR_STEP_05;
+                }
+                else {
+                    /* create and open a file for writing */
+                    cfgfile = g_io_channel_new_file (targetfilename, "w", &err);
+
+                    if (err != NULL) {
+                        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                     _("%s: Could not create satellite file (%s)."),
+                                     __FUNCTION__, err->message);
+                        g_clear_error (&err);
+                        *error |= FTC_ERROR_STEP_05;
+                    }
+                    else {
+                        g_io_channel_write_chars (cfgfile,
+                                                  cfgstr,
+                                                  length,
+                                                  &written,
+                                                  &err);
+
+                        g_io_channel_shutdown (cfgfile, TRUE, NULL);
+                        g_io_channel_unref (cfgfile);
+
+                        if (err != NULL) {
+                            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                         _("%s: Error writing satellite data (%s)."),
+                                         __FUNCTION__, err->message);
+                            g_clear_error (&err);
+                            *error |= FTC_ERROR_STEP_05;
+                        }
+                        else if (length != written) {
+                            sat_log_log (SAT_LOG_LEVEL_WARN,
+                                         _("%s: Wrote only %d out of %d chars for satellite data."),
+                                         __FUNCTION__, written, length);
+                        }
+                        else {
+                            sat_log_log (SAT_LOG_LEVEL_MSG,
+                                         _("%s: Satellite data written for %s."),
+                                         __FUNCTION__, satellites[i]);
+                            newsats++;
+                        }
+                    }
+                }
+                g_key_file_free (target);
+
+                g_free (cfgstr);
+                g_free (name);
+                g_free (nickname);
+                g_free (website);
+                g_free (tle1);
+                g_free (tle2);
+            }
+            g_free (targetfilename);
+        }
+        g_strfreev (satellites);
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: Written %d new satellite to user config"),
+                     __FUNCTION__, newsats);
+    }
+
+    g_key_file_free (satfile);
+    g_free (satfilename);
+
+
+    /* .cat files: if .cat file does not exist, copy it, otherwise skip */
+    srcdirname = g_strconcat (datadir, G_DIR_SEPARATOR_S, "satdata", NULL);
+    g_free (datadir);
+    //targetdirname = get_satdata_dir ();
+    srcdir = g_dir_open (srcdirname, 0, &err);
+
+    /* directory does not exist, something went wrong in step 4 */
+    if (!srcdir) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not open %s (%s)."),
+                     __FUNCTION__, srcdirname, err->message);
+
+        /* no reason to continue */
+        g_clear_error (&err);
+        *error |= FTC_ERROR_STEP_05;
+    }
+    else {
+
+        /* get each .cat file and check if they already exist in user conf */
         /* read files one by one, if any; count number of .tle files */
         while ((filename = g_dir_read_name (srcdir))) {
             /* note: filename is not a newly allocated gchar *,
                 so we must not free it
             */
+            if (g_strrstr (filename, ".cat")) {
 
-            /* check whether .sat or .cat file exisits in user conf */
-            gchar *target = sat_file_name (filename);
+                /* check whether .cat file exisits in user conf */
+                gchar *catfilename = sat_file_name (filename);
 
-            if (!g_file_test (target, G_FILE_TEST_EXISTS)) {
-                /* copy file to target dir */
-                gchar *source = g_strconcat (srcdirname, G_DIR_SEPARATOR_S, filename, NULL);
-                if (gpredict_file_copy (source, target)) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                 _("%s: Failed to copy %s"),
-                                 __FUNCTION__, filename);
+                if (!g_file_test (catfilename, G_FILE_TEST_EXISTS)) {
+                    /* copy file to target dir */
+                    gchar *source = g_strconcat (srcdirname, G_DIR_SEPARATOR_S, filename, NULL);
+                    if (gpredict_file_copy (source, catfilename)) {
+                        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                    _("%s: Failed to copy %s"),
+                                    __FUNCTION__, filename);
+                    }
+                    else {
+                        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                                    _("%s: Successfully copied %s"),
+                                    __FUNCTION__, filename);
+                    }
+                    g_free (source);
                 }
-                else {
-                    sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                                 _("%s: Successfully copied %s"),
-                                 __FUNCTION__, filename);
-                }
-                g_free (source);
-                i++;
             }
-            g_free (target);
-
         }
-        sat_log_log (SAT_LOG_LEVEL_MSG,
-                     _("%s: Copied %d files to %s"),
-                     __FUNCTION__, i, targetdirname);
-
         g_dir_close (srcdir);
     }
 
     g_free (srcdirname);
-    g_free (targetdirname);
 }
 
 
