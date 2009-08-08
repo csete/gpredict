@@ -32,7 +32,6 @@
 #include "qth-data.h"
 #include "sat-log.h"
 #include "config-keys.h"
-#include "tle-lookup.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif

@@ -49,7 +49,6 @@
 #include "compat.h"
 #include "gui.h"
 #include "mod-mgr.h"
-#include "tle-lookup.h"
 #include "tle-update.h"
 #include "sat-cfg.h"
 #include "sat-debugger.h"
@@ -158,8 +157,7 @@ static void test_ui (void)
  * gpredict_gui package.
  *
  */
-static void
-        gpredict_app_create ()
+static void gpredict_app_create ()
 {
     gchar     *title;     /* window title */
     gchar     *icon;      /* icon file name */
@@ -278,9 +276,6 @@ gpredict_app_destroy    (GtkWidget *widget,
     /* GUI timers are stopped automatically */
 
     /* stop timeouts */
-
-    /* stop other sub-systems */
-    tle_lookup_close ();
 
     /* configuration data */
     mod_mgr_save_state ();

@@ -68,11 +68,11 @@ gpredict_SOURCES = \
 	pass-popup-menu.c pass-popup-menu.h \
 	pass-to-txt.c pass-to-txt.h \
 	predict-tools.c predict-tools.h \
-    qth-data.c qth-data.h \
+        qth-data.c qth-data.h \
 	qth-editor.c qth-editor.h \
 	radio-conf.c radio-conf.h \
 	rotor-conf.c rotor-conf.h \
-    trsp-conf.c trsp-conf.h \
+        trsp-conf.c trsp-conf.h \
 	sat-cfg.c sat-cfg.h \
 	sat-info.c sat-info.h \
 	sat-log.c sat-log.h \
@@ -107,7 +107,6 @@ gpredict_SOURCES = \
 	sat-vis.c sat-vis.h \
 	save-pass.c save-pass.h \
 	time-tools.c time-tools.h \
-	tle-lookup.c tle-lookup.h \
 	tle-tools.c tle-tools.h \
 	tle-update.c tle-update.h \
 	sat-debugger.c sat-debugger.h
