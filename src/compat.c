@@ -314,7 +314,7 @@ gchar *sat_file_name  (const gchar *satfile)
 }
 
 
-/** \brief Build satellite file path from catnum */
+/** \brief Build satellite file path from catnum (integer) */
 gchar *sat_file_name_from_catnum (guint catnum)
 {
     gchar *filename;
@@ -331,6 +331,26 @@ gchar *sat_file_name_from_catnum (guint catnum)
 
     return filename;
 }
+
+
+/** \brief Build satellite file path from catnum (string) */
+gchar *sat_file_name_from_catnum (gchar *catnum)
+{
+    gchar *filename;
+    gchar *buff;
+    gchar *dir;
+
+    buff = g_strdup_printf ("%s.sat", catnum);
+    dir = get_satdata_dir ();
+
+    filename = g_strconcat (dir, G_DIR_SEPARATOR_S, buff, NULL);
+
+    g_free (buff);
+    g_free (dir);
+
+    return filename;
+}
+
 
 
 
