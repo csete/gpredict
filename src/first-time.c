@@ -484,9 +484,7 @@ first_time_check_step_05 (guint *error)
         *error |= FTC_ERROR_STEP_05;
     }
     else {
-        g_print ("read sats\n");
         satellites = g_key_file_get_groups (satfile, &num);
-                g_print ("read sats %d\n", num);
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s: Found %d satellites in %s"),
                      __FUNCTION__, num, satfilename);
@@ -513,10 +511,12 @@ first_time_check_step_05 (guint *error)
                 g_key_file_set_double (target, "Satellite", "VERSION", cfgver);
                 g_key_file_set_string (target, "Satellite", "NAME", name);
                 g_key_file_set_string (target, "Satellite", "NICKNAME", nickname);
-                g_key_file_set_string (target, "Satellite", "WEBSITE", website);
+                if (website != NULL) {
+                    g_key_file_set_string (target, "Satellite", "WEBSITE", website);
+                    g_free (website);
+                }
                 g_key_file_set_string (target, "Satellite", "TLE1", tle1);
                 g_key_file_set_string (target, "Satellite", "TLE2", tle2);
-
 
                 /* convert configuration data struct to charachter string */
                 cfgstr = g_key_file_to_data (target, &length, &err);
@@ -574,7 +574,6 @@ first_time_check_step_05 (guint *error)
                 g_free (cfgstr);
                 g_free (name);
                 g_free (nickname);
-                g_free (website);
                 g_free (tle1);
                 g_free (tle2);
             }
