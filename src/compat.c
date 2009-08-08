@@ -334,7 +334,7 @@ gchar *sat_file_name_from_catnum (guint catnum)
 
 
 /** \brief Build satellite file path from catnum (string) */
-gchar *sat_file_name_from_catnum (gchar *catnum)
+gchar *sat_file_name_from_catnum_s (gchar *catnum)
 {
     gchar *filename;
     gchar *buff;
