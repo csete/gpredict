@@ -459,8 +459,8 @@ first_time_check_step_05 (guint *error)
     guint      i;
     guint      newsats = 0;
 
-    gdouble    cfgver;
-    gchar     *name, *nickname, *website, *tle1, *tle2;
+    //gdouble    cfgver;
+    gchar     *name, *nickname, *website, *tle1, *tle2, *cfgver;
     GIOChannel *cfgfile;
 
     GDir *srcdir;
@@ -499,7 +499,7 @@ first_time_check_step_05 (guint *error)
             }
             else {
                 /* read data for this satellite */
-                cfgver = g_key_file_get_double (satfile, satellites[i], "VERSION", NULL);
+                cfgver = g_key_file_get_string (satfile, satellites[i], "VERSION", NULL);
                 name = g_key_file_get_string (satfile, satellites[i], "NAME", NULL);
                 nickname = g_key_file_get_string (satfile, satellites[i], "NICKNAME", NULL);
                 website = g_key_file_get_string (satfile, satellites[i], "WEBSITE", NULL);
@@ -508,7 +508,7 @@ first_time_check_step_05 (guint *error)
 
                 /* create output .sat file */
                 target = g_key_file_new ();
-                g_key_file_set_double (target, "Satellite", "VERSION", cfgver);
+                g_key_file_set_string (target, "Satellite", "VERSION", cfgver);
                 g_key_file_set_string (target, "Satellite", "NAME", name);
                 g_key_file_set_string (target, "Satellite", "NICKNAME", nickname);
                 if (website != NULL) {
