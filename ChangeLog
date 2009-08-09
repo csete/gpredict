@@ -3,6 +3,20 @@
     * src/compat.[ch]:
     Added sat_file_name_from_catnum_s (gchar *catnum).
 
+    * src/tle-update.[ch]:
+    Updated to new .sat and .cat files.
+
+    * src/main.c:
+    * src/qth-data.c
+    Avoid using tle-lookup.
+
+    * src/tle-lookup.[ch]:
+    Deleted.
+
+    * src/sat-cfg.[ch]:
+    Include new TLE files in default.
+    Introduced configuration version number.
+    Reset SAT_CFG_STR_TLE_FILES if version is < 1.1.
 
 
 2009-08-07 Alexandru Csete <oz9aec at gmail.com>
