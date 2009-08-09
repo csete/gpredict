@@ -493,7 +493,7 @@ first_time_check_step_05 (guint *error)
             /* first, check if this satellite already has a .sat file */
             targetfilename = sat_file_name_from_catnum_s (satellites[i]);
             if (g_file_test (targetfilename, G_FILE_TEST_EXISTS)) {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: %s.sat already exists. Skipped."),
                              __FUNCTION__, satellites[i]);
             }
