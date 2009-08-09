@@ -62,7 +62,9 @@ typedef enum {
 
 /** \brief Symbolic references for integer config values. */
 typedef enum {
-    SAT_CFG_INT_MODULE_TIMEOUT = 0,   /*!< Module refresh rate */
+    SAT_CFG_INT_VERSION_MAJOR = 0,    /*!< Configuration version number (major) */
+    SAT_CFG_INT_VERSION_MINOR,        /*!< Configuration version number (minor) */
+    SAT_CFG_INT_MODULE_TIMEOUT,       /*!< Module refresh rate */
     SAT_CFG_INT_MODULE_LAYOUT,        /*!< Module layout */
     SAT_CFG_INT_MODULE_VIEW_1,        /*!< Type of view 1 */
     SAT_CFG_INT_MODULE_VIEW_2,        /*!< Type of view 2 */

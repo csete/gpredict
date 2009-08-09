@@ -140,6 +140,8 @@ sat_cfg_bool_t sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
 
 /** \brief Array containing the integer configuration parameters */
 sat_cfg_int_t sat_cfg_int[SAT_CFG_INT_NUM] = {
+    { "VERSION", "MAJOR", 0},
+    { "VERSION", "MINOR", 0},
     { "MODULES", "DATA_TIMEOUT", 300},
     { "MODULES", "LAYOUT", GTK_SAT_MOD_LAYOUT_3},
     { "MODULES", "VIEW_1", GTK_SAT_MOD_VIEW_MAP},
@@ -214,12 +216,16 @@ sat_cfg_str_t sat_cfg_str[SAT_CFG_STR_NUM] = {
     { "MODULES", "MAP_FONT", "Sans 10"},
     { "MODULES", "POLAR_FONT", "Sans 10"},
     { "TLE",     "SERVER", "http://www.celestrak.com/NORAD/elements/"},
-    { "TLE",     "FILES", "amateur.txt;cubesat.txt;galileo.txt;geo.txt;gps-ops.txt;"\
-      "iridium.txt;military.txt;radar.txt;science.txt;weather.txt"},
-{ "TLE",     "PROXY", NULL},
-{ "TLE",     "FILE_DIR", NULL},
-{ "TLE",     "EXTENSION", "*.*"},
-{ "PREDICT", "SAVE_DIR", NULL}
+    { "TLE",     "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"\
+      "engineering.txt;galileo.txt;geo.txt;geodetic.txt;globalstar.txt;"\
+      "glo-ops.txt;goes.txt;gorizont.txt;gps-ops.txt;intelsat.txt;"\
+      "iridium.txt;military.txt;molniya.txt;musson.txt;nnss.txt;noaa.txt;"\
+      "orbcomm.txt;other.txt;other-comm.txt;radar.txt;raduga.txt;resource.txt;"\
+      "sarsat.txt;sbas.txt;science.txt;tle-new.txt;visual.txt;weather.txt;x-comm.txt"},
+    { "TLE",     "PROXY", NULL},
+    { "TLE",     "FILE_DIR", NULL},
+    { "TLE",     "EXTENSION", "*.*"},
+    { "PREDICT", "SAVE_DIR", NULL}
 };
 
 
@@ -239,8 +245,7 @@ static GKeyFile *config = NULL;
  * The the configuration data in memory is already "loaded" the data will
  * be ereased first.
  */
-guint
-        sat_cfg_load        ()
+guint sat_cfg_load        ()
 {
     gchar  *keyfile,*confdir;
     GError *error = NULL;
@@ -276,6 +281,16 @@ guint
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Everything OK."), __FUNCTION__);
     }
+
+    /* if config version is < 1.1; reset SAT_CFG_STR_TLE_FILES */
+    guint ver;
+    ver = 10*sat_cfg_get_int (SAT_CFG_INT_VERSION_MAJOR) + sat_cfg_get_int (SAT_CFG_INT_VERSION_MINOR);
+    if (ver < 11) {
+        sat_cfg_reset_str (SAT_CFG_STR_TLE_FILES);
+        sat_cfg_set_int (SAT_CFG_INT_VERSION_MAJOR, 1);
+        sat_cfg_set_int (SAT_CFG_INT_VERSION_MINOR, 1);
+    }
+
 
     return 0;
 }
