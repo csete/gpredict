@@ -49,13 +49,6 @@ static gboolean tle_in_progress = FALSE;
 
 
 /* private function prototypes */
-#if 0
-static void    copy_tle (tle_t *source, tle_t *target);
-static gint    compare_epoch (tle_t *tle1, tle_t *tle2);
-static tle_t  *gchar_to_tle (tle_type_t type, const gchar *lines);
-static gchar  *tle_to_gchar (tle_type_t type, tle_t *tle);
-#endif
-
 static size_t  my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream);
 static gint    read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *data);
 
@@ -173,7 +166,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                 while (g_main_context_iteration (NULL, FALSE));
 
                 /* give user a chance to follow progress */
-                g_usleep (G_USEC_PER_SEC / 10);
+                g_usleep (G_USEC_PER_SEC / 100);
             }
 
             /* now, do read the fresh data */
@@ -194,7 +187,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
         /* close directory since we don't need it anymore */
         g_dir_close (cache_dir);
 
-        /* now it is time to  read gpredict-tle into memory, too */
+        /* now we load each .sat file and update if we have new data */
         userconfdir = get_user_conf_dir ();
         ldname = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "satdata", NULL);
         g_free (userconfdir);
@@ -241,6 +234,8 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                 }
             }
 
+            g_dir_rewind (loc_dir);
+
             /* update TLE files one by one */
             while ((fnam = g_dir_read_name (loc_dir)) != NULL) {
                 /* only consider .sat files */
@@ -264,7 +259,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                     updated += updated_tmp;
                     skipped += skipped_tmp;
                     nodata  += nodata_tmp;
-                    total   += total_tmp;
+                    total   = updated+skipped+nodata;
 
                     if (!silent) {
 
@@ -304,10 +299,9 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                         while (g_main_context_iteration (NULL, FALSE));
 
                         /* give user a chance to follow progress */
-                        g_usleep (G_USEC_PER_SEC / 10);
+                        g_usleep (G_USEC_PER_SEC / 1000);
                     }
                 }
-
             }
 
             /* close directory handle */
@@ -357,6 +351,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 }
 
 
+
 /** \brief Check if satellite is new, if so, add it to local database */
 static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
 {
@@ -366,12 +361,15 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
     GIOChannel *satfile;
     gchar      *cfgstr, *cfgfile;
     gsize       length, written;
-    guint       catnum = GPOINTER_TO_UINT (key);
     GError     *err = NULL;
     
 
+    g_print ("==> Add new sat %d?\n", ntle->catnum);
+
     /* check if sat is new */
     if (ntle->isnew) {
+
+        g_print ("-----> YES!\n");
 
         /* create config data */
         satdata = g_key_file_new ();
@@ -387,7 +385,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
         cfgstr = g_key_file_to_data (satdata, &length, NULL);
 
         /* create an I/O channel and store data */
-        cfgfile = sat_file_name_from_catnum (catnum);
+        cfgfile = sat_file_name_from_catnum (ntle->catnum);
         satfile = g_io_channel_new_file (cfgfile, "w", &err);
 
         if (err != NULL) {
@@ -404,18 +402,18 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
             if (err != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error writing satellite data for %d (%s)."),
-                             __FUNCTION__, catnum, err->message);
+                             __FUNCTION__, ntle->catnum, err->message);
                 g_clear_error (&err);
             }
             else if (length != written) {
                 sat_log_log (SAT_LOG_LEVEL_WARN,
                              _("%s: Wrote only %d out of %d chars for satellite data %d."),
-                             __FUNCTION__, written, length, catnum);
+                             __FUNCTION__, written, length, ntle->catnum);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_MSG,
                              _("%s: Satellite data written for %d."),
-                             __FUNCTION__, catnum);
+                             __FUNCTION__, ntle->catnum);
                 *num += 1;
             }
         }
@@ -445,7 +443,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
             g_clear_error (&err);
         }
         else {
-            cfgstr = g_strdup_printf ("%d\n", catnum);
+            cfgstr = g_strdup_printf ("%d\n", ntle->catnum);
             g_io_channel_write_chars (satfile, cfgstr, -1, NULL, &err);
             g_io_channel_shutdown (satfile, TRUE, NULL);
             g_io_channel_unref (satfile);
@@ -454,13 +452,13 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
             if (err != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error adding %d to %s (%s)."),
-                             __FUNCTION__, catnum, cfgfile, err->message);
+                             __FUNCTION__, ntle->catnum, cfgfile, err->message);
                 g_clear_error (&err);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_MSG,
                              _("%s: Added satellite %d to %s."),
-                             __FUNCTION__, catnum, cfgfile);
+                             __FUNCTION__, ntle->catnum, cfgfile);
             }
         }
 
@@ -468,7 +466,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
         g_free (cfgfile);
         g_strfreev (buff);
     }
-    
+
 }
 
 
@@ -476,11 +474,12 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
 static guint add_new_sats (GHashTable *data)
 {
     guint num = 0;
-    
+
     g_hash_table_foreach (data, check_and_add_sat, &num);
-    
+
     return num;
 }
+
 
 
 /** \brief Update TLE files from network.
@@ -724,6 +723,9 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             b = fgets (tle_str[1], 80, fp);
             b = fgets (tle_str[2], 80, fp);
 
+            tle_str[1][69] = '\0';
+            tle_str[2][69] = '\0';
+
             /* copy catnum and convert to integer */
             for (i = 2; i < 7; i++) {
                 catstr[i-2] = tle_str[1][i];
@@ -754,6 +756,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
 
                     /* create new_tle structure */
                     ntle = g_try_new (new_tle_t, 1);
+                    ntle->catnum = catnr;
                     ntle->epoch = tle.epoch;
                     ntle->satname = g_strdup (tle_str[0]);
                     ntle->line1   = g_strdup (tle_str[1]);
@@ -864,11 +867,14 @@ static void update_tle_in_file (const gchar *ldname,
 
             /* check if obsolete sats should be deleted */
             /**** FIXME: This is dangereous, so we omit it */
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: No new TLE data found for %d. Satellite might be obsolete."),
                          __FUNCTION__, catnr);
         }
         else {
+            /* This satellite is not new */
+            ntle->isnew = FALSE;
+
             /* get TLE data */
             tlestr1 = g_key_file_get_string (satdata, "Satellite", "TLE1", NULL);
             tlestr2 = g_key_file_get_string (satdata, "Satellite", "TLE2", NULL);
@@ -930,11 +936,10 @@ static void update_tle_in_file (const gchar *ldname,
                         updated++;
                     }
                 }
-
                 g_free (cfgstr);
-
-                /* mark this satellite as not new */
-                ntle->isnew = FALSE;
+            }
+            else {
+                skipped++;
             }
         }
         g_strfreev (catstr);
@@ -949,82 +954,6 @@ static void update_tle_in_file (const gchar *ldname,
     *sat_tot = total;
 
 }
-
-
-
-#if 0
-/** \brief Copy a TLE structure.
- *  \param source The TLE structure to copy from.
- *  \param target The TLE structure to copy to.
- *
- */
-static void
-        copy_tle (tle_t *source, tle_t *target)
-{
-
-    target->epoch = source->epoch;
-    target->epoch_year = source->epoch_year;
-    target->epoch_day = source->epoch_day;
-    target->epoch_fod = source->epoch_fod;
-    target->xndt2o = source->xndt2o;
-    target->xndd6o = source->xndd6o;
-    target->bstar = source->bstar;
-    target->xincl = source->xincl;
-    target->xnodeo = source->xnodeo;
-    target->eo = source->eo;
-    target->omegao = source->omegao;
-    target->xmo = source->xmo;
-    target->xno = source->xno;
-    /*target->catnr = source->catnr;*/
-    target->elset = source->elset;
-    target->revnum = source->revnum;
-    target->status = source->status;
-
-    /*
-        target->xincl1 = source->xincl1;
-        target->xnodeo1 = source->xnodeo1;
-        target->omegao1 = source->omegao1;
-        */
-}
-
-
-/** \brief Compare EPOCH of two element sets
- *  \param tle1 The first element set.
- *  \param tle2 The second element set.
- *  \return 0 if the epochs are equal, -1 if tle1->epoch < tle2->epoch, and
- *          +1 if tle1->epoch > tle2->epoch.
- */
-static gint
-        compare_epoch (tle_t *tle1, tle_t *tle2)
-{
-    gint retval = 0;
-
-
-    if (tle1->epoch > tle2->epoch)
-        retval = 1;
-    else if (tle1->epoch < tle2->epoch)
-        retval = -1;
-    else
-        retval = 0;
-
-
-    return retval;
-}
-
-
-static tle_t *
-        gchar_to_tle (tle_type_t type, const gchar *lines)
-{
-    return NULL;
-}
-
-
-static gchar *
-        tle_to_gchar (tle_type_t type, tle_t *tle)
-{
-    return NULL;
-}
-#endif
 
 
 

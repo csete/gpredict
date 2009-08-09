@@ -58,6 +58,7 @@ typedef enum {
 
 /** \brief Data structure to hold a TLE set. */
 typedef struct {
+    guint    catnum;  /*!< Catalog number. */
     gdouble  epoch;   /*!< Epoch. */
     gchar   *satname; /*!< Satellite name. */
     gchar   *line1;   /*!< Line 1. */
