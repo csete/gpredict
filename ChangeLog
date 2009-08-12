@@ -1,3 +1,9 @@
+2009-08-12 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-module-tmg.c:
+    Fixed bug 2836265: Time controls should wrap around their limits.
+
+
 2009-08-09 Alexandru Csete <oz9aec at gmail.com>
 
     * src/compat.[ch]:
