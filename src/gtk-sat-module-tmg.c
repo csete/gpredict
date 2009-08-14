@@ -263,15 +263,19 @@ void tmg_create (GtkSatModule *mod)
     gtk_table_attach (GTK_TABLE (table), mod->tmgFactor,
                       2, 3, 4, 5, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
+    /* add slider */
+    mod->tmgSlider = gtk_hscale_new_with_range (-1.0, +1.0, 0.005);
+    gtk_scale_set_draw_value (GTK_SCALE (mod->tmgSlider), FALSE);
+    gtk_range_set_value (GTK_RANGE (mod->tmgSlider), 0.0);
+
 
     /* create the vertical box */
     vbox = gtk_vbox_new (FALSE, 0);
 
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), mod->tmgSlider, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new(), FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
-    /* add slider */
 
 
     /* create main window */
