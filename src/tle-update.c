@@ -343,6 +343,9 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s: TLE elements updated."),
                      __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: FIXME: Sync of categories not implemented!"),
+                     __FUNCTION__);
     }
 
     /* destroy hash tables */
@@ -364,12 +367,8 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
     GError     *err = NULL;
     
 
-    g_print ("==> Add new sat %d?\n", ntle->catnum);
-
     /* check if sat is new */
     if (ntle->isnew) {
-
-        g_print ("-----> YES!\n");
 
         /* create config data */
         satdata = g_key_file_new ();
@@ -412,7 +411,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_MSG,
-                             _("%s: Satellite data written for %d."),
+                             _("%s: Data for new sat %d successfully added."),
                              __FUNCTION__, ntle->catnum);
                 *num += 1;
             }
