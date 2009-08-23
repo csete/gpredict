@@ -11,7 +11,7 @@
   More details can be found at the project home page:
 
   http://gpredict.oz9aec.net/
- 
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -83,8 +83,8 @@ static GtkWidget *tree;   /* GtkSatTree for selecting satellites */
 
 /* private functions prototype */
 static GtkWidget *mod_cfg_editor_create (const gchar *modname,
-										 GKeyFile *cfgdata,
-										 GtkWidget *toplevel);
+                                         GKeyFile *cfgdata,
+                                         GtkWidget *toplevel);
 static void       mod_cfg_apply         (GKeyFile *cfgdata);
 static void       name_changed          (GtkWidget *widget, gpointer data);
 static GtkWidget *create_loc_selector   (GKeyFile *cfgdata);
@@ -100,135 +100,135 @@ static void       edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata);
  * returned  and it should be freed when no longer needed.
  */
 gchar *
-mod_cfg_new    ()
+        mod_cfg_new    ()
 {
-	GtkWidget        *dialog;
-	GKeyFile         *cfgdata;
-	gchar            *name = NULL;
-	gint              response;
-	mod_cfg_status_t  status;
-	gboolean          finished = FALSE;
-	gsize             num = 0;
-	guint            *sats;
+    GtkWidget        *dialog;
+    GKeyFile         *cfgdata;
+    gchar            *name = NULL;
+    gint              response;
+    mod_cfg_status_t  status;
+    gboolean          finished = FALSE;
+    gsize             num = 0;
+    guint            *sats;
 
-	/* create cfg data */
-	cfgdata = g_key_file_new ();
+    /* create cfg data */
+    cfgdata = g_key_file_new ();
 
-	dialog = mod_cfg_editor_create (NULL, cfgdata, app);
-	gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 400);
+    dialog = mod_cfg_editor_create (NULL, cfgdata, app);
+    gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 400);
 
-	while (!finished) {
+    while (!finished) {
 
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+        response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-		switch (response) {
+        switch (response) {
 
-			/* user pressed OK */
-		case GTK_RESPONSE_OK:
-			
-			/* check that user has selected at least one satellite */
-			sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
-			
-			if (num > 0) {
-				/* we have at least one sat selected */
+            /* user pressed OK */
+                case GTK_RESPONSE_OK:
+
+            /* check that user has selected at least one satellite */
+            sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
+
+            if (num > 0) {
+                /* we have at least one sat selected */
                 gchar *filename,*confdir;
-				gboolean save = TRUE;
+                gboolean save = TRUE;
 
-				/* check if there is already a module with this name */
+                /* check if there is already a module with this name */
                 confdir = get_modules_dir ();
                 filename = g_strconcat (confdir, G_DIR_SEPARATOR_S,
-										gtk_entry_get_text (GTK_ENTRY (namew)),
-										".mod", NULL);
+                                        gtk_entry_get_text (GTK_ENTRY (namew)),
+                                        ".mod", NULL);
                 g_free (confdir);
 
-				if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
-					GtkWidget *warn;
+                if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+                    GtkWidget *warn;
 
-					sat_log_log (SAT_LOG_LEVEL_DEBUG,
-								 _("%s: Already have module %s. Ask user to confirm..."),
-								 __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
+                    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                                 _("%s: Already have module %s. Ask user to confirm..."),
+                                 __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
 
-					warn = gtk_message_dialog_new (//NULL,
-												   GTK_WINDOW (app),
-												   GTK_DIALOG_MODAL |
-												   GTK_DIALOG_DESTROY_WITH_PARENT,
-												   GTK_MESSAGE_QUESTION,
-												   GTK_BUTTONS_YES_NO,
-												   _("There is already a module called %s.\n"\
-													 "Do you want to overwrite this module?"),
-												   gtk_entry_get_text (GTK_ENTRY (namew)));
-					switch (gtk_dialog_run (GTK_DIALOG (warn))) {
+                    warn = gtk_message_dialog_new (//NULL,
+                            GTK_WINDOW (app),
+                            GTK_DIALOG_MODAL |
+                            GTK_DIALOG_DESTROY_WITH_PARENT,
+                            GTK_MESSAGE_QUESTION,
+                            GTK_BUTTONS_YES_NO,
+                            _("There is already a module called %s.\n"\
+                              "Do you want to overwrite this module?"),
+                            gtk_entry_get_text (GTK_ENTRY (namew)));
+                    switch (gtk_dialog_run (GTK_DIALOG (warn))) {
 
-					case GTK_RESPONSE_YES:
-						save = TRUE;
-						break;
+                                        case GTK_RESPONSE_YES:
+                        save = TRUE;
+                        break;
 
-					default:
-						save = FALSE;
-						break;
-					}
-					gtk_widget_destroy (warn);
-				}
+                                        default:
+                        save = FALSE;
+                        break;
+                    }
+                    gtk_widget_destroy (warn);
+                }
 
-				g_free (filename);
+                g_free (filename);
 
-				if (save) {
-					name = g_strdup (gtk_entry_get_text (GTK_ENTRY (namew)));
-					mod_cfg_apply (cfgdata);
-					status = mod_cfg_save (name, cfgdata);
-			
-					if (status != MOD_CFG_OK) {
-						/* send an error message */
-						sat_log_log (SAT_LOG_LEVEL_ERROR,
-									 _("%s: Error while saving module data (%d)."),
-									 __FUNCTION__, status);
-					}
+                if (save) {
+                    name = g_strdup (gtk_entry_get_text (GTK_ENTRY (namew)));
+                    mod_cfg_apply (cfgdata);
+                    status = mod_cfg_save (name, cfgdata);
 
-					finished = TRUE;
-				}
+                    if (status != MOD_CFG_OK) {
+                        /* send an error message */
+                        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                     _("%s: Error while saving module data (%d)."),
+                                     __FUNCTION__, status);
+                    }
 
-				g_free (sats);
-			}
-			else {
-				sat_log_log (SAT_LOG_LEVEL_DEBUG,
-							 _("%s: User tried to create module with no sats."),
-							 __FUNCTION__);
+                    finished = TRUE;
+                }
 
-				/* tell user to behave nicely */
-				GtkWidget *errdialog;
+                g_free (sats);
+            }
+            else {
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s: User tried to create module with no sats."),
+                             __FUNCTION__);
 
-				errdialog = gtk_message_dialog_new (NULL,
-													//GTK_WINDOW (app),
-													GTK_DIALOG_MODAL |
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_OK,
-													_("Please select at least one satellite "\
-													  "from the list."));
-				gtk_dialog_run (GTK_DIALOG (errdialog));
-				gtk_widget_destroy (errdialog);
-			}
-			
-			break;
-			
-			/* bring up properties editor */
-		case GTK_RESPONSE_HELP:
-			edit_advanced_settings (GTK_DIALOG (dialog), cfgdata);
-			finished = FALSE;
-			break;
+                /* tell user to behave nicely */
+                GtkWidget *errdialog;
 
-			/* everything else is regarded CANCEL */
-		default:
-			finished = TRUE;
-			break;
-		}
-	}
+                errdialog = gtk_message_dialog_new (NULL,
+                                                    //GTK_WINDOW (app),
+                                                    GTK_DIALOG_MODAL |
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_MESSAGE_ERROR,
+                                                    GTK_BUTTONS_OK,
+                                                    _("Please select at least one satellite "\
+                                                      "from the list."));
+                gtk_dialog_run (GTK_DIALOG (errdialog));
+                gtk_widget_destroy (errdialog);
+            }
 
-	/* clean up */
-	g_key_file_free (cfgdata);
-	gtk_widget_destroy (dialog);
+            break;
 
-	return name;
+            /* bring up properties editor */
+                case GTK_RESPONSE_HELP:
+            edit_advanced_settings (GTK_DIALOG (dialog), cfgdata);
+            finished = FALSE;
+            break;
+
+            /* everything else is regarded CANCEL */
+                default:
+            finished = TRUE;
+            break;
+        }
+    }
+
+    /* clean up */
+    g_key_file_free (cfgdata);
+    gtk_widget_destroy (dialog);
+
+    return name;
 }
 
 
@@ -245,77 +245,77 @@ mod_cfg_new    ()
  *
  */
 mod_cfg_status_t
-mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
+        mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
 {
-	GtkWidget        *dialog;
-	gint              response;
-	gboolean          finished = FALSE;
-	gsize             num = 0;
-	guint            *sats;
-	mod_cfg_status_t  status = MOD_CFG_CANCEL;
+    GtkWidget        *dialog;
+    gint              response;
+    gboolean          finished = FALSE;
+    gsize             num = 0;
+    guint            *sats;
+    mod_cfg_status_t  status = MOD_CFG_CANCEL;
 
 
-	dialog = mod_cfg_editor_create (modname, cfgdata, toplevel);
-	gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 400);
+    dialog = mod_cfg_editor_create (modname, cfgdata, toplevel);
+    gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 400);
 
-	while (!finished) {
+    while (!finished) {
 
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+        response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-		switch (response) {
+        switch (response) {
 
-			/* user pressed OK */
-		case GTK_RESPONSE_OK:
+            /* user pressed OK */
+                case GTK_RESPONSE_OK:
 
-			/* check that user has selected at least one satellite */
-			sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
-			
-			if (num > 0) {
+            /* check that user has selected at least one satellite */
+            sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
 
-				/* we have at least one sat selected */
-				mod_cfg_apply (cfgdata);
-				finished = TRUE;
-				g_free (sats);
-				status = MOD_CFG_OK;
-			}
-			else {
-				sat_log_log (SAT_LOG_LEVEL_DEBUG,
-							 _("%s: User tried to create module with no sats."),
-							 __FUNCTION__);
+            if (num > 0) {
 
-				/* tell user not to do that */
-				GtkWidget *errdialog;
+                /* we have at least one sat selected */
+                mod_cfg_apply (cfgdata);
+                finished = TRUE;
+                g_free (sats);
+                status = MOD_CFG_OK;
+            }
+            else {
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s: User tried to create module with no sats."),
+                             __FUNCTION__);
 
-				errdialog = gtk_message_dialog_new (GTK_WINDOW (toplevel),
-													GTK_DIALOG_MODAL |
-													GTK_DIALOG_DESTROY_WITH_PARENT,
-													GTK_MESSAGE_ERROR,
-													GTK_BUTTONS_OK,
-													_("Please select at least one satellite "\
-													  "from the list."));
-				gtk_dialog_run (GTK_DIALOG (errdialog));
-				gtk_widget_destroy (errdialog);
-			}
+                /* tell user not to do that */
+                GtkWidget *errdialog;
 
-			break;
-			
-			/* bring up properties editor */
-		case GTK_RESPONSE_HELP:
-			edit_advanced_settings (GTK_DIALOG (dialog), cfgdata);
-			finished = FALSE;
-			break;
+                errdialog = gtk_message_dialog_new (GTK_WINDOW (toplevel),
+                                                    GTK_DIALOG_MODAL |
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_MESSAGE_ERROR,
+                                                    GTK_BUTTONS_OK,
+                                                    _("Please select at least one satellite "\
+                                                      "from the list."));
+                gtk_dialog_run (GTK_DIALOG (errdialog));
+                gtk_widget_destroy (errdialog);
+            }
 
-			/* everything else is regarded CANCEL */
-		default:
-			finished = TRUE;
-			break;
-		}
-	}
+            break;
 
-	/* clean up */
-	gtk_widget_destroy (dialog);
+            /* bring up properties editor */
+                case GTK_RESPONSE_HELP:
+            edit_advanced_settings (GTK_DIALOG (dialog), cfgdata);
+            finished = FALSE;
+            break;
 
-	return status;
+            /* everything else is regarded CANCEL */
+                default:
+            finished = TRUE;
+            break;
+        }
+    }
+
+    /* clean up */
+    gtk_widget_destroy (dialog);
+
+    return status;
 }
 
 
@@ -328,104 +328,104 @@ mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
  * the USER_CONF_DIR/modules/ directory.
  */
 mod_cfg_status_t
-mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
+        mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
 {
-	GError     *error = NULL;  /* Error handler */
-	gchar      *datastream;    /* cfgdata string */
-	GIOChannel *cfgfile;       /* .mod file */
-	gchar      *filename;      /* file name */
+    GError     *error = NULL;  /* Error handler */
+    gchar      *datastream;    /* cfgdata string */
+    GIOChannel *cfgfile;       /* .mod file */
+    gchar      *filename;      /* file name */
     gchar      *confdir;
-	gsize       length;        /* length of the data stream */
-	gsize       written;       /* number of bytes actually written */
-	gboolean    err;
+    gsize       length;        /* length of the data stream */
+    gsize       written;       /* number of bytes actually written */
+    gboolean    err;
 
 
-	if (!modname) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Attempt to save data to empty file name."),
-					 __FUNCTION__);
+    if (!modname) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Attempt to save data to empty file name."),
+                     __FUNCTION__);
 
-		return MOD_CFG_ERROR;
-	}
-	if (!cfgdata) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Attempt to save NULL data."),
-					 __FUNCTION__);
+        return MOD_CFG_ERROR;
+    }
+    if (!cfgdata) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Attempt to save NULL data."),
+                     __FUNCTION__);
 
-		return MOD_CFG_ERROR;
-	}
+        return MOD_CFG_ERROR;
+    }
 
-	/* ok, go on and convert the data */
-	datastream = g_key_file_to_data (cfgdata, &length, &error);
+    /* ok, go on and convert the data */
+    datastream = g_key_file_to_data (cfgdata, &length, &error);
 
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Could not create config data (%s)."),
-					 __FUNCTION__, error->message);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not create config data (%s)."),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		return MOD_CFG_ERROR;
-	}
+        return MOD_CFG_ERROR;
+    }
 
-	/* create file and write data stream */
+    /* create file and write data stream */
     confdir = get_modules_dir ();
     filename = g_strconcat (confdir, G_DIR_SEPARATOR_S, modname, ".mod", NULL);
     g_free (confdir);
 
-	cfgfile = g_io_channel_new_file (filename, "w", &error);
+    cfgfile = g_io_channel_new_file (filename, "w", &error);
 
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Could not create config file (%s)."),
-					 __FUNCTION__, error->message);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not create config file (%s)."),
+                     __FUNCTION__, error->message);
 
-		g_clear_error (&error);
+        g_clear_error (&error);
 
-		err = 1;
-	}
-	else {
-		g_io_channel_write_chars (cfgfile,
-								  datastream,
-								  length,
-								  &written,
-								  &error);
+        err = 1;
+    }
+    else {
+        g_io_channel_write_chars (cfgfile,
+                                  datastream,
+                                  length,
+                                  &written,
+                                  &error);
 
-		g_io_channel_shutdown (cfgfile, TRUE, NULL);
-		g_io_channel_unref (cfgfile);
+        g_io_channel_shutdown (cfgfile, TRUE, NULL);
+        g_io_channel_unref (cfgfile);
 
-		if (error != NULL) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: Error writing config data (%s)."),
-						 __FUNCTION__, error->message);
-			
-			g_clear_error (&error);
-			
-			err = 1;
-		}
-		else if (length != written) {
-			sat_log_log (SAT_LOG_LEVEL_WARN,
-						 _("%s: Wrote only %d out of %d chars."),
-						 __FUNCTION__, written, length);
-			
-			err = 1;
-		}
-		else {
-			sat_log_log (SAT_LOG_LEVEL_MSG,
-						 _("%s: Configuration saved for module %s."),
-						 __FUNCTION__, modname);
-			
-			err = 0;
-		}
-	}
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Error writing config data (%s)."),
+                         __FUNCTION__, error->message);
 
-	g_free (datastream);
-	g_free (filename);
+            g_clear_error (&error);
 
-	if (err)
-		return MOD_CFG_ERROR;
+            err = 1;
+        }
+        else if (length != written) {
+            sat_log_log (SAT_LOG_LEVEL_WARN,
+                         _("%s: Wrote only %d out of %d chars."),
+                         __FUNCTION__, written, length);
 
-	return MOD_CFG_OK;
+            err = 1;
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s: Configuration saved for module %s."),
+                         __FUNCTION__, modname);
+
+            err = 0;
+        }
+    }
+
+    g_free (datastream);
+    g_free (filename);
+
+    if (err)
+        return MOD_CFG_ERROR;
+
+    return MOD_CFG_OK;
 }
 
 
@@ -439,167 +439,167 @@ mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
  * MOD_CFG_CANCEL if the user has cancelled the operation.
  */
 mod_cfg_status_t
-mod_cfg_delete (gchar *modname, gboolean needcfm)
+        mod_cfg_delete (gchar *modname, gboolean needcfm)
 {
-	return MOD_CFG_CANCEL;
+    return MOD_CFG_CANCEL;
 }
 
 
 
 
 static GtkWidget *
-mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
+        mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
 {
-	GtkWidget   *dialog;
-	GtkWidget   *add;
-	GtkWidget   *table;
-	GtkWidget   *label;
-	GtkTooltips *tooltips;
-	gchar       *icon;      /* windo icon file name */
+    GtkWidget   *dialog;
+    GtkWidget   *add;
+    GtkWidget   *table;
+    GtkWidget   *label;
+    GtkTooltips *tooltips;
+    gchar       *icon;      /* windo icon file name */
 
 
 
-	gboolean   new = (modname != NULL) ? FALSE : TRUE;
+    gboolean   new = (modname != NULL) ? FALSE : TRUE;
 
-	if (new) {
-		dialog = gtk_dialog_new_with_buttons (_("Create New Module"),
-											  GTK_WINDOW (toplevel),
-											  GTK_DIALOG_MODAL |
-											  GTK_DIALOG_DESTROY_WITH_PARENT,
-											  GTK_STOCK_PROPERTIES,
-											  GTK_RESPONSE_HELP,
-											  GTK_STOCK_CANCEL,
-											  GTK_RESPONSE_CANCEL,
-											  GTK_STOCK_OK,
-											  GTK_RESPONSE_OK,
-											  NULL);
-	}
-	else {
-		dialog = gtk_dialog_new_with_buttons (_("Edit Module"),
-											  GTK_WINDOW (toplevel),
-											  GTK_DIALOG_MODAL |
-											  GTK_DIALOG_DESTROY_WITH_PARENT,
-											  GTK_STOCK_PROPERTIES,
-											  GTK_RESPONSE_HELP,
-											  GTK_STOCK_CANCEL,
-											  GTK_RESPONSE_CANCEL,
-											  GTK_STOCK_OK,
-											  GTK_RESPONSE_OK,
-											  NULL);
-	}
+    if (new) {
+        dialog = gtk_dialog_new_with_buttons (_("Create New Module"),
+                                              GTK_WINDOW (toplevel),
+                                              GTK_DIALOG_MODAL |
+                                              GTK_DIALOG_DESTROY_WITH_PARENT,
+                                              GTK_STOCK_PROPERTIES,
+                                              GTK_RESPONSE_HELP,
+                                              GTK_STOCK_CANCEL,
+                                              GTK_RESPONSE_CANCEL,
+                                              GTK_STOCK_OK,
+                                              GTK_RESPONSE_OK,
+                                              NULL);
+    }
+    else {
+        dialog = gtk_dialog_new_with_buttons (_("Edit Module"),
+                                              GTK_WINDOW (toplevel),
+                                              GTK_DIALOG_MODAL |
+                                              GTK_DIALOG_DESTROY_WITH_PARENT,
+                                              GTK_STOCK_PROPERTIES,
+                                              GTK_RESPONSE_HELP,
+                                              GTK_STOCK_CANCEL,
+                                              GTK_RESPONSE_CANCEL,
+                                              GTK_STOCK_OK,
+                                              GTK_RESPONSE_OK,
+                                              NULL);
+    }
 
-	gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 
-	/* window icon */
-	icon = icon_file_name ("gpredict-sat-pref.png");
-	if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
-		gtk_window_set_icon_from_file (GTK_WINDOW (dialog),
-									   icon,
-									   NULL);
-	}
-	g_free (icon);
+    /* window icon */
+    icon = icon_file_name ("gpredict-sat-pref.png");
+    if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
+        gtk_window_set_icon_from_file (GTK_WINDOW (dialog),
+                                       icon,
+                                       NULL);
+    }
+    g_free (icon);
 
-	/* module name */
-	namew = gtk_entry_new ();
+    /* module name */
+    namew = gtk_entry_new ();
 
-	if (!new) {
-		/* set module name and make entry insensitive */
-		gtk_entry_set_text (GTK_ENTRY (namew), modname);
-		gtk_widget_set_sensitive (namew, FALSE);
-	}
-	else {
-		/* connect changed signal to text-checker */
-		gtk_entry_set_max_length (GTK_ENTRY (namew), 25);
-		tooltips = gtk_tooltips_new ();
-		gtk_tooltips_set_tip (tooltips, namew,
-							  _("Enter a short name for this module.\n"\
-								"Allowed characters: 0..9, a..z, A..Z, - and _"),
-							  _("The name will be used to identify the module "\
-								"and it is also used a file name for saving the data."\
-								"Max length is 25 characters."));
+    if (!new) {
+        /* set module name and make entry insensitive */
+        gtk_entry_set_text (GTK_ENTRY (namew), modname);
+        gtk_widget_set_sensitive (namew, FALSE);
+    }
+    else {
+        /* connect changed signal to text-checker */
+        gtk_entry_set_max_length (GTK_ENTRY (namew), 25);
+        tooltips = gtk_tooltips_new ();
+        gtk_tooltips_set_tip (tooltips, namew,
+                              _("Enter a short name for this module.\n"\
+                                "Allowed characters: 0..9, a..z, A..Z, - and _"),
+                              _("The name will be used to identify the module "\
+                                "and it is also used a file name for saving the data."\
+                                "Max length is 25 characters."));
 
-		/* attach changed signal so that we can enable OK button when
-		   a proper name has been entered
-		   oh, btw. disable OK button to begin with....
-		*/
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   FALSE);
-		g_signal_connect (namew, "changed", G_CALLBACK (name_changed), dialog);
-		
-	}
+        /* attach changed signal so that we can enable OK button when
+                   a proper name has been entered
+                   oh, btw. disable OK button to begin with....
+                */
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_OK,
+                                           FALSE);
+        g_signal_connect (namew, "changed", G_CALLBACK (name_changed), dialog);
 
-	/* ground station selector */
-	locw = create_loc_selector (cfgdata);
+    }
 
-	table = gtk_table_new (2, 3, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+    /* ground station selector */
+    locw = create_loc_selector (cfgdata);
 
-	label = gtk_label_new (_("Module Name"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
-	gtk_table_attach_defaults (GTK_TABLE (table), namew, 1, 3, 0, 1);
-	label = gtk_label_new (_("Ground Station"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
-	gtk_table_attach_defaults (GTK_TABLE (table), locw, 1, 3, 1, 2);
+    table = gtk_table_new (2, 3, FALSE);
+    gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
-	/* add button */
-	add = gpredict_hstock_button (GTK_STOCK_ADD, NULL, _("Add new ground station"));
-	g_signal_connect (add, "clicked", G_CALLBACK (add_qth_cb), dialog);
-	gtk_table_attach_defaults (GTK_TABLE (table), add, 4, 5, 1, 2);
+    label = gtk_label_new (_("Module Name"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+    gtk_table_attach_defaults (GTK_TABLE (table), namew, 1, 3, 0, 1);
+    label = gtk_label_new (_("Ground Station"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+    gtk_table_attach_defaults (GTK_TABLE (table), locw, 1, 3, 1, 2);
 
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-						gtk_hseparator_new (), FALSE, FALSE, 5);
+    /* add button */
+    add = gpredict_hstock_button (GTK_STOCK_ADD, NULL, _("Add new ground station"));
+    g_signal_connect (add, "clicked", G_CALLBACK (add_qth_cb), dialog);
+    gtk_table_attach_defaults (GTK_TABLE (table), add, 4, 5, 1, 2);
 
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (label), _("<b>Select Satellites:</b>"));
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 5);
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+                        gtk_hseparator_new (), FALSE, FALSE, 5);
 
-	/* satellite selector */
-	tree = gtk_sat_tree_new (0);
-	if (!new) {
-		/* select satellites */
-		gint   *sats = NULL;
-		gsize   length;
-		GError *error = NULL;
-		guint   i;
+    label = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Select Satellites:</b>"));
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 5);
 
-		sats = g_key_file_get_integer_list (cfgdata,
-											MOD_CFG_GLOBAL_SECTION,
-											MOD_CFG_SATS_KEY,
-											&length,
-											&error);
-			
-		if (error != NULL) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: Failed to get list of satellites (%s)"),
-						 __FUNCTION__, error->message);
+    /* satellite selector */
+    tree = gtk_sat_tree_new (0);
+    if (!new) {
+        /* select satellites */
+        gint   *sats = NULL;
+        gsize   length;
+        GError *error = NULL;
+        guint   i;
 
-			g_clear_error (&error);
+        sats = g_key_file_get_integer_list (cfgdata,
+                                            MOD_CFG_GLOBAL_SECTION,
+                                            MOD_CFG_SATS_KEY,
+                                            &length,
+                                            &error);
 
-			/* GLib API says nothing about the contents in case of error */
-			if (sats) {
-				g_free (sats);
-			}
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to get list of satellites (%s)"),
+                         __FUNCTION__, error->message);
 
-		}
-		else {
-			for (i = 0; i < length; i++) {
-				gtk_sat_tree_select (GTK_SAT_TREE (tree), sats[i]);
-			}
-			g_free (sats);
-		}
+            g_clear_error (&error);
 
-	}
+            /* GLib API says nothing about the contents in case of error */
+            if (sats) {
+                g_free (sats);
+            }
 
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
+        }
+        else {
+            for (i = 0; i < length; i++) {
+                gtk_sat_tree_select (GTK_SAT_TREE (tree), sats[i]);
+            }
+            g_free (sats);
+        }
 
-	gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
+    }
 
-	return dialog;
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
+
+    gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
+
+    return dialog;
 }
 
 
@@ -610,55 +610,55 @@ mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *tople
  * of the name is greater than zero, if yes enable the OK button of the dialog.
  */
 static void
-name_changed          (GtkWidget *widget, gpointer data)
+        name_changed          (GtkWidget *widget, gpointer data)
 {
-	const gchar *text;
-	gchar       *entry, *end, *j;
-	gint         len, pos;
-	GtkWidget   *dialog = GTK_WIDGET (data);
+    const gchar *text;
+    gchar       *entry, *end, *j;
+    gint         len, pos;
+    GtkWidget   *dialog = GTK_WIDGET (data);
 
 
-	/* step 1: ensure that only valid characters are entered
-	   (stolen from xlog, tnx pg4i)
-	*/
-	entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
-	if ((len = g_utf8_strlen (entry, -1)) > 0)
-		{
-			end = entry + g_utf8_strlen (entry, -1);
-			for (j = entry; j < end; ++j)
-				{
-					switch (*j)
-						{
-						case '0' ... '9':
-						case 'a' ... 'z':
-						case 'A' ... 'Z':
-						case '-':
-						case '_':
-							break;
-						default:
-							gdk_beep ();
-							pos = gtk_editable_get_position (GTK_EDITABLE (widget));
-							gtk_editable_delete_text (GTK_EDITABLE (widget),
-													  pos, pos+1);
-							break;
-						}
-				}
-		}
+    /* step 1: ensure that only valid characters are entered
+           (stolen from xlog, tnx pg4i)
+        */
+    entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
+    if ((len = g_utf8_strlen (entry, -1)) > 0)
+    {
+        end = entry + g_utf8_strlen (entry, -1);
+        for (j = entry; j < end; ++j)
+        {
+            switch (*j)
+            {
+                                                case '0' ... '9':
+                                                case 'a' ... 'z':
+                                                case 'A' ... 'Z':
+                                                case '-':
+                                                case '_':
+                break;
+                                                default:
+                gdk_beep ();
+                pos = gtk_editable_get_position (GTK_EDITABLE (widget));
+                gtk_editable_delete_text (GTK_EDITABLE (widget),
+                                          pos, pos+1);
+                break;
+            }
+        }
+    }
 
 
-	/* step 2: if name seems all right, enable OK button */
-	text = gtk_entry_get_text (GTK_ENTRY (widget));
+    /* step 2: if name seems all right, enable OK button */
+    text = gtk_entry_get_text (GTK_ENTRY (widget));
 
-	if (g_utf8_strlen (text, -1) > 0) {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   TRUE);
-	}
-	else {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   FALSE);
-	}
+    if (g_utf8_strlen (text, -1) > 0) {
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_OK,
+                                           TRUE);
+    }
+    else {
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_OK,
+                                           FALSE);
+    }
 }
 
 
@@ -668,97 +668,97 @@ name_changed          (GtkWidget *widget, gpointer data)
  * with the names of the existing locations.
  */
 static GtkWidget *
-create_loc_selector   (GKeyFile *cfgdata)
+        create_loc_selector   (GKeyFile *cfgdata)
 {
-	GtkWidget    *combo;
-	GDir         *dir = NULL;
-	GError       *error = NULL;
-	gchar        *dirname;
-	const gchar  *filename;
-	gchar        *defqth = NULL;
-	gchar       **buffv;
-	gint         idx = -1;
-	gint         count = 0;
+    GtkWidget    *combo;
+    GDir         *dir = NULL;
+    GError       *error = NULL;
+    gchar        *dirname;
+    const gchar  *filename;
+    gchar        *defqth = NULL;
+    gchar       **buffv;
+    gint         idx = -1;
+    gint         count = 0;
 
 
-	combo = gtk_combo_box_new_text ();
+    combo = gtk_combo_box_new_text ();
 
-	/* get qth file name from cfgdata; if cfg data has no QTH
-	   set defqth = "** DEFAULT **"
-	*/
+    /* get qth file name from cfgdata; if cfg data has no QTH
+           set defqth = "** DEFAULT **"
+        */
 
-	if (g_key_file_has_key (cfgdata, MOD_CFG_GLOBAL_SECTION, MOD_CFG_QTH_FILE_KEY, NULL)) {
-		defqth = g_key_file_get_string (cfgdata,
-										MOD_CFG_GLOBAL_SECTION,
-										MOD_CFG_QTH_FILE_KEY,
-										&error);
-	}
-	else {
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-					 _("%s: Module has no QTH; use default."),
-					 __FUNCTION__);
+    if (g_key_file_has_key (cfgdata, MOD_CFG_GLOBAL_SECTION, MOD_CFG_QTH_FILE_KEY, NULL)) {
+        defqth = g_key_file_get_string (cfgdata,
+                                        MOD_CFG_GLOBAL_SECTION,
+                                        MOD_CFG_QTH_FILE_KEY,
+                                        &error);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: Module has no QTH; use default."),
+                     __FUNCTION__);
 
-		defqth = g_strdup (_("** DEFAULT **"));
-	}
+        defqth = g_strdup (_("** DEFAULT **"));
+    }
 
 
-	/* scan for .qth files in the user config directory and
-	   add the contents of each .qth file to the list store
-	*/
+    /* scan for .qth files in the user config directory and
+           add the contents of each .qth file to the list store
+        */
     dirname = get_user_conf_dir ();
-	dir = g_dir_open (dirname, 0, &error);
+    dir = g_dir_open (dirname, 0, &error);
 
-	if (dir) {
-		while ((filename = g_dir_read_name (dir))) {
+    if (dir) {
+        while ((filename = g_dir_read_name (dir))) {
 
-			if (g_strrstr (filename, ".qth")) {
+            if (g_strrstr (filename, ".qth")) {
 
-				buffv = g_strsplit (filename, ".qth", 0);
-				gtk_combo_box_append_text (GTK_COMBO_BOX (combo), buffv[0]);
-				g_strfreev (buffv);
+                buffv = g_strsplit (filename, ".qth", 0);
+                gtk_combo_box_append_text (GTK_COMBO_BOX (combo), buffv[0]);
+                g_strfreev (buffv);
 
-				/* is this the QTH for this module? */
-				if (!g_ascii_strcasecmp (defqth, filename)) {
-					idx = count;
-				}
+                /* is this the QTH for this module? */
+                if (!g_ascii_strcasecmp (defqth, filename)) {
+                    idx = count;
+                }
 
-				count++;
-			}
+                count++;
+            }
 
-		}
+        }
 
-	}
-	else {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s:%d: Failed to open user cfg dir %s (%s)"),
-					 __FILE__, __LINE__, dirname, error->message);
-		g_clear_error (&error);
-	}
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: Failed to open user cfg dir %s (%s)"),
+                     __FILE__, __LINE__, dirname, error->message);
+        g_clear_error (&error);
+    }
 
-	/* finally, add "** DEFAULT **" string; secting this will
-	   clear the MOD_CFG_QTH_FILE_KEY module configuration
-	   key ensuring that the module will use the default QTH
-	*/
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("** DEFAULT **"));
-
-
-	/* select the qth of this module;
-	   if idx == -1 we should select the "** DEFAULT **"
-	   string corresponding to index = count
-	*/
-	if (idx == -1) {
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo), count);
-	}
-	else {
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo), idx);
-	}
-
-	g_free (defqth);
-	g_free (dirname);
-	g_dir_close (dir);
+    /* finally, add "** DEFAULT **" string; secting this will
+           clear the MOD_CFG_QTH_FILE_KEY module configuration
+           key ensuring that the module will use the default QTH
+        */
+    gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("** DEFAULT **"));
 
 
-	return combo;
+    /* select the qth of this module;
+           if idx == -1 we should select the "** DEFAULT **"
+           string corresponding to index = count
+        */
+    if (idx == -1) {
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combo), count);
+    }
+    else {
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combo), idx);
+    }
+
+    g_free (defqth);
+    g_free (dirname);
+    g_dir_close (dir);
+
+
+    return combo;
 }
 
 
@@ -772,64 +772,64 @@ create_loc_selector   (GKeyFile *cfgdata)
  * CANCEL any action.
  */
 static void
-mod_cfg_apply         (GKeyFile *cfgdata)
+        mod_cfg_apply         (GKeyFile *cfgdata)
 {
-	guint *sats;
-	gsize num;
-	guint i;
-	gchar *satstr = NULL;
-	gchar *buff;
+    guint *sats;
+    gsize num;
+    guint i;
+    gchar *satstr = NULL;
+    gchar *buff;
 
 
-	/* store location */
-	buff = gtk_combo_box_get_active_text (GTK_COMBO_BOX (locw));
+    /* store location */
+    buff = gtk_combo_box_get_active_text (GTK_COMBO_BOX (locw));
 
-	/* is buff == "** DEFAULT **" clear the configuration key
-	   otherwise store the filename
-	*/
-	if (!g_ascii_strcasecmp (buff, _("** DEFAULT **"))) {
-		g_key_file_remove_key (cfgdata,
-							   MOD_CFG_GLOBAL_SECTION,
-							   MOD_CFG_QTH_FILE_KEY,
-							   NULL);
-	}
-	else {
-		satstr = g_strconcat (buff, ".qth", NULL);
-		g_key_file_set_string (cfgdata,
-							   MOD_CFG_GLOBAL_SECTION,
-							   MOD_CFG_QTH_FILE_KEY,
-							   satstr);
-		g_free (satstr);
-	}
+    /* is buff == "** DEFAULT **" clear the configuration key
+           otherwise store the filename
+        */
+    if (!g_ascii_strcasecmp (buff, _("** DEFAULT **"))) {
+        g_key_file_remove_key (cfgdata,
+                               MOD_CFG_GLOBAL_SECTION,
+                               MOD_CFG_QTH_FILE_KEY,
+                               NULL);
+    }
+    else {
+        satstr = g_strconcat (buff, ".qth", NULL);
+        g_key_file_set_string (cfgdata,
+                               MOD_CFG_GLOBAL_SECTION,
+                               MOD_CFG_QTH_FILE_KEY,
+                               satstr);
+        g_free (satstr);
+    }
 
-	g_free (buff);
+    g_free (buff);
 
-	/* store satellites */
-	sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
+    /* store satellites */
+    sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
 
-	for (i = 0; i < num; i++) {
+    for (i = 0; i < num; i++) {
 
-		if (i) {
-			buff = g_strdup_printf ("%s;%d", satstr, sats[i]);
-			g_free (satstr);
-		}
-		else {
-			buff = g_strdup_printf ("%d", sats[i]);
-		}
-		satstr = g_strdup (buff);
-		g_free (buff);
-	}
+        if (i) {
+            buff = g_strdup_printf ("%s;%d", satstr, sats[i]);
+            g_free (satstr);
+        }
+        else {
+            buff = g_strdup_printf ("%d", sats[i]);
+        }
+        satstr = g_strdup (buff);
+        g_free (buff);
+    }
 
-	g_key_file_set_string (cfgdata,
-						   MOD_CFG_GLOBAL_SECTION,
-						   MOD_CFG_SATS_KEY,
-						   satstr);
-	g_free (satstr);
-	g_free (sats);
+    g_key_file_set_string (cfgdata,
+                           MOD_CFG_GLOBAL_SECTION,
+                           MOD_CFG_SATS_KEY,
+                           satstr);
+    g_free (satstr);
+    g_free (sats);
 
-	sat_log_log (SAT_LOG_LEVEL_MSG,
-				 _("%s: Applied changes to %s."),
-				 __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Applied changes to %s."),
+                 __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
 }
 
 
@@ -844,49 +844,49 @@ mod_cfg_apply         (GKeyFile *cfgdata)
  * configuring GtkSatModules.
  */
 static void
-edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
+        edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
 {
-	GtkWidget *dialog;
-	GtkWidget *contents;
-	gchar     *icon;      /* window icon file name */
+    GtkWidget *dialog;
+    GtkWidget *contents;
+    gchar     *icon;      /* window icon file name */
 
-	dialog = gtk_dialog_new_with_buttons (_("Module Properties"),
-										  GTK_WINDOW (parent),
-										  GTK_DIALOG_MODAL |
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_STOCK_CANCEL,
-										  GTK_RESPONSE_REJECT,
-										  GTK_STOCK_OK,
-										  GTK_RESPONSE_ACCEPT,
-										  NULL);
+    dialog = gtk_dialog_new_with_buttons (_("Module Properties"),
+                                          GTK_WINDOW (parent),
+                                          GTK_DIALOG_MODAL |
+                                          GTK_DIALOG_DESTROY_WITH_PARENT,
+                                          GTK_STOCK_CANCEL,
+                                          GTK_RESPONSE_REJECT,
+                                          GTK_STOCK_OK,
+                                          GTK_RESPONSE_ACCEPT,
+                                          NULL);
 
-	/* window icon */
-	icon = icon_file_name ("gpredict-sat-pref.png");
-	if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
-		gtk_window_set_icon_from_file (GTK_WINDOW (dialog),
-									   icon,
-									   NULL);
-	}
+    /* window icon */
+    icon = icon_file_name ("gpredict-sat-pref.png");
+    if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
+        gtk_window_set_icon_from_file (GTK_WINDOW (dialog),
+                                       icon,
+                                       NULL);
+    }
 
 
-	contents = sat_pref_modules_create (cfgdata);
-	gtk_widget_show_all (contents);
+    contents = sat_pref_modules_create (cfgdata);
+    gtk_widget_show_all (contents);
 
-	gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), contents);
+    gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), contents);
 
-	/* execute dialog */
-	switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
+    /* execute dialog */
+    switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
 
-	case GTK_RESPONSE_ACCEPT:
-		sat_pref_modules_ok (cfgdata);
-		break;
+    case GTK_RESPONSE_ACCEPT:
+        sat_pref_modules_ok (cfgdata);
+        break;
 
-	default:
-		sat_pref_modules_cancel (cfgdata);
-		break;
-	}
+    default:
+        sat_pref_modules_cancel (cfgdata);
+        break;
+    }
 
-	gtk_widget_destroy (dialog);
+    gtk_widget_destroy (dialog);
 
 }
 
@@ -898,36 +898,36 @@ edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
  *
  */
 static void
-add_qth_cb (GtkWidget *button, gpointer data)
+        add_qth_cb (GtkWidget *button, gpointer data)
 {
-	GtkWindow       *parent = GTK_WINDOW (data);
-	GtkResponseType  response;
-	qth_t            qth;
+    GtkWindow       *parent = GTK_WINDOW (data);
+    GtkResponseType  response;
+    qth_t            qth;
 
-	qth.name = NULL;
-	qth.loc = NULL;
-	qth.desc = NULL;
-	qth.wx = NULL;
-	qth.qra = NULL;
-	qth.data = NULL;
+    qth.name = NULL;
+    qth.loc = NULL;
+    qth.desc = NULL;
+    qth.wx = NULL;
+    qth.qra = NULL;
+    qth.data = NULL;
 
-	response = qth_editor_run (&qth, parent);
+    response = qth_editor_run (&qth, parent);
 
-	if (response == GTK_RESPONSE_OK) {
-		gtk_combo_box_prepend_text (GTK_COMBO_BOX (locw), qth.name);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (locw), 0);
+    if (response == GTK_RESPONSE_OK) {
+        gtk_combo_box_prepend_text (GTK_COMBO_BOX (locw), qth.name);
+        gtk_combo_box_set_active (GTK_COMBO_BOX (locw), 0);
 
-		/* clean up */
-		g_free (qth.name);
-		if (qth.loc != NULL)
-			g_free (qth.loc);
-		if (qth.desc != NULL)
-			g_free (qth.desc);
-		if (qth.wx != NULL)
-			g_free (qth.wx);
-		if (qth.qra != NULL)
-			g_free (qth.qra);
-		/* 		if (qth.data != NULL) */
-		/* 			g_key_file_free (data); */
-	}
+        /* clean up */
+        g_free (qth.name);
+        if (qth.loc != NULL)
+            g_free (qth.loc);
+        if (qth.desc != NULL)
+            g_free (qth.desc);
+        if (qth.wx != NULL)
+            g_free (qth.wx);
+        if (qth.qra != NULL)
+            g_free (qth.qra);
+        /* 		if (qth.data != NULL) */
+        /* 			g_key_file_free (data); */
+    }
 }
