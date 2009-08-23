@@ -35,7 +35,9 @@
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
+#include "sgpsdp/sgp4sdp4.h"
 #include "sat-log.h"
+#include "gtk-sat-data.h"
 #include "compat.h"
 #include "gtk-sat-selector.h"
 
@@ -239,23 +241,89 @@ GtkWidget *gtk_sat_selector_new (guint flags)
 /** FIXME: flags not needed here */
 static void create_and_fill_models (GtkSatSelector *selector)
 {
-    GtkTreeStore *store;    /* the list store data structure */
+    GtkListStore *store;    /* the list store data structure */
     GtkTreeIter   node;     /* new top level node added to the tree store */
     GDir         *dir;
     gchar        *dirname;
+    sat_t         sat;
+    gint          catnum;
+
     gchar        *path;
     gchar        *nodename;
     gchar       **buffv;
     const gchar  *fname;
+
     guint         num = 0;
 
 
 
 
-    /* load all satellites into solector->models[0] */
+    /* load all satellites into selector->models[0] */
+    store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
+                                G_TYPE_STRING,    // name
+                                G_TYPE_INT,       // catnum
+                                G_TYPE_STRING     // epoch
+                                );
+    selector->models = g_slist_append (selector->models, store);
 
+    dirname = get_satdata_dir ();
+    dir = g_dir_open (dirname, 0, NULL);
+    if (!dir) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Failed to open satdata directory %s."),
+                     __FILE__, __FUNCTION__, dirname);
+
+        g_free (dirname);
+
+        return;
+    }
+
+    /* Scan data directory for .tle files.
+       For each file scan through the file and
+       add entry to the tree.
+        */
+    while ((fname = g_dir_read_name (dir))) {
+
+        if (g_strrstr (fname, ".sat")) {
+
+            buffv = g_strsplit (fname, ".", 0);
+            catnum = (gint) g_ascii_strtoll (buffv[0], NULL, 0);
+
+            if (gtk_sat_data_read_sat (catnum, &sat)) {
+                /* error */
+            }
+            else {
+                /* read satellite */
+
+                gtk_list_store_append (store, &node);
+                gtk_list_store_set (store, &node,
+                                    GTK_SAT_SELECTOR_COL_NAME, sat.nickname,
+                                    GTK_SAT_SELECTOR_COL_CATNUM, catnum,
+                                    -1);
+
+                g_free (sat.name);
+                g_free (sat.nickname);
+                num++;
+            }
+
+            g_strfreev (buffv);
+        }
+    }
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s:%s: Read %d satellites into MAIN group."),
+                 __FILE__, __FUNCTION__, num);
 
     /* load satellites from each .cat file into selector->models[i] */
+    g_dir_rewind (dir);
+    while ((fname = g_dir_read_name (dir))) {
+        if (g_strrstr (fname, ".cat")) {
+
+        }
+    }
+
+    g_dir_close (dir);
+    g_free (dirname);
+
 
 #if 0
     /* create a new tree store */

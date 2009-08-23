@@ -1,3 +1,9 @@
+2009-08-23 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-selector.[ch]:
+    Added files with new satellite selector.
+
+
 2009-08-12 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module-tmg.c:

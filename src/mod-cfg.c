@@ -71,6 +71,8 @@
 #include "mod-cfg.h"
 
 
+#include "gtk-sat-selector.h"
+
 extern GtkWidget *app;
 
 
@@ -596,6 +598,8 @@ static GtkWidget *
     }
 
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
+
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), gtk_sat_selector_new (0), TRUE, TRUE, 0);
 
     gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
 
