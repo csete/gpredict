@@ -367,6 +367,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
                 gtk_list_store_set (store, &node,
                                     GTK_SAT_SELECTOR_COL_NAME, sat.nickname,
                                     GTK_SAT_SELECTOR_COL_CATNUM, catnum,
+                                    GTK_SAT_SELECTOR_COL_EPOCH, sat.jul_epoch,
                                     -1);
 
                 g_free (sat.name);
@@ -441,7 +442,7 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
             store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
                                         G_TYPE_STRING,    // name
                                         G_TYPE_INT,       // catnum
-                                        G_TYPE_STRING     // epoch
+                                        G_TYPE_DOUBLE     // epoch
                                         );
             selector->models = g_slist_append (selector->models, store);
 
@@ -471,6 +472,7 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
                     gtk_list_store_set (store, &node,
                                         GTK_SAT_SELECTOR_COL_NAME, sat.nickname,
                                         GTK_SAT_SELECTOR_COL_CATNUM, catnum,
+                                        GTK_SAT_SELECTOR_COL_EPOCH, sat.jul_epoch,
                                         -1);
                     g_free (sat.name);
                     g_free (sat.nickname);
