@@ -181,10 +181,6 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     GtkTreeModel       *model;
     GtkCellRenderer    *renderer;
     GtkTreeViewColumn  *column;
-    GtkWidget          *hbox;
-    GtkTooltips        *tips;
-    GtkWidget          *expbut;
-    GtkWidget          *colbut;
 
 
     if (!flags)
@@ -307,16 +303,10 @@ static void create_and_fill_models (GtkSatSelector *selector)
     GtkListStore *store;    /* the list store data structure */
     GtkTreeIter   node;     /* new top level node added to the tree store */
     GDir         *dir;
-    GIOChannel   *catfile;
-    GIOStatus     status;
-    GError       *error = NULL;
     gchar        *dirname;
     sat_t         sat;
     gint          catnum;
 
-    gchar        *path;
-    gchar        *buff;
-    gchar        *nodename;
     gchar       **buffv;
     const gchar  *fname;
 
