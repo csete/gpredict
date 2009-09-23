@@ -25,7 +25,7 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/*
+/*  FIXME: Update diagram
 
 +------------------------------------+
 |           +---------------------+  |
@@ -103,8 +103,7 @@ static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer dat
  * This function creates a new module. The name of the module is
  * returned  and it should be freed when no longer needed.
  */
-gchar *
-        mod_cfg_new    ()
+gchar *mod_cfg_new    ()
 {
     GtkWidget        *dialog;
     GKeyFile         *cfgdata;
@@ -330,8 +329,7 @@ mod_cfg_status_t mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *t
  * into a module configuration file called modname.mod placed in
  * the USER_CONF_DIR/modules/ directory.
  */
-mod_cfg_status_t
-        mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
+mod_cfg_status_t mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
 {
     GError     *error = NULL;  /* Error handler */
     gchar      *datastream;    /* cfgdata string */
@@ -441,15 +439,18 @@ mod_cfg_status_t
  * TRUE the user will be asked for confirmation first. The function returns
  * MOD_CFG_CANCEL if the user has cancelled the operation.
  */
-mod_cfg_status_t
-        mod_cfg_delete (gchar *modname, gboolean needcfm)
+mod_cfg_status_t mod_cfg_delete (gchar *modname, gboolean needcfm)
 {
     return MOD_CFG_CANCEL;
 }
 
 
 
-
+/** \brief Create module configuration window.
+  * \param modname The name of the module (in edit mode) or NULL for a new module.
+  * \param cfgdata Pointer to the configuration data.
+  * \param toplevel Pointer to the toplevel window.
+  */
 static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
 {
     GtkWidget   *dialog;
@@ -618,8 +619,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
  * The primary purpose of this function is to check whether the char length
  * of the name is greater than zero, if yes enable the OK button of the dialog.
  */
-static void
-        name_changed          (GtkWidget *widget, gpointer data)
+static void name_changed          (GtkWidget *widget, gpointer data)
 {
     const gchar *text;
     gchar       *entry, *end, *j;
@@ -631,20 +631,17 @@ static void
            (stolen from xlog, tnx pg4i)
         */
     entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
-    if ((len = g_utf8_strlen (entry, -1)) > 0)
-    {
+    if ((len = g_utf8_strlen (entry, -1)) > 0) {
         end = entry + g_utf8_strlen (entry, -1);
-        for (j = entry; j < end; ++j)
-        {
-            switch (*j)
-            {
-                                                case '0' ... '9':
-                                                case 'a' ... 'z':
-                                                case 'A' ... 'Z':
-                                                case '-':
-                                                case '_':
+        for (j = entry; j < end; ++j) {
+            switch (*j) {
+            case '0' ... '9':
+            case 'a' ... 'z':
+            case 'A' ... 'Z':
+            case '-':
+            case '_':
                 break;
-                                                default:
+            default:
                 gdk_beep ();
                 pos = gtk_editable_get_position (GTK_EDITABLE (widget));
                 gtk_editable_delete_text (GTK_EDITABLE (widget),
@@ -676,8 +673,7 @@ static void
  * This function creates the location selector combo box and initialises it
  * with the names of the existing locations.
  */
-static GtkWidget *
-        create_loc_selector   (GKeyFile *cfgdata)
+static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
 {
     GtkWidget    *combo;
     GDir         *dir = NULL;
@@ -780,8 +776,7 @@ static GtkWidget *
  * automatically, since there needs to be a possibility to
  * CANCEL any action.
  */
-static void
-        mod_cfg_apply         (GKeyFile *cfgdata)
+static void mod_cfg_apply         (GKeyFile *cfgdata)
 {
     guint *sats;
     gsize num;
@@ -852,8 +847,7 @@ static void
  * relevant sat-pref config modules, i.e. those which are relevant for
  * configuring GtkSatModules.
  */
-static void
-        edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
+static void edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
 {
     GtkWidget *dialog;
     GtkWidget *contents;
@@ -906,8 +900,7 @@ static void
  *  \param data Pointer to the dialog window.
  *
  */
-static void
-        add_qth_cb (GtkWidget *button, gpointer data)
+static void add_qth_cb (GtkWidget *button, gpointer data)
 {
     GtkWindow       *parent = GTK_WINDOW (data);
     GtkResponseType  response;
