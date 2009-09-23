@@ -95,7 +95,7 @@ static void       add_qth_cb (GtkWidget *button, gpointer data);
 
 static void       edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata);
 
-static void sat_activated_cb (GtkSatSelector *selector, gpointer data);
+static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer data);
 
 
 /** \brief Create a new module.
@@ -950,17 +950,14 @@ static void
   * This function is called when the user has selected (i.e. double clicked) a satellite
   * in the GtkSatSelector.
   */
-static void sat_activated_cb (GtkSatSelector *selector, gpointer data)
+static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer data)
 {
     gchar   *satname;
     gint     catnum;
     gdouble  epoch;
 
-    /*** FIXME: Change callback to include catnum into callback (for other uses */
 
     gtk_sat_selector_get_selected (selector, &catnum, &satname, &epoch);
-
-    g_print ("===> %s (%d) updated at %.4f\n", satname, catnum, epoch);
 
     /* Add satellite to selected list */
 

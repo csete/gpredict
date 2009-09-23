@@ -130,9 +130,10 @@ static void gtk_sat_selector_class_init (GtkSatSelectorClass *class)
                           G_STRUCT_OFFSET (GtkSatSelectorClass,gtksatselector),
                           NULL,
                           NULL,
-                          g_cclosure_marshal_VOID__VOID,
-                          G_TYPE_NONE,
-                          0);
+                          g_cclosure_marshal_VOID__INT,
+                          G_TYPE_NONE, // return type
+                          1,
+                          G_TYPE_INT); // catnum
 }
 
 
@@ -570,10 +571,25 @@ static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
                               GtkTreeViewColumn *column, gpointer data)
 {
     GtkSatSelector   *selector = GTK_SAT_SELECTOR (data);
+    GtkTreeSelection *selection;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
+    gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
+    gint              catnum;     /* catalog number of the selected satellite */
 
-    /* emit the "sat-activated" signal for the GtkSatSelector */
-    g_signal_emit (G_OBJECT (selector), gtksatsel_signals[SAT_ACTIVATED_SIGNAL], 0);
+    /* get the selected row in the treeview */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (selector->tree));
+    haveselection = gtk_tree_selection_get_selected (selection, &model, &iter);
 
+    if (haveselection) {
+        /* get the name and catalog number of the selected saetllite */
+        gtk_tree_model_get (model, &iter,
+                            GTK_SAT_SELECTOR_COL_CATNUM, &catnum,
+                            -1);
+
+        /* emit the "sat-activated" signal for the GtkSatSelector */
+        g_signal_emit (G_OBJECT (selector), gtksatsel_signals[SAT_ACTIVATED_SIGNAL], 0, catnum);
+    }
 }
 
 
