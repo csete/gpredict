@@ -87,6 +87,7 @@ struct _gtk_sat_selector
     gulong       handler_id;  /*!< Toggle signale handler ID (FIXME): remove. */
 
     GtkWidget   *groups;      /*!< Combo box for selecting satellite group. */
+    GtkWidget   *search;      /*!< Text entry for searching. */
     GSList      *models;      /*!< List of models with index corresponding to groups. */
 };
 

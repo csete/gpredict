@@ -78,9 +78,10 @@ extern GtkWidget *app;
 
 
 /* private widgets */
-static GtkWidget *namew;  /* GtkEntry widget for module name */
-static GtkWidget *locw;   /* GtkComboBox for location selection */
-static GtkWidget *tree;   /* GtkSatTree for selecting satellites */
+static GtkWidget *namew;   /* GtkEntry widget for module name */
+static GtkWidget *locw;    /* GtkComboBox for location selection */
+static GtkWidget *tree;    /* OBSOLETE GtkSatTree for selecting satellites */
+static GtkWidget *satlist; /* list of selected satellites */
 
 
 /* private functions prototype */
@@ -127,9 +128,9 @@ gchar *mod_cfg_new    ()
         switch (response) {
 
             /* user pressed OK */
-                case GTK_RESPONSE_OK:
+            case GTK_RESPONSE_OK:
 
-            /* check that user has selected at least one satellite */
+            /* FIXME check that user has selected at least one satellite */
             sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
 
             if (num > 0) {
@@ -458,7 +459,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     GtkWidget   *table;
     GtkWidget   *label;
     GtkTooltips *tooltips;
-    gchar       *icon;      /* windo icon file name */
+    gchar       *icon;      /* window icon file name */
 
 
 
@@ -561,7 +562,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_label_set_markup (GTK_LABEL (label), _("<b>Select Satellites:</b>"));
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 5);
 
-    /* satellite selector */
+    /* OBSOLETE satellite selector */
     tree = gtk_sat_tree_new (0);
     if (!new) {
         /* select satellites */
@@ -600,7 +601,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
 
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
 
-    /*** EXPERIMENTAL CODE ***/
+    /*** NEW CODE ***/
     GtkWidget *selector = gtk_sat_selector_new (0);
     g_signal_connect (selector, "sat-activated",
                       G_CALLBACK (sat_activated_cb), NULL);

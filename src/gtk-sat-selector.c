@@ -28,7 +28,6 @@
 /** \brief Satellite selector.
  *
  * FIXME: add search/lookup function
- * FIXME: epoch not implemented
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -181,6 +180,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     GtkTreeModel       *model;
     GtkCellRenderer    *renderer;
     GtkTreeViewColumn  *column;
+    GtkWidget          *table;
 
 
     if (!flags)
@@ -226,7 +226,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     /* create tree view columns */
     /* label column */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Satellite"), renderer,
+    column = gtk_tree_view_column_new_with_attributes (_("Available Satellites"), renderer,
                                                        "text", GTK_SAT_SELECTOR_COL_NAME,
                                                        NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (selector->tree), column, -1);
@@ -267,9 +267,35 @@ GtkWidget *gtk_sat_selector_new (guint flags)
 
 
     //gtk_container_add (GTK_CONTAINER (widget), GTK_SAT_TREE (widget)->swin);
-    gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->groups, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->swin, TRUE, TRUE, 0);
+    //gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->groups, FALSE, FALSE, 0);
+    //gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->swin, TRUE, TRUE, 0);
 
+    table = gtk_table_new (5, 2, FALSE);
+
+    /* Search */    
+    gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Search:")), 0, 1, 0, 1,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
+    GTK_SAT_SELECTOR (widget)->search = gtk_entry_new ();
+
+    /* this enables automatic search */
+    gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
+                                    GTK_ENTRY (GTK_SAT_SELECTOR (widget)->search));
+    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 2, 0, 1,
+                      GTK_FILL, GTK_FILL, 0, 0);
+
+    /* Group selector */
+    gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group:")), 0, 1, 1, 2,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->groups, 1, 2, 1, 2,
+                      GTK_FILL, GTK_FILL, 0, 0);
+
+
+    /* satellite list */
+    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->swin, 0, 2, 2, 5,
+                      GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
+
+    /* Add tabel to main container */
+    gtk_box_pack_start (GTK_BOX (widget), table, TRUE, TRUE, 0);
 
     gtk_widget_show_all (widget);
 
@@ -540,9 +566,19 @@ static void group_selected_cb (GtkComboBox *combobox, gpointer data)
 
     sel = gtk_combo_box_get_active (combobox);
 
+    g_print ("%d\n", sel);
+
+    /*** FIXME ***/
+
     model = GTK_TREE_MODEL (g_slist_nth_data (selector->models, sel));
     gtk_tree_view_set_model (GTK_TREE_VIEW (selector->tree), model);
     g_object_unref (model);
+
+    /* We changed the GtkTreeModel so we need to reset the sort column ID */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+                                          GTK_SAT_SELECTOR_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
 
 }
 
