@@ -54,6 +54,10 @@ static void gtk_sat_selector_destroy    (GtkObject *object);
 static void create_and_fill_models      (GtkSatSelector *selector);
 static void load_cat_file               (GtkSatSelector *selector, const gchar *fname);
 static void group_selected_cb           (GtkComboBox *combobox, gpointer data);
+static void row_activated_cb            (GtkTreeView *view,
+                                         GtkTreePath *path,
+                                         GtkTreeViewColumn *column,
+                                         gpointer data);
 
 static gint compare_func (GtkTreeModel *model,
                           GtkTreeIter  *a,
@@ -61,6 +65,16 @@ static gint compare_func (GtkTreeModel *model,
                           gpointer      userdata);
 
 static GtkVBoxClass *parent_class = NULL;
+
+
+/** \brief GtkSatSelector signal IDs */
+enum {
+    SAT_ACTIVATED_SIGNAL, /*!< "sat-activated" signal */
+    LAST_SIGNAL
+};
+
+/** \brief GtkSatSelector specific signals. */
+static guint gtksatsel_signals[LAST_SIGNAL] = { 0 };
 
 
 GType gtk_sat_selector_get_type ()
@@ -108,6 +122,17 @@ static void gtk_sat_selector_class_init (GtkSatSelectorClass *class)
 
     object_class->destroy = gtk_sat_selector_destroy;
 
+    /* create GtkSatSelector specific signals */
+    gtksatsel_signals[SAT_ACTIVATED_SIGNAL] =
+            g_signal_new ("sat-activated",
+                          G_TYPE_FROM_CLASS (class),
+                          G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                          G_STRUCT_OFFSET (GtkSatSelectorClass,gtksatselector),
+                          NULL,
+                          NULL,
+                          g_cclosure_marshal_VOID__VOID,
+                          G_TYPE_NONE,
+                          0);
 }
 
 
@@ -198,7 +223,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
 
     /* we can now connect combobox signal handler */
     g_signal_connect (GTK_SAT_SELECTOR (widget)->groups, "changed",
-                      group_selected_cb, widget);
+                      G_CALLBACK(group_selected_cb), widget);
 
 
     /* create tree view columns */
@@ -229,6 +254,10 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     if (!(flags & GTK_SAT_SELECTOR_FLAG_EPOCH))
         gtk_tree_view_column_set_visible (column, FALSE);
 
+    /* "row-activated" signal is used to catch double click events, which means
+       a satellite has been selected. This propagates to the TBD GtkSatSelector signal */
+    g_signal_connect (selector->tree, "row-activated",
+                      G_CALLBACK(row_activated_cb), selector);
 
     /* scrolled window */
     GTK_SAT_SELECTOR (widget)->swin = gtk_scrolled_window_new (NULL, NULL);
@@ -299,7 +328,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
     store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
                                 G_TYPE_STRING,    // name
                                 G_TYPE_INT,       // catnum
-                                G_TYPE_STRING     // epoch
+                                G_TYPE_DOUBLE     // epoch
                                 );
     selector->models = g_slist_append (selector->models, store);
     gtk_combo_box_append_text (GTK_COMBO_BOX (selector->groups), _("All satellites"));
@@ -366,6 +395,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
     g_free (dirname);
 
 }
+
 
 
 /** \brief Load satellites from a .cat file
@@ -522,3 +552,74 @@ static void group_selected_cb (GtkComboBox *combobox, gpointer data)
     g_object_unref (model);
 
 }
+
+
+/** \brief Signal handler for managing satellite selection.
+  * \param view Pointer to the GtkTreeView object.
+  * \param path The path of the row that was activated.
+  * \param column The column where the activation occured.
+  * \param data Pointer to the GtkSatselector widget.
+  *
+  * This function is called when the user double clicks on a satellite in the
+  * satellite selector. It is used to trigger the "sat-activated" signal of
+  * the GtkSatSelector widget.
+  */
+static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+                              GtkTreeViewColumn *column, gpointer data)
+{
+    GtkSatSelector   *selector = GTK_SAT_SELECTOR (data);
+
+    /* emit the "sat-activated" signal for the GtkSatSelector */
+    g_signal_emit (G_OBJECT (selector), gtksatsel_signals[SAT_ACTIVATED_SIGNAL], 0);
+
+}
+
+
+/** \brief Get information about the selected satellite.
+  * \param selector Pointer to the GtkSatSelector widget.
+  * \param catnum Location where catnum will be stored (may be NULL).
+  * \param satname Location where the satellite name will be stored. May NOT be NULL. Must be g_freed after use.
+  * \param epoch Location where the satellite Epoch will be stored (may be NULL);
+  *
+  * This function can be used to retrieve information about the currently selected satellite
+  * a GtkSatSelector widget, e.g. after the "sat-activated" signal has been emitted.
+  */
+void gtk_sat_selector_get_selected (GtkSatSelector *selector,
+                                    gint *catnum, gchar **satname, gdouble *epoch)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
+    gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
+    gchar            *l_satname;   /* nickname of the selected satellite */
+    gint              l_catnum;     /* catalog number of the selected satellite */
+    gdouble           l_epoch;      /* TLE epoch of the selected satellite */
+
+    /* selector can not be NULL */
+    g_return_if_fail ((selector != NULL) && (satname != NULL));
+
+    /* get the selected row in the treeview */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (selector->tree));
+    haveselection = gtk_tree_selection_get_selected (selection, &model, &iter);
+
+    if (haveselection) {
+        /* get the name and catalog number of the selected saetllite */
+        gtk_tree_model_get (model, &iter,
+                            GTK_SAT_SELECTOR_COL_NAME, &l_satname,
+                            GTK_SAT_SELECTOR_COL_CATNUM, &l_catnum,
+                            GTK_SAT_SELECTOR_COL_EPOCH, &l_epoch,
+                            -1);
+
+        if (catnum != NULL)
+            *catnum = l_catnum;
+
+        *satname = g_strdup (l_satname);
+
+        if (epoch != NULL)
+            *epoch = l_epoch;
+
+        g_free (l_satname);
+    }
+
+}
+

@@ -1,3 +1,14 @@
+2009-09-23 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-selector.[ch]:
+    Changed EPOCH column type to G_TYPE_DOUBLE (consistent with sat_t).
+    Implemented "sat-activated" signal that is triggered when the user
+    double click on a satellite.
+
+    * src/mod-cfg.c:
+    Connect GtkSatSelector's new "sat-activated" signal to signal handler.
+
+
 2009-09-18 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-selector.[ch]:

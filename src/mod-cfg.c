@@ -95,6 +95,8 @@ static void       add_qth_cb (GtkWidget *button, gpointer data);
 
 static void       edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata);
 
+static void sat_activated_cb (GtkSatSelector *selector, gpointer data);
+
 
 /** \brief Create a new module.
  *
@@ -246,8 +248,7 @@ gchar *
  * mod_cfg_save function. 
  *
  */
-mod_cfg_status_t
-        mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
+mod_cfg_status_t mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
 {
     GtkWidget        *dialog;
     gint              response;
@@ -449,8 +450,7 @@ mod_cfg_status_t
 
 
 
-static GtkWidget *
-        mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
+static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata, GtkWidget *toplevel)
 {
     GtkWidget   *dialog;
     GtkWidget   *add;
@@ -599,7 +599,12 @@ static GtkWidget *
 
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
 
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), gtk_sat_selector_new (0), TRUE, TRUE, 0);
+    /*** EXPERIMENTAL CODE ***/
+    GtkWidget *selector = gtk_sat_selector_new (0);
+    g_signal_connect (selector, "sat-activated",
+                      G_CALLBACK (sat_activated_cb), NULL);
+
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), selector, TRUE, TRUE, 0);
 
     gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
 
@@ -934,4 +939,30 @@ static void
         /* 		if (qth.data != NULL) */
         /* 			g_key_file_free (data); */
     }
+}
+
+
+
+/** \brief Signal handkler for "sat-activated" signals from the GtkSatSelector.
+  * \param selector Pointer to the GtkSatSelector widget.
+  * \param data Pointer to the TBD ...
+  *
+  * This function is called when the user has selected (i.e. double clicked) a satellite
+  * in the GtkSatSelector.
+  */
+static void sat_activated_cb (GtkSatSelector *selector, gpointer data)
+{
+    gchar   *satname;
+    gint     catnum;
+    gdouble  epoch;
+
+    /*** FIXME: Change callback to include catnum into callback (for other uses */
+
+    gtk_sat_selector_get_selected (selector, &catnum, &satname, &epoch);
+
+    g_print ("===> %s (%d) updated at %.4f\n", satname, catnum, epoch);
+
+    /* Add satellite to selected list */
+
+    g_free (satname);
 }
