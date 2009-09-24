@@ -1,3 +1,12 @@
+2009-09-24 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-selector.c:
+    Fixed a bug that caused tree models to be deleted when selecting a new satellite group.
+
+    * src/mod-cfg.c:
+    Added list of selected satellites.
+
+
 2009-09-23 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-selector.[ch]:

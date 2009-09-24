@@ -269,7 +269,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     //gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->groups, FALSE, FALSE, 0);
     //gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->swin, TRUE, TRUE, 0);
 
-    table = gtk_table_new (5, 2, FALSE);
+    table = gtk_table_new (7, 4, TRUE);
 
     /* Search */    
     gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Search:")), 0, 1, 0, 1,
@@ -279,18 +279,18 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     /* this enables automatic search */
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
                                     GTK_ENTRY (GTK_SAT_SELECTOR (widget)->search));
-    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 2, 0, 1,
+    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 4, 0, 1,
                       GTK_FILL, GTK_FILL, 0, 0);
 
     /* Group selector */
     gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group:")), 0, 1, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
-    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->groups, 1, 2, 1, 2,
+    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->groups, 1, 4, 1, 2,
                       GTK_FILL, GTK_FILL, 0, 0);
 
 
     /* satellite list */
-    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->swin, 0, 2, 2, 5,
+    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->swin, 0, 4, 2, 7,
                       GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 
     /* Add tabel to main container */

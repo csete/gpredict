@@ -37,7 +37,7 @@
 | ---------------------------------- |
 |             Satellites             |
 | +--------------------------+-----+ |
-| | Name                     | Sel | |
+| | Available Satellites     | Sel | |
 | +--------------------------+-----+ |      
 | | > Amateur                |     | |
 | | v Weather                |     | |
@@ -96,7 +96,15 @@ static void       add_qth_cb (GtkWidget *button, gpointer data);
 
 static void       edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata);
 
+static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new);
+static void add_selected_sat (GtkListStore *store, gint catnum);
+
 static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer data);
+
+static gint compare_func (GtkTreeModel *model,
+                          GtkTreeIter  *a,
+                          GtkTreeIter  *b,
+                          gpointer      userdata);
 
 
 /** \brief Create a new module.
@@ -239,7 +247,7 @@ gchar *mod_cfg_new    ()
 /** \brief Edit configuration for an existing module.
  *  \param modname The name of the module to edit.
  *  \param cfgdata Configuration data for the module.
- *  \param toplevel Pointer to the topleve window.
+ *  \param toplevel Pointer to the toplevel window.
  *
  * This function allows the user to edit the configuration
  * of the module specified by modname. The changes are stored
@@ -456,8 +464,9 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
 {
     GtkWidget   *dialog;
     GtkWidget   *add;
-    GtkWidget   *table;
+    GtkWidget   *table;    
     GtkWidget   *label;
+    GtkWidget   *swin;
     GtkTooltips *tooltips;
     gchar       *icon;      /* window icon file name */
 
@@ -602,16 +611,191 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
 
     /*** NEW CODE ***/
+    /* satellite selector */
     GtkWidget *selector = gtk_sat_selector_new (0);
     g_signal_connect (selector, "sat-activated",
                       G_CALLBACK (sat_activated_cb), NULL);
 
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), selector, TRUE, TRUE, 0);
+    /* list of selected satellites */
+    satlist = create_selected_sats_list (cfgdata, new);
+    swin = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+    gtk_container_add (GTK_CONTAINER (swin), satlist);
+
+
+    table = gtk_table_new (7, 9, TRUE);
+    gtk_table_attach_defaults (GTK_TABLE (table), selector, 0, 4, 0, 7);
+    gtk_table_attach_defaults (GTK_TABLE (table), swin, 5, 9, 2, 7);
+
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, TRUE, TRUE, 0);
 
     gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
 
     return dialog;
 }
+
+
+/** \brief Create the list containing the selected satellites.
+  * \param new Flag indicating whether the module config window is for a new module.
+  * \returns A newly created GtkTreeView widget.
+  *
+  */
+static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new)
+{
+    GtkWidget          *satlist;
+    GtkCellRenderer    *renderer;
+    GtkTreeViewColumn  *column;
+    GtkListStore       *store;
+
+
+    satlist = gtk_tree_view_new ();
+
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Selected Satellites"), renderer,
+                                                       "text", GTK_SAT_SELECTOR_COL_NAME,
+                                                       NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (satlist), column, -1);
+    gtk_tree_view_column_set_visible (column, TRUE);
+
+    /* catalogue number */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Catnum"), renderer,
+                                                       "text", GTK_SAT_SELECTOR_COL_CATNUM,
+                                                       NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (satlist), column, -1);
+    gtk_tree_view_column_set_visible (column, FALSE);
+
+    /* epoch */
+    renderer = gtk_cell_renderer_text_new ();
+    column = gtk_tree_view_column_new_with_attributes (_("Epoch"), renderer,
+                                                       "text", GTK_SAT_SELECTOR_COL_EPOCH,
+                                                       NULL);
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (satlist), column, -1);
+    gtk_tree_view_column_set_visible (column, FALSE);
+
+
+    /* create the model */
+    store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
+                                G_TYPE_STRING,    // name
+                                G_TYPE_INT,       // catnum
+                                G_TYPE_DOUBLE     // epoch
+                                );
+
+    /* sort the list by name */
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
+                                     GTK_SAT_SELECTOR_COL_NAME,
+                                     compare_func,
+                                     NULL,
+                                     NULL);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                          GTK_SAT_SELECTOR_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
+    /* If we are editing an existing module, load the satellites into the list */
+    if (!new) {
+        gint   *sats = NULL;
+        gsize   length;
+        GError *error = NULL;
+        guint   i;
+
+        sats = g_key_file_get_integer_list (cfgdata,
+                                            MOD_CFG_GLOBAL_SECTION,
+                                            MOD_CFG_SATS_KEY,
+                                            &length,
+                                            &error);
+
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to get list of satellites (%s)"),
+                         __FUNCTION__, error->message);
+
+            g_clear_error (&error);
+
+            /* GLib API says nothing about the contents in case of error */
+            if (sats) {
+                g_free (sats);
+            }
+
+        }
+        else {
+            for (i = 0; i < length; i++) {
+                add_selected_sat (store, sats[i]);
+                g_print ("ADD: %d\n", sats[i]);
+            }
+            g_free (sats);
+        }
+
+    }
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW (satlist), GTK_TREE_MODEL(store));
+    g_object_unref (store);
+
+    return satlist;
+}
+
+
+/** \brief Add a satellite to the list of selected satellites.
+  * \param store Pointer to the GtkListStore into which the new satellite should be inserted.
+  * \param catnum Catalog number of the satellite to be added.
+  */
+static void add_selected_sat (GtkListStore *store, gint catnum)
+{
+    gint        i, sats = 0;
+    GtkTreeIter iter;
+    GtkTreeIter node;     /* new top level node added to the tree store */
+    gint        catnr;
+    gboolean    found = FALSE;
+    sat_t       sat;
+
+
+    /* check if the satellite is already in the list */
+
+    /* get number of satellites already in list */
+    sats = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL);
+
+    /* loop over list entries and check their catnums */
+    for (i = 0; i < sats; i++) {
+        if (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter, NULL, i)) {
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                                GTK_SAT_SELECTOR_COL_CATNUM, &catnr,
+                                -1);
+            if (catnum == catnr) {
+                found = TRUE;
+            }
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%s: Could not fetch entry %d in satellite list"),
+                         __FILE__, __FUNCTION__, i);
+        }
+
+    }
+
+    if (found)
+        return;
+
+    /* if we have made it so far, satellite is not in list */
+
+    /* Get satellite data */
+    if (gtk_sat_data_read_sat (catnum, &sat)) {
+        /* error */
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Error reading satellite %d."),
+                     __FILE__, __FUNCTION__, catnum);
+    }
+    else {
+        /* insert satellite into liststore */
+        gtk_list_store_append (store, &node);
+        gtk_list_store_set (store, &node,
+                            GTK_SAT_SELECTOR_COL_NAME, sat.nickname,
+                            GTK_SAT_SELECTOR_COL_CATNUM, catnum,
+                            GTK_SAT_SELECTOR_COL_EPOCH, sat.jul_epoch,
+                            -1);
+        g_free (sat.name);
+        g_free (sat.nickname);
+    }
+}
+
 
 
 /** \brief Manage name changes.
@@ -956,4 +1140,35 @@ static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer dat
     /* Add satellite to selected list */
 
     g_free (satname);
+}
+
+
+/** \brief Compare two rows of the GtkSatSelector.
+ *  \param model The tree model of the GtkSatSelector.
+ *  \param a The first row.
+ *  \param b The second row.
+ *  \param userdata Not used.
+ *
+ * This function is used by the sorting algorithm to compare two rows of the
+ * GtkSatSelector widget. The unctions works by comparing the character strings
+ * in the name column.
+ */
+static gint compare_func (GtkTreeModel *model,
+                          GtkTreeIter  *a,
+                          GtkTreeIter  *b,
+                          gpointer      userdata)
+{
+    gchar *sat1,*sat2;
+    gint ret = 0;
+
+
+    gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
+    gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
+
+    ret = g_ascii_strcasecmp (sat1, sat2);
+
+    g_free (sat1);
+    g_free (sat2);
+
+    return ret;
 }
