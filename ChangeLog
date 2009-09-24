@@ -4,7 +4,11 @@
     Fixed a bug that caused tree models to be deleted when selecting a new satellite group.
 
     * src/mod-cfg.c:
-    Added list of selected satellites.
+    Added list of selected satellites and arrow buttons. New satellite selector is now fully
+    functional and replaces GtkSatTree.
+
+    * src/gtk-sat-tree.[ch]:
+    Removed from build list.
 
 
 2009-09-23 Alexandru Csete <oz9aec at gmail.com>

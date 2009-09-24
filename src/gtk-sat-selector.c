@@ -264,11 +264,6 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     gtk_container_add (GTK_CONTAINER (GTK_SAT_SELECTOR (widget)->swin),
                        GTK_SAT_SELECTOR (widget)->tree);
 
-
-    //gtk_container_add (GTK_CONTAINER (widget), GTK_SAT_TREE (widget)->swin);
-    //gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->groups, FALSE, FALSE, 0);
-    //gtk_box_pack_start (GTK_BOX (widget), GTK_SAT_SELECTOR (widget)->swin, TRUE, TRUE, 0);
-
     table = gtk_table_new (7, 4, TRUE);
 
     /* Search */    
@@ -286,7 +281,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group:")), 0, 1, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->groups, 1, 4, 1, 2,
-                      GTK_FILL, GTK_FILL, 0, 0);
+                      GTK_FILL, GTK_SHRINK, 0, 0);
 
 
     /* satellite list */

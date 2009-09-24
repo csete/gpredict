@@ -66,21 +66,18 @@
 #include "config-keys.h"
 #include "sat-cfg.h"
 #include "sat-pref-modules.h"
-#include "gtk-sat-tree.h"
 #include "qth-editor.h"
 #include "mod-cfg.h"
 
-
 #include "gtk-sat-selector.h"
 
-extern GtkWidget *app;
 
+extern GtkWidget *app;
 
 
 /* private widgets */
 static GtkWidget *namew;   /* GtkEntry widget for module name */
 static GtkWidget *locw;    /* GtkComboBox for location selection */
-static GtkWidget *tree;    /* OBSOLETE GtkSatTree for selecting satellites */
 static GtkWidget *satlist; /* list of selected satellites */
 
 
@@ -106,6 +103,12 @@ static gint compare_func (GtkTreeModel *model,
                           GtkTreeIter  *b,
                           gpointer      userdata);
 
+static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+                              GtkTreeViewColumn *column, gpointer data);
+
+static void addbut_clicked_cb (GtkButton *button, GtkSatSelector *selector);
+static void delbut_clicked_cb (GtkButton *button, GtkSatSelector *selector);
+
 
 /** \brief Create a new module.
  *
@@ -121,7 +124,7 @@ gchar *mod_cfg_new    ()
     mod_cfg_status_t  status;
     gboolean          finished = FALSE;
     gsize             num = 0;
-    guint            *sats;
+
 
     /* create cfg data */
     cfgdata = g_key_file_new ();
@@ -138,8 +141,8 @@ gchar *mod_cfg_new    ()
             /* user pressed OK */
             case GTK_RESPONSE_OK:
 
-            /* FIXME check that user has selected at least one satellite */
-            sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
+
+            num = gtk_tree_model_iter_n_children (gtk_tree_view_get_model (GTK_TREE_VIEW (satlist)), NULL);
 
             if (num > 0) {
                 /* we have at least one sat selected */
@@ -198,8 +201,6 @@ gchar *mod_cfg_new    ()
 
                     finished = TRUE;
                 }
-
-                g_free (sats);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -224,7 +225,7 @@ gchar *mod_cfg_new    ()
             break;
 
             /* bring up properties editor */
-                case GTK_RESPONSE_HELP:
+            case GTK_RESPONSE_HELP:
             edit_advanced_settings (GTK_DIALOG (dialog), cfgdata);
             finished = FALSE;
             break;
@@ -262,7 +263,6 @@ mod_cfg_status_t mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *t
     gint              response;
     gboolean          finished = FALSE;
     gsize             num = 0;
-    guint            *sats;
     mod_cfg_status_t  status = MOD_CFG_CANCEL;
 
 
@@ -279,14 +279,13 @@ mod_cfg_status_t mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *t
                 case GTK_RESPONSE_OK:
 
             /* check that user has selected at least one satellite */
-            sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
+            num = gtk_tree_model_iter_n_children (gtk_tree_view_get_model (GTK_TREE_VIEW (satlist)), NULL);
 
             if (num > 0) {
 
                 /* we have at least one sat selected */
                 mod_cfg_apply (cfgdata);
                 finished = TRUE;
-                g_free (sats);
                 status = MOD_CFG_OK;
             }
             else {
@@ -467,6 +466,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     GtkWidget   *table;    
     GtkWidget   *label;
     GtkWidget   *swin;
+    GtkWidget   *addbut, *delbut;
     GtkTooltips *tooltips;
     gchar       *icon;      /* window icon file name */
 
@@ -571,46 +571,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_label_set_markup (GTK_LABEL (label), _("<b>Select Satellites:</b>"));
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 5);
 
-    /* OBSOLETE satellite selector */
-    tree = gtk_sat_tree_new (0);
-    if (!new) {
-        /* select satellites */
-        gint   *sats = NULL;
-        gsize   length;
-        GError *error = NULL;
-        guint   i;
 
-        sats = g_key_file_get_integer_list (cfgdata,
-                                            MOD_CFG_GLOBAL_SECTION,
-                                            MOD_CFG_SATS_KEY,
-                                            &length,
-                                            &error);
-
-        if (error != NULL) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Failed to get list of satellites (%s)"),
-                         __FUNCTION__, error->message);
-
-            g_clear_error (&error);
-
-            /* GLib API says nothing about the contents in case of error */
-            if (sats) {
-                g_free (sats);
-            }
-
-        }
-        else {
-            for (i = 0; i < length; i++) {
-                gtk_sat_tree_select (GTK_SAT_TREE (tree), sats[i]);
-            }
-            g_free (sats);
-        }
-
-    }
-
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), tree, TRUE, TRUE, 0);
-
-    /*** NEW CODE ***/
     /* satellite selector */
     GtkWidget *selector = gtk_sat_selector_new (0);
     g_signal_connect (selector, "sat-activated",
@@ -622,10 +583,19 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     gtk_container_add (GTK_CONTAINER (swin), satlist);
 
+    /* Add and Delete buttons */
+    addbut = gpredict_hstock_button (GTK_STOCK_GO_FORWARD, NULL,
+                                     _("Add satellite to list of selected satellites."));
+    g_signal_connect (addbut, "clicked", G_CALLBACK (addbut_clicked_cb), selector);
+    delbut = gpredict_hstock_button (GTK_STOCK_GO_BACK, NULL,
+                                     _("Remove satellite from the list of selected satellites."));
+    g_signal_connect (delbut, "clicked", G_CALLBACK (delbut_clicked_cb), NULL);
 
     table = gtk_table_new (7, 9, TRUE);
     gtk_table_attach_defaults (GTK_TABLE (table), selector, 0, 4, 0, 7);
     gtk_table_attach_defaults (GTK_TABLE (table), swin, 5, 9, 2, 7);
+    gtk_table_attach (GTK_TABLE (table), addbut, 4, 5, 4, 5, GTK_SHRINK, GTK_SHRINK, 2, 5);
+    gtk_table_attach (GTK_TABLE (table), delbut, 4, 5, 5, 6, GTK_SHRINK, GTK_SHRINK, 2, 5);
 
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, TRUE, TRUE, 0);
 
@@ -649,6 +619,8 @@ static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new)
 
 
     satlist = gtk_tree_view_new ();
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (satlist), TRUE);
+    //gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (satlist), GTK_TREE_VIEW_GRID_LINES_HORIZONTAL);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Selected Satellites"), renderer,
@@ -673,6 +645,10 @@ static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new)
     gtk_tree_view_insert_column (GTK_TREE_VIEW (satlist), column, -1);
     gtk_tree_view_column_set_visible (column, FALSE);
 
+    /* "row-activated" signal is used to catch double click events, which means
+       a satellite has been selected. This will cause the satellite to be deleted */
+    g_signal_connect (GTK_TREE_VIEW (satlist), "row-activated",
+                      G_CALLBACK(row_activated_cb), NULL);
 
     /* create the model */
     store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
@@ -720,7 +696,6 @@ static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new)
         else {
             for (i = 0; i < length; i++) {
                 add_selected_sat (store, sats[i]);
-                g_print ("ADD: %d\n", sats[i]);
             }
             g_free (sats);
         }
@@ -963,11 +938,13 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
  */
 static void mod_cfg_apply         (GKeyFile *cfgdata)
 {
-    guint *sats;
     gsize num;
     guint i;
+    guint catnum;
     gchar *satstr = NULL;
     gchar *buff;
+    GtkTreeModel *model;
+    GtkTreeIter   iter;
 
 
     /* store location */
@@ -993,20 +970,34 @@ static void mod_cfg_apply         (GKeyFile *cfgdata)
 
     g_free (buff);
 
-    /* store satellites */
-    sats = gtk_sat_tree_get_selected (GTK_SAT_TREE (tree), &num);
 
+    /* get number of satellites already in list */
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (satlist));
+    num = gtk_tree_model_iter_n_children (model, NULL);
+
+    /* loop over list entries and check their catnums */
     for (i = 0; i < num; i++) {
+        if (gtk_tree_model_iter_nth_child (model, &iter, NULL, i)) {
+            gtk_tree_model_get (model, &iter,
+                                GTK_SAT_SELECTOR_COL_CATNUM, &catnum,
+                                -1);
 
-        if (i) {
-            buff = g_strdup_printf ("%s;%d", satstr, sats[i]);
-            g_free (satstr);
+            if (i) {
+                buff = g_strdup_printf ("%s;%d", satstr, catnum);
+                g_free (satstr);
+            }
+            else {
+                buff = g_strdup_printf ("%d", catnum);
+            }
+            satstr = g_strdup (buff);
+            g_free (buff);
         }
         else {
-            buff = g_strdup_printf ("%d", sats[i]);
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%s: Could not fetch entry %d in satellite list"),
+                         __FILE__, __FUNCTION__, i);
         }
-        satstr = g_strdup (buff);
-        g_free (buff);
+
     }
 
     g_key_file_set_string (cfgdata,
@@ -1014,7 +1005,7 @@ static void mod_cfg_apply         (GKeyFile *cfgdata)
                            MOD_CFG_SATS_KEY,
                            satstr);
     g_free (satstr);
-    g_free (sats);
+
 
     sat_log_log (SAT_LOG_LEVEL_MSG,
                  _("%s: Applied changes to %s."),
@@ -1130,16 +1121,13 @@ static void add_qth_cb (GtkWidget *button, gpointer data)
   */
 static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer data)
 {
-    gchar   *satname;
-    gint     catnum;
-    gdouble  epoch;
+    GtkListStore *store;
 
-
-    gtk_sat_selector_get_selected (selector, &catnum, &satname, &epoch);
 
     /* Add satellite to selected list */
+    store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (satlist)));
+    add_selected_sat (store, catnr);
 
-    g_free (satname);
 }
 
 
@@ -1172,3 +1160,79 @@ static gint compare_func (GtkTreeModel *model,
 
     return ret;
 }
+
+
+/** \brief Signal handler for managing satellite selection.
+  * \param view Pointer to the GtkTreeView object.
+  * \param path The path of the row that was activated.
+  * \param column The column where the activation occured.
+  * \param data Pointer to the GtkSatselector widget.
+  *
+  * This function is called when the user double clicks on a satellite in the
+  * list of satellites. The double clicked satellite is removed from the list.
+  */
+static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+                              GtkTreeViewColumn *column, gpointer data)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
+    gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
+
+
+    /* get the selected row in the treeview */
+    selection = gtk_tree_view_get_selection (view);
+    haveselection = gtk_tree_selection_get_selected (selection, &model, &iter);
+
+    if (haveselection) {
+        gtk_list_store_remove (GTK_LIST_STORE(model), &iter);
+    }
+}
+
+
+/** \brief Signal handler for "->" button signals.
+  * \param button Pointer to the button that received the signal.
+  * \param selector Pointer to the GtkSatSelector.
+  */
+static void addbut_clicked_cb (GtkButton *button, GtkSatSelector *selector)
+{
+    GtkListStore *store;
+    gint         catnum = 0;
+    gchar        *name;
+    gdouble       epoch;
+
+
+    /* get the selected row in the treeview */
+    gtk_sat_selector_get_selected (selector, &catnum, &name, &epoch);
+
+    if (catnum) {
+        /* Add satellite to selected list */
+        store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (satlist)));
+        add_selected_sat (store, catnum);
+    }
+
+}
+
+
+/** \brief Signal handler for "<-" button signals.
+  * \param button Pointer to the button that received the signal.
+  * \param selector Pointer to the GtkSatSelector (not used).
+  */
+static void delbut_clicked_cb (GtkButton *button, GtkSatSelector *selector)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
+    gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
+
+
+    /* get the selected row in the treeview */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (satlist));
+    haveselection = gtk_tree_selection_get_selected (selection, &model, &iter);
+
+    if (haveselection) {
+        gtk_list_store_remove (GTK_LIST_STORE(model), &iter);
+    }
+
+}
+
