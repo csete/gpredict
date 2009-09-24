@@ -27,7 +27,6 @@
 */
 /** \brief Satellite selector.
  *
- * FIXME: add search/lookup function
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -561,21 +560,26 @@ static gint compare_func (GtkTreeModel *model,
 static void group_selected_cb (GtkComboBox *combobox, gpointer data)
 {
     GtkSatSelector *selector = GTK_SAT_SELECTOR (data);
-    GtkTreeModel   *model;
+    GtkTreeModel   *newmodel;
+    GtkTreeModel   *oldmodel;
     gint            sel;
 
     sel = gtk_combo_box_get_active (combobox);
 
-    g_print ("%d\n", sel);
 
-    /*** FIXME ***/
+    /* Frst, we need to reference the existing model, otherwise its
+       refcount will drop to 0 when we replace it */
+    oldmodel = gtk_tree_view_get_model (GTK_TREE_VIEW (selector->tree));
+    if (oldmodel != NULL)
+        g_object_ref (oldmodel);
 
-    model = GTK_TREE_MODEL (g_slist_nth_data (selector->models, sel));
-    gtk_tree_view_set_model (GTK_TREE_VIEW (selector->tree), model);
-    g_object_unref (model);
+    /* now replace oldmodel with newmodel */
+    newmodel = GTK_TREE_MODEL (g_slist_nth_data (selector->models, sel));
+    gtk_tree_view_set_model (GTK_TREE_VIEW (selector->tree), newmodel);
+    g_object_unref (newmodel);
 
     /* We changed the GtkTreeModel so we need to reset the sort column ID */
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (newmodel),
                                           GTK_SAT_SELECTOR_COL_NAME,
                                           GTK_SORT_ASCENDING);
 
