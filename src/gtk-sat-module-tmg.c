@@ -265,9 +265,9 @@ void tmg_create (GtkSatModule *mod)
                       2, 3, 4, 5, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
     /* add slider */
-    mod->tmgSlider = gtk_hscale_new_with_range (-0.208, +0.208, 0.0001);  // +/- 5 hr
+    mod->tmgSlider = gtk_hscale_new_with_range (-0.1, +0.1, 0.0001);  // +/- 2.5 hr
     gtk_widget_set_tooltip_text (mod->tmgSlider,
-                                 _("Drag the slider to change the time up to +/- 5 hours.\n"\
+                                 _("Drag the slider to change the time up to +/- 2.5 hours.\n"\
                                    "Resolution is ~ 8 seconds."));
     gtk_scale_set_draw_value (GTK_SCALE (mod->tmgSlider), FALSE);
     gtk_range_set_value (GTK_RANGE (mod->tmgSlider), 0.0);
