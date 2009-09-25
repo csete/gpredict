@@ -1,15 +1,16 @@
 Changes in version 1.1 (TBD)
 
-- New satellite selector in the module config dialog that makes it easier
-  to locate and select satellites.
+- New satellite selector in the module configuration dialog that makes
+  it easier to locate and select satellites.
 - User configuration on Unix is now stored in $HOME/.config/Gpredict/
   The old configuration is imported automatically and one can still use
   Gpredict 1.0 with the old configuration stored in $HOME/.gpredict2/
 - Distribution now includes all satellites from CelesTrak.
 * Added new Satellite Editor that allows adding/editing/deleting satellite
-  data in a convenient UI, includ
+  data in a convenient UI, including...
+- Added a slider control to the Time Controller.
 - Fixed bug 2116693: List view does not sort properly for all time formats.
-* Fixed bug 2836265: Time controls should wrap around their limits.
+- Fixed bug 2836265: Time controls should wrap around their limits.
 * Binary packages for Windows, Mac OS X, Ubuntu and generic Linux.
 
 

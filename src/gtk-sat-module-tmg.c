@@ -46,6 +46,7 @@ static void tmg_bwd      (GtkWidget *widget, gpointer data);
 static void tmg_reset    (GtkWidget *widget, gpointer data);
 static void tmg_throttle (GtkWidget *widget, gpointer data);
 static void tmg_time_set (GtkWidget *widget, gpointer data);
+static void slider_moved (GtkWidget *widget, gpointer data);
 static void tmg_hour_wrap (GtkWidget *widget, gpointer data);
 static void tmg_min_wrap  (GtkWidget *widget, gpointer data);
 static void tmg_sec_wrap  (GtkWidget *widget, gpointer data);
@@ -264,9 +265,14 @@ void tmg_create (GtkSatModule *mod)
                       2, 3, 4, 5, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
     /* add slider */
-    mod->tmgSlider = gtk_hscale_new_with_range (-1.0, +1.0, 0.005);
+    mod->tmgSlider = gtk_hscale_new_with_range (-0.208, +0.208, 0.0001);  // +/- 5 hr
+    gtk_widget_set_tooltip_text (mod->tmgSlider,
+                                 _("Drag the slider to change the time up to +/- 5 hours.\n"\
+                                   "Resolution is ~ 8 seconds."));
     gtk_scale_set_draw_value (GTK_SCALE (mod->tmgSlider), FALSE);
     gtk_range_set_value (GTK_RANGE (mod->tmgSlider), 0.0);
+    g_signal_connect (mod->tmgSlider, "value-changed",
+                      G_CALLBACK (slider_moved), mod);
 
 
     /* create the vertical box */
@@ -430,6 +436,9 @@ static void tmg_reset      (GtkWidget *widget, gpointer data)
     mod->tmgPdnum = mod->rtPrev;
     mod->tmgCdnum = mod->rtNow;
 
+    /* RESET slider */
+    gtk_range_set_value (GTK_RANGE (mod->tmgSlider), 0.0);
+
     /* update widgets; widget signals will have no effect
            since the tmgReset flag is TRUE	*/
     tmg_update_widgets (mod);
@@ -471,6 +480,7 @@ static void tmg_time_set (GtkWidget *widget, gpointer data)
     guint year, month, day;
     gint  hr, min, sec, msec;
     struct tm tim,utim;
+    gdouble slider;
     gdouble jd;
 
 
@@ -515,8 +525,33 @@ static void tmg_time_set (GtkWidget *widget, gpointer data)
 
         jd = jd + (gdouble)msec/8.64e+7;
 
-        mod->tmgCdnum = jd;
+        /* get slider offset */
+        slider = gtk_range_get_value (GTK_RANGE (mod->tmgSlider));
+
+        mod->tmgCdnum = jd + slider;
     }
+}
+
+
+/** \brief Signal handler for slider "value-changed" signals
+ *  \param widget The widget that was modified.
+ *  \param data Pointer to the GtkSatModule structure.
+ *
+ * This function is called when the user moves the slider.
+ * If we are in manual control mode, the function simpley calls
+ * tmg_time_set(). In the other modes, the function switches over
+ * to amnual mode first.
+ */
+static void slider_moved (GtkWidget *widget, gpointer data)
+{
+    GtkSatModule *mod = GTK_SAT_MODULE (data);
+
+    if (mod->throttle) {
+        /* "press" the stop button to trigger a transition into manual mode */
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (mod->tmgStop), TRUE);
+    }
+
+    tmg_time_set (widget, data);
 }
 
 

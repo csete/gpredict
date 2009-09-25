@@ -1,11 +1,20 @@
+2009-09-25 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-module-tmg.c:
+    Finished implementation of the slider. It allows dragging of the time
+    +/- 5 hours with a resolution of 8 seconds. It is complementary to the
+    spin buttons.
+
+
 2009-09-24 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-selector.c:
-    Fixed a bug that caused tree models to be deleted when selecting a new satellite group.
+    Fixed a bug that caused tree models to be deleted when selecting a new
+    satellite group.
 
     * src/mod-cfg.c:
-    Added list of selected satellites and arrow buttons. New satellite selector is now fully
-    functional and replaces GtkSatTree.
+    Added list of selected satellites and arrow buttons. New satellite selector
+    is now fully functional and replaces GtkSatTree.
 
     * src/gtk-sat-tree.[ch]:
     Removed from build list.
