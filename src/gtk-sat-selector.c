@@ -180,6 +180,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     GtkCellRenderer    *renderer;
     GtkTreeViewColumn  *column;
     GtkWidget          *table;
+    GtkWidget          *frame;
 
 
     if (!flags)
@@ -264,12 +265,19 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     gtk_container_add (GTK_CONTAINER (GTK_SAT_SELECTOR (widget)->swin),
                        GTK_SAT_SELECTOR (widget)->tree);
 
+    /* create a frame around the SWIN */
+    frame = gtk_frame_new (NULL);
+    gtk_container_add (GTK_CONTAINER (frame), GTK_SAT_SELECTOR (widget)->swin);
+
     table = gtk_table_new (7, 4, TRUE);
 
     /* Search */    
-    gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Search:")), 0, 1, 0, 1,
+    gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Search")), 0, 1, 0, 1,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     GTK_SAT_SELECTOR (widget)->search = gtk_entry_new ();
+    gtk_widget_set_tooltip_text (GTK_SAT_SELECTOR (widget)->search,
+                                 _("Start typing in this field to search for a satellite"\
+                                   " in the selected group."));
 
     /* this enables automatic search */
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
@@ -278,14 +286,14 @@ GtkWidget *gtk_sat_selector_new (guint flags)
                       GTK_FILL, GTK_FILL, 0, 0);
 
     /* Group selector */
-    gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group:")), 0, 1, 1, 2,
+    gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group")), 0, 1, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->groups, 1, 4, 1, 2,
                       GTK_FILL, GTK_SHRINK, 0, 0);
 
 
     /* satellite list */
-    gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->swin, 0, 4, 2, 7,
+    gtk_table_attach (GTK_TABLE (table), frame, 0, 4, 2, 7,
                       GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 
     /* Add tabel to main container */

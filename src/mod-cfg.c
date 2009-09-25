@@ -25,35 +25,6 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/*  FIXME: Update diagram
-
-+------------------------------------+
-|           +---------------------+  |
-|  Name     | My Kool Module      |  |
-|           +---------------------+  |
-|           +-----------+---+ +---+  |
-|  Location | OZ9AEC    | v | | + |  |
-|           +-----------+---+ +---+  |
-| ---------------------------------- |
-|             Satellites             |
-| +--------------------------+-----+ |
-| | Available Satellites     | Sel | |
-| +--------------------------+-----+ |      
-| | > Amateur                |     | |
-| | v Weather                |     | |
-| |     NOAA 14              |  x  | |
-| |     NOAA 15              |  x  | |
-| |     NOAA 17              |  x  | |
-| | > Military               |     | |
-| +--------------------------+-----+ |
-| ---------------------------------- |
-| +----------------------+ +------+  |
-| |  (not implemented)   | | Find |  |
-| +----------------------+ +------+  |
-|                                    |
-|      Advanced Settings             |
-+------------------------------------+
-*/
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "sat-log.h"
@@ -469,6 +440,8 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     GtkWidget   *addbut, *delbut;
     GtkTooltips *tooltips;
     gchar       *icon;      /* window icon file name */
+    GtkWidget *frame;
+
 
 
 
@@ -544,8 +517,9 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
 
     /* ground station selector */
     locw = create_loc_selector (cfgdata);
+    gtk_widget_set_tooltip_text (locw, _("Select a ground station for this module."));
 
-    table = gtk_table_new (2, 3, FALSE);
+    table = gtk_table_new (2, 5, TRUE);
     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
@@ -559,16 +533,18 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_table_attach_defaults (GTK_TABLE (table), locw, 1, 3, 1, 2);
 
     /* add button */
-    add = gpredict_hstock_button (GTK_STOCK_ADD, NULL, _("Add new ground station"));
+    add = gpredict_hstock_button (GTK_STOCK_ADD, NULL, _("Add a new ground station"));
     g_signal_connect (add, "clicked", G_CALLBACK (add_qth_cb), dialog);
-    gtk_table_attach_defaults (GTK_TABLE (table), add, 4, 5, 1, 2);
+    gtk_table_attach (GTK_TABLE (table), add, 3, 4, 1, 2,
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
 
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, FALSE, FALSE, 0);
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
                         gtk_hseparator_new (), FALSE, FALSE, 5);
 
     label = gtk_label_new (NULL);
-    gtk_label_set_markup (GTK_LABEL (label), _("<b>Select Satellites:</b>"));
+    gtk_label_set_markup (GTK_LABEL (label), _("<b>Satellites</b>"));
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 5);
 
 
@@ -591,11 +567,23 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
                                      _("Remove satellite from the list of selected satellites."));
     g_signal_connect (delbut, "clicked", G_CALLBACK (delbut_clicked_cb), NULL);
 
+    /* quick sat selecotr tutorial label */
+    label = gtk_label_new (NULL);
+    gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_label_set_markup (GTK_LABEL (label),
+                          _("<b>Hint: </b> Double click on any satellite\n"\
+                            "to move it to the other box."));
+
+    frame = gtk_frame_new (NULL);
+    gtk_container_add (GTK_CONTAINER (frame), swin);
+
     table = gtk_table_new (7, 9, TRUE);
     gtk_table_attach_defaults (GTK_TABLE (table), selector, 0, 4, 0, 7);
-    gtk_table_attach_defaults (GTK_TABLE (table), swin, 5, 9, 2, 7);
+    gtk_table_attach_defaults (GTK_TABLE (table), frame, 5, 9, 2, 7);
     gtk_table_attach (GTK_TABLE (table), addbut, 4, 5, 4, 5, GTK_SHRINK, GTK_SHRINK, 2, 5);
     gtk_table_attach (GTK_TABLE (table), delbut, 4, 5, 5, 6, GTK_SHRINK, GTK_SHRINK, 2, 5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 5, 9, 0, 2);
 
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, TRUE, TRUE, 0);
 
