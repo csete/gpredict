@@ -228,6 +228,17 @@ gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
     GtkWidget *skg;
     GooCanvasItemModel *root;
     GdkColor bg_color = {0, 0xFFFF, 0xFFFF, 0xFFFF};
+    guint number;
+
+
+    /* check that we have at least one satellite */
+    number = g_hash_table_size (sats);
+    if (number == 0) {
+        /* no satellites */
+        skg = gtk_label_new (_("This module has no satellites!"));
+
+        return skg;
+    }
 
     skg = g_object_new (GTK_TYPE_SKY_GLANCE, NULL);
 

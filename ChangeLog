@@ -3,6 +3,9 @@
     * src/tle-update.c:
     Synchronise satellite categories during TLE update.
 
+    * src/gtk-sky-at-glance.c:
+    Fixed bug 2691499: Sky at glance crashes with empty module.
+
 
 2009-09-25 Alexandru Csete <oz9aec at gmail.com>
 
