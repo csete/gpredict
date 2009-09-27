@@ -11,7 +11,7 @@
 
 /*
  *  Hamlib Interface - locator and bearing conversion calls
- *  Copyright (c) 2001-2008 by Stephane Fillod
+ *  Copyright (c) 2001-2009 by Stephane Fillod
  *  Copyright (c) 2003 by Nate Bargmann
  *  Copyright (c) 2003 by Dave Hines
  *
