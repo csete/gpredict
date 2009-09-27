@@ -130,6 +130,7 @@ sat_cfg_bool_t sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
     { "MODULES", "POLAR_NEXT_EVENT",   TRUE},
     { "MODULES", "POLAR_CURSOR_TRACK", TRUE},
     { "MODULES", "POLAR_EXTRA_AZ_TICKS", FALSE},
+    { "MODULES", "POLAR_SHOW_TRACK_AUTO", FALSE},
     { "TLE",     "SERVER_AUTH",        FALSE},
     { "TLE",     "PROXY_AUTH",         FALSE},
     { "TLE",     "ADD_NEW_SATS",       TRUE},

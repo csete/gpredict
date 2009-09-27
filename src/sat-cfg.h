@@ -51,6 +51,7 @@ typedef enum {
     SAT_CFG_BOOL_POL_SHOW_NEXT_EV,    /*!< Show next event on polar plot */
     SAT_CFG_BOOL_POL_SHOW_CURS_TRACK, /*!< Track mouse cursor on polar plot. */
     SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS, /*!< Extra Az ticks at every 30 deg. */
+    SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO,     /*!< Automatically show the sky track. */
     SAT_CFG_BOOL_TLE_SERVER_AUTH,     /*!< TLE server requires authentication. */
     SAT_CFG_BOOL_TLE_PROXY_AUTH,      /*!< Proxy requires authentication. */
     SAT_CFG_BOOL_TLE_ADD_NEW,         /*!< Add new satellites to database. */
