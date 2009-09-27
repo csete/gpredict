@@ -64,6 +64,7 @@ static void size_allocate_cb           (GtkWidget *widget,
                                         gpointer data);
 static void update_sat                 (gpointer key, gpointer value, gpointer data);
 static void update_track               (gpointer key, gpointer value, gpointer data);
+static void create_track               (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat);
 static void correct_pole_coor          (GtkPolarView *polv, polar_view_pole_t pole,
                                         gfloat *x, gfloat *y, GtkAnchorType *anch);
 static gboolean on_motion_notify       (GooCanvasItem *item,
@@ -200,6 +201,12 @@ gtk_polar_view_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
                                                       MOD_CFG_POLAR_REFRESH,
                                                       SAT_CFG_INT_POLAR_REFRESH);
 
+    GTK_POLAR_VIEW (polv)->showtrack = mod_cfg_get_bool (cfgdata,
+                                                         MOD_CFG_POLAR_SECTION,
+                                                         MOD_CFG_POLAR_SHOW_TRACK_AUTO,
+                                                         SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO);
+
+
     GTK_POLAR_VIEW (polv)->counter = 1;
 
     GTK_POLAR_VIEW (polv)->swap = mod_cfg_get_int (cfgdata,
@@ -280,6 +287,7 @@ create_canvas_model (GtkPolarView *polv)
                            MOD_CFG_POLAR_SECTION,
                            MOD_CFG_POLAR_AXIS_COL,
                            SAT_CFG_INT_POLAR_AXIS_COL);
+
 
     /* Add elevation circles at 0, 30 and 60 deg */
     polv->C00 = goo_canvas_ellipse_model_new (root,
@@ -938,7 +946,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             /* add sat to canvas */
             obj = g_try_new (sat_obj_t, 1);
             obj->selected = FALSE;
-            obj->showtrack = FALSE;
+            obj->showtrack = polv->showtrack;
             obj->istarget = FALSE;
 
             root = goo_canvas_get_root_item_model (GOO_CANVAS (polv->canvas));
@@ -976,6 +984,10 @@ update_sat    (gpointer key, gpointer value, gpointer data)
 
             /* add sat to hash table */
             g_hash_table_insert (polv->obj, catnum, obj);
+
+            /* Finally, create the sky track if necessary */
+            if (obj->showtrack)
+                create_track (polv, obj, sat);
         }
 
     }
@@ -1044,6 +1056,151 @@ update_track (gpointer key, gpointer value, gpointer data)
 
     }
 }
+
+
+/**** FIXME: DUPLICATE from gtk-polar-view-popup.c - needed by create_track  ******/
+static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y)
+{
+    GooCanvasItemModel *item;
+    time_t             t;
+    gchar              buff[7];
+    GtkAnchorType      anchor;
+    GooCanvasItemModel *root;
+    guint32            col;
+
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
+
+    col = mod_cfg_get_int (pv->cfgdata,
+                           MOD_CFG_POLAR_SECTION,
+                           MOD_CFG_POLAR_TRACK_COL,
+                           SAT_CFG_INT_POLAR_TRACK_COL);
+
+    /* convert julian date to struct tm */
+    t = (time - 2440587.5)*86400.;
+
+    /* format either local time or UTC depending on check box */
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
+        strftime (buff, 8, "%H:%M", localtime (&t));
+    else
+        strftime (buff, 8, "%H:%M", gmtime (&t));
+
+    buff[6]='\0';
+
+    if (x > pv->cx) {
+        anchor = GTK_ANCHOR_EAST;
+        x -= 5;
+    }
+    else {
+        anchor = GTK_ANCHOR_WEST;
+        x += 5;
+    }
+
+    item = goo_canvas_text_model_new (root, buff,
+                                      (gdouble) x, (gdouble) y,
+                                      -1, anchor,
+                                      "font", "Sans 7",
+                                      "fill-color-rgba", col,
+                                      NULL);
+
+    goo_canvas_item_model_lower (item, NULL);
+
+    return item;
+}
+
+/** \brief Create a sky track for a satellite.
+ *  \param pv Pointer to the GtkPolarView object.
+ *  \param obj Pointer to the sat_obj_t object.
+ *  \param sat Pointer to the sat_t object.
+ *
+ * Note: This function is only used when the the satellite comes within range
+ *       and the ALWAYS_SHOW_SKY_TRACK option is TRUE.
+ */
+static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
+{
+    gint               i;
+    GooCanvasItemModel *root;
+    pass_detail_t      *detail;
+    guint              num;
+    GooCanvasPoints    *points;
+    gfloat             x,y;
+    guint32            col;
+    guint              tres,ttidx;
+
+
+    /* get satellite object */
+    /*obj = SAT_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
+    sat = SAT(g_object_get_data (G_OBJECT (item), "sat"));
+    qth = (qth_t *)(g_object_get_data (G_OBJECT (item), "qth"));*/
+
+    if (obj == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Failed to get satellite object."),
+                     __FILE__, __LINE__);
+        return;
+    }
+
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
+
+    /* add sky track */
+
+    /* create points */
+    num = g_slist_length (obj->pass->details);
+
+    /* time resolution for time ticks; we need
+                   3 additional points to AOS and LOS ticks.
+                */
+    tres = (num-2) / (TRACK_TICK_NUM-1);
+
+    points = goo_canvas_points_new (num);
+
+    /* first point should be (aos_az,0.0) */
+    azel_to_xy (pv, obj->pass->aos_az, 0.0, &x, &y);
+    points->coords[0] = (double) x;
+    points->coords[1] = (double) y;
+    obj->trtick[0] = create_time_tick (pv, obj->pass->aos, x, y);
+
+    ttidx = 1;
+
+    for (i = 1; i < num-1; i++) {
+        detail = PASS_DETAIL(g_slist_nth_data (obj->pass->details, i));
+        azel_to_xy (pv, detail->az, detail->el, &x, &y);
+        points->coords[2*i] = (double) x;
+        points->coords[2*i+1] = (double) y;
+
+        if (!(i % tres)) {
+            /* create a time tick */
+            obj->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
+            ttidx++;
+        }
+    }
+
+    /* last point should be (los_az, 0.0)  */
+    azel_to_xy (pv, obj->pass->los_az, 0.0, &x, &y);
+    points->coords[2*(num-1)] = (double) x;
+    points->coords[2*(num-1)+1] = (double) y;
+
+    /* create poly-line */
+    col = mod_cfg_get_int (pv->cfgdata,
+                           MOD_CFG_POLAR_SECTION,
+                           MOD_CFG_POLAR_TRACK_COL,
+                           SAT_CFG_INT_POLAR_TRACK_COL);
+
+    obj->track = goo_canvas_polyline_model_new (root, FALSE, 0,
+                                                "points", points,
+                                                "line-width", 1.0,
+                                                "stroke-color-rgba", col,
+                                                "line-cap", CAIRO_LINE_CAP_SQUARE,
+                                                "line-join", CAIRO_LINE_JOIN_MITER,
+                                                NULL);
+    goo_canvas_points_unref (points);
+
+    /* put track on the bottom of the sack */
+    goo_canvas_item_model_lower (obj->track, NULL);
+
+}
+
+
+
 
 
 /** \brief Convert Az/El to canvas based XY coordinates. */

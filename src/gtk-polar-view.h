@@ -130,6 +130,7 @@ struct _GtkPolarView
     gboolean    eventinfo;   /*!< Show info about the next event. */
     gboolean    cursinfo;    /*!< Track the mouse cursor. */
     gboolean    extratick;   /*!< Show extra ticks */
+    gboolean    showtrack;   /*!< Automatically show sky tracks. */
     gboolean    resize;      /*!< Flag indicating that the view has been resized. */
 };
 
