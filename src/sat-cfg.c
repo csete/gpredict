@@ -222,7 +222,8 @@ sat_cfg_str_t sat_cfg_str[SAT_CFG_STR_NUM] = {
       "glo-ops.txt;goes.txt;gorizont.txt;gps-ops.txt;intelsat.txt;"\
       "iridium.txt;military.txt;molniya.txt;musson.txt;nnss.txt;noaa.txt;"\
       "orbcomm.txt;other.txt;other-comm.txt;radar.txt;raduga.txt;resource.txt;"\
-      "sarsat.txt;sbas.txt;science.txt;tle-new.txt;visual.txt;weather.txt;x-comm.txt"},
+      "sarsat.txt;sbas.txt;science.txt;tdrss;tle-new.txt;visual.txt;weather.txt;"\
+      "x-comm.txt"},
     { "TLE",     "PROXY", NULL},
     { "TLE",     "FILE_DIR", NULL},
     { "TLE",     "EXTENSION", "*.*"},
