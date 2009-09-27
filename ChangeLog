@@ -17,6 +17,9 @@
     * src/gtk-sat-module-tmg.c:
     Disabled tooltip since it was too annoying when using the scroll wheel.
 
+    * src/sat-pref-polar-view.c:
+    Added config widget for new sky track option.
+
 
 2009-09-25 Alexandru Csete <oz9aec at gmail.com>
 
