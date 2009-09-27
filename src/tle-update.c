@@ -709,12 +709,38 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
     guint      catnr,i;
     guint     *key = NULL;
 
+    /* category sync related */
+    gchar     *catname, *catpath, *buff, **buffv;
+    FILE      *catfile;
+    gchar      category[80];
+
+
 
     path = g_strconcat (dir, G_DIR_SEPARATOR_S, fnam, NULL);
 
     fp = g_fopen (path, "r");
 
     if (fp != NULL) {
+
+        /* Prepare .cat file for sync while we read data */
+        buffv = g_strsplit (fnam, ".", 0);
+        catname = g_strconcat (buffv[0], ".cat", NULL);
+        g_strfreev (buffv);
+        catpath = sat_file_name (catname);
+        g_free (catname);
+
+        /* read category name for catfile */
+        catfile = g_fopen (catpath, "r");
+        b = fgets (category, 80, catfile);
+        fclose (catfile);
+
+        /* reopen a new catfile and write category name */
+        catfile = g_fopen (catpath, "w");
+        g_free (catpath);
+        fputs (category, catfile);
+
+        /* .cat file now contains the category name;
+           satellite catnums will be added during update in the while loop */
 
         /* read 3 lines at a time */
         while (fgets (tle_str[0], 80, fp)) {
@@ -746,6 +772,11 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 /* 						     __FUNCTION__, */
                 /* 						     catnr); */
 
+                /* store catalog number in catfile */
+                buff = g_strdup_printf ("%d\n", catnr);
+                fputs (buff, catfile);
+                g_free (buff);
+
                 /* add data to hash table */
                 key = g_try_new0 (guint, 1);
                 *key = catnr;
@@ -773,6 +804,9 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             }
 
         }
+
+        /* close category file */
+        fclose (catfile);
 
         /* close input TLE file */
         fclose (fp);

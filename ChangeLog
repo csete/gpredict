@@ -1,3 +1,9 @@
+2009-09-27 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/tle-update.c:
+    Synchronise satellite categories during TLE update.
+
+
 2009-09-25 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module-tmg.c:
