@@ -9,6 +9,7 @@ Changes in version 1.1 (TBD)
 * Added new Satellite Editor that allows adding/editing/deleting satellite
   data in a convenient UI, including...
 - Added a slider control to the Time Controller.
+- Added config option to automatically show the sky tracks on the polar view.
 - Fixed bug 2116693: List view does not sort properly for all time formats.
 - Fixed bug 2836265: Time controls should wrap around their limits.
 - Fixed bug 2691499: Sky at glance crashes with empty module.

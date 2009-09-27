@@ -6,6 +6,17 @@
     * src/gtk-sky-at-glance.c:
     Fixed bug 2691499: Sky at glance crashes with empty module.
 
+    * src/sat-cfg.[ch]:
+    * src/config-keys.h:
+    Addd configuration flag for automatically showing the sky tracks in
+    the Polar views.
+
+    * src/gtk-polar-view.[ch]:
+    Added support for automatically showing the sky tracks.
+
+    * src/gtk-sat-module-tmg.c:
+    Disabled tooltip since it was too annoying when using the scroll wheel.
+
 
 2009-09-25 Alexandru Csete <oz9aec at gmail.com>
 
