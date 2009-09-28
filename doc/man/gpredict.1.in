@@ -11,18 +11,18 @@ gpredict \- real-time satellite tracking and orbit prediction program
 .SH "DESCRIPTION"
 .\" Add any additional description here
 .PP 
-Gpredict is a real-time satellite tracking and orbit prediction program. It can track an infinite number of satellites and display the satellite data in various visualisation modules like lists, maps and polar plots. Gpredict can also provide detailed information about upcoming satellite passes relative to one or more ground stations. The complete user manual, as well as other documentation, is available from http://groundstation.sourceforge.net/gpredict/documents.php
+Gpredict is a real-time satellite tracking and orbit prediction program. It can track an unlimitied number of satellites and display the satellite data in various visualisation modules like lists, maps and polar plots. Gpredict can also provide detailed information about upcoming satellite passes relative to one or more ground stations. Gpredict can perform Doppler tuning and antenna rotator tracking via hamlib. The complete user manual, as well as other documentation, is available from http://gpredict.oz9aec.net/documents.php
 
 
 .SH "AUTHOR"
 Gpredict is designed and written by Alexandru Csete, OZ9AEC, but many other have contributed in one way or other, see the AUTHORS file or the About box in gpredict.
 
 .SH "REPORTING BUGS"
-Report bugs to \fB<groundstation\-developer@lists.sourcforge.net>\fR.
+Report bugs to \fB<gpredict\-discussion@lists.sourcforge.net>\fR.
 
 .SH "COPYRIGHT"
-Copyright \(co 2001\-2006 Alexandru Csete.
+Copyright \(co 2001\-2009 Alexandru Csete.
 .br 
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. If it breaks you can keep both pieces.
+
 
