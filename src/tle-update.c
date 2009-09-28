@@ -343,9 +343,6 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s: TLE elements updated."),
                      __FUNCTION__);
-        sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%s: FIXME: Sync of categories not implemented!"),
-                     __FUNCTION__);
     }
 
     /* destroy hash tables */
