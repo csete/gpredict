@@ -11,7 +11,7 @@
   More details can be found at the project home page:
 
   http://gpredict.oz9aec.net/
- 
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -68,21 +68,21 @@ static void gtk_polar_plot_class_init          (GtkPolarPlotClass *class);
 static void gtk_polar_plot_init                (GtkPolarPlot *polview);
 static void gtk_polar_plot_destroy             (GtkObject *object);
 static void size_allocate_cb                   (GtkWidget *widget,
-												GtkAllocation *allocation,
-												gpointer data);
+                                                GtkAllocation *allocation,
+                                                gpointer data);
 static void create_track                       (GtkPolarPlot *pv);
 static void update_track                       (GtkPolarPlot *pv);
 static GooCanvasItemModel *create_time_tick    (GtkPolarPlot *pv, gdouble time, gfloat x, gfloat y);
 static void correct_pole_coor                  (GtkPolarPlot *polv, polar_plot_pole_t pole,
-												gfloat *x, gfloat *y, GtkAnchorType *anch);
+                                                gfloat *x, gfloat *y, GtkAnchorType *anch);
 static gboolean on_motion_notify               (GooCanvasItem *item,
-												GooCanvasItem *target,
-												GdkEventMotion *event,
-												gpointer data);
+                                                GooCanvasItem *target,
+                                                GdkEventMotion *event,
+                                                gpointer data);
 static void on_item_created                    (GooCanvas *canvas,
-												GooCanvasItem *item,
-												GooCanvasItemModel *model,
-												gpointer data);
+                                                GooCanvasItem *item,
+                                                GooCanvasItemModel *model,
+                                                gpointer data);
 static void on_canvas_realized                 (GtkWidget *canvas, gpointer data);
 static GooCanvasItemModel* create_canvas_model (GtkPolarPlot *polv);
 static void get_canvas_bg_color                (GtkPolarPlot *polv, GdkColor *color);
@@ -94,72 +94,72 @@ static GtkVBoxClass *parent_class = NULL;
 
 
 GtkType
-gtk_polar_plot_get_type ()
+        gtk_polar_plot_get_type ()
 {
-	static GType gtk_polar_plot_type = 0;
+    static GType gtk_polar_plot_type = 0;
 
-	if (!gtk_polar_plot_type) {
-		static const GTypeInfo gtk_polar_plot_info = {
-			sizeof (GtkPolarPlotClass),
-			NULL, /* base init */
-			NULL, /* base finalise */
-			(GClassInitFunc) gtk_polar_plot_class_init,
-			NULL, /* class finalise */
-			NULL, /* class data */
-			sizeof (GtkPolarPlot),
-			5,  /* n_preallocs */
-			(GInstanceInitFunc) gtk_polar_plot_init,
-		};
+    if (!gtk_polar_plot_type) {
+        static const GTypeInfo gtk_polar_plot_info = {
+            sizeof (GtkPolarPlotClass),
+            NULL, /* base init */
+            NULL, /* base finalise */
+            (GClassInitFunc) gtk_polar_plot_class_init,
+            NULL, /* class finalise */
+            NULL, /* class data */
+            sizeof (GtkPolarPlot),
+            5,  /* n_preallocs */
+            (GInstanceInitFunc) gtk_polar_plot_init,
+        };
 
-		gtk_polar_plot_type = g_type_register_static (GTK_TYPE_VBOX,
-													  "GtkPolarPlot",
-													  &gtk_polar_plot_info,
-													  0);
-	}
+        gtk_polar_plot_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                      "GtkPolarPlot",
+                                                      &gtk_polar_plot_info,
+                                                      0);
+    }
 
-	return gtk_polar_plot_type;
+    return gtk_polar_plot_type;
 }
 
 
 static void
-gtk_polar_plot_class_init (GtkPolarPlotClass *class)
+        gtk_polar_plot_class_init (GtkPolarPlotClass *class)
 {
-	GObjectClass      *gobject_class;
-	GtkObjectClass    *object_class;
-	GtkWidgetClass    *widget_class;
-	GtkContainerClass *container_class;
+    GObjectClass      *gobject_class;
+    GtkObjectClass    *object_class;
+    GtkWidgetClass    *widget_class;
+    GtkContainerClass *container_class;
 
-	gobject_class   = G_OBJECT_CLASS (class);
-	object_class    = (GtkObjectClass*) class;
-	widget_class    = (GtkWidgetClass*) class;
-	container_class = (GtkContainerClass*) class;
+    gobject_class   = G_OBJECT_CLASS (class);
+    object_class    = (GtkObjectClass*) class;
+    widget_class    = (GtkWidgetClass*) class;
+    container_class = (GtkContainerClass*) class;
 
-	parent_class = g_type_class_peek_parent (class);
+    parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_polar_plot_destroy;
-	//widget_class->size_allocate = gtk_polar_plot_size_allocate;
+    object_class->destroy = gtk_polar_plot_destroy;
+    //widget_class->size_allocate = gtk_polar_plot_size_allocate;
 }
 
 
 static void
-gtk_polar_plot_init (GtkPolarPlot *polview)
+        gtk_polar_plot_init (GtkPolarPlot *polview)
 {
-	polview->qth       = NULL;
+    polview->qth       = NULL;
     polview->pass      = NULL;
-	polview->size      = 0;
-	polview->r         = 0;
-	polview->cx        = 0;
-	polview->cy        = 0;
-	polview->swap      = 0;
-	polview->qthinfo   = FALSE;
-	polview->cursinfo  = FALSE;
-	polview->extratick = FALSE;
+    polview->size      = 0;
+    polview->r         = 0;
+    polview->cx        = 0;
+    polview->cy        = 0;
+    polview->swap      = 0;
+    polview->qthinfo   = FALSE;
+    polview->cursinfo  = FALSE;
+    polview->extratick = FALSE;
     polview->target    = NULL;
 }
 
 
 static void
-gtk_polar_plot_destroy (GtkObject *object)
+        gtk_polar_plot_destroy (GtkObject *object)
 {
 
     if (GTK_POLAR_PLOT (object)->pass != NULL) {
@@ -167,7 +167,7 @@ gtk_polar_plot_destroy (GtkObject *object)
         GTK_POLAR_PLOT (object)->pass = NULL;
     }
     
-	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 
@@ -178,57 +178,57 @@ gtk_polar_plot_destroy (GtkObject *object)
  *
  */
 GtkWidget*
-gtk_polar_plot_new (qth_t *qth, pass_t *pass)
+        gtk_polar_plot_new (qth_t *qth, pass_t *pass)
 {
-	GtkWidget *polv;
-	GooCanvasItemModel *root;
-	GdkColor bg_color = {0, 0xFFFF, 0xFFFF, 0xFFFF};
+    GtkWidget *polv;
+    GooCanvasItemModel *root;
+    GdkColor bg_color = {0, 0xFFFF, 0xFFFF, 0xFFFF};
 
-	polv = g_object_new (GTK_TYPE_POLAR_PLOT, NULL);
+    polv = g_object_new (GTK_TYPE_POLAR_PLOT, NULL);
 
-	GTK_POLAR_PLOT (polv)->qth  = qth;
+    GTK_POLAR_PLOT (polv)->qth  = qth;
     
     if (pass != NULL)
         GTK_POLAR_PLOT (polv)->pass = copy_pass (pass);
 
-	/* get settings */
-	GTK_POLAR_PLOT (polv)->swap = sat_cfg_get_int (SAT_CFG_INT_POLAR_ORIENTATION);
-	GTK_POLAR_PLOT (polv)->qthinfo = sat_cfg_get_bool (SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
-	GTK_POLAR_PLOT (polv)->extratick = sat_cfg_get_bool (SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
-	GTK_POLAR_PLOT (polv)->cursinfo = TRUE;
+    /* get settings */
+    GTK_POLAR_PLOT (polv)->swap = sat_cfg_get_int (SAT_CFG_INT_POLAR_ORIENTATION);
+    GTK_POLAR_PLOT (polv)->qthinfo = sat_cfg_get_bool (SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
+    GTK_POLAR_PLOT (polv)->extratick = sat_cfg_get_bool (SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
+    GTK_POLAR_PLOT (polv)->cursinfo = TRUE;
 
-	/* create the canvas */
-	GTK_POLAR_PLOT (polv)->canvas = goo_canvas_new ();
-	get_canvas_bg_color (GTK_POLAR_PLOT (polv), &bg_color);
-	gtk_widget_modify_base (GTK_POLAR_PLOT (polv)->canvas, GTK_STATE_NORMAL, &bg_color);
-	gtk_widget_set_size_request (GTK_POLAR_PLOT (polv)->canvas,
-								 POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
-	goo_canvas_set_bounds (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), 0, 0,
-							POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    /* create the canvas */
+    GTK_POLAR_PLOT (polv)->canvas = goo_canvas_new ();
+    get_canvas_bg_color (GTK_POLAR_PLOT (polv), &bg_color);
+    gtk_widget_modify_base (GTK_POLAR_PLOT (polv)->canvas, GTK_STATE_NORMAL, &bg_color);
+    gtk_widget_set_size_request (GTK_POLAR_PLOT (polv)->canvas,
+                                 POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    goo_canvas_set_bounds (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), 0, 0,
+                           POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
 
-	/* connect size-request signal */
-	g_signal_connect (GTK_POLAR_PLOT (polv)->canvas, "size-allocate",
-					  G_CALLBACK (size_allocate_cb), polv);
-	g_signal_connect (GTK_POLAR_PLOT (polv)->canvas, "item_created",
-					  (GtkSignalFunc) on_item_created, polv);
-	g_signal_connect_after (GTK_POLAR_PLOT (polv)->canvas, "realize",
-							(GtkSignalFunc) on_canvas_realized, polv);
+    /* connect size-request signal */
+    g_signal_connect (GTK_POLAR_PLOT (polv)->canvas, "size-allocate",
+                      G_CALLBACK (size_allocate_cb), polv);
+    g_signal_connect (GTK_POLAR_PLOT (polv)->canvas, "item_created",
+                      (GtkSignalFunc) on_item_created, polv);
+    g_signal_connect_after (GTK_POLAR_PLOT (polv)->canvas, "realize",
+                            (GtkSignalFunc) on_canvas_realized, polv);
 
-	gtk_widget_show (GTK_POLAR_PLOT (polv)->canvas);
+    gtk_widget_show (GTK_POLAR_PLOT (polv)->canvas);
 
-	/* Create the canvas model */
-	root = create_canvas_model (GTK_POLAR_PLOT (polv));
-	goo_canvas_set_root_item_model (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), root);
+    /* Create the canvas model */
+    root = create_canvas_model (GTK_POLAR_PLOT (polv));
+    goo_canvas_set_root_item_model (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), root);
 
-	g_object_unref (root);
+    g_object_unref (root);
     
     if (GTK_POLAR_PLOT (polv)->pass != NULL) {
-	   create_track (GTK_POLAR_PLOT (polv));
+        create_track (GTK_POLAR_PLOT (polv));
     }
 
-	gtk_container_add (GTK_CONTAINER (polv), GTK_POLAR_PLOT (polv)->canvas);
+    gtk_container_add (GTK_CONTAINER (polv), GTK_POLAR_PLOT (polv)->canvas);
 
-	return polv;
+    return polv;
 }
 
 
@@ -377,11 +377,11 @@ void gtk_polar_plot_set_ctrl_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
             /* the target object does not exist; create it */
             col = sat_cfg_get_int (SAT_CFG_INT_POLAR_SAT_COL);
             plot->ctrl = goo_canvas_ellipse_model_new (root,
-                    x, y, 7, 7,
-                    "fill-color-rgba", 0xFF00000F,
-                    "stroke-color-rgba", col,
-                    "line-width", 0.8,
-                    NULL);
+                                                       x, y, 7, 7,
+                                                       "fill-color-rgba", 0xFF00000F,
+                                                       "stroke-color-rgba", col,
+                                                       "line-width", 0.8,
+                                                       NULL);
         }
     }
     
@@ -465,11 +465,11 @@ void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
         else {
             /* the target object does not exist; create it */
             plot->rot1 = goo_canvas_polyline_model_new_line (root,
-                    x, y-4, x, y-14,
-                    "fill-color-rgba", col,
-                    "stroke-color-rgba", col,
-                    "line-width", 1.0,
-                    NULL);
+                                                             x, y-4, x, y-14,
+                                                             "fill-color-rgba", col,
+                                                             "stroke-color-rgba", col,
+                                                             "line-width", 1.0,
+                                                             NULL);
         }
         if (plot->rot2 != NULL) {
             /* the target object already exists; move it */
@@ -486,11 +486,11 @@ void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
         else {
             /* the target object does not exist; create it */
             plot->rot2 = goo_canvas_polyline_model_new_line (root,
-                    x+4, y, x+14, y,
-                    "fill-color-rgba", col,
-                    "stroke-color-rgba", col,
-                    "line-width", 1.0,
-                    NULL);
+                                                             x+4, y, x+14, y,
+                                                             "fill-color-rgba", col,
+                                                             "stroke-color-rgba", col,
+                                                             "line-width", 1.0,
+                                                             NULL);
         }
         if (plot->rot3 != NULL) {
             /* the target object already exists; move it */
@@ -507,11 +507,11 @@ void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
         else {
             /* the target object does not exist; create it */
             plot->rot3 = goo_canvas_polyline_model_new_line (root,
-                    x, y+4, x, y+14,
-                    "fill-color-rgba", col,
-                    "stroke-color-rgba", col,
-                    "line-width", 1.0,
-                    NULL);
+                                                             x, y+4, x, y+14,
+                                                             "fill-color-rgba", col,
+                                                             "stroke-color-rgba", col,
+                                                             "line-width", 1.0,
+                                                             NULL);
         }
         if (plot->rot4 != NULL) {
             /* the target object already exists; move it */
@@ -528,11 +528,11 @@ void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
         else {
             /* the target object does not exist; create it */
             plot->rot4 = goo_canvas_polyline_model_new_line (root,
-                    x-4, y, x-14, y,
-                    "fill-color-rgba", col,
-                    "stroke-color-rgba", col,
-                    "line-width", 1.0,
-                    NULL);
+                                                             x-4, y, x-14, y,
+                                                             "fill-color-rgba", col,
+                                                             "stroke-color-rgba", col,
+                                                             "line-width", 1.0,
+                                                             NULL);
         }
     }
     
@@ -552,131 +552,131 @@ void gtk_polar_plot_show_time_ticks (GtkPolarPlot *plot, gboolean show)
 
 
 static GooCanvasItemModel *
-create_canvas_model (GtkPolarPlot *polv)
+        create_canvas_model (GtkPolarPlot *polv)
 {
-	GooCanvasItemModel *root;
-	gfloat x,y;
-	guint32 col;
-	GtkAnchorType anch = GTK_ANCHOR_CENTER;
+    GooCanvasItemModel *root;
+    gfloat x,y;
+    guint32 col;
+    GtkAnchorType anch = GTK_ANCHOR_CENTER;
 
-	root = goo_canvas_group_model_new (NULL, NULL);
+    root = goo_canvas_group_model_new (NULL, NULL);
 
-	/* graph dimensions */
-	polv->size = POLV_DEFAULT_SIZE;
-	polv->r = (polv->size / 2) - POLV_DEFAULT_MARGIN;
-	polv->cx = POLV_DEFAULT_SIZE / 2;
-	polv->cy = POLV_DEFAULT_SIZE / 2;
+    /* graph dimensions */
+    polv->size = POLV_DEFAULT_SIZE;
+    polv->r = (polv->size / 2) - POLV_DEFAULT_MARGIN;
+    polv->cx = POLV_DEFAULT_SIZE / 2;
+    polv->cy = POLV_DEFAULT_SIZE / 2;
 
-	col = sat_cfg_get_int (SAT_CFG_INT_POLAR_AXIS_COL);
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_AXIS_COL);
 
-	/* Add elevation circles at 0, 30 and 60 deg */
-	polv->C00 = goo_canvas_ellipse_model_new (root,
-											  polv->cx, polv->cy,
-											  polv->r, polv->r,
-											  "line-width", 1.0,
-											  "stroke-color-rgba", col,
-											  NULL);
+    /* Add elevation circles at 0, 30 and 60 deg */
+    polv->C00 = goo_canvas_ellipse_model_new (root,
+                                              polv->cx, polv->cy,
+                                              polv->r, polv->r,
+                                              "line-width", 1.0,
+                                              "stroke-color-rgba", col,
+                                              NULL);
 
-	polv->C30 = goo_canvas_ellipse_model_new (root,
-											  polv->cx, polv->cy,
-											  0.6667 * polv->r, 0.6667 * polv->r,
-											  "line-width", 1.0,
-											  "stroke-color-rgba", col,
-											  NULL);
+    polv->C30 = goo_canvas_ellipse_model_new (root,
+                                              polv->cx, polv->cy,
+                                              0.6667 * polv->r, 0.6667 * polv->r,
+                                              "line-width", 1.0,
+                                              "stroke-color-rgba", col,
+                                              NULL);
 
-	polv->C60 = goo_canvas_ellipse_model_new (root,
-											  polv->cx, polv->cy,
-											  0.333 * polv->r, 0.3333 * polv->r,
-											  "line-width", 1.0,
-											  "stroke-color-rgba", col,
-											  NULL);
+    polv->C60 = goo_canvas_ellipse_model_new (root,
+                                              polv->cx, polv->cy,
+                                              0.333 * polv->r, 0.3333 * polv->r,
+                                              "line-width", 1.0,
+                                              "stroke-color-rgba", col,
+                                              NULL);
 
-	/* add horixontal and vertical guidance lines */
-	polv->hl = goo_canvas_polyline_model_new_line (root,
-												   polv->cx - polv->r - POLV_LINE_EXTRA,
-												   polv->cy,
-												   polv->cx + polv->r + POLV_LINE_EXTRA,
-												   polv->cy,
-												   "stroke-color-rgba", col,
-												   "line-width", 1.0,
-												   NULL);
-	polv->vl = goo_canvas_polyline_model_new_line (root,
-												   polv->cx,
-												   polv->cy - polv->r - POLV_LINE_EXTRA,
-												   polv->cx,
-												   polv->cy + polv->r + POLV_LINE_EXTRA,
-												   "stroke-color-rgba", col,
-												   "line-width", 1.0,
-												   NULL);
+    /* add horixontal and vertical guidance lines */
+    polv->hl = goo_canvas_polyline_model_new_line (root,
+                                                   polv->cx - polv->r - POLV_LINE_EXTRA,
+                                                   polv->cy,
+                                                   polv->cx + polv->r + POLV_LINE_EXTRA,
+                                                   polv->cy,
+                                                   "stroke-color-rgba", col,
+                                                   "line-width", 1.0,
+                                                   NULL);
+    polv->vl = goo_canvas_polyline_model_new_line (root,
+                                                   polv->cx,
+                                                   polv->cy - polv->r - POLV_LINE_EXTRA,
+                                                   polv->cx,
+                                                   polv->cy + polv->r + POLV_LINE_EXTRA,
+                                                   "stroke-color-rgba", col,
+                                                   "line-width", 1.0,
+                                                   NULL);
 
-	/* N, S, E and W labels.  */
-	col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TICK_COL);
-	azel_to_xy (polv, 0.0, 0.0, &x, &y);
-	correct_pole_coor (polv, POLAR_PLOT_POLE_N, &x, &y, &anch);
-	polv->N = goo_canvas_text_model_new (root, _("N"),
-										 x,
-										 y,
-										 -1,
-										 anch,
-										 "font", "Sans 8",
-										 "fill-color-rgba", col,
-										 NULL);
+    /* N, S, E and W labels.  */
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TICK_COL);
+    azel_to_xy (polv, 0.0, 0.0, &x, &y);
+    correct_pole_coor (polv, POLAR_PLOT_POLE_N, &x, &y, &anch);
+    polv->N = goo_canvas_text_model_new (root, _("N"),
+                                         x,
+                                         y,
+                                         -1,
+                                         anch,
+                                         "font", "Sans 8",
+                                         "fill-color-rgba", col,
+                                         NULL);
 
-	azel_to_xy (polv, 180.0, 0.0, &x, &y);
-	correct_pole_coor (polv, POLAR_PLOT_POLE_S, &x, &y, &anch);
-	polv->S = goo_canvas_text_model_new (root, _("S"),
-										 x,
-										 y,
-										 -1,
-										 anch,
-										 "font", "Sans 8",
-										 "fill-color-rgba", col,
-										 NULL);
+    azel_to_xy (polv, 180.0, 0.0, &x, &y);
+    correct_pole_coor (polv, POLAR_PLOT_POLE_S, &x, &y, &anch);
+    polv->S = goo_canvas_text_model_new (root, _("S"),
+                                         x,
+                                         y,
+                                         -1,
+                                         anch,
+                                         "font", "Sans 8",
+                                         "fill-color-rgba", col,
+                                         NULL);
 
-	azel_to_xy (polv, 90.0, 0.0, &x, &y);
-	correct_pole_coor (polv, POLAR_PLOT_POLE_E, &x, &y, &anch);
-	polv->E = goo_canvas_text_model_new (root, _("E"),
-										 x,
-										 y,
-										 -1,
-										 anch,
-										 "font", "Sans 8",
-										 "fill-color-rgba", col,
-										 NULL);
+    azel_to_xy (polv, 90.0, 0.0, &x, &y);
+    correct_pole_coor (polv, POLAR_PLOT_POLE_E, &x, &y, &anch);
+    polv->E = goo_canvas_text_model_new (root, _("E"),
+                                         x,
+                                         y,
+                                         -1,
+                                         anch,
+                                         "font", "Sans 8",
+                                         "fill-color-rgba", col,
+                                         NULL);
 
-	azel_to_xy (polv, 270.0, 0.0, &x, &y);
-	correct_pole_coor (polv, POLAR_PLOT_POLE_W, &x, &y, &anch);
-	polv->W = goo_canvas_text_model_new (root, _("W"),
-										 x,
-										 y,
-										 -1,
-										 anch,
-										 "font", "Sans 8",
-										 "fill-color-rgba", col,
-										 NULL);
+    azel_to_xy (polv, 270.0, 0.0, &x, &y);
+    correct_pole_coor (polv, POLAR_PLOT_POLE_W, &x, &y, &anch);
+    polv->W = goo_canvas_text_model_new (root, _("W"),
+                                         x,
+                                         y,
+                                         -1,
+                                         anch,
+                                         "font", "Sans 8",
+                                         "fill-color-rgba", col,
+                                         NULL);
 
-	/* cursor text */
-	col = sat_cfg_get_int (SAT_CFG_INT_POLAR_INFO_COL);
-	polv->curs = goo_canvas_text_model_new (root, "",
-											polv->cx - polv->r - 2*POLV_LINE_EXTRA,
-											polv->cy + polv->r + POLV_LINE_EXTRA,
-											-1,
-											GTK_ANCHOR_W,
-											"font", "Sans 8",
-											"fill-color-rgba", col,
-											NULL);
+    /* cursor text */
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_INFO_COL);
+    polv->curs = goo_canvas_text_model_new (root, "",
+                                            polv->cx - polv->r - 2*POLV_LINE_EXTRA,
+                                            polv->cy + polv->r + POLV_LINE_EXTRA,
+                                            -1,
+                                            GTK_ANCHOR_W,
+                                            "font", "Sans 8",
+                                            "fill-color-rgba", col,
+                                            NULL);
 
-	/* location info */
-	polv->locnam = goo_canvas_text_model_new (root, polv->qth->name,
-											  polv->cx - polv->r - 2*POLV_LINE_EXTRA,
-											  polv->cy - polv->r - POLV_LINE_EXTRA,
-											  -1,
-											  GTK_ANCHOR_SW,
-											  "font", "Sans 8",
-											  "fill-color-rgba", col,
-											  NULL);
+    /* location info */
+    polv->locnam = goo_canvas_text_model_new (root, polv->qth->name,
+                                              polv->cx - polv->r - 2*POLV_LINE_EXTRA,
+                                              polv->cy - polv->r - POLV_LINE_EXTRA,
+                                              -1,
+                                              GTK_ANCHOR_SW,
+                                              "font", "Sans 8",
+                                              "fill-color-rgba", col,
+                                              NULL);
 
-	return root;
+    return root;
 }
 
 
@@ -686,73 +686,73 @@ create_canvas_model (GtkPolarPlot *polv)
  * the orientation of the polar plot.
  */
 static void
-correct_pole_coor          (GtkPolarPlot *polv,
-							polar_plot_pole_t pole,
-							gfloat *x, gfloat *y,
-							GtkAnchorType *anch)
+        correct_pole_coor          (GtkPolarPlot *polv,
+                                    polar_plot_pole_t pole,
+                                    gfloat *x, gfloat *y,
+                                    GtkAnchorType *anch)
 {
 
-	switch (pole) {
+    switch (pole) {
 
-	case POLAR_PLOT_POLE_N:
-		if ((polv->swap == POLAR_PLOT_SENW) ||
-		    (polv->swap == POLAR_PLOT_SWNE)) {
-			/* North and South are swapped */
-			*y = *y + POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_NORTH;
-		}
-		else {
-			*y = *y - POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_SOUTH;
-		}
+    case POLAR_PLOT_POLE_N:
+        if ((polv->swap == POLAR_PLOT_SENW) ||
+            (polv->swap == POLAR_PLOT_SWNE)) {
+            /* North and South are swapped */
+            *y = *y + POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_NORTH;
+        }
+        else {
+            *y = *y - POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_SOUTH;
+        }
 
-		break;
+        break;
 
-	case POLAR_PLOT_POLE_E:
-		if ((polv->swap == POLAR_PLOT_NWSE) ||
-		    (polv->swap == POLAR_PLOT_SWNE)) {
-			/* East and West are swapped */
-			*x = *x - POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_EAST;
-		}
-		else {
-			*x = *x + POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_WEST;
-		}
-		break;
+    case POLAR_PLOT_POLE_E:
+        if ((polv->swap == POLAR_PLOT_NWSE) ||
+            (polv->swap == POLAR_PLOT_SWNE)) {
+            /* East and West are swapped */
+            *x = *x - POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_EAST;
+        }
+        else {
+            *x = *x + POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_WEST;
+        }
+        break;
 
-	case POLAR_PLOT_POLE_S:
-		if ((polv->swap == POLAR_PLOT_SENW) ||
-		    (polv->swap == POLAR_PLOT_SWNE)) {
-			/* North and South are swapped */
-			*y = *y - POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_SOUTH;
-		}
-		else {
-			*y = *y + POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_NORTH;
-		}
-		break;
+    case POLAR_PLOT_POLE_S:
+        if ((polv->swap == POLAR_PLOT_SENW) ||
+            (polv->swap == POLAR_PLOT_SWNE)) {
+            /* North and South are swapped */
+            *y = *y - POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_SOUTH;
+        }
+        else {
+            *y = *y + POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_NORTH;
+        }
+        break;
 
-	case POLAR_PLOT_POLE_W:
-		if ((polv->swap == POLAR_PLOT_NWSE) ||
-		    (polv->swap == POLAR_PLOT_SWNE)) {
-			/* East and West are swapped */
-			*x = *x + POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_WEST;
-		}
-		else {
-			*x = *x - POLV_LINE_EXTRA;
-			*anch = GTK_ANCHOR_EAST;
-		}
-		break;
+    case POLAR_PLOT_POLE_W:
+        if ((polv->swap == POLAR_PLOT_NWSE) ||
+            (polv->swap == POLAR_PLOT_SWNE)) {
+            /* East and West are swapped */
+            *x = *x + POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_WEST;
+        }
+        else {
+            *x = *x - POLV_LINE_EXTRA;
+            *anch = GTK_ANCHOR_EAST;
+        }
+        break;
 
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
+    default:
+        sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: Incorrect polar plot orientation."),
                      __FILE__, __LINE__);
-		break;
-	}
+        break;
+    }
 }
 
 
@@ -763,119 +763,119 @@ correct_pole_coor          (GtkPolarPlot *polv,
  * dimensions based on the new canvas size.
  */
 static void
-size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
+        size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 {
-	GtkPolarPlot *polv;
-	GooCanvasPoints *prec;
-	gfloat x,y;
-	GtkAnchorType anch = GTK_ANCHOR_CENTER;
+    GtkPolarPlot *polv;
+    GooCanvasPoints *prec;
+    gfloat x,y;
+    GtkAnchorType anch = GTK_ANCHOR_CENTER;
 
 
-	if (GTK_WIDGET_REALIZED (widget)) {
+    if (GTK_WIDGET_REALIZED (widget)) {
 
-		/* get graph dimensions */
-		polv = GTK_POLAR_PLOT (data);
+        /* get graph dimensions */
+        polv = GTK_POLAR_PLOT (data);
 
-		polv->size = MIN(allocation->width, allocation->height);
-		polv->r = (polv->size / 2) - POLV_DEFAULT_MARGIN;
-		polv->cx = allocation->width / 2;
-		polv->cy = allocation->height / 2;
+        polv->size = MIN(allocation->width, allocation->height);
+        polv->r = (polv->size / 2) - POLV_DEFAULT_MARGIN;
+        polv->cx = allocation->width / 2;
+        polv->cy = allocation->height / 2;
 
         goo_canvas_set_bounds (GOO_CANVAS (GTK_POLAR_PLOT (polv)->canvas), 0, 0,
-                                allocation->width, allocation->height);
+                               allocation->width, allocation->height);
 
         
-		/* update coordinate system */
-		g_object_set (polv->C00,
-					  "center-x", (gdouble) polv->cx,
-					  "center-y", (gdouble) polv->cy,
-					  "radius-x", (gdouble) polv->r,
-					  "radius-y", (gdouble) polv->r,
-					  NULL);
-		g_object_set (polv->C30,
-					  "center-x", (gdouble) polv->cx,
-					  "center-y", (gdouble) polv->cy,
-					  "radius-x", (gdouble) 0.6667*polv->r,
-					  "radius-y", (gdouble) 0.6667*polv->r,
-					  NULL);
-		g_object_set (polv->C60,
-					  "center-x", (gdouble) polv->cx,
-					  "center-y", (gdouble) polv->cy,
-					  "radius-x", (gdouble) 0.333*polv->r,
-					  "radius-y", (gdouble) 0.333*polv->r,
-					  NULL);
+        /* update coordinate system */
+        g_object_set (polv->C00,
+                      "center-x", (gdouble) polv->cx,
+                      "center-y", (gdouble) polv->cy,
+                      "radius-x", (gdouble) polv->r,
+                      "radius-y", (gdouble) polv->r,
+                      NULL);
+        g_object_set (polv->C30,
+                      "center-x", (gdouble) polv->cx,
+                      "center-y", (gdouble) polv->cy,
+                      "radius-x", (gdouble) 0.6667*polv->r,
+                      "radius-y", (gdouble) 0.6667*polv->r,
+                      NULL);
+        g_object_set (polv->C60,
+                      "center-x", (gdouble) polv->cx,
+                      "center-y", (gdouble) polv->cy,
+                      "radius-x", (gdouble) 0.333*polv->r,
+                      "radius-y", (gdouble) 0.333*polv->r,
+                      NULL);
 
-		/* horizontal line */
-		prec = goo_canvas_points_new (2);
-		prec->coords[0] = polv->cx - polv->r - POLV_LINE_EXTRA;
-		prec->coords[1] = polv->cy;
-		prec->coords[2] = polv->cx + polv->r + POLV_LINE_EXTRA;
-		prec->coords[3] = polv->cy;
-		g_object_set (polv->hl,
-					  "points", prec,
-					  NULL);
+        /* horizontal line */
+        prec = goo_canvas_points_new (2);
+        prec->coords[0] = polv->cx - polv->r - POLV_LINE_EXTRA;
+        prec->coords[1] = polv->cy;
+        prec->coords[2] = polv->cx + polv->r + POLV_LINE_EXTRA;
+        prec->coords[3] = polv->cy;
+        g_object_set (polv->hl,
+                      "points", prec,
+                      NULL);
 
-		/* vertical line */
-		prec->coords[0] = polv->cx;
-		prec->coords[1] = polv->cy - polv->r - POLV_LINE_EXTRA;
-		prec->coords[2] = polv->cx;
-		prec->coords[3] = polv->cy + polv->r + POLV_LINE_EXTRA;
-		g_object_set (polv->vl,
-					  "points", prec,
-					  NULL);
+        /* vertical line */
+        prec->coords[0] = polv->cx;
+        prec->coords[1] = polv->cy - polv->r - POLV_LINE_EXTRA;
+        prec->coords[2] = polv->cx;
+        prec->coords[3] = polv->cy + polv->r + POLV_LINE_EXTRA;
+        g_object_set (polv->vl,
+                      "points", prec,
+                      NULL);
 
-		/* free memory */
-		goo_canvas_points_unref (prec);
-		
-		/* N/E/S/W */
-		azel_to_xy (polv, 0.0, 0.0, &x, &y);
-		correct_pole_coor (polv, POLAR_PLOT_POLE_N, &x, &y, &anch);
-		g_object_set (polv->N,
-					  "x", x,
-					  "y", y,
-					  NULL);
+        /* free memory */
+        goo_canvas_points_unref (prec);
 
-		azel_to_xy (polv, 90.0, 0.0, &x, &y);
-		correct_pole_coor (polv, POLAR_PLOT_POLE_E, &x, &y, &anch);
-		g_object_set (polv->E,
-					  "x", x,
-					  "y", y,
-					  NULL);
+        /* N/E/S/W */
+        azel_to_xy (polv, 0.0, 0.0, &x, &y);
+        correct_pole_coor (polv, POLAR_PLOT_POLE_N, &x, &y, &anch);
+        g_object_set (polv->N,
+                      "x", x,
+                      "y", y,
+                      NULL);
 
-		azel_to_xy (polv, 180.0, 0.0, &x, &y);
-		correct_pole_coor (polv, POLAR_PLOT_POLE_S, &x, &y, &anch);
-		g_object_set (polv->S,
-					  "x", x,
-					  "y", y,
-					  NULL);
+        azel_to_xy (polv, 90.0, 0.0, &x, &y);
+        correct_pole_coor (polv, POLAR_PLOT_POLE_E, &x, &y, &anch);
+        g_object_set (polv->E,
+                      "x", x,
+                      "y", y,
+                      NULL);
 
-		azel_to_xy (polv, 270.0, 0.0, &x, &y);
-		correct_pole_coor (polv, POLAR_PLOT_POLE_W, &x, &y, &anch);
-		g_object_set (polv->W,
-					  "x", x,
-					  "y", y,
-					  NULL);
+        azel_to_xy (polv, 180.0, 0.0, &x, &y);
+        correct_pole_coor (polv, POLAR_PLOT_POLE_S, &x, &y, &anch);
+        g_object_set (polv->S,
+                      "x", x,
+                      "y", y,
+                      NULL);
 
-		/* cursor track */
-		g_object_set (polv->curs,
-					  "x", (gfloat) (polv->cx - polv->r - 2*POLV_LINE_EXTRA),
-					  "y", (gfloat) (polv->cy + polv->r + POLV_LINE_EXTRA),
-					  NULL);
+        azel_to_xy (polv, 270.0, 0.0, &x, &y);
+        correct_pole_coor (polv, POLAR_PLOT_POLE_W, &x, &y, &anch);
+        g_object_set (polv->W,
+                      "x", x,
+                      "y", y,
+                      NULL);
 
-		/* location name */
-		g_object_set (polv->locnam,
-					  "x", (gfloat) (polv->cx - polv->r - 2*POLV_LINE_EXTRA),
-					  "y", (gfloat) (polv->cy - polv->r - POLV_LINE_EXTRA),
-					  NULL);
+        /* cursor track */
+        g_object_set (polv->curs,
+                      "x", (gfloat) (polv->cx - polv->r - 2*POLV_LINE_EXTRA),
+                      "y", (gfloat) (polv->cy + polv->r + POLV_LINE_EXTRA),
+                      NULL);
+
+        /* location name */
+        g_object_set (polv->locnam,
+                      "x", (gfloat) (polv->cx - polv->r - 2*POLV_LINE_EXTRA),
+                      "y", (gfloat) (polv->cy - polv->r - POLV_LINE_EXTRA),
+                      NULL);
 
 
-		/* sky track */
+        /* sky track */
         if (polv->pass != NULL)
             update_track (polv);
         
 
 
-	}
+    }
 }
 
 
@@ -887,313 +887,313 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
  * graphs that have not yet been realised, e.g. when opening several module
  */
 static void
-on_canvas_realized (GtkWidget *canvas, gpointer data)
+        on_canvas_realized (GtkWidget *canvas, gpointer data)
 {
-	GtkAllocation aloc;
+    GtkAllocation aloc;
 
-	aloc.width = canvas->allocation.width;
-	aloc.height = canvas->allocation.height;
-	size_allocate_cb (canvas, &aloc, data);
+    aloc.width = canvas->allocation.width;
+    aloc.height = canvas->allocation.height;
+    size_allocate_cb (canvas, &aloc, data);
 
 }
 
 
 static void
-create_track (GtkPolarPlot *pv)
+        create_track (GtkPolarPlot *pv)
 {
-	gint               i;
-	GooCanvasItemModel *root;
-	pass_detail_t      *detail;
-	guint              num;
-	GooCanvasPoints    *points;
-	gfloat             x,y;
-	guint32            col;
-	guint              tres,ttidx;
+    gint               i;
+    GooCanvasItemModel *root;
+    pass_detail_t      *detail;
+    guint              num;
+    GooCanvasPoints    *points;
+    gfloat             x,y;
+    guint32            col;
+    guint              tres,ttidx;
 
-	root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
 
-	/* create points */
-	num = g_slist_length (pv->pass->details);
+    /* create points */
+    num = g_slist_length (pv->pass->details);
 
-	/* time resolution for time ticks; we need
-	   3 additional points to AOS and LOS ticks.
-	*/
-	tres = (num-2) / (TRACK_TICK_NUM-1);
+    /* time resolution for time ticks; we need
+           3 additional points to AOS and LOS ticks.
+        */
+    tres = (num-2) / (TRACK_TICK_NUM-1);
 
-	points = goo_canvas_points_new (num);
+    points = goo_canvas_points_new (num);
 
-	/* first point should be (aos_az,0.0) */
-	azel_to_xy (pv, pv->pass->aos_az, 0.0, &x, &y);
-	points->coords[0] = (double) x;
-	points->coords[1] = (double) y;
-	pv->trtick[0] = create_time_tick (pv, pv->pass->aos, x, y);
+    /* first point should be (aos_az,0.0) */
+    azel_to_xy (pv, pv->pass->aos_az, 0.0, &x, &y);
+    points->coords[0] = (double) x;
+    points->coords[1] = (double) y;
+    pv->trtick[0] = create_time_tick (pv, pv->pass->aos, x, y);
 
-	ttidx = 1;
+    ttidx = 1;
 
-	for (i = 1; i < num-1; i++) {
-		detail = PASS_DETAIL(g_slist_nth_data (pv->pass->details, i));
-		azel_to_xy (pv, detail->az, detail->el, &x, &y);
-		points->coords[2*i] = (double) x;
-		points->coords[2*i+1] = (double) y;
+    for (i = 1; i < num-1; i++) {
+        detail = PASS_DETAIL(g_slist_nth_data (pv->pass->details, i));
+        azel_to_xy (pv, detail->az, detail->el, &x, &y);
+        points->coords[2*i] = (double) x;
+        points->coords[2*i+1] = (double) y;
 
-		if (!(i % tres)) {
-			/* create a time tick */
-			pv->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
-			ttidx++;
-		}
-	}
+        if (!(i % tres)) {
+            /* create a time tick */
+            pv->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
+            ttidx++;
+        }
+    }
 
-	/* last point should be (los_az, 0.0)  */
-	azel_to_xy (pv, pv->pass->los_az, 0.0, &x, &y);
-	points->coords[2*(num-1)] = (double) x;
-	points->coords[2*(num-1)+1] = (double) y;
+    /* last point should be (los_az, 0.0)  */
+    azel_to_xy (pv, pv->pass->los_az, 0.0, &x, &y);
+    points->coords[2*(num-1)] = (double) x;
+    points->coords[2*(num-1)+1] = (double) y;
 
-	/* create poly-line */
-	col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TRACK_COL);
+    /* create poly-line */
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TRACK_COL);
 
-	pv->track = goo_canvas_polyline_model_new (root, FALSE, 0,
-											   "points", points,
-											   "line-width", 1.0,
-											   "stroke-color-rgba", col,
-											   "line-cap", CAIRO_LINE_CAP_SQUARE,
-											   "line-join", CAIRO_LINE_JOIN_MITER,
-											   NULL);
-	goo_canvas_points_unref (points);
+    pv->track = goo_canvas_polyline_model_new (root, FALSE, 0,
+                                               "points", points,
+                                               "line-width", 1.0,
+                                               "stroke-color-rgba", col,
+                                               "line-cap", CAIRO_LINE_CAP_SQUARE,
+                                               "line-join", CAIRO_LINE_JOIN_MITER,
+                                               NULL);
+    goo_canvas_points_unref (points);
 
 
 }
 
 
 static GooCanvasItemModel *
-create_time_tick (GtkPolarPlot *pv, gdouble time, gfloat x, gfloat y)
+        create_time_tick (GtkPolarPlot *pv, gdouble time, gfloat x, gfloat y)
 {
-	GooCanvasItemModel *item;
-	time_t             t;
-	gchar              buff[7];
-	GtkAnchorType      anchor;
-	GooCanvasItemModel *root;
-	guint32            col;
+    GooCanvasItemModel *item;
+    time_t             t;
+    gchar              buff[7];
+    GtkAnchorType      anchor;
+    GooCanvasItemModel *root;
+    guint32            col;
 
-	root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
 
-	col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TRACK_COL);
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TRACK_COL);
 
-	/* convert julian date to struct tm */
-	t = (time - 2440587.5)*86400.;
+    /* convert julian date to struct tm */
+    t = (time - 2440587.5)*86400.;
 
-	/* format either local time or UTC depending on check box */
-	if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-		strftime (buff, 8, "%H:%M", localtime (&t));
-	else
-		strftime (buff, 8, "%H:%M", gmtime (&t));
-	
-	buff[6]='\0';
+    /* format either local time or UTC depending on check box */
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
+        strftime (buff, 8, "%H:%M", localtime (&t));
+    else
+        strftime (buff, 8, "%H:%M", gmtime (&t));
 
-	if (x > pv->cx) {
-		anchor = GTK_ANCHOR_EAST;
-		x -= 5;
-	}
-	else {
-		anchor = GTK_ANCHOR_WEST;
-		x += 5;
-	}
+    buff[6]='\0';
 
-	item = goo_canvas_text_model_new (root, buff,
-									  (gdouble) x, (gdouble) y,
-									  -1, anchor,
-									  "font", "Sans 7",
-									  "fill-color-rgba", col,
-									  NULL);
-				    
-	return item;
+    if (x > pv->cx) {
+        anchor = GTK_ANCHOR_EAST;
+        x -= 5;
+    }
+    else {
+        anchor = GTK_ANCHOR_WEST;
+        x += 5;
+    }
+
+    item = goo_canvas_text_model_new (root, buff,
+                                      (gdouble) x, (gdouble) y,
+                                      -1, anchor,
+                                      "font", "Sans 7",
+                                      "fill-color-rgba", col,
+                                      NULL);
+
+    return item;
 }
 
 
 /** \brief Update sky track drawing after size allocate. */
 static void
-update_track (GtkPolarPlot *pv)
+        update_track (GtkPolarPlot *pv)
 {
-	guint            num,i;
-	GooCanvasPoints *points;
-	gfloat           x,y;
-	pass_detail_t   *detail;
-	guint            tres,ttidx;
+    guint            num,i;
+    GooCanvasPoints *points;
+    gfloat           x,y;
+    pass_detail_t   *detail;
+    guint            tres,ttidx;
 
 
-	/* create points */
-	num = g_slist_length (pv->pass->details);
+    /* create points */
+    num = g_slist_length (pv->pass->details);
 
-	points = goo_canvas_points_new (num);
+    points = goo_canvas_points_new (num);
 
-	/* first point should be (aos_az,0.0) */
-	azel_to_xy (pv, pv->pass->aos_az, 0.0, &x, &y);
-	points->coords[0] = (double) x;
-	points->coords[1] = (double) y;
+    /* first point should be (aos_az,0.0) */
+    azel_to_xy (pv, pv->pass->aos_az, 0.0, &x, &y);
+    points->coords[0] = (double) x;
+    points->coords[1] = (double) y;
 
-	/* time tick 0 */
-	g_object_set (pv->trtick[0], "x", (gdouble) x, "y", (gdouble) y, NULL);
+    /* time tick 0 */
+    g_object_set (pv->trtick[0], "x", (gdouble) x, "y", (gdouble) y, NULL);
 
-	/* time resolution for time ticks; we need
-	   3 additional points to AOS and LOS ticks.
-	*/
-	tres = (num-2) / (TRACK_TICK_NUM-1);
-	ttidx = 1;
+    /* time resolution for time ticks; we need
+           3 additional points to AOS and LOS ticks.
+        */
+    tres = (num-2) / (TRACK_TICK_NUM-1);
+    ttidx = 1;
 
-	for (i = 1; i < num-1; i++) {
-		detail = PASS_DETAIL(g_slist_nth_data (pv->pass->details, i));
-		azel_to_xy (pv, detail->az, detail->el, &x, &y);
-		points->coords[2*i] = (double) x;
-		points->coords[2*i+1] = (double) y;
-		
-		if (!(i % tres)) {
-			/* make room between text and track */
-			if (x > pv->cx) {
-				x -= 5;
-			}
-			else {
-				x += 5;
-			}
-			/* update time tick */
-			g_object_set (pv->trtick[ttidx],
-						  "x", (gdouble) x, "y", (gdouble) y,
-						  NULL);
-			ttidx++;
-		}
-	}
-	
-	/* last point should be (los_az, 0.0)  */
-	azel_to_xy (pv, pv->pass->los_az, 0.0, &x, &y);
-	points->coords[2*(num-1)] = (double) x;
-	points->coords[2*(num-1)+1] = (double) y;
-	
-	g_object_set (pv->track, "points", points, NULL);
-	
-	goo_canvas_points_unref (points);
-	
+    for (i = 1; i < num-1; i++) {
+        detail = PASS_DETAIL(g_slist_nth_data (pv->pass->details, i));
+        azel_to_xy (pv, detail->az, detail->el, &x, &y);
+        points->coords[2*i] = (double) x;
+        points->coords[2*i+1] = (double) y;
+
+        if (!(i % tres)) {
+            /* make room between text and track */
+            if (x > pv->cx) {
+                x -= 5;
+            }
+            else {
+                x += 5;
+            }
+            /* update time tick */
+            g_object_set (pv->trtick[ttidx],
+                          "x", (gdouble) x, "y", (gdouble) y,
+                          NULL);
+            ttidx++;
+        }
+    }
+
+    /* last point should be (los_az, 0.0)  */
+    azel_to_xy (pv, pv->pass->los_az, 0.0, &x, &y);
+    points->coords[2*(num-1)] = (double) x;
+    points->coords[2*(num-1)+1] = (double) y;
+
+    g_object_set (pv->track, "points", points, NULL);
+
+    goo_canvas_points_unref (points);
+
 }
 
 
 /** \brief Convert Az/El to canvas based XY coordinates. */
 static void
-azel_to_xy (GtkPolarPlot *p, gdouble az, gdouble el, gfloat *x, gfloat *y)
+        azel_to_xy (GtkPolarPlot *p, gdouble az, gdouble el, gfloat *x, gfloat *y)
 {
-	gdouble rel;
+    gdouble rel;
 
 
-	if (el < 0.0) {
-		/* FIXME: generate bug report */
+    if (el < 0.0) {
+        /* FIXME: generate bug report */
 
-		*x = 0.0;
-		*y = 0.0;
+        *x = 0.0;
+        *y = 0.0;
 
-		return;
-	}
+        return;
+    }
 
-	/* convert angles to radians */
-	az = de2ra*az;
-	el = de2ra*el;
+    /* convert angles to radians */
+    az = de2ra*az;
+    el = de2ra*el;
 
-	/* radius @ el */
-	rel = p->r - (2*p->r*el)/M_PI;
+    /* radius @ el */
+    rel = p->r - (2*p->r*el)/M_PI;
 
-	switch (p->swap) {
+    switch (p->swap) {
 
-	case POLAR_PLOT_NWSE:
-		az = 2 * M_PI - az;
-		break;
+    case POLAR_PLOT_NWSE:
+        az = 2 * M_PI - az;
+        break;
 
-	case POLAR_PLOT_SENW:
-		az = M_PI - az;
-		break;
+    case POLAR_PLOT_SENW:
+        az = M_PI - az;
+        break;
 
-	case POLAR_PLOT_SWNE:
-		az = M_PI + az;
-		break;
+    case POLAR_PLOT_SWNE:
+        az = M_PI + az;
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 
-	*x = (gfloat) (p->cx + rel * sin(az));
-	*y = (gfloat) (p->cy - rel * cos(az));
+    *x = (gfloat) (p->cx + rel * sin(az));
+    *y = (gfloat) (p->cy - rel * cos(az));
 }
 
 
 /** \brief Convert canvas based coordinates to Az/El. */
 static void
-xy_to_azel    (GtkPolarPlot *p, gfloat x, gfloat y, gfloat *az, gfloat *el)
+        xy_to_azel    (GtkPolarPlot *p, gfloat x, gfloat y, gfloat *az, gfloat *el)
 {
-	gfloat rel;
+    gfloat rel;
 
-	/* distance from center to cursor */
-	rel = p->r - sqrt((x - p->cx) * (x - p->cx) + (y - p->cy) * (y - p->cy));
+    /* distance from center to cursor */
+    rel = p->r - sqrt((x - p->cx) * (x - p->cx) + (y - p->cy) * (y - p->cy));
 
-	/* scale according to p->r = 90 deg */
-	*el = 90.0 * rel / p->r;
+    /* scale according to p->r = 90 deg */
+    *el = 90.0 * rel / p->r;
 
-	if (x >= p->cx) {
-		/* 1. and 2. quadrant */
-		*az = atan2 (x-p->cx, p->cy - y) / de2ra;
-	}
-	else {
-		/* 3 and 4. quadrant */
-		*az = 360 + atan2 (x-p->cx, p->cy - y) / de2ra;
-	}
+    if (x >= p->cx) {
+        /* 1. and 2. quadrant */
+        *az = atan2 (x-p->cx, p->cy - y) / de2ra;
+    }
+    else {
+        /* 3 and 4. quadrant */
+        *az = 360 + atan2 (x-p->cx, p->cy - y) / de2ra;
+    }
 
-	/* correct for orientation */
-	switch (p->swap) {
+    /* correct for orientation */
+    switch (p->swap) {
 
-	case POLAR_PLOT_NWSE:
-		*az = 360.0 - *az;
-		break;
+    case POLAR_PLOT_NWSE:
+        *az = 360.0 - *az;
+        break;
 
-	case POLAR_PLOT_SENW:
-		if (*az <= 180)
-			*az = 180.0 - *az;
-		else
-			*az = 540.0 - *az;
-		break;
+    case POLAR_PLOT_SENW:
+        if (*az <= 180)
+            *az = 180.0 - *az;
+        else
+            *az = 540.0 - *az;
+        break;
 
-	case POLAR_PLOT_SWNE:
-		if (*az >= 180.0)
-			*az = *az - 180.0;
-		else
-			*az = 180.0 + *az;
-		break;
+    case POLAR_PLOT_SWNE:
+        if (*az >= 180.0)
+            *az = *az - 180.0;
+        else
+            *az = 180.0 + *az;
+        break;
 
-	default:
-		break;
-	}
+    default:
+        break;
+    }
 }
 
 
 /** \brief Manage mouse motion events. */
 static gboolean
-on_motion_notify (GooCanvasItem *item,
-				  GooCanvasItem *target,
-				  GdkEventMotion *event,
-				  gpointer data)
+        on_motion_notify (GooCanvasItem *item,
+                          GooCanvasItem *target,
+                          GdkEventMotion *event,
+                          gpointer data)
 {
-	GtkPolarPlot *polv = GTK_POLAR_PLOT (data);
-	gfloat az,el;
-	gchar *text;
+    GtkPolarPlot *polv = GTK_POLAR_PLOT (data);
+    gfloat az,el;
+    gchar *text;
 
-	if (polv->cursinfo) {
+    if (polv->cursinfo) {
 
-		xy_to_azel (polv, event->x, event->y, &az, &el);
+        xy_to_azel (polv, event->x, event->y, &az, &el);
 
-		if (el > 0.0) {
-			/* cursor track */
-			text = g_strdup_printf ("AZ %.0f\302\260\nEL %.0f\302\260",az,el);
-			g_object_set (polv->curs, "text", text, NULL);
-			g_free (text);
-		}
-		else {
-			g_object_set (polv->curs, "text", "", NULL);
-		}
-	}
+        if (el > 0.0) {
+            /* cursor track */
+            text = g_strdup_printf ("AZ %.0f\302\260\nEL %.0f\302\260",az,el);
+            g_object_set (polv->curs, "text", text, NULL);
+            g_free (text);
+        }
+        else {
+            g_object_set (polv->curs, "text", "", NULL);
+        }
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 
@@ -1207,16 +1207,16 @@ on_motion_notify (GooCanvasItem *item,
  * the corresponding signals to the created items.
  */
 static void
-on_item_created (GooCanvas *canvas,
-				 GooCanvasItem *item,
-				 GooCanvasItemModel *model,
-				 gpointer data)
+        on_item_created (GooCanvas *canvas,
+                         GooCanvasItem *item,
+                         GooCanvasItemModel *model,
+                         gpointer data)
 {
-	if (!goo_canvas_item_model_get_parent (model))	{
-		/* root item / canvas */
-		g_signal_connect (item, "motion_notify_event",
-						  (GtkSignalFunc) on_motion_notify, data);
-	}
+    if (!goo_canvas_item_model_get_parent (model))	{
+        /* root item / canvas */
+        g_signal_connect (item, "motion_notify_event",
+                          (GtkSignalFunc) on_motion_notify, data);
+    }
 
 }
 
@@ -1228,28 +1228,28 @@ on_item_created (GooCanvas *canvas,
  * we also need to scale from [0;255] to [0;65535], i.e. multiply by 257.
  */
 static void
-get_canvas_bg_color (GtkPolarPlot *polv, GdkColor *color)
+        get_canvas_bg_color (GtkPolarPlot *polv, GdkColor *color)
 {
-	guint32 col,tmp;
-	guint16 r,g,b;
+    guint32 col,tmp;
+    guint16 r,g,b;
 
 
-	col = sat_cfg_get_int (SAT_CFG_INT_POLAR_BGD_COL);
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_BGD_COL);
 
-	/* red */
-	tmp = col & 0xFF000000;
-	r = (guint16) (tmp >> 24);
+    /* red */
+    tmp = col & 0xFF000000;
+    r = (guint16) (tmp >> 24);
 
-	/* green */
-	tmp = col & 0x00FF0000;
-	g = (guint16) (tmp >> 16);
+    /* green */
+    tmp = col & 0x00FF0000;
+    g = (guint16) (tmp >> 16);
 
-	/* blue */
-	tmp = col & 0x0000FF00;
-	b = (guint16) (tmp >> 8);
+    /* blue */
+    tmp = col & 0x0000FF00;
+    b = (guint16) (tmp >> 8);
 
-	/* store colours */
-	color->red   = 257 * r;
-	color->green = 257 * g;
-	color->blue  = 257 * b;
+    /* store colours */
+    color->red   = 257 * r;
+    color->green = 257 * g;
+    color->blue  = 257 * b;
 }
