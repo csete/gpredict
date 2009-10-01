@@ -51,6 +51,10 @@ const gchar *authors[] = {
     "Dave Hines (locator.c)",
     "Mirko Caserta (locator.c)",
     "S. R. Sampson (locator.c)",
+    "",
+    "Imagery:",
+    "Most of the maps originate from NASA Visible Earth",
+    "see http://visibleearth.nasa.gov/",
     NULL
 };
 
