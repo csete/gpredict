@@ -52,7 +52,7 @@ gpredict_SOURCES = \
 	gtk-sat-module.c gtk-sat-module.h \
 	gtk-sat-module-popup.c gtk-sat-module-popup.h \
 	gtk-sat-module-tmg.c gtk-sat-module-tmg.h \
-    gtk-sat-selector.c gtk-sat-slector.h \
+    gtk-sat-selector.c gtk-sat-selector.h \
 	gtk-single-sat.c gtk-single-sat.h \
 	gtk-sky-glance.c gtk-sky-glance.h \
 	gui.c gui.h \
@@ -68,11 +68,11 @@ gpredict_SOURCES = \
 	pass-popup-menu.c pass-popup-menu.h \
 	pass-to-txt.c pass-to-txt.h \
 	predict-tools.c predict-tools.h \
-        qth-data.c qth-data.h \
+    qth-data.c qth-data.h \
 	qth-editor.c qth-editor.h \
 	radio-conf.c radio-conf.h \
 	rotor-conf.c rotor-conf.h \
-        trsp-conf.c trsp-conf.h \
+    trsp-conf.c trsp-conf.h \
 	sat-cfg.c sat-cfg.h \
 	sat-info.c sat-info.h \
 	sat-log.c sat-log.h \
