@@ -13,6 +13,7 @@ Changes in version 1.1 (TBD)
 - Fixed bug 2116693: List view does not sort properly for all time formats.
 - Fixed bug 2836265: Time controls should wrap around their limits.
 - Fixed bug 2691499: Sky at glance crashes with empty module.
+- Include more maps from NASA Visible Earth: Blue Marble Next Generation.
 * Binary packages for Windows, Mac OS X, Ubuntu and generic Linux.
 
 
