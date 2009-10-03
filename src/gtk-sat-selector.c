@@ -37,6 +37,7 @@
 #include "sat-log.h"
 #include "gtk-sat-data.h"
 #include "compat.h"
+#include "sat-cfg.h"
 #include "gtk-sat-selector.h"
 
 
@@ -61,6 +62,14 @@ static gint compare_func (GtkTreeModel *model,
                           GtkTreeIter  *a,
                           GtkTreeIter  *b,
                           gpointer      userdata);
+
+
+static void epoch_cell_data_function (GtkTreeViewColumn *col,
+                                      GtkCellRenderer   *renderer,
+                                      GtkTreeModel      *model,
+                                      GtkTreeIter       *iter,
+                                      gpointer           column);
+
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -244,9 +253,11 @@ GtkWidget *gtk_sat_selector_new (guint flags)
 
     /* epoch */
     renderer = gtk_cell_renderer_text_new ();
-    column = gtk_tree_view_column_new_with_attributes (_("Epoch"), renderer,
+    column = gtk_tree_view_column_new_with_attributes (_("Updated"), renderer,
                                                        "text", GTK_SAT_SELECTOR_COL_EPOCH,
                                                        NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer, epoch_cell_data_function,
+                                             GUINT_TO_POINTER (GTK_SAT_SELECTOR_COL_EPOCH), NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (selector->tree), column, -1);
     if (!(flags & GTK_SAT_SELECTOR_FLAG_EPOCH))
         gtk_tree_view_column_set_visible (column, FALSE);
@@ -283,7 +294,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
                                     GTK_ENTRY (GTK_SAT_SELECTOR (widget)->search));
     gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 4, 0, 1,
-                      GTK_FILL, GTK_FILL, 0, 0);
+                      GTK_FILL, GTK_SHRINK, 0, 0);
 
     /* Group selector */
     gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group")), 0, 1, 1, 2,
@@ -674,3 +685,52 @@ void gtk_sat_selector_get_selected (GtkSatSelector *selector,
 
 }
 
+
+/** \brief Cell renderer function for the Epoch field. */
+static void epoch_cell_data_function (GtkTreeViewColumn *col,
+                                      GtkCellRenderer   *renderer,
+                                      GtkTreeModel      *model,
+                                      GtkTreeIter       *iter,
+                                      gpointer           column)
+{
+    gdouble    number;
+    gchar      buff[TIME_FORMAT_MAX_LENGTH];
+    gchar     *fmtstr;
+    guint      coli = GPOINTER_TO_UINT (column);
+    time_t     t;
+    guint size;
+
+
+    gtk_tree_model_get (model, iter, coli, &number, -1);
+
+    if (number == 0.0) {
+        g_object_set (renderer,
+                      "text", "--- N/A ---",
+                      NULL);
+    }
+    else {
+
+        /* convert julian date to struct tm */
+        t = (number - 2440587.5)*86400.;
+
+        /* format the number */
+        fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
+
+        /* format either local time or UTC depending on check box */
+        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
+            size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
+        else
+            size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
+
+        if (size == 0)
+            /* size > TIME_FORMAT_MAX_LENGTH */
+            buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+
+        g_object_set (renderer,
+                      "text", buff,
+                      NULL);
+
+        g_free (fmtstr);
+    }
+
+}
