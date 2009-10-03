@@ -77,6 +77,7 @@ src/sat-pref-single-sat.c
 src/sat-pref-sky-at-glance.c
 src/sat-pref-tle.c
 src/sat-vis.c
+src/satellite-editor.c
 src/save-pass.c
 src/sgpsdp/sgp4sdp4.c
 src/sgpsdp/sgp_in.c
