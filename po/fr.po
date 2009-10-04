@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-01 17:41+0200\n"
+"POT-Creation-Date: 2009-10-04 14:01+0200\n"
 "PO-Revision-Date: 2009-03-19 23:06+0200\n"
 "Last-Translator: Stéphane Fillod <fillods@users.sf.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -868,7 +868,7 @@ msgstr ""
 msgid "Satellite"
 msgstr "Satellite"
 
-#: ../src/gtk-sat-list.c:54 ../src/gtk-sat-selector.c:238
+#: ../src/gtk-sat-list.c:54 ../src/gtk-sat-selector.c:247
 #: ../src/gtk-sat-tree.c:222 ../src/mod-cfg.c:622
 msgid "Catnum"
 msgstr ""
@@ -1633,68 +1633,72 @@ msgstr "<b>Temps-Réel Simulé</b>"
 msgid "<b>Manual Control</b>"
 msgstr "<b>Contrôle Manuel</b>"
 
-#: ../src/gtk-sat-selector.c:197
+#: ../src/gtk-sat-selector.c:206
 msgid "Select a satellite group or category to narrow your search."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:229
+#: ../src/gtk-sat-selector.c:238
 #, fuzzy
 msgid "Available Satellites"
 msgstr "<b>Sélection Satellites:</b>"
 
-#: ../src/gtk-sat-selector.c:247 ../src/gtk-sat-tree.c:232
-#: ../src/mod-cfg.c:630
-msgid "Epoch"
-msgstr ""
+#: ../src/gtk-sat-selector.c:256
+#, fuzzy
+msgid "Updated"
+msgstr "Mise-à-jour TLE"
 
 #. Search
-#: ../src/gtk-sat-selector.c:275
+#: ../src/gtk-sat-selector.c:286
 msgid "Search"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:279
+#: ../src/gtk-sat-selector.c:290
 msgid ""
 "Start typing in this field to search for a satellite in the selected group."
 msgstr ""
 
 #. Group selector
-#: ../src/gtk-sat-selector.c:289
+#: ../src/gtk-sat-selector.c:300
 msgid "Group"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:353
+#: ../src/gtk-sat-selector.c:364
 #, fuzzy
 msgid "All satellites"
 msgstr "Satellite"
 
-#: ../src/gtk-sat-selector.c:360
+#: ../src/gtk-sat-selector.c:371
 #, c-format
 msgid "%s:%s: Failed to open satdata directory %s."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:401
+#: ../src/gtk-sat-selector.c:412
 #, c-format
 msgid "%s:%s: Read %d satellites into MAIN group."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:448
+#: ../src/gtk-sat-selector.c:459
 #, c-format
 msgid "%s:%s: Failed to open %s: %s"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:485 ../src/mod-cfg.c:746
+#: ../src/gtk-sat-selector.c:496 ../src/mod-cfg.c:746
 #, c-format
 msgid "%s:%s: Error reading satellite %d."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:504
+#: ../src/gtk-sat-selector.c:515
 #, fuzzy, c-format
 msgid "%s:%s: Read %d satellites from %s"
 msgstr "Lecture de données depuis %s"
 
-#: ../src/gtk-sat-selector.c:509
+#: ../src/gtk-sat-selector.c:520
 #, c-format
 msgid "%s:%s: Failed to read %s"
+msgstr ""
+
+#: ../src/gtk-sat-tree.c:232 ../src/mod-cfg.c:630
+msgid "Epoch"
 msgstr ""
 
 #: ../src/gtk-sat-tree.c:245
@@ -2049,208 +2053,219 @@ msgstr ""
 msgid "%s:%d: Could not stat %s"
 msgstr ""
 
-#: ../src/menubar.c:88
+#: ../src/menubar.c:89
 msgid "_File"
 msgstr "_Fichier"
 
-#: ../src/menubar.c:89
+#: ../src/menubar.c:90
 msgid "_Edit"
 msgstr "_Edition"
 
-#: ../src/menubar.c:90
+#: ../src/menubar.c:91
 msgid "_Update TLE"
 msgstr "_Mise à jour TLE"
 
-#: ../src/menubar.c:91
+#: ../src/menubar.c:92
 msgid "_Tools"
 msgstr "_Outils"
 
-#: ../src/menubar.c:92
+#: ../src/menubar.c:93
 msgid "_Help"
 msgstr "_Aide"
 
 #. File menu
-#: ../src/menubar.c:95
+#: ../src/menubar.c:96
 msgid "_New module"
 msgstr "_Nouveau module"
 
-#: ../src/menubar.c:96
+#: ../src/menubar.c:97
 msgid "Create a new module"
 msgstr "Créer un nouveau module"
 
-#: ../src/menubar.c:97
+#: ../src/menubar.c:98
 msgid "_Open module"
 msgstr "_Ouvrir module"
 
-#: ../src/menubar.c:98
+#: ../src/menubar.c:99
 msgid "Open an existing module"
 msgstr "Ouvre un module existant"
 
-#: ../src/menubar.c:100
+#: ../src/menubar.c:101
 msgid "Open the message log browser"
 msgstr ""
 
-#: ../src/menubar.c:101
+#: ../src/menubar.c:102
 msgid "E_xit"
 msgstr "_Quitter"
 
-#: ../src/menubar.c:102
+#: ../src/menubar.c:103
 msgid "Exit the program"
 msgstr "Quitter le programme"
 
 #. Edit menu
 #. { "Tle", GTK_STOCK_REFRESH, N_("Update TLE"), NULL,
 #. N_("Update Keplerian elements"), NULL},
-#: ../src/menubar.c:107
+#: ../src/menubar.c:108
 msgid "From _network"
 msgstr "Depuis le _réseau"
 
-#: ../src/menubar.c:108
+#: ../src/menubar.c:109
 msgid "Update Keplerian elements from a network server"
 msgstr "Mets à jour les éléments Képlériens depuis un serveur réseau"
 
-#: ../src/menubar.c:110
+#: ../src/menubar.c:111
 msgid "From l_ocal files"
 msgstr "Depuis des fichiers _locaux"
 
-#: ../src/menubar.c:111
+#: ../src/menubar.c:112
 msgid "Update Keplerian elements from local files"
 msgstr "Mets à jour les éléments Képlériens depuis des fichiers locaux"
 
-#: ../src/menubar.c:113
+#: ../src/menubar.c:114
 msgid "Using TLE _editor"
 msgstr "Utilisation de l'édit_eur TLE"
 
-#: ../src/menubar.c:114
+#: ../src/menubar.c:115
 msgid "Add or update Keplerian elements using the TLE editor"
 msgstr ""
 "Ajoute ou mets à jour les éléments Képlériens en utilisant l'éditeur TLE"
 
-#: ../src/menubar.c:116
+#: ../src/menubar.c:117
 msgid "_Transponders"
 msgstr "_Transpondeurs"
 
-#: ../src/menubar.c:117
+#: ../src/menubar.c:118
 msgid "Edit satellite transponder frequencies"
 msgstr "Edite les fréquences transpondeurs satellite"
 
-#: ../src/menubar.c:119
+#: ../src/menubar.c:120
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ../src/menubar.c:120
+#: ../src/menubar.c:121
 msgid "Edit user preferences"
 msgstr "Edite les préférences utilisateur"
 
 #. Tools menu
-#: ../src/menubar.c:123
-msgid "Comm Window"
-msgstr "Fenêtre Comm"
-
 #: ../src/menubar.c:124
-msgid "Predict windows between two observers"
-msgstr ""
+#, fuzzy
+msgid "Satellite Editor"
+msgstr "Info Satellite"
 
-#: ../src/menubar.c:126
-msgid "Advanced Predict"
+#: ../src/menubar.c:125
+msgid ""
+"Open the satellite editor where you can manually edit orbital elements and "
+"other data"
 msgstr ""
 
 #: ../src/menubar.c:127
+msgid "Comm Window"
+msgstr "Fenêtre Comm"
+
+#: ../src/menubar.c:128
+msgid "Predict windows between two observers"
+msgstr ""
+
+#: ../src/menubar.c:130
+msgid "Advanced Predict"
+msgstr ""
+
+#: ../src/menubar.c:131
 msgid "Open advanced pass predictor"
 msgstr ""
 
 #. Help menu
-#: ../src/menubar.c:130
+#: ../src/menubar.c:134
 msgid "Getting Started"
 msgstr ""
 
-#: ../src/menubar.c:131
+#: ../src/menubar.c:135
 msgid "Show online user manual, Getting Started Section"
 msgstr ""
 
-#: ../src/menubar.c:133
+#: ../src/menubar.c:137
 msgid "User Manual"
 msgstr "Manuel Utilisateur"
 
-#: ../src/menubar.c:134
+#: ../src/menubar.c:138
 msgid "Show online user manual"
 msgstr "Montre le manuel utilisateur en ligne"
 
-#: ../src/menubar.c:135
+#: ../src/menubar.c:139
 msgid "_License"
 msgstr "_Licence"
 
-#: ../src/menubar.c:136
+#: ../src/menubar.c:140
 msgid "Show the Gpredict license"
 msgstr "Monre la licence Gpredict"
 
-#: ../src/menubar.c:137
+#: ../src/menubar.c:141
 msgid "_News"
 msgstr "_Nouvelles"
 
-#: ../src/menubar.c:138
+#: ../src/menubar.c:142
 msgid "Show what's new in this release"
 msgstr "Montre ce qu'il y a de neuf dans cette version"
 
-#: ../src/menubar.c:139
+#: ../src/menubar.c:143
 msgid "_About Gpredict"
 msgstr "_A propos de Gpredict"
 
-#: ../src/menubar.c:140
+#: ../src/menubar.c:144
 msgid "Show about dialog"
 msgstr "Montre le dialogue à propos"
 
-#: ../src/menubar.c:230
+#: ../src/menubar.c:234
 #, c-format
 msgid "Failed to build menubar: %s"
 msgstr ""
 
-#: ../src/menubar.c:268
+#: ../src/menubar.c:272
 #, c-format
 msgid "%s: Starting new module configurator..."
 msgstr ""
 
-#: ../src/menubar.c:275
+#: ../src/menubar.c:279
 #, c-format
 msgid "%s: New module name is %s."
 msgstr ""
 
-#: ../src/menubar.c:295 ../src/menubar.c:363
+#: ../src/menubar.c:299 ../src/menubar.c:367
 #, c-format
 msgid "Could not open %s. Please examine the log messages for details."
 msgstr ""
 
-#: ../src/menubar.c:319
+#: ../src/menubar.c:323
 #, c-format
 msgid "%s: New module config cancelled."
 msgstr ""
 
-#: ../src/menubar.c:336
+#: ../src/menubar.c:340
 #, c-format
 msgid "%s: Open existing module..."
 msgstr ""
 
-#: ../src/menubar.c:343
+#: ../src/menubar.c:347
 #, c-format
 msgid "%s: Open module %s."
 msgstr ""
 
-#: ../src/menubar.c:401
+#: ../src/menubar.c:405
 #, c-format
 msgid "%s: Open module cancelled."
 msgstr ""
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:456 ../src/menubar.c:626 ../src/sat-pref-general.c:61
+#: ../src/menubar.c:460 ../src/menubar.c:630 ../src/sat-pref-general.c:61
 msgid "TLE Update"
 msgstr "Mise-à-jour TLE"
 
-#: ../src/menubar.c:477
+#: ../src/menubar.c:481
 msgid "<b>Updating TLE files from network</b>"
 msgstr "<b>Mise à jour des fichiers TLE depuis le réseau</b>"
 
 #. statistics
-#: ../src/menubar.c:490 ../src/menubar.c:660
+#: ../src/menubar.c:494 ../src/menubar.c:664
 msgid ""
 "Satellites updated:\t 0\n"
 "Satellites skipped:\t 0\n"
@@ -2260,69 +2275,69 @@ msgstr ""
 "Satellites sautés:    \t 0\n"
 "Satellites manquants: \t 0\n"
 
-#: ../src/menubar.c:516 ../src/menubar.c:686
+#: ../src/menubar.c:520 ../src/menubar.c:690
 msgid "Finished"
 msgstr "Terminé"
 
 #. create file chooser
-#: ../src/menubar.c:569
+#: ../src/menubar.c:573
 msgid "Select directory"
 msgstr "Sélectionne répertoire"
 
 #. create label
-#: ../src/menubar.c:575
+#: ../src/menubar.c:579
 msgid "Select TLE directory:"
 msgstr "Sélection répertoire TLE"
 
 #. create the dalog
-#: ../src/menubar.c:584
+#: ../src/menubar.c:588
 msgid "Update TLE from files"
 msgstr "Mise-à-jour tLE à partir de fichiers "
 
-#: ../src/menubar.c:619
+#: ../src/menubar.c:623
 #, c-format
 msgid "%s: Running TLE update from %s"
 msgstr ""
 
-#: ../src/menubar.c:646
+#: ../src/menubar.c:650
 msgid "<b>Updating TLE files from files</b>"
 msgstr "<b>Mise à jour de fichiers TLE depuis à partir de fichiers</b>"
 
-#: ../src/menubar.c:714 ../src/menubar.c:738 ../src/menubar.c:759
+#: ../src/menubar.c:728 ../src/menubar.c:749
 msgid "This function is still under development."
 msgstr ""
 
-#: ../src/menubar.c:842
+#: ../src/menubar.c:832
 #, c-format
 msgid "%s:%s: Scanning directory %s for modules."
 msgstr ""
 
-#: ../src/menubar.c:865
+#: ../src/menubar.c:855
 #, c-format
 msgid "%s:%d: Failed to open module dir %s (%s)"
 msgstr ""
 
-#: ../src/menubar.c:880
+#: ../src/menubar.c:870
 msgid ""
 "You do not have any modules set up yet. Please use File->New in order to "
 "create a module."
 msgstr ""
 
-#: ../src/menubar.c:898
+#: ../src/menubar.c:888
 msgid "Module"
 msgstr "Module"
 
 #. create dialog
-#: ../src/menubar.c:906
+#: ../src/menubar.c:896
 msgid "Select a module"
 msgstr ""
 
-#: ../src/menubar.c:933
+#: ../src/menubar.c:923
 #, c-format
 msgid "%s:%s: Selected module is: %s"
 msgstr ""
 
-#: ../src/menubar.c:938
+#: ../src/menubar.c:928
 #, c-format
 msgid "%s:%s: No selection is list of modules."
 msgstr ""
