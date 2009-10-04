@@ -52,6 +52,7 @@
 #include "compat.h"
 #include "menubar.h"
 #include "config-keys.h"
+//#include "satellite-editor.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -120,6 +121,9 @@ static GtkActionEntry entries[] = {
       N_("Edit user preferences"), G_CALLBACK (menubar_pref_cb)},
 
     /* Tools menu */
+    { "SatLab", NULL, N_("Satellite Editor"), NULL,
+      N_("Open the satellite editor where you can manually edit orbital elements and other data"),
+      G_CALLBACK (menubar_tle_manual_cb)},
     { "Window", NULL, N_("Comm Window"), NULL,
       N_("Predict windows between two observers"),
       G_CALLBACK (menubar_window_cb)},
@@ -159,18 +163,18 @@ static const char *menu_desc =
 "         <menu action='TleMenu'>"
 "            <menuitem action='Net'/>"
 "            <menuitem action='Local'/>"
-"            <menuitem action='Man'/>"
+/*"            <menuitem action='Man'/>"*/
 "         </menu>"
 /* "         <menuitem action='Freq'/>" */
 "         <separator/>"
 "         <menuitem action='Pref'/>"
 "      </menu>"
-"      <menu action='ToolsMenu'>"
+/*"      <menu action='ToolsMenu'>"
+"         <menuitem action='SatLab'/>"
+"         <separator/>"
 "         <menuitem action='Window'/>"
 "         <menuitem action='Predict'/>"
-/* "         <separator/>" */
-/* "         <menuitem action='Lab'/>" */
-"      </menu>"
+"      </menu>"*/
 "      <menu action='HelpMenu'>"
 /* "         <menuitem action='GettingStarted'/>" */
 /* "         <menuitem action='Manual'/>" */
@@ -234,12 +238,12 @@ menubar_create (GtkWidget *window)
     }
 
     /* load custom icons */
-/*    icon = icon_file_name ("gpredict-shuttle-small.png");
+    icon = icon_file_name ("gpredict-shuttle-small.png");
     image = gtk_image_new_from_file (icon);
     g_free (icon);
-    menuitem = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu/ToolsMenu/Rdv");
+    menuitem = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu/ToolsMenu/SatLab");
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-*/
+
     /* now, finally, get the menubar */
     menubar = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu");
 
@@ -704,21 +708,7 @@ menubar_tle_local_cb       (GtkWidget *widget, gpointer data)
 static void
 menubar_tle_manual_cb       (GtkWidget *widget, gpointer data)
 {
-    GtkWidget *dialog;
-
-
-    dialog = gtk_message_dialog_new (GTK_WINDOW (app),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_INFO,
-                                     GTK_BUTTONS_OK,
-                                     _("This function is still under development."));
-
-    /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK (gtk_widget_destroy),
-                              dialog);
-
-    gtk_widget_show_all (dialog);
+    //satellite_editor_run ();
 }
 
 
