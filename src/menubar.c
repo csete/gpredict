@@ -134,7 +134,7 @@ static GtkActionEntry entries[] = {
     { "GettingStarted", GTK_STOCK_EXECUTE, N_("Getting Started"), NULL,
       N_("Show online user manual, Getting Started Section"),
       G_CALLBACK (menubar_getting_started_cb)},
-    { "Manual", GTK_STOCK_HELP, N_("User Manual"), "F1",
+    { "Help", GTK_STOCK_HELP, N_("Online help"), "F1",
       N_("Show online user manual"), G_CALLBACK (menubar_help_cb)},
     { "License", NULL, N_("_License"), NULL,
       N_("Show the Gpredict license"), G_CALLBACK (menubar_license_cb) },
@@ -177,7 +177,7 @@ static const char *menu_desc =
 "      </menu>"*/
 "      <menu action='HelpMenu'>"
 /* "         <menuitem action='GettingStarted'/>" */
-/* "         <menuitem action='Manual'/>" */
+"         <menuitem action='Help'/>"
 "         <separator/>"
 "         <menuitem action='License'/>"
 "         <menuitem action='News'/>"
@@ -766,7 +766,25 @@ menubar_getting_started_cb (GtkWidget *widget, gpointer data)
 static void
 menubar_help_cb (GtkWidget *widget, gpointer data)
 {
-    gpredict_help_launch (GPREDICT_HELP_USER_MANUAL);
+    GtkWidget *dialog;
+    GtkWidget *button;
+
+    dialog = gtk_message_dialog_new (GTK_WINDOW (app),
+                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_INFO,
+                                     GTK_BUTTONS_CLOSE,
+                                     _("A comprehensive PDF user manual and \n"\
+                                       "video tutorials are available from the \n"\
+                                       "Gpredict website:"));
+
+    button = gtk_link_button_new ("http://gpredict.oz9aec.net/documents.php");
+    gtk_widget_show (button);
+
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), button, FALSE, FALSE, 0);
+
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+
 }
 
 

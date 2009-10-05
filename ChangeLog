@@ -4,6 +4,9 @@
     Implemented double click in multi-pass table will show the details of the
     clicked pass.
 
+    * src/menubar.c:
+    Added link to online documentation.
+
 
 2009-10-03 Alexandru Csete <oz9aec at gmail.com>
 
