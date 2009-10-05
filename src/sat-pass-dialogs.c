@@ -227,6 +227,8 @@ static void single_pass_dialog_destroy (GtkWidget *, gpointer);
 static gint multi_pass_dialog_delete   (GtkWidget *, GdkEvent *, gpointer);
 static void multi_pass_dialog_destroy  (GtkWidget *, gpointer);
 
+static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+                              GtkTreeViewColumn *column, gpointer data);
 
 static gboolean   popup_menu_cb   (GtkWidget *treeview, gpointer data);
 
@@ -1078,6 +1080,13 @@ show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *toplev
     g_signal_connect (list, "popup-menu",
                       G_CALLBACK (popup_menu_cb), NULL);
 
+
+    /* "row-activated" signal is used to catch double click events, which means
+       a pass has been double clicked => show details */
+    g_signal_connect (list, "row-activated",
+                      G_CALLBACK(row_activated_cb), toplevel);
+
+
     /* scrolled window */
     swin = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
@@ -1119,7 +1128,7 @@ show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *toplev
 
     g_signal_connect (dialog, "response",
                       G_CALLBACK (multi_pass_response), NULL);
-     g_signal_connect (dialog, "destroy",
+    g_signal_connect (dialog, "destroy",
                       G_CALLBACK (multi_pass_dialog_destroy), NULL);
     g_signal_connect (dialog, "delete_event",
                       G_CALLBACK (multi_pass_dialog_delete), NULL);
@@ -1306,7 +1315,6 @@ duration_cell_data_function (GtkTreeViewColumn *col,
 }
 
 
-
 /** \brief Manage "popup-menu" events.
  *  \param treeview The tree view in the GtkSatList widget
  *  \param list Pointer to the GtkSatList widget.
@@ -1416,5 +1424,52 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer data)
 
 }
 
+/** \brief Signal handler for managing double clicks in multi-pass dialog.
+  * \param view Pointer to the GtkTreeView object.
+  * \param path The path of the row that was activated.
+  * \param column The column where the activation occured.
+  * \param data Pointer to the toplevel window.
+  *
+  * This function is called when the user double clicks on a pass in the
+  * multi-pass dialog. This will cause the pass details to be shown.
+  */
+static void row_activated_cb (GtkTreeView *treeview, GtkTreePath *path,
+                              GtkTreeViewColumn *column, gpointer data)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel     *model;
+    GtkTreeIter       iter;
+    GtkWidget        *toplevel = GTK_WIDGET (data);
+    guint             rownum = 0;
+    GSList           *passes = NULL;
+    pass_t           *pass = NULL;
+    qth_t            *qth;
 
-/**** FIXME: formalise with the copy in gtk-sat-list */
+
+    /* get selected satellite */
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+
+    if (gtk_tree_selection_get_selected (selection, &model, &iter))  {
+
+        /* get data */
+        passes = (GSList *) g_object_get_data (G_OBJECT (treeview), "passes");
+        qth = (qth_t *) g_object_get_data (G_OBJECT (treeview), "qth");
+
+        gtk_tree_model_get (model, &iter,
+                            MULTI_PASS_COL_NUMBER, &rownum,
+                            -1);
+
+        /* get selected pass */
+        pass = copy_pass (PASS (g_slist_nth_data (passes, rownum)));
+
+        show_pass (pass->satname, qth, pass, toplevel);
+
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: There is no selection; skip popup."),
+                     __FILE__, __LINE__);
+    }
+
+}
+

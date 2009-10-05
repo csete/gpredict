@@ -1,4 +1,4 @@
-Changes in version 1.1 (4 Oct 2009)
+Changes in version 1.1 (5 Oct 2009)
 
 - New satellite selector in the module configuration dialog that makes
   it easier to locate and select satellites.
@@ -8,6 +8,8 @@ Changes in version 1.1 (4 Oct 2009)
 - Distribution now includes all satellites from CelesTrak.
 - Added a slider control to the Time Controller.
 - Added config option to automatically show the sky tracks on the polar view.
+- In the multi pass window one can now double click on any pass to show the
+  pass details. The right click pop-menu still works.
 - Fixed bug 2116693: List view does not sort properly for all time formats.
 - Fixed bug 2836265: Time controls should wrap around their limits.
 - Fixed bug 2691499: Sky at glance crashes with empty module.

@@ -1,3 +1,10 @@
+2009-09-05 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/sat-pass-dialogs.c:
+    Implemented double click in multi-pass table will show the details of the
+    clicked pass.
+
+
 2009-10-03 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-selector-c:
