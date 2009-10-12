@@ -1,3 +1,9 @@
+Changes in version 1.2 (TBD)
+
+- Fixed a memory leak in the rotator controller. Thanks to Charles Suprin
+  AA1VS for patch.
+
+
 Changes in version 1.1 (5 Oct 2009)
 
 - New satellite selector in the module configuration dialog that makes
@@ -13,8 +19,9 @@ Changes in version 1.1 (5 Oct 2009)
 - Fixed bug 2116693: List view does not sort properly for all time formats.
 - Fixed bug 2836265: Time controls should wrap around their limits.
 - Fixed bug 2691499: Sky at glance crashes with empty module.
+- Fixed bug 2836263: Setup translations in Launchpad.
 - Include more maps from NASA Visible Earth: Blue Marble Next Generation.
-- Binary packages for Windows, Mac OS X.
+- Binary packages for Ubuntu via PPA.
 
 
 Changes in version 1.0 beta 5 (24 May 2005)

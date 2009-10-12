@@ -1,3 +1,16 @@
+2009-10-12 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/trsp:
+    Added transponder data for new cubesats.
+
+    * data/satdata:
+    Updated satellite data. Replaced 2009+051B/C/D/E names for new cubesats
+    with real names based on latest guess by DK3WN.
+
+    * src/gtk-rot-ctrl.c:
+    Fixed memory leak (thanks to Charles Suprin AA1VS for patch).    
+
+
 2009-09-05 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pass-dialogs.c:
