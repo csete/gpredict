@@ -1028,10 +1028,11 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
         *az = g_strtod (vbuff[0], NULL);
         *el = g_strtod (vbuff[1], NULL);
 
-        g_free (buff);
         g_strfreev (vbuff);
     }
-    
+
+    g_free (buff);
+
     shutdown (sock, SHUT_RDWR);
     close (sock);
 
