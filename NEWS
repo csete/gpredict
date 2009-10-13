@@ -1,7 +1,16 @@
 Changes in version 1.2 (TBD)
 
-- Fixed a memory leak in the rotator controller. Thanks to Charles Suprin
-  AA1VS for patch.
+* New satellite editor to manually add/edit/delete satellite data.
+* New transponder editor to edit transponder data.
+* Feature request 2866570: Set operating mode via CAT.
+* Feature request 2873824: Flip Passes.
+* Feature request 2778735: Visual indicator for RX/TX/TRX.
+* Feature request 2689352: Mutual Contact Window AOS/LOS.
+- Fixed bug 2877974: Incorrect uplink Doppler.
+- Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to
+  Charles Suprin AA1VS).
+- Applied patch 2877878: Change Flag to Lock in tle-update (thanks Charles Suprin AA1VS).
+- Applied patch 2877918: Fixes segfault in TLE updater (thanks Charles Suprin AA1VS).
 
 
 Changes in version 1.1 (5 Oct 2009)

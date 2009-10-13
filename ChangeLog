@@ -1,3 +1,18 @@
+2009-10-13 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/tle-update.c:
+    Applied patch 2877878 and 2877918 from Charles Suprin AA1VS.
+
+    * src/gtk-rig-ctrl.c:
+    Fixed bug 2877974: Incorrect uplink Doppler.
+
+    * src/sat-cfg.c:
+    Changed some defaults for the map view.
+
+    * data/Amateur.mod:
+    Added SO-50 to list of satellites in the default module.
+
+
 2009-10-12 Alexandru Csete <oz9aec at gmail.com>
 
     * data/trsp:
