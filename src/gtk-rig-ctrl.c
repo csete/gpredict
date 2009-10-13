@@ -345,7 +345,7 @@ gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
         
         /* Doppler shift up */
         satfreq = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
-        ctrl->du = -satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
+        ctrl->du = satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
         buff = g_strdup_printf ("%.0f Hz", ctrl->du);
         gtk_label_set_text (GTK_LABEL (ctrl->SatDopUp), buff);
         g_free (buff);
