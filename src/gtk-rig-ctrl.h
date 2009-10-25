@@ -98,7 +98,7 @@ struct _gtk_rig_ctrl
     guint timerid;     /*!< Timer ID */
     
     gboolean tracking;  /*!< Flag set when we are tracking a target. */
-    gboolean busy;      /*!< Flag set when control algorithm is busy. */
+	GStaticMutex busy;/*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rig device is engaged. */
     gint     errcnt;    /*!< Error counter. */
     

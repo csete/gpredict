@@ -155,7 +155,7 @@ static void
     ctrl->plot = NULL;
     
     ctrl->tracking = FALSE;
-    ctrl->busy = FALSE;
+    g_static_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
@@ -180,7 +180,7 @@ static void
         g_free (ctrl->conf);
         ctrl->conf = NULL;
     }
-
+	
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -800,12 +800,10 @@ static gboolean
     gboolean error = FALSE;
     
     
-    if (ctrl->busy) {
+    if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
     }
-    
-    ctrl->busy = TRUE;
     
     /* If we are tracking and the target satellite is within
        range, set the rotor position controller knob values to
@@ -924,7 +922,7 @@ static gboolean
                                      gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
     }
     
-    ctrl->busy = FALSE;
+    g_static_mutex_unlock(&(ctrl->busy));
     
     return TRUE;
 }

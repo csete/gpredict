@@ -174,7 +174,7 @@ gtk_sat_module_init (GtkSatModule *module)
     module->rigctrlwin = NULL;
 
     module->state = GTK_SAT_MOD_STATE_DOCKED;
-    module->busy = FALSE;
+    module->busy = g_mutex_new();
 
     module->layout = GTK_SAT_MOD_LAYOUT_1;
     module->view_1 = GTK_SAT_MOD_VIEW_MAP;
@@ -766,18 +766,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
     gdouble   delta;
 
 
-    if (mod->busy) {
-
-        sat_log_log (SAT_LOG_LEVEL_WARN,
-                     _("%s: Previous cycle missed it's deadline."),
-                     __FUNCTION__);
-
-        return TRUE;
-
-    }
-
-
-    /* in docked state, update only if tab is visible */
+	/* in docked state, update only if tab is visible */
     switch (mod->state) {
 
     case GTK_SAT_MOD_STATE_DOCKED:
@@ -801,8 +790,15 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
     if (needupdate) {
 
-        mod->busy = TRUE;
-
+		if (g_mutex_trylock(mod->busy)==FALSE) {
+			
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: Previous cycle missed it's deadline."),
+                     __FUNCTION__);
+		
+        return TRUE;
+		
+		}
 
         mod->rtNow = get_current_daynum ();
 
@@ -879,11 +875,9 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
         }
 
-
-        mod->busy = FALSE;
+		g_mutex_unlock(mod->busy);
 
     }
-
     return TRUE;
 }
 
@@ -1488,8 +1482,8 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
     g_return_if_fail (IS_GTK_SAT_MODULE (module));
 
     /* lock module */
-    module->busy = TRUE;
-
+	g_mutex_lock(module->busy);
+	
     sat_log_log (SAT_LOG_LEVEL_MSG,
                  _("%s: Reloading satellites for module %s"),
                  __FUNCTION__, module->name);
@@ -1516,8 +1510,7 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
     /* FIXME: radio and rotator controller */
     
     /* unlock module */
-    module->busy = FALSE;
-
+	g_mutex_unlock(module->busy);
 }
 
 

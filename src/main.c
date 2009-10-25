@@ -102,6 +102,9 @@ int main (int argc, char *argv[])
 
     /* start logger first, so that we can catch error messages if any */
     sat_log_init ();
+	
+	if (!g_thread_supported ())
+		g_thread_init (NULL);
 
     /* check that user settings are ok */
     error = first_time_check_run ();
@@ -421,8 +424,6 @@ tle_mon_task          (gpointer data)
                          _("%s: Starting new update thread."),
                          __FUNCTION__);
 
-            if (!g_thread_supported ())
-                g_thread_init (NULL);
 
             g_thread_create (update_tle_thread, NULL, FALSE, &err);
 

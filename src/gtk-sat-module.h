@@ -132,7 +132,7 @@ struct _gtk_sat_module
     gtk_sat_mod_view_t   view_3;
 
     guint          timerid;      /*!< The timeout ID (FIXME: REMOVE) */
-    gboolean       busy;         /*!< Flag indicating whether timeout has
+    GMutex       *busy;         /*!< Flag indicating whether timeout has
                                                                       finished or not. Also used for blocking
                                                                           the module during TLE update.
                                                                  */

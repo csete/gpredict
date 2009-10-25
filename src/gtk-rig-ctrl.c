@@ -41,6 +41,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <math.h>
+#include <glib.h>
 #include "compat.h"
 #include "sat-log.h"
 #include "predict-tools.h"
@@ -186,7 +187,7 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->trsplist = NULL;
     ctrl->trsplock = FALSE;
     ctrl->tracking = FALSE;
-    ctrl->busy = FALSE;
+	g_static_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
@@ -199,7 +200,7 @@ static void
 gtk_rig_ctrl_destroy (GtkObject *object)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (object);
-    
+	
     /* stop timer */
     if (ctrl->timerid > 0) 
         g_source_remove (ctrl->timerid);
@@ -1260,14 +1261,12 @@ rig_ctrl_timeout_cb (gpointer data)
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
     
-    if (ctrl->busy) {
+	if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
     }
     
-    ctrl->busy = TRUE;
-    
-    if (ctrl->conf2 != NULL) {
+	if (ctrl->conf2 != NULL) {
         exec_dual_rig_cycle (ctrl);
     }
     else {
@@ -1315,7 +1314,7 @@ rig_ctrl_timeout_cb (gpointer data)
     
     //g_print ("       WROPS = %d\n", ctrl->wrops);
     
-    ctrl->busy = FALSE;
+    g_static_mutex_unlock(&(ctrl->busy));
     
     return TRUE;
 }

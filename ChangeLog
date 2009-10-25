@@ -1,3 +1,16 @@
+2009-10-25 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-module-popup.c:
+    * src/gtk-rig-ctrl.c:
+    * src/gtk-rig-ctrl.h:
+    * src/main.c:
+    * src/gtk-sat-module.c:
+    * src/gtk-sat-module.h:
+    * src/gtk-rot-ctrl.c:
+    * src/gtk-rot-ctrl.h:
+    Applied patch 2881367 from Charles Suprin AA1VS.
+
+
 2009-10-13 Alexandru Csete <oz9aec at gmail.com>
 
     * src/tle-update.c:

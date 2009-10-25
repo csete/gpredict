@@ -89,7 +89,7 @@ struct _gtk_rot_ctrl
     gdouble tolerance;  /*!< Error tolerance */
     
     gboolean tracking;  /*!< Flag set when we are tracking a target. */
-    gboolean busy;      /*!< Flag set when control algorithm is busy. */
+    GStaticMutex busy;      /*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
                         
     gint     errcnt;    /*!< Error counter. */
