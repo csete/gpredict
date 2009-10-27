@@ -50,7 +50,7 @@
 /* Replace flag with lock */
 /* http://library.gnome.org/devel/glib/unstable/glib-Threads.html */
 static GStaticMutex tle_in_progress = G_STATIC_MUTEX_INIT ;
-
+static GStaticMutex tle_file_in_progress = G_STATIC_MUTEX_INIT ;
 
 /* private function prototypes */
 static size_t  my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream);
@@ -122,8 +122,13 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     gdouble      fraction = 0.0;
     gdouble      start = 0.0;
 
-    if (g_static_mutex_trylock(&tle_in_progress)==FALSE)
+    if (g_static_mutex_trylock(&tle_file_in_progress)==FALSE) {
+    	sat_log_log (SAT_LOG_LEVEL_ERROR,
+    	             _("%s: A TLE update process is already running. Aborting."),
+    	             __FUNCTION__);
+    	             
         return;
+    }
 
     /* create hash table */
     data = g_hash_table_new_full (g_int_hash, g_int_equal, g_free, free_new_tle);
@@ -353,7 +358,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     /* destroy hash tables */
     g_hash_table_destroy (data);
 
-    g_static_mutex_unlock(&tle_in_progress);
+    g_static_mutex_unlock(&tle_file_in_progress);
 }
 
 
@@ -517,8 +522,13 @@ void tle_update_from_network (gboolean   silent,
 
     /* bail out if we are already in an update process */
     /*if (tle_in_progress)*/
-    if (g_static_mutex_trylock(&tle_in_progress)==FALSE)
+    if (g_static_mutex_trylock(&tle_in_progress)==FALSE) {
+    	sat_log_log (SAT_LOG_LEVEL_ERROR,
+    			     _("%s: A TLE update process is already running. Aborting."),
+    			     __FUNCTION__);
+    			     
         return;
+    }
 
 
     /*tle_in_progress = TRUE;*/
@@ -627,10 +637,19 @@ void tle_update_from_network (gboolean   silent,
 
         /* continue update if we have fetched at least one file */
         if (success > 0) {
+        	sat_log_log (SAT_LOG_LEVEL_MSG,
+        	             _("%s: Fetched %d files from network; updating..."),
+        	             __FUNCTION__, success);
             /* call update_from_files */
             cache = sat_file_name ("cache");
             tle_update_from_files (cache, NULL, silent, progress, label1, label2);
             g_free (cache);
+           
+        }
+        else {
+        	sat_log_log (SAT_LOG_LEVEL_ERROR,
+        	             _("%s: Could not fetch any new TLE files from network; aborting..."),
+        	             __FUNCTION__);
         }
 
     }

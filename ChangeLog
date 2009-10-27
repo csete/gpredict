@@ -1,3 +1,10 @@
+2009-10-27 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/tle-update.c:
+    Fixed bug that broke TLE update from network, caused by attempts to
+    double-lock the tle_in_progress mutex.
+    
+
 2009-10-25 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module-popup.c:
