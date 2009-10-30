@@ -1,4 +1,4 @@
-SUBDIRS = satdata trsp
+SUBDIRS = satdata trsp desktop
 
 gpredict_datdir = $(pkgdatadir)/data
 

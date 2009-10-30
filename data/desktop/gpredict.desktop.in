@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Gredict
+Comment=Satellite tracker
+Exec=gpredict
+Icon=$(datadir)/pixmaps/gpredict/icons/gpredict-icon.png
+Terminal=false
+Type=Application
+Categories=HamRadio;
