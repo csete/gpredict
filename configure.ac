@@ -59,6 +59,11 @@ if test "$enable_coverage" = yes ; then
 	AC_DEFINE(ENABLE_COV, 1, [Define if code coverage should be enabled.])
 fi
 
+AC_ARG_ENABLE(caches,[  --enable-caches	  Run update-* to update desktop and icon caches when installing (disable if you install as not root)],,[enable_caches="yes"])
+AM_CONDITIONAL(UPDATE_CACHES, test x"$enable_caches" = "xyes")
+
+
+
 
 GLIB_V=`pkg-config --modversion glib-2.0`
 GIO_V=`pkg-config --modversion gio-2.0`
@@ -89,6 +94,7 @@ pixmaps/Makefile
 pixmaps/maps/Makefile
 pixmaps/icons/Makefile
 data/Makefile
+data/desktop/Makefile
 data/satdata/Makefile
 data/trsp/Makefile
 po/Makefile.in
