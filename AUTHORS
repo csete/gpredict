@@ -2,6 +2,9 @@ Gpredict is designed and developed by Alexandru Csete, OZ9AEC.
 
 Contributors:
 - William J Beksi, KC2EXL, Map view.
+- Charles Suprin, AA1VS, various multithread fixes.
+- Valentin Yakovenkov, Windows build.
+- David VK5DG, transponder data files
 - Dr. T.S. Kelso, the author original SGP4/SDP4 algorithms in FORTRAN and Pascal. 
 - Neoklis Kyriazis, 5B4AZ, conversion of the algorithms to C.
 - Damon Chaplin is the author of GooCanvas, which is used extensively in gpredict

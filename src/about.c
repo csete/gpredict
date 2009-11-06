@@ -40,6 +40,8 @@ const gchar *authors[] = {
     "",
     "Contributors:",
     "David VK5DG (Transponder data files)",
+	"Charles Suprin, AA1VS (Various multithread fixes)",
+	"Valentin Yakovenkov (Windows build)",
     "Bruce Cowan (Gio port of TLE updater)",
     "Damon Chaplin (GooCanvas)",
     "Dr. T.S. Kelso (SGP4/SDP4 algorithms)",
