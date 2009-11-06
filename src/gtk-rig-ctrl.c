@@ -56,10 +56,14 @@
 
 /* NETWORK */
 //#include <sys/types.h>
+#ifndef WIN32
 #include <sys/socket.h>     /* socket(), connect(), send() */
 #include <netinet/in.h>     /* struct sockaddr_in */
 #include <arpa/inet.h>      /* htons() */
 #include <netdb.h>          /* gethostbyname() */
+#else
+#include <winsock2.h>
+#endif
 /* END */
 #include "gtk-rig-ctrl.h"
 
@@ -1880,8 +1884,14 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
                        __FILE__, __FUNCTION__);
-        shutdown (sock, SHUT_RDWR);
-        close (sock);
+
+#ifndef WIN32
+	shutdown (sock, SHUT_RDWR);
+#else
+	shutdown (sock, SD_BOTH);
+#endif
+       
+	close (sock);
         return FALSE;
     }
         
@@ -1903,8 +1913,13 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
         g_free (buff);
         g_strfreev (vbuff);
     }
-    
+
+#ifndef WIN32
     shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+    
     close (sock);
 
 
@@ -1977,7 +1992,13 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
                        __FUNCTION__, written, size);
     }
     g_free (buff);
+
+#ifndef WIN32
     shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+
     close (sock);
     
     ctrl->wrops++;
@@ -2062,7 +2083,13 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
                        __FILE__, __FUNCTION__);
+
+#ifndef WIN32
         shutdown (sock, SHUT_RDWR);
+#else
+        shutdown (sock, SD_BOTH);
+#endif
+        
         close (sock);
         return FALSE;
     }
@@ -2086,7 +2113,12 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
         g_strfreev (vbuff);
     }
     
+#ifndef WIN32
     shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+
     close (sock);
 
 
@@ -2182,7 +2214,13 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
                        __FUNCTION__, written, size);
     }
     g_free (buff);
+
+#ifndef WIN32
     shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+    
     close (sock);
     
     ctrl->wrops++;

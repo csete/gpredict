@@ -50,10 +50,14 @@
 
 /* NETWORK */
 //#include <sys/types.h>
+#ifndef WIN32
 #include <sys/socket.h>     /* socket(), connect(), send() */
 #include <netinet/in.h>     /* struct sockaddr_in */
 #include <arpa/inet.h>      /* htons() */
 #include <netdb.h>          /* gethostbyname() */
+#else
+#include <winsock2.h>
+#endif
 /* END */
 
 #define FMTSTR "%7.2f\302\260"
@@ -1005,7 +1009,13 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
                      __FILE__, __FUNCTION__);
+
+#ifndef WIN32
         shutdown (sock, SHUT_RDWR);
+#else
+        shutdown (sock, SD_BOTH);
+#endif
+        
         close (sock);
         return FALSE;
     }
@@ -1031,7 +1041,12 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 
     g_free (buff);
 
+#ifndef WIN32
     shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+    
     close (sock);
 
     ctrl->wrops++;
@@ -1113,7 +1128,12 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
     
     g_free (buff);
     
+#ifndef WIN32
     shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+
     close (sock);
     
     ctrl->wrops++;

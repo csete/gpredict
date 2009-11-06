@@ -5,7 +5,7 @@ include config.mk
 
 # directories
 topsrc = ..
-gcincdir = $(topsrc)/goocanv8
+gcincdir = c:/mingw/include/goocanvas-0.10/goocanvas/
 gcsrcdir = $(topsrc)/goocanv8/src
 gpreddir = $(topsrc)/src
 sgpsdpdir = $(gpreddir)/sgpsdp
@@ -22,7 +22,7 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC \
 # libraries
 GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-win32-2.0)
 GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs glib-2.0 gthread-2.0)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) libgoocanvas.lib libsgpsdp.lib -lcurl -lwinmm -lws2_32
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) -lgoocanvas libsgpsdp.lib -lcurldll -lwinmm -lws2_32
 LIBS = -lm
 
 
@@ -90,10 +90,12 @@ GPREDICTSRC = \
 	gtk-polar-plot.c \
 	gtk-polar-view.c \
 	gtk-polar-view-popup.c \
+	gtk-rig-ctrl.c \
 	gtk-rot-ctrl.c \
 	gtk-rot-knob.c \
 	gtk-sat-data.c \
 	gtk-sat-list.c \
+	gtk-sat-list-popup.c \
 	gtk-sat-list-col-sel.c \
 	gtk-sat-map.c \
 	gtk-sat-map-ground-track.c \
@@ -101,7 +103,7 @@ GPREDICTSRC = \
 	gtk-sat-module.c \
 	gtk-sat-module-popup.c \
 	gtk-sat-module-tmg.c \
-	gtk-sat-tree.c \
+	gtk-sat-selector.c \
 	gtk-single-sat.c \
 	gtk-sky-glance.c \
 	gui.c \
@@ -117,18 +119,17 @@ GPREDICTSRC = \
 	pass-popup-menu.c \
 	pass-to-txt.c \
 	predict-tools.c \
+	qth-data.c \
 	qth-editor.c \
 	radio-conf.c \
-	rig-io.c \
 	rotor-conf.c \
-	rdv.c \
 	sat-cfg.c \
 	sat-debugger.c \
+	sat-info.c \
 	sat-log.c \
 	sat-log-browser.c \
 	sat-monitor.c \
 	sat-pass-dialogs.c \
-	sat-popup-menu.c \
 	sat-pref.c \
 	sat-pref-conditions.c \
 	sat-pref-debug.c \
@@ -157,13 +158,13 @@ GPREDICTSRC = \
 	sat-vis.c \
 	save-pass.c \
 	time-tools.c \
-	tle-lookup.c \
 	tle-tools.c \
 	tle-update.c \
+	trsp-conf.c \
 
 GPREDICTOBJ = $(GPREDICTSRC:.c=.o)
 
-OBJS = $(GOOCANVOBJ) $(SGPSDPOBJ) $(GPREDICTOBJ)
+OBJS = $(SGPSDPOBJ) $(GPREDICTOBJ)
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(GTK_CFLAGS) $<
@@ -172,13 +173,13 @@ OBJS = $(GOOCANVOBJ) $(SGPSDPOBJ) $(GPREDICTOBJ)
 
 # targets begin
 
-all: libgoocanvas.dll libsgpsdp.dll gpredict.exe
+all: libsgpsdp.dll gpredict.exe
 
 
 # Use -mconsole to always open a console window when gpredicxt is started
 # Use -mwindows for no copnsole
 gpredict.exe: $(OBJS) gpredict_res.o
-	$(CC) -mconsole -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
+	$(CC) -mconsole -mthread -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
 
 gpredict_res.o: gpredict.rc 
 	$(RC) $(RCFLAGS) $< $@

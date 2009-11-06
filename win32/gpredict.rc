@@ -1,5 +1,7 @@
 #include <windows.h>
+#include <winuser.h>
 
 /* icon for the program itself */
 icon_0 ICON "icons/gpredict-icon.ico"
+2 RT_MANIFEST gpredict.exe.manifest
 

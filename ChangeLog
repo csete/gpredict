@@ -1,3 +1,17 @@
+2009-11-06 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    * src/gtk-rot-ctrl.c:
+    * src/main.c:
+    * win32/Makefile:
+    * win32/build-config.h:
+    * win32/config.mk:
+    * win32/gpredict.exe.manifest:
+    * win32/gpredict.rc:
+    Applied patch 2893617 from Valentin Yakovenkov fixing various windows issues.
+
+
+
 2009-10-27 Alexandru Csete <oz9aec at gmail.com>
 
     * src/tle-update.c:
