@@ -137,6 +137,7 @@ typedef enum {
     SAT_CFG_STR_DEF_QTH,        /*!< Default QTH file. */
     SAT_CFG_STR_OPEN_MODULES,   /*!< Open modules. */
     SAT_CFG_STR_WEB_BROWSER,    /*!< Web browser string. */
+    SAT_CFG_STR_MODULE_GRID,    /*!< The grid layout of the module */
     SAT_CFG_STR_MAP_FILE,       /*!< Map file (abs or rel). */
     SAT_CFG_STR_MAP_FONT,       /*!< Map font. */
     SAT_CFG_STR_POL_FONT,       /*!< Polar view font. */
