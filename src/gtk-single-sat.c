@@ -791,7 +791,6 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
 {
     GtkSingleSat *single_sat = GTK_SINGLE_SAT (data);
     GtkWidget    *menu;
-    GtkWidget    *select_menu;
     GtkWidget    *menuitem;
     GtkWidget    *image;
     GtkWidget    *label;
@@ -833,7 +832,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     menuitem = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    /* next pass and predict passes */
+    /* Show next pass */
     menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
     image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL,
                                       GTK_ICON_SIZE_MENU);
@@ -848,6 +847,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
         
+    /* Show future passes */
     menuitem = gtk_image_menu_item_new_with_label (_("Future passes"));
     image = gtk_image_new_from_stock (GTK_STOCK_INDEX,
                                       GTK_ICON_SIZE_MENU);
@@ -879,8 +879,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     menuitem = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    select_menu = gtk_menu_new ();
-
+    /* select sat */
     for (i = 0; i < n; i++) {
 
         sati = SAT (g_slist_nth_data (single_sat->sats, i));
@@ -899,15 +898,11 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
         g_signal_connect_after (menuitem, "activate",
                                 G_CALLBACK (select_satellite), single_sat);
 
-        gtk_menu_shell_append (GTK_MENU_SHELL (select_menu), menuitem);
+        //gtk_menu_shell_append (GTK_MENU_SHELL (select_menu), menuitem);
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
         //gtk_widget_show (menuitem);
     }
 
-
-    /* select sat */
-    menuitem = gtk_menu_item_new_with_label (_("Select satellite"));
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), select_menu);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     gtk_widget_show_all (menu);
 

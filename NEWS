@@ -13,6 +13,7 @@ Changes in version 1.2 (TBD)
 - Applied patch 2877918: Fixes segfault in TLE updater (thanks Charles Suprin AA1VS).
 - Applied patch 2881367: Updated Flags to Locks (thanks Charles Suprin AA1VS).
 - Applied patch 2893617: Patches for fixing Windows build (thanks Valentin Yakovenkov).
+- Slightly improved UI for the single-satellite view.
 
 
 Changes in version 1.1 (5 Oct 2009)

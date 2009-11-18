@@ -7,6 +7,10 @@
     Pack transponder list into a scrolled window to prevent long transponder lists from
     resizing the satellite info dialog.
 
+    * src/gtk-single-sat.c:
+    Changed satellite selector to list satellites in the main pop-up menu instead of a
+    submbenu (fewer mouse clicks).
+
 
 2009-11-06 Alexandru Csete <oz9aec at gmail.com>
 
