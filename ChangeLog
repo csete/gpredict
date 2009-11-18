@@ -3,6 +3,10 @@
     * src/config-keys.h:
     Added config key for new GRID layout.
 
+    * src/sat-info.c:
+    Pack transponder list into a scrolled window to prevent long transponder lists from
+    resizing the satellite info dialog.
+
 
 2009-11-06 Alexandru Csete <oz9aec at gmail.com>
 

@@ -415,7 +415,7 @@ epoch_to_str (sat_t *sat)
 /** \brief Create transponder table. */
 static GtkWidget *create_transponder_table (guint catnum)
 {
-    GtkWidget *vbox,*label;
+    GtkWidget *vbox,*label,*swin;
     GSList    *trsplist = NULL;
     trsp_t    *trsp = NULL;
     guint      i,n;
@@ -424,7 +424,7 @@ static GtkWidget *create_transponder_table (guint catnum)
     
     trsplist = read_transponders (catnum);
     if (trsplist == NULL) {
-        vbox = gtk_label_new (_("No transponders"));
+        swin = gtk_label_new (_("No transponders"));
     }
     else {
         vbox = gtk_vbox_new (FALSE, 0);
@@ -498,8 +498,14 @@ static GtkWidget *create_transponder_table (guint catnum)
             }
         }
         free_transponders (trsplist);
+
+        /* pack into a scrolled window */
+        swin = gtk_scrolled_window_new (NULL,NULL);
+        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+        //gtk_container_add (GTK_CONTAINER (swin), vbox);
+        gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (swin), vbox);
     }
     
-    return vbox;
+    return swin;
 }
 
