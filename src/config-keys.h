@@ -66,10 +66,11 @@
 #define MOD_CFG_SATS_KEY        "SATELLITES"
 #define MOD_CFG_TIMEOUT_KEY     "TIMEOUT"
 #define MOD_CFG_WARP_KEY        "WARP"
-#define MOD_CFG_LAYOUT          "LAYOUT"
-#define MOD_CFG_VIEW_1          "VIEW_1"
-#define MOD_CFG_VIEW_2          "VIEW_2"
-#define MOD_CFG_VIEW_3          "VIEW_3"
+#define MOD_CFG_LAYOUT          "LAYOUT"      /* Old layout before v1.2 */
+#define MOD_CFG_VIEW_1          "VIEW_1"      /* Old layout before v1.2 */
+#define MOD_CFG_VIEW_2          "VIEW_2"      /* Old layout before v1.2 */
+#define MOD_CFG_VIEW_3          "VIEW_3"      /* Old layout before v1.2 */
+#define MOD_CFG_GRID            "GRID"        /* New grid layout since v1.2 */
 #define MOD_CFG_STATE           "STATE"
 #define MOD_CFG_WIN_POS_X       "WIN_POS_X"
 #define MOD_CFG_WIN_POS_Y       "WIN_POS_Y"

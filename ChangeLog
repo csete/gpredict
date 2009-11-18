@@ -1,3 +1,9 @@
+2009-11-18 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/config-keys.h:
+    Added config key for new GRID layout.
+
+
 2009-11-06 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
