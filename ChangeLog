@@ -1,6 +1,7 @@
 2009-11-18 Alexandru Csete <oz9aec at gmail.com>
 
     * src/config-keys.h:
+    * src/sat-cfg.[ch]:
     Added config key for new GRID layout.
 
     * src/sat-info.c:
@@ -9,7 +10,7 @@
 
     * src/gtk-single-sat.c:
     Changed satellite selector to list satellites in the main pop-up menu instead of a
-    submbenu (fewer mouse clicks).
+    submbenu (fewer mouse clicks).      
 
 
 2009-11-06 Alexandru Csete <oz9aec at gmail.com>

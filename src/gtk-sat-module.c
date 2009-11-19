@@ -176,6 +176,8 @@ gtk_sat_module_init (GtkSatModule *module)
     module->state = GTK_SAT_MOD_STATE_DOCKED;
     module->busy = g_mutex_new();
 
+    module->grid = NULL;
+    module->views = NULL;
     module->layout = GTK_SAT_MOD_LAYOUT_1;
     module->view_1 = GTK_SAT_MOD_VIEW_MAP;
     module->view_2 = GTK_SAT_MOD_VIEW_POLAR;
@@ -232,6 +234,13 @@ gtk_sat_module_destroy (GtkObject *object)
         g_hash_table_destroy (module->satellites);
         module->satellites = NULL;
     }
+
+    if (module->grid) {
+        g_free (module->grid);
+        module->grid = NULL;
+    }
+
+    /* FIXME: free module->views? */
 
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -528,6 +537,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     gchar   *qthfile;
     gchar   *confdir;
     gchar  **buffv;
+    guint   length;
     GError  *error = NULL;
 
     module->cfgdata = g_key_file_new ();
@@ -615,7 +625,20 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                                        MOD_CFG_TIMEOUT_KEY,
                                        SAT_CFG_INT_MODULE_TIMEOUT);
 
-    /* layout */
+    /* get grid layout configuration (introduced in 1.2) */
+    buffer = mod_cfg_get_str (module->cfgdata,
+                              MOD_CFG_GLOBAL_SECTION,
+                              MOD_CFG_GRID,
+                              SAT_CFG_STR_MODULE_GRID);
+
+    /* convert to an integer list */
+    buffv = g_strsplit (buffer, ";", 0);
+    length = g_strv_length (buffv);
+    if ((length == 0) || (length % 5 != 0)) {
+
+    }
+
+
     module->layout = mod_cfg_get_int (module->cfgdata,
                                       MOD_CFG_GLOBAL_SECTION,
                                       MOD_CFG_LAYOUT,

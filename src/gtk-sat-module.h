@@ -113,6 +113,10 @@ struct _gtk_sat_module
     gint           vpanedpos;   /*!< Stored position of vpaned */
     gint           hpanedpos;   /*!< Stored pos of hpaned */
 
+    /* layout and children */
+    gint         *grid;
+    GSList       *views;
+
     /* children */
     GtkWidget     *child_1;
     GtkWidget     *child_2;
