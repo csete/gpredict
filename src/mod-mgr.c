@@ -441,9 +441,6 @@ mod_mgr_dock_module    (GtkWidget *module)
                                          module,
                                          gtk_label_new (GTK_SAT_MODULE (module)->name));
 
-        /* fix size allocation, i.e. paned position */
-        gtk_sat_module_fix_size (module);
-
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s: Docked %s into notebook (page %d)"),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name, page);

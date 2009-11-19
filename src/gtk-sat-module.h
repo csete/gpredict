@@ -105,22 +105,10 @@ struct _gtk_sat_module
     guint          event_count;
     guint          event_timeout;
 
-    /* layout */
-    GtkWidget     *vpaned;      /*!< Vertical space divider */
-    GtkWidget     *hpaned;      /*!< Horizontal space divider */
-
-    /* these are needed when docking */
-    gint           vpanedpos;   /*!< Stored position of vpaned */
-    gint           hpanedpos;   /*!< Stored pos of hpaned */
-
     /* layout and children */
-    gint         *grid;
-    GSList       *views;
-
-    /* children */
-    GtkWidget     *child_1;
-    GtkWidget     *child_2;
-    GtkWidget     *child_3;
+    gint         *grid;         /*!< The grid layout array [(type,left,right,top,bottom),...] */
+    guint         nviews;       /*!< The number of views */
+    GSList       *views;        /*!< Pointers to the views */
 
     GKeyFile      *cfgdata;      /*!< Configuration data. */
     qth_t         *qth;          /*!< QTH information. */
@@ -130,16 +118,11 @@ struct _gtk_sat_module
     guint32        timeout;      /*!< Timeout value [msec] */
 
     gtk_sat_mod_state_t  state;   /*!< The state of the module. */
-    gtk_sat_mod_layout_t layout;  /*!< module layout */
-    gtk_sat_mod_view_t   view_1;
-    gtk_sat_mod_view_t   view_2;
-    gtk_sat_mod_view_t   view_3;
 
     guint          timerid;      /*!< The timeout ID (FIXME: REMOVE) */
-    GMutex       *busy;         /*!< Flag indicating whether timeout has
-                                                                      finished or not. Also used for blocking
-                                                                          the module during TLE update.
-                                                                 */
+    GMutex       *busy;          /*!< Flag indicating whether timeout has
+                                      finished or not. Also used for blocking
+                                      the module during TLE update. */
 
     /* time keeping */
     gdouble        rtNow;        /*!< Real-time in this cycle */

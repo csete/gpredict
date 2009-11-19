@@ -203,9 +203,9 @@ menubar_create (GtkWidget *window)
     GtkUIManager   *uimgr;
     GtkAccelGroup  *accgrp;
     GError         *error = NULL;
-    GtkWidget      *menuitem;
-    GtkWidget      *image;
-    gchar          *icon;
+    //GtkWidget      *menuitem;
+    //GtkWidget      *image;
+    //gchar          *icon;
     gint           i;
 
 
@@ -264,8 +264,6 @@ menubar_new_mod_cb  (GtkWidget *widget, gpointer data)
     gchar *modfile;
     gchar *confdir;
     GtkWidget *module = NULL;
-    GtkWidget *parent;
-
 
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -305,14 +303,6 @@ menubar_new_mod_cb  (GtkWidget *widget, gpointer data)
         }
         else {
             mod_mgr_add_module (module, TRUE);
-
-            /* get size allocation from parent and set some reasonable
-               initial GtkPaned positions
-            */
-            parent = gtk_widget_get_parent (module);
-            GTK_SAT_MODULE (module)->hpanedpos = parent->allocation.width / 2;
-            GTK_SAT_MODULE (module)->vpanedpos = parent->allocation.height / 2;
-            gtk_sat_module_fix_size (module);
         }
 
         g_free (modnam);
@@ -333,7 +323,6 @@ menubar_open_mod_cb  (GtkWidget *widget, gpointer data)
     gchar *modfile;
     gchar *confdir;
     GtkWidget *module = NULL;
-    GtkWidget *parent;
 
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -385,16 +374,6 @@ menubar_open_mod_cb  (GtkWidget *widget, gpointer data)
                 mod_mgr_add_module (module, FALSE);
                 create_module_window (module);
             }
-
-            //mod_mgr_add_module (module, TRUE);
-
-            /* get size allocation from parent and set some reasonable
-               initial GtkPaned positions
-            */
-            parent = gtk_widget_get_parent (module);
-            GTK_SAT_MODULE (module)->hpanedpos = parent->allocation.width / 2;
-            GTK_SAT_MODULE (module)->vpanedpos = parent->allocation.height / 2;
-            gtk_sat_module_fix_size (module);
         }
 
         g_free (modnam);

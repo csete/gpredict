@@ -79,8 +79,6 @@ static void     gtk_sat_module_read_cfg_data  (GtkSatModule *module,
                                                const gchar *cfgfile);
 
 static void     gtk_sat_module_load_sats      (GtkSatModule *module);
-/* static gboolean gtk_sat_module_sats_are_equal (gconstpointer a, */
-/*                            gconstpointer b); */
 static gboolean gtk_sat_module_timeout_cb     (gpointer module);
 static void     gtk_sat_module_update_sat     (gpointer key,
                                                gpointer val,
@@ -91,10 +89,9 @@ static void     gtk_sat_module_popup_cb       (GtkWidget *button,
 static void     update_header                 (GtkSatModule *module);
 static void     update_child                  (GtkWidget *child, gdouble tstamp);
 static void     create_module_layout          (GtkSatModule *module);
-
+static void     get_grid_size                 (GtkSatModule *module, guint *rows, guint *cols);
 static GtkWidget *create_view                 (GtkSatModule *module, guint num);
 
-static void     fix_child_allocations   (GtkWidget *widget, gpointer data);
 
 static void     reload_sats_in_child (GtkWidget *widget, GtkSatModule *module);
 
@@ -178,13 +175,7 @@ gtk_sat_module_init (GtkSatModule *module)
 
     module->grid = NULL;
     module->views = NULL;
-    module->layout = GTK_SAT_MOD_LAYOUT_1;
-    module->view_1 = GTK_SAT_MOD_VIEW_MAP;
-    module->view_2 = GTK_SAT_MOD_VIEW_POLAR;
-    module->view_3 = GTK_SAT_MOD_VIEW_SINGLE;
-
-    module->vpanedpos = -1;
-    module->hpanedpos = -1;
+    module->nviews = 0;
 
     module->timerid = 0;
     
@@ -271,8 +262,8 @@ gtk_sat_module_new (const gchar *cfgfile)
     /* create module widget */
     widget = g_object_new (GTK_TYPE_SAT_MODULE, NULL);
 
-    g_signal_connect (widget, "realize",
-                      G_CALLBACK (fix_child_allocations), NULL);
+//    g_signal_connect (widget, "realize",
+//                      G_CALLBACK (fix_child_allocations), NULL);
 
     /* load configuration; note that this will also set the module name */
     gtk_sat_module_read_cfg_data (GTK_SAT_MODULE (widget), cfgfile);
@@ -365,120 +356,57 @@ gtk_sat_module_new (const gchar *cfgfile)
 
 /** \brief Create module layout and add views.
  *
- * It is assumed that module->layout and module->view_x have
- * sensible values.
+ * It is assumed that module->grid and module->nviews have
+ * coherent values.
  */
 static void
 create_module_layout (GtkSatModule *module)
 {
+    GtkWidget *table;
+    GtkWidget *view;
+    guint rows,cols;
+    guint i;
 
-    switch (module->layout) {
-        
-        /* one child, no setup needed here */
-    case GTK_SAT_MOD_LAYOUT_1:
-        module->child_1 = create_view (module, 1);
-        module->child_2 = NULL;
-        module->child_3 = NULL;
-        gtk_container_add (GTK_CONTAINER (module), module->child_1);
-        break;
 
-        /* two children, we need a vpaned
-           child_1 on top */
-    case GTK_SAT_MOD_LAYOUT_2:
-        module->vpaned = gtk_vpaned_new ();
-        gtk_container_add (GTK_CONTAINER (module), module->vpaned);
+    /* calculate the number of rows and columns necessary */
+    get_grid_size (module, &rows, &cols);
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s: Layout has %d columns and %d rows."),
+                 __FUNCTION__, cols, rows);
 
-        module->child_1 = create_view (module, 1);
-        module->child_2 = create_view (module, 2);
-        module->child_3 = NULL;
+    table = gtk_table_new (rows, cols, TRUE);
 
-        gtk_paned_pack1 (GTK_PANED (module->vpaned),
-                         module->child_1, TRUE, TRUE);
-        gtk_paned_pack2 (GTK_PANED (module->vpaned),
-                         module->child_2, TRUE, TRUE);
+    for (i = 0; i < module->nviews; i++) {
+        /* create the view */
+        view = create_view (module, module->grid[5*i]);
 
-        break;
+        /* store a pointer to the view */
+        module->views = g_slist_append (module->views, view);
 
-        /* one child on top, two at the bottom */
-    case GTK_SAT_MOD_LAYOUT_3:
-        module->vpaned = gtk_vpaned_new ();
-        module->hpaned = gtk_hpaned_new ();
-        gtk_container_add (GTK_CONTAINER (module), module->vpaned);
-        gtk_paned_pack2 (GTK_PANED (module->vpaned),
-                         module->hpaned,
-                         TRUE, TRUE);
-
-        module->child_1 = create_view (module, 1);
-        module->child_2 = create_view (module, 2);
-        module->child_3 = create_view (module, 3);
-
-        gtk_paned_pack1 (GTK_PANED (module->vpaned),
-                         module->child_1, TRUE, TRUE);
-        gtk_paned_pack1 (GTK_PANED (module->hpaned),
-                         module->child_2, TRUE, TRUE);
-        gtk_paned_pack2 (GTK_PANED (module->hpaned),
-                         module->child_3, TRUE, TRUE);
-
-        break;
-
-        /* two childre on top, on at the bottom */
-    case GTK_SAT_MOD_LAYOUT_4:
-        module->vpaned = gtk_vpaned_new ();
-        module->hpaned = gtk_hpaned_new ();
-        gtk_container_add (GTK_CONTAINER (module), module->vpaned);
-        gtk_paned_pack1 (GTK_PANED (module->vpaned),
-                         module->hpaned,
-                         TRUE, TRUE);
-
-        module->child_1 = create_view (module, 1);
-        module->child_2 = create_view (module, 2);
-        module->child_3 = create_view (module, 3);
-
-        gtk_paned_pack1 (GTK_PANED (module->hpaned),
-                         module->child_1, TRUE, TRUE);
-        gtk_paned_pack2 (GTK_PANED (module->hpaned),
-                         module->child_2, TRUE, TRUE);
-        gtk_paned_pack2 (GTK_PANED (module->vpaned),
-                         module->child_3, TRUE, TRUE);
-
-        break;
-
-    default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%s:%d: Invalid module layout (%d)"),
-                     __FILE__, __LINE__, module->layout);
-        break;
-
+        /* add view to the grid */
+        gtk_table_attach_defaults (GTK_TABLE (table), view,
+                                   module->grid[5*i+1], module->grid[5*i+2],
+                                   module->grid[5*i+3], module->grid[5*i+4]);
     }
+
+    gtk_container_add (GTK_CONTAINER (module), table);
+
 }
 
 
+/** \brief Create a new view.
+  * \param module Pointer to the parent GtkSatModule widget
+  * \param num The number ID of the view to create, see gtk_sat_mod_view_t
+  * \return Pointer to a new GtkWidget of type corresponding to num. If num
+  *         is invalid, a GtkSatList is returned.
+  */
 static GtkWidget *
 create_view (GtkSatModule *module, guint num)
 {
     GtkWidget *view;
-    gtk_sat_mod_view_t viewt = GTK_SAT_MOD_VIEW_LIST;
 
-    /* get view type */
+
     switch (num) {
-    case 1:
-        viewt = module->view_1;
-        break;
-    case 2:
-        viewt = module->view_2;
-        break;
-    case 3:
-        viewt = module->view_3;
-        break;
-    default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%s:%d: Invalid child number (%d)"),
-                     __FILE__, __LINE__, num);
-        break;
-    }
-
-    /* create the corresponding child widget */
-    switch (viewt) {
 
     case GTK_SAT_MOD_VIEW_LIST:
         view = gtk_sat_list_new (module->cfgdata,
@@ -504,12 +432,11 @@ create_view (GtkSatModule *module, guint num)
                                    module->satellites,
                                    module->qth,
                                    0);
-
         break;
 
     default:
         sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%s:%d: Invalid child type (%d)\nUsing GtkSatList..."),
+                     _("%s:%d: Invalid child type (%d). Using GtkSatList."),
                      __FILE__, __LINE__, num);
 
         view = gtk_sat_list_new (module->cfgdata,
@@ -537,7 +464,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     gchar   *qthfile;
     gchar   *confdir;
     gchar  **buffv;
-    guint   length;
+    guint   length,i;
     GError  *error = NULL;
 
     module->cfgdata = g_key_file_new ();
@@ -635,32 +562,36 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     buffv = g_strsplit (buffer, ";", 0);
     length = g_strv_length (buffv);
     if ((length == 0) || (length % 5 != 0)) {
+        /* the grid configuration is bogus; override with global default */
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Module layout is invalid: %s. Using default."),
+                     __FUNCTION__, buffer);
+        g_free (buffer);
+        g_strfreev (buffv);
 
+        buffer = sat_cfg_get_str_def (SAT_CFG_STR_MODULE_GRID);
+        buffv = g_strsplit (buffer, ";", 0);
+        length = g_strv_length (buffv);
     }
 
+    /* make a debug log entry */
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s: GRID(%d): %s"),
+                 __FUNCTION__, length, buffer);
+    g_free (buffer);
 
-    module->layout = mod_cfg_get_int (module->cfgdata,
-                                      MOD_CFG_GLOBAL_SECTION,
-                                      MOD_CFG_LAYOUT,
-                                      SAT_CFG_INT_MODULE_LAYOUT);
+    /* number of views: we have five numbers per view (type,left,right,top,bottom) */
+    module->nviews = length / 5;
+    module->grid = g_try_new0 (gint, length);
 
-    /* view 1 */
-    module->view_1 = mod_cfg_get_int (module->cfgdata,
-                                      MOD_CFG_GLOBAL_SECTION,
-                                      MOD_CFG_VIEW_1,
-                                      SAT_CFG_INT_MODULE_VIEW_1);
+    /* FIXME: we should check module->grid != NULL */
 
-    /* view 2 */
-    module->view_2 = mod_cfg_get_int (module->cfgdata,
-                                      MOD_CFG_GLOBAL_SECTION,
-                                      MOD_CFG_VIEW_2,
-                                      SAT_CFG_INT_MODULE_VIEW_2);
-
-    /* view 3 */
-    module->view_3 = mod_cfg_get_int (module->cfgdata,
-                                      MOD_CFG_GLOBAL_SECTION,
-                                      MOD_CFG_VIEW_3,
-                                      SAT_CFG_INT_MODULE_VIEW_3);
+    /* convert chars to integers */
+    for (i = 0; i < length; i++) {
+        module->grid[i] = (gint) g_ascii_strtoll (buffv[i], NULL, 0);
+        //g_print ("%d: %s => %d\n", i, buffv[i], module->grid[i]);
+    }
+    g_strfreev (buffv);
 
 }
 
@@ -765,31 +696,21 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
 
 
 
-/** \brief Compare two sat_t data structures.
- *
- * The function returns TRUE if 
- * sat1->catnum == sat2->catnum.
- */
-/* static gboolean */
-/* gtk_sat_module_sats_are_equal (gconstpointer sat1, gconstpointer sat2) */
-/* { */
-/*     return ( SAT(sat1)->tle.catnr == SAT(sat2)->tle.catnr ); */
-
-/* } */
-
 
 /** \brief Module timeout callback.
  */
 static gboolean
 gtk_sat_module_timeout_cb     (gpointer module)
 {
-    GtkSatModule *mod = GTK_SAT_MODULE (module);
-    gboolean       needupdate = FALSE;
-    GdkWindowState state;
-    gdouble   delta;
+    GtkSatModule   *mod = GTK_SAT_MODULE (module);
+    GtkWidget      *child;
+    gboolean        needupdate = FALSE;
+    GdkWindowState  state;
+    gdouble         delta;
+    guint           i;
 
 
-	/* in docked state, update only if tab is visible */
+    /* in docked state, update only if tab is visible */
     switch (mod->state) {
 
     case GTK_SAT_MOD_STATE_DOCKED:
@@ -861,14 +782,11 @@ gtk_sat_module_timeout_cb     (gpointer module)
                               module);
 
         /* update children */
-        if (mod->child_1 != NULL)
-            update_child (mod->child_1, mod->tmgCdnum);
+        for (i = 0; i < mod->nviews; i++) {
+            child = GTK_WIDGET (g_slist_nth_data (mod->views, i));
+            update_child (child, mod->tmgCdnum);
+        }
 
-        if (mod->child_2 != NULL)
-            update_child (mod->child_2, mod->tmgCdnum);
-
-        if (mod->child_3 != NULL)
-            update_child (mod->child_3, mod->tmgCdnum);
 
         /* update satellite data (it may have got out of sync during child updates) */
         g_hash_table_foreach (mod->satellites,
@@ -996,61 +914,53 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
     sat->jul_utc = daynum;
     sat->tsince = (sat->jul_utc - sat->jul_epoch) * xmnpda;
 
-    /*** FIXME: STS-122 FIX: Shuttle is fixed at launch site before launch
-         Actually, first TLE set seem invalid before MET = 00:03:?? = 00:04:00
-     */
-    /* check that we have a GtkMet child */
-    /**** FIXME: GtkMet may not be child 2.... */
-    if G_UNLIKELY(FALSE) {
-
-    }
-    else {
-
-        /* call the norad routines according to the deep-space flag */
-        if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
-            SDP4 (sat, sat->tsince);
-        else
-            SGP4 (sat, sat->tsince);
-
-        /* scale position and velocity to km and km/sec */
-        Convert_Sat_State (&sat->pos, &sat->vel);
-
-        /* get the velocity of the satellite */
-        Magnitude (&sat->vel);
-        sat->velo = sat->vel.w;
-        Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
-        Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
-        
-        /*** FIXME: should we ensure sat_geodetic.lon stays between -pi and pi? */
-        while (sat_geodetic.lon < -pi)
-            sat_geodetic.lon += twopi;
-        
-        while (sat_geodetic.lon > (pi))
-            sat_geodetic.lon -= twopi;
-        
-        sat->az = Degrees (obs_set.az);
-        sat->el = Degrees (obs_set.el);
-        sat->range = obs_set.range;
-        sat->range_rate = obs_set.range_rate;
-        sat->ssplat = Degrees (sat_geodetic.lat);
-        sat->ssplon = Degrees (sat_geodetic.lon);
-        sat->alt = sat_geodetic.alt;
-        sat->ma = Degrees (sat->phase);
-        sat->ma *= 256.0/360.0;
-        sat->phase = Degrees (sat->phase);
-
-        /* same formulas, but the one from predict is nicer */
-        //sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
-        sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
-        age = sat->jul_utc - sat->jul_epoch;
-        sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
-                                   age * sat->tle.bstar * ae) * age +
-                                  sat->tle.xmo/twopi) + sat->tle.revnum - 1;
 
 
-        /*** FIXME: Squint + AOS / LOS code */
+    /* call the norad routines according to the deep-space flag */
+    if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
+        SDP4 (sat, sat->tsince);
+    else
+        SGP4 (sat, sat->tsince);
 
-    }
+    /* scale position and velocity to km and km/sec */
+    Convert_Sat_State (&sat->pos, &sat->vel);
+
+    /* get the velocity of the satellite */
+    Magnitude (&sat->vel);
+    sat->velo = sat->vel.w;
+    Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
+    Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
+
+    /*** FIXME: should we ensure sat_geodetic.lon stays between -pi and pi? */
+    while (sat_geodetic.lon < -pi)
+        sat_geodetic.lon += twopi;
+
+    while (sat_geodetic.lon > (pi))
+        sat_geodetic.lon -= twopi;
+
+    sat->az = Degrees (obs_set.az);
+    sat->el = Degrees (obs_set.el);
+    sat->range = obs_set.range;
+    sat->range_rate = obs_set.range_rate;
+    sat->ssplat = Degrees (sat_geodetic.lat);
+    sat->ssplon = Degrees (sat_geodetic.lon);
+    sat->alt = sat_geodetic.alt;
+    sat->ma = Degrees (sat->phase);
+    sat->ma *= 256.0/360.0;
+    sat->phase = Degrees (sat->phase);
+
+    /* same formulas, but the one from predict is nicer */
+    //sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
+    sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
+    age = sat->jul_utc - sat->jul_epoch;
+    sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
+                               age * sat->tle.bstar * ae) * age +
+                              sat->tle.xmo/twopi) + sat->tle.revnum - 1;
+
+
+    /*** FIXME: Squint + AOS / LOS code */
+
+
 }
 
 
@@ -1206,7 +1116,6 @@ void
 gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 {
     GtkSatModule        *module = GTK_SAT_MODULE (data);
-    GtkWidget           *parent;
     GtkWidget           *toplevel;
     gchar               *name;
     gchar               *cfgfile;
@@ -1281,13 +1190,6 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
                     /* re-open module by adding it to the mod-mgr */
                     mod_mgr_add_module (GTK_WIDGET (module), TRUE);
 
-                    /* get size allocation from parent and set some reasonable
-                       initial GtkPaned positions */
-                    parent = gtk_widget_get_parent (GTK_WIDGET (module));
-                    module->hpanedpos = parent->allocation.width / 2;
-                    module->vpanedpos = parent->allocation.height / 2;
-                    gtk_sat_module_fix_size (GTK_WIDGET (module));
-
                     break;
 
                 case GTK_SAT_MOD_STATE_WINDOW:
@@ -1344,7 +1246,6 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
                                  __FUNCTION__, name, module->state);
                     break;
                 }
-                    
 
                 g_free (cfgfile);
 
@@ -1398,86 +1299,6 @@ update_header (GtkSatModule *module)
 }
 
 
-
-/** \brief Fix size allocations for children.
- *
- * This function is called when the GtkSatModule has been realised.
- * The purpose of this function is to attempt to divide the space
- * between the children on a 50/50 basis based on the size allocation
- * of the GtkSatModule.
- *
- * Sometimes the size allocation will not be available, e.g. when docking
- * back to an existing notebook. Therefore, we first try to use the
- * stored gutter positions module->vpanedpos and module->hpanedpos.
- */
-static void
-fix_child_allocations            (GtkWidget *widget, gpointer data)
-{
-    GtkSatModule *module = GTK_SAT_MODULE (widget);
-
-
-    switch (module->layout) {
-        
-        /* nothing to do */
-    case GTK_SAT_MOD_LAYOUT_1:
-        break;
-
-    case GTK_SAT_MOD_LAYOUT_2:
-        if (module->vpanedpos != -1) {
-            gtk_paned_set_position (GTK_PANED (module->vpaned),
-                                    module->vpanedpos);
-        }
-        else if (widget->allocation.height > 0) {
-            gtk_paned_set_position (GTK_PANED (module->vpaned),
-                                    widget->allocation.height / 2);
-        }
-        else {
-        }
-        break;
-
-        /* one child on top, two at the bottom */
-    case GTK_SAT_MOD_LAYOUT_3:
-    case GTK_SAT_MOD_LAYOUT_4:
-        if (module->vpanedpos == -1) {
-            gtk_paned_set_position (GTK_PANED (module->vpaned),
-                                    widget->allocation.height / 2);
-        }
-        else {
-            gtk_paned_set_position (GTK_PANED (module->vpaned),
-                                    module->vpanedpos);
-        }
-
-        if (module->hpanedpos == -1) {
-            gtk_paned_set_position (GTK_PANED (module->hpaned),
-                                    widget->allocation.width / 2);
-        }
-        else {
-            gtk_paned_set_position (GTK_PANED (module->hpaned),
-                                    module->hpanedpos);
-        }
-
-        break;
-
-    default:
-        break;
-
-    }
-}
-
-
-/** \brief Fix size allocations for children.
- *  \param module The GtkSatModule widget.
- *
- * This function is a public wrapper around the fix_allocations function.
- */
-void
-gtk_sat_module_fix_size (GtkWidget *module)
-{
-    fix_child_allocations (module, NULL);
-}
-
-
-
 static gboolean empty (gpointer key, gpointer val, gpointer data)
 {
     /* TRUE => sat removed from hash table */
@@ -1501,11 +1322,14 @@ static gboolean empty (gpointer key, gpointer val, gpointer data)
 void
 gtk_sat_module_reload_sats    (GtkSatModule *module)
 {
+    GtkWidget *child;
+    guint      i;
+
 
     g_return_if_fail (IS_GTK_SAT_MODULE (module));
 
     /* lock module */
-	g_mutex_lock(module->busy);
+    g_mutex_lock(module->busy);
 	
     sat_log_log (SAT_LOG_LEVEL_MSG,
                  _("%s: Reloading satellites for module %s"),
@@ -1521,19 +1345,15 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
     gtk_sat_module_load_sats (module);
 
     /* update children */
-    if (GTK_SAT_MODULE (module)->child_1 != NULL)
-        reload_sats_in_child (GTK_SAT_MODULE (module)->child_1, GTK_SAT_MODULE (module));
-    
-    if (GTK_SAT_MODULE (module)->child_2 != NULL)
-        reload_sats_in_child (GTK_SAT_MODULE (module)->child_2, GTK_SAT_MODULE (module));
-    
-    if (GTK_SAT_MODULE (module)->child_3 != NULL)
-        reload_sats_in_child (GTK_SAT_MODULE (module)->child_3, GTK_SAT_MODULE (module));
-    
+    for (i = 0; i < module->nviews; i++) {
+        child = GTK_WIDGET (g_slist_nth_data (module->views, i));
+        reload_sats_in_child (child, module);
+    }
+
     /* FIXME: radio and rotator controller */
     
     /* unlock module */
-	g_mutex_unlock(module->busy);
+    g_mutex_unlock(module->busy);
 }
 
 
@@ -1574,8 +1394,30 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
  *               local configuration dialog.
  *
  */
-void
-gtk_sat_module_reconf         (GtkSatModule *module, gboolean local)
+void gtk_sat_module_reconf (GtkSatModule *module, gboolean local)
 {
 }
 
+
+/** \brief Calculate the layout grid size.
+  * \param module Pointer to the GtkSatModule widget.
+  * \param rows Return value for number of rows
+  * \param cols Return value for number of columns
+  *
+  * It is assumed that module->grid and module->nviews have chierent values.
+  */
+static void get_grid_size (GtkSatModule *module, guint *rows, guint *cols)
+{
+    guint i;
+    guint xmax = 0;
+    guint ymax = 0;
+
+
+    for (i = 0; i < module->nviews; i++) {
+        xmax = MAX(xmax,module->grid[5*i+2]);
+        ymax = MAX(ymax,module->grid[5*i+4]);
+    }
+
+    *cols = xmax;
+    *rows = ymax;
+}

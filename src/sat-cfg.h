@@ -130,7 +130,6 @@ typedef enum {
 } sat_cfg_int_e;
 
 
-
 /** \brief Symbolic references for string config values. */
 typedef enum {
     SAT_CFG_STR_TIME_FORMAT = 0,/*!< Time format. */
