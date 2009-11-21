@@ -63,7 +63,7 @@ typedef enum {
     GTK_SAT_MOD_VIEW_MAP,       /*!< GtkSatMap */
     GTK_SAT_MOD_VIEW_POLAR,     /*!< GtkPolarView */
     GTK_SAT_MOD_VIEW_SINGLE,    /*!< GtkSingleSat */
-    GTK_SAT_MOD_VIEW_MET,       /*!< GtkMet */
+    GTK_SAT_MOD_VIEW_NUM,       /*!< Number of modules */
 } gtk_sat_mod_view_t;
 
 
