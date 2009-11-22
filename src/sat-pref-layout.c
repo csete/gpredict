@@ -40,30 +40,26 @@
 
 
 
-static gtk_sat_mod_layout_t layout = 0;
 static gboolean dirty = FALSE;
 static gboolean reset = FALSE;
-
-
-/* combo boxes for view seelctors */
-static GtkWidget *combo1,*combo2,*combo3;
-
-/* radio buttons for layout selector */
-static GtkWidget *but1,*but2,*but3,*but4;
 
 /* check boxes for window positioning */
 static GtkWidget *mwin,*mod,*state;
 
+/* Text entry for layout string */
+static GtkWidget *gridstr;
 
+/* private functions */
 static void create_layout_selector (GKeyFile *cfg, GtkTable *table);
 static void layout_selected_cb     (GtkToggleButton *but, gpointer data);
-static void create_view_selectors  (GKeyFile *cfg, GtkTable *table);
 static void create_window_placement (GtkBox *vbox);
 static void create_reset_button    (GKeyFile *cfg, GtkBox *vbox);
 static GtkWidget *create_combo     (void);
 static void combo_changed_cb       (GtkComboBox *widget, gpointer data);
 static void reset_cb               (GtkWidget *button, gpointer cfg);
 static void window_pos_toggle_cb   (GtkWidget *toggle, gpointer data);
+static void layout_code_changed    (GtkWidget *widget, gpointer data);
+
 
 
 /** \brief Create and initialise widgets for the layout view preferences tab.
@@ -90,17 +86,9 @@ GtkWidget *sat_pref_layout_create (GKeyFile *cfg)
 	/* separator */
 	gtk_table_attach (GTK_TABLE (table),
 					  gtk_hseparator_new (),
-					  0, 5, 2, 3,
+                      0, 5, 3, 4,
 					  GTK_FILL | GTK_EXPAND, GTK_SHRINK, 0, 0);
 
-	/* view selectors */
-	create_view_selectors (cfg, GTK_TABLE (table));
-
-	/* separator */
-	gtk_table_attach (GTK_TABLE (table),
-					  gtk_hseparator_new (),
-					  0, 5, 7, 8,
-					  GTK_FILL | GTK_EXPAND, GTK_SHRINK, 0, 0);
 
 	/* create vertical box */
 	vbox = gtk_vbox_new (FALSE, 5);
@@ -125,48 +113,33 @@ GtkWidget *sat_pref_layout_create (GKeyFile *cfg)
 
 /** \brief User pressed cancel. Any changes to config must be cancelled.
  */
-void
-sat_pref_layout_cancel (GKeyFile *cfg)
+void sat_pref_layout_cancel (GKeyFile *cfg)
 {
-	layout = sat_cfg_get_int (SAT_CFG_INT_MODULE_LAYOUT);
+    gchar *str;
+
+    str = sat_cfg_get_str (SAT_CFG_STR_MODULE_GRID);
+    gtk_entry_set_text (GTK_ENTRY (gridstr), str);
+    g_free (str);
+
 	dirty = FALSE;
 }
 
 
 /** \brief User pressed OK. Any changes should be stored in config.
  */
-void
-sat_pref_layout_ok     (GKeyFile *cfg)
+void sat_pref_layout_ok (GKeyFile *cfg)
 {
 	if (dirty) {
 		/* we have new settings */
 		if (cfg != NULL) {
-			g_key_file_set_integer (cfg,
-									MOD_CFG_GLOBAL_SECTION,
-									MOD_CFG_LAYOUT,
-									layout);
-			g_key_file_set_integer (cfg,
-									MOD_CFG_GLOBAL_SECTION,
-									MOD_CFG_VIEW_1,
-									gtk_combo_box_get_active (GTK_COMBO_BOX (combo1)));
-			g_key_file_set_integer (cfg,
-									MOD_CFG_GLOBAL_SECTION,
-									MOD_CFG_VIEW_2,
-									gtk_combo_box_get_active (GTK_COMBO_BOX (combo2)));
-			g_key_file_set_integer (cfg,
-									MOD_CFG_GLOBAL_SECTION,
-									MOD_CFG_VIEW_3,
-									gtk_combo_box_get_active (GTK_COMBO_BOX (combo3)));
-
+            g_key_file_set_string (cfg,
+                                   MOD_CFG_GLOBAL_SECTION,
+                                   MOD_CFG_GRID,
+                                   gtk_entry_get_text (GTK_ENTRY (gridstr)));
 		}
 		else {
-			sat_cfg_set_int (SAT_CFG_INT_MODULE_LAYOUT, layout);
-			sat_cfg_set_int (SAT_CFG_INT_MODULE_VIEW_1,
-							 gtk_combo_box_get_active (GTK_COMBO_BOX (combo1)));
-			sat_cfg_set_int (SAT_CFG_INT_MODULE_VIEW_2,
-							 gtk_combo_box_get_active (GTK_COMBO_BOX (combo2)));
-			sat_cfg_set_int (SAT_CFG_INT_MODULE_VIEW_3,
-							 gtk_combo_box_get_active (GTK_COMBO_BOX (combo3)));
+            sat_cfg_set_str (SAT_CFG_STR_MODULE_GRID,
+                             gtk_entry_get_text (GTK_ENTRY (gridstr)));
 			sat_cfg_set_bool (SAT_CFG_BOOL_MAIN_WIN_POS,
 							  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (mwin)));
 			sat_cfg_set_bool (SAT_CFG_BOOL_MOD_WIN_POS,
@@ -180,13 +153,8 @@ sat_pref_layout_ok     (GKeyFile *cfg)
 		/* we have to reset the values to global or default settings */
 		if (cfg == NULL) {
 
-			/* views */
-			sat_cfg_reset_int (SAT_CFG_INT_MODULE_VIEW_1);
-			sat_cfg_reset_int (SAT_CFG_INT_MODULE_VIEW_2);
-			sat_cfg_reset_int (SAT_CFG_INT_MODULE_VIEW_3);
-
 			/* layout */
-			sat_cfg_reset_int (SAT_CFG_INT_MODULE_LAYOUT);
+            sat_cfg_reset_str (SAT_CFG_STR_MODULE_GRID);
 
 			/* window placement */
 			sat_cfg_reset_bool (SAT_CFG_BOOL_MAIN_WIN_POS);
@@ -194,26 +162,10 @@ sat_pref_layout_ok     (GKeyFile *cfg)
             sat_cfg_reset_bool (SAT_CFG_BOOL_MOD_STATE);
         }
 		else {
-
-			/* layout views */
-			g_key_file_remove_key ((GKeyFile *)(cfg),
-								   MOD_CFG_GLOBAL_SECTION,
-								   MOD_CFG_VIEW_1,
-								   NULL);
-			g_key_file_remove_key ((GKeyFile *)(cfg),
-								   MOD_CFG_GLOBAL_SECTION,
-								   MOD_CFG_VIEW_2,
-								   NULL);
-			g_key_file_remove_key ((GKeyFile *)(cfg),
-								   MOD_CFG_GLOBAL_SECTION,
-								   MOD_CFG_VIEW_3,
-								   NULL);
-			
-			/* layout */
-			g_key_file_remove_key ((GKeyFile *)(cfg),
-								   MOD_CFG_GLOBAL_SECTION,
-								   MOD_CFG_LAYOUT,
-								   NULL);
+            g_key_file_remove_key ((GKeyFile *)(cfg),
+                                   MOD_CFG_GLOBAL_SECTION,
+                                   MOD_CFG_GRID,
+                                   NULL);
 		}
 
 	}
@@ -223,10 +175,10 @@ sat_pref_layout_ok     (GKeyFile *cfg)
 
 
 /** \brief Create layout selector. */
-static void
-create_layout_selector (GKeyFile *cfg, GtkTable *table)
+static void create_layout_selector (GKeyFile *cfg, GtkTable *table)
 {
 	GtkWidget *label;
+    gchar     *buffer;
 	GtkWidget *image;
 	gchar     *fname;
 
@@ -234,96 +186,42 @@ create_layout_selector (GKeyFile *cfg, GtkTable *table)
 	label = gtk_label_new (NULL);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 	gtk_label_set_markup (GTK_LABEL (label), 
-						  _("<b>Default Layout:</b>"));
+                          _("<b>Select Layout:</b>"));
 
 	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
 					  GTK_FILL, GTK_SHRINK, 0, 0);
 
-	/* layout 1 */
-	but1 = gtk_radio_button_new (NULL);
-	gtk_table_attach (table, but1, 0, 1, 1, 2,
-					  GTK_SHRINK, GTK_SHRINK, 0, 0);
-	fname = icon_file_name ("gpredict-layout-1.png");
-	image = gtk_image_new_from_file (fname);
-	g_free (fname);
-	gtk_container_add (GTK_CONTAINER (but1), image);
+    /* layout string */
+    label = gtk_label_new (_("Layout code:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                      GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
 
-	/* layout 2 */
-	but2 = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (but1));
-	gtk_table_attach (table, but2, 1, 2, 1, 2,
-					  GTK_SHRINK, GTK_SHRINK, 0, 0);
-	fname = icon_file_name ("gpredict-layout-2.png");
-	image = gtk_image_new_from_file (fname);
-	g_free (fname);
-	gtk_container_add (GTK_CONTAINER (but2), image);
+    if (cfg != NULL) {
+        buffer = mod_cfg_get_str (cfg,
+                                  MOD_CFG_GLOBAL_SECTION,
+                                  MOD_CFG_GRID,
+                                  SAT_CFG_STR_MODULE_GRID);
+    }
+    else {
+        buffer = sat_cfg_get_str (SAT_CFG_STR_MODULE_GRID);
+    }
 
-	/* layout 3 */
-	but3 = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (but1));
-	gtk_table_attach (table, but3, 2, 3, 1, 2,
-					  GTK_SHRINK, GTK_SHRINK, 0, 0);
-	fname = icon_file_name ("gpredict-layout-3.png");
-	image = gtk_image_new_from_file (fname);
-	g_free (fname);
-	gtk_container_add (GTK_CONTAINER (but3), image);
+    gridstr = gtk_entry_new ();
+    gtk_entry_set_text (GTK_ENTRY (gridstr), buffer);
+    g_free (buffer);
 
-	/* layout 4 */
-	but4 = gtk_radio_button_new_from_widget (GTK_RADIO_BUTTON (but1));
-	gtk_table_attach (table, but4, 3, 4, 1, 2,
-					  GTK_SHRINK, GTK_SHRINK, 0, 0);
-	fname = icon_file_name ("gpredict-layout-4.png");
-	image = gtk_image_new_from_file (fname);
-	g_free (fname);
-	gtk_container_add (GTK_CONTAINER (but4), image);
+    gtk_widget_set_tooltip_text (gridstr,
+                                 _("This entry holds the layout code for the module.\n"\
+                                   "Consult the user manual for how to create custom layouts "\
+                                   "using layout codes."));
 
-	/* select current layout */
-	if (cfg != NULL) {
-		layout = mod_cfg_get_int (cfg,
-								  MOD_CFG_GLOBAL_SECTION,
-								  MOD_CFG_LAYOUT,
-								  SAT_CFG_INT_MODULE_LAYOUT);
-	}
-	else {
-		layout = sat_cfg_get_int (SAT_CFG_INT_MODULE_LAYOUT);
-	}
+    /* connect changed signal handler */
+    g_signal_connect (gridstr, "changed", G_CALLBACK (layout_code_changed), NULL);
 
-	switch (layout) {
+    gtk_table_attach_defaults (GTK_TABLE (table), gridstr, 1, 2, 2, 3);
 
-	case GTK_SAT_MOD_LAYOUT_1:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but1), TRUE);
-		break;
 
-	case GTK_SAT_MOD_LAYOUT_2:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but2), TRUE);
-		break;
-
-	case GTK_SAT_MOD_LAYOUT_3:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but3), TRUE);
-		break;
-
-	case GTK_SAT_MOD_LAYOUT_4:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but4), TRUE);
-		break;
-
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Invalid module layout (%d)"),
-					 __FUNCTION__, layout);
-		break;
-	}
-
-	/* connect radio button signals */
-	g_signal_connect (but1, "toggled",
-					  G_CALLBACK (layout_selected_cb),
-					  GINT_TO_POINTER (GTK_SAT_MOD_LAYOUT_1));
-	g_signal_connect (but2, "toggled",
-					  G_CALLBACK (layout_selected_cb),
-					  GINT_TO_POINTER (GTK_SAT_MOD_LAYOUT_2));
-	g_signal_connect (but3, "toggled",
-					  G_CALLBACK (layout_selected_cb),
-					  GINT_TO_POINTER (GTK_SAT_MOD_LAYOUT_3));
-	g_signal_connect (but4, "toggled",
-					  G_CALLBACK (layout_selected_cb),
-					  GINT_TO_POINTER (GTK_SAT_MOD_LAYOUT_4));
 }
 
 /** \brief Callback to manage radio button clicks.
@@ -333,165 +231,11 @@ create_layout_selector (GKeyFile *cfg, GtkTable *table)
  * newly selected radio button and the de-selected radio button. It must
  * therefore check whether the button is currently active or not
  */
-static void
-layout_selected_cb (GtkToggleButton *but, gpointer data)
+static void layout_selected_cb (GtkToggleButton *but, gpointer data)
 {
-	
-	/* update layout if this button is selected */
-	if (gtk_toggle_button_get_active (but)) {
-		layout = GPOINTER_TO_INT (data);
-		dirty = TRUE;
 
-		/* enable/disable combos */
-		switch (layout) {
-		      
-		case GTK_SAT_MOD_LAYOUT_1:
-			gtk_widget_set_sensitive (combo2, FALSE);
-			gtk_widget_set_sensitive (combo3, FALSE);
-			break;
-
-		case GTK_SAT_MOD_LAYOUT_2:
-			gtk_widget_set_sensitive (combo2, TRUE);
-			gtk_widget_set_sensitive (combo3, FALSE);
-			break;
-
-		default:
-			gtk_widget_set_sensitive (combo2, TRUE);
-			gtk_widget_set_sensitive (combo3, TRUE);
-			break;
-		}
-			
-	}
 }
 
-
-
-/** \brief Create view selectors.
- *  \param cfg Config data or NULL in global mode.
- *  \param table The container.
- *
- * This function creates and sets up the view selector combos.
- */
-static void create_view_selectors (GKeyFile *cfg, GtkTable *table)
-{
-	GtkWidget *label;
-	gint idx;
-
-	/* create header */
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_markup (GTK_LABEL (label), 
-						  _("<b>Views:</b>"));
-	gtk_table_attach (table, label, 0, 2, 3, 4,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-
-	/* labels */
-	label = gtk_label_new (_("View 1:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach (table, label, 0, 1, 4, 5,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-
-	label = gtk_label_new (_("View 2:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach (table, label, 0, 1, 5, 6,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-
-	label = gtk_label_new (_("View 3:"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach (table, label, 0, 1, 6, 7,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-
-	/* combo boxes */
-	combo1 = create_combo ();
-	if (cfg != NULL) {
-		idx = mod_cfg_get_int (cfg,
-							   MOD_CFG_GLOBAL_SECTION,
-							   MOD_CFG_VIEW_1,
-							   SAT_CFG_INT_MODULE_VIEW_1);
-	}
-	else {
-		idx = sat_cfg_get_int (SAT_CFG_INT_MODULE_VIEW_1);
-	}
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo1), idx);
-	gtk_table_attach (table, combo1, 1, 2, 4, 5,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-	g_signal_connect (combo1, "changed", G_CALLBACK (combo_changed_cb), NULL);
-
-	combo2 = create_combo ();
-	if (cfg != NULL) {
-		idx = mod_cfg_get_int (cfg,
-							   MOD_CFG_GLOBAL_SECTION,
-							   MOD_CFG_VIEW_2,
-							   SAT_CFG_INT_MODULE_VIEW_2);
-	}
-	else {
-		idx = sat_cfg_get_int (SAT_CFG_INT_MODULE_VIEW_2);
-	}
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo2), idx);
-	gtk_table_attach (table, combo2, 1, 2, 5, 6,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-	g_signal_connect (combo2, "changed", G_CALLBACK (combo_changed_cb), NULL);
-
-	combo3 = create_combo ();
-	if (cfg != NULL) {
-		idx = mod_cfg_get_int (cfg,
-							   MOD_CFG_GLOBAL_SECTION,
-							   MOD_CFG_VIEW_3,
-							   SAT_CFG_INT_MODULE_VIEW_3);
-	}
-	else {
-		idx = sat_cfg_get_int (SAT_CFG_INT_MODULE_VIEW_3);
-	}
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo3), idx);
-	gtk_table_attach (table, combo3, 1, 2, 6, 7,
-					  GTK_FILL, GTK_SHRINK, 0, 0);
-	g_signal_connect (combo3, "changed", G_CALLBACK (combo_changed_cb), NULL);
-
-	/* enable/disable combos */
-	switch (layout) {
-		
-	case GTK_SAT_MOD_LAYOUT_1:
-		gtk_widget_set_sensitive (combo2, FALSE);
-		gtk_widget_set_sensitive (combo3, FALSE);
-		break;
-
-	case GTK_SAT_MOD_LAYOUT_2:
-		gtk_widget_set_sensitive (combo2, TRUE);
-		gtk_widget_set_sensitive (combo3, FALSE);
-		break;
-
-	default:
-		gtk_widget_set_sensitive (combo2, TRUE);
-		gtk_widget_set_sensitive (combo3, TRUE);
-		break;
-	}
-}
-
-
-/** \brief Convenience function for creatring combo boxes
- *
- * note: texts must correspond to the order of gtk_sat_mod_view_t
- */
-static GtkWidget *
-create_combo (void)
-{
-	GtkWidget *combo;
-
-	combo = gtk_combo_box_new_text ();
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("List View"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Map View"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Polar View"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Single Sat"));
-
-
-	return combo;
-}
-
-static void
-combo_changed_cb (GtkComboBox *widget, gpointer data)
-{
-	dirty = TRUE;
-}
 
 
 
@@ -499,8 +243,7 @@ combo_changed_cb (GtkComboBox *widget, gpointer data)
  *  \param vbox The GtkVBox into which the widgets should be packed.
  *
  */
-static void
-create_window_placement (GtkBox *vbox)
+static void create_window_placement (GtkBox *vbox)
 {
 	GtkWidget *label;
 	GtkTooltips *tips;
@@ -565,8 +308,7 @@ create_window_placement (GtkBox *vbox)
  *
  * This function creates and sets up the RESET button.
  */
-static void
-create_reset_button (GKeyFile *cfg, GtkBox *vbox)
+static void create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 {
 	GtkWidget   *button;
 	GtkWidget   *butbox;
@@ -607,65 +349,25 @@ create_reset_button (GKeyFile *cfg, GtkBox *vbox)
  * in "local" mode (when cfg != NULL) the function will reset the module settings to
  * the global settings. This is done by removing the corresponding key from the GKeyFile.
  */
-static void
-reset_cb               (GtkWidget *button, gpointer cfg)
+static void reset_cb (GtkWidget *button, gpointer cfg)
 {
 	gint idx;
+    gchar *buffer;
 
 
 	/* views */
 	if (cfg == NULL) {
 		/* global mode, get defaults */
-		idx = sat_cfg_get_int_def (SAT_CFG_INT_MODULE_VIEW_1);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo1), idx);
-		idx = sat_cfg_get_int_def (SAT_CFG_INT_MODULE_VIEW_2);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo2), idx);
-		idx = sat_cfg_get_int_def (SAT_CFG_INT_MODULE_VIEW_3);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo3), idx);
+        buffer = sat_cfg_get_str_def (SAT_CFG_STR_MODULE_GRID);
+        gtk_entry_set_text (GTK_ENTRY (gridstr), buffer);
+        g_free (buffer);
 	}
 	else {
 		/* local mode, get global value */
-		idx = sat_cfg_get_int (SAT_CFG_INT_MODULE_VIEW_1);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo1), idx);
-		idx = sat_cfg_get_int (SAT_CFG_INT_MODULE_VIEW_2);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo2), idx);
-		idx = sat_cfg_get_int (SAT_CFG_INT_MODULE_VIEW_3);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (combo3), idx);
+        buffer = sat_cfg_get_str (SAT_CFG_STR_MODULE_GRID);
+        gtk_entry_set_text (GTK_ENTRY (gridstr), buffer);
+        g_free (buffer);
 	}
-
-	/* read new layout */
-	if (cfg == NULL) {
-		layout = sat_cfg_get_int_def (SAT_CFG_INT_MODULE_LAYOUT);
-	}
-	else {
-		layout = sat_cfg_get_int (SAT_CFG_INT_MODULE_LAYOUT);
-	}
-
-	switch (layout) {
-
-	case GTK_SAT_MOD_LAYOUT_1:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but1), TRUE);
-		break;
-
-	case GTK_SAT_MOD_LAYOUT_2:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but2), TRUE);
-		break;
-
-	case GTK_SAT_MOD_LAYOUT_3:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but3), TRUE);
-		break;
-
-	case GTK_SAT_MOD_LAYOUT_4:
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (but4), TRUE);
-		break;
-
-	default:
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: Invalid module layout (%d)"),
-					 __FUNCTION__, layout);
-		break;
-	}
-
 
 	/* window placement settings */
 	if (cfg == NULL) {
@@ -687,9 +389,43 @@ reset_cb               (GtkWidget *button, gpointer cfg)
 
 
 /** \brief Toggle window positioning settings. */
-static void
-window_pos_toggle_cb   (GtkWidget *toggle, gpointer data)
+static void window_pos_toggle_cb   (GtkWidget *toggle, gpointer data)
 {
 	dirty = TRUE;
 }
 
+/** \brief Manage layout code changes.
+ *
+ * This function is called when the contents of the lyout code changes.
+ * The purpose of this function is to check whether entered character is valid
+ * and to make the configuration "dirty".
+ */
+static void layout_code_changed (GtkWidget *widget, gpointer data)
+{
+    gchar       *entry, *end, *j;
+    gint         len, pos;
+
+
+    /* step 1: ensure that only valid characters are entered
+           (stolen from xlog, tnx pg4i)
+        */
+    entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
+    if ((len = g_utf8_strlen (entry, -1)) > 0) {
+        end = entry + g_utf8_strlen (entry, -1);
+        for (j = entry; j < end; ++j) {
+            switch (*j) {
+            case '0' ... '9':
+            case ';':
+                dirty = TRUE;
+                break;
+            default:
+                gdk_beep ();
+                pos = gtk_editable_get_position (GTK_EDITABLE (widget));
+                gtk_editable_delete_text (GTK_EDITABLE (widget),
+                                          pos, pos+1);
+                break;
+            }
+        }
+    }
+
+}

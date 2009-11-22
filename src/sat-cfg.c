@@ -305,8 +305,7 @@ guint sat_cfg_load        ()
  * This function saves the configuration data currently stored in
  * memory to the gpredict.cfg file.
  */
-guint
-        sat_cfg_save        ()
+guint sat_cfg_save        ()
 {
     gsize       length;
     gsize       written;
@@ -396,8 +395,7 @@ guint
  * is called again. This function should only be called when the
  * program exits.
  */
-void
-        sat_cfg_close        ()
+void sat_cfg_close        ()
 {
     if (config != NULL) {
         g_key_file_free (config);
@@ -448,8 +446,7 @@ gboolean
 }
 
 /** \brief Get default value of boolean parameter */
-gboolean
-        sat_cfg_get_bool_def (sat_cfg_bool_e param)
+gboolean sat_cfg_get_bool_def (sat_cfg_bool_e param)
 {
     gboolean value = FALSE;
 
@@ -472,8 +469,7 @@ gboolean
  * This function stores a boolean configuration value in the configuration
  * table.
  */
-void
-        sat_cfg_set_bool (sat_cfg_bool_e param, gboolean value)
+void sat_cfg_set_bool (sat_cfg_bool_e param, gboolean value)
 {
 
     if (param < SAT_CFG_BOOL_NUM) {
@@ -529,8 +525,7 @@ void
  *
  * Return a newly allocated gchar * which must be freed when no longer needed.
  */
-gchar *
-        sat_cfg_get_str (sat_cfg_str_e param)
+gchar *sat_cfg_get_str (sat_cfg_str_e param)
 {
     gchar    *value;
     GError   *error = NULL;
@@ -575,8 +570,7 @@ gchar *
  *
  * Returns a newly allocated gchar * which must be freed when no longer needed.
  */
-gchar *
-        sat_cfg_get_str_def (sat_cfg_str_e param)
+gchar *sat_cfg_get_str_def (sat_cfg_str_e param)
 {
     gchar *value;
 
@@ -596,8 +590,7 @@ gchar *
 
 /** \brief Store a str configuration value.
  */
-void
-        sat_cfg_set_str (sat_cfg_str_e param, const gchar *value)
+void sat_cfg_set_str (sat_cfg_str_e param, const gchar *value)
 {
 
     if (param < SAT_CFG_STR_NUM) {
@@ -632,8 +625,7 @@ void
 }
 
 
-void
-        sat_cfg_reset_str (sat_cfg_str_e param)
+void sat_cfg_reset_str (sat_cfg_str_e param)
 {
 
     if (param < SAT_CFG_STR_NUM) {
@@ -658,8 +650,7 @@ void
     }
 }
 
-gint
-        sat_cfg_get_int      (sat_cfg_int_e param)
+gint sat_cfg_get_int      (sat_cfg_int_e param)
 {
     gint      value = 0;
     GError   *error = NULL;
@@ -699,8 +690,7 @@ gint
 }
 
 
-gint
-        sat_cfg_get_int_def  (sat_cfg_int_e param)
+gint sat_cfg_get_int_def  (sat_cfg_int_e param)
 {
     gint   value = 0;
 
@@ -717,8 +707,7 @@ gint
 }
 
 
-void
-        sat_cfg_set_int      (sat_cfg_int_e param, gint value)
+void sat_cfg_set_int      (sat_cfg_int_e param, gint value)
 {
     if (param < SAT_CFG_INT_NUM) {
         
@@ -743,8 +732,7 @@ void
 }
 
 
-void
-        sat_cfg_reset_int    (sat_cfg_int_e param)
+void sat_cfg_reset_int    (sat_cfg_int_e param)
 {
     if (param < SAT_CFG_INT_NUM) {
         
