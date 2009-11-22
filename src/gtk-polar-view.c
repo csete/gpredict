@@ -47,7 +47,7 @@
 
 
 
-#define POLV_DEFAULT_SIZE 300
+#define POLV_DEFAULT_SIZE 100
 #define POLV_DEFAULT_MARGIN 25
 
 /* extra size for line outside 0 deg circle (inside margin) */

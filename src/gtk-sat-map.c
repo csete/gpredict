@@ -313,8 +313,8 @@ create_canvas_model (GtkSatMap *satmap)
     root = goo_canvas_group_model_new (NULL, NULL);
 
     /* map dimensions */
-    satmap->width = gdk_pixbuf_get_width (satmap->origmap);
-    satmap->height = gdk_pixbuf_get_height (satmap->origmap);
+    satmap->width = 200; // was: gdk_pixbuf_get_width (satmap->origmap);
+    satmap->height = 100; // was: gdk_pixbuf_get_height (satmap->origmap);
     satmap->x0 = 0;
     satmap->y0 = 0;
 
