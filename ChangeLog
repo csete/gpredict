@@ -1,11 +1,24 @@
+2009-11-22 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/sat-cfg.c:
+    Minor formatting fixes.
+
+    * src/sat-pref-layout.c:
+    First working version of the new layout configurator.
+
+    * src/gtk-polar-view.c
+    * src/gtk-sat-map.c:
+    Changed default sized to allow scaling down to 100x100 grid cell size.
+
+
 2009-11-19 Alexandru Csete <oz9aec at gmail.com>
 
-   * src/gtk-sat-module.[ch]:
-   * src/gtk-sat-module-popup.c:
-   * src/menuibar.c:
-   * src/mod-mgr.c:
-   Implemented new grid-based layout engine for GtkSatModule
-   (engine only, config is still TBD).
+    * src/gtk-sat-module.[ch]:
+    * src/gtk-sat-module-popup.c:
+    * src/menuibar.c:
+    * src/mod-mgr.c:
+    Implemented new grid-based layout engine for GtkSatModule
+    (engine only, config is still TBD).
 
 
 2009-11-18 Alexandru Csete <oz9aec at gmail.com>
