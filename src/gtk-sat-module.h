@@ -49,12 +49,13 @@ typedef enum {
 
 
 /** \brief Module layout */
-typedef enum {
-    GTK_SAT_MOD_LAYOUT_1 = 0, /*!< one view */
-    GTK_SAT_MOD_LAYOUT_2,     /*!< Two views, one above the other */
-    GTK_SAT_MOD_LAYOUT_3,     /*!< Three views, big one on top, two small one at bottom */
-    GTK_SAT_MOD_LAYOUT_4      /*!< Three views, big one on bottom, small ones on top */
-} gtk_sat_mod_layout_t;
+
+//typedef enum {
+//    GTK_SAT_MOD_LAYOUT_1 = 0, /*!< one view */
+//    GTK_SAT_MOD_LAYOUT_2,     /*!< Two views, one above the other */
+//    GTK_SAT_MOD_LAYOUT_3,     /*!< Three views, big one on top, two small one at bottom */
+//    GTK_SAT_MOD_LAYOUT_4      /*!< Three views, big one on bottom, small ones on top */
+//} gtk_sat_mod_layout_t;
 
 
 /** \brief View types */
@@ -63,6 +64,7 @@ typedef enum {
     GTK_SAT_MOD_VIEW_MAP,       /*!< GtkSatMap */
     GTK_SAT_MOD_VIEW_POLAR,     /*!< GtkPolarView */
     GTK_SAT_MOD_VIEW_SINGLE,    /*!< GtkSingleSat */
+    GTK_SAT_MOD_VIEW_EVENT,     /*!< GtkEventList */
     GTK_SAT_MOD_VIEW_NUM,       /*!< Number of modules */
 } gtk_sat_mod_view_t;
 

@@ -1,3 +1,12 @@
+2009-11-29 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-event-list.[ch]:
+    Added files containing new view listing upcoming events.
+
+    * src/gtk-sat-module.[ch]:
+    Use new GtkEventList view.
+
+
 2009-11-22 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-cfg.c:
