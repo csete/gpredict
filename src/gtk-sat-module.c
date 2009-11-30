@@ -63,6 +63,7 @@
 #include "gtk-sat-map.h"
 #include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
+#include "gtk-event-list.h"
 #include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
 #include "compat.h"
@@ -429,6 +430,13 @@ create_view (GtkSatModule *module, guint num)
 
     case GTK_SAT_MOD_VIEW_SINGLE:
         view = gtk_single_sat_new (module->cfgdata,
+                                   module->satellites,
+                                   module->qth,
+                                   0);
+        break;
+
+    case GTK_SAT_MOD_VIEW_EVENT:
+        view = gtk_event_list_new (module->cfgdata,
                                    module->satellites,
                                    module->qth,
                                    0);
@@ -844,6 +852,11 @@ update_child (GtkWidget *child, gdouble tstamp)
     else if (IS_GTK_SINGLE_SAT(child)) {
         GTK_SINGLE_SAT (child)->tstamp = tstamp;
         gtk_single_sat_update (child);
+    }
+
+    else if (IS_GTK_EVENT_LIST(child)) {
+        GTK_EVENT_LIST (child)->tstamp = tstamp;
+        gtk_event_list_update (child);
     }
 
     else {
