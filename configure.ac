@@ -59,7 +59,7 @@ if test "$enable_coverage" = yes ; then
 	AC_DEFINE(ENABLE_COV, 1, [Define if code coverage should be enabled.])
 fi
 
-AC_ARG_ENABLE(caches,[  --enable-caches	  Run update-* to update desktop and icon caches when installing (disable if you install as not root)],,[enable_caches="yes"])
+AC_ARG_ENABLE(caches,[  --enable-caches	  Run update-* to update desktop and icon caches when installing (disable if you install as not root)],,[enable_caches="no"])
 AM_CONDITIONAL(UPDATE_CACHES, test x"$enable_caches" = "xyes")
 
 
