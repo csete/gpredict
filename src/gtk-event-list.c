@@ -49,13 +49,17 @@
 #include "gtk-sat-list-popup.h"
 
 
+#define EVENT_LIST_COL_DEF (EVENT_LIST_FLAG_NAME | EVENT_LIST_FLAG_AZ | EVENT_LIST_FLAG_EL | EVENT_LIST_FLAG_TIME)
+
 
 /** \brief Column titles indexed with column symb. refs. */
 const gchar *EVENT_LIST_COL_TITLE[EVENT_LIST_COL_NUMBER] = {
-    N_("Sat"),
+    N_("Satellite"),
     N_("Catnum"),
-    N_("A/L"),
-    N_("Time")
+    N_("Az"),
+    N_("El"),
+    N_("Event"),
+    N_("AOS/LOS")
 };
 
 
@@ -63,16 +67,33 @@ const gchar *EVENT_LIST_COL_TITLE[EVENT_LIST_COL_NUMBER] = {
 const gchar *EVENT_LIST_COL_HINT[EVENT_LIST_COL_NUMBER] = {
     N_("Satellite Name"),
     N_("Catalogue Number"),
+    N_("Azimuth"),
+    N_("Elevation"),
     N_("Next event type (A: AOS, L: LOS)"),
     N_("Countdown until next event")
 };
 
+/* field alignments */
 const gfloat EVENT_LIST_COL_XALIGN[EVENT_LIST_COL_NUMBER] = {
     0.0, // name
     0.5, // catnum
+    1.0, // az
+    1.0, // el
     0.5, // event type
-    0.5, // time
+    1.0, // time
 };
+
+/* column head alignments */
+const gfloat EVENT_LIST_HEAD_XALIGN[EVENT_LIST_COL_NUMBER] = {
+    0.0, // name
+    0.5, // catnum
+    0.5, // az
+    0.5, // el
+    0.5, // event type
+    1.0, // time
+};
+
+
 
 static void          gtk_event_list_class_init (GtkEventListClass *class);
 static void          gtk_event_list_init       (GtkEventList      *list);
@@ -102,6 +123,12 @@ static void          time_cell_data_function (GtkTreeViewColumn *col,
                                               GtkTreeModel      *model,
                                               GtkTreeIter       *iter,
                                               gpointer           column);
+
+static void          degree_cell_data_function (GtkTreeViewColumn *col,
+                                                GtkCellRenderer   *renderer,
+                                                GtkTreeModel      *model,
+                                                GtkTreeIter       *iter,
+                                                gpointer           column);
 
 static gint event_cell_compare_function (GtkTreeModel *model,
                                          GtkTreeIter  *a,
@@ -214,30 +241,18 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 
 
     /* initialise column flags */
-    evlist->flags = 0;
-/*    if (columns > 0)
-        evlist->flags = columns;
-    else
-        evlist->flags = mod_cfg_get_int (cfgdata,
-                                         MOD_CFG_EVLIST_SECTION,
-                                         MOD_CFG_EVLIST_COLUMNS,
-                                         SAT_CFG_INT_EVLIST_COLUMNS);
-                                         */
-    
-    /* get refresh rate and cycle counter */
-/*    evlist->refresh = mod_cfg_get_int (cfgdata,
-                                       MOD_CFG_EVLIST_SECTION,
-                                       MOD_CFG_EVLIST_REFRESH,
-                                       SAT_CFG_INT_EVLIST_REFRESH);
-                                       */
-    evlist->refresh = 1000;
+    evlist->flags = EVENT_LIST_COL_DEF;
 
+    /* FIXME: Not used */
+    evlist->refresh = 3;
     evlist->counter = 1;
 
     /* create the tree view and add columns */
     evlist->treeview = gtk_tree_view_new ();
 
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (evlist->treeview), FALSE);
+    /* visual appearance of table */
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (evlist->treeview), TRUE);
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (evlist->treeview), GTK_TREE_VIEW_GRID_LINES_NONE);
 
     /* create treeview columns */
     for (i = 0; i < EVENT_LIST_COL_NUMBER; i++) {
@@ -249,11 +264,12 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
                                                            renderer,
                                                            "text", i,
                                                            NULL);
+
         gtk_tree_view_insert_column (GTK_TREE_VIEW (evlist->treeview),
                                      column, -1);
 
         /* only aligns the headers */
-        gtk_tree_view_column_set_alignment (column, 0.5);
+        gtk_tree_view_column_set_alignment (column, EVENT_LIST_HEAD_XALIGN[i]);
 
         /* set sort id */
         gtk_tree_view_column_set_sort_column_id (column, i);
@@ -262,9 +278,9 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
         check_and_set_cell_renderer (column, renderer, i);
 
         /* hide columns that have not been specified */
-        /*if (!(evlist->flags & (1 << i))) {
+        if (!(evlist->flags & (1 << i))) {
             gtk_tree_view_column_set_visible (column, FALSE);
-        }*/
+        }
         
     }
 
@@ -310,15 +326,16 @@ static GtkTreeModel *create_and_fill_model   (GHashTable      *sats)
     GtkListStore *liststore;
 
 
-    liststore = gtk_list_store_new (SAT_LIST_COL_NUMBER,
+    liststore = gtk_list_store_new (EVENT_LIST_COL_NUMBER,
                                     G_TYPE_STRING,     // name
                                     G_TYPE_INT,        // catnum
+                                    G_TYPE_DOUBLE,     // az
+                                    G_TYPE_DOUBLE,     // el
                                     G_TYPE_BOOLEAN,    // TRUE if AOS, FALSE if LOS
                                     G_TYPE_DOUBLE);    // time
 
     /* add each satellite from hash table */
     g_hash_table_foreach (sats, event_list_add_satellites, liststore);
-
 
     return GTK_TREE_MODEL (liststore);
 }
@@ -343,6 +360,8 @@ static void event_list_add_satellites (gpointer key, gpointer value, gpointer us
     gtk_list_store_set (store, &item,
                         EVENT_LIST_COL_NAME, sat->nickname,
                         EVENT_LIST_COL_CATNUM, sat->tle.catnr,
+                        EVENT_LIST_COL_AZ, sat->az,
+                        EVENT_LIST_COL_EL, sat->el,
                         EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
                         EVENT_LIST_COL_TIME, 0.0,
                         -1);    
@@ -357,6 +376,7 @@ void gtk_event_list_update          (GtkWidget *widget)
     GtkEventList   *evlist = GTK_EVENT_LIST (widget);
 
 
+
     /* first, do some sanity checks */
     if ((evlist == NULL) || !IS_GTK_EVENT_LIST (evlist)) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -364,7 +384,14 @@ void gtk_event_list_update          (GtkWidget *widget)
                      __FUNCTION__);
     }
 
+    /* get and tranverse the model */
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview));
 
+    /* update */
+    gtk_tree_model_foreach (model, event_list_update_sats, evlist);
+
+
+#if 0
     /* check refresh rate */
     if (evlist->counter < evlist->refresh) {
         evlist->counter++;
@@ -378,6 +405,7 @@ void gtk_event_list_update          (GtkWidget *widget)
         /* update */
         gtk_tree_model_foreach (model, event_list_update_sats, evlist);
     }
+#endif
 }
 
 
@@ -387,11 +415,10 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
                                         GtkTreeIter  *iter,
                                         gpointer      data)
 {
-    GtkEventList *satlist = GTK_EVENT_LIST (data);
+    GtkEventList *evlist = GTK_EVENT_LIST (data);
     guint      *catnum;
     sat_t      *sat;
-    gchar      *buff;
-    gint        retcode;
+    gdouble     number, now;
 
 
     /* get the catalogue number for this row
@@ -399,7 +426,7 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
     */
     catnum = g_new0 (guint, 1);
     gtk_tree_model_get (model, iter, EVENT_LIST_COL_CATNUM, catnum, -1);
-    sat = SAT (g_hash_table_lookup (satlist->satellites, catnum));
+    sat = SAT (g_hash_table_lookup (evlist->satellites, catnum));
 
     if (sat == NULL) {
         /* satellite not tracked anymore => remove */
@@ -415,27 +442,33 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
     }
     else {
 
-
-        /**** FIXME *****/
         /* update data */
+        now = evlist->tstamp;
+
+        if (sat->el > 0.0) {
+            if (sat->los > 0.0) {
+                number = sat->los - now;
+            }
+            else {
+                number = -1.0;   /* Sat is staionary or no event */
+            }
+        }
+        else {
+            if (sat->aos > 0.0) {
+                number = sat->aos - now;
+            }
+            else {
+                number = -1.0; /* Sat is staionary or no event */
+            }
+        }
 
         /* store new data */
-/*        gtk_list_store_set (GTK_LIST_STORE (model), iter,
-                            SAT_LIST_COL_AZ, sat->az,
-                            SAT_LIST_COL_EL, sat->el,
-                            SAT_LIST_COL_RANGE, sat->range,
-                            SAT_LIST_COL_RANGE_RATE, sat->range_rate,
-                            SAT_LIST_COL_LAT, sat->ssplat,
-                            SAT_LIST_COL_LON, sat->ssplon,
-                            SAT_LIST_COL_FOOTPRINT, sat->footprint,
-                            SAT_LIST_COL_ALT, sat->alt,
-                            SAT_LIST_COL_VEL, sat->velo,
-                            SAT_LIST_COL_MA, sat->ma,
-                            SAT_LIST_COL_PHASE, sat->phase,
-                            SAT_LIST_COL_ORBIT, sat->orbit,
+        gtk_list_store_set (GTK_LIST_STORE (model), iter,
+                            EVENT_LIST_COL_AZ, sat->az,
+                            EVENT_LIST_COL_EL, sat->el,
+                            EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
+                            EVENT_LIST_COL_TIME, number,
                             -1);
-*/
-
 
     }
 
@@ -456,6 +489,16 @@ static void check_and_set_cell_renderer (GtkTreeViewColumn *column,
 {
 
     switch (i) {
+
+        /* Event type */
+    case EVENT_LIST_COL_AZ:
+    case EVENT_LIST_COL_EL:
+        gtk_tree_view_column_set_cell_data_func (column,
+                                                 renderer,
+                                                 degree_cell_data_function,
+                                                 GUINT_TO_POINTER (i),
+                                                 NULL);
+        break;
 
         /* Event type */
     case EVENT_LIST_COL_EVT:
@@ -503,11 +546,11 @@ static void evtype_cell_data_function (GtkTreeViewColumn *col,
     gtk_tree_model_get (model, iter, coli, &value, -1);
 
 
-    if (value = TRUE) {
-        buff = g_strdup ("L");
+    if (value == TRUE) {
+        buff = g_strdup (_("LOS"));
     }
     else {
-        buff = g_strdup ("A");
+        buff = g_strdup (_("AOS"));
     }
 
     /* render the cell */
@@ -527,20 +570,91 @@ static void time_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
-    time_t     t;
-    guint size;
+
+    guint         h,m,s;
+    gchar        *ch,*cm,*cs;
 
 
     /* get cell data */
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* format the time code */
-    buff = g_strdup_printf ("%.6f", number);
+    if (number < 0.0) {
+        buff = g_strdup(_("Never"));
+    }
+    else {
+
+        /* convert julian date to seconds */
+        s = (guint) (number * 86400);
+
+        /* extract hours */
+        h = (guint) floor (s/3600);
+        s -= 3600*h;
+
+        /* leading zero */
+        if ((h > 0) && (h < 10))
+            ch = g_strdup ("0");
+        else
+            ch = g_strdup ("");
+
+        /* extract minutes */
+        m = (guint) floor (s/60);
+        s -= 60*m;
+
+        /* leading zero */
+        if (m < 10)
+            cm = g_strdup ("0");
+        else
+            cm = g_strdup ("");
+
+        /* leading zero */
+        if (s < 10)
+            cs = g_strdup (":0");
+        else
+            cs = g_strdup (":");
+
+        if (h > 0) {
+            buff = g_strdup_printf ("%s%d:%s%d%s%d", ch, h, cm, m, cs, s);
+        }
+        else {
+            buff = g_strdup_printf ("%s%d%s%d", cm, m, cs, s);
+        }
+
+        g_free (ch);
+        g_free (cm);
+        g_free (cs);
+
+    }
 
     /* render the cell */
     g_object_set (renderer, "text", buff, NULL);
     g_free (buff);
 
+}
+
+
+
+/* general floats with 2 digits + degree char. Used for Az and El */
+static void degree_cell_data_function (GtkTreeViewColumn *col,
+                                       GtkCellRenderer   *renderer,
+                                       GtkTreeModel      *model,
+                                       GtkTreeIter       *iter,
+                                       gpointer           column)
+{
+    gdouble    number;
+    gchar     *buff;
+    guint      coli = GPOINTER_TO_UINT (column);
+
+
+    /* get the value */
+    gtk_tree_model_get (model, iter, coli, &number, -1);
+
+    /* format the number */
+    buff = g_strdup_printf ("%.2f\302\260", number);
+
+    /* render column */
+    g_object_set (renderer, "text", buff, NULL);
+    g_free (buff);
 }
 
 

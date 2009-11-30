@@ -85,6 +85,8 @@ struct _GtkEventListClass
 typedef enum {
         EVENT_LIST_COL_NAME = 0,    /*!< Satellite name. */
         EVENT_LIST_COL_CATNUM,      /*!< Catalogue number. */
+        EVENT_LIST_COL_AZ,          /*!< Satellite Azimuth. */
+        EVENT_LIST_COL_EL,          /*!< Satellite Elevation. */
         EVENT_LIST_COL_EVT,         /*!< Next event (AOS or LOS). */
         EVENT_LIST_COL_TIME,        /*!< Time countdown. */
         EVENT_LIST_COL_NUMBER
@@ -96,6 +98,8 @@ typedef enum {
 typedef enum {
         EVENT_LIST_FLAG_NAME       = 1 << EVENT_LIST_COL_NAME,        /*!< Satellite name. */
         EVENT_LIST_FLAG_CATNUM     = 1 << EVENT_LIST_COL_CATNUM,
+        EVENT_LIST_FLAG_AZ         = 1 << EVENT_LIST_COL_AZ,
+        EVENT_LIST_FLAG_EL         = 1 << EVENT_LIST_COL_EL,
         EVENT_LIST_FLAG_EVT        = 1 << EVENT_LIST_COL_EVT,         /*!< Next event (AOS or LOS) */
         EVENT_LIST_FLAG_TIME       = 1 << EVENT_LIST_COL_TIME,        /*!< Time countdown */
 } event_list_flag_t;
