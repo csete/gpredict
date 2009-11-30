@@ -45,6 +45,9 @@
 #  include <build-config.h>
 #endif
 
+/*** FIXME */
+#include "gtk-sat-list-popup.h"
+
 
 
 /** \brief Column titles indexed with column symb. refs. */
@@ -355,7 +358,7 @@ void gtk_event_list_update          (GtkWidget *widget)
 
 
     /* first, do some sanity checks */
-    if ((evlist == NULL) || !IS_GTK_EVENT_LIST (satlist)) {
+    if ((evlist == NULL) || !IS_GTK_EVENT_LIST (evlist)) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s: Invalid GtkEventList!"),
                      __FUNCTION__);
@@ -373,7 +376,7 @@ void gtk_event_list_update          (GtkWidget *widget)
         model = gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview));
 
         /* update */
-        gtk_tree_model_foreach (model, event_list_update_sats, satlist);
+        gtk_tree_model_foreach (model, event_list_update_sats, evlist);
     }
 }
 
@@ -412,9 +415,12 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
     }
     else {
 
-        /**** UPDATED UNTIL HERE *****/
+
+        /**** FIXME *****/
+        /* update data */
+
         /* store new data */
-        gtk_list_store_set (GTK_LIST_STORE (model), iter,
+/*        gtk_list_store_set (GTK_LIST_STORE (model), iter,
                             SAT_LIST_COL_AZ, sat->az,
                             SAT_LIST_COL_EL, sat->el,
                             SAT_LIST_COL_RANGE, sat->range,
@@ -428,66 +434,8 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
                             SAT_LIST_COL_PHASE, sat->phase,
                             SAT_LIST_COL_ORBIT, sat->orbit,
                             -1);
+*/
 
-        if (satlist->flags & SAT_LIST_FLAG_NEXT_EVENT) {
-            gdouble    number;
-            gchar      buff[TIME_FORMAT_MAX_LENGTH];
-            gchar     *tfstr;
-            gchar     *fmtstr;
-            gchar     *alstr;
-            time_t     t;
-            guint      size;
-
-
-            if (sat->aos > sat->los) {
-                /* next event is LOS */
-                number = sat->los;
-                alstr = g_strdup ("LOS: ");
-            }
-            else {
-                /* next event is AOS */
-                number = sat->aos;
-                alstr = g_strdup ("AOS: ");
-            }
-    
-            if (number == 0.0) {
-                gtk_list_store_set (GTK_LIST_STORE (model), iter,
-                                    SAT_LIST_COL_NEXT_EVENT, "--- N/A ---",
-                                    -1);
-            }
-            else {
-
-                /* convert julian date to struct tm */
-                t = (number - 2440587.5)*86400.;
-
-                /* format the number */
-                tfstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-                fmtstr = g_strconcat (alstr, tfstr, NULL);
-                g_free (tfstr);
-
-                /* format either local time or UTC depending on check box */
-                if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-                    size = strftime (buff, TIME_FORMAT_MAX_LENGTH,
-                                     fmtstr, localtime (&t));
-                else
-                    size = strftime (buff, TIME_FORMAT_MAX_LENGTH,
-                                     fmtstr, gmtime (&t));
-        
-                if (size == 0)
-                    /* size > MAX_LENGTH */
-                    buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
-
-                gtk_list_store_set (GTK_LIST_STORE (model), iter,
-                                    SAT_LIST_COL_NEXT_EVENT, buff,
-                                    -1);
-
-
-                g_free (fmtstr);
-            }
-
-            g_free (alstr);
-            
-        }
 
     }
 
@@ -509,74 +457,20 @@ static void check_and_set_cell_renderer (GtkTreeViewColumn *column,
 
     switch (i) {
 
-        /* general float with 2 dec. precision
-           no extra format besides a degree char
-        */
-    case SAT_LIST_COL_AZ:
-    case SAT_LIST_COL_EL:
-    case SAT_LIST_COL_RA:
-    case SAT_LIST_COL_DEC:
-    case SAT_LIST_COL_MA:
-    case SAT_LIST_COL_PHASE:
+        /* Event type */
+    case EVENT_LIST_COL_EVT:
         gtk_tree_view_column_set_cell_data_func (column,
                                                  renderer,
-                                                 degree_cell_data_function,
+                                                 evtype_cell_data_function,
                                                  GUINT_TO_POINTER (i),
                                                  NULL);
         break;
 
-        /* LAT/LON format */
-    case SAT_LIST_COL_LAT:
-    case SAT_LIST_COL_LON:
+        /* time countdown */
+    case EVENT_LIST_COL_TIME:
         gtk_tree_view_column_set_cell_data_func (column,
                                                  renderer,
-                                                 latlon_cell_data_function,
-                                                 GUINT_TO_POINTER (i),
-                                                 NULL);
-        break;
-
-        /* distances and velocities */
-    case SAT_LIST_COL_RANGE:
-    case SAT_LIST_COL_ALT:
-    case SAT_LIST_COL_FOOTPRINT:
-        gtk_tree_view_column_set_cell_data_func (column,
-                                                 renderer,
-                                                 distance_cell_data_function,
-                                                 GUINT_TO_POINTER (i),
-                                                 NULL);
-        break;
-
-    case SAT_LIST_COL_VEL:
-    case SAT_LIST_COL_RANGE_RATE:
-        gtk_tree_view_column_set_cell_data_func (column,
-                                                 renderer,
-                                                 range_rate_cell_data_function,
-                                                 GUINT_TO_POINTER (i),
-                                                 NULL);
-        break;
-
-    case SAT_LIST_COL_DOPPLER:
-        gtk_tree_view_column_set_cell_data_func (column,
-                                                 renderer,
-                                                 float_to_int_cell_data_function,
-                                                 GUINT_TO_POINTER (i),
-                                                 NULL);
-        break;
-
-    case SAT_LIST_COL_DELAY:
-    case SAT_LIST_COL_LOSS:
-        gtk_tree_view_column_set_cell_data_func (column,
-                                                 renderer,
-                                                 two_dec_cell_data_function,
-                                                 GUINT_TO_POINTER (i),
-                                                 NULL);
-        break;
-
-    case SAT_LIST_COL_AOS:
-    case SAT_LIST_COL_LOS:
-        gtk_tree_view_column_set_cell_data_func (column,
-                                                 renderer,
-                                                 event_cell_data_function,
+                                                 time_cell_data_function,
                                                  GUINT_TO_POINTER (i),
                                                  NULL);
         break;
@@ -589,241 +483,63 @@ static void check_and_set_cell_renderer (GtkTreeViewColumn *column,
 }
 
 
-/* render column containg lat/lon
-   by using this instead of the default data function, we can
-   control the number of decimals and display the coordinates in a
-   fancy way, including degree sign and NWSE suffixes.
-
-   Please note that this function only affects how the numbers are
-   displayed (rendered), the tree_store will still contain the
-   original flaoting point numbers. Very cool!
-*/
-static void
-latlon_cell_data_function (GtkTreeViewColumn *col,
-                           GtkCellRenderer   *renderer,
-                           GtkTreeModel      *model,
-                           GtkTreeIter       *iter,
-                           gpointer           column)
+/** \brief Render column containg event type.
+  *
+  * Event type can be AOS or LOS depending on whether the satellite is within
+  * range or not. AOS will rendern an "A", LOS will render an "L".
+  */
+static void evtype_cell_data_function (GtkTreeViewColumn *col,
+                                       GtkCellRenderer   *renderer,
+                                       GtkTreeModel      *model,
+                                       GtkTreeIter       *iter,
+                                       gpointer           column)
 {
-    gdouble   number = 0.0;
-    gchar   *buff;
-    guint    coli = GPOINTER_TO_UINT (column);
-    gchar    hmf = ' ';
+    gboolean  value;
+    gchar    *buff;
+    guint     coli = GPOINTER_TO_UINT (column);
 
-    gtk_tree_model_get (model, iter, coli, &number, -1);
 
-    /* check whether configuration requests the use
-       of N, S, E and W instead of signs
-    */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_NSEW)) {
+    /* get field value from cell */
+    gtk_tree_model_get (model, iter, coli, &value, -1);
 
-        if (coli == SAT_LIST_COL_LAT) {
-            if (number < 0.00) {
-                number = -number;
-                hmf = 'S';
-            }
-            else {
-                hmf = 'N';
-            }
-        }
-        else if (coli == SAT_LIST_COL_LON) {
-            if (number < 0.00) {
-                number = -number;
-                hmf = 'W';
-            }
-            else {
-                hmf = 'E';
-            }
-        }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
-                         _("%s:%d: Invalid column: %d"),
-                         __FILE__, __LINE__,
-                         coli);
-            hmf = '?';
-        }
+
+    if (value = TRUE) {
+        buff = g_strdup ("L");
+    }
+    else {
+        buff = g_strdup ("A");
     }
 
-    /* format the number */
-    buff = g_strdup_printf ("%.2f\302\260%c", number, hmf);
-    g_object_set (renderer,
-                  "text", buff,
-                  NULL);
+    /* render the cell */
+    g_object_set (renderer, "text", buff, NULL);
     g_free (buff);
 }
 
-
-/* general floats with 2 digits + degree char */
-static void
-degree_cell_data_function (GtkTreeViewColumn *col,
-                           GtkCellRenderer   *renderer,
-                           GtkTreeModel      *model,
-                           GtkTreeIter       *iter,
-                           gpointer           column)
-{
-    gdouble    number;
-    gchar     *buff;
-    guint      coli = GPOINTER_TO_UINT (column);
-
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-    /* format the number */
-    buff = g_strdup_printf ("%.2f\302\260", number);
-    g_object_set (renderer,
-                  "text", buff,
-                  NULL);
-    g_free (buff);
-}
-
-
-/* distance and velocity, 0 decimal digits */
-static void
-distance_cell_data_function (GtkTreeViewColumn *col,
-                             GtkCellRenderer   *renderer,
-                             GtkTreeModel      *model,
-                             GtkTreeIter       *iter,
-                             gpointer           column)
-{
-    gdouble    number;
-    gchar     *buff;
-    guint      coli = GPOINTER_TO_UINT (column);
-
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-    /* convert distance to miles? */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
-        number = KM_TO_MI(number);
-    }
-
-    /* format the number */
-    buff = g_strdup_printf ("%.0f", number);
-    g_object_set (renderer,
-                  "text", buff,
-                  NULL);
-    g_free (buff);
-}
-
-/* range rate is special, because we may need to convert to miles
-   and want 2-3 decimal digits.
-*/
-static void
-range_rate_cell_data_function (GtkTreeViewColumn *col,
-                               GtkCellRenderer   *renderer,
-                               GtkTreeModel      *model,
-                               GtkTreeIter       *iter,
-                               gpointer           column)
-{
-    gdouble    number;
-    gchar     *buff;
-    guint      coli = GPOINTER_TO_UINT (column);
-
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-    /* convert distance to miles? */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
-        number = KM_TO_MI(number);
-    }
-
-    /* format the number */
-    buff = g_strdup_printf ("%.3f", number);
-    g_object_set (renderer,
-                  "text", buff,
-                  NULL);
-    g_free (buff);
-}
-
-/* 0 decimal digits */
-static void
-float_to_int_cell_data_function (GtkTreeViewColumn *col,
-                                 GtkCellRenderer   *renderer,
-                                 GtkTreeModel      *model,
-                                 GtkTreeIter       *iter,
-                                 gpointer           column)
-{
-    gdouble    number;
-    gchar     *buff;
-    guint      coli = GPOINTER_TO_UINT (column);
-
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-    /* format the number */
-    buff = g_strdup_printf ("%.0f", number);
-    g_object_set (renderer,
-                  "text", buff,
-                  NULL);
-    g_free (buff);
-}
-
-/* 2 decimal digits */
-static void
-two_dec_cell_data_function (GtkTreeViewColumn *col,
-                            GtkCellRenderer   *renderer,
-                            GtkTreeModel      *model,
-                            GtkTreeIter       *iter,
-                            gpointer           column)
-{
-    gdouble    number;
-    gchar     *buff;
-    guint      coli = GPOINTER_TO_UINT (column);
-
-    gtk_tree_model_get (model, iter, coli, &number, -1);
-
-    /* format the number */
-    buff = g_strdup_printf ("%.2f", number);
-    g_object_set (renderer,
-                  "text", buff,
-                  NULL);
-    g_free (buff);
-}
 
 
 /* AOS/LOS; convert julian date to string */
-static void
-event_cell_data_function (GtkTreeViewColumn *col,
-                          GtkCellRenderer   *renderer,
-                          GtkTreeModel      *model,
-                          GtkTreeIter       *iter,
-                          gpointer           column)
+static void time_cell_data_function (GtkTreeViewColumn *col,
+                                     GtkCellRenderer   *renderer,
+                                     GtkTreeModel      *model,
+                                     GtkTreeIter       *iter,
+                                     gpointer           column)
 {
     gdouble    number;
-    gchar      buff[TIME_FORMAT_MAX_LENGTH];
-    gchar     *fmtstr;
+    gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
     time_t     t;
     guint size;
 
 
+    /* get cell data */
     gtk_tree_model_get (model, iter, coli, &number, -1);
-    
-    if (number == 0.0) {
-        g_object_set (renderer,
-                      "text", "--- N/A ---",
-                      NULL);
-    }
-    else {
 
-        /* convert julian date to struct tm */
-        t = (number - 2440587.5)*86400.;
+    /* format the time code */
+    buff = g_strdup_printf ("%.6f", number);
 
-        /* format the number */
-        fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-
-        /* format either local time or UTC depending on check box */
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-        else
-            size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-        
-        if (size == 0)
-            /* size > TIME_FORMAT_MAX_LENGTH */
-            buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
-
-        g_object_set (renderer,
-                      "text", buff,
-                      NULL);
-
-        g_free (fmtstr);
-    }
+    /* render the cell */
+    g_object_set (renderer, "text", buff, NULL);
+    g_free (buff);
 
 }
 
@@ -878,8 +594,7 @@ static gint event_cell_compare_function (GtkTreeModel *model,
 
 
 /** \brief Reload configuration */
-void
-gtk_sat_list_reconf          (GtkWidget *widget, GKeyFile *cfgdat)
+void gtk_event_list_reconf (GtkWidget *widget, GKeyFile *cfgdat)
 {
     sat_log_log (SAT_LOG_LEVEL_WARN, _("%s: FIXME I am not implemented"));
 }
@@ -890,16 +605,11 @@ gtk_sat_list_reconf          (GtkWidget *widget, GKeyFile *cfgdat)
  *  \param treeview The tree view in the GtkSatList widget
  *  \param list Pointer to the GtkSatList widget.
  *
- * This function is called when the "popup-menu" signal is emitted. This
- * usually happens if the user presses SHJIFT-F10? It is used as a wrapper
- * for the function that actually creates the popup menu.
  */
-static gboolean
-popup_menu_cb (GtkWidget *treeview, gpointer list)
+static gboolean popup_menu_cb (GtkWidget *treeview, gpointer list)
 {
 
     /* if there is no selection, select the first row */
-
 
     view_popup_menu (treeview, NULL, list);
 
@@ -913,8 +623,7 @@ popup_menu_cb (GtkWidget *treeview, gpointer list)
  *  \param list Pointer to the GtkSatList widget.
  *
  */
-static gboolean
-button_press_cb (GtkWidget *treeview, GdkEventButton *event, gpointer list)
+static gboolean button_press_cb (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 {
 
     /* single click with the right mouse button? */
@@ -955,8 +664,7 @@ button_press_cb (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 }
 
 
-static void
-view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
+static void view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 {
     GtkTreeSelection *selection;
     GtkTreeModel     *model;
@@ -972,7 +680,7 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 
 
         gtk_tree_model_get (model, &iter,
-                            SAT_LIST_COL_CATNUM, catnum,
+                            EVENT_LIST_COL_CATNUM, catnum,
                             -1);
 
         sat = SAT (g_hash_table_lookup (GTK_SAT_LIST (list)->satellites, catnum));
@@ -1000,64 +708,12 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 }
 
 
-/*** FIXME: formalise with other copies, only need az,el and jul_utc */
-static void
-Calculate_RADec (sat_t *sat, qth_t *qth, obs_astro_t *obs_set)
-{
-    /* Reference:  Methods of Orbit Determination by  */
-    /*                Pedro Ramon Escobal, pp. 401-402 */
-
-    double phi,theta,sin_theta,cos_theta,sin_phi,cos_phi,
-        az,el,Lxh,Lyh,Lzh,Sx,Ex,Zx,Sy,Ey,Zy,Sz,Ez,Zz,
-        Lx,Ly,Lz,cos_delta,sin_alpha,cos_alpha;
-    geodetic_t geodetic;
-
-
-    geodetic.lon = qth->lon * de2ra;
-    geodetic.lat = qth->lat * de2ra;
-    geodetic.alt = qth->alt / 1000.0;
-    geodetic.theta = 0;
-
-
-
-    az = sat->az * de2ra;
-    el = sat->el * de2ra;
-    phi   = geodetic.lat;
-    theta = FMod2p(ThetaG_JD(sat->jul_utc) + geodetic.lon);
-    sin_theta = sin(theta);
-    cos_theta = cos(theta);
-    sin_phi = sin(phi);
-    cos_phi = cos(phi);
-    Lxh = -cos(az) * cos(el);
-    Lyh =  sin(az) * cos(el);
-    Lzh =  sin(el);
-    Sx = sin_phi * cos_theta;
-    Ex = -sin_theta;
-    Zx = cos_theta * cos_phi;
-    Sy = sin_phi * sin_theta;
-    Ey = cos_theta;
-    Zy = sin_theta*cos_phi;
-    Sz = -cos_phi;
-    Ez = 0;
-    Zz = sin_phi;
-    Lx = Sx*Lxh + Ex * Lyh + Zx*Lzh;
-    Ly = Sy*Lxh + Ey * Lyh + Zy*Lzh;
-    Lz = Sz*Lxh + Ez * Lyh + Zz*Lzh;
-    obs_set->dec = ArcSin(Lz);  /* Declination (radians)*/
-    cos_delta = sqrt(1 - Sqr(Lz));
-    sin_alpha = Ly / cos_delta;
-    cos_alpha = Lx / cos_delta;
-    obs_set->ra = AcTan(sin_alpha,cos_alpha); /* Right Ascension (radians)*/
-    obs_set->ra = FMod2p(obs_set->ra);
-
-}
-
 
 
 
 /** \brief Reload reference to satellites (e.g. after TLE update). */
 void
-gtk_sat_list_reload_sats (GtkWidget *satlist, GHashTable *sats)
+gtk_event_list_reload_sats (GtkWidget *evlist, GHashTable *sats)
 {
-    GTK_SAT_LIST (satlist)->satellites = sats;
+    GTK_EVENT_LIST (evlist)->satellites = sats;
 }

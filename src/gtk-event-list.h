@@ -40,7 +40,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_EVENT_LIST       (gtk_EVENT_list_get_type ())
+#define GTK_TYPE_EVENT_LIST       (gtk_event_list_get_type ())
 #define GTK_EVENT_LIST(obj)       GTK_CHECK_CAST (obj,\
                                                   gtk_event_list_get_type (),\
                                                   GtkEventList)
