@@ -110,20 +110,20 @@ const gchar *SAT_LIST_COL_HINT[SAT_LIST_COL_NUMBER] = {
 const gfloat SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
     0.0, // name
     0.5, // catnum
-    0.0, // az
-    0.0, // el
+    1.0, // az
+    1.0, // el
     0.5, // direction
     0.0, // RA
     0.0, // dec
-    0.0, // range
-    0.0, // range rate
+    1.0, // range
+    1.0, // range rate
     0.5, // next event
     0.5, // AOS
     0.5, // LOS
-    0.0, // lat
-    0.0, // lon
-    0.0, // SSP
-    0.0, // footprint
+    1.0, // lat
+    1.0, // lon
+    0.5, // SSP
+    0.5, // footprint
     1.0, // alt
     0.0, // vel
     0.0, // doppler

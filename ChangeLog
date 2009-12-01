@@ -5,6 +5,9 @@
     Added configuration keys for GtkEventList. Curently only refresh rate is
     configurable.
 
+    * src/gtk-sat-list.c:
+    Changed some field alignments.
+
 
 2009-11-30 Alexandru Csete <oz9aec at gmail.com>
 
