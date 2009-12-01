@@ -95,6 +95,7 @@ typedef enum {
     SAT_CFG_INT_POLAR_INFO_COL,       /*!< Info colour. */
     SAT_CFG_INT_SINGLE_SAT_REFRESH,   /*!< Single-sat refresh rate (cycle). */
     SAT_CFG_INT_SINGLE_SAT_FIELDS,    /*!< Single-sat fields. */
+    SAT_CFG_INT_EVENT_LIST_REFRESH,   /*!< Event list refresh rate (cycle). */
     SAT_CFG_INT_PRED_MIN_EL,          /*!< Minimum elevation for passes. */
     SAT_CFG_INT_PRED_NUM_PASS,        /*!< Number of passes to predict. */
     SAT_CFG_INT_PRED_LOOK_AHEAD,      /*!< Look-ahead time limit in days. */ 
