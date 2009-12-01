@@ -1,3 +1,11 @@
+2009-12-01 Alexandru csete <oz9aec at gmail.com>
+
+    * src/config-keys.h:
+    * src/sat-cfg.[ch]:
+    Added configuration keys for GtkEventList. Curently only refresh rate is
+    configurable.
+
+
 2009-11-30 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module.c:
