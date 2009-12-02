@@ -36,6 +36,7 @@ gpredict_SOURCES = \
     gpredict-utils.c gpredict-utils.h \
     gtk-azel-plot.c gtk-azel-plot.h \
     gtk-event-list.c gtk-event-list.h \
+    gtk-event-list-popup.c gtk-event-list-popup.h \
     gtk-freq-knob.c gtk-freq-knob.h \
     gtk-polar-plot.c gtk-polar-plot.h \
     gtk-polar-view.c gtk-polar-view.h \
