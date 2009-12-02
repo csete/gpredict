@@ -33,6 +33,7 @@
 #include <glib/gi18n.h>
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-event-list.h"
+#include "gtk-event-list-popup.h"
 #include "sat-log.h"
 #include "config-keys.h"
 #include "sat-cfg.h"
@@ -44,9 +45,6 @@
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
-
-/*** FIXME */
-#include "gtk-sat-list-popup.h"
 
 
 #define EVENT_LIST_COL_DEF (EVENT_LIST_FLAG_NAME | EVENT_LIST_FLAG_AZ | EVENT_LIST_FLAG_EL | EVENT_LIST_FLAG_TIME)
@@ -301,10 +299,10 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 
     g_object_unref (model);
 
-/*    g_signal_connect (evlist->treeview, "button-press-event",
+    g_signal_connect (evlist->treeview, "button-press-event",
                       G_CALLBACK (button_press_cb), widget);
     g_signal_connect (evlist->treeview, "popup-menu",
-                      G_CALLBACK (popup_menu_cb), widget);*/
+                      G_CALLBACK (popup_menu_cb), widget);
 
     evlist->swin = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (evlist->swin),
@@ -797,7 +795,7 @@ static void view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointe
                             EVENT_LIST_COL_CATNUM, catnum,
                             -1);
 
-        sat = SAT (g_hash_table_lookup (GTK_SAT_LIST (list)->satellites, catnum));
+        sat = SAT (g_hash_table_lookup (GTK_EVENT_LIST (list)->satellites, catnum));
 
         if (sat == NULL) {
             sat_log_log (SAT_LOG_LEVEL_MSG,
@@ -806,8 +804,8 @@ static void view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointe
 
         }
         else {
-            gtk_sat_list_popup_exec (sat, GTK_SAT_LIST (list)->qth, event,
-                                     GTK_SAT_LIST (list));
+            gtk_event_list_popup_exec (sat, GTK_EVENT_LIST (list)->qth, event,
+                                       GTK_EVENT_LIST (list));
         }
 
 

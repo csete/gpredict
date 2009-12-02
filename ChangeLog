@@ -1,3 +1,14 @@
+2009-12-02 alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-event-list-popup.[ch]:
+    New files implementing popup menu for GtkEventList widget.
+
+    * win32/Makefile:
+    * src/Makefile.am:
+    * src/gtk-event-list.c:
+    Enabled usage of gtk-event-list-popup.
+
+
 2009-12-01 Alexandru csete <oz9aec at gmail.com>
 
     * src/config-keys.h:
