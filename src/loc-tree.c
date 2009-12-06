@@ -354,6 +354,8 @@ loc_tree_create_and_fill_model (const gchar *fname)
 					 _("%s: %s does not exist!"),
 					 __FUNCTION__, fname);
 
+		g_free(continent);
+		g_free(country);
 		return GTK_TREE_MODEL (treestore);
 	}
 		
