@@ -11,7 +11,7 @@ gpredict \- real-time satellite tracking and orbit prediction program
 .SH "DESCRIPTION"
 .\" Add any additional description here
 .PP 
-Gpredict is a real-time satellite tracking and orbit prediction program. It can track an unlimitied number of satellites and display the satellite data in various visualisation modules like lists, maps and polar plots. Gpredict can also provide detailed information about upcoming satellite passes relative to one or more ground stations. Gpredict can perform Doppler tuning and antenna rotator tracking via hamlib. The complete user manual, as well as other documentation, is available from http://gpredict.oz9aec.net/documents.php
+Gpredict is a real-time satellite tracking and orbit prediction program. It can track an unlimited number of satellites and display the satellite data in various visualisation modules like lists, maps and polar plots. Gpredict can also provide detailed information about upcoming satellite passes relative to one or more ground stations. Gpredict can perform Doppler tuning and antenna rotator tracking via hamlib. The complete user manual, as well as other documentation, is available from http://gpredict.oz9aec.net/documents.php
 
 
 .SH "AUTHOR"
