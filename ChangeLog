@@ -1,4 +1,12 @@
-2009-12-02 alexandru Csete <oz9aec at gmail.com>
+2009-12-21 Alexandru Csete <oz9aec at gmail.com>
+
+    * doc/man/gpredict.1.in:
+    * doc/notes/configuration.txt:
+    * doc/notes/time_keeping.txt:
+    Applied patch 2916646 from Paul Schulz: Minor fixes to documentation.
+
+
+2009-12-02 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-event-list-popup.[ch]:
     New files implementing popup menu for GtkEventList widget.
