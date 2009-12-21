@@ -9,12 +9,13 @@ Changes in version 1.2 (TBD)
 * Feature request 2778735: Visual indicator for RX/TX/TRX.
 * Feature request 2689352: Mutual Contact Window AOS/LOS.
 - Fixed bug 2877974: Incorrect uplink Doppler.
-- Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to
-  Charles Suprin AA1VS).
-- Applied patch 2877878: Change Flag to Lock in tle-update (thanks Charles Suprin AA1VS).
-- Applied patch 2877918: Fixes segfault in TLE updater (thanks Charles Suprin AA1VS).
-- Applied patch 2881367: Updated Flags to Locks (thanks Charles Suprin AA1VS).
-- Applied patch 2893617: Patches for fixing Windows build (thanks Valentin Yakovenkov).
+- Fixed bug 2918672: Trailing whitespace and newline in satellite names.
+- Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to Charles Suprin AA1VS).
+- Applied patch 2877878: Change Flag to Lock in tle-update (thanks to Charles Suprin AA1VS).
+- Applied patch 2877918: Fixes segfault in TLE updater (thanks to Charles Suprin AA1VS).
+- Applied patch 2881367: Updated Flags to Locks (thanks to Charles Suprin AA1VS).
+- Applied patch 2893617: Patches for fixing Windows build (thanks to Valentin Yakovenkov).
+- Applied patch 2916646: Minor fixes to documentation (thanks to Paul Schulz).
 - Slightly improved UI for the single-satellite view.
 
 

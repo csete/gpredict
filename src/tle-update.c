@@ -126,7 +126,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     	sat_log_log (SAT_LOG_LEVEL_ERROR,
     	             _("%s: A TLE update process is already running. Aborting."),
     	             __FUNCTION__);
-    	             
+
         return;
     }
 
@@ -136,7 +136,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 
     /* open directory and read files one by one */
     cache_dir = g_dir_open (dir, 0, &err);
-	
+
     if (err != NULL) {
 
         /* send an error message */
@@ -524,9 +524,9 @@ void tle_update_from_network (gboolean   silent,
     /*if (tle_in_progress)*/
     if (g_static_mutex_trylock(&tle_in_progress)==FALSE) {
     	sat_log_log (SAT_LOG_LEVEL_ERROR,
-    			     _("%s: A TLE update process is already running. Aborting."),
-    			     __FUNCTION__);
-    			     
+                     _("%s: A TLE update process is already running. Aborting."),
+                     __FUNCTION__);
+
         return;
     }
 
@@ -637,19 +637,19 @@ void tle_update_from_network (gboolean   silent,
 
         /* continue update if we have fetched at least one file */
         if (success > 0) {
-        	sat_log_log (SAT_LOG_LEVEL_MSG,
-        	             _("%s: Fetched %d files from network; updating..."),
-        	             __FUNCTION__, success);
+            sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s: Fetched %d files from network; updating..."),
+                         __FUNCTION__, success);
             /* call update_from_files */
             cache = sat_file_name ("cache");
             tle_update_from_files (cache, NULL, silent, progress, label1, label2);
             g_free (cache);
-           
+
         }
         else {
-        	sat_log_log (SAT_LOG_LEVEL_ERROR,
-        	             _("%s: Could not fetch any new TLE files from network; aborting..."),
-        	             __FUNCTION__);
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Could not fetch any new TLE files from network; aborting..."),
+                         __FUNCTION__);
         }
 
     }
@@ -689,7 +689,7 @@ void tle_update_from_network (gboolean   silent,
     g_free (cache);
 
     /* clear busy flag */
-	/* tle_in_progress = FALSE; */
+    /* tle_in_progress = FALSE; */
     g_static_mutex_unlock(&tle_in_progress);
 
 }
@@ -754,98 +754,98 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
 
         /* read category name for catfile */
         catfile = g_fopen (catpath, "r");
-		if (catfile!=NULL) {
-			b = fgets (category, 80, catfile);
-			fclose (catfile);
-		} 
-		else {
-			/* FIXME not sure what goes here AA1VS */
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s:%s: Failed to open %s"),
-						 __FILE__, __FUNCTION__, catpath);
-			return (retcode);
-		}
+        if (catfile!=NULL) {
+            b = fgets (category, 80, catfile);
+            fclose (catfile);
+        }
+        else {
+            /* FIXME not sure what goes here AA1VS */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%s: Failed to open %s"),
+                         __FILE__, __FUNCTION__, catpath);
+            return (retcode);
+        }
 
         /* reopen a new catfile and write category name */
         catfile = g_fopen (catpath, "w");
-		if (catfile!=NULL) {
+        if (catfile!=NULL) {
 
-			fputs (category, catfile);
-			
-			/* .cat file now contains the category name;
+            fputs (category, catfile);
+
+            /* .cat file now contains the category name;
 			   satellite catnums will be added during update in the while loop */
 
-			/* read 3 lines at a time */
-			while (fgets (tle_str[0], 80, fp)) {
-				/* read second and third lines */
-				b = fgets (tle_str[1], 80, fp);
-				b = fgets (tle_str[2], 80, fp);
-				
-				tle_str[1][69] = '\0';
-				tle_str[2][69] = '\0';
-				
-				/* copy catnum and convert to integer */
-				for (i = 2; i < 7; i++) {
-					catstr[i-2] = tle_str[1][i];
-				}
-				catstr[5] = '\0';
-				catnr = (guint) g_ascii_strtod (catstr, NULL);
-				
-				
-				if (Get_Next_Tle_Set (tle_str, &tle) != 1) {
-					/* TLE data not good */
-					sat_log_log (SAT_LOG_LEVEL_ERROR,
-								 _("%s:%s: Invalid data for %d"),
-								 __FILE__, __FUNCTION__, catnr);
-				}
-				else {
-					/* DATA OK, phew... */
-					/* 				sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-					/* 						     _("%s: Good data for %d"), */
-					/* 						     __FUNCTION__, */
-					/* 						     catnr); */
-					
-					/* store catalog number in catfile */
-					buff = g_strdup_printf ("%d\n", catnr);
-					fputs (buff, catfile);
-					g_free (buff);
-					
-					/* add data to hash table */
-					key = g_try_new0 (guint, 1);
-					*key = catnr;
-					
-					/* check if satellite already in hash table */
-					if (g_hash_table_lookup (data, key) == NULL) {
-						
-						/* create new_tle structure */
-						ntle = g_try_new (new_tle_t, 1);
-						ntle->catnum = catnr;
-						ntle->epoch = tle.epoch;
-						ntle->satname = g_strdup (tle_str[0]);
-						ntle->line1   = g_strdup (tle_str[1]);
-						ntle->line2   = g_strdup (tle_str[2]);
-						ntle->srcfile = g_strdup (fnam);
-						ntle->isnew   = TRUE; /* flag will be reset when using data */
-						
-						
-						g_hash_table_insert (data, key, ntle);
-						retcode++;
-					}
-					else {
-						g_free (key);
-					}
-				}
-				
-			}
-			
-			/* close category file */
-			fclose (catfile);
-		}
-		else {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s:%s: Failed to open %s"),
-						 __FILE__, __FUNCTION__, catpath);
-		}
+            /* read 3 lines at a time */
+            while (fgets (tle_str[0], 80, fp)) {
+                /* read second and third lines */
+                b = fgets (tle_str[1], 80, fp);
+                b = fgets (tle_str[2], 80, fp);
+
+                tle_str[1][69] = '\0';
+                tle_str[2][69] = '\0';
+
+                /* copy catnum and convert to integer */
+                for (i = 2; i < 7; i++) {
+                    catstr[i-2] = tle_str[1][i];
+                }
+                catstr[5] = '\0';
+                catnr = (guint) g_ascii_strtod (catstr, NULL);
+
+
+                if (Get_Next_Tle_Set (tle_str, &tle) != 1) {
+                    /* TLE data not good */
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                 _("%s:%s: Invalid data for %d"),
+                                 __FILE__, __FUNCTION__, catnr);
+                }
+                else {
+                    /* DATA OK, phew... */
+                    /* 				sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+                    /* 						     _("%s: Good data for %d"), */
+                    /* 						     __FUNCTION__, */
+                    /* 						     catnr); */
+
+                    /* store catalog number in catfile */
+                    buff = g_strdup_printf ("%d\n", catnr);
+                    fputs (buff, catfile);
+                    g_free (buff);
+
+                    /* add data to hash table */
+                    key = g_try_new0 (guint, 1);
+                    *key = catnr;
+
+                    /* check if satellite already in hash table */
+                    if (g_hash_table_lookup (data, key) == NULL) {
+
+                        /* create new_tle structure */
+                        ntle = g_try_new (new_tle_t, 1);
+                        ntle->catnum = catnr;
+                        ntle->epoch = tle.epoch;
+                        ntle->satname = g_strdup (g_strchomp(tle_str[0]));
+                        ntle->line1   = g_strdup (tle_str[1]);
+                        ntle->line2   = g_strdup (tle_str[2]);
+                        ntle->srcfile = g_strdup (fnam);
+                        ntle->isnew   = TRUE; /* flag will be reset when using data */
+
+
+                        g_hash_table_insert (data, key, ntle);
+                        retcode++;
+                    }
+                    else {
+                        g_free (key);
+                    }
+                }
+
+            }
+
+            /* close category file */
+            fclose (catfile);
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%s: Failed to open %s"),
+                         __FILE__, __FUNCTION__, catpath);
+        }
 
         g_free (catpath);
 

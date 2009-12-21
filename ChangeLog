@@ -5,6 +5,10 @@
     * doc/notes/time_keeping.txt:
     Applied patch 2916646 from Paul Schulz: Minor fixes to documentation.
 
+    * src/tle-update.c:
+    Fixed bug 2918672: Trailing whitespace and newline in satellite names.
+    Fixed indentation.
+
 
 2009-12-02 Alexandru Csete <oz9aec at gmail.com>
 
