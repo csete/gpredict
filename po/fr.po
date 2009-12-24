@@ -359,7 +359,7 @@ msgstr ""
 #: ../src/gtk-polar-view-popup.c:107 ../src/gtk-sat-list-popup.c:97
 #: ../src/gtk-sat-map-popup.c:106 ../src/gtk-single-sat.c:837
 msgid "Show next pass"
-msgstr "Montre prochain passage"
+msgstr "Montre le prochain passage"
 
 #: ../src/gtk-polar-view-popup.c:115 ../src/gtk-sat-list-popup.c:108
 #: ../src/gtk-sat-map-popup.c:114 ../src/gtk-single-sat.c:851
@@ -1794,22 +1794,20 @@ msgid "Doppler@100M"
 msgstr ""
 
 #: ../src/gtk-single-sat.c:73
-#, fuzzy
 msgid "Sig. Loss"
-msgstr "Perte"
+msgstr "Perte Sig."
 
 #: ../src/gtk-single-sat.c:74
 msgid "Sig. Delay"
-msgstr ""
+msgstr "Délai Sig."
 
 #: ../src/gtk-single-sat.c:75
 msgid "Mean Anom."
 msgstr ""
 
 #: ../src/gtk-single-sat.c:77
-#, fuzzy
 msgid "Orbit Num."
-msgstr "Num Orbite"
+msgstr "Num. Orbite"
 
 #: ../src/gtk-single-sat.c:84
 msgid "Azimuth of the satellite"
@@ -2272,7 +2270,7 @@ msgid ""
 "Satellites skipped:\t 0\n"
 "Missing Satellites:\t 0\n"
 msgstr ""
-"Satellites mis-à-jour:\t 0\n"
+"Satellites mis à jour:\t 0\n"
 "Satellites sautés:    \t 0\n"
 "Satellites manquants: \t 0\n"
 
@@ -3212,9 +3210,8 @@ msgid "Satellite Info"
 msgstr "Info Satellite"
 
 #: ../src/sat-info.c:427
-#, fuzzy
 msgid "No transponders"
-msgstr "Transpondeurs"
+msgstr "Aucun Transpondeur"
 
 #. we have a range
 #: ../src/sat-info.c:454
@@ -5029,10 +5026,10 @@ msgid ""
 "Missing Satellites:\t %d\n"
 "New Satellites:\t\t %d"
 msgstr ""
-"Satellites mis-à-jour:\t %d\n"
+"Satellites mis à jour:\t %d\n"
 "Satellites sautés:    \t %d\n"
 "Satellites manquants: \t %d\n"
-"Nouveaux Satellites:  \t %d"
+"Nouveaux satellites:  \t %d"
 
 #: ../src/tle-update.c:337
 #, c-format

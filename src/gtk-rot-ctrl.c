@@ -991,9 +991,9 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
     }
     
     /* send command */
-    buff = g_strdup_printf ("p");
+    buff = g_strdup_printf ("p\x0aq\x0a");
     
-    size = 1;
+    size = 4;
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -1114,9 +1114,9 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
     /* send command */
     g_ascii_formatd (azstr, 8, "%7.2f", az);
     g_ascii_formatd (elstr, 8, "%7.2f", el);
-    buff = g_strdup_printf ("P %s %s", azstr, elstr);
+    buff = g_strdup_printf ("P %s %s\x0aq\x0a", azstr, elstr);
     
-    size = 17;
+    size = 20;
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,

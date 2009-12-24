@@ -1860,13 +1860,13 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
     
     if (conf->ptt == PTT_TYPE_CAT) {
         /* send command get_ptt (t) */
-        buff = g_strdup_printf ("t");
-        size = 1;
+        buff = g_strdup_printf ("t\x0aq\x0a");
+        size = 4;
     }
     else {
         /* send command \get_dcd */
-        buff = g_strdup_printf ("%c",0x8b);
-        size = 1;
+        buff = g_strdup_printf ("%c\x0aq\x0a",0x8b);
+        size = 4;
     }
     
     written = send(sock, buff, size, 0);
@@ -1982,9 +1982,9 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     }
     
     /* send command */
-    buff = g_strdup_printf ("F %10.0f", freq);
+    buff = g_strdup_printf ("F %10.0f\x0aq\x0a", freq);
     
-    size = 12;
+    size = 15;
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -2065,9 +2065,9 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     }
     
     /* send command */
-    buff = g_strdup_printf ("f");
+    buff = g_strdup_printf ("f\x0aq\x0a");
     
-    size = 1;
+    size = 4;
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -2178,23 +2178,23 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
     /* prepare command */
     switch (vfo) {
     case VFO_A:
-    	buff = g_strdup_printf ("V VFOA");
-        size = 6;
+    	buff = g_strdup_printf ("V VFOA\x0aq\x0a");
+        size = 9;
         break;
         
     case VFO_B:
-    	buff = g_strdup_printf ("V VFOB");
-        size = 6;
+    	buff = g_strdup_printf ("V VFOB\x0aq\x0a");
+        size = 9;
         break;
         
     case VFO_MAIN:
-    	buff = g_strdup_printf ("V Main");
-        size = 6;
+    	buff = g_strdup_printf ("V Main\x0aq\x0a");
+        size = 9;
         break;
         
     case VFO_SUB:
-    	buff = g_strdup_printf ("V Sub");
-        size = 5;
+    	buff = g_strdup_printf ("V Sub\x0aq\x0a");
+        size = 8;
         break;
         
      default:
