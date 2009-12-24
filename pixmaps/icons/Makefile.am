@@ -16,10 +16,6 @@ gpredict_icons_DATA = \
 	gpredict-mod-detach.png \
 	gpredict-mod-popup.png \
 	gpredict-notebook.png \
-	gpredict-layout-1.png \
-	gpredict-layout-2.png \
-	gpredict-layout-3.png \
-	gpredict-layout-4.png \
 	gpredict-oscilloscope.png \
 	gpredict-oscilloscope-small.png \
 	gpredict-planner.png \
