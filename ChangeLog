@@ -1,3 +1,10 @@
+2009-12-24 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/satdata:
+    * data/trsp:
+    Added TLE and transponder data for XW-1 / HO68.
+
+
 2009-12-21 Alexandru Csete <oz9aec at gmail.com>
 
     * doc/man/gpredict.1.in:
