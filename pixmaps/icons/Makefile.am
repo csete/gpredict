@@ -9,6 +9,16 @@ gpredict_icons_DATA = \
 	gpredict-clock-small.png \
 	gpredict-crash.png \
 	gpredict-icon.png \
+        gpredict-layout-00.png \
+        gpredict-layout-01.png \
+        gpredict-layout-02.png \
+        gpredict-layout-03.png \
+        gpredict-layout-04.png \
+        gpredict-layout-05.png \
+        gpredict-layout-06.png \
+        gpredict-layout-07.png \
+        gpredict-layout-08.png \
+        gpredict-layout-99.png \
 	gpredict-leds.png \
 	gpredict-mod-attach.png \
 	gpredict-mod-close.png \
