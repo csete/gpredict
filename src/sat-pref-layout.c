@@ -61,6 +61,21 @@ static void window_pos_toggle_cb   (GtkWidget *toggle, gpointer data);
 static void layout_code_changed    (GtkWidget *widget, gpointer data);
 
 
+#define PREDEF_NUM 10
+
+gchar *predef_layout[PREDEF_NUM][3] = {
+    { "1;0;2;0;1;2;0;1;1;2;3;1;2;1;2", N_("World map, polar and single sat (default)"), "gpredict-layout-00.png" },
+    { "1;0;2;0;1", N_("World map"), "gpredict-layout-01.png" },
+    { "1;0;2;0;1", N_("Table"), "gpredict-layout-02.png" },
+    { "1;0;2;0;2;0;0;2;2;3", N_("World map and table"), "gpredict-layout-03.png" },
+    { "2;0;1;0;1;3;1;2;0;1", N_("Polar and single sat"), "gpredict-layout-04.png" },
+    { "2;0;1;0;1;4;1;2;0;1", N_("Polar and upcoming passes"), "gpredict-layout-05.png" },
+    { "1;0;3;0;4;0;0;3;4;6;2;0;1;6;8;3;1;2;6;8;4;2;3;6;8", N_("All views (narrow)"), "gpredict-layout-06.png" },
+    { "1;0;3;0;3;0;0;3;3;4;2;3;4;0;2;4;3;4;2;3;3;3;4;3;4", N_("All views (wide)"), "gpredict-layout-07.png"},
+    { "1;0;3;0;3;0;0;3;3;4;2;3;4;0;2;3;3;4;2;4", N_("Map, table, polar and single sat (wide)"), "gpredict-layout-08.png"},
+    { "", N_("Custom"), "gpredict-layout-99.png" }
+};
+
 
 /** \brief Create and initialise widgets for the layout view preferences tab.
  *

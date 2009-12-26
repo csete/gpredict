@@ -1,8 +1,14 @@
+2009-12-25 Alexandru Csete <oz9aec at gmail.com>
+
+    * pixmaps/icons:
+    Added thumbnails for predefined layouts.
+
+
 2009-12-24 Alexandru Csete <oz9aec at gmail.com>
 
     * data/satdata:
     * data/trsp:
-    Added TLE and transponder data for XW-1 / HO68.
+    Added TLE and transponder data for XW-1 / HO-68.
 
 
 2009-12-21 Alexandru Csete <oz9aec at gmail.com>
