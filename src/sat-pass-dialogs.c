@@ -265,8 +265,7 @@ static void multi_pass_response (GtkWidget *dialog, gint response, gpointer data
  * of fullscreen modules.
  *
  */
-void
-        show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *toplevel)
+void show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *toplevel)
 {
     GtkWidget         *dialog;      /* the dialogue window */
     GtkWidget         *notebook;    /* the notebook widet */
@@ -538,8 +537,7 @@ void
  * Use sat, qth, and passes labels to obtain the relevant data
  *
  */
-static void
-        single_pass_response (GtkWidget *dialog, gint response, gpointer data)
+static void single_pass_response (GtkWidget *dialog, gint response, gpointer data)
 {
 
     switch (response) {
@@ -564,10 +562,9 @@ static void
 
 
 /** \brief Set cell renderer function. */
-static void
-        check_and_set_single_cell_renderer (GtkTreeViewColumn *column,
-                                            GtkCellRenderer   *renderer,
-                                            gint               i)
+static void check_and_set_single_cell_renderer (GtkTreeViewColumn *column,
+                                                GtkCellRenderer   *renderer,
+                                                gint               i)
 {
 
     switch (i) {
@@ -660,12 +657,11 @@ static void
    displayed (rendered), the tree_store will still contain the
    original flaoting point numbers. Very cool!
 */
-static void
-        latlon_cell_data_function (GtkTreeViewColumn *col,
-                                   GtkCellRenderer   *renderer,
-                                   GtkTreeModel      *model,
-                                   GtkTreeIter       *iter,
-                                   gpointer           column)
+static void latlon_cell_data_function (GtkTreeViewColumn *col,
+                                       GtkCellRenderer   *renderer,
+                                       GtkTreeModel      *model,
+                                       GtkTreeIter       *iter,
+                                       gpointer           column)
 {
     gdouble   number = 0.0;
     gchar   *buff;
@@ -717,12 +713,11 @@ static void
 
 
 /* general floats with 2 digits + degree char */
-static void
-        degree_cell_data_function (GtkTreeViewColumn *col,
-                                   GtkCellRenderer   *renderer,
-                                   GtkTreeModel      *model,
-                                   GtkTreeIter       *iter,
-                                   gpointer           column)
+static void degree_cell_data_function (GtkTreeViewColumn *col,
+                                       GtkCellRenderer   *renderer,
+                                       GtkTreeModel      *model,
+                                       GtkTreeIter       *iter,
+                                       gpointer           column)
 {
     gdouble    number;
     gchar     *buff;
@@ -741,12 +736,11 @@ static void
 
 
 /* distance and velocity, 0 decimal digits */
-static void
-        distance_cell_data_function (GtkTreeViewColumn *col,
-                                     GtkCellRenderer   *renderer,
-                                     GtkTreeModel      *model,
-                                     GtkTreeIter       *iter,
-                                     gpointer           column)
+static void distance_cell_data_function (GtkTreeViewColumn *col,
+                                         GtkCellRenderer   *renderer,
+                                         GtkTreeModel      *model,
+                                         GtkTreeIter       *iter,
+                                         gpointer           column)
 {
     gdouble    number;
     gchar     *buff;
@@ -770,12 +764,11 @@ static void
 /* range rate is special, because we may need to convert to miles
    and want 2-3 decimal digits.
 */
-static void
-        range_rate_cell_data_function (GtkTreeViewColumn *col,
-                                       GtkCellRenderer   *renderer,
-                                       GtkTreeModel      *model,
-                                       GtkTreeIter       *iter,
-                                       gpointer           column)
+static void range_rate_cell_data_function (GtkTreeViewColumn *col,
+                                           GtkCellRenderer   *renderer,
+                                           GtkTreeModel      *model,
+                                           GtkTreeIter       *iter,
+                                           gpointer           column)
 {
     gdouble    number;
     gchar     *buff;
@@ -797,12 +790,11 @@ static void
 }
 
 /* 0 decimal digits */
-static void
-        float_to_int_cell_data_function (GtkTreeViewColumn *col,
-                                         GtkCellRenderer   *renderer,
-                                         GtkTreeModel      *model,
-                                         GtkTreeIter       *iter,
-                                         gpointer           column)
+static void float_to_int_cell_data_function (GtkTreeViewColumn *col,
+                                             GtkCellRenderer   *renderer,
+                                             GtkTreeModel      *model,
+                                             GtkTreeIter       *iter,
+                                             gpointer           column)
 {
     gdouble    number;
     gchar     *buff;
@@ -819,12 +811,11 @@ static void
 }
 
 /* 2 decimal digits */
-static void
-        two_dec_cell_data_function (GtkTreeViewColumn *col,
-                                    GtkCellRenderer   *renderer,
-                                    GtkTreeModel      *model,
-                                    GtkTreeIter       *iter,
-                                    gpointer           column)
+static void two_dec_cell_data_function (GtkTreeViewColumn *col,
+                                        GtkCellRenderer   *renderer,
+                                        GtkTreeModel      *model,
+                                        GtkTreeIter       *iter,
+                                        gpointer           column)
 {
     gdouble    number;
     gchar     *buff;
@@ -842,12 +833,11 @@ static void
 
 
 /* AOS/LOS; convert julian date to string */
-static void
-        time_cell_data_function (GtkTreeViewColumn *col,
-                                 GtkCellRenderer   *renderer,
-                                 GtkTreeModel      *model,
-                                 GtkTreeIter       *iter,
-                                 gpointer           column)
+static void time_cell_data_function (GtkTreeViewColumn *col,
+                                     GtkCellRenderer   *renderer,
+                                     GtkTreeModel      *model,
+                                     GtkTreeIter       *iter,
+                                     gpointer           column)
 {
     gdouble    number;
     gchar      buff[TIME_FORMAT_MAX_LENGTH];
@@ -898,15 +888,13 @@ static void
 
 
 
-static gint
-        single_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpointer pass)
+static gint single_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpointer pass)
 {
     /* dialog will be destroyed */
     return FALSE;
 }
 
-static void
-        single_pass_dialog_destroy (GtkWidget *dialog, gpointer data)
+static void single_pass_dialog_destroy (GtkWidget *dialog, gpointer data)
 {
     pass_t *pass = PASS(g_object_get_data (G_OBJECT (dialog), "pass"));
 
@@ -917,9 +905,8 @@ static void
 
 
 /*** FIXME: formalise with other copies */
-static void
-        Calc_RADec (gdouble jul_utc, gdouble saz, gdouble sel,
-                    qth_t *qth, obs_astro_t *obs_set)
+static void Calc_RADec (gdouble jul_utc, gdouble saz, gdouble sel,
+                        qth_t *qth, obs_astro_t *obs_set)
 {
 
     double phi,theta,sin_theta,cos_theta,sin_phi,cos_phi,
@@ -978,8 +965,7 @@ static void
  * details of a pass.
  *
  */
-void
-        show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *toplevel)
+void show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *toplevel)
 {
     GtkWidget         *dialog;
     GtkWidget         *list;
@@ -1151,8 +1137,7 @@ void
  * Use sat, qth, and passes labels to obtain the relevant data
  *
  */
-static void
-        multi_pass_response (GtkWidget *dialog, gint response, gpointer data)
+static void multi_pass_response (GtkWidget *dialog, gint response, gpointer data)
 {
     switch (response) {
 
@@ -1175,16 +1160,14 @@ static void
 
 
 
-static gint
-        multi_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpointer pass)
+static gint multi_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpointer pass)
 {
     /* dialog will be destroyed */
     return FALSE;
 }
 
 
-static void
-        multi_pass_dialog_destroy (GtkWidget *dialog, gpointer data)
+static void multi_pass_dialog_destroy (GtkWidget *dialog, gpointer data)
 {
     GSList *passes = (GSList *) g_object_get_data (G_OBJECT (dialog), "passes");
 
@@ -1196,10 +1179,9 @@ static void
 
 
 /** \brief Set cell renderer function. */
-static void
-        check_and_set_multi_cell_renderer (GtkTreeViewColumn *column,
-                                           GtkCellRenderer   *renderer,
-                                           gint               i)
+static void check_and_set_multi_cell_renderer (GtkTreeViewColumn *column,
+                                               GtkCellRenderer   *renderer,
+                                               gint               i)
 {
 
     switch (i) {
@@ -1246,12 +1228,11 @@ static void
 
 
 /* duration; convert delta t in days to HH:MM:SS */
-static void
-        duration_cell_data_function (GtkTreeViewColumn *col,
-                                     GtkCellRenderer   *renderer,
-                                     GtkTreeModel      *model,
-                                     GtkTreeIter       *iter,
-                                     gpointer           column)
+static void duration_cell_data_function (GtkTreeViewColumn *col,
+                                         GtkCellRenderer   *renderer,
+                                         GtkTreeModel      *model,
+                                         GtkTreeIter       *iter,
+                                         gpointer           column)
 {
     gdouble    number;
     gchar     *buff;
@@ -1323,8 +1304,7 @@ static void
  * usually happens if the user presses SHJIFT-F10? It is used as a wrapper
  * for the function that actually creates the popup menu.
  */
-static gboolean
-        popup_menu_cb (GtkWidget *treeview, gpointer data)
+static gboolean popup_menu_cb (GtkWidget *treeview, gpointer data)
 {
 
     /* if there is no selection, select the first row */
@@ -1342,8 +1322,7 @@ static gboolean
  *  \param list Pointer to the GtkSatList widget.
  *
  */
-static gboolean
-        button_press_cb (GtkWidget *treeview, GdkEventButton *event, gpointer data)
+static gboolean button_press_cb (GtkWidget *treeview, GdkEventButton *event, gpointer data)
 {
 
     /* single click with the right mouse button? */
@@ -1384,8 +1363,7 @@ static gboolean
 }
 
 
-static void
-        view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer data)
+static void view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer data)
 {
     GtkTreeSelection *selection;
     GtkTreeModel     *model;

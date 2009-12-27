@@ -84,8 +84,7 @@ enum passes_content_e {
  *
  * \note All the relevant data are attached to the parent dialogue window.
  */
-void
-        save_pass   (GtkWidget *parent)
+void save_pass   (GtkWidget *parent)
 {
     GtkWidget *dialog;
     GtkWidget *table;
@@ -248,8 +247,7 @@ void
  *
  * \note All the relevant data are attached to the parent dialogue window.
  */
-void
-        save_passes (GtkWidget *parent)
+void save_passes (GtkWidget *parent)
 {
     GtkWidget *dialog;
     GtkWidget *table;
@@ -407,8 +405,7 @@ void
  * The function sets the state of the Save button according to the validity
  * of the current file name.
  */
-static void
-        file_changed          (GtkWidget *widget, gpointer data)
+static void file_changed          (GtkWidget *widget, gpointer data)
 {
     gchar       *entry, *end, *j;
     gint         len, pos;
@@ -472,11 +469,10 @@ static void
  * \note The formatting is done by external functions according to the selected
  *       file format.
  */
-static void
-        save_passes_exec (GtkWidget *parent,
-                          GSList *passes, qth_t *qth,
-                          const gchar *savedir, const gchar *savefile,
-                          gint format, gint contents)
+static void save_passes_exec (GtkWidget *parent,
+                              GSList *passes, qth_t *qth,
+                              const gchar *savedir, const gchar *savefile,
+                              gint format, gint contents)
 {
     gchar      *fname;
     gchar      *pgheader;
@@ -566,11 +562,10 @@ static void
  * \note The formatting is done by external functions according to the selected
  *       file format.
  */
-static void
-        save_pass_exec (GtkWidget *parent,
-                        pass_t *pass, qth_t *qth,
-                        const gchar *savedir, const gchar *savefile,
-                        gint format, gint contents)
+static void save_pass_exec (GtkWidget *parent,
+                            pass_t *pass, qth_t *qth,
+                            const gchar *savedir, const gchar *savefile,
+                            gint format, gint contents)
 {
     gchar      *fname;
     gchar      *pgheader;
@@ -651,8 +646,7 @@ static void
 
 
 
-static void
-        save_to_file (GtkWidget *parent, const gchar *fname, const gchar *data)
+static void save_to_file (GtkWidget *parent, const gchar *fname, const gchar *data)
 {
     GIOChannel *chan;
     GError     *err = NULL;
