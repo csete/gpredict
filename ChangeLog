@@ -1,3 +1,12 @@
+2009-12-26 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/sat-pref-layout.c:
+    Finished implementation of layout selector.
+
+    * src/pass-to-txt.c:
+    Fixed bug 2914679: Unable to save Future passes.
+
+
 2009-12-25 Alexandru Csete <oz9aec at gmail.com>
 
     * pixmaps/icons:
