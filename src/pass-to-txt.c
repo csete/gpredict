@@ -599,6 +599,8 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
             /* size > TIME_FORMAT_MAX_LENGTH */
             tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
 
+        line = g_strdup_printf (" %s", tbuff);
+
         /* TCA */
         t = (pass->tca - 2440587.5)*86400.;
         if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))

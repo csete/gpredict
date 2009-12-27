@@ -506,10 +506,10 @@ static void save_passes_exec (GtkWidget *parent,
         g_free (tblheader);
         g_free (tblcontents);
 
-
         if (contents == PASSES_CONTENT_FULL) {
             fields = sat_cfg_get_int (SAT_CFG_INT_PRED_SINGLE_COL);
             n = g_slist_length (passes);
+
             for (i = 0; i < n; i++) {
 
                 pass = PASS (g_slist_nth_data (passes, i));
@@ -533,7 +533,7 @@ static void save_passes_exec (GtkWidget *parent,
 
         break;
 
-	default:
+    default:
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s: Invalid file format: %d"),
                      __FUNCTION__, format);
