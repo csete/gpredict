@@ -75,7 +75,7 @@ static gchar *thumb_file_from_sel  (guint sel);
 gchar *predef_layout[PREDEF_NUM][3] = {
     { "1;0;2;0;1;2;0;1;1;2;3;1;2;1;2", N_("World map, polar and single sat"), "gpredict-layout-00.png" },
     { "1;0;2;0;1", N_("World map"), "gpredict-layout-01.png" },
-    { "1;0;2;0;1", N_("Table"), "gpredict-layout-02.png" },
+    { "0;0;2;0;1", N_("Table"), "gpredict-layout-02.png" },
     { "1;0;2;0;2;0;0;2;2;3", N_("World map and table"), "gpredict-layout-03.png" },
     { "2;0;1;0;1;3;1;2;0;1", N_("Polar and single sat"), "gpredict-layout-04.png" },
     { "2;0;1;0;1;4;1;2;0;1", N_("Polar and upcoming passes"), "gpredict-layout-05.png" },
