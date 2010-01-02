@@ -84,9 +84,11 @@ static gboolean tle_mon_task          (gpointer data);
 static void     tle_mon_stop          (void);
 static gpointer update_tle_thread     (gpointer data);
 
-static void test_ui (void);
-static void InitWinSock2(void);
-static void CloseWinSock2(void);
+#ifdef G_OS_WIN32
+  static void InitWinSock2(void);
+  static void CloseWinSock2(void);
+#endif
+
 
 int main (int argc, char *argv[])
 {
@@ -139,7 +141,6 @@ int main (int argc, char *argv[])
     /* launch TLE monitoring task; 10 min interval */
     tle_mon_id = g_timeout_add (600000, tle_mon_task, NULL);
 
-    //test_ui ();
 	
 #ifdef WIN32
 	// Initializing Windozze Sockets
@@ -193,15 +194,6 @@ static void CloseWinSock2(void)
 }
 #endif
 
-static void test_ui (void)
-{
-    gchar *fnam;
-    
-    fnam = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
-                        "test.ui", NULL);
-    
-    g_free (fnam);
-}
 
 
 /** \brief Create main application window.
