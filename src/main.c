@@ -51,6 +51,7 @@
 #include "mod-mgr.h"
 #include "tle-update.h"
 #include "sat-cfg.h"
+#include "gtk-sat-selector.h"
 #include "sat-debugger.h"
 
 #ifdef WIN32
@@ -410,6 +411,7 @@ gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer dat
 static gboolean
 tle_mon_task          (gpointer data)
 {
+    GtkWidget *selector;
     glong last,now,thrld;
     GTimeVal   tval;
     GtkWidget *dialog;
@@ -422,6 +424,14 @@ tle_mon_task          (gpointer data)
 
     /* get time of last update */
     last = sat_cfg_get_int (SAT_CFG_INT_TLE_LAST_UPDATE);
+    /*if (last == 0) {
+        selector = gtk_sat_selector_new (0);
+        last = (glong) gtk_sat_selector_get_latest_epoch (GTK_SAT_SELECTOR (selector));
+        gtk_widget_destroy (selector);
+    }
+
+    g_print ("LAST: %ld\n", last); */
+
 
     /* get current time */
     g_get_current_time (&tval);

@@ -1,3 +1,9 @@
+2010-01-02 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-selector.[ch]:
+    Added utility function to retrieve newest EPOCH of satellites in database.
+
+
 2009-12-26 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sat-pref-layout.c:
