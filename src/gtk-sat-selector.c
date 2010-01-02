@@ -734,3 +734,44 @@ static void epoch_cell_data_function (GtkTreeViewColumn *col,
     }
 
 }
+
+
+
+/** \brief Get the latest EPOCH of the satellites that are loaded into the GtkSatSelector.
+  * \param selector Pointer to the GtkSatSelector widget.
+  * \return The latest EPOCH or 0.0 in case an error occurs.
+  */
+gdouble gtk_sat_selector_get_latest_epoch (GtkSatSelector *selector)
+{
+    GtkTreeModel *model;
+    GtkTreeIter   iter;
+    gdouble epoch = 0.0;
+    gdouble thisepoch;
+    gint i,n;
+
+
+    g_return_val_if_fail (selector != 0 && IS_GTK_SAT_SELECTOR (selector), 0.0);
+
+
+    /* get the tree model that contains all satellites */
+    model = GTK_TREE_MODEL (g_slist_nth_data (selector->models, 0));
+    n = gtk_tree_model_iter_n_children (model,NULL);
+
+    /* loop over each satellite in the model and store the newest EPOCH */
+    for (i = 0; i < n; i++) {
+        if G_LIKELY(gtk_tree_model_iter_nth_child (model, &iter, NULL, i)) {
+            gtk_tree_model_get (model, &iter,
+                                GTK_SAT_SELECTOR_COL_EPOCH, &thisepoch,
+                                -1);
+            if (thisepoch > epoch)
+                epoch = thisepoch;
+
+        }
+        else {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Error getting %dth satellite"), __FUNCTION__, i);
+        }
+    }
+
+    return epoch;
+}

@@ -103,6 +103,7 @@ GtkType    gtk_sat_selector_get_type  (void);
 GtkWidget *gtk_sat_selector_new       (guint flags);
 guint32    gtk_sat_selector_get_flags (GtkSatSelector *selector);
 void       gtk_sat_selector_get_selected (GtkSatSelector *selector, gint *catnum, gchar **satname, gdouble *epoch);
+gdouble    gtk_sat_selector_get_latest_epoch (GtkSatSelector *selector);
 
 #ifdef __cplusplus
 }
