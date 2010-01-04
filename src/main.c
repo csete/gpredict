@@ -59,6 +59,22 @@
 GtkWidget *app;
 
 
+/** \brief Command line flag for cleaning TLE data. */
+static gboolean cleantle = FALSE;
+
+/** \brief Command line flag for cleaning TRSP data */
+static gboolean cleantrsp = FALSE;
+
+/** \brief Command line options. */
+static GOptionEntry entries[] =
+{
+  { "clean-tle", 0, 0, G_OPTION_ARG_NONE, &cleantle, "Clean the TLE data in user's configuration directory", NULL },
+  { "clean-trsp", 0, 0, G_OPTION_ARG_NONE, &cleantrsp, "Clean the transponder data in user's configuration directory", NULL },
+  { NULL }
+};
+
+
+
 const gchar *dummy = N_("just to have a pot");
 
 
@@ -90,7 +106,10 @@ static gpointer update_tle_thread     (gpointer data);
 
 int main (int argc, char *argv[])
 {
+    GError *err = NULL;
+    GOptionContext *context;
     guint  error = 0;
+
 
 #ifdef G_OS_WIN32
     printf ("Starting gpredict. This may take some time...\n");
@@ -105,11 +124,24 @@ int main (int argc, char *argv[])
     gtk_set_locale ();
     gtk_init (&argc, &argv);
 
+    context = g_option_context_new ("");
+    g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+    g_option_context_set_summary (context,
+                                  _("Gpredict is a graphical real-time satellite tracking "\
+                                    "and orbit prediction program.\n"\
+                                    "Gpredict does not require any command line options for "\
+                                    "nominal operation."));
+    g_option_context_add_group (context, gtk_get_option_group (TRUE));
+    if (!g_option_context_parse (context, &argc, &argv, &err)) {
+        g_print (_("Option parsing failed: %s\n"), err->message);
+    }
+
+
     /* start logger first, so that we can catch error messages if any */
     sat_log_init ();
 	
-	if (!g_thread_supported ())
-		g_thread_init (NULL);
+    if (!g_thread_supported ())
+        g_thread_init (NULL);
 
     /* check that user settings are ok */
     error = first_time_check_run ();
