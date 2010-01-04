@@ -41,9 +41,6 @@
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
-#ifdef HAVE_GETOPT_H
-#  include <getopt.h>
-#endif
 #include "sat-log.h"
 #include "first-time.h"
 #include "compat.h"
