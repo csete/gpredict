@@ -1,3 +1,9 @@
+2010-01-04 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/main.c:
+    Added command line options for cleaning TLE and transponder data.
+
+
 2010-01-02 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-selector.[ch]:

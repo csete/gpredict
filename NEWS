@@ -18,6 +18,7 @@ Changes in version 1.2 (TBD)
 - Applied patch 2893617: Patches for fixing Windows build (thanks to Valentin Yakovenkov).
 - Applied patch 2916646: Minor fixes to documentation (thanks to Paul Schulz).
 - Slightly improved UI for the single-satellite view.
+- Command line options for cleaning user's TLE and transponder data, see --help for list.
 
 
 Changes in version 1.1 (5 Oct 2009)
