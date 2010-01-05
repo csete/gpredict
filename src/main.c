@@ -29,15 +29,12 @@
  *  \ingroup main
  *  \bief    Main program file.
  *
- * Add some more text.
- *
- * \bug Change to glib getopt in 2.6
- *
  */
 #include <stdlib.h>
 #include <signal.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -97,6 +94,8 @@ static void     gpredict_sig_handler  (int sig);
 static gboolean tle_mon_task          (gpointer data);
 static void     tle_mon_stop          (void);
 static gpointer update_tle_thread     (gpointer data);
+static void     clean_tle             (void);
+static void     clean_trsp            (void);
 
 #ifdef G_OS_WIN32
   static void InitWinSock2(void);
@@ -142,6 +141,13 @@ int main (int argc, char *argv[])
 	
     if (!g_thread_supported ())
         g_thread_init (NULL);
+
+    /* check command line options */
+    if (cleantle)
+        clean_tle ();
+
+    if (cleantrsp)
+        clean_trsp ();
 
     /* check that user settings are ok */
     error = first_time_check_run ();
@@ -577,4 +583,86 @@ update_tle_thread     (gpointer data)
     tle_upd_running = FALSE;
 
     return NULL;
+}
+
+
+/** \brief Clean TLE data.
+  *
+  * This function removes all .sat files from the user's configuration directory.
+  * The function is called when gpreidict is executed with the --clean-tle
+  * command line option.
+  */
+static void clean_tle (void)
+{
+    GDir     *targetdir;
+    gchar    *targetdirname,*path;
+    const gchar *filename;
+
+
+    /* Get trsp directory */
+    targetdirname = get_satdata_dir ();
+    targetdir = g_dir_open (targetdirname, 0, NULL);
+
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Cleaning TLE data in %s"), __FUNCTION__, targetdirname);
+
+
+    while ((filename = g_dir_read_name (targetdir))) {
+        if (g_strrstr (filename, ".sat")) {
+            /* remove .sat file */
+            path = sat_file_name (filename);
+            if G_UNLIKELY(g_unlink (path)) {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Failed to delete %s"), __FUNCTION__, filename);
+            }
+            else {
+                sat_log_log (SAT_LOG_LEVEL_MSG,
+                             _("%s: Removed %s"), __FUNCTION__, filename);
+            }
+            g_free (path);
+        }
+    }
+    g_free (targetdirname);
+
+}
+
+
+/** \brief Clean transponder data.
+  *
+  * This function removes all .trsp files from the user's configuration directory.
+  * The function is called when gpredict is executed with the --clean-trsp
+  * command line option.
+  */
+static void clean_trsp (void)
+{
+    GDir     *targetdir;
+    gchar    *targetdirname,*path;
+    const gchar *filename;
+
+
+    /* Get trsp directory */
+    targetdirname = get_trsp_dir ();
+    targetdir = g_dir_open (targetdirname, 0, NULL);
+
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Cleaning transponder data in %s"), __FUNCTION__, targetdirname);
+
+
+    while ((filename = g_dir_read_name (targetdir))) {
+        if (g_strrstr (filename, ".trsp")) {
+            /* remove .trsp file */
+            path = trsp_file_name (filename);
+            if G_UNLIKELY(g_unlink (path)) {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Failed to delete %s"), __FUNCTION__, filename);
+            }
+            else {
+                sat_log_log (SAT_LOG_LEVEL_MSG,
+                             _("%s: Removed %s"), __FUNCTION__, filename);
+            }
+            g_free (path);
+        }
+    }
+    g_free (targetdirname);
+
 }
