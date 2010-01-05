@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-26 23:58+0100\n"
+"POT-Creation-Date: 2010-01-05 12:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:97 ../src/main.c:221 ../src/sat-log-browser.c:462
+#: ../src/about.c:97 ../src/main.c:249 ../src/sat-log-browser.c:462
 #: ../src/sat-log.c:58
 msgid "GPREDICT"
 msgstr ""
@@ -1070,7 +1070,7 @@ msgstr ""
 msgid "%s: Satellite #%d removed from list."
 msgstr ""
 
-#: ../src/gtk-sat-list.c:952 ../src/sat-pass-dialogs.c:702
+#: ../src/gtk-sat-list.c:952 ../src/sat-pass-dialogs.c:698
 #: ../src/sat-pref-qth.c:769
 #, c-format
 msgid "%s:%d: Invalid column: %d"
@@ -1086,8 +1086,8 @@ msgstr ""
 msgid "%s:%d Failed to get data for %d."
 msgstr ""
 
-#: ../src/gtk-sat-list.c:1307 ../src/sat-pass-dialogs.c:1421
-#: ../src/sat-pass-dialogs.c:1470
+#: ../src/gtk-sat-list.c:1307 ../src/sat-pass-dialogs.c:1399
+#: ../src/sat-pass-dialogs.c:1448
 #, c-format
 msgid "%s:%d: There is no selection; skip popup."
 msgstr ""
@@ -1692,6 +1692,11 @@ msgstr ""
 msgid "%s:%s: Failed to read %s"
 msgstr ""
 
+#: ../src/gtk-sat-selector.c:772
+#, c-format
+msgid "%s: Error getting %dth satellite"
+msgstr ""
+
 #: ../src/gtk-sat-tree.c:232 ../src/mod-cfg.c:630
 msgid "Epoch"
 msgstr ""
@@ -1987,11 +1992,23 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:64
+#: ../src/main.c:75
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:120
+#: ../src/main.c:129
+msgid ""
+"Gpredict is a graphical real-time satellite tracking and orbit prediction "
+"program.\n"
+"Gpredict does not require any command line options for nominal operation."
+msgstr ""
+
+#: ../src/main.c:135
+#, c-format
+msgid "Option parsing failed: %s\n"
+msgstr ""
+
+#: ../src/main.c:158
 #, c-format
 msgid ""
 "%s: User config check failed (code %d). This is fatal.\n"
@@ -1999,22 +2016,22 @@ msgid ""
 "in your home directory"
 msgstr ""
 
-#: ../src/main.c:468
+#: ../src/main.c:505
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:476
+#: ../src/main.c:513
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
-#: ../src/main.c:484
+#: ../src/main.c:521
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:494
+#: ../src/main.c:531
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2022,9 +2039,29 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:525
+#: ../src/main.c:562
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
+msgstr ""
+
+#: ../src/main.c:607
+#, c-format
+msgid "%s: Cleaning TLE data in %s"
+msgstr ""
+
+#: ../src/main.c:616 ../src/main.c:657
+#, c-format
+msgid "%s: Failed to delete %s"
+msgstr ""
+
+#: ../src/main.c:620 ../src/main.c:661
+#, c-format
+msgid "%s: Removed %s"
+msgstr ""
+
+#: ../src/main.c:648
+#, c-format
+msgid "%s: Cleaning transponder data in %s"
 msgstr ""
 
 #. create a new file chooser dialogue in "open file" mode
@@ -3405,31 +3442,31 @@ msgstr ""
 msgid "Visibility during pass"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:458
+#: ../src/sat-pass-dialogs.c:457
 msgid "Data"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:469
+#: ../src/sat-pass-dialogs.c:468
 msgid "Polar"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:480
+#: ../src/sat-pass-dialogs.c:479
 msgid "Az/El"
 msgstr ""
 
 #. create dialog
-#: ../src/sat-pass-dialogs.c:486
+#: ../src/sat-pass-dialogs.c:485
 #, c-format
 msgid "Pass details for %s (orbit %d)"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:549 ../src/sat-pass-dialogs.c:1161
+#: ../src/sat-pass-dialogs.c:547 ../src/sat-pass-dialogs.c:1146
 #, c-format
 msgid "%s: PRINT not implemented"
 msgstr ""
 
 #. create dialog
-#: ../src/sat-pass-dialogs.c:1100
+#: ../src/sat-pass-dialogs.c:1086
 #, c-format
 msgid "Upcoming passes for %s"
 msgstr ""
@@ -4867,74 +4904,74 @@ msgid "Eclipsed"
 msgstr ""
 
 #. create the dialog
-#: ../src/save-pass.c:114
+#: ../src/save-pass.c:113
 msgid "Save Pass Details"
 msgstr ""
 
 #. directory chooser
-#: ../src/save-pass.c:132 ../src/save-pass.c:296
+#: ../src/save-pass.c:131 ../src/save-pass.c:294
 msgid "Save in folder:"
 msgstr ""
 
-#: ../src/save-pass.c:136 ../src/save-pass.c:300
+#: ../src/save-pass.c:135 ../src/save-pass.c:298
 msgid "Select a folder"
 msgstr ""
 
 #. file name
-#: ../src/save-pass.c:150 ../src/save-pass.c:314
+#: ../src/save-pass.c:149 ../src/save-pass.c:312
 msgid "Save using file name:"
 msgstr ""
 
 #. file format
-#: ../src/save-pass.c:169 ../src/save-pass.c:333
+#: ../src/save-pass.c:168 ../src/save-pass.c:331
 msgid "Save as:"
 msgstr ""
 
-#: ../src/save-pass.c:174 ../src/save-pass.c:338
+#: ../src/save-pass.c:173 ../src/save-pass.c:336
 msgid "Plain text (*.txt)"
 msgstr ""
 
 #. file contents
-#: ../src/save-pass.c:184 ../src/save-pass.c:348
+#: ../src/save-pass.c:183 ../src/save-pass.c:346
 msgid "File contents:"
 msgstr ""
 
-#: ../src/save-pass.c:189
+#: ../src/save-pass.c:188
 msgid "Info+header+data"
 msgstr ""
 
-#: ../src/save-pass.c:190
+#: ../src/save-pass.c:189
 msgid "Header + data"
 msgstr ""
 
-#: ../src/save-pass.c:191
+#: ../src/save-pass.c:190
 msgid "Data only"
 msgstr ""
 
 #. create the dialog
-#: ../src/save-pass.c:278
+#: ../src/save-pass.c:276
 msgid "Save Passes"
 msgstr ""
 
-#: ../src/save-pass.c:353
+#: ../src/save-pass.c:351
 msgid "Complete report"
 msgstr ""
 
-#: ../src/save-pass.c:354
+#: ../src/save-pass.c:352
 msgid "Summary"
 msgstr ""
 
-#: ../src/save-pass.c:542 ../src/save-pass.c:644
+#: ../src/save-pass.c:538 ../src/save-pass.c:639
 #, c-format
 msgid "%s: Invalid file format: %d"
 msgstr ""
 
-#: ../src/save-pass.c:667
+#: ../src/save-pass.c:661
 #, c-format
 msgid "%s: Could not create file %s (%s)"
 msgstr ""
 
-#: ../src/save-pass.c:676
+#: ../src/save-pass.c:670
 #, c-format
 msgid ""
 "Could not create file %s\n"
@@ -4942,12 +4979,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/save-pass.c:691
+#: ../src/save-pass.c:685
 #, c-format
 msgid "%s: An error occurred while saving data to %s (%s)"
 msgstr ""
 
-#: ../src/save-pass.c:699
+#: ../src/save-pass.c:693
 #, c-format
 msgid ""
 "An error occurred while saving data to %s\n"
@@ -4955,7 +4992,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/save-pass.c:707
+#: ../src/save-pass.c:701
 #, c-format
 msgid "%s: Written %d characters to %s"
 msgstr ""
