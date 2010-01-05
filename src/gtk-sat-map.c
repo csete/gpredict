@@ -1813,7 +1813,7 @@ update_sat (gpointer key, gpointer value, gpointer data)
                           NULL);
         } else if ((satmap->width - x ) < 50) {
             g_object_set (obj->label,
-                          "x", (gdouble) (x),
+                          "x", (gdouble) (x+3),
                           "y", (gdouble) (y),
                           "anchor", GTK_ANCHOR_EAST,
                           NULL);

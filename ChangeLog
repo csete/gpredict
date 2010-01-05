@@ -1,3 +1,9 @@
+2010-01-05 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-map-c:
+    Leave 3px room between satellite label and amrker.
+
+
 2010-01-04 Alexandru Csete <oz9aec at gmail.com>
 
     * src/main.c:
