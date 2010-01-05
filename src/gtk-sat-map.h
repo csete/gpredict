@@ -91,7 +91,9 @@ typedef struct {
     
     /* graphical elements */
     GooCanvasItemModel  *marker;  /*!< A small rectangle showing sat pos. */
+    GooCanvasItemModel  *shadowm; /*!< Shadow under satellite marker. */
     GooCanvasItemModel  *label;   /*!< Satellite name. */
+    GooCanvasItemModel  *shadowl; /*!< Shadow under satellite name */
     GooCanvasItemModel  *range1;  /*!< First part of the range circle. */
     GooCanvasItemModel  *range2;  /*!< Second part of the range circle. */
     

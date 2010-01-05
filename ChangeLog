@@ -1,7 +1,14 @@
 2010-01-05 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-map-c:
-    Leave 3px room between satellite label and amrker.
+    Added shadow under satellite markers and labels to improve visual
+    appearance on light background (e.g. South Pole). Added missing 3px room
+    between satellite label and marker.
+
+    * src/config-keys.h:
+    * src/sat-cfg.[ch]:
+    * src/sat-pref-map-view.c:
+    Added config parameter for shadow transparency on the GtkSatMap.
 
 
 2010-01-04 Alexandru Csete <oz9aec at gmail.com>

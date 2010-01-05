@@ -84,6 +84,7 @@ typedef enum {
     SAT_CFG_INT_MAP_TICK_COL,         /*!< Tick labels colour. */
     SAT_CFG_INT_MAP_TRACK_COL,        /*!< Ground Track colour. */
     SAT_CFG_INT_MAP_TRACK_NUM,        /*!< Number of orbits to show ground track for */
+    SAT_CFG_INT_MAP_SHADOW_ALPHA,     /*!< Tranparency of shadow under satellite marker. */
     SAT_CFG_INT_POLAR_REFRESH,        /*!< Polar refresh rate (cycle). */
     SAT_CFG_INT_POLAR_ORIENTATION,    /*!< Orientation of the polar charts. */
     SAT_CFG_INT_POLAR_BGD_COL,        /*!< Polar view, background colour. */

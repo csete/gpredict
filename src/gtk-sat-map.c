@@ -1633,7 +1633,7 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     sat_t *sat = SAT(value);
     GooCanvasItemModel *root;
     gint *catnum;
-    guint32 col,covcol;
+    guint32 col,covcol,shadowcol;
     gfloat x,y;
 
     /* get satellite and SSP */
@@ -1664,16 +1664,27 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                            SAT_CFG_INT_MAP_SAT_COL);
 
     /* area coverage colour */
-    /*     if ((obj->showcov) && (sat->otype != ORBIT_TYPE_DECAYED)) { */
     covcol = mod_cfg_get_int (satmap->cfgdata,
                               MOD_CFG_MAP_SECTION,
                               MOD_CFG_MAP_SAT_COV_COL,
                               SAT_CFG_INT_MAP_SAT_COV_COL);
-    /*     } */
-    /*     else { */
-    /*         covcol = 0x00000000; */
-    /*     } */
 
+    /* shadow colour (only alpha channel) */
+    shadowcol = mod_cfg_get_int (satmap->cfgdata,
+                                 MOD_CFG_MAP_SECTION,
+                                 MOD_CFG_MAP_SHADOW_ALPHA,
+                                 SAT_CFG_INT_MAP_SHADOW_ALPHA);
+
+
+    /* create satellite marker and label + shadows. We create shadows first */
+    obj->shadowm = goo_canvas_rect_model_new (root,
+                                              x - MARKER_SIZE_HALF + 1,
+                                              y - MARKER_SIZE_HALF + 1,
+                                              2 * MARKER_SIZE_HALF,
+                                              2 * MARKER_SIZE_HALF,
+                                              "fill-color-rgba", 0x00,
+                                              "stroke-color-rgba", shadowcol,
+                                              NULL);
     obj->marker = goo_canvas_rect_model_new (root,
                                              x - MARKER_SIZE_HALF,
                                              y - MARKER_SIZE_HALF,
@@ -1683,6 +1694,14 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                              "stroke-color-rgba", col,
                                              NULL);
 
+    obj->shadowl = goo_canvas_text_model_new (root, sat->nickname,
+                                            x+1,
+                                            y+3,
+                                            -1,
+                                            GTK_ANCHOR_NORTH,
+                                            "font", "Sans 8",
+                                            "fill-color-rgba", shadowcol,
+                                            NULL);
     obj->label = goo_canvas_text_model_new (root, sat->nickname,
                                             x, 
                                             y+2,
@@ -1691,6 +1710,7 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                             "font", "Sans 8",
                                             "fill-color-rgba", col,
                                             NULL);
+
 
     g_object_set_data (G_OBJECT (obj->marker), "catnum", GINT_TO_POINTER (*catnum));
     g_object_set_data (G_OBJECT (obj->label), "catnum", GINT_TO_POINTER (*catnum));
@@ -1803,6 +1823,10 @@ update_sat (gpointer key, gpointer value, gpointer data)
                       "x", (gdouble) (x - MARKER_SIZE_HALF),
                       "y", (gdouble) (y - MARKER_SIZE_HALF),
                       NULL);
+        g_object_set (obj->shadowm,
+                      "x", (gdouble) (x - MARKER_SIZE_HALF + 1),
+                      "y", (gdouble) (y - MARKER_SIZE_HALF + 1),
+                      NULL);
 
         /* update sat label */
         if (x < 50) {
@@ -1811,10 +1835,20 @@ update_sat (gpointer key, gpointer value, gpointer data)
                           "y", (gdouble) (y),
                           "anchor", GTK_ANCHOR_WEST,
                           NULL);
+            g_object_set (obj->shadowl,
+                          "x", (gdouble) (x+3+1),
+                          "y", (gdouble) (y+1),
+                          "anchor", GTK_ANCHOR_WEST,
+                          NULL);
         } else if ((satmap->width - x ) < 50) {
             g_object_set (obj->label,
                           "x", (gdouble) (x+3),
                           "y", (gdouble) (y),
+                          "anchor", GTK_ANCHOR_EAST,
+                          NULL);
+            g_object_set (obj->shadowl,
+                          "x", (gdouble) (x+3+1),
+                          "y", (gdouble) (y+1),
                           "anchor", GTK_ANCHOR_EAST,
                           NULL);
         } else if ((satmap->height - y) < 25) {
@@ -1823,10 +1857,20 @@ update_sat (gpointer key, gpointer value, gpointer data)
                           "y", (gdouble) (y-2),
                           "anchor", GTK_ANCHOR_SOUTH,
                           NULL);
+            g_object_set (obj->shadowl,
+                          "x", (gdouble) (x+1),
+                          "y", (gdouble) (y-2+1),
+                          "anchor", GTK_ANCHOR_SOUTH,
+                          NULL);
         } else {
             g_object_set (obj->label,
                           "x", (gdouble) (x),
                           "y", (gdouble) (y+2),
+                          "anchor", GTK_ANCHOR_NORTH,
+                          NULL);
+            g_object_set (obj->shadowl,
+                          "x", (gdouble) (x+1),
+                          "y", (gdouble) (y+2+1),
                           "anchor", GTK_ANCHOR_NORTH,
                           NULL);
         }

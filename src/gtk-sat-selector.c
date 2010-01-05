@@ -294,7 +294,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
                                     GTK_ENTRY (GTK_SAT_SELECTOR (widget)->search));
     gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 4, 0, 1,
-                      GTK_FILL, GTK_SHRINK, 0, 0);
+                      GTK_SHRINK, GTK_SHRINK, 0, 0);
 
     /* Group selector */
     gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Group")), 0, 1, 1, 2,
