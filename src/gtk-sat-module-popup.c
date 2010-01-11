@@ -75,8 +75,7 @@ static gint window_delete    (GtkWidget *widget, GdkEvent *event, gpointer data)
  * parent.
  *
  */
-void
-        gtk_sat_module_popup (GtkSatModule *module)
+void gtk_sat_module_popup (GtkSatModule *module)
 {
     GtkWidget        *menu;
     GtkWidget        *menuitem;
@@ -121,7 +120,7 @@ void
 
     if (module->state == GTK_SAT_MOD_STATE_FULLSCREEN) {
 
-        menuitem = gtk_image_menu_item_new_with_label (_("Leave fullscreen"));
+        menuitem = gtk_image_menu_item_new_with_label (_("Exit full screen"));
         image = gtk_image_new_from_stock (GTK_STOCK_LEAVE_FULLSCREEN,
                                           GTK_ICON_SIZE_MENU);
         gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -130,7 +129,7 @@ void
                           G_CALLBACK (screen_state_cb), module);
     }
     else {
-        menuitem = gtk_image_menu_item_new_with_label (_("Fullscreen"));
+        menuitem = gtk_image_menu_item_new_with_label (_("Full screen"));
         image = gtk_image_new_from_stock (GTK_STOCK_FULLSCREEN,
                                           GTK_ICON_SIZE_MENU);
         gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -243,8 +242,7 @@ void
  * wrapper for gtk_sat_module_config_cb
  *
  */
-static void
-        config_cb        (GtkWidget *menuitem, gpointer data)
+static void config_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     
@@ -279,8 +277,7 @@ static void
  * possibility to override this in the dialog window.
  *
  */
-static void
-        clone_cb         (GtkWidget *menuitem, gpointer data)
+static void clone_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkWidget    *dialog;
     GtkWidget    *entry;
@@ -466,8 +463,7 @@ static void
  * The text of the menu item will be changed corresponding to the
  * action that has been performed.
  */
-static void
-        docking_state_cb (GtkWidget *menuitem, gpointer data)
+static void docking_state_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkWidget *module = GTK_WIDGET (data);
     gint       w,h;
@@ -637,8 +633,7 @@ static void
  * This function is intended to toggle between FULLSCREEN
  * and WINDOW state.
  */
-static void
-        screen_state_cb  (GtkWidget *menuitem, gpointer data)
+static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
 {
     GtkWidget *module = GTK_WIDGET (data);
     gint       w,h;
@@ -758,8 +753,7 @@ static void
  * in that it will make the predictions with the satellites
  * tracked in the current module.
  */
-static void
-        sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
+static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     GtkWidget    *skg;
@@ -801,8 +795,7 @@ static void
 }
 
 /** \brief Open time manager. */
-static void
-        tmgr_cb          (GtkWidget *menuitem, gpointer data)
+static void tmgr_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
 
@@ -813,8 +806,7 @@ static void
  * \param menuitem The menuitem that was selected.
  * \param data Pointer the GtkSatModule.
  */
-static void
-        rigctrl_cb          (GtkWidget *menuitem, gpointer data)
+static void rigctrl_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     gchar *buff;
@@ -872,8 +864,7 @@ static void
  * 
  * This function is called automatically when the window is destroyed.
  */
-static void
-        destroy_rigctrl  (GtkWidget *window, gpointer data)
+static void destroy_rigctrl  (GtkWidget *window, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     
@@ -886,8 +877,7 @@ static void
  * \param menuitem The menuitem that was selected.
  * \param data Pointer the GtkSatModule.
  */
-static void
-        rotctrl_cb          (GtkWidget *menuitem, gpointer data)
+static void rotctrl_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     gchar *buff;
@@ -944,8 +934,7 @@ static void
  * 
  * This function is called automatically when the window is destroyed.
  */
-static void
-        destroy_rotctrl  (GtkWidget *window, gpointer data)
+static void destroy_rotctrl  (GtkWidget *window, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     
@@ -954,8 +943,7 @@ static void
 }
 
 /* ensure that deleted top-level windows are destroyed */
-static gint
-        window_delete      (GtkWidget *widget,
+static gint window_delete  (GtkWidget *widget,
                             GdkEvent  *event,
                             gpointer   data)
 {
@@ -970,8 +958,7 @@ static gint
  * item in the GtkSatModule popup menu. It is simply a wrapper
  * for gtk_sat_module_close_cb, which will close the current module.
  */
-static void
-        close_cb         (GtkWidget *menuitem, gpointer data)
+static void close_cb (GtkWidget *menuitem, gpointer data)
 {
     gtk_sat_module_close_cb (menuitem, data);
 }
@@ -983,8 +970,7 @@ static void
  * with gtk_sat_module_close_cb, which will close the current module,
  * whereafter the module file will be deleted from the disk.
  */
-static void
-        delete_cb         (GtkWidget *menuitem, gpointer data)
+static void delete_cb (GtkWidget *menuitem, gpointer data)
 {
     gchar *file;
     GtkWidget *dialog;
@@ -1040,8 +1026,7 @@ static void
  * The primary purpose of this function is to check whether the char length
  * of the name is greater than zero, if yes enable the OK button of the dialog.
  */
-static void
-        name_changed          (GtkWidget *widget, gpointer data)
+static void name_changed (GtkWidget *widget, gpointer data)
 {
     const gchar *text;
     gchar       *entry, *end, *j;
@@ -1111,8 +1096,7 @@ static void
  * \note The logic in the code has been borrowed from gaim/pidgin http://pidgin.im/
  *
  */
-gboolean
-        module_window_config_cb (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+gboolean module_window_config_cb (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
     gint x, y;
     GtkSatModule *module = GTK_SAT_MODULE (data);
