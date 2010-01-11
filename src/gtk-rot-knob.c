@@ -453,12 +453,20 @@ button_clicked_cb (GtkWidget *button, gpointer data)
     GtkRotKnob *knob = GTK_ROT_KNOB (data);
     gdouble delta = GPOINTER_TO_INT(g_object_get_data (G_OBJECT (button), "delta")) / 100.0;
     
-    if ((delta > 0.0) && ((knob->value + delta) <= knob->max)) {
+    if ((delta > 0.0) && ((knob->value + delta) <= knob->max+.005)) {
         knob->value += delta;
+		if (knob->value>knob->max){
+			knob->value=knob->max;
+		}
     }
-    else if ((delta < 0.0) && ((knob->value + delta) >= knob->min)) {
+    else if ((delta < 0.0) && ((knob->value + delta) >= knob->min-.005)) {
         knob->value += delta;
-    }
+		if (knob->value<knob->min){
+			knob->value=knob->min;
+		}
+    } else {
+		g_print("Val: %.2f %.2f %.10f\n",knob->value,delta,knob->value+delta);
+	}
     
     gtk_rot_knob_update (knob);
     
