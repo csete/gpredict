@@ -1,3 +1,13 @@
+2010-01-11 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-rot-knob.c:
+    Applied patch 2929816: Fixes Bound Checking in gtk-rot-knob.c
+    Thanks Charles Suprin AA1VS.
+
+    * src/gtk-sat-module-popup.c:
+    Change menu item to "Exit full screen" and someminor cleaning.
+
+
 2010-01-05 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-map-c:

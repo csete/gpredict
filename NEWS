@@ -17,6 +17,7 @@ Changes in version 1.2 (TBD)
 - Applied patch 2881367: Updated Flags to Locks (thanks to Charles Suprin AA1VS).
 - Applied patch 2893617: Patches for fixing Windows build (thanks to Valentin Yakovenkov).
 - Applied patch 2916646: Minor fixes to documentation (thanks to Paul Schulz).
+- Applied patch 2929816: Fixes Bound Checking in gtk-rot-knob.c (Thanks to Charles Suprin AA1VS).
 - Slightly improved UI for the single-satellite view.
 - Command line options for cleaning user's TLE and transponder data, see --help for list.
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance
