@@ -39,7 +39,7 @@
 #include "sat-cfg.h"
 #include "orbit-tools.h"
 #include "predict-tools.h"
-
+#include "sat-log.h"
 
 
 /** \brief SGP4SDP4 driver for doing AOS/LOS calculations.
@@ -619,7 +619,6 @@ get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
     t = start;
 
     for (i = 0; i < num; i++) {
-
         pass = get_pass (sat, qth, t, maxdt);
 
         if (pass != NULL) {
@@ -639,6 +638,14 @@ get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
         }
 
     }
+	/*make a log entry in case num is set too small*/
+	/*i=num+1 if kicked out of loop due to internal condition*/
+	
+	if (i == num){
+		sat_log_log (SAT_LOG_LEVEL_ERROR,
+					 _("More future passes than requested in time window %f %f than requested %d in %s"),start,maxdt,num,
+                     __FUNCTION__);
+	}
 
     if (passes != NULL)
         passes = g_slist_reverse (passes);
@@ -738,15 +745,15 @@ copy_pass_detail  (pass_detail_t *detail)
 void
 free_pass   (pass_t *pass)
 {
-    free_pass_details (pass->details);
-
-    if (pass->satname != NULL) {
-        g_free (pass->satname);
-        pass->satname = NULL;
-    }
-
-    g_free (pass);
-    pass = NULL;
+	free_pass_details (pass->details);
+	
+	if (pass->satname != NULL) {
+		g_free (pass->satname);
+		pass->satname = NULL;
+	}
+	
+	g_free (pass);
+	pass = NULL;
 }
 
 
@@ -1015,6 +1022,13 @@ get_current_pass (sat_t *sat, qth_t *qth, gdouble start)
     else
         t = get_current_daynum ();
     predict_calc (sat, qth, t);	
+
+	/* check whether satellite has aos */
+    if (has_aos (sat, qth)) {
+		
+        return NULL;
+		
+    }
 
     /* find a time before AOS */
     while (sat->el > -2.0) {
