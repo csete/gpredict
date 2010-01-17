@@ -46,6 +46,7 @@
 #include "gtk-polar-plot.h"
 #include "gtk-azel-plot.h"
 #include "save-pass.h"
+#include "print-pass.h"
 
 
 
@@ -546,6 +547,11 @@ static void single_pass_response (GtkWidget *dialog, gint response, gpointer dat
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: PRINT not implemented"),
                      __FUNCTION__);
+
+        pass_t    *pass = (pass_t *) g_object_get_data (G_OBJECT (dialog), "pass");
+        qth_t     *qth = (qth_t *) g_object_get_data (G_OBJECT (dialog), "qth");
+
+        print_pass (pass, qth, GTK_WINDOW (dialog));
         break;
 
     case RESPONSE_SAVE:
