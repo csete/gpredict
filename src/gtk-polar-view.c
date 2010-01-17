@@ -1009,7 +1009,13 @@ update_track (gpointer key, gpointer value, gpointer data)
 
 
     if (obj->showtrack) {
-
+		if (obj->pass == NULL) {
+			sat_log_log (SAT_LOG_LEVEL_BUG,
+						 _("%s:%d: Failed to get satellite pass."),
+						 __FILE__, __LINE__);
+			return;
+		}
+		
         /* create points */
         num = g_slist_length (obj->pass->details);
 
@@ -1135,6 +1141,13 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
     if (obj == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: Failed to get satellite object."),
+                     __FILE__, __LINE__);
+        return;
+    }
+
+    if (obj->pass == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Failed to get satellite pass."),
                      __FILE__, __LINE__);
         return;
     }
