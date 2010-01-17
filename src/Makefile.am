@@ -70,6 +70,7 @@ gpredict_SOURCES = \
     pass-popup-menu.c pass-popup-menu.h \
     pass-to-txt.c pass-to-txt.h \
     predict-tools.c predict-tools.h \
+    print-pass.c print-pass.h \
     qth-data.c qth-data.h \
     qth-editor.c qth-editor.h \
     radio-conf.c radio-conf.h \
