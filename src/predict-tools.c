@@ -745,6 +745,7 @@ copy_pass_detail  (pass_detail_t *detail)
 void
 free_pass   (pass_t *pass)
 {
+	if (pass!=NULL){
 	free_pass_details (pass->details);
 	
 	if (pass->satname != NULL) {
@@ -754,6 +755,9 @@ free_pass   (pass_t *pass)
 	
 	g_free (pass);
 	pass = NULL;
+	} else {
+		/*FIXME: log an error?*/
+	}
 }
 
 
@@ -1024,7 +1028,9 @@ get_current_pass (sat_t *sat, qth_t *qth, gdouble start)
     predict_calc (sat, qth, t);	
 
 	/* check whether satellite has aos */
-    if (has_aos (sat, qth)) {
+    if ((sat->otype == ORBIT_TYPE_GEO) || 
+        (sat->otype == ORBIT_TYPE_DECAYED) ||
+		!has_aos (sat, qth)) {
 		
         return NULL;
 		

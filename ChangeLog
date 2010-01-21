@@ -1,3 +1,9 @@
+2010-01-20 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/predict-tools.c:
+    Applied new version of patch 2933879 from Charles Suprin AA1VS.
+
+
 2010-01-17 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-polar-view.c:
