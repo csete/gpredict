@@ -1,3 +1,11 @@
+2010-01-28 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/predict-tools.c:
+    Replaced incorrect error message with info. The pass condition are "either or"
+    and only one of the conditions have to be met before stopping the search for
+    future passes.
+
+
 2010-01-20 Alexandru Csete <oz9aec at gmail.com>
 
     * src/predict-tools.c:
