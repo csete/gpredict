@@ -638,17 +638,13 @@ get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
         }
 
     }
-	/*make a log entry in case num is set too small*/
-	/*i=num+1 if kicked out of loop due to internal condition*/
-	
-	if (i == num){
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("More future passes than requested in time window %f %f than requested %d in %s"),start,maxdt,num,
-                     __FUNCTION__);
-	}
 
     if (passes != NULL)
         passes = g_slist_reverse (passes);
+
+    sat_log_log (SAT_LOG_LEVEL_MSG,
+                 _("%s: Found %d passes for %s in time window [%f;%f]"),
+                 __FUNCTION__, g_slist_length (passes), sat->nickname, start, start+maxdt);
 
     return passes;
 }
