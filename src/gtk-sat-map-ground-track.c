@@ -285,7 +285,7 @@ static void
 create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 {
 	ssp_t              *ssp,*buff;     /* map coordinates */
-	double             lastx;
+	double             lastx,lasty;
 	GSList             *points = NULL;
 	GooCanvasItemModel *root;
 	GooCanvasItemModel *line;
@@ -297,6 +297,7 @@ create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 
 	/* initialise parameters */
 	lastx = -50.0;
+	lasty = -50.0;
 	start = 0;
 	num_points = 0;
 	n = g_slist_length (obj->track_data.latlon);
@@ -316,6 +317,7 @@ create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 		if (i == start) {
 			points = g_slist_prepend (points, ssp);
 			lastx = ssp->lon;
+			lasty = ssp->lat;
 		}
 
 		else {
@@ -361,20 +363,23 @@ create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 				points = NULL;
 				start = i;
 				lastx = ssp->lon;
+				lasty = ssp->lat;
 				num_points = 0;
 
 				/* Add current SSP to the new list */
 				points = g_slist_prepend (points, ssp);
 				lastx = ssp->lon;
+				lasty = ssp->lat;
 
 			}
 
 			/* else if this SSP is separable from the previous */
-			else if (fabs (lastx - ssp->lon) > 1.0 ) {
+			else if ((fabs (lastx - ssp->lon) > 1.0 ) || (fabs(lasty - ssp->lat)>1.0)){
 
 				/* add SSP to list */
 				points = g_slist_prepend (points, ssp);
 				lastx = ssp->lon;
+				lasty = ssp->lon;
 
 			}
 
