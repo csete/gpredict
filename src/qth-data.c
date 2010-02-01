@@ -61,6 +61,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
                                     G_KEY_FILE_KEEP_COMMENTS, &error)) {
 
         g_key_file_free (qth->data);
+        qth->data = NULL;
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not load data from %s (%s)"),
