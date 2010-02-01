@@ -1,3 +1,14 @@
+2010-02-01 Alexandur Csete <oz9aec at gmail.com>
+
+    * src/qth-data.c:
+    Applied patch 2943018: Potential Double Free in qth-data.c (Thanks to
+    Charles Suprin AA1VS).
+
+    * src/gtk-sat-map-ground-track.c:
+    Applied patch 2942658: Ground Tracks with Narrow Windows (Thanks to Charles
+    Suprin AA1VS).
+
+
 2010-01-28 Alexandru Csete <oz9aec at gmail.com>
 
     * src/predict-tools.c:
