@@ -259,11 +259,12 @@ gtk_rig_ctrl_new (GtkSatModule *module)
     /* store QTH */
     GTK_RIG_CTRL (widget)->qth = module->qth;
     
-    /* get next pass for target satellite */
-    GTK_RIG_CTRL (widget)->pass = get_next_pass (GTK_RIG_CTRL (widget)->target,
-                                                 GTK_RIG_CTRL (widget)->qth,
-                                                 3.0);
-    
+	if (GTK_RIG_CTRL(widget)->target !=NULL) {
+		/* get next pass for target satellite */
+		GTK_RIG_CTRL (widget)->pass = get_next_pass (GTK_RIG_CTRL (widget)->target,
+													 GTK_RIG_CTRL (widget)->qth,
+													 3.0);
+    }
     /* initialise custom colors */
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColBlack);
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColWhite);

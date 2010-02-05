@@ -219,18 +219,19 @@ GtkWidget *
     GTK_ROT_CTRL (widget)->qth = module->qth;
     
     /* get next pass for target satellite */
-    if (GTK_ROT_CTRL (widget)->target->el > 0.0) {
-        GTK_ROT_CTRL (widget)->pass = get_current_pass (GTK_ROT_CTRL (widget)->target,
-                                                        GTK_ROT_CTRL (widget)->qth,
-                                                        0.0);
-    }
-    else {
-        GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
-                                                     GTK_ROT_CTRL (widget)->qth,
-                                                     3.0);
-    }
-
-
+	if (GTK_ROT_CTRL (widget)->target){
+		if (GTK_ROT_CTRL (widget)->target->el > 0.0) {
+			GTK_ROT_CTRL (widget)->pass = get_current_pass (GTK_ROT_CTRL (widget)->target,
+															GTK_ROT_CTRL (widget)->qth,
+															0.0);
+		}
+		else {
+			GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
+														 GTK_ROT_CTRL (widget)->qth,
+														 3.0);
+		}
+	}
+	
     /* initialise custom colors */
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColBlack);
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColWhite);
@@ -815,7 +816,7 @@ static gboolean
        set the rotor controller to 0 deg El and to the Az where the
        target sat is expected to come up
     */
-    if (ctrl->tracking) {
+    if (ctrl->tracking && ctrl->target) {
         if (ctrl->target->el < 0.0) {
             gdouble aosaz = 0.0;
             
