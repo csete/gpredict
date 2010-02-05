@@ -1796,6 +1796,15 @@ update_sat (gpointer key, gpointer value, gpointer data)
 
     obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catnum));
 
+    if (obj == NULL) {
+        /* FIXME: protection against this should be implemented in the module. */
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%d: NULL object for %d (yes, this is a bug)"),
+                     __FILE__, __LINE__, sat->tle.catnr);
+
+        return;
+    }
+
     if (obj->selected) {
         /* update satmap->sel */
         update_selected (satmap, sat);
