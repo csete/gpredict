@@ -24,6 +24,9 @@ Changes in version 1.2 (TBD)
 - Applied patch 2933879: Check for AOS before burning computational resources (Thanks to Charles Suprin AA1VS).
 - Applied patch 2943018: Potential Double Free in qth-data.c (Thanks to Charles Suprin AA1VS).
 - Applied patch 2942658: Ground Tracks with Narrow Windows (Thanks to Charles Suprin AA1VS).
+- Applied patch 2943024: Eliminate Segfault in gtk-sat-map.c (Thanks to Charles Suprin AA1VS).
+- Applied patch 2943448: Remove Segfault from corrupted module (Thanks to Charles Suprin AA1VS).
+- Applied patch 2945525: Sort list of modules in open module dialog (Thanks to Charles Suprin AA1VS).
 - Slightly improved UI for the single-satellite view.
 - Command line options for cleaning user's TLE and transponder data, see --help for list.
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance
