@@ -80,7 +80,10 @@ static void   menubar_news_cb      (GtkWidget *widget, gpointer data);
 static void   menubar_about_cb     (GtkWidget *widget, gpointer data);
 static gchar *select_module        (void);
 static void   create_module_window (GtkWidget *module);
-
+static gint compare_func (GtkTreeModel *model,
+                          GtkTreeIter  *a,
+                          GtkTreeIter  *b,
+                          gpointer      userdata);
 
 /** \brief Regular menu items.
  *  \ingroup menupriv
@@ -807,6 +810,7 @@ select_module        ()
     GtkTreeIter        item;       /* new item added to the list store */
     GtkTreeSelection  *selection;
     GtkTreeModel      *selmod;
+	GtkTreeModel      *listtreemodel;
     GDir              *dir = NULL;   /* directory handle */
     GError            *error = NULL; /* error flag and info */
     gchar             *dirname;      /* directory name */
@@ -817,8 +821,8 @@ select_module        ()
     /* create and fill data model */
     liststore = gtk_list_store_new (1, G_TYPE_STRING);
 
-    /* scan for .qth files in the user config directory and
-       add the contents of each .qth file to the list store
+    /* scan for .mod files in the user config directory and
+       add the contents of each .mod file to the list store
     */
     dirname = get_modules_dir ();
     dir = g_dir_open (dirname, 0, &error);
@@ -831,7 +835,7 @@ select_module        ()
 
         while ((filename = g_dir_read_name (dir))) {
 
-            if (g_strrstr (filename, ".mod")) {
+            if (g_str_has_suffix (filename, ".mod")) {
 
                 /* strip extension and add to list */
                 buffv = g_strsplit (filename, ".mod", 0);
@@ -876,8 +880,21 @@ select_module        ()
 
     /* create tree view */
     modlist = gtk_tree_view_new ();
-    gtk_tree_view_set_model (GTK_TREE_VIEW (modlist), GTK_TREE_MODEL (liststore));
+	listtreemodel=GTK_TREE_MODEL (liststore);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (modlist), listtreemodel);
     g_object_unref (liststore);
+
+	
+	/* sort the tree by name */
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (listtreemodel),
+                                     0,
+                                     compare_func,
+                                     NULL,
+                                     NULL);
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (listtreemodel),
+                                          0,
+                                          GTK_SORT_ASCENDING);
+
 
     /*** FIXME: Add g_stat info? */
 
@@ -1049,3 +1066,22 @@ create_module_window (GtkWidget *module)
 
 }
 
+static gint compare_func (GtkTreeModel *model,
+                          GtkTreeIter  *a,
+                          GtkTreeIter  *b,
+                          gpointer      userdata)
+{
+    gchar *sat1,*sat2;
+    gint ret = 0;
+
+
+    gtk_tree_model_get(model, a, 0, &sat1, -1);
+    gtk_tree_model_get(model, b, 0, &sat2, -1);
+
+    ret = g_ascii_strcasecmp (sat1, sat2);
+
+    g_free (sat1);
+    g_free (sat2);
+
+    return ret;
+}
