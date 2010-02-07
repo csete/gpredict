@@ -1,3 +1,10 @@
+2010-02-07 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/menubar.c:
+    Applied patch 2947459: Make Module List Scrollable (Thanks to
+    Charles Suprin AA1VS).
+
+
 2010-02-05 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-map.c:
