@@ -1,3 +1,14 @@
+2010-02-15 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    * src/sat-pref-rig.c:
+    Applied patch 2951724: Allow FT-857 to work QSO (should also work with 817 and 897).
+
+    * src/radio-conf.h:
+    * sat-pref-rig-editor.c:
+    Updated to work with patch 2951724: Allow FT-857 to work QSO.
+
+
 2010-02-07 Alexandru Csete <oz9aec at gmail.com>
 
     * src/menubar.c:

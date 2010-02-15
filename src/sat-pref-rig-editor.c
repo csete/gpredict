@@ -208,6 +208,7 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("TX only"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Simplex TRX"));
     gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("Duplex TRX"));
+    gtk_combo_box_append_text (GTK_COMBO_BOX (type), _("FT817/857/897"));
     gtk_combo_box_set_active (GTK_COMBO_BOX (type), RIG_TYPE_RX);
     g_signal_connect (type, "changed", G_CALLBACK (type_changed), NULL);
     gtk_widget_set_tooltip_markup (type,
@@ -215,17 +216,21 @@ create_editor_widgets (radio_conf_t *conf)
                     "If <i>Monitor PTT status</i> is checked the doppler tuning "\
                     "will be suspended while PTT is ON (manual TX). "\
                     "If not, the controller will always perform doppler tuning and "\
-                    "you cannot use the same RIG for uplink.\n"\
+                    "you cannot use the same RIG for uplink.\n\n"\
                     "<b>TX only:</b>  The radio shall only be used for uplink. "\
                     "If <i>Monitor PTT status</i> is checked the doppler tuning "\
-                    "will be suspended while PTT is OFF (manual RX).\n"\
+                    "will be suspended while PTT is OFF (manual RX).\n\n"\
                     "<b>Simplex TRX:</b>  The radio should be used for both up- and downlink "\
                     "but in simplex mode only. This option requires that the PTT status "\
                     "is monitored (otherwise gpredict cannot know whether to tune the "\
-                    "RX or the TX).\n"\
+                    "RX or the TX).\n\n"\
                     "<b>Duplex:</b>  The radio is a full duplex radio, such as the IC910H. "\
                     "Gpredict will be continuously tuning both uplink and downlink "\
-                    "simultaneously and not care about PTT setting."));
+                    "simultaneously and not care about PTT setting.\n\n"\
+                    "<b>FT817/857/897:</b> This is a special mode that can be used with "\
+                    "YAESU FT-817, 857 and 897 radios. These radios do not allow computer "\
+                    "control while in TX mode. Therefore, TX Doppler correction is applied "\
+                    "while the radio is in RX mode by toggling between VFO A/B."));
     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 3, 3, 4);
     
     /* ptt */

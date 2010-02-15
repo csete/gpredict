@@ -253,7 +253,7 @@ static GtkTreeModel *create_and_fill_model ()
         /* read each .rig file */
         while ((filename = g_dir_read_name (dir))) {
             
-            if (g_strrstr (filename, ".rig")) {
+            if (g_str_has_suffix (filename, ".rig")) {
                 
                 vbuff = g_strsplit (filename, ".rig", 0);
                 conf.name = g_strdup (vbuff[0]);
@@ -396,7 +396,7 @@ void sat_pref_rig_ok     ()
         /* read each .rig file */
         while ((filename = g_dir_read_name (dir))) {
 
-            if (g_strrstr (filename, ".rig")) {
+            if (g_str_has_suffix (filename, ".rig")) {
 
                 buff = g_strconcat (dirname, G_DIR_SEPARATOR_S, filename, NULL);
                 g_remove (buff);
@@ -712,6 +712,10 @@ static void render_type (GtkTreeViewColumn *col,
 
         case RIG_TYPE_DUPLEX:
             g_object_set (renderer, "text", _("Duplex"), NULL);
+            break;
+			
+        case RIG_TYPE_SPLIT:
+            g_object_set (renderer, "text", _("FT817/857/897"), NULL);
             break;
 
         default:
