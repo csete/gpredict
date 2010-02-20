@@ -220,7 +220,7 @@ static GtkTreeModel *create_and_fill_model ()
         /* read each .rot file */
         while ((filename = g_dir_read_name (dir))) {
             
-            if (g_strrstr (filename, ".rot")) {
+            if (g_str_has_suffix (filename, ".rot")) {
                 
                 vbuff = g_strsplit (filename, ".rot", 0);
                 conf.name = g_strdup (vbuff[0]);
@@ -360,7 +360,7 @@ void sat_pref_rot_ok     ()
         /* read each .rot file */
         while ((filename = g_dir_read_name (dir))) {
 
-            if (g_strrstr (filename, ".rot")) {
+            if (g_str_has_suffix (filename, ".rot")) {
 
                 buff = g_strconcat (dirname, G_DIR_SEPARATOR_S, filename, NULL);
                 g_remove (buff);
