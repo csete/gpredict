@@ -1,3 +1,14 @@
+2010-02-20 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/sat-pref-rig.c:
+    * src/radio-conf.h:
+    * src/gtk-rig-ctrl.c:
+    Replace RIG_TYPE_SPLIT with RIG_TYPE_TOGGLE (from patch 2955061).
+
+    * src/sat-pref-rot.c:
+    Use g_str_has_suffix() instead of g_strrstr() (from patch 2955061).
+
+
 2010-02-15 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
