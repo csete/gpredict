@@ -714,7 +714,7 @@ static void render_type (GtkTreeViewColumn *col,
             g_object_set (renderer, "text", _("Duplex"), NULL);
             break;
 			
-        case RIG_TYPE_SPLIT:
+        case RIG_TYPE_TOGGLE:
             g_object_set (renderer, "text", _("FT817/857/897"), NULL);
             break;
 

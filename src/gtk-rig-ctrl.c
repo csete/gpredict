@@ -103,16 +103,16 @@ static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data);
 static void exec_rx_cycle (GtkRigCtrl *ctrl);
 static void exec_tx_cycle (GtkRigCtrl *ctrl);
 static void exec_trx_cycle (GtkRigCtrl *ctrl);
-static void exec_split_cycle (GtkRigCtrl *ctrl);
-static void exec_split_tx_cycle (GtkRigCtrl *ctrl);
+static void exec_toggle_cycle (GtkRigCtrl *ctrl);
+static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl);
 static void exec_duplex_cycle (GtkRigCtrl *ctrl);
 static void exec_dual_rig_cycle (GtkRigCtrl *ctrl);
 static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
 static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
-static gboolean set_freq_split (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
-static gboolean set_split (GtkRigCtrl *ctrl, radio_conf_t *conf);
-static gboolean unset_split (GtkRigCtrl *ctrl, radio_conf_t *conf);
-static gboolean get_freq_split (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
+static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
+static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf);
+static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf);
+static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
 static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf);
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
@@ -1179,8 +1179,8 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
 		switch (ctrl->conf->type) {
-		    case RIG_TYPE_SPLIT:
-				unset_split (ctrl,ctrl->conf);
+            case RIG_TYPE_TOGGLE:
+                unset_toggle (ctrl,ctrl->conf);
 				break;
 		    default:
 				break;
@@ -1224,9 +1224,9 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
                     exec_duplex_cycle (ctrl);
                     break;
 
-                case RIG_TYPE_SPLIT:
-					set_split (ctrl,ctrl->conf);
-                    exec_split_cycle (ctrl);
+                case RIG_TYPE_TOGGLE:
+                    set_toggle (ctrl,ctrl->conf);
+                    exec_toggle_cycle (ctrl);
                     break;
                     
                 default:
@@ -1311,8 +1311,8 @@ rig_ctrl_timeout_cb (gpointer data)
                 exec_duplex_cycle (ctrl);
                 break;
 				
-		    case RIG_TYPE_SPLIT:
-			    exec_split_cycle (ctrl);
+            case RIG_TYPE_TOGGLE:
+                exec_toggle_cycle (ctrl);
 				break;
             
             default:
@@ -1587,24 +1587,24 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
     exec_tx_cycle (ctrl);
 }
 
-/** \brief Execute split mode cycle.
+/** \brief Execute toggle mode cycle.
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
- * This function executes a controller cycle when the device is of RIG_TYPE_SPLIT.
+ * This function executes a controller cycle when the device is of RIG_TYPE_TOGGLE.
  */
-static void exec_split_cycle (GtkRigCtrl *ctrl)
+static void exec_toggle_cycle (GtkRigCtrl *ctrl)
 {
 		exec_rx_cycle (ctrl);
-		exec_split_tx_cycle (ctrl);
+        exec_toggle_tx_cycle (ctrl);
 }
 
 /** \brief Execute TX mode cycle.
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
- * This function executes a transmit cycle when the primary device is of RIG_TYPE_SPLIT.
+ * This function executes a transmit cycle when the primary device is of RIG_TYPE_TOGGLE.
  */
 
-static void exec_split_tx_cycle (GtkRigCtrl *ctrl)
+static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
 {
     gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ;
     gboolean ptt = TRUE;
@@ -1625,7 +1625,7 @@ static void exec_split_tx_cycle (GtkRigCtrl *ctrl)
         
 		if (ptt == TRUE) {
 			printf("PTT TRUE\n");
-			if (!get_freq_split (ctrl, ctrl->conf, &readfreq)) {
+            if (!get_freq_toggle (ctrl, ctrl->conf, &readfreq)) {
 				/* error => use a passive value */
 				readfreq = ctrl->lasttxf;
 				ctrl->errcnt++;
@@ -1689,7 +1689,7 @@ static void exec_split_tx_cycle (GtkRigCtrl *ctrl)
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
-        if (set_freq_split (ctrl, ctrl->conf, tmpfreq)) {
+        if (set_freq_toggle (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
 
@@ -1701,7 +1701,7 @@ static void exec_split_tx_cycle (GtkRigCtrl *ctrl)
                smallest tuning step of 10 Hz). Therefore we read back the actual
                frequency from the rig. */
             if (ptt){
-				get_freq_split (ctrl, ctrl->conf, &tmpfreq);
+                get_freq_toggle (ctrl, ctrl->conf, &tmpfreq);
 			}
 			ctrl->lasttxf = tmpfreq;
         }
@@ -2153,7 +2153,7 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
 }
 
 
-/** \brief Set frequency in split mode
+/** \brief Set frequency in toggle mode
  * \param ctrl Pointer to the GtkRigCtrl structure.
  * \param freq The new frequency.
  * \return TRUE if the operation was successful, FALSE if a connection error
@@ -2164,7 +2164,7 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
  *       might become useful in the future.
  */
 
-static gboolean set_freq_split (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq)
+static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq)
 {
     gchar  *buff;
     gint    written,size;
@@ -2233,13 +2233,13 @@ static gboolean set_freq_split (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble fr
 }
 
 
-/** \brief Turn on the radios split mode
+/** \brief Turn on the radios toggle mode
  * \param ctrl Pointer to the GtkRigCtrl structure.
  * \return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  * 
  */
-static gboolean set_split (GtkRigCtrl *ctrl, radio_conf_t *conf)
+static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
 {
     gchar  *buff;
     gint    written,size;
@@ -2307,14 +2307,14 @@ static gboolean set_split (GtkRigCtrl *ctrl, radio_conf_t *conf)
     return TRUE;
 }
 
-/** \brief Turn off the radios split mode
+/** \brief Turn off the radios toggle mode
  * \param ctrl Pointer to the GtkRigCtrl structure.
  * \return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  * 
  */
 
-static gboolean unset_split (GtkRigCtrl *ctrl, radio_conf_t *conf)
+static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
 {
     gchar  *buff;
     gint    written,size;
@@ -2504,14 +2504,14 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     return TRUE;
 }
 
-/** \brief Get frequency when the radio is working split
+/** \brief Get frequency when the radio is working toggle
  * \param ctrl Pointer to the GtkRigCtrl structure.
  * \param freq The current frequency of the radio.
  * \return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  */
 
-static gboolean get_freq_split (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq)
+static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq)
 {
     gchar  *buff,**vbuff;
     gint    written,size;
