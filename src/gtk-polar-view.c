@@ -1397,7 +1397,7 @@ on_button_press (GooCanvasItem *item,
             catpoint = g_try_new0 (gint, 1);
             *catpoint = catnum;
 
-            sat = SAT (g_hash_table_lookup (satmap->sats, catpoint));
+            sat = SAT (g_hash_table_lookup (polv->sats, catpoint));
             if (sat != NULL) {
                 show_sat_info(sat, gtk_widget_get_toplevel (GTK_WIDGET (data)));
             }
