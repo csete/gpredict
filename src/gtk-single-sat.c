@@ -823,7 +823,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
     g_object_set_data (G_OBJECT (menuitem), "qth", single_sat->qth);
     g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_sat_info),
+                      G_CALLBACK (show_sat_info_menu_cb),
                       gtk_widget_get_toplevel (button));
 
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);

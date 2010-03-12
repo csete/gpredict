@@ -33,6 +33,7 @@
 #include "gtk-sat-data.h"
 
 
-void show_sat_info      (GtkWidget *menuitem, gpointer data);
+void show_sat_info_menu_cb (GtkWidget *menuitem, gpointer data);
+void show_sat_info         (sat_t     *sat, gpointer data);
 
 #endif

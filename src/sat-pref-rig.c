@@ -52,6 +52,10 @@ static GtkWidget    *create_buttons        (void);
 static void add_cb    (GtkWidget *button, gpointer data);
 static void edit_cb   (GtkWidget *button, gpointer data);
 static void delete_cb (GtkWidget *button, gpointer data);
+static void row_activated_cb (GtkTreeView       *tree_view,
+                              GtkTreePath       *path,
+                              GtkTreeViewColumn *column,
+                              gpointer           user_data);
 
 static void render_name (GtkTreeViewColumn *col,
                          GtkCellRenderer   *renderer,
@@ -217,6 +221,7 @@ static void create_rig_list ()
                                                      NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (riglist), column, -1);
 
+    g_signal_connect (riglist, "row-activated", G_CALLBACK (row_activated_cb), riglist);
 }
 
 
@@ -643,6 +648,14 @@ static void delete_cb (GtkWidget *button, gpointer data)
         gtk_widget_destroy (dialog);
 
     }
+}
+
+static void row_activated_cb (GtkTreeView       *tree_view,
+                              GtkTreePath       *path,
+                              GtkTreeViewColumn *column,
+                              gpointer           user_data)
+{
+    edit_cb (editbutton, NULL);
 }
 
 

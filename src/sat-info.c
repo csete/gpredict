@@ -47,26 +47,37 @@ static GtkWidget *create_transponder_table (guint catnum);
 static gchar *epoch_to_str     (sat_t *sat);
 
 
-/** \brief Show satellite info in a dialog 
+/** \brief Show satellite info in a dialog (callback)
  *  \param menuitem The menuitem from where the function is invoked.
+ *  \param data Pointer to parent window or NULL.
+ *
+ */
+void
+show_sat_info_menu_cb (GtkWidget *menuitem, gpointer data)
+{
+    sat_t     *sat;
+
+    sat = SAT(g_object_get_data (G_OBJECT (menuitem), "sat"));
+    show_sat_info(sat, data);
+}
+
+/** \brief Show satellite info in a dialog 
+ *  \param sat Pointer to the sat info.
  *  \param data Pointer to parent window or NULL.
  *
  * FIXME: see nice drawing at http://www.amsat.org/amsat-new/tools/keps_tutorial.php
  *
 */
 void
-show_sat_info (GtkWidget *menuitem, gpointer data)
+show_sat_info (sat_t *sat, gpointer data)
 {
     GtkWidget *dialog;
     GtkWidget *notebook;
     GtkWidget *table;
     GtkWidget *label;
     GtkWindow *toplevel = NULL;
-    sat_t     *sat;
     gchar     *str;
 
-
-    sat = SAT(g_object_get_data (G_OBJECT (menuitem), "sat"));
 
     if (data != NULL)
         toplevel = GTK_WINDOW (data);
@@ -328,8 +339,6 @@ show_sat_info (GtkWidget *menuitem, gpointer data)
 
     g_signal_connect (dialog, "response",
                 G_CALLBACK (gtk_widget_destroy), NULL);
-    g_signal_connect (dialog, "destroy",
-                G_CALLBACK (gtk_widget_destroyed), &dialog);
 
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), notebook);
     

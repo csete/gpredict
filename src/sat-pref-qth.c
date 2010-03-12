@@ -78,6 +78,10 @@ static void          float_cell_data_function (GtkTreeViewColumn *col,
 static void add_cb    (GtkWidget *button, gpointer data);
 static void edit_cb   (GtkWidget *button, gpointer data);
 static void delete_cb (GtkWidget *button, gpointer data);
+static void row_activated_cb (GtkTreeView       *tree_view,
+                              GtkTreePath       *path,
+                              GtkTreeViewColumn *column,
+                              gpointer           user_data);
 
 /* static gboolean check_and_set_default_qth (GtkTreeModel *model, */
 /* 										   GtkTreePath  *path, */
@@ -260,6 +264,7 @@ create_qth_list ()
 	gtk_tree_view_append_column (GTK_TREE_VIEW (qthlist), column);
 	gtk_tree_view_column_set_alignment (column, 0.5);
 
+	g_signal_connect (qthlist, "row-activated", G_CALLBACK (row_activated_cb), NULL);
 
 	return qthlist;
 }
@@ -512,6 +517,15 @@ add_cb    (GtkWidget *button, gpointer data)
 	sat_pref_qth_editor_run (qthlist, TRUE);
 }
 
+
+static void
+row_activated_cb (GtkTreeView       *tree_view,
+                  GtkTreePath       *path,
+                  GtkTreeViewColumn *column,
+                  gpointer           user_data) 
+{
+	sat_pref_qth_editor_run (tree_view, FALSE);
+}
 
 static void
 edit_cb   (GtkWidget *button, gpointer data)

@@ -40,6 +40,7 @@
 #include "gpredict-utils.h"
 #include "gtk-polar-view-popup.h"
 #include "gtk-polar-view.h"
+#include "sat-info.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -1390,6 +1391,26 @@ on_button_press (GooCanvasItem *item,
 
     switch (event->button) {
 
+        /* double-left-click */
+    case 1:
+        if (event->type == GDK_2BUTTON_PRESS) {
+            catpoint = g_try_new0 (gint, 1);
+            *catpoint = catnum;
+
+            sat = SAT (g_hash_table_lookup (satmap->sats, catpoint));
+            if (sat != NULL) {
+                show_sat_info(sat, gtk_widget_get_toplevel (GTK_WIDGET (data)));
+            }
+            else {
+                /* double-clicked on map */
+            }
+        }
+
+        g_free (catpoint);
+
+        break;
+
+
         /* pop-up menu */
     case 3:
         catpoint = g_try_new0 (gint, 1);
@@ -1425,8 +1446,8 @@ on_button_press (GooCanvasItem *item,
 /** \brief Manage button release events.
  *
  * This function is called when the mouse button is released above
- * a satellite object. It will act as a button click and if the relesed
- * button is the left one, the clock will correspond to selecting or
+ * a satellite object. It will act as a button click and if the released
+ * button is the left one, the click will correspond to selecting or
  * deselecting a satellite
  */
 static gboolean

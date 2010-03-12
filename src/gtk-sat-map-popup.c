@@ -94,7 +94,7 @@ gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
 	/* attach data to menuitem and connect callback */
 	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
 	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (show_sat_info), toplevel);
+	g_signal_connect (menuitem, "activate", G_CALLBACK (show_sat_info_menu_cb), toplevel);
 
 	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 

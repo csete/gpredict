@@ -42,6 +42,7 @@
 #include "gpredict-utils.h"
 #include "locator.h"
 #include "sat-vis.h"
+#include "sat-info.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -206,6 +207,11 @@ static gboolean   popup_menu_cb   (GtkWidget *treeview,
 static gboolean   button_press_cb (GtkWidget *treeview,
                                    GdkEventButton *event,
                                    gpointer list);
+
+static void row_activated_cb (GtkTreeView       *tree_view,
+                              GtkTreePath       *path,
+                              GtkTreeViewColumn *column,
+                              gpointer           list);
 
 static void       view_popup_menu (GtkWidget *treeview,
                                    GdkEventButton *event,
@@ -412,6 +418,8 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
                       G_CALLBACK (button_press_cb), widget);
     g_signal_connect (GTK_SAT_LIST (widget)->treeview, "popup-menu",
                       G_CALLBACK (popup_menu_cb), widget);
+    g_signal_connect (GTK_SAT_LIST (widget)->treeview, "row-activated",
+                      G_CALLBACK (row_activated_cb), widget);
 
     GTK_SAT_LIST (widget)->swin = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (GTK_SAT_LIST (widget)->swin),
@@ -1266,6 +1274,38 @@ button_press_cb (GtkWidget *treeview, GdkEventButton *event, gpointer list)
     return FALSE; /* we did not handle this */
 }
 
+static void
+row_activated_cb (GtkTreeView       *tree_view,
+                  GtkTreePath       *path,
+                  GtkTreeViewColumn *column,
+                  gpointer           list)
+{
+    GtkTreeModel  *model;
+    GtkTreeIter    iter;
+    guint         *catnum;
+    sat_t         *sat;
+    
+    catnum = g_new0 (guint, 1);
+
+    model = gtk_tree_view_get_model(tree_view);
+    gtk_tree_model_get_iter (model, &iter, path);
+    gtk_tree_model_get (model, &iter,
+                        SAT_LIST_COL_CATNUM, catnum,
+                        -1);
+
+    sat = SAT (g_hash_table_lookup (GTK_SAT_LIST (list)->satellites, catnum));
+
+    if (sat == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s:%d Failed to get data for %d."),
+                     __FILE__, __LINE__, *catnum);
+    }
+    else {
+        show_sat_info(sat, gtk_widget_get_toplevel (GTK_WIDGET (list)));
+    }
+
+    g_free (catnum);
+}
 
 static void
 view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
@@ -1292,7 +1332,7 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
         if (sat == NULL) {
             sat_log_log (SAT_LOG_LEVEL_MSG,
                          _("%s:%d Failed to get data for %d."),
-                         __FILE__, __LINE__, catnum);
+                         __FILE__, __LINE__, *catnum);
 
         }
         else {

@@ -54,6 +54,10 @@ static GtkWidget    *create_buttons        (void);
 static void add_cb    (GtkWidget *button, gpointer data);
 static void edit_cb   (GtkWidget *button, gpointer data);
 static void delete_cb (GtkWidget *button, gpointer data);
+static void row_activated_cb (GtkTreeView       *tree_view,
+                              GtkTreePath       *path,
+                              GtkTreeViewColumn *column,
+                              gpointer           user_data);
 
 static void render_angle (GtkTreeViewColumn *col,
                           GtkCellRenderer   *renderer,
@@ -185,6 +189,8 @@ static void create_rot_list ()
                                              GUINT_TO_POINTER(ROT_LIST_COL_AZTYPE),
                                              NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (rotlist), column, -1);
+
+    g_signal_connect (rotlist, "row-activated", G_CALLBACK (row_activated_cb), NULL);
 }
 
 
@@ -601,6 +607,14 @@ static void delete_cb (GtkWidget *button, gpointer data)
         gtk_widget_destroy (dialog);
 
     }
+}
+
+static void row_activated_cb (GtkTreeView       *tree_view,
+                              GtkTreePath       *path,
+                              GtkTreeViewColumn *column,
+                              gpointer           user_data)
+{
+    edit_cb (editbutton, NULL);
 }
 
 /** \brief Render an angle.
