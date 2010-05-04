@@ -1,13 +1,19 @@
+2010-05-04 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sky-at-glance.c:
+    Click on satellite pass shows pass details.
+
+
 2010-03-12 Stephane Fillod <fillods at users.sf.net>
 
-	* src/gtk-event-list-popup.c:
-	* src/gtk-sat-map-popup.c:
-	* src/gtk-sat-list-popup.c:
-	* src/gtk-single-sat.c:
-	* src/gtk-polar-view-popup.c:
-	* src/sat-info.[ch]:
+    * src/gtk-event-list-popup.c:
+    * src/gtk-sat-map-popup.c:
+    * src/gtk-sat-list-popup.c:
+    * src/gtk-single-sat.c:
+    * src/gtk-polar-view-popup.c:
+    * src/sat-info.[ch]:
     Rename show_sat_info as show_sat_info_menu_cb,
-	show_sat_info can now be called from outside a menu.
+    show_sat_info can now be called from outside a menu.
 
     * src/sat-pref-qth.c:
     * src/sat-pref-rot.c:
@@ -20,6 +26,7 @@
     * po/gpredict.pot:
     * po/fr.po:
     Misc update and merge with launchpad translations.
+
 
 2010-02-20 Alexandru Csete <oz9aec at gmail.com>
 
