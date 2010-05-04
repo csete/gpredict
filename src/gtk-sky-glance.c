@@ -46,6 +46,7 @@
 #include "gtk-sat-data.h"
 #include "gpredict-utils.h"
 #include "predict-tools.h"
+#include "sat-pass-dialogs.h"
 #include "time-tools.h"
 //#include "gtk-sky-glance-popup.h"
 #include "gtk-sky-glance.h"
@@ -86,6 +87,16 @@ static gboolean on_button_release      (GooCanvasItem *item,
                                         GooCanvasItem *target,
                                         GdkEventButton *event,
                                         gpointer data);
+
+static gboolean on_mouse_enter         (GooCanvasItem    *item,
+                                        GooCanvasItem    *target_item,
+                                        GdkEventCrossing *event,
+                                        gpointer          data);
+static gboolean on_mouse_leave         (GooCanvasItem    *item,
+                                        GooCanvasItem    *target_item,
+                                        GdkEventCrossing *event,
+                                        gpointer          data);
+
 
 static GooCanvasItemModel* create_canvas_model (GtkSkyGlance *skg);
 
@@ -271,17 +282,17 @@ gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
     GTK_SKY_GLANCE (skg)->canvas = goo_canvas_new ();
     gtk_widget_modify_base (GTK_SKY_GLANCE (skg)->canvas, GTK_STATE_NORMAL, &bg_color);
     gtk_widget_set_size_request (GTK_SKY_GLANCE (skg)->canvas,
-                                    GTK_SKY_GLANCE (skg)->w,
-                                    GTK_SKY_GLANCE (skg)->h + SKG_FOOTER);
+                                 GTK_SKY_GLANCE (skg)->w,
+                                 GTK_SKY_GLANCE (skg)->h + SKG_FOOTER);
     goo_canvas_set_bounds (GOO_CANVAS (GTK_SKY_GLANCE (skg)->canvas), 0, 0,
-                            GTK_SKY_GLANCE (skg)->w,
-                            GTK_SKY_GLANCE (skg)->h + SKG_FOOTER);
+                           GTK_SKY_GLANCE (skg)->w,
+                           GTK_SKY_GLANCE (skg)->h + SKG_FOOTER);
 
     /* connect size-request signal */
     g_signal_connect (GTK_SKY_GLANCE (skg)->canvas, "size-allocate",
-                        G_CALLBACK (size_allocate_cb), skg);
+                      G_CALLBACK (size_allocate_cb), skg);
     g_signal_connect (GTK_SKY_GLANCE (skg)->canvas, "item_created",
-                        (GtkSignalFunc) on_item_created, skg);
+                      (GtkSignalFunc) on_item_created, skg);
     g_signal_connect_after (GTK_SKY_GLANCE (skg)->canvas, "realize",
                             (GtkSignalFunc) on_canvas_realized, skg);
 
@@ -564,11 +575,11 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
             }
 
             g_object_set (skp->box,
-                            "x", x,
-                            "y", y,
-                            "width", w,
-                            "height", h,
-                            NULL);
+                          "x", x,
+                          "y", y,
+                          "width", w,
+                          "height", h,
+                          NULL);
         }
 
     }
@@ -633,7 +644,9 @@ on_motion_notify (GooCanvasItem *item,
     /* in order to avoid label clipping close to the edges of
         the chart, the label is placed left/right of the cursor
         tracking line depending on which half we are in.
+        => Currently disabled, time display stays in upper left corner
     */
+/*
     if (event->x > (skg->w / 2)) {
         g_object_set (skg->timel,
                         "text", buff,
@@ -648,6 +661,12 @@ on_motion_notify (GooCanvasItem *item,
                         "anchor", GTK_ANCHOR_NW,
                         NULL);
     }
+*/
+    g_object_set (skg->timel,
+                  "text", buff,
+                  NULL);
+
+
 
     return TRUE;
 }
@@ -670,30 +689,33 @@ on_item_created (GooCanvas *canvas,
 {
     if (!goo_canvas_item_model_get_parent (model))	{
         /* root item / canvas */
-        g_signal_connect (item, "motion_notify_event",
-                            (GtkSignalFunc) on_motion_notify, data);
+        g_signal_connect (item, "motion_notify_event", (GtkSignalFunc) on_motion_notify, data);
     }
 
     else if (!g_object_get_data (G_OBJECT (item), "skip-signal-connection")) {
-        g_signal_connect (item, "button_press_event",
-                            (GtkSignalFunc) on_button_press, data);
-        g_signal_connect (item, "button_release_event",
-                            (GtkSignalFunc) on_button_release, data);
+        //g_signal_connect (item, "button_press_event", (GtkSignalFunc) on_button_press, data);
+        g_signal_connect (item, "button_release_event", (GtkSignalFunc) on_button_release, data);
+        g_signal_connect (item, "enter_notify_event", (GtkSignalFunc) on_mouse_enter, data);
+        g_signal_connect (item, "leave_notify_event", (GtkSignalFunc) on_mouse_leave, data);
     }
 }
 
 
 /** \brief Manage button press events
+ *  \param item The GooCanvasItem object that received the button press event.
+ *  \param target The target of the event (what?).
+ *  \param event Event data, such as X and Y coordinates.
+ *  \param data User data; points to the GtkSkyAtGlance object.
+ *  \return Always TRUE to prevent further propagation of the event.
  *
- * This function is called when a mouse button is pressed on a satellite object.
- * If the pressed button is #3 (right button) the satellite popup menu will be
- * created and executed.
+ * This function is called when a mouse button is pressed on a satellite pass object.
+ * If the pressed button is 1 (left) pass details will be show.
  */
 static gboolean
 on_button_press (GooCanvasItem *item,
-                GooCanvasItem *target,
-                GdkEventButton *event,
-                gpointer data)
+                 GooCanvasItem *target,
+                 GdkEventButton *event,
+                 gpointer data)
 {
 /*  GooCanvasItemModel *model = goo_canvas_item_get_model (item); */
 /*  GtkSkyGlance  *skg = GTK_SKY_GLANCE (data); */
@@ -701,56 +723,143 @@ on_button_press (GooCanvasItem *item,
 
     switch (event->button) {
 
-        /* pop-up menu */
-    case 3:
-
-        break;
-
     default:
-        break;
-    }
-
-       
-
-	return TRUE;
-}
-
-
-/** \brief Manage button release events.
- *
- * This function is called when the mouse button is released above
- * a satellite object. It will act as a button click and if the relesed
- * button is the left one, the clock will correspond to selecting or
- * deselecting a satellite
- */
-static gboolean
-on_button_release (GooCanvasItem *item,
-                    GooCanvasItem *target,
-                    GdkEventButton *event,
-                    gpointer data)
-{
-/*  GooCanvasItemModel *model = goo_canvas_item_get_model (item); */
-/*  GtkSkyGlance  *skg = GTK_SKY_GLANCE (data); */
-
-    switch (event->button) {
-
-        /* Select / de-select satellite */
-    case 1:
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s::%s: Button %d has no function..."),
+                     __FILE__, __FUNCTION__, event->button);
 
         break;
-
-    default:
-        break;
-    }
-
+    }       
 
     return TRUE;
 }
 
 
+/** \brief Manage button release events.
+ *  \param item The GooCanvasItem object that received the button press event.
+ *  \param target The target of the event (what?).
+ *  \param event Event data, such as X and Y coordinates.
+ *  \param data User data; points to the GtkSkyAtGlance object.
+ *  \return Always TRUE to prevent further propagation of the event.
+ *
+ * This function is called when the mouse button is released above
+ * a satellite pass object.
+ *
+ * We do not currently use this for anything.
+ */
+static gboolean
+on_button_release (GooCanvasItem *item,
+                   GooCanvasItem *target,
+                   GdkEventButton *event,
+                   gpointer data)
+{
+
+    GooCanvasItemModel *item_model = goo_canvas_item_get_model (item);
+    GtkSkyGlance  *skg = GTK_SKY_GLANCE (data);
+
+    /* get pointer to pass_t structure */
+    pass_t *pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
+    pass_t *new_pass;
+
+
+    if G_UNLIKELY(pass == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s::%s: Could not retrieve pass_t object"),
+                     __FILE__, __FUNCTION__);
+        return TRUE;
+    }
+
+
+    switch (event->button) {
+
+        /* LEFT button released */
+    case 1:
+        new_pass = copy_pass (pass);
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s::%s: Showing pass details for %s - we may have a memory leak here"),
+                     __FILE__, __FUNCTION__, pass->satname);
+
+        /* show the pass details */
+        show_pass (pass->satname, skg->qth, new_pass, NULL);
+
+        break;
+
+    default:
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s::%s: Button %d has no function..."),
+                     __FILE__, __FUNCTION__, event->button);
+        break;
+    }
+
+    return TRUE;
+}
+
+
+/** \brief Manage mouse-enter events on canvas items (satellite pass boxes)
+ * \param item The GooCanvasItem that received the signal
+ * \param target_item The target if the even (have no idea what this is...)
+ * \param event Info about the event
+ * \param data Pointer to the GtkSkyAtGlance object
+ * \return Always TRUE to prevent further propagation of the event.
+ *
+ * This function is used to be notified when the mouse enters over a satellite
+ * pass box. When this happens the user is presented with brief info about the
+ * satellite pass and a suggestion to click on the box for more info.
+ */
+static gboolean on_mouse_enter         (GooCanvasItem    *item,
+                                        GooCanvasItem    *target_item,
+                                        GdkEventCrossing *event,
+                                        gpointer          data)
+{
+    GooCanvasItemModel *item_model = goo_canvas_item_get_model (item);
+    GtkSkyGlance  *skg = GTK_SKY_GLANCE (data);
+
+    /* get pointer to pass_t structure */
+    pass_t *pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
+    if G_UNLIKELY(pass == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s::%s: Could not retrieve pass_t object"),
+                     __FILE__, __FUNCTION__);
+        return TRUE;
+    }
+
+
+
+
+    //g_print("Mouse enter: %s AOS:\n");
+
+    return TRUE;
+}
+
+
+/** \brief Manage mouse-leave events on canvas items (satellite pass boxes)
+ * \param item The GooCanvasItem that received the signal
+ * \param target_item The target if the even (have no idea what this is...)
+ * \param event Info about the event
+ * \param data Pointer to the GtkSkyAtGlance object
+ * \return Always TRUE to prevent further propagation of the event.
+ *
+ * This function is used to be notified when the mouse leaves a satellite
+ * pass box. When this happens the information about the pass is cleared.
+ */
+static gboolean on_mouse_leave         (GooCanvasItem    *item,
+                                        GooCanvasItem    *target_item,
+                                        GdkEventCrossing *event,
+                                        gpointer          data)
+{
+    g_print("Mouse leave\n");
+
+    return TRUE;
+}
+
+
+
+
+
 /** \brief Convert time value to x position.
  *  \param skg The GtkSkyGlance widget.
- *  \param t Julian date
+ *  \param t Julian dateuser is presented with brief info about the
+ * satellite pass and a suggestion to click on the box for more info.
  *  \return X coordinate.
  *
  * No error checking is made to ensure that we are within visible range.
@@ -913,12 +1022,17 @@ create_sat (gpointer key, gpointer value, gpointer data)
                 tmppass = (pass_t *) g_slist_nth_data (passes, i);
                 skypass->pass = copy_pass (tmppass);
                 skypass->box = goo_canvas_rect_model_new (root, 10, 10, 20, 20, /* dummy coordinates */
-                                                            "stroke-color-rgba", bcol,
-                                                            "fill-color-rgba", fcol,
-                                                            NULL);
-                                                    
-                /* store pass data */
+                                                          "stroke-color-rgba", bcol,
+                                                          "fill-color-rgba", fcol,
+                                                          NULL);
+
+                /* store this pass in list */
                 skg->passes = g_slist_append (skg->passes, skypass);
+
+                /* store a pointer to the pass data in the GooCanvasItem so that we
+                   can access it later during various events, e.g mouse click */
+                g_object_set_data (G_OBJECT (skypass->box), "pass", skypass->pass);
+
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
