@@ -32,6 +32,7 @@ Changes in version 1.2 (TBD)
 - Applied patch 2951724: Allow TX Doppler correction for FT-817, 857 and 897 (Thanks to Charles Suprin AA1VS).
 - Applied patch 3002344: Remove Uninitialized Jump (Thanks to Charles Suprin AA1VS).
 - Applied patch 3002345: Free catfilename (Thanks to Charles Suprin AA1VS).
+- Applied patch 3002348: Option context never freed (Thanks to Charles Suprin AA1VS).
 - Slightly improved UI for the single-satellite view.
 - Command line options for cleaning user's TLE and transponder data, see --help for list.
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance

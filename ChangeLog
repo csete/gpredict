@@ -6,6 +6,9 @@
     * src/first-time.c:
     Applied patch 3002345: Free catfilename.
 
+    * src/main.c:
+    Applied patch 3002348: Option context never freed.
+
 
 2010-05-04 Alexandru Csete <oz9aec at gmail.com>
 

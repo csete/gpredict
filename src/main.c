@@ -185,6 +185,7 @@ int main (int argc, char *argv[])
     
     gtk_main ();
 
+	g_option_context_free(context);
 #ifdef WIN32
     // Cleanup Windozze Sockets
     CloseWinSock2();
