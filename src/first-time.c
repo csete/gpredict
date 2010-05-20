@@ -626,6 +626,7 @@ first_time_check_step_05 (guint *error)
                     }
                     g_free (source);
                 }
+				g_free (catfilename);
             }
         }
         g_dir_close (srcdir);

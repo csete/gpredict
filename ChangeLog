@@ -3,6 +3,9 @@
     * src/sgpsdp/sgp4sdp4.c:
     Applied patch 3002344: Remove Uninitialized Jump.
 
+    * src/first-time.c:
+    Applied patch 3002345: Free catfilename.
+
 
 2010-05-04 Alexandru Csete <oz9aec at gmail.com>
 
