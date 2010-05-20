@@ -1,3 +1,9 @@
+2010-05-20 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/sgpsdp/sgp4sdp4.c:
+    Applied patch 3002344: Remove Uninitialized Jump.
+
+
 2010-05-04 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sky-at-glance.c:

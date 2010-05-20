@@ -554,6 +554,7 @@ Deep (int ientry, sat_t *sat)
 		sinq = sin (sat->tle.xnodeo);
 		cosq = cos (sat->tle.xnodeo);
 		sat->dps.omegaq = sat->tle.omegao;
+		sat->dps.preep = 0;
 
 		/* Initialize lunar solar terms */
 		day = sat->deep_arg.ds50 + 18261.5;  /*Days since 1900 Jan 0.5*/
