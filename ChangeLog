@@ -1,3 +1,9 @@
+2010-05-23 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/print-pass.h:
+    Applied patch 3005548: Cut and Paste Error In print_pass.h
+
+
 2010-05-20 Alexandru Csete <oz9aec at gmail.com>
 
     * src/sgpsdp/sgp4sdp4.c:

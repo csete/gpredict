@@ -25,8 +25,8 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#ifndef SAVE_PASS_H
-#define SAVE_PASS_H 1
+#ifndef PRINT_PASS_H
+#define PRINT_PASS_H 1
 
 #include <gtk/gtk.h>
 #include "sat-pass-dialogs.h"
