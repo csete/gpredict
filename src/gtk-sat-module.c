@@ -80,6 +80,7 @@ static void     gtk_sat_module_read_cfg_data  (GtkSatModule *module,
                                                const gchar *cfgfile);
 
 static void     gtk_sat_module_load_sats      (GtkSatModule *module);
+static void     gtk_sat_module_free_sat       (gpointer sat);
 static gboolean gtk_sat_module_timeout_cb     (gpointer module);
 static void     gtk_sat_module_update_sat     (gpointer key,
                                                gpointer val,
@@ -165,7 +166,7 @@ gtk_sat_module_init (GtkSatModule *module)
     module->satellites = g_hash_table_new_full (g_int_hash,
                                                 g_int_equal,
                                                 g_free,
-                                                g_free);
+                                                gtk_sat_module_free_sat);
     
     module->rotctrlwin = NULL;
     module->rotctrl    = NULL;
@@ -703,6 +704,15 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
 }
 
 
+/** \brief Free satellite data
+ * 
+ * This function is called automatically for each satellite when
+ * the hash table is destroyed.
+ */
+static void gtk_sat_module_free_sat (gpointer sat)
+{
+    gtk_sat_data_free_sat (SAT(sat));
+}
 
 
 /** \brief Module timeout callback.

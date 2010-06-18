@@ -3,6 +3,12 @@
     * src/main.c:
     Applied patch 3009725: Delete Explicit Call to gtk_set_locale.
     
+    * src/gtk-sat-data.[ch]:
+    Added function to free satellite name, nickname and website (patch 3009727).
+    
+    * src/gtk-sat-module.c:
+    Use new gtk_sat_data_free_sat() function (patch 3009727).
+    
 
 2010-05-23 Alexandru Csete <oz9aec at gmail.com>
 

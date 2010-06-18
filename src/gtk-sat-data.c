@@ -301,3 +301,31 @@ void gtk_sat_data_copy_sat (const sat_t *source, sat_t *dest, qth_t *qth)
 
     gtk_sat_data_init_sat (dest, qth);
 }
+
+
+/** \brief Free satellite data
+ *  \param sat Pointer to the satellite data to free
+ * 
+ * This function frees the memory that has been dyunamically allocated
+ * when creating a new satellite object.
+ */
+void gtk_sat_data_free_sat(sat_t *sat)
+{
+
+	if (sat){
+		if (sat->name){
+			g_free(sat->name);
+			sat->name=NULL;
+		}
+		if (sat->nickname){
+			g_free(sat->nickname);
+			sat->nickname=NULL;
+		}
+		if (sat->website){
+			g_free(sat->website);
+			sat->website=NULL;
+		}
+        
+		g_free(sat);
+	}
+}
