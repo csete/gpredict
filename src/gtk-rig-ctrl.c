@@ -11,7 +11,7 @@
   More details can be found at the project home page:
 
   http://gpredict.oz9aec.net/
- 
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -135,7 +135,7 @@ static GdkColor ColGreen = {0, 0, 0xFFFF, 0};
 
 
 GType
-gtk_rig_ctrl_get_type ()
+        gtk_rig_ctrl_get_type ()
 {
     static GType gtk_rig_ctrl_type = 0;
 
@@ -156,7 +156,7 @@ gtk_rig_ctrl_get_type ()
         gtk_rig_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
                                                     "GtkRigCtrl",
                                                     &gtk_rig_ctrl_info,
-                                                     0);
+                                                    0);
     }
 
     return gtk_rig_ctrl_type;
@@ -164,7 +164,7 @@ gtk_rig_ctrl_get_type ()
 
 
 static void
-gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
+        gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
 {
     GObjectClass      *gobject_class;
     GtkObjectClass    *object_class;
@@ -179,13 +179,13 @@ gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
     parent_class = g_type_class_peek_parent (class);
 
     object_class->destroy = gtk_rig_ctrl_destroy;
- 
+
 }
 
 
 
 static void
-gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
+        gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
 {
     ctrl->sats = NULL;
     ctrl->target = NULL;
@@ -197,7 +197,7 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->trsplist = NULL;
     ctrl->trsplock = FALSE;
     ctrl->tracking = FALSE;
-	g_static_mutex_init(&(ctrl->busy));
+    g_static_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
@@ -207,10 +207,10 @@ gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
 }
 
 static void
-gtk_rig_ctrl_destroy (GtkObject *object)
+        gtk_rig_ctrl_destroy (GtkObject *object)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (object);
-	
+
     /* stop timer */
     if (ctrl->timerid > 0) 
         g_source_remove (ctrl->timerid);
@@ -245,7 +245,7 @@ gtk_rig_ctrl_destroy (GtkObject *object)
  * 
  */
 GtkWidget *
-gtk_rig_ctrl_new (GtkSatModule *module)
+        gtk_rig_ctrl_new (GtkSatModule *module)
 {
     GtkWidget *widget;
     GtkWidget *table;
@@ -265,11 +265,11 @@ gtk_rig_ctrl_new (GtkSatModule *module)
     /* store QTH */
     GTK_RIG_CTRL (widget)->qth = module->qth;
     
-	if (GTK_RIG_CTRL(widget)->target !=NULL) {
-		/* get next pass for target satellite */
-		GTK_RIG_CTRL (widget)->pass = get_next_pass (GTK_RIG_CTRL (widget)->target,
-													 GTK_RIG_CTRL (widget)->qth,
-													 3.0);
+    if (GTK_RIG_CTRL(widget)->target !=NULL) {
+        /* get next pass for target satellite */
+        GTK_RIG_CTRL (widget)->pass = get_next_pass (GTK_RIG_CTRL (widget)->target,
+                                                     GTK_RIG_CTRL (widget)->qth,
+                                                     3.0);
     }
     /* initialise custom colors */
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColBlack);
@@ -299,7 +299,7 @@ gtk_rig_ctrl_new (GtkSatModule *module)
                                                     rig_ctrl_timeout_cb,
                                                     GTK_RIG_CTRL (widget));
     
-	return widget;
+    return widget;
 }
 
 
@@ -311,7 +311,7 @@ gtk_rig_ctrl_new (GtkSatModule *module)
  * of the controller and the rigator.
  */
 void
-gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
+        gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
 {
     gdouble satfreq;
     gchar *buff;
@@ -387,7 +387,7 @@ gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
  * 
  */
 static
-GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
+        GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
     GtkWidget   *vbox;
@@ -452,7 +452,7 @@ GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
  * uplink frequency of the satellite and the radio.
  */
 static
-GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
+        GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
     GtkWidget   *vbox;
@@ -501,7 +501,7 @@ GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
     ctrl->RigFreqUp = gtk_freq_knob_new (145890000.0, FALSE);
     gtk_box_pack_start_defaults (GTK_BOX (hbox2), ctrl->RigFreqUp);
     
-   
+
     gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox1);
     gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox2);
     gtk_container_add (GTK_CONTAINER (frame), vbox);
@@ -514,7 +514,7 @@ GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
  * \param ctrl Pointer to the GtkRigCtrl widget.
  */
 static
-GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
+        GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*satsel,*track;
     GtkWidget *tune,*trsplock,*hbox;
@@ -563,24 +563,24 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     /* buttons */
     tune = gtk_button_new_with_label (_("T"));
     gtk_widget_set_tooltip_text (tune,
-                                  _("Tune the radio to this transponder. "\
-                                  "The uplink and downlink will be set to the center of "\
-                                  "the transponder passband. In case of beacons, only the "\
-                                  "downlink will be tuned to the beacon frequency."));
+                                 _("Tune the radio to this transponder. "\
+                                   "The uplink and downlink will be set to the center of "\
+                                   "the transponder passband. In case of beacons, only the "\
+                                   "downlink will be tuned to the beacon frequency."));
     g_signal_connect (tune, "clicked", G_CALLBACK (trsp_tune_cb), ctrl);
     
     trsplock = gtk_toggle_button_new_with_label (_("L"));
     gtk_widget_set_tooltip_text (trsplock,
-                                  _("Lock the uplink and the downlink to each other. "\
-                                  "Whenever you change the downlink (in the controller "\
-                                  "or on the dial, the uplink will track it according "\
-                                  "to whether the transponder is inverting or not. "\
-                                  "Similarly, if you change the uplink the downlink "\
-                                  "will track it automatically.\n\n"\
-                                  "If the downlink and uplink are initially out of sync "\
-                                  "when you enable this function, "\
-                                  "the current downlink frequency will be used as "\
-                                  "baseline for setting the new uplink frequency."));
+                                 _("Lock the uplink and the downlink to each other. "\
+                                   "Whenever you change the downlink (in the controller "\
+                                   "or on the dial, the uplink will track it according "\
+                                   "to whether the transponder is inverting or not. "\
+                                   "Similarly, if you change the uplink the downlink "\
+                                   "will track it automatically.\n\n"\
+                                   "If the downlink and uplink are initially out of sync "\
+                                   "when you enable this function, "\
+                                   "the current downlink frequency will be used as "\
+                                   "baseline for setting the new uplink frequency."));
     g_signal_connect (trsplock, "toggled", G_CALLBACK (trsp_lock_cb), ctrl);
     
     /* box for packing buttons */
@@ -646,7 +646,7 @@ GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
 
 
 static GtkWidget *
-create_conf_widgets (GtkRigCtrl *ctrl)
+        create_conf_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*timer;
     GDir        *dir = NULL;   /* directory handle */
@@ -691,7 +691,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to open hwconf dir (%s)"),
-                       __FILE__, __LINE__, error->message);
+                     __FILE__, __LINE__, error->message);
         g_clear_error (&error);
     }
 
@@ -734,7 +734,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to open hwconf dir (%s)"),
-                       __FILE__, __LINE__, error->message);
+                     __FILE__, __LINE__, error->message);
         g_clear_error (&error);
     }
 
@@ -784,7 +784,7 @@ create_conf_widgets (GtkRigCtrl *ctrl)
 
 /** \brief Create count down widget */
 static GtkWidget *
-create_count_down_widgets (GtkRigCtrl *ctrl)
+        create_count_down_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame;
     
@@ -808,7 +808,7 @@ create_count_down_widgets (GtkRigCtrl *ctrl)
 /** \brief Copy satellite from hash table to singly linked list.
  */
 static void
-store_sats (gpointer key, gpointer value, gpointer user_data)
+        store_sats (gpointer key, gpointer value, gpointer user_data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL( user_data);
     sat_t        *sat = SAT (value);
@@ -824,7 +824,7 @@ store_sats (gpointer key, gpointer value, gpointer user_data)
  * This function is called when the user selects a new satellite.
  */
 static void
-sat_selected_cb (GtkComboBox *satsel, gpointer data)
+        sat_selected_cb (GtkComboBox *satsel, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gint i;
@@ -880,8 +880,8 @@ static void trsp_selected_cb (GtkComboBox *box, gpointer data)
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_BUG,
-                      _("%s: Inconsistency detected in internal transponder data (%d,%d)"),
-                      __FUNCTION__, i, n);
+                     _("%s: Inconsistency detected in internal transponder data (%d,%d)"),
+                     __FUNCTION__, i, n);
     }
 }
 
@@ -959,7 +959,7 @@ static void trsp_lock_cb (GtkToggleButton *button, gpointer data)
  * \param data Pointer to the GtkRigCtrl widget.
  */
 static void
-track_toggle_cb (GtkToggleButton *button, gpointer data)
+        track_toggle_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
@@ -979,7 +979,7 @@ track_toggle_cb (GtkToggleButton *button, gpointer data)
  * cycle delay.
  */
 static void
-delay_changed_cb (GtkSpinButton *spin, gpointer data)
+        delay_changed_cb (GtkSpinButton *spin, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
@@ -1005,7 +1005,7 @@ delay_changed_cb (GtkSpinButton *spin, gpointer data)
  * BUG Doesn't prevent user to select same radio as in the secondary conf.
  */
 static void
-primary_rig_selected_cb (GtkComboBox *box, gpointer data)
+        primary_rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gchar      *buff;
@@ -1071,7 +1071,7 @@ primary_rig_selected_cb (GtkComboBox *box, gpointer data)
  * device for the secondary radio. This radio is used for uplink only.
  */
 static void
-secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
+        secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gchar      *buff;
@@ -1166,7 +1166,7 @@ secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
  * This function is called when the user toggles the "Engage" button.
  */
 static void
-rig_engaged_cb (GtkToggleButton *button, gpointer data)
+        rig_engaged_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
 
@@ -1178,20 +1178,20 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
         ctrl->engaged = FALSE;
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
-		switch (ctrl->conf->type) {
-            case RIG_TYPE_TOGGLE:
-                unset_toggle (ctrl,ctrl->conf);
-				break;
-		    default:
-				break;
-		}
+        switch (ctrl->conf->type) {
+        case RIG_TYPE_TOGGLE:
+            unset_toggle (ctrl,ctrl->conf);
+            break;
+        default:
+            break;
+        }
     }
     else {
         if (ctrl->conf == NULL) {
             /* we don't have a working configuration */
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Controller does not have a valid configuration"),
-                           __FUNCTION__);
+                         __FUNCTION__);
             return;
         }
         
@@ -1208,32 +1208,32 @@ rig_engaged_cb (GtkToggleButton *button, gpointer data)
         else {
             switch (ctrl->conf->type) {
                 
-                case RIG_TYPE_RX:
-                    exec_rx_cycle (ctrl);
-                    break;
-                    
-                case RIG_TYPE_TX:
-                    exec_tx_cycle (ctrl);
-                    break;
-                    
-                case RIG_TYPE_TRX:
-                    exec_trx_cycle (ctrl);
-                    break;
-                    
-                case RIG_TYPE_DUPLEX:
-                    exec_duplex_cycle (ctrl);
-                    break;
+            case RIG_TYPE_RX:
+                exec_rx_cycle (ctrl);
+                break;
 
-                case RIG_TYPE_TOGGLE:
-                    set_toggle (ctrl,ctrl->conf);
-                    exec_toggle_cycle (ctrl);
-                    break;
-                    
-                default:
-                    /* this is an error! */
-                    ctrl->conf->type = RIG_TYPE_RX;
-                    exec_rx_cycle (ctrl);
-                    break;
+            case RIG_TYPE_TX:
+                exec_tx_cycle (ctrl);
+                break;
+
+            case RIG_TYPE_TRX:
+                exec_trx_cycle (ctrl);
+                break;
+
+            case RIG_TYPE_DUPLEX:
+                exec_duplex_cycle (ctrl);
+                break;
+
+            case RIG_TYPE_TOGGLE:
+                set_toggle (ctrl,ctrl->conf);
+                exec_toggle_cycle (ctrl);
+                break;
+
+            default:
+                /* this is an error! */
+                ctrl->conf->type = RIG_TYPE_RX;
+                exec_rx_cycle (ctrl);
+                break;
             }
         }
     }
@@ -1279,48 +1279,48 @@ static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data)
  * \return Always TRUE to let the timer continue.
  */
 static gboolean
-rig_ctrl_timeout_cb (gpointer data)
+        rig_ctrl_timeout_cb (gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
-	if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
+    if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
     }
     
-	if (ctrl->conf2 != NULL) {
+    if (ctrl->conf2 != NULL) {
         exec_dual_rig_cycle (ctrl);
     }
     else {
         /* Execute controller cycle depending on primary radio type */
         switch (ctrl->conf->type) {
-        
-            case RIG_TYPE_RX:
-                exec_rx_cycle (ctrl);
-                break;
+
+        case RIG_TYPE_RX:
+            exec_rx_cycle (ctrl);
+            break;
             
-            case RIG_TYPE_TX:
-                exec_tx_cycle (ctrl);
-                break;
+        case RIG_TYPE_TX:
+            exec_tx_cycle (ctrl);
+            break;
             
-            case RIG_TYPE_TRX:
-                exec_trx_cycle (ctrl);
-                break;
+        case RIG_TYPE_TRX:
+            exec_trx_cycle (ctrl);
+            break;
             
-            case RIG_TYPE_DUPLEX:
-                exec_duplex_cycle (ctrl);
-                break;
-				
-            case RIG_TYPE_TOGGLE:
-                exec_toggle_cycle (ctrl);
-				break;
+        case RIG_TYPE_DUPLEX:
+            exec_duplex_cycle (ctrl);
+            break;
+
+        case RIG_TYPE_TOGGLE:
+            exec_toggle_cycle (ctrl);
+            break;
             
-            default:
-                /* invalid mode */
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                            _("%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"),
-                            __FUNCTION__, ctrl->conf->type);
-                ctrl->conf->type = RIG_TYPE_RX;
+        default:
+            /* invalid mode */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"),
+                         __FUNCTION__, ctrl->conf->type);
+            ctrl->conf->type = RIG_TYPE_RX;
             
         }
     }
@@ -1332,8 +1332,8 @@ rig_ctrl_timeout_cb (gpointer data)
         ctrl->engaged = FALSE;
         ctrl->errcnt = 0;
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                        _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                        __FUNCTION__, MAX_ERROR_COUNT);
+                     _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                     __FUNCTION__, MAX_ERROR_COUNT);
         
         //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
     }
@@ -1422,16 +1422,16 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     if (ctrl->tracking) {
         /* downlink */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd + ctrl->dd - ctrl->conf->lo);
+                                 satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + ctrl->du - ctrl->conf->loup);
+                                 satfrequ + ctrl->du - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd - ctrl->conf->lo);
+                                 satfreqd - ctrl->conf->lo);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ - ctrl->conf->loup );
+                                 satfrequ - ctrl->conf->loup );
     }
 
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
@@ -1536,16 +1536,16 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     if (ctrl->tracking) {
         /* downlink */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd + ctrl->dd - ctrl->conf->lo);
+                                 satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + ctrl->du - ctrl->conf->loup);
+                                 satfrequ + ctrl->du - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd - ctrl->conf->lo);
+                                 satfreqd - ctrl->conf->lo);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ - ctrl->conf->loup);
+                                 satfrequ - ctrl->conf->loup);
     }
 
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
@@ -1594,8 +1594,8 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_toggle_cycle (GtkRigCtrl *ctrl)
 {
-		exec_rx_cycle (ctrl);
-        exec_toggle_tx_cycle (ctrl);
+    exec_rx_cycle (ctrl);
+    exec_toggle_tx_cycle (ctrl);
 }
 
 /** \brief Execute TX mode cycle.
@@ -1618,21 +1618,21 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
        Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
              and no need to execute the dial feedback.
     */
-	if (ctrl->engaged && ctrl->conf->ptt) {
+    if (ctrl->engaged && ctrl->conf->ptt) {
         ptt = get_ptt (ctrl, ctrl->conf);
     }
     if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
         
-		if (ptt == TRUE) {
-			printf("PTT TRUE\n");
+        if (ptt == TRUE) {
+            printf("PTT TRUE\n");
             if (!get_freq_toggle (ctrl, ctrl->conf, &readfreq)) {
-				/* error => use a passive value */
-				readfreq = ctrl->lasttxf;
-				ctrl->errcnt++;
-			}
-		} else {
-			readfreq = ctrl->lasttxf;
-		}
+                /* error => use a passive value */
+                readfreq = ctrl->lasttxf;
+                ctrl->errcnt++;
+            }
+        } else {
+            readfreq = ctrl->lasttxf;
+        }
         
         if (fabs (readfreq - ctrl->lasttxf) >= 1.0) {
             dialchanged = TRUE;
@@ -1673,16 +1673,16 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
     if (ctrl->tracking) {
         /* downlink */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd + ctrl->dd - ctrl->conf->lo);
+                                 satfreqd + ctrl->dd - ctrl->conf->lo);
         /* uplink */
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ + ctrl->du - ctrl->conf->loup);
+                                 satfrequ + ctrl->du - ctrl->conf->loup);
     }
     else {
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                  satfreqd - ctrl->conf->lo);
+                                 satfreqd - ctrl->conf->lo);
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                  satfrequ - ctrl->conf->loup);
+                                 satfrequ - ctrl->conf->loup);
     }
 
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
@@ -1702,8 +1702,8 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
                frequency from the rig. */
             if (ptt){
                 get_freq_toggle (ctrl, ctrl->conf, &tmpfreq);
-			}
-			ctrl->lasttxf = tmpfreq;
+            }
+            ctrl->lasttxf = tmpfreq;
         }
         else {
             ctrl->errcnt++;
@@ -1720,14 +1720,14 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
  */
 static void exec_duplex_cycle (GtkRigCtrl *ctrl)
 {
-	if (ctrl->engaged) {
-		/* Downlink */
-		set_vfo (ctrl, ctrl->conf->vfoDown);
-		exec_rx_cycle (ctrl);
-		
-		/* Uplink */
-		set_vfo (ctrl, ctrl->conf->vfoUp);
-		exec_tx_cycle (ctrl);
+    if (ctrl->engaged) {
+        /* Downlink */
+        set_vfo (ctrl, ctrl->conf->vfoDown);
+        exec_rx_cycle (ctrl);
+
+        /* Uplink */
+        set_vfo (ctrl, ctrl->conf->vfoUp);
+        exec_tx_cycle (ctrl);
     }
     else {
         /* still execute cycles to update UI widgets
@@ -1818,7 +1818,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         /* if no dial change on downlink perform forward tracking on downlink
            and execute uplink controller too.
         */
-    
+
         satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
         if (ctrl->tracking) {
             /* downlink */
@@ -1854,19 +1854,19 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         
         /* check if uplink dial has changed */
         if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
-        
+
             if (!get_freq_simplex (ctrl, ctrl->conf2, &readfreq)) {
                 /* error => use a passive value */
                 readfreq = ctrl->lasttxf;
                 ctrl->errcnt++;
             }
-        
+
             if (fabs (readfreq - ctrl->lasttxf) >= 1.0) {
                 dialchanged = TRUE;
-            
+
                 gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp), readfreq);
                 ctrl->lasttxf = readfreq;
-            
+
                 /* doppler shift; only if we are tracking */
                 if (ctrl->tracking) {
                     satfrequ = readfreq - ctrl->du + ctrl->conf2->loup;
@@ -1896,7 +1896,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
             }
 
             tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
-        
+
             /* if device is engaged, send freq command to radio */
             if ((ctrl->engaged) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
                 if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
@@ -1975,15 +1975,15 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to create socket"),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d Network socket created successfully"),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -1995,13 +1995,13 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
-                       __FILE__, __LINE__, conf->host, conf->port);
+                     __FILE__, __LINE__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d: Connection opened to %s:%d"),
-                       __FILE__, __LINE__, conf->host, conf->port);
+                     __FILE__, __LINE__, conf->host, conf->port);
     }
     
     if (conf->ptt == PTT_TYPE_CAT) {
@@ -2019,7 +2019,7 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: SIZE ERROR %d / %d"),
-                       __FILE__, __LINE__, written, size);
+                     __FILE__, __LINE__, written, size);
     }
     g_free (buff);
     
@@ -2029,33 +2029,33 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (buff == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                       __FILE__, __FUNCTION__);
+                     __FILE__, __FUNCTION__);
 
 #ifndef WIN32
 	shutdown (sock, SHUT_RDWR);
 #else
 	shutdown (sock, SD_BOTH);
 #endif
-       
+
 	close (sock);
         return FALSE;
     }
-        
+
     size = read (sock, buff, 127);
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rigctld"),
-                       __FILE__, __FUNCTION__);
+                     __FILE__, __FUNCTION__);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%s: Read %d bytes from rigctld"),
-                       __FILE__, __FUNCTION__, size);
+                     __FILE__, __FUNCTION__, size);
         
         buff[size] = 0;
         vbuff = g_strsplit (buff, "\n", 3);
         pttstat = g_ascii_strtoull (vbuff[0], NULL, 0);  //FIXME base = 0 ok?
-                
+
         g_free (buff);
         g_strfreev (vbuff);
     }
@@ -2092,21 +2092,21 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     struct hostent *h;
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
-        
+
     /* create socket */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                       __FUNCTION__);
+                     __FUNCTION__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                       __FUNCTION__);
+                     __FUNCTION__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -2118,13 +2118,13 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
     }
     
     /* send command */
@@ -2135,7 +2135,7 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                       __FUNCTION__, written, size);
+                     __FUNCTION__, written, size);
     }
     g_free (buff);
 
@@ -2172,21 +2172,21 @@ static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble f
     struct hostent *h;
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
-        
+
     /* create socket */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                       __FUNCTION__);
+                     __FUNCTION__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                       __FUNCTION__);
+                     __FUNCTION__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -2198,13 +2198,13 @@ static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble f
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
     }
     
     /* send command */
@@ -2215,7 +2215,7 @@ static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble f
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                       __FUNCTION__, written, size);
+                     __FUNCTION__, written, size);
     }
     g_free (buff);
 
@@ -2247,21 +2247,21 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     struct hostent *h;
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
-        
+
     /* create socket */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                       __FUNCTION__);
+                     __FUNCTION__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                       __FUNCTION__);
+                     __FUNCTION__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -2273,13 +2273,13 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
     }
     
     /* send command */
@@ -2290,7 +2290,7 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                       __FUNCTION__, written, size);
+                     __FUNCTION__, written, size);
     }
     g_free (buff);
 
@@ -2322,21 +2322,21 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     struct hostent *h;
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
-        
+
     /* create socket */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                       __FUNCTION__);
+                     __FUNCTION__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                       __FUNCTION__);
+                     __FUNCTION__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -2348,13 +2348,13 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, conf->host, conf->port);
+                     __FUNCTION__, conf->host, conf->port);
     }
     
     /* send command */
@@ -2365,7 +2365,7 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                       __FUNCTION__, written, size);
+                     __FUNCTION__, written, size);
     }
     g_free (buff);
 
@@ -2405,7 +2405,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (freq == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: NULL storage."),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
         return FALSE;
     }
     
@@ -2414,15 +2414,15 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to create socket"),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d Network socket created successfully"),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -2434,13 +2434,13 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
-                       __FILE__, __LINE__, conf->host, conf->port);
+                     __FILE__, __LINE__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d: Connection opened to %s:%d"),
-                       __FILE__, __LINE__, conf->host, conf->port);
+                     __FILE__, __LINE__, conf->host, conf->port);
     }
     
     /* send command */
@@ -2451,7 +2451,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: SIZE ERROR %d / %d"),
-                       __FILE__, __LINE__, written, size);
+                     __FILE__, __LINE__, written, size);
     }
     g_free (buff);
     
@@ -2461,7 +2461,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
     if (buff == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                       __FILE__, __FUNCTION__);
+                     __FILE__, __FUNCTION__);
 
 #ifndef WIN32
         shutdown (sock, SHUT_RDWR);
@@ -2472,22 +2472,22 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
         close (sock);
         return FALSE;
     }
-        
+
     size = read (sock, buff, 127);
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rigctld"),
-                       __FILE__, __FUNCTION__);
+                     __FILE__, __FUNCTION__);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%s: Read %d bytes from rigctld"),
-                       __FILE__, __FUNCTION__, size);
+                     __FILE__, __FUNCTION__, size);
         
         buff[size] = 0;
         vbuff = g_strsplit (buff, "\n", 3);
         *freq = g_ascii_strtod (vbuff[0], NULL);
-                
+
         g_free (buff);
         g_strfreev (vbuff);
     }
@@ -2524,7 +2524,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
     if (freq == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: NULL storage."),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
         return FALSE;
     }
     
@@ -2533,15 +2533,15 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to create socket"),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d Network socket created successfully"),
-                       __FILE__, __LINE__);
+                     __FILE__, __LINE__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(conf->host);
@@ -2553,13 +2553,13 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to connect to %s:%d"),
-                       __FILE__, __LINE__, conf->host, conf->port);
+                     __FILE__, __LINE__, conf->host, conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%d: Connection opened to %s:%d"),
-                       __FILE__, __LINE__, conf->host, conf->port);
+                     __FILE__, __LINE__, conf->host, conf->port);
     }
     
     /* send command */
@@ -2570,7 +2570,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: SIZE ERROR %d / %d"),
-                       __FILE__, __LINE__, written, size);
+                     __FILE__, __LINE__, written, size);
     }
     g_free (buff);
     
@@ -2580,7 +2580,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
     if (buff == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                       __FILE__, __FUNCTION__);
+                     __FILE__, __FUNCTION__);
 
 #ifndef WIN32
         shutdown (sock, SHUT_RDWR);
@@ -2591,22 +2591,22 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
         close (sock);
         return FALSE;
     }
-        
+
     size = read (sock, buff, 127);
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rigctld"),
-                       __FILE__, __FUNCTION__);
+                     __FILE__, __FUNCTION__);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%s: Read %d bytes from rigctld"),
-                       __FILE__, __FUNCTION__, size);
+                     __FILE__, __FUNCTION__, size);
         
         buff[size] = 0;
         vbuff = g_strsplit (buff, "\n", 3);
         *freq = g_ascii_strtod (vbuff[0], NULL);
-                
+
         g_free (buff);
         g_strfreev (vbuff);
     }
@@ -2638,21 +2638,21 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
     struct hostent *h;
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
-        
+
     /* create socket */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                       __FUNCTION__);
+                     __FUNCTION__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                       __FUNCTION__);
+                     __FUNCTION__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(ctrl->conf->host);
@@ -2664,13 +2664,13 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
     }
     
     /* prepare command */
@@ -2695,21 +2695,21 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
         size = 8;
         break;
         
-     default:
+    default:
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s: Invalid VFO argument. Using VFOA."),
                      __FUNCTION__);
     	buff = g_strdup_printf ("V VFOA");
         size = 6;
         break;
-	}    
-	
+    }
+
     /* send command */
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                       __FUNCTION__, written, size);
+                     __FUNCTION__, written, size);
     }
     g_free (buff);
 
@@ -2834,8 +2834,8 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
     /* check if there is a target satellite */
     if G_UNLIKELY (ctrl->target == NULL) {
         sat_log_log (SAT_LOG_LEVEL_MSG,
-                      _("%s:%s: GtkSatModule has no target satellite."),
-                      __FILE__, __FUNCTION__);
+                     _("%s:%s: GtkSatModule has no target satellite."),
+                     __FILE__, __FUNCTION__);
         return;
     }
 
@@ -2893,7 +2893,7 @@ static gboolean have_conf ()
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Failed to open hwconf dir (%s)"),
-                       __FILE__, __LINE__, error->message);
+                     __FILE__, __LINE__, error->message);
         g_clear_error (&error);
     }
 
@@ -2920,17 +2920,17 @@ static void track_downlink (GtkRigCtrl *ctrl)
     
     /* ensure that we have a useable transponder config */
     if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->uplow > 0.0)) {
-    
+
         down = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
         delta = down - ctrl->trsp->downlow;
-    
+
         if (ctrl->trsp->invert) {
             up = ctrl->trsp->uphigh - delta;
         }
         else {
             up = ctrl->trsp->uplow + delta;
         }
-    
+
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), up);
     }
 }
@@ -2955,14 +2955,14 @@ static void track_uplink (GtkRigCtrl *ctrl)
 
         up = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
         delta = up - ctrl->trsp->uplow;
-    
+
         if (ctrl->trsp->invert) {
             down = ctrl->trsp->downhigh - delta;
         }
         else {
             down = ctrl->trsp->downlow + delta;
         }
-    
+
         gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqDown), down);
     }
 }
@@ -2998,7 +2998,7 @@ static gboolean is_rig_tx_capable (const gchar *confname)
         
         cantx = FALSE;
     }
- 
+
     g_free (conf->name);
     if (conf->host)
         g_free (conf->host);
@@ -3016,21 +3016,21 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gchar *buff, gint size)
     struct hostent *h;
     struct sockaddr_in ServAddr;
     gint  sock;          /*!< Network socket */
-        
+
     /* create socket */
     sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                       __FUNCTION__);
+                     __FUNCTION__);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                       __FUNCTION__);
+                     __FUNCTION__);
     }
-        
+
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
     ServAddr.sin_family = AF_INET;             /* Internet address family */
     h = gethostbyname(ctrl->conf->host);
@@ -3042,13 +3042,13 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gchar *buff, gint size)
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                       __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
     }
     
     /* send command */
@@ -3056,7 +3056,7 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gchar *buff, gint size)
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                       __FUNCTION__, written, size);
+                     __FUNCTION__, written, size);
     }
 
 #ifndef WIN32
@@ -3069,5 +3069,5 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gchar *buff, gint size)
     
     ctrl->wrops++;
     
-	return TRUE;
+    return TRUE;
 }
