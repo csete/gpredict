@@ -1165,8 +1165,7 @@ static void
  * 
  * This function is called when the user toggles the "Engage" button.
  */
-static void
-        rig_engaged_cb (GtkToggleButton *button, gpointer data)
+static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
 
@@ -1179,7 +1178,7 @@ static void
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
         switch (ctrl->conf->type) {
-        case RIG_TYPE_TOGGLE:
+        case RIG_TYPE_TOGGLE_AUTO:
             unset_toggle (ctrl,ctrl->conf);
             break;
         default:
@@ -1224,9 +1223,16 @@ static void
                 exec_duplex_cycle (ctrl);
                 break;
 
-            case RIG_TYPE_TOGGLE:
+            case RIG_TYPE_TOGGLE_AUTO:
                 set_toggle (ctrl,ctrl->conf);
                 exec_toggle_cycle (ctrl);
+                break;
+
+            case RIG_TYPE_TOGGLE_MAN:
+                /** FIXME **/
+                sat_log_log (SAT_LOG_LEVEL_BUG,
+                             _("%s: Controller for RIG_TYPE_TOGGLE_MAN not implemented"),
+                             __FUNCTION__);
                 break;
 
             default:
@@ -1311,8 +1317,15 @@ static gboolean
             exec_duplex_cycle (ctrl);
             break;
 
-        case RIG_TYPE_TOGGLE:
+        case RIG_TYPE_TOGGLE_AUTO:
             exec_toggle_cycle (ctrl);
+            break;
+
+        case RIG_TYPE_TOGGLE_MAN:
+            /** FIXME **/
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s: Controller for RIG_TYPE_TOGGLE_MAN not implemented"),
+                         __FUNCTION__);
             break;
             
         default:
@@ -1590,7 +1603,7 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
 /** \brief Execute toggle mode cycle.
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
- * This function executes a controller cycle when the device is of RIG_TYPE_TOGGLE.
+ * This function executes a controller cycle when the device is of RIG_TYPE_TOGGLE_AUTO.
  */
 static void exec_toggle_cycle (GtkRigCtrl *ctrl)
 {
@@ -1601,7 +1614,7 @@ static void exec_toggle_cycle (GtkRigCtrl *ctrl)
 /** \brief Execute TX mode cycle.
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
- * This function executes a transmit cycle when the primary device is of RIG_TYPE_TOGGLE.
+ * This function executes a transmit cycle when the primary device is of RIG_TYPE_TOGGLE_AUTO.
  */
 
 static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)

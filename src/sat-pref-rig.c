@@ -711,29 +711,33 @@ static void render_type (GtkTreeViewColumn *col,
     gtk_tree_model_get (model, iter, coli, &type, -1);
 
     switch (type) {
-        case RIG_TYPE_RX:
-            g_object_set (renderer, "text", _("RX only"), NULL);
-            break;
-            
-        case RIG_TYPE_TX:
-            g_object_set (renderer, "text", _("TX only"), NULL);
-            break;
+    case RIG_TYPE_RX:
+        g_object_set (renderer, "text", _("RX only"), NULL);
+        break;
 
-        case RIG_TYPE_TRX:
-            g_object_set (renderer, "text", _("RX + TX"), NULL);
-            break;
+    case RIG_TYPE_TX:
+        g_object_set (renderer, "text", _("TX only"), NULL);
+        break;
 
-        case RIG_TYPE_DUPLEX:
-            g_object_set (renderer, "text", _("Duplex"), NULL);
-            break;
-			
-        case RIG_TYPE_TOGGLE:
-            g_object_set (renderer, "text", _("FT817/857/897"), NULL);
-            break;
+    case RIG_TYPE_TRX:
+        g_object_set (renderer, "text", _("RX + TX"), NULL);
+        break;
 
-        default:
-            g_object_set (renderer, "text", _("ERROR"), NULL);
-            break;
+    case RIG_TYPE_DUPLEX:
+        g_object_set (renderer, "text", _("Duplex"), NULL);
+        break;
+
+    case RIG_TYPE_TOGGLE_AUTO:
+        g_object_set (renderer, "text", _("FT817/857/897 (auto)"), NULL);
+        break;
+
+    case RIG_TYPE_TOGGLE_MAN:
+        g_object_set (renderer, "text", _("FT817/857/897 (man)"), NULL);
+        break;
+
+    default:
+        g_object_set (renderer, "text", _("ERROR"), NULL);
+        break;
     }
     
 }
