@@ -134,8 +134,7 @@ static GdkColor ColRed =   { 0, 0xFFFF, 0, 0};
 static GdkColor ColGreen = {0, 0, 0xFFFF, 0};
 
 
-GType
-        gtk_rig_ctrl_get_type ()
+GType gtk_rig_ctrl_get_type ()
 {
     static GType gtk_rig_ctrl_type = 0;
 
@@ -163,8 +162,7 @@ GType
 }
 
 
-static void
-        gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
+static void gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
 {
     GObjectClass      *gobject_class;
     GtkObjectClass    *object_class;
@@ -184,8 +182,7 @@ static void
 
 
 
-static void
-        gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
+static void gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
 {
     ctrl->sats = NULL;
     ctrl->target = NULL;
@@ -206,8 +203,7 @@ static void
     ctrl->lasttxf = 0.0;
 }
 
-static void
-        gtk_rig_ctrl_destroy (GtkObject *object)
+static void gtk_rig_ctrl_destroy (GtkObject *object)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (object);
 
@@ -244,8 +240,7 @@ static void
  * \return A new rig control window.
  * 
  */
-GtkWidget *
-        gtk_rig_ctrl_new (GtkSatModule *module)
+GtkWidget *gtk_rig_ctrl_new (GtkSatModule *module)
 {
     GtkWidget *widget;
     GtkWidget *table;
@@ -310,8 +305,7 @@ GtkWidget *
  * the satellite data has been updated. The function updates the internal state
  * of the controller and the rigator.
  */
-void
-        gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
+void gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t)
 {
     gdouble satfreq;
     gchar *buff;
@@ -386,8 +380,7 @@ void
  * satellite frequency with the radio frequency below it.
  * 
  */
-static
-        GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
+static GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
     GtkWidget   *vbox;
@@ -451,8 +444,7 @@ static
  * This function creates and initialises the widgets for displaying the
  * uplink frequency of the satellite and the radio.
  */
-static
-        GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
+static GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget   *frame;
     GtkWidget   *vbox;
@@ -513,8 +505,7 @@ static
 /** \brief Create target widgets.
  * \param ctrl Pointer to the GtkRigCtrl widget.
  */
-static
-        GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
+static GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*satsel,*track;
     GtkWidget *tune,*trsplock,*hbox;
@@ -645,8 +636,7 @@ static
 }
 
 
-static GtkWidget *
-        create_conf_widgets (GtkRigCtrl *ctrl)
+static GtkWidget *create_conf_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame,*table,*label,*timer;
     GDir        *dir = NULL;   /* directory handle */
@@ -783,8 +773,7 @@ static GtkWidget *
 
 
 /** \brief Create count down widget */
-static GtkWidget *
-        create_count_down_widgets (GtkRigCtrl *ctrl)
+static GtkWidget *create_count_down_widgets (GtkRigCtrl *ctrl)
 {
     GtkWidget *frame;
     
@@ -807,8 +796,7 @@ static GtkWidget *
 
 /** \brief Copy satellite from hash table to singly linked list.
  */
-static void
-        store_sats (gpointer key, gpointer value, gpointer user_data)
+static void store_sats (gpointer key, gpointer value, gpointer user_data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL( user_data);
     sat_t        *sat = SAT (value);
@@ -823,8 +811,7 @@ static void
  * 
  * This function is called when the user selects a new satellite.
  */
-static void
-        sat_selected_cb (GtkComboBox *satsel, gpointer data)
+static void sat_selected_cb (GtkComboBox *satsel, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gint i;
@@ -958,8 +945,7 @@ static void trsp_lock_cb (GtkToggleButton *button, gpointer data)
  * \param button Pointer to the GtkToggle button.
  * \param data Pointer to the GtkRigCtrl widget.
  */
-static void
-        track_toggle_cb (GtkToggleButton *button, gpointer data)
+static void track_toggle_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
@@ -978,8 +964,7 @@ static void
  * This function is called when the user changes the value of the
  * cycle delay.
  */
-static void
-        delay_changed_cb (GtkSpinButton *spin, gpointer data)
+static void delay_changed_cb (GtkSpinButton *spin, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
@@ -1004,8 +989,7 @@ static void
  *
  * BUG Doesn't prevent user to select same radio as in the secondary conf.
  */
-static void
-        primary_rig_selected_cb (GtkComboBox *box, gpointer data)
+static void primary_rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gchar      *buff;
@@ -1070,8 +1054,7 @@ static void
  * This function is called when the user selects a new rig controller
  * device for the secondary radio. This radio is used for uplink only.
  */
-static void
-        secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
+static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gchar      *buff;
@@ -1284,8 +1267,7 @@ static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data)
  * \param data Pointer to the GtkRigCtrl widget.
  * \return Always TRUE to let the timer continue.
  */
-static gboolean
-        rig_ctrl_timeout_cb (gpointer data)
+static gboolean rig_ctrl_timeout_cb (gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     
