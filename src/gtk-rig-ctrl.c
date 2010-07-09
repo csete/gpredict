@@ -39,6 +39,7 @@
  * 
  */
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include <glib/gi18n.h>
 #include <math.h>
 #include <glib.h>
@@ -97,6 +98,7 @@ static void trsp_lock_cb (GtkToggleButton *button, gpointer data);
 static gboolean rig_ctrl_timeout_cb (gpointer data);
 static void downlink_changed_cb (GtkFreqKnob *knob, gpointer data);
 static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data);
+static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer data);
 
 
 /* radio control functions */
@@ -251,6 +253,10 @@ GtkWidget *gtk_rig_ctrl_new (GtkSatModule *module)
     }
 
     widget = g_object_new (GTK_TYPE_RIG_CTRL, NULL);
+
+    /* connect calback to catch key press events */
+    g_signal_connect (widget, "key-press-event",
+                      G_CALLBACK(key_press_cb), NULL); // controller widget will be passed as primary param
     
     /* store satellites */
     g_hash_table_foreach (module->satellites, store_sats, widget);
@@ -3065,4 +3071,45 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gchar *buff, gint size)
     ctrl->wrops++;
     
     return TRUE;
+}
+
+
+/** \brief Manage key press event on the controller widget
+  * \param widget Pointer to the GtkRigCtrl widget that received the event
+  * \param pKey Pointer to the event that has happened
+  * \param data User data (always NULL)
+  * \return TRUE if the event is known and managed by this callback, FALSE otherwise
+  *
+  * This function is used to catch events when the user presses the SPACE key on the keyboard.
+  * This is used to toggle betweer RX/TX when using FT817/857/897 in manual mode.
+  */
+static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(widget);
+    gboolean event_managed = FALSE;
+
+
+    /* filter GDK_KEY_PRESS events */
+    if (pKey->type == GDK_KEY_PRESS) {
+
+        switch (pKey->keyval) {
+            /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
+        case GDK_space:
+            sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s: Detected SPACEBAR pressed event"),
+                         __FUNCTION__);
+
+            event_managed = TRUE;
+            break;
+
+        default:
+            sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                         _("%s: Keypress value %i not managed by this function"),
+                         __FUNCTION__, pKey->keyval);
+            break;
+
+        }
+    }
+
+    return event_managed;
 }
