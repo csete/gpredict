@@ -1,3 +1,13 @@
+2010-07-09 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/radio-conf.h:
+    * src/sat-pref-rig.c:
+    * src/sat-pref-rig-editor.c:
+    * src/gtk-rig-ctrl.c:
+    Added option for manual T/R switch for FT-817/857/897 (RIG_TYPE_TOGGLE_MAN).
+    The auto mode has been renamed to RIG_TYPE_TOGGLE_AUTO.
+
+
 2010-06-18 Alexandru Csete <oz9aec at gmail.com>
 
     * src/main.c:
