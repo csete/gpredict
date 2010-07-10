@@ -10,6 +10,9 @@
     * data/trsp/36122.trsp:
     Fixed incorrect V/U packet frequencies.
 
+    * data/trsp/32791.trsp:
+    Fixed incorrect frequency and added more modes.
+
 
 2010-06-18 Alexandru Csete <oz9aec at gmail.com>
 
