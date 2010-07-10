@@ -40,6 +40,7 @@ Changes in version 1.2 (TBD)
 - Command line options for cleaning user's TLE and transponder data, see --help for list.
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance
   over light background map regions.
+- Fixed incorrect uplink and downlink frequencies for HO-68, mode V/U packet.
 
 
 Changes in version 1.1 (5 Oct 2009)
