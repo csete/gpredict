@@ -1,3 +1,9 @@
+2010-07-11 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/satdata:
+    Synchronise satellite database with Celestrak.
+
+
 2010-07-09 Alexandru Csete <oz9aec at gmail.com>
 
     * src/radio-conf.h:
