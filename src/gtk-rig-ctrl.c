@@ -1603,112 +1603,47 @@ static void exec_toggle_cycle (GtkRigCtrl *ctrl)
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
  * This function executes a transmit cycle when the primary device is of RIG_TYPE_TOGGLE_AUTO.
+ * This applies to radios that support split operation (e.g. TX on VHF, RX on UHF) where the
+ * frequency can not be set via CAT while PTT is active.
+ * 
+ * If PTT=TRUE we are in TX mode and hence there is nothing to do since the frequency is kept
+ * constant.
+ * 
+ * If PTT=FALSE we are in RX mode and we should update the TX frequency by using set_freq_toggle()
+ * 
+ * For these kind of radios there is no dial-feedback for the TX frequency.
  */
 
 static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
 {
     gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ;
     gboolean ptt = TRUE;
-    gboolean dialchanged = FALSE;
+
     
-    /* Dial feedback:
-       If radio device is engaged read frequency from radio and compare it to the
-       last set frequency. If different, it means that user has changed frequency
-       on the radio dial => update transponder knob
-       
-       Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
-             and no need to execute the dial feedback.
-    */
     if (ctrl->engaged && ctrl->conf->ptt) {
         ptt = get_ptt (ctrl, ctrl->conf);
     }
-    if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
-        
-        if (ptt == TRUE) {
-            printf("PTT TRUE\n");
-            if (!get_freq_toggle (ctrl, ctrl->conf, &readfreq)) {
-                /* error => use a passive value */
-                readfreq = ctrl->lasttxf;
-                ctrl->errcnt++;
-            }
-        } else {
-            readfreq = ctrl->lasttxf;
-        }
-        
-        if (fabs (readfreq - ctrl->lasttxf) >= 1.0) {
-            dialchanged = TRUE;
-            printf("Dial Changed\n");
-            printf("Readfreq %f\n",readfreq);
-            printf("lastfreq %f\n",ctrl->lasttxf);
-            /* user might have altered radio frequency => update transponder knob */
-            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp), readfreq);
-            ctrl->lasttxf = readfreq;
-            
-            /* doppler shift; only if we are tracking */
-            if (ctrl->tracking) {
-                satfrequ = readfreq - ctrl->du + ctrl->conf->loup;
-            }
-            else {
-                satfrequ = readfreq + ctrl->conf->loup;
-            }
-            gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->SatFreqUp), satfrequ);
-
-            /* Follow with downlink if transponder is locked */
-            if (ctrl->trsplock) {
-                track_uplink (ctrl);
-            }
-        }
-    }
-
-    /* now, forward tracking */
-    if (dialchanged) {
-        /* no need to forward track */
+    
+    /* if we are in TX mode do nothing */
+    if (ptt == TRUE) {
         return;
     }
-    
-    /* If we are tracking, calculate the radio freq by applying both dopper shift
-       and tranverter LO frequency. If we are not tracking, apply only LO frequency.
-    */
-    satfreqd = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqDown));
-    satfrequ = gtk_freq_knob_get_value (GTK_FREQ_KNOB (ctrl->SatFreqUp));
-    if (ctrl->tracking) {
-        /* downlink */
-        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                 satfreqd + ctrl->dd - ctrl->conf->lo);
-        /* uplink */
-        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                 satfrequ + ctrl->du - ctrl->conf->loup);
-    }
-    else {
-        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqDown),
-                                 satfreqd - ctrl->conf->lo);
-        gtk_freq_knob_set_value (GTK_FREQ_KNOB (ctrl->RigFreqUp),
-                                 satfrequ - ctrl->conf->loup);
-    }
 
+    /* Get the desired uplink frequency from controller */
     tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqUp));
 
     /* if device is engaged, send freq command to radio */
-    if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
+    if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 10.0)) {
         if (set_freq_toggle (ctrl, ctrl->conf, tmpfreq)) {
             /* reset error counter */
-            ctrl->errcnt = 0;
-
-            /* give radio a chance to set frequency */
-            g_usleep (WR_DEL);
-
-            /* The actual frequency migh be different from what we have set because
-               the tuning step is larger than what we work with (e.g. FT-817 has a
-               smallest tuning step of 10 Hz). Therefore we read back the actual
-               frequency from the rig. */
-            if (ptt){
-                get_freq_toggle (ctrl, ctrl->conf, &tmpfreq);
-            }
-            ctrl->lasttxf = tmpfreq;
+            ctrl->errcnt = 0;          
         }
         else {
             ctrl->errcnt++;
         }
+        
+        /* store the last sent frequency even if an error occurred */
+        ctrl->lasttxf = tmpfreq;
     }
     
 }

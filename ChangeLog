@@ -2,6 +2,11 @@
 
     * data/satdata:
     Synchronise satellite database with Celestrak.
+    
+    * src/gtk-rig-ctrl.c:
+    Simplified exec_toggle_tx_cycle() to only do something while PTT=FALSE and
+    without any dial feedback since dial feedback makes no sense when using 
+    such radios.
 
 
 2010-07-09 Alexandru Csete <oz9aec at gmail.com>
