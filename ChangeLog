@@ -10,6 +10,11 @@
     Added function to set_ptt().
     Implemented controller for RIG_TYPE_ROGGLE_MAN (FT-817/857/897 manual TX).
 
+    * src/gtk-rig-ctrl.c:
+    * src/gtk-rig-ctrl.h:
+    Updated RIG_TYPE_TOGGLE_AUTO controller to perform TX frequency update only
+    once every 10 seconds.
+
 
 2010-07-09 Alexandru Csete <oz9aec at gmail.com>
 

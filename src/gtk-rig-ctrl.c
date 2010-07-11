@@ -204,6 +204,7 @@ static void gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->errcnt = 0;
     ctrl->lastrxf = 0.0;
     ctrl->lasttxf = 0.0;
+    ctrl->last_toggle_tx = -1;
 }
 
 static void gtk_rig_ctrl_destroy (GtkObject *object)
@@ -1217,6 +1218,7 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
             case RIG_TYPE_TOGGLE_AUTO:
             case RIG_TYPE_TOGGLE_MAN:
                 set_toggle (ctrl,ctrl->conf);
+                ctrl->last_toggle_tx = -1;
                 exec_toggle_cycle (ctrl);
                 break;
 
@@ -1589,10 +1591,24 @@ static void exec_toggle_cycle (GtkRigCtrl *ctrl)
     exec_rx_cycle (ctrl);
     
     /* TX cycle is executed only if user selected RIG_TYPE_TOGGLE_AUTO
-     * In manual mode the TX freq update is performed only when TX isactivated 
+     * In manual mode the TX freq update is performed only when TX is activated. 
+     * Even in auto mode, the toggling is performed only once every 10 seconds.
      */
-    if (ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO)
-        exec_toggle_tx_cycle (ctrl);
+    if (ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO) {
+
+        GTimeVal current_time;
+        
+        /* get the current time */
+        g_get_current_time (&current_time);
+        
+        if ((ctrl->last_toggle_tx == -1) || ((current_time.tv_sec - ctrl->last_toggle_tx) >= 10)) {
+            /* it's time to update TX freq */
+            exec_toggle_tx_cycle (ctrl);
+            
+            /* store current time */
+            ctrl->last_toggle_tx = current_time.tv_sec;
+        }
+    }
 }
 
 /** \brief Execute TX mode cycle.
