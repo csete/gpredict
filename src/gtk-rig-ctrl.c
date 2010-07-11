@@ -99,7 +99,7 @@ static gboolean rig_ctrl_timeout_cb (gpointer data);
 static void downlink_changed_cb (GtkFreqKnob *knob, gpointer data);
 static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data);
 static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer data);
-
+static void manage_ptt_event (GtkRigCtrl *ctrl);
 
 /* radio control functions */
 static void exec_rx_cycle (GtkRigCtrl *ctrl);
@@ -116,6 +116,7 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf);
 static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf);
 static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
 static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf);
+static gboolean set_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf, gboolean ptt);
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 
@@ -1168,6 +1169,7 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         ctrl->lastrxf = 0.0;
         switch (ctrl->conf->type) {
         case RIG_TYPE_TOGGLE_AUTO:
+        case RIG_TYPE_TOGGLE_MAN:
             unset_toggle (ctrl,ctrl->conf);
             break;
         default:
@@ -1213,15 +1215,9 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
                 break;
 
             case RIG_TYPE_TOGGLE_AUTO:
+            case RIG_TYPE_TOGGLE_MAN:
                 set_toggle (ctrl,ctrl->conf);
                 exec_toggle_cycle (ctrl);
-                break;
-
-            case RIG_TYPE_TOGGLE_MAN:
-                /** FIXME **/
-                sat_log_log (SAT_LOG_LEVEL_BUG,
-                             _("%s: Controller for RIG_TYPE_TOGGLE_MAN not implemented"),
-                             __FUNCTION__);
                 break;
 
             default:
@@ -1306,16 +1302,10 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
             break;
 
         case RIG_TYPE_TOGGLE_AUTO:
+        case RIG_TYPE_TOGGLE_MAN:        
             exec_toggle_cycle (ctrl);
             break;
-
-        case RIG_TYPE_TOGGLE_MAN:
-            /** FIXME **/
-            sat_log_log (SAT_LOG_LEVEL_BUG,
-                         _("%s: Controller for RIG_TYPE_TOGGLE_MAN not implemented"),
-                         __FUNCTION__);
-            break;
-            
+           
         default:
             /* invalid mode */
             sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -1591,12 +1581,18 @@ static void exec_trx_cycle (GtkRigCtrl *ctrl)
 /** \brief Execute toggle mode cycle.
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
- * This function executes a controller cycle when the device is of RIG_TYPE_TOGGLE_AUTO.
+ * This function executes a controller cycle when the device is of RIG_TYPE_TOGGLE_AUTO
+ * and RIG_TYPE_TOGGLE_MAN.
  */
 static void exec_toggle_cycle (GtkRigCtrl *ctrl)
 {
     exec_rx_cycle (ctrl);
-    exec_toggle_tx_cycle (ctrl);
+    
+    /* TX cycle is executed only if user selected RIG_TYPE_TOGGLE_AUTO
+     * In manual mode the TX freq update is performed only when TX isactivated 
+     */
+    if (ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO)
+        exec_toggle_tx_cycle (ctrl);
 }
 
 /** \brief Execute TX mode cycle.
@@ -1616,7 +1612,7 @@ static void exec_toggle_cycle (GtkRigCtrl *ctrl)
 
 static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
 {
-    gdouble readfreq=0.0, tmpfreq, satfreqd, satfrequ;
+    gdouble tmpfreq;
     gboolean ptt = TRUE;
 
     
@@ -2008,6 +2004,87 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
     return (pttstat == 1) ? TRUE : FALSE;
 
 }
+
+
+/** \brief Set PTT status
+ * \param ctrl Pointer to the GtkRigCtrl data
+ * \param conf Pointer to the radio conf data
+ * \param ptt The new PTT value (TRUE=ON, FALSE=OFF)
+ * \return TRUE if the operation was successful, FALSE if an error has occurred
+ */
+static gboolean set_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf, gboolean ptt)
+{
+    gchar  *buff;
+    gint    written,size;
+    gint    status;
+    struct hostent *h;
+    struct sockaddr_in ServAddr;
+    gint  sock;          /*!< Network socket */
+
+    /* create socket */
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to create socket"),
+                     __FUNCTION__);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Network socket created successfully"),
+                     __FUNCTION__);
+    }
+
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to connect to %s:%d"),
+                     __FUNCTION__, conf->host, conf->port);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Connection opened to %s:%d"),
+                     __FUNCTION__, conf->host, conf->port);
+    }
+    
+    /* send command */
+    if (ptt == TRUE) {
+        buff = g_strdup_printf ("T 1\x0aq\x0a");
+    }
+    else {
+        buff = g_strdup_printf ("T 0\x0aq\x0a");
+    }
+    
+    size = 6;
+    written = send(sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: SIZE ERROR %d / %d"),
+                     __FUNCTION__, written, size);
+    }
+    g_free (buff);
+
+#ifndef WIN32
+    shutdown (sock, SHUT_RDWR);
+#else
+    shutdown (sock, SD_BOTH);
+#endif
+
+    close (sock);
+    
+    ctrl->wrops++;
+    
+    return TRUE;
+}
+
 
 
 /** \brief Set frequency in simplex mode
@@ -3026,25 +3103,107 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
 
     /* filter GDK_KEY_PRESS events */
     if (pKey->type == GDK_KEY_PRESS) {
-
+        
         switch (pKey->keyval) {
+            
             /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
         case GDK_space:
             sat_log_log (SAT_LOG_LEVEL_MSG,
                          _("%s: Detected SPACEBAR pressed event"),
                          __FUNCTION__);
-
+                         
+            /* manage PTT event */
+            manage_ptt_event (ctrl);
             event_managed = TRUE;
+
             break;
 
         default:
             sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                         _("%s: Keypress value %i not managed by this function"),
-                         __FUNCTION__, pKey->keyval);
+                         _("%s:%s: Keypress value %i not managed by this function"),
+                         __FILE__, __FUNCTION__, pKey->keyval);
             break;
 
         }
     }
 
     return event_managed;
+}
+
+
+/** \brief Maange PTT events
+ * \param ctrl Pointer to the radio controller data
+ * 
+ * This function is used to manage PTT events, e.g. the user presses
+ * the spacebar. It is only useful for RIG_TYPE_TOGGLE_MAN.
+ * 
+ * First, the function will try to lock the controller. If the lock is acquired
+ * the function checks the current PTT status.
+ * If PTT status is FALSE (off), it will set the TX frequency and set PTT to TRUE (on).
+ * If PTT status is TRUE (on) it will simply set the PTT to FALSE (off).
+ * 
+ * \warning This function assumes that the radio supprot set/get PTT, otherwise
+ *          ot makes no sense to use it!
+ */
+static void manage_ptt_event (GtkRigCtrl *ctrl)
+{
+    guint timeout = 1;
+    gboolean ptt = FALSE;
+    
+
+    /* wait for controller to be idle or until the timeout triggers */
+    while (timeout < 5) {
+        if (g_static_mutex_trylock(&(ctrl->busy)) == TRUE) {
+            timeout = 17; /* use an arbitrary value that is large enough */
+        }
+        else {
+            /* wait for 100 msec */
+            g_usleep (100000);
+            timeout++;
+        }
+    }
+
+    if (timeout == 17) {
+        /* timeout did not expire, we've got the controller lock */
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Acquired controller lock"),
+                     __FUNCTION__);
+
+        if (ctrl->engaged == FALSE) {       
+            sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage button)"),
+                         __FUNCTION__);
+        }
+        else {
+
+            ptt = get_ptt (ctrl, ctrl->conf);        
+        
+            if (ptt == FALSE) {
+                /* PTT is OFF => set TX freq then set PTT to ON */
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s: PTT is OFF => Set TX freq and PTT=ON"),
+                             __FUNCTION__);
+                             
+                exec_toggle_tx_cycle (ctrl);
+                set_ptt(ctrl, ctrl->conf, TRUE);
+            }
+            else {
+                /* PTT is ON => set to OFF */
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s: PTT is ON = Set PTT=OFF"),
+                             __FUNCTION__);
+                             
+                set_ptt(ctrl, ctrl->conf, FALSE);
+            }
+        }
+        
+        /* release controller lock */
+        g_static_mutex_unlock(&(ctrl->busy));
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to acquire controller lock; PTT event not handled"),
+                     __FUNCTION__);
+    }
+   
 }

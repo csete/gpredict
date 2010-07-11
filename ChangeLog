@@ -7,6 +7,8 @@
     Simplified exec_toggle_tx_cycle() to only do something while PTT=FALSE and
     without any dial feedback since dial feedback makes no sense when using 
     such radios.
+    Added function to set_ptt().
+    Implemented controller for RIG_TYPE_ROGGLE_MAN (FT-817/857/897 manual TX).
 
 
 2010-07-09 Alexandru Csete <oz9aec at gmail.com>
