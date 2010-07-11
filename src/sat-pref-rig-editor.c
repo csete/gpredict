@@ -533,7 +533,10 @@ static void
 type_changed (GtkWidget *widget, gpointer data)
 {
 	/* PTT consistency */    
-    if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TRX) {
+    if ((gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TRX) ||
+        (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TOGGLE_AUTO) ||
+        (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TOGGLE_MAN))
+     {
         if (gtk_combo_box_get_active (GTK_COMBO_BOX (ptt)) == PTT_TYPE_NONE) {
             gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), PTT_TYPE_CAT);
         }

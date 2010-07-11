@@ -14,6 +14,9 @@
     * src/gtk-rig-ctrl.h:
     Updated RIG_TYPE_TOGGLE_AUTO controller to perform TX frequency update only
     once every 10 seconds.
+    
+    * src/sat-pref-rig-editor.c:
+    Automatically set PTT type for RIG_TYPE_TOGGLE_AUTO and RIG_TYPE_TOGGLE_MAN.
 
 
 2010-07-09 Alexandru Csete <oz9aec at gmail.com>
