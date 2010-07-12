@@ -102,6 +102,7 @@ static gint compare_coordinates_y  (gconstpointer a, gconstpointer b, gpointer d
 static void update_selected        (GtkSatMap *satmap, sat_t *sat);
 static void draw_grid_lines        (GtkSatMap *satmap, GooCanvasItemModel *root);
 static void redraw_grid_lines      (GtkSatMap *satmap);
+static gchar *aoslos_time_to_str   (GtkSatMap *satmap, sat_t *sat);
 
 static GtkVBoxClass *parent_class = NULL;
 static GooCanvasPoints *points1;
@@ -252,6 +253,7 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
 
     /* create the canvas */
     GTK_SAT_MAP (satmap)->canvas = goo_canvas_new ();
+    g_object_set (G_OBJECT (GTK_SAT_MAP (satmap)->canvas), "has-tooltip", TRUE, NULL);
 
     /* safely load a background map */
     load_map_file (GTK_SAT_MAP (satmap));
@@ -1656,6 +1658,7 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     gint *catnum;
     guint32 col,covcol,shadowcol;
     gfloat x,y;
+    gchar *tooltip;
 
     /* get satellite and SSP */
     catnum = g_new0 (gint, 1);
@@ -1696,6 +1699,16 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                  MOD_CFG_MAP_SHADOW_ALPHA,
                                  SAT_CFG_INT_MAP_SHADOW_ALPHA);
 
+    /* create tooltip */
+    tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
+                              "<tt>Lon: %5.1f\302\260\n" \
+                              "Lat: %5.1f\302\260\n" \
+                              " Az: %5.1f\302\260\n" \
+                              " El: %5.1f\302\260</tt>",
+                              sat->nickname,
+                              sat->ssplon, sat->ssplat,
+                              sat->az, sat->el);
+
 
     /* create satellite marker and label + shadows. We create shadows first */
     obj->shadowm = goo_canvas_rect_model_new (root,
@@ -1713,6 +1726,7 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                              2 * MARKER_SIZE_HALF,
                                              "fill-color-rgba", col,
                                              "stroke-color-rgba", col,
+                                             "tooltip", tooltip,
                                              NULL);
 
     obj->shadowl = goo_canvas_text_model_new (root, sat->nickname,
@@ -1730,8 +1744,10 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                             GTK_ANCHOR_NORTH,
                                             "font", "Sans 8",
                                             "fill-color-rgba", col,
+                                            "tooltip", tooltip,
                                             NULL);
 
+    g_free (tooltip);
 
     g_object_set_data (G_OBJECT (obj->marker), "catnum", GINT_TO_POINTER (*catnum));
     g_object_set_data (G_OBJECT (obj->label), "catnum", GINT_TO_POINTER (*catnum));
@@ -1799,6 +1815,8 @@ update_sat (gpointer key, gpointer value, gpointer data)
     GooCanvasItemModel *root;
     gint               idx;
     guint32            col,covcol;
+    gchar    *tooltip;
+    gchar    *aosstr;
 
     //gdouble sspla,ssplo;
 
@@ -1834,6 +1852,23 @@ update_sat (gpointer key, gpointer value, gpointer data)
     //sat_debugger_get_ssp (&ssplo,&sspla);
     //sat->ssplon = ssplo;
     //sat->ssplat = sspla;
+
+    /* we update tooltips every time */
+    aosstr = aoslos_time_to_str(satmap, sat);
+    tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
+                              "<tt>Lon: %5.1f\302\260\n" \
+                              "Lat: %5.1f\302\260\n" \
+                              " Az: %5.1f\302\260\n" \
+                              " El: %5.1f\302\260\n" \
+                              "%s</tt>",
+                              sat->nickname,
+                              sat->ssplon, sat->ssplat,
+                              sat->az, sat->el,
+                              aosstr);
+    g_object_set (obj->marker, "tooltip", tooltip, NULL);
+    g_object_set (obj->label, "tooltip", tooltip, NULL);
+    g_free (tooltip);
+    g_free (aosstr);
 
     lonlat_to_xy (satmap, sat->ssplon, sat->ssplat, &x, &y);
 
@@ -2312,3 +2347,42 @@ gtk_sat_map_reload_sats (GtkWidget *satmap, GHashTable *sats)
     GTK_SAT_MAP (satmap)->ncat = 0;
 }
 
+
+
+/** \brief Convert AOS or LOS timestamp to human readable countdown string */
+static gchar *aoslos_time_to_str (GtkSatMap *satmap, sat_t *sat)
+{
+    guint    h,m,s;
+    gdouble  number, now;
+    gchar   *text = NULL;
+
+
+    now = satmap->tstamp;//get_current_daynum ();
+    if (sat->el > 0.0) {
+        number = sat->los - now;
+    }
+    else {
+        number = sat->aos - now;
+    }
+
+    /* convert julian date to seconds */
+    s = (guint) (number * 86400);
+
+    /* extract hours */
+    h = (guint) floor (s/3600);
+    s -= 3600*h;
+
+    /* extract minutes */
+    m = (guint) floor (s/60);
+    s -= 60*m;
+
+
+    if (sat->el > 0.0) {
+        text = g_strdup_printf (_("LOS in %d minutes"), m+60*h);
+    }
+    else {
+        text = g_strdup_printf (_("AOS in %d minutes"), m+60*h);
+    }
+
+    return text;
+}

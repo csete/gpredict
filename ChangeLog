@@ -21,6 +21,10 @@
     * src/gtk-polar-view.c:
     Added satellite tooltips showing current Az, El and time to LOS.
 
+    * src/gtk-sat-map.c:
+    Added satellite tooltips in map view showing current SSP Lat, Lon, Az, El
+    and time to AOS/LOS.
+
 
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
 
