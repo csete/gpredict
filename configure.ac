@@ -21,7 +21,7 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
 fi
 
 dnl check for glib, gtk, and goocanvas libraries
-pkg_modules="gtk+-2.0 >= 2.12.0 glib-2.0 >= 2.16.0 gthread-2.0 >= 2.14.0 goocanvas >= 0.9 libcurl >= 7.16.0"
+pkg_modules="gtk+-2.0 >= 2.18.0 glib-2.0 >= 2.22.0 gthread-2.0 >= 2.22.0 goocanvas >= 0.15 libcurl >= 7.19.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)

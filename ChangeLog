@@ -3,6 +3,9 @@
     * src/mod-mgr.c:
     Allow docked modules to be reordered by dragging the tabs.
 
+    * src/configure-ac:
+    Require GooCanvas 0.15. Updated dependencies to match Ubuntu 9.10 Karmic.
+
 
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
 
