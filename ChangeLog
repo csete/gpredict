@@ -18,6 +18,9 @@
     * src/sat-cfg.c:
     Changed default value of SKY_AT_GLANCE/COLOUR_07 to be darker.
 
+    * src/gtk-polar-view.c:
+    Added satellite tooltips showing current Az, El and time to LOS.
+
 
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
 

@@ -88,6 +88,7 @@ static gboolean on_button_release      (GooCanvasItem *item,
 static void clear_selection            (gpointer key, gpointer val, gpointer data);
 static GooCanvasItemModel* create_canvas_model (GtkPolarView *polv);
 static void get_canvas_bg_color        (GtkPolarView *polv, GdkColor *color);
+static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -237,12 +238,13 @@ gtk_polar_view_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
 
     /* create the canvas */
     GTK_POLAR_VIEW (polv)->canvas = goo_canvas_new ();
+    g_object_set (G_OBJECT (GTK_POLAR_VIEW (polv)->canvas), "has-tooltip", TRUE, NULL);
     get_canvas_bg_color (GTK_POLAR_VIEW (polv), &bg_color);
     gtk_widget_modify_base (GTK_POLAR_VIEW (polv)->canvas, GTK_STATE_NORMAL, &bg_color);
     gtk_widget_set_size_request (GTK_POLAR_VIEW (polv)->canvas,
                                  POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
     goo_canvas_set_bounds (GOO_CANVAS (GTK_POLAR_VIEW (polv)->canvas), 0, 0,
-                                POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+                           POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
 
 
     /* connect size-request signal */
@@ -792,6 +794,8 @@ update_sat    (gpointer key, gpointer value, gpointer data)
     gint               idx,i;
     gdouble            now;// = get_current_daynum ();
     gchar             *text;
+    gchar             *losstr;
+    gchar             *tooltip;
     guint32            colour;
 
 
@@ -870,78 +874,48 @@ update_sat    (gpointer key, gpointer value, gpointer data)
 
         /* if sat is already on canvas */
         if (obj != NULL) {
-            /* update sat */
+
+            /* update LOS count down */
+            if (sat->los > 0.0) {
+                losstr = los_time_to_str(polv, sat);
+            }
+            else {
+                losstr = g_strdup_printf (_("%s\nAlways in range"), sat->nickname);
+            }
+
+            /* update tooltip */
+            tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
+                                      "<tt>Az: %5.1f\302\260\n" \
+                                      "El: %5.1f\302\260\n" \
+                                      "%s</tt>",
+                                      sat->nickname,
+                                      sat->az, sat->el,
+                                      losstr);
+
             g_object_set (obj->marker,
                           "x", x - MARKER_SIZE_HALF,
                           "y", y - MARKER_SIZE_HALF,
+                          "tooltip", tooltip,
                           NULL);
             g_object_set (obj->label,
                           "x", x,
                           "y", y+2,
+                          "tooltip", tooltip,
                           NULL);
+
+            g_free (tooltip);
 
             /* update selection info if satellite is
                selected
             */
             if (obj->selected) {
-                guint         h,m,s;
-                gchar        *ch,*cm,*cs;
-                gdouble       number, now;
-
-                if (sat->los > 0.0) {
-                    now = polv->tstamp;//get_current_daynum ();
-                    number = sat->los - now;
-
-                    /* convert julian date to seconds */
-                    s = (guint) (number * 86400);
-
-                    /* extract hours */
-                    h = (guint) floor (s/3600);
-                    s -= 3600*h;
-
-                    /* leading zero */
-                    if ((h > 0) && (h < 10))
-                        ch = g_strdup ("0");
-                    else
-                        ch = g_strdup ("");
-
-                    /* extract minutes */
-                    m = (guint) floor (s/60);
-                    s -= 60*m;
-
-                    /* leading zero */
-                    if (m < 10)
-                        cm = g_strdup ("0");
-                    else
-                        cm = g_strdup ("");
-
-                    /* leading zero */
-                    if (s < 10)
-                        cs = g_strdup (":0");
-                    else
-                        cs = g_strdup (":");
-
-                    if (h > 0) {
-                        text = g_strdup_printf (_("%s\nLOS in %s%d:%s%d%s%d"),
-                                                sat->nickname, ch, h, cm, m, cs, s);
-                    }
-                    else {
-                        text = g_strdup_printf (_("%s\nLOS in %s%d%s%d"),
-                                                sat->nickname, cm, m, cs, s);
-                    }
-                    g_free (ch);
-                    g_free (cm);
-                    g_free (cs);
-                }
-                else {
-                    text = g_strdup_printf (_("%s\nAlways in range"), sat->nickname);
-                }
+                text = g_strdup_printf ("%s\n%s",sat->nickname, losstr);
                 g_object_set (polv->sel, "text", text, NULL);
-
                 g_free (text);
             }
 
-            g_free (catnum);
+            g_free (losstr);
+            g_free (catnum);  // FIXME: why free here, what about else?
         }
         else {
             /* add sat to canvas */
@@ -957,6 +931,14 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                       MOD_CFG_POLAR_SAT_COL,
                                       SAT_CFG_INT_POLAR_SAT_COL);
 
+            /* create tooltip */
+            tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
+                                      "<tt>Az: %5.1f\302\260\n" \
+                                      "El: %5.1f\302\260\n" \
+                                      "</tt>",
+                                      sat->nickname,
+                                      sat->az, sat->el);
+
             obj->marker = goo_canvas_rect_model_new (root,
                                                      x - MARKER_SIZE_HALF,
                                                      y - MARKER_SIZE_HALF,
@@ -964,6 +946,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                                      2*MARKER_SIZE_HALF,
                                                      "fill-color-rgba", colour,
                                                      "stroke-color-rgba", colour,
+                                                     "tooltip", tooltip,
                                                      NULL);
             obj->label = goo_canvas_text_model_new (root, sat->nickname,
                                                     x,
@@ -972,7 +955,10 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                                     GTK_ANCHOR_NORTH,
                                                     "font", "Sans 8",
                                                     "fill-color-rgba", colour,
+                                                    "tooltip", tooltip,
                                                     NULL);
+
+            g_free (tooltip);
             
             goo_canvas_item_model_raise (obj->marker, NULL);
             goo_canvas_item_model_raise (obj->label, NULL);
@@ -1603,4 +1589,60 @@ gtk_polar_view_reload_sats (GtkWidget *polv, GHashTable *sats)
 
     GTK_POLAR_VIEW (polv)->naos = 0.0;
     GTK_POLAR_VIEW (polv)->ncat = 0;
+}
+
+
+
+/** \brief Convert LOS timestamp to human readable countdown string */
+static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat)
+{
+    guint    h,m,s;
+    gchar   *ch,*cm,*cs;
+    gdouble  number, now;
+    gchar   *text = NULL;
+
+
+    now = polv->tstamp;//get_current_daynum ();
+    number = sat->los - now;
+
+    /* convert julian date to seconds */
+    s = (guint) (number * 86400);
+
+    /* extract hours */
+    h = (guint) floor (s/3600);
+    s -= 3600*h;
+
+    /* leading zero */
+    if ((h > 0) && (h < 10))
+        ch = g_strdup ("0");
+    else
+        ch = g_strdup ("");
+
+    /* extract minutes */
+    m = (guint) floor (s/60);
+    s -= 60*m;
+
+    /* leading zero */
+    if (m < 10)
+        cm = g_strdup ("0");
+    else
+        cm = g_strdup ("");
+
+    /* leading zero */
+    if (s < 10)
+        cs = g_strdup (":0");
+    else
+        cs = g_strdup (":");
+
+    if (h > 0) {        
+        text = g_strdup_printf (_("LOS in %s%d:%s%d%s%d"), ch, h, cm, m, cs, s);
+    }
+    else {
+        text = g_strdup_printf (_("LOS in %s%d%s%d"), cm, m, cs, s);
+    }
+    g_free (ch);
+    g_free (cm);
+    g_free (cs);
+
+    return text;
 }
