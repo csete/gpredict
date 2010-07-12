@@ -6,6 +6,9 @@
     * src/configure-ac:
     Require GooCanvas 0.15. Updated dependencies to match Ubuntu 9.10 Karmic.
 
+    * src/predict-tools.c:
+    Include TCA when creating copy of a pass.
+
 
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
 

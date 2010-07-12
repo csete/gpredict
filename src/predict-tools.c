@@ -661,6 +661,7 @@ copy_pass         (pass_t *pass)
     if (new != NULL) {
         new->aos = pass->aos;
         new->los = pass->los;
+        new->tca = pass->tca;
         new->max_el = pass->max_el;
         new->aos_az = pass->aos_az;
         new->los_az = pass->los_az;
