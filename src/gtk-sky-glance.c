@@ -804,8 +804,7 @@ on_button_release (GooCanvasItem *item,
  * \return Always TRUE to prevent further propagation of the event.
  *
  * This function is used to be notified when the mouse enters over a satellite
- * pass box. When this happens the user is presented with brief info about the
- * satellite pass and a suggestion to click on the box for more info.
+ * pass box. We could use it to highlihght the pass under the mouse.
  */
 static gboolean on_mouse_enter         (GooCanvasItem    *item,
                                         GooCanvasItem    *target_item,
@@ -824,7 +823,6 @@ static gboolean on_mouse_enter         (GooCanvasItem    *item,
         return TRUE;
     }
 
-
     //g_print("Mouse enter: %s AOS:\n");
 
     return TRUE;
@@ -839,14 +837,14 @@ static gboolean on_mouse_enter         (GooCanvasItem    *item,
  * \return Always TRUE to prevent further propagation of the event.
  *
  * This function is used to be notified when the mouse leaves a satellite
- * pass box. When this happens the information about the pass is cleared.
+ * pass box.
  */
 static gboolean on_mouse_leave         (GooCanvasItem    *item,
                                         GooCanvasItem    *target_item,
                                         GdkEventCrossing *event,
                                         gpointer          data)
 {
-    g_print("Mouse leave\n");
+    //g_print("Mouse leave\n");
 
     return TRUE;
 }
@@ -955,7 +953,7 @@ static void get_colours (guint i, guint *bcol, guint *fcol)
     *bcol = (tmp * 0x100) | 0xFF;
 
     /* fill colour is slightly transparent */
-    *fcol = (tmp * 0x100) | 0xF0;
+    *fcol = (tmp * 0x100) | 0xA0;
 }
 
 
@@ -1049,6 +1047,8 @@ create_sat (gpointer key, gpointer value, gpointer data)
                 skypass->box = goo_canvas_rect_model_new (root, 10, 10, 20, 20, /* dummy coordinates */
                                                           "stroke-color-rgba", bcol,
                                                           "fill-color-rgba", fcol,
+                                                          "line-width", 1.0,
+                                                          "antialias", CAIRO_ANTIALIAS_NONE,
                                                           "tooltip", tooltip,
                                                           NULL);
                 g_free (tooltip);
