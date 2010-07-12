@@ -12,6 +12,11 @@
     * src/gtk-sky-glance.c:
     Implemented pass summary pop-up when mouse hovers over a pass. Works like
     tooltips.
+    Turn off anitialias for rectangles to make them look sharper.
+    Increase transparency of fill color.
+
+    * src/sat-cfg.c:
+    Changed default value of SKY_AT_GLANCE/COLOUR_07 to be darker.
 
 
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
