@@ -192,7 +192,7 @@ sat_cfg_int_t sat_cfg_int[SAT_CFG_INT_NUM] = {
     { "SKY_AT_GLANCE", "COLOUR_04", 0xd06b38},
     { "SKY_AT_GLANCE", "COLOUR_05", 0xcf477a},
     { "SKY_AT_GLANCE", "COLOUR_06", 0xbf041f},
-    { "SKY_AT_GLANCE", "COLOUR_07", 0x04bf20},
+    { "SKY_AT_GLANCE", "COLOUR_07", 0x688522},
     { "SKY_AT_GLANCE", "COLOUR_08", 0x0420bf},
     { "SKY_AT_GLANCE", "COLOUR_09", 0xa304bf},
     { "SKY_AT_GLANCE", "COLOUR_10", 0x04bdbf},
