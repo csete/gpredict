@@ -101,11 +101,11 @@ static gboolean on_mouse_leave         (GooCanvasItem    *item,
 static GooCanvasItemModel* create_canvas_model (GtkSkyGlance *skg);
 
 
-static gdouble t2x (GtkSkyGlance *skg, gdouble t);
-static gdouble x2t (GtkSkyGlance *skg, gdouble x);
-
 static void create_sat (gpointer key, gpointer value, gpointer data);
 
+static gdouble t2x (GtkSkyGlance *skg, gdouble t);
+static gdouble x2t (GtkSkyGlance *skg, gdouble x);
+static gchar *time_to_str (gdouble julutc);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -280,6 +280,7 @@ gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
 
     /* create the canvas */
     GTK_SKY_GLANCE (skg)->canvas = goo_canvas_new ();
+    g_object_set (G_OBJECT (GTK_SKY_GLANCE(skg)->canvas), "has-tooltip", TRUE, NULL);
     gtk_widget_modify_base (GTK_SKY_GLANCE (skg)->canvas, GTK_STATE_NORMAL, &bg_color);
     gtk_widget_set_size_request (GTK_SKY_GLANCE (skg)->canvas,
                                  GTK_SKY_GLANCE (skg)->w,
@@ -824,8 +825,6 @@ static gboolean on_mouse_enter         (GooCanvasItem    *item,
     }
 
 
-
-
     //g_print("Mouse enter: %s AOS:\n");
 
     return TRUE;
@@ -983,6 +982,12 @@ create_sat (gpointer key, gpointer value, gpointer data)
     GooCanvasItemModel *root;
     GooCanvasItemModel *lab;
 
+    /* tooltips vars */
+    gchar *tooltip; /* the complete tooltips string */
+    gchar *aosstr;  /* AOS time string */
+    gchar *losstr;  /* LOS time string */
+    gchar *tcastr;  /* TCA time string */
+
 
     /* FIXME: 
         Include current pass if sat is up now
@@ -1021,10 +1026,32 @@ create_sat (gpointer key, gpointer value, gpointer data)
                 skypass->catnum = sat->tle.catnr;
                 tmppass = (pass_t *) g_slist_nth_data (passes, i);
                 skypass->pass = copy_pass (tmppass);
+
+                aosstr = time_to_str (skypass->pass->aos);
+                losstr = time_to_str (skypass->pass->los);
+                tcastr = time_to_str (skypass->pass->tca);
+
+                /* box tooltip will contain pass summary */
+                tooltip = g_strdup_printf("<big><b>%s</b>\n</big>\n"\
+                                          "<tt>AOS: %s  Az:%.0f\302\260\n" \
+                                          "TCA: %s  Az:%.0f\302\260 / El:%.1f\302\260\n" \
+                                          "LOS: %s  Az:%.0f\302\260</tt>\n" \
+                                          "\n<i>Click for details</i>",
+                                          skypass->pass->satname,
+                                          aosstr, skypass->pass->aos_az,
+                                          tcastr, skypass->pass->maxel_az, skypass->pass->max_el,
+                                          losstr, skypass->pass->los_az);
+
+                g_free (aosstr);
+                g_free (losstr);
+                g_free (tcastr);
+
                 skypass->box = goo_canvas_rect_model_new (root, 10, 10, 20, 20, /* dummy coordinates */
                                                           "stroke-color-rgba", bcol,
                                                           "fill-color-rgba", fcol,
+                                                          "tooltip", tooltip,
                                                           NULL);
+                g_free (tooltip);
 
                 /* store this pass in list */
                 skg->passes = g_slist_append (skg->passes, skypass);
@@ -1052,4 +1079,48 @@ create_sat (gpointer key, gpointer value, gpointer data)
                                             NULL);
         skg->satlab = g_slist_append (skg->satlab, lab);
     }
+}
+
+
+
+/** \brief Convert "jul_utc" time to formatted string
+  * \param julutc The time to convert
+  * \return A newly allocated string containing the formatted time (should be freed by caller)
+  *
+  * \bug This code is duplicated many places.
+  */
+static gchar *time_to_str (gdouble julutc)
+{
+    gchar   buff[TIME_FORMAT_MAX_LENGTH];
+    gchar  *fmtstr;
+    gchar  *timestr;
+    time_t  t;
+    guint   size;
+
+
+    /* convert julian date to struct time_t */
+    t = (julutc - 2440587.5)*86400.;
+
+    /* format the number */
+    fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
+
+    /* format either local time or UTC depending on check box */
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
+        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
+    }
+    else {
+        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
+    }
+
+    g_free (fmtstr);
+
+
+    if (size == 0)
+        /* size > MAX_LENGTH */
+        buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+
+    timestr = g_strdup (buff);
+
+
+    return timestr;
 }

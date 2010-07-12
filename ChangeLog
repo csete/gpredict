@@ -9,6 +9,10 @@
     * src/predict-tools.c:
     Include TCA when creating copy of a pass.
 
+    * src/gtk-sky-glance.c:
+    Implemented pass summary pop-up when mouse hovers over a pass. Works like
+    tooltips.
+
 
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
 
