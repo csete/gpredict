@@ -1,3 +1,9 @@
+2010-07-12 alexandru Csete >oz9aec at gmail.com>
+
+    * src/mod-mgr.c:
+    Allow docked modules to be reordered by dragging the tabs.
+
+
 2010-07-11 Alexandru Csete <oz9aec at gmail.com>
 
     * data/satdata:

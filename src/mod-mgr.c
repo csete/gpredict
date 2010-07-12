@@ -202,6 +202,9 @@ mod_mgr_add_module     (GtkWidget *module, gboolean dock)
                                              module,
                                              gtk_label_new (GTK_SAT_MODULE (module)->name));
 
+            /* allow nmodule to be dragged to different position */
+            gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK(nbook), module, TRUE);
+
             gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
             /* send message to logger */

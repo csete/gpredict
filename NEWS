@@ -41,6 +41,7 @@ Changes in version 1.2 (TBD)
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance
   over light background map regions.
 - Fixed incorrect uplink and downlink frequencies for HO-68, mode V/U packet.
+- Modules that are docked in the main window can be reordered by dragging the tabs.
 
 
 Changes in version 1.1 (5 Oct 2009)
