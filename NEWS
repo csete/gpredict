@@ -4,7 +4,8 @@ Changes in version 1.2 (TBD)
 * New transponder editor to edit transponder data.
 - New layout engine that allows any combination of views to be created in a NxM grid.
   Closes feature request 2821408.
-* Sky at a glance is now more interactive. Click on a pass to get the details.
+- Sky at a glance is now more interactive. Show pass summary when mouse hovers over pass and
+  click on pass shows the details.
 * Feature request 2866570: Set operating mode via CAT.
 * Feature request 2873824: Flip Passes.
 * Feature request 2778735: Visual indicator for RX/TX/TRX.
