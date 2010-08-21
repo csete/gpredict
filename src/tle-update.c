@@ -55,6 +55,8 @@ static GStaticMutex tle_file_in_progress = G_STATIC_MUTEX_INIT ;
 /* private function prototypes */
 static size_t  my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream);
 static gint    read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *data);
+static gboolean is_tle_file (const gchar *dir, const gchar *fnam);
+
 
 static void    update_tle_in_file (const gchar *ldname,
                                    const gchar *fname,
@@ -159,28 +161,32 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     }
     else {
 
-        /* read fresh tle files into memory */
+        /* scan directory for tle files */
         while ((fnam = g_dir_read_name (cache_dir)) != NULL) {
 
-            /* status message */
-            if (!silent && (label1 != NULL)) {
-                text = g_strdup_printf (_("Reading data from %s"), fnam);
-                gtk_label_set_text (GTK_LABEL (label1), text);
-                g_free (text);
-
-
-                /* Force the drawing queue to be processed otherwise there will
-                    not be any visual feedback, ie. frozen GUI
-                    - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
-                */
-                while (g_main_context_iteration (NULL, FALSE));
-
-                /* give user a chance to follow progress */
-                g_usleep (G_USEC_PER_SEC / 100);
+            /* check that we got a TLE file */
+            if (is_tle_file(dir, fnam)) {
+                
+                /* status message */
+                if (!silent && (label1 != NULL)) {
+                    text = g_strdup_printf (_("Reading data from %s"), fnam);
+                    gtk_label_set_text (GTK_LABEL (label1), text);
+                    g_free (text);
+    
+    
+                    /* Force the drawing queue to be processed otherwise there will
+                        not be any visual feedback, ie. frozen GUI
+                        - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
+                    */
+                    while (g_main_context_iteration (NULL, FALSE));
+    
+                    /* give user a chance to follow progress */
+                    g_usleep (G_USEC_PER_SEC / 100);
+                }
+    
+                /* now, do read the fresh data */
+                num = read_fresh_tle (dir, fnam, data);
             }
-
-            /* now, do read the fresh data */
-            num = read_fresh_tle (dir, fnam, data);
             
             if (num < 1) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -712,12 +718,44 @@ static size_t my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream)
 }
 
 
+/** \brief Check whether file is TLE file.
+ *  \param dir The directory.
+ *  \param fnam The file name.
+ * 
+ * This function checks whether the file with path dir/fnam is a potential
+ * TLE file. Checks performed:
+ *   - It is a real file
+ *   - suffix is .txt or .tle
+ */
+static gboolean is_tle_file (const gchar *dir, const gchar *fnam)
+{
+    gchar    *path;
+    gboolean  fileIsOk = FALSE;
+    
+    
+    path = g_strconcat (dir, G_DIR_SEPARATOR_S, fnam, NULL);
+    
+    if (g_file_test (path, G_FILE_TEST_IS_REGULAR) && 
+        (g_str_has_suffix(fnam, ".tle") || g_str_has_suffix(fnam, ".txt")))
+    {
+        fileIsOk = TRUE;      
+    }
+    
+    g_free (path);
+    
+    return fileIsOk;
+}
+
 
 /** \brief Read fresh TLE data into hash table.
  *  \param dir The directory to read from.
  *  \param fnam The name of the file to read from.
  *  \param fresh_data Hash table where the data should be stored.
  *  \return The number of satellites successfully read.
+ * 
+ * This function will read fresh TLE data from local files into memory.
+ * If there is a saetllite category (.cat file) with the same name as the
+ * input file it will also update the satellites in that category.
  */
 static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *data)
 {
@@ -736,6 +774,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
     gchar     *catname, *catpath, *buff, **buffv;
     FILE      *catfile;
     gchar      category[80];
+    gboolean   catsync = FALSE; /* whether .cat file should be synced */
 
 
 
@@ -757,94 +796,96 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
         if (catfile!=NULL) {
             b = fgets (category, 80, catfile);
             fclose (catfile);
+            catsync = TRUE;
         }
         else {
-            /* FIXME not sure what goes here AA1VS */
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%s: Failed to open %s"),
-                         __FILE__, __FUNCTION__, catpath);
-            return (retcode);
+            /* There is no category with this name (could be update from custom file) */
+            sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s:%s: There is no category called %s"),
+                         __FILE__, __FUNCTION__, fnam);
         }
 
         /* reopen a new catfile and write category name */
-        catfile = g_fopen (catpath, "w");
-        if (catfile!=NULL) {
-
-            fputs (category, catfile);
-
+        if (catsync) {
+            catfile = g_fopen (catpath, "w");
+            if (catfile != NULL) {
+                fputs (category, catfile);
+            }
+            else {
+                catsync = FALSE;
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s:%s: Could not reopne .cat file while reading TLE from %s"),
+                             __FILE__, __FUNCTION__, fnam);
+            }
+            
             /* .cat file now contains the category name;
 			   satellite catnums will be added during update in the while loop */
+        }
+        
 
-            /* read 3 lines at a time */
-            while (fgets (tle_str[0], 80, fp)) {
-                /* read second and third lines */
-                b = fgets (tle_str[1], 80, fp);
-                b = fgets (tle_str[2], 80, fp);
+        /* read 3 lines at a time */
+        while (fgets (tle_str[0], 80, fp)) {
+            /* read second and third lines */
+            b = fgets (tle_str[1], 80, fp);
+            b = fgets (tle_str[2], 80, fp);
 
-                tle_str[1][69] = '\0';
-                tle_str[2][69] = '\0';
+            tle_str[1][69] = '\0';
+            tle_str[2][69] = '\0';
 
-                /* copy catnum and convert to integer */
-                for (i = 2; i < 7; i++) {
-                    catstr[i-2] = tle_str[1][i];
-                }
-                catstr[5] = '\0';
-                catnr = (guint) g_ascii_strtod (catstr, NULL);
+            /* copy catnum and convert to integer */
+            for (i = 2; i < 7; i++) {
+                catstr[i-2] = tle_str[1][i];
+            }
+            catstr[5] = '\0';
+            catnr = (guint) g_ascii_strtod (catstr, NULL);
 
 
-                if (Get_Next_Tle_Set (tle_str, &tle) != 1) {
-                    /* TLE data not good */
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                 _("%s:%s: Invalid data for %d"),
-                                 __FILE__, __FUNCTION__, catnr);
-                }
-                else {
-                    /* DATA OK, phew... */
-                    /* 				sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-                    /* 						     _("%s: Good data for %d"), */
-                    /* 						     __FUNCTION__, */
-                    /* 						     catnr); */
+            if (Get_Next_Tle_Set (tle_str, &tle) != 1) {
+                /* TLE data not good */
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s:%s: Invalid data for %d"),
+                             __FILE__, __FUNCTION__, catnr);
+            }
+            else {
 
+                if (catsync) {
                     /* store catalog number in catfile */
                     buff = g_strdup_printf ("%d\n", catnr);
                     fputs (buff, catfile);
                     g_free (buff);
-
-                    /* add data to hash table */
-                    key = g_try_new0 (guint, 1);
-                    *key = catnr;
-
-                    /* check if satellite already in hash table */
-                    if (g_hash_table_lookup (data, key) == NULL) {
-
-                        /* create new_tle structure */
-                        ntle = g_try_new (new_tle_t, 1);
-                        ntle->catnum = catnr;
-                        ntle->epoch = tle.epoch;
-                        ntle->satname = g_strdup (g_strchomp(tle_str[0]));
-                        ntle->line1   = g_strdup (tle_str[1]);
-                        ntle->line2   = g_strdup (tle_str[2]);
-                        ntle->srcfile = g_strdup (fnam);
-                        ntle->isnew   = TRUE; /* flag will be reset when using data */
-
-
-                        g_hash_table_insert (data, key, ntle);
-                        retcode++;
-                    }
-                    else {
-                        g_free (key);
-                    }
                 }
 
+                /* add data to hash table */
+                key = g_try_new0 (guint, 1);
+                *key = catnr;
+
+                /* check if satellite already in hash table */
+                if (g_hash_table_lookup (data, key) == NULL) {
+
+                    /* create new_tle structure */
+                    ntle = g_try_new (new_tle_t, 1);
+                    ntle->catnum = catnr;
+                    ntle->epoch = tle.epoch;
+                    ntle->satname = g_strdup (g_strchomp(tle_str[0]));
+                    ntle->line1   = g_strdup (tle_str[1]);
+                    ntle->line2   = g_strdup (tle_str[2]);
+                    ntle->srcfile = g_strdup (fnam);
+                    ntle->isnew   = TRUE; /* flag will be reset when using data */
+
+
+                    g_hash_table_insert (data, key, ntle);
+                    retcode++;
+                }
+                else {
+                    g_free (key);
+                }
             }
 
+        }
+
+        if (catsync) {
             /* close category file */
             fclose (catfile);
-        }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%s: Failed to open %s"),
-                         __FILE__, __FUNCTION__, catpath);
         }
 
         g_free (catpath);

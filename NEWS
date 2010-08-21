@@ -16,7 +16,8 @@ Changes in version 1.2 (TBD)
 - Fixed bug 2918672: Trailing whitespace and newline in satellite names.
 - Fixed bug 2914679: Unable to save Future passes.
 - Fixed bug 2674626: Process 100% CPU load with one kepler element.
-- Fixed bug 2792349: Segfault on certain satellites (Geo)
+- Fixed bug 2792349: Segfault on certain satellites (Geo).
+- Fixed bug 3050068: Unable to update TLE from local files.
 - Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to Charles Suprin AA1VS).
 - Applied patch 2877878: Change Flag to Lock in tle-update (thanks to Charles Suprin AA1VS).
 - Applied patch 2877918: Fixes segfault in TLE updater (thanks to Charles Suprin AA1VS).

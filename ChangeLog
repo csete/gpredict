@@ -8,6 +8,9 @@
     Applied patch 3050047 from Patrick Strasser OE6PSE to include current
     pass in the list of future passes.
     
+    * src/tle-update.c:
+    Fixed bug 3050068: Unable to update TLE from local files.
+    
 
 2010-07-12 Alexandru Csete <oz9aec at gmail.com>
 
