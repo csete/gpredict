@@ -39,6 +39,7 @@ Changes in version 1.2 (TBD)
 - Applied patch 3005548: Cut and Paste Error In print_pass.h (Thanks to Charles Suprin AA1VS).
 - Applied patch 3009725: Delete Explicit Call to gtk_set_locale (Thanks to Charles Suprin AA1VS).
 - Applied patch 3009727: Free satellite hash references (Thanks to Charles Suprin AA1VS).
+- Applied patch 3050047: Improve sat search and prediction of upcoming passes (Thanks to Patrick Strasser OE6PSE)
 - Slightly improved UI for the single-satellite view.
 - Command line options for cleaning user's TLE and transponder data, see --help for list.
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance

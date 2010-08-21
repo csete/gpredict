@@ -1,4 +1,15 @@
-2010-07-12 alexandru Csete >oz9aec at gmail.com>
+2010-08-21 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-selector.c:
+    Applied patch 3050047 from Patrick Strasser OE6PSE to improve searching
+    in the satellite selector.
+    
+    * src/predict-tools.c:
+    Applied patch 3050047 from Patrick Strasser OE6PSE to include current
+    pass in the list of future passes.
+    
+
+2010-07-12 Alexandru Csete <oz9aec at gmail.com>
 
     * src/mod-mgr.c:
     Allow docked modules to be reordered by dragging the tabs.

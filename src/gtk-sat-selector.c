@@ -28,6 +28,7 @@
 /** \brief Satellite selector.
  *
  */
+#include "string.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
@@ -39,7 +40,7 @@
 #include "compat.h"
 #include "sat-cfg.h"
 #include "gtk-sat-selector.h"
-
+#include "gtk-sat-tree.h"
 
 
 
@@ -83,6 +84,36 @@ enum {
 /** \brief GtkSatSelector specific signals. */
 static guint gtksatsel_signals[LAST_SIGNAL] = { 0 };
 
+gboolean gtk_sat_selector_search_equal_func (GtkTreeModel *model, 
+                                             gint column,
+                                             const gchar *key,
+                                             GtkTreeIter *iter,
+                                             gpointer search_data)
+{
+    gchar *name = NULL;
+    gchar *match;
+    gchar *NULLSTR = "NULL";
+
+    gtk_tree_model_get(model, iter, GTK_SAT_TREE_COL_NAME, &name, -1);
+    /* sat_log_log(SAT_LOG_LEVEL_MSG, "%s: key %s, name %s", */
+    /*             __FUNCTION__,  */
+    /*             key,  */
+    /*             (name==NULL) ? NULLSTR : name);  */ 
+    if (name == NULL){
+        sat_log_log(SAT_LOG_LEVEL_MSG, "%s:%s: name is NULL", __FILE__, __FUNCTION__); 
+        return TRUE;
+    }
+    match = strstr(name, key);
+
+    if (match == NULL) {
+        //sat_log_log(SAT_LOG_LEVEL_BUG, "%s: no match", __FUNCTION__);
+        return TRUE;
+    } 
+    else {
+        //sat_log_log(SAT_LOG_LEVEL_BUG, "%s: MATCH at %s", __FUNCTION__, match);
+        return FALSE;
+    }
+}
 
 GType gtk_sat_selector_get_type ()
 {
@@ -293,6 +324,10 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     /* this enables automatic search */
     gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
                                     GTK_ENTRY (GTK_SAT_SELECTOR (widget)->search));
+    gtk_tree_view_set_search_equal_func(GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
+                                            gtk_sat_selector_search_equal_func,
+                                            NULL,
+                                        NULL);
     gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 4, 0, 1,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
 

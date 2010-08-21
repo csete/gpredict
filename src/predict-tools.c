@@ -445,7 +445,20 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
     */
     while (!done) {
 
+        /* Find los of next pass or of current pass */
+        los = find_los (sat, qth, t0, maxdt); // See if a pass is ongoing
         aos = find_aos (sat, qth, t0, maxdt);
+        /* sat_log_log(SAT_LOG_LEVEL_MSG, "%s:%s:%d: found aos %f and los %f for t0=%f", */
+        /*          __FILE__,  */
+        /*          __FUNCTION__, */
+        /*          __LINE__, */
+        /*          aos, */
+        /*          los,  */
+        /*          t0); */
+        if (aos > los) {
+            // los is from an currently happening pass, find previous aos
+            aos = find_prev_aos(sat, qth, t0);
+        }
 
         /* aos = 0.0 means no aos */
         if (aos == 0.0) {
@@ -459,7 +472,7 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
             done = TRUE;
         }
         else {
-            los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
+            //los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
             dt = los - aos;
 
             /* get time step, which will give us the max number of entries */
