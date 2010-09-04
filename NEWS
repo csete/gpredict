@@ -18,6 +18,7 @@ Changes in version 1.2 (TBD)
 - Fixed bug 2674626: Process 100% CPU load with one kepler element.
 - Fixed bug 2792349: Segfault on certain satellites (Geo).
 - Fixed bug 3050068: Unable to update TLE from local files.
+- Fixed bugs 3057771 and 3058753: Crash if module file is empty.
 - Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to Charles Suprin AA1VS).
 - Applied patch 2877878: Change Flag to Lock in tle-update (thanks to Charles Suprin AA1VS).
 - Applied patch 2877918: Fixes segfault in TLE updater (thanks to Charles Suprin AA1VS).
@@ -41,6 +42,7 @@ Changes in version 1.2 (TBD)
 - Applied patch 3009725: Delete Explicit Call to gtk_set_locale (Thanks to Charles Suprin AA1VS).
 - Applied patch 3009727: Free satellite hash references (Thanks to Charles Suprin AA1VS).
 - Applied patch 3050047: Improve sat search and prediction of upcoming passes (Thanks to Patrick Strasser OE6PSE)
+- Applied patch 3059022: Fix gpredict crashed with NULL pointer exception (Thanks to Charles Suprin AA1VS).
 - Slightly improved UI for the single-satellite view.
 - Command line options for cleaning user's TLE and transponder data, see --help for list.
 - Satellite Map: Added shadow to satellite marker and label to enhance visual appearance

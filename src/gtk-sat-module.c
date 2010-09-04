@@ -270,6 +270,15 @@ gtk_sat_module_new (const gchar *cfgfile)
     /* load configuration; note that this will also set the module name */
     gtk_sat_module_read_cfg_data (GTK_SAT_MODULE (widget), cfgfile);
 
+	/*check that we loaded some reasonable data*/
+	if (GTK_SAT_MODULE(widget)->cfgdata==NULL){
+		sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Module %s has problems."),
+                     __FUNCTION__, cfgfile);
+		
+        return NULL;
+	}
+	
     /* module state */
     if ((g_key_file_has_key (GTK_SAT_MODULE (widget)->cfgdata,
                              MOD_CFG_GLOBAL_SECTION,
@@ -484,7 +493,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                                     G_KEY_FILE_KEEP_COMMENTS, &error)) {
 
         g_key_file_free (module->cfgdata);
-
+		module->cfgdata=NULL;
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not load config data from %s (%s)."),
                      __FUNCTION__, cfgfile, error->message);

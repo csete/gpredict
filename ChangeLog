@@ -1,5 +1,12 @@
 2010-08-21 Alexandru Csete <oz9aec at gmail.com>
 
+    * src/gtk-sat-module.c:
+    Applied patch 3059022 from Charles Suprin AA1VS fixing crash if module file
+    is empty on empty (bugs 3057771 and 3058753).
+
+
+2010-08-21 Alexandru Csete <oz9aec at gmail.com>
+
     * src/gtk-sat-selector.c:
     Applied patch 3050047 from Patrick Strasser OE6PSE to improve searching
     in the satellite selector.
