@@ -2004,9 +2004,10 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
         vbuff = g_strsplit (buff, "\n", 3);
         pttstat = g_ascii_strtoull (vbuff[0], NULL, 0);  //FIXME base = 0 ok?
 
-        g_free (buff);
         g_strfreev (vbuff);
     }
+	g_free (buff);
+
 
 #ifndef WIN32
     shutdown (sock, SHUT_RDWR);
@@ -2517,9 +2518,10 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
         vbuff = g_strsplit (buff, "\n", 3);
         *freq = g_ascii_strtod (vbuff[0], NULL);
 
-        g_free (buff);
         g_strfreev (vbuff);
     }
+	g_free (buff);
+
     
 #ifndef WIN32
     shutdown (sock, SHUT_RDWR);
@@ -2636,9 +2638,9 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
         vbuff = g_strsplit (buff, "\n", 3);
         *freq = g_ascii_strtod (vbuff[0], NULL);
 
-        g_free (buff);
         g_strfreev (vbuff);
     }
+	g_free (buff);	
     
 #ifndef WIN32
     shutdown (sock, SHUT_RDWR);
