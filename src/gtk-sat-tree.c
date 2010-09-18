@@ -352,7 +352,7 @@ static GtkTreeModel *
         */
     while ((fname = g_dir_read_name (dir))) {
 
-        if (g_strrstr (fname, ".tle")) {
+        if (g_str_has_suffix (fname, ".tle")) {
 
             buffv = g_strsplit (fname, ".tle", 0);
             nodename = g_strdup (buffv[0]);

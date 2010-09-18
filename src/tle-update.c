@@ -245,7 +245,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
             num = 0;
             while ((fnam = g_dir_read_name (loc_dir)) != NULL) {
                 /* only consider .sat files */
-                if (g_strrstr (fnam, ".sat")) {
+                if (g_str_has_suffix (fnam, ".sat")) {
                     num++;
                 }
             }
@@ -255,7 +255,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
             /* update TLE files one by one */
             while ((fnam = g_dir_read_name (loc_dir)) != NULL) {
                 /* only consider .sat files */
-                if (g_strrstr (fnam, ".sat")) {
+                if (g_str_has_suffix (fnam, ".sat")) {
 
                     /* clear stat bufs */
                     updated_tmp = 0;

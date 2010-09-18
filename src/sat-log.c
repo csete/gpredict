@@ -348,7 +348,7 @@ clean_log_dir (const gchar *dirname, glong age)
 	while ((fname = g_dir_read_name (dir)) != NULL) {
 
 		/* ensure this is a .log file */
-		if G_LIKELY(g_strrstr (fname, ".log")) {
+		if G_LIKELY(g_str_has_suffix (fname, ".log")) {
 
 			vbuf = g_strsplit_set (fname, "-.", -1);
 

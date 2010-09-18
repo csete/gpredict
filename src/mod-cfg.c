@@ -864,7 +864,7 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
     if (dir) {
         while ((filename = g_dir_read_name (dir))) {
 
-            if (g_strrstr (filename, ".qth")) {
+            if (g_str_has_suffix (filename, ".qth")) {
 
                 buffv = g_strsplit (filename, ".qth", 0);
                 gtk_combo_box_append_text (GTK_COMBO_BOX (combo), buffv[0]);

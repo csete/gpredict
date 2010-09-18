@@ -608,7 +608,7 @@ static void clean_tle (void)
 
 
     while ((filename = g_dir_read_name (targetdir))) {
-        if (g_strrstr (filename, ".sat")) {
+        if (g_str_has_suffix (filename, ".sat")) {
             /* remove .sat file */
             path = sat_file_name (filename);
             if G_UNLIKELY(g_unlink (path)) {
@@ -649,7 +649,7 @@ static void clean_trsp (void)
 
 
     while ((filename = g_dir_read_name (targetdir))) {
-        if (g_strrstr (filename, ".trsp")) {
+        if (g_str_has_suffix (filename, ".trsp")) {
             /* remove .trsp file */
             path = trsp_file_name (filename);
             if G_UNLIKELY(g_unlink (path)) {

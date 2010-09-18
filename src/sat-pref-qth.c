@@ -312,7 +312,7 @@ create_and_fill_model ()
 
 		while ((filename = g_dir_read_name (dir))) {
 
-			if (g_strrstr (filename, ".qth")) {
+			if (g_str_has_suffix (filename, ".qth")) {
 
 				buff = g_strconcat (dirname, G_DIR_SEPARATOR_S,
 									filename, NULL);
@@ -918,7 +918,7 @@ delete_location_files ()
 
 		while ((filename = g_dir_read_name (dir))) {
 
-			if (g_strrstr (filename, ".qth")) {
+			if (g_str_has_suffix (filename, ".qth")) {
 
 				buff = g_strconcat (dirname, G_DIR_SEPARATOR_S,
 									filename, NULL);

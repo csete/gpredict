@@ -501,7 +501,7 @@ static GtkWidget *
         /* read each .rot file */
         while ((filename = g_dir_read_name (dir))) {
             
-            if (g_strrstr (filename, ".rot")) {
+            if (g_str_has_suffix (filename, ".rot")) {
                 
                 vbuff = g_strsplit (filename, ".rot", 0);
                 gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), vbuff[0]);
@@ -1231,7 +1231,7 @@ static gboolean have_conf ()
         /* read each .rot file */
         while ((filename = g_dir_read_name (dir))) {
             
-            if (g_strrstr (filename, ".rot")) {
+            if (g_str_has_suffix (filename, ".rot")) {
                 i++;
             }
         }

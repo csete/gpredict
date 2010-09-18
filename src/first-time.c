@@ -201,7 +201,7 @@ first_time_check_step_02 (guint *error)
                 so we must not free it
             */
 
-            if (g_strrstr (datafile, ".qth")) {
+            if (g_str_has_suffix (datafile, ".qth")) {
                 foundqth = TRUE;
             }
 
@@ -227,7 +227,7 @@ first_time_check_step_02 (guint *error)
                     /* note: filename is not a newly allocated gchar *,
                        so we must not free it
                     */
-                    if (g_strrstr (datafile, ".qth")) {
+                    if (g_str_has_suffix (datafile, ".qth")) {
 
                         gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
 
@@ -342,7 +342,7 @@ first_time_check_step_03 (guint *error)
                     /* note: filename is not a newly allocated gchar *,
                        so we must not free it
                     */
-                    if (g_strrstr (datafile, ".mod")) {
+                    if (g_str_has_suffix (datafile, ".mod")) {
                         gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
 
                         /* copy .qth file to USER_CONF_DIR */
@@ -606,7 +606,7 @@ first_time_check_step_05 (guint *error)
             /* note: filename is not a newly allocated gchar *,
                 so we must not free it
             */
-            if (g_strrstr (filename, ".cat")) {
+            if (g_str_has_suffix (filename, ".cat")) {
 
                 /* check whether .cat file exisits in user conf */
                 gchar *catfilename = sat_file_name (filename);
@@ -852,7 +852,7 @@ static void first_time_check_step_09 (guint *error)
         
         /* for each .trsp file found in data dir */
         while ((filename = g_dir_read_name (dir))) {
-            if (g_strrstr (filename, ".trsp")) {
+            if (g_str_has_suffix (filename, ".trsp")) {
                 /* check if .trsp file already in user dir */
                 destfile = g_strconcat (targetdirname, G_DIR_SEPARATOR_S, filename, NULL);
                 

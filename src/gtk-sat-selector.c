@@ -417,7 +417,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
         */
     while ((fname = g_dir_read_name (dir))) {
 
-        if (g_strrstr (fname, ".sat")) {
+        if (g_str_has_suffix (fname, ".sat")) {
 
             buffv = g_strsplit (fname, ".", 0);
             catnum = (gint) g_ascii_strtoll (buffv[0], NULL, 0);
@@ -450,7 +450,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
     /* load satellites from each .cat file into selector->models[i] */
     g_dir_rewind (dir);
     while ((fname = g_dir_read_name (dir))) {
-        if (g_strrstr (fname, ".cat")) {
+        if (g_str_has_suffix (fname, ".cat")) {
 
             load_cat_file (selector, fname);
 
