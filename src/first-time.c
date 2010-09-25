@@ -850,40 +850,45 @@ static void first_time_check_step_09 (guint *error)
         g_free (buff);
         dir = g_dir_open (datadirname, 0, NULL);
         
-        /* for each .trsp file found in data dir */
-        while ((filename = g_dir_read_name (dir))) {
-            if (g_str_has_suffix (filename, ".trsp")) {
-                /* check if .trsp file already in user dir */
-                destfile = g_strconcat (targetdirname, G_DIR_SEPARATOR_S, filename, NULL);
-                
-                /* check if .trsp file already in user dir */
-                if (!g_file_test (destfile, G_FILE_TEST_EXISTS)) {
-                    sat_log_log (SAT_LOG_LEVEL_MSG,
-                                 _("%s: %s does not appear to be in user conf dir; adding."),
-                                 __FUNCTION__, filename);
-
-                                 /* copy new .trsp file to user dir */
-                    srcfile = g_strconcat (datadirname, G_DIR_SEPARATOR_S, filename,NULL);
-                    if (gpredict_file_copy (srcfile, destfile)) {
-                        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                                     _("%s: Failed to copy %s"),
+        if (dir) {
+            /* for each .trsp file found in data dir */
+            while ((filename = g_dir_read_name (dir))) {
+                if (g_str_has_suffix (filename, ".trsp")) {
+                    /* check if .trsp file already in user dir */
+                    destfile = g_strconcat (targetdirname, G_DIR_SEPARATOR_S, filename, NULL);
+                    
+                    /* check if .trsp file already in user dir */
+                    if (!g_file_test (destfile, G_FILE_TEST_EXISTS)) {
+                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                                     _("%s: %s does not appear to be in user conf dir; adding."),
                                      __FUNCTION__, filename);
 
-                        *error |= FTC_ERROR_STEP_09;
+                        /* copy new .trsp file to user dir */
+                        srcfile = g_strconcat (datadirname, G_DIR_SEPARATOR_S, filename,NULL);
+                        if (gpredict_file_copy (srcfile, destfile)) {
+                            sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                                         _("%s: Failed to copy %s"),
+                                         __FUNCTION__, filename);
+
+                            *error |= FTC_ERROR_STEP_09;
+                        }
+                        g_free (srcfile);
                     }
-                    g_free (srcfile);
+                    else {
+                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                                     _("%s: %s already in user conf dir."),
+                                     __FUNCTION__, filename);
+                    }
+                    
+                    g_free (destfile);
                 }
-                else {
-                    sat_log_log (SAT_LOG_LEVEL_MSG,
-                                 _("%s: %s already in user conf dir."),
-                                 __FUNCTION__, filename);
-                }
-                
-                g_free (destfile);
-            
             }
-        }
-        g_dir_close (dir);
+            g_dir_close (dir);
+        } else {
+			sat_log_log (SAT_LOG_LEVEL_ERROR,
+						 _("%s: %s directory does not exist. Incomplete installation."),
+						 __FUNCTION__, datadirname);
+		}
         g_free (datadirname);
     }
     g_free (targetdirname);
