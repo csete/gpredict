@@ -217,7 +217,7 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_DOUBLE,    // Max El
                                     G_TYPE_INT        // Az type
                                    );
-
+	gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE(liststore),ROT_LIST_COL_NAME,GTK_SORT_ASCENDING);
     /* open configuration directory */
     dirname = get_hwconf_dir ();
     
@@ -680,7 +680,4 @@ static void render_aztype (GtkTreeViewColumn *col,
     g_object_set (renderer, "text", text, NULL);
     g_free (text);
 }
-
-
-
 

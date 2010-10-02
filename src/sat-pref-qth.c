@@ -301,6 +301,7 @@ create_and_fill_model ()
 									G_TYPE_BOOLEAN    // Default
 									);
 
+	gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE(liststore), QTH_LIST_COL_NAME,GTK_SORT_ASCENDING);
 	/* scan for .qth files in the user config directory and
 	   add the contents of each .qth file to the list store
 	*/
@@ -1016,3 +1017,4 @@ convert_qth_altitude (GtkTreeModel *model,
 
 	return FALSE;
 }
+
