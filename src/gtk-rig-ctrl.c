@@ -1168,14 +1168,16 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         ctrl->engaged = FALSE;
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
-        switch (ctrl->conf->type) {
-        case RIG_TYPE_TOGGLE_AUTO:
-        case RIG_TYPE_TOGGLE_MAN:
-            unset_toggle (ctrl,ctrl->conf);
-            break;
-        default:
-            break;
-        }
+		if (ctrl->conf->type != NULL) {
+			switch (ctrl->conf->type) {
+			case RIG_TYPE_TOGGLE_AUTO:
+			case RIG_TYPE_TOGGLE_MAN:
+				unset_toggle (ctrl,ctrl->conf);
+				break;
+			default:
+				break;
+			}
+		}
     }
     else {
         if (ctrl->conf == NULL) {
@@ -1274,7 +1276,15 @@ static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data)
 static gboolean rig_ctrl_timeout_cb (gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
-    
+    if (ctrl->conf == NULL) {
+		sat_log_log (SAT_LOG_LEVEL_ERROR,
+					 _("%s: Controller does not have a valid configuration"),
+					 __FUNCTION__);
+		return (TRUE);
+
+	}
+	
+	
     if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
