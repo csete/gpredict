@@ -916,17 +916,18 @@ static gboolean
     }
     
     /* update controller circle on polar plot */
-    if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
-        gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
-                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet))+360.0,
-                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+	if (ctrl->conf !=NULL){
+		if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
+			gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet))+360.0,
+										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+		}
+		else {
+			gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
+										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+		}
     }
-    else {
-        gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
-                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
-                                     gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
-    }
-    
     g_static_mutex_unlock(&(ctrl->busy));
     
     return TRUE;
