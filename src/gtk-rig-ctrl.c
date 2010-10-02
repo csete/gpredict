@@ -1160,6 +1160,15 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
 
+	if (ctrl->conf == NULL) {
+		/* we don't have a working configuration */
+		sat_log_log (SAT_LOG_LEVEL_ERROR,
+					 _("%s: Controller does not have a valid configuration"),
+					 __FUNCTION__);
+		return;
+	}
+
+
     
     if (!gtk_toggle_button_get_active (button)) {
         /* close socket */
@@ -1168,6 +1177,7 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         ctrl->engaged = FALSE;
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
+
 		if (ctrl->conf->type != NULL) {
 			switch (ctrl->conf->type) {
 			case RIG_TYPE_TOGGLE_AUTO:
@@ -1180,14 +1190,7 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 		}
     }
     else {
-        if (ctrl->conf == NULL) {
-            /* we don't have a working configuration */
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Controller does not have a valid configuration"),
-                         __FUNCTION__);
-            return;
-        }
-        
+
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         gtk_widget_set_sensitive (ctrl->DevSel2, FALSE);
         ctrl->engaged = TRUE;
