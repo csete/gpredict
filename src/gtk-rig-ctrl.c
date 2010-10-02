@@ -2315,7 +2315,7 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     /* send command */
     buff = g_strdup_printf ("S 1 %d\x0aq\x0a",ctrl->conf->vfoDown);
     
-    size = 15;
+    size = strlen(buff);
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -2390,7 +2390,7 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
     /* send command */
     buff = g_strdup_printf ("S 0 %d\x0aq\x0a",ctrl->conf->vfoDown);
     
-    size = 15;
+    size = strlen(buff);
     written = send(sock, buff, size, 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
