@@ -19,6 +19,8 @@ Changes in version 1.2 (TBD)
 - Fixed bug 2792349: Segfault on certain satellites (Geo).
 - Fixed bug 3050068: Unable to update TLE from local files.
 - Fixed bugs 3057771 and 3058753: Crash if module file is empty.
+- Fixed bug 3074990: Crash if directory does not exist
+- Fixed bug 3080019: Corrupted hw file cause crash.
 - Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to Charles Suprin AA1VS).
 - Applied patch 2877878: Change Flag to Lock in tle-update (thanks to Charles Suprin AA1VS).
 - Applied patch 2877918: Fixes segfault in TLE updater (thanks to Charles Suprin AA1VS).

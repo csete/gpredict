@@ -1,3 +1,45 @@
+2010-10-02 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rig-ctrl.c
+    Fix bug with set and unset toggle buffer size being incorrect
+    causing junk to be sent to rigctld.
+
+    * src/gtk-rig-ctrl.c
+    * src/gtk-rot-ctrl.c
+    Catch NULLs in ctrl->conf
+
+    * src/sat-pref-qth.c
+    * src/sat-pref-rig.c
+    * src/sat-pref-rot.c
+    Add sorting to rig, rot, and qth preference screens.
+
+2010-09-24 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/first-time.c
+    Applied patch from bug 3074990 from Zlika catching crash if data
+    directory does not exist. Added error message to log.
+
+2010-09-17 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/first-time.c
+    * src/gtk-sat-selector.c
+    * src/gtk-sat-tree.c
+    * src/main.c
+    * src/mod-cfg.c
+    * src/sat-log.c
+    * src/sat-pref-qth.c
+    * src/tle-update.c
+    Make file name checks check for suffix not substring
+
+    * src/gtk-rig-ctrl.c
+    * src/gtk-rot-ctrl.c
+    Fix potential memory leak
+
+2010-09-14 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/satdata:
+    Updated satellite database.
+
 2010-08-21 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module.c:
