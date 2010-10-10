@@ -64,7 +64,7 @@ msgstr ""
 "59 Temple Place - Suite 330\n"
 "Бостон\n"
 "MA 02111-1307\n"
-"США."
+"США.\n"
 
 #. window title
 #. icon file name
