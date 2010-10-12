@@ -1,17 +1,11 @@
-Changes in version 1.2 (TBD)
+Changes in version 1.2 (12 Oct 2010)
 
-* New satellite editor to manually add/edit/delete satellite data.
-* New transponder editor to edit transponder data.
 - New layout engine that allows any combination of views to be created in a NxM grid.
   Closes feature request 2821408.
 - Sky at a glance is now more interactive. Show pass summary when mouse hovers over pass and
   click on pass shows the details.
 - Added satellite tooltips in polar view showing current Az, El and time to LOS.
 - Added satellite tooltips in map view showing current SSP Lat, Lon, Az, El and time to AOS/LOS.
-* Feature request 2866570: Set operating mode via CAT.
-* Feature request 2873824: Flip Passes.
-* Feature request 2778735: Visual indicator for RX/TX/TRX.
-* Feature request 2689352: Mutual Contact Window AOS/LOS.
 - Fixed bug 2877974: Incorrect uplink Doppler.
 - Fixed bug 2918672: Trailing whitespace and newline in satellite names.
 - Fixed bug 2914679: Unable to save Future passes.

@@ -1,5 +1,11 @@
 Future plans for gpredict development include:
 
+* New satellite editor to manually add/edit/delete satellite data.
+* New transponder editor to edit transponder data.
+* Feature request 2866570: Set operating mode via CAT.
+* Feature request 2873824: Flip Passes.
+* Feature request 2778735: Visual indicator for RX/TX/TRX.
+* Feature request 2689352: Mutual Contact Window AOS/LOS.
 * Show day/night on satmap.
 * Added new Satellite Editor that allows adding/editing/deleting satellite
   data in a convenient UI, including...
