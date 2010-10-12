@@ -1178,16 +1178,11 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         ctrl->lasttxf = 0.0;
         ctrl->lastrxf = 0.0;
 
-		if (ctrl->conf->type != NULL) {
-			switch (ctrl->conf->type) {
-			case RIG_TYPE_TOGGLE_AUTO:
-			case RIG_TYPE_TOGGLE_MAN:
-				unset_toggle (ctrl,ctrl->conf);
-				break;
-			default:
-				break;
-			}
-		}
+        if ((ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO) ||
+            (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN)) {
+
+            unset_toggle (ctrl,ctrl->conf);
+        }
     }
     else {
 
