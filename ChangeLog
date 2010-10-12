@@ -1,4 +1,6 @@
-2010-10-10 Alexandru Csete <oz9aec at gmaol.com>
+2010-10-10 Alexandru Csete <oz9aec at gmail.com>
+
+    * Gpredict 1.2 released.
 
     * configure.ac:
     Change version to 1.2
@@ -9,6 +11,15 @@
 
     * data/satdata:
     Updated top altest TLE.
+
+    * src/gtk-sat-selector.c:
+    Remove erroneous dependency introduced with patch 3050047.
+    GtkSatTree is deprecated and using it breaks build from tarballs.
+
+    * src/gtk-rig-ctrl.c:
+    Not sure what 'NULL' was supposed to mean here, but the rewritten
+    code is equivalent and gives no warnings.
+
 
 2010-10-10 Alexandru Csete <oz9aec at gmail.com>
 
