@@ -40,10 +40,6 @@
 #include "compat.h"
 #include "sat-cfg.h"
 #include "gtk-sat-selector.h"
-#include "gtk-sat-tree.h"
-
-
-
 
 
 
@@ -92,9 +88,9 @@ gboolean gtk_sat_selector_search_equal_func (GtkTreeModel *model,
 {
     gchar *name = NULL;
     gchar *match;
-    gchar *NULLSTR = "NULL";
+    //gchar *NULLSTR = "NULL";
 
-    gtk_tree_model_get(model, iter, GTK_SAT_TREE_COL_NAME, &name, -1);
+    gtk_tree_model_get(model, iter, GTK_SAT_SELECTOR_COL_NAME, &name, -1);
     /* sat_log_log(SAT_LOG_LEVEL_MSG, "%s: key %s, name %s", */
     /*             __FUNCTION__,  */
     /*             key,  */
