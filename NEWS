@@ -45,6 +45,7 @@ Changes in version 1.2 (12 Oct 2010)
   over light background map regions.
 - Fixed incorrect uplink and downlink frequencies for HO-68, mode V/U packet.
 - Modules that are docked in the main window can be reordered by dragging the tabs.
+- Updated translations for CS, DE, EN_GB, EN_US, FI, FR, IT, LT, RU and TH
 
 
 Changes in version 1.1 (5 Oct 2009)
