@@ -1,3 +1,9 @@
+2010-10-15 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sky-glance.[ch]:
+    Minor cleaning and improved documentation.
+
+
 2010-10-10 Alexandru Csete <oz9aec at gmail.com>
 
     * Gpredict 1.2 released.

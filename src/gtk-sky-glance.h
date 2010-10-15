@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -65,7 +65,7 @@ typedef struct {
 #define SKY_PASS_T(obj) ((sky_pass_t *)obj)
 
 
-
+/** \brief GtkSkyGlance widget */
 struct _GtkSkyGlance
 {
     GtkVBox vbox;
@@ -76,8 +76,8 @@ struct _GtkSkyGlance
     qth_t      *qth;      /*!< Pointer to current location. */
 
     GSList *passes;      /*!< Canvas items representing each pass.
-                                Each element in the list is of type sky_pass_t.
-                            */
+                              Each element in the list is of type sky_pass_t.
+                          */
     GSList *satlab;      /*!< Canvas items showing satellite names. */
 
 
@@ -89,10 +89,10 @@ struct _GtkSkyGlance
 
     guint       numsat;   /*!< Number of satellites */
     guint       satcnt;   /*!< Counter to keep track of how many satellites we have
-                                plotted so far when creating the boxes.
-                                This is needed to ensure that we do not plot more
-                                than 10 satellites and to know which colour to fetch
-                                from sat-cfg.
+                               plotted so far when creating the boxes.
+                               This is needed to ensure that we do not plot more
+                               than 10 satellites and to know which colour to fetch
+                               from sat-cfg.
                             */
     gdouble     ts,te;    /*!< Start and end times (Julian date) */
 

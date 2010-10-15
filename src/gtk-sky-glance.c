@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -26,10 +26,13 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 /** \brief Sky at a glance Widget.
+ * 
+ * The sky at a glance widget provides a convenient overview of the upcoming
+ * satellite passes in a timeline format. The widget is tied to a specific
+ * module and uses the QTH and satellite data from the module.
  *
  * Note about the sizing policy:
- * Initially we require 30 pixels per sat + 5 pix margin between the sats.
- * Additionally.
+ * Initially we require 10 pixels per sat + 5 pix margin between the sats.
  *
  * When we get additional space due to resizing, the space will be allocated
  * to make the rectangles taller.
@@ -178,8 +181,13 @@ gtk_sky_glance_init (GtkSkyGlance *skg)
 }
 
 
-/* for some reason, this function is called twice when
-   parent is destroyed.
+/** \brief Destroy the GtkSkyGlance widget
+ *  \param object Pointer to the GtkSkyGlance widget
+ *
+ * This function is called when the GtkSkyGlance widget is destroyed. It frees 
+ * the memory that has been allocated when the widget was created.
+ * 
+ * \bug For some reason, this function is called twice when parent is destroyed.
  */
 static void
 gtk_sky_glance_destroy (GtkObject *object)
@@ -232,6 +240,7 @@ gtk_sky_glance_destroy (GtkObject *object)
 /** \brief Create a new GtkSkyGlance widget.
  *  \param sats Pointer to the hash table containing the asociated satellites.
  *  \param qth Pointer to the ground station data.
+ *  \param ts The t0 for the timeline or 0 to use the current date and time.
  */
 GtkWidget*
 gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
@@ -315,6 +324,9 @@ gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
 }
 
 
+/** \brief Create the model for the GtkSkyGlance canvas
+ *  \param skg Pointer to the GtkSkyGlance widget
+ */
 static GooCanvasItemModel *
 create_canvas_model (GtkSkyGlance *skg)
 {
@@ -609,9 +621,9 @@ on_canvas_realized (GtkWidget *canvas, gpointer data)
 /** \brief Manage mouse motion events. */
 static gboolean
 on_motion_notify (GooCanvasItem *item,
-                    GooCanvasItem *target,
-                    GdkEventMotion *event,
-                    gpointer data)
+                  GooCanvasItem *target,
+                  GdkEventMotion *event,
+                  gpointer data)
 {
     GtkSkyGlance    *skg = GTK_SKY_GLANCE (data);
     GooCanvasPoints *pts;
@@ -674,9 +686,9 @@ on_motion_notify (GooCanvasItem *item,
 
 
 /** \brief Finish canvas item setup.
- *  \param canvas 
- *  \param item
- *  \param model 
+ *  \param canvas Pointer to the GooCanvas object
+ *  \param item Pointer to the GooCanvasItem that received the signals
+ *  \param model Pointer to the model associated with the GooCanvasItem object
  *  \param data Pointer to the GtkSkyGlance object.
  *
  * This function is called when a canvas item is created. Its purpose is to connect
@@ -891,7 +903,7 @@ static gdouble x2t (GtkSkyGlance *skg, gdouble x)
 }
 
 
-/* fetch the basic colour and add alpha channel */
+/** \brief Fetch the basic colour and add alpha channel */
 static void get_colours (guint i, guint *bcol, guint *fcol)
 {
     guint tmp;
