@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -62,6 +62,7 @@ static void close_cb         (GtkWidget *menuitem, gpointer data);
 static void name_changed     (GtkWidget *widget, gpointer data);
 static void destroy_rotctrl  (GtkWidget *window, gpointer data);
 static void destroy_rigctrl  (GtkWidget *window, gpointer data);
+static void destroy_skg      (GtkWidget *window, gpointer data);
 static gint window_delete    (GtkWidget *widget, GdkEvent *event, gpointer data);
 
 
@@ -756,41 +757,53 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
 static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-    GtkWidget    *skg;
-    GtkWidget    *window;
+    //GtkWidget    *skg;
+    //GtkWidget    *window;
     gchar        *buff;
 
-
-    /* create window */
-    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    buff = g_strdup_printf (_("The sky at a glance (%s)"), module->name);
-    gtk_window_set_title (GTK_WINDOW (window), buff);
-    g_free (buff);
-    g_signal_connect (G_OBJECT (window), "delete_event", G_CALLBACK (window_delete), NULL);
-
-    /* window icon */
-    buff = icon_file_name ("gpredict-planner.png");
-    gtk_window_set_icon_from_file (GTK_WINDOW (window), buff, NULL);
-    g_free (buff);
 
     /* if module is busy wait until done then go on */
     g_mutex_lock(module->busy);
 
-    /* create sky at a glance widget */
-    
+
+    if (module->skgwin != NULL) {
+        /* there is already a sky at glance for this module */
+        gtk_window_present (GTK_WINDOW (module->skgwin));
+        g_mutex_unlock(module->busy);
+
+        return;
+    }
+
+
+    /* create window */
+    module->skgwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    buff = g_strdup_printf (_("The sky at a glance (%s)"), module->name);
+    gtk_window_set_title (GTK_WINDOW (module->skgwin), buff);
+    g_free (buff);
+    g_signal_connect (G_OBJECT (module->skgwin), "delete_event", G_CALLBACK (window_delete), NULL);
+    g_signal_connect (G_OBJECT (module->skgwin), "destroy", G_CALLBACK (destroy_skg), module);
+
+    /* window icon */
+    buff = icon_file_name ("gpredict-planner.png");
+    gtk_window_set_icon_from_file (GTK_WINDOW (module->skgwin), buff, NULL);
+    g_free (buff);
+
+
+    /* create sky at a glance widget */  
     if (sat_cfg_get_bool (SAT_CFG_BOOL_PRED_USE_REAL_T0)) {
-        skg = gtk_sky_glance_new (module->satellites, module->qth, 0.0);
+        module->skg = gtk_sky_glance_new (module->satellites, module->qth, 0.0);
     }
     else {
-        skg = gtk_sky_glance_new (module->satellites, module->qth, module->tmgCdnum);
+        module->skg = gtk_sky_glance_new (module->satellites, module->qth, module->tmgCdnum);
     }
     
+
+    gtk_container_set_border_width (GTK_CONTAINER (module->skgwin), 10);
+    gtk_container_add (GTK_CONTAINER (module->skgwin), module->skg);
+
+    gtk_widget_show_all (module->skgwin);
+
     g_mutex_unlock(module->busy);
-
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-    gtk_container_add (GTK_CONTAINER (window), skg);
-
-    gtk_widget_show_all (window);
 
 }
 
@@ -942,7 +955,23 @@ static void destroy_rotctrl  (GtkWidget *window, gpointer data)
     module->rotctrl    = NULL;
 }
 
-/* ensure that deleted top-level windows are destroyed */
+
+/** \brief Destroy sky at glance window.
+ * \param window Pointer to the sky at glance window.
+ * \param data Pointer to the GtkSatModule to which this widget is attached.
+ * 
+ * This function is called automatically when the window is destroyed.
+ */
+static void destroy_skg  (GtkWidget *window, gpointer data)
+{
+    GtkSatModule *module = GTK_SAT_MODULE (data);
+    
+    module->skgwin = NULL;
+    module->skg    = NULL;
+}
+
+
+/** \brief Ensure that deleted top-level windows are destroyed */
 static gint window_delete  (GtkWidget *widget,
                             GdkEvent  *event,
                             gpointer   data)
