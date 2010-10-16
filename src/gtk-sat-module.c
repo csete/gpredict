@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -28,16 +28,15 @@
 /** \brief Main module container.
  *
  * The GtkSatModule widget is the top level container that contains the
- * individual views.
+ * individual views. These views are of type GtkSatList, GtkSatMap, GtkSingleSat,
+ * GtkPolarView and GtkEventList (as of version 1.2).
  *
- * more on layout ...
- *
- * Unfortunately, the GtkPaned widgets do not offer a sensible way to divide
- * the space between the children, e.g. set_position (50%). The only way to
- * set the gutter position is using pixel values, which by the way is in 
- * contradiction with the philosophy behind the use of containers in Gtk+.
- * We try to work around this silly shortcoming by doing all sorts of hack
- * around the size-allocate signal.
+ * The views are organized in a grid (GtkTable) where each view can occupy one
+ * or more squares, see the create_module_layout() function.
+ * 
+ * A module can have a GtkRigCtrl, a GtkRotCtrl and a GtkSkyGlance widget
+ * associated to it. These associations exist because theu share QTH and
+ * satellite data.
  */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -150,7 +149,7 @@ gtk_sat_module_class_init (GtkSatModuleClass *class)
 }
 
 
-
+/** \brief Initialise GtkSatModule widget */
 static void
 gtk_sat_module_init (GtkSatModule *module)
 {
@@ -171,6 +170,9 @@ gtk_sat_module_init (GtkSatModule *module)
     module->rotctrlwin = NULL;
     module->rotctrl    = NULL;
     module->rigctrlwin = NULL;
+    module->rigctrl    = NULL;
+    module->skgwin     = NULL;
+    module->skg        = NULL;
 
     module->state = GTK_SAT_MOD_STATE_DOCKED;
     module->busy = g_mutex_new();
@@ -215,6 +217,11 @@ gtk_sat_module_destroy (GtkObject *object)
     if (module->rotctrlwin) {
         gtk_widget_destroy (module->rotctrlwin);
     }
+    
+    /* destroy sky at a glance window */
+    if (module->skgwin) {
+        gtk_widget_destroy (module->skgwin);
+    }
 
     /* clean up QTH */
     if (module->qth) {
@@ -239,8 +246,12 @@ gtk_sat_module_destroy (GtkObject *object)
 }
 
 
-/**** FIXME: Program goes into infinite loop when there is something
-      wrong with cfg file. */
+/** \brief Create a new GtkSatModule widget.
+ *  \param cfgfile The name of the configuration file (.mod)
+ * 
+ *  \bug Program goes into infinite loop when there is something
+ *       wrong with cfg file.
+ */
 GtkWidget *
 gtk_sat_module_new (const gchar *cfgfile)
 {
@@ -850,6 +861,13 @@ gtk_sat_module_timeout_cb     (gpointer module)
 }
 
 
+/** \brief Update a child widget.
+ *  \param child Pointer to the child widget (views)
+ *  \param tstamp The current timestamp
+ * 
+ * This function is called by the main loop of the GtkSatModule widget for
+ * each view in the layout grid.
+ */
 static void
 update_child (GtkWidget *child, gdouble tstamp)
 {

@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -97,9 +97,11 @@ struct _gtk_sat_module
     GtkWidget     *win;       /*!< Window when module is not docked */
 
     GtkWidget     *rotctrlwin;  /*!< Rotator controller window */
-    GtkWidget     *rotctrl;
+    GtkWidget     *rotctrl;     /*!< Rotator controller widget */
     GtkWidget     *rigctrlwin;  /*!< Radio controller window */
-    GtkWidget     *rigctrl;
+    GtkWidget     *rigctrl;     /*!< Radio controller widget */
+    GtkWidget     *skgwin;      /*!< Sky at glance window */
+    GtkWidget     *skg;         /*!< Sky at glance widget */
 
     GtkWidget     *header;
     guint          head_count;
