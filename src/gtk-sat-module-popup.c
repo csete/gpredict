@@ -796,7 +796,9 @@ static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
     else {
         module->skg = gtk_sky_glance_new (module->satellites, module->qth, module->tmgCdnum);
     }
-    
+
+    /* store time at which GtkSkyGlance has been created */
+    module->lastSkgUpd = module->tmgCdnum;
 
     gtk_container_set_border_width (GTK_CONTAINER (module->skgwin), 10);
     gtk_container_add (GTK_CONTAINER (module->skgwin), module->skg);
