@@ -2,6 +2,15 @@
 
     * src/time-tools.[ch]:
     Disabled legacy code.
+
+    * src/gtk-sat-module.[ch]:
+    Store references to GtkSkyGlance widget and window the same way as we
+    store references to GtkRigCtrl and GtkRotCtrl.
+    Automatically refresh GtkSkyGlance every 60 seconds.
+
+    * src/gtk-sat-module-popup.c:
+    Allow only one GtkSkyGlance widget per module (consistent with
+    GtkRigCtrl and GtkRotCtrl).
     
 
 2010-10-15 Alexandru Csete <oz9aec at gmail.com>

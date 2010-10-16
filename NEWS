@@ -1,3 +1,8 @@
+Changes in version 1.3 (TBD)
+
+- Automatically refresh the Sky at a glance view every minute.
+
+
 Changes in version 1.2 (12 Oct 2010)
 
 - New layout engine that allows any combination of views to be created in a NxM grid.
