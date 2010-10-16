@@ -1,3 +1,9 @@
+2010-10-16 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/time-tools.[ch]:
+    Disabled legacy code.
+    
+
 2010-10-15 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sky-glance.[ch]:

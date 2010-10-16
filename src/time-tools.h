@@ -29,7 +29,7 @@
 #define TIME_TOOLS_H 1
 
 gdouble  get_current_daynum  (void);
-long     get_daynum_from_dmy (int d, int m, int y);
+//long     get_daynum_from_dmy (int d, int m, int y);
 #endif
 
 

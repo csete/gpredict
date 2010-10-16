@@ -63,10 +63,11 @@ get_current_daynum ()
 }
 
 
+/* This function calculates the day number from m/d/y. */
+/* Legacy code no longer in use
 long
 get_daynum_from_dmy (int d, int m, int y)
 {
-	/* This function calculates the day number from m/d/y. */
 
 	long dn;
 	double mm, yy;
@@ -87,3 +88,4 @@ get_daynum_from_dmy (int d, int m, int y)
 
 	return dn;
 }
+*/
