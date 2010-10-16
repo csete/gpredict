@@ -65,6 +65,7 @@
 #include "gtk-event-list.h"
 #include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
+#include "gtk-sky-glance.h"
 #include "compat.h"
 
 //#ifdef G_OS_WIN32
@@ -93,9 +94,9 @@ static void     create_module_layout          (GtkSatModule *module);
 static void     get_grid_size                 (GtkSatModule *module, guint *rows, guint *cols);
 static GtkWidget *create_view                 (GtkSatModule *module, guint num);
 
-
 static void     reload_sats_in_child (GtkWidget *widget, GtkSatModule *module);
 
+static void     update_skg                    (GtkSatModule *module);
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -173,6 +174,7 @@ gtk_sat_module_init (GtkSatModule *module)
     module->rigctrl    = NULL;
     module->skgwin     = NULL;
     module->skg        = NULL;
+    module->lastSkgUpd = 0.0;
 
     module->state = GTK_SAT_MOD_STATE_DOCKED;
     module->busy = g_mutex_new();
@@ -836,6 +838,15 @@ gtk_sat_module_timeout_cb     (gpointer module)
             gtk_rig_ctrl_update (GTK_RIG_CTRL (mod->rigctrl), mod->tmgCdnum);
         if (mod->rotctrl)
             gtk_rot_ctrl_update (GTK_ROT_CTRL (mod->rotctrl), mod->tmgCdnum);
+            
+        /* check and update Sky at glance */
+        /* FIXME: We should have some timeout counter to ensure that we don't
+         * update GtkSkyGlance too often when running with high throttle values;
+         * however, the update does not seem to add any significant load even
+         * when running at max throttle
+         */
+        if (mod->skg)
+            update_skg (mod);
 
 
         mod->event_count++;
@@ -1470,4 +1481,39 @@ static void get_grid_size (GtkSatModule *module, guint *rows, guint *cols)
 
     *cols = xmax;
     *rows = ymax;
+}
+
+
+/** \brief Update GtkSkyGlance view
+ *  \param module Pointer to the GtkSatModule widget
+ * 
+ * This function checks how long ago the GtkSkyGlance widget has been updated
+ * and performs an update if necessary. The current timeout is set to 60 sec.
+ * 
+ * This is a cheap/lazy implementation of automatic update. Instead of
+ * performing a real update by "moving" the objects on the GtkSkyGlance canvas,
+ * we simply replace the current GtkSkyGlance object with a new one.
+ * Ugly but safe.
+ * 
+ * To ensure smooth performance while running in simulated real time with high
+ * throttle value or manual time mode, the caller is responsible for only calling
+ * this function at an appropriate frequency (e.g. every 10 cycle).
+ */
+static void update_skg (GtkSatModule *module)
+{
+    
+    /* threshold is ~60 seconds */
+    if G_UNLIKELY(fabs(module->tmgCdnum - module->lastSkgUpd) > 7.0e-4) {
+        
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: Updating GtkSkyGlance for %s"),
+                     __FUNCTION__, module->name);
+        
+        gtk_container_remove (GTK_CONTAINER (module->skgwin), module->skg);
+        module->skg = gtk_sky_glance_new (module->satellites, module->qth, module->tmgCdnum);
+        gtk_container_add (GTK_CONTAINER (module->skgwin), module->skg);
+        gtk_widget_show_all (module->skg);
+        
+        module->lastSkgUpd = module->tmgCdnum;
+    }
 }

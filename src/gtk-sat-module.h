@@ -102,6 +102,7 @@ struct _gtk_sat_module
     GtkWidget     *rigctrl;     /*!< Radio controller widget */
     GtkWidget     *skgwin;      /*!< Sky at glance window */
     GtkWidget     *skg;         /*!< Sky at glance widget */
+    gdouble        lastSkgUpd;  /*!< Daynum of last GtkSkyGlance update */
 
     GtkWidget     *header;
     guint          head_count;
@@ -124,7 +125,7 @@ struct _gtk_sat_module
     gtk_sat_mod_state_t  state;   /*!< The state of the module. */
 
     guint          timerid;      /*!< The timeout ID (FIXME: REMOVE) */
-    GMutex       *busy;          /*!< Flag indicating whether timeout has
+    GMutex        *busy;         /*!< Flag indicating whether timeout has
                                       finished or not. Also used for blocking
                                       the module during TLE update. */
 
