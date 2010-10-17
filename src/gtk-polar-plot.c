@@ -410,7 +410,7 @@ void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
     
     root = goo_canvas_get_root_item_model (GOO_CANVAS (plot->canvas));
 
-    if ((az < 0.0) || (el <= 0.0)) {
+    if ((az < 0.0) || (el < 0.0)) {
         if (plot->rot1 != NULL) {
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child (root, plot->rot1);
