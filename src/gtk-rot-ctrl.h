@@ -93,7 +93,8 @@ struct _gtk_rot_ctrl
     gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
                         
     gint     errcnt;    /*!< Error counter. */
-    
+	gint     sock;      /*!< socket for connecting to rotctld. */
+	
     /* debug related */
     guint    wrops;
     guint    rdops;

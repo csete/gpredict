@@ -89,7 +89,13 @@ static void update_count_down (GtkRotCtrl *ctrl, gdouble t);
 static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el);
 static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el);
 
+static gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gint sizeout);
+static gboolean open_rotctld_socket (GtkRotCtrl *ctrl, gint *sock);
+static gboolean close_rotctld_socket (gint sock);
+
 static gboolean have_conf (void);
+static gint sat_name_compare (sat_t* a,sat_t*b);
+static gint rot_name_compare (const gchar* a,const gchar *b);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -477,7 +483,7 @@ static GtkWidget *
     gchar       *dirname;      /* directory name */
     gchar      **vbuff;
     const gchar *filename;     /* file name */
-
+	gchar       *rotname;
     
     
     table = gtk_table_new (3, 3, FALSE);
@@ -499,15 +505,27 @@ static GtkWidget *
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
         /* read each .rot file */
+		GSList *rots=NULL;
+		gint i;
+		gint n;
         while ((filename = g_dir_read_name (dir))) {
             
             if (g_str_has_suffix (filename, ".rot")) {
                 
                 vbuff = g_strsplit (filename, ".rot", 0);
-                gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), vbuff[0]);
+				rots=g_slist_insert_sorted(rots,g_strdup(vbuff[0]),(GCompareFunc)rot_name_compare);
                 g_strfreev (vbuff);
             }
         }
+		n = g_slist_length (rots);
+		for (i = 0; i < n; i++) {
+			rotname = g_slist_nth_data (rots, i);
+			if (rotname) {
+				gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), rotname);
+				g_free(rotname);
+			}
+		}
+		g_slist_free(rots);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -605,7 +623,8 @@ static void
     GtkRotCtrl *ctrl = GTK_ROT_CTRL( user_data);
     sat_t        *sat = SAT (value);
 
-    ctrl->sats = g_slist_append (ctrl->sats, sat);
+    //ctrl->sats = g_slist_append (ctrl->sats, sat);
+	ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
 
 
@@ -754,7 +773,10 @@ static void
         g_free (ctrl->conf);
         ctrl->conf = NULL;
     }
+    
+    return TRUE;
 }
+
 
 
 /** \brief Rotor locked.
@@ -771,6 +793,7 @@ static void
     if (!gtk_toggle_button_get_active (button)) {
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
+		close_rotctld_socket(ctrl->sock);
         gtk_label_set_text (GTK_LABEL (ctrl->AzRead), "---");
         gtk_label_set_text (GTK_LABEL (ctrl->ElRead), "---");
     }
@@ -784,7 +807,7 @@ static void
         }
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
-        
+        open_rotctld_socket(ctrl,&(ctrl->sock));
         ctrl->wrops = 0;
         ctrl->rdops = 0;
     }
@@ -928,8 +951,8 @@ static gboolean
 										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
 		}
     }
-    g_static_mutex_unlock(&(ctrl->busy));
-    
+	g_static_mutex_unlock(&(ctrl->busy));
+
     return TRUE;
 }
 
@@ -944,13 +967,9 @@ static gboolean
 static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 {
     gchar  *buff,**vbuff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
-
-
+	gchar  buffback[128];
+	gboolean retcode;
+	
     if ((az == NULL) || (el == NULL)) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: NULL storage."),
@@ -958,108 +977,36 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
         return FALSE;
     }
     
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to create socket"),
-                     __FILE__, __LINE__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d Network socket created successfully"),
-                     __FILE__, __LINE__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to connect to %s:%d"),
-                     __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d: Connection opened to %s:%d"),
-                     __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
-    }
-    
     /* send command */
-    buff = g_strdup_printf ("p\x0aq\x0a");
-    
-    size = 4;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: SIZE ERROR %d / %d"),
-                     __FILE__, __LINE__, written, size);
-    }
-    g_free (buff);
-    
+    buff = g_strdup_printf ("p\x0a");
+
+	retcode=send_rotctld_command(ctrl,buff,buffback,128);
     
     /* try to read answer */
-    buff = g_try_malloc (128);
-    if (buff == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                     __FILE__, __FUNCTION__);
+	if (retcode) {
+		if (strncmp(buffback,"RPRT",4)==0){
+			retcode=FALSE;
+			sat_log_log (SAT_LOG_LEVEL_ERROR,
+						 _("%s:%d: rotctld returned error (%s)"),
+						 __FILE__, __LINE__,buffback);
 
-#ifndef WIN32
-        shutdown (sock, SHUT_RDWR);
-#else
-        shutdown (sock, SD_BOTH);
-#endif
-        
-        close (sock);
-        return FALSE;
-    }
-
-    size = read (sock, buff, 127);
-    if (size == 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Got 0 bytes from rotctld"),
-                     __FILE__, __FUNCTION__);
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%s: Read %d bytes from rotctld"),
-                     __FILE__, __FUNCTION__, size);
-        
-        buff[size] = 0;
-        vbuff = g_strsplit (buff, "\n", 3);
-        *az = g_strtod (vbuff[0], NULL);
-        *el = g_strtod (vbuff[1], NULL);
-
-        g_strfreev (vbuff);
-    }
+		} else {
+			vbuff = g_strsplit (buffback, "\n", 3);
+			*az = g_strtod (vbuff[0], NULL);
+			*el = g_strtod (vbuff[1], NULL);
+			
+			g_strfreev (vbuff);
+		}
+	}
 
     g_free (buff);
 
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-    
-    close (sock);
-
-    ctrl->wrops++;
-    ctrl->rdops++;
-    
-    return TRUE;
+    return retcode;
 }
 
 
 /** \brief Send new position to rotator device
- * \param ctrl Poitner to the GtkRotCtrl widget
+ * \param ctrl Pointer to the GtkRotCtrl widget
  * \param az The new Azimuth
  * \param el The new Elevation
  * \return TRUE if the new position has been sent successfully
@@ -1071,76 +1018,29 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
 {
     gchar  *buff;
+	gchar  buffback[128];
     gchar  azstr[8],elstr[8];
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
-
-    
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to create socket"),
-                     __FILE__, __LINE__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d Network socket created successfully"),
-                     __FILE__, __LINE__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to connect to %s:%d"),
-                     __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d: Connection opened to %s:%d"),
-                     __FILE__, __LINE__, ctrl->conf->host, ctrl->conf->port);
-    }
+	gboolean retcode;
     
     /* send command */
     g_ascii_formatd (azstr, 8, "%7.2f", az);
     g_ascii_formatd (elstr, 8, "%7.2f", el);
-    buff = g_strdup_printf ("P %s %s\x0aq\x0a", azstr, elstr);
+    buff = g_strdup_printf ("P %s %s\x0a", azstr, elstr);
     
-    size = 20;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: SIZE ERROR %d / %d"),
-                     __FILE__, __LINE__, written, size);
-    }
-    
-    //g_print ("SZ:%d  WR:%d  AZ:%s  EL:%s  STR:%s", size, written, azstr, elstr, buff);
+	retcode=send_rotctld_command(ctrl,buff,buffback,128);
     
     g_free (buff);
     
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
+	if (retcode==TRUE)
+		if (strncmp(buffback,"RPRT 0",6)!=0) {
+			sat_log_log (SAT_LOG_LEVEL_ERROR,
+						 _("%s:%d: rotctld returned error (%s)"),
+						 __FILE__, __LINE__,buffback);
+			
+			retcode=FALSE;
+		}
 
-    close (sock);
-    
-    ctrl->wrops++;
-
-    return TRUE;
+    return (retcode);
 }
 
 
@@ -1234,6 +1134,8 @@ static gboolean have_conf ()
             
             if (g_str_has_suffix (filename, ".rot")) {
                 i++;
+				/*once we have one we need nothing else*/
+				break;
             }
         }
     }
@@ -1248,4 +1150,137 @@ static gboolean have_conf ()
     g_dir_close (dir);
     
     return (i > 0) ? TRUE : FALSE;
+}
+
+/** \brief open the rotcld socket. return true if successful false otherwise.*/
+
+static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
+	struct sockaddr_in ServAddr;
+	struct hostent *h;
+	gint status;
+
+	ctrl->sock=socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+	if (ctrl->sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to create socket"),
+                     __FUNCTION__);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Network socket created successfully"),
+                     __FUNCTION__);
+    }
+
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(ctrl->conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(ctrl->sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to connect to %s:%d"),
+                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Connection opened to %s:%d"),
+                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+    }
+
+	return TRUE;
+}
+
+
+/*close a rotcld socket. First send a q command to cleanly shut down rotctld*/
+static gboolean close_rotctld_socket (gint sock) {
+  gint written;
+  /*shutdown the rigctld connect*/
+  written = send(sock, "q\x0a", 2, 0);
+  
+#ifndef WIN32
+  shutdown (sock, SHUT_RDWR);
+#else
+  shutdown (sock, SD_BOTH);
+#endif
+  
+  close (sock);
+  
+  return TRUE;
+}
+
+/** \brief  Send a command to rigctld
+ *   Inputs are a controller, a string command, and a buffer and length for returning the output from rigctld.
+ */
+
+gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gint sizeout)
+{
+    gint    written;
+	gint    size;
+
+	size = strlen(buff);
+	
+	sat_log_log (SAT_LOG_LEVEL_DEBUG,
+				 _("%s:%s: Sending %d bytes as %s."),
+				 __FILE__, __FUNCTION__, size, buff);
+
+
+    /* send command */
+    written = send(ctrl->sock, buff, size, 0);
+    if (written != size) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: SIZE ERROR %d / %d"),
+                     __FUNCTION__, written, size);
+    }
+    if (written == -1) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: rotctld Socket Down"),
+                     __FUNCTION__);
+		return FALSE;
+    }
+
+    /* try to read answer */
+    size = read (ctrl->sock, buffout, sizeout);
+
+	if (size == -1) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: rotctld Socket Down"),
+                     __FUNCTION__);
+		return FALSE;
+    }  
+
+	buffout[size]='\0';
+	if (size == 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Got 0 bytes from rotctld"),
+                     __FILE__, __FUNCTION__);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%s: Read %d bytes as %s from rotctld"),
+                     __FILE__, __FUNCTION__, size, buffout);
+        
+    }
+
+    ctrl->wrops++;
+    
+    return TRUE;
+}
+
+/** \brief  Compare Satellite Names.
+ *simple function to sort the list of satellites in the combo box.
+ */
+static gint sat_name_compare (sat_t* a,sat_t*b){
+	return (g_ascii_strcasecmp(a->nickname,b->nickname));
+}
+
+
+/** \brief  Compare Rotator Names.
+ */
+static gint rot_name_compare (const gchar* a,const gchar *b){
+	return (g_ascii_strcasecmp(a,b));
 }
