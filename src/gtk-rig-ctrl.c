@@ -109,16 +109,18 @@ static void exec_toggle_cycle (GtkRigCtrl *ctrl);
 static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl);
 static void exec_duplex_cycle (GtkRigCtrl *ctrl);
 static void exec_dual_rig_cycle (GtkRigCtrl *ctrl);
-static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
-static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
-static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq);
-static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf);
-static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf);
-static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq);
-static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf);
-static gboolean set_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf, gboolean ptt);
+static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble freq);
+static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq);
+static gboolean set_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble freq);
+static gboolean set_toggle (GtkRigCtrl *ctrl, gint sock);
+static gboolean unset_toggle (GtkRigCtrl *ctrl, gint sock);
+static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq);
+static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock);
+static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt);
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
+static gboolean open_rigctld_socket(radio_conf_t *conf, gint *sock);
+static gboolean close_rigctld_socket(gint sock);
 
 /* misc utility functions */
 static void load_trsp_list (GtkRigCtrl *ctrl);
@@ -127,6 +129,12 @@ static gboolean have_conf (void);
 static void track_downlink (GtkRigCtrl *ctrl);
 static void track_uplink (GtkRigCtrl *ctrl);
 static gboolean is_rig_tx_capable (const gchar *confname);
+static gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *buffout, gint sizeout);
+static inline gboolean check_set_response (gchar *buff,gboolean retcode,const gchar* filename);
+static inline gboolean check_get_response (gchar *buff,gboolean retcode,const gchar* filename);
+static gint sat_name_compare (sat_t* a,sat_t*b);
+static gint rig_name_compare (const gchar* a,const gchar *b);
+
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -652,7 +660,7 @@ static GtkWidget *create_conf_widgets (GtkRigCtrl *ctrl)
     gchar       *dirname;      /* directory name */
     gchar      **vbuff;
     const gchar *filename;     /* file name */
-
+	gchar       *rigname;
     
     
     table = gtk_table_new (4, 3, FALSE);
@@ -676,15 +684,26 @@ static GtkWidget *create_conf_widgets (GtkRigCtrl *ctrl)
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
         /* read each .rig file */
+		GSList *rigs=NULL;
+		gint i;
+		gint n;
         while ((filename = g_dir_read_name (dir))) {
             
             if (g_str_has_suffix (filename, ".rig")) {
-                
-                vbuff = g_strsplit (filename, ".rig", 0);
-                gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), vbuff[0]);
+				vbuff = g_strsplit (filename, ".rig", 0);
+				rigs=g_slist_insert_sorted(rigs,g_strdup(vbuff[0]),(GCompareFunc)rig_name_compare);
                 g_strfreev (vbuff);
             }
         }
+		n = g_slist_length (rigs);
+		for (i = 0; i < n; i++) {
+			rigname = g_slist_nth_data (rigs, i);
+			if (rigname) {
+				gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), rigname);
+				g_free(rigname);
+			}
+		}
+		g_slist_free(rigs);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -809,7 +828,8 @@ static void store_sats (gpointer key, gpointer value, gpointer user_data)
     GtkRigCtrl *ctrl = GTK_RIG_CTRL( user_data);
     sat_t        *sat = SAT (value);
 
-    ctrl->sats = g_slist_append (ctrl->sats, sat);
+    //ctrl->sats = g_slist_append (ctrl->sats, sat);
+	ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
 
 
@@ -1169,7 +1189,6 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 	}
 
 
-    
     if (!gtk_toggle_button_get_active (button)) {
         /* close socket */
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
@@ -1180,9 +1199,16 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 
         if ((ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO) ||
             (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN)) {
+            unset_toggle (ctrl,ctrl->sock);
+		}
 
-            unset_toggle (ctrl,ctrl->conf);
-        }
+        if (ctrl->conf2 != NULL) {
+
+			close_rigctld_socket(ctrl->sock2);
+		}
+		close_rigctld_socket(ctrl->sock);
+		
+
     }
     else {
 
@@ -1190,9 +1216,12 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         gtk_widget_set_sensitive (ctrl->DevSel2, FALSE);
         ctrl->engaged = TRUE;
         ctrl->wrops = 0;
-        
+
+        open_rigctld_socket(ctrl->conf,&(ctrl->sock));
+
         /* set initial frequency */
         if (ctrl->conf2 != NULL) {
+            open_rigctld_socket(ctrl->conf2,&(ctrl->sock2));
             /* set initial dual mode */
             exec_dual_rig_cycle (ctrl);
         }
@@ -1217,7 +1246,7 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 
             case RIG_TYPE_TOGGLE_AUTO:
             case RIG_TYPE_TOGGLE_MAN:
-                set_toggle (ctrl,ctrl->conf);
+                set_toggle (ctrl,ctrl->sock);
                 ctrl->last_toggle_tx = -1;
                 exec_toggle_cycle (ctrl);
                 break;
@@ -1361,7 +1390,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     
     /* get PTT status */
     if (ctrl->engaged && ctrl->conf->ptt)
-        ptt = get_ptt (ctrl, ctrl->conf);
+        ptt = get_ptt (ctrl, ctrl->sock);
     
     
     /* Dial feedback:
@@ -1375,7 +1404,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
     if ((ctrl->engaged) && (ctrl->lastrxf > 0.0)) {
         
         if (ptt == FALSE) {
-            if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
+            if (!get_freq_simplex (ctrl, ctrl->sock, &readfreq)) {
                 /* error => use a passive value */
                 readfreq = ctrl->lastrxf;
                 ctrl->errcnt++;
@@ -1440,7 +1469,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ptt == FALSE) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
-        if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
+        if (set_freq_simplex (ctrl, ctrl->sock, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
             
@@ -1451,7 +1480,7 @@ static void exec_rx_cycle (GtkRigCtrl *ctrl)
                the tuning step is larger than what we work with (e.g. FT-817 has a
                smallest tuning step of 10 Hz). Therefore we read back the actual
                frequency from the rig. */
-            get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
+            get_freq_simplex (ctrl, ctrl->sock, &tmpfreq);
             ctrl->lastrxf = tmpfreq;
         }
         else {
@@ -1476,7 +1505,7 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     
     /* get PTT status */
     if (ctrl->engaged && ctrl->conf->ptt) {
-        ptt = get_ptt (ctrl, ctrl->conf);
+        ptt = get_ptt (ctrl, ctrl->sock);
     }
 
     /* Dial feedback:
@@ -1490,7 +1519,7 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
     if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
         
         if (ptt == TRUE) {
-            if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
+            if (!get_freq_simplex (ctrl, ctrl->sock, &readfreq)) {
                 /* error => use a passive value */
                 readfreq = ctrl->lasttxf;
                 ctrl->errcnt++;
@@ -1553,7 +1582,7 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (ptt == TRUE) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
-        if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
+        if (set_freq_simplex (ctrl, ctrl->sock, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;
 
@@ -1564,7 +1593,7 @@ static void exec_tx_cycle (GtkRigCtrl *ctrl)
                the tuning step is larger than what we work with (e.g. FT-817 has a
                smallest tuning step of 10 Hz). Therefore we read back the actual
                frequency from the rig. */
-            get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
+            get_freq_simplex (ctrl, ctrl->sock, &tmpfreq);
             ctrl->lasttxf = tmpfreq;
         }
         else {
@@ -1641,7 +1670,7 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
 
     
     if (ctrl->engaged && ctrl->conf->ptt) {
-        ptt = get_ptt (ctrl, ctrl->conf);
+        ptt = get_ptt (ctrl, ctrl->sock);
     }
     
     /* if we are in TX mode do nothing */
@@ -1654,7 +1683,7 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
 
     /* if device is engaged, send freq command to radio */
     if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 10.0)) {
-        if (set_freq_toggle (ctrl, ctrl->conf, tmpfreq)) {
+        if (set_freq_toggle (ctrl, ctrl->sock, tmpfreq)) {
             /* reset error counter */
             ctrl->errcnt = 0;          
         }
@@ -1708,7 +1737,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
     if (ctrl->engaged && (ctrl->lastrxf > 0.0)) {
         
         /* get frequency from receiver */
-        if (!get_freq_simplex (ctrl, ctrl->conf, &readfreq)) {
+        if (!get_freq_simplex (ctrl, ctrl->sock, &readfreq)) {
             /* error => use a passive value */
             readfreq = ctrl->lastrxf;
             ctrl->errcnt++;
@@ -1753,7 +1782,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         
         /* if device is engaged, send freq command to radio */
         if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
-            if (set_freq_simplex (ctrl, ctrl->conf2, tmpfreq)) {
+            if (set_freq_simplex (ctrl, ctrl->sock2, tmpfreq)) {
                 /* reset error counter */
                 ctrl->errcnt = 0;
 
@@ -1761,7 +1790,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                 g_usleep (WR_DEL);
 
                 /* The actual frequency migh be different from what we have set */
-                get_freq_simplex (ctrl, ctrl->conf2, &tmpfreq);
+                get_freq_simplex (ctrl, ctrl->sock2, &tmpfreq);
                 ctrl->lasttxf = tmpfreq;
             }
             else {
@@ -1790,7 +1819,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 
         /* if device is engaged, send freq command to radio */
         if ((ctrl->engaged) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
-            if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
+            if (set_freq_simplex (ctrl, ctrl->sock, tmpfreq)) {
                 /* reset error counter */
                 ctrl->errcnt = 0;
 
@@ -1798,7 +1827,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                 g_usleep (WR_DEL);
 
                 /* The actual frequency migh be different from what we have set */
-                get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
+                get_freq_simplex (ctrl, ctrl->sock, &tmpfreq);
                 ctrl->lastrxf = tmpfreq;
             }
             else {
@@ -1811,7 +1840,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
         /* check if uplink dial has changed */
         if ((ctrl->engaged) && (ctrl->lasttxf > 0.0)) {
 
-            if (!get_freq_simplex (ctrl, ctrl->conf2, &readfreq)) {
+            if (!get_freq_simplex (ctrl, ctrl->sock2, &readfreq)) {
                 /* error => use a passive value */
                 readfreq = ctrl->lasttxf;
                 ctrl->errcnt++;
@@ -1855,7 +1884,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 
             /* if device is engaged, send freq command to radio */
             if ((ctrl->engaged) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0)) {
-                if (set_freq_simplex (ctrl, ctrl->conf, tmpfreq)) {
+                if (set_freq_simplex (ctrl, ctrl->sock, tmpfreq)) {
                     /* reset error counter */
                     ctrl->errcnt = 0;
 
@@ -1863,7 +1892,7 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
                     g_usleep (WR_DEL);
 
                     /* The actual frequency migh be different from what we have set */
-                    get_freq_simplex (ctrl, ctrl->conf, &tmpfreq);
+                    get_freq_simplex (ctrl, ctrl->sock, &tmpfreq);
                     ctrl->lastrxf = tmpfreq;
                 }
                 else {
@@ -1887,15 +1916,15 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 
             /* if device is engaged, send freq command to radio */
             if ((ctrl->engaged) && (fabs(ctrl->lasttxf - tmpfreq) >= 1.0)) {
-                if (set_freq_simplex (ctrl, ctrl->conf2, tmpfreq)) {
+                if (set_freq_simplex (ctrl, ctrl->sock2, tmpfreq)) {
                     /* reset error counter */
                     ctrl->errcnt = 0;
 
                     /* give radio a chance to set frequency */
                     g_usleep (WR_DEL);
 
-                    /* The actual frequency migh be different from what we have set. */
-                    get_freq_simplex (ctrl, ctrl->conf2, &tmpfreq);
+                    /* The actual frequency might be different from what we have set. */
+                    get_freq_simplex (ctrl, ctrl->sock2, &tmpfreq);
                     ctrl->lasttxf = tmpfreq;
                 }
                 else {
@@ -1915,116 +1944,32 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
  *  \return TRUE if PTT is ON, FALSE if PTT is OFF or an error occurred.
  *
  */
-static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
+static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock)
 {
     gchar  *buff,**vbuff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gchar  buffback[128];
+	gboolean retcode;
     guint64  pttstat = 0;
 
     
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to create socket"),
-                     __FILE__, __LINE__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d Network socket created successfully"),
-                     __FILE__, __LINE__);
-    }
+    if (ctrl->conf->ptt == PTT_TYPE_CAT) {
 
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to connect to %s:%d"),
-                     __FILE__, __LINE__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d: Connection opened to %s:%d"),
-                     __FILE__, __LINE__, conf->host, conf->port);
-    }
-    
-    if (conf->ptt == PTT_TYPE_CAT) {
         /* send command get_ptt (t) */
-        buff = g_strdup_printf ("t\x0aq\x0a");
-        size = 4;
+        buff = g_strdup_printf ("t\x0a");
     }
     else {
         /* send command \get_dcd */
-        buff = g_strdup_printf ("%c\x0aq\x0a",0x8b);
-        size = 4;
+        buff = g_strdup_printf ("%c\x0a",0x8b);
     }
     
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: SIZE ERROR %d / %d"),
-                     __FILE__, __LINE__, written, size);
-    }
-    g_free (buff);
-    
-    
-    /* try to read answer */
-    buff = g_try_malloc (128);
-    if (buff == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                     __FILE__, __FUNCTION__);
-
-#ifndef WIN32
-	shutdown (sock, SHUT_RDWR);
-#else
-	shutdown (sock, SD_BOTH);
-#endif
-
-	close (sock);
-        return FALSE;
-    }
-
-    size = read (sock, buff, 127);
-    if (size == 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Got 0 bytes from rigctld"),
-                     __FILE__, __FUNCTION__);
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%s: Read %d bytes from rigctld"),
-                     __FILE__, __FUNCTION__, size);
-        
-        buff[size] = 0;
-        vbuff = g_strsplit (buff, "\n", 3);
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	if (retcode) {
+		vbuff = g_strsplit (buffback, "\n", 3);
         pttstat = g_ascii_strtoull (vbuff[0], NULL, 0);  //FIXME base = 0 ok?
 
         g_strfreev (vbuff);
     }
 	g_free (buff);
-
-
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-    
-    close (sock);
-
 
     return (pttstat == 1) ? TRUE : FALSE;
 
@@ -2037,48 +1982,11 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf)
  * \param ptt The new PTT value (TRUE=ON, FALSE=OFF)
  * \return TRUE if the operation was successful, FALSE if an error has occurred
  */
-static gboolean set_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf, gboolean ptt)
+static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt)
 {
     gchar  *buff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
-
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-    }
+	gchar  buffback[128];
+    gboolean retcode;
     
     /* send command */
     if (ptt == TRUE) {
@@ -2088,26 +1996,11 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf, gboolean ptt)
         buff = g_strdup_printf ("T 0\x0aq\x0a");
     }
     
-    size = 6;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
-    }
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	
     g_free (buff);
+	return(check_set_response(buffback,retcode,__FUNCTION__));
 
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-
-    close (sock);
-    
-    ctrl->wrops++;
-    
-    return TRUE;
 }
 
 
@@ -2122,72 +2015,19 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, radio_conf_t *conf, gboolean ptt)
  *       gotten the current frequency from the ctrl; however, the param
  *       might become useful in the future.
  */
-static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq)
+static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble freq)
 {
     gchar  *buff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gchar  buffback[128];
+	gboolean retcode;
 
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
+    buff = g_strdup_printf ("F %10.0f\x0a", freq);    
 
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	
+	g_free(buff);
+	return(check_set_response(buffback,retcode,__FUNCTION__));
 
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-    }
-    
-    /* send command */
-    buff = g_strdup_printf ("F %10.0f\x0aq\x0a", freq);
-    
-    size = 15;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
-    }
-    g_free (buff);
-
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-
-    close (sock);
-    
-    ctrl->wrops++;
-    
-    return TRUE;
 }
 
 
@@ -2202,72 +2042,21 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
  *       might become useful in the future.
  */
 
-static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble freq)
+static gboolean set_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble freq)
 {
     gchar  *buff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gchar   buffback[128];
+	gboolean retcode;
 
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-    }
-    
     /* send command */
-    buff = g_strdup_printf ("I %10.0f\x0aq\x0a", freq);
-    
-    size = 15;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
-    }
-    g_free (buff);
+    buff = g_strdup_printf ("I %10.0f\x0a", freq);
 
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	
+	g_free(buff);
 
-    close (sock);
-    
-    ctrl->wrops++;
-    
-    return TRUE;
+	return(check_set_response(buffback,retcode,__FUNCTION__));
+
 }
 
 
@@ -2277,72 +2066,19 @@ static gboolean set_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble f
  *         occurred.
  * 
  */
-static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
+static gboolean set_toggle (GtkRigCtrl *ctrl, gint sock)
 {
     gchar  *buff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gchar buffback[128];
+	gboolean retcode;
 
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
+    buff = g_strdup_printf ("S 1 %d\x0a",ctrl->conf->vfoDown);
+	
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	
+	g_free(buff);
+	return(check_set_response(buffback,retcode,__FUNCTION__));
 
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-    }
-    
-    /* send command */
-    buff = g_strdup_printf ("S 1 %d\x0aq\x0a",ctrl->conf->vfoDown);
-    
-    size = strlen(buff);
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
-    }
-    g_free (buff);
-
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-
-    close (sock);
-    
-    ctrl->wrops++;
-    
-    return TRUE;
 }
 
 /** \brief Turn off the radios toggle mode
@@ -2352,72 +2088,21 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
  * 
  */
 
-static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
+static gboolean unset_toggle (GtkRigCtrl *ctrl, gint sock)
 {
     gchar  *buff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gchar buffback[128];
+	gboolean retcode;
 
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
-    }
-    
     /* send command */
-    buff = g_strdup_printf ("S 0 %d\x0aq\x0a",ctrl->conf->vfoDown);
-    
-    size = strlen(buff);
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
-    }
-    g_free (buff);
+    buff = g_strdup_printf ("S 0 %d\x0a",ctrl->conf->vfoDown);
 
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	
+	g_free(buff);
 
-    close (sock);
-    
-    ctrl->wrops++;
-    
-    return TRUE;
+	return(check_set_response(buffback,retcode,__FUNCTION__));
+
 }
 
 
@@ -2430,116 +2115,21 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf)
  * \return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  */
-static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq)
+static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 {
     gchar  *buff,**vbuff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gchar buffback[128];
+	gboolean retcode;
 
+    buff = g_strdup_printf ("f\x0a");
 
-    if (freq == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%s:%d: NULL storage."),
-                     __FILE__, __LINE__);
-        return FALSE;
-    }
-    
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to create socket"),
-                     __FILE__, __LINE__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d Network socket created successfully"),
-                     __FILE__, __LINE__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to connect to %s:%d"),
-                     __FILE__, __LINE__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d: Connection opened to %s:%d"),
-                     __FILE__, __LINE__, conf->host, conf->port);
-    }
-    
-    /* send command */
-    buff = g_strdup_printf ("f\x0aq\x0a");
-    
-    size = 4;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: SIZE ERROR %d / %d"),
-                     __FILE__, __LINE__, written, size);
-    }
-    g_free (buff);
-    
-    
-    /* try to read answer */
-    buff = g_try_malloc (128);
-    if (buff == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                     __FILE__, __FUNCTION__);
-
-#ifndef WIN32
-        shutdown (sock, SHUT_RDWR);
-#else
-        shutdown (sock, SD_BOTH);
-#endif
-        
-        close (sock);
-        return FALSE;
-    }
-
-    size = read (sock, buff, 127);
-    if (size == 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Got 0 bytes from rigctld"),
-                     __FILE__, __FUNCTION__);
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%s: Read %d bytes from rigctld"),
-                     __FILE__, __FUNCTION__, size);
-        
-        buff[size] = 0;
-        vbuff = g_strsplit (buff, "\n", 3);
-        *freq = g_ascii_strtod (vbuff[0], NULL);
-
-        g_strfreev (vbuff);
-    }
-	g_free (buff);
-
-    
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-
-    close (sock);
-
-
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	retcode=check_get_response(buffback,retcode,__FUNCTION__);
+	if (retcode) {
+		vbuff = g_strsplit (buffback, "\n", 3);
+		*freq = g_ascii_strtod (vbuff[0], NULL);
+		g_strfreev (vbuff);
+	}
     return TRUE;
 }
 
@@ -2550,15 +2140,11 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble 
  *         occurred.
  */
 
-static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *freq)
+static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 {
     gchar  *buff,**vbuff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
-
+	gchar   buffback[128];
+	gboolean retcode;
 
     if (freq == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -2567,98 +2153,16 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
         return FALSE;
     }
     
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to create socket"),
-                     __FILE__, __LINE__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d Network socket created successfully"),
-                     __FILE__, __LINE__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: Failed to connect to %s:%d"),
-                     __FILE__, __LINE__, conf->host, conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%d: Connection opened to %s:%d"),
-                     __FILE__, __LINE__, conf->host, conf->port);
-    }
-    
     /* send command */
-    buff = g_strdup_printf ("i\x0aq\x0a");
-    
-    size = 4;
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: SIZE ERROR %d / %d"),
-                     __FILE__, __LINE__, written, size);
-    }
-    g_free (buff);
-    
-    
-    /* try to read answer */
-    buff = g_try_malloc (128);
-    if (buff == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"),
-                     __FILE__, __FUNCTION__);
+    buff = g_strdup_printf ("i\x0a");    
 
-#ifndef WIN32
-        shutdown (sock, SHUT_RDWR);
-#else
-        shutdown (sock, SD_BOTH);
-#endif
-        
-        close (sock);
-        return FALSE;
-    }
-
-    size = read (sock, buff, 127);
-    if (size == 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%s: Got 0 bytes from rigctld"),
-                     __FILE__, __FUNCTION__);
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%s: Read %d bytes from rigctld"),
-                     __FILE__, __FUNCTION__, size);
-        
-        buff[size] = 0;
-        vbuff = g_strsplit (buff, "\n", 3);
-        *freq = g_ascii_strtod (vbuff[0], NULL);
-
-        g_strfreev (vbuff);
-    }
-	g_free (buff);	
-    
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-
-    close (sock);
-
-
+	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+	retcode=check_get_response(buffback,retcode,__FUNCTION__);
+	if (retcode) {
+		vbuff = g_strsplit (buffback, "\n", 3);
+		*freq = g_ascii_strtod (vbuff[0], NULL);
+		g_strfreev (vbuff);
+	}
     return TRUE;
 }
 
@@ -2672,97 +2176,38 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, radio_conf_t *conf, gdouble *
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
 {
     gchar  *buff;
-    gint    written,size;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
-
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-    }
-    
-    /* prepare command */
+	gchar   buffback[128];
+    gboolean retcode;
     switch (vfo) {
     case VFO_A:
-    	buff = g_strdup_printf ("V VFOA\x0aq\x0a");
-        size = 9;
+    	buff = g_strdup_printf ("V VFOA\x0a");
         break;
         
     case VFO_B:
-    	buff = g_strdup_printf ("V VFOB\x0aq\x0a");
-        size = 9;
+    	buff = g_strdup_printf ("V VFOB\x0a");
         break;
         
     case VFO_MAIN:
-    	buff = g_strdup_printf ("V Main\x0aq\x0a");
-        size = 9;
+    	buff = g_strdup_printf ("V Main\x0a");
         break;
         
     case VFO_SUB:
-    	buff = g_strdup_printf ("V Sub\x0aq\x0a");
-        size = 8;
+    	buff = g_strdup_printf ("V Sub\x0a");
         break;
         
     default:
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s: Invalid VFO argument. Using VFOA."),
                      __FUNCTION__);
-    	buff = g_strdup_printf ("V VFOA");
-        size = 6;
+    	buff = g_strdup_printf ("V VFOA\x0a");
         break;
     }
 
-    /* send command */
-    written = send(sock, buff, size, 0);
-    if (written != size) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
-    }
-    g_free (buff);
-
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-    
-    close (sock);
-    
-    ctrl->wrops++;
-    
-    return TRUE;
+	retcode=send_rigctld_command(ctrl,ctrl->sock,buff,buffback,128);
+ 
+	g_free(buff);
+	
+	return(check_set_response(buffback,retcode,__FUNCTION__));
 }
 
 
@@ -2926,6 +2371,8 @@ static gboolean have_conf ()
             
             if (g_str_has_suffix (filename, ".rig")) {
                 i++;
+				/*once we have one we are done*/
+				break;
             }
         }
     }
@@ -3048,64 +2495,51 @@ static gboolean is_rig_tx_capable (const gchar *confname)
 
 
 
-gboolean send_rigctld_command(GtkRigCtrl *ctrl, gchar *buff, gint size)
+
+gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *buffout, gint sizeout)
 {
     gint    written;
-    gint    status;
-    struct hostent *h;
-    struct sockaddr_in ServAddr;
-    gint  sock;          /*!< Network socket */
+	gint    size;
+	
+	size = strlen(buff)-1;
 
-    /* create socket */
-    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to create socket"),
-                     __FUNCTION__);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Network socket created successfully"),
-                     __FUNCTION__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;             /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
-    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port); /* Server port */
-
-    /* establish connection */
-    status = connect(sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
-    if (status < 0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-        return FALSE;
-    }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
-    }
-    
+	sat_log_log (SAT_LOG_LEVEL_DEBUG,
+				 _("%s:%s: sending %d bytes to rigctld as \"%s\""),
+				 __FILE__, __FUNCTION__, size, buff);
     /* send command */
-    written = send(sock, buff, size, 0);
+    written = send(sock, buff, strlen(buff), 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
                      __FUNCTION__, written, size);
     }
+    if (written == -1) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: rigctld port closed"),
+                     __FUNCTION__);
+		return FALSE;
+    }
+    /* try to read answer */
+    size = read (sock, buffout, 127);
+    if (size == -1) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: rigctld port closed"),
+                     __FUNCTION__);
+		return FALSE;
+    }
 
-#ifndef WIN32
-    shutdown (sock, SHUT_RDWR);
-#else
-    shutdown (sock, SD_BOTH);
-#endif
-    
-    close (sock);
-    
+	buffout[size]='\0';
+    if (size == 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Got 0 bytes from rigctld"),
+                     __FILE__, __FUNCTION__);
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s:%s: Read %d bytes from rigctld"),
+                     __FILE__, __FUNCTION__, size);
+        
+    }
     ctrl->wrops++;
     
     return TRUE;
@@ -3202,7 +2636,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
         }
         else {
 
-            ptt = get_ptt (ctrl, ctrl->conf);        
+            ptt = get_ptt (ctrl, ctrl->sock);        
         
             if (ptt == FALSE) {
                 /* PTT is OFF => set TX freq then set PTT to ON */
@@ -3211,7 +2645,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
                              __FUNCTION__);
                              
                 exec_toggle_tx_cycle (ctrl);
-                set_ptt(ctrl, ctrl->conf, TRUE);
+                set_ptt(ctrl, ctrl->sock, TRUE);
             }
             else {
                 /* PTT is ON => set to OFF */
@@ -3219,7 +2653,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
                              _("%s: PTT is ON = Set PTT=OFF"),
                              __FUNCTION__);
                              
-                set_ptt(ctrl, ctrl->conf, FALSE);
+                set_ptt(ctrl, ctrl->sock, FALSE);
             }
         }
         
@@ -3232,4 +2666,95 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
                      __FUNCTION__);
     }
    
+}
+
+
+static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
+	struct sockaddr_in ServAddr;
+	struct hostent *h;
+	gint status;
+
+	*sock=socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+	if (*sock < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to create socket"),
+                     __FUNCTION__);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Network socket created successfully"),
+                     __FUNCTION__);
+    }
+
+    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
+    ServAddr.sin_family = AF_INET;             /* Internet address family */
+    h = gethostbyname(conf->host);
+    memcpy((char *) &ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(conf->port); /* Server port */
+
+    /* establish connection */
+    status = connect(*sock, (struct sockaddr *) &ServAddr, sizeof(ServAddr));
+    if (status < 0) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to connect to %s:%d"),
+                     __FUNCTION__, conf->host, conf->port);
+        return FALSE;
+    }
+    else {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Connection opened to %s:%d"),
+                     __FUNCTION__, conf->host, conf->port);
+    }
+
+	return TRUE;
+}
+
+static gboolean close_rigctld_socket (gint sock) {
+  gint written;
+  /*shutdown the rigctld connect*/
+  written = send(sock, "q\x0a", 2, 0);
+  
+#ifndef WIN32
+  shutdown (sock, SHUT_RDWR);
+#else
+  shutdown (sock, SD_BOTH);
+#endif
+  
+  close (sock);
+  
+  return TRUE;
+}
+
+/*simple function to sort the list of satellites in the combo box.*/
+static gint sat_name_compare (sat_t* a,sat_t*b){
+	return (g_ascii_strcasecmp(a->nickname,b->nickname));
+}
+
+static gint rig_name_compare (const gchar* a,const gchar *b){
+	return (g_ascii_strcasecmp(a,b));
+}
+
+static inline gboolean check_set_response (gchar *buffback,gboolean retcode,const gchar *function){
+	if (retcode==TRUE)
+		if (strncmp(buffback,"RPRT 0",6)!=0) {
+			sat_log_log (SAT_LOG_LEVEL_ERROR,
+						 _("%s: %s rigctld returned error (%s)"),
+						 __FILE__,function,buffback);
+			
+			retcode=FALSE;
+		}
+	return retcode;
+}
+
+static inline gboolean check_get_response (gchar *buffback,gboolean retcode,const gchar *function){
+	if (retcode==TRUE)
+		if (strncmp(buffback,"RPRT",4)==0) {
+			sat_log_log (SAT_LOG_LEVEL_ERROR,
+						 _("%s: %s rigctld returned error (%s)"),
+						 __FILE__,function,buffback);
+			
+			retcode=FALSE;
+		}
+	return retcode;
 }

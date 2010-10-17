@@ -108,7 +108,9 @@ struct _gtk_rig_ctrl
     
     glong last_toggle_tx;  /*!< Last time when exec_toggle_tx_cycle() was executed (seconds)
                                 -1 indicates that an update should be performed ASAP */
-    
+	
+	gint sock, sock2;   /*!< Sockets for controlling the radio(s). */
+
     /* debug related */
     guint    wrops;
     guint    rdops;
