@@ -97,6 +97,9 @@ static gboolean have_conf (void);
 static gint sat_name_compare (sat_t* a,sat_t*b);
 static gint rot_name_compare (const gchar* a,const gchar *b);
 
+static gboolean is_flipped_pass (pass_t * pass,rot_az_type_t type);
+static inline void set_flipped_pass (GtkRotCtrl* ctrl);
+
 static GtkVBoxClass *parent_class = NULL;
 
 static GdkColor ColBlack = { 0, 0, 0, 0};
@@ -301,7 +304,8 @@ void
                 /* we need to update the pass */
                 free_pass (ctrl->pass);
                 ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
-                
+                set_flipped_pass(ctrl);
+
                 /* update polar plot */
                 gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
             }
@@ -314,7 +318,7 @@ void
             else {
                 ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
             }
-            
+            set_flipped_pass(ctrl);
             /* update polar plot */
             gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
         }
@@ -652,6 +656,9 @@ static void
             ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, ctrl->t);
         else
             ctrl->pass = get_pass (ctrl->target, ctrl->qth, ctrl->t, 3.0);
+
+        set_flipped_pass(ctrl);
+
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -761,6 +768,9 @@ static void
         /* update new ranges of the Az and El controller widgets */
         gtk_rot_knob_set_range (GTK_ROT_KNOB (ctrl->AzSet), ctrl->conf->minaz, ctrl->conf->maxaz);
         gtk_rot_knob_set_range (GTK_ROT_KNOB (ctrl->ElSet), ctrl->conf->minel, ctrl->conf->maxel);
+
+		/*Update flipped when changing rotor if there is a plot*/
+		set_flipped_pass(ctrl);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -842,26 +852,45 @@ static gboolean
     if (ctrl->tracking && ctrl->target) {
         if (ctrl->target->el < 0.0) {
             gdouble aosaz = 0.0;
-            
+            gdouble aosel = 0.0;
+
             if (ctrl->pass != NULL) {
                 aosaz = ctrl->pass->aos_az;
-                
+                /* if this is a flipped pass and the rotor supports it*/
+                if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
+                    aosel=180;
+                    if (aosaz>180)
+                        aosaz-=180;
+                    else
+                        aosaz+=180;					
+				}
+
                 if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (aosaz > 180.0)) {
                     aosaz -= 360.0;
                 }
             }
             gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), aosaz);
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), 0.0);
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), aosel);
         }
         else {
+            setaz=ctrl->target->az;
+            setel=ctrl->target->el;
+            if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
+                setel=180-setel;
+                if (setaz>180)
+                    setaz-=180;
+                else
+                    setaz+=180;
+            }
+
             if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) &&
-                (ctrl->target->az > 180.0)) {
-                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), ctrl->target->az - 360.0);
+                (setaz > 180.0)) {
+                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz- 360.0);
             }
             else {
-                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), ctrl->target->az);
+                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz);
             }
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), ctrl->target->el);
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), setel);
         }
         
     }
@@ -1283,4 +1312,70 @@ static gint sat_name_compare (sat_t* a,sat_t*b){
  */
 static gint rot_name_compare (const gchar* a,const gchar *b){
 	return (g_ascii_strcasecmp(a,b));
+}
+
+
+/** \brief  Compute if a pass is flipped or not.  this is a function of the rotator and the particular pass. 
+ */
+static gboolean is_flipped_pass (pass_t * pass,rot_az_type_t type){
+    gdouble max_az,min_az;
+    gdouble caz,last_az=pass->aos_az;
+    guint num,i;
+    pass_detail_t      *detail;
+    gboolean retval=FALSE;
+
+    num = g_slist_length (pass->details);
+    if (type==ROT_AZ_TYPE_360) {
+        min_az = 0;
+        max_az = 360;
+    } 
+    else if (type==ROT_AZ_TYPE_180) {
+        min_az = -180;
+        max_az = 180;
+    }
+	
+	/* Assume that min_az and max_az are atleat 360 degrees apart*/
+    /*get the azimuth that is in a settable range*/
+    while (last_az>max_az) {
+        last_az-=360;
+    } 
+    while (last_az<min_az) {
+        last_az+=360;
+    }
+    
+    for (i = 1; i < num-1; i++) {
+        detail = PASS_DETAIL(g_slist_nth_data (pass->details, i));
+        caz=detail->az;
+        while (caz>max_az) {
+            caz-=360;
+        } 
+        while (caz<min_az) {
+            caz+=360;
+        }
+        if (fabs(caz-last_az)>180) {
+            retval=TRUE;
+        }
+        last_az=caz;
+
+    }
+    caz=pass->los_az;
+    while (caz>max_az) {
+        caz-=360;
+    } 
+    while (caz<min_az) {
+        caz+=360;
+    }
+    if (fabs(caz-last_az)>180) {
+        retval=TRUE;
+    }
+    
+    return retval;
+}
+
+static inline void set_flipped_pass (GtkRotCtrl* ctrl){
+    if (ctrl->conf)
+        if (ctrl->pass){
+            ctrl->flipped=is_flipped_pass(ctrl->pass,ctrl->conf->aztype);
+        }
+
 }

@@ -83,7 +83,8 @@ struct _gtk_rot_ctrl
     sat_t  *target;     /*!< Target satellite */
     pass_t *pass;       /*!< Next pass of target satellite */
     qth_t  *qth;        /*!< The QTH for this module */
-    
+	gboolean flipped;   /*!< Whether the current pass loaded is a flip pass or not */
+
     guint delay;       /*!< Timeout delay. */
     guint timerid;     /*!< Timer ID */
     gdouble tolerance;  /*!< Error tolerance */
