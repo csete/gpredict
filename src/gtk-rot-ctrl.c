@@ -783,8 +783,6 @@ static void
         g_free (ctrl->conf);
         ctrl->conf = NULL;
     }
-    
-    return TRUE;
 }
 
 
