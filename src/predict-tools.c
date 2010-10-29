@@ -571,6 +571,8 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 
             pass->details = g_slist_reverse (pass->details);
 
+            /* calculate satellite data */
+            predict_calc (sat, qth, pass->los);
             /* store los_az, max_el and tca */
             pass->los_az = sat->az;
             pass->max_el = max_el;
@@ -996,6 +998,8 @@ get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 
         pass->details = g_slist_reverse (pass->details);
 
+        /* calculate satellite data */
+        predict_calc (sat, qth, pass->los);
         /* store los_az, max_el and tca */
         pass->los_az = sat->az;
         pass->max_el = max_el;
