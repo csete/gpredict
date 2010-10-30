@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -193,7 +193,7 @@ static void
         g_free (ctrl->conf);
         ctrl->conf = NULL;
     }
-	
+    
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -228,19 +228,19 @@ GtkWidget *
     GTK_ROT_CTRL (widget)->qth = module->qth;
     
     /* get next pass for target satellite */
-	if (GTK_ROT_CTRL (widget)->target){
-		if (GTK_ROT_CTRL (widget)->target->el > 0.0) {
-			GTK_ROT_CTRL (widget)->pass = get_current_pass (GTK_ROT_CTRL (widget)->target,
-															GTK_ROT_CTRL (widget)->qth,
-															0.0);
-		}
-		else {
-			GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
-														 GTK_ROT_CTRL (widget)->qth,
-														 3.0);
-		}
-	}
-	
+    if (GTK_ROT_CTRL (widget)->target){
+        if (GTK_ROT_CTRL (widget)->target->el > 0.0) {
+            GTK_ROT_CTRL (widget)->pass = get_current_pass (GTK_ROT_CTRL (widget)->target,
+                                                            GTK_ROT_CTRL (widget)->qth,
+                                                            0.0);
+        }
+        else {
+            GTK_ROT_CTRL (widget)->pass = get_next_pass (GTK_ROT_CTRL (widget)->target,
+                                                         GTK_ROT_CTRL (widget)->qth,
+                                                         3.0);
+        }
+    }
+    
     /* initialise custom colors */
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColBlack);
     gdk_rgb_find_color (gtk_widget_get_colormap (widget), &ColWhite);
@@ -487,7 +487,7 @@ static GtkWidget *
     gchar       *dirname;      /* directory name */
     gchar      **vbuff;
     const gchar *filename;     /* file name */
-	gchar       *rotname;
+    gchar       *rotname;
     
     
     table = gtk_table_new (3, 3, FALSE);
@@ -509,27 +509,27 @@ static GtkWidget *
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
         /* read each .rot file */
-		GSList *rots=NULL;
-		gint i;
-		gint n;
+        GSList *rots=NULL;
+        gint i;
+        gint n;
         while ((filename = g_dir_read_name (dir))) {
             
             if (g_str_has_suffix (filename, ".rot")) {
                 
                 vbuff = g_strsplit (filename, ".rot", 0);
-				rots=g_slist_insert_sorted(rots,g_strdup(vbuff[0]),(GCompareFunc)rot_name_compare);
+                rots=g_slist_insert_sorted(rots,g_strdup(vbuff[0]),(GCompareFunc)rot_name_compare);
                 g_strfreev (vbuff);
             }
         }
-		n = g_slist_length (rots);
-		for (i = 0; i < n; i++) {
-			rotname = g_slist_nth_data (rots, i);
-			if (rotname) {
-				gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), rotname);
-				g_free(rotname);
-			}
-		}
-		g_slist_free(rots);
+        n = g_slist_length (rots);
+        for (i = 0; i < n; i++) {
+            rotname = g_slist_nth_data (rots, i);
+            if (rotname) {
+                gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), rotname);
+                g_free(rotname);
+            }
+        }
+        g_slist_free(rots);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -628,7 +628,7 @@ static void
     sat_t        *sat = SAT (value);
 
     //ctrl->sats = g_slist_append (ctrl->sats, sat);
-	ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
+    ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
 
 
@@ -769,8 +769,8 @@ static void
         gtk_rot_knob_set_range (GTK_ROT_KNOB (ctrl->AzSet), ctrl->conf->minaz, ctrl->conf->maxaz);
         gtk_rot_knob_set_range (GTK_ROT_KNOB (ctrl->ElSet), ctrl->conf->minel, ctrl->conf->maxel);
 
-		/*Update flipped when changing rotor if there is a plot*/
-		set_flipped_pass(ctrl);
+        /*Update flipped when changing rotor if there is a plot*/
+        set_flipped_pass(ctrl);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -801,7 +801,7 @@ static void
     if (!gtk_toggle_button_get_active (button)) {
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
-		close_rotctld_socket(ctrl->sock);
+        close_rotctld_socket(ctrl->sock);
         gtk_label_set_text (GTK_LABEL (ctrl->AzRead), "---");
         gtk_label_set_text (GTK_LABEL (ctrl->ElRead), "---");
     }
@@ -860,8 +860,8 @@ static gboolean
                     if (aosaz>180)
                         aosaz-=180;
                     else
-                        aosaz+=180;					
-				}
+                        aosaz+=180;                    
+                }
 
                 if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (aosaz > 180.0)) {
                     aosaz -= 360.0;
@@ -966,19 +966,19 @@ static gboolean
     }
     
     /* update controller circle on polar plot */
-	if (ctrl->conf !=NULL){
-		if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
-			gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
-										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet))+360.0,
-										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
-		}
-		else {
-			gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
-										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
-										 gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
-		}
+    if (ctrl->conf !=NULL){
+        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
+            gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+                                         gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet))+360.0,
+                                         gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+        }
+        else {
+            gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
+                                         gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet)),
+                                         gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
+        }
     }
-	g_static_mutex_unlock(&(ctrl->busy));
+    g_static_mutex_unlock(&(ctrl->busy));
 
     return TRUE;
 }
@@ -994,9 +994,9 @@ static gboolean
 static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 {
     gchar  *buff,**vbuff;
-	gchar  buffback[128];
-	gboolean retcode;
-	
+    gchar  buffback[128];
+    gboolean retcode;
+    
     if ((az == NULL) || (el == NULL)) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: NULL storage."),
@@ -1007,24 +1007,24 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
     /* send command */
     buff = g_strdup_printf ("p\x0a");
 
-	retcode=send_rotctld_command(ctrl,buff,buffback,128);
+    retcode=send_rotctld_command(ctrl,buff,buffback,128);
     
     /* try to read answer */
-	if (retcode) {
-		if (strncmp(buffback,"RPRT",4)==0){
-			retcode=FALSE;
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s:%d: rotctld returned error (%s)"),
-						 __FILE__, __LINE__,buffback);
+    if (retcode) {
+        if (strncmp(buffback,"RPRT",4)==0){
+            retcode=FALSE;
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%d: rotctld returned error (%s)"),
+                         __FILE__, __LINE__,buffback);
 
-		} else {
-			vbuff = g_strsplit (buffback, "\n", 3);
-			*az = g_strtod (vbuff[0], NULL);
-			*el = g_strtod (vbuff[1], NULL);
-			
-			g_strfreev (vbuff);
-		}
-	}
+        } else {
+            vbuff = g_strsplit (buffback, "\n", 3);
+            *az = g_strtod (vbuff[0], NULL);
+            *el = g_strtod (vbuff[1], NULL);
+            
+            g_strfreev (vbuff);
+        }
+    }
 
     g_free (buff);
 
@@ -1045,27 +1045,27 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
 {
     gchar  *buff;
-	gchar  buffback[128];
+    gchar  buffback[128];
     gchar  azstr[8],elstr[8];
-	gboolean retcode;
+    gboolean retcode;
     
     /* send command */
     g_ascii_formatd (azstr, 8, "%7.2f", az);
     g_ascii_formatd (elstr, 8, "%7.2f", el);
     buff = g_strdup_printf ("P %s %s\x0a", azstr, elstr);
     
-	retcode=send_rotctld_command(ctrl,buff,buffback,128);
+    retcode=send_rotctld_command(ctrl,buff,buffback,128);
     
     g_free (buff);
     
-	if (retcode==TRUE)
-		if (strncmp(buffback,"RPRT 0",6)!=0) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s:%d: rotctld returned error (%s)"),
-						 __FILE__, __LINE__,buffback);
-			
-			retcode=FALSE;
-		}
+    if (retcode==TRUE)
+        if (strncmp(buffback,"RPRT 0",6)!=0) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%d: rotctld returned error (%s)"),
+                         __FILE__, __LINE__,buffback);
+            
+            retcode=FALSE;
+        }
 
     return (retcode);
 }
@@ -1161,8 +1161,8 @@ static gboolean have_conf ()
             
             if (g_str_has_suffix (filename, ".rot")) {
                 i++;
-				/*once we have one we need nothing else*/
-				break;
+                /*once we have one we need nothing else*/
+                break;
             }
         }
     }
@@ -1182,12 +1182,12 @@ static gboolean have_conf ()
 /** \brief open the rotcld socket. return true if successful false otherwise.*/
 
 static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
-	struct sockaddr_in ServAddr;
-	struct hostent *h;
-	gint status;
+    struct sockaddr_in ServAddr;
+    struct hostent *h;
+    gint status;
 
-	ctrl->sock=socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
-	if (ctrl->sock < 0) {
+    ctrl->sock=socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+    if (ctrl->sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
                      __FUNCTION__);
@@ -1219,7 +1219,7 @@ static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
                      __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
     }
 
-	return TRUE;
+    return TRUE;
 }
 
 
@@ -1247,13 +1247,13 @@ static gboolean close_rotctld_socket (gint sock) {
 gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gint sizeout)
 {
     gint    written;
-	gint    size;
+    gint    size;
 
-	size = strlen(buff);
-	
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s:%s: Sending %d bytes as %s."),
-				 __FILE__, __FUNCTION__, size, buff);
+    size = strlen(buff);
+    
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s:%s: Sending %d bytes as %s."),
+                 __FILE__, __FUNCTION__, size, buff);
 
 
     /* send command */
@@ -1267,21 +1267,21 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rotctld Socket Down"),
                      __FUNCTION__);
-		return FALSE;
+        return FALSE;
     }
 
     /* try to read answer */
     size = read (ctrl->sock, buffout, sizeout);
 
-	if (size == -1) {
+    if (size == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rotctld Socket Down"),
                      __FUNCTION__);
-		return FALSE;
+        return FALSE;
     }  
 
-	buffout[size]='\0';
-	if (size == 0) {
+    buffout[size]='\0';
+    if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rotctld"),
                      __FILE__, __FUNCTION__);
@@ -1302,14 +1302,14 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
  *simple function to sort the list of satellites in the combo box.
  */
 static gint sat_name_compare (sat_t* a,sat_t*b){
-	return (g_ascii_strcasecmp(a->nickname,b->nickname));
+    return (g_ascii_strcasecmp(a->nickname,b->nickname));
 }
 
 
 /** \brief  Compare Rotator Names.
  */
 static gint rot_name_compare (const gchar* a,const gchar *b){
-	return (g_ascii_strcasecmp(a,b));
+    return (g_ascii_strcasecmp(a,b));
 }
 
 
@@ -1331,8 +1331,8 @@ static gboolean is_flipped_pass (pass_t * pass,rot_az_type_t type){
         min_az = -180;
         max_az = 180;
     }
-	
-	/* Assume that min_az and max_az are atleat 360 degrees apart*/
+    
+    /* Assume that min_az and max_az are atleat 360 degrees apart*/
     /*get the azimuth that is in a settable range*/
     while (last_az>max_az) {
         last_az-=360;

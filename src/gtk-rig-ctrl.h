@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -98,7 +98,7 @@ struct _gtk_rig_ctrl
     guint timerid;     /*!< Timer ID */
     
     gboolean tracking;  /*!< Flag set when we are tracking a target. */
-	GStaticMutex busy;/*!< Flag set when control algorithm is busy. */
+    GStaticMutex busy;/*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rig device is engaged. */
     gint     errcnt;    /*!< Error counter. */
     
@@ -108,8 +108,8 @@ struct _gtk_rig_ctrl
     
     glong last_toggle_tx;  /*!< Last time when exec_toggle_tx_cycle() was executed (seconds)
                                 -1 indicates that an update should be performed ASAP */
-	
-	gint sock, sock2;   /*!< Sockets for controlling the radio(s). */
+    
+    gint sock, sock2;   /*!< Sockets for controlling the radio(s). */
 
     /* debug related */
     guint    wrops;

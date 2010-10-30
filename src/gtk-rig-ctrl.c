@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -660,7 +660,7 @@ static GtkWidget *create_conf_widgets (GtkRigCtrl *ctrl)
     gchar       *dirname;      /* directory name */
     gchar      **vbuff;
     const gchar *filename;     /* file name */
-	gchar       *rigname;
+    gchar       *rigname;
     
     
     table = gtk_table_new (4, 3, FALSE);
@@ -684,26 +684,26 @@ static GtkWidget *create_conf_widgets (GtkRigCtrl *ctrl)
     dir = g_dir_open (dirname, 0, &error);
     if (dir) {
         /* read each .rig file */
-		GSList *rigs=NULL;
-		gint i;
-		gint n;
+        GSList *rigs=NULL;
+        gint i;
+        gint n;
         while ((filename = g_dir_read_name (dir))) {
             
             if (g_str_has_suffix (filename, ".rig")) {
-				vbuff = g_strsplit (filename, ".rig", 0);
-				rigs=g_slist_insert_sorted(rigs,g_strdup(vbuff[0]),(GCompareFunc)rig_name_compare);
+                vbuff = g_strsplit (filename, ".rig", 0);
+                rigs=g_slist_insert_sorted(rigs,g_strdup(vbuff[0]),(GCompareFunc)rig_name_compare);
                 g_strfreev (vbuff);
             }
         }
-		n = g_slist_length (rigs);
-		for (i = 0; i < n; i++) {
-			rigname = g_slist_nth_data (rigs, i);
-			if (rigname) {
-				gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), rigname);
-				g_free(rigname);
-			}
-		}
-		g_slist_free(rigs);
+        n = g_slist_length (rigs);
+        for (i = 0; i < n; i++) {
+            rigname = g_slist_nth_data (rigs, i);
+            if (rigname) {
+                gtk_combo_box_append_text (GTK_COMBO_BOX (ctrl->DevSel), rigname);
+                g_free(rigname);
+            }
+        }
+        g_slist_free(rigs);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -829,7 +829,7 @@ static void store_sats (gpointer key, gpointer value, gpointer user_data)
     sat_t        *sat = SAT (value);
 
     //ctrl->sats = g_slist_append (ctrl->sats, sat);
-	ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
+    ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
 
 
@@ -1180,13 +1180,13 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
 
-	if (ctrl->conf == NULL) {
-		/* we don't have a working configuration */
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Controller does not have a valid configuration"),
-					 __FUNCTION__);
-		return;
-	}
+    if (ctrl->conf == NULL) {
+        /* we don't have a working configuration */
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Controller does not have a valid configuration"),
+                     __FUNCTION__);
+        return;
+    }
 
 
     if (!gtk_toggle_button_get_active (button)) {
@@ -1200,14 +1200,14 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         if ((ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO) ||
             (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN)) {
             unset_toggle (ctrl,ctrl->sock);
-		}
+        }
 
         if (ctrl->conf2 != NULL) {
 
-			close_rigctld_socket(ctrl->sock2);
-		}
-		close_rigctld_socket(ctrl->sock);
-		
+            close_rigctld_socket(ctrl->sock2);
+        }
+        close_rigctld_socket(ctrl->sock);
+        
 
     }
     else {
@@ -1304,14 +1304,14 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     if (ctrl->conf == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Controller does not have a valid configuration"),
-					 __FUNCTION__);
-		return (TRUE);
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Controller does not have a valid configuration"),
+                     __FUNCTION__);
+        return (TRUE);
 
-	}
-	
-	
+    }
+    
+    
     if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
@@ -1947,8 +1947,8 @@ static void exec_dual_rig_cycle (GtkRigCtrl *ctrl)
 static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock)
 {
     gchar  *buff,**vbuff;
-	gchar  buffback[128];
-	gboolean retcode;
+    gchar  buffback[128];
+    gboolean retcode;
     guint64  pttstat = 0;
 
     
@@ -1962,14 +1962,14 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock)
         buff = g_strdup_printf ("%c\x0a",0x8b);
     }
     
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	if (retcode) {
-		vbuff = g_strsplit (buffback, "\n", 3);
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    if (retcode) {
+        vbuff = g_strsplit (buffback, "\n", 3);
         pttstat = g_ascii_strtoull (vbuff[0], NULL, 0);  //FIXME base = 0 ok?
 
         g_strfreev (vbuff);
     }
-	g_free (buff);
+    g_free (buff);
 
     return (pttstat == 1) ? TRUE : FALSE;
 
@@ -1985,7 +1985,7 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock)
 static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt)
 {
     gchar  *buff;
-	gchar  buffback[128];
+    gchar  buffback[128];
     gboolean retcode;
     
     /* send command */
@@ -1996,10 +1996,10 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt)
         buff = g_strdup_printf ("T 0\x0aq\x0a");
     }
     
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    
     g_free (buff);
-	return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__FUNCTION__));
 
 }
 
@@ -2018,15 +2018,15 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt)
 static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble freq)
 {
     gchar  *buff;
-	gchar  buffback[128];
-	gboolean retcode;
+    gchar  buffback[128];
+    gboolean retcode;
 
     buff = g_strdup_printf ("F %10.0f\x0a", freq);    
 
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	
-	g_free(buff);
-	return(check_set_response(buffback,retcode,__FUNCTION__));
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    
+    g_free(buff);
+    return(check_set_response(buffback,retcode,__FUNCTION__));
 
 }
 
@@ -2045,17 +2045,17 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble freq)
 static gboolean set_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble freq)
 {
     gchar  *buff;
-	gchar   buffback[128];
-	gboolean retcode;
+    gchar   buffback[128];
+    gboolean retcode;
 
     /* send command */
     buff = g_strdup_printf ("I %10.0f\x0a", freq);
 
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	
-	g_free(buff);
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    
+    g_free(buff);
 
-	return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__FUNCTION__));
 
 }
 
@@ -2069,15 +2069,15 @@ static gboolean set_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble freq)
 static gboolean set_toggle (GtkRigCtrl *ctrl, gint sock)
 {
     gchar  *buff;
-	gchar buffback[128];
-	gboolean retcode;
+    gchar buffback[128];
+    gboolean retcode;
 
     buff = g_strdup_printf ("S 1 %d\x0a",ctrl->conf->vfoDown);
-	
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	
-	g_free(buff);
-	return(check_set_response(buffback,retcode,__FUNCTION__));
+    
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    
+    g_free(buff);
+    return(check_set_response(buffback,retcode,__FUNCTION__));
 
 }
 
@@ -2091,17 +2091,17 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, gint sock)
 static gboolean unset_toggle (GtkRigCtrl *ctrl, gint sock)
 {
     gchar  *buff;
-	gchar buffback[128];
-	gboolean retcode;
+    gchar buffback[128];
+    gboolean retcode;
 
     /* send command */
     buff = g_strdup_printf ("S 0 %d\x0a",ctrl->conf->vfoDown);
 
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	
-	g_free(buff);
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    
+    g_free(buff);
 
-	return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__FUNCTION__));
 
 }
 
@@ -2118,18 +2118,18 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, gint sock)
 static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 {
     gchar  *buff,**vbuff;
-	gchar buffback[128];
-	gboolean retcode;
+    gchar buffback[128];
+    gboolean retcode;
 
     buff = g_strdup_printf ("f\x0a");
 
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	retcode=check_get_response(buffback,retcode,__FUNCTION__);
-	if (retcode) {
-		vbuff = g_strsplit (buffback, "\n", 3);
-		*freq = g_ascii_strtod (vbuff[0], NULL);
-		g_strfreev (vbuff);
-	}
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    retcode=check_get_response(buffback,retcode,__FUNCTION__);
+    if (retcode) {
+        vbuff = g_strsplit (buffback, "\n", 3);
+        *freq = g_ascii_strtod (vbuff[0], NULL);
+        g_strfreev (vbuff);
+    }
     return TRUE;
 }
 
@@ -2143,8 +2143,8 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 {
     gchar  *buff,**vbuff;
-	gchar   buffback[128];
-	gboolean retcode;
+    gchar   buffback[128];
+    gboolean retcode;
 
     if (freq == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -2156,13 +2156,13 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     /* send command */
     buff = g_strdup_printf ("i\x0a");    
 
-	retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-	retcode=check_get_response(buffback,retcode,__FUNCTION__);
-	if (retcode) {
-		vbuff = g_strsplit (buffback, "\n", 3);
-		*freq = g_ascii_strtod (vbuff[0], NULL);
-		g_strfreev (vbuff);
-	}
+    retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
+    retcode=check_get_response(buffback,retcode,__FUNCTION__);
+    if (retcode) {
+        vbuff = g_strsplit (buffback, "\n", 3);
+        *freq = g_ascii_strtod (vbuff[0], NULL);
+        g_strfreev (vbuff);
+    }
     return TRUE;
 }
 
@@ -2176,38 +2176,38 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
 {
     gchar  *buff;
-	gchar   buffback[128];
+    gchar   buffback[128];
     gboolean retcode;
     switch (vfo) {
     case VFO_A:
-    	buff = g_strdup_printf ("V VFOA\x0a");
+        buff = g_strdup_printf ("V VFOA\x0a");
         break;
         
     case VFO_B:
-    	buff = g_strdup_printf ("V VFOB\x0a");
+        buff = g_strdup_printf ("V VFOB\x0a");
         break;
         
     case VFO_MAIN:
-    	buff = g_strdup_printf ("V Main\x0a");
+        buff = g_strdup_printf ("V Main\x0a");
         break;
         
     case VFO_SUB:
-    	buff = g_strdup_printf ("V Sub\x0a");
+        buff = g_strdup_printf ("V Sub\x0a");
         break;
         
     default:
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s: Invalid VFO argument. Using VFOA."),
                      __FUNCTION__);
-    	buff = g_strdup_printf ("V VFOA\x0a");
+        buff = g_strdup_printf ("V VFOA\x0a");
         break;
     }
 
-	retcode=send_rigctld_command(ctrl,ctrl->sock,buff,buffback,128);
+    retcode=send_rigctld_command(ctrl,ctrl->sock,buff,buffback,128);
  
-	g_free(buff);
-	
-	return(check_set_response(buffback,retcode,__FUNCTION__));
+    g_free(buff);
+    
+    return(check_set_response(buffback,retcode,__FUNCTION__));
 }
 
 
@@ -2371,8 +2371,8 @@ static gboolean have_conf ()
             
             if (g_str_has_suffix (filename, ".rig")) {
                 i++;
-				/*once we have one we are done*/
-				break;
+                /*once we have one we are done*/
+                break;
             }
         }
     }
@@ -2499,13 +2499,13 @@ static gboolean is_rig_tx_capable (const gchar *confname)
 gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *buffout, gint sizeout)
 {
     gint    written;
-	gint    size;
-	
-	size = strlen(buff)-1;
+    gint    size;
+    
+    size = strlen(buff)-1;
 
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s:%s: sending %d bytes to rigctld as \"%s\""),
-				 __FILE__, __FUNCTION__, size, buff);
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                 _("%s:%s: sending %d bytes to rigctld as \"%s\""),
+                 __FILE__, __FUNCTION__, size, buff);
     /* send command */
     written = send(sock, buff, strlen(buff), 0);
     if (written != size) {
@@ -2517,7 +2517,7 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rigctld port closed"),
                      __FUNCTION__);
-		return FALSE;
+        return FALSE;
     }
     /* try to read answer */
     size = read (sock, buffout, 127);
@@ -2525,10 +2525,10 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rigctld port closed"),
                      __FUNCTION__);
-		return FALSE;
+        return FALSE;
     }
 
-	buffout[size]='\0';
+    buffout[size]='\0';
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rigctld"),
@@ -2670,12 +2670,12 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
 
 
 static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
-	struct sockaddr_in ServAddr;
-	struct hostent *h;
-	gint status;
+    struct sockaddr_in ServAddr;
+    struct hostent *h;
+    gint status;
 
-	*sock=socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
-	if (*sock < 0) {
+    *sock=socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
+    if (*sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
                      __FUNCTION__);
@@ -2707,7 +2707,7 @@ static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
                      __FUNCTION__, conf->host, conf->port);
     }
 
-	return TRUE;
+    return TRUE;
 }
 
 static gboolean close_rigctld_socket (gint sock) {
@@ -2728,33 +2728,33 @@ static gboolean close_rigctld_socket (gint sock) {
 
 /*simple function to sort the list of satellites in the combo box.*/
 static gint sat_name_compare (sat_t* a,sat_t*b){
-	return (g_ascii_strcasecmp(a->nickname,b->nickname));
+    return (g_ascii_strcasecmp(a->nickname,b->nickname));
 }
 
 static gint rig_name_compare (const gchar* a,const gchar *b){
-	return (g_ascii_strcasecmp(a,b));
+    return (g_ascii_strcasecmp(a,b));
 }
 
 static inline gboolean check_set_response (gchar *buffback,gboolean retcode,const gchar *function){
-	if (retcode==TRUE)
-		if (strncmp(buffback,"RPRT 0",6)!=0) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: %s rigctld returned error (%s)"),
-						 __FILE__,function,buffback);
-			
-			retcode=FALSE;
-		}
-	return retcode;
+    if (retcode==TRUE)
+        if (strncmp(buffback,"RPRT 0",6)!=0) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: %s rigctld returned error (%s)"),
+                         __FILE__,function,buffback);
+            
+            retcode=FALSE;
+        }
+    return retcode;
 }
 
 static inline gboolean check_get_response (gchar *buffback,gboolean retcode,const gchar *function){
-	if (retcode==TRUE)
-		if (strncmp(buffback,"RPRT",4)==0) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: %s rigctld returned error (%s)"),
-						 __FILE__,function,buffback);
-			
-			retcode=FALSE;
-		}
-	return retcode;
+    if (retcode==TRUE)
+        if (strncmp(buffback,"RPRT",4)==0) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: %s rigctld returned error (%s)"),
+                         __FILE__,function,buffback);
+            
+            retcode=FALSE;
+        }
+    return retcode;
 }

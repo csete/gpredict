@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -44,12 +44,12 @@ extern "C" {
 
 #define GTK_TYPE_ROT_CTRL          (gtk_rot_ctrl_get_type ())
 #define GTK_ROT_CTRL(obj)          GTK_CHECK_CAST (obj,\
-				                   gtk_rot_ctrl_get_type (),\
-						           GtkRotCtrl)
+                                   gtk_rot_ctrl_get_type (),\
+                                   GtkRotCtrl)
 
 #define GTK_ROT_CTRL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_rot_ctrl_get_type (),\
-							 GtkRotCtrlClass)
+                             gtk_rot_ctrl_get_type (),\
+                             GtkRotCtrlClass)
 
 #define IS_GTK_ROT_CTRL(obj)       GTK_CHECK_TYPE (obj, gtk_rot_ctrl_get_type ())
 
@@ -61,7 +61,7 @@ typedef struct _GtkRotCtrlClass   GtkRotCtrlClass;
 
 struct _gtk_rot_ctrl
 {
-	GtkVBox vbox;
+    GtkVBox vbox;
     
     /* Azimuth widgets */
     GtkWidget *AzSat,*AzSet,*AzRead,*AzDevSel;
@@ -83,7 +83,7 @@ struct _gtk_rot_ctrl
     sat_t  *target;     /*!< Target satellite */
     pass_t *pass;       /*!< Next pass of target satellite */
     qth_t  *qth;        /*!< The QTH for this module */
-	gboolean flipped;   /*!< Whether the current pass loaded is a flip pass or not */
+    gboolean flipped;   /*!< Whether the current pass loaded is a flip pass or not */
 
     guint delay;       /*!< Timeout delay. */
     guint timerid;     /*!< Timer ID */
@@ -94,8 +94,8 @@ struct _gtk_rot_ctrl
     gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
                         
     gint     errcnt;    /*!< Error counter. */
-	gint     sock;      /*!< socket for connecting to rotctld. */
-	
+    gint     sock;      /*!< socket for connecting to rotctld. */
+    
     /* debug related */
     guint    wrops;
     guint    rdops;
@@ -103,7 +103,7 @@ struct _gtk_rot_ctrl
 
 struct _GtkRotCtrlClass
 {
-	GtkVBoxClass parent_class;
+    GtkVBoxClass parent_class;
 };
 
 
