@@ -1005,6 +1005,12 @@ update_track (gpointer key, gpointer value, gpointer data)
           
         /* create points */
         num = g_slist_length (obj->pass->details);
+        if (num == 0) {
+               sat_log_log (SAT_LOG_LEVEL_BUG,
+                               _("%s:%d: Pass had no points in it."),
+                               __FILE__, __LINE__);
+               return;
+          }
 
         points = goo_canvas_points_new (num);
 
@@ -1145,6 +1151,12 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 
     /* create points */
     num = g_slist_length (obj->pass->details);
+    if (num == 0) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s:%d: Pass had no points in it."),
+                     __FILE__, __LINE__);
+        return;
+    }
 
     /* time resolution for time ticks; we need
                    3 additional points to AOS and LOS ticks.
@@ -1152,7 +1164,9 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
     tres = (num-2) / (TRACK_TICK_NUM-1);
 
     points = goo_canvas_points_new (num);
+    
 
+    
     /* first point should be (aos_az,0.0) */
     azel_to_xy (pv, obj->pass->aos_az, 0.0, &x, &y);
     points->coords[0] = (double) x;
