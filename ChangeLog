@@ -1,7 +1,6 @@
 2010-10-31 Charles Suprin <hamaa1vs at gmail.com>
 
-    trunk/src/about.c
-    * src/about.h
+    * src/about.[ch]
     * src/compat.[ch]
     * src/config-keys.h
     * src/defaults.h
