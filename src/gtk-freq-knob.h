@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -42,12 +42,12 @@ extern "C" {
 
 #define GTK_TYPE_FREQ_KNOB          (gtk_freq_knob_get_type ())
 #define GTK_FREQ_KNOB(obj)          GTK_CHECK_CAST (obj,\
-				                       gtk_freq_knob_get_type (),\
-						               GtkFreqKnob)
+                                           gtk_freq_knob_get_type (),\
+                                             GtkFreqKnob)
 
 #define GTK_FREQ_KNOB_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_freq_knob_get_type (),\
-							 GtkFreqKnobClass)
+                                    gtk_freq_knob_get_type (),\
+                                    GtkFreqKnobClass)
 
 #define IS_GTK_FREQ_KNOB(obj)       GTK_CHECK_TYPE (obj, gtk_freq_knob_get_type ())
 
@@ -59,11 +59,11 @@ typedef struct _GtkFreqKnobClass   GtkFreqKnobClass;
 
 struct _gtk_freq_knob
 {
-	GtkVBox vbox;
+     GtkVBox vbox;
     
     GtkWidget *digits[10];   /*!< Labels for the digits */
     GtkWidget *buttons[20];  /*!< Buttons; 0..9 up; 10..19 down */
-	
+     
     gdouble min;
     gdouble max;
     gdouble value;
@@ -71,7 +71,7 @@ struct _gtk_freq_knob
 
 struct _GtkFreqKnobClass
 {
-	GtkVBoxClass parent_class;
+     GtkVBoxClass parent_class;
 };
 
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -42,12 +42,12 @@ extern "C" {
 
 #define GTK_TYPE_ROT_KNOB          (gtk_rot_knob_get_type ())
 #define GTK_ROT_KNOB(obj)          GTK_CHECK_CAST (obj,\
-				                   gtk_rot_knob_get_type (),\
-						           GtkRotKnob)
+                                       gtk_rot_knob_get_type (),\
+                                         GtkRotKnob)
 
 #define GTK_ROT_KNOB_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_rot_knob_get_type (),\
-							 GtkRotKnobClass)
+                                    gtk_rot_knob_get_type (),\
+                                    GtkRotKnobClass)
 
 #define IS_GTK_ROT_KNOB(obj)       GTK_CHECK_TYPE (obj, gtk_rot_knob_get_type ())
 
@@ -59,11 +59,11 @@ typedef struct _GtkRotKnobClass   GtkRotKnobClass;
 
 struct _gtk_rot_knob
 {
-	GtkVBox vbox;
+     GtkVBox vbox;
     
     GtkWidget *digits[7];   /*!< Labels for the digits */
     GtkWidget *buttons[10]; /*!< Buttons; 0..4 up; 5..9 down */
-	
+     
     gdouble min;
     gdouble max;
     gdouble value;
@@ -71,7 +71,7 @@ struct _gtk_rot_knob
 
 struct _GtkRotKnobClass
 {
-	GtkVBoxClass parent_class;
+     GtkVBoxClass parent_class;
 };
 
 

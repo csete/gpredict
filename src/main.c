@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -137,7 +137,7 @@ int main (int argc, char *argv[])
 
     /* start logger first, so that we can catch error messages if any */
     sat_log_init ();
-	
+     
     if (!g_thread_supported ())
         g_thread_init (NULL);
 
@@ -176,15 +176,15 @@ int main (int argc, char *argv[])
     /* launch TLE monitoring task; 10 min interval */
     tle_mon_id = g_timeout_add (600000, tle_mon_task, NULL);
 
-	
+     
 #ifdef WIN32
-	// Initializing Windozze Sockets
+     // Initializing Windozze Sockets
     InitWinSock2();
 #endif
     
     gtk_main ();
 
-	g_option_context_free(context);
+     g_option_context_free(context);
 #ifdef WIN32
     // Cleanup Windozze Sockets
     CloseWinSock2();
@@ -310,8 +310,8 @@ static void gpredict_app_create ()
 static void
 gpredict_sig_handler (int sig)
 {
-    /* 	satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
-    /* 	satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
+    /*      satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
+    /*      satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
 
     gtk_widget_destroy (app);
 }
@@ -364,7 +364,7 @@ gpredict_app_destroy    (GtkWidget *widget,
     mod_mgr_save_state ();
 
     /* not good, have to use configure event instead (see API doc) */
-    /*	gtk_window_get_size (GTK_WINDOW (app), &w, &h);
+    /*     gtk_window_get_size (GTK_WINDOW (app), &w, &h);
                 sat_cfg_set_int (SAT_CFG_INT_WINDOW_WIDTH, w);
                 sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, h);
         */
@@ -453,9 +453,9 @@ tle_mon_task          (gpointer data)
     GError    *err = NULL;
 
 
-    /* 	sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-    /* 				 _("%s: Checking whether TLE check should be executed..."), */
-    /* 				 __FUNCTION__); */
+    /*      sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+    /*                      _("%s: Checking whether TLE check should be executed..."), */
+    /*                      __FUNCTION__); */
 
     /* get time of last update */
     last = sat_cfg_get_int (SAT_CFG_INT_TLE_LAST_UPDATE);
@@ -495,9 +495,9 @@ tle_mon_task          (gpointer data)
 
     if ((now - last) < thrld) {
         /* too early */
-        /* 		sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-        /* 					 _("%s: Threshold has not been passed yet."), */
-        /* 					 __FUNCTION__, last, now, thrld); */
+        /*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+        /*                           _("%s: Threshold has not been passed yet."), */
+        /*                           __FUNCTION__, last, now, thrld); */
     }
     else {
         /* time to update */

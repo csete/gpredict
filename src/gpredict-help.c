@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -50,46 +50,46 @@ static gint config_help (void);
 void
 gpredict_help_launch (gpredict_help_type_t type)
 {
-	browser_type_t idx;
-	gint           resp;
+     browser_type_t idx;
+     gint           resp;
 
 
-	idx = sat_cfg_get_int (SAT_CFG_INT_WEB_BROWSER_TYPE);
+     idx = sat_cfg_get_int (SAT_CFG_INT_WEB_BROWSER_TYPE);
 
-	/* some sanity check before accessing the arrays ;-) */
-	if ((idx < BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM)) {
-		idx = BROWSER_TYPE_NONE;
-	}
+     /* some sanity check before accessing the arrays ;-) */
+     if ((idx < BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM)) {
+          idx = BROWSER_TYPE_NONE;
+     }
 
-	if (idx == BROWSER_TYPE_NONE) {
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-			     _("%s: Help browser is not set up yet."),
-			     __FUNCTION__);
+     if (idx == BROWSER_TYPE_NONE) {
+          sat_log_log (SAT_LOG_LEVEL_MSG,
+                    _("%s: Help browser is not set up yet."),
+                    __FUNCTION__);
 
-		resp = config_help ();
+          resp = config_help ();
 
-		if (resp == GTK_RESPONSE_CANCEL) {
-			sat_log_log (SAT_LOG_LEVEL_MSG,
-				     _("%s: Configure help browser cancelled."),
-				     __FUNCTION__);
+          if (resp == GTK_RESPONSE_CANCEL) {
+               sat_log_log (SAT_LOG_LEVEL_MSG,
+                         _("%s: Configure help browser cancelled."),
+                         __FUNCTION__);
 
-			return;
-		}
+               return;
+          }
 
-		/* else try again */
-		idx = sat_cfg_get_int (SAT_CFG_INT_WEB_BROWSER_TYPE);		
-	}
+          /* else try again */
+          idx = sat_cfg_get_int (SAT_CFG_INT_WEB_BROWSER_TYPE);          
+     }
 
-	if ((idx <= BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM)) {
-		return;
-	}
+     if ((idx <= BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM)) {
+          return;
+     }
 
-	/* launch help browser */
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-		     _("%s: Launching help browser %s."),
-		     __FUNCTION__, sat_help[idx].type);
+     /* launch help browser */
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+               _("%s: Launching help browser %s."),
+               __FUNCTION__, sat_help[idx].type);
 
-	g_print ("FIXME: FINSH IMPELMTATION\n");
+     g_print ("FIXME: FINSH IMPELMTATION\n");
 }
 
 
@@ -106,45 +106,45 @@ gpredict_help_launch (gpredict_help_type_t type)
 static gint
 config_help (void)
 {
-	GtkWidget *dialog;
-	GtkWidget *label;
-	gint resp;
+     GtkWidget *dialog;
+     GtkWidget *label;
+     gint resp;
 
 
-	dialog = gtk_dialog_new_with_buttons (_("Configure Help Browser"),
-					      GTK_WINDOW (app),
-					      GTK_DIALOG_MODAL |
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_STOCK_CANCEL,
-					      GTK_RESPONSE_CANCEL,
-					      GTK_STOCK_OK,
-					      GTK_RESPONSE_OK,
-					      NULL);
+     dialog = gtk_dialog_new_with_buttons (_("Configure Help Browser"),
+                               GTK_WINDOW (app),
+                               GTK_DIALOG_MODAL |
+                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                               GTK_STOCK_CANCEL,
+                               GTK_RESPONSE_CANCEL,
+                               GTK_STOCK_OK,
+                               GTK_RESPONSE_OK,
+                               NULL);
 
-	label = gtk_label_new (_("Please select a HTML browser to be used to view the help."));
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, TRUE, 0);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-			    sat_pref_help_create (), TRUE, FALSE, 0);
+     label = gtk_label_new (_("Please select a HTML browser to be used to view the help."));
+     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, TRUE, 0);
+     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+                   sat_pref_help_create (), TRUE, FALSE, 0);
 
-	gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
+     gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
 
-	resp = gtk_dialog_run (GTK_DIALOG (dialog));
+     resp = gtk_dialog_run (GTK_DIALOG (dialog));
 
-	switch (resp) {
+     switch (resp) {
 
-		/* save browser settings */
-	case GTK_RESPONSE_OK:
-		sat_pref_help_ok ();
-		break;
-		
-	default:
-		sat_pref_help_cancel ();
-		break;
-	}
+          /* save browser settings */
+     case GTK_RESPONSE_OK:
+          sat_pref_help_ok ();
+          break;
+          
+     default:
+          sat_pref_help_cancel ();
+          break;
+     }
 
-	gtk_widget_destroy (dialog);
+     gtk_widget_destroy (dialog);
 
-	return resp;
+     return resp;
 }
 
 
@@ -160,92 +160,92 @@ config_help (void)
 void
 gpredict_help_show_txt (const gchar *filename)
 {
-	GtkWidget     *dialog;
-	GtkWidget     *swin;
-	GtkWidget     *view;
-	GtkTextBuffer *txtbuf;
-	GIOChannel    *chan;
-	GError        *error = NULL;
-	gchar         *fname;
-	gchar         *buff;
-	gsize          length;
+     GtkWidget     *dialog;
+     GtkWidget     *swin;
+     GtkWidget     *view;
+     GtkTextBuffer *txtbuf;
+     GIOChannel    *chan;
+     GError        *error = NULL;
+     gchar         *fname;
+     gchar         *buff;
+     gsize          length;
 
 
-	/* get system data directory */
+     /* get system data directory */
 #ifdef G_OS_UNIX
-	fname = g_strconcat (PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, filename, NULL);
+     fname = g_strconcat (PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, filename, NULL);
 #else
 #  ifdef G_OS_WIN32
         buff = g_win32_get_package_installation_directory (NULL, NULL);
         fname = g_strconcat (buff, G_DIR_SEPARATOR_S,
-							 "doc", G_DIR_SEPARATOR_S,
-							 filename, ".txt", NULL);
+                                    "doc", G_DIR_SEPARATOR_S,
+                                    filename, ".txt", NULL);
         g_free (buff);
 #  endif
 #endif
 
-	/* load file into buffer */
-	chan = g_io_channel_new_file (fname, "r", &error);
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Failed to load %s (%s)"),
-					 __FUNCTION__, fname, error->message);
-		g_free (fname);
-		g_clear_error (&error);
+     /* load file into buffer */
+     chan = g_io_channel_new_file (fname, "r", &error);
+     if (error != NULL) {
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
+                          _("%s: Failed to load %s (%s)"),
+                          __FUNCTION__, fname, error->message);
+          g_free (fname);
+          g_clear_error (&error);
 
-		return;
-	}
+          return;
+     }
 
-	g_io_channel_read_to_end (chan, &buff, &length, &error);
-	if (error != NULL) {
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s: Error reading %s (%s)"),
-					 __FUNCTION__, fname, error->message);
+     g_io_channel_read_to_end (chan, &buff, &length, &error);
+     if (error != NULL) {
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
+                          _("%s: Error reading %s (%s)"),
+                          __FUNCTION__, fname, error->message);
 
-		g_free (buff);
-		g_clear_error (&error);
-		g_io_channel_shutdown (chan, TRUE, NULL);
-		g_io_channel_unref (chan);
+          g_free (buff);
+          g_clear_error (&error);
+          g_io_channel_shutdown (chan, TRUE, NULL);
+          g_io_channel_unref (chan);
 
-		return;
-	}
+          return;
+     }
 
-	g_free (fname);
-		
-	/* create text view and text buffer widgets */
-	view = gtk_text_view_new ();
-	gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
-	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
-	txtbuf = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+     g_free (fname);
+          
+     /* create text view and text buffer widgets */
+     view = gtk_text_view_new ();
+     gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+     gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
+     txtbuf = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-	gtk_text_buffer_set_text (txtbuf, buff, -1);
-	g_free (buff);
+     gtk_text_buffer_set_text (txtbuf, buff, -1);
+     g_free (buff);
 
-	/* scrolled window */
-	swin = gtk_scrolled_window_new (NULL, NULL);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
-										 GTK_SHADOW_ETCHED_IN);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
-									GTK_POLICY_NEVER,
-									GTK_POLICY_AUTOMATIC);
-	gtk_container_add (GTK_CONTAINER (swin), view);
+     /* scrolled window */
+     swin = gtk_scrolled_window_new (NULL, NULL);
+     gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
+                                                   GTK_SHADOW_ETCHED_IN);
+     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+                                             GTK_POLICY_NEVER,
+                                             GTK_POLICY_AUTOMATIC);
+     gtk_container_add (GTK_CONTAINER (swin), view);
 
-	/* create and show dialogue with textbuffer */
-	dialog = gtk_dialog_new_with_buttons (_("Gpredict Info"),
-										  NULL,
-										  0,
-										  GTK_STOCK_CLOSE,
-										  GTK_RESPONSE_ACCEPT,
-										  NULL);
-	gtk_widget_set_size_request (dialog, -1, 450);
-	buff = icon_file_name ("gpredict-icon.png");
-	gtk_window_set_icon_from_file (GTK_WINDOW (dialog), buff, NULL);
-	g_free (buff);
+     /* create and show dialogue with textbuffer */
+     dialog = gtk_dialog_new_with_buttons (_("Gpredict Info"),
+                                                    NULL,
+                                                    0,
+                                                    GTK_STOCK_CLOSE,
+                                                    GTK_RESPONSE_ACCEPT,
+                                                    NULL);
+     gtk_widget_set_size_request (dialog, -1, 450);
+     buff = icon_file_name ("gpredict-icon.png");
+     gtk_window_set_icon_from_file (GTK_WINDOW (dialog), buff, NULL);
+     g_free (buff);
 
-	g_signal_connect_swapped (dialog, "response", 
-							  G_CALLBACK (gtk_widget_destroy), dialog);
+     g_signal_connect_swapped (dialog, "response", 
+                                     G_CALLBACK (gtk_widget_destroy), dialog);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), swin);
-	gtk_widget_show_all (dialog);
+     gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), swin);
+     gtk_widget_show_all (dialog);
 
 }

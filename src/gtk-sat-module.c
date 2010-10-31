@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -283,15 +283,15 @@ gtk_sat_module_new (const gchar *cfgfile)
     /* load configuration; note that this will also set the module name */
     gtk_sat_module_read_cfg_data (GTK_SAT_MODULE (widget), cfgfile);
 
-	/*check that we loaded some reasonable data*/
-	if (GTK_SAT_MODULE(widget)->cfgdata==NULL){
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
+     /*check that we loaded some reasonable data*/
+     if (GTK_SAT_MODULE(widget)->cfgdata==NULL){
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s has problems."),
                      __FUNCTION__, cfgfile);
-		
+          
         return NULL;
-	}
-	
+     }
+     
     /* module state */
     if ((g_key_file_has_key (GTK_SAT_MODULE (widget)->cfgdata,
                              MOD_CFG_GLOBAL_SECTION,
@@ -506,7 +506,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                                     G_KEY_FILE_KEEP_COMMENTS, &error)) {
 
         g_key_file_free (module->cfgdata);
-		module->cfgdata=NULL;
+          module->cfgdata=NULL;
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not load config data from %s (%s)."),
                      __FUNCTION__, cfgfile, error->message);
@@ -774,15 +774,15 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
     if (needupdate) {
 
-		if (g_mutex_trylock(mod->busy)==FALSE) {
-			
+          if (g_mutex_trylock(mod->busy)==FALSE) {
+               
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: Previous cycle missed it's deadline."),
                      __FUNCTION__);
-		
+          
         return TRUE;
-		
-		}
+          
+          }
 
         mod->rtNow = get_current_daynum ();
 
@@ -865,7 +865,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
         }
 
-		g_mutex_unlock(mod->busy);
+          g_mutex_unlock(mod->busy);
 
     }
     return TRUE;
@@ -1391,7 +1391,7 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
 
     /* lock module */
     g_mutex_lock(module->busy);
-	
+     
     sat_log_log (SAT_LOG_LEVEL_MSG,
                  _("%s: Reloading satellites for module %s"),
                  __FUNCTION__, module->name);

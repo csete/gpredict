@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -55,28 +55,28 @@
  */
 GtkWidget *sat_pref_modules_create (GKeyFile *cfg)
 {
-	GtkWidget *nbook;
+     GtkWidget *nbook;
 
-	nbook = gtk_notebook_new ();
+     nbook = gtk_notebook_new ();
 
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_layout_create (cfg),
-				  gtk_label_new (_("Layout")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_refresh_create (cfg),
-				  gtk_label_new (_("Refresh Rates")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_list_view_create (cfg),
-				  gtk_label_new (_("List View")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_map_view_create (cfg),
-				  gtk_label_new (_("Map View")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_polar_view_create (cfg),
-				  gtk_label_new (_("Polar View")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_single_sat_create (cfg),
-				  gtk_label_new (_("Single Sat View")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_layout_create (cfg),
+                      gtk_label_new (_("Layout")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_refresh_create (cfg),
+                      gtk_label_new (_("Refresh Rates")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_list_view_create (cfg),
+                      gtk_label_new (_("List View")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_map_view_create (cfg),
+                      gtk_label_new (_("Map View")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_polar_view_create (cfg),
+                      gtk_label_new (_("Polar View")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_single_sat_create (cfg),
+                      gtk_label_new (_("Single Sat View")));
 
         return nbook;
 }
@@ -87,12 +87,12 @@ GtkWidget *sat_pref_modules_create (GKeyFile *cfg)
 void
 sat_pref_modules_cancel (GKeyFile *cfg)
 {
-	sat_pref_layout_cancel (cfg);
-	sat_pref_refresh_cancel (cfg);
-	sat_pref_list_view_cancel (cfg);
-	sat_pref_map_view_cancel (cfg);
-	sat_pref_polar_view_cancel (cfg);
-	sat_pref_single_sat_cancel (cfg);
+     sat_pref_layout_cancel (cfg);
+     sat_pref_refresh_cancel (cfg);
+     sat_pref_list_view_cancel (cfg);
+     sat_pref_map_view_cancel (cfg);
+     sat_pref_polar_view_cancel (cfg);
+     sat_pref_single_sat_cancel (cfg);
 }
 
 
@@ -101,12 +101,12 @@ sat_pref_modules_cancel (GKeyFile *cfg)
 void
 sat_pref_modules_ok     (GKeyFile *cfg)
 {
-	sat_pref_layout_ok (cfg);
-	sat_pref_refresh_ok (cfg);
-	sat_pref_list_view_ok (cfg);
-	sat_pref_map_view_ok (cfg);
-	sat_pref_polar_view_ok (cfg);
-	sat_pref_single_sat_ok (cfg);
+     sat_pref_layout_ok (cfg);
+     sat_pref_refresh_ok (cfg);
+     sat_pref_list_view_ok (cfg);
+     sat_pref_map_view_ok (cfg);
+     sat_pref_polar_view_ok (cfg);
+     sat_pref_single_sat_ok (cfg);
 }
 
 

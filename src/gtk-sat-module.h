@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -72,7 +72,7 @@ typedef enum {
 
 #define GTK_TYPE_SAT_MODULE         (gtk_sat_module_get_type ())
 #define GTK_SAT_MODULE(obj)         GTK_CHECK_CAST (obj,\
-                                    gtk_sat_module_get_type (),	\
+                                    gtk_sat_module_get_type (),     \
                                     GtkSatModule)
 
 #define GTK_SAT_MODULE_CLASS(klass) GTK_CHECK_CLASS_CAST (klass,\

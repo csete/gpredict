@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -39,12 +39,12 @@ extern "C" {
 
 #define GTK_TYPE_SAT_LIST_COL_SEL  (gtk_sat_list_col_sel_get_type ())
 #define GTK_SAT_LIST_COL_SEL(obj)  GTK_CHECK_CAST (obj,\
-						   gtk_sat_list_col_sel_get_type (),\
-						   GtkSatListColSel)
+                                 gtk_sat_list_col_sel_get_type (),\
+                                 GtkSatListColSel)
 
 #define GTK_SAT_LIST_COL_SEL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_sat_list_col_sel_get_type (),\
-							 GtkSatListColSelClass)
+                                    gtk_sat_list_col_sel_get_type (),\
+                                    GtkSatListColSelClass)
 
 #define IS_GTK_SAT_LIST_COL_SEL(obj)       GTK_CHECK_TYPE (obj, gtk_sat_list_col_sel_get_type ())
 
@@ -56,17 +56,17 @@ typedef struct _GtkSatListColSelClass GtkSatListColSelClass;
 
 struct _gtk_sat_list_col_sel
 {
-	GtkVBox vbox;
+     GtkVBox vbox;
 
-	GtkWidget   *list;     /*!< the list containing the toggles */
-	GtkWidget   *swin;
-	guint32      flags;    /*!< Flags indicating which boxes are checked */
-	gulong     handler_id;
+     GtkWidget   *list;     /*!< the list containing the toggles */
+     GtkWidget   *swin;
+     guint32      flags;    /*!< Flags indicating which boxes are checked */
+     gulong     handler_id;
 };
 
 struct _GtkSatListColSelClass
 {
-	GtkVBoxClass parent_class;
+     GtkVBoxClass parent_class;
 };
 
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -1093,8 +1093,8 @@ static void add_qth_cb (GtkWidget *button, gpointer data)
             g_free (qth.wx);
         if (qth.qra != NULL)
             g_free (qth.qra);
-        /* 		if (qth.data != NULL) */
-        /* 			g_key_file_free (data); */
+        /*           if (qth.data != NULL) */
+        /*                g_key_file_free (data); */
     }
 }
 

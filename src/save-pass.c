@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -48,7 +48,7 @@
 
 
 static void file_changed (GtkWidget *widget, gpointer data);
-static void	save_pass_exec (GtkWidget *parent,
+static void    save_pass_exec (GtkWidget *parent,
                                 pass_t *pass, qth_t *qth,
                                 const gchar *savedir, const gchar *savefile,
                                 gint format, gint contents);
@@ -156,7 +156,7 @@ void save_pass   (GtkWidget *parent)
     gtk_table_attach_defaults (GTK_TABLE (table), filchooser, 1, 2, 1, 2);
 
     /* use satellite name + orbit num as default; replace invalid characters
-	   with dash */
+       with dash */
     savefile = g_strdup_printf ("%s-%d", pass->satname, pass->orbit);
     savefile = g_strdelimit (savefile, " ", '-');
     savefile = g_strdelimit (savefile, "!?/\()*&%$#@[]{}=+<>,.|:;", '_');
@@ -171,8 +171,8 @@ void save_pass   (GtkWidget *parent)
 
     fmtchooser = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Plain text (*.txt)"));
-    /* 	gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Hypertext (*.html)")); */
-    /* 	gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Docbook (*.xml)")); */
+    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Hypertext (*.html)")); */
+    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Docbook (*.xml)")); */
     gtk_combo_box_set_active (GTK_COMBO_BOX (fmtchooser),
                               sat_cfg_get_int (SAT_CFG_INT_PRED_SAVE_FORMAT));
     gtk_table_attach_defaults (GTK_TABLE (table), fmtchooser, 1, 2, 2, 3);
@@ -319,7 +319,7 @@ void save_passes (GtkWidget *parent)
     gtk_table_attach_defaults (GTK_TABLE (table), filchooser, 1, 2, 1, 2);
 
     /* use satellite name + orbit num as default; replace invalid characters
-	   with dash */
+       with dash */
     savefile = g_strdup_printf ("%s-passes", sat);
     savefile = g_strdelimit (savefile, " ", '-');
     savefile = g_strdelimit (savefile, "!?/\()*&%$#@[]{}=+<>,.|:;", '_');
@@ -334,8 +334,8 @@ void save_passes (GtkWidget *parent)
 
     fmtchooser = gtk_combo_box_new_text ();
     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Plain text (*.txt)"));
-    /* 	gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Hypertext (*.html)")); */
-    /* 	gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Docbook (*.xml)")); */
+    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Hypertext (*.html)")); */
+    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Docbook (*.xml)")); */
     gtk_combo_box_set_active (GTK_COMBO_BOX (fmtchooser),
                               sat_cfg_get_int (SAT_CFG_INT_PRED_SAVE_FORMAT));
     gtk_table_attach_defaults (GTK_TABLE (table), fmtchooser, 1, 2, 2, 3);
@@ -414,13 +414,13 @@ static void file_changed          (GtkWidget *widget, gpointer data)
 
 
     /* ensure that only valid characters are entered
-	   (stolen from xlog, tnx pg4i)
-	*/
+       (stolen from xlog, tnx pg4i)
+    */
     entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
     if ((len = g_utf8_strlen (entry, -1)) > 0) {
         end = entry + g_utf8_strlen (entry, -1);
         for (j = entry; j < end; ++j) {
-            switch (*j)	{
+            switch (*j)    {
             case '0' ... '9':
             case 'a' ... 'z':
             case 'A' ... 'Z':
@@ -450,7 +450,7 @@ static void file_changed          (GtkWidget *widget, gpointer data)
                                            GTK_RESPONSE_ACCEPT,
                                            FALSE);
     }
-}	
+}    
 
 /** \brief Save data to file.
  *  \param parent Parent window (needed for error dialogs).
@@ -621,7 +621,7 @@ static void save_pass_exec (GtkWidget *parent,
         else {
             data = g_strdup (tblcontents);
         }
-	
+    
         /* save data */
         save_to_file (parent, fname, data);
 
@@ -634,7 +634,7 @@ static void save_pass_exec (GtkWidget *parent,
 
         break;
 
-	default:
+    default:
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s: Invalid file format: %d"),
                      __FUNCTION__, format);

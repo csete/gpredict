@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -33,9 +33,9 @@
 
 /** \brief Status codes returned by functions. */
 typedef enum {
-	MOD_CFG_OK = 0,   /*!< Operation performed ok, changes have been made */
-	MOD_CFG_CANCEL,   /*!< Operation has been cancelled */
-	MOD_CFG_ERROR     /*!< There was an error, see log messages */
+     MOD_CFG_OK = 0,   /*!< Operation performed ok, changes have been made */
+     MOD_CFG_CANCEL,   /*!< Operation has been cancelled */
+     MOD_CFG_ERROR     /*!< There was an error, see log messages */
 } mod_cfg_status_t;
 
 

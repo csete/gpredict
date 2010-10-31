@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -312,20 +312,20 @@ void gtk_sat_data_copy_sat (const sat_t *source, sat_t *dest, qth_t *qth)
 void gtk_sat_data_free_sat(sat_t *sat)
 {
 
-	if (sat){
-		if (sat->name){
-			g_free(sat->name);
-			sat->name=NULL;
-		}
-		if (sat->nickname){
-			g_free(sat->nickname);
-			sat->nickname=NULL;
-		}
-		if (sat->website){
-			g_free(sat->website);
-			sat->website=NULL;
-		}
+     if (sat){
+          if (sat->name){
+               g_free(sat->name);
+               sat->name=NULL;
+          }
+          if (sat->nickname){
+               g_free(sat->nickname);
+               sat->nickname=NULL;
+          }
+          if (sat->website){
+               g_free(sat->website);
+               sat->website=NULL;
+          }
         
-		g_free(sat);
-	}
+          g_free(sat);
+     }
 }

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -488,23 +488,23 @@ static gboolean
     qthqra  = gtk_entry_get_text (GTK_ENTRY (qra));
 
     /* clear qth struct if not empty */
-    /* 	if (qth->name != NULL) */
-    /* 		g_free (qth->name); */
+    /*      if (qth->name != NULL) */
+    /*           g_free (qth->name); */
 
-    /* 	if (qth->loc != NULL) */
-    /* 		g_free (qth->loc); */
+    /*      if (qth->loc != NULL) */
+    /*           g_free (qth->loc); */
 
-    /* 	if (qth->desc != NULL) */
-    /* 		g_free (qth->desc); */
+    /*      if (qth->desc != NULL) */
+    /*           g_free (qth->desc); */
 
-    /* 	if (qth->wx != NULL) */
-    /* 		g_free (qth->wx); */
+    /*      if (qth->wx != NULL) */
+    /*           g_free (qth->wx); */
 
-    /* 	if (qth->qra != NULL) */
-    /* 		g_free (qth->qra); */
+    /*      if (qth->qra != NULL) */
+    /*           g_free (qth->qra); */
 
-    /* 	if (qth->data != NULL) */
-    /* 		g_key_file_free (qth->data); */
+    /*      if (qth->data != NULL) */
+    /*           g_key_file_free (qth->data); */
 
     /* copy new values to qth struct */
     qth->name = g_strdup (qthname);

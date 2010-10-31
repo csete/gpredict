@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -48,18 +48,18 @@
 gdouble
 get_current_daynum ()
 {
-	struct tm utc;
-	//struct timeval tmval;
-	GTimeVal tmval;
-	double daynum;
+    struct tm utc;
+    //struct timeval tmval;
+    GTimeVal tmval;
+    double daynum;
 
-	UTC_Calendar_Now (&utc);
-	//gettimeofday (&tmval, NULL);
-	g_get_current_time (&tmval);
-	daynum = Julian_Date (&utc);
-	daynum = daynum + (double)tmval.tv_usec/8.64e+10;
+    UTC_Calendar_Now (&utc);
+    //gettimeofday (&tmval, NULL);
+    g_get_current_time (&tmval);
+    daynum = Julian_Date (&utc);
+    daynum = daynum + (double)tmval.tv_usec/8.64e+10;
  
-	return daynum;
+    return daynum;
 }
 
 
@@ -69,23 +69,23 @@ long
 get_daynum_from_dmy (int d, int m, int y)
 {
 
-	long dn;
-	double mm, yy;
+    long dn;
+    double mm, yy;
 
-	if (m<3)
-	{ 
-		y--; 
-		m+=12; 
-	}
+    if (m<3)
+    { 
+        y--; 
+        m+=12; 
+    }
 
-	if (y<57)
-		y+=100;
+    if (y<57)
+        y+=100;
 
-	yy=(double)y;
-	mm=(double)m;
-	dn=(long)(floor(365.25*(yy-80.0))-floor(19.0+yy/100.0)+floor(4.75+yy/400.0)-16.0);
-	dn+=d+30*m+(long)floor(0.6*mm-0.3);
+    yy=(double)y;
+    mm=(double)m;
+    dn=(long)(floor(365.25*(yy-80.0))-floor(19.0+yy/100.0)+floor(4.75+yy/400.0)-16.0);
+    dn+=d+30*m+(long)floor(0.6*mm-0.3);
 
-	return dn;
+    return dn;
 }
 */

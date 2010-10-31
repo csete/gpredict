@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -214,7 +214,7 @@ gtk_sky_glance_destroy (GtkObject *object)
     /* for the rest we only need to free the GSList because the
         canvas items will be freed when removed from canvas.
     */
-    if (GTK_SKY_GLANCE (object)->satlab != NULL) {	
+    if (GTK_SKY_GLANCE (object)->satlab != NULL) {     
         g_slist_free (GTK_SKY_GLANCE (object)->satlab);
         GTK_SKY_GLANCE (object)->satlab = NULL;
     }
@@ -700,7 +700,7 @@ on_item_created (GooCanvas *canvas,
                 GooCanvasItemModel *model,
                 gpointer data)
 {
-    if (!goo_canvas_item_model_get_parent (model))	{
+    if (!goo_canvas_item_model_get_parent (model))     {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event", (GtkSignalFunc) on_motion_notify, data);
     }
@@ -1004,9 +1004,9 @@ create_sat (gpointer key, gpointer value, gpointer data)
     */
 
     /* check that we didn't exceed 10 sats */
-    /* 	if (++skg->satcnt > 10) { */
-    /* 		return; */
-    /* 	} */
+    /*      if (++skg->satcnt > 10) { */
+    /*           return; */
+    /*      } */
 
     /* get canvas root */
     root = goo_canvas_get_root_item_model (GOO_CANVAS (skg->canvas));

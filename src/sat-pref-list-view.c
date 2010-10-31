@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -70,118 +70,118 @@ static void toggle_rh_cb        (GtkToggleButton *toggle, gpointer data);
  */
 GtkWidget *sat_pref_list_view_create (GKeyFile *cfg)
 {
-	GtkWidget *vbox;
-	GtkTooltips *tips;
-	gint      i;
-	GtkWidget *table,*label;
+     GtkWidget *vbox;
+     GtkTooltips *tips;
+     gint      i;
+     GtkWidget *table,*label;
 
 
-	/* column visibility selector */
-	if (cfg != NULL) {
-		flags = mod_cfg_get_int (cfg,
-								 MOD_CFG_LIST_SECTION,
-								 MOD_CFG_LIST_COLUMNS,
-								 SAT_CFG_INT_LIST_COLUMNS);
-	}
-	else {
-		flags = sat_cfg_get_int (SAT_CFG_INT_LIST_COLUMNS);
-	}
+     /* column visibility selector */
+     if (cfg != NULL) {
+          flags = mod_cfg_get_int (cfg,
+                                         MOD_CFG_LIST_SECTION,
+                                         MOD_CFG_LIST_COLUMNS,
+                                         SAT_CFG_INT_LIST_COLUMNS);
+     }
+     else {
+          flags = sat_cfg_get_int (SAT_CFG_INT_LIST_COLUMNS);
+     }
 
 
-	/* create the table */
-	table = gtk_table_new ((SAT_LIST_COL_NUMBER+1)/COLUMNS + 1, COLUMNS, TRUE);
-	//gtk_container_set_border_width (GTK_CONTAINER (table), 20);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 10);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+     /* create the table */
+     table = gtk_table_new ((SAT_LIST_COL_NUMBER+1)/COLUMNS + 1, COLUMNS, TRUE);
+     //gtk_container_set_border_width (GTK_CONTAINER (table), 20);
+     gtk_table_set_row_spacings (GTK_TABLE (table), 10);
+     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
-	/* create header */
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_markup (GTK_LABEL (label), 
-						  _("<b>Visible Fields:</b>"));
+     /* create header */
+     label = gtk_label_new (NULL);
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_label_set_markup (GTK_LABEL (label), 
+                                _("<b>Visible Fields:</b>"));
 
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-					  GTK_FILL,  GTK_SHRINK, 0, 0);
+     gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+                           GTK_FILL,  GTK_SHRINK, 0, 0);
 
 
-	for (i = 0; i < SAT_LIST_COL_NUMBER; i++) {
+     for (i = 0; i < SAT_LIST_COL_NUMBER; i++) {
 
-		check[i] = gtk_check_button_new_with_label (SAT_LIST_COL_HINT[i]);
+          check[i] = gtk_check_button_new_with_label (SAT_LIST_COL_HINT[i]);
 
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
-									  flags & (1 << i));
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
+                                               flags & (1 << i));
 
-		gtk_table_attach (GTK_TABLE (table), check[i],
-						  i % COLUMNS, (i % COLUMNS) + 1,
-						  Y0 + i / COLUMNS, Y0 + i / COLUMNS + 1,
-						  GTK_FILL,  GTK_SHRINK, 0, 0);
+          gtk_table_attach (GTK_TABLE (table), check[i],
+                                i % COLUMNS, (i % COLUMNS) + 1,
+                                Y0 + i / COLUMNS, Y0 + i / COLUMNS + 1,
+                                GTK_FILL,  GTK_SHRINK, 0, 0);
 
-		g_signal_connect (check[i], "toggled",
-						  G_CALLBACK (toggle_cb),
-						  GUINT_TO_POINTER (i));
+          g_signal_connect (check[i], "toggled",
+                                G_CALLBACK (toggle_cb),
+                                GUINT_TO_POINTER (i));
 
-	}
+     }
 
 
 #if 0
-	colsel = gtk_sat_list_col_sel_new (columns);
-	frame1 = gtk_frame_new (_("Visible Columns"));
-	gtk_frame_set_label_align (GTK_FRAME (frame1), 0.5, 0.5);
-	gtk_container_add (GTK_CONTAINER (frame1), colsel);
+     colsel = gtk_sat_list_col_sel_new (columns);
+     frame1 = gtk_frame_new (_("Visible Columns"));
+     gtk_frame_set_label_align (GTK_FRAME (frame1), 0.5, 0.5);
+     gtk_container_add (GTK_CONTAINER (frame1), colsel);
 
-	/* Colours */
-	frame2 = gtk_frame_new ("");
-	gtk_frame_set_label_align (GTK_FRAME (frame2), 0.5, 0.5);
+     /* Colours */
+     frame2 = gtk_frame_new ("");
+     gtk_frame_set_label_align (GTK_FRAME (frame2), 0.5, 0.5);
 
-	hbox = gtk_hbox_new (FALSE, 5);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-	gtk_box_pack_start (GTK_BOX (hbox), frame1, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), frame2, TRUE, TRUE, 0);
-	gtk_widget_show_all (hbox);
+     hbox = gtk_hbox_new (FALSE, 5);
+     gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+     gtk_box_pack_start (GTK_BOX (hbox), frame1, FALSE, FALSE, 0);
+     gtk_box_pack_start (GTK_BOX (hbox), frame2, TRUE, TRUE, 0);
+     gtk_widget_show_all (hbox);
 #endif
 
-	/* vertical box */
-	vbox = gtk_vbox_new (FALSE, 10);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
-	gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
+     /* vertical box */
+     vbox = gtk_vbox_new (FALSE, 10);
+     gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
+     gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
 
-	/* rules hint; only in global mode */
-	if (cfg == NULL) {
-		ruleshint = gtk_check_button_new_with_label (_("Enable rules hint in the list views"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ruleshint),
-									  sat_cfg_get_bool (SAT_CFG_BOOL_RULES_HINT));	
+     /* rules hint; only in global mode */
+     if (cfg == NULL) {
+          ruleshint = gtk_check_button_new_with_label (_("Enable rules hint in the list views"));
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ruleshint),
+                                               sat_cfg_get_bool (SAT_CFG_BOOL_RULES_HINT));     
 
-		/* store original value */
-		rh_flag = sat_cfg_get_bool (SAT_CFG_BOOL_RULES_HINT);
+          /* store original value */
+          rh_flag = sat_cfg_get_bool (SAT_CFG_BOOL_RULES_HINT);
 
-		/* connect toggle signal */
-		g_signal_connect (G_OBJECT (ruleshint), "toggled",
-						  G_CALLBACK (toggle_rh_cb), NULL);
+          /* connect toggle signal */
+          g_signal_connect (G_OBJECT (ruleshint), "toggled",
+                                G_CALLBACK (toggle_rh_cb), NULL);
 
-		tips = gtk_tooltips_new ();
-		gtk_tooltips_set_tip (tips, ruleshint,
-							  _("Enabling rules hint may make reading across many "\
-								"columns easier. By default the satlist will be rendered "\
-								"with alternating colours, but the exact behaviour is "\
-								"up to the theme engine."),
-							  NULL);
+          tips = gtk_tooltips_new ();
+          gtk_tooltips_set_tip (tips, ruleshint,
+                                     _("Enabling rules hint may make reading across many "\
+                                        "columns easier. By default the satlist will be rendered "\
+                                        "with alternating colours, but the exact behaviour is "\
+                                        "up to the theme engine."),
+                                     NULL);
 
-		gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
+          gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
-		gtk_box_pack_start (GTK_BOX (vbox), ruleshint, FALSE, FALSE, 0);
-	}
+          gtk_box_pack_start (GTK_BOX (vbox), ruleshint, FALSE, FALSE, 0);
+     }
 
-	
-	gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
+     
+     gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
-	/* create RESET button */
-	create_reset_button (cfg, GTK_BOX (vbox));
+     /* create RESET button */
+     create_reset_button (cfg, GTK_BOX (vbox));
 
-	startflags = flags;
-	dirty = FALSE;
-	reset = FALSE;
+     startflags = flags;
+     dirty = FALSE;
+     reset = FALSE;
 
-	return vbox;
+     return vbox;
 }
 
 
@@ -199,39 +199,39 @@ void
 sat_pref_list_view_ok     (GKeyFile *cfg)
 {
 
-	if (dirty) {
+     if (dirty) {
 
-		if (cfg != NULL) {
-			g_key_file_set_integer (cfg,
-									MOD_CFG_LIST_SECTION,
-									MOD_CFG_LIST_COLUMNS,
-									flags);
-		}
-		else {
-			sat_cfg_set_int (SAT_CFG_INT_LIST_COLUMNS, flags);
-			sat_cfg_set_bool (SAT_CFG_BOOL_RULES_HINT,
-							  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ruleshint)));
+          if (cfg != NULL) {
+               g_key_file_set_integer (cfg,
+                                             MOD_CFG_LIST_SECTION,
+                                             MOD_CFG_LIST_COLUMNS,
+                                             flags);
+          }
+          else {
+               sat_cfg_set_int (SAT_CFG_INT_LIST_COLUMNS, flags);
+               sat_cfg_set_bool (SAT_CFG_BOOL_RULES_HINT,
+                                     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ruleshint)));
 
-		}
-	}
-	else if (reset) {
+          }
+     }
+     else if (reset) {
 
-		if (cfg != NULL) {
+          if (cfg != NULL) {
 
-			g_key_file_remove_key (cfg,
-								   MOD_CFG_LIST_SECTION,
-								   MOD_CFG_LIST_COLUMNS,
-								   NULL);
-		}
-		else {
-			sat_cfg_reset_int (SAT_CFG_INT_LIST_COLUMNS);
-			sat_cfg_reset_bool (SAT_CFG_BOOL_RULES_HINT);
-		}
+               g_key_file_remove_key (cfg,
+                                           MOD_CFG_LIST_SECTION,
+                                           MOD_CFG_LIST_COLUMNS,
+                                           NULL);
+          }
+          else {
+               sat_cfg_reset_int (SAT_CFG_INT_LIST_COLUMNS);
+               sat_cfg_reset_bool (SAT_CFG_BOOL_RULES_HINT);
+          }
 
-	}
+     }
 
-	dirty = FALSE;
-	reset = FALSE;
+     dirty = FALSE;
+     reset = FALSE;
 
 }
 
@@ -245,32 +245,32 @@ sat_pref_list_view_ok     (GKeyFile *cfg)
 static void
 create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 {
-	GtkWidget   *button;
-	GtkWidget   *butbox;
-	GtkTooltips *tips;
+     GtkWidget   *button;
+     GtkWidget   *butbox;
+     GtkTooltips *tips;
 
 
-	button = gtk_button_new_with_label (_("Reset"));
-	g_signal_connect (G_OBJECT (button), "clicked",
-			  G_CALLBACK (reset_cb), cfg);
+     button = gtk_button_new_with_label (_("Reset"));
+     g_signal_connect (G_OBJECT (button), "clicked",
+                 G_CALLBACK (reset_cb), cfg);
 
-	tips = gtk_tooltips_new ();
-	if (cfg == NULL) {
-		gtk_tooltips_set_tip (tips, button,
-				      _("Reset settings to the default values."),
-				      NULL);
-	}
-	else {
-		gtk_tooltips_set_tip (tips, button,
-				      _("Reset module settings to the global values."),
-				      NULL);
-	}
+     tips = gtk_tooltips_new ();
+     if (cfg == NULL) {
+          gtk_tooltips_set_tip (tips, button,
+                          _("Reset settings to the default values."),
+                          NULL);
+     }
+     else {
+          gtk_tooltips_set_tip (tips, button,
+                          _("Reset module settings to the global values."),
+                          NULL);
+     }
 
-	butbox = gtk_hbutton_box_new ();
-	gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
-	gtk_box_pack_end (GTK_BOX (butbox), button, FALSE, TRUE, 10);
+     butbox = gtk_hbutton_box_new ();
+     gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
+     gtk_box_pack_end (GTK_BOX (butbox), button, FALSE, TRUE, 10);
 
-	gtk_box_pack_end (vbox, butbox, FALSE, TRUE, 0);
+     gtk_box_pack_end (vbox, butbox, FALSE, TRUE, 0);
 
 }
 
@@ -287,34 +287,34 @@ create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 static void
 reset_cb               (GtkWidget *button, gpointer cfg)
 {
-	guint32 flags;
-	guint i;
+     guint32 flags;
+     guint i;
 
 
 
-	if (cfg == NULL) {
-		/* global mode, get defaults */
-		flags = sat_cfg_get_int_def (SAT_CFG_INT_LIST_COLUMNS);
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ruleshint),
-									  sat_cfg_get_bool_def (SAT_CFG_BOOL_RULES_HINT));
-	}
-	else {
-		/* local mode, get global value */
-		flags = sat_cfg_get_int (SAT_CFG_INT_LIST_COLUMNS);
-	}
+     if (cfg == NULL) {
+          /* global mode, get defaults */
+          flags = sat_cfg_get_int_def (SAT_CFG_INT_LIST_COLUMNS);
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ruleshint),
+                                               sat_cfg_get_bool_def (SAT_CFG_BOOL_RULES_HINT));
+     }
+     else {
+          /* local mode, get global value */
+          flags = sat_cfg_get_int (SAT_CFG_INT_LIST_COLUMNS);
+     }
 
 
 
-	for (i = 0; i < SAT_LIST_COL_NUMBER; i++) {
+     for (i = 0; i < SAT_LIST_COL_NUMBER; i++) {
 
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
-									  flags & (1 << i));
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
+                                               flags & (1 << i));
 
-	}
+     }
 
-	/* reset flags */
-	dirty = FALSE;
-	reset = TRUE;
+     /* reset flags */
+     dirty = FALSE;
+     reset = TRUE;
 
 }
 
@@ -323,16 +323,16 @@ static void
 toggle_cb  (GtkToggleButton *toggle, gpointer data)
 {
 
-	if (gtk_toggle_button_get_active (toggle)) {
+     if (gtk_toggle_button_get_active (toggle)) {
 
-		flags |= (1 << GPOINTER_TO_UINT (data));
-	}
-	else {
-		flags &= ~(1 << GPOINTER_TO_UINT (data));
-	}
-	
-	/* clear dirty flag if we are back where we started */
-	dirty = (flags != startflags);
+          flags |= (1 << GPOINTER_TO_UINT (data));
+     }
+     else {
+          flags &= ~(1 << GPOINTER_TO_UINT (data));
+     }
+     
+     /* clear dirty flag if we are back where we started */
+     dirty = (flags != startflags);
 }
 
 
@@ -340,7 +340,7 @@ static void
 toggle_rh_cb        (GtkToggleButton *toggle, gpointer data)
 {
 
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ruleshint)) != rh_flag)
-		dirty = TRUE;
+     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ruleshint)) != rh_flag)
+          dirty = TRUE;
 
 }

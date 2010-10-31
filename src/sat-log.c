@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -66,8 +66,8 @@ static sat_log_level_t loglevel = SAT_LOG_LEVEL_DEBUG;
 
 
 static void manage_debug_message (sat_log_src_t source,
-								  sat_log_level_t debug_level,
-								  const gchar *message);
+                                          sat_log_level_t debug_level,
+                                          const gchar *message);
 static void log_rotate (void);
 static void clean_log_dir (const gchar *dirname, glong age);
 
@@ -86,58 +86,58 @@ void
 sat_log_init        ()
 {
     gchar *dirname,*filename,*confdir;
-	gboolean err = FALSE;
-	GError *error = NULL;
+     gboolean err = FALSE;
+     GError *error = NULL;
  
 
 
-	/* Check whether log directory exists, if not, create it */
+     /* Check whether log directory exists, if not, create it */
     confdir = get_user_conf_dir ();
     dirname = g_strconcat (confdir, G_DIR_SEPARATOR_S, "logs", NULL);
     g_free (confdir);
 
-	if (!g_file_test (dirname, G_FILE_TEST_IS_DIR)) {
-		if (g_mkdir_with_parents (dirname, 0755)) {
-			/* print an error message */
-			g_print (_("ERROR: Could not create %s\n"), dirname);
-			err = TRUE;
-		}
-	}
+     if (!g_file_test (dirname, G_FILE_TEST_IS_DIR)) {
+          if (g_mkdir_with_parents (dirname, 0755)) {
+               /* print an error message */
+               g_print (_("ERROR: Could not create %s\n"), dirname);
+               err = TRUE;
+          }
+     }
 
 
-	/* check if gpredict.log already exists */
-	filename = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
-	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+     /* check if gpredict.log already exists */
+     filename = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
+     if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
 
-		/* Note that logger shall clean up and perform log rotation
-		   upon exit, so we don't do anything here except removing
-		   the old file.
-		   The reason for this is that we need sat-cfg parameters for
-		   log rotation, but sat-cfg is not initialised at this time.
-		*/
+          /* Note that logger shall clean up and perform log rotation
+             upon exit, so we don't do anything here except removing
+             the old file.
+             The reason for this is that we need sat-cfg parameters for
+             log rotation, but sat-cfg is not initialised at this time.
+          */
 
-		g_remove (filename);
+          g_remove (filename);
 
-	}
+     }
 
-	/* create new gpredict.log file */
-	logfile = g_io_channel_new_file (filename, "w", &error);
-	if (error != NULL) {
-		g_print (_("\n\nERROR: Failed to create %s\n%s\n\n"),
-				 filename, error->message);
-		g_clear_error (&error);
-		err = 1;
-	}
+     /* create new gpredict.log file */
+     logfile = g_io_channel_new_file (filename, "w", &error);
+     if (error != NULL) {
+          g_print (_("\n\nERROR: Failed to create %s\n%s\n\n"),
+                     filename, error->message);
+          g_clear_error (&error);
+          err = 1;
+     }
 
-	/* clean up */
-	g_free (dirname);
-	g_free (filename);
+     /* clean up */
+     g_free (dirname);
+     g_free (filename);
 
-	if (!err) {
-		initialised = TRUE;
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-					 _("%s: Session started"), __FUNCTION__);
-	}
+     if (!err) {
+          initialised = TRUE;
+          sat_log_log (SAT_LOG_LEVEL_MSG,
+                          _("%s: Session started"), __FUNCTION__);
+     }
 }
 
 
@@ -146,17 +146,17 @@ sat_log_init        ()
 void
 sat_log_close       ()
 {
-	if (initialised) {
-		sat_log_log (SAT_LOG_LEVEL_MSG,
-					 _("%s: Session ended"), __FUNCTION__);
-		g_io_channel_shutdown (logfile, TRUE, NULL);
-		g_io_channel_unref (logfile);
-		logfile = NULL;
-		initialised = FALSE;
-		if (sat_cfg_get_bool (SAT_CFG_BOOL_KEEP_LOG_FILES)) {
-			log_rotate ();
-		}
-	}
+     if (initialised) {
+          sat_log_log (SAT_LOG_LEVEL_MSG,
+                          _("%s: Session ended"), __FUNCTION__);
+          g_io_channel_shutdown (logfile, TRUE, NULL);
+          g_io_channel_unref (logfile);
+          logfile = NULL;
+          initialised = FALSE;
+          if (sat_cfg_get_bool (SAT_CFG_BOOL_KEEP_LOG_FILES)) {
+               log_rotate ();
+          }
+     }
 }
 
 
@@ -164,44 +164,44 @@ sat_log_close       ()
 void
 sat_log_log         (sat_log_level_t level, const gchar *fmt, ...)
 {
-	gchar      *msg;       /* formatted debug message */
-	gchar     **msgv;      /* debug message line by line */
-	guint       numlines;  /* the number of lines in the message */
-	guint       i;
-	va_list     ap;
+     gchar      *msg;       /* formatted debug message */
+     gchar     **msgv;      /* debug message line by line */
+     guint       numlines;  /* the number of lines in the message */
+     guint       i;
+     va_list     ap;
 
 
-	if (level > loglevel) {
-		return;
-	}
+     if (level > loglevel) {
+          return;
+     }
 
-	va_start (ap, fmt);
+     va_start (ap, fmt);
 
-	/* create character string and split it in case
-	   it is a multi-line message */
-	msg = g_strdup_vprintf (fmt, ap);
+     /* create character string and split it in case
+        it is a multi-line message */
+     msg = g_strdup_vprintf (fmt, ap);
 
-	/* remove trailing \n */
-	g_strchomp (msg);
+     /* remove trailing \n */
+     g_strchomp (msg);
 
-	/* split the message in case it is a multiline message */
-	msgv = g_strsplit_set (msg, "\n", 0);
-	numlines = g_strv_length (msgv);
+     /* split the message in case it is a multiline message */
+     msgv = g_strsplit_set (msg, "\n", 0);
+     numlines = g_strv_length (msgv);
 
-	g_free (msg);
+     g_free (msg);
 
-	/* for each line in msgv, call the real debug handler
-	   which will print the debug message and save it to
-	   a logfile
-	*/
-	for (i = 0; i < numlines; i++) {
-		manage_debug_message (SAT_LOG_SRC_GPREDICT, level, msgv[i]);
-	}
+     /* for each line in msgv, call the real debug handler
+        which will print the debug message and save it to
+        a logfile
+     */
+     for (i = 0; i < numlines; i++) {
+          manage_debug_message (SAT_LOG_SRC_GPREDICT, level, msgv[i]);
+     }
 
-	va_end(ap);
+     va_end(ap);
 
-	g_strfreev (msgv);
-	
+     g_strfreev (msgv);
+     
 
 }
 
@@ -217,64 +217,64 @@ sat_log_set_visible (gboolean visible)
 void
 sat_log_set_level   (sat_log_level_t level)
 {
-	if G_LIKELY(level <= SAT_LOG_LEVEL_DEBUG) {
-		loglevel = level;
-	}
+     if G_LIKELY(level <= SAT_LOG_LEVEL_DEBUG) {
+          loglevel = level;
+     }
 }
 
 
 
 static void
 manage_debug_message (sat_log_src_t source,
-					  sat_log_level_t debug_level,
-					  const gchar *message)
+                           sat_log_level_t debug_level,
+                           const gchar *message)
 {
-	gchar    msg_time[50];
-	guint    size;
-	GTimeVal tval;
-	time_t   t;
-	gchar   *msg;
-	gsize    written;
-	GError  *error = NULL;
+     gchar    msg_time[50];
+     guint    size;
+     GTimeVal tval;
+     time_t   t;
+     gchar   *msg;
+     gsize    written;
+     GError  *error = NULL;
 
 
-	/* get the time */
-	g_get_current_time (&tval);
-	t = (time_t ) tval.tv_sec;
-	size = strftime (msg_time, 48, "%Y/%m/%d %H:%M:%S", localtime (&t));
-	if (size < 49) {
-		msg_time[size] = '\0';
-	}
-	else {
-		msg_time[49] = '\0';
-	}
+     /* get the time */
+     g_get_current_time (&tval);
+     t = (time_t ) tval.tv_sec;
+     size = strftime (msg_time, 48, "%Y/%m/%d %H:%M:%S", localtime (&t));
+     if (size < 49) {
+          msg_time[size] = '\0';
+     }
+     else {
+          msg_time[49] = '\0';
+     }
 
-	msg = g_strdup_printf ("%s%s%d%s%d%s%s\n",
-						   msg_time,
-						   SAT_LOG_MSG_SEPARATOR,
-						   source,
-						   SAT_LOG_MSG_SEPARATOR,
-						   debug_level,
-						   SAT_LOG_MSG_SEPARATOR,
-						   message);
+     msg = g_strdup_printf ("%s%s%d%s%d%s%s\n",
+                                 msg_time,
+                                 SAT_LOG_MSG_SEPARATOR,
+                                 source,
+                                 SAT_LOG_MSG_SEPARATOR,
+                                 debug_level,
+                                 SAT_LOG_MSG_SEPARATOR,
+                                 message);
 
-	/* print debug message */
-	if G_LIKELY(initialised) {
-		/* save to file */
-		g_io_channel_write_chars (logfile, msg, -1, &written, &error);
-		if G_UNLIKELY(error != NULL) {
-			g_fprintf (stderr, "CRITICAL: LOG ERROR\n");
-			g_clear_error (&error);
-		}
-		g_io_channel_flush (logfile, NULL);
-	}
-	else {
-		/* send to stderr */
-		g_fprintf (stderr, "%s", msg);
+     /* print debug message */
+     if G_LIKELY(initialised) {
+          /* save to file */
+          g_io_channel_write_chars (logfile, msg, -1, &written, &error);
+          if G_UNLIKELY(error != NULL) {
+               g_fprintf (stderr, "CRITICAL: LOG ERROR\n");
+               g_clear_error (&error);
+          }
+          g_io_channel_flush (logfile, NULL);
+     }
+     else {
+          /* send to stderr */
+          g_fprintf (stderr, "%s", msg);
 
-	}
+     }
 
-	g_free (msg);
+     g_free (msg);
 }
 
 
@@ -285,37 +285,37 @@ manage_debug_message (sat_log_src_t source,
 static void
 log_rotate ()
 {
-	GTimeVal  now;   /* current time */
-	glong     age;   /* age for cleaning */
-	glong     then;  /* time in sec corresponding to age */
+     GTimeVal  now;   /* current time */
+     glong     age;   /* age for cleaning */
+     glong     then;  /* time in sec corresponding to age */
     gchar    *confdir,*dirname,*fname1,*fname2;
 
 
-	/* initialise some vars */
-	g_get_current_time (&now);
+     /* initialise some vars */
+     g_get_current_time (&now);
     confdir = get_user_conf_dir ();
     dirname = g_strconcat (confdir, G_DIR_SEPARATOR_S, "logs", NULL);
 
-	fname1 = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
-	fname2 = g_strdup_printf ("%s%sgpredict-%ld.log",
-							  dirname, G_DIR_SEPARATOR_S, now.tv_sec);
+     fname1 = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
+     fname2 = g_strdup_printf ("%s%sgpredict-%ld.log",
+                                     dirname, G_DIR_SEPARATOR_S, now.tv_sec);
 
-	g_rename (fname1, fname2);
+     g_rename (fname1, fname2);
 
 
-	/* get cleaning age; if age non-zero perform cleaning */
-	age = sat_cfg_get_int (SAT_CFG_INT_LOG_CLEAN_AGE);
-	if (age > 0) {
+     /* get cleaning age; if age non-zero perform cleaning */
+     age = sat_cfg_get_int (SAT_CFG_INT_LOG_CLEAN_AGE);
+     if (age > 0) {
 
-		/* calculate age for files that should be removed */
-		then = now.tv_sec - age;
-		clean_log_dir (dirname, then);
+          /* calculate age for files that should be removed */
+          then = now.tv_sec - age;
+          clean_log_dir (dirname, then);
 
-	}
+     }
 
-	g_free (dirname);
-	g_free (fname1);
-	g_free (fname2);
+     g_free (dirname);
+     g_free (fname1);
+     g_free (fname2);
     g_free (confdir);
 }
 
@@ -326,51 +326,51 @@ log_rotate ()
 static void
 clean_log_dir (const gchar *dirname, glong age)
 {
-	GDir        *dir;            /* directory handle */
-	GError      *error = NULL;   /* error handle */
-	const gchar *fname;          /* current file name */
-	gchar      **vbuf;           /* string vector buffer */
-	gchar       *ages;           /* age as string */
-	gchar       *buff;
+     GDir        *dir;            /* directory handle */
+     GError      *error = NULL;   /* error handle */
+     const gchar *fname;          /* current file name */
+     gchar      **vbuf;           /* string vector buffer */
+     gchar       *ages;           /* age as string */
+     gchar       *buff;
 
 
-	ages = g_strdup_printf ("%ld", age);
-	
-	dir = g_dir_open (dirname, 0, &error);
+     ages = g_strdup_printf ("%ld", age);
+     
+     dir = g_dir_open (dirname, 0, &error);
 
-	/* failed to open dir */
-	if (error != NULL) {
-		g_clear_error (&error);
-		return;
-	}
+     /* failed to open dir */
+     if (error != NULL) {
+          g_clear_error (&error);
+          return;
+     }
 
-	
-	while ((fname = g_dir_read_name (dir)) != NULL) {
+     
+     while ((fname = g_dir_read_name (dir)) != NULL) {
 
-		/* ensure this is a .log file */
-		if G_LIKELY(g_str_has_suffix (fname, ".log")) {
+          /* ensure this is a .log file */
+          if G_LIKELY(g_str_has_suffix (fname, ".log")) {
 
-			vbuf = g_strsplit_set (fname, "-.", -1);
+               vbuf = g_strsplit_set (fname, "-.", -1);
 
 
-			g_print ("%s <=> %s\n", vbuf[1], ages);
+               g_print ("%s <=> %s\n", vbuf[1], ages);
 
-			/* Remove file if too old */
-			if (g_ascii_strcasecmp (vbuf[1], ages) <= 0) {
+               /* Remove file if too old */
+               if (g_ascii_strcasecmp (vbuf[1], ages) <= 0) {
 
-				buff = g_strconcat (dirname, G_DIR_SEPARATOR_S, fname, NULL);
-				g_remove (buff);
-				g_free (buff);
+                    buff = g_strconcat (dirname, G_DIR_SEPARATOR_S, fname, NULL);
+                    g_remove (buff);
+                    g_free (buff);
 
- 			} 
+                } 
 
-			g_strfreev (vbuf);
-		}
+               g_strfreev (vbuf);
+          }
 
-	}
+     }
 
-	g_dir_close (dir);
-	g_free (ages);
+     g_dir_close (dir);
+     g_free (ages);
 
 }
 

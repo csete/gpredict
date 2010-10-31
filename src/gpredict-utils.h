@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -49,7 +49,7 @@ GtkWidget *gpredict_hstock_button  (const gchar *stock_id,
                                     const gchar *tooltip);
 
 GtkWidget *gpredict_mini_mod_button (const gchar *pixmapfile,
-									 const gchar *tooltip);
+                                              const gchar *tooltip);
 
 void gpredict_set_combo_tooltips (GtkWidget *combo, gpointer text);
 

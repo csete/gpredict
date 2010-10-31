@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -29,15 +29,15 @@
 
 /** \brief Coumn definitions for QTH list. */
 typedef enum {
-	QTH_LIST_COL_NAME = 0,   /*!< Name of the QTH. */
-	QTH_LIST_COL_LOC,        /*!< Location, eg. "Copenhagen, Denmark". */
-	QTH_LIST_COL_DESC,       /*!< Optional description. */
-	QTH_LIST_COL_LAT,        /*!< Latitude in dec. deg. North. */
-	QTH_LIST_COL_LON,        /*!< Longitude in dec. deg. East. */
-	QTH_LIST_COL_ALT,        /*!< Altitude in meters. */
-	QTH_LIST_COL_QRA,        /*!< QRA locator. */
-	QTH_LIST_COL_WX,         /*!< 4 letter weather station. */
-	QTH_LIST_COL_DEF,        /*!< Is this QTH the default one? */
-	QTH_LIST_COL_NUM         /*!< The number of fields. */
+     QTH_LIST_COL_NAME = 0,   /*!< Name of the QTH. */
+     QTH_LIST_COL_LOC,        /*!< Location, eg. "Copenhagen, Denmark". */
+     QTH_LIST_COL_DESC,       /*!< Optional description. */
+     QTH_LIST_COL_LAT,        /*!< Latitude in dec. deg. North. */
+     QTH_LIST_COL_LON,        /*!< Longitude in dec. deg. East. */
+     QTH_LIST_COL_ALT,        /*!< Altitude in meters. */
+     QTH_LIST_COL_QRA,        /*!< QRA locator. */
+     QTH_LIST_COL_WX,         /*!< 4 letter weather station. */
+     QTH_LIST_COL_DEF,        /*!< Is this QTH the default one? */
+     QTH_LIST_COL_NUM         /*!< The number of fields. */
 } qth_list_col_t;
 

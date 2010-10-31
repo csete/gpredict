@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -106,7 +106,7 @@ get_maps_dir   ()
         gchar *buff = g_win32_get_package_installation_directory (NULL, NULL);
         dir = g_strconcat (buff, G_DIR_SEPARATOR_S,
                            "share", G_DIR_SEPARATOR_S,
-			   /* FIXME */
+                  /* FIXME */
                            "gpredict", G_DIR_SEPARATOR_S,
                            "pixmaps", G_DIR_SEPARATOR_S,
                            "maps", NULL);

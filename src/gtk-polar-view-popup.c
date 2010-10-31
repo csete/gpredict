@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -144,13 +144,13 @@ void
         gtk_widget_set_sensitive (menuitem, FALSE);
 
     /* target */
-    /* 	menuitem = gtk_check_menu_item_new_with_label (_("Set as target")); */
-    /* 	g_object_set_data (G_OBJECT (menuitem), "sat", sat); */
-    /* 	g_object_set_data (G_OBJECT (menuitem), "qth", qth); */
-    /* 	g_object_set_data (G_OBJECT (menuitem), "obj", obj); */
-    /* 	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem); */
-    /* 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget); */
-    /* 	g_signal_connect (menuitem, "activate", G_CALLBACK (target_toggled), pview); */
+    /*      menuitem = gtk_check_menu_item_new_with_label (_("Set as target")); */
+    /*      g_object_set_data (G_OBJECT (menuitem), "sat", sat); */
+    /*      g_object_set_data (G_OBJECT (menuitem), "qth", qth); */
+    /*      g_object_set_data (G_OBJECT (menuitem), "obj", obj); */
+    /*      gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem); */
+    /*      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget); */
+    /*      g_signal_connect (menuitem, "activate", G_CALLBACK (target_toggled), pview); */
 
     gtk_widget_show_all (menu);
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -35,81 +35,81 @@
 
 /** \brief Column definitions for multi-pass listings. */
 typedef enum {
-	MULTI_PASS_COL_AOS_TIME  = 0,  /*!< AOS time. */
-	MULTI_PASS_COL_TCA,            /*!< Time of closest approach. */
-	MULTI_PASS_COL_LOS_TIME,       /*!< LOS time. */
-	MULTI_PASS_COL_DURATION,       /*!< Duration. */
-	MULTI_PASS_COL_MAX_EL,         /*!< Maximum elevation. */
-	MULTI_PASS_COL_AOS_AZ,         /*!< Azimuth at AOS. */
-	MULTI_PASS_COL_MAX_EL_AZ,      /*!< Azimuth at max el. */
-	MULTI_PASS_COL_LOS_AZ,         /*!< Azimuth at LOS. */
-	MULTI_PASS_COL_ORBIT,          /*!< Orbit number. */
-	MULTI_PASS_COL_VIS,            /*!< Visibility. */
-	MULTI_PASS_COL_NUMBER
+     MULTI_PASS_COL_AOS_TIME  = 0,  /*!< AOS time. */
+     MULTI_PASS_COL_TCA,            /*!< Time of closest approach. */
+     MULTI_PASS_COL_LOS_TIME,       /*!< LOS time. */
+     MULTI_PASS_COL_DURATION,       /*!< Duration. */
+     MULTI_PASS_COL_MAX_EL,         /*!< Maximum elevation. */
+     MULTI_PASS_COL_AOS_AZ,         /*!< Azimuth at AOS. */
+     MULTI_PASS_COL_MAX_EL_AZ,      /*!< Azimuth at max el. */
+     MULTI_PASS_COL_LOS_AZ,         /*!< Azimuth at LOS. */
+     MULTI_PASS_COL_ORBIT,          /*!< Orbit number. */
+     MULTI_PASS_COL_VIS,            /*!< Visibility. */
+     MULTI_PASS_COL_NUMBER
 } multi_pass_col_t;
 
 
 /** \brief Column flags for multi-pass listings. */
 typedef enum {
-	MULTI_PASS_FLAG_AOS_TIME  = 1 << MULTI_PASS_COL_AOS_TIME,  /*!< AOS time. */
-	MULTI_PASS_FLAG_TCA       = 1 << MULTI_PASS_COL_TCA,       /*!< Time of closest approach. */
-	MULTI_PASS_FLAG_LOS_TIME  = 1 << MULTI_PASS_COL_LOS_TIME,  /*!< LOS time. */
-	MULTI_PASS_FLAG_DURATION  = 1 << MULTI_PASS_COL_DURATION,  /*!< Duration. */
-	MULTI_PASS_FLAG_MAX_EL    = 1 << MULTI_PASS_COL_MAX_EL,    /*!< Maximum elevation. */
-	MULTI_PASS_FLAG_AOS_AZ    = 1 << MULTI_PASS_COL_AOS_AZ,    /*!< Azimuth at AOS. */
-	MULTI_PASS_FLAG_MAX_EL_AZ = 1 << MULTI_PASS_COL_MAX_EL_AZ, /*!< Azimuth at max el. */
-	MULTI_PASS_FLAG_LOS_AZ    = 1 << MULTI_PASS_COL_LOS_AZ,    /*!< Azimuth at LOS. */
-	MULTI_PASS_FLAG_ORBIT     = 1 << MULTI_PASS_COL_ORBIT,     /*!< Orbit number. */
-	MULTI_PASS_FLAG_VIS       = 1 << MULTI_PASS_COL_VIS        /*!< Visibility. */
+     MULTI_PASS_FLAG_AOS_TIME  = 1 << MULTI_PASS_COL_AOS_TIME,  /*!< AOS time. */
+     MULTI_PASS_FLAG_TCA       = 1 << MULTI_PASS_COL_TCA,       /*!< Time of closest approach. */
+     MULTI_PASS_FLAG_LOS_TIME  = 1 << MULTI_PASS_COL_LOS_TIME,  /*!< LOS time. */
+     MULTI_PASS_FLAG_DURATION  = 1 << MULTI_PASS_COL_DURATION,  /*!< Duration. */
+     MULTI_PASS_FLAG_MAX_EL    = 1 << MULTI_PASS_COL_MAX_EL,    /*!< Maximum elevation. */
+     MULTI_PASS_FLAG_AOS_AZ    = 1 << MULTI_PASS_COL_AOS_AZ,    /*!< Azimuth at AOS. */
+     MULTI_PASS_FLAG_MAX_EL_AZ = 1 << MULTI_PASS_COL_MAX_EL_AZ, /*!< Azimuth at max el. */
+     MULTI_PASS_FLAG_LOS_AZ    = 1 << MULTI_PASS_COL_LOS_AZ,    /*!< Azimuth at LOS. */
+     MULTI_PASS_FLAG_ORBIT     = 1 << MULTI_PASS_COL_ORBIT,     /*!< Orbit number. */
+     MULTI_PASS_FLAG_VIS       = 1 << MULTI_PASS_COL_VIS        /*!< Visibility. */
 } multi_pass_flag_t;
 
 
 /** \brief Column definition for single-pass listings. */
 typedef enum {
-	SINGLE_PASS_COL_TIME = 0,
-	SINGLE_PASS_COL_AZ,          /*!< Azimuth. */
-	SINGLE_PASS_COL_EL,          /*!< Elvation. */
-	SINGLE_PASS_COL_RA,          /*!< Right Ascension. */
-	SINGLE_PASS_COL_DEC,         /*!< Declination. */
-	SINGLE_PASS_COL_RANGE,       /*!< Range. */
-	SINGLE_PASS_COL_RANGE_RATE,  /*!< Range rate. */
-	SINGLE_PASS_COL_LAT,         /*!< Latitude. */
-	SINGLE_PASS_COL_LON,         /*!< Longitude. */
-	SINGLE_PASS_COL_SSP,         /*!< Sub satellite point grid square */
-	SINGLE_PASS_COL_FOOTPRINT,   /*!< Footprint. */
-	SINGLE_PASS_COL_ALT,         /*!< Altitude. */
-	SINGLE_PASS_COL_VEL,         /*!< Velocity. */
-	SINGLE_PASS_COL_DOPPLER,     /*!< Doppler shift at 100 MHz.*/
-	SINGLE_PASS_COL_LOSS,        /*!< Path Loss at 100 MHz. */
-	SINGLE_PASS_COL_DELAY,       /*!< Signal delay */
-	SINGLE_PASS_COL_MA,          /*!< Mean Anomaly. */
-	SINGLE_PASS_COL_PHASE,       /*!< Phase. */
-	SINGLE_PASS_COL_VIS,         /*!< Visibility. */
-	SINGLE_PASS_COL_NUMBER
+     SINGLE_PASS_COL_TIME = 0,
+     SINGLE_PASS_COL_AZ,          /*!< Azimuth. */
+     SINGLE_PASS_COL_EL,          /*!< Elvation. */
+     SINGLE_PASS_COL_RA,          /*!< Right Ascension. */
+     SINGLE_PASS_COL_DEC,         /*!< Declination. */
+     SINGLE_PASS_COL_RANGE,       /*!< Range. */
+     SINGLE_PASS_COL_RANGE_RATE,  /*!< Range rate. */
+     SINGLE_PASS_COL_LAT,         /*!< Latitude. */
+     SINGLE_PASS_COL_LON,         /*!< Longitude. */
+     SINGLE_PASS_COL_SSP,         /*!< Sub satellite point grid square */
+     SINGLE_PASS_COL_FOOTPRINT,   /*!< Footprint. */
+     SINGLE_PASS_COL_ALT,         /*!< Altitude. */
+     SINGLE_PASS_COL_VEL,         /*!< Velocity. */
+     SINGLE_PASS_COL_DOPPLER,     /*!< Doppler shift at 100 MHz.*/
+     SINGLE_PASS_COL_LOSS,        /*!< Path Loss at 100 MHz. */
+     SINGLE_PASS_COL_DELAY,       /*!< Signal delay */
+     SINGLE_PASS_COL_MA,          /*!< Mean Anomaly. */
+     SINGLE_PASS_COL_PHASE,       /*!< Phase. */
+     SINGLE_PASS_COL_VIS,         /*!< Visibility. */
+     SINGLE_PASS_COL_NUMBER
 } single_pass_col_t;
 
 
 /** \brief Column flags for single-pass listings. */
 typedef enum {
-	SINGLE_PASS_FLAG_TIME       = 1 << SINGLE_PASS_COL_TIME,
-	SINGLE_PASS_FLAG_AZ         = 1 << SINGLE_PASS_COL_AZ,          /*!< Azimuth. */
-	SINGLE_PASS_FLAG_EL         = 1 << SINGLE_PASS_COL_EL,          /*!< Elvation. */
-	SINGLE_PASS_FLAG_RA         = 1 << SINGLE_PASS_COL_RA,          /*!< Right Ascension. */
-	SINGLE_PASS_FLAG_DEC        = 1 << SINGLE_PASS_COL_DEC,         /*!< Declination. */
-	SINGLE_PASS_FLAG_RANGE      = 1 << SINGLE_PASS_COL_RANGE,       /*!< Range. */
-	SINGLE_PASS_FLAG_RANGE_RATE = 1 << SINGLE_PASS_COL_RANGE_RATE,  /*!< Range rate. */
-	SINGLE_PASS_FLAG_LAT        = 1 << SINGLE_PASS_COL_LAT,         /*!< Latitude. */
-	SINGLE_PASS_FLAG_LON        = 1 << SINGLE_PASS_COL_LON,         /*!< Longitude. */
-	SINGLE_PASS_FLAG_SSP        = 1 << SINGLE_PASS_COL_SSP,         /*!< Sub satellite point grid square */
-	SINGLE_PASS_FLAG_FOOTPRINT  = 1 << SINGLE_PASS_COL_FOOTPRINT,   /*!< Footprint. */
-	SINGLE_PASS_FLAG_ALT        = 1 << SINGLE_PASS_COL_ALT,         /*!< Altitude. */
-	SINGLE_PASS_FLAG_VEL        = 1 << SINGLE_PASS_COL_VEL,         /*!< Velocity. */
-	SINGLE_PASS_FLAG_DOPPLER    = 1 << SINGLE_PASS_COL_DOPPLER,     /*!< Doppler shift at 100 MHz.*/
-	SINGLE_PASS_FLAG_LOSS       = 1 << SINGLE_PASS_COL_LOSS,        /*!< Path Loss at 100 MHz. */
-	SINGLE_PASS_FLAG_DELAY      = 1 << SINGLE_PASS_COL_DELAY,       /*!< Signal delay */
-	SINGLE_PASS_FLAG_MA         = 1 << SINGLE_PASS_COL_MA,          /*!< Mean Anomaly. */
-	SINGLE_PASS_FLAG_PHASE      = 1 << SINGLE_PASS_COL_PHASE,       /*!< Phase. */
-	SINGLE_PASS_FLAG_VIS        = 1 << SINGLE_PASS_COL_VIS          /*!< Visibility. */
+     SINGLE_PASS_FLAG_TIME       = 1 << SINGLE_PASS_COL_TIME,
+     SINGLE_PASS_FLAG_AZ         = 1 << SINGLE_PASS_COL_AZ,          /*!< Azimuth. */
+     SINGLE_PASS_FLAG_EL         = 1 << SINGLE_PASS_COL_EL,          /*!< Elvation. */
+     SINGLE_PASS_FLAG_RA         = 1 << SINGLE_PASS_COL_RA,          /*!< Right Ascension. */
+     SINGLE_PASS_FLAG_DEC        = 1 << SINGLE_PASS_COL_DEC,         /*!< Declination. */
+     SINGLE_PASS_FLAG_RANGE      = 1 << SINGLE_PASS_COL_RANGE,       /*!< Range. */
+     SINGLE_PASS_FLAG_RANGE_RATE = 1 << SINGLE_PASS_COL_RANGE_RATE,  /*!< Range rate. */
+     SINGLE_PASS_FLAG_LAT        = 1 << SINGLE_PASS_COL_LAT,         /*!< Latitude. */
+     SINGLE_PASS_FLAG_LON        = 1 << SINGLE_PASS_COL_LON,         /*!< Longitude. */
+     SINGLE_PASS_FLAG_SSP        = 1 << SINGLE_PASS_COL_SSP,         /*!< Sub satellite point grid square */
+     SINGLE_PASS_FLAG_FOOTPRINT  = 1 << SINGLE_PASS_COL_FOOTPRINT,   /*!< Footprint. */
+     SINGLE_PASS_FLAG_ALT        = 1 << SINGLE_PASS_COL_ALT,         /*!< Altitude. */
+     SINGLE_PASS_FLAG_VEL        = 1 << SINGLE_PASS_COL_VEL,         /*!< Velocity. */
+     SINGLE_PASS_FLAG_DOPPLER    = 1 << SINGLE_PASS_COL_DOPPLER,     /*!< Doppler shift at 100 MHz.*/
+     SINGLE_PASS_FLAG_LOSS       = 1 << SINGLE_PASS_COL_LOSS,        /*!< Path Loss at 100 MHz. */
+     SINGLE_PASS_FLAG_DELAY      = 1 << SINGLE_PASS_COL_DELAY,       /*!< Signal delay */
+     SINGLE_PASS_FLAG_MA         = 1 << SINGLE_PASS_COL_MA,          /*!< Mean Anomaly. */
+     SINGLE_PASS_FLAG_PHASE      = 1 << SINGLE_PASS_COL_PHASE,       /*!< Phase. */
+     SINGLE_PASS_FLAG_VIS        = 1 << SINGLE_PASS_COL_VIS          /*!< Visibility. */
 } single_pass_flag_t;
 
 

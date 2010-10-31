@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -132,9 +132,9 @@ static void create_map_selector  (GKeyFile *cfg, GtkBox *vbox)
     gtk_box_pack_start (vbox, label, FALSE, TRUE, 0);
 
     /* create a table to pu the map preview and select button in.
-	   using a simple hbox won't do it because the button would have
-	   the same height as the map preview
-	*/
+        using a simple hbox won't do it because the button would have
+        the same height as the map preview
+     */
     table = gtk_table_new (3, 2, TRUE);
     gtk_box_pack_start (vbox, table, FALSE, FALSE, 0);
 

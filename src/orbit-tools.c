@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -41,19 +41,19 @@
 orbit_type_t
 get_orbit_type (sat_t *sat)
 {
-	orbit_type_t orbit = ORBIT_TYPE_UNKNOWN;
+     orbit_type_t orbit = ORBIT_TYPE_UNKNOWN;
 
-	if (geostationary (sat)) {
-		orbit = ORBIT_TYPE_GEO;
-	}
-	else if (decayed (sat)) {
-		orbit = ORBIT_TYPE_DECAYED;
-	}
-	else {
-		orbit = ORBIT_TYPE_UNKNOWN;
-	}
+     if (geostationary (sat)) {
+          orbit = ORBIT_TYPE_GEO;
+     }
+     else if (decayed (sat)) {
+          orbit = ORBIT_TYPE_DECAYED;
+     }
+     else {
+          orbit = ORBIT_TYPE_UNKNOWN;
+     }
 
-	return orbit;
+     return orbit;
 }
 
 
@@ -72,10 +72,10 @@ get_orbit_type (sat_t *sat)
 gboolean
 geostationary  (sat_t *sat)
 {
-	if (fabs (sat->meanmo - 1.0027) < 0.0002)
-		return TRUE;
-	else
-		return FALSE;
+     if (fabs (sat->meanmo - 1.0027) < 0.0002)
+          return TRUE;
+     else
+          return FALSE;
 }
 
 
@@ -95,12 +95,12 @@ gboolean
 decayed        (sat_t *sat)
 {
 
-	/*** FIXME: should use the unconverted xndt2o here! */
-	if (sat->jul_epoch + ((16.666666 - sat->meanmo) / 
-			      (10.0 * fabs (sat->tle.xndt2o))) < sat->jul_utc)
-		return TRUE;
-	else
-		return FALSE;
+     /*** FIXME: should use the unconverted xndt2o here! */
+     if (sat->jul_epoch + ((16.666666 - sat->meanmo) / 
+                     (10.0 * fabs (sat->tle.xndt2o))) < sat->jul_utc)
+          return TRUE;
+     else
+          return FALSE;
 
 
 }
@@ -116,30 +116,30 @@ decayed        (sat_t *sat)
 gboolean
 has_aos        (sat_t *sat, qth_t *qth)
 {
-	double lin, sma, apogee;
-	gboolean retcode = FALSE;
+     double lin, sma, apogee;
+     gboolean retcode = FALSE;
 
 
-	/* FIXME */
-	if (sat->meanmo == 0.0) {
-		retcode = FALSE;
-	}
-	else {
+     /* FIXME */
+     if (sat->meanmo == 0.0) {
+          retcode = FALSE;
+     }
+     else {
 
-		/* xincl is already in RAD by select_ephemeris */
-		lin = sat->tle.xincl;
-		if (lin >= pio2)
-			lin = pi - lin;
+          /* xincl is already in RAD by select_ephemeris */
+          lin = sat->tle.xincl;
+          if (lin >= pio2)
+               lin = pi - lin;
 
-		sma = 331.25 * exp(log(1440.0/sat->meanmo) * (2.0/3.0));
-		apogee = sma * (1.0 + sat->tle.eo) - xkmper;
+          sma = 331.25 * exp(log(1440.0/sat->meanmo) * (2.0/3.0));
+          apogee = sma * (1.0 + sat->tle.eo) - xkmper;
 
-		if ((acos(xkmper/(apogee+xkmper))+(lin)) > fabs(qth->lat*de2ra))
-			retcode = TRUE;
-		else
-			retcode = FALSE;
+          if ((acos(xkmper/(apogee+xkmper))+(lin)) > fabs(qth->lat*de2ra))
+               retcode = TRUE;
+          else
+               retcode = FALSE;
 
-	}
+     }
 
-	return retcode;
+     return retcode;
 }

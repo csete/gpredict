@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -71,95 +71,95 @@ static void     free_ssp          (gpointer ssp, gpointer data);
 void
 ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 {
-	unsigned long  this_orbit;  /* current orbit number */
-	unsigned long  max_orbit;   /* target orbit number, ie. this + num - 1 */
-	double         t0;          /* time when this_orbit starts */
-	double         t;
-	ssp_t         *this_ssp;
+     unsigned long  this_orbit;  /* current orbit number */
+     unsigned long  max_orbit;   /* target orbit number, ie. this + num - 1 */
+     double         t0;          /* time when this_orbit starts */
+     double         t;
+     ssp_t         *this_ssp;
 
 
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Creating ground track for %s"),
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Creating ground track for %s"),
                  __FUNCTION__, sat->nickname);
 
-	/* just to be safe... if empty GSList is not NULL => segfault */
-	obj->track_data.latlon = NULL;
+     /* just to be safe... if empty GSList is not NULL => segfault */
+     obj->track_data.latlon = NULL;
 
-	/* get configuration parameters */
-	this_orbit = sat->orbit;
-	max_orbit = sat->orbit -1 + mod_cfg_get_int (satmap->cfgdata,
-												 MOD_CFG_MAP_SECTION,
-												 MOD_CFG_MAP_TRACK_NUM,
-												 SAT_CFG_INT_MAP_TRACK_NUM);
+     /* get configuration parameters */
+     this_orbit = sat->orbit;
+     max_orbit = sat->orbit -1 + mod_cfg_get_int (satmap->cfgdata,
+                                                             MOD_CFG_MAP_SECTION,
+                                                             MOD_CFG_MAP_TRACK_NUM,
+                                                             SAT_CFG_INT_MAP_TRACK_NUM);
 
-						 
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Start orbit: %d"),
-				 __FUNCTION__, this_orbit);
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: End orbit %d"),
-				 __FUNCTION__, max_orbit);
-
-
-	/* find the time when the current orbit started */
-
-	/* Iterate backwards in time until we reach sat->orbit < this_orbit.
-	   Use predict_calc from predict-tools.c as SGP/SDP driver.
-	   As a built-in safety, we stop iteration if the orbit crossing is
-	   more than 12 hours back in time.
-	*/
-	t0 = satmap->tstamp;//get_current_daynum ();
-	for (t = t0; (sat->orbit >= this_orbit) && ((t+0.5) > t0); t -= 0.0007) {
-
-		predict_calc (sat, qth, t);
-
-	}
-
-	t0 = t;
-
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: T0: %f (%d)"),
-				 __FUNCTION__, t0, sat->orbit);
+                               
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Start orbit: %d"),
+                     __FUNCTION__, this_orbit);
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: End orbit %d"),
+                     __FUNCTION__, max_orbit);
 
 
-	/* calculate (lat,lon) for the required orbits */
-	while (sat->orbit <= max_orbit) {
+     /* find the time when the current orbit started */
 
-		/* We use 30 sec time steps. If resolution is too fine, the
-		   line drawing routine will filter out unnecessary points
-		*/
-		t += 0.00035;
-		predict_calc (sat, qth, t);
+     /* Iterate backwards in time until we reach sat->orbit < this_orbit.
+        Use predict_calc from predict-tools.c as SGP/SDP driver.
+        As a built-in safety, we stop iteration if the orbit crossing is
+        more than 12 hours back in time.
+     */
+     t0 = satmap->tstamp;//get_current_daynum ();
+     for (t = t0; (sat->orbit >= this_orbit) && ((t+0.5) > t0); t -= 0.0007) {
 
-		/* store this SSP */
+          predict_calc (sat, qth, t);
 
-		/* Note: g_slist_append() has to traverse the entire list to find the end, which
-		   is inefficient when adding multiple elements. Therefore, we use g_slist_prepend()
-		   and reverse the entire list when we are done.
-		*/
-		this_ssp = g_try_new (ssp_t, 1);
+     }
 
-		if (this_ssp == NULL) {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: MAYDAY: Insufficient memory for ground track!"),
-						 __FUNCTION__);
-			return;
-		}
-		
-		this_ssp->lat = sat->ssplat;
-		this_ssp->lon = sat->ssplon;
-		obj->track_data.latlon = g_slist_prepend (obj->track_data.latlon, this_ssp);
-		
-	}
+     t0 = t;
 
-	/* reverse GSList */
-	obj->track_data.latlon = g_slist_reverse (obj->track_data.latlon);
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: T0: %f (%d)"),
+                     __FUNCTION__, t0, sat->orbit);
 
-	/* split points into polylines */
-	create_polylines (satmap, sat, qth, obj);
 
-	/* misc book-keeping */
-	obj->track_orbit = this_orbit;
+     /* calculate (lat,lon) for the required orbits */
+     while (sat->orbit <= max_orbit) {
+
+          /* We use 30 sec time steps. If resolution is too fine, the
+             line drawing routine will filter out unnecessary points
+          */
+          t += 0.00035;
+          predict_calc (sat, qth, t);
+
+          /* store this SSP */
+
+          /* Note: g_slist_append() has to traverse the entire list to find the end, which
+             is inefficient when adding multiple elements. Therefore, we use g_slist_prepend()
+             and reverse the entire list when we are done.
+          */
+          this_ssp = g_try_new (ssp_t, 1);
+
+          if (this_ssp == NULL) {
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
+                               _("%s: MAYDAY: Insufficient memory for ground track!"),
+                               __FUNCTION__);
+               return;
+          }
+          
+          this_ssp->lat = sat->ssplat;
+          this_ssp->lon = sat->ssplon;
+          obj->track_data.latlon = g_slist_prepend (obj->track_data.latlon, this_ssp);
+          
+     }
+
+     /* reverse GSList */
+     obj->track_data.latlon = g_slist_reverse (obj->track_data.latlon);
+
+     /* split points into polylines */
+     create_polylines (satmap, sat, qth, obj);
+
+     /* misc book-keeping */
+     obj->track_orbit = this_orbit;
 
 }
 
@@ -187,18 +187,18 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 void
 ground_track_update (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj, gboolean recalc)
 {
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Updating ground track for %s"),
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Updating ground track for %s"),
                  __FUNCTION__, sat->nickname);
 
-	if (recalc == TRUE) {
-		ground_track_delete (satmap, sat, qth, obj, TRUE);
-		ground_track_create (satmap, sat, qth, obj);
-	}
-	else {
-		ground_track_delete (satmap, sat, qth, obj, FALSE);
-		create_polylines (satmap, sat, qth, obj);
-	}
+     if (recalc == TRUE) {
+          ground_track_delete (satmap, sat, qth, obj, TRUE);
+          ground_track_create (satmap, sat, qth, obj);
+     }
+     else {
+          ground_track_delete (satmap, sat, qth, obj, FALSE);
+          create_polylines (satmap, sat, qth, obj);
+     }
 }
 
 
@@ -213,57 +213,57 @@ ground_track_update (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 void
 ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj, gboolean clear_ssp)
 {
-	guint              i,j,n;
-	GooCanvasItemModel *line;
-	GooCanvasItemModel *root;
+     guint              i,j,n;
+     GooCanvasItemModel *line;
+     GooCanvasItemModel *root;
 
-	sat_log_log (SAT_LOG_LEVEL_DEBUG,
-				 _("%s: Deleting ground track for %s"),
+     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s: Deleting ground track for %s"),
                  __FUNCTION__, sat->nickname);
 
-	root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
+     root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
 
-	/* remove plylines */
-	if (obj->track_data.lines != NULL) {
-		n = g_slist_length (obj->track_data.lines);
+     /* remove plylines */
+     if (obj->track_data.lines != NULL) {
+          n = g_slist_length (obj->track_data.lines);
 
-		for (i = 0; i < n; i++) {
+          for (i = 0; i < n; i++) {
 
-			/* get line */
-			line = GOO_CANVAS_ITEM_MODEL (g_slist_nth_data (obj->track_data.lines, i));
+               /* get line */
+               line = GOO_CANVAS_ITEM_MODEL (g_slist_nth_data (obj->track_data.lines, i));
 
-			/* find its ID and remove it */
-			j = goo_canvas_item_model_find_child (root, line);
-			if (j == -1) {
-				sat_log_log (SAT_LOG_LEVEL_BUG,
-							 _("%s: Could not find part %d of ground track"),
-							 __FUNCTION__, j);
-			}
-			else {
-				goo_canvas_item_model_remove_child (root, j);
-			}
-		}
+               /* find its ID and remove it */
+               j = goo_canvas_item_model_find_child (root, line);
+               if (j == -1) {
+                    sat_log_log (SAT_LOG_LEVEL_BUG,
+                                    _("%s: Could not find part %d of ground track"),
+                                    __FUNCTION__, j);
+               }
+               else {
+                    goo_canvas_item_model_remove_child (root, j);
+               }
+          }
 
-		g_slist_free (obj->track_data.lines);
-		obj->track_data.lines = NULL;
-			
-	}
+          g_slist_free (obj->track_data.lines);
+          obj->track_data.lines = NULL;
+               
+     }
 
-	/* clear SSP too? */
-	if (clear_ssp == TRUE) {
-		if (obj->track_data.latlon != NULL) {
+     /* clear SSP too? */
+     if (clear_ssp == TRUE) {
+          if (obj->track_data.latlon != NULL) {
 
-			/* free allocated ssp_t */
-			g_slist_foreach (obj->track_data.latlon, free_ssp, NULL);
+               /* free allocated ssp_t */
+               g_slist_foreach (obj->track_data.latlon, free_ssp, NULL);
 
-			/* free the SList itself */
-			g_slist_free (obj->track_data.latlon);
-			obj->track_data.latlon = NULL;
+               /* free the SList itself */
+               g_slist_free (obj->track_data.latlon);
+               obj->track_data.latlon = NULL;
 
-		}
+          }
 
-		obj->track_orbit = 0;
-	}
+          obj->track_orbit = 0;
+     }
 }
 
 
@@ -276,7 +276,7 @@ ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 static void
 free_ssp (gpointer ssp, gpointer data)
 {
-	g_free (ssp);
+     g_free (ssp);
 }
 
 
@@ -284,145 +284,145 @@ free_ssp (gpointer ssp, gpointer data)
 static void
 create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 {
-	ssp_t              *ssp,*buff;     /* map coordinates */
-	double             lastx,lasty;
-	GSList             *points = NULL;
-	GooCanvasItemModel *root;
-	GooCanvasItemModel *line;
-	GooCanvasPoints    *gpoints;
-	guint              start;
-	guint              i,j,n,num_points;
-	guint32            col;
+     ssp_t              *ssp,*buff;     /* map coordinates */
+     double             lastx,lasty;
+     GSList             *points = NULL;
+     GooCanvasItemModel *root;
+     GooCanvasItemModel *line;
+     GooCanvasPoints    *gpoints;
+     guint              start;
+     guint              i,j,n,num_points;
+     guint32            col;
 
 
-	/* initialise parameters */
-	lastx = -50.0;
-	lasty = -50.0;
-	start = 0;
-	num_points = 0;
-	n = g_slist_length (obj->track_data.latlon);
-	col = mod_cfg_get_int (satmap->cfgdata,
-						   MOD_CFG_MAP_SECTION,
-						   MOD_CFG_MAP_TRACK_COL,
-						   SAT_CFG_INT_MAP_TRACK_COL);
+     /* initialise parameters */
+     lastx = -50.0;
+     lasty = -50.0;
+     start = 0;
+     num_points = 0;
+     n = g_slist_length (obj->track_data.latlon);
+     col = mod_cfg_get_int (satmap->cfgdata,
+                                 MOD_CFG_MAP_SECTION,
+                                 MOD_CFG_MAP_TRACK_COL,
+                                 SAT_CFG_INT_MAP_TRACK_COL);
 
-	/* loop over each SSP */
-	for (i = 0; i < n; i++) {
+     /* loop over each SSP */
+     for (i = 0; i < n; i++) {
 
-		buff = (ssp_t *) g_slist_nth_data (obj->track_data.latlon, i);
-		ssp = g_try_new (ssp_t, 1);
-		gtk_sat_map_lonlat_to_xy (satmap, buff->lon, buff->lat, &ssp->lon, &ssp->lat);
+          buff = (ssp_t *) g_slist_nth_data (obj->track_data.latlon, i);
+          ssp = g_try_new (ssp_t, 1);
+          gtk_sat_map_lonlat_to_xy (satmap, buff->lon, buff->lat, &ssp->lon, &ssp->lat);
 
-		/* if this is the first point, just add it to the list */
-		if (i == start) {
-			points = g_slist_prepend (points, ssp);
-			lastx = ssp->lon;
-			lasty = ssp->lat;
-		}
+          /* if this is the first point, just add it to the list */
+          if (i == start) {
+               points = g_slist_prepend (points, ssp);
+               lastx = ssp->lon;
+               lasty = ssp->lat;
+          }
 
-		else {
+          else {
 
-			/* if SSP is on the other side of the map */
-			if (ssp_wrap_detected (satmap, lastx, ssp->lon)) {
+               /* if SSP is on the other side of the map */
+               if (ssp_wrap_detected (satmap, lastx, ssp->lon)) {
 
-				points = g_slist_reverse (points);
-				num_points = g_slist_length (points);
+                    points = g_slist_reverse (points);
+                    num_points = g_slist_length (points);
 
-				/* we need at least 2 points to draw a line */
-				if (num_points > 1) {
+                    /* we need at least 2 points to draw a line */
+                    if (num_points > 1) {
 
-					/* convert SSPs to GooCanvasPoints */
-					gpoints = goo_canvas_points_new (num_points);
-					for (j = 0; j < num_points; j++) {
-						buff = (ssp_t *) g_slist_nth_data (points, j);
-						gpoints->coords[2*j] = buff->lon;
-						gpoints->coords[2*j+1] = buff->lat;
-					}
+                         /* convert SSPs to GooCanvasPoints */
+                         gpoints = goo_canvas_points_new (num_points);
+                         for (j = 0; j < num_points; j++) {
+                              buff = (ssp_t *) g_slist_nth_data (points, j);
+                              gpoints->coords[2*j] = buff->lon;
+                              gpoints->coords[2*j+1] = buff->lat;
+                         }
 
-					/* create a new polyline using the current set of points */
-					root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
+                         /* create a new polyline using the current set of points */
+                         root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
 
-					line = goo_canvas_polyline_model_new (root, FALSE, 0,
-														  "points", gpoints,
-														  "line-width", 1.0,
-														  "stroke-color-rgba", col,
-														  "line-cap", CAIRO_LINE_CAP_SQUARE,
-														  "line-join", CAIRO_LINE_JOIN_MITER,
-														  NULL);
-					goo_canvas_points_unref (gpoints);
-					goo_canvas_item_model_lower (line, obj->marker);
-					
-					/* store line in sat object */
-					obj->track_data.lines = g_slist_append (obj->track_data.lines, line);
+                         line = goo_canvas_polyline_model_new (root, FALSE, 0,
+                                                                        "points", gpoints,
+                                                                        "line-width", 1.0,
+                                                                        "stroke-color-rgba", col,
+                                                                        "line-cap", CAIRO_LINE_CAP_SQUARE,
+                                                                        "line-join", CAIRO_LINE_JOIN_MITER,
+                                                                        NULL);
+                         goo_canvas_points_unref (gpoints);
+                         goo_canvas_item_model_lower (line, obj->marker);
+                         
+                         /* store line in sat object */
+                         obj->track_data.lines = g_slist_append (obj->track_data.lines, line);
 
-				}
+                    }
 
-				/* reset parameters and continue with a new set */
-				g_slist_foreach (points, free_ssp, NULL);
-				g_slist_free (points);
-				points = NULL;
-				start = i;
-				lastx = ssp->lon;
-				lasty = ssp->lat;
-				num_points = 0;
+                    /* reset parameters and continue with a new set */
+                    g_slist_foreach (points, free_ssp, NULL);
+                    g_slist_free (points);
+                    points = NULL;
+                    start = i;
+                    lastx = ssp->lon;
+                    lasty = ssp->lat;
+                    num_points = 0;
 
-				/* Add current SSP to the new list */
-				points = g_slist_prepend (points, ssp);
-				lastx = ssp->lon;
-				lasty = ssp->lat;
+                    /* Add current SSP to the new list */
+                    points = g_slist_prepend (points, ssp);
+                    lastx = ssp->lon;
+                    lasty = ssp->lat;
 
-			}
+               }
 
-			/* else if this SSP is separable from the previous */
-			else if ((fabs (lastx - ssp->lon) > 1.0 ) || (fabs(lasty - ssp->lat)>1.0)){
+               /* else if this SSP is separable from the previous */
+               else if ((fabs (lastx - ssp->lon) > 1.0 ) || (fabs(lasty - ssp->lat)>1.0)){
 
-				/* add SSP to list */
-				points = g_slist_prepend (points, ssp);
-				lastx = ssp->lon;
-				lasty = ssp->lon;
+                    /* add SSP to list */
+                    points = g_slist_prepend (points, ssp);
+                    lastx = ssp->lon;
+                    lasty = ssp->lon;
 
-			}
+               }
 
-			/* else if  do nothing */
+               /* else if  do nothing */
 
-		}
-	}
+          }
+     }
 
-	/* create (last) line if we have at least two points */
-	points = g_slist_reverse (points);
-	num_points = g_slist_length (points);
+     /* create (last) line if we have at least two points */
+     points = g_slist_reverse (points);
+     num_points = g_slist_length (points);
 
-	if (num_points > 1) {
+     if (num_points > 1) {
 
-		/* convert SSPs to GooCanvasPoints */
-		gpoints = goo_canvas_points_new (num_points);
-		for (j = 0; j < num_points; j++) {
-			buff = (ssp_t *) g_slist_nth_data (points, j);
-			gpoints->coords[2*j] = buff->lon;
-			gpoints->coords[2*j+1] = buff->lat;
-		}
+          /* convert SSPs to GooCanvasPoints */
+          gpoints = goo_canvas_points_new (num_points);
+          for (j = 0; j < num_points; j++) {
+               buff = (ssp_t *) g_slist_nth_data (points, j);
+               gpoints->coords[2*j] = buff->lon;
+               gpoints->coords[2*j+1] = buff->lat;
+          }
 
-		/* create a new polyline using the current set of points */
-		root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
+          /* create a new polyline using the current set of points */
+          root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
 
-		line = goo_canvas_polyline_model_new (root, FALSE, 0,
-											  "points", gpoints,
-											  "line-width", 1.0,
-											  "stroke-color-rgba", col,
-											  "line-cap", CAIRO_LINE_CAP_SQUARE,
-											  "line-join", CAIRO_LINE_JOIN_MITER,
-											  NULL);
-		goo_canvas_points_unref (gpoints);
-		goo_canvas_item_model_lower (line, obj->marker);
+          line = goo_canvas_polyline_model_new (root, FALSE, 0,
+                                                         "points", gpoints,
+                                                         "line-width", 1.0,
+                                                         "stroke-color-rgba", col,
+                                                         "line-cap", CAIRO_LINE_CAP_SQUARE,
+                                                         "line-join", CAIRO_LINE_JOIN_MITER,
+                                                         NULL);
+          goo_canvas_points_unref (gpoints);
+          goo_canvas_item_model_lower (line, obj->marker);
 
-		/* store line in sat object */
-		obj->track_data.lines = g_slist_append (obj->track_data.lines, line);
+          /* store line in sat object */
+          obj->track_data.lines = g_slist_append (obj->track_data.lines, line);
 
-		/* reset parameters and continue with a new set */
-		g_slist_foreach (points, free_ssp, NULL);
-		g_slist_free (points);
+          /* reset parameters and continue with a new set */
+          g_slist_foreach (points, free_ssp, NULL);
+          g_slist_free (points);
 
-	}
+     }
 }
 
 
@@ -430,11 +430,11 @@ create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 static gboolean
 ssp_wrap_detected (GtkSatMap *satmap, gdouble x1, gdouble x2)
 {
-	gboolean retval = FALSE;
+     gboolean retval = FALSE;
 
 
-	if (fabs (x1-x2) > (satmap->width/2))
-		retval = TRUE;
-	
-	return retval;
+     if (fabs (x1-x2) > (satmap->width/2))
+          retval = TRUE;
+     
+     return retval;
 }

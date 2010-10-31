@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -321,9 +321,9 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
                             "Max length is 25 characters."));
 
     /* attach changed signal so that we can enable OK button when
-	   a proper name has been entered
-	   oh, btw. disable OK button to begin with....
-	*/
+        a proper name has been entered
+        oh, btw. disable OK button to begin with....
+     */
     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
                                        GTK_RESPONSE_OK,
                                        FALSE);
@@ -435,13 +435,13 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
 
         break;
 
-	case GTK_RESPONSE_CANCEL:
+     case GTK_RESPONSE_CANCEL:
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s:%d: Cloning cancelled by user."),
                      __FILE__, __LINE__);
         break;
 
-	default:
+     default:
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s:%d: Cloning interrupted."),
                      __FILE__, __LINE__);
@@ -580,8 +580,8 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
 
         break;
 
-	case GTK_SAT_MOD_STATE_WINDOW:
-	case GTK_SAT_MOD_STATE_FULLSCREEN:
+     case GTK_SAT_MOD_STATE_WINDOW:
+     case GTK_SAT_MOD_STATE_FULLSCREEN:
 
         /* increase referene count */
         g_object_ref (module);
@@ -615,7 +615,7 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
 
         break;
 
-	default:
+     default:
 
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: Unknown module state: %d"),
@@ -691,7 +691,7 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
         break;
 
 
-	case GTK_SAT_MOD_STATE_WINDOW:
+     case GTK_SAT_MOD_STATE_WINDOW:
         /* change internal state */
         GTK_SAT_MODULE (module)->state = GTK_SAT_MOD_STATE_FULLSCREEN;
         gtk_window_fullscreen (GTK_WINDOW (GTK_SAT_MODULE (module)->win));
@@ -700,7 +700,7 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
         break;
 
 
-	case GTK_SAT_MOD_STATE_FULLSCREEN:
+     case GTK_SAT_MOD_STATE_FULLSCREEN:
         /* change internal state */
         GTK_SAT_MODULE (module)->state = GTK_SAT_MOD_STATE_WINDOW;
         gtk_window_unfullscreen (GTK_WINDOW (GTK_SAT_MODULE (module)->win));
@@ -736,7 +736,7 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
 
         break;
 
-	default:
+     default:
 
         sat_log_log (SAT_LOG_LEVEL_BUG,
                      _("%s:%d: Unknown module state: %d"),
@@ -1041,7 +1041,7 @@ static void delete_cb (GtkWidget *menuitem, gpointer data)
         }
         break;
 
-	default:
+     default:
         break;
     }
 
@@ -1066,8 +1066,8 @@ static void name_changed (GtkWidget *widget, gpointer data)
 
 
     /* step 1: ensure that only valid characters are entered
-	   (stolen from xlog, tnx pg4i)
-	*/
+        (stolen from xlog, tnx pg4i)
+     */
     entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
     if ((len = g_utf8_strlen (entry, -1)) > 0)
     {

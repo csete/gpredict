@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -125,9 +125,9 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     gdouble      start = 0.0;
 
     if (g_static_mutex_trylock(&tle_file_in_progress)==FALSE) {
-    	sat_log_log (SAT_LOG_LEVEL_ERROR,
-    	             _("%s: A TLE update process is already running. Aborting."),
-    	             __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: A TLE update process is already running. Aborting."),
+                     __FUNCTION__);
 
         return;
     }
@@ -529,7 +529,7 @@ void tle_update_from_network (gboolean   silent,
     /* bail out if we are already in an update process */
     /*if (tle_in_progress)*/
     if (g_static_mutex_trylock(&tle_in_progress)==FALSE) {
-    	sat_log_log (SAT_LOG_LEVEL_ERROR,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: A TLE update process is already running. Aborting."),
                      __FUNCTION__);
 
@@ -819,7 +819,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             }
             
             /* .cat file now contains the category name;
-			   satellite catnums will be added during update in the while loop */
+               satellite catnums will be added during update in the while loop */
         }
         
 

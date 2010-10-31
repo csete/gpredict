@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -67,72 +67,72 @@ static void reset_cb            (GtkWidget *button, gpointer cfg);
  */
 GtkWidget *sat_pref_single_sat_create (GKeyFile *cfg)
 {
-	GtkWidget *table;
-	GtkWidget *vbox;
-	GtkWidget *label;
-	guint      i;
+    GtkWidget *table;
+    GtkWidget *vbox;
+    GtkWidget *label;
+    guint      i;
 
 
-	/* create the table */
-	table = gtk_table_new ((SINGLE_SAT_FIELD_NUMBER+1)/COLUMNS + 1, COLUMNS, TRUE);
-	//gtk_container_set_border_width (GTK_CONTAINER (table), 20);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 10);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+    /* create the table */
+    table = gtk_table_new ((SINGLE_SAT_FIELD_NUMBER+1)/COLUMNS + 1, COLUMNS, TRUE);
+    //gtk_container_set_border_width (GTK_CONTAINER (table), 20);
+    gtk_table_set_row_spacings (GTK_TABLE (table), 10);
+    gtk_table_set_col_spacings (GTK_TABLE (table), 5);
 
-	/* create header */
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_label_set_markup (GTK_LABEL (label), 
-			      _("<b>Visible Fields:</b>"));
+    /* create header */
+    label = gtk_label_new (NULL);
+    gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+    gtk_label_set_markup (GTK_LABEL (label), 
+                  _("<b>Visible Fields:</b>"));
 
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			  GTK_FILL,  GTK_SHRINK, 0, 0);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+              GTK_FILL,  GTK_SHRINK, 0, 0);
 
-	/* get visible column flags */
-	if (cfg != NULL) {
-		flags = mod_cfg_get_int (cfg,
-					 MOD_CFG_SINGLE_SAT_SECTION,
-					 MOD_CFG_SINGLE_SAT_FIELDS,
-					 SAT_CFG_INT_SINGLE_SAT_FIELDS);
-	}
-	else {
-		flags = sat_cfg_get_int (SAT_CFG_INT_SINGLE_SAT_FIELDS);
-	}
+    /* get visible column flags */
+    if (cfg != NULL) {
+        flags = mod_cfg_get_int (cfg,
+                     MOD_CFG_SINGLE_SAT_SECTION,
+                     MOD_CFG_SINGLE_SAT_FIELDS,
+                     SAT_CFG_INT_SINGLE_SAT_FIELDS);
+    }
+    else {
+        flags = sat_cfg_get_int (SAT_CFG_INT_SINGLE_SAT_FIELDS);
+    }
 
-	for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++) {
+    for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++) {
 
         check[i] = gtk_check_button_new_with_label (SINGLE_SAT_FIELD_TITLE[i]);
         gtk_widget_set_tooltip_text (check[i], SINGLE_SAT_FIELD_HINT[i]);
 
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
-					      flags & (1 << i));
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
+                          flags & (1 << i));
 
-		gtk_table_attach (GTK_TABLE (table), check[i],
-				  i % COLUMNS, (i % COLUMNS) + 1,
-				  Y0 + i / COLUMNS, Y0 + i / COLUMNS + 1,
-				  GTK_FILL,  GTK_SHRINK, 0, 0);
+        gtk_table_attach (GTK_TABLE (table), check[i],
+                  i % COLUMNS, (i % COLUMNS) + 1,
+                  Y0 + i / COLUMNS, Y0 + i / COLUMNS + 1,
+                  GTK_FILL,  GTK_SHRINK, 0, 0);
 
-		g_signal_connect (check[i], "toggled",
-				  G_CALLBACK (toggle_cb),
-				  GUINT_TO_POINTER (i));
+        g_signal_connect (check[i], "toggled",
+                  G_CALLBACK (toggle_cb),
+                  GUINT_TO_POINTER (i));
 
-	}
-
-
-	/* create vertical box */
-	vbox = gtk_vbox_new (FALSE, 5);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
-	gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
-
-	/* create RESET button */
-	create_reset_button (cfg, GTK_BOX (vbox));
-
-	startflags = flags;
-	dirty = FALSE;
-	reset = FALSE;
+    }
 
 
-	return vbox;
+    /* create vertical box */
+    vbox = gtk_vbox_new (FALSE, 5);
+    gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
+    gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
+
+    /* create RESET button */
+    create_reset_button (cfg, GTK_BOX (vbox));
+
+    startflags = flags;
+    dirty = FALSE;
+    reset = FALSE;
+
+
+    return vbox;
 }
 
 
@@ -141,8 +141,8 @@ GtkWidget *sat_pref_single_sat_create (GKeyFile *cfg)
 void
 sat_pref_single_sat_cancel (GKeyFile *cfg)
 {
-	dirty = FALSE;
-	reset = FALSE;
+    dirty = FALSE;
+    reset = FALSE;
 }
 
 
@@ -152,37 +152,37 @@ void
 sat_pref_single_sat_ok     (GKeyFile *cfg)
 {
 
-	if (dirty) {
+    if (dirty) {
 
-		if (cfg != NULL) {
-			g_key_file_set_integer (cfg,
-						MOD_CFG_SINGLE_SAT_SECTION,
-						MOD_CFG_SINGLE_SAT_FIELDS,
-						flags);
-						
-		}
-		else {
-			sat_cfg_set_int (SAT_CFG_INT_SINGLE_SAT_FIELDS, flags);
-		}
-	}
-	else if (reset) {
+        if (cfg != NULL) {
+            g_key_file_set_integer (cfg,
+                        MOD_CFG_SINGLE_SAT_SECTION,
+                        MOD_CFG_SINGLE_SAT_FIELDS,
+                        flags);
+                        
+        }
+        else {
+            sat_cfg_set_int (SAT_CFG_INT_SINGLE_SAT_FIELDS, flags);
+        }
+    }
+    else if (reset) {
 
-		if (cfg != NULL) {
-			/* local mode; remove key */
-			g_key_file_remove_key (cfg,
-					       MOD_CFG_SINGLE_SAT_SECTION,
-					       MOD_CFG_SINGLE_SAT_FIELDS,
-					       NULL);
-						
-		}
-		else {
-			/* global mode; reset value */
-			sat_cfg_reset_int (SAT_CFG_INT_SINGLE_SAT_FIELDS);
-		}
-	}
+        if (cfg != NULL) {
+            /* local mode; remove key */
+            g_key_file_remove_key (cfg,
+                           MOD_CFG_SINGLE_SAT_SECTION,
+                           MOD_CFG_SINGLE_SAT_FIELDS,
+                           NULL);
+                        
+        }
+        else {
+            /* global mode; reset value */
+            sat_cfg_reset_int (SAT_CFG_INT_SINGLE_SAT_FIELDS);
+        }
+    }
 
-	dirty = FALSE;
-	reset = FALSE;
+    dirty = FALSE;
+    reset = FALSE;
 }
 
 
@@ -191,16 +191,16 @@ static void
 toggle_cb  (GtkToggleButton *toggle, gpointer data)
 {
 
-	if (gtk_toggle_button_get_active (toggle)) {
+    if (gtk_toggle_button_get_active (toggle)) {
 
-		flags |= (1 << GPOINTER_TO_UINT (data));
-	}
-	else {
-		flags &= ~(1 << GPOINTER_TO_UINT (data));
-	}
-	
-	/* clear dirty flag if we are back where we started */
-	dirty = (flags != startflags);
+        flags |= (1 << GPOINTER_TO_UINT (data));
+    }
+    else {
+        flags &= ~(1 << GPOINTER_TO_UINT (data));
+    }
+    
+    /* clear dirty flag if we are back where we started */
+    dirty = (flags != startflags);
 }
 
 
@@ -214,32 +214,32 @@ toggle_cb  (GtkToggleButton *toggle, gpointer data)
 static void
 create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 {
-	GtkWidget   *button;
-	GtkWidget   *butbox;
-	GtkTooltips *tips;
+    GtkWidget   *button;
+    GtkWidget   *butbox;
+    GtkTooltips *tips;
 
 
-	button = gtk_button_new_with_label (_("Reset"));
-	g_signal_connect (G_OBJECT (button), "clicked",
-			  G_CALLBACK (reset_cb), cfg);
+    button = gtk_button_new_with_label (_("Reset"));
+    g_signal_connect (G_OBJECT (button), "clicked",
+              G_CALLBACK (reset_cb), cfg);
 
-	tips = gtk_tooltips_new ();
-	if (cfg == NULL) {
-		gtk_tooltips_set_tip (tips, button,
-				      _("Reset settings to the default values."),
-				      NULL);
-	}
-	else {
-		gtk_tooltips_set_tip (tips, button,
-				      _("Reset module settings to the global values."),
-				      NULL);
-	}
+    tips = gtk_tooltips_new ();
+    if (cfg == NULL) {
+        gtk_tooltips_set_tip (tips, button,
+                      _("Reset settings to the default values."),
+                      NULL);
+    }
+    else {
+        gtk_tooltips_set_tip (tips, button,
+                      _("Reset module settings to the global values."),
+                      NULL);
+    }
 
-	butbox = gtk_hbutton_box_new ();
-	gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
-	gtk_box_pack_end (GTK_BOX (butbox), button, FALSE, TRUE, 10);
+    butbox = gtk_hbutton_box_new ();
+    gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
+    gtk_box_pack_end (GTK_BOX (butbox), button, FALSE, TRUE, 10);
 
-	gtk_box_pack_end (vbox, butbox, FALSE, TRUE, 0);
+    gtk_box_pack_end (vbox, butbox, FALSE, TRUE, 0);
 
 }
 
@@ -256,26 +256,26 @@ create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 static void
 reset_cb               (GtkWidget *button, gpointer cfg)
 {
-	guint i;
+    guint i;
 
 
-	if (cfg == NULL) {
-		/* global mode, get defaults */
-		flags = sat_cfg_get_int_def (SAT_CFG_INT_SINGLE_SAT_FIELDS);
-	}
-	else {
-		/* local mode, get global value */
-		flags = sat_cfg_get_int (SAT_CFG_INT_SINGLE_SAT_FIELDS);
-	}
+    if (cfg == NULL) {
+        /* global mode, get defaults */
+        flags = sat_cfg_get_int_def (SAT_CFG_INT_SINGLE_SAT_FIELDS);
+    }
+    else {
+        /* local mode, get global value */
+        flags = sat_cfg_get_int (SAT_CFG_INT_SINGLE_SAT_FIELDS);
+    }
 
-	for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++) {
+    for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++) {
 
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
-					      flags & (1 << i));
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
+                          flags & (1 << i));
 
-	}
+    }
 
-	/* reset flags */
-	dirty = FALSE;
-	reset = TRUE;
+    /* reset flags */
+    dirty = FALSE;
+    reset = TRUE;
 }

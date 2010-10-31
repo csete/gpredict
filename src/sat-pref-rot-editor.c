@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -77,63 +77,63 @@ static void          aztype_changed_cb     (GtkComboBox *box, gpointer data);
 void
 sat_pref_rot_editor_run (rotor_conf_t *conf)
 {
-	gint       response;
-	gboolean   finished = FALSE;
+     gint       response;
+     gboolean   finished = FALSE;
 
 
-	/* crate dialog and add contents */
-	dialog = gtk_dialog_new_with_buttons (_("Edit rotator configuration"),
-										  GTK_WINDOW (window),
-										  GTK_DIALOG_MODAL |
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_STOCK_CLEAR,
-										  GTK_RESPONSE_REJECT,
-										  GTK_STOCK_CANCEL,
-										  GTK_RESPONSE_CANCEL,
-										  GTK_STOCK_OK,
-										  GTK_RESPONSE_OK,
-										  NULL);
+     /* crate dialog and add contents */
+     dialog = gtk_dialog_new_with_buttons (_("Edit rotator configuration"),
+                                                    GTK_WINDOW (window),
+                                                    GTK_DIALOG_MODAL |
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_STOCK_CLEAR,
+                                                    GTK_RESPONSE_REJECT,
+                                                    GTK_STOCK_CANCEL,
+                                                    GTK_RESPONSE_CANCEL,
+                                                    GTK_STOCK_OK,
+                                                    GTK_RESPONSE_OK,
+                                                    NULL);
 
-	/* disable OK button to begin with */
-	gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-									   GTK_RESPONSE_OK,
-									   FALSE);
+     /* disable OK button to begin with */
+     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                                GTK_RESPONSE_OK,
+                                                FALSE);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
-					   create_editor_widgets (conf));
+     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
+                            create_editor_widgets (conf));
 
-	/* this hacky-thing is to keep the dialog running in case the
-	   CLEAR button is plressed. OK and CANCEL will exit the loop
-	*/
-	while (!finished) {
+     /* this hacky-thing is to keep the dialog running in case the
+        CLEAR button is plressed. OK and CANCEL will exit the loop
+     */
+     while (!finished) {
 
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+          response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-		switch (response) {
+          switch (response) {
 
-			/* OK */
-		case GTK_RESPONSE_OK:
-			if (apply_changes (conf)) {
-				finished = TRUE;
-			}
-			else {
-				finished = FALSE;
-			}
-			break;
+               /* OK */
+          case GTK_RESPONSE_OK:
+               if (apply_changes (conf)) {
+                    finished = TRUE;
+               }
+               else {
+                    finished = FALSE;
+               }
+               break;
 
-			/* CLEAR */
-		case GTK_RESPONSE_REJECT:
-			clear_widgets ();
-			break;
+               /* CLEAR */
+          case GTK_RESPONSE_REJECT:
+               clear_widgets ();
+               break;
 
-			/* Everything else is considered CANCEL */
-		default:
-			finished = TRUE;
-			break;
-		}
-	}
+               /* Everything else is considered CANCEL */
+          default:
+               finished = TRUE;
+               break;
+          }
+     }
 
-	gtk_widget_destroy (dialog);
+     gtk_widget_destroy (dialog);
 }
 
 
@@ -141,36 +141,36 @@ sat_pref_rot_editor_run (rotor_conf_t *conf)
 static GtkWidget *
 create_editor_widgets (rotor_conf_t *conf)
 {
-	GtkWidget    *table;
-	GtkWidget    *label;
+     GtkWidget    *table;
+     GtkWidget    *label;
 
 
-	table = gtk_table_new (7, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+     table = gtk_table_new (7, 4, FALSE);
+     gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 
-	/* Config name */
-	label = gtk_label_new (_("Name"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
-	
-	name = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (name), 25);
+     /* Config name */
+     label = gtk_label_new (_("Name"));
+     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+     
+     name = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (name), 25);
     gtk_widget_set_tooltip_text (name,
                                  _("Enter a short name for this configuration, e.g. ROTOR-1.\n"\
                                    "Allowed characters: 0..9, a..z, A..Z, - and _"));
-	gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
+     gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
 
-	/* attach changed signal so that we can enable OK button when
-	   a proper name has been entered
-	*/
-	g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
+     /* attach changed signal so that we can enable OK button when
+        a proper name has been entered
+     */
+     g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
 
-	/* Host */
-	label = gtk_label_new (_("Host"));
-	gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+     /* Host */
+     label = gtk_label_new (_("Host"));
+     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
     
     host = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
@@ -182,7 +182,7 @@ create_editor_widgets (rotor_conf_t *conf)
                                  "If gpredict and rotctld are running on the "\
                                  "same computer, use localhost"));
     gtk_table_attach_defaults (GTK_TABLE (table), host, 1, 4, 1, 2);
-	
+     
     /* port */
     label = gtk_label_new (_("Port"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
@@ -253,11 +253,11 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_table_attach_defaults (GTK_TABLE (table), maxel, 3, 4, 6, 7);
     
     if (conf->name != NULL)
-		update_widgets (conf);
+          update_widgets (conf);
 
-	gtk_widget_show_all (table);
+     gtk_widget_show_all (table);
 
-	return table;
+     return table;
 }
 
 
@@ -346,7 +346,7 @@ apply_changes         (rotor_conf_t *conf)
     conf->minel = gtk_spin_button_get_value (GTK_SPIN_BUTTON (minel));
     conf->maxel = gtk_spin_button_get_value (GTK_SPIN_BUTTON (maxel));
     
-	return TRUE;
+     return TRUE;
 }
 
 
@@ -360,52 +360,52 @@ apply_changes         (rotor_conf_t *conf)
 static void
 name_changed          (GtkWidget *widget, gpointer data)
 {
-	const gchar *text;
-	gchar *entry, *end, *j;
-	gint len, pos;
+     const gchar *text;
+     gchar *entry, *end, *j;
+     gint len, pos;
 
 
-	/* step 1: ensure that only valid characters are entered
-	   (stolen from xlog, tnx pg4i)
-	*/
-	entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
-	if ((len = g_utf8_strlen (entry, -1)) > 0)
-		{
-			end = entry + g_utf8_strlen (entry, -1);
-			for (j = entry; j < end; ++j)
-				{
-					switch (*j)
-						{
-						case '0' ... '9':
-						case 'a' ... 'z':
-						case 'A' ... 'Z':
-						case '-':
-						case '_':
-							break;
-						default:
-							gdk_beep ();
-							pos = gtk_editable_get_position (GTK_EDITABLE (widget));
-							gtk_editable_delete_text (GTK_EDITABLE (widget),
-													  pos, pos+1);
-							break;
-						}
-				}
-		}
+     /* step 1: ensure that only valid characters are entered
+        (stolen from xlog, tnx pg4i)
+     */
+     entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
+     if ((len = g_utf8_strlen (entry, -1)) > 0)
+          {
+               end = entry + g_utf8_strlen (entry, -1);
+               for (j = entry; j < end; ++j)
+                    {
+                         switch (*j)
+                              {
+                              case '0' ... '9':
+                              case 'a' ... 'z':
+                              case 'A' ... 'Z':
+                              case '-':
+                              case '_':
+                                   break;
+                              default:
+                                   gdk_beep ();
+                                   pos = gtk_editable_get_position (GTK_EDITABLE (widget));
+                                   gtk_editable_delete_text (GTK_EDITABLE (widget),
+                                                                   pos, pos+1);
+                                   break;
+                              }
+                    }
+          }
 
 
-	/* step 2: if name seems all right, enable OK button */
-	text = gtk_entry_get_text (GTK_ENTRY (widget));
+     /* step 2: if name seems all right, enable OK button */
+     text = gtk_entry_get_text (GTK_ENTRY (widget));
 
-	if (g_utf8_strlen (text, -1) > 0) {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   TRUE);
-	}
-	else {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   FALSE);
-	}
+     if (g_utf8_strlen (text, -1) > 0) {
+          gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                                     GTK_RESPONSE_OK,
+                                                     TRUE);
+     }
+     else {
+          gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                                     GTK_RESPONSE_OK,
+                                                     FALSE);
+     }
 }
 
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -58,26 +58,26 @@ typedef struct _GtkEventListClass   GtkEventListClass;
 
 struct _gtk_event_list
 {
-	GtkVBox vbox;
+     GtkVBox vbox;
 
-	GtkWidget       *treeview;     /*!< the tree view itself */
-	GtkWidget       *swin;         /*!< scrolled window */
-	
-	GHashTable      *satellites;   /*!< Satellites. */
-	qth_t           *qth;          /*!< Pointer to current location. */
+     GtkWidget       *treeview;     /*!< the tree view itself */
+     GtkWidget       *swin;         /*!< scrolled window */
+     
+     GHashTable      *satellites;   /*!< Satellites. */
+     qth_t           *qth;          /*!< Pointer to current location. */
 
-	guint32          flags;        /*!< Flags indicating which columns are visible */
-	guint            refresh;      /*!< Refresh rate, ie. how many cycles should pass between updates */
-	guint            counter;      /*!< cycle counter */
+     guint32          flags;        /*!< Flags indicating which columns are visible */
+     guint            refresh;      /*!< Refresh rate, ie. how many cycles should pass between updates */
+     guint            counter;      /*!< cycle counter */
 
-	gdouble          tstamp;       /*!< time stamp of calculations; set by GtkSatModule */
-	
-	void (* update) (GtkWidget *widget);  /*!< update function */
+     gdouble          tstamp;       /*!< time stamp of calculations; set by GtkSatModule */
+     
+     void (* update) (GtkWidget *widget);  /*!< update function */
 };
 
 struct _GtkEventListClass
 {
-	GtkVBoxClass parent_class;
+     GtkVBoxClass parent_class;
 };
 
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -62,24 +62,24 @@
  */
 gint
 twoline2tle (gchar *line1, gchar *line2, gchar *line3,
-			 gboolean checksum, tle_t *tle)
+             gboolean checksum, tle_t *tle)
 {
 
-	/* check function parameters */
-	if G_UNLIKELY((line1 == NULL) || (line2 == NULL) || (line3 == NULL)) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: NULL input data!"), __FUNCTION__);
-		return TLE_CONV_ERROR;
-	}
-	if G_UNLIKELY(tle == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s: NULL output storage!"), __FUNCTION__);
-		return TLE_CONV_ERROR;
-	}
+    /* check function parameters */
+    if G_UNLIKELY((line1 == NULL) || (line2 == NULL) || (line3 == NULL)) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: NULL input data!"), __FUNCTION__);
+        return TLE_CONV_ERROR;
+    }
+    if G_UNLIKELY(tle == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: NULL output storage!"), __FUNCTION__);
+        return TLE_CONV_ERROR;
+    }
 
 
 
-	return TLE_CONV_SUCCESS;
+    return TLE_CONV_SUCCESS;
 }
 
 
@@ -100,7 +100,7 @@ twoline2tle (gchar *line1, gchar *line2, gchar *line3,
 gint
 tle2twoline (tle_t *tle, gchar *line1, gchar *line2, gchar *line3)
 {
-	return TLE_CONV_SUCCESS;
+    return TLE_CONV_SUCCESS;
 }
 
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -58,34 +58,34 @@ void callback( GtkWidget *widget,
 GtkWidget *
 gui_create (GtkWidget *window)
 {
-	GtkWidget *vbox;
+     GtkWidget *vbox;
 
 
-	vbox = gtk_vbox_new (FALSE, 0);
+     vbox = gtk_vbox_new (FALSE, 0);
 
-	/* add menu bar */
-	gtk_box_pack_start (GTK_BOX (vbox),
-			    menubar_create (window),
-			    FALSE,
-			    FALSE,
-			    0);
+     /* add menu bar */
+     gtk_box_pack_start (GTK_BOX (vbox),
+                   menubar_create (window),
+                   FALSE,
+                   FALSE,
+                   0);
 
-	/* add tool bar */
-/* 	gtk_box_pack_start (GTK_BOX (vbox), */
-/* 			    gpredict_gui_toolbar_create (), */
-/* 			    FALSE, */
-/* 			    FALSE, */
-/* 			    0); */
+     /* add tool bar */
+/*      gtk_box_pack_start (GTK_BOX (vbox), */
+/*                    gpredict_gui_toolbar_create (), */
+/*                    FALSE, */
+/*                    FALSE, */
+/*                    0); */
 
 
-	/* add module manager */
-	gtk_box_pack_start (GTK_BOX (vbox), mod_mgr_create (), TRUE, TRUE, 0);
+     /* add module manager */
+     gtk_box_pack_start (GTK_BOX (vbox), mod_mgr_create (), TRUE, TRUE, 0);
 
-	
-	/* add bottom info box */
+     
+     /* add bottom info box */
 
-	/* add status bar */
+     /* add status bar */
 
-	return vbox;
+     return vbox;
 }
 

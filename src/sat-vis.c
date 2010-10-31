@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -37,10 +37,10 @@
 static gchar VIS2CHR[SAT_VIS_NUM] = { '-', 'V', 'D', 'E'};
 
 static gchar *VIS2STR[SAT_VIS_NUM] = {
-	N_("Unknown"),
-	N_("Visible"),
-	N_("Daylight"),
-	N_("Eclipsed")
+    N_("Unknown"),
+    N_("Visible"),
+    N_("Daylight"),
+    N_("Eclipsed")
 };
 
 
@@ -55,54 +55,54 @@ static gchar *VIS2STR[SAT_VIS_NUM] = {
 sat_vis_t
 get_sat_vis (sat_t *sat, qth_t *qth, gdouble jul_utc)
 {
-	gboolean sat_sun_status;
-	gdouble  sun_el;
+    gboolean sat_sun_status;
+    gdouble  sun_el;
     gdouble  threshold;
-	gdouble  eclipse_depth;
-	sat_vis_t vis = SAT_VIS_NONE;
-	vector_t zero_vector = {0,0,0,0};
-	geodetic_t obs_geodetic;
+    gdouble  eclipse_depth;
+    sat_vis_t vis = SAT_VIS_NONE;
+    vector_t zero_vector = {0,0,0,0};
+    geodetic_t obs_geodetic;
 
-	/* Solar ECI position vector  */
-	vector_t solar_vector=zero_vector;
+    /* Solar ECI position vector  */
+    vector_t solar_vector=zero_vector;
 
-	/* Solar observed az and el vector  */
-	obs_set_t solar_set;
+    /* Solar observed az and el vector  */
+    obs_set_t solar_set;
 
-	/* FIXME: could be passed as parameter */
-	obs_geodetic.lon = qth->lon * de2ra;
-	obs_geodetic.lat = qth->lat * de2ra;
-	obs_geodetic.alt = qth->alt / 1000.0;
-	obs_geodetic.theta = 0;
-
-
-	Calculate_Solar_Position (jul_utc, &solar_vector);
-	Calculate_Obs (jul_utc, &solar_vector, &zero_vector, &obs_geodetic, &solar_set);
-
-	if (Sat_Eclipsed (&sat->pos, &solar_vector, &eclipse_depth)) {
-		/* satellite is eclipsed */
-		sat_sun_status = FALSE;
-	}
-	else {
-		/* satellite in sunlight => may be visible */
-		sat_sun_status = TRUE;
-	}
+    /* FIXME: could be passed as parameter */
+    obs_geodetic.lon = qth->lon * de2ra;
+    obs_geodetic.lat = qth->lat * de2ra;
+    obs_geodetic.alt = qth->alt / 1000.0;
+    obs_geodetic.theta = 0;
 
 
-	if (sat_sun_status) {
+    Calculate_Solar_Position (jul_utc, &solar_vector);
+    Calculate_Obs (jul_utc, &solar_vector, &zero_vector, &obs_geodetic, &solar_set);
+
+    if (Sat_Eclipsed (&sat->pos, &solar_vector, &eclipse_depth)) {
+        /* satellite is eclipsed */
+        sat_sun_status = FALSE;
+    }
+    else {
+        /* satellite in sunlight => may be visible */
+        sat_sun_status = TRUE;
+    }
+
+
+    if (sat_sun_status) {
         sun_el = Degrees (solar_set.el);
         threshold = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_TWILIGHT_THLD);
         
         if (sun_el <= threshold && sat->el >= 0.0)
-			vis = SAT_VIS_VISIBLE;
-		else
-			vis = SAT_VIS_DAYLIGHT;
-	}
-	else
-		vis = SAT_VIS_ECLIPSED;
+            vis = SAT_VIS_VISIBLE;
+        else
+            vis = SAT_VIS_DAYLIGHT;
+    }
+    else
+        vis = SAT_VIS_ECLIPSED;
 
 
-	return vis;
+    return vis;
 }
 
 
@@ -111,7 +111,7 @@ get_sat_vis (sat_t *sat, qth_t *qth, gdouble jul_utc)
 gchar
 vis_to_chr       (sat_vis_t vis)
 {
-	return VIS2CHR[vis];
+    return VIS2CHR[vis];
 }
 
 
@@ -123,6 +123,6 @@ vis_to_chr       (sat_vis_t vis)
 gchar *
 vis_to_str       (sat_vis_t vis)
 {
-	return g_strdup (_(VIS2STR[vis]));
+    return g_strdup (_(VIS2STR[vis]));
 }
 

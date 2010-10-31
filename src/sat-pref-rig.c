@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -250,7 +250,7 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_DOUBLE     // LO UO
                                    );
 
-	gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE(liststore),RIG_LIST_COL_NAME,GTK_SORT_ASCENDING);
+     gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE(liststore),RIG_LIST_COL_NAME,GTK_SORT_ASCENDING);
     /* open configuration directory */
     dirname = get_hwconf_dir ();
     

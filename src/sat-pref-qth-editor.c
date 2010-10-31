@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -61,8 +61,8 @@
  *         select location or select weather station.
  */
 enum {
-	SELECTION_MODE_LOC = 1,
-	SELECTION_MODE_WX  = 2
+     SELECTION_MODE_LOC = 1,
+     SELECTION_MODE_WX  = 2
 };
 
 
@@ -104,63 +104,63 @@ static void       qra_changed     (GtkEntry *entry, gpointer data);
 void
 sat_pref_qth_editor_run (GtkTreeView *treeview, gboolean new)
 {
-	gint       response;
-	gboolean   finished = FALSE;
+     gint       response;
+     gboolean   finished = FALSE;
 
 
-	/* crate dialog and add contents */
-	dialog = gtk_dialog_new_with_buttons (_("Edit ground station data"),
-										  GTK_WINDOW (window),
-										  GTK_DIALOG_MODAL |
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_STOCK_CLEAR,
-										  GTK_RESPONSE_REJECT,
-										  GTK_STOCK_CANCEL,
-										  GTK_RESPONSE_CANCEL,
-										  GTK_STOCK_OK,
-										  GTK_RESPONSE_OK,
-										  NULL);
+     /* crate dialog and add contents */
+     dialog = gtk_dialog_new_with_buttons (_("Edit ground station data"),
+                                                    GTK_WINDOW (window),
+                                                    GTK_DIALOG_MODAL |
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_STOCK_CLEAR,
+                                                    GTK_RESPONSE_REJECT,
+                                                    GTK_STOCK_CANCEL,
+                                                    GTK_RESPONSE_CANCEL,
+                                                    GTK_STOCK_OK,
+                                                    GTK_RESPONSE_OK,
+                                                    NULL);
 
-	/* disable OK button to begin with */
-	gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-									   GTK_RESPONSE_OK,
-									   FALSE);
+     /* disable OK button to begin with */
+     gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                                GTK_RESPONSE_OK,
+                                                FALSE);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
-					   create_editor_widgets (treeview, new));
+     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
+                            create_editor_widgets (treeview, new));
 
-	/* this hacky-thing is to keep the dialog running in case the
-	   CLEAR button is plressed. OK and CANCEL will exit the loop
-	*/
-	while (!finished) {
+     /* this hacky-thing is to keep the dialog running in case the
+        CLEAR button is plressed. OK and CANCEL will exit the loop
+     */
+     while (!finished) {
 
-		response = gtk_dialog_run (GTK_DIALOG (dialog));
+          response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-		switch (response) {
+          switch (response) {
 
-			/* OK */
-		case GTK_RESPONSE_OK:
-			if (apply_changes (treeview, new)) {
-				finished = TRUE;
-			}
-			else {
-				finished = FALSE;
-			}
-			break;
+               /* OK */
+          case GTK_RESPONSE_OK:
+               if (apply_changes (treeview, new)) {
+                    finished = TRUE;
+               }
+               else {
+                    finished = FALSE;
+               }
+               break;
 
-			/* CLEAR */
-		case GTK_RESPONSE_REJECT:
-			clear_widgets ();
-			break;
+               /* CLEAR */
+          case GTK_RESPONSE_REJECT:
+               clear_widgets ();
+               break;
 
-			/* Everything else is considered CANCEL */
-		default:
-			finished = TRUE;
-			break;
-		}
-	}
+               /* Everything else is considered CANCEL */
+          default:
+               finished = TRUE;
+               break;
+          }
+     }
 
-	gtk_widget_destroy (dialog);
+     gtk_widget_destroy (dialog);
 }
 
 
@@ -168,202 +168,202 @@ sat_pref_qth_editor_run (GtkTreeView *treeview, gboolean new)
 static GtkWidget *
 create_editor_widgets (GtkTreeView *treeview, gboolean new)
 {
-	GtkWidget   *table;
-	GtkWidget   *label;
-	GtkTooltips *tooltips;
-	GtkWidget   *locbut;
-	GtkWidget   *wxbut;
+     GtkWidget   *table;
+     GtkWidget   *label;
+     GtkTooltips *tooltips;
+     GtkWidget   *locbut;
+     GtkWidget   *wxbut;
 
 
-	table = gtk_table_new (9, 4, FALSE);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+     table = gtk_table_new (9, 4, FALSE);
+     gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+     gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+     gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 
-	/* QTH name */
-	label = gtk_label_new (_("Name"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
-	
-	name = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (name), 25);
-	tooltips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tooltips, name,
-						  _("Enter a short name for this ground station, e.g. callsign.\n"\
-							"Allowed characters: 0..9, a..z, A..Z, - and _"),
-						  _("The name will be used to identify the ground station when "\
-							"it is presented to the user. Maximum allowed length "\
-							"is 25 characters."));
-	gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
+     /* QTH name */
+     label = gtk_label_new (_("Name"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 0, 1);
+     
+     name = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (name), 25);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, name,
+                                _("Enter a short name for this ground station, e.g. callsign.\n"\
+                                   "Allowed characters: 0..9, a..z, A..Z, - and _"),
+                                _("The name will be used to identify the ground station when "\
+                                   "it is presented to the user. Maximum allowed length "\
+                                   "is 25 characters."));
+     gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
 
-	/* attach changed signal so that we can enable OK button when
-	   a proper name has been entered
-	*/
-	g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
+     /* attach changed signal so that we can enable OK button when
+        a proper name has been entered
+     */
+     g_signal_connect (name, "changed", G_CALLBACK (name_changed), NULL);
 
-	/* QTH description */
-	label = gtk_label_new (_("Description"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
-	
-	desc = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (desc), 256);
-	tooltips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tooltips, desc,
-						  _("Enter an optional description for this ground station."),
-						  _("The description can be used as additional "\
-							"information. It may be included when generating reports. "\
-							"The maximum length for the description is 256 characters."));
-	gtk_table_attach_defaults (GTK_TABLE (table), desc, 1, 4, 1, 2);
+     /* QTH description */
+     label = gtk_label_new (_("Description"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 1, 2);
+     
+     desc = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (desc), 256);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, desc,
+                                _("Enter an optional description for this ground station."),
+                                _("The description can be used as additional "\
+                                   "information. It may be included when generating reports. "\
+                                   "The maximum length for the description is 256 characters."));
+     gtk_table_attach_defaults (GTK_TABLE (table), desc, 1, 4, 1, 2);
 
-	/* location */
-	label = gtk_label_new (_("Location"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
-	
-	location = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (location), 50);
-	tooltips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tooltips, location,
-						  _("Optional location of the ground station, fx. Copenhagen, Denmark."),
-						  NULL);
-	gtk_table_attach_defaults (GTK_TABLE (table), location, 1, 3, 2, 3);
+     /* location */
+     label = gtk_label_new (_("Location"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 2, 3);
+     
+     location = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (location), 50);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, location,
+                                _("Optional location of the ground station, fx. Copenhagen, Denmark."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), location, 1, 3, 2, 3);
 
-	locbut = gpredict_hstock_button (GTK_STOCK_INDEX, _("Select"),
-									 _("Select a predefined location from a list."));
-	g_signal_connect (locbut, "clicked",
-					  G_CALLBACK (select_location),
-					  GUINT_TO_POINTER (SELECTION_MODE_LOC));
-	gtk_table_attach_defaults (GTK_TABLE (table), locbut, 3, 4, 2, 3);
-	
+     locbut = gpredict_hstock_button (GTK_STOCK_INDEX, _("Select"),
+                                              _("Select a predefined location from a list."));
+     g_signal_connect (locbut, "clicked",
+                           G_CALLBACK (select_location),
+                           GUINT_TO_POINTER (SELECTION_MODE_LOC));
+     gtk_table_attach_defaults (GTK_TABLE (table), locbut, 3, 4, 2, 3);
+     
 
-	/* latitude */
-	label = gtk_label_new (_("Latitude (\302\260)"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
+     /* latitude */
+     label = gtk_label_new (_("Latitude (\302\260)"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
 
-	lat = gtk_spin_button_new_with_range (0.00, 90.00, 0.0001);
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON (lat), 0.0001, 1.0);
-	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lat), TRUE);
-	gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lat), 4);
-	tooltips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tooltips, lat,
-						  _("Select the latitude of the ground station in decimal degrees."),
-						  NULL);
-	gtk_table_attach_defaults (GTK_TABLE (table), lat, 1, 2, 3, 4);
+     lat = gtk_spin_button_new_with_range (0.00, 90.00, 0.0001);
+     gtk_spin_button_set_increments (GTK_SPIN_BUTTON (lat), 0.0001, 1.0);
+     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lat), TRUE);
+     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lat), 4);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, lat,
+                                _("Select the latitude of the ground station in decimal degrees."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), lat, 1, 2, 3, 4);
 
-	ns = gtk_combo_box_new_text ();
-	gtk_combo_box_append_text (GTK_COMBO_BOX (ns), _("North"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (ns), _("South"));
-	gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
-	/*** FIXME tooltips */
-	gtk_table_attach_defaults (GTK_TABLE (table), ns, 2, 3, 3, 4);
+     ns = gtk_combo_box_new_text ();
+     gtk_combo_box_append_text (GTK_COMBO_BOX (ns), _("North"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (ns), _("South"));
+     gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
+     /*** FIXME tooltips */
+     gtk_table_attach_defaults (GTK_TABLE (table), ns, 2, 3, 3, 4);
 
-	/* longitude */
-	label = gtk_label_new (_("Longitude (\302\260)"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
+     /* longitude */
+     label = gtk_label_new (_("Longitude (\302\260)"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 4, 5);
 
-	lon = gtk_spin_button_new_with_range (0.00, 180.00, 0.0001);
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON (lon), 0.0001, 1.0);
-	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lon), TRUE);
-	gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lon), 4);
-	gtk_tooltips_set_tip (tooltips, lon,
-						  _("Select the longitude of the ground station in decimal degrees."),
-						  NULL);
-	gtk_table_attach_defaults (GTK_TABLE (table), lon, 1, 2, 4, 5);
+     lon = gtk_spin_button_new_with_range (0.00, 180.00, 0.0001);
+     gtk_spin_button_set_increments (GTK_SPIN_BUTTON (lon), 0.0001, 1.0);
+     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lon), TRUE);
+     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lon), 4);
+     gtk_tooltips_set_tip (tooltips, lon,
+                                _("Select the longitude of the ground station in decimal degrees."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), lon, 1, 2, 4, 5);
 
-	ew = gtk_combo_box_new_text ();
-	gtk_combo_box_append_text (GTK_COMBO_BOX (ew), _("East"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (ew), _("West"));
-	gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
-	/*** FIXME tooltips */
-	gtk_table_attach_defaults (GTK_TABLE (table), ew, 2, 3, 4, 5);
+     ew = gtk_combo_box_new_text ();
+     gtk_combo_box_append_text (GTK_COMBO_BOX (ew), _("East"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (ew), _("West"));
+     gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
+     /*** FIXME tooltips */
+     gtk_table_attach_defaults (GTK_TABLE (table), ew, 2, 3, 4, 5);
 
 
-	/* connect lat/lon spinners and combos to callback
-	   remember signal id so that we can block signals
-	   while doing automatic cross-updates
-	*/
-	latsigid = g_signal_connect (lat, "value-changed",
-								 G_CALLBACK (latlon_changed),
-								 NULL);
-	lonsigid = g_signal_connect (lon, "value-changed",
-								 G_CALLBACK (latlon_changed),
-								 NULL);
-	nssigid = g_signal_connect (ns, "changed",
-								G_CALLBACK (latlon_changed),
-								NULL);
-	ewsigid = g_signal_connect (ew, "changed",
-								G_CALLBACK (latlon_changed),
-								NULL);
-	
-	/* QRA locator */
-	label = gtk_label_new (_("Locator"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
+     /* connect lat/lon spinners and combos to callback
+        remember signal id so that we can block signals
+        while doing automatic cross-updates
+     */
+     latsigid = g_signal_connect (lat, "value-changed",
+                                         G_CALLBACK (latlon_changed),
+                                         NULL);
+     lonsigid = g_signal_connect (lon, "value-changed",
+                                         G_CALLBACK (latlon_changed),
+                                         NULL);
+     nssigid = g_signal_connect (ns, "changed",
+                                        G_CALLBACK (latlon_changed),
+                                        NULL);
+     ewsigid = g_signal_connect (ew, "changed",
+                                        G_CALLBACK (latlon_changed),
+                                        NULL);
+     
+     /* QRA locator */
+     label = gtk_label_new (_("Locator"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 5, 6);
 
-	qra = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (qra), 6);
-	tooltips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tooltips, qra,
-						  _("Maidenhead locator grid."),
-						  NULL);
-	gtk_table_attach_defaults (GTK_TABLE (table), qra, 1, 2, 5, 6);
-	qrasigid = g_signal_connect (qra, "changed",
-								 G_CALLBACK (qra_changed),
-								 NULL);
+     qra = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (qra), 6);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, qra,
+                                _("Maidenhead locator grid."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), qra, 1, 2, 5, 6);
+     qrasigid = g_signal_connect (qra, "changed",
+                                         G_CALLBACK (qra_changed),
+                                         NULL);
 
-	/* altitude */
-	label = gtk_label_new (_("Altitude"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 6, 7);
+     /* altitude */
+     label = gtk_label_new (_("Altitude"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 6, 7);
 
-	alt = gtk_spin_button_new_with_range (0, 5000, 1);
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON (alt), 1, 100);
-	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (alt), TRUE);
-	gtk_tooltips_set_tip (tooltips, alt,
-						  _("Select the altitude of the ground station in meters or feet "\
-							"depending on your settings"),
-						  NULL);
-	gtk_table_attach_defaults (GTK_TABLE (table), alt, 1, 2, 6, 7);
+     alt = gtk_spin_button_new_with_range (0, 5000, 1);
+     gtk_spin_button_set_increments (GTK_SPIN_BUTTON (alt), 1, 100);
+     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (alt), TRUE);
+     gtk_tooltips_set_tip (tooltips, alt,
+                                _("Select the altitude of the ground station in meters or feet "\
+                                   "depending on your settings"),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), alt, 1, 2, 6, 7);
 
-	if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
-		label = gtk_label_new (_("ft asl"));
-	}
-	else {
-		label = gtk_label_new (_("m asl"));
-	}
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 6, 7);
+     if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
+          label = gtk_label_new (_("ft asl"));
+     }
+     else {
+          label = gtk_label_new (_("m asl"));
+     }
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 6, 7);
 
-	/* weather station */
-	label = gtk_label_new (_("Weather St"));
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-	gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 7, 8);
+     /* weather station */
+     label = gtk_label_new (_("Weather St"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 7, 8);
 
-	wx = gtk_entry_new ();
-	gtk_entry_set_max_length (GTK_ENTRY (wx), 4);
-	tooltips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tooltips, wx,
-						  _("Four letter code for weather station"),
-						  NULL);
-	gtk_table_attach_defaults (GTK_TABLE (table), wx, 1, 3, 7, 8);
+     wx = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (wx), 4);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, wx,
+                                _("Four letter code for weather station"),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), wx, 1, 3, 7, 8);
 
-	wxbut = gpredict_hstock_button (GTK_STOCK_INDEX, _("Select"),
-									_("Select a predefined weather station from a list."));
-	g_signal_connect (wxbut, "clicked",
-					  G_CALLBACK (select_location),
-					  GUINT_TO_POINTER (SELECTION_MODE_WX));
-	gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
-	
+     wxbut = gpredict_hstock_button (GTK_STOCK_INDEX, _("Select"),
+                                             _("Select a predefined weather station from a list."));
+     g_signal_connect (wxbut, "clicked",
+                           G_CALLBACK (select_location),
+                           GUINT_TO_POINTER (SELECTION_MODE_WX));
+     gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
+     
 
-	if (!new)
-		update_widgets (treeview);
+     if (!new)
+          update_widgets (treeview);
 
-	gtk_widget_show_all (table);
+     gtk_widget_show_all (table);
 
-	return table;
+     return table;
 }
 
 
@@ -372,85 +372,85 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
 static void
 update_widgets (GtkTreeView *treeview)
 {
-	GtkTreeSelection *selection; /* the selection in the tree view */
-	GtkTreeModel     *model;     /* the tree model corresponding to the selection */
-	GtkTreeIter       iter;      /* the iter of the selection */
-	gchar            *qthname;   /* location name */
-	gchar            *qthdesc;   /* location description */
-	gchar            *qthloc;    /* location */
-	gdouble           qthlat;    /* latitude */
-	gdouble           qthlon;    /* longitude */
-	guint             qthalt;    /* altitude */
-	gchar            *qthwx;     /* weather station */
+     GtkTreeSelection *selection; /* the selection in the tree view */
+     GtkTreeModel     *model;     /* the tree model corresponding to the selection */
+     GtkTreeIter       iter;      /* the iter of the selection */
+     gchar            *qthname;   /* location name */
+     gchar            *qthdesc;   /* location description */
+     gchar            *qthloc;    /* location */
+     gdouble           qthlat;    /* latitude */
+     gdouble           qthlon;    /* longitude */
+     guint             qthalt;    /* altitude */
+     gchar            *qthwx;     /* weather station */
 
 
 
-	selection = gtk_tree_view_get_selection (treeview);
+     selection = gtk_tree_view_get_selection (treeview);
 
-	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+     if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
 
-		/* get values */
-		gtk_tree_model_get (model, &iter,
-							QTH_LIST_COL_NAME, &qthname,
-							QTH_LIST_COL_LOC,  &qthloc,
-							QTH_LIST_COL_DESC, &qthdesc,
-							QTH_LIST_COL_LAT, &qthlat,
-							QTH_LIST_COL_LON, &qthlon,
-							QTH_LIST_COL_ALT, &qthalt,
-							QTH_LIST_COL_WX, &qthwx,
-							-1);
+          /* get values */
+          gtk_tree_model_get (model, &iter,
+                                   QTH_LIST_COL_NAME, &qthname,
+                                   QTH_LIST_COL_LOC,  &qthloc,
+                                   QTH_LIST_COL_DESC, &qthdesc,
+                                   QTH_LIST_COL_LAT, &qthlat,
+                                   QTH_LIST_COL_LON, &qthlon,
+                                   QTH_LIST_COL_ALT, &qthalt,
+                                   QTH_LIST_COL_WX, &qthwx,
+                                   -1);
 
-		/* update widgets and free memory afterwards */
-		if (qthname) {
-			gtk_entry_set_text (GTK_ENTRY (name), qthname);
-		}
+          /* update widgets and free memory afterwards */
+          if (qthname) {
+               gtk_entry_set_text (GTK_ENTRY (name), qthname);
+          }
 
-		if (qthloc) {
-			gtk_entry_set_text (GTK_ENTRY (location), qthloc);
-			g_free (qthloc);
-		}
+          if (qthloc) {
+               gtk_entry_set_text (GTK_ENTRY (location), qthloc);
+               g_free (qthloc);
+          }
 
-		if (qthdesc) {
-			gtk_entry_set_text (GTK_ENTRY (desc), qthdesc);
-			g_free (qthdesc);
-		}
+          if (qthdesc) {
+               gtk_entry_set_text (GTK_ENTRY (desc), qthdesc);
+               g_free (qthdesc);
+          }
 
-		if (qthwx) {
-			gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
-			g_free (qthwx);
-		}
+          if (qthwx) {
+               gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
+               g_free (qthwx);
+          }
 
-		if (qthlat < 0.00)
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
-		else
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
-			
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), fabs (qthlat));
+          if (qthlat < 0.00)
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
+          else
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
+               
+          gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), fabs (qthlat));
 
-		if (qthlon < 0.00)
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 1);
-		else
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
+          if (qthlon < 0.00)
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 1);
+          else
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
 
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), fabs (qthlon));
+          gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), fabs (qthlon));
 
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), qthalt);
+          gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), qthalt);
 
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s:%d: Loaded %s for editing:\n"\
-					   "LAT:%.4f LON:%.4f ALT:%d"),
-					 __FILE__, __LINE__,
-					 (qthname != NULL) ? qthname : "???",
-					 qthlat, qthlon, qthalt);
+          sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                          _("%s:%d: Loaded %s for editing:\n"\
+                            "LAT:%.4f LON:%.4f ALT:%d"),
+                          __FILE__, __LINE__,
+                          (qthname != NULL) ? qthname : "???",
+                          qthlat, qthlon, qthalt);
 
-		g_free (qthname);
+          g_free (qthname);
 
-	}
-	else {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: No ground station selected!"),
-					 __FILE__, __LINE__);
-	}
+     }
+     else {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%d: No ground station selected!"),
+                          __FILE__, __LINE__);
+     }
 }
 
 
@@ -463,14 +463,14 @@ update_widgets (GtkTreeView *treeview)
 static void
 clear_widgets () 
 {
-	gtk_entry_set_text (GTK_ENTRY (name), "");
-	gtk_entry_set_text (GTK_ENTRY (location), "");
-	gtk_entry_set_text (GTK_ENTRY (desc), "");
-	gtk_entry_set_text (GTK_ENTRY (wx), "");
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), 0.0);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), 0.0);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), 0);
-	gtk_entry_set_text (GTK_ENTRY (qra), "");
+     gtk_entry_set_text (GTK_ENTRY (name), "");
+     gtk_entry_set_text (GTK_ENTRY (location), "");
+     gtk_entry_set_text (GTK_ENTRY (desc), "");
+     gtk_entry_set_text (GTK_ENTRY (wx), "");
+     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), 0.0);
+     gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), 0.0);
+     gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), 0);
+     gtk_entry_set_text (GTK_ENTRY (qra), "");
 }
 
 
@@ -482,79 +482,79 @@ clear_widgets ()
 static gboolean
 apply_changes         (GtkTreeView *treeview, gboolean new)
 {
-	GtkTreeSelection *selection; /* selection in the treeview */
-	GtkTreeModel     *model;     /* the tree model corresponding to the selection */
-	GtkListStore     *liststore; /* the list store corresponding to the model */
-	GtkTreeIter       iter;      /* iter used to add and modify row data */
-	const gchar      *qthname;
-	const gchar      *qthloc;
-	const gchar      *qthdesc;
-	const gchar      *qthwx;
-	gdouble           qthlat;
-	gdouble           qthlon;
-	guint             qthalt;
-	const gchar      *qthqra;
+     GtkTreeSelection *selection; /* selection in the treeview */
+     GtkTreeModel     *model;     /* the tree model corresponding to the selection */
+     GtkListStore     *liststore; /* the list store corresponding to the model */
+     GtkTreeIter       iter;      /* iter used to add and modify row data */
+     const gchar      *qthname;
+     const gchar      *qthloc;
+     const gchar      *qthdesc;
+     const gchar      *qthwx;
+     gdouble           qthlat;
+     gdouble           qthlon;
+     guint             qthalt;
+     const gchar      *qthqra;
 
 
 
-	/* get values from dialog box */
-	qthname = gtk_entry_get_text (GTK_ENTRY (name));
-	qthloc  = gtk_entry_get_text (GTK_ENTRY (location));
-	qthdesc = gtk_entry_get_text (GTK_ENTRY (desc));
-	qthwx   = gtk_entry_get_text (GTK_ENTRY (wx));
+     /* get values from dialog box */
+     qthname = gtk_entry_get_text (GTK_ENTRY (name));
+     qthloc  = gtk_entry_get_text (GTK_ENTRY (location));
+     qthdesc = gtk_entry_get_text (GTK_ENTRY (desc));
+     qthwx   = gtk_entry_get_text (GTK_ENTRY (wx));
 
-	qthlat  = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat));
-	if (gtk_combo_box_get_active (GTK_COMBO_BOX (ns)))
-		qthlat = -qthlat;
+     qthlat  = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat));
+     if (gtk_combo_box_get_active (GTK_COMBO_BOX (ns)))
+          qthlat = -qthlat;
 
-	qthlon  = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon));
-	if (gtk_combo_box_get_active (GTK_COMBO_BOX (ew)))
-		qthlon = -qthlon;
+     qthlon  = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon));
+     if (gtk_combo_box_get_active (GTK_COMBO_BOX (ew)))
+          qthlon = -qthlon;
 
-	qthalt = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (alt));	
+     qthalt = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (alt));     
 
-	/* get liststore */
-	liststore = GTK_LIST_STORE (gtk_tree_view_get_model (treeview));
+     /* get liststore */
+     liststore = GTK_LIST_STORE (gtk_tree_view_get_model (treeview));
 
-	/* if this is a new entry, insert row into model */
-	if (new == TRUE) {
-		gtk_list_store_append (liststore, &iter);
-	}
-	/* otherwise get current selection */
-	else {
-		selection = gtk_tree_view_get_selection (treeview);
+     /* if this is a new entry, insert row into model */
+     if (new == TRUE) {
+          gtk_list_store_append (liststore, &iter);
+     }
+     /* otherwise get current selection */
+     else {
+          selection = gtk_tree_view_get_selection (treeview);
 
-		if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-			liststore = GTK_LIST_STORE (model);
-		}
-		else {
-			/* no selection; internal error */
-			sat_log_log (SAT_LOG_LEVEL_BUG,
-						 _("%s:%d: Oooops, gpredict encountered an internal error "\
-						   "(no selection in qth list)"),
-						 __FILE__, __LINE__);
+          if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+               liststore = GTK_LIST_STORE (model);
+          }
+          else {
+               /* no selection; internal error */
+               sat_log_log (SAT_LOG_LEVEL_BUG,
+                               _("%s:%d: Oooops, gpredict encountered an internal error "\
+                                 "(no selection in qth list)"),
+                               __FILE__, __LINE__);
 
-			return FALSE;
-		}
-	}
+               return FALSE;
+          }
+     }
 
-	/* update values */
-	gtk_list_store_set (liststore, &iter,
-						QTH_LIST_COL_NAME, qthname,
-						QTH_LIST_COL_LOC, qthloc,
-						QTH_LIST_COL_DESC, qthdesc,
-						QTH_LIST_COL_LAT, qthlat,
-						QTH_LIST_COL_LON, qthlon,
-						QTH_LIST_COL_ALT, qthalt,
-						QTH_LIST_COL_WX, qthwx,
-						-1);
+     /* update values */
+     gtk_list_store_set (liststore, &iter,
+                              QTH_LIST_COL_NAME, qthname,
+                              QTH_LIST_COL_LOC, qthloc,
+                              QTH_LIST_COL_DESC, qthdesc,
+                              QTH_LIST_COL_LAT, qthlat,
+                              QTH_LIST_COL_LON, qthlon,
+                              QTH_LIST_COL_ALT, qthalt,
+                              QTH_LIST_COL_WX, qthwx,
+                              -1);
 
-	qthqra  = gtk_entry_get_text (GTK_ENTRY (qra));
-	gtk_list_store_set (liststore, &iter,
-						QTH_LIST_COL_QRA, qthqra,
-						-1);
+     qthqra  = gtk_entry_get_text (GTK_ENTRY (qra));
+     gtk_list_store_set (liststore, &iter,
+                              QTH_LIST_COL_QRA, qthqra,
+                              -1);
 
-	return TRUE;
+     return TRUE;
 }
 
 
@@ -568,52 +568,52 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
 static void
 name_changed          (GtkWidget *widget, gpointer data)
 {
-	const gchar *text;
-	gchar *entry, *end, *j;
-	gint len, pos;
+     const gchar *text;
+     gchar *entry, *end, *j;
+     gint len, pos;
 
 
-	/* step 1: ensure that only valid characters are entered
-	   (stolen from xlog, tnx pg4i)
-	*/
-	entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
-	if ((len = g_utf8_strlen (entry, -1)) > 0)
-		{
-			end = entry + g_utf8_strlen (entry, -1);
-			for (j = entry; j < end; ++j)
-				{
-					switch (*j)
-						{
-						case '0' ... '9':
-						case 'a' ... 'z':
-						case 'A' ... 'Z':
-						case '-':
-						case '_':
-							break;
-						default:
-							gdk_beep ();
-							pos = gtk_editable_get_position (GTK_EDITABLE (widget));
-							gtk_editable_delete_text (GTK_EDITABLE (widget),
-													  pos, pos+1);
-							break;
-						}
-				}
-		}
+     /* step 1: ensure that only valid characters are entered
+        (stolen from xlog, tnx pg4i)
+     */
+     entry = gtk_editable_get_chars (GTK_EDITABLE (widget), 0, -1);
+     if ((len = g_utf8_strlen (entry, -1)) > 0)
+          {
+               end = entry + g_utf8_strlen (entry, -1);
+               for (j = entry; j < end; ++j)
+                    {
+                         switch (*j)
+                              {
+                              case '0' ... '9':
+                              case 'a' ... 'z':
+                              case 'A' ... 'Z':
+                              case '-':
+                              case '_':
+                                   break;
+                              default:
+                                   gdk_beep ();
+                                   pos = gtk_editable_get_position (GTK_EDITABLE (widget));
+                                   gtk_editable_delete_text (GTK_EDITABLE (widget),
+                                                                   pos, pos+1);
+                                   break;
+                              }
+                    }
+          }
 
 
-	/* step 2: if name seems all right, enable OK button */
-	text = gtk_entry_get_text (GTK_ENTRY (widget));
+     /* step 2: if name seems all right, enable OK button */
+     text = gtk_entry_get_text (GTK_ENTRY (widget));
 
-	if (g_utf8_strlen (text, -1) > 0) {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   TRUE);
-	}
-	else {
-		gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-										   GTK_RESPONSE_OK,
-										   FALSE);
-	}
+     if (g_utf8_strlen (text, -1) > 0) {
+          gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                                     GTK_RESPONSE_OK,
+                                                     TRUE);
+     }
+     else {
+          gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
+                                                     GTK_RESPONSE_OK,
+                                                     FALSE);
+     }
 }
 
 
@@ -626,78 +626,78 @@ name_changed          (GtkWidget *widget, gpointer data)
 static void
 select_location       (GtkWidget *widget, gpointer data)
 {
-	guint    mode = GPOINTER_TO_UINT (data);
-	guint    flags;
-	gchar   *qthloc;
-	gchar   *qthwx;
-	gfloat   qthlat;
-	gfloat   qthlon;
-	guint    qthalt;
-	gboolean selected = FALSE;
+     guint    mode = GPOINTER_TO_UINT (data);
+     guint    flags;
+     gchar   *qthloc;
+     gchar   *qthwx;
+     gfloat   qthlat;
+     gfloat   qthlon;
+     guint    qthalt;
+     gboolean selected = FALSE;
 
 
-	switch (mode) {
+     switch (mode) {
 
-		/* We distinguish only between WX mode and "everything else".
-		   Although a value != 1 or 2 is definitely a bug, we need to
-		   have some sensible fall-back.
-		*/
-	case SELECTION_MODE_WX:
-		flags = TREE_COL_FLAG_NAME | TREE_COL_FLAG_WX;
-		break;
+          /* We distinguish only between WX mode and "everything else".
+             Although a value != 1 or 2 is definitely a bug, we need to
+             have some sensible fall-back.
+          */
+     case SELECTION_MODE_WX:
+          flags = TREE_COL_FLAG_NAME | TREE_COL_FLAG_WX;
+          break;
 
-	default:
-		flags = TREE_COL_FLAG_NAME |
-			TREE_COL_FLAG_LAT  |
-			TREE_COL_FLAG_LON  |
-			TREE_COL_FLAG_ALT  |
-			TREE_COL_FLAG_WX;
+     default:
+          flags = TREE_COL_FLAG_NAME |
+               TREE_COL_FLAG_LAT  |
+               TREE_COL_FLAG_LON  |
+               TREE_COL_FLAG_ALT  |
+               TREE_COL_FLAG_WX;
 
-		mode = SELECTION_MODE_LOC;
-		break;
-	}
+          mode = SELECTION_MODE_LOC;
+          break;
+     }
 
-	selected = loc_tree_create (NULL, flags, &qthloc, &qthlat, &qthlon, &qthalt, &qthwx);
+     selected = loc_tree_create (NULL, flags, &qthloc, &qthlat, &qthlon, &qthalt, &qthwx);
 
-	if (selected) {
-		/* update widgets */
-		switch (mode) {
+     if (selected) {
+          /* update widgets */
+          switch (mode) {
 
-		case SELECTION_MODE_WX:
-			gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
-			break;
+          case SELECTION_MODE_WX:
+               gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
+               break;
 
-		case SELECTION_MODE_LOC:
-			gtk_entry_set_text (GTK_ENTRY (location), qthloc);
-			gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
+          case SELECTION_MODE_LOC:
+               gtk_entry_set_text (GTK_ENTRY (location), qthloc);
+               gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
 
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), (gdouble) fabs (qthlat));
-			if (qthlat < 0.00)
-				gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
-			else
-				gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
+               gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), (gdouble) fabs (qthlat));
+               if (qthlat < 0.00)
+                    gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
+               else
+                    gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
 
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), (gdouble) fabs (qthlon));
-			if (qthlon < 0.00)
-				gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 1);
-			else
-				gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
-			
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), qthalt);
+               gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), (gdouble) fabs (qthlon));
+               if (qthlon < 0.00)
+                    gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 1);
+               else
+                    gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
+               
+               gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), qthalt);
 
-			break;
+               break;
 
-		default:
-			/*** FIXME: add some error reporting */
-			break;
-		}
+          default:
+               /*** FIXME: add some error reporting */
+               break;
+          }
 
-		/* free some memory */
-		g_free (qthloc);
-		g_free (qthwx);
-	}
+          /* free some memory */
+          g_free (qthloc);
+          g_free (qthwx);
+     }
 
-	/* else do nothing; we are finished */
+     /* else do nothing; we are finished */
 }
 
 
@@ -713,56 +713,56 @@ select_location       (GtkWidget *widget, gpointer data)
 static void
 latlon_changed        (GtkWidget *widget, gpointer data)
 {
-	gchar *locator;
-	gint   retcode;
-	gdouble latf,lonf;
+     gchar *locator;
+     gint   retcode;
+     gdouble latf,lonf;
 
-	locator = g_try_malloc (7);
-	
-	/* no need to check locator != NULL, since hamlib func will do it for us
-	   and return RIGEINVAL
-	*/
-	lonf = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon));
-	latf = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat));
+     locator = g_try_malloc (7);
+     
+     /* no need to check locator != NULL, since hamlib func will do it for us
+        and return RIGEINVAL
+     */
+     lonf = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon));
+     latf = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat));
 
-	/* set the correct sign */
-	if (gtk_combo_box_get_active (GTK_COMBO_BOX (ns))) {
-		/* index 1 => South */
-		latf = -latf;
-	}
+     /* set the correct sign */
+     if (gtk_combo_box_get_active (GTK_COMBO_BOX (ns))) {
+          /* index 1 => South */
+          latf = -latf;
+     }
 
-	if (gtk_combo_box_get_active (GTK_COMBO_BOX (ew))) {
-		/* index 1 => Wesr */
-		lonf = -lonf;
-	}
+     if (gtk_combo_box_get_active (GTK_COMBO_BOX (ew))) {
+          /* index 1 => Wesr */
+          lonf = -lonf;
+     }
 
-	retcode = longlat2locator (lonf, latf, locator, 3);
+     retcode = longlat2locator (lonf, latf, locator, 3);
 
-	if (retcode == RIG_OK) {
-		/* debug message */
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s:%s: %.2f %.2f => %s"),
-					 __FILE__, __FUNCTION__,
-					 gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon)),
-					 gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat)),
-					 locator);
+     if (retcode == RIG_OK) {
+          /* debug message */
+          sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                          _("%s:%s: %.2f %.2f => %s"),
+                          __FILE__, __FUNCTION__,
+                          gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon)),
+                          gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat)),
+                          locator);
 
-		g_signal_handler_block (qra, qrasigid);
+          g_signal_handler_block (qra, qrasigid);
 
-		gtk_entry_set_text (GTK_ENTRY (qra), locator);
+          gtk_entry_set_text (GTK_ENTRY (qra), locator);
 
-		g_signal_handler_unblock (qra, qrasigid);
-	}
-	else {
-		/* send an error message and don't update */
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s:%d: Error converting lon/lat to locator"),
-					 __FILE__, __LINE__);
-	}
+          g_signal_handler_unblock (qra, qrasigid);
+     }
+     else {
+          /* send an error message and don't update */
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
+                          _("%s:%d: Error converting lon/lat to locator"),
+                          __FILE__, __LINE__);
+     }
 
 
-	if (locator)
-		g_free (locator);
+     if (locator)
+          g_free (locator);
 }
 
 /** \brief Manage locator changes.
@@ -774,62 +774,62 @@ latlon_changed        (GtkWidget *widget, gpointer data)
 static void
 qra_changed     (GtkEntry *entry, gpointer data)
 {
-	gint retcode;
-	gdouble latf,lonf;
-	gchar *msg;
+     gint retcode;
+     gdouble latf,lonf;
+     gchar *msg;
 
-	retcode = locator2longlat (&lonf, &latf, gtk_entry_get_text (GTK_ENTRY (qra)));
+     retcode = locator2longlat (&lonf, &latf, gtk_entry_get_text (GTK_ENTRY (qra)));
 
-	if (retcode == RIG_OK) {
+     if (retcode == RIG_OK) {
 
-		/* debug message */
-		sat_log_log (SAT_LOG_LEVEL_DEBUG,
-					 _("%s:%s: %s => %.2f %.2f"),
-					 __FILE__, __FUNCTION__,
-					 gtk_entry_get_text (GTK_ENTRY (qra)),
-					 lonf, latf);
+          /* debug message */
+          sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                          _("%s:%s: %s => %.2f %.2f"),
+                          __FILE__, __FUNCTION__,
+                          gtk_entry_get_text (GTK_ENTRY (qra)),
+                          lonf, latf);
 
-		/* block signal emissions for lat/lon widgets */
-		g_signal_handler_block (lat, latsigid);
-		g_signal_handler_block (lon, lonsigid);
-		g_signal_handler_block (ns, nssigid);
-		g_signal_handler_block (ew, ewsigid);
-		g_signal_handler_block (qra, qrasigid);
+          /* block signal emissions for lat/lon widgets */
+          g_signal_handler_block (lat, latsigid);
+          g_signal_handler_block (lon, lonsigid);
+          g_signal_handler_block (ns, nssigid);
+          g_signal_handler_block (ew, ewsigid);
+          g_signal_handler_block (qra, qrasigid);
 
-		/* update widgets */
-		if (latf < 0.00)
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
-		else
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
+          /* update widgets */
+          if (latf < 0.00)
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
+          else
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 0);
 
-		if (lonf < 0.00)
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 1);
-		else
-			gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
+          if (lonf < 0.00)
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 1);
+          else
+               gtk_combo_box_set_active (GTK_COMBO_BOX (ew), 0);
 
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), fabs (latf));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), fabs (lonf));
+          gtk_spin_button_set_value (GTK_SPIN_BUTTON (lat), fabs (latf));
+          gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), fabs (lonf));
 
-		/* make sure text is upper case */
-		msg = g_ascii_strup (gtk_entry_get_text (GTK_ENTRY (qra)), -1);
-		gtk_entry_set_text (GTK_ENTRY (qra), msg);
-		g_free (msg);
+          /* make sure text is upper case */
+          msg = g_ascii_strup (gtk_entry_get_text (GTK_ENTRY (qra)), -1);
+          gtk_entry_set_text (GTK_ENTRY (qra), msg);
+          g_free (msg);
 
-		/* unblock signal emissions */
-		g_signal_handler_unblock (lat, latsigid);
-		g_signal_handler_unblock (lon, lonsigid);
-		g_signal_handler_unblock (ns, nssigid);
-		g_signal_handler_unblock (ew, ewsigid);
-		g_signal_handler_unblock (qra, qrasigid);
+          /* unblock signal emissions */
+          g_signal_handler_unblock (lat, latsigid);
+          g_signal_handler_unblock (lon, lonsigid);
+          g_signal_handler_unblock (ns, nssigid);
+          g_signal_handler_unblock (ew, ewsigid);
+          g_signal_handler_unblock (qra, qrasigid);
 
-	}
-	else {
-		/* send an error message and don't update */
-		sat_log_log (SAT_LOG_LEVEL_ERROR,
-					 _("%s:%d: Invalid locator: %s"),
-					 __FILE__, __LINE__,
-					 gtk_entry_get_text (GTK_ENTRY (qra)));
-	}
+     }
+     else {
+          /* send an error message and don't update */
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
+                          _("%s:%d: Invalid locator: %s"),
+                          __FILE__, __LINE__,
+                          gtk_entry_get_text (GTK_ENTRY (qra)));
+     }
 
 }
 

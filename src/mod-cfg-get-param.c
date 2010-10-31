@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -57,107 +57,107 @@
 gboolean
 mod_cfg_get_bool (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_bool_e p)
 {
-	GError  *error = NULL;
-	gboolean param;
+     GError  *error = NULL;
+     gboolean param;
 
-	/* check whether parameter is present in GKeyFile */
-	if (g_key_file_has_key (f, sec, key, NULL)) {
+     /* check whether parameter is present in GKeyFile */
+     if (g_key_file_has_key (f, sec, key, NULL)) {
 
-		param = g_key_file_get_boolean (f, sec, key, &error);
+          param = g_key_file_get_boolean (f, sec, key, &error);
 
-		if (error != NULL) {
+          if (error != NULL) {
 
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-				     _("%s: Failed to read boolean (%s)"),
-				     __FUNCTION__, error->message);
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to read boolean (%s)"),
+                         __FUNCTION__, error->message);
 
-			g_clear_error (&error);
+               g_clear_error (&error);
 
-			/* get a timeout from global config */
-			param = sat_cfg_get_bool (p);
-		}
-	}
-	/* get value from sat-cfg */
-	else {
-		param = sat_cfg_get_bool (p);
+               /* get a timeout from global config */
+               param = sat_cfg_get_bool (p);
+          }
+     }
+     /* get value from sat-cfg */
+     else {
+          param = sat_cfg_get_bool (p);
 
-/* 		sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-/* 			     _("%s: Boolean value not found, using default (%d)"), */
-/* 			     __FUNCTION__, param); */
-	}
+/*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+/*                     _("%s: Boolean value not found, using default (%d)"), */
+/*                     __FUNCTION__, param); */
+     }
 
-	return param;
+     return param;
 }
 
 
 gint
 mod_cfg_get_int  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_int_e p)
 {
-	GError  *error = NULL;
-	gint     param;
+     GError  *error = NULL;
+     gint     param;
 
-	/* check whether parameter is present in GKeyFile */
-	if (g_key_file_has_key (f, sec, key, NULL)) {
+     /* check whether parameter is present in GKeyFile */
+     if (g_key_file_has_key (f, sec, key, NULL)) {
 
-		param = g_key_file_get_integer (f, sec, key, &error);
+          param = g_key_file_get_integer (f, sec, key, &error);
 
-		if (error != NULL) {
+          if (error != NULL) {
 
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-				     _("%s: Failed to read integer (%s)"),
-				     __FUNCTION__, error->message);
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to read integer (%s)"),
+                         __FUNCTION__, error->message);
 
-			g_clear_error (&error);
+               g_clear_error (&error);
 
-			/* get a timeout from global config */
-			param = sat_cfg_get_int (p);
-		}
-	}
-	/* get value from sat-cfg */
-	else {
-		param = sat_cfg_get_int (p);
+               /* get a timeout from global config */
+               param = sat_cfg_get_int (p);
+          }
+     }
+     /* get value from sat-cfg */
+     else {
+          param = sat_cfg_get_int (p);
 
-/* 		sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-/* 			     _("%s: Integer value not found, using default (%d)"), */
-/* 			     __FUNCTION__, param); */
-	}
+/*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+/*                     _("%s: Integer value not found, using default (%d)"), */
+/*                     __FUNCTION__, param); */
+     }
 
-	return param;
+     return param;
 }
 
 
 gchar   *
 mod_cfg_get_str  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_str_e p)
 {
-	GError  *error = NULL;
-	gchar   *param;
+     GError  *error = NULL;
+     gchar   *param;
 
-	/* check whether parameter is present in GKeyFile */
-	if (g_key_file_has_key (f, sec, key, NULL)) {
+     /* check whether parameter is present in GKeyFile */
+     if (g_key_file_has_key (f, sec, key, NULL)) {
 
-		param = g_key_file_get_string (f, sec, key, &error);
+          param = g_key_file_get_string (f, sec, key, &error);
 
-		if (error != NULL) {
+          if (error != NULL) {
 
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-				     _("%s: Failed to read string (%s)"),
-				     __FUNCTION__, error->message);
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Failed to read string (%s)"),
+                         __FUNCTION__, error->message);
 
-			g_clear_error (&error);
+               g_clear_error (&error);
 
-			/* get a timeout from global config */
-			param = sat_cfg_get_str (p);
-		}
-	}
-	/* get value from sat-cfg */
-	else {
-		param = sat_cfg_get_str (p);
+               /* get a timeout from global config */
+               param = sat_cfg_get_str (p);
+          }
+     }
+     /* get value from sat-cfg */
+     else {
+          param = sat_cfg_get_str (p);
 
-/* 		sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-/* 			     _("%s: String not found, using default (%s)"), */
-/* 			     __FUNCTION__, param); */
-	}
+/*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
+/*                     _("%s: String not found, using default (%s)"), */
+/*                     __FUNCTION__, param); */
+     }
 
-	return param;
+     return param;
 
 }

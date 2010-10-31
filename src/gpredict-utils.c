@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -51,28 +51,28 @@ static void set_combo_tooltip (GtkWidget *combo, gpointer text);
 GtkWidget *
 gpredict_hpixmap_button (const gchar *file, const gchar *text, const gchar *tooltip)
 {
-	GtkWidget *button;
-	GtkWidget *image;
-	GtkWidget *box;
-	gchar     *path;
-	GtkTooltips *tips;
+     GtkWidget *button;
+     GtkWidget *image;
+     GtkWidget *box;
+     gchar     *path;
+     GtkTooltips *tips;
 
-	path = icon_file_name (file);
-	image = gtk_image_new_from_file (path);
-	g_free (path);
-	box = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (box), image, TRUE, TRUE, 0);
-	if (text != NULL)
-		gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
+     path = icon_file_name (file);
+     image = gtk_image_new_from_file (path);
+     g_free (path);
+     box = gtk_hbox_new (FALSE, 0);
+     gtk_box_pack_start (GTK_BOX (box), image, TRUE, TRUE, 0);
+     if (text != NULL)
+          gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
 
-	button = gtk_button_new ();
-	gtk_container_add (GTK_CONTAINER (button), box);
+     button = gtk_button_new ();
+     gtk_container_add (GTK_CONTAINER (button), box);
 
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, button, tooltip, NULL);
+     tips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
 
 
-	return button;
+     return button;
 }
 
 
@@ -86,28 +86,28 @@ gpredict_hpixmap_button (const gchar *file, const gchar *text, const gchar *tool
 GtkWidget *
 gpredict_vpixmap_button (const gchar *file, const gchar *text, const gchar *tooltip)
 {
-	GtkWidget *button;
-	GtkWidget *image;
-	GtkWidget *box;
-	gchar     *path;
-	GtkTooltips *tips;
+     GtkWidget *button;
+     GtkWidget *image;
+     GtkWidget *box;
+     gchar     *path;
+     GtkTooltips *tips;
 
-	path = icon_file_name (file);
-	image = gtk_image_new_from_file (path);
-	g_free (path);
-	box = gtk_vbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (box), image, TRUE, TRUE, 0);
-	if (text != NULL)
-		gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
+     path = icon_file_name (file);
+     image = gtk_image_new_from_file (path);
+     g_free (path);
+     box = gtk_vbox_new (FALSE, 0);
+     gtk_box_pack_start (GTK_BOX (box), image, TRUE, TRUE, 0);
+     if (text != NULL)
+          gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
 
-	button = gtk_button_new ();
-	gtk_container_add (GTK_CONTAINER (button), box);
+     button = gtk_button_new ();
+     gtk_container_add (GTK_CONTAINER (button), box);
 
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, button, tooltip, NULL);
+     tips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
 
 
-	return button;
+     return button;
 }
 
 
@@ -119,26 +119,26 @@ gpredict_vpixmap_button (const gchar *file, const gchar *text, const gchar *tool
 GtkWidget *
 gpredict_hstock_button (const gchar *stock_id, const gchar *text, const gchar *tooltip)
 {
-	GtkWidget *button;
-	GtkWidget *image;
-	GtkWidget *box;
-	GtkTooltips *tips;
-	
+     GtkWidget *button;
+     GtkWidget *image;
+     GtkWidget *box;
+     GtkTooltips *tips;
+     
 
-	image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-	box = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (box), image, TRUE, TRUE, 0);
-	if (text != NULL)
-		gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
+     image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+     box = gtk_hbox_new (FALSE, 0);
+     gtk_box_pack_start (GTK_BOX (box), image, TRUE, TRUE, 0);
+     if (text != NULL)
+          gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
 
-	button = gtk_button_new ();
-	gtk_container_add (GTK_CONTAINER (button), box);
+     button = gtk_button_new ();
+     gtk_container_add (GTK_CONTAINER (button), box);
 
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, button, tooltip, NULL);
+     tips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
 
 
-	return button;
+     return button;
 }
 
 
@@ -164,12 +164,12 @@ void
 gpredict_set_combo_tooltips (GtkWidget *combo, gpointer text)
 {
 
-	/* for each child in the container call the internal
-	   function which actually creates the tooltips.
-	*/
-	gtk_container_forall (GTK_CONTAINER (combo),
-						  set_combo_tooltip,
-						  text);
+     /* for each child in the container call the internal
+        function which actually creates the tooltips.
+     */
+     gtk_container_forall (GTK_CONTAINER (combo),
+                                set_combo_tooltip,
+                                text);
 
 }
 
@@ -185,17 +185,17 @@ static void
 set_combo_tooltip (GtkWidget *combo, gpointer text)
 {
 
-	/* if current child is a button we have BINGO! */
-	if (GTK_IS_BUTTON (combo)) {
+     /* if current child is a button we have BINGO! */
+     if (GTK_IS_BUTTON (combo)) {
 
-		GtkTooltips *tips;
+          GtkTooltips *tips;
 
-		tips = gtk_tooltips_new ();
+          tips = gtk_tooltips_new ();
 
-		gtk_tooltips_set_tip (tips, combo,
-							  (gchar *) text,
-							  NULL);
-	}
+          gtk_tooltips_set_tip (tips, combo,
+                                     (gchar *) text,
+                                     NULL);
+     }
 
 }
 
@@ -207,44 +207,44 @@ set_combo_tooltip (GtkWidget *combo, gpointer text)
 gint
 gpredict_file_copy (const gchar *in, const gchar *out)
 {
-	gchar    *contents;
-	gboolean  status=0;
-	GError   *err=NULL;
-	gsize     ulen;
-	gssize    slen;
+     gchar    *contents;
+     gboolean  status=0;
+     GError   *err=NULL;
+     gsize     ulen;
+     gssize    slen;
 
 
-	g_return_val_if_fail (in != NULL, 1);
-	g_return_val_if_fail (out != NULL, 1);
+     g_return_val_if_fail (in != NULL, 1);
+     g_return_val_if_fail (out != NULL, 1);
 
 
-	/* read source file */
-	if (!g_file_get_contents (in, &contents, &ulen, &err)) {
+     /* read source file */
+     if (!g_file_get_contents (in, &contents, &ulen, &err)) {
 
-		sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __FUNCTION__, err->message);
-		g_clear_error (&err);
+          sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __FUNCTION__, err->message);
+          g_clear_error (&err);
 
-		status = 1;
-	}
-	else {
+          status = 1;
+     }
+     else {
 
-		/* write contents to new file */
-		slen = (gssize) ulen;
+          /* write contents to new file */
+          slen = (gssize) ulen;
 
-		if (!g_file_set_contents (out, contents, slen, &err)) {
+          if (!g_file_set_contents (out, contents, slen, &err)) {
 
-			sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __FUNCTION__, err->message);
-			g_clear_error (&err);
+               sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __FUNCTION__, err->message);
+               g_clear_error (&err);
 
-			status = 1;
+               status = 1;
 
-		}
+          }
 
-		g_free (contents);
-	}
+          g_free (contents);
+     }
 
 
-	return status;
+     return status;
 }
 
 
@@ -256,24 +256,24 @@ gpredict_file_copy (const gchar *in, const gchar *out)
 GtkWidget *
 gpredict_mini_mod_button (const gchar *pixmapfile, const gchar *tooltip)
 {
-	GtkWidget *button;
-	GtkWidget *image;
-	gchar     *path;
-	GtkTooltips *tips;
+     GtkWidget *button;
+     GtkWidget *image;
+     gchar     *path;
+     GtkTooltips *tips;
 
-	path = icon_file_name (pixmapfile);
-	image = gtk_image_new_from_file (path);
-	g_free (path);
+     path = icon_file_name (pixmapfile);
+     image = gtk_image_new_from_file (path);
+     g_free (path);
 
-	button = gtk_button_new ();
-	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-	gtk_container_add (GTK_CONTAINER (button), image);
+     button = gtk_button_new ();
+     gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+     gtk_container_add (GTK_CONTAINER (button), image);
 
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, button, tooltip, NULL);
+     tips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
 
 
-	return button;
+     return button;
 }
 
 
@@ -284,33 +284,33 @@ gpredict_mini_mod_button (const gchar *pixmapfile, const gchar *tooltip)
 void
 rgb2gdk  (guint rgb, GdkColor *color)
 {
-	guint16 r,g,b;
-	guint tmp;
+     guint16 r,g,b;
+     guint tmp;
 
-	/* sanity checks */
-	if (color == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with color = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
+     /* sanity checks */
+     if (color == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with color = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
 
-	/* red */
-	tmp = rgb & 0xFF0000;
-	r = (guint16) (tmp >> 16);
+     /* red */
+     tmp = rgb & 0xFF0000;
+     r = (guint16) (tmp >> 16);
 
-	/* green */
-	tmp = rgb & 0x00FF00;
-	g = (guint16) (tmp >> 8);
+     /* green */
+     tmp = rgb & 0x00FF00;
+     g = (guint16) (tmp >> 8);
 
-	/* blue */
-	tmp = rgb & 0x0000FF;
-	b = (guint16) tmp;
+     /* blue */
+     tmp = rgb & 0x0000FF;
+     b = (guint16) tmp;
 
-	/* store colours */
-	color->red   = 257 * r;
-	color->green = 257 * g;
-	color->blue  = 257 * b;
+     /* store colours */
+     color->red   = 257 * r;
+     color->green = 257 * g;
+     color->blue  = 257 * b;
 }
 
 
@@ -322,43 +322,43 @@ rgb2gdk  (guint rgb, GdkColor *color)
 void
 rgba2gdk (guint rgba, GdkColor *color, guint16 *alpha)
 {
-	guint16 r,g,b;
-	guint tmp;
+     guint16 r,g,b;
+     guint tmp;
 
 
-	/* sanity checks */
-	if (color == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with color = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
-	if (alpha == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with alpha = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
+     /* sanity checks */
+     if (color == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with color = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
+     if (alpha == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with alpha = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
 
-	/* red */
-	tmp = rgba & 0xFF000000;
-	r = (guint16) (tmp >> 24);
+     /* red */
+     tmp = rgba & 0xFF000000;
+     r = (guint16) (tmp >> 24);
 
-	/* green */
-	tmp = rgba & 0x00FF0000;
-	g = (guint16) (tmp >> 16);
+     /* green */
+     tmp = rgba & 0x00FF0000;
+     g = (guint16) (tmp >> 16);
 
-	/* blue */
-	tmp = rgba & 0x0000FF00;
-	b = (guint16) (tmp >> 8);
+     /* blue */
+     tmp = rgba & 0x0000FF00;
+     b = (guint16) (tmp >> 8);
 
-	/* alpha channel */
-	*alpha = (guint16) (257 * (rgba & 0x000000FF));
+     /* alpha channel */
+     *alpha = (guint16) (257 * (rgba & 0x000000FF));
 
-	/* store colours */
-	color->red   = 257 * r;
-	color->green = 257 * g;
-	color->blue  = 257 * b;
+     /* store colours */
+     color->red   = 257 * r;
+     color->green = 257 * g;
+     color->blue  = 257 * b;
 }
 
 
@@ -369,37 +369,37 @@ rgba2gdk (guint rgba, GdkColor *color, guint16 *alpha)
 void
 gdk2rgb  (const GdkColor *color, guint *rgb)
 {
-	guint r,g,b;
-	guint16 tmp;
+     guint r,g,b;
+     guint16 tmp;
 
 
-	/* sanity checks */
-	if (color == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with color = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
-	if (rgb == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with rgb = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
+     /* sanity checks */
+     if (color == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with color = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
+     if (rgb == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with rgb = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
 
-	/* red */
-	tmp = color->red / 257;
-	r = (guint) (tmp << 16);
+     /* red */
+     tmp = color->red / 257;
+     r = (guint) (tmp << 16);
 
-	/* green */
-	tmp = color->green / 257;
-	g = (guint) (tmp << 8);
+     /* green */
+     tmp = color->green / 257;
+     g = (guint) (tmp << 8);
 
-	/* blue */
-	tmp = color->blue / 257;
-	b = (guint) tmp;
+     /* blue */
+     tmp = color->blue / 257;
+     b = (guint) tmp;
 
-	*rgb = (r | g | b);
+     *rgb = (r | g | b);
 }
 
 
@@ -411,41 +411,41 @@ gdk2rgb  (const GdkColor *color, guint *rgb)
 void
 gdk2rgba (const GdkColor *color, guint16 alpha, guint *rgba)
 {
-	guint r,g,b,a;
-	guint16 tmp;
+     guint r,g,b,a;
+     guint16 tmp;
 
 
-	/* sanity checks */
-	if (color == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with color = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
-	if (rgba == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%s: %s called with rgba = NULL"),
-					 __FILE__, __LINE__, __FUNCTION__);
-		return;
-	}
+     /* sanity checks */
+     if (color == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with color = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
+     if (rgba == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%s: %s called with rgba = NULL"),
+                          __FILE__, __LINE__, __FUNCTION__);
+          return;
+     }
 
-	/* red */
-	tmp = color->red / 257;
-	r = (guint) (tmp << 24);
+     /* red */
+     tmp = color->red / 257;
+     r = (guint) (tmp << 24);
 
-	/* green */
-	tmp = color->green / 257;
-	g = (guint) (tmp << 16);
+     /* green */
+     tmp = color->green / 257;
+     g = (guint) (tmp << 16);
 
-	/* blue */
-	tmp = color->blue / 257;
-	b = (guint) (tmp << 8);
+     /* blue */
+     tmp = color->blue / 257;
+     b = (guint) (tmp << 8);
 
-	/* alpha */
-	tmp = alpha / 257;
-	a = (guint) tmp;
+     /* alpha */
+     tmp = alpha / 257;
+     a = (guint) tmp;
 
-	*rgba = (r | g | b | a);
+     *rgba = (r | g | b | a);
 }
 
 
@@ -456,24 +456,24 @@ gdk2rgba (const GdkColor *color, guint16 alpha, guint *rgba)
 gchar *
 rgba2html (guint rgba)
 {
-	gchar *col;
-	guint8 r,g,b;
-	guint16 tmp;
+     gchar *col;
+     guint8 r,g,b;
+     guint16 tmp;
 
 
-	tmp = rgba & 0xFF000000;
-	r = (guint8) (tmp >> 24);
+     tmp = rgba & 0xFF000000;
+     r = (guint8) (tmp >> 24);
 
-	/* green */
-	tmp = rgba & 0x00FF0000;
-	g = (guint8) (tmp >> 16);
+     /* green */
+     tmp = rgba & 0x00FF0000;
+     g = (guint8) (tmp >> 16);
 
-	/* blue */
-	tmp = rgba & 0x0000FF00;
-	b = (guint8) (tmp >> 8);
+     /* blue */
+     tmp = rgba & 0x0000FF00;
+     b = (guint8) (tmp >> 8);
 
-	col = g_strdup_printf ("%X%X%X",r,g,b);
+     col = g_strdup_printf ("%X%X%X",r,g,b);
 
-	return col;
+     return col;
 }
 

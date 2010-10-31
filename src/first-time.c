@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -626,7 +626,7 @@ first_time_check_step_05 (guint *error)
                     }
                     g_free (source);
                 }
-				g_free (catfilename);
+                    g_free (catfilename);
             }
         }
         g_dir_close (srcdir);
@@ -885,10 +885,10 @@ static void first_time_check_step_09 (guint *error)
             }
             g_dir_close (dir);
         } else {
-			sat_log_log (SAT_LOG_LEVEL_ERROR,
-						 _("%s: %s directory does not exist. Incomplete installation."),
-						 __FUNCTION__, datadirname);
-		}
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
+                               _("%s: %s directory does not exist. Incomplete installation."),
+                               __FUNCTION__, datadirname);
+          }
         g_free (datadirname);
     }
     g_free (targetdirname);

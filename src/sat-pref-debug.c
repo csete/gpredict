@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -59,99 +59,99 @@ static void reset_cb        (GtkWidget *button, gpointer data);
  */
 GtkWidget *sat_pref_debug_create ()
 {
-	GtkWidget   *vbox;    /* vbox containing the list part and the details part */
-	GtkWidget   *hbox;
-	GtkWidget   *rbut;
-	GtkTooltips *tips;
-	GtkWidget   *label;
-	GtkWidget   *butbox;
-	gchar       *msg;
+     GtkWidget   *vbox;    /* vbox containing the list part and the details part */
+     GtkWidget   *hbox;
+     GtkWidget   *rbut;
+     GtkTooltips *tips;
+     GtkWidget   *label;
+     GtkWidget   *butbox;
+     gchar       *msg;
     gchar       *confdir;
 
 
-	vbox = gtk_vbox_new (FALSE, 10);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
-	gtk_box_set_spacing (GTK_BOX (vbox), 10);
+     vbox = gtk_vbox_new (FALSE, 10);
+     gtk_container_set_border_width (GTK_CONTAINER (vbox), 20);
+     gtk_box_set_spacing (GTK_BOX (vbox), 10);
 
 
-	/* debug level */
-	hbox = gtk_hbox_new (FALSE, 10);
+     /* debug level */
+     hbox = gtk_hbox_new (FALSE, 10);
 
-	label = gtk_label_new (_("Debug level:"));
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+     label = gtk_label_new (_("Debug level:"));
+     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-	level = gtk_combo_box_new_text ();
-	gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 0: None"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 1: Bug"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 2: Error"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 3: Warning"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 4: Info"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 5: Trace"));
-	gtk_combo_box_set_active (GTK_COMBO_BOX (level),
-							  sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
-	g_signal_connect (G_OBJECT (level), "realize",
-					  G_CALLBACK (gpredict_set_combo_tooltips),
-					  _("Select the debug level. The higher the level, the more "
-						"messages will be logged (so be careful with eLevel 5)."));
-	g_signal_connect (G_OBJECT (level), "changed",
-					  G_CALLBACK (state_change_cb), NULL);
+     level = gtk_combo_box_new_text ();
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 0: None"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 1: Bug"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 2: Error"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 3: Warning"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 4: Info"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 5: Trace"));
+     gtk_combo_box_set_active (GTK_COMBO_BOX (level),
+                                     sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
+     g_signal_connect (G_OBJECT (level), "realize",
+                           G_CALLBACK (gpredict_set_combo_tooltips),
+                           _("Select the debug level. The higher the level, the more "
+                              "messages will be logged (so be careful with eLevel 5)."));
+     g_signal_connect (G_OBJECT (level), "changed",
+                           G_CALLBACK (state_change_cb), NULL);
 
-	gtk_box_pack_start (GTK_BOX (hbox), level, FALSE, FALSE, 10);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+     gtk_box_pack_start (GTK_BOX (hbox), level, FALSE, FALSE, 10);
+     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
-	/* clean frequency */
-	hbox = gtk_hbox_new (FALSE, 10);
+     /* clean frequency */
+     hbox = gtk_hbox_new (FALSE, 10);
 
-	label = gtk_label_new (_("Delete log files older than:"));
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+     label = gtk_label_new (_("Delete log files older than:"));
+     gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-	age = gtk_combo_box_new_text ();
-	gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("Always delete"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("1 day"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("1 week"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("1 month"));
-	select_age ();
-	g_signal_connect (G_OBJECT (age), "realize",
-					  G_CALLBACK (gpredict_set_combo_tooltips),
-					  _("Select how often gpredict should delete old log files."));
-	g_signal_connect (G_OBJECT (age), "changed",
-					  G_CALLBACK (state_change_cb), NULL);
-	gtk_box_pack_start (GTK_BOX (hbox), age, FALSE, FALSE, 10);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+     age = gtk_combo_box_new_text ();
+     gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("Always delete"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("1 day"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("1 week"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (age), _("1 month"));
+     select_age ();
+     g_signal_connect (G_OBJECT (age), "realize",
+                           G_CALLBACK (gpredict_set_combo_tooltips),
+                           _("Select how often gpredict should delete old log files."));
+     g_signal_connect (G_OBJECT (age), "changed",
+                           G_CALLBACK (state_change_cb), NULL);
+     gtk_box_pack_start (GTK_BOX (hbox), age, FALSE, FALSE, 10);
+     gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
-	/* separator */
-	gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
+     /* separator */
+     gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
-	/* info label */
+     /* info label */
     confdir = get_user_conf_dir ();
-	msg = g_strdup_printf (_("Gpredict stores all run-time messages "
+     msg = g_strdup_printf (_("Gpredict stores all run-time messages "
                              "in the %s%slogs%s folder. The "
-							 "current log file is called gpredict.log and the "
-							 "file is always kept until the next execution so "
-							 "that you can examine it in case of a failure. "
-							 "If old log files are kept, they are called "
-							 "gpredict-XYZ.log where XYZ is a uniques timestamp."),
+                                    "current log file is called gpredict.log and the "
+                                    "file is always kept until the next execution so "
+                                    "that you can examine it in case of a failure. "
+                                    "If old log files are kept, they are called "
+                                    "gpredict-XYZ.log where XYZ is a uniques timestamp."),
                            confdir, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
-	label = gtk_label_new (msg);
-	gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	g_free (msg);
+     label = gtk_label_new (msg);
+     gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+     gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+     g_free (msg);
 
-	/* reset button */
-	rbut = gtk_button_new_with_label (_("Reset"));
-	tips = gtk_tooltips_new ();
-	gtk_tooltips_set_tip (tips, rbut,
-						  _("Reset settings to the default values."),
-						  NULL);
-	g_signal_connect (G_OBJECT (rbut), "clicked",
-					  G_CALLBACK (reset_cb), NULL);
-	butbox = gtk_hbutton_box_new ();
-	gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
-	gtk_box_pack_end (GTK_BOX (butbox), rbut, FALSE, TRUE, 10);
+     /* reset button */
+     rbut = gtk_button_new_with_label (_("Reset"));
+     tips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tips, rbut,
+                                _("Reset settings to the default values."),
+                                NULL);
+     g_signal_connect (G_OBJECT (rbut), "clicked",
+                           G_CALLBACK (reset_cb), NULL);
+     butbox = gtk_hbutton_box_new ();
+     gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
+     gtk_box_pack_end (GTK_BOX (butbox), rbut, FALSE, TRUE, 10);
 
-	gtk_box_pack_end (GTK_BOX (vbox), butbox, FALSE, TRUE, 0);
+     gtk_box_pack_end (GTK_BOX (vbox), butbox, FALSE, TRUE, 0);
 
-	return vbox;
+     return vbox;
 }
 
 
@@ -159,25 +159,25 @@ GtkWidget *sat_pref_debug_create ()
 static void 
 select_age (void)
 {
-	gint num = sat_cfg_get_int (SAT_CFG_INT_LOG_CLEAN_AGE);
+     gint num = sat_cfg_get_int (SAT_CFG_INT_LOG_CLEAN_AGE);
 
-	switch (num) {
+     switch (num) {
 
-	case SEC_PER_DAY:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 1);
-		break;
+     case SEC_PER_DAY:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 1);
+          break;
 
-	case SEC_PER_WEEK:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 2);
-		break;
+     case SEC_PER_WEEK:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 2);
+          break;
 
-	case SEC_PER_MONTH:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 3);
-		break;
+     case SEC_PER_MONTH:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 3);
+          break;
 
-	default:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 0);
-	}
+     default:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 0);
+     }
 
 }
 
@@ -194,47 +194,47 @@ sat_pref_debug_cancel ()
 void
 sat_pref_debug_ok     ()
 {
-	gint num = gtk_combo_box_get_active (GTK_COMBO_BOX (age));
+     gint num = gtk_combo_box_get_active (GTK_COMBO_BOX (age));
 
-	if (dirty) {
-		/* store new values */
-		sat_cfg_set_int (SAT_CFG_INT_LOG_LEVEL,
-						 gtk_combo_box_get_active (GTK_COMBO_BOX (level)));
+     if (dirty) {
+          /* store new values */
+          sat_cfg_set_int (SAT_CFG_INT_LOG_LEVEL,
+                               gtk_combo_box_get_active (GTK_COMBO_BOX (level)));
 
-		switch (num) {
+          switch (num) {
 
-		case 1:
-			sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, SEC_PER_DAY);
-			break;
+          case 1:
+               sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, SEC_PER_DAY);
+               break;
 
-		case 2:
-			sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, SEC_PER_WEEK);
-			break;
+          case 2:
+               sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, SEC_PER_WEEK);
+               break;
 
-		case 3:
-			sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, SEC_PER_MONTH);
-			break;
+          case 3:
+               sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, SEC_PER_MONTH);
+               break;
 
-		default:
-			sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, 0);
-		}
-	}
+          default:
+               sat_cfg_set_int (SAT_CFG_INT_LOG_CLEAN_AGE, 0);
+          }
+     }
 
-	else if (reset) {
-		/* reset values */
-		sat_cfg_reset_int (SAT_CFG_INT_LOG_LEVEL);
-		sat_cfg_reset_int (SAT_CFG_INT_LOG_CLEAN_AGE);
-	}
+     else if (reset) {
+          /* reset values */
+          sat_cfg_reset_int (SAT_CFG_INT_LOG_LEVEL);
+          sat_cfg_reset_int (SAT_CFG_INT_LOG_CLEAN_AGE);
+     }
 
-	dirty = FALSE;
-	reset = FALSE;
+     dirty = FALSE;
+     reset = FALSE;
 }
 
 
 static void
 state_change_cb (GtkWidget *widget, gpointer data)
 {
-	dirty = TRUE;
+     dirty = TRUE;
 }
 
 
@@ -242,29 +242,29 @@ state_change_cb (GtkWidget *widget, gpointer data)
 static void
 reset_cb               (GtkWidget *button, gpointer data)
 {
-	gint num = sat_cfg_get_int_def (SAT_CFG_INT_LOG_CLEAN_AGE);
+     gint num = sat_cfg_get_int_def (SAT_CFG_INT_LOG_CLEAN_AGE);
 
-	switch (num) {
+     switch (num) {
 
-	case SEC_PER_DAY:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 1);
-		break;
+     case SEC_PER_DAY:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 1);
+          break;
 
-	case SEC_PER_WEEK:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 2);
-		break;
+     case SEC_PER_WEEK:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 2);
+          break;
 
-	case SEC_PER_MONTH:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 3);
-		break;
+     case SEC_PER_MONTH:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 3);
+          break;
 
-	default:
-		gtk_combo_box_set_active (GTK_COMBO_BOX (age), 0);
-	}
+     default:
+          gtk_combo_box_set_active (GTK_COMBO_BOX (age), 0);
+     }
 
-	gtk_combo_box_set_active (GTK_COMBO_BOX (level),
-							  sat_cfg_get_int_def (SAT_CFG_INT_LOG_LEVEL));
+     gtk_combo_box_set_active (GTK_COMBO_BOX (level),
+                                     sat_cfg_get_int_def (SAT_CFG_INT_LOG_LEVEL));
 
-	reset = TRUE;
-	dirty = FALSE;
+     reset = TRUE;
+     dirty = FALSE;
 }

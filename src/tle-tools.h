@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -34,14 +34,14 @@
 
 
 enum {
-	TLE_CONV_SUCCESS = 0,
-	TLE_CONV_ERROR
+     TLE_CONV_SUCCESS = 0,
+     TLE_CONV_ERROR
 };
 
 
 
 gint twoline2tle (gchar *line1, gchar *line2, gchar *line3,
-				  gboolean checksum, tle_t *tle);
+                      gboolean checksum, tle_t *tle);
 
 gint tle2twoline (tle_t *tle, gchar *line1, gchar *line2, gchar *line3);
 

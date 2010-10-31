@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -810,8 +810,8 @@ select_module        ()
     GtkTreeIter        item;       /* new item added to the list store */
     GtkTreeSelection  *selection;
     GtkTreeModel      *selmod;
-	GtkTreeModel      *listtreemodel;
-	GtkWidget         *swin;
+     GtkTreeModel      *listtreemodel;
+     GtkWidget         *swin;
     GDir              *dir = NULL;   /* directory handle */
     GError            *error = NULL; /* error flag and info */
     gchar             *dirname;      /* directory name */
@@ -881,15 +881,15 @@ select_module        ()
 
     /* create tree view */
     modlist = gtk_tree_view_new ();
-	listtreemodel=GTK_TREE_MODEL (liststore);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (modlist), listtreemodel);
+     listtreemodel=GTK_TREE_MODEL (liststore);
+     gtk_tree_view_set_model (GTK_TREE_VIEW (modlist), listtreemodel);
     g_object_unref (liststore);
 
-	swin = gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
+     swin = gtk_scrolled_window_new(NULL,NULL);
+     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-	/* sort the tree by name */
+     /* sort the tree by name */
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (listtreemodel),
                                      0,
                                      compare_func,
@@ -922,7 +922,7 @@ select_module        ()
                                           NULL);
 
     gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 200);
-	gtk_container_add (GTK_CONTAINER (swin), modlist);
+     gtk_container_add (GTK_CONTAINER (swin), modlist);
     gtk_widget_show (swin);
     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), swin);
 

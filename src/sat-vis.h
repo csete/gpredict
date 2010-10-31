@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -38,11 +38,11 @@
 
 /** \brief Satellite visibility. */
 typedef enum {
-	SAT_VIS_NONE = 0,     /*!< Unknown/undefined. */
-	SAT_VIS_VISIBLE,      /*!< Visible. */
-	SAT_VIS_DAYLIGHT,     /*!< Satellite is in daylight. */
-	SAT_VIS_ECLIPSED,     /*!< Satellite is eclipsed. */
-	SAT_VIS_NUM
+     SAT_VIS_NONE = 0,     /*!< Unknown/undefined. */
+     SAT_VIS_VISIBLE,      /*!< Visible. */
+     SAT_VIS_DAYLIGHT,     /*!< Satellite is in daylight. */
+     SAT_VIS_ECLIPSED,     /*!< Satellite is eclipsed. */
+     SAT_VIS_NUM
 } sat_vis_t;
 
 

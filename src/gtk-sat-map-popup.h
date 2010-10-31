@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -35,8 +35,8 @@
 
 
 void gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
-							 GtkSatMap *satmap,
-							 GdkEventButton *event,
-							 GtkWidget *toplevel);
+                                    GtkSatMap *satmap,
+                                    GdkEventButton *event,
+                                    GtkWidget *toplevel);
 
 #endif

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -63,48 +63,48 @@ static GtkHBoxClass *parent_class = NULL;
 GType
 gtk_rot_knob_get_type ()
 {
-	static GType gtk_rot_knob_type = 0;
+     static GType gtk_rot_knob_type = 0;
 
-	if (!gtk_rot_knob_type) {
+     if (!gtk_rot_knob_type) {
 
-		static const GTypeInfo gtk_rot_knob_info = {
-			sizeof (GtkRotKnobClass),
-			NULL,  /* base_init */
-			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_rot_knob_class_init,
-			NULL,  /* class_finalize */
-			NULL,  /* class_data */
-			sizeof (GtkRotKnob),
-			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_rot_knob_init,
-		};
+          static const GTypeInfo gtk_rot_knob_info = {
+               sizeof (GtkRotKnobClass),
+               NULL,  /* base_init */
+               NULL,  /* base_finalize */
+               (GClassInitFunc) gtk_rot_knob_class_init,
+               NULL,  /* class_finalize */
+               NULL,  /* class_data */
+               sizeof (GtkRotKnob),
+               5,     /* n_preallocs */
+               (GInstanceInitFunc) gtk_rot_knob_init,
+          };
 
-		gtk_rot_knob_type = g_type_register_static (GTK_TYPE_VBOX,
-												    "GtkRotKnob",
-													&gtk_rot_knob_info,
-													0);
-	}
+          gtk_rot_knob_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                                "GtkRotKnob",
+                                                                 &gtk_rot_knob_info,
+                                                                 0);
+     }
 
-	return gtk_rot_knob_type;
+     return gtk_rot_knob_type;
 }
 
 
 static void
 gtk_rot_knob_class_init (GtkRotKnobClass *class)
 {
-	GObjectClass      *gobject_class;
-	GtkObjectClass    *object_class;
-	GtkWidgetClass    *widget_class;
-	GtkContainerClass *container_class;
+     GObjectClass      *gobject_class;
+     GtkObjectClass    *object_class;
+     GtkWidgetClass    *widget_class;
+     GtkContainerClass *container_class;
 
-	gobject_class   = G_OBJECT_CLASS (class);
-	object_class    = (GtkObjectClass*) class;
-	widget_class    = (GtkWidgetClass*) class;
-	container_class = (GtkContainerClass*) class;
+     gobject_class   = G_OBJECT_CLASS (class);
+     object_class    = (GtkObjectClass*) class;
+     widget_class    = (GtkWidgetClass*) class;
+     container_class = (GtkContainerClass*) class;
 
-	parent_class = g_type_class_peek_parent (class);
+     parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_rot_knob_destroy;
+     object_class->destroy = gtk_rot_knob_destroy;
  
 }
 
@@ -120,7 +120,7 @@ gtk_rot_knob_init (GtkRotKnob *knob)
 static void
 gtk_rot_knob_destroy (GtkObject *object)
 {
-	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 
@@ -140,7 +140,7 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
     GtkWidget *label;
     guint i;
 
-	widget = g_object_new (GTK_TYPE_ROT_KNOB, NULL);
+     widget = g_object_new (GTK_TYPE_ROT_KNOB, NULL);
 
     GTK_ROT_KNOB(widget)->min = min;
     GTK_ROT_KNOB(widget)->max = max;
@@ -296,10 +296,10 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
     gtk_rot_knob_update (GTK_ROT_KNOB(widget));
     
     gtk_container_add (GTK_CONTAINER (widget), table);
-	gtk_widget_show_all (widget);
+     gtk_widget_show_all (widget);
 
     
-	return widget;
+     return widget;
 }
 
 
@@ -455,18 +455,18 @@ button_clicked_cb (GtkWidget *button, gpointer data)
     
     if ((delta > 0.0) && ((knob->value + delta) <= knob->max+.005)) {
         knob->value += delta;
-		if (knob->value>knob->max){
-			knob->value=knob->max;
-		}
+          if (knob->value>knob->max){
+               knob->value=knob->max;
+          }
     }
     else if ((delta < 0.0) && ((knob->value + delta) >= knob->min-.005)) {
         knob->value += delta;
-		if (knob->value<knob->min){
-			knob->value=knob->min;
-		}
+          if (knob->value<knob->min){
+               knob->value=knob->min;
+          }
     } else {
-		g_print("Val: %.2f %.2f %.10f\n",knob->value,delta,knob->value+delta);
-	}
+          g_print("Val: %.2f %.2f %.10f\n",knob->value,delta,knob->value+delta);
+     }
     
     gtk_rot_knob_update (knob);
     

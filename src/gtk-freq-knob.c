@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -74,48 +74,48 @@ static guint freq_changed_signal = 0;
 GType
 gtk_freq_knob_get_type ()
 {
-	static GType gtk_freq_knob_type = 0;
+     static GType gtk_freq_knob_type = 0;
 
-	if (!gtk_freq_knob_type) {
+     if (!gtk_freq_knob_type) {
 
-		static const GTypeInfo gtk_freq_knob_info = {
-			sizeof (GtkFreqKnobClass),
-			NULL,  /* base_init */
-			NULL,  /* base_finalize */
-			(GClassInitFunc) gtk_freq_knob_class_init,
-			NULL,  /* class_finalize */
-			NULL,  /* class_data */
-			sizeof (GtkFreqKnob),
-			5,     /* n_preallocs */
-			(GInstanceInitFunc) gtk_freq_knob_init,
-		};
+          static const GTypeInfo gtk_freq_knob_info = {
+               sizeof (GtkFreqKnobClass),
+               NULL,  /* base_init */
+               NULL,  /* base_finalize */
+               (GClassInitFunc) gtk_freq_knob_class_init,
+               NULL,  /* class_finalize */
+               NULL,  /* class_data */
+               sizeof (GtkFreqKnob),
+               5,     /* n_preallocs */
+               (GInstanceInitFunc) gtk_freq_knob_init,
+          };
 
-		gtk_freq_knob_type = g_type_register_static (GTK_TYPE_VBOX,
-												    "GtkFreqKnob",
-													&gtk_freq_knob_info,
-													0);
-	}
+          gtk_freq_knob_type = g_type_register_static (GTK_TYPE_VBOX,
+                                                                "GtkFreqKnob",
+                                                                 &gtk_freq_knob_info,
+                                                                 0);
+     }
 
-	return gtk_freq_knob_type;
+     return gtk_freq_knob_type;
 }
 
 
 static void
 gtk_freq_knob_class_init (GtkFreqKnobClass *class)
 {
-	GObjectClass      *gobject_class;
-	GtkObjectClass    *object_class;
-	GtkWidgetClass    *widget_class;
-	GtkContainerClass *container_class;
+     GObjectClass      *gobject_class;
+     GtkObjectClass    *object_class;
+     GtkWidgetClass    *widget_class;
+     GtkContainerClass *container_class;
 
-	gobject_class   = G_OBJECT_CLASS (class);
-	object_class    = (GtkObjectClass*) class;
-	widget_class    = (GtkWidgetClass*) class;
-	container_class = (GtkContainerClass*) class;
+     gobject_class   = G_OBJECT_CLASS (class);
+     object_class    = (GtkObjectClass*) class;
+     widget_class    = (GtkWidgetClass*) class;
+     container_class = (GtkContainerClass*) class;
 
-	parent_class = g_type_class_peek_parent (class);
+     parent_class = g_type_class_peek_parent (class);
 
-	object_class->destroy = gtk_freq_knob_destroy;
+     object_class->destroy = gtk_freq_knob_destroy;
     
     /* create freq changed signal */
     freq_changed_signal = g_signal_new ("freq-changed",
@@ -143,7 +143,7 @@ gtk_freq_knob_init (GtkFreqKnob *knob)
 static void
 gtk_freq_knob_destroy (GtkObject *object)
 {
-	(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 
@@ -164,7 +164,7 @@ gtk_freq_knob_new (gdouble val, gboolean buttons)
     gint       delta;
 
 
-	widget = g_object_new (GTK_TYPE_FREQ_KNOB, NULL);
+     widget = g_object_new (GTK_TYPE_FREQ_KNOB, NULL);
 
     GTK_FREQ_KNOB(widget)->value = val;
     
@@ -232,7 +232,7 @@ gtk_freq_knob_new (gdouble val, gboolean buttons)
     gtk_container_add (GTK_CONTAINER (widget), table);
     gtk_widget_show_all (widget);
 
-	return widget;
+     return widget;
 }
 
 

@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -565,8 +565,8 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
                     pass->maxel_az = sat->az;
                 }
 
-                /*	g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
-                /*		 t, sat->az, sat->el, max_el); */
+                /*     g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
+                /*           t, sat->az, sat->el, max_el); */
             }
 
             pass->details = g_slist_reverse (pass->details);
@@ -757,19 +757,19 @@ copy_pass_detail  (pass_detail_t *detail)
 void
 free_pass   (pass_t *pass)
 {
-	if (pass!=NULL){
-	free_pass_details (pass->details);
-	
-	if (pass->satname != NULL) {
-		g_free (pass->satname);
-		pass->satname = NULL;
-	}
-	
-	g_free (pass);
-	pass = NULL;
-	} else {
-		/*FIXME: log an error?*/
-	}
+     if (pass!=NULL){
+     free_pass_details (pass->details);
+     
+     if (pass->satname != NULL) {
+          g_free (pass->satname);
+          pass->satname = NULL;
+     }
+     
+     g_free (pass);
+     pass = NULL;
+     } else {
+          /*FIXME: log an error?*/
+     }
 }
 
 
@@ -992,8 +992,8 @@ get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
                 pass->maxel_az = sat->az;
             }
 
-            /*	g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
-            /*		 t, sat->az, sat->el, max_el); */
+            /*     g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
+            /*           t, sat->az, sat->el, max_el); */
         }
 
         pass->details = g_slist_reverse (pass->details);
@@ -1039,15 +1039,15 @@ get_current_pass (sat_t *sat, qth_t *qth, gdouble start)
         t = start;
     else
         t = get_current_daynum ();
-    predict_calc (sat, qth, t);	
+    predict_calc (sat, qth, t);     
 
-	/* check whether satellite has aos */
+     /* check whether satellite has aos */
     if ((sat->otype == ORBIT_TYPE_GEO) || 
         (sat->otype == ORBIT_TYPE_DECAYED) ||
-		!has_aos (sat, qth)) {
-		
+          !has_aos (sat, qth)) {
+          
         return NULL;
-		
+          
     }
 
     /* find a time before AOS */

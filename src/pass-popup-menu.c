@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -60,68 +60,68 @@ static void azel_plot_pass_details  (GtkWidget *menuitem, gpointer data);
 void
 pass_popup_menu_exec (qth_t *qth, pass_t *pass, GdkEventButton *event, GtkWidget *toplevel)
 {
-	GtkWidget        *menu;
-	GtkWidget        *menuitem;
-	GtkWidget        *image;
-	gchar            *buff;
+     GtkWidget        *menu;
+     GtkWidget        *menuitem;
+     GtkWidget        *image;
+     gchar            *buff;
 
 
-	menu = gtk_menu_new ();
+     menu = gtk_menu_new ();
 
-	/* pass details */
-	menuitem = gtk_image_menu_item_new_with_label (_("Show details"));
-	image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL,
-					  GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-	g_object_set_data (G_OBJECT (menuitem), "pass", pass);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (show_pass_details),
-			  toplevel);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-	
-	/* separator */
-	menuitem = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
-
-	/* Polar plot pass */
-	menuitem = gtk_image_menu_item_new_with_label (_("Polar plot"));
-	buff = icon_file_name ("gpredict-polar-small.png");
-	image = gtk_image_new_from_file (buff);
-	g_free (buff);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-	g_object_set_data (G_OBJECT (menuitem), "pass", pass);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (polar_plot_pass_details),
-			  toplevel);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-	gtk_widget_set_sensitive (menuitem, FALSE);
-		
-	/* Az/El plot pass */
-	menuitem = gtk_image_menu_item_new_with_label (_("Az/El plot"));
-	buff = icon_file_name ("gpredict-azel-small.png");
-	image = gtk_image_new_from_file (buff);
-	g_free (buff);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-	g_object_set_data (G_OBJECT (menuitem), "pass", pass);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (azel_plot_pass_details),
-			  toplevel);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-	gtk_widget_set_sensitive (menuitem, FALSE);
+     /* pass details */
+     menuitem = gtk_image_menu_item_new_with_label (_("Show details"));
+     image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL,
+                           GTK_ICON_SIZE_MENU);
+     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+     g_object_set_data (G_OBJECT (menuitem), "pass", pass);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_signal_connect (menuitem, "activate",
+                 G_CALLBACK (show_pass_details),
+                 toplevel);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     
+     /* separator */
+     menuitem = gtk_separator_menu_item_new ();
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
 
-	gtk_widget_show_all (menu);
+     /* Polar plot pass */
+     menuitem = gtk_image_menu_item_new_with_label (_("Polar plot"));
+     buff = icon_file_name ("gpredict-polar-small.png");
+     image = gtk_image_new_from_file (buff);
+     g_free (buff);
+     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+     g_object_set_data (G_OBJECT (menuitem), "pass", pass);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_signal_connect (menuitem, "activate",
+                 G_CALLBACK (polar_plot_pass_details),
+                 toplevel);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     gtk_widget_set_sensitive (menuitem, FALSE);
+          
+     /* Az/El plot pass */
+     menuitem = gtk_image_menu_item_new_with_label (_("Az/El plot"));
+     buff = icon_file_name ("gpredict-azel-small.png");
+     image = gtk_image_new_from_file (buff);
+     g_free (buff);
+     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+     g_object_set_data (G_OBJECT (menuitem), "pass", pass);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_signal_connect (menuitem, "activate",
+                 G_CALLBACK (azel_plot_pass_details),
+                 toplevel);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     gtk_widget_set_sensitive (menuitem, FALSE);
 
-	/* Note: event can be NULL here when called from view_onPopupMenu;
-	 *  gdk_event_get_time() accepts a NULL argument */
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-			(event != NULL) ? event->button : 0,
-			gdk_event_get_time ((GdkEvent*) event));
-		
+
+     gtk_widget_show_all (menu);
+
+     /* Note: event can be NULL here when called from view_onPopupMenu;
+      *  gdk_event_get_time() accepts a NULL argument */
+     gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+               (event != NULL) ? event->button : 0,
+               gdk_event_get_time ((GdkEvent*) event));
+          
 
 }
 
@@ -137,21 +137,21 @@ pass_popup_menu_exec (qth_t *qth, pass_t *pass, GdkEventButton *event, GtkWidget
 static void
 show_pass_details       (GtkWidget *menuitem, gpointer data)
 {
-	pass_t *pass;
-	qth_t *qth;
+     pass_t *pass;
+     qth_t *qth;
 
-	//pass = copy_pass (PASS (g_object_get_data (G_OBJECT (menuitem), "pass")));
-	pass = PASS (g_object_get_data (G_OBJECT (menuitem), "pass"));
-	qth = (qth_t *) g_object_get_data (G_OBJECT (menuitem), "qth");
+     //pass = copy_pass (PASS (g_object_get_data (G_OBJECT (menuitem), "pass")));
+     pass = PASS (g_object_get_data (G_OBJECT (menuitem), "pass"));
+     qth = (qth_t *) g_object_get_data (G_OBJECT (menuitem), "qth");
 
-	show_pass (pass->satname, qth, pass, data);
+     show_pass (pass->satname, qth, pass, data);
 }
 
 /* data = toplevel window */
 static void
 polar_plot_pass_details (GtkWidget *menuitem, gpointer data)
 {
-	g_print ("FIXME: %s:%s not implemented!\n", __FILE__, __FUNCTION__);
+     g_print ("FIXME: %s:%s not implemented!\n", __FILE__, __FUNCTION__);
 }
 
 
@@ -159,6 +159,6 @@ polar_plot_pass_details (GtkWidget *menuitem, gpointer data)
 static void
 azel_plot_pass_details  (GtkWidget *menuitem, gpointer data)
 {
-	g_print ("FIXME: %s:%s not implemented!\n", __FILE__, __FUNCTION__);
+     g_print ("FIXME: %s:%s not implemented!\n", __FILE__, __FUNCTION__);
 }
 

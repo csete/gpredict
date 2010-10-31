@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -45,18 +45,18 @@
 
 /** \brief columns in the icon list */
 enum { 
-	NBOOK_PAGE_GENERAL = 0,
-	NBOOK_PAGE_MODULES,
-	NBOOK_PAGE_INTERFACE,
-	NBOOK_PAGE_PREDICT
+     NBOOK_PAGE_GENERAL = 0,
+     NBOOK_PAGE_MODULES,
+     NBOOK_PAGE_INTERFACE,
+     NBOOK_PAGE_PREDICT
 };
 
 
 const gchar *WINDOW_TITLE[4] = {
-	N_("GPREDICT Preferences :: General"),
-	N_("GPREDICT Preferences :: Modules"),
-	N_("GPREDICT Preferences :: Interfaces"),
-	N_("GPREDICT Preferences :: Predict")
+     N_("GPREDICT Preferences :: General"),
+     N_("GPREDICT Preferences :: Modules"),
+     N_("GPREDICT Preferences :: Interfaces"),
+     N_("GPREDICT Preferences :: Predict")
 };
 
 
@@ -83,127 +83,127 @@ static void button_press_cb (GtkWidget *widget, gpointer nbook);
 void
 sat_pref_run ()
 {
-	GtkWidget *nbook;    /* notebook widget */
-	GtkWidget *hbox;     /* horizontal box */
-	GtkWidget *butbox;
-	GtkWidget *genbut,*modbut,*ifbut,*predbut;
-	gchar     *iconfile;
-	gint       response;
+     GtkWidget *nbook;    /* notebook widget */
+     GtkWidget *hbox;     /* horizontal box */
+     GtkWidget *butbox;
+     GtkWidget *genbut,*modbut,*ifbut,*predbut;
+     gchar     *iconfile;
+     gint       response;
 
         
 
-	/* Create notebook and add individual pages.
-	   The individual pages will need the GKeyFile
-	*/
-	nbook = gtk_notebook_new ();
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-							  sat_pref_general_create (),
-							  gtk_label_new (_("General")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-							  sat_pref_modules_create (NULL),
-							  gtk_label_new (_("Modules")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-							  sat_pref_interfaces_create (),
-							  gtk_label_new (_("Interfaces")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-							  sat_pref_predict_create (),
-							  gtk_label_new (_("Predict")));
-	
-	gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nbook), FALSE);
-	gtk_notebook_set_show_border (GTK_NOTEBOOK (nbook), FALSE);
+     /* Create notebook and add individual pages.
+        The individual pages will need the GKeyFile
+     */
+     nbook = gtk_notebook_new ();
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                                     sat_pref_general_create (),
+                                     gtk_label_new (_("General")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                                     sat_pref_modules_create (NULL),
+                                     gtk_label_new (_("Modules")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                                     sat_pref_interfaces_create (),
+                                     gtk_label_new (_("Interfaces")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                                     sat_pref_predict_create (),
+                                     gtk_label_new (_("Predict")));
+     
+     gtk_notebook_set_show_tabs (GTK_NOTEBOOK (nbook), FALSE);
+     gtk_notebook_set_show_border (GTK_NOTEBOOK (nbook), FALSE);
 
 
-	/* create a button box and add the buttons one by one */
-	genbut = gpredict_vpixmap_button ("gpredict-sat-pref.png", _("General"), NULL);
-	gtk_button_set_relief (GTK_BUTTON (genbut), GTK_RELIEF_NONE);
-	g_object_set_data (G_OBJECT (genbut), "page",
-					   GINT_TO_POINTER (NBOOK_PAGE_GENERAL));
-	g_signal_connect (G_OBJECT (genbut), "clicked",
-					  G_CALLBACK (button_press_cb), nbook);
+     /* create a button box and add the buttons one by one */
+     genbut = gpredict_vpixmap_button ("gpredict-sat-pref.png", _("General"), NULL);
+     gtk_button_set_relief (GTK_BUTTON (genbut), GTK_RELIEF_NONE);
+     g_object_set_data (G_OBJECT (genbut), "page",
+                            GINT_TO_POINTER (NBOOK_PAGE_GENERAL));
+     g_signal_connect (G_OBJECT (genbut), "clicked",
+                           G_CALLBACK (button_press_cb), nbook);
 
-	modbut = gpredict_vpixmap_button ("gpredict-sat-list.png", _("Modules"), NULL);
-	gtk_button_set_relief (GTK_BUTTON (modbut), GTK_RELIEF_NONE);
-	g_object_set_data (G_OBJECT (modbut), "page",
-					   GINT_TO_POINTER (NBOOK_PAGE_MODULES));
-	g_signal_connect (G_OBJECT (modbut), "clicked",
-					  G_CALLBACK (button_press_cb), nbook);
+     modbut = gpredict_vpixmap_button ("gpredict-sat-list.png", _("Modules"), NULL);
+     gtk_button_set_relief (GTK_BUTTON (modbut), GTK_RELIEF_NONE);
+     g_object_set_data (G_OBJECT (modbut), "page",
+                            GINT_TO_POINTER (NBOOK_PAGE_MODULES));
+     g_signal_connect (G_OBJECT (modbut), "clicked",
+                           G_CALLBACK (button_press_cb), nbook);
 
-	ifbut  = gpredict_vpixmap_button ("gpredict-oscilloscope.png", _("Interfaces"), NULL);
-	gtk_button_set_relief (GTK_BUTTON (ifbut), GTK_RELIEF_NONE);
-	g_object_set_data (G_OBJECT (ifbut), "page",
-					   GINT_TO_POINTER (NBOOK_PAGE_INTERFACE));
-	g_signal_connect (G_OBJECT (ifbut), "clicked",
-					  G_CALLBACK (button_press_cb), nbook);
+     ifbut  = gpredict_vpixmap_button ("gpredict-oscilloscope.png", _("Interfaces"), NULL);
+     gtk_button_set_relief (GTK_BUTTON (ifbut), GTK_RELIEF_NONE);
+     g_object_set_data (G_OBJECT (ifbut), "page",
+                            GINT_TO_POINTER (NBOOK_PAGE_INTERFACE));
+     g_signal_connect (G_OBJECT (ifbut), "clicked",
+                           G_CALLBACK (button_press_cb), nbook);
 
-	predbut = gpredict_vpixmap_button ("gpredict-calendar.png", _("Predict"), NULL);
-	gtk_button_set_relief (GTK_BUTTON (predbut), GTK_RELIEF_NONE);
-	g_object_set_data (G_OBJECT (predbut), "page",
-					   GINT_TO_POINTER (NBOOK_PAGE_PREDICT));
-	g_signal_connect (G_OBJECT (predbut), "clicked",
-					  G_CALLBACK (button_press_cb), nbook);
+     predbut = gpredict_vpixmap_button ("gpredict-calendar.png", _("Predict"), NULL);
+     gtk_button_set_relief (GTK_BUTTON (predbut), GTK_RELIEF_NONE);
+     g_object_set_data (G_OBJECT (predbut), "page",
+                            GINT_TO_POINTER (NBOOK_PAGE_PREDICT));
+     g_signal_connect (G_OBJECT (predbut), "clicked",
+                           G_CALLBACK (button_press_cb), nbook);
 
-	butbox = gtk_vbutton_box_new ();
-	gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_START);
-	gtk_container_add (GTK_CONTAINER (butbox), genbut);
-	gtk_container_add (GTK_CONTAINER (butbox), modbut);
-	gtk_container_add (GTK_CONTAINER (butbox), ifbut);
-	gtk_container_add (GTK_CONTAINER (butbox), predbut);
+     butbox = gtk_vbutton_box_new ();
+     gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_START);
+     gtk_container_add (GTK_CONTAINER (butbox), genbut);
+     gtk_container_add (GTK_CONTAINER (butbox), modbut);
+     gtk_container_add (GTK_CONTAINER (butbox), ifbut);
+     gtk_container_add (GTK_CONTAINER (butbox), predbut);
 
-	/* create horizontal box which will contain the icon list on the left side
-	   and the notebook on the right side.
-	*/
-	hbox = gtk_hbox_new (FALSE, 5);
-	gtk_box_pack_start (GTK_BOX (hbox), butbox, FALSE, FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), nbook, TRUE, TRUE, 0);
-	gtk_widget_show_all (hbox);
+     /* create horizontal box which will contain the icon list on the left side
+        and the notebook on the right side.
+     */
+     hbox = gtk_hbox_new (FALSE, 5);
+     gtk_box_pack_start (GTK_BOX (hbox), butbox, FALSE, FALSE, 0);
+     gtk_box_pack_start (GTK_BOX (hbox), nbook, TRUE, TRUE, 0);
+     gtk_widget_show_all (hbox);
 
 
-	/* create and display preferences window */
-	window = gtk_dialog_new_with_buttons (_("Gpredict Preferences :: General"),
-										  GTK_WINDOW (app),
-										  GTK_DIALOG_MODAL |
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_STOCK_CANCEL,
-										  GTK_RESPONSE_REJECT,
-										  GTK_STOCK_OK,
-										  GTK_RESPONSE_ACCEPT,
-										  NULL);
-	iconfile = icon_file_name ("gpredict-sat-pref.png");
-	gtk_window_set_icon_from_file (GTK_WINDOW (window),
-								   iconfile,
-								   NULL);
-	g_free (iconfile);
+     /* create and display preferences window */
+     window = gtk_dialog_new_with_buttons (_("Gpredict Preferences :: General"),
+                                                    GTK_WINDOW (app),
+                                                    GTK_DIALOG_MODAL |
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                    GTK_STOCK_CANCEL,
+                                                    GTK_RESPONSE_REJECT,
+                                                    GTK_STOCK_OK,
+                                                    GTK_RESPONSE_ACCEPT,
+                                                    NULL);
+     iconfile = icon_file_name ("gpredict-sat-pref.png");
+     gtk_window_set_icon_from_file (GTK_WINDOW (window),
+                                           iconfile,
+                                           NULL);
+     g_free (iconfile);
 
-	gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG(window)->vbox), hbox);
-	gtk_box_set_spacing (GTK_BOX (GTK_DIALOG(window)->vbox), 10);
+     gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG(window)->vbox), hbox);
+     gtk_box_set_spacing (GTK_BOX (GTK_DIALOG(window)->vbox), 10);
 
-	gtk_button_clicked (GTK_BUTTON (genbut));
+     gtk_button_clicked (GTK_BUTTON (genbut));
 
-	response = gtk_dialog_run (GTK_DIALOG (window));
-	switch (response) {
+     response = gtk_dialog_run (GTK_DIALOG (window));
+     switch (response) {
 
-	case GTK_RESPONSE_ACCEPT:
-		
-		sat_pref_general_ok ();
-		sat_pref_modules_ok (NULL);
-		sat_pref_interfaces_ok ();
-		sat_pref_predict_ok ();
+     case GTK_RESPONSE_ACCEPT:
+          
+          sat_pref_general_ok ();
+          sat_pref_modules_ok (NULL);
+          sat_pref_interfaces_ok ();
+          sat_pref_predict_ok ();
 
-		sat_cfg_save ();
+          sat_cfg_save ();
 
-		break;
+          break;
 
-	default:
+     default:
 
-		sat_pref_general_cancel ();
-		sat_pref_modules_cancel (NULL);
-		sat_pref_interfaces_cancel ();
-		sat_pref_predict_cancel ();
+          sat_pref_general_cancel ();
+          sat_pref_modules_cancel (NULL);
+          sat_pref_interfaces_cancel ();
+          sat_pref_predict_cancel ();
 
-		break;
-	}
+          break;
+     }
 
-	gtk_widget_destroy (window);
+     gtk_widget_destroy (window);
 
 }
 
@@ -216,10 +216,10 @@ sat_pref_run ()
 static void
 button_press_cb (GtkWidget *widget, gpointer nbook)
 {
-	gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "page"));
+     gint page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "page"));
 
-	gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
+     gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
-	gtk_window_set_title (GTK_WINDOW (window), _(WINDOW_TITLE[page]));
+     gtk_window_set_title (GTK_WINDOW (window), _(WINDOW_TITLE[page]));
 }
 

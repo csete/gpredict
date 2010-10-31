@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -34,19 +34,19 @@
 
 /** \brief Debug message sources. */
 typedef enum {
-	SAT_LOG_SRC_NONE     = 0,     /*!< No source, unknown source. */
-	SAT_LOG_SRC_HAMLIB   = 1,     /*!< Debug message comes from hamlib */
-	SAT_LOG_SRC_GPREDICT = 2      /*!< Debug message comes from grig itself */
+     SAT_LOG_SRC_NONE     = 0,     /*!< No source, unknown source. */
+     SAT_LOG_SRC_HAMLIB   = 1,     /*!< Debug message comes from hamlib */
+     SAT_LOG_SRC_GPREDICT = 2      /*!< Debug message comes from grig itself */
 } sat_log_src_t;
 
 
 typedef enum {
-	SAT_LOG_LEVEL_NONE  = 0,
-	SAT_LOG_LEVEL_BUG   = 1,
-	SAT_LOG_LEVEL_ERROR = 2,
-	SAT_LOG_LEVEL_WARN  = 3,
-	SAT_LOG_LEVEL_MSG   = 4,
-	SAT_LOG_LEVEL_DEBUG = 5
+     SAT_LOG_LEVEL_NONE  = 0,
+     SAT_LOG_LEVEL_BUG   = 1,
+     SAT_LOG_LEVEL_ERROR = 2,
+     SAT_LOG_LEVEL_WARN  = 3,
+     SAT_LOG_LEVEL_MSG   = 4,
+     SAT_LOG_LEVEL_DEBUG = 5
 } sat_log_level_t;
 
 

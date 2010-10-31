@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -273,12 +273,12 @@ create_editor_widgets (radio_conf_t *conf)
     gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 0);
     g_signal_connect (vfo, "changed", G_CALLBACK (vfo_changed), NULL);
     gtk_widget_set_tooltip_markup (vfo,
-    							   _("Select which VFO to use for uplink and downlink. "\
-    							     "This setting is used for full-duplex radios only, "\
-    							     "such as the IC-910H, FT-847 and the TS-2000.\n\n"\
-    							     "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"\
-    							     "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"\
-    							     "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
+                                          _("Select which VFO to use for uplink and downlink. "\
+                                            "This setting is used for full-duplex radios only, "\
+                                            "such as the IC-910H, FT-847 and the TS-2000.\n\n"\
+                                            "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"\
+                                            "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"\
+                                            "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
     gtk_table_attach_defaults (GTK_TABLE (table), vfo, 1, 3, 5, 6);
         
     /* Downconverter LO frequency */
@@ -352,14 +352,14 @@ update_widgets (radio_conf_t *conf)
     
     /* vfo up/down */
     if (conf->type == RIG_TYPE_DUPLEX) {
-    	if (conf->vfoUp == VFO_MAIN)
-    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 1);
+         if (conf->vfoUp == VFO_MAIN)
+              gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 1);
         else if (conf->vfoUp == VFO_SUB)
-    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 2);
+              gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 2);
         else if (conf->vfoUp == VFO_A)
-    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 3);
-    	else
-    		gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 4);
+              gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 3);
+         else
+              gtk_combo_box_set_active (GTK_COMBO_BOX (vfo), 4);
     }
 
     /* lo down in MHz */
@@ -431,33 +431,33 @@ apply_changes         (radio_conf_t *conf)
     
     /* vfo up/down */
     if (conf->type == RIG_TYPE_DUPLEX) {
-		switch (gtk_combo_box_get_active (GTK_COMBO_BOX (vfo))) {
-		
-		case 1:
-			conf->vfoUp = VFO_MAIN;
-			conf->vfoDown = VFO_SUB;
-			break;    	
-		
-		case 2:
-			conf->vfoUp = VFO_SUB;
-			conf->vfoDown = VFO_MAIN;
-			break;
-		
-		case 3:
-			conf->vfoUp = VFO_A;
-			conf->vfoDown = VFO_B;
-			break;    	
-		
-		case 4:
-			conf->vfoUp = VFO_B;
-			conf->vfoDown = VFO_A;
-			break;    	
-		
-		default:
-			conf->vfoUp = VFO_MAIN;
-			conf->vfoDown = VFO_SUB;
-			break;    	
-		}
+          switch (gtk_combo_box_get_active (GTK_COMBO_BOX (vfo))) {
+          
+          case 1:
+               conf->vfoUp = VFO_MAIN;
+               conf->vfoDown = VFO_SUB;
+               break;         
+          
+          case 2:
+               conf->vfoUp = VFO_SUB;
+               conf->vfoDown = VFO_MAIN;
+               break;
+          
+          case 3:
+               conf->vfoUp = VFO_A;
+               conf->vfoDown = VFO_B;
+               break;         
+          
+          case 4:
+               conf->vfoUp = VFO_B;
+               conf->vfoDown = VFO_A;
+               break;         
+          
+          default:
+               conf->vfoUp = VFO_MAIN;
+               conf->vfoDown = VFO_SUB;
+               break;         
+          }
     }
 
     return TRUE;
@@ -532,7 +532,7 @@ name_changed          (GtkWidget *widget, gpointer data)
 static void
 type_changed (GtkWidget *widget, gpointer data)
 {
-	/* PTT consistency */    
+     /* PTT consistency */    
     if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TRX) {
         if (gtk_combo_box_get_active (GTK_COMBO_BOX (ptt)) == PTT_TYPE_NONE) {
             gtk_combo_box_set_active (GTK_COMBO_BOX (ptt), PTT_TYPE_CAT);

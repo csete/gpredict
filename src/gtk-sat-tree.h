@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -39,21 +39,21 @@ extern "C" {
 
 /** \brief Column definitions in the tree. */
 typedef enum {
-	GTK_SAT_TREE_COL_NAME = 0,  /*!< Satellite name. */
-	GTK_SAT_TREE_COL_CATNUM,    /*!< Catalogue Number. */
-	GTK_SAT_TREE_COL_EPOCH,     /*!< Element set epoch. */
-	GTK_SAT_TREE_COL_SEL,       /*!< Checkbox column, ie select satellite. */
-	GTK_SAT_TREE_COL_VIS,       /*!< Hidden column used to node visibility */
-	GTK_SAT_TREE_COL_NUM        /*!< The number of columns. */
+     GTK_SAT_TREE_COL_NAME = 0,  /*!< Satellite name. */
+     GTK_SAT_TREE_COL_CATNUM,    /*!< Catalogue Number. */
+     GTK_SAT_TREE_COL_EPOCH,     /*!< Element set epoch. */
+     GTK_SAT_TREE_COL_SEL,       /*!< Checkbox column, ie select satellite. */
+     GTK_SAT_TREE_COL_VIS,       /*!< Hidden column used to node visibility */
+     GTK_SAT_TREE_COL_NUM        /*!< The number of columns. */
 } gtk_sat_tree_col_t;
 
-	
+     
 /** \brief Flags used to indicate which columns should be visible. */
 typedef enum {
-	GTK_SAT_TREE_FLAG_NAME   = 1 << GTK_SAT_TREE_COL_NAME,   /*!< Satellite name. */
-	GTK_SAT_TREE_FLAG_CATNUM = 1 << GTK_SAT_TREE_COL_CATNUM, /*!< Catalogue Number. */
-	GTK_SAT_TREE_FLAG_EPOCH  = 1 << GTK_SAT_TREE_COL_EPOCH,  /*!< Element set epoch. */
-	GTK_SAT_TREE_FLAG_SEL    = 1 << GTK_SAT_TREE_COL_SEL     /*!< Checkbox column. */
+     GTK_SAT_TREE_FLAG_NAME   = 1 << GTK_SAT_TREE_COL_NAME,   /*!< Satellite name. */
+     GTK_SAT_TREE_FLAG_CATNUM = 1 << GTK_SAT_TREE_COL_CATNUM, /*!< Catalogue Number. */
+     GTK_SAT_TREE_FLAG_EPOCH  = 1 << GTK_SAT_TREE_COL_EPOCH,  /*!< Element set epoch. */
+     GTK_SAT_TREE_FLAG_SEL    = 1 << GTK_SAT_TREE_COL_SEL     /*!< Checkbox column. */
 } gtk_sat_tree_flag_t;
 
 
@@ -63,12 +63,12 @@ typedef enum {
 
 #define GTK_TYPE_SAT_TREE  (gtk_sat_tree_get_type ())
 #define GTK_SAT_TREE(obj)  GTK_CHECK_CAST (obj,\
-					   gtk_sat_tree_get_type (),\
-					   GtkSatTree)
+                            gtk_sat_tree_get_type (),\
+                            GtkSatTree)
 
 #define GTK_SAT_TREE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
-							 gtk_sat_tree_get_type (),\
-							 GtkSatTreeClass)
+                                    gtk_sat_tree_get_type (),\
+                                    GtkSatTreeClass)
 
 #define IS_GTK_SAT_TREE(obj)       GTK_CHECK_TYPE (obj, gtk_sat_tree_get_type ())
 
@@ -81,18 +81,18 @@ typedef struct _GtkSatTreeClass GtkSatTreeClass;
 /** \brief The GtkSatTree Structure definition */
 struct _gtk_sat_tree
 {
-	GtkVBox vbox;
+     GtkVBox vbox;
 
-	GtkWidget   *tree;        /*!< The tree. */
-	GtkWidget   *swin;        /*!< Scrolled window. */
-	guint        flags;       /*!< Column visibility flags. */
-	GSList      *selection;   /*!< List of selected satellites. */
-	gulong       handler_id;  /*!< Toggle signale handler ID (FIXME): remove. */
+     GtkWidget   *tree;        /*!< The tree. */
+     GtkWidget   *swin;        /*!< Scrolled window. */
+     guint        flags;       /*!< Column visibility flags. */
+     GSList      *selection;   /*!< List of selected satellites. */
+     gulong       handler_id;  /*!< Toggle signale handler ID (FIXME): remove. */
 };
 
 struct _GtkSatTreeClass
 {
-	GtkVBoxClass parent_class;
+     GtkVBoxClass parent_class;
 };
 
 

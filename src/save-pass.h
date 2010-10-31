@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -36,8 +36,8 @@
 
 /** \brief Save format */
 typedef enum {
-	SAVE_FORMAT_TXT = 0,   /*!< Save in plain text format (data only) */
-	//SAVE_FORMAT_HTML,      /*!< HTML format (data and graphics) */
+     SAVE_FORMAT_TXT = 0,   /*!< Save in plain text format (data only) */
+     //SAVE_FORMAT_HTML,      /*!< HTML format (data and graphics) */
 } save_format_t;
 
 

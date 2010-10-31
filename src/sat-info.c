@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -354,7 +354,7 @@ show_sat_info (sat_t *sat, gpointer data)
                       fractional portion of one day, but...
 
     we now have the converted fields, tle->epoch_year, tle->epoch_day and tle->epoch_fod
-		      
+                
 */
 static gchar *
 epoch_to_str (sat_t *sat)

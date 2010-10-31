@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -141,7 +141,7 @@ void tmg_create (GtkSatModule *mod)
 
     mod->tmgCal = gtk_calendar_new ();
     gtk_calendar_set_display_options (GTK_CALENDAR (mod->tmgCal),
-                                      GTK_CALENDAR_SHOW_HEADING	|
+                                      GTK_CALENDAR_SHOW_HEADING     |
                                       GTK_CALENDAR_SHOW_DAY_NAMES |
                                       GTK_CALENDAR_WEEK_START_MONDAY);
     g_signal_connect (mod->tmgCal, "day-selected",
@@ -421,8 +421,8 @@ static void tmg_bwd      (GtkWidget *widget, gpointer data)
  * This function is called when the user clicks on the Reset button.
  * It resets the current time by setting 
  *
- *	mod->tmgPdnum = mod->rtPrev;
- *	mod->tmgCdnum = mod->rtNow;
+ *     mod->tmgPdnum = mod->rtPrev;
+ *     mod->tmgCdnum = mod->rtNow;
  *
  */
 static void tmg_reset      (GtkWidget *widget, gpointer data)
@@ -440,7 +440,7 @@ static void tmg_reset      (GtkWidget *widget, gpointer data)
     gtk_range_set_value (GTK_RANGE (mod->tmgSlider), 0.0);
 
     /* update widgets; widget signals will have no effect
-           since the tmgReset flag is TRUE	*/
+           since the tmgReset flag is TRUE     */
     tmg_update_widgets (mod);
 
     /* clear reset flag */

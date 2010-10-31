@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -44,16 +44,16 @@
  */
 GtkWidget *sat_pref_interfaces_create ()
 {
-	GtkWidget *nbook;
+     GtkWidget *nbook;
 
-	nbook = gtk_notebook_new ();
+     nbook = gtk_notebook_new ();
 
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_rig_create (),
-				  gtk_label_new (_("Radios")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_rot_create (),
-				  gtk_label_new (_("Rotators")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_rig_create (),
+                      gtk_label_new (_("Radios")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_rot_create (),
+                      gtk_label_new (_("Rotators")));
 
         return nbook;
 }
@@ -64,8 +64,8 @@ GtkWidget *sat_pref_interfaces_create ()
 void
 sat_pref_interfaces_cancel ()
 {
-	sat_pref_rig_cancel ();
-	sat_pref_rot_cancel ();
+     sat_pref_rig_cancel ();
+     sat_pref_rot_cancel ();
 }
 
 
@@ -74,8 +74,8 @@ sat_pref_interfaces_cancel ()
 void
 sat_pref_interfaces_ok     ()
 {
-	sat_pref_rig_ok ();
-	sat_pref_rot_ok ();
+     sat_pref_rig_ok ();
+     sat_pref_rot_ok ();
 }
 
 

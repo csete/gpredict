@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -64,112 +64,112 @@ static void show_next_passes_cb     (GtkWidget *menuitem, gpointer data);
  */
 void
 gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
-						GtkSatMap *satmap,
-						GdkEventButton *event,
-						GtkWidget *toplevel)
+                              GtkSatMap *satmap,
+                              GdkEventButton *event,
+                              GtkWidget *toplevel)
 {
-	GtkWidget      *menu;
-	GtkWidget      *menuitem;
-	GtkWidget      *label;
-	GtkWidget      *image;
-	gchar          *buff;
-	sat_map_obj_t  *obj = NULL;
-	gint           *catnum;
+     GtkWidget      *menu;
+     GtkWidget      *menuitem;
+     GtkWidget      *label;
+     GtkWidget      *image;
+     gchar          *buff;
+     sat_map_obj_t  *obj = NULL;
+     gint           *catnum;
 
 
 
-	menu = gtk_menu_new ();
+     menu = gtk_menu_new ();
 
-	/* first menu item is the satellite name, centered */
-	menuitem = gtk_image_menu_item_new ();
-	label = gtk_label_new (NULL);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+     /* first menu item is the satellite name, centered */
+     menuitem = gtk_image_menu_item_new ();
+     label = gtk_label_new (NULL);
+     gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
     buff = g_strdup_printf ("<b>%s</b>", sat->nickname);
-	gtk_label_set_markup (GTK_LABEL (label), buff);
-	g_free (buff);
-	gtk_container_add (GTK_CONTAINER (menuitem), label);
-	image = gtk_image_new_from_stock (GTK_STOCK_INFO, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+     gtk_label_set_markup (GTK_LABEL (label), buff);
+     g_free (buff);
+     gtk_container_add (GTK_CONTAINER (menuitem), label);
+     image = gtk_image_new_from_stock (GTK_STOCK_INFO, GTK_ICON_SIZE_MENU);
+     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
 
-	/* attach data to menuitem and connect callback */
-	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (show_sat_info_menu_cb), toplevel);
+     /* attach data to menuitem and connect callback */
+     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_signal_connect (menuitem, "activate", G_CALLBACK (show_sat_info_menu_cb), toplevel);
 
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-	/* separator */
-	menuitem = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     /* separator */
+     menuitem = gtk_separator_menu_item_new ();
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-	/* next pass and predict passes */
-	menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
-	image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (show_next_pass_cb), satmap);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-		
-	menuitem = gtk_image_menu_item_new_with_label (_("Future passes"));
-	image = gtk_image_new_from_stock (GTK_STOCK_INDEX, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (show_next_passes_cb), satmap);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     /* next pass and predict passes */
+     menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
+     image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
+     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_signal_connect (menuitem, "activate", G_CALLBACK (show_next_pass_cb), satmap);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+          
+     menuitem = gtk_image_menu_item_new_with_label (_("Future passes"));
+     image = gtk_image_new_from_stock (GTK_STOCK_INDEX, GTK_ICON_SIZE_MENU);
+     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_signal_connect (menuitem, "activate", G_CALLBACK (show_next_passes_cb), satmap);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-	/* separator */
-	menuitem = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     /* separator */
+     menuitem = gtk_separator_menu_item_new ();
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-	/* get sat obj since we'll need it for the remaining items */
-	catnum = g_new0 (gint, 1);
-	*catnum = sat->tle.catnr;
-	obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catnum));
-	g_free (catnum);
+     /* get sat obj since we'll need it for the remaining items */
+     catnum = g_new0 (gint, 1);
+     *catnum = sat->tle.catnr;
+     obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catnum));
+     g_free (catnum);
 
-	/* highlight cov. area */
-	menuitem = gtk_check_menu_item_new_with_label (_("Highlight footprint"));
-	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-	g_object_set_data (G_OBJECT (menuitem), "obj", obj);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->showcov);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (coverage_toggled), satmap);
+     /* highlight cov. area */
+     menuitem = gtk_check_menu_item_new_with_label (_("Highlight footprint"));
+     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+     g_object_set_data (G_OBJECT (menuitem), "obj", obj);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->showcov);
+     g_signal_connect (menuitem, "activate", G_CALLBACK (coverage_toggled), satmap);
 
-	/* show track */
-	menuitem = gtk_check_menu_item_new_with_label (_("Ground Track"));
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->showtrack);
-	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_object_set_data (G_OBJECT (menuitem), "obj", obj);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->showtrack);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (track_toggled), satmap);
+     /* show track */
+     menuitem = gtk_check_menu_item_new_with_label (_("Ground Track"));
+     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->showtrack);
+     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_object_set_data (G_OBJECT (menuitem), "obj", obj);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->showtrack);
+     g_signal_connect (menuitem, "activate", G_CALLBACK (track_toggled), satmap);
 
 
 #if 0
-	/* target */
-	menuitem = gtk_check_menu_item_new_with_label (_("Set Target"));
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget);
-	g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-	g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-	g_object_set_data (G_OBJECT (menuitem), "obj", obj);
-	gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget);
-	g_signal_connect (menuitem, "activate", G_CALLBACK (target_toggled), satmap);
-	gtk_widget_set_sensitive (menuitem, FALSE);
+     /* target */
+     menuitem = gtk_check_menu_item_new_with_label (_("Set Target"));
+     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget);
+     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+     g_object_set_data (G_OBJECT (menuitem), "obj", obj);
+     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget);
+     g_signal_connect (menuitem, "activate", G_CALLBACK (target_toggled), satmap);
+     gtk_widget_set_sensitive (menuitem, FALSE);
 #endif
 
-	gtk_widget_show_all (menu);
+     gtk_widget_show_all (menu);
 
-	/* Note: event can be NULL here when called from view_onPopupMenu;
-	 *  gdk_event_get_time() accepts a NULL argument */
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-					(event != NULL) ? event->button : 0,
-					gdk_event_get_time ((GdkEvent*) event));
-		
+     /* Note: event can be NULL here when called from view_onPopupMenu;
+      *  gdk_event_get_time() accepts a NULL argument */
+     gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                         (event != NULL) ? event->button : 0,
+                         gdk_event_get_time ((GdkEvent*) event));
+          
 
 }
 
@@ -182,45 +182,45 @@ gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
 static void
 coverage_toggled (GtkCheckMenuItem *item, gpointer data)
 {
-	sat_map_obj_t *obj = NULL;
-	GtkSatMap     *satmap = GTK_SAT_MAP(data);
-	guint32        covcol;
+     sat_map_obj_t *obj = NULL;
+     GtkSatMap     *satmap = GTK_SAT_MAP(data);
+     guint32        covcol;
 
 
-	/* get satellite object */
-	obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
+     /* get satellite object */
+     obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
 
-	if (obj == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Failed to get satellite object."),
-					 __FILE__, __LINE__);
-		return;
-	}
+     if (obj == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%d: Failed to get satellite object."),
+                          __FILE__, __LINE__);
+          return;
+     }
 
-	/* toggle flag */
-	obj->showcov = !obj->showcov;
-	gtk_check_menu_item_set_active (item, obj->showcov);
+     /* toggle flag */
+     obj->showcov = !obj->showcov;
+     gtk_check_menu_item_set_active (item, obj->showcov);
 
-	/* set or clear coverage colour */
-	if (obj->showcov) {
-		covcol = mod_cfg_get_int (satmap->cfgdata,
-								  MOD_CFG_MAP_SECTION,
-								  MOD_CFG_MAP_SAT_COV_COL,
-								  SAT_CFG_INT_MAP_SAT_COV_COL);
-	}
-	else {
-		covcol = 0x00000000;
-	}
+     /* set or clear coverage colour */
+     if (obj->showcov) {
+          covcol = mod_cfg_get_int (satmap->cfgdata,
+                                          MOD_CFG_MAP_SECTION,
+                                          MOD_CFG_MAP_SAT_COV_COL,
+                                          SAT_CFG_INT_MAP_SAT_COV_COL);
+     }
+     else {
+          covcol = 0x00000000;
+     }
 
-	g_object_set (obj->range1,
-				  "fill-color-rgba", covcol,
-				  NULL);
+     g_object_set (obj->range1,
+                      "fill-color-rgba", covcol,
+                      NULL);
 
-	if (obj->newrcnum == 2) {
-		g_object_set (obj->range2,
-					  "fill-color-rgba", covcol,
-					  NULL);
-	}
+     if (obj->newrcnum == 2) {
+          g_object_set (obj->range2,
+                           "fill-color-rgba", covcol,
+                           NULL);
+     }
 }
 
 
@@ -232,37 +232,37 @@ coverage_toggled (GtkCheckMenuItem *item, gpointer data)
 static void
 track_toggled (GtkCheckMenuItem *item, gpointer data)
 {
-	sat_map_obj_t *obj = NULL;
-	sat_t         *sat = NULL;
-	qth_t         *qth = NULL;
-	GtkSatMap     *satmap = GTK_SAT_MAP(data);
+     sat_map_obj_t *obj = NULL;
+     sat_t         *sat = NULL;
+     qth_t         *qth = NULL;
+     GtkSatMap     *satmap = GTK_SAT_MAP(data);
 
 
-	/* get satellite object */
-	obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
-	sat = SAT(g_object_get_data (G_OBJECT (item), "sat"));
-	qth = (qth_t *)(g_object_get_data (G_OBJECT (item), "qth"));
+     /* get satellite object */
+     obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
+     sat = SAT(g_object_get_data (G_OBJECT (item), "sat"));
+     qth = (qth_t *)(g_object_get_data (G_OBJECT (item), "qth"));
 
-	if (obj == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Failed to get satellite object."),
-					 __FILE__, __LINE__);
-		return;
-	}
+     if (obj == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%d: Failed to get satellite object."),
+                          __FILE__, __LINE__);
+          return;
+     }
 
-	/* toggle flag */
-	obj->showtrack = !obj->showtrack;
-	gtk_check_menu_item_set_active (item, obj->showtrack);
+     /* toggle flag */
+     obj->showtrack = !obj->showtrack;
+     gtk_check_menu_item_set_active (item, obj->showtrack);
 
-	if (obj->showtrack) {
-		/* create ground track */
-		ground_track_create (satmap, sat, qth, obj);
+     if (obj->showtrack) {
+          /* create ground track */
+          ground_track_create (satmap, sat, qth, obj);
 
-	}
-	else {
-		/* delete ground track with clear_ssp = TRUE */
-		ground_track_delete (satmap, sat, qth, obj, TRUE);
-	}
+     }
+     else {
+          /* delete ground track with clear_ssp = TRUE */
+          ground_track_delete (satmap, sat, qth, obj, TRUE);
+     }
 
 }
 
@@ -413,23 +413,23 @@ static void show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
 static void
 target_toggled (GtkCheckMenuItem *item, gpointer data)
 {
-	sat_map_obj_t *obj = NULL;
+     sat_map_obj_t *obj = NULL;
 
 
 
-	/* get satellite object */
-	obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
+     /* get satellite object */
+     obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
 
-	if (obj == NULL) {
-		sat_log_log (SAT_LOG_LEVEL_BUG,
-					 _("%s:%d: Failed to get satellite object."),
-					 __FILE__, __LINE__);
-		return;
-	}
+     if (obj == NULL) {
+          sat_log_log (SAT_LOG_LEVEL_BUG,
+                          _("%s:%d: Failed to get satellite object."),
+                          __FILE__, __LINE__);
+          return;
+     }
 
-	/* toggle flag */
-	obj->istarget = !obj->istarget;
-	gtk_check_menu_item_set_active (item, obj->istarget);
+     /* toggle flag */
+     obj->istarget = !obj->istarget;
+     gtk_check_menu_item_set_active (item, obj->istarget);
 }
 #endif
 

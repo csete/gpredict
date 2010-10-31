@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -35,16 +35,16 @@
 
 /** \brief QTH data structure in human readable form. */
 typedef struct {
-	gchar    *name;   /*!< Name, eg. callsign. */
-	gchar    *loc;    /*!< Location, eg City, Country. */
-	gchar    *desc;   /*!< Short description. */
-	gdouble   lat;    /*!< Latitude in dec. deg. North. */
-	gdouble   lon;    /*!< Longitude in dec. deg. East. */
-	gint      alt;    /*!< Altitude above sea level in meters. */
-	gchar    *qra;    /*!< QRA locator */
-	gchar    *wx;     /*!< Weather station code (4 chars). */
+     gchar    *name;   /*!< Name, eg. callsign. */
+     gchar    *loc;    /*!< Location, eg City, Country. */
+     gchar    *desc;   /*!< Short description. */
+     gdouble   lat;    /*!< Latitude in dec. deg. North. */
+     gdouble   lon;    /*!< Longitude in dec. deg. East. */
+     gint      alt;    /*!< Altitude above sea level in meters. */
+     gchar    *qra;    /*!< QRA locator */
+     gchar    *wx;     /*!< Weather station code (4 chars). */
 
-	GKeyFile *data;   /*!< Raw data from cfg file. */
+     GKeyFile *data;   /*!< Raw data from cfg file. */
 } qth_t;
 
 

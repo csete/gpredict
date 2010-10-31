@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -46,22 +46,22 @@
  */
 GtkWidget *sat_pref_predict_create ()
 {
-	GtkWidget *nbook;
+     GtkWidget *nbook;
 
-	nbook = gtk_notebook_new ();
+     nbook = gtk_notebook_new ();
 
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_conditions_create (),
-				  gtk_label_new (_("Pass Conditions")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_multi_pass_create (),
-				  gtk_label_new (_("Multiple Passes")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_single_pass_create (),
-				  gtk_label_new (_("Single Pass")));
-	gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-				  sat_pref_sky_at_glance_create (),
-				  gtk_label_new (_("Sky at a Glance")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_conditions_create (),
+                      gtk_label_new (_("Pass Conditions")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_multi_pass_create (),
+                      gtk_label_new (_("Multiple Passes")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_single_pass_create (),
+                      gtk_label_new (_("Single Pass")));
+     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
+                      sat_pref_sky_at_glance_create (),
+                      gtk_label_new (_("Sky at a Glance")));
 
         return nbook;
 }
@@ -72,10 +72,10 @@ GtkWidget *sat_pref_predict_create ()
 void
 sat_pref_predict_cancel ()
 {
-	sat_pref_conditions_cancel ();
-	sat_pref_multi_pass_cancel ();
-	sat_pref_single_pass_cancel ();
-	sat_pref_sky_at_glance_cancel ();
+     sat_pref_conditions_cancel ();
+     sat_pref_multi_pass_cancel ();
+     sat_pref_single_pass_cancel ();
+     sat_pref_sky_at_glance_cancel ();
 }
 
 
@@ -84,10 +84,10 @@ sat_pref_predict_cancel ()
 void
 sat_pref_predict_ok     ()
 {
-	sat_pref_conditions_ok ();
-	sat_pref_multi_pass_ok ();
-	sat_pref_single_pass_ok ();
-	sat_pref_sky_at_glance_ok ();
+     sat_pref_conditions_ok ();
+     sat_pref_multi_pass_ok ();
+     sat_pref_single_pass_ok ();
+     sat_pref_sky_at_glance_ok ();
 }
 
 

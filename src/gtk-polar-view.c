@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -996,13 +996,13 @@ update_track (gpointer key, gpointer value, gpointer data)
 
 
     if (obj->showtrack) {
-		if (obj->pass == NULL) {
-			sat_log_log (SAT_LOG_LEVEL_BUG,
-						 _("%s:%d: Failed to get satellite pass."),
-						 __FILE__, __LINE__);
-			return;
-		}
-		
+          if (obj->pass == NULL) {
+               sat_log_log (SAT_LOG_LEVEL_BUG,
+                               _("%s:%d: Failed to get satellite pass."),
+                               __FILE__, __LINE__);
+               return;
+          }
+          
         /* create points */
         num = g_slist_length (obj->pass->details);
 
