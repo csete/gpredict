@@ -3,7 +3,6 @@ Future plans for gpredict development include:
 * New satellite editor to manually add/edit/delete satellite data.
 * New transponder editor to edit transponder data.
 * Feature request 2866570: Set operating mode via CAT.
-* Feature request 2873824: Flip Passes.
 * Feature request 2778735: Visual indicator for RX/TX/TRX.
 * Feature request 2689352: Mutual Contact Window AOS/LOS.
 * Show day/night on satmap.
@@ -20,7 +19,7 @@ Future plans for gpredict development include:
 * Native Mac OS X port.
 * Dynamic reconfiguration. No need to re-load modules if configuration changes
 * Plot more parameters in detailed pass prediction dialogue (depending
-  on settingss).
+  on settings).
 * Predict satellite parameters over a given time period (Tools).
 * Solar illumination prediction.
 * Treat Sun and Moon as satellites.

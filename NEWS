@@ -1,6 +1,8 @@
 Changes in version 1.3 (TBD)
 
+- Feature request 2873824: Flip Passes.
 - Automatically refresh the Sky at a glance view every minute.
+- Fixed bug 2116691: Leave network connection open.
 
 
 Changes in version 1.2 (12 Oct 2010)
