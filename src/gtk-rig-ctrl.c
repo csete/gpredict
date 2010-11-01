@@ -1965,8 +1965,8 @@ static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock)
     retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
     if (retcode) {
         vbuff = g_strsplit (buffback, "\n", 3);
-        pttstat = g_ascii_strtoull (vbuff[0], NULL, 0);  //FIXME base = 0 ok?
-
+        if (vbuff[0])
+            pttstat = g_ascii_strtoull (vbuff[0], NULL, 0);  //FIXME base = 0 ok?
         g_strfreev (vbuff);
     }
     g_free (buff);
@@ -2120,6 +2120,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     gchar  *buff,**vbuff;
     gchar buffback[128];
     gboolean retcode;
+    gboolean retval = TRUE;
 
     buff = g_strdup_printf ("f\x0a");
 
@@ -2127,10 +2128,15 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     retcode=check_get_response(buffback,retcode,__FUNCTION__);
     if (retcode) {
         vbuff = g_strsplit (buffback, "\n", 3);
-        *freq = g_ascii_strtod (vbuff[0], NULL);
+        if (vbuff[0])
+            *freq = g_ascii_strtod (vbuff[0], NULL);
+        else
+            retval = FALSE;
         g_strfreev (vbuff);
+    } else {
+       retval = FALSE;
     }
-    return TRUE;
+    return retval;
 }
 
 /** \brief Get frequency when the radio is working toggle
@@ -2145,6 +2151,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     gchar  *buff,**vbuff;
     gchar   buffback[128];
     gboolean retcode;
+    gboolean retval=TRUE;
 
     if (freq == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -2160,10 +2167,16 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     retcode=check_get_response(buffback,retcode,__FUNCTION__);
     if (retcode) {
         vbuff = g_strsplit (buffback, "\n", 3);
-        *freq = g_ascii_strtod (vbuff[0], NULL);
+        if (vbuff[0]) 
+            *freq = g_ascii_strtod (vbuff[0], NULL);
+        else
+            retval = FALSE;
+
         g_strfreev (vbuff);
+    } else {
+        retval = FALSE;
     }
-    return TRUE;
+    return retval;
 }
 
 /** \brief Select target VFO
