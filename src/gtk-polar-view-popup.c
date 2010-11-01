@@ -210,6 +210,12 @@ static void
 
         /* create points */
         num = g_slist_length (obj->pass->details);
+        if (num == 0) {
+            sat_log_log (SAT_LOG_LEVEL_BUG,
+                         _("%s:%d: Pass has no details."),
+                         __FILE__, __LINE__);
+            return;
+        }
 
         /* time resolution for time ticks; we need
                    3 additional points to AOS and LOS ticks.
