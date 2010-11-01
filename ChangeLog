@@ -89,6 +89,10 @@
     * src/tle-update.[ch]
     Change tab to spaces and change emacs indent-tabs-mode.
 
+    * src/gtk-polar-view.c
+    * src/gtk-polar-view-popup.c
+    Catch if pass has no points before making polar view/polar view popup
+
 2010-10-30 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.[ch]
