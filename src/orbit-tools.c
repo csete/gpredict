@@ -95,9 +95,14 @@ gboolean
 decayed        (sat_t *sat)
 {
 
-     /*** FIXME: should use the unconverted xndt2o here! */
+     /* tle.xndt2o/(twopi/xmnpda/xmnpda) is the value before converted the 
+        value matches up with the value in predict 2.2.3 */
+     /*** FIXME decayed is treated as a static quantity. 
+          It is time dependent. Also sat->jul_utc is often zero 
+          when this function is called
+     ***/
      if (sat->jul_epoch + ((16.666666 - sat->meanmo) / 
-                     (10.0 * fabs (sat->tle.xndt2o))) < sat->jul_utc)
+                           (10.0 * fabs (sat->tle.xndt2o/(twopi/xmnpda/xmnpda)))) < sat->jul_utc)
           return TRUE;
      else
           return FALSE;
