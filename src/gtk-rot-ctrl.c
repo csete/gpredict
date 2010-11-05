@@ -1341,20 +1341,22 @@ static gboolean is_flipped_pass (pass_t * pass,rot_az_type_t type){
         last_az+=360;
     }
     
-    for (i = 1; i < num-1; i++) {
-        detail = PASS_DETAIL(g_slist_nth_data (pass->details, i));
-        caz=detail->az;
-        while (caz>max_az) {
-            caz-=360;
-        } 
-        while (caz<min_az) {
-            caz+=360;
+    if (num>1) {
+        for (i = 1; i < num-1; i++) {
+            detail = PASS_DETAIL(g_slist_nth_data (pass->details, i));
+            caz=detail->az;
+            while (caz>max_az) {
+                caz-=360;
+            } 
+            while (caz<min_az) {
+                caz+=360;
+            }
+            if (fabs(caz-last_az)>180) {
+                retval=TRUE;
+            }
+            last_az=caz;
+            
         }
-        if (fabs(caz-last_az)>180) {
-            retval=TRUE;
-        }
-        last_az=caz;
-
     }
     caz=pass->los_az;
     while (caz>max_az) {
