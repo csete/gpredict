@@ -418,7 +418,7 @@ get_next_passes (sat_t *sat, qth_t *qth, gdouble maxdt, guint num)
  *       reversed
  */
 pass_t *
-get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
+get_pass   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
 {
     gdouble        aos = 0.0;    /* time of AOS */
     gdouble        tca = 0.0;    /* time of TCA */
@@ -433,8 +433,11 @@ get_pass   (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
     pass_detail_t *detail = NULL;
     gboolean       done = FALSE;
     guint          iter = 0;      /* number of iterations */
-
+    sat_t         *sat,sat_working;
     /* FIXME: watchdog */
+
+    /*copy sat_in to a working structure*/
+    sat = memcpy(&sat_working,sat_in,sizeof(sat_t));
 
     /* get time resolution; sat-cfg stores it in seconds */
     tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
@@ -862,7 +865,7 @@ free_pass_details (GSList *details)
  *       reversed
  */
 pass_t *
-get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
+get_pass_no_min_el (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
 {
     gdouble        aos = 0.0;    /* time of AOS */
     gdouble        tca = 0.0;    /* time of TCA */
@@ -876,9 +879,12 @@ get_pass_no_min_el (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
     pass_t        *pass = NULL;
     pass_detail_t *detail = NULL;
     gboolean       done = FALSE;
-
+    sat_t         *sat,sat_working;
 
     /* FIXME: watchdog */
+
+    /*copy sat_in to a working structure*/
+    sat = memcpy(&sat_working,sat_in,sizeof(sat_t));
 
     /* get time resolution; sat-cfg stores it in seconds */
     tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
