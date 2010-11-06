@@ -1019,8 +1019,15 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
 
         } else {
             vbuff = g_strsplit (buffback, "\n", 3);
-            *az = g_strtod (vbuff[0], NULL);
-            *el = g_strtod (vbuff[1], NULL);
+            if ((vbuff[0] !=NULL) && (vbuff[1]!=NULL)){
+                *az = g_strtod (vbuff[0], NULL);
+                *el = g_strtod (vbuff[1], NULL);
+            } else {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s:%d: rotctld returned bad response (%s)"),
+                             __FILE__, __LINE__,buffback);
+                retcode=FALSE;
+            }
             
             g_strfreev (vbuff);
         }
