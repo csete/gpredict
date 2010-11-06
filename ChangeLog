@@ -1,3 +1,25 @@
+2010-11-06 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rot-ctrl.c
+    Added checks on g_strsplit in get_pos
+
+2010-11-05 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/predict-tools.c
+    get_pass and get_pass_no_min_el now work on copies of sat_t structure
+    to address bug 3099314
+
+    * src/gtk-rot-ctrl.c
+    Update is_flipped_pass to handle pass with no details
+
+2010-11-01 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/orbit-tools.c
+    Corrected fixme inside decayed.
+
+    * src/gtk-rig-ctrl.c
+    Add checks to g_strsplit calls in gtk-rig-ctrl.c
+
 2010-10-31 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/about.[ch]
@@ -135,7 +157,6 @@
     * src/gtk-sat-module-popup.c:
     Allow only one GtkSkyGlance widget per module (consistent with
     GtkRigCtrl and GtkRotCtrl).
-    
 
 2010-10-15 Alexandru Csete <oz9aec at gmail.com>
 
