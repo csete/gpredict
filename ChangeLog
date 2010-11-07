@@ -4,6 +4,10 @@
     Updated pass regeneration logic in rotator controller.
     Fixes bug 2167508: problems in rotator controller.
 
+    * data/locations.dat
+    Added locations in Malaysia, Indonesia, the Philippines, and Kiribati from US/NOAA Metar database.
+    Addresses Feature Request 3022617: Malaysia's location.
+
 2010-11-07 Alexandru Csete <oz9aec at gmail.com>
 
     * configure.ac:
