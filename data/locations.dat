@@ -736,6 +736,11 @@ Europe;Denmark;Vaerlose;EKVL;55.7667;12.3333;31
 Europe;Denmark;Vagar;EKVG;62.0667;-7.2833;92
 Europe;Denmark;Vandel;EKVA;55.7;9.2;76
 Europe;Denmark;Vojens/Skrydstrup;EKSP;55.2333;9.2667;47
+Europe;Estonia;Kardla;EEKA;58.983;22.817;5
+Europe;Estonia;Kuressaare;EEKE;58.217;22.500;4
+Europe;Estonia;Parnu;EEPU;58.417;24.467;14
+Europe;Estonia;Tallinn;EETN;59.400;24.817;40
+Europe;Estonia;Tartu/Ulenurme;EETU;58.300;26.733;59
 Europe;Finland;Helsinki;EFHK;60.3167;24.9667;56
 Europe;Finland;Tampere;EFTP;61.4167;23.5833;112
 Europe;Finland;Turku;EFTU;60.5167;22.2667;59
@@ -945,6 +950,14 @@ Europe;Italy;Venezia;LIPZ;45.5;12.3333;6
 Europe;Italy;Vicenza;LIPT;45.5667;11.5167;53
 Europe;Italy;Villafranca;LIPX;45.3833;10.8667;68
 Europe;Italy;Viterbo;LIRV;42.4333;12.05;308
+Europe;Latvia;Liepaja International Airport;EVLA;56.517;21.083;5
+Europe;Latvia;Riga International Airport;EVRA;56.917;23.967;10
+Europe;Latvia;Riga;UMRR;56.967;24.050;7
+Europe;Latvia;Ventspils;UMRW;57.400;21.533;3
+Europe;Lithuania;Kaunas;EYKA;54.900;23.917;77
+Europe;Lithuania;Palanga Intl.;EYPA;55.917;21.050;10
+Europe;Lithuania;Siauliai Intl./Mil.;EYSA;55.883;23.383;135
+Europe;Lithuania;Vilnius;EYVI;54.633;25.100;162
 Europe;Luxembourg;Luxembourg;ELLX;49.6167;6.2167;379
 Europe;Malta;Luqa;LMML;35.85;14.4833;91
 Europe;Moldova;Kishineu;LUKK;46.9167;28.9308;0
