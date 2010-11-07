@@ -986,7 +986,7 @@ get_pass_no_min_el (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
             default:
                 break;
             }
-
+            
             pass->details = g_slist_prepend (pass->details, detail);
 
             /* store elevation if greater than the
@@ -1036,10 +1036,13 @@ get_pass_no_min_el (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
  *
  */
 pass_t *
-get_current_pass (sat_t *sat, qth_t *qth, gdouble start)
+get_current_pass (sat_t *sat_in, qth_t *qth, gdouble start)
 {
     gdouble t;
-
+    sat_t  *sat,sat_working;
+    
+    /*copy sat_in to a working structure*/
+    sat = memcpy(&sat_working,sat_in,sizeof(sat_t));
 
     if (start > 0.0)
         t = start;
