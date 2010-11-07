@@ -20,6 +20,9 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
   CFLAGS="${CFLAGS} -Wall"
 fi
 
+dnl check for libm
+AC_CHECK_LIB([m], [sin],, AC_MSG_ERROR([Can't find libm. Check your libc installation]))
+
 dnl check for glib, gtk, and goocanvas libraries
 pkg_modules="gtk+-2.0 >= 2.18.0 glib-2.0 >= 2.22.0 gthread-2.0 >= 2.22.0 goocanvas >= 0.15 libcurl >= 7.19.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
