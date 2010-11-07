@@ -1,6 +1,12 @@
+2010-11-07 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rot-ctrl.c
+    Updated pass regeneration logic in rotator controller.
+    Fixes bug 2167508: problems in rotator controller.
+
 2010-11-07 Alexandru Csete <oz9aec at gmail.com>
 
-    * configura.ac:
+    * configure.ac:
     Added implicit check for libm (required on Fedora core 13 and later).
 
 

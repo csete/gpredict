@@ -298,16 +298,46 @@ void
         
         update_count_down (ctrl, t);
         
+        
         /* update next pass if necessary */
         if (ctrl->pass != NULL) {
-            if ((ctrl->target->aos > ctrl->pass->aos) && (ctrl->target->el <= 0.0)) {
-                /* we need to update the pass */
-                free_pass (ctrl->pass);
-                ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
-                set_flipped_pass(ctrl);
-
-                /* update polar plot */
-                gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
+            /*if we are not in the current pass*/
+            if ((ctrl->pass->aos>t)||(ctrl->pass->los<t)){
+                /* the pass may not have met the minimum 
+                   elevation, calculate the pass and plot it*/
+                if (ctrl->target->el >= 0.0) {
+                    /*inside an unexpected/unpredicted pass*/
+                    free_pass (ctrl->pass);
+                    ctrl->pass=NULL;
+                    ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, t);
+                    set_flipped_pass(ctrl);
+                    gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
+                } else if ((ctrl->target->aos-ctrl->pass->aos)>(ctrl->delay/secday/1000/4.0)) {
+                    /*the target is expected to appear in a new pass 
+                      sufficiently later after the current pass says*/
+                    
+                    /*converted milliseconds to gpredict time and took a 
+                      fraction of it as a threshold for deciding a new pass*/
+                    
+                    /*if the next pass is not the one for the target*/
+                    free_pass (ctrl->pass);
+                    ctrl->pass=NULL;
+                    ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
+                    set_flipped_pass(ctrl);
+                    /* update polar plot */
+                    gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
+                }
+            } else {
+                /* inside a pass and target dropped below the 
+                   horizon so look for a new pass */
+                if (ctrl->target->el < 0.0) {
+                    free_pass (ctrl->pass);
+                    ctrl->pass=NULL;
+                    ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
+                    set_flipped_pass(ctrl);
+                    /* update polar plot */
+                    gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
+                }
             }
         }
         else {
