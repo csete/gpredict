@@ -3,6 +3,10 @@
     * src/gtk-rot-ctrl.c
     Added checks on g_strsplit in get_pos
 
+    * src/predict-tools.c
+    get_current_pass now works on copy of sat_t structure
+    to address bug 3099314
+
 2010-11-05 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/predict-tools.c
