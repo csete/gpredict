@@ -1085,6 +1085,7 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
     gchar  buffback[128];
     gchar  azstr[8],elstr[8];
     gboolean retcode;
+    gint   retval;
     
     /* send command */
     g_ascii_formatd (azstr, 8, "%7.2f", az);
@@ -1095,14 +1096,25 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
     
     g_free (buff);
     
-    if (retcode==TRUE)
-        if (strncmp(buffback,"RPRT 0",6)!=0) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%d: rotctld returned error (%s)"),
-                         __FILE__, __LINE__,buffback);
+    if (retcode==TRUE){
+        retval=(gint)g_strtod(buffback+4,NULL);
+        switch(retval) {
             
-            retcode=FALSE;
+        case 0:
+            /*no error case*/
+            break;
+            
+        default:
+            /*any other case*/
+            /*not sure what is a hard error or soft error*/
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%d: rotctld returned error %d (%s)"),
+                         __FILE__, __LINE__, retval, buffback);
+            
+            //retcode=FALSE;
+            break;
         }
+    }
 
     return (retcode);
 }
