@@ -120,7 +120,7 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt);
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 static gboolean open_rigctld_socket(radio_conf_t *conf, gint *sock);
-static gboolean close_rigctld_socket(gint sock);
+static gboolean close_rigctld_socket(gint *sock);
 
 /* misc utility functions */
 static void load_trsp_list (GtkRigCtrl *ctrl);
@@ -205,6 +205,8 @@ static void gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->trsplist = NULL;
     ctrl->trsplock = FALSE;
     ctrl->tracking = FALSE;
+    ctrl->sock = 0;
+    ctrl->sock2 = 0;
     g_static_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
@@ -243,6 +245,11 @@ static void gtk_rig_ctrl_destroy (GtkObject *object)
         ctrl->trsplist = NULL;   /* destroy might be called twice (?) so we need to NULL it */
     }
 
+    /* close sockets if they are open*/
+    if (ctrl->sock)
+        close_rigctld_socket(&(ctrl->sock));
+    if (ctrl->sock2)
+        close_rigctld_socket(&(ctrl->sock2));
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -1204,9 +1211,9 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
 
         if (ctrl->conf2 != NULL) {
 
-            close_rigctld_socket(ctrl->sock2);
+            close_rigctld_socket(&(ctrl->sock2));
         }
-        close_rigctld_socket(ctrl->sock);
+        close_rigctld_socket(&(ctrl->sock));
         
 
     }
@@ -2692,6 +2699,7 @@ static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
                      __FUNCTION__);
+        *sock = 0;
         return FALSE;
     }
     else {
@@ -2712,6 +2720,7 @@ static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
                      __FUNCTION__, conf->host, conf->port);
+        *sock = 0;
         return FALSE;
     }
     else {
@@ -2723,18 +2732,18 @@ static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
     return TRUE;
 }
 
-static gboolean close_rigctld_socket (gint sock) {
+static gboolean close_rigctld_socket (gint *sock) {
   gint written;
   /*shutdown the rigctld connect*/
-  written = send(sock, "q\x0a", 2, 0);
+  written = send(*sock, "q\x0a", 2, 0);
   
 #ifndef WIN32
-  shutdown (sock, SHUT_RDWR);
+  shutdown (*sock, SHUT_RDWR);
 #else
-  shutdown (sock, SD_BOTH);
+  shutdown (*sock, SD_BOTH);
 #endif
   
-  close (sock);
+  close (*sock);
   
   return TRUE;
 }
