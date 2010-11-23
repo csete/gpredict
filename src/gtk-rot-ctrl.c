@@ -90,8 +90,8 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el);
 static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el);
 
 static gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gint sizeout);
-static gboolean open_rotctld_socket (GtkRotCtrl *ctrl, gint *sock);
-static gboolean close_rotctld_socket (gint sock);
+static gboolean open_rotctld_socket (GtkRotCtrl *ctrl);
+static gboolean close_rotctld_socket (gint *sock);
 
 static gboolean have_conf (void);
 static gint sat_name_compare (sat_t* a,sat_t*b);
@@ -166,7 +166,8 @@ static void
     ctrl->pass = NULL;
     ctrl->qth = NULL;
     ctrl->plot = NULL;
-    
+    ctrl->sock = 0;
+
     ctrl->tracking = FALSE;
     g_static_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
@@ -194,6 +195,11 @@ static void
         ctrl->conf = NULL;
     }
     
+    /*close the socket if it is still open*/
+    if (ctrl->sock!=0) {
+        close_rotctld_socket(&(ctrl->sock));
+    }
+
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -831,7 +837,7 @@ static void
     if (!gtk_toggle_button_get_active (button)) {
         gtk_widget_set_sensitive (ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
-        close_rotctld_socket(ctrl->sock);
+        close_rotctld_socket(&(ctrl->sock));
         gtk_label_set_text (GTK_LABEL (ctrl->AzRead), "---");
         gtk_label_set_text (GTK_LABEL (ctrl->ElRead), "---");
     }
@@ -845,7 +851,7 @@ static void
         }
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
-        open_rotctld_socket(ctrl,&(ctrl->sock));
+        open_rotctld_socket(ctrl);
         ctrl->wrops = 0;
         ctrl->rdops = 0;
     }
@@ -1230,7 +1236,7 @@ static gboolean have_conf ()
 
 /** \brief open the rotcld socket. return true if successful false otherwise.*/
 
-static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
+static gboolean open_rotctld_socket (GtkRotCtrl * ctrl) {
     struct sockaddr_in ServAddr;
     struct hostent *h;
     gint status;
@@ -1240,6 +1246,7 @@ static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
                      __FUNCTION__);
+        ctrl->sock = 0;
         return FALSE;
     }
     else {
@@ -1260,6 +1267,7 @@ static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
                      __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+        ctrl->sock = 0;
         return FALSE;
     }
     else {
@@ -1273,18 +1281,20 @@ static gboolean open_rotctld_socket (GtkRotCtrl * ctrl, gint *sock) {
 
 
 /*close a rotcld socket. First send a q command to cleanly shut down rotctld*/
-static gboolean close_rotctld_socket (gint sock) {
+static gboolean close_rotctld_socket (gint *sock) {
   gint written;
   /*shutdown the rigctld connect*/
-  written = send(sock, "q\x0a", 2, 0);
+  written = send(*sock, "q\x0a", 2, 0);
   
 #ifndef WIN32
-  shutdown (sock, SHUT_RDWR);
+  shutdown (*sock, SHUT_RDWR);
 #else
-  shutdown (sock, SD_BOTH);
+  shutdown (*sock, SD_BOTH);
 #endif
   
-  close (sock);
+  close (*sock);
+
+  *sock=0;
   
   return TRUE;
 }
