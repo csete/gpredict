@@ -2744,7 +2744,9 @@ static gboolean close_rigctld_socket (gint *sock) {
 #endif
   
   close (*sock);
-  
+
+  *sock = 0;
+
   return TRUE;
 }
 
