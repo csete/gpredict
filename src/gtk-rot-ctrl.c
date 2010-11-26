@@ -870,6 +870,8 @@ static gboolean
     gdouble setaz,setel;
     gchar *text;
     gboolean error = FALSE;
+    gboolean update_flag=FALSE;
+    sat_t sat_working, *sat;
     
     
     if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
@@ -881,34 +883,29 @@ static gboolean
        range, set the rotor position controller knob values to
        the target values. If the target satellite is out of range
        set the rotor controller to 0 deg El and to the Az where the
-       target sat is expected to come up
+       target sat is expected to come up or where it last went down
     */
     if (ctrl->tracking && ctrl->target) {
         if (ctrl->target->el < 0.0) {
-            gdouble aosaz = 0.0;
-            gdouble aosel = 0.0;
-
             if (ctrl->pass != NULL) {
-                aosaz = ctrl->pass->aos_az;
-                /* if this is a flipped pass and the rotor supports it*/
-                if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
-                    aosel=180;
-                    if (aosaz>180)
-                        aosaz-=180;
-                    else
-                        aosaz+=180;                    
-                }
-
-                if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (aosaz > 180.0)) {
-                    aosaz -= 360.0;
+                if (ctrl->t < ctrl->pass->aos) {
+                    setaz=ctrl->pass->aos_az;
+                    setel=0;
+                    update_flag=TRUE;
+                } else if (ctrl->t > ctrl->pass->los) {
+                    setaz=ctrl->pass->los_az;
+                    setel=0;
+                    update_flag=TRUE;
                 }
             }
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), aosaz);
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), aosel);
         }
-        else {
+        else { 
             setaz=ctrl->target->az;
             setel=ctrl->target->el;
+            update_flag=TRUE;
+        }
+        if (update_flag){
+            /* if this is a flipped pass and the rotor supports it*/
             if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
                 setel=180-setel;
                 if (setaz>180)
@@ -916,17 +913,15 @@ static gboolean
                 else
                     setaz+=180;
             }
-
-            if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) &&
-                (setaz > 180.0)) {
+            
+            if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0)) {
                 gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz- 360.0);
             }
             else {
                 gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz);
             }
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), setel);
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), setel);        
         }
-        
     }
 
     if ((ctrl->engaged) && (ctrl->conf != NULL)) {
@@ -962,6 +957,7 @@ static gboolean
         setel = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet));
         if ((fabs(setaz-rotaz) > ctrl->tolerance) ||
             (fabs(setel-rotel) > ctrl->tolerance)) {
+           
             /* send controller values to rotator device */
             if (!set_pos (ctrl, setaz, setel)) {
                 error = TRUE;
@@ -1310,9 +1306,9 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
 
     size = strlen(buff);
     
-    sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                 _("%s:%s: Sending %d bytes as %s."),
-                 __FILE__, __FUNCTION__, size, buff);
+    //sat_log_log (SAT_LOG_LEVEL_DEBUG,
+    //             _("%s:%s: Sending %d bytes as %s."),
+    //             __FILE__, __FUNCTION__, size, buff);
 
 
     /* send command */
@@ -1346,9 +1342,9 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
                      __FILE__, __FUNCTION__);
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s:%s: Read %d bytes as %s from rotctld"),
-                     __FILE__, __FUNCTION__, size, buffout);
+        //sat_log_log (SAT_LOG_LEVEL_DEBUG,
+        //             _("%s:%s: Read %d bytes as %s from rotctld"),
+        //             __FILE__, __FUNCTION__, size, buffout);
         
     }
 
