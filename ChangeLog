@@ -1,8 +1,8 @@
-2010-11-25 Charles Suprin <hamaa1vs at gmail.com>
+2010-12-10 Charles Suprin <hamaa1vs at gmail.com>
 
     * data/locations.dat
     Add entries to locations.dat and add state to Mexican locations.
-	
+
 2010-11-25 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.c
