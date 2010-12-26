@@ -1,3 +1,9 @@
+2010-12-26 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rot-ctrl.c
+    Make rotator lead satellite on update.
+    Restructure error handling for cleaner code.
+
 2010-12-26 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-map.c:

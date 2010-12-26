@@ -867,11 +867,14 @@ static gboolean
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
     gdouble rotaz=0.0, rotel=0.0;
-    gdouble setaz,setel;
+    gdouble setaz=0.0, setel=0.0;
     gchar *text;
     gboolean error = FALSE;
     gboolean update_flag=FALSE;
     sat_t sat_working, *sat;
+    /*parameters for path predictions*/
+    gdouble time_delta;
+    gdouble step_size;
     
     
     if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
@@ -904,24 +907,21 @@ static gboolean
             setel=ctrl->target->el;
             update_flag=TRUE;
         }
-        if (update_flag){
-            /* if this is a flipped pass and the rotor supports it*/
-            if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
-                setel=180-setel;
-                if (setaz>180)
-                    setaz-=180;
-                else
-                    setaz+=180;
-            }
-            
-            if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0)) {
-                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz- 360.0);
-            }
-            else {
-                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz);
-            }
-            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), setel);        
+        /* if this is a flipped pass and the rotor supports it*/
+        if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
+            setel=180-setel;
+            if (setaz>180)
+                setaz-=180;
+            else
+                setaz+=180;
         }
+        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0)) {
+            setaz = setaz- 360.0;
+        }
+
+    } else {
+        setaz = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet));
+        setel = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet));
     }
 
     if ((ctrl->engaged) && (ctrl->conf != NULL)) {
@@ -953,14 +953,83 @@ static gboolean
         }
         
         /* if tolerance exceeded */
-        setaz = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet));
-        setel = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet));
         if ((fabs(setaz-rotaz) > ctrl->tolerance) ||
             (fabs(setel-rotel) > ctrl->tolerance)) {
-           
+            
+            if (ctrl->tracking){
+                /*if we are in a pass try to lead the satellite 
+                  some so we are not always chasing it*/
+                if (ctrl->target->el>0.0) {
+                    /*starting the rotator moving while we do some computation can lead to errors later*/
+                    /* 
+                       compute a time in the future when the position is 
+                       within tolerance so and send the rotor there.
+                    */         
+                    
+                    /*use a working copy so data does not get corrupted*/
+                    sat=memcpy(&(sat_working),ctrl->target,sizeof(sat_t));
+                    
+                    /*
+                      compute az/el in the future that is past end of pass 
+                      or exceeds tolerance
+                    */
+                    if (ctrl->pass) {
+                        /* the next point is before the end of the pass 
+                           if there is one.*/
+                        time_delta=ctrl->pass->los-ctrl->t;
+                    } else {
+                        /* otherwise look 20 minutes into the future*/
+                        time_delta=1.0/72.0;
+                    }
+                
+                    step_size = time_delta / 2.0;
+                    
+                    /*
+                      find a time when satellite is above horizon and at the 
+                      edge of tolerance. the final step size needs to be smaller
+                      than delay. otherwise the az/el could be further away than
+                      tolerance the next time we enter the loop and we end up 
+                      pushing ourselves away from the satellite.
+                    */
+                    while (step_size > (ctrl->delay/1000.0/4.0/(secday))) {
+                        predict_calc (sat,ctrl->qth,ctrl->t+time_delta);
+                        /*update sat->az and sat->el to account for flips and az range*/
+                        if ((ctrl->flipped) && (ctrl->conf->maxel >= 180.0)){
+                            sat->el = 180.0-sat->el;
+                            if (sat->az > 180.0)
+                                sat->az -= 180.0;
+                            else
+                                sat->az += 180.0;
+                        }
+                        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0)) { 
+                            sat->az = sat->az - 360.0;
+                        } 
+                        if ((sat->el < 0.0)||(sat->el > 180.0)||
+                            (fabs(setaz - sat->az) > (ctrl->tolerance)) ||
+                            (fabs(setel - sat->el) > (ctrl->tolerance))) {
+                            time_delta -= step_size;
+                        } else {
+                            time_delta += step_size;
+                        }
+                        step_size /= 2.0;
+                    }
+                    setel = sat->el;
+                    if (setel < 0.0) {
+                        setel = 0.0;
+                    }
+                    if (setel > 180.0) {
+                        setel = 180.0;
+                    }
+                    setaz = sat->az;
+                }
+            }
             /* send controller values to rotator device */
+            /* this is the newly computed value which should be ahead of the current position */
             if (!set_pos (ctrl, setaz, setel)) {
                 error = TRUE;
+            } else {
+                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz);
+                gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), setel);
             }
         }
         
@@ -999,7 +1068,7 @@ static gboolean
     
     /* update controller circle on polar plot */
     if (ctrl->conf !=NULL){
-        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0)) {
+        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz < 0.0)) {
             gtk_polar_plot_set_ctrl_pos (GTK_POLAR_PLOT (ctrl->plot),
                                          gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet))+360.0,
                                          gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
@@ -1100,12 +1169,57 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
     
     if (retcode==TRUE){
         retval=(gint)g_strtod(buffback+4,NULL);
+        /*treat errors as soft errors unless there is good reason*/
+        /*good reasons come from operator experience or documentation*/
         switch(retval) {
             
         case 0:
             /*no error case*/
             break;
+        case -1:
+            /*RIG_EINVAL error*/
+            /*
+              Returned by gs232 (-m 601) driver when value sent to 
+              rotator outside configured range.
+              Based on author's experiment.
+            */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%d: rotctld returned error %d (%s). Check the limits in your configuration."),
+                         __FILE__, __LINE__, retval, buffback);
+
             
+            retcode=FALSE;
+            break;
+
+        case -5:
+            /*RIG_ETIMEOUT error*/
+            /*
+              Returned by ea4tx interface when stuck
+              Based on comments on hamlib-discussion list.
+            */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%d: rotctld returned error %d (%s)."),
+                         __FILE__, __LINE__, retval, buffback);
+            
+            
+            retcode=FALSE;
+            break;
+
+
+        case -8:
+            /*RIG_EPROTO error*/
+            /*
+              Returned by gs232 (-m 601) driver when interface is turned off
+              Based on author's experiment.
+            */
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s:%d: rotctld returned error %d (%s). Check that interface power on."),
+                         __FILE__, __LINE__, retval, buffback);
+
+            
+            retcode=FALSE;
+            break;
+
         default:
             /*any other case*/
             /*not sure what is a hard error or soft error*/
