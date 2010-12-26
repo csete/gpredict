@@ -1,3 +1,8 @@
+2010-12-26 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-map.c:
+    Removed dead code in coordinate conversion (it was nonsense anyway).
+
 2010-12-10 Charles Suprin <hamaa1vs at gmail.com>
 
     * data/locations.dat
@@ -11,7 +16,7 @@
 2010-11-24 Alexandru Csete <oz9aec at gmail.com>
 
     * src/Makefile.am:
-    Fixed PACKAGE_OCALE_DIR.
+    Fixed PACKAGE_LOCALE_DIR.
 
 
 2010-11-23 Charles Suprin <hamaa1vs at gmail.com>

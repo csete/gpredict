@@ -723,16 +723,12 @@ gtk_sat_map_update (GtkWidget  *widget)
  *  \param x The X coordinate on the screen (left to right)
  *  \param y The Y coordinate on the screen (top to bottom)
  *
+ * Assumes that -180 <= lon <= 180 and -90 <= lat <= 90
  */
 static void
 lonlat_to_xy (GtkSatMap *p, gdouble lon, gdouble lat, gfloat *x, gfloat *y)
 {
-    *x = p->x0 + (180.0 - lon) * p->width / 360.0;
-    if (*x < 0.0) /* west longitude */
-        *x *= -1;
-    else  /* east longitude */
-        *x = p->x0 + (180.0 + lon) * p->width / 360.0;
-
+    *x = p->x0 + (180.0 + lon) * p->width / 360.0;
     *y = p->y0 + (90.0 - lat) * p->height / 180.0;;
 }
 
