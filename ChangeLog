@@ -1,3 +1,9 @@
+2010-01-24 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/tle-update.c
+    Fix bug where tle file suffix compare is case dependent.
+    <https://bugs.launchpad.net/bugs/706452>
+
 2010-12-26 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.c
