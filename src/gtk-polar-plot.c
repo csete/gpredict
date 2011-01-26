@@ -937,8 +937,9 @@ static void
         points->coords[2*i+1] = (double) y;
 
         if (!(i % tres)) {
-            /* create a time tick */
-            pv->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
+            if (ttidx<TRACK_TICK_NUM)
+                /* create a time tick */
+                pv->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
             ttidx++;
         }
     }
@@ -1054,9 +1055,11 @@ static void
                 x += 5;
             }
             /* update time tick */
-            g_object_set (pv->trtick[ttidx],
-                          "x", (gdouble) x, "y", (gdouble) y,
-                          NULL);
+            if (ttidx<TRACK_TICK_NUM){
+                g_object_set (pv->trtick[ttidx],
+                              "x", (gdouble) x, "y", (gdouble) y,
+                              NULL);
+            }
             ttidx++;
         }
     }
