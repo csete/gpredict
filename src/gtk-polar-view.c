@@ -1036,9 +1036,10 @@ update_track (gpointer key, gpointer value, gpointer data)
 
             if (!(i % tres)) {
                 /* update time tick */
-                g_object_set (obj->trtick[ttidx],
-                              "x", (gdouble) x, "y", (gdouble) y,
-                              NULL);
+                if (ttidx<TRACK_TICK_NUM)
+                    g_object_set (obj->trtick[ttidx],
+                                  "x", (gdouble) x, "y", (gdouble) y,
+                                  NULL);
                 ttidx++;
             }
         }
@@ -1183,7 +1184,8 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 
         if (!(i % tres)) {
             /* create a time tick */
-            obj->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
+            if (ttidx<TRACK_TICK_NUM)
+                obj->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
             ttidx++;
         }
     }
