@@ -867,10 +867,9 @@ static gboolean
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL (data);
     gdouble rotaz=0.0, rotel=0.0;
-    gdouble setaz=0.0, setel=0.0;
+    gdouble setaz=0.0, setel=45.0;
     gchar *text;
     gboolean error = FALSE;
-    gboolean update_flag=FALSE;
     sat_t sat_working, *sat;
     /*parameters for path predictions*/
     gdouble time_delta;
@@ -894,18 +893,15 @@ static gboolean
                 if (ctrl->t < ctrl->pass->aos) {
                     setaz=ctrl->pass->aos_az;
                     setel=0;
-                    update_flag=TRUE;
                 } else if (ctrl->t > ctrl->pass->los) {
                     setaz=ctrl->pass->los_az;
                     setel=0;
-                    update_flag=TRUE;
                 }
             }
         }
         else { 
             setaz=ctrl->target->az;
             setel=ctrl->target->el;
-            update_flag=TRUE;
         }
         /* if this is a flipped pass and the rotor supports it*/
         if ((ctrl->flipped)&&(ctrl->conf->maxel>=180.0)){
@@ -981,7 +977,12 @@ static gboolean
                         /* otherwise look 20 minutes into the future*/
                         time_delta=1.0/72.0;
                     }
-                
+                    /* have a minimum time delta*/
+                    if (time_delta<(ctrl->delay/1000.0/secday)){
+                        time_delta=ctrl->delay/1000.0/secday;
+                    }
+
+
                     step_size = time_delta / 2.0;
                     
                     /*
