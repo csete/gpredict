@@ -1001,7 +1001,7 @@ static gboolean
                             else
                                 sat->az += 180.0;
                         }
-                        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0)) { 
+                        if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (sat->az > 180.0)) { 
                             sat->az = sat->az - 360.0;
                         } 
                         if ((sat->el < 0.0)||(sat->el > 180.0)||
