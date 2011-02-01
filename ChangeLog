@@ -3,6 +3,9 @@
     * src/gtk-rig-ctrl.c:
     Manage keyboard PTT event only if rig is RIG_TYPE_TOGGLE_MAN.
 
+    * src/defaults.h:
+    Deleted obsolete file.
+
 
 2011-01-24 Charles Suprin <hamaa1vs at gmail.com>
 
