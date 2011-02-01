@@ -1,8 +1,15 @@
-2010-01-24 Charles Suprin <hamaa1vs at gmail.com>
+2011-02-01 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-rig-ctrl.c:
+    Manage keyboard PTT event only if rig is RIG_TYPE_TOGGLE_MAN.
+
+
+2011-01-24 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/tle-update.c
     Fix bug where tle file suffix compare is case dependent.
     <https://bugs.launchpad.net/bugs/706452>
+
 
 2010-12-26 Charles Suprin <hamaa1vs at gmail.com>
 
@@ -10,20 +17,24 @@
     Make rotator lead satellite on update.
     Restructure error handling for cleaner code.
 
+
 2010-12-26 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-map.c:
     Removed dead code in coordinate conversion (it was nonsense anyway).
+
 
 2010-12-10 Charles Suprin <hamaa1vs at gmail.com>
 
     * data/locations.dat
     Add entries to locations.dat and add state to Mexican locations.
 
+
 2010-11-25 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.c
     Move rotor to end of pass if below horizon and after current pass
+
 
 2010-11-24 Alexandru Csete <oz9aec at gmail.com>
 
@@ -37,10 +48,12 @@
     * src/gtk-rig-ctrl.c
     Close socket in gtk-rig/rot-ctrl when window closes if applicable.
 
+
 2010-11-11 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.c
     Change error checking in set_pos
+
 
 2010-11-07 Charles Suprin <hamaa1vs at gmail.com>
 
@@ -51,6 +64,7 @@
     * data/locations.dat
     Added locations in Malaysia, Indonesia, the Philippines, and Kiribati from US/NOAA Metar database.
     Addresses Feature Request 3022617: Malaysia's location.
+
 
 2010-11-07 Alexandru Csete <oz9aec at gmail.com>
 
@@ -67,6 +81,7 @@
     get_current_pass now works on copy of sat_t structure
     to address bug 3099314
 
+
 2010-11-05 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/predict-tools.c
@@ -76,6 +91,7 @@
     * src/gtk-rot-ctrl.c
     Update is_flipped_pass to handle pass with no details
 
+
 2010-11-01 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/orbit-tools.c
@@ -83,6 +99,7 @@
 
     * src/gtk-rig-ctrl.c
     Add checks to g_strsplit calls in gtk-rig-ctrl.c
+
 
 2010-10-31 Charles Suprin <hamaa1vs at gmail.com>
 
@@ -179,22 +196,26 @@
     * src/gtk-polar-view-popup.c
     Catch if pass has no points before making polar view/polar view popup
 
+
 2010-10-30 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.[ch]
     * src/gtk-rig-ctrl.[ch]
     Change tab to spaces and change emacs indent-tabs-mode.
 
+
 2010-10-28 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/predict-tools.c
     Explicitly compute pass LOS_AZ.
+
 
 2010-10-27 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-rot-ctrl.[ch]
     Added support for flipped passes.
     Remove return from void function.
+
 
 2010-10-17 Charles Suprin <hamaa1vs at gmail.com>
 
@@ -207,6 +228,7 @@
 
     * src/gtk-polar-plot.c
     Make rotator show when on horizon as with other items.
+
 
 2010-10-16 Alexandru Csete <oz9aec at gmail.com>
 
@@ -221,6 +243,7 @@
     * src/gtk-sat-module-popup.c:
     Allow only one GtkSkyGlance widget per module (consistent with
     GtkRigCtrl and GtkRotCtrl).
+
 
 2010-10-15 Alexandru Csete <oz9aec at gmail.com>
 

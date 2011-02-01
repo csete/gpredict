@@ -2592,9 +2592,11 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
                          _("%s: Detected SPACEBAR pressed event"),
                          __FUNCTION__);
                          
-            /* manage PTT event */
-            manage_ptt_event (ctrl);
-            event_managed = TRUE;
+            /* manage PTT event but only if rig is of type TOGGLE_MAN */
+            if (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN) {
+                manage_ptt_event (ctrl);
+                event_managed = TRUE;
+            }
 
             break;
 
@@ -2611,11 +2613,12 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
 }
 
 
-/** \brief Maange PTT events
- * \param ctrl Pointer to the radio controller data
+/** \brief Manage PTT events.
+ * \param ctrl Pointer to the radio controller data.
  * 
  * This function is used to manage PTT events, e.g. the user presses
- * the spacebar. It is only useful for RIG_TYPE_TOGGLE_MAN.
+ * the spacebar. It is only useful for RIG_TYPE_TOGGLE_MAN and possibly for 
+ * RIG_TYPE_TOGGLE_AUTO.
  * 
  * First, the function will try to lock the controller. If the lock is acquired
  * the function checks the current PTT status.
@@ -2623,7 +2626,7 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
  * If PTT status is TRUE (on) it will simply set the PTT to FALSE (off).
  * 
  * \warning This function assumes that the radio supprot set/get PTT, otherwise
- *          ot makes no sense to use it!
+ *          it makes no sense to use it!
  */
 static void manage_ptt_event (GtkRigCtrl *ctrl)
 {
