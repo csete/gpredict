@@ -80,6 +80,7 @@ static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
 static void addbut_clicked_cb (GtkButton *button, GtkSatSelector *selector);
 static void delbut_clicked_cb (GtkButton *button, GtkSatSelector *selector);
 
+static gint qth_name_compare (const gchar *a, const gchar *b);
 
 /** \brief Create a new module.
  *
@@ -829,10 +830,13 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
     gchar        *dirname;
     const gchar  *filename;
     gchar        *defqth = NULL;
+    gchar        *defqthshort = NULL;
     gchar       **buffv;
     gint         idx = -1;
     gint         count = 0;
-
+    GSList      *qths=NULL;
+    gchar       *qthname;
+    gint         i,n;
 
     combo = gtk_combo_box_new_text ();
 
@@ -845,6 +849,10 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
                                         MOD_CFG_GLOBAL_SECTION,
                                         MOD_CFG_QTH_FILE_KEY,
                                         &error);
+        buffv = g_strsplit (defqth, ".qth", 0);
+        defqthshort = g_strdup(buffv[0]);
+        
+        g_strfreev(buffv);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_MSG,
@@ -852,6 +860,7 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
                      __FUNCTION__);
 
         defqth = g_strdup (_("** DEFAULT **"));
+        defqthshort = g_strdup(defqth);
     }
 
 
@@ -863,23 +872,33 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
 
     if (dir) {
         while ((filename = g_dir_read_name (dir))) {
-
+            /*create a sorted list then use it to load the combo box*/
             if (g_str_has_suffix (filename, ".qth")) {
 
                 buffv = g_strsplit (filename, ".qth", 0);
-                gtk_combo_box_append_text (GTK_COMBO_BOX (combo), buffv[0]);
+                qths=g_slist_insert_sorted(qths,g_strdup(buffv[0]),(GCompareFunc) qth_name_compare);
                 g_strfreev (buffv);
 
-                /* is this the QTH for this module? */
-                if (!g_ascii_strcasecmp (defqth, filename)) {
-                    idx = count;
-                }
-
-                count++;
             }
 
         }
+        n = g_slist_length (qths);
+        for (i = 0; i < n; i++) {
+            qthname = g_slist_nth_data (qths, i);
+            if (qthname) {
+                gtk_combo_box_append_text (GTK_COMBO_BOX (combo), qthname);
 
+                /* is this the QTH for this module? */
+                /* comparison uses short name full filename*/
+                if (!g_ascii_strcasecmp (defqthshort, qthname)) {
+                    idx = count;
+                }
+                g_free(qthname);
+                count++;
+            }
+        }
+        g_slist_free(qths);
+        
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -907,6 +926,7 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
     }
 
     g_free (defqth);
+    g_free (defqthshort);
     g_free (dirname);
     g_dir_close (dir);
 
@@ -1224,3 +1244,7 @@ static void delbut_clicked_cb (GtkButton *button, GtkSatSelector *selector)
 
 }
 
+
+static gint qth_name_compare (const gchar* a,const gchar *b){
+    return (g_ascii_strcasecmp(a,b));
+}
