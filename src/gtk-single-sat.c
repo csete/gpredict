@@ -118,7 +118,7 @@ static void gtk_single_sat_popup_cb (GtkWidget *button, gpointer data);
 static void select_satellite        (GtkWidget *menuitem, gpointer data);
 static void show_next_pass_cb       (GtkWidget *menuitem, gpointer data);
 static void show_next_passes_cb     (GtkWidget *menuitem, gpointer data);
-
+static gint sat_name_compare (sat_t *a,sat_t *b);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -724,7 +724,7 @@ store_sats (gpointer key, gpointer value, gpointer user_data)
     GtkSingleSat *single_sat = GTK_SINGLE_SAT (user_data);
     sat_t        *sat = SAT (value);
 
-    single_sat->sats = g_slist_append (single_sat->sats, sat);
+    single_sat->sats = g_slist_insert_sorted (single_sat->sats,sat, sat_name_compare);
 }
 
 
@@ -1144,4 +1144,8 @@ show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
          gtk_widget_destroy (dialog);
      }
 
+}
+
+static gint sat_name_compare (sat_t *a,sat_t *b) {
+    return g_ascii_strcasecmp(a->nickname,b->nickname);
 }

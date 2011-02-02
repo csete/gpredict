@@ -866,11 +866,11 @@ gint cat_file_compare (const gchar *a,const gchar *b){
     gchar *cat_a, *cat_b;
     gint temp;
     
-    cat_a=load_cat_file_cat(a);
-    cat_b=load_cat_file_cat(b);
-    temp = g_ascii_strcasecmp(cat_a,cat_b);
+    cat_a = load_cat_file_cat (a);
+    cat_b = load_cat_file_cat (b);
+    temp = g_ascii_strcasecmp (cat_a,cat_b);
     g_free (cat_a);
     g_free (cat_b);
-    return(temp);
+    return (temp);
         
 }
