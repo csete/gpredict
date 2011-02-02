@@ -67,6 +67,7 @@ static void epoch_cell_data_function (GtkTreeViewColumn *col,
                                       GtkTreeIter       *iter,
                                       gpointer           column);
 
+static gint cat_file_compare (const gchar *a, const gchar *b);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -379,9 +380,11 @@ static void create_and_fill_models (GtkSatSelector *selector)
 
     gchar       **buffv;
     const gchar  *fname;
+    gchar        *nfname;
 
     guint         num = 0;
-
+    gint          i,n;
+    GSList       *cats = NULL;
 
 
 
@@ -447,11 +450,20 @@ static void create_and_fill_models (GtkSatSelector *selector)
     g_dir_rewind (dir);
     while ((fname = g_dir_read_name (dir))) {
         if (g_str_has_suffix (fname, ".cat")) {
-
-            load_cat_file (selector, fname);
-
+            cats = g_slist_insert_sorted(cats,g_strdup(fname),(GCompareFunc)cat_file_compare);
         }
     }
+
+    /*now load them into the combo box*/
+    n = g_slist_length (cats);
+    for (i = 0; i < n; i++) {
+        nfname = g_slist_nth_data (cats, i);
+        if (nfname) {
+            load_cat_file (selector, nfname);
+        }
+        g_free(nfname);
+    }
+    g_slist_free (cats);
 
     g_dir_close (dir);
     g_free (dirname);
@@ -805,4 +817,60 @@ gdouble gtk_sat_selector_get_latest_epoch (GtkSatSelector *selector)
     }
 
     return epoch;
+}
+
+
+/** \brief Load category name from a .cat file
+ *  \param fname The name of the .cat file (name only, no path)
+ *  This function is a stripped down version of load_cat_file.  It 
+ *  is needed to load the category name to created a sorted list 
+ *  of category names. With the existing user base already having 
+ *  .cat files in their directories, use of the file name directly 
+ *  for sorting will have problems.
+ */
+static gchar *load_cat_file_cat (const gchar *fname)
+{
+    GIOChannel   *catfile;
+    GError       *error = NULL;
+
+    gchar        *path;
+    gchar        *buff;
+
+    /* .cat files contains clear text category name in the first line
+               then one satellite catalog number per line */
+    path = sat_file_name (fname);
+    catfile = g_io_channel_new_file (path, "r", &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s:%s: Failed to open %s: %s"),
+                     __FILE__, __FUNCTION__, fname, error->message);
+        g_clear_error (&error);
+    }
+    else {
+        /* read first line => category name */
+        
+        if (g_io_channel_read_line (catfile, &buff, NULL, NULL, NULL) == G_IO_STATUS_NORMAL) {
+            g_strstrip (buff); /* removes trailing newline */
+        }
+    }
+    
+    g_free (path);
+    g_io_channel_shutdown (catfile, TRUE, NULL);
+    return buff;
+}
+
+/* this is a quick function that loads the category name from two cat 
+   files and compares them. 
+*/
+gint cat_file_compare (const gchar *a,const gchar *b){
+    gchar *cat_a, *cat_b;
+    gint temp;
+    
+    cat_a=load_cat_file_cat(a);
+    cat_b=load_cat_file_cat(b);
+    temp = g_ascii_strcasecmp(cat_a,cat_b);
+    g_free (cat_a);
+    g_free (cat_b);
+    return(temp);
+        
 }

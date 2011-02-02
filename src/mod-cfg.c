@@ -876,7 +876,7 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
             if (g_str_has_suffix (filename, ".qth")) {
 
                 buffv = g_strsplit (filename, ".qth", 0);
-                qths=g_slist_insert_sorted(qths,g_strdup(buffv[0]),(GCompareFunc) qth_name_compare);
+                qths = g_slist_insert_sorted(qths,g_strdup(buffv[0]),(GCompareFunc) qth_name_compare);
                 g_strfreev (buffv);
 
             }

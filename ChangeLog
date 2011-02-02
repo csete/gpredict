@@ -3,6 +3,9 @@
     * src/mod-cfg.c
     Sort QTH list alphabetically when configuring module.
 
+    * src/gtk-sat-selector.c
+    Sort Satellites Groups alphabetically in combo box.
+
 2011-02-01 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
