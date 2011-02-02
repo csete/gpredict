@@ -6,6 +6,9 @@
     * src/gtk-sat-selector.c
     Sort Satellites Groups alphabetically in combo box.
 
+    * src/gtk-single-sat.c
+    List satellites in single sat view alphabetically instead of hash order.
+
 2011-02-01 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rig-ctrl.c:
