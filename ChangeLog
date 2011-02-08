@@ -3,6 +3,12 @@
     * src/gtk-sat-selector.c
     Replace search capability with filter capability in gtk-sat-selector.
 
+    * data/desktop/gpredict.desktop.in
+    * pixmaps/icons/Makefile.am
+    Install a copy of gpredict-icon.png to pixmaps directory.
+    Change gpredict.desktop to reference this new copy.
+    Resolves part of Bug 3113190.
+
 2011-02-02 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/mod-cfg.c

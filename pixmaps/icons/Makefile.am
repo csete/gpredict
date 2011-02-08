@@ -1,5 +1,8 @@
 gpredict_iconsdir = $(datadir)/pixmaps/gpredict/icons
 
+gpredict_icons2dir = $(datadir)/pixmaps/
+gpredict_icons2_DATA = gpredict-icon.png
+
 gpredict_icons_DATA = \
 	gpredict-antenna.png \
 	gpredict-antenna-small.png \
@@ -36,5 +39,5 @@ gpredict_icons_DATA = \
 	gpredict-shuttle.png \
 	gpredict-shuttle-small.png
 
-EXTRA_DIST = $(gpredict_icons_DATA)
+EXTRA_DIST = $(gpredict_icons_DATA) $(gpredict_icons2_DATA)
 
