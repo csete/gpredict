@@ -1,3 +1,8 @@
+2011-02-08 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-selector.c
+    Replace search capability with filter capability in gtk-sat-selector.
+
 2011-02-02 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/mod-cfg.c

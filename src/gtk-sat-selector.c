@@ -55,10 +55,14 @@ static void row_activated_cb            (GtkTreeView *view,
                                          GtkTreeViewColumn *column,
                                          gpointer data);
 
+static gboolean cb_entry_changed( GtkEditable *entry, GtkTreeView *treeview );
 static gint compare_func (GtkTreeModel *model,
                           GtkTreeIter  *a,
                           GtkTreeIter  *b,
                           gpointer      userdata);
+static gboolean sat_filter_func( GtkTreeModel *model, 
+                                 GtkTreeIter  *iter, 
+                                 GtkEntry     *entry );
 
 
 static void epoch_cell_data_function (GtkTreeViewColumn *col,
@@ -218,7 +222,7 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     GtkTreeViewColumn  *column;
     GtkWidget          *table;
     GtkWidget          *frame;
-
+    GtkTreeModel *filter;
 
     if (!flags)
         flags = GTK_SAT_SELECTOR_DEFAULT_FLAGS;
@@ -236,14 +240,12 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     /* combo box signal handler will be connected at the end after it has
        been populated to avoid false triggering */
 
+    /*create search widget early so it can be used for callback*/
+    GTK_SAT_SELECTOR (widget)->search = gtk_entry_new ();
 
     /* create list and model */
-    selector->tree = gtk_tree_view_new ();
-    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (selector->tree), TRUE);
     create_and_fill_models (selector);
     model = GTK_TREE_MODEL (g_slist_nth_data (selector->models, 0));
-    gtk_tree_view_set_model (GTK_TREE_VIEW (selector->tree), model);
-    g_object_unref (model);
 
     /* sort the tree by name */
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
@@ -254,6 +256,21 @@ GtkWidget *gtk_sat_selector_new (guint flags)
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
                                           GTK_SAT_SELECTOR_COL_NAME,
                                           GTK_SORT_ASCENDING);
+
+    /*create a filtering tree*/
+    filter = gtk_tree_model_filter_new(model,NULL);
+    gtk_tree_model_filter_set_visible_func(GTK_TREE_MODEL_FILTER(filter), 
+                                           (GtkTreeModelFilterVisibleFunc) sat_filter_func,GTK_SAT_SELECTOR(widget)->search,NULL);
+
+    selector->tree = gtk_tree_view_new_with_model(filter);
+    gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (selector->tree), TRUE);
+
+    g_signal_connect( G_OBJECT(GTK_SAT_SELECTOR(widget)->search), "changed",
+                      G_CALLBACK(cb_entry_changed),
+                      GTK_TREE_VIEW( selector->tree));
+
+    g_object_unref (model);
+
 
     /* we can now connect combobox signal handler */
     g_signal_connect (GTK_SAT_SELECTOR (widget)->groups, "changed",
@@ -310,21 +327,14 @@ GtkWidget *gtk_sat_selector_new (guint flags)
 
     table = gtk_table_new (7, 4, TRUE);
 
-    /* Search */    
+    /* Search */
+    /* Finish setting up the search entry*/
     gtk_table_attach (GTK_TABLE (table), gtk_label_new (_("Search")), 0, 1, 0, 1,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
-    GTK_SAT_SELECTOR (widget)->search = gtk_entry_new ();
     gtk_widget_set_tooltip_text (GTK_SAT_SELECTOR (widget)->search,
                                  _("Start typing in this field to search for a satellite"\
                                    " in the selected group."));
 
-    /* this enables automatic search */
-    gtk_tree_view_set_search_entry (GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
-                                    GTK_ENTRY (GTK_SAT_SELECTOR (widget)->search));
-    gtk_tree_view_set_search_equal_func(GTK_TREE_VIEW (GTK_SAT_SELECTOR (widget)->tree),
-                                            gtk_sat_selector_search_equal_func,
-                                            NULL,
-                                        NULL);
     gtk_table_attach (GTK_TABLE (table), GTK_SAT_SELECTOR (widget)->search, 1, 4, 0, 1,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
 
@@ -619,6 +629,7 @@ static void group_selected_cb (GtkComboBox *combobox, gpointer data)
     GtkSatSelector *selector = GTK_SAT_SELECTOR (data);
     GtkTreeModel   *newmodel;
     GtkTreeModel   *oldmodel;
+    GtkTreeModel   *filter;
     gint            sel;
 
     sel = gtk_combo_box_get_active (combobox);
@@ -632,13 +643,25 @@ static void group_selected_cb (GtkComboBox *combobox, gpointer data)
 
     /* now replace oldmodel with newmodel */
     newmodel = GTK_TREE_MODEL (g_slist_nth_data (selector->models, sel));
-    gtk_tree_view_set_model (GTK_TREE_VIEW (selector->tree), newmodel);
-    g_object_unref (newmodel);
 
     /* We changed the GtkTreeModel so we need to reset the sort column ID */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (newmodel),
                                           GTK_SAT_SELECTOR_COL_NAME,
                                           GTK_SORT_ASCENDING);
+    /*build a filter around the new model*/
+    filter = gtk_tree_model_filter_new(newmodel,NULL);
+    gtk_tree_model_filter_set_visible_func(GTK_TREE_MODEL_FILTER(filter), 
+                                           (GtkTreeModelFilterVisibleFunc) sat_filter_func,GTK_SAT_SELECTOR(selector)->search,NULL);
+
+    /*install the filter tree and hookup callbacks*/
+    gtk_tree_view_set_model (GTK_TREE_VIEW (selector->tree), filter);
+    g_signal_connect( G_OBJECT(GTK_SAT_SELECTOR(selector)->search), "changed",
+                      G_CALLBACK(cb_entry_changed),
+                      GTK_TREE_VIEW( selector->tree));
+    g_object_unref (newmodel);
+    g_object_unref (filter);
+
+
 
 
 }
@@ -874,3 +897,36 @@ gint cat_file_compare (const gchar *a,const gchar *b){
     return (temp);
         
 }
+
+/** \brief Make the tree refilter after something entered in the search box
+ **/
+
+static gboolean cb_entry_changed( GtkEditable *entry,
+                  GtkTreeView *treeview )
+{
+    GtkTreeModelFilter *filter;
+   
+    filter = GTK_TREE_MODEL_FILTER( gtk_tree_view_get_model( treeview ) );
+    gtk_tree_model_filter_refilter( filter );
+   
+    return( FALSE );
+} 
+
+/** \brief Selects satellites whose name contains the substring in entry.
+ **/
+static gboolean sat_filter_func( GtkTreeModel *model, 
+                                 GtkTreeIter  *iter, 
+                                 GtkEntry     *entry )
+{
+    const gchar *searchstring;
+    gchar       *satname;
+   
+    gtk_tree_model_get( model, iter, GTK_SAT_SELECTOR_COL_NAME, &satname, -1 );
+    searchstring = gtk_entry_get_text( entry );
+   
+    if( strcasestr( satname, searchstring ) != NULL )
+        return( TRUE );
+    else
+        return( FALSE );
+} 
+
