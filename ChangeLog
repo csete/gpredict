@@ -9,6 +9,9 @@
     Change gpredict.desktop to reference this new copy.
     Resolves part of Bug 3113190.
 
+    * src/about.c
+    Update copyright dates to 2011 from 2009.
+
 2011-02-02 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/mod-cfg.c
