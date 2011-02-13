@@ -643,7 +643,8 @@ static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new)
     store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
                                 G_TYPE_STRING,    // name
                                 G_TYPE_INT,       // catnum
-                                G_TYPE_DOUBLE     // epoch
+                                G_TYPE_DOUBLE,    // epoch
+                                G_TYPE_BOOLEAN    // selected 
                                 );
 
     /* sort the list by name */

@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -402,7 +403,8 @@ static void create_and_fill_models (GtkSatSelector *selector)
     store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
                                 G_TYPE_STRING,    // name
                                 G_TYPE_INT,       // catnum
-                                G_TYPE_DOUBLE     // epoch
+                                G_TYPE_DOUBLE,    // epoch
+                                G_TYPE_BOOLEAN    // selected
                                 );
     selector->models = g_slist_append (selector->models, store);
     gtk_combo_box_append_text (GTK_COMBO_BOX (selector->groups), _("All satellites"));
@@ -525,7 +527,8 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
             store = gtk_list_store_new (GTK_SAT_SELECTOR_COL_NUM,
                                         G_TYPE_STRING,    // name
                                         G_TYPE_INT,       // catnum
-                                        G_TYPE_DOUBLE     // epoch
+                                        G_TYPE_DOUBLE,    // epoch
+                                        G_TYPE_BOOLEAN    // selected
                                         );
             selector->models = g_slist_append (selector->models, store);
 
@@ -920,10 +923,14 @@ static gboolean sat_filter_func( GtkTreeModel *model,
 {
     const gchar *searchstring;
     gchar       *satname;
+    gboolean     selected;
    
     gtk_tree_model_get( model, iter, GTK_SAT_SELECTOR_COL_NAME, &satname, -1 );
+    gtk_tree_model_get( model, iter, GTK_SAT_SELECTOR_COL_SELECTED, &selected, -1 );
     searchstring = gtk_entry_get_text( entry );
-   
+    /*if it is already selected then remove it from the available list*/
+    if (selected)
+        return( FALSE);
     if( strcasestr( satname, searchstring ) != NULL )
         return( TRUE );
     else

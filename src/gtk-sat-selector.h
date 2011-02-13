@@ -42,6 +42,7 @@ typedef enum {
     GTK_SAT_SELECTOR_COL_NAME = 0,  /*!< Satellite name. */
     GTK_SAT_SELECTOR_COL_CATNUM,    /*!< Catalogue Number. */
     GTK_SAT_SELECTOR_COL_EPOCH,     /*!< Element set epoch. */
+    GTK_SAT_SELECTOR_COL_SELECTED,  /*!< Track whether element is selected. */
     GTK_SAT_SELECTOR_COL_NUM        /*!< The number of columns. */
 } gtk_sat_selector_col_t;
 
@@ -51,6 +52,7 @@ typedef enum {
     GTK_SAT_SELECTOR_FLAG_NAME   = 1 << GTK_SAT_SELECTOR_COL_NAME,   /*!< Satellite name. */
     GTK_SAT_SELECTOR_FLAG_CATNUM = 1 << GTK_SAT_SELECTOR_COL_CATNUM, /*!< Catalogue Number. */
     GTK_SAT_SELECTOR_FLAG_EPOCH  = 1 << GTK_SAT_SELECTOR_COL_EPOCH,  /*!< Element set epoch. */
+    GTK_SAT_SELECTOR_FLAG_SELECTED  = 1 << GTK_SAT_SELECTOR_COL_SELECTED,  /*!< Item selected or not. */
 } gtk_sat_selector_flag_t;
 
 
