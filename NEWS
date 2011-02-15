@@ -4,6 +4,7 @@ Changes in version 1.3 (TBD)
 - Feature Request 3022617: Malaysia's location.
 - Automatically refresh the Sky at a glance view every minute.
 - Added more checks with hamlib communications.
+- List satellite as available or selected when configuring module.
 - Fixed bug 2116691: Leave network connection open.
 - Fixed bug 3099314: Rotator Thrashing.
 - Fixed bug 2167508: problems in rotator controller.

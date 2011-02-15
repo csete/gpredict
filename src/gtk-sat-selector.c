@@ -29,7 +29,10 @@
 /** \brief Satellite selector.
  *
  */
-#include "string.h"
+
+/*needed _gnu_source to have strcasestr defined*/
+#define _GNU_SOURCE
+#include <string.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
@@ -73,6 +76,7 @@ static void epoch_cell_data_function (GtkTreeViewColumn *col,
                                       gpointer           column);
 
 static gint cat_file_compare (const gchar *a, const gchar *b);
+static void gtk_sat_selector_mark_engine(GtkSatSelector *selector, gint catnr,gboolean val);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -444,6 +448,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
                                     GTK_SAT_SELECTOR_COL_NAME, sat.nickname,
                                     GTK_SAT_SELECTOR_COL_CATNUM, catnum,
                                     GTK_SAT_SELECTOR_COL_EPOCH, sat.jul_epoch,
+                                    GTK_SAT_SELECTOR_COL_SELECTED, FALSE,
                                     -1);
 
                 g_free (sat.name);
@@ -559,6 +564,7 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
                                         GTK_SAT_SELECTOR_COL_NAME, sat.nickname,
                                         GTK_SAT_SELECTOR_COL_CATNUM, catnum,
                                         GTK_SAT_SELECTOR_COL_EPOCH, sat.jul_epoch,
+                                        GTK_SAT_SELECTOR_COL_SELECTED, FALSE,
                                         -1);
                     g_free (sat.name);
                     g_free (sat.nickname);
@@ -915,7 +921,7 @@ static gboolean cb_entry_changed( GtkEditable *entry,
     return( FALSE );
 } 
 
-/** \brief Selects satellites whose name contains the substring in entry.
+/** \brief Selects unselected satellites whose name contains the substring in entry.
  **/
 static gboolean sat_filter_func( GtkTreeModel *model, 
                                  GtkTreeIter  *iter, 
@@ -931,9 +937,55 @@ static gboolean sat_filter_func( GtkTreeModel *model,
     /*if it is already selected then remove it from the available list*/
     if (selected)
         return( FALSE);
-    if( strcasestr( satname, searchstring ) != NULL )
+    if( strcasestr( satname, searchstring ) != (char *)NULL )
         return( TRUE );
     else
         return( FALSE );
 } 
 
+/** \brief Searches through all the models for the given satellite and sets its selected value.
+    \param *selector is the selector that contains the models
+    \param catnr is the catalog numer of satellite.
+    \param val is true or false depending on whether that satellite is selected or not.
+ **/
+static void gtk_sat_selector_mark_engine(GtkSatSelector *selector, gint catnr,gboolean val){
+    gint n, k;
+    gint nummodels, numiters;
+    gint catnumscratch;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    nummodels = g_slist_length(selector->models);
+
+    for (n = 0; n<nummodels; n++) {
+        model = GTK_TREE_MODEL(g_slist_nth_data (selector->models,n));
+        numiters = gtk_tree_model_iter_n_children(model,NULL);
+        for (k = 0; k<numiters; k++){
+            if (G_LIKELY(gtk_tree_model_iter_nth_child(model, &iter,NULL,k))){                    
+                gtk_tree_model_get (model, &iter, GTK_SAT_SELECTOR_COL_CATNUM, &catnumscratch,-1);
+                if (catnumscratch == catnr) {
+                    gtk_list_store_set(GTK_LIST_STORE(model),&iter,GTK_SAT_SELECTOR_COL_SELECTED,val,-1);
+                }
+            }
+        
+        }
+    
+    }
+}
+
+
+/** \brief Searches the models for the satellite and sets SELECTED to TRUE.
+    \param *selector is the selector that contains the models
+    \param catnr is the catalog numer of satellite.
+**/
+void gtk_sat_selector_mark_selected(GtkSatSelector *selector, gint catnr){
+    gtk_sat_selector_mark_engine ( selector, catnr, TRUE);
+}
+
+/** \brief Searches the models for the satellite and sets SELECTED to FALSE.
+    \param *selector is the selector that contains the models
+    \param catnr is the catalog numer of satellite.
+**/
+void gtk_sat_selector_mark_unselected(GtkSatSelector *selector, gint catnr){
+    gtk_sat_selector_mark_engine ( selector, catnr, FALSE);
+}

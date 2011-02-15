@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -85,8 +85,6 @@ struct _gtk_sat_selector
     GtkWidget   *tree;        /*!< The tree. */
     GtkWidget   *swin;        /*!< Scrolled window. */
     guint        flags;       /*!< Column visibility flags. */
-    GSList      *selection;   /*!< List of selected satellites. FIXME: remove */
-    gulong       handler_id;  /*!< Toggle signale handler ID (FIXME): remove. */
 
     GtkWidget   *groups;      /*!< Combo box for selecting satellite group. */
     GtkWidget   *search;      /*!< Text entry for searching. */
@@ -106,6 +104,8 @@ GtkWidget *gtk_sat_selector_new       (guint flags);
 guint32    gtk_sat_selector_get_flags (GtkSatSelector *selector);
 void       gtk_sat_selector_get_selected (GtkSatSelector *selector, gint *catnum, gchar **satname, gdouble *epoch);
 gdouble    gtk_sat_selector_get_latest_epoch (GtkSatSelector *selector);
+void       gtk_sat_selector_mark_selected (GtkSatSelector *selector, gint catnum);
+void       gtk_sat_selector_mark_unselected (GtkSatSelector *selector, gint catnum);
 
 #ifdef __cplusplus
 }

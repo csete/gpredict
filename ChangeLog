@@ -1,3 +1,10 @@
+2011-02-14 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-selector.c
+    * src/gtk-sat-selector.h
+    * src/mod-cfg.c
+    List a satellite under the available column or the selected column but not both.
+
 2011-02-08 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-selector.c
