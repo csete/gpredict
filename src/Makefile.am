@@ -29,7 +29,6 @@ gpredict_SOURCES = \
     sgpsdp/solar.c \
     about.c about.h \
     compat.c compat.h config-keys.h \
-    defaults.h \
     first-time.c first-time.h \
     gpredict-help.c gpredict-help.h \
     gpredict-url-hook.c gpredict-url-hook.h \
