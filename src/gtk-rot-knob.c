@@ -465,7 +465,7 @@ button_clicked_cb (GtkWidget *button, gpointer data)
                knob->value=knob->min;
           }
     } else {
-          g_print("Val: %.2f %.2f %.10f\n",knob->value,delta,knob->value+delta);
+        //g_print("Val: %.2f %.2f %.10f\n",knob->value,delta,knob->value+delta);
      }
     
     gtk_rot_knob_update (knob);
