@@ -1114,7 +1114,8 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
     /* try to read answer */
     if (retcode) {
         if (strncmp(buffback,"RPRT",4)==0){
-            retcode=FALSE;
+            //retcode=FALSE;
+            g_strstrip (buffback);
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%d: rotctld returned error (%s)"),
                          __FILE__, __LINE__,buffback);
@@ -1125,10 +1126,11 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
                 *az = g_strtod (vbuff[0], NULL);
                 *el = g_strtod (vbuff[1], NULL);
             } else {
+                g_strstrip (buffback);
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s:%d: rotctld returned bad response (%s)"),
                              __FILE__, __LINE__,buffback);
-                retcode=FALSE;
+                //retcode=FALSE;
             }
             
             g_strfreev (vbuff);
@@ -1177,56 +1179,14 @@ static gboolean set_pos (GtkRotCtrl *ctrl, gdouble az, gdouble el)
         case 0:
             /*no error case*/
             break;
-        case -1:
-            /*RIG_EINVAL error*/
-            /*
-              Returned by gs232 (-m 601) driver when value sent to 
-              rotator outside configured range.
-              Based on author's experiment.
-            */
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%d: rotctld returned error %d (%s). Check the limits in your configuration."),
-                         __FILE__, __LINE__, retval, buffback);
-
-            
-            retcode=FALSE;
-            break;
-
-        case -5:
-            /*RIG_ETIMEOUT error*/
-            /*
-              Returned by ea4tx interface when stuck
-              Based on comments on hamlib-discussion list.
-            */
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%d: rotctld returned error %d (%s)."),
-                         __FILE__, __LINE__, retval, buffback);
-            
-            
-            retcode=FALSE;
-            break;
-
-
-        case -8:
-            /*RIG_EPROTO error*/
-            /*
-              Returned by gs232 (-m 601) driver when interface is turned off
-              Based on author's experiment.
-            */
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%d: rotctld returned error %d (%s). Check that interface power on."),
-                         __FILE__, __LINE__, retval, buffback);
-
-            
-            retcode=FALSE;
-            break;
-
         default:
             /*any other case*/
             /*not sure what is a hard error or soft error*/
+            /*over time a database of this is needed*/
+            g_strstrip (buffback);
             sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s:%d: rotctld returned error %d (%s)"),
-                         __FILE__, __LINE__, retval, buffback);
+                         _("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
+                         __FILE__, __LINE__, retval, az, el, buffback);
             
             //retcode=FALSE;
             break;
