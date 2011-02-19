@@ -1030,7 +1030,8 @@ update_track (gpointer key, gpointer value, gpointer data)
 
         for (i = 1; i < num-1; i++) {
             detail = PASS_DETAIL(g_slist_nth_data (obj->pass->details, i));
-            azel_to_xy (pv, detail->az, detail->el, &x, &y);
+            if (detail->el>=0)
+                azel_to_xy (pv, detail->az, detail->el, &x, &y);
             points->coords[2*i] = (double) x;
             points->coords[2*i+1] = (double) y;
 
@@ -1175,10 +1176,11 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
     obj->trtick[0] = create_time_tick (pv, obj->pass->aos, x, y);
 
     ttidx = 1;
-
+    
     for (i = 1; i < num-1; i++) {
         detail = PASS_DETAIL(g_slist_nth_data (obj->pass->details, i));
-        azel_to_xy (pv, detail->az, detail->el, &x, &y);
+        if (detail->el >= 0.0 )
+            azel_to_xy (pv, detail->az, detail->el, &x, &y);
         points->coords[2*i] = (double) x;
         points->coords[2*i+1] = (double) y;
 
