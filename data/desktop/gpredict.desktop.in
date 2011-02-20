@@ -5,4 +5,4 @@ Exec=gpredict
 Icon=gpredict-icon
 Terminal=false
 Type=Application
-Categories=HamRadio;
+Categories=HamRadio;Science;Astronomy;Education;Network;
