@@ -10,6 +10,8 @@ Changes in version 1.3 (TBD)
 - Fixed bug 2167508: problems in rotator controller.
 - Fixed bug from Ubuntu #706452:Update from local files won't work with files in UPPER case 
 - Fixed bug 3171615: Searching for satellites in the satellite selector
+- Fixed bug 3113190: .desktop file error
+- Address bug 2945538: Pass in polar display going outside the circle (Improve the graphical portion.)
 
 Changes in version 1.2 (12 Oct 2010)
 
