@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -724,7 +725,7 @@ store_sats (gpointer key, gpointer value, gpointer user_data)
     GtkSingleSat *single_sat = GTK_SINGLE_SAT (user_data);
     sat_t        *sat = SAT (value);
 
-    single_sat->sats = g_slist_insert_sorted (single_sat->sats,sat, sat_name_compare);
+    single_sat->sats = g_slist_insert_sorted (single_sat->sats,sat, (GCompareFunc) sat_name_compare);
 }
 
 
