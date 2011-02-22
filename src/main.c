@@ -446,7 +446,7 @@ gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer dat
 static gboolean
 tle_mon_task          (gpointer data)
 {
-    GtkWidget *selector;
+    /*GtkWidget *selector;*/
     glong last,now,thrld;
     GTimeVal   tval;
     GtkWidget *dialog;
