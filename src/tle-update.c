@@ -815,7 +815,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             else {
                 catsync = FALSE;
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s:%s: Could not reopne .cat file while reading TLE from %s"),
+                             _("%s:%s: Could not reopen .cat file while reading TLE from %s"),
                              __FILE__, __FUNCTION__, fnam);
             }
             
