@@ -2,7 +2,7 @@ AC_INIT(src/main.c)
 
 AM_CONFIG_HEADER(build-config.h)
 
-AM_INIT_AUTOMAKE(gpredict, 1.3svn)
+AM_INIT_AUTOMAKE(gpredict, 1.3)
 
 AM_MAINTAINER_MODE
 AC_PROG_INTLTOOL([0.21])
@@ -45,7 +45,7 @@ dnl])
 
 dnl Add the languages which your application supports here.
 dnl Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
-ALL_LINGUAS="cs de en_GB en_US es fi fr it lt ru th"
+ALL_LINGUAS="cs da de en_GB en_US es fi fr it lt ru th"
 GETTEXT_PACKAGE=gpredict
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
