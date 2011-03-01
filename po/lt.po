@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-10-10 03:21+0000\n"
-"PO-Revision-Date: 2010-07-26 16:11+0000\n"
+"POT-Creation-Date: 2010-11-26 03:42+0000\n"
+"PO-Revision-Date: 2010-12-05 14:31+0000\n"
 "Last-Translator: LY2SS <Unknown>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-10 12:08+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-01 15:24+0000\n"
+"X-Generator: Launchpad (build 12460)\n"
 
 #: ../src/about.c:65
 msgid ""
@@ -66,6 +66,7 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Gpredict Team https://launchpad.net/~gpredict-team\n"
 "  LY2SS https://launchpad.net/~zilvinas-atkociunas"
 
 #: ../src/first-time.c:190 ../src/first-time.c:837
@@ -190,7 +191,7 @@ msgstr "%s: %s jau egzistuoja vartotojo nuostatų kataloge."
 #: ../src/first-time.c:889
 #, c-format
 msgid "%s: %s directory does not exist. Incomplete installation."
-msgstr ""
+msgstr "%s: %s katalogas nesukurtas. Nepilna instaliacija."
 
 #: ../src/gpredict-help.c:66
 #, c-format
@@ -255,7 +256,7 @@ msgstr "%s:%s: %s iššauktas su rgba = NULL"
 msgid "Local Time"
 msgstr "Vietinis laikas"
 
-#: ../src/gtk-azel-plot.c:383 ../src/gtk-sky-glance.c:362
+#: ../src/gtk-azel-plot.c:383 ../src/gtk-sky-glance.c:374
 #: ../src/pass-to-txt.c:158
 msgid "UTC"
 msgstr "UTC"
@@ -333,34 +334,39 @@ msgstr ""
 "%s\n"
 "Always in range"
 
-#: ../src/gtk-polar-view.c:1001 ../src/gtk-polar-view.c:1137
+#: ../src/gtk-polar-view.c:1001 ../src/gtk-polar-view.c:1143
 #, c-format
 msgid "%s:%d: Failed to get satellite pass."
 msgstr "%s:%d: Nepavyko gauti palydovo orbitos."
 
-#: ../src/gtk-polar-view.c:1130 ../src/gtk-polar-view-popup.c:197
-#: ../src/gtk-polar-view-popup.c:304 ../src/gtk-sat-map-popup.c:195
+#: ../src/gtk-polar-view.c:1010 ../src/gtk-polar-view.c:1156
+#, c-format
+msgid "%s:%d: Pass had no points in it."
+msgstr ""
+
+#: ../src/gtk-polar-view.c:1136 ../src/gtk-polar-view-popup.c:197
+#: ../src/gtk-polar-view-popup.c:310 ../src/gtk-sat-map-popup.c:195
 #: ../src/gtk-sat-map-popup.c:248 ../src/gtk-sat-map-popup.c:425
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
 msgstr "%s:%d: Nepavyko gauti palydovo objekto."
 
-#: ../src/gtk-polar-view.c:1414
+#: ../src/gtk-polar-view.c:1428
 #, c-format
 msgid "%s:%d: Could not find satellite (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1462 ../src/gtk-sat-map.c:926
+#: ../src/gtk-polar-view.c:1476 ../src/gtk-sat-map.c:926
 #, c-format
 msgid "%s:%d: Can not find clicked object (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1638
+#: ../src/gtk-polar-view.c:1652
 #, c-format
 msgid "LOS in %s%d:%s%d%s%d"
 msgstr "LOS %s%d:%s%d%s%d"
 
-#: ../src/gtk-polar-view.c:1641
+#: ../src/gtk-polar-view.c:1655
 #, c-format
 msgid "LOS in %s%d%s%d"
 msgstr "LOS %s%d%s%d"
@@ -381,9 +387,14 @@ msgstr "Tolimesnės orbitos"
 #. show track
 #: ../src/gtk-polar-view-popup.c:134
 msgid "Sky track"
+msgstr "Trajektorija"
+
+#: ../src/gtk-polar-view-popup.c:215
+#, c-format
+msgid "%s:%d: Pass has no details."
 msgstr ""
 
-#: ../src/gtk-polar-view-popup.c:404 ../src/gtk-polar-view-popup.c:474
+#: ../src/gtk-polar-view-popup.c:410 ../src/gtk-polar-view-popup.c:480
 #: ../src/gtk-sat-list-popup.c:176 ../src/gtk-sat-list-popup.c:246
 #: ../src/gtk-sat-map-popup.c:306 ../src/gtk-sat-map-popup.c:376
 #: ../src/gtk-single-sat.c:1049 ../src/gtk-single-sat.c:1120
@@ -395,7 +406,7 @@ msgstr ""
 "Palydovas %s neturi orbitų\n"
 "sekančių %d dienų bėgyje"
 
-#: ../src/gtk-polar-view-popup.c:420 ../src/gtk-sat-list-popup.c:192
+#: ../src/gtk-polar-view-popup.c:426 ../src/gtk-sat-list-popup.c:192
 #: ../src/gtk-sat-map-popup.c:322 ../src/gtk-single-sat.c:1065
 #, c-format
 msgid ""
@@ -413,7 +424,7 @@ msgstr ""
 "geostacionarioje orbitoje, suiręs, arba\n"
 "niekada nepakyla virš horizonto."
 
-#: ../src/gtk-polar-view-popup.c:493 ../src/gtk-sat-list-popup.c:265
+#: ../src/gtk-polar-view-popup.c:499 ../src/gtk-sat-list-popup.c:265
 #: ../src/gtk-sat-map-popup.c:395 ../src/gtk-single-sat.c:1139
 #, c-format
 msgid ""
@@ -423,17 +434,17 @@ msgstr ""
 "Palydovas %s neturi orbitų\n"
 "pasirinktai antžeminėi stočiai!"
 
-#: ../src/gtk-rig-ctrl.c:399
+#: ../src/gtk-rig-ctrl.c:414
 msgid "<b> Downlink </b>"
 msgstr "<b> Priėmimo dažnis </b>"
 
 #. Downlink doppler
 #. Uplink doppler
-#: ../src/gtk-rig-ctrl.c:414 ../src/gtk-rig-ctrl.c:478
+#: ../src/gtk-rig-ctrl.c:429 ../src/gtk-rig-ctrl.c:493
 msgid "Doppler:"
 msgstr "Dopleris:"
 
-#: ../src/gtk-rig-ctrl.c:416 ../src/gtk-rig-ctrl.c:480
+#: ../src/gtk-rig-ctrl.c:431 ../src/gtk-rig-ctrl.c:495
 msgid ""
 "The Doppler shift according to the range rate and the currently selected "
 "downlink frequency"
@@ -441,24 +452,24 @@ msgstr ""
 "Doplerio poslinkis sutinkamai su atstumo pokyčiu ir pasirinktu priemimo "
 "dažniu"
 
-#: ../src/gtk-rig-ctrl.c:428 ../src/gtk-rig-ctrl.c:492
+#: ../src/gtk-rig-ctrl.c:443 ../src/gtk-rig-ctrl.c:507
 msgid "LO:"
-msgstr ""
+msgstr "LO:"
 
-#: ../src/gtk-rig-ctrl.c:463
+#: ../src/gtk-rig-ctrl.c:478
 msgid "<b> Uplink </b>"
 msgstr "<b> Uplink </b>"
 
-#: ../src/gtk-rig-ctrl.c:542 ../src/gtk-rot-ctrl.c:425
+#: ../src/gtk-rig-ctrl.c:557 ../src/gtk-rot-ctrl.c:471
 msgid "Select target object"
 msgstr "Pasirinkite objektą"
 
 #. tracking button
-#: ../src/gtk-rig-ctrl.c:547 ../src/gtk-rot-ctrl.c:430
+#: ../src/gtk-rig-ctrl.c:562 ../src/gtk-rot-ctrl.c:476
 msgid "Track"
 msgstr "Sekti"
 
-#: ../src/gtk-rig-ctrl.c:548
+#: ../src/gtk-rig-ctrl.c:563
 msgid ""
 "Track the satellite transponder.\n"
 "Enabling this button will apply Dopper correction to the frequency of the "
@@ -467,16 +478,16 @@ msgstr ""
 "Sekti palydovo transponderį.\n"
 "Nuspaudus, radijo įrangos dažniui bus taikoma Doplerio korekcija."
 
-#: ../src/gtk-rig-ctrl.c:556
+#: ../src/gtk-rig-ctrl.c:571
 msgid "Select a transponder"
 msgstr "Pasirinkite transponderį"
 
 #. buttons
-#: ../src/gtk-rig-ctrl.c:563
+#: ../src/gtk-rig-ctrl.c:578
 msgid "T"
-msgstr ""
+msgstr "S"
 
-#: ../src/gtk-rig-ctrl.c:565
+#: ../src/gtk-rig-ctrl.c:580
 msgid ""
 "Tune the radio to this transponder. The uplink and downlink will be set to "
 "the center of the transponder passband. In case of beacons, only the "
@@ -485,11 +496,11 @@ msgstr ""
 "Suderinti radijo įrangą pasirinktam transponderiui. Siuntimo ir priėmimo "
 "dažnis bus nustatytas centriniam transponderio juostos dažniui"
 
-#: ../src/gtk-rig-ctrl.c:571
+#: ../src/gtk-rig-ctrl.c:586
 msgid "L"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:573
+#: ../src/gtk-rig-ctrl.c:588
 msgid ""
 "Lock the uplink and the downlink to each other. Whenever you change the "
 "downlink (in the controller or on the dial, the uplink will track it "
@@ -509,44 +520,44 @@ msgstr ""
 "dažnis bus panaudotas siuntimo dažnio nustatymui."
 
 #. Azimuth
-#: ../src/gtk-rig-ctrl.c:592 ../src/gtk-rot-ctrl.c:436
+#: ../src/gtk-rig-ctrl.c:607 ../src/gtk-rot-ctrl.c:482
 msgid "Az:"
 msgstr "Azimutas:"
 
 #. Elevation
-#: ../src/gtk-rig-ctrl.c:600 ../src/gtk-rot-ctrl.c:446
+#: ../src/gtk-rig-ctrl.c:615 ../src/gtk-rot-ctrl.c:492
 msgid "El:"
 msgstr "Elevacija"
 
 #. Range
-#: ../src/gtk-rig-ctrl.c:608
+#: ../src/gtk-rig-ctrl.c:623
 msgid " Range:"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:616 ../src/gtk-rig-ctrl.c:619
+#: ../src/gtk-rig-ctrl.c:631 ../src/gtk-rig-ctrl.c:634
 msgid "This is the current distance between the satellite and the observer."
 msgstr "Atstumas tarp palydovo ir stebėtojo."
 
 #. Range rate
-#: ../src/gtk-rig-ctrl.c:623
+#: ../src/gtk-rig-ctrl.c:638
 msgid " Rate:"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:631 ../src/gtk-rig-ctrl.c:634
+#: ../src/gtk-rig-ctrl.c:646 ../src/gtk-rig-ctrl.c:649
 msgid ""
 "The rate of change for the distance between the satellite and the observer."
 msgstr "Atstumo tarp palydovo ir stebėtojo kitimo greitis."
 
-#: ../src/gtk-rig-ctrl.c:637 ../src/gtk-rot-ctrl.c:462
+#: ../src/gtk-rig-ctrl.c:652 ../src/gtk-rot-ctrl.c:508
 msgid "Target"
 msgstr "Taikinys"
 
 #. Primary device
-#: ../src/gtk-rig-ctrl.c:664
+#: ../src/gtk-rig-ctrl.c:679
 msgid "1. Device:"
 msgstr "1. Įrenginys:"
 
-#: ../src/gtk-rig-ctrl.c:669
+#: ../src/gtk-rig-ctrl.c:684
 msgid ""
 "Select primary radio device.This device will be used for downlink and uplink "
 "unless you select a secondary device for uplink"
@@ -554,9 +565,9 @@ msgstr ""
 "Pasirinkite pirminį radijo įrenginį. Šis įrenginys bus naudojamas ir "
 "priėmimui ir siuntimui jei neturite pasirinkę antrinio įrenginio siuntimui."
 
-#: ../src/gtk-rig-ctrl.c:691 ../src/gtk-rig-ctrl.c:734
-#: ../src/gtk-rig-ctrl.c:2939 ../src/gtk-rot-ctrl.c:514
-#: ../src/gtk-rot-ctrl.c:1242 ../src/sat-pref-rig.c:306
+#: ../src/gtk-rig-ctrl.c:717 ../src/gtk-rig-ctrl.c:760
+#: ../src/gtk-rig-ctrl.c:2401 ../src/gtk-rot-ctrl.c:572
+#: ../src/gtk-rot-ctrl.c:1222 ../src/sat-pref-rig.c:306
 #: ../src/sat-pref-rot.c:272
 #, c-format
 msgid "%s:%d: Failed to open hwconf dir (%s)"
@@ -564,11 +575,11 @@ msgstr "%s:%d: Nepavyko atverti hwconf katalogo (%s)"
 
 #. config will be force-loaded after LO spin is created
 #. Secondary device
-#: ../src/gtk-rig-ctrl.c:704
+#: ../src/gtk-rig-ctrl.c:730
 msgid "2. Device:"
 msgstr "2. Įrenginys:"
 
-#: ../src/gtk-rig-ctrl.c:709
+#: ../src/gtk-rig-ctrl.c:735
 msgid ""
 "Select secondary radio device\n"
 "This device will be used for uplink"
@@ -577,42 +588,42 @@ msgstr ""
 "Šis įrenginys bus naudojamas siuntimui"
 
 #. load config
-#: ../src/gtk-rig-ctrl.c:713 ../src/sat-pref-rig.c:769
+#: ../src/gtk-rig-ctrl.c:739 ../src/sat-pref-rig.c:769
 #: ../src/sat-pref-rig.c:778 ../src/sat-pref-rig-editor.c:246
 msgid "None"
 msgstr "Nėra"
 
 #. Engage button
-#: ../src/gtk-rig-ctrl.c:749 ../src/gtk-rot-ctrl.c:527
+#: ../src/gtk-rig-ctrl.c:775 ../src/gtk-rot-ctrl.c:585
 msgid "Engage"
 msgstr "Susijungti"
 
-#: ../src/gtk-rig-ctrl.c:750
+#: ../src/gtk-rig-ctrl.c:776
 msgid "Engage the selected radio device"
 msgstr "Susijungti su pasirinktu radijo įrenginiu"
 
 #. Timeout
-#: ../src/gtk-rig-ctrl.c:758 ../src/gtk-rot-ctrl.c:533
+#: ../src/gtk-rig-ctrl.c:784 ../src/gtk-rot-ctrl.c:591
 msgid "Cycle:"
 msgstr "Ciklas:"
 
-#: ../src/gtk-rig-ctrl.c:765
+#: ../src/gtk-rig-ctrl.c:791
 msgid "This parameter controls the delay between commands sent to the rig."
 msgstr "Vėlinimas tarp siunčiamų įrenginiui komandų."
 
-#: ../src/gtk-rig-ctrl.c:772 ../src/gtk-rot-ctrl.c:547
+#: ../src/gtk-rig-ctrl.c:798 ../src/gtk-rot-ctrl.c:605
 msgid "msec"
 msgstr "milisek"
 
-#: ../src/gtk-rig-ctrl.c:776 ../src/gtk-rot-ctrl.c:576
+#: ../src/gtk-rig-ctrl.c:802 ../src/gtk-rot-ctrl.c:634
 msgid "Settings"
 msgstr "Nustatymai"
 
-#: ../src/gtk-rig-ctrl.c:792
+#: ../src/gtk-rig-ctrl.c:818
 msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:794
+#: ../src/gtk-rig-ctrl.c:820
 msgid ""
 "The time remaining until the next AOS or LOS event, depending on which one "
 "comes first."
@@ -620,225 +631,156 @@ msgstr ""
 "Laikas iki sekančio AOS ar LOS įvykio, priklausomai nuo to kuris bus "
 "anksčiau."
 
-#: ../src/gtk-rig-ctrl.c:841 ../src/gtk-rot-ctrl.c:639
+#: ../src/gtk-rig-ctrl.c:868 ../src/gtk-rot-ctrl.c:701
 #, c-format
 msgid "%s:%s: Invalid satellite selection: %d"
 msgstr "%s:%s: Pasirinktas neteisingas palydovas: %d"
 
-#: ../src/gtk-rig-ctrl.c:878
+#: ../src/gtk-rig-ctrl.c:905
 #, c-format
 msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
 msgstr "%s: rastas neatitikimas transponderio duomenyse (%d,%d)"
 
-#: ../src/gtk-rig-ctrl.c:1007
+#: ../src/gtk-rig-ctrl.c:1034
 #, c-format
 msgid "%s:%s: Primary device selected: %d"
 msgstr "%s:%s: Pasirinktas pirminis įrenginys: %d"
 
-#: ../src/gtk-rig-ctrl.c:1021 ../src/gtk-rig-ctrl.c:3027
+#: ../src/gtk-rig-ctrl.c:1048 ../src/gtk-rig-ctrl.c:2489
 #, c-format
 msgid "%s:%d: Failed to allocate memory for radio config"
 msgstr "%s:%d: Nepavyko paskirti atminties radijo įrangos nustatymams"
 
-#: ../src/gtk-rig-ctrl.c:1030 ../src/gtk-rig-ctrl.c:1130
+#: ../src/gtk-rig-ctrl.c:1057 ../src/gtk-rig-ctrl.c:1157
 #, c-format
 msgid "%s:%s: Loaded new radio configuration %s"
 msgstr "%s:%s: Įkrauti naujos įrangos nustatymai %s"
 
 #. update LO widgets
-#: ../src/gtk-rig-ctrl.c:1033 ../src/gtk-rig-ctrl.c:1038
-#: ../src/gtk-rig-ctrl.c:1089 ../src/gtk-rig-ctrl.c:1105
-#: ../src/gtk-rig-ctrl.c:1133
+#: ../src/gtk-rig-ctrl.c:1060 ../src/gtk-rig-ctrl.c:1065
+#: ../src/gtk-rig-ctrl.c:1116 ../src/gtk-rig-ctrl.c:1132
+#: ../src/gtk-rig-ctrl.c:1160
 #, c-format
 msgid "%.0f MHz"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1045 ../src/gtk-rig-ctrl.c:1139
+#: ../src/gtk-rig-ctrl.c:1072 ../src/gtk-rig-ctrl.c:1166
 #, c-format
 msgid "%s:%s: Failed to load radio configuration %s"
 msgstr "%s:%s: Nepavyko įkrauto įrangos nustatymų %s"
 
-#: ../src/gtk-rig-ctrl.c:1073
+#: ../src/gtk-rig-ctrl.c:1100
 #, c-format
 msgid "%s:%s: Secondary device selected: %d"
 msgstr "%s:%s: Pasirinktas antrinis radijo įrenginys: %d"
 
-#: ../src/gtk-rig-ctrl.c:1121
+#: ../src/gtk-rig-ctrl.c:1148
 #, c-format
 msgid "%s:%s: Failed to allocate memory for radio config"
 msgstr "%s:%s: Nepavyko paskirti atminties radijo įrangos nustatymams"
 
-#: ../src/gtk-rig-ctrl.c:1166 ../src/gtk-rig-ctrl.c:1284
-#: ../src/gtk-rot-ctrl.c:781
+#: ../src/gtk-rig-ctrl.c:1193 ../src/gtk-rig-ctrl.c:1315
+#: ../src/gtk-rot-ctrl.c:848
 #, c-format
 msgid "%s: Controller does not have a valid configuration"
 msgstr "%s: Kontroleris neturi teisingų nustatymų"
 
-#: ../src/gtk-rig-ctrl.c:1292 ../src/gtk-rot-ctrl.c:809
+#: ../src/gtk-rig-ctrl.c:1323 ../src/gtk-rot-ctrl.c:878
 #, c-format
 msgid "%s missed the deadline"
 msgstr "%s praleistas terminas"
 
-#: ../src/gtk-rig-ctrl.c:1327
+#: ../src/gtk-rig-ctrl.c:1358
 #, c-format
 msgid "%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
 msgstr "%s: Neteisingas radijo įrenginio tipas %d. Nustatoma į RIG_TYPE_RX"
 
-#: ../src/gtk-rig-ctrl.c:1341 ../src/gtk-rot-ctrl.c:896
+#: ../src/gtk-rig-ctrl.c:1372 ../src/gtk-rot-ctrl.c:978
 #, c-format
 msgid "%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr "%s: MAX_ERROR_COUNT (%d) pasiektas. Atsijungiama nuo įrenginio!"
 
-#: ../src/gtk-rig-ctrl.c:1938 ../src/gtk-rig-ctrl.c:2459
-#: ../src/gtk-rig-ctrl.c:2579 ../src/gtk-rot-ctrl.c:965
-#: ../src/gtk-rot-ctrl.c:1086
-#, c-format
-msgid "%s:%d: Failed to create socket"
-msgstr "%s:%d: Nepavyko sukurti socket"
-
-#: ../src/gtk-rig-ctrl.c:1944 ../src/gtk-rig-ctrl.c:2465
-#: ../src/gtk-rig-ctrl.c:2585 ../src/gtk-rot-ctrl.c:971
-#: ../src/gtk-rot-ctrl.c:1092
-#, c-format
-msgid "%s:%d Network socket created successfully"
-msgstr "%s:%d Network socket sukurtas sėkmingai"
-
-#: ../src/gtk-rig-ctrl.c:1958 ../src/gtk-rig-ctrl.c:2479
-#: ../src/gtk-rig-ctrl.c:2599 ../src/gtk-rot-ctrl.c:985
-#: ../src/gtk-rot-ctrl.c:1106
-#, c-format
-msgid "%s:%d: Failed to connect to %s:%d"
-msgstr "%s:%d: Nepavyko prisijungti prie %s:%d"
-
-#: ../src/gtk-rig-ctrl.c:1964 ../src/gtk-rig-ctrl.c:2485
-#: ../src/gtk-rig-ctrl.c:2605 ../src/gtk-rot-ctrl.c:991
-#: ../src/gtk-rot-ctrl.c:1112
-#, c-format
-msgid "%s:%d: Connection opened to %s:%d"
-msgstr "%s:%d: Atidaromas prisijungimas prie %s:%d"
-
-#: ../src/gtk-rig-ctrl.c:1982 ../src/gtk-rig-ctrl.c:2496
-#: ../src/gtk-rig-ctrl.c:2616 ../src/gtk-rot-ctrl.c:1002
-#: ../src/gtk-rot-ctrl.c:1125
-#, c-format
-msgid "%s:%d: SIZE ERROR %d / %d"
-msgstr ""
-
-#: ../src/gtk-rig-ctrl.c:1992 ../src/gtk-rig-ctrl.c:2506
-#: ../src/gtk-rig-ctrl.c:2626 ../src/gtk-rot-ctrl.c:1012
-#, c-format
-msgid "%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"
-msgstr "%s:%s: Nepavyko paskirti 128 baitų (bėda)"
-
-#: ../src/gtk-rig-ctrl.c:2008 ../src/gtk-rig-ctrl.c:2522
-#: ../src/gtk-rig-ctrl.c:2642
-#, c-format
-msgid "%s:%s: Got 0 bytes from rigctld"
-msgstr "%s:%s: Gauta 0 baitų iš rigctld"
-
-#: ../src/gtk-rig-ctrl.c:2013 ../src/gtk-rig-ctrl.c:2527
-#: ../src/gtk-rig-ctrl.c:2647
-#, c-format
-msgid "%s:%s: Read %d bytes from rigctld"
-msgstr "%s:%s: Gauta %d baitų iš rigctld"
-
-#: ../src/gtk-rig-ctrl.c:2058 ../src/gtk-rig-ctrl.c:2143
-#: ../src/gtk-rig-ctrl.c:2223 ../src/gtk-rig-ctrl.c:2298
-#: ../src/gtk-rig-ctrl.c:2373 ../src/gtk-rig-ctrl.c:2690
-#: ../src/gtk-rig-ctrl.c:3068
-#, c-format
-msgid "%s: Failed to create socket"
-msgstr "%s: Nepavyko sukurti socket"
-
-#: ../src/gtk-rig-ctrl.c:2064 ../src/gtk-rig-ctrl.c:2149
-#: ../src/gtk-rig-ctrl.c:2229 ../src/gtk-rig-ctrl.c:2304
-#: ../src/gtk-rig-ctrl.c:2379 ../src/gtk-rig-ctrl.c:2696
-#: ../src/gtk-rig-ctrl.c:3074
-#, c-format
-msgid "%s: Network socket created successfully"
-msgstr "%s: Network socket sukurtas sėkmingai"
-
-#: ../src/gtk-rig-ctrl.c:2078 ../src/gtk-rig-ctrl.c:2163
-#: ../src/gtk-rig-ctrl.c:2243 ../src/gtk-rig-ctrl.c:2318
-#: ../src/gtk-rig-ctrl.c:2393 ../src/gtk-rig-ctrl.c:2710
-#: ../src/gtk-rig-ctrl.c:3088
-#, c-format
-msgid "%s: Failed to connect to %s:%d"
-msgstr "%s: Nepavyko prisijungti prie %s:%d"
-
-#: ../src/gtk-rig-ctrl.c:2084 ../src/gtk-rig-ctrl.c:2169
-#: ../src/gtk-rig-ctrl.c:2249 ../src/gtk-rig-ctrl.c:2324
-#: ../src/gtk-rig-ctrl.c:2399 ../src/gtk-rig-ctrl.c:2716
-#: ../src/gtk-rig-ctrl.c:3094
-#, c-format
-msgid "%s: Connection opened to %s:%d"
-msgstr "%s: Pavyko prisijungti prie: %s:%d"
-
-#: ../src/gtk-rig-ctrl.c:2100 ../src/gtk-rig-ctrl.c:2180
-#: ../src/gtk-rig-ctrl.c:2260 ../src/gtk-rig-ctrl.c:2335
-#: ../src/gtk-rig-ctrl.c:2410 ../src/gtk-rig-ctrl.c:2755
-#: ../src/gtk-rig-ctrl.c:3102
-#, c-format
-msgid "%s: SIZE ERROR %d / %d"
-msgstr ""
-
-#: ../src/gtk-rig-ctrl.c:2450 ../src/gtk-rig-ctrl.c:2570
-#: ../src/gtk-rot-ctrl.c:956
+#: ../src/gtk-rig-ctrl.c:2165 ../src/gtk-rot-ctrl.c:1034
 #, c-format
 msgid "%s:%d: NULL storage."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2744
+#: ../src/gtk-rig-ctrl.c:2220
 #, c-format
 msgid "%s: Invalid VFO argument. Using VFOA."
 msgstr "%s: Neteisingas  VFO argumentas. Bus naudojamas VFOA."
 
-#: ../src/gtk-rig-ctrl.c:2794
+#: ../src/gtk-rig-ctrl.c:2254
 #, c-format
 msgid "AOS in"
 msgstr "AOS po"
 
-#: ../src/gtk-rig-ctrl.c:2798
+#: ../src/gtk-rig-ctrl.c:2258
 #, c-format
 msgid "LOS in"
 msgstr "LOS po"
 
-#: ../src/gtk-rig-ctrl.c:2881
+#: ../src/gtk-rig-ctrl.c:2341
 #, c-format
 msgid "%s:%s: GtkSatModule has no target satellite."
 msgstr "%s:%s: GtkSatModule nenurodytas palydovas."
 
-#: ../src/gtk-rig-ctrl.c:2893
+#: ../src/gtk-rig-ctrl.c:2353
 #, c-format
 msgid "%s:%s: Satellite %d has %d transponder modes."
 msgstr "%s:%s: Palydovas %d turi %d transponderių režimus."
 
-#: ../src/gtk-rig-ctrl.c:2904
+#: ../src/gtk-rig-ctrl.c:2364
 #, c-format
 msgid "%s:&s: Read transponder '%s' for satellite %d"
 msgstr "%s:&s: Nuskaitomas transponderis '%s' palydovui %d"
 
-#: ../src/gtk-rig-ctrl.c:3039
+#: ../src/gtk-rig-ctrl.c:2501
 #, c-format
 msgid "%s:%d: Error reading radio configuration %s"
 msgstr "%s:%d: Klaida nuskaitant radijo įrangos nustatymus %s"
 
-#: ../src/gtk-rig-ctrl.c:3143
+#: ../src/gtk-rig-ctrl.c:2527
+#, c-format
+msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
+msgstr ""
+
+#: ../src/gtk-rig-ctrl.c:2533 ../src/gtk-rot-ctrl.c:1318
+#, c-format
+msgid "%s: SIZE ERROR %d / %d"
+msgstr ""
+
+#: ../src/gtk-rig-ctrl.c:2538 ../src/gtk-rig-ctrl.c:2546
+#, c-format
+msgid "%s: rigctld port closed"
+msgstr ""
+
+#: ../src/gtk-rig-ctrl.c:2554
+#, c-format
+msgid "%s:%s: Got 0 bytes from rigctld"
+msgstr "%s:%s: Gauta 0 baitų iš rigctld"
+
+#: ../src/gtk-rig-ctrl.c:2559
+#, c-format
+msgid "%s:%s: Read %d bytes from rigctld"
+msgstr "%s:%s: Gauta %d baitų iš rigctld"
+
+#: ../src/gtk-rig-ctrl.c:2592
 #, c-format
 msgid "%s: Detected SPACEBAR pressed event"
 msgstr "%s: Aptiktas SPACEBAR klavišo paspaudimo įvykis"
 
-#: ../src/gtk-rig-ctrl.c:3154
+#: ../src/gtk-rig-ctrl.c:2603
 #, c-format
 msgid "%s:%s: Keypress value %i not managed by this function"
 msgstr "%s:%s: Klavišo reikšmė %i neaptarnaujama šios funkcijos"
 
-#: ../src/gtk-rig-ctrl.c:3200
+#: ../src/gtk-rig-ctrl.c:2649
 #, c-format
 msgid "%s: Acquired controller lock"
 msgstr "%s: valdiklio lock pavyko"
 
-#: ../src/gtk-rig-ctrl.c:3205
+#: ../src/gtk-rig-ctrl.c:2654
 #, c-format
 msgid ""
 "%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage "
@@ -847,71 +789,96 @@ msgstr ""
 "%s: nesusirišta su valdikliu; PTT įvykis ignoruojamas (Bandykite spausti "
 "susijungimo su įranga mygtuką)"
 
-#: ../src/gtk-rig-ctrl.c:3215
+#: ../src/gtk-rig-ctrl.c:2664
 #, c-format
 msgid "%s: PTT is OFF => Set TX freq and PTT=ON"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:3224
+#: ../src/gtk-rig-ctrl.c:2673
 #, c-format
 msgid "%s: PTT is ON = Set PTT=OFF"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:3236
+#: ../src/gtk-rig-ctrl.c:2685
 #, c-format
 msgid "%s: Failed to acquire controller lock; PTT event not handled"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:333 ../src/gtk-sat-list.c:86
+#: ../src/gtk-rig-ctrl.c:2700 ../src/gtk-rot-ctrl.c:1243
+#, c-format
+msgid "%s: Failed to create socket"
+msgstr "%s: Nepavyko sukurti socket"
+
+#: ../src/gtk-rig-ctrl.c:2707 ../src/gtk-rot-ctrl.c:1250
+#, c-format
+msgid "%s: Network socket created successfully"
+msgstr "%s: Network socket sukurtas sėkmingai"
+
+#: ../src/gtk-rig-ctrl.c:2721 ../src/gtk-rot-ctrl.c:1264
+#, c-format
+msgid "%s: Failed to connect to %s:%d"
+msgstr "%s: Nepavyko prisijungti prie %s:%d"
+
+#: ../src/gtk-rig-ctrl.c:2728 ../src/gtk-rot-ctrl.c:1271
+#, c-format
+msgid "%s: Connection opened to %s:%d"
+msgstr "%s: Pavyko prisijungti prie: %s:%d"
+
+#: ../src/gtk-rig-ctrl.c:2766 ../src/gtk-rig-ctrl.c:2778
+#, c-format
+msgid "%s: %s rigctld returned error (%s)"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:379 ../src/gtk-sat-list.c:86
 #: ../src/gtk-single-sat.c:56 ../src/sat-pass-dialogs.c:126
 msgid "Azimuth"
 msgstr "Azimutas"
 
-#: ../src/gtk-rot-ctrl.c:345
+#: ../src/gtk-rot-ctrl.c:391
 msgid "Read:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:372 ../src/gtk-sat-list.c:87
+#: ../src/gtk-rot-ctrl.c:418 ../src/gtk-sat-list.c:87
 #: ../src/gtk-single-sat.c:57 ../src/sat-pass-dialogs.c:127
 msgid "Elevation"
 msgstr "Elevacija"
 
-#: ../src/gtk-rot-ctrl.c:384
+#: ../src/gtk-rot-ctrl.c:430
 msgid "Read: "
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:431
+#: ../src/gtk-rot-ctrl.c:477
 msgid "Track the satellite when it is within range"
 msgstr "Sekti palydovą kai jis matomas"
 
 #. count down
-#: ../src/gtk-rot-ctrl.c:455
+#: ../src/gtk-rot-ctrl.c:501
 msgid "ΔT:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:489
+#: ../src/gtk-rot-ctrl.c:535
 msgid "Device:"
 msgstr "Įrenginys:"
 
-#: ../src/gtk-rot-ctrl.c:494
+#: ../src/gtk-rot-ctrl.c:540
 msgid "Select antenna rotator device"
 msgstr "Pasirinkite antenos sukimo įrenginį"
 
-#: ../src/gtk-rot-ctrl.c:528
+#: ../src/gtk-rot-ctrl.c:586
 msgid "Engage the selected rotor device"
 msgstr "Susijungti su pasirinktu sukimo įrenginiu"
 
-#: ../src/gtk-rot-ctrl.c:540
+#: ../src/gtk-rot-ctrl.c:598
 msgid ""
 "This parameter controls the delay between commands sent to the rotator."
 msgstr "Vėlinimas tarp komandų siunčiamų sukimo įrenginiui."
 
 #. Tolerance
-#: ../src/gtk-rot-ctrl.c:552
+#: ../src/gtk-rot-ctrl.c:610
 msgid "Tolerance:"
 msgstr "Tolerancija"
 
-#: ../src/gtk-rot-ctrl.c:559
+#: ../src/gtk-rot-ctrl.c:617
 msgid ""
 "This parameter controls the tolerance between the target and rotator values "
 "for the rotator.\n"
@@ -921,39 +888,54 @@ msgstr ""
 "Tolerancija tarp taikinio ir sukimo įrenginio reikšmių. Jei skirtumas tarp "
 "šių reikšmių mažesnis už toleranciją, komandos nebus siunčiamos."
 
-#: ../src/gtk-rot-ctrl.c:569
+#: ../src/gtk-rot-ctrl.c:627
 msgid "deg"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:730
+#: ../src/gtk-rot-ctrl.c:792
 #, c-format
 msgid "%s:%d: Failed to allocate memory for rotator config"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:739
+#: ../src/gtk-rot-ctrl.c:801
 #, c-format
 msgid "Loaded new rotator configuration %s"
 msgstr "Užkrauti naujo sukimo įrenginio nustatymai %s"
 
-#: ../src/gtk-rot-ctrl.c:748
+#: ../src/gtk-rot-ctrl.c:813
 #, c-format
 msgid "%s:%d: Failed to load rotator configuration %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:867 ../src/gtk-rot-ctrl.c:868
-#: ../src/gtk-sat-module-popup.c:833 ../src/gtk-sat-module-popup.c:904
+#: ../src/gtk-rot-ctrl.c:948 ../src/gtk-rot-ctrl.c:949
+#: ../src/gtk-sat-module-popup.c:848 ../src/gtk-sat-module-popup.c:919
 #: ../src/qth-data.c:95 ../src/sat-log-browser.c:72 ../src/sat-pref-rig.c:740
 msgid "ERROR"
 msgstr "KLAIDA"
 
-#: ../src/gtk-rot-ctrl.c:1028
+#: ../src/gtk-rot-ctrl.c:1049
 #, c-format
-msgid "%s:%s: Got 0 bytes from rotctld"
+msgid "%s:%d: rotctld returned error (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1033
+#: ../src/gtk-rot-ctrl.c:1059
 #, c-format
-msgid "%s:%s: Read %d bytes from rotctld"
+msgid "%s:%d: rotctld returned bad response (%s)"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:1113
+#, c-format
+msgid "%s:%d: rotctld returned error %d (%s)"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:1323 ../src/gtk-rot-ctrl.c:1333
+#, c-format
+msgid "%s: rotctld Socket Down"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:1341
+#, c-format
+msgid "%s:%s: Got 0 bytes from rotctld"
 msgstr ""
 
 #: ../src/gtk-sat-data.c:85
@@ -975,7 +957,7 @@ msgstr "%s: TLE duomenys %d neteisingi"
 msgid "Satellite"
 msgstr "Palydovas"
 
-#: ../src/gtk-sat-list.c:55 ../src/gtk-sat-selector.c:278
+#: ../src/gtk-sat-list.c:55 ../src/gtk-sat-selector.c:274
 #: ../src/gtk-sat-tree.c:222 ../src/mod-cfg.c:622
 msgid "Catnum"
 msgstr ""
@@ -1011,22 +993,22 @@ msgstr ""
 #: ../src/gtk-sat-list.c:64 ../src/gtk-sat-list.c:94
 #: ../src/gtk-single-sat.c:64
 msgid "Next AOS"
-msgstr ""
+msgstr "Kitas AOS"
 
 #: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:95
 #: ../src/gtk-single-sat.c:65
 msgid "Next LOS"
-msgstr ""
+msgstr "Kitas LOS"
 
 #: ../src/gtk-sat-list.c:66 ../src/loc-tree.c:146
 #: ../src/sat-pass-dialogs.c:108 ../src/sat-pref-qth.c:200
 msgid "Lat"
-msgstr ""
+msgstr "Platuma"
 
 #: ../src/gtk-sat-list.c:67 ../src/loc-tree.c:166
 #: ../src/sat-pass-dialogs.c:109 ../src/sat-pref-qth.c:213
 msgid "Lon"
-msgstr ""
+msgstr "Ilguma"
 
 #: ../src/gtk-sat-list.c:68 ../src/sat-pass-dialogs.c:110
 msgid "SSP"
@@ -1095,7 +1077,7 @@ msgstr ""
 #: ../src/gtk-sat-list.c:90 ../src/gtk-single-sat.c:60
 #: ../src/sat-pass-dialogs.c:129
 msgid "Declination"
-msgstr ""
+msgstr "Deklinacija"
 
 #: ../src/gtk-sat-list.c:91 ../src/gtk-single-sat.c:61
 #: ../src/sat-pass-dialogs.c:130
@@ -1162,7 +1144,7 @@ msgstr ""
 
 #: ../src/gtk-sat-list.c:107 ../src/gtk-single-sat.c:105
 msgid "Orbit Number"
-msgstr ""
+msgstr "Orbitos Numeris"
 
 #: ../src/gtk-sat-list.c:108 ../src/gtk-single-sat.c:78
 #: ../src/sat-pass-dialogs.c:143
@@ -1172,17 +1154,17 @@ msgstr "Matomumas"
 #: ../src/gtk-sat-list.c:538
 #, c-format
 msgid "%s: Invalid GtkSatList!"
-msgstr ""
+msgstr "%s: neteisingas GtkSatList!"
 
 #: ../src/gtk-sat-list.c:601
 #, c-format
 msgid "%s: Failed to get data for #%d."
-msgstr ""
+msgstr "%s: Nepavyko gauti duomenų #%d."
 
 #: ../src/gtk-sat-list.c:607
 #, c-format
 msgid "%s: Satellite #%d removed from list."
-msgstr ""
+msgstr "%s: Palydovas #%d pašalintas iš sąrašo."
 
 #: ../src/gtk-sat-list.c:960 ../src/sat-pass-dialogs.c:704
 #: ../src/sat-pref-qth.c:784
@@ -1193,7 +1175,7 @@ msgstr ""
 #: ../src/gtk-sat-list.c:1204
 #, c-format
 msgid "%s: FIXME I am not implemented"
-msgstr ""
+msgstr "%s: FIXME Aš dar nerealizuotas"
 
 #: ../src/gtk-sat-list.c:1300 ../src/gtk-sat-list.c:1334
 #, c-format
@@ -1208,7 +1190,7 @@ msgstr ""
 
 #: ../src/gtk-sat-list-col-sel.c:153
 msgid "Column Name"
-msgstr ""
+msgstr "Stulpelio vardas"
 
 #: ../src/gtk-sat-list-col-sel.c:162 ../src/sat-vis.c:41
 msgid "Visible"
@@ -1216,42 +1198,42 @@ msgstr "Matomas"
 
 #: ../src/gtk-sat-list-col-sel.c:169
 msgid "Row"
-msgstr ""
+msgstr "Eilė"
 
 #: ../src/gtk-sat-map.c:674
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d:%s%d%s%d </span>"
-msgstr ""
+msgstr "<span background=\"#%s\"> Sekantis: %s po %s%d:%s%d%s%d </span>"
 
 #: ../src/gtk-sat-map.c:680
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d%s%d </span>"
-msgstr ""
+msgstr "<span background=\"#%s\"> Kitas: %s po %s%d%s%d </span>"
 
 #: ../src/gtk-sat-map.c:1071
 #, c-format
 msgid "%s:%d: Loading map file %s"
-msgstr ""
+msgstr "%s:%d: Įkraunamas žemėlapis %s"
 
 #: ../src/gtk-sat-map.c:1077
 #, c-format
 msgid "%s:%d: Map file found"
-msgstr ""
+msgstr "%s:%d: Žemėlapis rastas"
 
 #: ../src/gtk-sat-map.c:1082
 #, c-format
 msgid "%s:%d: Could not find map file %s"
-msgstr ""
+msgstr "%s:%d: Nerasta žemėlapio byla %s"
 
 #: ../src/gtk-sat-map.c:1090
 #, c-format
 msgid "%s:%d: Using default map: %s"
-msgstr ""
+msgstr "%s:%d: Naudojamas žemėlapis pagal nutylėjimą: %s"
 
 #: ../src/gtk-sat-map.c:1099
 #, c-format
 msgid "%s:%d: Error loading map file (%s)"
-msgstr ""
+msgstr "%s:%d: Klaida skaitant žemėlapio bylą (%s)"
 
 #: ../src/gtk-sat-map.c:1841
 #, c-format
@@ -1323,222 +1305,227 @@ msgstr "Pėdsakas"
 msgid "Set Target"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:258
+#: ../src/gtk-sat-module.c:271
 #, c-format
 msgid "%s: Module %s is not valid."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:276
+#: ../src/gtk-sat-module.c:289
 #, c-format
 msgid "%s: Module %s has problems."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:310
+#: ../src/gtk-sat-module.c:323
 msgid "Module options / shortcuts"
 msgstr "Modulio nustatymai / shortcuts"
 
-#: ../src/gtk-sat-module.c:316
+#: ../src/gtk-sat-module.c:329
 msgid "Close this module."
 msgstr "Užverti modulį."
 
-#: ../src/gtk-sat-module.c:385
+#: ../src/gtk-sat-module.c:398
 #, c-format
 msgid "%s: Layout has %d columns and %d rows."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:457
+#: ../src/gtk-sat-module.c:470
 #, c-format
 msgid "%s:%d: Invalid child type (%d). Using GtkSatList."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:498
+#: ../src/gtk-sat-module.c:511
 #, c-format
 msgid "%s: Could not load config data from %s (%s)."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:508
+#: ../src/gtk-sat-module.c:521
 #, c-format
 msgid "%s: Reading configuration from %s"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:550
+#: ../src/gtk-sat-module.c:563
 #, c-format
 msgid "%s: Can not load default QTH file %s; using built-in defaults"
 msgstr ""
 
 #. settings are really screwed up; we need some safe values here
-#: ../src/gtk-sat-module.c:554 ../src/gtk-sat-module.c:555
+#: ../src/gtk-sat-module.c:567 ../src/gtk-sat-module.c:568
 msgid "Error"
 msgstr "Klaida"
 
-#: ../src/gtk-sat-module.c:585
+#: ../src/gtk-sat-module.c:598
 #, c-format
 msgid "%s: Module layout is invalid: %s. Using default."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:597
+#: ../src/gtk-sat-module.c:610
 #, c-format
 msgid "%s: GRID(%d): %s"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:642 ../src/mod-cfg.c:673
+#: ../src/gtk-sat-module.c:655 ../src/mod-cfg.c:673
 #, c-format
 msgid "%s: Failed to get list of satellites (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:664
+#: ../src/gtk-sat-module.c:677
 #, c-format
 msgid "%s: Error reading data for #%d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:688
+#: ../src/gtk-sat-module.c:701
 #, c-format
 msgid "%s: Read data for #%d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:695
+#: ../src/gtk-sat-module.c:708
 #, c-format
 msgid "%s: Sat #%d already in list"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:706
+#: ../src/gtk-sat-module.c:719
 #, c-format
 msgid "%s: Read %d out of %d satellites"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:767
+#: ../src/gtk-sat-module.c:780
 #, c-format
 msgid "%s: Previous cycle missed it's deadline."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:883 ../src/gtk-sat-module.c:1416
+#: ../src/gtk-sat-module.c:912 ../src/gtk-sat-module.c:1445
 #, c-format
 msgid "%f:%d: Unknown child type"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1035
+#: ../src/gtk-sat-module.c:1064
 #, c-format
 msgid "%s: Module %s recevied CLOSE signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1045
+#: ../src/gtk-sat-module.c:1074
 #, c-format
 msgid "%s: Module %s is in DOCKED state."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1052 ../src/gtk-sat-module.c:1068
-#: ../src/gtk-sat-module.c:1096
+#: ../src/gtk-sat-module.c:1081 ../src/gtk-sat-module.c:1097
+#: ../src/gtk-sat-module.c:1125
 #, c-format
 msgid ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
 "Internal state is corrupt?"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1061
+#: ../src/gtk-sat-module.c:1090
 #, c-format
 msgid "%s: Module %s is in WINDOW state."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1089
+#: ../src/gtk-sat-module.c:1118
 #, c-format
 msgid "%s: Module %s is in FULLSCREEN state."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1118 ../src/gtk-sat-module.c:1277
+#: ../src/gtk-sat-module.c:1147 ../src/gtk-sat-module.c:1306
 #, c-format
 msgid "%s: Module %s has unknown state: %d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1127
+#: ../src/gtk-sat-module.c:1156
 #, c-format
 msgid "%s: Module %s closed."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1167
+#: ../src/gtk-sat-module.c:1196
 #, c-format
 msgid "%s: Module %s recevied CONFIG signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1176
+#: ../src/gtk-sat-module.c:1205
 #, c-format
 msgid ""
 "%s: Could not stop timeout callback\n"
 "%s: Source ID %d seems invalid."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1194
+#: ../src/gtk-sat-module.c:1223
 #, c-format
 msgid "%s: Module configuration failed for some reason."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1367
+#: ../src/gtk-sat-module.c:1396
 #, c-format
 msgid "%s: Reloading satellites for module %s"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:89
+#: ../src/gtk-sat-module.c:1509
+#, c-format
+msgid "%s: Updating GtkSkyGlance for %s"
+msgstr ""
+
+#: ../src/gtk-sat-module-popup.c:90
 #, c-format
 msgid "%s:%d: %s called with NULL parameter!"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:99
+#: ../src/gtk-sat-module-popup.c:100
 msgid "Detach module"
 msgstr "Atskirti modulį"
 
-#: ../src/gtk-sat-module-popup.c:110
+#: ../src/gtk-sat-module-popup.c:111
 msgid "Attach module"
 msgstr "Prijungti modulį"
 
-#: ../src/gtk-sat-module-popup.c:123
+#: ../src/gtk-sat-module-popup.c:124
 msgid "Exit full screen"
 msgstr "Nepilnas ekranas"
 
-#: ../src/gtk-sat-module-popup.c:132
+#: ../src/gtk-sat-module-popup.c:133
 msgid "Full screen"
 msgstr "Vaizdas visame ekrane"
 
 #. sky at a glance
-#: ../src/gtk-sat-module-popup.c:146
+#: ../src/gtk-sat-module-popup.c:147
 msgid "Sky at a glance"
 msgstr "Sky at a glance"
 
 #. time manager
-#: ../src/gtk-sat-module-popup.c:156 ../src/gtk-sat-module-tmg.c:289
+#: ../src/gtk-sat-module-popup.c:157 ../src/gtk-sat-module-tmg.c:289
 msgid "Time Controller"
 msgstr "Laiko valdiklis"
 
 #. Radio Control
-#: ../src/gtk-sat-module-popup.c:169
+#: ../src/gtk-sat-module-popup.c:170
 msgid "Radio Control"
 msgstr "Radijo valdiklis"
 
 #. Antenna Control
-#: ../src/gtk-sat-module-popup.c:178
+#: ../src/gtk-sat-module-popup.c:179
 msgid "Antenna Control"
 msgstr "Antenos valdiklis"
 
 #. configure
-#: ../src/gtk-sat-module-popup.c:191
+#: ../src/gtk-sat-module-popup.c:192
 msgid "Configure"
 msgstr "Nustatymai"
 
 #. clone
-#: ../src/gtk-sat-module-popup.c:200
+#: ../src/gtk-sat-module-popup.c:201
 msgid "Clone..."
 msgstr "Klonuoti..."
 
 #. delete module
-#: ../src/gtk-sat-module-popup.c:213 ../src/sat-pref-qth.c:496
+#: ../src/gtk-sat-module-popup.c:214 ../src/sat-pref-qth.c:496
 #: ../src/sat-pref-rig.c:344 ../src/sat-pref-rot.c:309
 msgid "Delete"
 msgstr "Šalinti"
 
 #. close
-#: ../src/gtk-sat-module-popup.c:222
+#: ../src/gtk-sat-module-popup.c:223
 msgid "Close"
 msgstr "Uždaryti"
 
-#: ../src/gtk-sat-module-popup.c:255
+#: ../src/gtk-sat-module-popup.c:256
 msgid ""
 "A module can not be configured while the radio or rotator controller is "
 "active.\n"
@@ -1552,16 +1539,16 @@ msgstr ""
 
 #. icon file name
 #. window title
-#: ../src/gtk-sat-module-popup.c:295
+#: ../src/gtk-sat-module-popup.c:296
 msgid "Clone Module"
 msgstr "Klonuoti modulį"
 
 #. label
-#: ../src/gtk-sat-module-popup.c:307
+#: ../src/gtk-sat-module-popup.c:308
 msgid "Name of new module:"
 msgstr "Naujo modulio pavadinimas:"
 
-#: ../src/gtk-sat-module-popup.c:316 ../src/mod-cfg.c:501
+#: ../src/gtk-sat-module-popup.c:317 ../src/mod-cfg.c:501
 msgid ""
 "Enter a short name for this module.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
@@ -1569,7 +1556,7 @@ msgstr ""
 "Įveskite trumpą modulio pavadinimą\n"
 "Leidžiami simboliai: 0..9, a..z, A..Z, - ir _"
 
-#: ../src/gtk-sat-module-popup.c:318 ../src/mod-cfg.c:503
+#: ../src/gtk-sat-module-popup.c:319 ../src/mod-cfg.c:503
 msgid ""
 "The name will be used to identify the module and it is also used a file name "
 "for saving the data.Max length is 25 characters."
@@ -1578,50 +1565,50 @@ msgstr ""
 "duomenis. Maksimalus ilgis - 25 simboliai."
 
 #. check button
-#: ../src/gtk-sat-module-popup.c:335
+#: ../src/gtk-sat-module-popup.c:336
 msgid "Open module when created"
 msgstr "Atverti modulį po sukūrimo"
 
-#: ../src/gtk-sat-module-popup.c:339
+#: ../src/gtk-sat-module-popup.c:340
 msgid "If checked, the new module will be opened after it has been created"
 msgstr "Jei pažymėta, atverti modulį iškarto po jo sukūrimo"
 
-#: ../src/gtk-sat-module-popup.c:355
+#: ../src/gtk-sat-module-popup.c:356
 #, c-format
 msgid "%s:%d: Cloning %s => %s"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:370
+#: ../src/gtk-sat-module-popup.c:371
 #, c-format
 msgid "%s:%d: Failed to clone %s."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:375
+#: ../src/gtk-sat-module-popup.c:376
 #, c-format
 msgid "%s:%d: Successfully cloned %s."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:439
+#: ../src/gtk-sat-module-popup.c:440
 #, c-format
 msgid "%s:%d: Cloning cancelled by user."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:445
+#: ../src/gtk-sat-module-popup.c:446
 #, c-format
 msgid "%s:%d: Cloning interrupted."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:620 ../src/gtk-sat-module-popup.c:741
+#: ../src/gtk-sat-module-popup.c:621 ../src/gtk-sat-module-popup.c:742
 #, c-format
 msgid "%s:%d: Unknown module state: %d"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:766
+#: ../src/gtk-sat-module-popup.c:780
 #, c-format
 msgid "The sky at a glance (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:828
+#: ../src/gtk-sat-module-popup.c:843
 msgid ""
 "You have no radio configuration!\n"
 "Please configure a radio first."
@@ -1629,12 +1616,12 @@ msgstr ""
 "Nerasti radijo įrenginio nustatymai!\n"
 "Būtina pradžiai sukurti ir suderinti įrangą."
 
-#: ../src/gtk-sat-module-popup.c:841
+#: ../src/gtk-sat-module-popup.c:856
 #, c-format
 msgid "Gpredict Radio Control: %s"
-msgstr ""
+msgstr "Gpredict Radijo Valdymas: %s"
 
-#: ../src/gtk-sat-module-popup.c:899
+#: ../src/gtk-sat-module-popup.c:914
 msgid ""
 "You have no rotator configuration!\n"
 "Please configure an antenna rotator first."
@@ -1642,12 +1629,12 @@ msgstr ""
 "Nėra antenų sukimo įrenginio nustatymų.\n"
 "Sukurkite ir suderinkite įrenginį."
 
-#: ../src/gtk-sat-module-popup.c:912
+#: ../src/gtk-sat-module-popup.c:927
 #, c-format
 msgid "Gpredict Rotator Control: %s"
 msgstr "Gpredict rotatorių valdymas: %s"
 
-#: ../src/gtk-sat-module-popup.c:993
+#: ../src/gtk-sat-module-popup.c:1024
 #, c-format
 msgid ""
 "This operation will permanently delete\n"
@@ -1659,12 +1646,12 @@ msgstr ""
 "<b>%s</b>.\n"
 "Ar tikrai norite tęsti?"
 
-#: ../src/gtk-sat-module-popup.c:1003
+#: ../src/gtk-sat-module-popup.c:1034
 #, c-format
 msgid "%s:%d: Failed to delete %s."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:1008
+#: ../src/gtk-sat-module-popup.c:1039
 #, c-format
 msgid "%s:%d: %s deleted permanently."
 msgstr ""
@@ -1780,68 +1767,68 @@ msgstr ""
 msgid "<b>Manual Control</b>"
 msgstr "Rankinis valdymas"
 
-#: ../src/gtk-sat-selector.c:237
+#: ../src/gtk-sat-selector.c:233
 msgid "Select a satellite group or category to narrow your search."
 msgstr "Pasirinkite palydovų grupę arba kategoriją paieškos susiaurinimui"
 
-#: ../src/gtk-sat-selector.c:269
+#: ../src/gtk-sat-selector.c:265
 msgid "Available Satellites"
 msgstr "Visi palydovai"
 
-#: ../src/gtk-sat-selector.c:287
+#: ../src/gtk-sat-selector.c:283
 msgid "Updated"
 msgstr "Atnaujinta"
 
 #. Search
-#: ../src/gtk-sat-selector.c:317
+#: ../src/gtk-sat-selector.c:313
 msgid "Search"
 msgstr "Paieška"
 
-#: ../src/gtk-sat-selector.c:321
+#: ../src/gtk-sat-selector.c:317
 msgid ""
 "Start typing in this field to search for a satellite in the selected group."
 msgstr "Pradėkite rinkti palydovo pavadinima paieškai pasirinktoje grupėje."
 
 #. Group selector
-#: ../src/gtk-sat-selector.c:335
+#: ../src/gtk-sat-selector.c:331
 msgid "Group"
 msgstr "Grupė"
 
-#: ../src/gtk-sat-selector.c:399
+#: ../src/gtk-sat-selector.c:395
 msgid "All satellites"
 msgstr "Visi palydovai"
 
-#: ../src/gtk-sat-selector.c:406
+#: ../src/gtk-sat-selector.c:402
 #, c-format
 msgid "%s:%s: Failed to open satdata directory %s."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:447
+#: ../src/gtk-sat-selector.c:443
 #, c-format
 msgid "%s:%s: Read %d satellites into MAIN group."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:494
+#: ../src/gtk-sat-selector.c:490
 #, c-format
 msgid "%s:%s: Failed to open %s: %s"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:531 ../src/mod-cfg.c:746
+#: ../src/gtk-sat-selector.c:527 ../src/mod-cfg.c:746
 #, c-format
 msgid "%s:%s: Error reading satellite %d."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:550
+#: ../src/gtk-sat-selector.c:546
 #, c-format
 msgid "%s:%s: Read %d satellites from %s"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:555
+#: ../src/gtk-sat-selector.c:551
 #, c-format
 msgid "%s:%s: Failed to read %s"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:807
+#: ../src/gtk-sat-selector.c:803
 #, c-format
 msgid "%s: Error getting %dth satellite"
 msgstr ""
@@ -1935,7 +1922,7 @@ msgstr ""
 
 #: ../src/gtk-single-sat.c:68
 msgid "SSP Loc."
-msgstr ""
+msgstr "SSP Lok."
 
 #: ../src/gtk-single-sat.c:72
 msgid "Doppler@100M"
@@ -1951,7 +1938,7 @@ msgstr "Vėlinimas"
 
 #: ../src/gtk-single-sat.c:75
 msgid "Mean Anom."
-msgstr ""
+msgstr "Vidut. Anom."
 
 #: ../src/gtk-single-sat.c:77
 msgid "Orbit Num."
@@ -1975,7 +1962,7 @@ msgstr ""
 
 #: ../src/gtk-single-sat.c:88
 msgid "Declination of the satellite"
-msgstr ""
+msgstr "Palydovo deklinacija"
 
 #: ../src/gtk-single-sat.c:89
 msgid "The range between satellite and observer"
@@ -1999,7 +1986,7 @@ msgstr "Sekančio LOS laikas"
 
 #: ../src/gtk-single-sat.c:94
 msgid "Latitude of the sub-satellite point"
-msgstr ""
+msgstr "Taško po palydovu platuma"
 
 #: ../src/gtk-single-sat.c:95
 msgid "Longitude of the sub-satellite point"
@@ -2019,7 +2006,7 @@ msgstr "Palydovo aukštis"
 
 #: ../src/gtk-single-sat.c:99
 msgid "Tangential velocity of the satellite"
-msgstr ""
+msgstr "Tangentinis palydovo greitis"
 
 #: ../src/gtk-single-sat.c:101
 msgid "Signal loss @ 100MHz"
@@ -2059,40 +2046,40 @@ msgid "%s:%d: Invalid field number (%d)"
 msgstr ""
 
 #. no satellites
-#: ../src/gtk-sky-glance.c:249
+#: ../src/gtk-sky-glance.c:258
 msgid "This module has no satellites!"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:355
+#: ../src/gtk-sky-glance.c:367
 msgid "TIME"
 msgstr "LAIKAS"
 
-#: ../src/gtk-sky-glance.c:729 ../src/gtk-sky-glance.c:790
+#: ../src/gtk-sky-glance.c:741 ../src/gtk-sky-glance.c:802
 #, c-format
 msgid "%s::%s: Button %d has no function..."
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:768 ../src/gtk-sky-glance.c:821
+#: ../src/gtk-sky-glance.c:780 ../src/gtk-sky-glance.c:833
 #, c-format
 msgid "%s::%s: Could not retrieve pass_t object"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:780
+#: ../src/gtk-sky-glance.c:792
 #, c-format
 msgid "%s::%s: Showing pass details for %s - we may have a memory leak here"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:946
+#: ../src/gtk-sky-glance.c:958
 #, c-format
 msgid "%s:%d: Colour index out of valid range (%d)"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:1010
+#: ../src/gtk-sky-glance.c:1022
 #, c-format
 msgid "%s:%d: %s has %d passes within %.4f days\n"
-msgstr ""
+msgstr "%s:%d: %s praskries %d kartų %.4f dienų laikotarpyje\n"
 
-#: ../src/gtk-sky-glance.c:1066
+#: ../src/gtk-sky-glance.c:1078
 #, c-format
 msgid "%s:%d: Could not allocate memory for pass object"
 msgstr ""
@@ -2166,6 +2153,9 @@ msgid ""
 "program.\n"
 "Gpredict does not require any command line options for nominal operation."
 msgstr ""
+"Gpredict yra grafinė palydovų sekimo realiame laike ir orbitų paskaičiavimo "
+"programa.\n"
+"Kasdieniam darbui Gpredict nereikalauja jokių komandinės eilutės nuostatų."
 
 #: ../src/main.c:134
 #, c-format
@@ -2460,6 +2450,9 @@ msgid ""
 "Satellites skipped:\t 0\n"
 "Missing Satellites:\t 0\n"
 msgstr ""
+"Atnaujinta palydovų:\t 0\n"
+"Praleista palydovų:\t 0\n"
+"Trūksta palydovų:\t 0\n"
 
 #: ../src/menubar.c:502 ../src/menubar.c:672
 msgid "Finished"
@@ -2805,7 +2798,7 @@ msgstr ""
 #. pass details
 #: ../src/pass-popup-menu.c:72
 msgid "Show details"
-msgstr ""
+msgstr "Rodyti išsamiau"
 
 #. Polar plot pass
 #: ../src/pass-popup-menu.c:89
@@ -2938,7 +2931,7 @@ msgid ""
 "LAT:%.2f LON:%.2f\n"
 msgstr ""
 
-#: ../src/predict-tools.c:659
+#: ../src/predict-tools.c:664
 #, c-format
 msgid "%s: Found %d passes for %s in time window [%f;%f]"
 msgstr ""
@@ -3018,7 +3011,7 @@ msgstr ""
 #. crate dialog and add contents
 #: ../src/qth-editor.c:110 ../src/sat-pref-qth-editor.c:112
 msgid "Edit ground station data"
-msgstr ""
+msgstr "Antžeminės stoties duomenys"
 
 #: ../src/qth-editor.c:153
 #, c-format
@@ -3027,6 +3020,9 @@ msgid ""
 "ground station data to %s.qth!\n"
 "Please try again using a different name."
 msgstr ""
+"Įrašant duomenis į %s.qth bylą\n"
+"įvyko klaida!\n"
+"Pabandykite išsaugoti kitu vardu."
 
 #. QTH name
 #. Config name
@@ -3041,6 +3037,8 @@ msgid ""
 "Enter a short name for this ground station, e.g. callsign.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 msgstr ""
+"Suteikite šiai antžeminėi stočiai trumpą vardą, pvz. šaukinys.\n"
+"Leidžiami simboliai: 0..9, a..z, A..Z, - ir _"
 
 #: ../src/qth-editor.c:210 ../src/sat-pref-qth-editor.c:194
 msgid ""
@@ -3071,50 +3069,50 @@ msgstr ""
 #: ../src/qth-editor.c:248 ../src/qth-editor.c:369
 #: ../src/sat-pref-qth-editor.c:232 ../src/sat-pref-qth-editor.c:353
 msgid "Select"
-msgstr ""
+msgstr "Rinktis"
 
 #: ../src/qth-editor.c:249 ../src/sat-pref-qth-editor.c:233
 msgid "Select a predefined location from a list."
-msgstr ""
+msgstr "Rinktis vietovę iš sąrašo."
 
 #. latitude
 #: ../src/qth-editor.c:257 ../src/sat-pref-qth-editor.c:241
 msgid "Latitude (°)"
-msgstr ""
+msgstr "Platuma (°)"
 
 #: ../src/qth-editor.c:267 ../src/sat-pref-qth-editor.c:251
 msgid "Select the latitude of the ground station in decimal degrees."
-msgstr ""
+msgstr "Nustatykite antžeminės stoties platumą dešimtainiais laipsniais."
 
 #: ../src/qth-editor.c:272 ../src/sat-pref-qth-editor.c:256
 msgid "North"
-msgstr ""
+msgstr "Šiaurės"
 
 #: ../src/qth-editor.c:273 ../src/sat-pref-qth-editor.c:257
 msgid "South"
-msgstr ""
+msgstr "Pietų"
 
 #. longitude
 #: ../src/qth-editor.c:279 ../src/sat-pref-qth-editor.c:263
 msgid "Longitude (°)"
-msgstr ""
+msgstr "Ilguma (°)"
 
 #: ../src/qth-editor.c:288 ../src/sat-pref-qth-editor.c:272
 msgid "Select the longitude of the ground station in decimal degrees."
-msgstr ""
+msgstr "Nustatykite antžeminės stoties ilgumą dešimtainiais laipsniais."
 
 #: ../src/qth-editor.c:293 ../src/sat-pref-qth-editor.c:277
 msgid "East"
-msgstr ""
+msgstr "Rytų"
 
 #: ../src/qth-editor.c:294 ../src/sat-pref-qth-editor.c:278
 msgid "West"
-msgstr ""
+msgstr "Vakarų"
 
 #. QRA locator
 #: ../src/qth-editor.c:318 ../src/sat-pref-qth-editor.c:302
 msgid "Locator"
-msgstr ""
+msgstr "Lokatorius"
 
 #: ../src/qth-editor.c:326 ../src/sat-pref-qth-editor.c:310
 msgid "Maidenhead locator grid."
@@ -3124,7 +3122,7 @@ msgstr ""
 msgid ""
 "Select the altitude of the ground station in meters or feet depending on "
 "your settings"
-msgstr ""
+msgstr "Antžeminės stoties aukštis virš jūros lygio."
 
 #: ../src/qth-editor.c:348 ../src/sat-pref-qth-editor.c:332
 msgid "ft asl"
@@ -3132,20 +3130,20 @@ msgstr ""
 
 #: ../src/qth-editor.c:351 ../src/sat-pref-qth-editor.c:335
 msgid "m asl"
-msgstr ""
+msgstr "m VJL"
 
 #. weather station
 #: ../src/qth-editor.c:357 ../src/sat-pref-qth-editor.c:341
 msgid "Weather St"
-msgstr ""
+msgstr "Oro stotelė"
 
 #: ../src/qth-editor.c:365 ../src/sat-pref-qth-editor.c:349
 msgid "Four letter code for weather station"
-msgstr ""
+msgstr "Keturraidis oro stotelės kodas"
 
 #: ../src/qth-editor.c:370 ../src/sat-pref-qth-editor.c:354
 msgid "Select a predefined weather station from a list."
-msgstr ""
+msgstr "Pasirinkite oro stotelę iš sąrašo."
 
 #: ../src/qth-editor.c:424
 #, c-format
@@ -3278,7 +3276,7 @@ msgstr ""
 
 #: ../src/sat-info.c:95
 msgid "<b>Satellite name:</b>"
-msgstr ""
+msgstr "<b>Palydovo pavadinimas:</b>"
 
 #: ../src/sat-info.c:100
 #, c-format
@@ -3288,27 +3286,27 @@ msgstr ""
 #. operational status
 #: ../src/sat-info.c:107
 msgid "Operational Status:"
-msgstr ""
+msgstr "Būsena:"
 
 #: ../src/sat-info.c:114
 msgid "Operational"
-msgstr ""
+msgstr "Veikiantis"
 
 #: ../src/sat-info.c:118
 msgid "Non-operational"
-msgstr ""
+msgstr "Neveikiantis"
 
 #: ../src/sat-info.c:122
 msgid "Partially operational"
-msgstr ""
+msgstr "Dalinai veikiantis"
 
 #: ../src/sat-info.c:126
 msgid "Backup/Standby"
-msgstr ""
+msgstr "Rezervinis/budintis"
 
 #: ../src/sat-info.c:130
 msgid "Spare"
-msgstr ""
+msgstr "Atsarginis"
 
 #: ../src/sat-info.c:134
 msgid "Extended Mission"
@@ -3316,22 +3314,22 @@ msgstr ""
 
 #: ../src/sat-info.c:138 ../src/sat-vis.c:40
 msgid "Unknown"
-msgstr ""
+msgstr "Nežinoma"
 
 #. Catnum
 #: ../src/sat-info.c:147
 msgid "Catalogue number:"
-msgstr ""
+msgstr "Katalogo numeris:"
 
 #. international designator
 #: ../src/sat-info.c:158
 msgid "Internation designator:"
-msgstr ""
+msgstr "Tarptautinis kodas:"
 
 #. elset number
 #: ../src/sat-info.c:167
 msgid "Element set number:"
-msgstr ""
+msgstr "Elementų rinkinio numeris:"
 
 #. elset epoch
 #: ../src/sat-info.c:178
@@ -3346,7 +3344,7 @@ msgstr ""
 #. Orbit inclination
 #: ../src/sat-info.c:207
 msgid "Inclination:"
-msgstr ""
+msgstr "Inklinacija:"
 
 #. RAAN
 #: ../src/sat-info.c:218
@@ -3356,7 +3354,7 @@ msgstr ""
 #. Eccentricity
 #: ../src/sat-info.c:229
 msgid "Eccentricity:"
-msgstr ""
+msgstr "Ekscentricitetas:"
 
 #. Argument of perigee
 #: ../src/sat-info.c:240
@@ -3389,20 +3387,20 @@ msgstr ""
 
 #: ../src/sat-info.c:324
 msgid "Orbit Info"
-msgstr ""
+msgstr "Orbitos duomenys"
 
 #: ../src/sat-info.c:327
 msgid "Transponders"
-msgstr ""
+msgstr "Transponderiai"
 
 #. create dialog window with NULL parent
 #: ../src/sat-info.c:330
 msgid "Satellite Info"
-msgstr ""
+msgstr "Palydovo duomenys"
 
 #: ../src/sat-info.c:436
 msgid "No transponders"
-msgstr ""
+msgstr "Nėra transponderių"
 
 #. we have a range
 #: ../src/sat-info.c:463
@@ -3429,29 +3427,29 @@ msgstr ""
 #: ../src/sat-info.c:493
 #, c-format
 msgid "Inverting: %s"
-msgstr ""
+msgstr "Invertuojantis: %s"
 
 #: ../src/sat-info.c:502
 #, c-format
 msgid "Mode: %s"
-msgstr ""
+msgstr "Moda: %s"
 
 #: ../src/sat-log-browser.c:57 ../src/sat-pass-dialogs.c:101
 #: ../src/sat-pass-dialogs.c:125
 msgid "Time"
-msgstr ""
+msgstr "Laikas"
 
 #: ../src/sat-log-browser.c:58
 msgid "Source"
-msgstr ""
+msgstr "Šaltinis"
 
 #: ../src/sat-log-browser.c:59
 msgid "Level"
-msgstr ""
+msgstr "Lygis"
 
 #: ../src/sat-log-browser.c:60
 msgid "Message"
-msgstr ""
+msgstr "Pranešimas"
 
 #. * WARNING: Used directly in sat-log-browser
 #: ../src/sat-log-browser.c:70 ../src/sat-log.c:58
@@ -3600,7 +3598,7 @@ msgstr ""
 
 #: ../src/sat-pass-dialogs.c:77
 msgid "Maximum elevation"
-msgstr ""
+msgstr "Didžiausia elevacija"
 
 #: ../src/sat-pass-dialogs.c:78
 msgid "Azimuth at AOS"
@@ -3608,7 +3606,7 @@ msgstr ""
 
 #: ../src/sat-pass-dialogs.c:79
 msgid "Az at max. elevation"
-msgstr ""
+msgstr "Az esant maks. elevacijai"
 
 #: ../src/sat-pass-dialogs.c:80
 msgid "Azimuth at LOS"
@@ -3616,7 +3614,7 @@ msgstr ""
 
 #: ../src/sat-pass-dialogs.c:81
 msgid "Orbit number"
-msgstr ""
+msgstr "Orbitos numeris"
 
 #: ../src/sat-pass-dialogs.c:82
 msgid "Visibility during pass"
@@ -3628,7 +3626,7 @@ msgstr ""
 
 #: ../src/sat-pass-dialogs.c:469
 msgid "Polar"
-msgstr ""
+msgstr "Polinis"
 
 #: ../src/sat-pass-dialogs.c:480
 msgid "Az/El"
@@ -3653,32 +3651,32 @@ msgstr ""
 
 #: ../src/sat-pref.c:56
 msgid "GPREDICT Preferences :: General"
-msgstr ""
+msgstr "GPREDICT Nustatymai :: Bendri"
 
 #: ../src/sat-pref.c:57
 msgid "GPREDICT Preferences :: Modules"
-msgstr ""
+msgstr "GPREDICT Nustatymai :: Moduliai"
 
 #: ../src/sat-pref.c:58
 msgid "GPREDICT Preferences :: Interfaces"
-msgstr ""
+msgstr "GPREDICT Nustatymai :: Prievadai"
 
 #: ../src/sat-pref.c:59
 msgid "GPREDICT Preferences :: Predict"
-msgstr ""
+msgstr "GPREDICT Preferences :: Paskaičiavimai"
 
 #. create a button box and add the buttons one by one
 #: ../src/sat-pref.c:101 ../src/sat-pref.c:117
 msgid "General"
-msgstr ""
+msgstr "Bendri"
 
 #: ../src/sat-pref.c:104 ../src/sat-pref.c:124
 msgid "Modules"
-msgstr ""
+msgstr "Moduliai"
 
 #: ../src/sat-pref.c:107 ../src/sat-pref.c:131
 msgid "Interfaces"
-msgstr ""
+msgstr "Sąsajos"
 
 #: ../src/sat-pref.c:110 ../src/sat-pref.c:138
 msgid "Predict"
@@ -3692,83 +3690,85 @@ msgstr ""
 #. minimum elevation
 #: ../src/sat-pref-conditions.c:76
 msgid "Minimum elevation"
-msgstr ""
+msgstr "Minimali elevacija"
 
 #: ../src/sat-pref-conditions.c:86
 msgid ""
 "Elevation threshold for passes.\n"
 "Passes with maximum elevation below this limit will be omitted"
 msgstr ""
+"Elevacijos slenkstis praskriejimams\n"
+"Praskriejimai kurių maks. elevacija mažesnė už šią ribą, nebus rodomi."
 
 #: ../src/sat-pref-conditions.c:102 ../src/sat-pref-conditions.c:311
 msgid "[deg]"
-msgstr ""
+msgstr "[laipsniai]"
 
 #: ../src/sat-pref-conditions.c:119
 msgid "<b>Multiple Passes:</b>"
-msgstr ""
+msgstr "<b>Keli Praskriejimai:</b>"
 
 #. number of passes
 #: ../src/sat-pref-conditions.c:128
 msgid "Number of passes to predict"
-msgstr ""
+msgstr "Praskriejimų skaičius"
 
 #: ../src/sat-pref-conditions.c:138
 msgid "The maximum number of passes to predict."
-msgstr ""
+msgstr "Maksimalus praskriejimų skaičius"
 
 #. lookahead
 #: ../src/sat-pref-conditions.c:154
 msgid "Passes should occur within"
-msgstr ""
+msgstr "Praskriejimai laikotarpyje"
 
 #: ../src/sat-pref-conditions.c:164
 msgid ""
 "Only passes that occur within the specified number of days will be shown."
-msgstr ""
+msgstr "Bus rodomi praskriejimai nurodytame laikotarpyje."
 
 #: ../src/sat-pref-conditions.c:179
 msgid "[days]"
-msgstr ""
+msgstr "[dienų]"
 
 #: ../src/sat-pref-conditions.c:197
 msgid "<b>Pass Details:</b>"
-msgstr ""
+msgstr "<b>Praskriejimo Detalės:</b>"
 
 #. time resolution
 #: ../src/sat-pref-conditions.c:206
 msgid "Time resolution"
-msgstr ""
+msgstr "Laikas kas"
 
 #: ../src/sat-pref-conditions.c:216
 msgid ""
 "Gpredict will try to show the pass details with the specified time "
 "resolution."
-msgstr ""
+msgstr "Gpredict rodys praskriejimo detales nurodytais laiko tarpais."
 
 #: ../src/sat-pref-conditions.c:231
 msgid "[sec]"
-msgstr ""
+msgstr "[sek]"
 
 #. number of entries
 #: ../src/sat-pref-conditions.c:240
 msgid "Number of entries"
-msgstr ""
+msgstr "Įrašų skaičius"
 
 #: ../src/sat-pref-conditions.c:250
 msgid ""
 "Gpredict will try to keep the number of rows in the detailed prediction "
 "within this limit."
-msgstr ""
+msgstr "Gpredict rodys  nurodytą eilučių skaičių."
 
 #: ../src/sat-pref-conditions.c:276
 msgid "<b>Satellite Visibility:</b>"
-msgstr ""
+msgstr "<b>Palydovo matomumas:</b>"
 
 #. twilight threshold
 #: ../src/sat-pref-conditions.c:285
 msgid "Twilight threshold"
-msgstr ""
+msgstr "Prieblandos riba"
 
 #: ../src/sat-pref-conditions.c:294
 msgid ""
@@ -3778,11 +3778,15 @@ msgid ""
 "  • Nautical: -12° to -6°\n"
 "  • Civil: -6° to 0°"
 msgstr ""
+"Palydovai matomi, kai Saulės elevacija yra mažesnė už nurodytą.\n"
+"  • Astronominė sutema: -18° to -12°\n"
+"  • Jūrinė sutema: -12° to -6°\n"
+"  • Civilinė sutema: -6° to 0°"
 
 #. T0 for predictions
 #: ../src/sat-pref-conditions.c:328
 msgid "Always use real time for pass predictions"
-msgstr ""
+msgstr "Visada naudoti realų laiką praskriejimų paskaičiavimams"
 
 #: ../src/sat-pref-conditions.c:330
 msgid ""
@@ -3793,6 +3797,10 @@ msgid ""
 "will use the time from the time controller as starting time for predicting "
 "satellite passes."
 msgstr ""
+"Pažymėkite jei norite, kad Gpredict visada naudotų dabartinį (realų) laiką "
+"kaip pradinį laiką ateities praskriejimų paskaičiavimams.\n"
+"Jei nepažymėta ir Laiko Valdiklis aktyvus, jo laikas bus naudojamas kaip "
+"pradinis."
 
 #: ../src/sat-pref-conditions.c:433 ../src/sat-pref-debug.c:144
 #: ../src/sat-pref-layout.c:434 ../src/sat-pref-list-view.c:260
@@ -3801,7 +3809,7 @@ msgstr ""
 #: ../src/sat-pref-single-pass.c:190 ../src/sat-pref-single-sat.c:229
 #: ../src/sat-pref-sky-at-glance.c:497 ../src/sat-pref-tle.c:354
 msgid "Reset settings to the default values."
-msgstr ""
+msgstr "Gražinti nustatymams numatytasias reikšmes."
 
 #: ../src/sat-pref-debug.c:80
 msgid "Debug level:"
@@ -3895,139 +3903,156 @@ msgid ""
 "\n"
 "See the user manual for more codes and examples."
 msgstr ""
+"Įveskite laiko formato eilutę, naudodami šiuos kodus:\n"
+"\n"
+"\t%Y\tMetai.\n"
+"\t%m\tMėnuo (01-12).\n"
+"\t%d\tMėnesio diena (01-31).\n"
+"\t%j\tDiena metuose (001-366).\n"
+"\t%H\tValanda (00-23).\n"
+"\t%M\tMinutė (00-59).\n"
+"\t%S\tSekundė (00-59).\n"
+"\n"
+"Vartotojo gide galite rasti daugiau kodų ir pavyzdžių."
 
 #: ../src/sat-pref-formats.c:63
 msgid ""
 "Checking this box will cause geographical coordinates to be displayed using "
 "a suffix instead of sign (eg. 23.43°W instead of -23.43°)."
 msgstr ""
+"Pažymėkite, jei norite, kad koordinatės būtų atvaizduojamos naudojant "
+"sufiksą vietoje ženklo (pvz. 23.43°V vietoje -23.43°)."
 
 #: ../src/sat-pref-formats.c:68
 msgid ""
 "Display distances using Imperial units, for example miles instead of "
 "kilometres."
 msgstr ""
+"Rodyti atstumus naudojant Imperinę matų sistemą, pvz.: mylios vietoje "
+"kilometrų."
 
 #. use local time
 #: ../src/sat-pref-formats.c:96
 msgid "Show local time instead of UTC."
-msgstr ""
+msgstr "Rodyti vietos laiką (ne UTC)."
 
 #: ../src/sat-pref-formats.c:121
 msgid "Reset to default value"
-msgstr ""
+msgstr "Gražinti numatytą reikšmę."
 
 #: ../src/sat-pref-formats.c:124
 msgid "Time format:"
-msgstr ""
+msgstr "Laiko formatas:"
 
 #. N/S/W/E
 #: ../src/sat-pref-formats.c:131
 msgid "Use N/S/E/W for geographical coordinates."
-msgstr ""
+msgstr "Naudoti Š/P/R/W geografinėms koordinatėms."
 
 #: ../src/sat-pref-formats.c:139
 msgid "Use Imperial units instead of Metric."
-msgstr ""
+msgstr "Naudoti Imperinę matų sistemą vietoje Metrinės."
 
 #: ../src/sat-pref-general.c:55
 msgid "Number Formats"
-msgstr ""
+msgstr "Skaičių formatai"
 
 #: ../src/sat-pref-general.c:58
 msgid "Ground Stations"
-msgstr ""
+msgstr "Antžeminės Stotys"
 
 #: ../src/sat-pref-general.c:64
 msgid "Message Logs"
-msgstr ""
+msgstr "Pranešimų Žurnalai"
 
 #: ../src/sat-pref-help.c:88
 msgid "<b>Html Browser:</b>"
-msgstr ""
+msgstr "<b>Html naršyklė:</b>"
 
 #. browser type
 #: ../src/sat-pref-help.c:98
 msgid "Browser type:"
-msgstr ""
+msgstr "Naršyklės tipas:"
 
 #. command string
 #: ../src/sat-pref-help.c:109
 msgid "Command string:"
-msgstr ""
+msgstr "Komandinė eilutė:"
 
 #: ../src/sat-pref-interfaces.c:53
 msgid "Radios"
-msgstr ""
+msgstr "Radijo įranga"
 
 #: ../src/sat-pref-interfaces.c:56
 msgid "Rotators"
-msgstr ""
+msgstr "Pasukimo įranga"
 
 #: ../src/sat-pref-layout.c:76
 msgid "World map, polar and single sat"
-msgstr ""
+msgstr "Pasaulio žemėlapis, polinis ir vienas palydovas"
 
 #: ../src/sat-pref-layout.c:77
 msgid "World map"
-msgstr ""
+msgstr "Pasaulio žemėlapis"
 
 #: ../src/sat-pref-layout.c:78
 msgid "Table"
-msgstr ""
+msgstr "Lentelė"
 
 #: ../src/sat-pref-layout.c:79
 msgid "World map and table"
-msgstr ""
+msgstr "Pasaulio žemėlapis ir lentelė"
 
 #: ../src/sat-pref-layout.c:80
 msgid "Polar and single sat"
-msgstr ""
+msgstr "Polinis ir vienas palydovas"
 
 #: ../src/sat-pref-layout.c:81
 msgid "Polar and upcoming passes"
-msgstr ""
+msgstr "Polinis ir artimiausi praskriejimai"
 
 #: ../src/sat-pref-layout.c:82
 msgid "All views (narrow)"
-msgstr ""
+msgstr "Visi vaizdai (siaurai)"
 
 #: ../src/sat-pref-layout.c:83
 msgid "All views (wide)"
-msgstr ""
+msgstr "Visi vaizdai (plačiai)"
 
 #: ../src/sat-pref-layout.c:84
 msgid "Map, table, polar and single sat (wide)"
-msgstr ""
+msgstr "Žemėlapis, lentelė, radaras ir vienas palydovas (platus)"
 
 #: ../src/sat-pref-layout.c:85
 msgid "Custom"
-msgstr ""
+msgstr "Vartotojo"
 
 #. create header
 #: ../src/sat-pref-layout.c:222
 msgid "Select layout:"
-msgstr ""
+msgstr "Pasirinkite išdėstymą:"
 
 #. layout string
 #: ../src/sat-pref-layout.c:258
 msgid "Layout code:"
-msgstr ""
+msgstr "Išdėstymo kodas:"
 
 #: ../src/sat-pref-layout.c:269
 msgid ""
 "This entry holds the layout code for the module.\n"
 "Consult the user manual for how to create custom layouts using layout codes."
 msgstr ""
+"Čia aprašomas modulio išdėstymo kodas.\n"
+"Išsamesnę informaciją kaip sukurti nuosavą išdėstymą rasite vartoto vadove."
 
 #: ../src/sat-pref-layout.c:365
 msgid "<b>Window Placements:</b>"
-msgstr ""
+msgstr "<b>Langų išdėstymai:</b>"
 
 #. main window setting
 #: ../src/sat-pref-layout.c:369
 msgid "Restore position of main window"
-msgstr ""
+msgstr "Atstatyti pagrindinio lango poziciją"
 
 #: ../src/sat-pref-layout.c:374
 msgid ""
@@ -4035,11 +4060,13 @@ msgid ""
 "position it was during the last session.\n"
 "Note that window managers can ignore this request."
 msgstr ""
+"Pažymėjus, gpredict atstatys langą į paskutinės sesijos poziciją.\n"
+"Langų valdikliai (window managers) gali ignoruoti šią nuostatą."
 
 #. module window setting
 #: ../src/sat-pref-layout.c:384
 msgid "Restore position of module windows"
-msgstr ""
+msgstr "Atstatyti modulių langų pozicijas."
 
 #: ../src/sat-pref-layout.c:389
 msgid ""
@@ -4047,31 +4074,34 @@ msgid ""
 "the position they were the last time.\n"
 "Note that window managers can ignore this request."
 msgstr ""
+"Pažymėjus, gpredict atstatys modulių langus į ankstesnę poziciją.\n"
+"Langų valdikliai (window managers) gali ignoruoti šią nuostatą."
 
 #. module state
 #: ../src/sat-pref-layout.c:399
 msgid "Restore the state of modules when reopened (docked or window)"
-msgstr ""
+msgstr "Atstatyti modulių būseną atidarant (docked or window)"
 
 #: ../src/sat-pref-layout.c:404
 msgid ""
 "If you check this button, gpredict will restore the states of the modules "
 "from the last time they were used."
 msgstr ""
+"Pažymėjus, gpredict atstatys modulių būsenas į naudotas paskutinį kartą."
 
 #: ../src/sat-pref-layout.c:439 ../src/sat-pref-list-view.c:265
 #: ../src/sat-pref-map-view.c:690 ../src/sat-pref-polar-view.c:638
 #: ../src/sat-pref-refresh.c:431 ../src/sat-pref-single-sat.c:234
 msgid "Reset module settings to the global values."
-msgstr ""
+msgstr "Gražinti moduliams globalias numatytas reikšmes."
 
 #: ../src/sat-pref-list-view.c:101 ../src/sat-pref-single-sat.c:86
 msgid "<b>Visible Fields:</b>"
-msgstr ""
+msgstr "<b>Matomi stulpeliai:</b>"
 
 #: ../src/sat-pref-list-view.c:128
 msgid "Visible Columns"
-msgstr ""
+msgstr "Matomi stulpeliai"
 
 #: ../src/sat-pref-list-view.c:150
 msgid "Enable rules hint in the list views"
@@ -4086,61 +4116,61 @@ msgstr ""
 
 #: ../src/sat-pref-map-view.c:131
 msgid "<b>Background Map:</b>"
-msgstr ""
+msgstr "<b>Fono Žemėlapis:</b>"
 
 #. select button
 #: ../src/sat-pref-map-view.c:181
 msgid "Select map"
-msgstr ""
+msgstr "Pasirinkite žemėlapį"
 
 #: ../src/sat-pref-map-view.c:184
 msgid "Click to select a map"
-msgstr ""
+msgstr "Pasirinkite žemėlapį"
 
 #: ../src/sat-pref-map-view.c:215 ../src/sat-pref-polar-view.c:248
 msgid "<b>Extra Contents:</b>"
-msgstr ""
+msgstr "<b>Papildomi Duomenys:</b>"
 
 #. QTH info
 #: ../src/sat-pref-map-view.c:223 ../src/sat-pref-polar-view.c:256
 msgid "QTH Info"
-msgstr ""
+msgstr "QTH Informacija"
 
 #: ../src/sat-pref-map-view.c:226
 msgid "Show location information on the map"
-msgstr ""
+msgstr "Rodyti vietovės informaciją žemėlapyje"
 
 #: ../src/sat-pref-map-view.c:246
 msgid "Show which satellite comes up next and at what time"
-msgstr ""
+msgstr "Rodyti koks ir kada atskries sekantis palydovas"
 
 #. Cursor position
 #: ../src/sat-pref-map-view.c:263 ../src/sat-pref-polar-view.c:296
 msgid "Cursor Position"
-msgstr ""
+msgstr "Koordinatės ties žymekliu"
 
 #: ../src/sat-pref-map-view.c:266
 msgid "Show the latitude and longitude of the mouse pointer"
-msgstr ""
+msgstr "Rodyti žymeklio koordinates"
 
 #. Grid
 #: ../src/sat-pref-map-view.c:284
 msgid "Grid Lines"
-msgstr ""
+msgstr "Tinklelio linijos"
 
 #: ../src/sat-pref-map-view.c:287
 msgid "Show horizontal and vertical grid lines"
-msgstr ""
+msgstr "Rodyti horizontalias ir vertikalias tinklelio linijas."
 
 #: ../src/sat-pref-map-view.c:326 ../src/sat-pref-polar-view.c:360
 #: ../src/sat-pref-sky-at-glance.c:135
 msgid "<b>Colours:</b>"
-msgstr ""
+msgstr "<b>Spalvos:</b>"
 
 #. background
 #: ../src/sat-pref-map-view.c:337
 msgid "Ground Station:"
-msgstr ""
+msgstr "Antžeminė Stotis:"
 
 #: ../src/sat-pref-map-view.c:347 ../src/sat-pref-sky-at-glance.c:157
 #: ../src/sat-pref-sky-at-glance.c:179 ../src/sat-pref-sky-at-glance.c:201
@@ -4149,16 +4179,16 @@ msgstr ""
 #: ../src/sat-pref-sky-at-glance.c:312 ../src/sat-pref-sky-at-glance.c:334
 #: ../src/sat-pref-sky-at-glance.c:356
 msgid "Click to select a colour"
-msgstr ""
+msgstr "Spauskite norėdami pasirinkti spalvą"
 
 #. Grid in case it is enabled
 #: ../src/sat-pref-map-view.c:364
 msgid "Grid:"
-msgstr ""
+msgstr "Tinklelis:"
 
 #: ../src/sat-pref-map-view.c:374
 msgid "Click to select the grid colour"
-msgstr ""
+msgstr "Tinklelio spalva"
 
 #. tick labels
 #: ../src/sat-pref-map-view.c:391 ../src/sat-pref-polar-view.c:425
@@ -4172,34 +4202,34 @@ msgstr ""
 #. satellite
 #: ../src/sat-pref-map-view.c:418 ../src/sat-pref-polar-view.c:452
 msgid "Satellite:"
-msgstr ""
+msgstr "Palydovas:"
 
 #: ../src/sat-pref-map-view.c:428 ../src/sat-pref-polar-view.c:462
 msgid "Click to select satellite colour"
-msgstr ""
+msgstr "Palydovo spalva"
 
 #. selected satellite
 #: ../src/sat-pref-map-view.c:445 ../src/sat-pref-polar-view.c:479
 msgid "Selected Sat.:"
-msgstr ""
+msgstr "Pažymėt. palyd."
 
 #: ../src/sat-pref-map-view.c:455 ../src/sat-pref-polar-view.c:489
 msgid "Click to select colour for selected satellites"
-msgstr ""
+msgstr "Pažymėto palydovo spalva"
 
 #. tack
 #: ../src/sat-pref-map-view.c:472
 msgid "Ground Track:"
-msgstr ""
+msgstr "Pėdsakas:"
 
 #: ../src/sat-pref-map-view.c:482
 msgid "Click to select ground track colour"
-msgstr ""
+msgstr "Pėdsako spalva"
 
 #. coverage
 #: ../src/sat-pref-map-view.c:499
 msgid "Area Coverage:"
-msgstr ""
+msgstr "Vietovės Padengimas"
 
 #: ../src/sat-pref-map-view.c:509
 msgid "Colour for coverage Area (make it transparent)"
@@ -5470,3 +5500,23 @@ msgstr ""
 #, c-format
 msgid "%s: Not implemented!"
 msgstr ""
+
+#, c-format
+#~ msgid "%s:%d: Connection opened to %s:%d"
+#~ msgstr "%s:%d: Atidaromas prisijungimas prie %s:%d"
+
+#, c-format
+#~ msgid "%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"
+#~ msgstr "%s:%s: Nepavyko paskirti 128 baitų (bėda)"
+
+#, c-format
+#~ msgid "%s:%d Network socket created successfully"
+#~ msgstr "%s:%d Network socket sukurtas sėkmingai"
+
+#, c-format
+#~ msgid "%s:%d: Failed to connect to %s:%d"
+#~ msgstr "%s:%d: Nepavyko prisijungti prie %s:%d"
+
+#, c-format
+#~ msgid "%s:%d: Failed to create socket"
+#~ msgstr "%s:%d: Nepavyko sukurti socket"
