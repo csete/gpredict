@@ -32,7 +32,7 @@
 #include <glib/gi18n.h>
 #include "sgpsdp/sgp4sdp4.h"
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
 #include "gtk-sat-data.h"
 #include "time-tools.h"
@@ -229,7 +229,7 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
 {
     gdouble t = start;
     gdouble lostime = 0.0;
-
+    gdouble eltemp;
 
     predict_calc (sat, qth, start);
 
@@ -269,8 +269,19 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
             t += sat->el * sqrt(sat->alt)/502500.0;
             predict_calc (sat, qth, t);
             
-            if (fabs(sat->el) < 0.005)
-                lostime = t;
+            if (fabs (sat->el) < 0.005) {
+                /* two things are true at LOS time
+                   The elevation is a zero and descending.
+                   This checks that those two are true.
+                */
+                eltemp = sat->el;
+
+                /*check elevation 1 second earlier*/
+                predict_calc (sat, qth, t-1.0/86400.0);
+
+                if (sat->el > eltemp)
+                    lostime = t;
+            }
         }
     }
 
@@ -289,8 +300,19 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
             t += sat->el * sqrt(sat->alt)/502500.0;
             predict_calc (sat, qth, t);
             
-            if (fabs(sat->el) < 0.005)
-                lostime = t;
+            if (fabs(sat->el) < 0.005){
+                /* two things are true at LOS time
+                   The elevation is a zero and descending.
+                   This checks that those two are true.
+                */
+                eltemp = sat->el;
+
+                /*check elevation 1 second earlier*/
+                predict_calc (sat,qth,t-1.0/86400.0);
+
+                if (sat->el > eltemp)
+                    lostime = t;
+            }
         }
     }
 
