@@ -2,9 +2,10 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011 Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
+    Charles Suprin <hamaa1vs@gmail.com>
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -56,7 +57,9 @@
 #define QTH_CFG_LAT_KEY        "LAT"
 #define QTH_CFG_LON_KEY        "LON"
 #define QTH_CFG_ALT_KEY        "ALT"
-
+#define QTH_CFG_GPSD_SERVER_KEY "GPSDSERVER"
+#define QTH_CFG_GPSD_PORT_KEY  "GPSDPORT"
+#define QTH_CFG_TYPE_KEY       "QTH_TYPE"
 
 /* Module files (.mod) */
 

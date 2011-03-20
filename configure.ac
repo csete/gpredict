@@ -29,6 +29,17 @@ PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
+dnl optional check for libgps
+PKG_CHECK_MODULES(LIBGPS, [ libgps >= 2.90 ], [
+       CFLAGS="$CFLAGS $LIBGPS_CFLAGS";
+       LIBS="$LIBS $LIBGPS_LIBS"; 
+        havelibgps=true;            
+        AC_DEFINE(HAS_LIBGPS, 1, [Define if libgps is available])
+   ], [
+        havelibgps=false;            
+        AC_DEFINE(HAS_LIBGPS, 0, [Define if libgps is unvailable])
+
+])
 
 dnl Hamlib not needed if we go for the TCP based I/F
 dnl check for hamlib
@@ -75,6 +86,9 @@ GDK_V=`pkg-config --modversion gdk-2.0`
 GTK_V=`pkg-config --modversion gtk+-2.0`
 GOOC_V=`pkg-config --modversion goocanvas`
 CURL_V=`pkg-config --modversion libcurl`
+if test "$havelibgps" = true ; then
+   GPS_V=`pkg-config --modversion libgps`
+fi
 dnl SQL_V=`pkg-config --modversion sqlite3`
 dnl if test "$havehamlib" = true ; then
 dnl    HAML_V=`pkg-config --modversion hamlib`
@@ -113,7 +127,10 @@ echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
-echo Liburl version..... : $CURL_V
+echo Libcurl version..... : $CURL_V
+if test "$havelibgps" = true ; then
+   echo Libgps version..... : $GPS_V
+fi
 dnl echo SQLite version..... : $SQL_V
 dnl if test "$havehamlib" = true ; then
 dnl echo Hamlib version..... : $HAML_V

@@ -2,9 +2,10 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
+    Charles Suprin <hamaa1vs@gmail.com>
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -103,6 +104,7 @@ struct _gtk_sat_module
     GtkWidget     *skgwin;      /*!< Sky at glance window */
     GtkWidget     *skg;         /*!< Sky at glance widget */
     gdouble        lastSkgUpd;  /*!< Daynum of last GtkSkyGlance update */
+    qth_small_t    lastSkgUpdqth;     /*!< QTH information for last GtkSkyGlance update. */
 
     GtkWidget     *header;
     guint          head_count;
@@ -117,7 +119,7 @@ struct _gtk_sat_module
 
     GKeyFile      *cfgdata;      /*!< Configuration data. */
     qth_t         *qth;          /*!< QTH information. */
-
+    qth_small_t   qth_event;     /*!< QTH information for last AOS/LOS update. */
     GHashTable    *satellites;   /*!< Satellites. */
 
     guint32        timeout;      /*!< Timeout value [msec] */
@@ -152,6 +154,9 @@ struct _gtk_sat_module
     GtkWidget     *tmgState;     /*!< Status label indicating RT/SRT/MAN */
 
     gboolean       reset;     /*!< Flag indicating whether time reset is in progress */
+
+    /* location structure */
+    struct gps_data_t* gps_data; /*!< GPSD data structure */
 };
 
 struct _GtkSatModuleClass

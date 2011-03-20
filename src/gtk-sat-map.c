@@ -4,9 +4,11 @@
 
   Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
+  Copyright (C)  2011       Charles Suprin,  AA1VS.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
   William J Beksi <wjbeksi@users.sourceforge.net>
+  Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -608,12 +610,44 @@ gtk_sat_map_update (GtkWidget  *widget)
     gint *catnr;
     guint h, m, s;
     gchar *ch, *cm, *cs;
+    gfloat x,y;
+    gdouble oldx,oldy;
 
+    
     /* check whether there are any pending resize requests */
     if (satmap->resize) 
         update_map_size (satmap);
 
-    /* check refresh rate and refresh sats if time */
+    /* check if qth has moved significantly if so move it*/
+    lonlat_to_xy (satmap,  satmap->qth->lon, satmap->qth->lat, &x, &y);
+    g_object_get (satmap->qthmark,
+                  "x", &oldx,
+                  "y", &oldy,
+                  NULL);
+
+    if ((fabs (oldx-x) >= 2*MARKER_SIZE_HALF) ||
+        (fabs (oldy-y) >= 2*MARKER_SIZE_HALF)) {
+
+        /* update qth mark */
+        g_object_set (satmap->qthmark,
+                      "x", x - MARKER_SIZE_HALF,
+                      "y", y - MARKER_SIZE_HALF,
+                      NULL);
+        g_object_set (satmap->qthlabel,
+                      "x", x,
+                      "y", y+2,
+                      NULL);
+        
+        /* QTH info */
+        g_object_set (satmap->locnam,
+                      "x", (gdouble) satmap->x0 + 2,
+                      "y", (gdouble) satmap->y0 + 1,
+                      NULL);
+        satmap->counter=satmap->refresh;
+    }
+
+    /* check refresh rate and refresh sats/qth if time */
+    /* FIXME add location check*/
     if (satmap->counter < satmap->refresh) {
         satmap->counter++;
     }
@@ -621,6 +655,25 @@ gtk_sat_map_update (GtkWidget  *widget)
         /* reset data */
         satmap->counter = 1;
         satmap->naos = 2458849.5;
+
+        /* QTH */
+        /*update for accuracy*/
+        lonlat_to_xy (satmap,  satmap->qth->lon, satmap->qth->lat, &x, &y);
+        g_object_set (satmap->qthmark,
+                      "x", x - MARKER_SIZE_HALF,
+                      "y", y - MARKER_SIZE_HALF,
+                      NULL);
+        g_object_set (satmap->qthlabel,
+                      "x", x,
+                      "y", y+2,
+                      NULL);
+        
+        /* QTH info */
+        g_object_set (satmap->locnam,
+                      "x", (gdouble) satmap->x0 + 2,
+                      "y", (gdouble) satmap->y0 + 1,
+                      NULL);
+        
 
         /* update sats */
         g_hash_table_foreach (satmap->sats, update_sat, satmap);

@@ -4,7 +4,9 @@
 
   Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
 
+
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin  <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -159,9 +161,7 @@ gtk_sat_module_init (GtkSatModule *module)
     module->win = NULL;
 
     module->qth = g_try_new0 (qth_t, 1);
-    module->qth->lat = 0.0;
-    module->qth->lon = 0.0;
-    module->qth->alt = 0;
+    qth_init(module->qth);
 
     module->satellites = g_hash_table_new_full (g_int_hash,
                                                 g_int_equal,
@@ -178,6 +178,10 @@ gtk_sat_module_init (GtkSatModule *module)
 
     module->state = GTK_SAT_MOD_STATE_DOCKED;
     module->busy = g_mutex_new();
+
+    /* open the gpsd device */
+    module->gps_data = NULL;
+
 
     module->grid = NULL;
     module->views = NULL;
@@ -282,16 +286,18 @@ gtk_sat_module_new (const gchar *cfgfile)
 
     /* load configuration; note that this will also set the module name */
     gtk_sat_module_read_cfg_data (GTK_SAT_MODULE (widget), cfgfile);
-
-     /*check that we loaded some reasonable data*/
-     if (GTK_SAT_MODULE(widget)->cfgdata==NULL){
-          sat_log_log (SAT_LOG_LEVEL_ERROR,
+    
+    /*check that we loaded some reasonable data*/
+    if (GTK_SAT_MODULE(widget)->cfgdata==NULL){
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s has problems."),
                      __FUNCTION__, cfgfile);
-          
+        
         return NULL;
-     }
-     
+    }
+    /*initialize the qth engine and get position*/
+    qth_data_update_init(GTK_SAT_MODULE(widget)->qth);
+    
     /* module state */
     if ((g_key_file_has_key (GTK_SAT_MODULE (widget)->cfgdata,
                              MOD_CFG_GLOBAL_SECTION,
@@ -564,11 +570,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
                          __FUNCTION__, buffer);
 
             /* settings are really screwed up; we need some safe values here */
-            module->qth->name = g_strdup (_("Error"));
-            module->qth->loc  = g_strdup (_("Error"));
-            module->qth->lat  = 0.0;
-            module->qth->lon  = 0.0;
-            module->qth->alt  = 0;
+            qth_safe(module->qth);
         }
     }
 
@@ -748,7 +750,8 @@ gtk_sat_module_timeout_cb     (gpointer module)
     GdkWindowState  state;
     gdouble         delta;
     guint           i;
-
+    /*update the qth position*/
+    qth_data_update(mod->qth,mod->tmgCdnum);
 
     /* in docked state, update only if tab is visible */
     switch (mod->state) {
@@ -773,19 +776,19 @@ gtk_sat_module_timeout_cb     (gpointer module)
     }
 
     if (needupdate) {
-
-          if (g_mutex_trylock(mod->busy)==FALSE) {
-               
-        sat_log_log (SAT_LOG_LEVEL_WARN,
-                     _("%s: Previous cycle missed it's deadline."),
-                     __FUNCTION__);
-          
-        return TRUE;
-          
-          }
-
+        
+        if (g_mutex_trylock(mod->busy)==FALSE) {
+            
+            sat_log_log (SAT_LOG_LEVEL_WARN,
+                         _("%s: Previous cycle missed it's deadline."),
+                         __FUNCTION__);
+            
+            return TRUE;
+            
+        }
+        
         mod->rtNow = get_current_daynum ();
-
+        
         /* Update time if throttle != 0 */
         if (mod->throttle) {
 
@@ -799,7 +802,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
         /* time to update header? */
         mod->head_count++;
-        if (mod->head_count == mod->head_timeout) {
+        if (mod->head_count >= mod->head_timeout) {
 
             /* reset counter */
             mod->head_count = 0;
@@ -815,7 +818,19 @@ gtk_sat_module_timeout_cb     (gpointer module)
             */
             mod->event_count = 0;
         }
-
+        /*only trigger an update if adequate movement has occurred*/
+        /*FIXME position threshhold should be configurable*/
+        if (qth_small_dist(mod->qth,mod->qth_event)>1.0) {
+            /* reset counter, this will make gtk_sat_module_update_sat
+               recalculate events
+            */
+            mod->event_count = 0;
+        }
+        
+        /*if the events are going to be recalculated store the position*/
+        if (mod->event_count == 0){
+            qth_small_save(mod->qth,&(mod->qth_event));
+        }
         /* update satellite data */
         g_hash_table_foreach (mod->satellites,
                               gtk_sat_module_update_sat,
@@ -939,6 +954,7 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
 
     sat = SAT(val);
     module = GTK_SAT_MODULE (data);
+    
 
 
     /* get current time (real or simulated */
@@ -965,7 +981,7 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
     }
 
 
-    /*** FIXME: we don't need to do this every time! */
+    /*data may have been updated by gpsd*/
     obs_geodetic.lon = module->qth->lon * de2ra;
     obs_geodetic.lat = module->qth->lat * de2ra;
     obs_geodetic.alt = module->qth->alt / 1000.0;
@@ -1029,7 +1045,7 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
 /** \brief Module options
  *
  * Invoke module-wide popup menu
- */
+ */ 
 static void
 gtk_sat_module_popup_cb       (GtkWidget *button, gpointer data)
 {
@@ -1334,7 +1350,7 @@ update_header (GtkSatModule *module)
     time_t t;
     guint size;
     gchar buff[TIME_FORMAT_MAX_LENGTH+1];
-
+    gchar *buff2;
 
 
     t = (module->tmgCdnum - 2440587.5)*86400.;
@@ -1351,8 +1367,17 @@ update_header (GtkSatModule *module)
         buff[size]='\0';
     else
         buff[TIME_FORMAT_MAX_LENGTH]='\0';
+    
+    if (module->qth->type==QTH_GPSD_TYPE) {
+        buff2=g_strdup_printf("%s GPS %0.3f seconds old", buff,fabs(module->tmgCdnum-module->qth->gpsd_update)*(24*3600));
+        gtk_label_set_text (GTK_LABEL (module->header), buff2);
+        g_free(buff2);
+    }
+    else
+        gtk_label_set_text (GTK_LABEL (module->header), buff);
+ 
 
-    gtk_label_set_text (GTK_LABEL (module->header), buff);
+
     g_free (fmtstr);
 
     if (module->tmgActive)
@@ -1487,8 +1512,12 @@ static void get_grid_size (GtkSatModule *module, guint *rows, guint *cols)
 /** \brief Update GtkSkyGlance view
  *  \param module Pointer to the GtkSatModule widget
  * 
- * This function checks how long ago the GtkSkyGlance widget has been updated
- * and performs an update if necessary. The current timeout is set to 60 sec.
+ * This function checks to see if the sky-at-a-glance display needs to be updated 
+ * due to time or qth moving. It checks how long ago the GtkSkyGlance widget was 
+ * updated and performs an update if necessary. The current timeout is set to 60 sec.
+ * It also checks how far away the qth is from where the GtkSkyGlance 
+ * widget was last updated and triggers an update if necessary. The current 
+ * distance is set to 1km.
  * 
  * This is a cheap/lazy implementation of automatic update. Instead of
  * performing a real update by "moving" the objects on the GtkSkyGlance canvas,
@@ -1501,9 +1530,18 @@ static void get_grid_size (GtkSatModule *module, guint *rows, guint *cols)
  */
 static void update_skg (GtkSatModule *module)
 {
-    
+    gboolean update_needed=FALSE;
     /* threshold is ~60 seconds */
-    if G_UNLIKELY(fabs(module->tmgCdnum - module->lastSkgUpd) > 7.0e-4) {
+    if (G_UNLIKELY(fabs(module->tmgCdnum - module->lastSkgUpd) > 7.0e-4)) {
+        update_needed=TRUE;
+    }
+    /* threshold is 1km */
+    if (G_UNLIKELY(qth_small_dist(module->qth, module->lastSkgUpdqth) >1.0)) {
+        update_needed=TRUE;
+    }
+
+
+    if (G_UNLIKELY(update_needed==TRUE)) {
         
         sat_log_log (SAT_LOG_LEVEL_MSG,
                      _("%s: Updating GtkSkyGlance for %s"),
@@ -1515,5 +1553,6 @@ static void update_skg (GtkSatModule *module)
         gtk_widget_show_all (module->skg);
         
         module->lastSkgUpd = module->tmgCdnum;
+        qth_small_save(module->qth,&(module->lastSkgUpdqth));
     }
 }

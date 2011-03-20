@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin  <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -224,13 +225,13 @@ create_qth_list ()
      /* alt column */
      renderer = gtk_cell_renderer_text_new ();
      if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
-          column = gtk_tree_view_column_new_with_attributes (_("Alt (ft)"),
+          column = gtk_tree_view_column_new_with_attributes (_("Alt\n(ft)"),
                                                                          renderer,
                                                                          "text", QTH_LIST_COL_ALT,
                                                                          NULL);
      }
      else {
-          column = gtk_tree_view_column_new_with_attributes (_("Alt (m)"), renderer,
+          column = gtk_tree_view_column_new_with_attributes (_("Alt\n(m)"), renderer,
                                                                          "text", QTH_LIST_COL_ALT,
                                                                          NULL);
      }
@@ -266,6 +267,29 @@ create_qth_list ()
 
      g_signal_connect (qthlist, "row-activated", G_CALLBACK (row_activated_cb), NULL);
 
+     /*server*/
+     renderer = gtk_cell_renderer_text_new ();
+     column = gtk_tree_view_column_new_with_attributes (_("GPSD\nServer"), renderer,
+                                                                    "text", QTH_LIST_COL_GPSD_SERVER,
+                                                                    NULL);
+     gtk_tree_view_insert_column (GTK_TREE_VIEW (qthlist), column, -1);
+     gtk_tree_view_column_set_alignment (column, 0.5);
+     /*port*/
+     renderer = gtk_cell_renderer_text_new ();
+     column = gtk_tree_view_column_new_with_attributes (_("GPSD\nPort"), renderer,
+                                                                    "text", QTH_LIST_COL_GPSD_PORT,
+                                                                    NULL);
+     gtk_tree_view_insert_column (GTK_TREE_VIEW (qthlist), column, -1);
+     gtk_tree_view_column_set_alignment (column, 0.5);
+
+     /*type*/
+     renderer = gtk_cell_renderer_text_new ();
+     column = gtk_tree_view_column_new_with_attributes (_("QTH\nType"), renderer,
+                                                                    "text", QTH_LIST_COL_TYPE,
+                                                                    NULL);
+     gtk_tree_view_insert_column (GTK_TREE_VIEW (qthlist), column, -1);
+     gtk_tree_view_column_set_alignment (column, 0.5);
+
      return qthlist;
 }
 
@@ -298,7 +322,10 @@ create_and_fill_model ()
                                              G_TYPE_INT,       // Altitude
                                              G_TYPE_STRING,    // QRA locator
                                              G_TYPE_STRING,    // Weather station
-                                             G_TYPE_BOOLEAN    // Default
+                                     G_TYPE_BOOLEAN,    // Default
+                                     G_TYPE_INT, //type
+                                     G_TYPE_STRING, //server
+                                     G_TYPE_INT //port
                                              );
 
      gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE(liststore), QTH_LIST_COL_NAME,GTK_SORT_ASCENDING);
@@ -455,6 +482,9 @@ read_qth_file (GtkListStore *liststore, gchar *filename)
                               QTH_LIST_COL_QRA, qth->qra,
                               QTH_LIST_COL_WX, qth->wx,
                               QTH_LIST_COL_DEF, is_default,
+                              QTH_LIST_COL_TYPE, qth->type,
+                              QTH_LIST_COL_GPSD_SERVER, qth->gpsd_server,
+                              QTH_LIST_COL_GPSD_PORT, qth->gpsd_port,
                               -1);
 
      g_free (fname);
@@ -845,15 +875,18 @@ save_qth (GtkTreeModel *model,
 
 
      gtk_tree_model_get (model, iter,
-                              QTH_LIST_COL_DEF, &def,
-                              QTH_LIST_COL_NAME, &qth.name,
-                              QTH_LIST_COL_LOC,  &qth.loc,
-                              QTH_LIST_COL_DESC, &qth.desc,
-                              QTH_LIST_COL_LAT, &qth.lat,
-                              QTH_LIST_COL_LON, &qth.lon,
-                              QTH_LIST_COL_ALT, &qth.alt,
-                              QTH_LIST_COL_WX, &qth.wx,
-                              -1);
+                         QTH_LIST_COL_DEF, &def,
+                         QTH_LIST_COL_NAME, &qth.name,
+                         QTH_LIST_COL_LOC,  &qth.loc,
+                         QTH_LIST_COL_DESC, &qth.desc,
+                         QTH_LIST_COL_LAT, &qth.lat,
+                         QTH_LIST_COL_LON, &qth.lon,
+                         QTH_LIST_COL_ALT, &qth.alt,
+                         QTH_LIST_COL_WX, &qth.wx,
+                         QTH_LIST_COL_TYPE, &qth.type,
+                         QTH_LIST_COL_GPSD_SERVER, &qth.gpsd_server,
+                         QTH_LIST_COL_GPSD_PORT, &qth.gpsd_port,
+                         -1);
 
     confdir = get_user_conf_dir ();
     filename = g_strconcat (confdir, G_DIR_SEPARATOR_S,     qth.name, ".qth", NULL);

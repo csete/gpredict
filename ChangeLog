@@ -1,11 +1,33 @@
+2011-03-20 Charles Suprin <hamaa1vs at gmail.com>
+
+    Merged gpsd_testing branch into trunk.
+
+2011-03-20 Charles Suprin <hamaa1vs at gmail.com>
+
+    * doc/man/gpredict.1.in
+    Update Copyright to 2011
+
+2011-03-13 Charles Suprin <hamaa1vs at gmail.com>
+
+    * data/locations.dat
+    Added more locations to locations.dat
+
+    * configure.ac
+    Changed version to 1.4svn
+
+2011-03-12 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/predict-tools.c
+    Added check for slope of elevation in find_los.
+
 2011-03-01 Alexandru Csete <oz9aec at gmail.com>
 
     * data/satdata:
     Updated satellite data.
-    
+
     * po:
     Synchronised with translations from launchpad.net
-    
+
     * configure.ac:
     Updated version number to 1.3.
     Include da.po
@@ -96,6 +118,114 @@
     Fix bug where tle file suffix compare is case dependent.
     <https://bugs.launchpad.net/bugs/706452>
 
+    * ChangeLog
+    * src/gtk-sat-map.c
+    * src/gtk-sat-module.c
+    * src/gtk-polar-view.c
+    Code cleanup and comments.
+    Update Changelog
+
+2011-01-21 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/predict-tools.c
+    Eliminate segfault if pass being returned is NULL in get_pass routines.
+
+2011-01-20 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-module.c
+    Convert gps update time to seconds.
+
+2011-01-19 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-module.c
+    * src/qth-data.c
+    * src/qth-data.h
+    * src/sat-pref-qth-editor.c
+    * src/sat-pref-qth.c
+    Added initial GPSD API version 5 support.
+    Added engineering gui support for GPSD.
+
+2011-01-16 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/qth-data.c
+    Added more QTH validation
+
+2011-01-14 Charles Suprin <hamaa1vs at gmail.com>
+
+    * NEWS
+    * src/config-keys.h
+    * src/gtk-polar-view.c
+    * src/gtk-rot-ctrl.c
+    * src/gtk-sat-map.c
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module.h
+    * src/mod-mgr.c
+    * src/predict-tools.c
+    * src/predict-tools.h
+    * src/qth-data.c
+    * src/qth-data.h
+    * src/sat-pref-qth-data.h
+    * src/sat-pref-qth.c
+    Updated copyright information.
+    Added handling for new QTH fields into saving and loading routines.
+    Updated qth preference guis.  (Still not complete)
+    Conditioned gpsd calls on GPSD_API_MAJOR_VERSION as requested in libgps man page.
+    Update NEWS and Changelog in anticipation of merge with trunk.
+    Corrected minor typos in comments.
+
+2011-01-11 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rot-ctrl.c
+    Add support for changing qth to gtk-rot-ctrl.c to update pass in polar view
+
+2011-01-09 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-polar-view.c
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module.h
+    Add position based updates for sky-at-a-glance.
+    Move qth updates so they occur all the time.
+
+2011-01-08 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-polar-view.c
+    * src/predict-tools.c
+    * src/predict-tools.h
+    * src/qth-data.c
+    * src/gtk-sat-map.c
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module.h
+    * src/qth-data.h
+    Make gpsd code safer for multiple modules.
+    Add position comparison for event updates.
+    Fix segfault when gpsd not connected.
+    Make gtk-polar-view update pass if qth has moved significantly.
+    Add qth_small_t element to pass to check if pass data is old.
+
+2011-01-05 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-module.c
+    * src/qth-data.c
+    * src/qth-data.h
+    Update AOS information when qth changes and make distinction between qth_data and qth_data_update in function names
+
+	2011-01-02 Charles Suprin <hamaa1vs at gmail.com>
+    * configure.ac
+    * src/config-keys.h
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module.h
+    * src/qth-data.c
+    * src/qth-data.h
+    * src/sat-pref-qth-editor.c
+    Second version of qpsd qth moved things into qth-data.c and started working on the qth editing gui to support these new interfaces
+
+2010-12-30 Charles Suprin <hamaa1vs at gmail.com>
+
+    * configure.ac
+    * src/gtk-sat-map.c
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module.h
+    Initial GPSD hack.
 
 2010-12-26 Charles Suprin <hamaa1vs at gmail.com>
 

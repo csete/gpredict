@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -82,7 +83,7 @@ static void switch_page_cb      (GtkNotebook     *notebook,
 static void create_module_window (GtkWidget *module);
 
 
-/** \brief Create and initialise module manger.
+/** \brief Create and initialise module manager.
  *  \return The main module container widget (GtkNotebook).
  *
  * This function creates and initialises the module manager widget, which
@@ -209,13 +210,13 @@ mod_mgr_add_module     (GtkWidget *module, gboolean dock)
 
             /* send message to logger */
             sat_log_log (SAT_LOG_LEVEL_MSG,
-                         _("%s: Added %s to module manger (page %d)."),
+                         _("%s: Added %s to module manager (page %d)."),
                          __FUNCTION__, GTK_SAT_MODULE (module)->name, page);
         }
         else {
             /* send message to logger */
             sat_log_log (SAT_LOG_LEVEL_MSG,
-                         _("%s: Added %s to module manger (NOT DOCKED)."),
+                         _("%s: Added %s to module manager (NOT DOCKED)."),
                          __FUNCTION__, GTK_SAT_MODULE (module)->name);
         }
         retcode = 0;

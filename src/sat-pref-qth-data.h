@@ -2,9 +2,10 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
+    
     Authors: Alexandru Csete <oz9aec@gmail.com>
+             Charles Suprin  <hamaa1vs@gmail.com>
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -38,6 +39,9 @@ typedef enum {
      QTH_LIST_COL_QRA,        /*!< QRA locator. */
      QTH_LIST_COL_WX,         /*!< 4 letter weather station. */
      QTH_LIST_COL_DEF,        /*!< Is this QTH the default one? */
+     QTH_LIST_COL_TYPE,        /*!< Is this QTH the default one? */
+     QTH_LIST_COL_GPSD_SERVER,        /*!< Is this QTH the default one? */
+     QTH_LIST_COL_GPSD_PORT,        /*!< Is this QTH the default one? */
      QTH_LIST_COL_NUM         /*!< The number of fields. */
 } qth_list_col_t;
 

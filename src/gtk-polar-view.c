@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -685,6 +686,7 @@ gtk_polar_view_update          (GtkWidget  *widget)
     }
     
     /* check refresh rate and refresh sats if time */
+    /* FIXME need to add location based update*/
     if (polv->counter < polv->refresh) {
         polv->counter++;
     }
@@ -846,6 +848,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             
             /* free pass info */
             free_pass (obj->pass);
+            obj->pass=NULL;
 
             /* if this was the selected satellite we need to
                clear the info text
@@ -914,8 +917,42 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                 g_free (text);
             }
 
+            /*check if pass was computed near current qth otherwise update*/
+            if (obj->pass) {
+                /* FIXME once again threshold should be user configurable*/
+                if (qth_small_dist(polv->qth,(obj->pass->qth_comp))>1.0){
+
+                    root = goo_canvas_get_root_item_model (GOO_CANVAS (polv->canvas));
+                    /* remove sky track */
+                    if (obj->showtrack) {
+                        idx = goo_canvas_item_model_find_child (root, obj->track);
+                        if (idx != -1)
+                            goo_canvas_item_model_remove_child (root, idx);
+                        
+                        for (i = 0; i < TRACK_TICK_NUM; i++) {
+                            idx = goo_canvas_item_model_find_child (root, obj->trtick[i]);
+                            if (idx != -1)
+                                goo_canvas_item_model_remove_child (root, idx);
+                        }
+                    }
+                    
+                    /* free pass info */
+                    free_pass (obj->pass);
+                    obj->pass=NULL;
+                    
+                    /*compute new pass */
+                    obj->pass = get_current_pass (sat, polv->qth, now);
+                    
+                    /* Finally, create the sky track if necessary */
+                    if (obj->showtrack)
+                        create_track (polv, obj, sat);
+                    
+                }
+            }
             g_free (losstr);
             g_free (catnum);  // FIXME: why free here, what about else?
+
+
         }
         else {
             /* add sat to canvas */

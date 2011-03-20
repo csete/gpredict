@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -73,6 +73,9 @@ static GtkWidget *name;           /* QTH name */
 static GtkWidget *location;       /* QTH location */
 static GtkWidget *desc;           /* QTH description */
 static GtkWidget *lat,*lon,*alt;  /* LAT, LON and ALT */
+static GtkWidget *type;           /* GPSD type */
+static GtkWidget *server;         /* GPSD Server */
+static GtkWidget *port;           /* GPSD Port */
 static GtkWidget *ns,*ew;
 
 static GtkWidget *qra;            /* QRA locator */
@@ -373,6 +376,45 @@ static GtkWidget *
                       GUINT_TO_POINTER (SELECTION_MODE_WX));
     gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
 
+     /* GPSD enabled*/
+     label = gtk_label_new (_("QTH Type"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 8, 9);
+
+     type = gtk_combo_box_new_text();
+     gtk_combo_box_append_text (GTK_COMBO_BOX (type), "Static");
+     gtk_combo_box_append_text (GTK_COMBO_BOX (type), "GPSD");
+     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
+     gtk_tooltips_set_tip (tooltips, type,
+                                _("A qth can be static, ie. it does not change, or gpsd based for computers with gps attached."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 8, 9);
+     /* GPSD Server */
+     label = gtk_label_new (_("GPSD Server"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 9, 10);
+
+     server = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (server), 6000);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, server,
+                                _("GPSD Server."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), server, 1, 2, 9, 10);
+     
+     /* GPSD Port*/
+     label = gtk_label_new (_("GPSD Port"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 10, 11);
+
+     port = gtk_spin_button_new_with_range (0, 32768, 1);
+     gtk_spin_button_set_increments (GTK_SPIN_BUTTON (port), 1, 100);
+     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (port), TRUE);
+     gtk_tooltips_set_tip (tooltips, port,
+                                _("Set the port for GPSD to use. Default for gpsd is 2947."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 10, 11);
+
 
     if (qth->name != NULL)
         update_widgets (qth);
@@ -463,6 +505,9 @@ static gboolean
     const gchar      *qthdesc = NULL;
     const gchar      *qthwx = NULL;
     const gchar      *qthqra= NULL;
+    const gchar      *gpsdserver= NULL;
+    guint       gpsdport;
+    guint       gpsdenabled;
     gdouble           qthlat;
     gdouble           qthlon;
     guint             qthalt;
@@ -486,6 +531,10 @@ static gboolean
 
     qthalt = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (alt));
     qthqra  = gtk_entry_get_text (GTK_ENTRY (qra));
+    
+    gpsdenabled = gtk_combo_box_get_active ( GTK_COMBO_BOX (type) );
+    gpsdserver = gtk_entry_get_text (GTK_ENTRY (server));
+    gpsdport = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
 
     /* clear qth struct if not empty */
     /*      if (qth->name != NULL) */
@@ -521,9 +570,14 @@ static gboolean
     if (qthqra != NULL)
         qth->qra = g_strdup (qthqra);
 
+    if (gpsdserver != NULL)
+        qth->gpsd_server = g_strdup (gpsdserver);
+
     qth->lat = qthlat;
     qth->lon = qthlon;
     qth->alt = qthalt;
+    qth->type = gpsdenabled;
+    qth->gpsd_port = gpsdport;
 
     /* store values */
     confdir = get_user_conf_dir ();

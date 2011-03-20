@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin  <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -303,7 +304,19 @@ void
         g_free (buff);
         
         update_count_down (ctrl, t);
-        
+
+        /*if the current pass is too far away*/
+        if ((ctrl->pass!=NULL)&& (ctrl->qth!=NULL))
+            if (qth_small_dist(ctrl->qth,ctrl->pass->qth_comp)>1.0){
+                free_pass (ctrl->pass);
+                ctrl->pass=NULL;
+                ctrl->pass = get_pass (ctrl->target, ctrl->qth, t, 3.0);
+                if (ctrl->pass) {
+                    set_flipped_pass(ctrl);
+                    /* update polar plot */
+                    gtk_polar_plot_set_pass (GTK_POLAR_PLOT (ctrl->plot), ctrl->pass);
+                }
+            }
         
         /* update next pass if necessary */
         if (ctrl->pass != NULL) {
@@ -977,14 +990,12 @@ static gboolean
                         /* otherwise look 20 minutes into the future*/
                         time_delta=1.0/72.0;
                     }
+
                     /* have a minimum time delta*/
-                    if (time_delta<(ctrl->delay/1000.0/secday)){
-                        time_delta=ctrl->delay/1000.0/secday;
-                    }
-
-
                     step_size = time_delta / 2.0;
-                    
+                    if (step_size<ctrl->delay/1000.0/(secday)){
+                        step_size=ctrl->delay/1000.0/(secday);
+                    }
                     /*
                       find a time when satellite is above horizon and at the 
                       edge of tolerance. the final step size needs to be smaller
@@ -1024,6 +1035,7 @@ static gboolean
                     setaz = sat->az;
                 }
             }
+
             /* send controller values to rotator device */
             /* this is the newly computed value which should be ahead of the current position */
             if (!set_pos (ctrl, setaz, setel)) {

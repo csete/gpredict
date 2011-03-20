@@ -2,9 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -79,6 +80,9 @@ static GtkWidget *lat,*lon,*alt;  /* LAT, LON and ALT */
 static GtkWidget *ns,*ew;
 
 static GtkWidget *qra;            /* QRA locator */
+static GtkWidget *type;         /* GPSD type */
+static GtkWidget *server;         /* GPSD Server */
+static GtkWidget *port;           /* GPSD Port */
 static gulong latsigid,lonsigid,nssigid,ewsigid,qrasigid;
 
 static GtkWidget *wx;             /* weather station */
@@ -356,7 +360,45 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
                            G_CALLBACK (select_location),
                            GUINT_TO_POINTER (SELECTION_MODE_WX));
      gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
+     /* GPSD enabled*/
+     label = gtk_label_new (_("QTH Type"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 8, 9);
+
+     type = gtk_combo_box_new_text();
+     gtk_combo_box_append_text (GTK_COMBO_BOX (type), "Static");
+     gtk_combo_box_append_text (GTK_COMBO_BOX (type), "GPSD");
+     gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
+     gtk_tooltips_set_tip (tooltips, type,
+                                _("A qth can be static, ie. it does not change, or gpsd based for computers with gps attached."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 8, 9);
+     /* GPSD Server */
+     label = gtk_label_new (_("GPSD Server"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 9, 10);
+
+     server = gtk_entry_new ();
+     gtk_entry_set_max_length (GTK_ENTRY (server), 6000);
+     tooltips = gtk_tooltips_new ();
+     gtk_tooltips_set_tip (tooltips, server,
+                                _("GPSD Server."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), server, 1, 2, 9, 10);
      
+     /* GPSD Port*/
+     label = gtk_label_new (_("GPSD Port"));
+     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 10, 11);
+
+     port = gtk_spin_button_new_with_range (0, 32768, 1);
+     gtk_spin_button_set_increments (GTK_SPIN_BUTTON (port), 1, 100);
+     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (port), TRUE);
+     gtk_tooltips_set_tip (tooltips, port,
+                                _("Set the port for GPSD to use. Default for gpsd is 2947."),
+                                NULL);
+     gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 10, 11);
+
 
      if (!new)
           update_widgets (treeview);
@@ -382,7 +424,9 @@ update_widgets (GtkTreeView *treeview)
      gdouble           qthlon;    /* longitude */
      guint             qthalt;    /* altitude */
      gchar            *qthwx;     /* weather station */
-
+     gchar            *qthgpsdserver;     /* gpsdserver */
+     guint             qthtype;    /* type */
+     guint             qthgpsdport;    /* gpsdport */
 
 
      selection = gtk_tree_view_get_selection (treeview);
@@ -398,6 +442,9 @@ update_widgets (GtkTreeView *treeview)
                                    QTH_LIST_COL_LON, &qthlon,
                                    QTH_LIST_COL_ALT, &qthalt,
                                    QTH_LIST_COL_WX, &qthwx,
+                              QTH_LIST_COL_GPSD_SERVER, &qthgpsdserver,
+                              QTH_LIST_COL_GPSD_PORT, &qthgpsdport,
+                              QTH_LIST_COL_TYPE, &qthtype,
                                    -1);
 
           /* update widgets and free memory afterwards */
@@ -419,6 +466,10 @@ update_widgets (GtkTreeView *treeview)
                gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
                g_free (qthwx);
           }
+          if (qthgpsdserver) {
+               gtk_entry_set_text (GTK_ENTRY (server), qthgpsdserver);
+               g_free (qthgpsdserver);
+          }
 
           if (qthlat < 0.00)
                gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
@@ -435,6 +486,8 @@ update_widgets (GtkTreeView *treeview)
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), fabs (qthlon));
 
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), qthalt);
+          gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), qthgpsdport);
+          gtk_combo_box_set_active (GTK_COMBO_BOX (type), qthtype);
 
           sat_log_log (SAT_LOG_LEVEL_DEBUG,
                           _("%s:%d: Loaded %s for editing:\n"\
@@ -490,9 +543,12 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
      const gchar      *qthloc;
      const gchar      *qthdesc;
      const gchar      *qthwx;
+     const gchar      *qthgpsdserver;
      gdouble           qthlat;
      gdouble           qthlon;
      guint             qthalt;
+     guint             qthtype;
+     guint             qthgpsdport;
      const gchar      *qthqra;
 
 
@@ -502,6 +558,7 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
      qthloc  = gtk_entry_get_text (GTK_ENTRY (location));
      qthdesc = gtk_entry_get_text (GTK_ENTRY (desc));
      qthwx   = gtk_entry_get_text (GTK_ENTRY (wx));
+     qthgpsdserver   = gtk_entry_get_text (GTK_ENTRY (server));
 
      qthlat  = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat));
      if (gtk_combo_box_get_active (GTK_COMBO_BOX (ns)))
@@ -512,6 +569,8 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
           qthlon = -qthlon;
 
      qthalt = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (alt));     
+     qthgpsdport = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));     
+     qthtype = gtk_combo_box_get_active ( GTK_COMBO_BOX (type));
 
      /* get liststore */
      liststore = GTK_LIST_STORE (gtk_tree_view_get_model (treeview));
@@ -547,6 +606,9 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
                               QTH_LIST_COL_LON, qthlon,
                               QTH_LIST_COL_ALT, qthalt,
                               QTH_LIST_COL_WX, qthwx,
+                              QTH_LIST_COL_GPSD_SERVER, qthgpsdserver,
+                              QTH_LIST_COL_GPSD_PORT, qthgpsdport,
+                              QTH_LIST_COL_TYPE, qthtype,
                               -1);
 
      qthqra  = gtk_entry_get_text (GTK_ENTRY (qra));

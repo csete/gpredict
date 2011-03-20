@@ -2,11 +2,12 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
     Parts are Copyright John A. Magliacane, KD2BD 1991-2003 (indicated below)
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
              John A. Magliacane, KD2BD.
+             Charles Suprin <hamaa1vs@gmail.com>
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -524,6 +525,8 @@ get_pass   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
             pass->vis[3] = 0;
             pass->satname = g_strdup (sat->nickname);
             pass->details = NULL;
+            /*copy qth data into the pass for later comparisons*/
+            qth_small_save(qth,&(pass->qth_comp));
 
             /* iterate over each time step */
             for (t = pass->aos; t <= pass->los; t += step) {
@@ -617,7 +620,7 @@ get_pass   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
             iter++;
         }
     }
-
+     
     return pass;
 }
 
@@ -954,6 +957,8 @@ get_pass_no_min_el (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
         pass->vis[3] = 0;
         pass->satname = g_strdup (sat->nickname);
         pass->details = NULL;
+        /*copy qth data into the pass for later comparisons*/
+        qth_small_save(qth,&(pass->qth_comp));
 
         /* iterate over each time step */
         for (t = pass->aos; t <= pass->los; t += step) {
@@ -1034,7 +1039,7 @@ get_pass_no_min_el (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
         pass->tca    = tca;
 
     }
-
+    
     return pass;
 }
 

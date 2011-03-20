@@ -5,6 +5,7 @@
     Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
+    Charles Suprin <hamaa1vs@gmail.com>
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -49,6 +50,7 @@ typedef struct {
     gdouble     maxel_az; /*!< Azimuth at maximum elevation */
     gchar       vis[4];   /*!< Visibility string, e.g. VSE, -S-, V-- */
     GSList     *details;  /*!< List of pass_detail_t entries */
+    qth_small_t qth_comp; /*!< Short version of qth at time computed */
 } pass_t;
 
 
