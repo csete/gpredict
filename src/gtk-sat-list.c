@@ -654,7 +654,7 @@ sat_list_update_sats (GtkTreeModel *model,
             if (sat->otype == ORBIT_TYPE_GEO) {
                 buff = g_strdup ("G");
             }
-            else if (sat->otype == ORBIT_TYPE_DECAYED) {
+            else if (decayed(sat)) {
                 buff = g_strdup ("D");
             }
             else if (sat->range_rate > 0.001) {

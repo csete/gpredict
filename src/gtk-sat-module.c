@@ -964,8 +964,6 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
        and the other requirements are fulfilled
     */
     if ((GTK_SAT_MODULE (module)->event_count == 0) &&
-        (sat->otype != ORBIT_TYPE_GEO) &&
-        (sat->otype != ORBIT_TYPE_DECAYED) &&
         has_aos (sat, module->qth))    {
 
         /* Note that has_aos may return TRUE for geostationary sats

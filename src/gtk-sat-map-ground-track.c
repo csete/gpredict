@@ -123,7 +123,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
 
      /* calculate (lat,lon) for the required orbits */
-     while (sat->orbit <= max_orbit) {
+     while (sat->orbit <= max_orbit && !decayed(sat)) {
 
           /* We use 30 sec time steps. If resolution is too fine, the
              line drawing routine will filter out unnecessary points

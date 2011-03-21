@@ -94,13 +94,25 @@ geostationary  (sat_t *sat)
 gboolean
 decayed        (sat_t *sat)
 {
+    
+#if 0
+    /*this code was used for debugging basically it print out the 
+      time of decay for comparison to other sources.
+    */
+    time_t t;
+    gdouble eol;
+    char something[100];
+    eol=sat->jul_epoch + ((16.666666 - sat->meanmo) / 
+                          (10.0 * fabs (sat->tle.xndt2o/(twopi/xmnpda/xmnpda))));
+    /* convert julian date to struct tm */
+    t = (eol - 2440587.5)*86400.;
+    strftime(something,100,"%F %R",gmtime(&t));
+    printf("%s Decayed at %s %f\n",sat->nickname,something,eol);
+#endif
 
-     /* tle.xndt2o/(twopi/xmnpda/xmnpda) is the value before converted the 
+    /* tle.xndt2o/(twopi/xmnpda/xmnpda) is the value before converted the 
         value matches up with the value in predict 2.2.3 */
-     /*** FIXME decayed is treated as a static quantity. 
-          It is time dependent. Also sat->jul_utc is often zero 
-          when this function is called
-     ***/
+
      if (sat->jul_epoch + ((16.666666 - sat->meanmo) / 
                            (10.0 * fabs (sat->tle.xndt2o/(twopi/xmnpda/xmnpda)))) < sat->jul_utc)
           return TRUE;
@@ -124,27 +136,36 @@ has_aos        (sat_t *sat, qth_t *qth)
      double lin, sma, apogee;
      gboolean retcode = FALSE;
 
-
      /* FIXME */
-     if (sat->meanmo == 0.0) {
-          retcode = FALSE;
+     /*the first condition takes care of geostationary satellites and 
+       decayed satellites.  The second deals with LEOS from the original 
+       predict code.  However, nothing correctly handles geos with poor 
+       station keeping that are tracing a figure 8.
+     */
+
+     if ((sat->otype == ORBIT_TYPE_GEO) || (decayed(sat))) {
+         retcode = FALSE;
+     } else {
+
+         if (sat->meanmo == 0.0) {
+             retcode = FALSE;
+         }
+         else {
+             
+             /* xincl is already in RAD by select_ephemeris */
+             lin = sat->tle.xincl;
+             if (lin >= pio2)
+                 lin = pi - lin;
+             
+             sma = 331.25 * exp(log(1440.0/sat->meanmo) * (2.0/3.0));
+             apogee = sma * (1.0 + sat->tle.eo) - xkmper;
+             
+             if ((acos(xkmper/(apogee+xkmper))+(lin)) > fabs(qth->lat*de2ra))
+                 retcode = TRUE;
+             else
+                 retcode = FALSE;
+             
+         }
      }
-     else {
-
-          /* xincl is already in RAD by select_ephemeris */
-          lin = sat->tle.xincl;
-          if (lin >= pio2)
-               lin = pi - lin;
-
-          sma = 331.25 * exp(log(1440.0/sat->meanmo) * (2.0/3.0));
-          apogee = sma * (1.0 + sat->tle.eo) - xkmper;
-
-          if ((acos(xkmper/(apogee+xkmper))+(lin)) > fabs(qth->lat*de2ra))
-               retcode = TRUE;
-          else
-               retcode = FALSE;
-
-     }
-
      return retcode;
 }

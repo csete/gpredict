@@ -436,7 +436,7 @@ update_field            (GtkSingleSat *ssat, guint i)
         if (sat->otype == ORBIT_TYPE_GEO) {
             buff = g_strdup ("Geostationary");
         }
-        else if (sat->otype == ORBIT_TYPE_DECAYED) {
+        else if (decayed(sat)) {
             buff = g_strdup ("Decayed");
         }
         else if (sat->range_rate > 0.0) {
@@ -1026,8 +1026,7 @@ show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
     qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
 
     /* check wheather sat actially has AOS */
-    if ((sat->otype != ORBIT_TYPE_GEO) && (sat->otype != ORBIT_TYPE_DECAYED) &&
-         has_aos (sat, qth)) {
+    if (has_aos (sat, qth)) {
         if (sat_cfg_get_bool(SAT_CFG_BOOL_PRED_USE_REAL_T0)) {
             pass = get_next_pass (sat, qth,
                                   sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
@@ -1092,8 +1091,7 @@ show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
     qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
 
     /* check wheather sat actially has AOS */
-    if ((sat->otype != ORBIT_TYPE_GEO) && (sat->otype != ORBIT_TYPE_DECAYED) &&
-         has_aos (sat, qth)) {
+    if (has_aos (sat, qth)) {
 
         if (sat_cfg_get_bool(SAT_CFG_BOOL_PRED_USE_REAL_T0)) {
             passes = get_next_passes (sat, qth,

@@ -136,9 +136,7 @@ find_aos (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
     predict_calc (sat, qth, start);
 
     /* check whether satellite has aos */
-    if ((sat->otype == ORBIT_TYPE_GEO) || 
-        (sat->otype == ORBIT_TYPE_DECAYED) ||
-        !has_aos (sat, qth)) {
+    if (!has_aos (sat, qth)) {
 
         return 0.0;
 
@@ -235,9 +233,7 @@ find_los (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt)
     predict_calc (sat, qth, start);
 
     /* check whether satellite has aos */
-    if ((sat->otype == ORBIT_TYPE_GEO) || 
-        (sat->otype == ORBIT_TYPE_DECAYED) ||
-        !has_aos (sat, qth)) {
+    if (!has_aos (sat, qth)) {
 
         return 0.0;
 
@@ -343,9 +339,7 @@ find_prev_aos (sat_t *sat, qth_t *qth, gdouble start)
     predict_calc (sat, qth, start);
 
     /* check whether satellite has aos */
-    if ((sat->otype == ORBIT_TYPE_GEO) || 
-        (sat->otype == ORBIT_TYPE_DECAYED) ||
-        !has_aos (sat, qth)) {
+    if (!has_aos (sat, qth)) {
 
         return 0.0;
 
@@ -1078,9 +1072,7 @@ get_current_pass (sat_t *sat_in, qth_t *qth, gdouble start)
     predict_calc (sat, qth, t);     
 
      /* check whether satellite has aos */
-    if ((sat->otype == ORBIT_TYPE_GEO) || 
-        (sat->otype == ORBIT_TYPE_DECAYED) ||
-          !has_aos (sat, qth)) {
+    if (!has_aos (sat, qth)) {
           
         return NULL;
           
