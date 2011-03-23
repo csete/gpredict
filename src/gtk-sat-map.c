@@ -56,6 +56,7 @@
 #include "locator.h"
 #include "sat-debugger.h"
 #include "sat-info.h"
+#include "predict-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -1708,7 +1709,10 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     guint32 col,covcol,shadowcol;
     gfloat x,y;
     gchar *tooltip;
-
+    
+    if (decayed(sat)) {
+        return;
+    }
     /* get satellite and SSP */
     catnum = g_new0 (gint, 1);
     *catnum = sat->tle.catnr;
@@ -1883,14 +1887,41 @@ update_sat (gpointer key, gpointer value, gpointer data)
     }
 
     obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catnum));
+    
+    /*get rid of a decayed satellite*/
+    if (decayed(sat) && obj!=NULL) {
+        SAT_MAP_OBJ (g_hash_table_remove (satmap->obj, catnum));
+        /*remove items*/
+        idx = goo_canvas_item_model_find_child (root,obj->marker);
+        if (idx !=-1)
+            goo_canvas_item_model_remove_child (root, idx);;
+        idx = goo_canvas_item_model_find_child (root,obj->shadowm);
+        if (idx !=-1)
+            goo_canvas_item_model_remove_child (root, idx);;
+        idx = goo_canvas_item_model_find_child (root,obj->label);
+        if (idx !=-1)
+            goo_canvas_item_model_remove_child (root, idx);
+        idx = goo_canvas_item_model_find_child (root,obj->shadowl);
+        if (idx !=-1)
+            goo_canvas_item_model_remove_child (root, idx);
+        idx = goo_canvas_item_model_find_child (root,obj->range1);
+        if (idx !=-1)
+            goo_canvas_item_model_remove_child (root, idx);
+        idx = goo_canvas_item_model_find_child (root,obj->range2);
+        if (idx !=-1)
+            goo_canvas_item_model_remove_child (root, idx);
+        return;
+    }
 
     if (obj == NULL) {
-        /* FIXME: protection against this should be implemented in the module. */
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s:%d: NULL object for %d (yes, this is a bug)"),
-                     __FILE__, __LINE__, sat->tle.catnr);
-
-        return;
+        if (decayed(sat)) {
+            return;
+        } else {
+            /*satellite was decayed now is visible*/
+            /*time controller backed up time*/
+            plot_sat(key,value,data);
+            return;
+        }
     }
 
     if (obj->selected) {
