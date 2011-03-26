@@ -1,6 +1,7 @@
 Changes in version 1.4 (TBD)
 
 - Feature request 3141555: gpsd support.
+- Applied and extended patch 3237220: natural sort for sat list in module config
 - Improve handling of decayed satellites.
 
 Changes in version 1.3 (1 Mar 2011)
