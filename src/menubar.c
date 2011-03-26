@@ -48,6 +48,7 @@
 #include "gtk-sat-module.h"
 #include "gtk-sat-module-popup.h"
 #include "gpredict-help.h"
+#include "gpredict-utils.h"
 #include "tle-update.h"
 #include "compat.h"
 #include "menubar.h"
@@ -1083,7 +1084,7 @@ static gint compare_func (GtkTreeModel *model,
     gtk_tree_model_get(model, a, 0, &sat1, -1);
     gtk_tree_model_get(model, b, 0, &sat2, -1);
 
-    ret = g_ascii_strcasecmp (sat1, sat2);
+    ret = gpredict_strcmp (sat1, sat2);
 
     g_free (sat1);
     g_free (sat2);

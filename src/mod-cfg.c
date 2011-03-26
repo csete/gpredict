@@ -39,7 +39,6 @@
 #include "sat-pref-modules.h"
 #include "qth-editor.h"
 #include "mod-cfg.h"
-
 #include "gtk-sat-selector.h"
 
 
@@ -1164,7 +1163,7 @@ static gint compare_func (GtkTreeModel *model,
     gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
 
-    ret = g_ascii_strcasecmp (sat1, sat2);
+    ret = gpredict_strcmp (sat1, sat2);
 
     g_free (sat1);
     g_free (sat2);
@@ -1259,5 +1258,5 @@ static void delbut_clicked_cb (GtkButton *button, GtkSatSelector *selector)
 
 
 static gint qth_name_compare (const gchar* a,const gchar *b){
-    return (g_ascii_strcasecmp(a,b));
+    return (gpredict_strcmp(a,b));
 }

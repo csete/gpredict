@@ -62,5 +62,5 @@ void   rgba2gdk  (guint rgba, GdkColor *color, guint16 *alpha);
 void   gdk2rgb   (const GdkColor *color, guint *rgb);
 void   gdk2rgba  (const GdkColor *color, guint16 alpha, guint *rgba);
 gchar *rgba2html (guint rgba);
-
+int gpredict_strcmp (const char *s1, const char *s2);
 #endif

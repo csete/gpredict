@@ -28,6 +28,9 @@
 /** \brief Various utility functions.
  *
  */
+
+#define _GNU_SOURCE
+#include <ctype.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -37,6 +40,8 @@
 #include "compat.h"
 #include "sat-log.h"
 #include "gpredict-utils.h"
+#include "strnatcmp.h"
+
 
 
 
@@ -477,3 +482,19 @@ rgba2html (guint rgba)
      return col;
 }
 
+int gpredict_strcmp (const char *s1, const char *s2) {
+#if 0
+
+    gchar *a,*b;
+    int retval;
+    a=g_ascii_strup(s1,-1);
+    b=g_ascii_strup(s2,-1);
+    
+    retval=strverscmp(a,b);
+    g_free(a);
+    g_free(b);
+    return retval;
+#else
+    return strnatcasecmp(s1,s2);
+#endif 
+}

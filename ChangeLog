@@ -1,3 +1,20 @@
+2011-03-25 Charles Suprin <hamaa1vs at gmail.com>
+
+    * AUTHORS
+    * src/about.c
+    * src/Makefile.am
+    * src/menubar.c
+    * src/mod-cfg.c
+    * src/gpredict-utils.c
+    * src/gpredict-utils.h
+    * src/gtk-rig-ctrl.c
+    * src/gtk-rot-ctrl.c
+    * src/gtk-sat-selector.c
+    * src/gtk-single-sat.c
+    * src/strnatcmp.c
+    * src/strnatcmp.h
+    Added "natural comparison" by Martin Pool from patch 3237220 by Patrick Strasser.
+
 2011-03-24 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/predict-tools.c

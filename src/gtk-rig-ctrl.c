@@ -2755,11 +2755,11 @@ static gboolean close_rigctld_socket (gint *sock) {
 
 /*simple function to sort the list of satellites in the combo box.*/
 static gint sat_name_compare (sat_t* a,sat_t*b){
-    return (g_ascii_strcasecmp(a->nickname,b->nickname));
+    return (gpredict_strcmp(a->nickname,b->nickname));
 }
 
 static gint rig_name_compare (const gchar* a,const gchar *b){
-    return (g_ascii_strcasecmp(a,b));
+    return (gpredict_strcmp(a,b));
 }
 
 static inline gboolean check_set_response (gchar *buffback,gboolean retcode,const gchar *function){

@@ -51,7 +51,6 @@
 #include "sat-pass-dialogs.h"
 
 
-
 /** \brief Column titles indexed with column symb. refs. */
 const gchar *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Azimuth"),
@@ -1146,5 +1145,5 @@ show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
 }
 
 static gint sat_name_compare (sat_t *a,sat_t *b) {
-    return g_ascii_strcasecmp(a->nickname,b->nickname);
+    return gpredict_strcmp(a->nickname,b->nickname);
 }

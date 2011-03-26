@@ -112,7 +112,8 @@ gpredict_SOURCES = \
     time-tools.c time-tools.h \
     tle-tools.c tle-tools.h \
     tle-update.c tle-update.h \
-    sat-debugger.c sat-debugger.h
+    sat-debugger.c sat-debugger.h \
+    strnatcmp.c strnatcmp.h
 
 
 

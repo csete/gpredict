@@ -32,6 +32,7 @@
 
 /*needed _gnu_source to have strcasestr defined*/
 #define _GNU_SOURCE
+
 #include <string.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -44,7 +45,7 @@
 #include "compat.h"
 #include "sat-cfg.h"
 #include "gtk-sat-selector.h"
-
+#include "gpredict-utils.h"
 
 
 static void gtk_sat_selector_class_init (GtkSatSelectorClass *class);
@@ -614,7 +615,7 @@ static gint compare_func (GtkTreeModel *model,
     gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
 
-    ret = g_ascii_strcasecmp (sat1, sat2);
+    ret = strverscmp (sat1, sat2);
 
     g_free (sat1);
     g_free (sat2);
@@ -900,7 +901,7 @@ gint cat_file_compare (const gchar *a,const gchar *b){
     
     cat_a = load_cat_file_cat (a);
     cat_b = load_cat_file_cat (b);
-    temp = g_ascii_strcasecmp (cat_a,cat_b);
+    temp = gpredict_strcmp (cat_a,cat_b);
     g_free (cat_a);
     g_free (cat_b);
     return (temp);

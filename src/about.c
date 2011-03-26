@@ -54,6 +54,7 @@ const gchar *authors[] = {
     "Mirko Caserta (locator.c)",
     "S. R. Sampson (locator.c)",
     "Paul Schulz (various patches)",
+    "Martin Pool (natural sorting)",
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",

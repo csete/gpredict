@@ -42,6 +42,7 @@
 #include "compat.h"
 #include "sat-log.h"
 #include "predict-tools.h"
+#include "gpredict-utils.h"
 #include "gtk-polar-plot.h"
 #include "gtk-rot-knob.h"
 #include "gtk-rot-ctrl.h"
@@ -1444,14 +1445,14 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
  *simple function to sort the list of satellites in the combo box.
  */
 static gint sat_name_compare (sat_t* a,sat_t*b){
-    return (g_ascii_strcasecmp(a->nickname,b->nickname));
+    return (gpredict_strcmp(a->nickname,b->nickname));
 }
 
 
 /** \brief  Compare Rotator Names.
  */
 static gint rot_name_compare (const gchar* a,const gchar *b){
-    return (g_ascii_strcasecmp(a,b));
+    return (gpredict_strcmp(a,b));
 }
 
 
