@@ -913,9 +913,11 @@ free_pass_details (GSList *details)
 pass_t *
 get_current_pass (sat_t *sat_in, qth_t *qth, gdouble start)
 {
-    gdouble t;
+    gdouble t,t0;
+    gdouble el0;
     sat_t  *sat,sat_working;
-    
+    pass_t *pass;
+
     /*copy sat_in to a working structure*/
     sat = memcpy(&sat_working,sat_in,sizeof(sat_t));
 
@@ -925,6 +927,10 @@ get_current_pass (sat_t *sat_in, qth_t *qth, gdouble start)
         t = get_current_daynum ();
     predict_calc (sat, qth, t);     
 
+    /*save initial conditions for later comparison*/
+    t0 = t;
+    el0 = sat->el;
+
      /* check whether satellite has aos */
     if (!has_aos (sat, qth)) {
           
@@ -933,10 +939,26 @@ get_current_pass (sat_t *sat_in, qth_t *qth, gdouble start)
     }
 
     /* find a time before AOS */
-    while (sat->el > -2.0) {
+    while (sat->el > 0.0) {
         predict_calc (sat, qth, t);
         t -= 0.007; // +10 min
     }
 
-    return get_pass_no_min_el (sat, qth, t, 0.0);
+    pass = get_pass_no_min_el (sat, qth, t, 0.0);
+    if (el0 > 0.0) {
+        /* this function is only specified if the elevation 
+           is greater than zero at the time it is called*/
+        if (pass){          
+            if (pass->aos > t0)
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Returning a pass for %s that starts after the seeded time."),
+                             __FUNCTION__,sat->nickname);
+
+            if (pass->los < t0)
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Returning a pass for %s that ends before the seeded time."),
+                             __FUNCTION__,sat->nickname);
+        }
+    }
+    return pass;
 }

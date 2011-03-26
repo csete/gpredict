@@ -1,3 +1,8 @@
+2011-03-26 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/predict-tools.c
+    Change get_current_pass to log error if returned pass is not current.
+
 2011-03-25 Charles Suprin <hamaa1vs at gmail.com>
 
     * AUTHORS
