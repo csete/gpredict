@@ -46,7 +46,7 @@
 #include "sat-cfg.h"
 #include "gtk-sat-selector.h"
 #include "gpredict-utils.h"
-
+#include "time-tools.h"
 
 static void gtk_sat_selector_class_init (GtkSatSelectorClass *class);
 static void gtk_sat_selector_init       (GtkSatSelector *selector);
@@ -773,8 +773,6 @@ static void epoch_cell_data_function (GtkTreeViewColumn *col,
     gchar      buff[TIME_FORMAT_MAX_LENGTH];
     gchar     *fmtstr;
     guint      coli = GPOINTER_TO_UINT (column);
-    time_t     t;
-    guint size;
 
 
     gtk_tree_model_get (model, iter, coli, &number, -1);

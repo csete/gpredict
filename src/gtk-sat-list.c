@@ -44,6 +44,7 @@
 #include "sat-vis.h"
 #include "sat-info.h"
 #include "time-tools.h"
+#include "orbit-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif

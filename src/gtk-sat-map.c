@@ -57,6 +57,7 @@
 #include "sat-debugger.h"
 #include "sat-info.h"
 #include "predict-tools.h"
+#include "orbit-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -1890,7 +1891,6 @@ update_sat (gpointer key, gpointer value, gpointer data)
     
     /*get rid of a decayed satellite*/
     if (decayed(sat) && obj!=NULL) {
-        SAT_MAP_OBJ (g_hash_table_remove (satmap->obj, catnum));
         /*remove items*/
         idx = goo_canvas_item_model_find_child (root,obj->marker);
         if (idx !=-1)

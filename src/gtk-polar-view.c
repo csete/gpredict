@@ -42,6 +42,7 @@
 #include "gtk-polar-view-popup.h"
 #include "gtk-polar-view.h"
 #include "sat-info.h"
+#include "time-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -1100,7 +1101,6 @@ update_track (gpointer key, gpointer value, gpointer data)
 static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y)
 {
     GooCanvasItemModel *item;
-    time_t             t;
     gchar              buff[7];
     GtkAnchorType      anchor;
     GooCanvasItemModel *root;
