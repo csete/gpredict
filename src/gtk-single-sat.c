@@ -49,7 +49,7 @@
 #include "orbit-tools.h"
 #include "predict-tools.h"
 #include "sat-pass-dialogs.h"
-
+#include "time-tools.h"
 
 /** \brief Column titles indexed with column symb. refs. */
 const gchar *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
@@ -392,8 +392,6 @@ update_field            (GtkSingleSat *ssat, guint i)
     gint       retcode;
     gchar     *fmtstr;
     gchar     *alstr;
-    time_t     t;
-    guint      size;
     sat_vis_t  vis;
 
 
@@ -495,21 +493,9 @@ update_field            (GtkSingleSat *ssat, guint i)
         }
         if (number > 0.0) {
 
-            /* convert julian date to struct tm */
-            t = (number - 2440587.5)*86400.;
-
             /* format the number */
             fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-
-            /* format either local time or UTC depending on check box */
-            if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-                size = strftime (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-            else
-                size = strftime (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-        
-            if (size == 0)
-                /* size > MAX_LENGTH */
-                tbuf[TIME_FORMAT_MAX_LENGTH-1]='\0';
+            julian_print_time (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
             g_free (fmtstr);
 
@@ -527,21 +513,10 @@ update_field            (GtkSingleSat *ssat, guint i)
 
     case SINGLE_SAT_FIELD_AOS:
         if (sat->aos > 0.0) {
-            /* convert julian date to struct tm */
-            t = (sat->aos - 2440587.5)*86400.;
-
             /* format the number */
             fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 
-            /* format either local time or UTC depending on check box */
-            if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-                size = strftime (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-            else
-                size = strftime (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-        
-            if (size == 0)
-                /* size > MAX_LENGTH */
-                tbuf[TIME_FORMAT_MAX_LENGTH-1]='\0';
+            julian_print_time(tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->aos);
 
             g_free (fmtstr);
 
@@ -555,21 +530,10 @@ update_field            (GtkSingleSat *ssat, guint i)
 
     case SINGLE_SAT_FIELD_LOS:
         if (sat->los > 0.0) {
-            /* convert julian date to struct tm */
-            t = (sat->los - 2440587.5)*86400.;
 
-            /* format the number */
             fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 
-            /* format either local time or UTC depending on check box */
-            if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-                size = strftime (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-            else
-                size = strftime (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-        
-            if (size == 0)
-                /* size > MAX_LENGTH */
-                tbuf[TIME_FORMAT_MAX_LENGTH-1]='\0';
+            julian_print_time (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->los);
 
             g_free (fmtstr);
 

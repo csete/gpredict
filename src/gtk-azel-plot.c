@@ -234,7 +234,6 @@ create_canvas_model (GtkAzelPlot *polv)
      guint i;
      gdouble xstep,ystep;
      gdouble t,az,el;
-     time_t tim;
      gchar  buff[7];
      gchar *txt;
 
@@ -298,16 +297,7 @@ create_canvas_model (GtkAzelPlot *polv)
           /* get time */
           xy_to_graph (polv, polv->x0 + (i+1) * xstep, 0.0, &t, &az, &el);
 
-          /* convert julian date to struct tm */
-          tim = (t - 2440587.5)*86400.0;
-
-          /* format either local time or UTC depending on check box */
-          if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-               strftime (buff, 7, "%H:%M", localtime (&tim));
-          else
-               strftime (buff, 7, "%H:%M", gmtime (&tim));
-          
-          buff[6]='\0';
+          julian_print_time (buff, 7, "%H:%M", t);
 
           polv->xlab[i] = goo_canvas_text_model_new (root, buff,
                                                                (gfloat) (polv->x0 + (i+1) * xstep),
@@ -694,7 +684,6 @@ on_motion_notify (GooCanvasItem *item,
 {
      GtkAzelPlot *polv = GTK_AZEL_PLOT (data);
      gdouble t,az,el;
-     time_t tim;
      gfloat x,y;
      gchar *text;
      gchar  buff[10];
@@ -715,16 +704,7 @@ on_motion_notify (GooCanvasItem *item,
 
                xy_to_graph (polv, x, y, &t, &az, &el);
 
-               /* convert julian date to struct tm */
-               tim = (t - 2440587.5)*86400.0;
-
-               /* format either local time or UTC depending on check box */
-               if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-                    strftime (buff, 10, "%H:%M:%S", localtime (&tim));
-               else
-                    strftime (buff, 10, "%H:%M:%S", gmtime (&tim));
-               
-               buff[8]='\0';
+               julian_print_time(buff, 10, "%H:%M:%S", t);
 
                /* cursor track */
                text = g_strdup_printf ("T: %s, AZ: %.0f\302\260, EL: %.0f\302\260", buff, az, el);

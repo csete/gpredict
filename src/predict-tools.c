@@ -502,7 +502,7 @@ get_pass_engine   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt, gdou
 
         /* Find los of next pass or of current pass */
         los = find_los (sat, qth, t0, maxdt); // See if a pass is ongoing
-        aos = find_aos (sat, qth, t0, maxdt);
+        aos = find_aos (sat, qth, t0, start + maxdt - t0);
         /* sat_log_log(SAT_LOG_LEVEL_MSG, "%s:%s:%d: found aos %f and los %f for t0=%f", */
         /*          __FILE__,  */
         /*          __FUNCTION__, */

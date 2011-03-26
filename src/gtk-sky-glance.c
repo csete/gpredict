@@ -108,8 +108,6 @@ static void create_sat (gpointer key, gpointer value, gpointer data);
 
 static gdouble t2x (GtkSkyGlance *skg, gdouble t);
 static gdouble x2t (GtkSkyGlance *skg, gdouble x);
-static gchar *time_to_str (gdouble julutc);
-
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -334,7 +332,6 @@ create_canvas_model (GtkSkyGlance *skg)
     GooCanvasItemModel *hrt,*hrl,*hrm;
     guint              i,n;
     gdouble            th,tm;
-    time_t             tt;
     gdouble            xh,xm;
     gchar              buff[3];
 
@@ -405,13 +402,8 @@ create_canvas_model (GtkSkyGlance *skg)
                                                     NULL);
 
         /* hour tick label */
-        tt = (th - 2440587.5)*86400.0;
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            strftime (buff, 3, "%H", localtime (&tt));
-        else
-            strftime (buff, 3, "%H", gmtime (&tt));
-        
-        buff[2] = '\0';
+        julian_print_time (buff, 3, "%H", th);
+
         hrl = goo_canvas_text_model_new (root, buff, xh, skg->h + 12,
                                             -1, GTK_ANCHOR_N,
                                             "font", "Sans 8",
@@ -628,7 +620,6 @@ on_motion_notify (GooCanvasItem *item,
     GtkSkyGlance    *skg = GTK_SKY_GLANCE (data);
     GooCanvasPoints *pts;
     gdouble          t;
-    time_t           tt;
     gchar            buff[6];
 
     /* update cursor tracking line and time label */
@@ -643,16 +634,7 @@ on_motion_notify (GooCanvasItem *item,
     /* get time corresponding to x */
     t = x2t (skg, event->x);
 
-    /* convert julian date to struct tm */
-    tt = (t - 2440587.5)*86400.;
-
-    /* format either local time or UTC depending on check box */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        strftime (buff, 6, "%H:%M", localtime (&tt));
-    else
-        strftime (buff, 6, "%H:%M", gmtime (&tt));
-
-    buff[5] = '\0';
+    julian_print_time (buff, 6, "%H:%M", t);
 
     /* in order to avoid label clipping close to the edges of
         the chart, the label is placed left/right of the cursor
@@ -994,9 +976,9 @@ create_sat (gpointer key, gpointer value, gpointer data)
 
     /* tooltips vars */
     gchar *tooltip; /* the complete tooltips string */
-    gchar *aosstr;  /* AOS time string */
-    gchar *losstr;  /* LOS time string */
-    gchar *tcastr;  /* TCA time string */
+    gchar aosstr[100];  /* AOS time string */
+    gchar losstr[100];  /* LOS time string */
+    gchar tcastr[100];  /* TCA time string */
 
 
     /* FIXME: 
@@ -1037,9 +1019,9 @@ create_sat (gpointer key, gpointer value, gpointer data)
                 tmppass = (pass_t *) g_slist_nth_data (passes, i);
                 skypass->pass = copy_pass (tmppass);
 
-                aosstr = time_to_str (skypass->pass->aos);
-                losstr = time_to_str (skypass->pass->los);
-                tcastr = time_to_str (skypass->pass->tca);
+                julian_print_time (aosstr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->aos);
+                julian_print_time (losstr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->los);
+                julian_print_time (tcastr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->tca);
 
                 /* box tooltip will contain pass summary */
                 tooltip = g_strdup_printf("<big><b>%s</b>\n</big>\n"\
@@ -1051,10 +1033,6 @@ create_sat (gpointer key, gpointer value, gpointer data)
                                           aosstr, skypass->pass->aos_az,
                                           tcastr, skypass->pass->maxel_az, skypass->pass->max_el,
                                           losstr, skypass->pass->los_az);
-
-                g_free (aosstr);
-                g_free (losstr);
-                g_free (tcastr);
 
                 skypass->box = goo_canvas_rect_model_new (root, 10, 10, 20, 20, /* dummy coordinates */
                                                           "stroke-color-rgba", bcol,
@@ -1091,48 +1069,4 @@ create_sat (gpointer key, gpointer value, gpointer data)
                                             NULL);
         skg->satlab = g_slist_append (skg->satlab, lab);
     }
-}
-
-
-
-/** \brief Convert "jul_utc" time to formatted string
-  * \param julutc The time to convert
-  * \return A newly allocated string containing the formatted time (should be freed by caller)
-  *
-  * \bug This code is duplicated many places.
-  */
-static gchar *time_to_str (gdouble julutc)
-{
-    gchar   buff[TIME_FORMAT_MAX_LENGTH];
-    gchar  *fmtstr;
-    gchar  *timestr;
-    time_t  t;
-    guint   size;
-
-
-    /* convert julian date to struct time_t */
-    t = (julutc - 2440587.5)*86400.;
-
-    /* format the number */
-    fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-
-    /* format either local time or UTC depending on check box */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
-        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-    }
-    else {
-        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-    }
-
-    g_free (fmtstr);
-
-
-    if (size == 0)
-        /* size > MAX_LENGTH */
-        buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
-
-    timestr = g_strdup (buff);
-
-
-    return timestr;
 }

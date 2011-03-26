@@ -30,6 +30,7 @@
 
 gdouble  get_current_daynum  (void);
 //long     get_daynum_from_dmy (int d, int m, int y);
+int      julian_print_time(char *s, size_t max, const char *format, gdouble jultime);
 #endif
 
 

@@ -69,6 +69,7 @@
 #include "gtk-rot-ctrl.h"
 #include "gtk-sky-glance.h"
 #include "compat.h"
+#include "time-tools.h"
 
 //#ifdef G_OS_WIN32
 //#  include "libc_internal.h"
@@ -1345,27 +1346,14 @@ static void
 update_header (GtkSatModule *module)
 {
     gchar *fmtstr;
-    time_t t;
-    guint size;
     gchar buff[TIME_FORMAT_MAX_LENGTH+1];
     gchar *buff2;
 
 
-    t = (module->tmgCdnum - 2440587.5)*86400.;
-
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    
-    /* format either local time or UTC depending on check box */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-    else
-        size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
 
-    if (size < TIME_FORMAT_MAX_LENGTH)
-        buff[size]='\0';
-    else
-        buff[TIME_FORMAT_MAX_LENGTH]='\0';
-    
+    julian_print_time (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, module->tmgCdnum);
+
     if (module->qth->type==QTH_GPSD_TYPE) {
         buff2=g_strdup_printf("%s GPS %0.3f seconds old", buff,fabs(module->tmgCdnum-module->qth->gpsd_update)*(24*3600));
         gtk_label_set_text (GTK_LABEL (module->header), buff2);

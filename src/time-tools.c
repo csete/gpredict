@@ -34,6 +34,7 @@
 #endif
 #include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
+#include "sat-cfg.h"
 //#ifdef G_OS_WIN32
 //#  include "libc_internal.h"
 //#  include "libc_interface.h"
@@ -62,6 +63,23 @@ get_current_daynum ()
     return daynum;
 }
 
+int
+julian_print_time(char *s, size_t max, const char *format, gdouble jultime){
+    //    printf("Someone called me\n");
+    time_t tim;
+    size_t size=0;
+    tim = (jultime - 2440587.5)*86400.0;
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
+        size = strftime (s, max, format, localtime (&tim));
+    else
+        size = strftime (s, max, format, gmtime (&tim));
+
+    if (size<max) 
+        s[size] = '\0';
+    else
+        s[max-1] = '\0';
+    return size;
+}
 
 /* This function calculates the day number from m/d/y. */
 /* Legacy code no longer in use

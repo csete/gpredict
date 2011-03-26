@@ -34,6 +34,7 @@
 #include "locator.h"
 #include "sat-vis.h"
 #include "pass-to-txt.h"
+#include "time-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -191,7 +192,6 @@ gchar *
 pass_to_txt_tblheader (pass_t *pass, qth_t *qth, gint fields)
 {
     gchar    *fmtstr;
-    time_t    t;
     guint     size;
     gchar     tbuff[TIME_FORMAT_MAX_LENGTH];
     guint     i;
@@ -203,12 +203,7 @@ pass_to_txt_tblheader (pass_t *pass, qth_t *qth, gint fields)
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    t = (pass->aos - 2440587.5)*86400.;
-
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-    else
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
+    size = julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     g_free (fmtstr);
 
@@ -249,8 +244,6 @@ gchar *
 pass_to_txt_tblcontents (pass_t *pass, qth_t *qth, gint fields)
 {
     gchar    *fmtstr;
-    time_t    t;
-    guint     size;
     gchar     tbuff[TIME_FORMAT_MAX_LENGTH];
     guint     i,num;
     gchar    *line;
@@ -264,16 +257,7 @@ pass_to_txt_tblcontents (pass_t *pass, qth_t *qth, gint fields)
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    t = (pass->aos - 2440587.5)*86400.;
-
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-    else
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-
-    if (size == 0)
-        /* size > MAX_LENGTH */
-        tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+    julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     /* get number of rows */
     num = g_slist_length (pass->details);
@@ -284,15 +268,7 @@ pass_to_txt_tblcontents (pass_t *pass, qth_t *qth, gint fields)
         detail = PASS_DETAIL (g_slist_nth_data (pass->details, i));
 
         /* time */
-        t = (detail->time - 2440587.5)*86400.;
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-        else
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
- 
-        if (size == 0)
-            /* size > MAX_LENGTH */
-            tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+        julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, detail->time);
 
         line = g_strdup_printf (" %s", tbuff);
 
@@ -492,7 +468,6 @@ gchar *
 passes_to_txt_tblheader (GSList *passes, qth_t *qth, gint fields)
 {
     gchar    *fmtstr;
-    time_t    t;
     guint     size;
     gchar     tbuff[TIME_FORMAT_MAX_LENGTH];
     guint     i;
@@ -506,16 +481,7 @@ passes_to_txt_tblheader (GSList *passes, qth_t *qth, gint fields)
     /* first, get the length of the time field */
     pass = PASS (g_slist_nth_data (passes, 0));
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    t = (pass->aos - 2440587.5)*86400.;
-
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-    else
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-    
-    if (size == 0)
-        /* size > TIME_FORMAT_MAX_LENGTH */
-        tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+    size = julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     g_free (fmtstr);
 
@@ -556,8 +522,6 @@ gchar *
 passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
 {
     gchar    *fmtstr;
-    time_t    t;
-    guint     size;
     gchar     tbuff[TIME_FORMAT_MAX_LENGTH];
     guint     i,num;
     gchar    *line = NULL;
@@ -570,16 +534,7 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    t = (pass->aos - 2440587.5)*86400.;
-
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-    else
-        size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-
-    if (size == 0)
-        /* size > TIME_FORMAT_MAX_LENGTH */
-        tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+    julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     /* get number of rows */
     num = g_slist_length (passes);
@@ -589,46 +544,20 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
         pass = PASS (g_slist_nth_data (passes, i));
 
         /* AOS */
-        t = (pass->aos - 2440587.5)*86400.;
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-        else
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-
-        if (size == 0)
-            /* size > TIME_FORMAT_MAX_LENGTH */
-            tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
+        julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
         line = g_strdup_printf (" %s", tbuff);
 
         /* TCA */
-        t = (pass->tca - 2440587.5)*86400.;
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-        else
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
+        julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->tca);
 
-        if (size == 0)
-            /* size > TIME_FORMAT_MAX_LENGTH */
-            tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
-
-        
         buff = g_strdup (line);
         g_free (line);
         line = g_strdup_printf ("%s  %s", buff, tbuff);
         g_free (buff);
 
         /* LOS */
-        t = (pass->los - 2440587.5)*86400.;
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-        else
-            size = strftime (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-
-        if (size == 0)
-            /* size > TIME_FORMAT_MAX_LENGTH */
-            tbuff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
-
+        julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->los);
 
         buff = g_strdup (line);
         g_free (line);

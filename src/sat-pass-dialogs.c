@@ -862,27 +862,10 @@ static void time_cell_data_function (GtkTreeViewColumn *col,
     }
     else {
 
-        /* convert julian date to struct tm */
-        t = (number - 2440587.5)*86400.;
-
         /* format the number */
         fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
+        julian_print_time (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
-        /* format either local time or UTC depending on check box */
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-            size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime (&t));
-        else
-            size = strftime (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime (&t));
-        
-        if (size == 0)
-            /* size > MAX_LENGTH */
-            buff[TIME_FORMAT_MAX_LENGTH-1] = '\0';
-        /*
-        if (size < TIME_FORMAT_MAX_LENGTH)
-            buff[size]='\0';
-        else
-            buff[TIME_FORMAT_MAX_LENGTH]='\0';
-*/
         g_object_set (renderer,
                       "text", buff,
                       NULL);

@@ -325,7 +325,6 @@ static GooCanvasItemModel *
         create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y)
 {
     GooCanvasItemModel *item;
-    time_t             t;
     gchar              buff[7];
     GtkAnchorType      anchor;
     GooCanvasItemModel *root;
@@ -338,16 +337,7 @@ static GooCanvasItemModel *
                            MOD_CFG_POLAR_TRACK_COL,
                            SAT_CFG_INT_POLAR_TRACK_COL);
 
-    /* convert julian date to struct tm */
-    t = (time - 2440587.5)*86400.;
-
-    /* format either local time or UTC depending on check box */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
-        strftime (buff, 8, "%H:%M", localtime (&t));
-    else
-        strftime (buff, 8, "%H:%M", gmtime (&t));
-
-    buff[6]='\0';
+    julian_print_time (buff, 8, "%H:%M", time);
 
     if (x > pv->cx) {
         anchor = GTK_ANCHOR_EAST;
