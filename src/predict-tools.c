@@ -43,6 +43,8 @@
 #include "sat-log.h"
 
 
+static pass_t * get_pass_engine   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt, gdouble min_el);
+
 /** \brief SGP4SDP4 driver for doing AOS/LOS calculations.
  *  \param sat Pointer to the satellite data.
  *  \param qth Pointer to the QTH data.
@@ -420,6 +422,38 @@ get_next_passes (sat_t *sat, qth_t *qth, gdouble maxdt, guint num)
  *  \param maxdt The maximum number of days to look ahead (0 for no limit).
  *  \return Pointer to a newly allocated pass_t structure or NULL if
  *          there was an error.
+ *   This function assumes that you want a pass that achieves the 
+ *   minimum elevation of is configured for.
+ */
+
+pass_t *
+get_pass   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt) {
+    return get_pass_engine (sat_in, qth, start, maxdt, 1.0*sat_cfg_get_int (SAT_CFG_INT_PRED_MIN_EL));
+}
+
+/** \brief Predict first pass after a certain time ignoring the min elevation.
+ *  \param sat Pointer to the satellite data.
+ *  \param qth Pointer to the location data.
+ *  \param start Starting time.
+ *  \param maxdt The maximum number of days to look ahead (0 for no limit).
+ *  \return Pointer to a newly allocated pass_t structure or NULL if
+ *          there was an error.
+ *   This function assumes that you want a pass that achieves the 
+ *   minimum elevation of is configured for.
+ */
+pass_t *
+get_pass_no_min_el   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt) {
+    return get_pass_engine (sat_in, qth, start, maxdt, 0.0);
+}
+
+
+/** \brief Predict first pass after a certain time.
+ *  \param sat Pointer to the satellite data.
+ *  \param qth Pointer to the location data.
+ *  \param start Starting time.
+ *  \param maxdt The maximum number of days to look ahead (0 for no limit).
+ *  \return Pointer to a newly allocated pass_t structure or NULL if
+ *          there was an error.
  *
  * This function will find the first upcoming pass with AOS no earlier than
  * t = start and no later than t = (start+maxdt).
@@ -434,8 +468,9 @@ get_next_passes (sat_t *sat, qth_t *qth, gdouble maxdt, guint num)
  *       Therefore, the elements are prepended whereafter the GSList is
  *       reversed
  */
-pass_t *
-get_pass   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
+
+static pass_t *
+get_pass_engine   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt, gdouble min_el)
 {
     gdouble        aos = 0.0;    /* time of AOS */
     gdouble        tca = 0.0;    /* time of TCA */
@@ -601,7 +636,7 @@ get_pass   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
             pass->tca    = tca;
 
             /* check whether this pass is good */
-            if (max_el >= sat_cfg_get_int (SAT_CFG_INT_PRED_MIN_EL)) {
+            if (max_el >= min_el) {
                 done = TRUE;
             }
             else {
@@ -857,187 +892,6 @@ free_pass_details (GSList *details)
     g_slist_free (details);
     details = NULL;
 }
-
-
-
-/** \brief Predict first pass after a certain time disergarding any minimum El setting.
- *  \param sat Pointer to the satellite data.
- *  \param qth Pointer to the location data.
- *  \param start Starting time.
- *  \param maxdt The maximum number of days to look ahead (0 for no limit).
- *  \return Pointer to a newly allocated pass_t structure or NULL if
- *          there was an error.
- *
- * This function will find the first upcoming pass with AOS no earlier than
- * t = start and no later than t = (start+maxdt). Since the intented use of this
- * function is to get the details of the current pass of a satellite, this function
- * does not care of the minimum elevation setting in sat-cfg.
- *
- * \note For no time limit use maxdt = 0.0
- *
- * \note the data in sat will be corrupt (future) and must be refreshed
- *       by the caller, if the caller will need it later on (eg. if the caller
- *       is GtkSatList).
- *
- * \note Prepending to a singly linked list is much faster than appending.
- *       Therefore, the elements are prepended whereafter the GSList is
- *       reversed
- */
-pass_t *
-get_pass_no_min_el (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt)
-{
-    gdouble        aos = 0.0;    /* time of AOS */
-    gdouble        tca = 0.0;    /* time of TCA */
-    gdouble        los = 0.0;    /* time of LOS */
-    gdouble        dt = 0.0;     /* time diff */
-    gdouble        step = 0.0;   /* time step */
-    gdouble        t0 = start;
-    gdouble        t;            /* current time counter */
-    gdouble        tres = 0.0; /* required time resolution */
-    gdouble        max_el = 0.0; /* maximum elevation */
-    pass_t        *pass = NULL;
-    pass_detail_t *detail = NULL;
-    gboolean       done = FALSE;
-    sat_t         *sat,sat_working;
-
-    /* FIXME: watchdog */
-
-    /*copy sat_in to a working structure*/
-    sat = memcpy(&sat_working,sat_in,sizeof(sat_t));
-
-    /* get time resolution; sat-cfg stores it in seconds */
-    tres = sat_cfg_get_int (SAT_CFG_INT_PRED_RESOLUTION) / 86400.0;
-
-
-    aos = find_aos (sat, qth, t0, maxdt);
-
-
-    /* aos = 0.0 means no aos */
-    if (aos == 0.0) {
-        done = TRUE;
-    }
-
-    /* check whether we are within time limits;
-        maxdt = 0 mean no time limit.
-    */
-    else if ((maxdt > 0.0) && (aos > (start + maxdt))) {
-        done = TRUE;
-    }
-    else {
-        los = find_los (sat, qth, aos + 0.001, maxdt); // +1.5 min later
-        dt = los - aos;
-
-        /* get time step, which will give us the max number of entries */
-        step = dt / sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_ENTRIES);
-
-        /* but if this is smaller than the required resolution
-            we go with the resolution
-        */
-        if (step < tres)
-            step = tres;
-
-        /* create a pass_t entry; FIXME: g_try_new in 2.8 */
-        pass = g_new (pass_t, 1);
-            
-        pass->aos = aos;
-        pass->los = los;
-        pass->max_el = 0.0;
-        pass->aos_az = 0.0;
-        pass->los_az = 0.0;
-        pass->maxel_az = 0.0;
-        pass->vis[0] = '-';
-        pass->vis[1] = '-';
-        pass->vis[2] = '-';
-        pass->vis[3] = 0;
-        pass->satname = g_strdup (sat->nickname);
-        pass->details = NULL;
-        /*copy qth data into the pass for later comparisons*/
-        qth_small_save(qth,&(pass->qth_comp));
-
-        /* iterate over each time step */
-        for (t = pass->aos; t <= pass->los; t += step) {
-            
-            /* calculate satellite data */
-            predict_calc (sat, qth, t);
-
-            /* in the first iter we want to store
-                pass->aos_az
-            */
-            if (t == pass->aos) {
-                pass->aos_az = sat->az;
-                pass->orbit = sat->orbit;
-            }
-
-            /* append details to sat->details */
-            detail = g_new (pass_detail_t, 1);
-            detail->time = t;
-            detail->pos.x = sat->pos.x;
-            detail->pos.y = sat->pos.y;
-            detail->pos.z = sat->pos.z;
-            detail->pos.w = sat->pos.w;
-            detail->vel.x = sat->vel.x;
-            detail->vel.y = sat->vel.y;
-            detail->vel.z = sat->vel.z;
-            detail->vel.w = sat->vel.w;
-            detail->velo = sat->velo;
-            detail->az = sat->az;
-            detail->el = sat->el;
-            detail->range = sat->range;
-            detail->range_rate = sat->range_rate;
-            detail->lat = sat->ssplat;
-            detail->lon = sat->ssplon;
-            detail->alt = sat->alt;
-            detail->ma = sat->ma;
-            detail->phase = sat->phase;
-            detail->footprint = sat->footprint;
-            detail->orbit = sat->orbit;
-            detail->vis = get_sat_vis (sat, qth, t);
-
-            /* also store visibility "bit" */
-            switch (detail->vis) {
-            case SAT_VIS_VISIBLE:
-                pass->vis[0] = 'V';
-                break;
-            case SAT_VIS_DAYLIGHT:
-                pass->vis[1] = 'D';
-                break;
-            case SAT_VIS_ECLIPSED:
-                pass->vis[2] = 'E';
-                break;
-            default:
-                break;
-            }
-            
-            pass->details = g_slist_prepend (pass->details, detail);
-
-            /* store elevation if greater than the
-                previously stored one
-            */
-            if (sat->el > max_el) {
-                max_el = sat->el;
-                tca = t;
-                pass->maxel_az = sat->az;
-            }
-
-            /*     g_print ("TIME: %f\tAZ: %f\tEL: %f (MAX: %f)\n", */
-            /*           t, sat->az, sat->el, max_el); */
-        }
-
-        pass->details = g_slist_reverse (pass->details);
-
-        /* calculate satellite data */
-        predict_calc (sat, qth, pass->los);
-        /* store los_az, max_el and tca */
-        pass->los_az = sat->az;
-        pass->max_el = max_el;
-        pass->tca    = tca;
-
-    }
-    
-    return pass;
-}
-
-
 
 /** \brief Get current pass.
  *  \param sat Pointer to the satellite data.

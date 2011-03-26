@@ -1,3 +1,29 @@
+2011-03-24 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/predict-tools.c
+    Unify get_pass and get_pass_no_min_el to use common pass generator.
+
+
+2011-03-22 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-map.c
+    Remove decayed satellites from map view.
+
+2011-03-21 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-event-list-popup.c
+    * src/gtk-polar-view-popup.c
+    * src/gtk-sat-list-popup.c
+    * src/gtk-sat-list.c
+    * src/gtk-sat-map-ground-track.c
+    * src/gtk-sat-map-popup.c
+    * src/gtk-sat-module.c
+    * src/gtk-single-sat.c
+    * src/orbit-tools.c
+    * src/predict-tools.c
+    Include geo and decayed orbits in has_aos and make dynamic calls to
+	decayed instead of static orbit type check.
+
 2011-03-20 Charles Suprin <hamaa1vs at gmail.com>
 
     Merged gpsd_testing branch into trunk.
