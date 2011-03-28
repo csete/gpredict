@@ -64,7 +64,7 @@ get_current_daynum ()
 }
 
 int
-julian_print_time(char *s, size_t max, const char *format, gdouble jultime){
+daynum_to_str(char *s, size_t max, const char *format, gdouble jultime){
     //    printf("Someone called me\n");
     time_t tim;
     size_t size=0;

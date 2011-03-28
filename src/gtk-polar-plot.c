@@ -979,7 +979,7 @@ static GooCanvasItemModel *
 
     col = sat_cfg_get_int (SAT_CFG_INT_POLAR_TRACK_COL);
 
-    julian_print_time (buff, 8, "%H:%M", time);
+    daynum_to_str (buff, 8, "%H:%M", time);
 
     if (x > pv->cx) {
         anchor = GTK_ANCHOR_EAST;

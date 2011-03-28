@@ -769,7 +769,7 @@ sat_list_update_sats (GtkTreeModel *model,
                 fmtstr = g_strconcat (alstr, tfstr, NULL);
                 g_free (tfstr);
                 
-                julian_print_time (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
+                daynum_to_str (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
                 gtk_list_store_set (GTK_LIST_STORE (model), iter,
                                     SAT_LIST_COL_NEXT_EVENT, buff,
@@ -1110,7 +1110,7 @@ event_cell_data_function (GtkTreeViewColumn *col,
         /* format the number */
         fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 
-        julian_print_time (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
+        daynum_to_str (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
         g_object_set (renderer,
                       "text", buff,

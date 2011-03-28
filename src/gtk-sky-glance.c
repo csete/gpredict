@@ -402,7 +402,7 @@ create_canvas_model (GtkSkyGlance *skg)
                                                     NULL);
 
         /* hour tick label */
-        julian_print_time (buff, 3, "%H", th);
+        daynum_to_str (buff, 3, "%H", th);
 
         hrl = goo_canvas_text_model_new (root, buff, xh, skg->h + 12,
                                             -1, GTK_ANCHOR_N,
@@ -634,7 +634,7 @@ on_motion_notify (GooCanvasItem *item,
     /* get time corresponding to x */
     t = x2t (skg, event->x);
 
-    julian_print_time (buff, 6, "%H:%M", t);
+    daynum_to_str (buff, 6, "%H:%M", t);
 
     /* in order to avoid label clipping close to the edges of
         the chart, the label is placed left/right of the cursor
@@ -1019,9 +1019,9 @@ create_sat (gpointer key, gpointer value, gpointer data)
                 tmppass = (pass_t *) g_slist_nth_data (passes, i);
                 skypass->pass = copy_pass (tmppass);
 
-                julian_print_time (aosstr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->aos);
-                julian_print_time (losstr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->los);
-                julian_print_time (tcastr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->tca);
+                daynum_to_str (aosstr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->aos);
+                daynum_to_str (losstr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->los);
+                daynum_to_str (tcastr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->tca);
 
                 /* box tooltip will contain pass summary */
                 tooltip = g_strdup_printf("<big><b>%s</b>\n</big>\n"\

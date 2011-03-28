@@ -297,7 +297,7 @@ create_canvas_model (GtkAzelPlot *polv)
           /* get time */
           xy_to_graph (polv, polv->x0 + (i+1) * xstep, 0.0, &t, &az, &el);
 
-          julian_print_time (buff, 7, "%H:%M", t);
+          daynum_to_str (buff, 7, "%H:%M", t);
 
           polv->xlab[i] = goo_canvas_text_model_new (root, buff,
                                                                (gfloat) (polv->x0 + (i+1) * xstep),
@@ -704,7 +704,7 @@ on_motion_notify (GooCanvasItem *item,
 
                xy_to_graph (polv, x, y, &t, &az, &el);
 
-               julian_print_time(buff, 10, "%H:%M:%S", t);
+               daynum_to_str(buff, 10, "%H:%M:%S", t);
 
                /* cursor track */
                text = g_strdup_printf ("T: %s, AZ: %.0f\302\260, EL: %.0f\302\260", buff, az, el);

@@ -495,7 +495,7 @@ update_field            (GtkSingleSat *ssat, guint i)
 
             /* format the number */
             fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-            julian_print_time (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
+            daynum_to_str (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
             g_free (fmtstr);
 
@@ -516,7 +516,7 @@ update_field            (GtkSingleSat *ssat, guint i)
             /* format the number */
             fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 
-            julian_print_time(tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->aos);
+            daynum_to_str(tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->aos);
 
             g_free (fmtstr);
 
@@ -533,7 +533,7 @@ update_field            (GtkSingleSat *ssat, guint i)
 
             fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 
-            julian_print_time (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->los);
+            daynum_to_str (tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->los);
 
             g_free (fmtstr);
 

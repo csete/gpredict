@@ -786,7 +786,7 @@ static void epoch_cell_data_function (GtkTreeViewColumn *col,
 
         /* format the number */
         fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-        julian_print_time(buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
+        daynum_to_str(buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
         g_object_set (renderer,
                       "text", buff,

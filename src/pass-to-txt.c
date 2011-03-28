@@ -203,7 +203,7 @@ pass_to_txt_tblheader (pass_t *pass, qth_t *qth, gint fields)
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    size = julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
+    size = daynum_to_str (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     g_free (fmtstr);
 
@@ -257,7 +257,7 @@ pass_to_txt_tblcontents (pass_t *pass, qth_t *qth, gint fields)
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
+    daynum_to_str (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     /* get number of rows */
     num = g_slist_length (pass->details);
@@ -268,7 +268,7 @@ pass_to_txt_tblcontents (pass_t *pass, qth_t *qth, gint fields)
         detail = PASS_DETAIL (g_slist_nth_data (pass->details, i));
 
         /* time */
-        julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, detail->time);
+        daynum_to_str (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, detail->time);
 
         line = g_strdup_printf (" %s", tbuff);
 
@@ -481,7 +481,7 @@ passes_to_txt_tblheader (GSList *passes, qth_t *qth, gint fields)
     /* first, get the length of the time field */
     pass = PASS (g_slist_nth_data (passes, 0));
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    size = julian_print_time (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
+    size = daynum_to_str (tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     g_free (fmtstr);
 
@@ -534,7 +534,7 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
-    julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
+    daynum_to_str(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
     /* get number of rows */
     num = g_slist_length (passes);
@@ -544,12 +544,12 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
         pass = PASS (g_slist_nth_data (passes, i));
 
         /* AOS */
-        julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
+        daynum_to_str(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->aos);
 
         line = g_strdup_printf (" %s", tbuff);
 
         /* TCA */
-        julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->tca);
+        daynum_to_str(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->tca);
 
         buff = g_strdup (line);
         g_free (line);
@@ -557,7 +557,7 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
         g_free (buff);
 
         /* LOS */
-        julian_print_time(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->los);
+        daynum_to_str(tbuff, TIME_FORMAT_MAX_LENGTH, fmtstr, pass->los);
 
         buff = g_strdup (line);
         g_free (line);

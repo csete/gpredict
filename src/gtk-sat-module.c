@@ -1352,7 +1352,7 @@ update_header (GtkSatModule *module)
 
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
 
-    julian_print_time (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, module->tmgCdnum);
+    daynum_to_str (buff, TIME_FORMAT_MAX_LENGTH, fmtstr, module->tmgCdnum);
 
     if (module->qth->type==QTH_GPSD_TYPE) {
         buff2=g_strdup_printf("%s GPS %0.3f seconds old", buff,fabs(module->tmgCdnum-module->qth->gpsd_update)*(24*3600));
