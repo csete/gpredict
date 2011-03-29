@@ -615,7 +615,7 @@ static gint compare_func (GtkTreeModel *model,
     gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
 
-    ret = strverscmp (sat1, sat2);
+    ret = gpredict_strcmp (sat1, sat2);
 
     g_free (sat1);
     g_free (sat2);
