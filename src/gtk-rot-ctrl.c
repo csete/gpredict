@@ -1372,12 +1372,12 @@ static gboolean close_rotctld_socket (gint *sock) {
   
 #ifndef WIN32
   shutdown (*sock, SHUT_RDWR);
+  close (*sock);
 #else
   shutdown (*sock, SD_BOTH);
+  closesocket (*sock);
 #endif
   
-  close (*sock);
-
   *sock=0;
   
   return TRUE;
@@ -1414,7 +1414,7 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
     }
 
     /* try to read answer */
-    size = read (ctrl->sock, buffout, sizeout);
+    size = recv (ctrl->sock, buffout, sizeout, 0);
 
     if (size == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,

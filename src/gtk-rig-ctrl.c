@@ -2540,7 +2540,7 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
         return FALSE;
     }
     /* try to read answer */
-    size = read (sock, buffout, 127);
+    size = recv (sock, buffout, 127, 0);
     if (size == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rigctld port closed"),
@@ -2742,11 +2742,12 @@ static gboolean close_rigctld_socket (gint *sock) {
   
 #ifndef WIN32
   shutdown (*sock, SHUT_RDWR);
+  close (*sock);
 #else
   shutdown (*sock, SD_BOTH);
+  closesocket (*sock);
 #endif
   
-  close (*sock);
 
   *sock = 0;
 
