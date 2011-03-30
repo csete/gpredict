@@ -924,7 +924,7 @@ static gboolean sat_filter_func( GtkTreeModel *model,
     /*if it is already selected then remove it from the available list*/
     if (selected)
         return( FALSE);
-    if( strcasestr( satname, searchstring ) != (char *)NULL )
+    if( gpredict_strcasestr( satname, searchstring ) != (char *)NULL )
         return( TRUE );
     else
         return( FALSE );

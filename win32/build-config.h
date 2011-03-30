@@ -86,4 +86,9 @@
 #undef STDC_HEADERS
 
 /* Version number of package */
-#define VERSION "1.1"
+#define VERSION "1.3"
+
+#define GETTEXT_PACKAGE "gpredict"
+
+#define HAS_LIBGPS 0
+

@@ -345,7 +345,7 @@ static void show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
     sat = SAT(g_object_get_data (G_OBJECT (menuitem), "sat"));
     qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
 
-    /* check wheather sat actially has AOS */
+    /* check whether sat actually has AOS */
     if (has_aos (sat, qth)) {
 
         if (sat_cfg_get_bool(SAT_CFG_BOOL_PRED_USE_REAL_T0)) {

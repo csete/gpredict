@@ -187,6 +187,7 @@ create_qth_list ()
      column = gtk_tree_view_column_new_with_attributes (_("Name"), renderer,
                                                                     "text", QTH_LIST_COL_NAME,
                                                                     NULL);
+     gtk_tree_view_column_set_expand(column, TRUE);
      gtk_tree_view_insert_column (GTK_TREE_VIEW (qthlist), column, -1);
 
      /* location column */
@@ -194,6 +195,7 @@ create_qth_list ()
      column = gtk_tree_view_column_new_with_attributes (_("Location"), renderer,
                                                                     "text", QTH_LIST_COL_LOC,
                                                                     NULL);
+     gtk_tree_view_column_set_expand(column, TRUE);
      gtk_tree_view_insert_column (GTK_TREE_VIEW (qthlist), column, -1);
 
      /* lat column */
@@ -267,6 +269,9 @@ create_qth_list ()
 
      g_signal_connect (qthlist, "row-activated", G_CALLBACK (row_activated_cb), NULL);
 
+
+#  if HAS_LIBGPS
+     /* GPSD enabled*/
      /*server*/
      renderer = gtk_cell_renderer_text_new ();
      column = gtk_tree_view_column_new_with_attributes (_("GPSD\nServer"), renderer,
@@ -289,6 +294,7 @@ create_qth_list ()
                                                                     NULL);
      gtk_tree_view_insert_column (GTK_TREE_VIEW (qthlist), column, -1);
      gtk_tree_view_column_set_alignment (column, 0.5);
+#  endif
 
      return qthlist;
 }
@@ -827,7 +833,7 @@ float_cell_data_function (GtkTreeViewColumn *col,
 
 /* function below not used */
 #if 0
-/** \brief Callback function to check each QTH for beeing the default */
+/** \brief Callback function to check each QTH for being the default */
 static gboolean
 check_and_set_default_qth (GtkTreeModel *model,
                                  GtkTreePath  *path,

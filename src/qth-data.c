@@ -41,7 +41,7 @@
 #include "time-tools.h"
 #include "locator.h"
 #if HAS_LIBGPS
-#include <gps.h>
+#  include <gps.h>
 #endif
 
 void qth_validate(qth_t*qth);

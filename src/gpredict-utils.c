@@ -498,3 +498,18 @@ int gpredict_strcmp (const char *s1, const char *s2) {
     return strnatcasecmp(s1,s2);
 #endif 
 }
+
+char * gpredict_strcasestr(const char *s1, const char *s2)
+{
+	size_t s1_len = strlen(s1);
+	size_t s2_len = strlen(s2);
+	while (s1_len >= s2_len) {
+		if (strncasecmp(s1, s2, s2_len) == 0)
+		    return (char *) s1;
+
+		s1++;
+		s1_len--;
+	}
+
+	return NULL;
+}

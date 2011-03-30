@@ -5,8 +5,10 @@ include config.mk
 
 # directories
 topsrc = ..
-gcincdir = c:/mingw/include/goocanvas-0.10/goocanvas/
-gcsrcdir = $(topsrc)/goocanv8/src
+glibdir = c:/mingw/include/glib-2.0
+gcincdir = c:/mingw/include/goocanvas/
+gcsrcdir = $(topsrc)/goocanvas-0.15/src
+
 gpreddir = $(topsrc)/src
 sgpsdpdir = $(gpreddir)/sgpsdp
 
@@ -22,13 +24,12 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC \
 # libraries
 GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-win32-2.0)
 GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs glib-2.0 gthread-2.0)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) -lgoocanvas libsgpsdp.lib -lcurldll -lwinmm -lws2_32
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) -lgoocanvas libsgpsdp.lib -lcurl.dll -lwinmm -lws2_32
 LIBS = -lm
-
 
 # flags/defines
 CFLAGS = -DHAVE_CONFIG_H -DHAVE_LIBCURL -DPACKAGE_LOCALE_DIR=\"/\"  \
-	 -I. -I.. -I$(gpreddir) -I$(gcincdir) -I$(gcsrcdir) -I$(CROSSDIR)/include
+	 -I. -I.. -I$(glibdir) -I$(gpreddir) -I$(gcincdir) -I$(gcsrcdir) -I$(CROSSDIR)/include
 GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags gtk+-win32-2.0)
 
 # source paths
@@ -121,6 +122,7 @@ GPREDICTSRC = \
 	pass-popup-menu.c \
 	pass-to-txt.c \
 	predict-tools.c \
+	print-pass.c \
 	qth-data.c \
 	qth-editor.c \
 	radio-conf.c \
@@ -159,6 +161,7 @@ GPREDICTSRC = \
 	sat-pref-tle.c \
 	sat-vis.c \
 	save-pass.c \
+	strnatcmp.c \
 	time-tools.c \
 	tle-tools.c \
 	tle-update.c \

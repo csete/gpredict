@@ -333,10 +333,10 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      gtk_table_attach_defaults (GTK_TABLE (table), alt, 1, 2, 6, 7);
 
      if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
-          label = gtk_label_new (_("ft asl"));
+          label = gtk_label_new (_("ft above sea level"));
      }
      else {
-          label = gtk_label_new (_("m asl"));
+          label = gtk_label_new (_("m above sea level"));
      }
      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
      gtk_table_attach_defaults (GTK_TABLE (table), label, 2, 3, 6, 7);
@@ -360,6 +360,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
                            G_CALLBACK (select_location),
                            GUINT_TO_POINTER (SELECTION_MODE_WX));
      gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
+
+#  if HAS_LIBGPS
      /* GPSD enabled*/
      label = gtk_label_new (_("QTH Type"));
      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -398,7 +400,7 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
                                 _("Set the port for GPSD to use. Default for gpsd is 2947."),
                                 NULL);
      gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 10, 11);
-
+#  endif
 
      if (!new)
           update_widgets (treeview);
