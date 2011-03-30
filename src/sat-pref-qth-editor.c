@@ -80,9 +80,11 @@ static GtkWidget *lat,*lon,*alt;  /* LAT, LON and ALT */
 static GtkWidget *ns,*ew;
 
 static GtkWidget *qra;            /* QRA locator */
+#ifdef HAS_LIBGPS
 static GtkWidget *type;         /* GPSD type */
 static GtkWidget *server;         /* GPSD Server */
 static GtkWidget *port;           /* GPSD Port */
+#endif
 static gulong latsigid,lonsigid,nssigid,ewsigid,qrasigid;
 
 static GtkWidget *wx;             /* weather station */
@@ -361,7 +363,7 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
                            GUINT_TO_POINTER (SELECTION_MODE_WX));
      gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
 
-#  if HAS_LIBGPS
+#  ifdef HAS_LIBGPS
      /* GPSD enabled*/
      label = gtk_label_new (_("QTH Type"));
      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -468,11 +470,12 @@ update_widgets (GtkTreeView *treeview)
                gtk_entry_set_text (GTK_ENTRY (wx), qthwx);
                g_free (qthwx);
           }
+#ifdef HAS_LIBGPS
           if (qthgpsdserver) {
                gtk_entry_set_text (GTK_ENTRY (server), qthgpsdserver);
                g_free (qthgpsdserver);
           }
-
+#endif
           if (qthlat < 0.00)
                gtk_combo_box_set_active (GTK_COMBO_BOX (ns), 1);
           else
@@ -488,8 +491,10 @@ update_widgets (GtkTreeView *treeview)
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (lon), fabs (qthlon));
 
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (alt), qthalt);
+#ifdef HAS_LIBGPS
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (port), qthgpsdport);
           gtk_combo_box_set_active (GTK_COMBO_BOX (type), qthtype);
+#endif
 
           sat_log_log (SAT_LOG_LEVEL_DEBUG,
                           _("%s:%d: Loaded %s for editing:\n"\
@@ -560,7 +565,10 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
      qthloc  = gtk_entry_get_text (GTK_ENTRY (location));
      qthdesc = gtk_entry_get_text (GTK_ENTRY (desc));
      qthwx   = gtk_entry_get_text (GTK_ENTRY (wx));
+
+#ifdef HAS_LIBGPS
      qthgpsdserver   = gtk_entry_get_text (GTK_ENTRY (server));
+#endif
 
      qthlat  = gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat));
      if (gtk_combo_box_get_active (GTK_COMBO_BOX (ns)))
@@ -571,8 +579,11 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
           qthlon = -qthlon;
 
      qthalt = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (alt));     
+
+#ifdef HAS_LIBGPS
      qthgpsdport = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));     
      qthtype = gtk_combo_box_get_active ( GTK_COMBO_BOX (type));
+#endif
 
      /* get liststore */
      liststore = GTK_LIST_STORE (gtk_tree_view_get_model (treeview));

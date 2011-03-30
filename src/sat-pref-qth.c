@@ -270,7 +270,7 @@ create_qth_list ()
      g_signal_connect (qthlist, "row-activated", G_CALLBACK (row_activated_cb), NULL);
 
 
-#  if HAS_LIBGPS
+#  ifdef HAS_LIBGPS
      /* GPSD enabled*/
      /*server*/
      renderer = gtk_cell_renderer_text_new ();

@@ -40,7 +40,7 @@
 #include "orbit-tools.h"
 #include "time-tools.h"
 #include "locator.h"
-#if HAS_LIBGPS
+#ifdef HAS_LIBGPS
 #  include <gps.h>
 #endif
 
@@ -499,7 +499,7 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
         }
 
         if (qth->gps_data!=NULL) {
-#if HAS_LIBGPS
+#ifdef HAS_LIBGPS
             switch (GPSD_API_MAJOR_VERSION){
             case 4:
 #if GPSD_API_MAJOR_VERSION==4
@@ -621,7 +621,7 @@ gboolean qth_data_update_init(qth_t * qth) {
         /*nothing to do.  the data never updates*/
         break;
     case QTH_GPSD_TYPE:
-#if HAS_LIBGPS
+#ifdef HAS_LIBGPS
         switch (GPSD_API_MAJOR_VERSION) {
         case 4:
 #if GPSD_API_MAJOR_VERSION==4
@@ -696,7 +696,7 @@ void qth_data_update_stop (qth_t *qth) {
 
             /* close gpsd socket */
             if (qth->gps_data !=NULL){
-#if HAS_LIBGPS
+#ifdef HAS_LIBGPS
                 switch (GPSD_API_MAJOR_VERSION) {
                 case 4:
                     gps_close(qth->gps_data);

@@ -73,9 +73,11 @@ static GtkWidget *name;           /* QTH name */
 static GtkWidget *location;       /* QTH location */
 static GtkWidget *desc;           /* QTH description */
 static GtkWidget *lat,*lon,*alt;  /* LAT, LON and ALT */
+#ifdef HAS_LIBGPS
 static GtkWidget *type;           /* GPSD type */
 static GtkWidget *server;         /* GPSD Server */
 static GtkWidget *port;           /* GPSD Port */
+#endif
 static GtkWidget *ns,*ew;
 
 static GtkWidget *qra;            /* QRA locator */
@@ -376,7 +378,7 @@ static GtkWidget *
                       GUINT_TO_POINTER (SELECTION_MODE_WX));
     gtk_table_attach_defaults (GTK_TABLE (table), wxbut, 3, 4, 7, 8);
 
-#  if HAS_LIBGPS
+#  ifdef HAS_LIBGPS
      /* GPSD enabled*/
      label = gtk_label_new (_("QTH Type"));
      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -506,9 +508,11 @@ static gboolean
     const gchar      *qthdesc = NULL;
     const gchar      *qthwx = NULL;
     const gchar      *qthqra= NULL;
+#ifdef HAS_LIBGPS
     const gchar      *gpsdserver= NULL;
     guint       gpsdport;
     guint       gpsdenabled;
+#endif
     gdouble           qthlat;
     gdouble           qthlon;
     guint             qthalt;
@@ -533,9 +537,11 @@ static gboolean
     qthalt = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (alt));
     qthqra  = gtk_entry_get_text (GTK_ENTRY (qra));
     
+#ifdef HAS_LIBGPS
     gpsdenabled = gtk_combo_box_get_active ( GTK_COMBO_BOX (type) );
     gpsdserver = gtk_entry_get_text (GTK_ENTRY (server));
     gpsdport = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (port));
+#endif
 
     /* clear qth struct if not empty */
     /*      if (qth->name != NULL) */
@@ -571,14 +577,18 @@ static gboolean
     if (qthqra != NULL)
         qth->qra = g_strdup (qthqra);
 
+#ifdef HAS_LIBGPS
     if (gpsdserver != NULL)
         qth->gpsd_server = g_strdup (gpsdserver);
-
+#endif
     qth->lat = qthlat;
     qth->lon = qthlon;
     qth->alt = qthalt;
+
+#ifdef HAS_LIBGPS
     qth->type = gpsdenabled;
     qth->gpsd_port = gpsdport;
+#endif
 
     /* store values */
     confdir = get_user_conf_dir ();

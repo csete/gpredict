@@ -37,8 +37,6 @@ PKG_CHECK_MODULES(LIBGPS, [ libgps >= 2.90 ], [
         AC_DEFINE(HAS_LIBGPS, 1, [Define if libgps is available])
    ], [
         havelibgps=false;            
-        AC_DEFINE(HAS_LIBGPS, 0, [Define if libgps is unvailable])
-
 ])
 
 dnl Hamlib not needed if we go for the TCP based I/F
