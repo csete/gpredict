@@ -12,7 +12,8 @@ Contributors:
   see http://www.dachaplin.dsl.pipex.com/goocanvas/
 - Maidenhead locator functions are based on work done by Stephane Fillod,
   Nate Bargmann, Dave Hines, Mirko Caserta, and S. R. Sampson.
-- Paul Schulz, various patches.
+- Win32 networking in rig and rotor control fixed by Stephane Fillod,
+- Paul Schulz, VK5FPAW (various patches).
 - Martin Pool, for his natural string compare routines
   see http://sourcefrog.net/projects/natsort/
 

@@ -438,7 +438,7 @@ gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer dat
  *
  * If the time to update the TLE has come, it will either notify
  * the user, or fork a separate task which will update the TLE data
- * in the background (depending on user settings.
+ * in the background (depending on user settings).
  *
  * In case of notification, the task will be removed in order to
  * avoid a new notification the next time the taks would be run.
