@@ -8,6 +8,10 @@
     * src/gtk-polar-view.c
     Appied patch 3261586: Remove leading zero code from time formatting
     functions (thanks to Paul Schulz).
+    
+    * src/about.c
+    * AUTHORS
+    Trying to sync AUTHORS and about.c
 
 
 2011-03-28 Charles Suprin <hamaa1vs at gmail.com>

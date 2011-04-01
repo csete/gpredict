@@ -3,8 +3,8 @@ contributions from all over the world.
 
 Contributors:
 - William J Beksi, KC2EXL, Map view.
-- Charles Suprin, AA1VS, various multithread fixes.
-- Valentin Yakovenkov, Windows build.
+- Charles Suprin, AA1VS, GPS support and many other improvements.
+- Alan Moffet KE7IJZ and Valentin Yakovenkov, Windows build.
 - David VK5DG, transponder data files
 - Dr. T.S. Kelso, the author original SGP4/SDP4 algorithms in FORTRAN and Pascal. 
 - Neoklis Kyriazis, 5B4AZ, conversion of the algorithms to C.
@@ -16,6 +16,8 @@ Contributors:
 - Paul Schulz, VK5FPAW (various patches).
 - Martin Pool, for his natural string compare routines
   see http://sourcefrog.net/projects/natsort/
+- Patrick Strasser, OE6PSE (natural sorting)
+
 
 Imagery:
 Most of the maps originate from NASA Visible Earth, http://visibleearth.nasa.gov/

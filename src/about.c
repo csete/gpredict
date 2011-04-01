@@ -40,9 +40,9 @@ const gchar *authors[] = {
     "",
     "Contributors:",
     "David VK5DG (Transponder data files)",
-    "Charles Suprin, AA1VS (Various multithread fixes)",
+    "Charles Suprin, AA1VS (GPS support and many other improvements)",
+    "Alan Moffet, KE7IJZ (windows build),"
     "Valentin Yakovenkov (Windows build)",
-    "Bruce Cowan (Gio port of TLE updater)",
     "Damon Chaplin (GooCanvas)",
     "Dr. T.S. Kelso (SGP4/SDP4 algorithms)",
     "John A. Magliacane, KD2BD (prediction code)",
@@ -54,6 +54,7 @@ const gchar *authors[] = {
     "Mirko Caserta (locator.c)",
     "S. R. Sampson (locator.c)",
     "Paul Schulz, VK5FPAW (various patches)",
+    "Patrick Strasser, OE6PSE (natural sorting)",
     "Martin Pool (natural sorting)",
     "",
     "Imagery:",
@@ -64,7 +65,7 @@ const gchar *authors[] = {
 
 
 const gchar license[] = N_("Copyright (C) 2001-2011 Alexandru Csete OZ9AEC and contributors.\n"\
-                           "Contact: oz9aec at googlemail.com\n\n"\
+                           "Contact: oz9aec at gmail.com\n\n"\
                            "Gpredict is free software; you can redistribute it and "\
                            "mofdify it under the terms of the GNU General Public License "\
                            "as published by the Free Software Foundation; either version 2 "\
