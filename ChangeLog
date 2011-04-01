@@ -1,3 +1,10 @@
+2011-04-01 Charles Suprin <hamaa1vs at gmail.com>
+
+    * win32/gpredict.rc
+    * win32/gpredict.exe.manifest
+    * win32/build-config.h
+    Apply Alan Moffet's changes for win32 build.
+
 2011-04-01 Alexandru Csete <oz9aec at gmail.com>
 
     * src/pass-to-txt.c

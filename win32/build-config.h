@@ -90,5 +90,5 @@
 
 #define GETTEXT_PACKAGE "gpredict"
 
-#define HAS_LIBGPS 0
+#undef HAS_LIBGPS
 
