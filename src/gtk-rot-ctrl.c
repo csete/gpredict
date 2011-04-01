@@ -1225,7 +1225,6 @@ static void update_count_down (GtkRotCtrl *ctrl, gdouble t)
     gdouble  delta;
     gchar   *buff;
     guint    h,m,s;
-    gchar   *ch,*cm,*cs;
 
     
     /* select AOS or LOS time depending on target elevation */
@@ -1243,39 +1242,18 @@ static void update_count_down (GtkRotCtrl *ctrl, gdouble t)
     h = (guint) floor (s/3600);
     s -= 3600*h;
 
-    /* leading zero */
-    if ((h > 0) && (h < 10))
-        ch = g_strdup ("0");
-    else
-        ch = g_strdup ("");
-
     /* extract minutes */
     m = (guint) floor (s/60);
     s -= 60*m;
 
-    /* leading zero */
-    if (m < 10)
-        cm = g_strdup ("0");
-    else
-        cm = g_strdup ("");
-
-    /* leading zero */
-    if (s < 10)
-        cs = g_strdup (":0");
-    else
-        cs = g_strdup (":");
-
     if (h > 0) 
-        buff = g_strdup_printf ("%s%d:%s%d%s%d", ch, h, cm, m, cs, s);
+        buff = g_strdup_printf ("%02d:%02d:%02d", h, m, s);
     else
-        buff = g_strdup_printf ("%s%d%s%d", cm, m, cs, s);
+        buff = g_strdup_printf ("%02d:%02d",  m, s);
 
     gtk_label_set_text (GTK_LABEL (ctrl->SatCnt), buff);
 
     g_free (buff);
-    g_free (ch);
-    g_free (cm);
-    g_free (cs);
 
 }
 

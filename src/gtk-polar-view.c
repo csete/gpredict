@@ -677,7 +677,6 @@ gtk_polar_view_update          (GtkWidget  *widget)
     gdouble       number, now;
     gchar        *buff;
     guint         h,m,s;
-    gchar        *ch,*cm,*cs;
     sat_t        *sat = NULL;
     gint         *catnr;
 
@@ -721,34 +720,16 @@ gtk_polar_view_update          (GtkWidget  *widget)
                     h = (guint) floor (s/3600);
                     s -= 3600*h;
 
-                    /* leading zero */
-                    if ((h > 0) && (h < 10))
-                        ch = g_strdup ("0");
-                    else
-                        ch = g_strdup ("");
-
                     /* extract minutes */
                     m = (guint) floor (s/60);
                     s -= 60*m;
                     
-                    /* leading zero */
-                    if (m < 10)
-                        cm = g_strdup ("0");
-                    else
-                        cm = g_strdup ("");
-                    
-                    /* leading zero */
-                    if (s < 10)
-                        cs = g_strdup (":0");
-                    else
-                        cs = g_strdup (":");
-                    
                     if (h > 0) 
-                        buff = g_strdup_printf (_("Next: %s\nin %s%d:%s%d%s%d"),
-                                                sat->nickname, ch, h, cm, m, cs, s);
+                        buff = g_strdup_printf (_("Next: %s\nin %02d:%02d:%02d"),
+                                                sat->nickname, h, m, s);
                     else
-                        buff = g_strdup_printf (_("Next: %s\nin %s%d%s%d"),
-                                                sat->nickname, cm, m, cs, s);
+                        buff = g_strdup_printf (_("Next: %s\nin %02d:%02d"),
+                                                sat->nickname, m, s);
                     
                     
                     g_object_set (polv->next,
@@ -756,9 +737,6 @@ gtk_polar_view_update          (GtkWidget  *widget)
                                   NULL);
 
                     g_free (buff);
-                    g_free (ch);
-                    g_free (cm);
-                    g_free (cs);
                 }
                 else {
                     sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -1643,7 +1621,6 @@ gtk_polar_view_reload_sats (GtkWidget *polv, GHashTable *sats)
 static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat)
 {
     guint    h,m,s;
-    gchar   *ch,*cm,*cs;
     gdouble  number, now;
     gchar   *text = NULL;
 
@@ -1658,37 +1635,16 @@ static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat)
     h = (guint) floor (s/3600);
     s -= 3600*h;
 
-    /* leading zero */
-    if ((h > 0) && (h < 10))
-        ch = g_strdup ("0");
-    else
-        ch = g_strdup ("");
-
     /* extract minutes */
     m = (guint) floor (s/60);
     s -= 60*m;
 
-    /* leading zero */
-    if (m < 10)
-        cm = g_strdup ("0");
-    else
-        cm = g_strdup ("");
-
-    /* leading zero */
-    if (s < 10)
-        cs = g_strdup (":0");
-    else
-        cs = g_strdup (":");
-
     if (h > 0) {        
-        text = g_strdup_printf (_("LOS in %s%d:%s%d%s%d"), ch, h, cm, m, cs, s);
+        text = g_strdup_printf (_("LOS in %02d:%02d:%02d"), h, m, s);
     }
     else {
-        text = g_strdup_printf (_("LOS in %s%d%s%d"), cm, m, cs, s);
+        text = g_strdup_printf (_("LOS in %02d:%02d"), m, s);
     }
-    g_free (ch);
-    g_free (cm);
-    g_free (cs);
 
     return text;
 }

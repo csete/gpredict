@@ -1226,7 +1226,6 @@ static void duration_cell_data_function (GtkTreeViewColumn *col,
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
     guint      h,m,s;
-    gchar     *ch,*cm,*cs;
 
 
 
@@ -1246,39 +1245,17 @@ static void duration_cell_data_function (GtkTreeViewColumn *col,
         h = (guint) floor (s/3600);
         s -= 3600*h;
 
-        /* leading zero */
-        if (h < 10)
-            ch = g_strdup ("0");
-        else
-            ch = g_strdup ("");
-
         /* extract minutes */
         m = (guint) floor (s/60);
         s -= 60*m;
 
-        /* leading zero */
-        if (m < 10)
-            cm = g_strdup (":0");
-        else
-            cm = g_strdup (":");
-
-        /* leading zero */
-        if (s < 10)
-            cs = g_strdup (":0");
-        else
-            cs = g_strdup (":");
-
-
-        buff = g_strdup_printf ("%s%d%s%d%s%d", ch, h, cm, m, cs, s);
+        buff = g_strdup_printf ("%02d:%02d:%02d", h, m, s);
 
         g_object_set (renderer,
                       "text", buff,
                       NULL);
 
         g_free (buff);
-        g_free (ch);
-        g_free (cm);
-        g_free (cs);
     }
 
 }

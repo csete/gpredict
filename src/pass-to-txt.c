@@ -567,7 +567,6 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
         /* Duration */
         if (fields & (1 << MULTI_PASS_COL_DURATION)) {
             guint      h,m,s;
-            gchar     *ch,*cm,*cs;
 
             /* convert julian date to seconds */
             s = (guint) ((pass->los - pass->aos) * 86400);
@@ -576,35 +575,14 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
             h = (guint) floor (s/3600);
             s -= 3600*h;
 
-            /* leading zero */
-            if (h < 10)
-                ch = g_strdup ("0");
-            else
-                ch = g_strdup ("");
-
             /* extract minutes */
             m = (guint) floor (s/60);
             s -= 60*m;
 
-            /* leading zero */
-            if (m < 10)
-                cm = g_strdup (":0");
-            else
-                cm = g_strdup (":");
-
-            /* leading zero */
-            if (s < 10)
-                cs = g_strdup (":0");
-            else
-                cs = g_strdup (":");
-
-            buff = g_strdup_printf ("%s  %s%d%s%d%s%d", line, ch, h, cm, m, cs, s);
+            buff = g_strdup_printf ("%s  %02d:%02d:%02d", line, h, m, s);
             g_free (line);
             line = g_strdup (buff);
             g_free (buff);
-            g_free (ch);
-            g_free (cm);
-            g_free (cs);
         }
 
         /* Max El */
