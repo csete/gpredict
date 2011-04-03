@@ -59,9 +59,10 @@ typedef struct _GtkRotKnobClass   GtkRotKnobClass;
 
 struct _gtk_rot_knob
 {
-     GtkVBox vbox;
+    GtkVBox vbox;
     
     GtkWidget *digits[7];   /*!< Labels for the digits */
+    GtkWidget *evtbox[7];   /*!< Event boxes to catch mouse events over the digits */
     GtkWidget *buttons[10]; /*!< Buttons; 0..4 up; 5..9 down */
      
     gdouble min;

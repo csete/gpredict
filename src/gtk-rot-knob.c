@@ -52,12 +52,14 @@ static void gtk_rot_knob_destroy    (GtkObject       *object);
 static void gtk_rot_knob_update     (GtkRotKnob *knob);
 
 static void button_clicked_cb (GtkWidget *button, gpointer data);
-
+static gboolean on_button_press  (GtkWidget *digit, GdkEventButton *event, gpointer data);
+static gboolean on_button_scroll (GtkWidget *digit, GdkEventScroll *event, gpointer data);
 
 static GtkHBoxClass *parent_class = NULL;
 
 
-        
+/** \brief Convert digit index (in the digit array) to amount of change. */
+const gdouble INDEX_TO_DELTA[] = {0.0, 100.0, 10.0, 1.0, 0.0, 0.1, 0.01};
         
 
 GType
@@ -145,10 +147,10 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
     GTK_ROT_KNOB(widget)->min = min;
     GTK_ROT_KNOB(widget)->max = max;
     GTK_ROT_KNOB(widget)->value = val;
-    
+
     /* create table */
     table = gtk_table_new (3, 8, FALSE);
-    
+
     /* create buttons */
     /* +100 deg */
     GTK_ROT_KNOB(widget)->buttons[0] = gtk_button_new ();
@@ -282,9 +284,23 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
 
     /* create labels */
     for (i = 0; i < 7; i++) {
+        /* labels showing the digits */
         GTK_ROT_KNOB(widget)->digits[i] = gtk_label_new (NULL);
-        gtk_table_attach (GTK_TABLE (table), GTK_ROT_KNOB(widget)->digits[i],
+        gtk_widget_set_tooltip_text(GTK_ROT_KNOB(widget)->digits[i],
+                                    _("Use mouse buttons and wheel to change value"));
+
+        /* Event boxes for catching mouse evetns */
+        GTK_ROT_KNOB(widget)->evtbox[i] = gtk_event_box_new ();
+        g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->evtbox[i]), "index", GUINT_TO_POINTER(i));
+        gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->evtbox[i]), GTK_ROT_KNOB(widget)->digits[i]);
+        gtk_table_attach (GTK_TABLE (table), GTK_ROT_KNOB(widget)->evtbox[i],
                           i, i+1, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
+                          
+        g_signal_connect (GTK_ROT_KNOB(widget)->evtbox[i], "button_press_event",
+                         (GtkSignalFunc) on_button_press, widget);
+        g_signal_connect (GTK_ROT_KNOB(widget)->evtbox[i], "scroll_event",
+                         (GtkSignalFunc) on_button_scroll, widget);
+
     }
     
     /* degree sign */
@@ -296,10 +312,9 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
     gtk_rot_knob_update (GTK_ROT_KNOB(widget));
     
     gtk_container_add (GTK_CONTAINER (widget), table);
-     gtk_widget_show_all (widget);
+    gtk_widget_show_all (widget);
 
-    
-     return widget;
+    return widget;
 }
 
 
@@ -473,4 +488,131 @@ button_clicked_cb (GtkWidget *button, gpointer data)
     /*g_print ("VAL: %.2f\n", knob->value);*/
 }
 
+
+/** \brief Manage button press events
+ *  \param digit Pointer to the event box that received the event
+ *  \param event Pointer to the GdkEventButton that contains details for te event
+ *  \param data Pointer to the GtkRotKnob widget (we need it to update the value)
+ *  \return Always TRUE to prevent further propagation of the event
+ *
+ * This function is called when a mouse button is pressed on a digit. This is used
+ * to increment or decrement the value:
+ * - Left button: up
+ * - Right button: down
+ * - Middle button: set digit to 0 (TBC)
+ * 
+ * Wheel up/down are managed in a separate callback since these are treated as scroll events
+ * rather than button press events (they used to be button press events though)
+ * 
+ * The digit labels are stored in an array that also contains the sign and the
+ * decimal separator. To get the amount of change corresponding to the clicked label we
+ * can use the INDEX_TO_DELTA[] array. The index to this table is attached to the evtbox.
+ * Whether the delta is positive or negative depends on which mouse button triggered the event.
+ */
+static gboolean on_button_press (GtkWidget *evtbox,
+                                 GdkEventButton *event,
+                                 gpointer data)
+{
+    GtkRotKnob *knob = GTK_ROT_KNOB(data);
+    guint idx = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT (evtbox), "index"));
+    gdouble delta = INDEX_TO_DELTA[idx];
+    gdouble value;
+
+    if (delta < 0.01) {
+        /* no change, user clicked on sign or decimal separator */
+        return TRUE;
+    }
+    
+    if (event->type != GDK_BUTTON_PRESS) {
+        /* wrong event (not possible?) */
+        return TRUE;
+    }
+
+
+    switch (event->button) {
+
+        /* left button */
+    case 1:
+        value = gtk_rot_knob_get_value(knob) + delta;
+        gtk_rot_knob_set_value(knob, value);
+        break;
+
+        /* middle button */
+    case 2:
+        break;
+
+        /* right button */
+    case 3:
+        value = gtk_rot_knob_get_value(knob) - delta;
+        gtk_rot_knob_set_value(knob, value);
+        break;
+
+    default:
+        break;
+    }
+
+
+    return TRUE;
+}
+
+/** \brief Manage scroll wheel events
+ *  \param digit Pointer to the event box that received the event
+ *  \param event Pointer to the GdkEventScroll that contains details for te event
+ *  \param data Pointer to the GtkRotKnob widget (we need it to update the value)
+ *  \return Always TRUE to prevent further propagation of the event
+ *
+ * This function is called when the mouse wheel is moved up or down. This is used to increment
+ * or decrement the value.
+ * 
+ * Button presses are managed in a separate callback since these are treated as different
+ * events.
+ * 
+ * The digit labels are stored in an array that also contains the sign and the
+ * decimal separator. To get the amount of change corresponding to the clicked label we
+ * can use the INDEX_TO_DELTA[] array. The index is attached to the evtbox.
+ * Whether the delta is positive or negative depends on the scroll direction.
+ */
+static gboolean on_button_scroll (GtkWidget *evtbox,
+                                  GdkEventScroll *event,
+                                  gpointer data)
+{
+    GtkRotKnob *knob = GTK_ROT_KNOB(data);
+    guint idx = GPOINTER_TO_UINT(g_object_get_data (G_OBJECT (evtbox), "index"));
+    gdouble delta = INDEX_TO_DELTA[idx];
+    gdouble value;
+
+    if (delta < 0.01) {
+        /* no change, user clicked on sign or decimal separator */
+        return TRUE;
+    }
+    
+    if (event->type != GDK_SCROLL) {
+        /* wrong event (not possible?) */
+        return TRUE;
+    }
+
+
+    switch (event->direction) {
+
+        /* decrease value by delta */
+    case GDK_SCROLL_DOWN:
+    case GDK_SCROLL_LEFT:
+        value = gtk_rot_knob_get_value(knob) - delta;
+        gtk_rot_knob_set_value(knob, value);
+        break;
+
+        /* increase value by delta */
+    case GDK_SCROLL_UP:
+    case GDK_SCROLL_RIGHT:
+        value = gtk_rot_knob_get_value(knob) + delta;
+        gtk_rot_knob_set_value(knob, value);
+        break;
+
+    default:
+        break;
+    }
+
+
+    return TRUE;
+}
 

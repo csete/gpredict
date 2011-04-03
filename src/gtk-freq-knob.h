@@ -62,6 +62,7 @@ struct _gtk_freq_knob
      GtkVBox vbox;
     
     GtkWidget *digits[10];   /*!< Labels for the digits */
+    GtkWidget *evtbox[10];   /*!< Event boxes to catch mouse events over the digits */
     GtkWidget *buttons[20];  /*!< Buttons; 0..9 up; 10..19 down */
      
     gdouble min;

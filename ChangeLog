@@ -1,9 +1,20 @@
+2011-04-03 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-rot-knob.c
+    * src/gtk-rot-knob.h
+    * src/gtk-freq-knob.c
+    * src/gtk-freq-knob.h
+    Allow changing radio frequency and rotator position using mouse buttons
+    and wheel (feature req 2130926). Up/down arrows are kept for now.
+
+
 2011-04-01 Charles Suprin <hamaa1vs at gmail.com>
 
     * win32/gpredict.rc
     * win32/gpredict.exe.manifest
     * win32/build-config.h
     Apply Alan Moffet's changes for win32 build.
+
 
 2011-04-01 Alexandru Csete <oz9aec at gmail.com>
 
@@ -29,6 +40,7 @@
 
     * src/gtk-sat-selector.c
     Remove strverscmp reference.
+
 
 2011-03-27 Charles Suprin <hamaa1vs at gmail.com>
 
