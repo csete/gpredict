@@ -6,6 +6,9 @@
     * src/gtk-freq-knob.h
     Allow changing radio frequency and rotator position using mouse buttons
     and wheel (feature req 2130926). Up/down arrows are kept for now.
+    
+    * doc/um/gpredict-user-manual.odt
+    Updated with info about using the mouse wheel over the digits.
 
 
 2011-04-01 Charles Suprin <hamaa1vs at gmail.com>
