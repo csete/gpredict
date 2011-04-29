@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Gredict
+Name=Gpredict
 Comment=Satellite tracker
 Exec=gpredict
 Icon=gpredict-icon

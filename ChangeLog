@@ -1,3 +1,9 @@
+2011-04-29 Alexandru Csete <oz9aec at gmail.com>
+
+    * data/desktop/gpredict.desktop.in
+    Fixed bug 3294829: Program name wrong in desktop files.
+    
+
 2011-04-03 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-rot-knob.c
