@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -843,4 +843,40 @@ void
 gtk_event_list_reload_sats (GtkWidget *evlist, GHashTable *sats)
 {
     GTK_EVENT_LIST (evlist)->satellites = sats;
+}
+
+
+/** \brief Select satellite. */
+void gtk_event_list_select_sat  (GtkWidget *widget, gint catnum)
+{
+    GtkEventList *list;
+    GtkTreeModel *model;
+    GtkTreeSelection *selection;
+    GtkTreeIter iter;
+    gint i,n;
+    gint sat;
+    
+    
+    list = GTK_EVENT_LIST(widget);
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(list->treeview));
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(list->treeview));
+
+    /* iterate over the satellite list until a amtch is found */
+    n = g_hash_table_size(list->satellites);
+    for (i = 0; i < n; i++) {
+        
+        if (gtk_tree_model_iter_nth_child(model, &iter, NULL, i)) {
+            gtk_tree_model_get(model, &iter, EVENT_LIST_COL_CATNUM, &sat, -1);
+            if (sat == catnum) {
+                gtk_tree_selection_select_iter(selection, &iter);
+                i = n;
+            }
+        }
+        else {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: GtkEventList has not child with index %d"),
+                        __FUNCTION__, i);
+        }
+    }
+
 }

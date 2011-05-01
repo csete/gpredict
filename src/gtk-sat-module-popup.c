@@ -53,6 +53,7 @@ static void config_cb        (GtkWidget *menuitem, gpointer data);
 static void clone_cb         (GtkWidget *menuitem, gpointer data);
 static void docking_state_cb (GtkWidget *menuitem, gpointer data);
 static void screen_state_cb  (GtkWidget *menuitem, gpointer data);
+static void sat_selected_cb  (GtkWidget *menuitem, gpointer data);
 static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data);
 static void tmgr_cb          (GtkWidget *menuitem, gpointer data);
 static void rigctrl_cb       (GtkWidget *menuitem, gpointer data);
@@ -78,10 +79,16 @@ static gint window_delete    (GtkWidget *widget, GdkEvent *event, gpointer data)
  */
 void gtk_sat_module_popup (GtkSatModule *module)
 {
-    GtkWidget        *menu;
-    GtkWidget        *menuitem;
-    GtkWidget        *image;
-    gchar            *buff;
+    GtkWidget *menu;        /* The pop-up menu */
+    GtkWidget *satsubmenu;  /* Satellite selection submenu */
+    GtkWidget *menuitem;    /* Widget used to create the menu items */
+    GtkWidget *image;       /* Widget used to create menu item icons */
+    
+    /* misc variables */
+    GList  *sats;
+    sat_t  *sat;
+    gchar  *buff;
+    guint   i,n;
 
 
 
@@ -137,6 +144,27 @@ void gtk_sat_module_popup (GtkSatModule *module)
         gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
         g_signal_connect (menuitem, "activate",
                           G_CALLBACK (screen_state_cb), module);
+    }
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    /* select satellite submenu */
+    menuitem = gtk_menu_item_new_with_label(_("Select satellite"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    
+    satsubmenu = gtk_menu_new();
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), satsubmenu);
+    
+    sats = g_hash_table_get_values(module->satellites);  // FIXME: sort list
+    n = g_list_length(sats);
+    for (i = 0; i < n; i++) {
+        sat = SAT(g_list_nth_data(sats, i));
+        menuitem = gtk_menu_item_new_with_label(sat->nickname);
+        g_object_set_data(G_OBJECT(menuitem), "catnum", GINT_TO_POINTER(sat->tle.catnr));
+        g_signal_connect(menuitem, "activate", G_CALLBACK (sat_selected_cb), module);
+        gtk_menu_shell_append(GTK_MENU_SHELL(satsubmenu), menuitem);
     }
 
     /* separator */
@@ -747,6 +775,23 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
 
 }
 
+/** \brief New satellite selected.
+ *  \param data Pointer to the GtkSatModule widget
+ * 
+ * This menu item is activated when a new satellite is selected in the 
+ * "Select satellite" submenu of the module pop-up. This will trigger a call
+ * to the select_sat() fuinction of the module, which in turn will call the
+ * select_sat() function of each child view.
+ * 
+ * The catalog number of the selected satellite is attached to the menu item
+ */
+static void sat_selected_cb  (GtkWidget *menuitem, gpointer data)
+{
+    gint catnum = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(menuitem), "catnum"));
+    GtkSatModule *module = GTK_SAT_MODULE(data);
+    
+    gtk_sat_module_select_sat(module, catnum);
+}
 
 /** \brief Invoke Sky-at-glance.
  *

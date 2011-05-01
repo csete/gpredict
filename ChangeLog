@@ -1,3 +1,24 @@
+2011-05-01 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/gtk-sat-module-popup.c
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module.h
+    * src/gtk-sat-list.c
+    * src/gtk-sat-list.h
+    * src/gtk-single-sat.c
+    * src/gtk-single-sat.h
+    * src/gtk-event-list.c
+    * src/gtk-event-list.h
+    * src/gtk-sat-map.c
+    * src/gtk-sat-map.h
+    * src/gtk-polar-view.c
+    * src/gtk-polar-view.h
+    New module menu item to allow selection of a satellite in all views at the
+    same time. Related to feature request 3179102: Right click on satellite to
+    add the track (probably the closest we can get to "global selection" without
+    breaking the design).
+
+
 2011-04-29 Alexandru Csete <oz9aec at gmail.com>
 
     * data/desktop/gpredict.desktop.in

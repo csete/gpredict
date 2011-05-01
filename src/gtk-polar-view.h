@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -154,7 +154,7 @@ void azel_to_xy     (GtkPolarView *p, gdouble az, gdouble el, gfloat *x, gfloat 
 void xy_to_azel     (GtkPolarView *p, gfloat x, gfloat y, gfloat *az, gfloat *el);
 
 void gtk_polar_view_reload_sats (GtkWidget *polv, GHashTable *sats);
-
+void gtk_polar_view_select_sat  (GtkWidget *widget, gint catnum);
 
 #ifdef __cplusplus
 }

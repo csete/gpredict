@@ -325,8 +325,45 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 }
 
 
+/** \brief Select new satellite */
+void gtk_single_sat_select_sat (GtkWidget *single_sat, gint catnum)
+{
+    GtkSingleSat *ssat = GTK_SINGLE_SAT(single_sat);
+    sat_t *sat = NULL;
+    gchar *title;
+    gboolean foundsat = FALSE;
+    gint i,n;
+    
 
+    /* find satellite with catnum */
+    n = g_slist_length (ssat->sats);
+    for (i = 0; i < n; i++) {
 
+        sat = SAT(g_slist_nth_data(ssat->sats, i));
+
+        if (sat->tle.catnr == catnum) {
+
+            /* found satellite */
+            ssat->selected = i;
+            foundsat = TRUE;
+
+            /* exit loop */
+            i = n;
+        }
+    }
+
+    if (!foundsat) {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not find satellite with catalog number %d"),
+                    __FUNCTION__, catnum);
+        return;
+    }
+
+    title = g_strdup_printf ("<b>%s</b>", sat->nickname);
+    gtk_label_set_markup (GTK_LABEL (ssat->header), title);
+    g_free (title);
+
+}
 
 
 

@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
   Copyright (C)  2011       Charles Suprin,  AA1VS.
 
@@ -1065,6 +1065,57 @@ clear_selection (gpointer key, gpointer val, gpointer data)
     }
 }
 
+
+/** \brief select a satellite */
+void gtk_sat_map_select_sat  (GtkWidget *satmap, gint catnum)
+{
+    GtkSatMap *smap = GTK_SAT_MAP(satmap);
+    gint *catpoint = NULL;
+    sat_map_obj_t *obj = NULL;
+    guint32  col;
+
+
+    catpoint = g_try_new0 (gint, 1);
+    *catpoint = catnum;
+
+    obj = SAT_MAP_OBJ (g_hash_table_lookup (smap->obj, catpoint));
+    if (obj == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_BUG,
+                     _("%s: Can not find clicked object (%d) in hash table"),
+                     __FUNCTION__, catnum);
+    }
+    else {
+        obj->selected = TRUE;
+
+        col = mod_cfg_get_int (smap->cfgdata,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_SEL_COL,
+                               SAT_CFG_INT_MAP_SAT_SEL_COL);
+
+        g_object_set (obj->marker,
+                      "fill-color-rgba", col,
+                      "stroke-color-rgba", col,
+                       NULL);
+        g_object_set (obj->label,
+                      "fill-color-rgba", col,
+                      "stroke-color-rgba", col,
+                      NULL);
+        g_object_set (obj->range1,
+                      "stroke-color-rgba", col,
+                      NULL);
+
+        if (obj->oldrcnum == 2)
+            g_object_set (obj->range2,
+                          "stroke-color-rgba", col,
+                          NULL);
+
+        /* clear other selections */
+        g_hash_table_foreach (smap->obj, clear_selection, catpoint);
+    }
+
+    g_free (catpoint);
+
+}
 
 /** \brief Reconfigure map.
  *

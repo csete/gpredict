@@ -1460,6 +1460,42 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
 }
 
 
+/** \brief Select a new satellite */
+void gtk_sat_module_select_sat (GtkSatModule *module, gint catnum)
+{
+    GtkWidget *child;
+    gint i;
+
+    
+    /* select satellite in each child */
+    for (i = 0; i < module->nviews; i++) {
+        
+        child = GTK_WIDGET (g_slist_nth_data (module->views, i));
+
+        if (IS_GTK_SINGLE_SAT (G_OBJECT (child))) {
+            gtk_single_sat_select_sat(child, catnum);
+        }
+        else if (IS_GTK_SAT_MAP (child)) {
+            gtk_sat_map_select_sat(child, catnum);
+        }
+        else if (IS_GTK_SAT_LIST (child)) {
+            gtk_sat_list_select_sat(child, catnum);
+        }
+        else if (IS_GTK_EVENT_LIST (child)) {
+            gtk_event_list_select_sat(child, catnum);
+        }
+        else if (IS_GTK_POLAR_VIEW (child)) {
+            gtk_polar_view_select_sat(child, catnum);
+        }
+        else {
+            sat_log_log(SAT_LOG_LEVEL_BUG, _("%s: Unknown child type"), __FUNCTION__);
+        }
+    }
+
+}
+
+
+
 /** \brief Re-configure module.
  *  \param module The module.
  *  \param local Flag indicating whether reconfiguration is requested from 

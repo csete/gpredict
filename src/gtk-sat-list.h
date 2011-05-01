@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -152,6 +152,7 @@ void           gtk_sat_list_update          (GtkWidget  *widget);
 void           gtk_sat_list_reconf          (GtkWidget  *widget, GKeyFile *cfgdat);
 
 void gtk_sat_list_reload_sats (GtkWidget *satlist, GHashTable *sats);
+void gtk_sat_list_select_sat  (GtkWidget *satlist, gint catnum);
 
 
 #ifdef __cplusplus

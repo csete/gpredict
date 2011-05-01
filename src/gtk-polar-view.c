@@ -1616,6 +1616,53 @@ gtk_polar_view_reload_sats (GtkWidget *polv, GHashTable *sats)
 }
 
 
+/** \brief Select a satellite (puublic)
+ * 
+ * \todo Current selection is loast when satellite goes LOS
+ */
+void gtk_polar_view_select_sat  (GtkWidget *widget, gint catnum)
+{
+    GtkPolarView *polv = GTK_POLAR_VIEW(widget);
+    gint *catpoint = NULL;
+    sat_obj_t *obj = NULL;
+    guint32  color;
+
+    catpoint = g_try_new0 (gint, 1);
+    *catpoint = catnum;
+
+
+    obj = SAT_OBJ (g_hash_table_lookup (polv->obj, catpoint));
+    if (obj == NULL) {
+        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                     _("%s Requested satellite (%d) is not within range"),
+                     __FUNCTION__, catnum);
+    }
+    else {
+        obj->selected = TRUE;
+
+        color = mod_cfg_get_int (polv->cfgdata,
+                                 MOD_CFG_POLAR_SECTION,
+                                 MOD_CFG_POLAR_SAT_SEL_COL,
+                                 SAT_CFG_INT_POLAR_SAT_SEL_COL);
+
+        g_object_set (obj->marker,
+                      "fill-color-rgba", color,
+                      "stroke-color-rgba", color,
+                      NULL);
+        g_object_set (obj->label,
+                      "fill-color-rgba", color,
+                      "stroke-color-rgba", color,
+                      NULL);
+
+    }
+
+    /* clear previous selection, if any */
+    g_hash_table_foreach (polv->obj, clear_selection, catpoint);
+ 
+    g_free (catpoint);
+
+}
+
 
 /** \brief Convert LOS timestamp to human readable countdown string */
 static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat)
