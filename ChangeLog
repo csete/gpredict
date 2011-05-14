@@ -1,3 +1,10 @@
+2011-05-14 Charles Suprin <hamaa1vs at gmail.com>
+
+    * data/trsp/25338.trsp
+    * data/trsp/26536.trsp
+    * data/trsp/27543.trsp
+    Update NOAA-15,-16,-17 transponder frequencies.
+
 2011-05-01 Alexandru Csete <oz9aec at gmail.com>
 
     * src/gtk-sat-module-popup.c
