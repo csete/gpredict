@@ -206,6 +206,8 @@ gtk_sat_module_destroy (GtkObject *object)
 {
     GtkSatModule *module = GTK_SAT_MODULE (object);
 
+    /*save the configuration*/
+    mod_cfg_save (module->name, module->cfgdata);
     
     /* stop timeout */
     if (module->timerid > 0)
@@ -977,8 +979,17 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
         sat->aos = find_aos (sat, module->qth, daynum, maxdt);
         sat->los = find_los (sat, module->qth, daynum, maxdt);
 
+    } 
+    /*update aos if it was known and is stale*/
+    if (sat->aos > 0 && sat->aos < daynum) {
+        maxdt = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
+        sat->aos = find_aos (sat, module->qth, daynum, maxdt);
+    } 
+    /*update los if it was known is stale*/    
+    if (sat->los > 0 && sat->los < daynum) {
+        maxdt = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
+        sat->los = find_los (sat, module->qth, daynum, maxdt);
     }
-
 
     /*data may have been updated by gpsd*/
     obs_geodetic.lon = module->qth->lon * de2ra;
@@ -1079,9 +1090,6 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
                  _("%s: Module %s recevied CLOSE signal."),
                  __FUNCTION__, name);
 
-    /* save configuration to ensure that dynamic data like state is stored */
-    mod_cfg_save (module->name, module->cfgdata);
-
     switch (module->state) {
 
     case GTK_SAT_MOD_STATE_DOCKED:
@@ -1163,6 +1171,10 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
                      __FUNCTION__, name, module->state);
         break;
     }
+    /* save configuration to ensure that dynamic data like state is stored */
+    mod_cfg_save (module->name, module->cfgdata);
+
+
 
     /* appearantly, module will be destroyed when removed from notebook */
     /* gtk_widget_destroy (GTK_WIDGET (module)); */

@@ -197,6 +197,10 @@ gtk_single_sat_init (GtkSingleSat *list)
 static void
 gtk_single_sat_destroy (GtkObject *object)
 {
+    GtkSingleSat *ssat = GTK_SINGLE_SAT(object);
+    sat_t      *sat = SAT (g_slist_nth_data (ssat->sats, ssat->selected));
+    g_key_file_set_integer (ssat->cfgdata,MOD_CFG_SINGLE_SAT_SECTION,MOD_CFG_SINGLE_SAT_SELECT,sat->tle.catnr);
+
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -213,8 +217,7 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
     sat_t     *sat;
     gchar     *title;
     guint      i;
-
-
+    gint       selectedcatnum;
 
     widget = g_object_new (GTK_TYPE_SINGLE_SAT, NULL);
 
@@ -244,7 +247,12 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
                                                         MOD_CFG_SINGLE_SAT_REFRESH,
                                                         SAT_CFG_INT_SINGLE_SAT_REFRESH);
     GTK_SINGLE_SAT (widget)->counter = 1;
-
+    
+    /* get selected catnum if available */
+    selectedcatnum = mod_cfg_get_int (cfgdata,
+                                      MOD_CFG_SINGLE_SAT_SECTION,
+                                      MOD_CFG_SINGLE_SAT_SELECT,
+                                      SAT_CFG_INT_SINGLE_SAT_SELECT);
     /* popup button */
     GTK_SINGLE_SAT (widget)->popup_button =
         gpredict_mini_mod_button ("gpredict-mod-popup.png",
@@ -321,6 +329,9 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 
     gtk_widget_show_all (widget);
 
+    if (selectedcatnum) {
+        gtk_single_sat_select_sat ( widget, selectedcatnum );
+    }
     return widget;
 }
 
