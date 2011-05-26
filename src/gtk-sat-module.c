@@ -980,12 +980,47 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
         sat->los = find_los (sat, module->qth, daynum, maxdt);
 
     } 
-    /*update aos if it was known and is stale*/
+    /*
+      Update AOS and LOS for this satellite if it was known and is before 
+      the current time. 
+      
+      daynum is the current time in the module. 
+      
+      The conditional aos < daynum is merely saying that aos occured 
+      in the past. Therefore it cannot be the next event or aos/los 
+      for that satellite.
+
+      The conditional aos > 0.0 is a short hand for saying that the 
+      aos was successfully computed before. find_aos returns 0.0 when it 
+      cannot find an AOS. 
+      
+      This code should not execute find_aos(los) if the conditional before 
+      is triggered as the newly computed aos(los) should either be in 
+      the future (aos > daynum) or (aos == 0 ).
+
+      Single sat/list/event/map views all use these values and they 
+      should be up to date.
+
+      The above code is still required for dealing with circumstances 
+      where the qth moves from someplace where the qth can have an AOS and 
+      where qth does not and for satellites in parking orbits where the 
+      AOS may be further than maxdt out results in aos==0.0 until the 
+      next aos is closer than maxdt. It also prevents the aos from 
+      being computed every pass through the module for the parking orbits.
+
+      To be completely correct, when time can move forward and backwards 
+      as it can with the time controller, the time the aos/los was 
+      computed should be stored and associated with aos/los. That way 
+      if daynum <time_computed, the aos can be recomputed as there is 
+      no assurance that the current stored aos is the next aos. As a 
+      practical matter the above code handles time reversing acceptably 
+      for most circumstances. 
+
+    */
     if (sat->aos > 0 && sat->aos < daynum) {
         maxdt = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
         sat->aos = find_aos (sat, module->qth, daynum, maxdt);
     } 
-    /*update los if it was known is stale*/    
     if (sat->los > 0 && sat->los < daynum) {
         maxdt = (gdouble) sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD);
         sat->los = find_los (sat, module->qth, daynum, maxdt);
