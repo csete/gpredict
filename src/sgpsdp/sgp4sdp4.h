@@ -347,7 +347,7 @@ void    Time_of_Day(double jd, struct tm *cdate);
 double  Julian_Date(struct tm *cdate);
 void    Date_Time(double jd, struct tm *cdate);
 int     Check_Date(struct tm *cdate);
-struct tm Time_to_UTC(struct tm *cdate);
+void Time_to_UTC(struct tm *cdate, struct tm *odate);
 struct tm Time_from_UTC(struct tm *cdate);
 double  JD_to_UTC(double jt);
 double  JD_from_UTC(double jt);

@@ -241,13 +241,23 @@ Check_Date(struct tm *cdate)
 /* The procedures JD_to_UTC and JD_from_UTC are used to  */
 /* do the same thing working directly with Julian dates. */
 
-struct tm
-Time_to_UTC(struct tm *cdate)
+void
+Time_to_UTC(struct tm *cdate, struct tm *odate)
 {
   time_t tdate;
-
+  /* 
+     functions such as Julian_Date work with tm_year in being 
+     the year since 0 AD and mktime uses it as the year since 1900
+     
+     tm_isdst = -1 forces the mktime call to lookup the daylight 
+     savings for the current timezone instead of using whatever 
+     was in the structure when it was created.
+  */
+  cdate->tm_year -= 1900;
+  cdate->tm_isdst = -1;
   tdate = mktime(cdate);
-  return( *gmtime(&tdate) );
+  gmtime_r(&tdate,odate);
+  odate->tm_year += 1900;
 } /*Procedure Time_to_UTC*/
 
 /*------------------------------------------------------------------*/

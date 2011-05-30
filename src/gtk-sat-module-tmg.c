@@ -483,7 +483,6 @@ static void tmg_time_set (GtkWidget *widget, gpointer data)
     gdouble slider;
     gdouble jd;
 
-
     /* update time only if we are in manual time control */
     if (!mod->throttle && !mod->reset) {
 
@@ -513,7 +512,7 @@ static void tmg_time_set (GtkWidget *widget, gpointer data)
         /* convert UTC time to Julian Date  */
         if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
             /* convert local time to UTC */
-            utim = Time_to_UTC (&tim);
+            Time_to_UTC (&tim, &utim);
 
             /* Convert to JD */
             jd = Julian_Date (&utim);
@@ -814,7 +813,7 @@ static void tmg_cal_add_one_day (GtkSatModule *mod)
     /* convert UTC time to Julian Date  */
     if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
         /* convert local time to UTC */
-        utim = Time_to_UTC (&tim);
+        Time_to_UTC (&tim, &utim);
 
         /* Convert to JD */
         jd = Julian_Date (&utim);
@@ -869,7 +868,7 @@ static void tmg_cal_sub_one_day (GtkSatModule *mod)
     /* convert UTC time to Julian Date  */
     if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
         /* convert local time to UTC */
-        utim = Time_to_UTC (&tim);
+        Time_to_UTC (&tim, &utim);
 
         /* Convert to JD */
         jd = Julian_Date (&utim);

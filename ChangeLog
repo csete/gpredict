@@ -1,3 +1,13 @@
+2011-05-31 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/sgpsdp/sgp_time.c
+    * src/sgpsdp/sgp4sdp4.h
+    * src/gtk-sat-module-tmg.c
+    Fix discrepancy in year convention with Time_to_UTC between Julian_Date
+    convention and mktime convention.
+    Fixes Bug 3309110: 100% on manual time adjustment.
+    Fixes part of Ubuntu Bug #789691.
+
 2011-05-26 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-single-sat.c
