@@ -694,6 +694,7 @@ gtk_polar_view_update          (GtkWidget  *widget)
         /* reset data */
         polv->counter = 1;
         polv->naos = 2458849.5;
+        polv->ncat = 0;
 
         /* update sats */
         g_hash_table_foreach (polv->sats, update_sat, polv);

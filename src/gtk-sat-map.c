@@ -657,6 +657,7 @@ gtk_sat_map_update (GtkWidget  *widget)
         /* reset data */
         satmap->counter = 1;
         satmap->naos = 2458849.5;
+        satmap->ncat = 0;
 
         /* QTH */
         /*update for accuracy*/
