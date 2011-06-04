@@ -118,6 +118,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq);
 static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock);
 static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt);
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
+static gboolean setup_split(GtkRigCtrl *ctrl);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 static gboolean open_rigctld_socket(radio_conf_t *conf, gint *sock);
 static gboolean close_rigctld_socket(gint *sock);
@@ -1248,6 +1249,8 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
                 break;
 
             case RIG_TYPE_DUPLEX:
+                /* set rig into SAT mode (hamlib needs it even if rig already in SAT) */
+                setup_split(ctrl);
                 exec_duplex_cycle (ctrl);
                 break;
 
@@ -1266,6 +1269,53 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
             }
         }
     }
+}
+
+
+/** \brief Setup VFOs for split operation (simplex or duplex)
+ *  \param ctrl Pointer to the GtkRigCtrl structure.
+ *  \return TRUE if the operation was succesful, FALSE if an error occurred.
+ * 
+ * This function is used to setup the VFOs for split operation. For full
+ * duplex radios this will enable the SAT mode (True for FT847 but TBC for others).
+ * See bug #3272993
+ */
+static gboolean setup_split(GtkRigCtrl *ctrl)
+{
+    gchar  *buff;
+    gchar  buffback[128];
+    gboolean retcode;
+
+    /* select TX VFO */
+    switch (ctrl->conf->vfoUp) {
+        case VFO_A:
+            buff = g_strdup("S 1 A\x0a");
+            break;
+        
+        case VFO_B:
+            buff = g_strdup("S 1 B\x0a");
+            break;
+
+        case VFO_MAIN:
+            buff = g_strdup("S 1 Main\x0a");
+            break;
+
+        case VFO_SUB:
+            buff = g_strdup("S 1 Sub\x0a");
+            break;
+            
+        default:
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s called but TX VFO is %d."), __FUNCTION__, ctrl->conf->vfoUp);
+            return FALSE;
+        }
+
+    retcode=send_rigctld_command(ctrl, ctrl->sock, buff, buffback, 128);
+    
+    g_free(buff);
+    
+    return(check_set_response(buffback, retcode, __FUNCTION__));
+
 }
 
 
@@ -1709,22 +1759,20 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl)
  *  \param ctrl Pointer to the GtkRigCtrl widget.
  *
  * This function executes a controller cycle when the device is of RIG_TYPE_DUPLEX.
+ * The RIG should already be in SAT mode.
  */
 static void exec_duplex_cycle (GtkRigCtrl *ctrl)
-{
+{   
     if (ctrl->engaged) {
-        /* Downlink */
-        set_vfo (ctrl, ctrl->conf->vfoDown);
         exec_rx_cycle (ctrl);
-
-        /* Uplink */
-        set_vfo (ctrl, ctrl->conf->vfoUp);
-        exec_tx_cycle (ctrl);
+        exec_toggle_tx_cycle (ctrl);
     }
     else {
         /* still execute cycles to update UI widgets
-           no data will be sent to RIG */
+         * no data will be sent to RIG */
         exec_rx_cycle (ctrl);
+        /* toggle_tx does nothing when not engaged
+         * (was originally written for FT-817-like rigs) */
         exec_tx_cycle (ctrl);
     }
 }
@@ -2732,16 +2780,28 @@ static gboolean close_rigctld_socket (gint *sock) {
   return TRUE;
 }
 
-/*simple function to sort the list of satellites in the combo box.*/
-static gint sat_name_compare (sat_t* a,sat_t*b){
+/** \brief Simple function to sort the list of satellites in the combo box.
+ *  \return TBC
+ */
+static gint sat_name_compare (sat_t *a, sat_t *b)
+{
     return (gpredict_strcmp(a->nickname,b->nickname));
 }
 
-static gint rig_name_compare (const gchar* a,const gchar *b){
+/** \brief Simple function to sort the list of rigs in the combo box.
+ *  \return TBC
+ */
+static gint rig_name_compare (const gchar *a, const gchar *b){
     return (gpredict_strcmp(a,b));
 }
 
-static inline gboolean check_set_response (gchar *buffback,gboolean retcode,const gchar *function){
+/** \brief Check hamlib rigctld response
+ *  \param buffback
+ *  \param retcode
+ *  \param function
+ *  \return TRUE if the check was successful?
+ */
+static inline gboolean check_set_response (gchar *buffback, gboolean retcode, const gchar *function){
     if (retcode==TRUE)
         if (strncmp(buffback,"RPRT 0",6)!=0) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -2753,6 +2813,12 @@ static inline gboolean check_set_response (gchar *buffback,gboolean retcode,cons
     return retcode;
 }
 
+/** \brief Check hamlib rigctld response
+ *  \param buffback
+ *  \param retcode
+ *  \param function
+ *  \return TRUE if the check was successful?
+ */
 static inline gboolean check_get_response (gchar *buffback,gboolean retcode,const gchar *function){
     if (retcode==TRUE)
         if (strncmp(buffback,"RPRT",4)==0) {
