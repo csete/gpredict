@@ -8,6 +8,7 @@ Changes in version 1.4 (TBD)
 - Fixed bug 3250344: Win32 build not working with hamlib.
 - Fixed bug 3294829: Program name wrong in desktop files.
 - Fixed bug 3309110: 100% on manual time adjustment.
+- Fixed bug 3272993: Issue controlling Yaesu FT-847.
 
 
 Changes in version 1.3 (1 Mar 2011)
