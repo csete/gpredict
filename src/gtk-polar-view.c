@@ -793,7 +793,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
     }
 
     /* if sat is out of range */
-    if (sat->el < 0.00) {
+    if ((sat->el < 0.00) || decayed(sat)) {
 
         obj = SAT_OBJ(g_hash_table_lookup (polv->obj, catnum));
 
