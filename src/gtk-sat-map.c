@@ -1962,6 +1962,8 @@ update_sat (gpointer key, gpointer value, gpointer data)
         idx = goo_canvas_item_model_find_child (root,obj->range2);
         if (idx !=-1)
             goo_canvas_item_model_remove_child (root, idx);
+        g_hash_table_remove (satmap->obj, catnum);
+        g_free (obj);                
         return;
     }
 

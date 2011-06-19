@@ -1,3 +1,9 @@
+2011-06-19 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-map.c
+    Remove decayed satellite object from hash.
+
+
 2011-06-07 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-polar-view.c:
