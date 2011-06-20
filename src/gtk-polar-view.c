@@ -150,7 +150,7 @@ gtk_polar_view_init (GtkPolarView *polview)
     polview->sats      = NULL;
     polview->qth       = NULL;
     polview->obj       = NULL;
-    polview->naos      = 2458849.5;
+    polview->naos      = 0.0;
     polview->ncat      = 0;
     polview->size      = 0;
     polview->r         = 0;
@@ -693,7 +693,7 @@ gtk_polar_view_update          (GtkWidget  *widget)
     else {
         /* reset data */
         polv->counter = 1;
-        polv->naos = 2458849.5;
+        polv->naos = 0.0;
         polv->ncat = 0;
 
         /* update sats */
@@ -787,9 +787,11 @@ update_sat    (gpointer key, gpointer value, gpointer data)
     now = polv->tstamp;
 
     /* update next AOS */
-    if ((sat->aos > now) && (sat->aos < polv->naos)) {
-        polv->naos = sat->aos;
-        polv->ncat = sat->tle.catnr;
+    if (sat->aos > now) {
+        if ((sat->aos < polv->naos)|| (polv->naos == 0.0)) {
+            polv->naos = sat->aos;
+            polv->ncat = sat->tle.catnr;
+        }
     }
 
     /* if sat is out of range */

@@ -170,7 +170,7 @@ gtk_sat_map_init (GtkSatMap *satmap)
     satmap->sats      = NULL;
     satmap->qth       = NULL;
     satmap->obj       = NULL;
-    satmap->naos      = 2458849.5;
+    satmap->naos      = 0.0;
     satmap->ncat      = 0;
     satmap->tstamp    = 2458849.5;
     satmap->x0        = 0;
@@ -656,7 +656,7 @@ gtk_sat_map_update (GtkWidget  *widget)
     else {
         /* reset data */
         satmap->counter = 1;
-        satmap->naos = 2458849.5;
+        satmap->naos = 0.0;
         satmap->ncat = 0;
 
         /* QTH */
@@ -1934,9 +1934,11 @@ update_sat (gpointer key, gpointer value, gpointer data)
     now = satmap->tstamp;
 
     /* update next AOS */
-    if ((sat->aos > now) && (sat->aos < satmap->naos)) {
-        satmap->naos = sat->aos;
-        satmap->ncat = sat->tle.catnr;
+    if (sat->aos > now) {
+        if ((sat->aos < satmap->naos)|| (satmap->naos == 0.0)) {
+            satmap->naos = sat->aos;
+            satmap->ncat = sat->tle.catnr;
+        }
     }
 
     obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catnum));
