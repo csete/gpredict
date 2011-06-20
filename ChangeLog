@@ -4,6 +4,9 @@
     * src/gtk-polar-view.c
     Change naos logic to avoid a daynum 2458849.5 (Y2021?) problem.
 
+    * src/main.c
+    Move log closing and module saving until after gtk has shut down.
+
 
 2011-06-19 Charles Suprin <hamaa1vs at gmail.com>
 

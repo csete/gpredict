@@ -184,7 +184,14 @@ int main (int argc, char *argv[])
     
     gtk_main ();
 
-     g_option_context_free(context);
+    g_option_context_free(context);
+
+    sat_cfg_save ();
+    sat_log_close ();
+    sat_cfg_close ();
+
+
+
 #ifdef WIN32
     // Cleanup Windozze Sockets
     CloseWinSock2();
@@ -368,9 +375,6 @@ gpredict_app_destroy    (GtkWidget *widget,
                 sat_cfg_set_int (SAT_CFG_INT_WINDOW_WIDTH, w);
                 sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, h);
         */
-    sat_cfg_save ();
-    sat_log_close ();
-    sat_cfg_close ();
 
     /* exit Gtk+ */
     gtk_main_quit ();
