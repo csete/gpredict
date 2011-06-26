@@ -227,7 +227,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
         qth->type = QTH_STATIC_TYPE;
     }
 
-    /*GPSD Port*/
+    /* GPSD Port */
     qth->gpsd_port = g_key_file_get_integer (qth->data,
                                         QTH_CFG_MAIN_SECTION,
                                         QTH_CFG_GPSD_PORT_KEY,
@@ -361,7 +361,7 @@ qth_data_save (const gchar *filename, qth_t *qth)
                                QTH_CFG_GPSD_SERVER_KEY,
                                qth->gpsd_server);
     }
-    /*gpsd port*/
+    /* gpsd port */
     g_key_file_set_integer (qth->data,
                             QTH_CFG_MAIN_SECTION,
                             QTH_CFG_GPSD_PORT_KEY,
@@ -442,7 +442,7 @@ qth_data_save (const gchar *filename, qth_t *qth)
 void
 qth_data_free (qth_t *qth)
 {
-    /*stop any updating*/
+    /* stop any updating */
     qth_data_update_stop(qth);
 
     if (qth->name) {
@@ -484,14 +484,16 @@ qth_data_free (qth_t *qth)
  */
 gboolean qth_data_update(qth_t * qth, gdouble t) {
     gboolean retval = FALSE;
+#ifdef HAS_LIBGPS
     guint num_loops=0;
+#endif
     switch (qth->type) {
     case QTH_STATIC_TYPE:
-        /*never changes*/
+        /* never changes */
         break;
     case QTH_GPSD_TYPE:
         if (((t-qth->gpsd_update)>30.0/86400.0)&&(t-qth->gpsd_connected>30.0/86400.0)){
-            /*if needed restart the gpsd interface*/
+            /* if needed restart the gpsd interface */
             qth_data_update_stop(qth);
             qth_data_update_init(qth);
             qth->gpsd_connected=t;
@@ -515,8 +517,8 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
                         break;
                     }
                     if(gps_poll(qth->gps_data) == 0){
-                        /*handling packet_set inline with 
-                          http://gpsd.berlios.de/client-howto.html
+                        /* handling packet_set inline with 
+                           http://gpsd.berlios.de/client-howto.html
                         */
                         if (qth->gps_data->set&PACKET_SET) {
                             if (qth->gps_data->fix.mode >= MODE_2D) {
@@ -548,17 +550,17 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
                 break;
             case 5:
 #if GPSD_API_MAJOR_VERSION==5
-                while(gps_waiting(qth->gps_data) == 1) {
-                    /*see comment from above*/
-                    /*hopefully not needed but does not hurt anything.*/
+                while(gps_waiting(qth->gps_data,0) == 1) {
+                    /* see comment from above */
+                    /* hopefully not needed but does not hurt anything. */
                     num_loops++;
                     if (num_loops>1000){
                         retval=FALSE;
                         break;
                     }
                     if(gps_read(qth->gps_data) == 0){
-                        /*handling packet_set inline with 
-                          http://gpsd.berlios.de/client-howto.html
+                        /* handling packet_set inline with 
+                           http://gpsd.berlios.de/client-howto.html
                         */
                         if (qth->gps_data->set&PACKET_SET) {
                             if (qth->gps_data->fix.mode >= MODE_2D) {
@@ -600,7 +602,7 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
     default:
         break;
     }
-    /*check that data is valid*/
+    /* check that data is valid */
     qth_validate(qth);
     return retval;
 }
@@ -618,7 +620,7 @@ gboolean qth_data_update_init(qth_t * qth) {
     switch (qth->type){
 
     case QTH_STATIC_TYPE:
-        /*nothing to do.  the data never updates*/
+        /* nothing to do.  the data never updates */
         break;
     case QTH_GPSD_TYPE:
 #ifdef HAS_LIBGPS
@@ -690,7 +692,7 @@ gboolean qth_data_update_init(qth_t * qth) {
 void qth_data_update_stop (qth_t *qth) {
     switch (qth->type) {
         case QTH_STATIC_TYPE:
-            /*nothing to do.  the data never updates*/
+            /* nothing to do.  the data never updates */
             break;
         case QTH_GPSD_TYPE:
 
@@ -763,7 +765,7 @@ void qth_small_save(qth_t*qth,qth_small_t *qth_small){
  * \param qth the qth data structure to cleanup
  */
 void qth_validate(qth_t*qth){
-    /*check that the values are not set to nonsense such as nan or inf. if so error it and set to zero.*/
+    /* check that the values are not set to nonsense such as nan or inf. if so error it and set to zero. */
     if (!isnormal(qth->lat)){
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: QTH data had bogus lat %f"),
@@ -784,7 +786,8 @@ void qth_validate(qth_t*qth){
         qth->alt=0.0;
     }
 
-    /*check that qth->lat and qth->lon are in a reasonable range and if not wrap them back*/
+    /* check that qth->lat and qth->lon are in a reasonable range 
+       and if not wrap them back */
     if (fabs(qth->lat)>90.0||fabs(qth->lon)>180.0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"),
