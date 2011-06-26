@@ -146,16 +146,15 @@ sat_log_init        ()
 void
 sat_log_close       ()
 {
-     if (initialised) {
-          sat_log_log (SAT_LOG_LEVEL_MSG,
-                          _("%s: Session ended"), __FUNCTION__);
+    if (initialised) {
+        sat_log_log (SAT_LOG_LEVEL_MSG,
+                     _("%s: Session ended"), __FUNCTION__);
           g_io_channel_shutdown (logfile, TRUE, NULL);
           g_io_channel_unref (logfile);
           logfile = NULL;
-          initialised = FALSE;
-          if (sat_cfg_get_bool (SAT_CFG_BOOL_KEEP_LOG_FILES)) {
-               log_rotate ();
-          }
+          initialised = FALSE;     
+          /* Always call log_rotate to get rid of old logs */
+          log_rotate ();
      }
 }
 
@@ -290,32 +289,32 @@ log_rotate ()
      glong     then;  /* time in sec corresponding to age */
     gchar    *confdir,*dirname,*fname1,*fname2;
 
-
-     /* initialise some vars */
-     g_get_current_time (&now);
+    /* get cleaning age; if age non-zero do not rename log */
+    age = sat_cfg_get_int (SAT_CFG_INT_LOG_CLEAN_AGE);
+     
+    /* initialise some vars */
+    g_get_current_time (&now);
     confdir = get_user_conf_dir ();
     dirname = g_strconcat (confdir, G_DIR_SEPARATOR_S, "logs", NULL);
 
-     fname1 = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
-     fname2 = g_strdup_printf ("%s%sgpredict-%ld.log",
-                                     dirname, G_DIR_SEPARATOR_S, now.tv_sec);
+    fname1 = g_strconcat (dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
+    fname2 = g_strdup_printf ("%s%sgpredict-%ld.log",
+                              dirname, G_DIR_SEPARATOR_S, now.tv_sec);
+     
+    if (age > 0)
+        g_rename (fname1, fname2);
+    
 
-     g_rename (fname1, fname2);
-
-
-     /* get cleaning age; if age non-zero perform cleaning */
-     age = sat_cfg_get_int (SAT_CFG_INT_LOG_CLEAN_AGE);
-     if (age > 0) {
-
-          /* calculate age for files that should be removed */
-          then = now.tv_sec - age;
-          clean_log_dir (dirname, then);
-
-     }
-
-     g_free (dirname);
-     g_free (fname1);
-     g_free (fname2);
+    /* calculate age for files that should be removed */
+    then = now.tv_sec - age;
+    
+    /* cleanup every time as old log files should be deleted if they exist */
+    clean_log_dir (dirname, then);
+    
+    
+    g_free (dirname);
+    g_free (fname1);
+    g_free (fname2);
     g_free (confdir);
 }
 
@@ -353,7 +352,7 @@ clean_log_dir (const gchar *dirname, glong age)
                vbuf = g_strsplit_set (fname, "-.", -1);
 
 
-               g_print ("%s <=> %s\n", vbuf[1], ages);
+               //g_print ("%s <=> %s\n", vbuf[1], ages);
 
                /* Remove file if too old */
                if (g_ascii_strcasecmp (vbuf[1], ages) <= 0) {
