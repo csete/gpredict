@@ -599,25 +599,28 @@ void tle_update_from_network (gboolean   silent,
                                    "cache", G_DIR_SEPARATOR_S,
                                    files[i], NULL);
             outfile = g_fopen (locfile, "wb");
-            curl_easy_setopt (curl, CURLOPT_WRITEDATA, outfile);
-            curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, my_write_func);
+            if (outfile != NULL) {
+                curl_easy_setopt (curl, CURLOPT_WRITEDATA, outfile);
+                curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, my_write_func);
+                
+                /* get file */
+                res = curl_easy_perform (curl);
+                
+                if (res != CURLE_OK) {
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
+                                 _("%s: Error fetching %s (%s)"),
+                                 __FUNCTION__, curfile, curl_easy_strerror (res));
+                    error = TRUE;
+                }
+                else {
+                    sat_log_log (SAT_LOG_LEVEL_MSG,
+                                 _("%s: Successfully fetched %s"),
+                                 __FUNCTION__, curfile);
+                    success++;
+                }
+                fclose (outfile);
 
-            /* get file */
-            res = curl_easy_perform (curl);
-
-            if (res != CURLE_OK) {
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Error fetching %s (%s)"),
-                             __FUNCTION__, curfile, curl_easy_strerror (res));
-                error = TRUE;
             }
-            else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
-                             _("%s: Successfully fetched %s"),
-                             __FUNCTION__, curfile);
-                success++;
-            }
-
             /* update progress indicator */
             if (!silent && (progress != NULL)) {
 
@@ -636,7 +639,6 @@ void tle_update_from_network (gboolean   silent,
             g_free (userconfdir);
             g_free (curfile);
             g_free (locfile);
-            fclose (outfile);
         }
 
         curl_easy_cleanup (curl);
