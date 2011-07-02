@@ -1,5 +1,11 @@
 2011-06-29 Charles Suprin <hamaa1vs at gmail.com>
 
+    * src/gtk-sat-map.c
+    Add check on satellite map object allocation.
+
+
+2011-06-29 Charles Suprin <hamaa1vs at gmail.com>
+
     * src/tle-update.c
     Fix SEGFAULT in tle-update.c when unable to open file for writing in network updates.
 

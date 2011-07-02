@@ -1775,6 +1775,13 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     /* create and initialize a sat object */
     obj = g_try_new (sat_map_obj_t, 1);
 
+    if ( obj == NULL ) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                     _("%s: Cannot allocate memory for satellite %d."),
+                     __FUNCTION__, sat->tle.catnr);
+        return;
+    }
+
     obj->selected = FALSE;
     obj->showtrack = FALSE;
     obj->showcov = TRUE;
