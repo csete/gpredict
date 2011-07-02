@@ -619,13 +619,19 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     /* number of views: we have five numbers per view (type,left,right,top,bottom) */
     module->nviews = length / 5;
     module->grid = g_try_new0 (gint, length);
-
-    /* FIXME: we should check module->grid != NULL */
-
-    /* convert chars to integers */
-    for (i = 0; i < length; i++) {
-        module->grid[i] = (gint) g_ascii_strtoll (buffv[i], NULL, 0);
-        //g_print ("%d: %s => %d\n", i, buffv[i], module->grid[i]);
+    
+    /* if we cannot allocate memory for the grid zero the views out and log */
+    if ( module->grid != NULL ) {
+        /* convert chars to integers */
+        for (i = 0; i < length; i++) {
+            module->grid[i] = (gint) g_ascii_strtoll (buffv[i], NULL, 0);
+            //g_print ("%d: %s => %d\n", i, buffv[i], module->grid[i]);
+        }
+    } else {        
+        module->nviews = 0;
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Unable to allocate memory for grid."),
+                     __FUNCTION__);
     }
     g_strfreev (buffv);
 
@@ -1566,8 +1572,7 @@ static void get_grid_size (GtkSatModule *module, guint *rows, guint *cols)
     guint i;
     guint xmax = 0;
     guint ymax = 0;
-
-
+    
     for (i = 0; i < module->nviews; i++) {
         xmax = MAX(xmax,module->grid[5*i+2]);
         ymax = MAX(ymax,module->grid[5*i+4]);

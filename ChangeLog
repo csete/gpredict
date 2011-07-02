@@ -3,6 +3,9 @@
     * src/gtk-sat-map.c
     Add check on satellite map object allocation.
 
+    * src/gtk-sat-module.c
+    Add check on mod->grid allocation.
+
 
 2011-06-29 Charles Suprin <hamaa1vs at gmail.com>
 
