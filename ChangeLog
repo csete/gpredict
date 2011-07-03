@@ -1,4 +1,12 @@
-2011-06-29 Charles Suprin <hamaa1vs at gmail.com>
+2011-07-03 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-selector.c
+    * src/gtk-sat-selector.h
+    * src/mod-cfg.c
+    Show catalog number in satellite selector.
+    Address 3322786: Show More Information in Edit Module Sat Selection.
+
+2011-07-01 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-map.c
     Add check on satellite map object allocation.

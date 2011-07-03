@@ -916,18 +916,28 @@ static gboolean sat_filter_func( GtkTreeModel *model,
 {
     const gchar *searchstring;
     gchar       *satname;
+    gint         catnr;
+    gchar       *catnrstr;
     gboolean     selected;
-   
+    gboolean     retval = FALSE;
+    
     gtk_tree_model_get( model, iter, GTK_SAT_SELECTOR_COL_NAME, &satname, -1 );
+    gtk_tree_model_get( model, iter, GTK_SAT_SELECTOR_COL_CATNUM, &catnr, -1 );
     gtk_tree_model_get( model, iter, GTK_SAT_SELECTOR_COL_SELECTED, &selected, -1 );
     searchstring = gtk_entry_get_text( entry );
+    catnrstr = g_strdup_printf("%d",catnr);
+    //printf("satname %s catnr %s searchstring %s\n",satname,catnrstr,searchstring);
     /*if it is already selected then remove it from the available list*/
     if (selected)
-        return( FALSE);
-    if( gpredict_strcasestr( satname, searchstring ) != (char *)NULL )
-        return( TRUE );
-    else
-        return( FALSE );
+        retval = FALSE;
+    else if( gpredict_strcasestr( satname, searchstring ) != (char *)NULL )
+        retval = TRUE;
+    else if( gpredict_strcasestr( catnrstr, searchstring ) != (char *)NULL )
+        retval = TRUE;
+
+    g_free (catnrstr);
+    return (retval);
+
 } 
 
 /** \brief Searches through all the models for the given satellite and sets its selected value.

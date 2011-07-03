@@ -623,7 +623,7 @@ static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new, Gt
                                                        "text", GTK_SAT_SELECTOR_COL_CATNUM,
                                                        NULL);
     gtk_tree_view_insert_column (GTK_TREE_VIEW (satlist), column, -1);
-    gtk_tree_view_column_set_visible (column, FALSE);
+    gtk_tree_view_column_set_visible (column, TRUE);
 
     /* epoch */
     renderer = gtk_cell_renderer_text_new ();

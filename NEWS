@@ -3,6 +3,7 @@ Changes in version 1.4 (TBD)
 - New menu item in the module menu for selecting a satellite in all views.
 - Feature request 3141555: gpsd support.
 - Feature request 2130926: Change frequency using mouse wheel. Also for rotator controller.
+- Feature request 3322786: Show More Information in Edit Module Sat Selection.
 - Applied and extended patch 3237220: natural sort for sat list in module config
 - Improve handling of decayed satellites.
 - Fixed bug 3250344: Win32 build not working with hamlib.
