@@ -6,6 +6,10 @@
     Show catalog number in satellite selector.
     Address 3322786: Show More Information in Edit Module Sat Selection.
 
+    * src/tle-update.c
+    Add tle filename as description in new .cat files instead of catalog number.
+
+
 2011-07-01 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-map.c
