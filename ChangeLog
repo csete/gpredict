@@ -9,6 +9,8 @@
     * src/tle-update.c
     Add tle filename as description in new .cat files instead of catalog number.
 
+    * src/gtk-polar-view.c
+    Add check on polarview object allocation.
 
 2011-07-01 Charles Suprin <hamaa1vs at gmail.com>
 

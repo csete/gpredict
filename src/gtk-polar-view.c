@@ -939,61 +939,73 @@ update_sat    (gpointer key, gpointer value, gpointer data)
         else {
             /* add sat to canvas */
             obj = g_try_new (sat_obj_t, 1);
-            obj->selected = FALSE;
-            obj->showtrack = polv->showtrack;
-            obj->istarget = FALSE;
 
-            root = goo_canvas_get_root_item_model (GOO_CANVAS (polv->canvas));
-
-            colour = mod_cfg_get_int (polv->cfgdata,
-                                      MOD_CFG_POLAR_SECTION,
-                                      MOD_CFG_POLAR_SAT_COL,
-                                      SAT_CFG_INT_POLAR_SAT_COL);
-
-            /* create tooltip */
-            tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
-                                      "<tt>Az: %5.1f\302\260\n" \
-                                      "El: %5.1f\302\260\n" \
-                                      "</tt>",
-                                      sat->nickname,
-                                      sat->az, sat->el);
-
-            obj->marker = goo_canvas_rect_model_new (root,
-                                                     x - MARKER_SIZE_HALF,
-                                                     y - MARKER_SIZE_HALF,
-                                                     2*MARKER_SIZE_HALF,
-                                                     2*MARKER_SIZE_HALF,
-                                                     "fill-color-rgba", colour,
-                                                     "stroke-color-rgba", colour,
-                                                     "tooltip", tooltip,
-                                                     NULL);
-            obj->label = goo_canvas_text_model_new (root, sat->nickname,
-                                                    x,
-                                                    y+2,
-                                                    -1,
-                                                    GTK_ANCHOR_NORTH,
-                                                    "font", "Sans 8",
-                                                    "fill-color-rgba", colour,
-                                                    "tooltip", tooltip,
-                                                    NULL);
-
-            g_free (tooltip);
-            
-            goo_canvas_item_model_raise (obj->marker, NULL);
-            goo_canvas_item_model_raise (obj->label, NULL);
-
-            g_object_set_data (G_OBJECT (obj->marker), "catnum", GINT_TO_POINTER(*catnum));
-            g_object_set_data (G_OBJECT (obj->label), "catnum", GINT_TO_POINTER(*catnum));
-
-            /* get info about the current pass */
-            obj->pass = get_current_pass (sat, polv->qth, now);
-
-            /* add sat to hash table */
-            g_hash_table_insert (polv->obj, catnum, obj);
-
-            /* Finally, create the sky track if necessary */
-            if (obj->showtrack)
-                create_track (polv, obj, sat);
+            if ( obj != NULL) {
+                /* space was allocated now use it */
+                obj->selected = FALSE;
+                obj->showtrack = polv->showtrack;
+                obj->istarget = FALSE;
+                
+                root = goo_canvas_get_root_item_model (GOO_CANVAS (polv->canvas));
+                
+                colour = mod_cfg_get_int (polv->cfgdata,
+                                          MOD_CFG_POLAR_SECTION,
+                                          MOD_CFG_POLAR_SAT_COL,
+                                          SAT_CFG_INT_POLAR_SAT_COL);
+                
+                /* create tooltip */
+                tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"  \
+                                          "<tt>Az: %5.1f\302\260\n" \
+                                          "El: %5.1f\302\260\n"     \
+                                          "</tt>",
+                                          sat->nickname,
+                                          sat->az, sat->el);
+                
+                obj->marker = goo_canvas_rect_model_new (root,
+                                                         x - MARKER_SIZE_HALF,
+                                                         y - MARKER_SIZE_HALF,
+                                                         2*MARKER_SIZE_HALF,
+                                                         2*MARKER_SIZE_HALF,
+                                                         "fill-color-rgba", colour,
+                                                         "stroke-color-rgba", colour,
+                                                         "tooltip", tooltip,
+                                                         NULL);
+                obj->label = goo_canvas_text_model_new (root, sat->nickname,
+                                                        x,
+                                                        y+2,
+                                                        -1,
+                                                        GTK_ANCHOR_NORTH,
+                                                        "font", "Sans 8",
+                                                        "fill-color-rgba", colour,
+                                                        "tooltip", tooltip,
+                                                        NULL);
+                
+                g_free (tooltip);
+                
+                goo_canvas_item_model_raise (obj->marker, NULL);
+                goo_canvas_item_model_raise (obj->label, NULL);
+                
+                g_object_set_data (G_OBJECT (obj->marker), "catnum", GINT_TO_POINTER(*catnum));
+                g_object_set_data (G_OBJECT (obj->label), "catnum", GINT_TO_POINTER(*catnum));
+                
+                /* get info about the current pass */
+                obj->pass = get_current_pass (sat, polv->qth, now);
+                
+                /* add sat to hash table */
+                g_hash_table_insert (polv->obj, catnum, obj);
+                
+                /* Finally, create the sky track if necessary */
+                if (obj->showtrack)
+                    create_track (polv, obj, sat);
+                
+            } else {
+                /* obj == NULL */
+                sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                             _("%s: Cannot allocate memory for satellite %d."),
+                             __FUNCTION__, sat->tle.catnr);
+                return;
+                
+            }
         }
 
     }
