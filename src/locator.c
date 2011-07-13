@@ -105,7 +105,7 @@
  * left at 6.  MIN_LOCATOR_PAIRS sets a floor on the shortest locator that
  * should be handled.  -N0NB
  */
-const static int loc_char_range[] = { 18, 10, 24, 10, 24, 10 };
+static const int loc_char_range[] = { 18, 10, 24, 10, 24, 10 };
 
 #define MAX_LOCATOR_PAIRS       6
 #define MIN_LOCATOR_PAIRS       1
