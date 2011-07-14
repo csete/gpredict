@@ -169,6 +169,8 @@ GSList *read_transponders (guint catnum)
 void write_transponders (guint catnum, GSList *trsplist)
 {
     // FIXME
+    (void) catnum; /* avoid unused parameter compiler warning */
+    (void) trsplist; /* avoid unused parameter compiler warning */
     sat_log_log (SAT_LOG_LEVEL_BUG, _("%s: Not implemented!"), __FUNCTION__);
 }
 
