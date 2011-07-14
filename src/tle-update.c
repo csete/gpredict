@@ -123,6 +123,8 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     guint        total,total_tmp;
     gdouble      fraction = 0.0;
     gdouble      start = 0.0;
+    
+    (void) filter; /* avoid unused parameter compiler warning */
 
     if (g_static_mutex_trylock(&tle_file_in_progress)==FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -380,6 +382,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
     gsize       length, written;
     GError     *err = NULL;
 
+    (void) key; /* avoid unused parameter compiler warning */
     /* check if sat is new */
     if (ntle->isnew) {
 
@@ -1100,7 +1103,7 @@ const gchar *freq_to_str[TLE_AUTO_UPDATE_NUM] = {
 const gchar *
         tle_update_freq_to_str (tle_auto_upd_freq_t freq)
 {
-    if ((freq < TLE_AUTO_UPDATE_NEVER) ||
+    if ((freq <= TLE_AUTO_UPDATE_NEVER) ||
         (freq >= TLE_AUTO_UPDATE_NUM)) {
 
         freq = TLE_AUTO_UPDATE_NEVER;
