@@ -209,7 +209,7 @@ sat_log_log         (sat_log_level_t level, const gchar *fmt, ...)
 void
 sat_log_set_visible (gboolean visible)
 {
-
+    (void) visible; /* avoid unused parameter compiler warning */
 }
 
 
