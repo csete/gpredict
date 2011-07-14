@@ -109,6 +109,7 @@ GtkType
             sizeof (GtkPolarPlot),
             5,  /* n_preallocs */
             (GInstanceInitFunc) gtk_polar_plot_init,
+            NULL
         };
 
         gtk_polar_plot_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -546,6 +547,8 @@ void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el)
  */
 void gtk_polar_plot_show_time_ticks (GtkPolarPlot *plot, gboolean show)
 {
+    (void) plot; /* avoid unused parameter compiler warning */
+    (void) show; /* avoid unused parameter compiler warning */
     g_print ("NOT IMPLEMENTED %s\n",__FUNCTION__);
 }
 
@@ -901,7 +904,7 @@ static void
 static void
         create_track (GtkPolarPlot *pv)
 {
-    gint               i;
+    guint               i;
     GooCanvasItemModel *root;
     pass_detail_t      *detail;
     guint              num;
@@ -1172,6 +1175,9 @@ static gboolean
     GtkPolarPlot *polv = GTK_POLAR_PLOT (data);
     gfloat az,el;
     gchar *text;
+    
+    (void) item; /* avoid unused parameter compiler warning */
+    (void) target; /* avoid unused parameter compiler warning */
 
     if (polv->cursinfo) {
 
@@ -1207,6 +1213,7 @@ static void
                          GooCanvasItemModel *model,
                          gpointer data)
 {
+    (void) canvas; /* avoid unused parameter compiler warning */
     if (!goo_canvas_item_model_get_parent (model))     {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
@@ -1228,6 +1235,7 @@ static void
     guint32 col,tmp;
     guint16 r,g,b;
 
+    (void) polv; /* avoid unused parameter compiler warning */
 
     col = sat_cfg_get_int (SAT_CFG_INT_POLAR_BGD_COL);
 
