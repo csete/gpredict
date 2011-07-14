@@ -79,6 +79,7 @@ gtk_rot_knob_get_type ()
                sizeof (GtkRotKnob),
                5,     /* n_preallocs */
                (GInstanceInitFunc) gtk_rot_knob_init,
+               NULL
           };
 
           gtk_rot_knob_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -115,7 +116,8 @@ gtk_rot_knob_class_init (GtkRotKnobClass *class)
 static void
 gtk_rot_knob_init (GtkRotKnob *knob)
 {
-
+   
+    (void) knob; /* avoid unused parameter warning */
     
 }
 
