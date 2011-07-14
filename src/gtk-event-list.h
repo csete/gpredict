@@ -67,8 +67,6 @@ struct _gtk_event_list
      qth_t           *qth;          /*!< Pointer to current location. */
 
      guint32          flags;        /*!< Flags indicating which columns are visible */
-     guint            refresh;      /*!< Refresh rate, ie. how many cycles should pass between updates */
-     guint            counter;      /*!< cycle counter */
 
      gdouble          tstamp;       /*!< time stamp of calculations; set by GtkSatModule */
      

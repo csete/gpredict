@@ -171,6 +171,7 @@ GType gtk_event_list_get_type ()
                     sizeof (GtkEventList),
                     5,     /* n_preallocs */
                     (GInstanceInitFunc) gtk_event_list_init,
+                    NULL
                 };
 
             gtk_event_list_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -204,7 +205,7 @@ static void gtk_event_list_class_init (GtkEventListClass *class)
 
 static void gtk_event_list_init (GtkEventList *list)
 {
-
+    (void) list; /* avoid unused warning compiler warning. */
 }
 
 
@@ -230,6 +231,9 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
     GtkCellRenderer   *renderer;
     GtkTreeViewColumn *column;
 
+    /* FIXME */
+    (void) cfgdata; /* avoid unused warning compiler warning. */
+    (void) columns; /* avoid unused warning compiler warning. */
 
     widget = g_object_new (GTK_TYPE_EVENT_LIST, NULL);
     evlist = GTK_EVENT_LIST (widget);
@@ -245,10 +249,6 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 
     /* initialise column flags */
     evlist->flags = EVENT_LIST_COL_DEF;
-
-    /* FIXME: Not used */
-    evlist->refresh = 3;
-    evlist->counter = 1;
 
     /* create the tree view and add columns */
     evlist->treeview = gtk_tree_view_new ();
@@ -360,6 +360,7 @@ static void event_list_add_satellites (gpointer key, gpointer value, gpointer us
     GtkTreeIter   item;
     sat_t        *sat = SAT (value);
 
+    (void) key; /* avoid unused warning compiler warning. */
 
     gtk_list_store_append (store, &item);
     gtk_list_store_set (store, &item,
@@ -425,6 +426,7 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
     sat_t      *sat;
     gdouble     number, now;
 
+    (void) path; /* avoid unused warning compiler warning. */
 
     /* get the catalogue number for this row
        then look it up in the hash table
@@ -542,6 +544,8 @@ static void evtype_cell_data_function (GtkTreeViewColumn *col,
                                        GtkTreeIter       *iter,
                                        gpointer           column)
 {
+    (void) col; /* avoid unused warning compiler warning. */
+
     gboolean  value;
     gchar    *buff;
     guint     coli = GPOINTER_TO_UINT (column);
@@ -572,6 +576,8 @@ static void time_cell_data_function (GtkTreeViewColumn *col,
                                      GtkTreeIter       *iter,
                                      gpointer           column)
 {
+    (void) col; /* avoid unused warning compiler warning. */
+
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
@@ -623,6 +629,8 @@ static void degree_cell_data_function (GtkTreeViewColumn *col,
                                        GtkTreeIter       *iter,
                                        gpointer           column)
 {
+    (void) col; /* avoid unused warning compiler warning. */
+        
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
@@ -664,6 +672,7 @@ static gint event_cell_compare_function (GtkTreeModel *model,
     gint sort_col;
     GtkSortType sort_type;
 
+    (void) user_data; /* avoid unused warning compiler warning. */
 
     /* Since this function is used for both AOS and LOS columns,
        we need to get the sort column */
@@ -692,6 +701,8 @@ static gint event_cell_compare_function (GtkTreeModel *model,
 /** \brief Reload configuration */
 void gtk_event_list_reconf (GtkWidget *widget, GKeyFile *cfgdat)
 {
+    (void) cfgdat; /* avoid unused warning compiler warning. */
+    (void) widget; /* avoid unused warning compiler warning. */
     sat_log_log (SAT_LOG_LEVEL_WARN, _("%s: FIXME I am not implemented"));
 }
 
@@ -769,6 +780,8 @@ row_activated_cb (GtkTreeView       *tree_view,
     GtkTreeIter    iter;
     guint         *catnum;
     sat_t         *sat;
+    
+    (void) column; /* avoid unused warning compiler warning. */
 
     catnum = g_new0 (guint, 1);
     model = gtk_tree_view_get_model(tree_view);
