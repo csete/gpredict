@@ -245,6 +245,7 @@ gtk_sat_list_get_type ()
                     sizeof (GtkSatList),
                     5,     /* n_preallocs */
                     (GInstanceInitFunc) gtk_sat_list_init,
+                    NULL
                 };
 
             gtk_sat_list_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -281,6 +282,7 @@ gtk_sat_list_class_init (GtkSatListClass *class)
 static void
 gtk_sat_list_init (GtkSatList *list)
 {
+    (void) list; /* avoid unusued parameter compiler warning */
     /*     GtkWidget *vbox,*hbox; */
 
 
@@ -490,6 +492,7 @@ sat_list_add_satellites (gpointer key, gpointer value, gpointer user_data)
     GtkTreeIter   item;
     sat_t        *sat = SAT (value);
 
+    (void) key; /* avoid unusued parameter compiler warning */
 
     gtk_list_store_append (store, &item);
     gtk_list_store_set (store, &item,
@@ -588,7 +591,7 @@ sat_list_update_sats (GtkTreeModel *model,
     gdouble     loss;
     gdouble     oldrate;
     gint        retcode;
-
+    (void) path; /* avoid unusued parameter compiler warning */
 
     /* get the catalogue number for this row
        then look it up in the hash table
@@ -917,6 +920,8 @@ latlon_cell_data_function (GtkTreeViewColumn *col,
     guint    coli = GPOINTER_TO_UINT (column);
     gchar    hmf = ' ';
 
+    (void) col; /* avoid unusued parameter compiler warning */
+    
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* check whether configuration requests the use
@@ -971,7 +976,9 @@ degree_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
-
+    
+    (void) col; /* avoid unusued parameter compiler warning */
+        
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* format the number */
@@ -994,6 +1001,8 @@ distance_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
+
+    (void) col; /* avoid unusued parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -1023,7 +1032,9 @@ range_rate_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
-
+    
+    (void) col; /* avoid unusued parameter compiler warning */
+        
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* convert distance to miles? */
@@ -1050,6 +1061,8 @@ float_to_int_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
+    
+    (void) col; /* avoid unusued parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -1072,7 +1085,9 @@ two_dec_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
-
+    
+    (void) col; /* avoid unusued parameter compiler warning */
+    
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* format the number */
@@ -1097,7 +1112,8 @@ event_cell_data_function (GtkTreeViewColumn *col,
     gchar     *fmtstr;
     guint      coli = GPOINTER_TO_UINT (column);
 
-
+    (void) col; /* avoid unusued parameter compiler warning */
+    
     gtk_tree_model_get (model, iter, coli, &number, -1);
     
     if (number == 0.0) {
@@ -1146,6 +1162,7 @@ static gint event_cell_compare_function (GtkTreeModel *model,
     gint sort_col;
     GtkSortType sort_type;
 
+    (void) user_data; /* avoid unusued parameter compiler warning */
 
     /* Since this function is used for both AOS and LOS columns,
        we need to get the sort column */
@@ -1175,6 +1192,8 @@ static gint event_cell_compare_function (GtkTreeModel *model,
 void
 gtk_sat_list_reconf          (GtkWidget *widget, GKeyFile *cfgdat)
 {
+    (void) widget; /* avoid unusued parameter compiler warning */
+    (void) cfgdat; /* avoid unusued parameter compiler warning */
     sat_log_log (SAT_LOG_LEVEL_WARN, _("%s: FIXME I am not implemented"));
 }
 
@@ -1258,6 +1277,8 @@ row_activated_cb (GtkTreeView       *tree_view,
     GtkTreeIter    iter;
     guint         *catnum;
     sat_t         *sat;
+    
+    (void) column; /* avoid compiler warning */
     
     catnum = g_new0 (guint, 1);
 
