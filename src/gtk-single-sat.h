@@ -138,7 +138,7 @@ struct _gtk_single_sat
      guint32       flags;        /*!< Flags indicating which columns are visible. */
      guint         refresh;      /*!< Refresh rate. */
      guint         counter;      /*!< cycle counter. */
-     gint          selected;     /*!< index of selected sat. */
+     guint          selected;     /*!< index of selected sat. */
 
      gdouble       tstamp;       /*!< time stamp of calculations; update by GtkSatModule */
      

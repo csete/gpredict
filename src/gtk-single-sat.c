@@ -140,6 +140,7 @@ gtk_single_sat_get_type ()
             sizeof (GtkSingleSat),
             5,     /* n_preallocs */
             (GInstanceInitFunc) gtk_single_sat_init,
+            NULL
         };
 
         gtk_single_sat_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -176,6 +177,7 @@ gtk_single_sat_class_init (GtkSingleSatClass *class)
 static void
 gtk_single_sat_init (GtkSingleSat *list)
 {
+    (void) list; /* avoid unused parameter compiler warning */
     /*     GtkWidget *vbox,*hbox; */
 
 
@@ -735,7 +737,9 @@ store_sats (gpointer key, gpointer value, gpointer user_data)
 {
     GtkSingleSat *single_sat = GTK_SINGLE_SAT (user_data);
     sat_t        *sat = SAT (value);
-
+    
+    (void) key; /* avoid unused parameter compiler warning */
+    
     single_sat->sats = g_slist_insert_sorted (single_sat->sats,sat, (GCompareFunc) sat_name_compare);
 }
 
