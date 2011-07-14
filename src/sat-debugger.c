@@ -79,6 +79,10 @@ debugger_delete      (GtkWidget *widget,
                 GdkEvent  *event,
                 gpointer   data)
 {
-     active = FALSE;
-     return FALSE;
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */ 
+    (void) data; /* avoid unused parameter compiler warning */ 
+
+    active = FALSE;
+    return FALSE;
 }
