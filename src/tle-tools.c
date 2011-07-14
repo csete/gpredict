@@ -64,6 +64,8 @@ gint
 twoline2tle (gchar *line1, gchar *line2, gchar *line3,
              gboolean checksum, tle_t *tle)
 {
+    /* FIXME */
+    (void) checksum; /* avoid unused parameter compiler warning */
 
     /* check function parameters */
     if G_UNLIKELY((line1 == NULL) || (line2 == NULL) || (line3 == NULL)) {
@@ -100,6 +102,11 @@ twoline2tle (gchar *line1, gchar *line2, gchar *line3,
 gint
 tle2twoline (tle_t *tle, gchar *line1, gchar *line2, gchar *line3)
 {
+    (void) tle; /* avoid unused parameter compiler warning */
+    (void) line1; /* avoid unused parameter compiler warning */
+    (void) line2; /* avoid unused parameter compiler warning */
+    (void) line3; /* avoid unused parameter compiler warning */
+    
     return TLE_CONV_SUCCESS;
 }
 
