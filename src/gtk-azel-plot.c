@@ -98,6 +98,7 @@ gtk_azel_plot_get_type ()
                sizeof (GtkAzelPlot),
                5,  /* n_preallocs */
                (GInstanceInitFunc) gtk_azel_plot_init,
+               NULL
           };
 
           gtk_azel_plot_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -688,6 +689,9 @@ on_motion_notify (GooCanvasItem *item,
      gchar *text;
      gchar  buff[10];
 
+     (void) item; /* avoid unused warning compiler warning. */
+     (void) target; /* avoid unused warning compiler warning. */
+
      if (polv->cursinfo) {
 
           /* get (x,y) */
@@ -736,12 +740,15 @@ on_item_created (GooCanvas *canvas,
                      GooCanvasItemModel *model,
                      gpointer data)
 {
-     if (!goo_canvas_item_model_get_parent (model)) {
-          /* root item / canvas */
-          g_signal_connect (item, "motion_notify_event",
-                                (GtkSignalFunc) on_motion_notify, data);
-     }
 
+    (void) canvas; /* avoid unused warning compiler warning. */
+    
+    if (!goo_canvas_item_model_get_parent (model)) {
+        /* root item / canvas */
+        g_signal_connect (item, "motion_notify_event",
+                          (GtkSignalFunc) on_motion_notify, data);
+    }
+    
 }
 
 
@@ -754,26 +761,28 @@ on_item_created (GooCanvas *canvas,
 static void
 get_canvas_bg_color (GtkAzelPlot *polv, GdkColor *color)
 {
-     guint32 col,tmp;
-     guint16 r,g,b;
-
-
-     col = sat_cfg_get_int (SAT_CFG_INT_POLAR_BGD_COL);
-
-     /* red */
-     tmp = col & 0xFF000000;
-     r = (guint16) (tmp >> 24);
-
-     /* green */
-     tmp = col & 0x00FF0000;
-     g = (guint16) (tmp >> 16);
-
-     /* blue */
-     tmp = col & 0x0000FF00;
-     b = (guint16) (tmp >> 8);
-
-     /* store colours */
-     color->red   = 257 * r;
-     color->green = 257 * g;
-     color->blue  = 257 * b;
+    (void) polv; /* avoid unused warning compiler warning. */
+    
+    guint32 col,tmp;
+    guint16 r,g,b;
+    
+    
+    col = sat_cfg_get_int (SAT_CFG_INT_POLAR_BGD_COL);
+    
+    /* red */
+    tmp = col & 0xFF000000;
+    r = (guint16) (tmp >> 24);
+    
+    /* green */
+    tmp = col & 0x00FF0000;
+    g = (guint16) (tmp >> 16);
+    
+    /* blue */
+    tmp = col & 0x0000FF00;
+    b = (guint16) (tmp >> 8);
+    
+    /* store colours */
+    color->red   = 257 * r;
+    color->green = 257 * g;
+    color->blue  = 257 * b;
 }
