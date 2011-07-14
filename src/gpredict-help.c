@@ -53,11 +53,13 @@ gpredict_help_launch (gpredict_help_type_t type)
      browser_type_t idx;
      gint           resp;
 
+     (void) type; /* avoid unused parameter compiler warning */
+
 
      idx = sat_cfg_get_int (SAT_CFG_INT_WEB_BROWSER_TYPE);
 
      /* some sanity check before accessing the arrays ;-) */
-     if ((idx < BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM)) {
+     if ((idx <= BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM)) {
           idx = BROWSER_TYPE_NONE;
      }
 
