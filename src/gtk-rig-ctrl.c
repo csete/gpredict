@@ -118,7 +118,9 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, gint sock);
 static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq);
 static gboolean get_ptt (GtkRigCtrl *ctrl, gint sock);
 static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt);
+#if 0
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo);
+#endif
 static gboolean setup_split(GtkRigCtrl *ctrl);
 static void update_count_down (GtkRigCtrl *ctrl, gdouble t);
 static gboolean open_rigctld_socket(radio_conf_t *conf, gint *sock);
@@ -163,6 +165,7 @@ GType gtk_rig_ctrl_get_type ()
             sizeof (GtkRigCtrl),
             2,     /* n_preallocs */
             (GInstanceInitFunc) gtk_rig_ctrl_init,
+            NULL
         };
 
         gtk_rig_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -837,6 +840,7 @@ static void store_sats (gpointer key, gpointer value, gpointer user_data)
     GtkRigCtrl *ctrl = GTK_RIG_CTRL( user_data);
     sat_t        *sat = SAT (value);
 
+    (void) key; /* avoid unused parameter compiler warning */
     //ctrl->sats = g_slist_append (ctrl->sats, sat);
     ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
@@ -927,6 +931,8 @@ static void trsp_tune_cb (GtkButton *button, gpointer data)
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
     gdouble     freq;
     
+    (void) button; /* avoid unused parameter compiler warning */
+
     if (ctrl->trsp == NULL)
         return;
     
@@ -1330,6 +1336,7 @@ static gboolean setup_split(GtkRigCtrl *ctrl)
 static void downlink_changed_cb (GtkFreqKnob *knob, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    (void) knob; /* avoid unused parameter compiler warning */
     
     if (ctrl->trsplock) {
         track_downlink (ctrl);
@@ -1346,6 +1353,7 @@ static void downlink_changed_cb (GtkFreqKnob *knob, gpointer data)
 static void uplink_changed_cb (GtkFreqKnob *knob, gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL (data);
+    (void) knob; /* avoid unused parameter compiler warning */
     
     if (ctrl->trsplock) {
         track_uplink (ctrl);
@@ -2337,6 +2345,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
  *         occurred.
  * 
  */
+#if 0
 static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
 {
     gchar  *buff;
@@ -2373,7 +2382,7 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
     
     return(check_set_response(buffback,retcode,__FUNCTION__));
 }
-
+#endif
 
 /** \brief Update count down label.
  * \param[in] ctrl Pointer to the RigCtrl widget.
@@ -2662,7 +2671,7 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
         return FALSE;
     }
     /* try to read answer */
-    size = recv (sock, buffout, 127, 0);
+    size = recv (sock, buffout, sizeout - 1, 0);
     if (size == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rigctld port closed"),
@@ -2702,6 +2711,7 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
     GtkRigCtrl *ctrl = GTK_RIG_CTRL(widget);
     gboolean event_managed = FALSE;
 
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* filter GDK_KEY_PRESS events */
     if (pKey->type == GDK_KEY_PRESS) {
