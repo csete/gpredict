@@ -564,6 +564,9 @@ static void switch_page_cb      (GtkNotebook     *notebook,
     GtkWidget *pg;
     gchar *title;
 
+    (void) notebook; /* avoid unused parameter compiler warning */
+    (void) page; /* avoid unused parameter compiler warning */
+    (void) user_data; /* avoid unused parameter compiler warning */
 
     pg = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nbook), page_num);
     title = g_strdup_printf (_("GPREDICT: %s"),
