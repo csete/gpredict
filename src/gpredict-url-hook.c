@@ -39,6 +39,9 @@ gpredict_url_hook_cb (GtkAboutDialog *about,
                            const gchar *link,
                            gpointer data)
 {
-
+    /* FIXME */
+    (void) about; /* avoid unused warning compiler warning. */
+    (void) link; /* avoid unused warning compiler warning. */
+    (void) data; /* avoid unused warning compiler warning. */
 
 }
