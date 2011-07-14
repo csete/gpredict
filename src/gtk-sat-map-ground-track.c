@@ -213,11 +213,14 @@ ground_track_update (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 void
 ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj, gboolean clear_ssp)
 {
-     guint              i,j,n;
+     guint              i,n;
+     gint               j;
      GooCanvasItemModel *line;
      GooCanvasItemModel *root;
 
-     sat_log_log (SAT_LOG_LEVEL_DEBUG,
+    (void) qth; /* avoid unusued parameter compiler warning */
+
+    sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Deleting ground track for %s"),
                  __FUNCTION__, sat->nickname);
 
@@ -276,7 +279,8 @@ ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 static void
 free_ssp (gpointer ssp, gpointer data)
 {
-     g_free (ssp);
+    (void) data; /* prevent unused parameter compiler warning */
+    g_free (ssp);
 }
 
 
@@ -294,6 +298,8 @@ create_polylines (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
      guint              i,j,n,num_points;
      guint32            col;
 
+     (void) sat; /* prevent unused parameter compiler warning */
+     (void) qth; /* prevent unused parameter compiler warning */
 
      /* initialise parameters */
      lastx = -50.0;
