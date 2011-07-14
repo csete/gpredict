@@ -132,7 +132,10 @@ first_time_check_step_01 (guint *error)
 {
     gchar *newdir,*olddir;
     gchar *source,*target;
-
+    
+    /* FIXME */
+    (void) error; /* avoid unused parameter compiler warning */
+    
     newdir = get_user_conf_dir ();
     target = g_strconcat (newdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
     g_free (newdir);
