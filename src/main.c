@@ -319,7 +319,7 @@ gpredict_sig_handler (int sig)
 {
     /*      satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
     /*      satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
-
+    (void) sig; /* prevent unused parameter compiler warning */
     gtk_widget_destroy (app);
 }
 
@@ -341,6 +341,9 @@ gpredict_app_delete      (GtkWidget *widget,
                           GdkEvent  *event,
                           gpointer   data)
 {
+    (void) widget; /* prevent unused parameter compiler warning */
+    (void) event; /* prevent unused parameter compiler warning */
+    (void) data; /* prevent unused parameter compiler warning */
     return FALSE;
 }
 
@@ -359,7 +362,9 @@ static void
 gpredict_app_destroy    (GtkWidget *widget,
                          gpointer   data)
 {
-
+    (void) widget; /* prevent unused parameter compiler warning */
+    (void) data; /* prevent unused parameter compiler warning */
+    
     /* stop TLE monitoring task */
     tle_mon_stop ();
 
@@ -401,7 +406,7 @@ static gboolean
 gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
     gint x, y;
-
+    (void) data; /* prevent unused parameter compiler warning */
 
     /* data is only useful when window is visible */
     if (GTK_WIDGET_VISIBLE (widget))
@@ -455,7 +460,10 @@ tle_mon_task          (gpointer data)
     GTimeVal   tval;
     GtkWidget *dialog;
     GError    *err = NULL;
-
+    
+    if (data != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Passed a non-null pointer which should never happen.\n"), __FUNCTION__);
+    }
 
     /*      sat_log_log (SAT_LOG_LEVEL_DEBUG, */
     /*                      _("%s: Checking whether TLE check should be executed..."), */
@@ -580,6 +588,7 @@ tle_mon_stop          ()
 static gpointer
 update_tle_thread     (gpointer data)
 {
+    (void) data; /* prevent unused parameter compiler warning */
     tle_upd_running = TRUE;
 
     tle_update_from_network (TRUE, NULL, NULL, NULL);
