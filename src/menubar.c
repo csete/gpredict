@@ -90,11 +90,11 @@ static gint compare_func (GtkTreeModel *model,
  *  \ingroup menupriv
  */
 static GtkActionEntry entries[] = {
-    { "FileMenu", NULL, N_("_File") },
-    { "EditMenu", NULL, N_("_Edit") },
-    { "TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE") },
-    { "ToolsMenu", NULL, N_("_Tools") },
-    { "HelpMenu", NULL, N_("_Help") },
+    { "FileMenu", NULL, N_("_File"), NULL, NULL, NULL },
+    { "EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL },
+    { "TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE"), NULL, NULL, NULL },
+    { "ToolsMenu", NULL, N_("_Tools"), NULL, NULL, NULL },
+    { "HelpMenu", NULL, N_("_Help"), NULL, NULL, NULL },
 
     /* File menu */
     { "New", GTK_STOCK_NEW, N_("_New module"), "<control>N",
@@ -210,7 +210,7 @@ menubar_create (GtkWidget *window)
     //GtkWidget      *menuitem;
     //GtkWidget      *image;
     //gchar          *icon;
-    gint           i;
+    guint           i;
 
 
     /* create action group */
@@ -269,6 +269,8 @@ menubar_new_mod_cb  (GtkWidget *widget, gpointer data)
     gchar *confdir;
     GtkWidget *module = NULL;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: Starting new module configurator..."),
@@ -328,6 +330,8 @@ menubar_open_mod_cb  (GtkWidget *widget, gpointer data)
     gchar *confdir;
     GtkWidget *module = NULL;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: Open existing module..."),
@@ -394,6 +398,9 @@ menubar_open_mod_cb  (GtkWidget *widget, gpointer data)
 static void
 menubar_message_log  (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     sat_log_browser_open ();
 }
 
@@ -401,6 +408,9 @@ menubar_message_log  (GtkWidget *widget, gpointer data)
 static void
 menubar_app_exit_cb  (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     gtk_widget_destroy (app);
 }
 
@@ -408,12 +418,17 @@ menubar_app_exit_cb  (GtkWidget *widget, gpointer data)
 static void
 menubar_freq_edit_cb (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 }
 
 
 static void
 menubar_pref_cb      (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     sat_pref_run ();
 }
 
@@ -437,7 +452,8 @@ menubar_tle_net_cb       (GtkWidget *widget, gpointer data)
     GtkWidget *label1,*label2;  /* activitity and stats labels */
     GtkWidget *box;
 
-
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
     
     /* create new dialog with progress indicator */
     dialog = gtk_dialog_new_with_buttons (_("TLE Update"),
@@ -543,6 +559,8 @@ menubar_tle_local_cb       (GtkWidget *widget, gpointer data)
     gint       response;     /* dialog response */
     gboolean   doupdate = FALSE;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* get last used directory */
     dir = sat_cfg_get_str (SAT_CFG_STR_TLE_FILE_DIR);
@@ -691,6 +709,8 @@ menubar_tle_local_cb       (GtkWidget *widget, gpointer data)
 static void
 menubar_tle_manual_cb       (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
     //satellite_editor_run ();
 }
 
@@ -703,6 +723,8 @@ menubar_window_cb (GtkWidget *widget, gpointer data)
 {
     GtkWidget *dialog;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     dialog = gtk_message_dialog_new (GTK_WINDOW (app),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -724,6 +746,8 @@ menubar_predict_cb   (GtkWidget *widget, gpointer data)
 {
     GtkWidget *dialog;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     dialog = gtk_message_dialog_new (GTK_WINDOW (app),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -743,6 +767,9 @@ menubar_predict_cb   (GtkWidget *widget, gpointer data)
 static void
 menubar_getting_started_cb (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     gpredict_help_launch (GPREDICT_HELP_GETTING_STARTED);
 }
 
@@ -751,6 +778,9 @@ menubar_help_cb (GtkWidget *widget, gpointer data)
 {
     GtkWidget *dialog;
     GtkWidget *button;
+    
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     dialog = gtk_message_dialog_new (GTK_WINDOW (app),
                                      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -774,6 +804,9 @@ menubar_help_cb (GtkWidget *widget, gpointer data)
 static void
 menubar_license_cb (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     gpredict_help_show_txt ("COPYING");
 }
 
@@ -781,6 +814,9 @@ menubar_license_cb (GtkWidget *widget, gpointer data)
 static void
 menubar_news_cb (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     gpredict_help_show_txt ("NEWS");
 }
 
@@ -788,6 +824,9 @@ menubar_news_cb (GtkWidget *widget, gpointer data)
 static void
 menubar_about_cb (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     about_dialog_create ();
 }
 
@@ -1079,7 +1118,8 @@ static gint compare_func (GtkTreeModel *model,
 {
     gchar *sat1,*sat2;
     gint ret = 0;
-
+    
+    (void) userdata; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get(model, a, 0, &sat1, -1);
     gtk_tree_model_get(model, b, 0, &sat2, -1);
