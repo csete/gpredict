@@ -82,10 +82,12 @@ static void on_item_created            (GooCanvas *canvas,
                                         GooCanvasItemModel *model,
                                         gpointer data);
 static void on_canvas_realized         (GtkWidget *canvas, gpointer data);
+#if 0
 static gboolean on_button_press        (GooCanvasItem *item,
                                         GooCanvasItem *target,
                                         GdkEventButton *event,
                                         gpointer data);
+#endif
 static gboolean on_button_release      (GooCanvasItem *item,
                                         GooCanvasItem *target,
                                         GdkEventButton *event,
@@ -128,6 +130,7 @@ gtk_sky_glance_get_type ()
             sizeof (GtkSkyGlance),
             1,  /* n_preallocs */
             (GInstanceInitFunc) gtk_sky_glance_init,
+            NULL
         };
 
         gtk_sky_glance_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -622,6 +625,9 @@ on_motion_notify (GooCanvasItem *item,
     gdouble          t;
     gchar            buff[6];
 
+    (void) item; /* avoid unused parameter compiler warning */
+    (void) target; /* avoid unused parameter compiler warning */
+
     /* update cursor tracking line and time label */
     pts = goo_canvas_points_new (2);
     pts->coords[0] = event->x;
@@ -682,6 +688,8 @@ on_item_created (GooCanvas *canvas,
                 GooCanvasItemModel *model,
                 gpointer data)
 {
+    (void) canvas; /* avoid unused parameter compiler warning */
+
     if (!goo_canvas_item_model_get_parent (model))     {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event", (GtkSignalFunc) on_motion_notify, data);
@@ -706,15 +714,17 @@ on_item_created (GooCanvas *canvas,
  * This function is called when a mouse button is pressed on a satellite pass object.
  * If the pressed button is 1 (left) pass details will be show.
  */
+#if 0
 static gboolean
 on_button_press (GooCanvasItem *item,
                  GooCanvasItem *target,
                  GdkEventButton *event,
                  gpointer data)
 {
-/*  GooCanvasItemModel *model = goo_canvas_item_get_model (item); */
-/*  GtkSkyGlance  *skg = GTK_SKY_GLANCE (data); */
 
+    (void) item; /* avoid unused parameter compiler warning */
+    (void) target; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     switch (event->button) {
 
@@ -728,7 +738,7 @@ on_button_press (GooCanvasItem *item,
 
     return TRUE;
 }
-
+#endif
 
 /** \brief Manage button release events.
  *  \param item The GooCanvasItem object that received the button press event.
@@ -751,7 +761,9 @@ on_button_release (GooCanvasItem *item,
 
     GooCanvasItemModel *item_model = goo_canvas_item_get_model (item);
     GtkSkyGlance  *skg = GTK_SKY_GLANCE (data);
-
+    
+    (void) target; /* avoid unused parameter compiler warning */
+    
     /* get pointer to pass_t structure */
     pass_t *pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
     pass_t *new_pass;
@@ -806,7 +818,10 @@ static gboolean on_mouse_enter         (GooCanvasItem    *item,
                                         gpointer          data)
 {
     GooCanvasItemModel *item_model = goo_canvas_item_get_model (item);
-    GtkSkyGlance  *skg = GTK_SKY_GLANCE (data);
+
+    (void) target_item; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* get pointer to pass_t structure */
     pass_t *pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
@@ -839,6 +854,12 @@ static gboolean on_mouse_leave         (GooCanvasItem    *item,
                                         gpointer          data)
 {
     //g_print("Mouse leave\n");
+
+    (void) item; /* avoid unused parameter compiler warning */
+    (void) target_item; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
 
     return TRUE;
 }
@@ -974,6 +995,8 @@ create_sat (gpointer key, gpointer value, gpointer data)
     GooCanvasItemModel *root;
     GooCanvasItemModel *lab;
 
+    (void) key; /* avoid unused parameter compiler warning */
+        
     /* tooltips vars */
     gchar *tooltip; /* the complete tooltips string */
     gchar aosstr[100];  /* AOS time string */
