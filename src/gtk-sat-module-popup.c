@@ -320,6 +320,7 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
     gchar        *icon;      /* icon file name */
     gchar        *title;     /* window title */
 
+    (void) menuitem; /* avoid unused parameter compiler warning */
 
     dialog = gtk_dialog_new_with_buttons (_("Clone Module"),
                                           GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (module))),
@@ -499,7 +500,7 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
     gchar     *icon;      /* icon file name */
     gchar     *title;     /* window title */
 
-
+    (void) menuitem; /* avoid unused parameter compiler warning */
 
     switch (GTK_SAT_MODULE (module)->state) {
 
@@ -669,6 +670,7 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
     gchar     *icon;      /* icon file name */
     gchar     *title;     /* window title */
 
+    (void) menuitem; /* avoid unused parameter compiler warning */
 
     switch (GTK_SAT_MODULE (module)->state) {
 
@@ -806,6 +808,7 @@ static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
     //GtkWidget    *window;
     gchar        *buff;
 
+    (void) menuitem; /* avoid unused parameter compiler warning */
 
     /* if module is busy wait until done then go on */
     g_mutex_lock(module->busy);
@@ -858,7 +861,9 @@ static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
 static void tmgr_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-
+    
+    (void) menuitem; /* avoid unused parameter compiler warning */
+    
     tmg_create (module);
 }
 
@@ -870,6 +875,8 @@ static void rigctrl_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     gchar *buff;
+    
+    (void) menuitem; /* avoid unused parameter compiler warning */
     
     if (module->rigctrlwin != NULL) {
         /* there is already a roto controller for this module */
@@ -928,6 +935,8 @@ static void destroy_rigctrl  (GtkWidget *window, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     
+    (void) window; /* avoid unused parameter compiler warning */
+
     module->rigctrlwin = NULL;
     module->rigctrl = NULL;
 }
@@ -941,6 +950,8 @@ static void rotctrl_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     gchar *buff;
+    
+    (void) menuitem; /* avoid unused parameter compiler warning */
     
     if (module->rotctrlwin != NULL) {
         /* there is already a roto controller for this module */
@@ -998,6 +1009,8 @@ static void destroy_rotctrl  (GtkWidget *window, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
     
+    (void) window; /* avoid unused parameter compiler warning */
+
     module->rotctrlwin = NULL;
     module->rotctrl    = NULL;
 }
@@ -1012,7 +1025,9 @@ static void destroy_rotctrl  (GtkWidget *window, gpointer data)
 static void destroy_skg  (GtkWidget *window, gpointer data)
 {
     GtkSatModule *module = GTK_SAT_MODULE (data);
-    
+
+    (void) window; /* avoid unused parameter compiler warning */
+
     module->skgwin = NULL;
     module->skg    = NULL;
 }
@@ -1023,6 +1038,10 @@ static gint window_delete  (GtkWidget *widget,
                             GdkEvent  *event,
                             gpointer   data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+        
     return FALSE;
 }
 
