@@ -113,7 +113,7 @@ struct _gtk_sat_module
     guint          event_timeout;
 
     /* layout and children */
-    gint         *grid;         /*!< The grid layout array [(type,left,right,top,bottom),...] */
+    guint         *grid;         /*!< The grid layout array [(type,left,right,top,bottom),...] */
     guint         nviews;       /*!< The number of views */
     GSList       *views;        /*!< Pointers to the views */
 
