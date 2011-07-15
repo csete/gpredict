@@ -113,6 +113,7 @@ gtk_polar_view_get_type ()
             sizeof (GtkPolarView),
             5,  /* n_preallocs */
             (GInstanceInitFunc) gtk_polar_view_init,
+            NULL
         };
 
         gtk_polar_view_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -518,6 +519,9 @@ correct_pole_coor          (GtkPolarView *polv,
 static void
 size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) allocation; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
     GTK_POLAR_VIEW (data)->resize = TRUE;
 }
 
@@ -781,6 +785,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
     gchar             *tooltip;
     guint32            colour;
 
+    (void) key; /* avoid unused parameter compiler warning */
 
     catnum = g_new0 (gint, 1);
     *catnum = sat->tle.catnr;
@@ -1026,6 +1031,7 @@ update_track (gpointer key, gpointer value, gpointer data)
     pass_detail_t   *detail;
     guint            tres,ttidx;
 
+    (void) key; /* avoid unused parameter compiler warning */
 
     if (obj->showtrack) {
           if (obj->pass == NULL) {
@@ -1140,7 +1146,7 @@ static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfl
  */
 static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 {
-    gint               i;
+    guint              i;
     GooCanvasItemModel *root;
     pass_detail_t      *detail;
     guint              num;
@@ -1149,6 +1155,7 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
     guint32            col;
     guint              tres,ttidx;
 
+    (void) sat; /* avoid unused parameter compiler warning */
 
     /* get satellite object */
     /*obj = SAT_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
@@ -1347,6 +1354,9 @@ on_motion_notify (GooCanvasItem *item,
     GtkPolarView *polv = GTK_POLAR_VIEW (data);
     gfloat az,el;
     gchar *text;
+    
+    (void) item; /* avoid unused parameter compiler warning */
+    (void) target; /* avoid unused parameter compiler warning */
 
     if (polv->cursinfo) {
 
@@ -1382,6 +1392,9 @@ on_item_created (GooCanvas *canvas,
                  GooCanvasItemModel *model,
                  gpointer data)
 {
+
+    (void) canvas; /* avoid unused parameter compiler warning */
+
     if (!goo_canvas_item_model_get_parent (model))    {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
@@ -1414,6 +1427,8 @@ on_button_press (GooCanvasItem *item,
     gint catnum = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (model), "catnum"));
     gint *catpoint = NULL;
     sat_t *sat = NULL;
+
+    (void) target; /* avoid unused parameter compiler warning */
 
     switch (event->button) {
 
@@ -1488,6 +1503,8 @@ on_button_release (GooCanvasItem *item,
     gint *catpoint = NULL;
     sat_obj_t *obj = NULL;
     guint32  color;
+
+    (void) target; /* avoid unused parameter compiler warning */
 
     catpoint = g_try_new0 (gint, 1);
     *catpoint = catnum;
@@ -1580,6 +1597,8 @@ clear_selection (gpointer key, gpointer val, gpointer data)
 void
 gtk_polar_view_reconf          (GtkWidget  *widget, GKeyFile *cfgdat)
 {
+    (void) cfgdat; /* avoid unused parameter compiler warning */
+    (void) widget; /* avoid unused parameter compiler warning */
 }
 
 
