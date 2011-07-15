@@ -99,7 +99,9 @@ gboolean gtk_sat_selector_search_equal_func (GtkTreeModel *model,
 {
     gchar *name = NULL;
     gchar *match;
-    //gchar *NULLSTR = "NULL";
+
+    (void) column; /* avoid unused parameter compiler warning */
+    (void) search_data; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get(model, iter, GTK_SAT_SELECTOR_COL_NAME, &name, -1);
     /* sat_log_log(SAT_LOG_LEVEL_MSG, "%s: key %s, name %s", */
@@ -139,6 +141,7 @@ GType gtk_sat_selector_get_type ()
             sizeof (GtkSatSelector),
             1,     /* n_preallocs */
             (GInstanceInitFunc) gtk_sat_selector_init,
+            NULL
         };
 
         gtk_sat_selector_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -611,6 +614,7 @@ static gint compare_func (GtkTreeModel *model,
     gchar *sat1,*sat2;
     gint ret = 0;
 
+    (void) userdata; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
@@ -697,6 +701,10 @@ static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
     gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
     gint              catnum;     /* catalog number of the selected satellite */
 
+    (void) view; /* avoid unused parameter compiler warning */
+    (void) path; /* avoid unused parameter compiler warning */    
+    (void) column; /* avoid unused parameter compiler warning */
+
     /* get the selected row in the treeview */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (selector->tree));
     haveselection = gtk_tree_selection_get_selected (selection, &model, &iter);
@@ -774,6 +782,7 @@ static void epoch_cell_data_function (GtkTreeViewColumn *col,
     gchar     *fmtstr;
     guint      coli = GPOINTER_TO_UINT (column);
 
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -901,6 +910,8 @@ static gboolean cb_entry_changed( GtkEditable *entry,
                   GtkTreeView *treeview )
 {
     GtkTreeModelFilter *filter;
+    
+    (void) entry; /* avoid unused parameter compiler warning */
    
     filter = GTK_TREE_MODEL_FILTER( gtk_tree_view_get_model( treeview ) );
     gtk_tree_model_filter_refilter( filter );
