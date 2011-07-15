@@ -466,6 +466,9 @@ sat_pref_sky_at_glance_ok     ()
 static void
 spin_changed_cb (GtkWidget *spinner, gpointer data)
 {
+    (void) spinner; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     dirty = TRUE;
 }
 
@@ -520,6 +523,9 @@ reset_cb               (GtkWidget *button, gpointer data)
 {
     guint    rgb;
     GdkColor col;
+
+    (void) data; /* avoid unused parameter compiler warning */
+    (void) button; /* avoid unused parameter compiler warning */
 
     /* get defaults */
 
@@ -586,6 +592,9 @@ reset_cb               (GtkWidget *button, gpointer data)
 static void
 colour_changed     (GtkWidget *but, gpointer data)
 {
+    (void) but; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     dirty = TRUE;
 }
 
