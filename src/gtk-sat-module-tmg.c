@@ -318,6 +318,10 @@ void tmg_create (GtkSatModule *mod)
  */ 
 static gint tmg_delete   (GtkWidget *tmg, GdkEvent *event, gpointer data)
 {
+    (void) tmg; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     return FALSE;
 }
 
@@ -327,6 +331,7 @@ static void tmg_destroy  (GtkWidget *tmg, gpointer data)
 {
     GtkSatModule *mod = GTK_SAT_MODULE (data);
 
+    (void) tmg; /* avoid unused parameter compiler warning */
 
     /* reset time keeping variables */
     mod->throttle = 1;
@@ -429,6 +434,8 @@ static void tmg_reset      (GtkWidget *widget, gpointer data)
 {
     GtkSatModule *mod = GTK_SAT_MODULE (data);
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    
     /* set reset flag in order to block
            widget signals */
     mod->reset = TRUE;
@@ -483,6 +490,8 @@ static void tmg_time_set (GtkWidget *widget, gpointer data)
     gdouble slider;
     gdouble jd;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+        
     /* update time only if we are in manual time control */
     if (!mod->throttle && !mod->reset) {
 
@@ -566,7 +575,9 @@ static void tmg_hour_wrap  (GtkWidget *widget, gpointer data)
 {
     GtkSatModule *mod = GTK_SAT_MODULE (data);
     gint hour;
-
+    
+    (void) widget; /* avoid unused parameter compiler warning */
+    
     hour = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgHour));
 
     if (hour == 0) {
@@ -592,6 +603,8 @@ static void tmg_min_wrap (GtkWidget *widget, gpointer data)
 {
     GtkSatModule *mod = GTK_SAT_MODULE (data);
     gint hr, min;
+
+    (void) widget; /* avoid unused parameter compiler warning */
 
     hr = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgHour));
     min = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgMin));
@@ -635,6 +648,8 @@ static void tmg_sec_wrap (GtkWidget *widget, gpointer data)
     GtkSatModule *mod = GTK_SAT_MODULE (data);
     gint min, sec;
 
+    (void) widget; /* avoid unused parameter compiler warning */
+
     sec = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgSec));
     min = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgMin));
 
@@ -676,6 +691,8 @@ static void tmg_msec_wrap (GtkWidget *widget, gpointer data)
 {
     GtkSatModule *mod = GTK_SAT_MODULE (data);
     gint msec, sec;
+    
+    (void) widget; /* avoid unused parameter compiler warning */
 
     sec = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgSec));
     msec = gtk_spin_button_get_value (GTK_SPIN_BUTTON (mod->tmgMsec));
