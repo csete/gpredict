@@ -121,6 +121,7 @@ gtk_sat_module_get_type ()
             sizeof (GtkSatModule),
             5,     /* n_preallocs */
             (GInstanceInitFunc) gtk_sat_module_init,
+            NULL
         };
 
         gtk_sat_module_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -618,7 +619,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
 
     /* number of views: we have five numbers per view (type,left,right,top,bottom) */
     module->nviews = length / 5;
-    module->grid = g_try_new0 (gint, length);
+    module->grid = g_try_new0 (guint, length);
     
     /* if we cannot allocate memory for the grid zero the views out and log */
     if ( module->grid != NULL ) {
@@ -959,6 +960,8 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
     geodetic_t    obs_geodetic = {0,0,0,0};
     gdouble       maxdt;
 
+    (void) key; /* prevent unused parameter compiler warning */
+
     g_return_if_fail ((val != NULL) && (data != NULL));
 
     sat = SAT(val);
@@ -1100,6 +1103,7 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
 static void
 gtk_sat_module_popup_cb       (GtkWidget *button, gpointer data)
 {
+    (void) button; /* prevent unused parameter compiler warning */
     gtk_sat_module_popup (GTK_SAT_MODULE (data));
 }
 
@@ -1124,6 +1128,8 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     GtkSatModule *module = GTK_SAT_MODULE (data);
     gchar        *name;
     gint          retcode;
+
+    (void) button; /* prevent unused parameter compiler warning */
 
     name = g_strdup (module->name);
 
@@ -1252,7 +1258,8 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
     gtk_sat_mod_state_t  laststate;
     gint w,h;
 
-
+    (void) button; /* prevent unused parameter compiler warning */
+     
     if (module->win != NULL)
         toplevel = module->win;
     else
@@ -1426,6 +1433,9 @@ update_header (GtkSatModule *module)
 
 static gboolean empty (gpointer key, gpointer val, gpointer data)
 {
+    (void) key; /* prevent unused parameter compiler warning */
+    (void) val; /* prevent unused parameter compiler warning */
+    (void) data; /* prevent unused parameter compiler warning */
     /* TRUE => sat removed from hash table */
     return TRUE;
 }
@@ -1517,7 +1527,7 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
 void gtk_sat_module_select_sat (GtkSatModule *module, gint catnum)
 {
     GtkWidget *child;
-    gint i;
+    guint i;
 
     
     /* select satellite in each child */
@@ -1557,6 +1567,8 @@ void gtk_sat_module_select_sat (GtkSatModule *module, gint catnum)
  */
 void gtk_sat_module_reconf (GtkSatModule *module, gboolean local)
 {
+    (void) module; /* prevent unused parameter compiler warning */
+    (void) local; /* prevent unused parameter compiler warning */
 }
 
 
