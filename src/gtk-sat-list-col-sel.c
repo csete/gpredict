@@ -77,6 +77,7 @@ gtk_sat_list_col_sel_get_type ()
                     sizeof (GtkSatListColSel),
                     5,     /* n_preallocs */
                     (GInstanceInitFunc) gtk_sat_list_col_sel_init,
+                    NULL
                };
 
           gtk_sat_list_col_sel_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -113,7 +114,7 @@ gtk_sat_list_col_sel_class_init (GtkSatListColSelClass *class)
 static void
 gtk_sat_list_col_sel_init (GtkSatListColSel *list)
 {
-
+    (void) list; /* avoid unusued parameter compiler warning */
 }
 
 static void
@@ -257,7 +258,7 @@ set_col (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer dat
      GtkSatListColSel *sel = GTK_SAT_LIST_COL_SEL (data);
      guint i;
      gboolean checked;
-
+     (void) path; /* avoid unusued parameter compiler warning */
      /* get row number */
      gtk_tree_model_get (model, iter, 2, &i, -1);
 

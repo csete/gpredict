@@ -130,6 +130,7 @@ gtk_sat_map_get_type ()
             sizeof (GtkSatMap),
             5,    /* n_preallocs */
             (GInstanceInitFunc) gtk_sat_map_init,
+            NULL
         };
 
         gtk_sat_map_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -450,6 +451,8 @@ create_canvas_model (GtkSatMap *satmap)
 static void
 size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 {
+    (void) widget; /* avoid unusued parameter compiler warning */
+    (void) allocation; /* avoid unusued parameter compiler warning */
     GTK_SAT_MAP (data)->resize = TRUE;
 }
 
@@ -590,6 +593,8 @@ on_canvas_realized (GtkWidget *canvas, gpointer data)
 {
     GtkSatMap *satmap = GTK_SAT_MAP(data);
 
+    (void) canvas; /* avoid unusued parameter compiler warning */
+    
     /* raise info items */
     goo_canvas_item_model_raise (satmap->sel, NULL);
     goo_canvas_item_model_raise (satmap->locnam, NULL);
@@ -822,6 +827,9 @@ on_motion_notify (GooCanvasItem *item,
     GtkSatMap *satmap = GTK_SAT_MAP (data);
     gfloat lat,lon;
     gchar *text;
+    
+    (void) target; /* avoid unusued parameter compiler warning */
+    (void) item; /* avoid unusued parameter compiler warning */
 
     /* set text only if QTH info is enabled */
     if (satmap->cursinfo) {
@@ -864,6 +872,7 @@ on_item_created (GooCanvas *canvas,
                  GooCanvasItemModel *model,
                  gpointer data)
 {
+    (void) canvas; /* avoid unusued parameter compiler warning */
     if (!goo_canvas_item_model_get_parent (model)) {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
@@ -897,6 +906,8 @@ on_button_press (GooCanvasItem *item,
     gint *catpoint = NULL;
     sat_t *sat = NULL;
 
+    (void) target; /* avoid unusued parameter compiler warning */
+    
     switch (event->button) {
 
         /* double-left-click */
@@ -965,6 +976,8 @@ on_button_release (GooCanvasItem *item,
     gint *catpoint = NULL;
     sat_map_obj_t *obj = NULL;
     guint32  col;
+
+    (void) target; /* avoid unusued parameter compiler warning */
 
     catpoint = g_try_new0 (gint, 1);
     *catpoint = catnum;
@@ -1127,6 +1140,8 @@ void gtk_sat_map_select_sat  (GtkWidget *satmap, gint catnum)
 void
 gtk_sat_map_reconf (GtkWidget  *widget, GKeyFile *cfgdat)
 {
+    (void) widget; /* avoid unusued parameter compiler warning */
+    (void) cfgdat; /* avoid unusued parameter compiler warning */
 }
 
 
@@ -1353,7 +1368,7 @@ calculate_footprint (GtkSatMap *satmap, sat_t *sat)
             rangelon = ssplon;
                 
         else {
-            if ((180 - azi) >= 0)
+            if ((180.0 - azi) >= 0)
                 rangelon = ssplon - arccos (num, dem);
             else
                 rangelon = ssplon + arccos (num, dem);
@@ -1665,6 +1680,8 @@ sort_points_y (GtkSatMap *satmap, sat_t *sat, GooCanvasPoints *points, gint num)
 {
     gsize size;
 
+    (void) satmap; /* avoid unusued parameter compiler warning */
+    (void) sat; /* avoid unusued parameter compiler warning */
     size = 2*sizeof(double);
 
     /* call g_qsort_with_data, which warps the qsort function
@@ -1695,6 +1712,8 @@ compare_coordinates_x (gconstpointer a, gconstpointer b, gpointer data)
 {
     double *ea = (double *)a;
     double *eb = (double *)b;
+
+    (void) data; /* avoid unusued parameter compiler warning */
     
     if (ea[0] < eb[0]) {
         return -1;
@@ -1730,6 +1749,8 @@ compare_coordinates_y (gconstpointer a, gconstpointer b, gpointer data)
     double *ea = (double *)a;
     double *eb = (double *)b;
     
+    (void) data; /* avoid unusued parameter compiler warning */
+    
     if (ea[1] < eb[1]) {
         return -1;
     }
@@ -1763,6 +1784,8 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     gfloat x,y;
     gchar *tooltip;
     
+    (void) key; /* avoid unusued parameter compiler warning */
+
     if (decayed(sat)) {
         return;
     }

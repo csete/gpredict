@@ -177,7 +177,8 @@ static void
     sat_obj_t          *obj = NULL;
     sat_t              *sat;
     qth_t              *qth;
-    gint               idx,i;
+    gint               idx;
+    guint              i;
     GooCanvasItemModel *root;
     pass_detail_t      *detail;
     guint              num;

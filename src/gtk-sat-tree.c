@@ -100,6 +100,7 @@ GType
             sizeof (GtkSatTree),
             1,     /* n_preallocs */
             (GInstanceInitFunc) gtk_sat_tree_init,
+            NULL
         };
 
         gtk_sat_tree_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -136,7 +137,7 @@ static void
 static void
         gtk_sat_tree_init (GtkSatTree *sat_tree)
 {
-
+    (void) sat_tree; /* avoid unused parameter compiler warning */
 }
 
 static void
@@ -311,6 +312,7 @@ static GtkTreeModel *
     const gchar  *fname;
     guint         num = 0;
 
+    (void) flags; /* avoid unused parameter compiler warning */
 
     /* create a new tree store */
     store = gtk_tree_store_new (GTK_SAT_TREE_COL_NUM,
@@ -501,6 +503,7 @@ static void
     gboolean      toggle_item;
     guint         catnum;
 
+    (void) cell; /* avoid unused parameter compiler warning */
 
     /* get toggled iter */
     gtk_tree_model_get_iter (model, &iter, path);
@@ -634,6 +637,7 @@ static gboolean
     GtkSatTree *sat_tree = GTK_SAT_TREE (data);
     guint cat1, cat2;
 
+    (void) path; /* avoid unused parameter compiler warning */
 
     cat1 = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (data), "tmp"));
 
@@ -692,6 +696,7 @@ static gboolean
 {
     guint cat1, cat2;
 
+    (void) path; /* avoid unused parameter compiler warning */
 
     cat1 = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (data), "tmp"));
 
@@ -784,6 +789,7 @@ static gint
     gchar *sat1,*sat2;
     gint ret = 0;
 
+    (void) userdata; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get(model, a, GTK_SAT_TREE_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_TREE_COL_NAME, &sat2, -1);
@@ -808,6 +814,8 @@ static gint
 static void
         expand_cb   (GtkWidget *button, gpointer tree)
 {
+    (void) button; /* avoid unused parameter compiler warning */
+        
     gtk_tree_view_expand_all (GTK_TREE_VIEW (GTK_SAT_TREE (tree)->tree));
 }
 
@@ -821,6 +829,8 @@ static void
 static void
         collapse_cb (GtkWidget *button, gpointer tree)
 {
+    (void) button; /* avoid unused parameter compiler warning */
+
     gtk_tree_view_collapse_all (GTK_TREE_VIEW (GTK_SAT_TREE (tree)->tree));
 }
 

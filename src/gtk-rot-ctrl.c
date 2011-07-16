@@ -127,6 +127,7 @@ GType
             sizeof (GtkRotCtrl),
             5,     /* n_preallocs */
             (GInstanceInitFunc) gtk_rot_ctrl_init,
+            NULL
         };
 
         gtk_rot_ctrl_type = g_type_register_static (GTK_TYPE_VBOX,
@@ -676,8 +677,9 @@ static void
 {
     GtkRotCtrl *ctrl = GTK_ROT_CTRL( user_data);
     sat_t        *sat = SAT (value);
-
-    //ctrl->sats = g_slist_append (ctrl->sats, sat);
+    
+    (void) key; /* avoid unused variable warning */
+    
     ctrl->sats = g_slist_insert_sorted (ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
 

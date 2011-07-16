@@ -91,6 +91,7 @@ gtk_freq_knob_get_type ()
                sizeof (GtkFreqKnob),
                5,     /* n_preallocs */
                (GInstanceInitFunc) gtk_freq_knob_init,
+               NULL,
           };
 
           gtk_freq_knob_type = g_type_register_static (GTK_TYPE_VBOX,
