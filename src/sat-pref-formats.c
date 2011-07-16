@@ -193,6 +193,9 @@ static gboolean
 tfprev_cb (gpointer data)
 {
      const gchar *fmtstr;
+     
+     (void) data; /* avoid unused parameter compiler warning */
+     
      //struct timeval tval;
      //struct timezone tzone;
      GTimeVal tval;
@@ -229,8 +232,9 @@ tfprev_cb (gpointer data)
 static void
 systog_cb   (GtkToggleButton *togglebutton, gpointer user_data)
 {
-     sat_cfg_set_bool (SAT_CFG_BOOL_USE_IMPERIAL,
-                           gtk_toggle_button_get_active (togglebutton));
+    (void) user_data; /* avoid unused parameter compiler warning */
+    sat_cfg_set_bool (SAT_CFG_BOOL_USE_IMPERIAL,
+                      gtk_toggle_button_get_active (togglebutton));
 
      sat_pref_qth_sys_changed (gtk_toggle_button_get_active (togglebutton));
 }
@@ -241,7 +245,9 @@ static void
 reset_cb    (GtkWidget *button, gpointer data)
 {
      gchar *fmtstr;
-
+     
+     (void) button; /* avoid unused parameter compiler warning */
+     (void) data; /* avoid unused parameter compiler warning */
 
      fmtstr = sat_cfg_get_str_def (SAT_CFG_STR_TIME_FORMAT);
      gtk_entry_set_text (GTK_ENTRY (tfentry), fmtstr);

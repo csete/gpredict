@@ -673,6 +673,9 @@ static void orient_chganged (GtkToggleButton *but, gpointer data)
  */
 static void content_changed    (GtkToggleButton *but, gpointer data)
 {
+    (void) but; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     dirty = TRUE;
 }
 
@@ -686,6 +689,9 @@ static void content_changed    (GtkToggleButton *but, gpointer data)
  */
 static void colour_changed     (GtkWidget *but, gpointer data)
 {
+    (void) but; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     dirty = TRUE;
 }
 
@@ -704,6 +710,8 @@ static void reset_cb           (GtkWidget *button, gpointer cfg)
     GdkColor col;
     guint16  alpha;
     guint    rgba;
+
+    (void) button; /* avoid unused parameter compiler warning */
 
 
     if (cfg == NULL) {
@@ -860,6 +868,8 @@ static void reset_cb           (GtkWidget *button, gpointer cfg)
  */
 void sat_pref_polar_view_cancel (GKeyFile *cfg)
 {
+    (void) cfg; /* avoid unused parameter compiler warning */
+
     dirty = FALSE;
 }
 

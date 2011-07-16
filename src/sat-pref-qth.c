@@ -551,6 +551,8 @@ add_cb    (GtkWidget *button, gpointer data)
 {
      GtkTreeView *qthlist = GTK_TREE_VIEW (data);
 
+     (void) button; /* avoid unused parameter compiler warning */
+
      sat_pref_qth_editor_run (qthlist, TRUE);
 }
 
@@ -561,14 +563,20 @@ row_activated_cb (GtkTreeView       *tree_view,
                   GtkTreeViewColumn *column,
                   gpointer           user_data) 
 {
-     sat_pref_qth_editor_run (tree_view, FALSE);
+    (void) path; /* avoid unused parameter compiler warning */
+    (void) column; /* avoid unused parameter compiler warning */
+    (void) user_data; /* avoid unused parameter compiler warning */
+        
+    sat_pref_qth_editor_run (tree_view, FALSE);
 }
 
 static void
 edit_cb   (GtkWidget *button, gpointer data)
 {
      GtkTreeView *qthlist = GTK_TREE_VIEW (data);
-
+     
+     (void) button; /* avoid unused parameter compiler warning */
+     
      sat_pref_qth_editor_run (qthlist, FALSE);
 }
 
@@ -594,6 +602,7 @@ delete_cb (GtkWidget *button, gpointer data)
      GtkTreeSelection *selection;
      GtkTreeIter       iter;
 
+     (void) button; /* avoid unused parameter compiler warning */
 
      /* if this is the only entry, tell user that it is not
         possible to delete
@@ -745,6 +754,7 @@ clear_default_flags (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, 
 {
      gchar *thisqth;
 
+     (void) path; /* avoid unused parameter compiler warning */
 
      gtk_tree_model_get (model, iter,
                               QTH_LIST_COL_NAME, &thisqth,
@@ -789,7 +799,9 @@ float_cell_data_function (GtkTreeViewColumn *col,
      gchar   *buff;
      guint    coli = GPOINTER_TO_UINT (column);
      gchar    hmf = ' ';
-
+     
+     (void) col; /* avoid unused parameter compiler warning */
+     
      gtk_tree_model_get (model, iter, coli, &number, -1);
 
      /* check whether configuration requests the use
@@ -874,11 +886,13 @@ save_qth (GtkTreeModel *model,
             GtkTreeIter  *iter,
             gpointer      data)
 {
-     qth_t     qth;
+    qth_t     qth;
     gboolean  def = FALSE;
     gchar    *filename,*confdir;
-     gchar    *buff;
+    gchar    *buff;
 
+    (void) path; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
      gtk_tree_model_get (model, iter,
                          QTH_LIST_COL_DEF, &def,
@@ -1027,7 +1041,8 @@ convert_qth_altitude (GtkTreeModel *model,
      gint alti;
      GtkTreeViewColumn *column;
      gchar  *title;
-
+     
+     (void) path; /* avoid unused parameter compiler warning */
 
      /* first, get the current altitude and other data */
      gtk_tree_model_get (model, iter,

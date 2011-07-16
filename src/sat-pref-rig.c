@@ -466,6 +466,9 @@ static void add_cb    (GtkWidget *button, gpointer data)
     GtkTreeIter  item;      /* new item added to the list store */
     GtkListStore *liststore;
     
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+        
     radio_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
@@ -520,6 +523,9 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     GtkTreeSelection *selection;
     GtkTreeIter       iter;
     
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     radio_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
@@ -618,6 +624,8 @@ static void delete_cb (GtkWidget *button, gpointer data)
     GtkTreeSelection *selection;
     GtkTreeIter       iter;
 
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* If there are no entries, we have a bug since the button should 
        have been disabled. */
@@ -656,6 +664,11 @@ static void row_activated_cb (GtkTreeView       *tree_view,
                               GtkTreeViewColumn *column,
                               gpointer           user_data)
 {
+    (void) tree_view; /* avoid unused parameter compiler warning */
+    (void) path; /* avoid unused parameter compiler warning */
+    (void) column; /* avoid unused parameter compiler warning */
+    (void) user_data; /* avoid unused parameter compiler warning */
+
     edit_cb (editbutton, NULL);
 }
 
@@ -680,6 +693,8 @@ static void render_name (GtkTreeViewColumn *col,
     gchar  *fname;
     gchar **buff;
     guint   coli = GPOINTER_TO_UINT (column);
+
+    (void) col; /* avoid unused parameter compiler warning */
     
     gtk_tree_model_get (model, iter, coli, &fname, -1);
 
@@ -708,7 +723,9 @@ static void render_type (GtkTreeViewColumn *col,
 {
     guint   type;
     guint   coli = GPOINTER_TO_UINT (column);
-    
+
+    (void) col; /* avoid unused parameter compiler warning */    
+
     gtk_tree_model_get (model, iter, coli, &type, -1);
 
     switch (type) {
@@ -762,6 +779,8 @@ static void render_ptt (GtkTreeViewColumn *col,
     gint    ptt;
     guint   coli = GPOINTER_TO_UINT (column);
     
+    (void) col; /* avoid unused parameter compiler warning */
+
     gtk_tree_model_get (model, iter, coli, &ptt, -1);
 
     switch (ptt) {
@@ -802,6 +821,8 @@ static void render_lo (GtkTreeViewColumn *col,
     gchar   *buff;
     guint    coli = GPOINTER_TO_UINT (column);
     
+    (void) col; /* avoid unused parameter compiler warning */
+
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* convert to MHz */
@@ -831,6 +852,8 @@ static void render_vfo (GtkTreeViewColumn *col,
     gchar   *buff;
     guint    coli = GPOINTER_TO_UINT (column);
     
+    (void) col; /* avoid unused parameter compiler warning */
+
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     switch (number) {

@@ -377,6 +377,8 @@ static void
 reset_cb               (GtkWidget *button, gpointer data)
 {
 
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
     /* get defaults */
 
     /* update frequency */
@@ -423,6 +425,9 @@ reset_cb               (GtkWidget *button, gpointer data)
 static void
 value_changed_cb    (GtkWidget *widget, gpointer data)
 {
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     dirty = TRUE;
 }
 

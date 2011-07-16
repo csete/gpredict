@@ -405,7 +405,10 @@ sat_pref_conditions_ok     ()
 static void
 spin_changed_cb (GtkWidget *spinner, gpointer data)
 {
-     dirty = TRUE;
+    (void) spinner; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
+    dirty = TRUE;
 }
 
 
@@ -454,7 +457,9 @@ create_reset_button (GtkBox *vbox)
 static void
 reset_cb               (GtkWidget *button, gpointer data)
 {
-
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
      /* get defaults */
      gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel),
                                       sat_cfg_get_int_def (SAT_CFG_INT_PRED_MIN_EL));

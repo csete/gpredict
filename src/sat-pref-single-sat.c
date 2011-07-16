@@ -141,6 +141,8 @@ GtkWidget *sat_pref_single_sat_create (GKeyFile *cfg)
 void
 sat_pref_single_sat_cancel (GKeyFile *cfg)
 {
+    (void) cfg; /* avoid unused parameter compiler warning */
+
     dirty = FALSE;
     reset = FALSE;
 }
@@ -257,7 +259,8 @@ static void
 reset_cb               (GtkWidget *button, gpointer cfg)
 {
     guint i;
-
+    
+    (void) button; /* avoid unused parameter compiler warning */
 
     if (cfg == NULL) {
         /* global mode, get defaults */

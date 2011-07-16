@@ -140,7 +140,9 @@ GtkWidget *sat_pref_layout_create (GKeyFile *cfg)
 void sat_pref_layout_cancel (GKeyFile *cfg)
 {
     gchar *str;
-
+    
+    (void) cfg; /* avoid unused parameter compiler warning */
+    
     str = sat_cfg_get_str (SAT_CFG_STR_MODULE_GRID);
     gtk_entry_set_text (GTK_ENTRY (gridstr), str);
     g_free (str);
@@ -322,6 +324,7 @@ static void layout_selected_cb (GtkComboBox *combo, gpointer data)
     gint   idx;
     gchar *icon;
 
+    (void) data; /* avoid unused parameter compiler warning */
 
     idx = gtk_combo_box_get_active (combo);
     if (idx < PREDEF_NUM) {
@@ -463,6 +466,7 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
     guint i,sel=PREDEF_NUM-1;
     gchar *buffer;
 
+    (void) button; /* avoid unused parameter compiler warning */
 
     /* views */
     if (cfg == NULL) {
@@ -509,6 +513,8 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
 /** \brief Toggle window positioning settings. */
 static void window_pos_toggle_cb   (GtkWidget *toggle, gpointer data)
 {
+    (void) toggle; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
     dirty = TRUE;
 }
 
@@ -522,7 +528,8 @@ static void layout_code_changed (GtkWidget *widget, gpointer data)
 {
     gchar       *entry, *end, *j;
     gint         len, pos;
-
+    
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* step 1: ensure that only valid characters are entered
            (stolen from xlog, tnx pg4i)

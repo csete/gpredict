@@ -478,6 +478,7 @@ name_changed          (GtkWidget *widget, gpointer data)
     gchar *entry, *end, *j;
     gint len, pos;
 
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* step 1: ensure that only valid characters are entered
         (stolen from xlog, tnx pg4i)
@@ -532,6 +533,9 @@ name_changed          (GtkWidget *widget, gpointer data)
 static void
 type_changed (GtkWidget *widget, gpointer data)
 {
+
+    (void) data; /* avoid unused parameter compiler warning */
+
      /* PTT consistency */    
     if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == RIG_TYPE_TRX) {
         if (gtk_combo_box_get_active (GTK_COMBO_BOX (ptt)) == PTT_TYPE_NONE) {
@@ -563,7 +567,8 @@ type_changed (GtkWidget *widget, gpointer data)
 static void
 ptt_changed (GtkWidget *widget, gpointer data)
 {
-    
+    (void) data; /* avoid unused parameter compiler warning */   
+ 
     if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == PTT_TYPE_NONE) {
         if (gtk_combo_box_get_active (GTK_COMBO_BOX (type)) == RIG_TYPE_TRX) {
             /* not good, we need to have PTT for this type */
@@ -581,6 +586,7 @@ ptt_changed (GtkWidget *widget, gpointer data)
 static void
 vfo_changed (GtkWidget *widget, gpointer data)
 {
+    (void) data; /* avoid unused parameter compiler warning */
     
     if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == 0) {
         if (gtk_combo_box_get_active (GTK_COMBO_BOX (type)) == RIG_TYPE_DUPLEX) {

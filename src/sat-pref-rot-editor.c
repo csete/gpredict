@@ -364,6 +364,7 @@ name_changed          (GtkWidget *widget, gpointer data)
      gchar *entry, *end, *j;
      gint len, pos;
 
+     (void) data; /* avoid unused parameter compiler warning */
 
      /* step 1: ensure that only valid characters are entered
         (stolen from xlog, tnx pg4i)
@@ -414,6 +415,8 @@ static void aztype_changed_cb     (GtkComboBox *box, gpointer data)
 {
     gint type = gtk_combo_box_get_active (box);
     
+    (void) data; /* avoid unused parameter compiler warning */
+
     switch (type) {
         
         case ROT_AZ_TYPE_360:

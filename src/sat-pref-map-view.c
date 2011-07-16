@@ -710,6 +710,9 @@ static void create_reset_button     (GKeyFile *cfg, GtkBox *vbox)
  */
 static void content_changed    (GtkToggleButton *but, gpointer data)
 {
+    (void) but; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     dirty = TRUE;
 }
 
@@ -723,17 +726,28 @@ static void content_changed    (GtkToggleButton *but, gpointer data)
  */
 static void colour_changed (GtkWidget *but, gpointer data)
 {
+    (void) but; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     dirty = TRUE;
 }
 
 
 static void orbit_changed (GtkWidget *spin, gpointer data)
 {
+    (void) spin; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     dirty = TRUE;
 }
 
 static gboolean shadow_changed (GtkRange *range, GtkScrollType scroll, gdouble value, gpointer data)
 {
+    (void) range; /* avoid unused parameter compiler warning */
+    (void) scroll; /* avoid unused parameter compiler warning */
+    (void) value; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     dirty = TRUE;
 
     /* prevent other signal handlers from being executed */
@@ -758,6 +772,7 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
     guint16  alpha;
     guint    rgba;
 
+    (void) button; /* avoid unused parameter compiler warning */
 
     if (cfg == NULL) {
         /* global mode, get defaults */
@@ -916,6 +931,8 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
  */
 void sat_pref_map_view_cancel (GKeyFile *cfg)
 {
+    (void) cfg; /* avoid unused parameter compiler warning */
+
     dirty = FALSE;
 
     g_free (mapf);
@@ -1206,7 +1223,9 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
 static void select_map_cb   (GtkWidget *button, gpointer data)
 {
     gchar   *mapfile;
-
+    
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* execute map selector */
     mapfile = select_map (mapf);

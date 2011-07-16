@@ -290,6 +290,7 @@ GtkWidget *sat_pref_refresh_create (GKeyFile *cfg)
 void
 sat_pref_refresh_cancel (GKeyFile *cfg)
 {
+    (void) cfg; /* avoid unused parameter compiler warning */
 
      dirty = FALSE;
 }
@@ -395,6 +396,9 @@ sat_pref_refresh_ok     (GKeyFile *cfg)
 static void
 spin_changed_cb (GtkWidget *spinner, gpointer data)
 {
+    (void) spinner; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
      dirty = TRUE;
 }
 
@@ -455,6 +459,7 @@ reset_cb               (GtkWidget *button, gpointer cfg)
 {
      gint val;
 
+     (void) button; /* avoid unused parameter compiler warning */
 
      /* views */
      if (cfg == NULL) {

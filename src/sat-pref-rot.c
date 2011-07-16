@@ -428,6 +428,9 @@ static void add_cb    (GtkWidget *button, gpointer data)
     GtkTreeIter  item;      /* new item added to the list store */
     GtkListStore *liststore;
     
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     rotor_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
@@ -480,6 +483,9 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     GtkTreeSelection *selection;
     GtkTreeIter       iter;
     
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     rotor_conf_t conf = {
         .name  = NULL,
         .host  = NULL,
@@ -576,6 +582,8 @@ static void delete_cb (GtkWidget *button, gpointer data)
     GtkTreeSelection *selection;
     GtkTreeIter       iter;
 
+    (void) button; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* If there are no entries, we have a bug since the button should 
        have been disabled. */
@@ -614,6 +622,11 @@ static void row_activated_cb (GtkTreeView       *tree_view,
                               GtkTreeViewColumn *column,
                               gpointer           user_data)
 {
+    (void) tree_view; /* avoid unused parameter compiler warning */
+    (void) path; /* avoid unused parameter compiler warning */
+    (void) column; /* avoid unused parameter compiler warning */
+    (void) user_data; /* avoid unused parameter compiler warning */
+
     edit_cb (editbutton, NULL);
 }
 
@@ -635,6 +648,8 @@ static void render_angle (GtkTreeViewColumn *col,
     guint   coli = GPOINTER_TO_UINT (column);
     gchar  *text;
     
+    (void) col; /* avoid unused parameter compiler warning */
+
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     text = g_strdup_printf ("%.0f\302\260", number);
@@ -660,6 +675,8 @@ static void render_aztype (GtkTreeViewColumn *col,
     gint   number;
     guint   coli = GPOINTER_TO_UINT (column);
     gchar  *text;
+    
+    (void) col; /* avoid unused parameter compiler warning */
     
     gtk_tree_model_get (model, iter, coli, &number, -1);
 

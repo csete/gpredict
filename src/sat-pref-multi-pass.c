@@ -218,7 +218,11 @@ static void
 reset_cb               (GtkWidget *button, gpointer data)
 {
      guint i;
-
+     
+     (void) button; /* avoid unused parameter compiler warning */
+     (void) data; /* avoid unused parameter compiler warning */
+     
+     
      /* get defaults */
      flags = sat_cfg_get_int_def (SAT_CFG_INT_PRED_MULTI_COL);
 

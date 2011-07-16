@@ -234,7 +234,10 @@ sat_pref_debug_ok     ()
 static void
 state_change_cb (GtkWidget *widget, gpointer data)
 {
-     dirty = TRUE;
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
+    dirty = TRUE;
 }
 
 
@@ -243,7 +246,10 @@ static void
 reset_cb               (GtkWidget *button, gpointer data)
 {
      gint num = sat_cfg_get_int_def (SAT_CFG_INT_LOG_CLEAN_AGE);
-
+     
+     (void) button; /* avoid unused parameter compiler warning */
+     (void) data; /* avoid unused parameter compiler warning */
+     
      switch (num) {
 
      case SEC_PER_DAY:

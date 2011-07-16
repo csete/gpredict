@@ -190,6 +190,7 @@ GtkWidget *sat_pref_list_view_create (GKeyFile *cfg)
 void
 sat_pref_list_view_cancel (GKeyFile *cfg)
 {
+    (void) cfg; /* avoid unused parameter compiler warning */
 }
 
 
@@ -290,6 +291,7 @@ reset_cb               (GtkWidget *button, gpointer cfg)
      guint32 flags;
      guint i;
 
+     (void) button; /* avoid unused parameter compiler warning */
 
 
      if (cfg == NULL) {
@@ -340,7 +342,11 @@ static void
 toggle_rh_cb        (GtkToggleButton *toggle, gpointer data)
 {
 
-     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ruleshint)) != rh_flag)
-          dirty = TRUE;
+    (void) toggle; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+ 
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (ruleshint)) != rh_flag)
+    
+        dirty = TRUE;
 
 }

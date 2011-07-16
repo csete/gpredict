@@ -176,6 +176,8 @@ static void
 browser_changed_cb (GtkComboBox *cbox, gpointer data)
 {
      gint idx;
+     
+     (void) data; /* avoid unused parameter compiler warning */
 
      idx = gtk_combo_box_get_active (cbox);
 
