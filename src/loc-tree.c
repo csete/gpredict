@@ -493,6 +493,8 @@ loc_tree_float_cell_data_function (GtkTreeViewColumn *col,
      guint    coli = GPOINTER_TO_UINT (column);
      gchar    hmf = ' ';
 
+     (void) col; /* avoid unused parameter compiler warning */
+
      gtk_tree_model_get (model, iter, coli, &number, -1);
 
 
@@ -552,6 +554,8 @@ loc_tree_int_cell_data_function (GtkTreeViewColumn *col,
      gchar   *buff;
      guint    coli = GPOINTER_TO_UINT (column);
      
+     (void) col; /* avoid unused parameter compiler warning */
+
      gtk_tree_model_get (model, iter, GPOINTER_TO_UINT (column), &number, -1);
      
      if (coli == TREE_COL_ALT) {
@@ -589,6 +593,9 @@ loc_tree_check_selection_cb       (GtkTreeSelection *selection,
 {
 
      GtkTreeIter iter;
+     
+     (void) selection; /* avoid unused parameter compiler warning */
+     (void) sel_path; /* avoid unused parameter compiler warning */
      
      if (gtk_tree_model_get_iter(model, &iter, path)) {
 

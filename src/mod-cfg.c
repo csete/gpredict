@@ -420,6 +420,9 @@ mod_cfg_status_t mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
  */
 mod_cfg_status_t mod_cfg_delete (gchar *modname, gboolean needcfm)
 {
+    (void) modname; /* avoid unused parameter compiler warning */
+    (void) needcfm; /* avoid unused parameter compiler warning */
+
     return MOD_CFG_CANCEL;
 }
 
@@ -1091,6 +1094,8 @@ static void add_qth_cb (GtkWidget *button, gpointer data)
     GtkResponseType  response;
     qth_t            qth;
 
+    (void) button; /* avoid unused parameter compiler warning */
+
     qth.name = NULL;
     qth.loc = NULL;
     qth.desc = NULL;
@@ -1131,7 +1136,7 @@ static void add_qth_cb (GtkWidget *button, gpointer data)
 static void sat_activated_cb (GtkSatSelector *selector, gint catnr, gpointer data)
 {
     GtkListStore *store;
-
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* Add satellite to selected list */
     store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (satlist)));
@@ -1159,6 +1164,7 @@ static gint compare_func (GtkTreeModel *model,
     gchar *sat1,*sat2;
     gint ret = 0;
 
+    (void) userdata; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
@@ -1190,7 +1196,10 @@ static void row_activated_cb (GtkTreeView *view, GtkTreePath *path,
     gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
     gint              catnr;
     GtkSatSelector   *selector = GTK_SAT_SELECTOR(data);
-
+    
+    (void) path; /* avoid unused parameter compiler warning */
+    (void) column; /* avoid unused parameter compiler warning */
+    
     /* get the selected row in the treeview */
     selection = gtk_tree_view_get_selection (view);
     haveselection = gtk_tree_selection_get_selected (selection, &model, &iter);
@@ -1215,7 +1224,8 @@ static void addbut_clicked_cb (GtkButton *button, GtkSatSelector *selector)
     gchar        *name;
     gdouble       epoch;
 
-
+    (void) button; /* avoid unused parameter compiler warning */
+    
     /* get the selected row in the treeview */
     gtk_sat_selector_get_selected (selector, &catnum, &name, &epoch);
 
@@ -1242,6 +1252,7 @@ static void delbut_clicked_cb (GtkButton *button, GtkSatSelector *selector)
     gboolean          haveselection = FALSE; /* this flag is set to TRUE if there is a selection */
     gint              catnr;
 
+    (void) button; /* avoid unused parameter compiler warning */
 
     /* get the selected row in the treeview */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (satlist));

@@ -541,6 +541,7 @@ void show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *tople
  */
 static void single_pass_response (GtkWidget *dialog, gint response, gpointer data)
 {
+    (void) data; /* avoid unused parameter compiler warning */
 
     switch (response) {
 
@@ -675,6 +676,8 @@ static void latlon_cell_data_function (GtkTreeViewColumn *col,
     guint    coli = GPOINTER_TO_UINT (column);
     gchar    hmf = ' ';
 
+    (void) col; /* avoid unused parameter compiler warning */
+
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* check whether configuration requests the use
@@ -729,6 +732,8 @@ static void degree_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
+    
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -752,6 +757,8 @@ static void distance_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
+    
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -780,6 +787,8 @@ static void range_rate_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
+    
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -807,6 +816,8 @@ static void float_to_int_cell_data_function (GtkTreeViewColumn *col,
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
 
+    (void) col; /* avoid unused parameter compiler warning */
+
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
     /* format the number */
@@ -827,6 +838,8 @@ static void two_dec_cell_data_function (GtkTreeViewColumn *col,
     gdouble    number;
     gchar     *buff;
     guint      coli = GPOINTER_TO_UINT (column);
+
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
 
@@ -851,6 +864,7 @@ static void time_cell_data_function (GtkTreeViewColumn *col,
     gchar     *fmtstr;
     guint      coli = GPOINTER_TO_UINT (column);
 
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
     
@@ -878,6 +892,10 @@ static void time_cell_data_function (GtkTreeViewColumn *col,
 
 static gint single_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpointer pass)
 {
+    (void) dialog; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) pass; /* avoid unused parameter compiler warning */
+
     /* dialog will be destroyed */
     return FALSE;
 }
@@ -885,7 +903,10 @@ static gint single_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpoi
 static void single_pass_dialog_destroy (GtkWidget *dialog, gpointer data)
 {
     pass_t *pass = PASS(g_object_get_data (G_OBJECT (dialog), "pass"));
+    
+    (void) data; /* avoid unused parameter compiler warning */
 
+    
     free_pass (PASS(pass));
 
     gtk_widget_destroy (dialog);
@@ -1127,6 +1148,8 @@ void show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *t
  */
 static void multi_pass_response (GtkWidget *dialog, gint response, gpointer data)
 {
+    (void) data; /* avoid unused parameter compiler warning */
+
     switch (response) {
 
     case RESPONSE_PRINT:
@@ -1150,6 +1173,10 @@ static void multi_pass_response (GtkWidget *dialog, gint response, gpointer data
 
 static gint multi_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpointer pass)
 {
+    (void) dialog; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) pass; /* avoid unused parameter compiler warning */
+        
     /* dialog will be destroyed */
     return FALSE;
 }
@@ -1158,6 +1185,8 @@ static gint multi_pass_dialog_delete  (GtkWidget *dialog, GdkEvent *event, gpoin
 static void multi_pass_dialog_destroy (GtkWidget *dialog, gpointer data)
 {
     GSList *passes = (GSList *) g_object_get_data (G_OBJECT (dialog), "passes");
+
+    (void) data; /* avoid unused parameter compiler warning */
 
     free_passes (passes);
 
@@ -1227,7 +1256,7 @@ static void duration_cell_data_function (GtkTreeViewColumn *col,
     guint      coli = GPOINTER_TO_UINT (column);
     guint      h,m,s;
 
-
+    (void) col; /* avoid unused parameter compiler warning */
 
     gtk_tree_model_get (model, iter, coli, &number, -1);
     
@@ -1338,6 +1367,7 @@ static void view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointe
     pass_t           *pass = NULL;
     qth_t            *qth;
 
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* get selected satellite */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
@@ -1388,6 +1418,8 @@ static void row_activated_cb (GtkTreeView *treeview, GtkTreePath *path,
     pass_t           *pass = NULL;
     qth_t            *qth;
 
+    (void) path; /* avoid unused parameter compiler warning */
+    (void) column; /* avoid unused parameter compiler warning */
 
     /* get selected satellite */
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));

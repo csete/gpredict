@@ -132,7 +132,8 @@ pass_to_txt_pgheader (pass_t *pass, qth_t *qth, gint fields)
     gchar   *fmtstr;
     time_t   aos,los;
     guint    size;
-
+    
+    (void) fields; /* avoid unused parameter compiler warning */
 
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
     loc = sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME);
@@ -200,6 +201,7 @@ pass_to_txt_tblheader (pass_t *pass, qth_t *qth, gint fields)
     gchar    *sep;
     gchar    *buff;
 
+    (void) qth; /* avoid unused parameter compiler warning */
 
     /* first, get the length of the time field */
     fmtstr = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
@@ -451,6 +453,8 @@ passes_to_txt_pgheader (GSList *passes, qth_t *qth, gint fields)
 {
     gchar   *header;
     pass_t  *pass;
+    
+    (void) fields; /* avoid unused parameter compiler warning */
 
     pass = PASS (g_slist_nth_data (passes, 0));
 
@@ -477,6 +481,7 @@ passes_to_txt_tblheader (GSList *passes, qth_t *qth, gint fields)
     gchar    *buff;
     pass_t   *pass;
 
+    (void) qth; /* avoid unused parameter compiler warning */
 
     /* first, get the length of the time field */
     pass = PASS (g_slist_nth_data (passes, 0));
@@ -529,6 +534,7 @@ passes_to_txt_tblcontents (GSList *passes, qth_t *qth, gint fields)
     gchar    *buff;
     pass_t   *pass;
 
+    (void) qth; /* avoid unused parameter compiler warning */
 
     pass = PASS (g_slist_nth_data (passes, 0));
 

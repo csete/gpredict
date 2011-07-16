@@ -151,6 +151,9 @@ show_pass_details       (GtkWidget *menuitem, gpointer data)
 static void
 polar_plot_pass_details (GtkWidget *menuitem, gpointer data)
 {
+    (void) menuitem; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+        
      g_print ("FIXME: %s:%s not implemented!\n", __FILE__, __FUNCTION__);
 }
 
@@ -159,6 +162,9 @@ polar_plot_pass_details (GtkWidget *menuitem, gpointer data)
 static void
 azel_plot_pass_details  (GtkWidget *menuitem, gpointer data)
 {
+    (void) menuitem; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
      g_print ("FIXME: %s:%s not implemented!\n", __FILE__, __FUNCTION__);
 }
 

@@ -617,6 +617,7 @@ static void
     gchar *entry, *end, *j;
     gint len, pos;
 
+    (void) data; /* avoid unused parameter compiler warning */
 
     /* step 1: ensure that only valid characters are entered
            (stolen from xlog, tnx pg4i)
@@ -680,6 +681,7 @@ static void
     guint    qthalt;
     gboolean selected = FALSE;
 
+    (void) widget; /* avoid unused parameter compiler warning */
 
     switch (mode) {
 
@@ -761,7 +763,10 @@ static void
     gchar *locator;
     gint   retcode;
     gdouble latf,lonf;
-
+    
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     locator = g_try_malloc (7);
 
     /* no need to check locator != NULL, since hamlib func will do it for us
@@ -822,6 +827,9 @@ static void
     gint retcode;
     gdouble latf,lonf;
     gchar *msg;
+
+    (void) entry; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
 
     retcode = locator2longlat (&lonf, &latf, gtk_entry_get_text (GTK_ENTRY (qra)));
 

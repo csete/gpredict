@@ -175,6 +175,8 @@ void print_pass   (pass_t *pass, qth_t *qth, GtkWindow *parent)
   */
 void print_passes (GSList *passes)
 {
+    (void) passes; /* avoid unused parameter compiler warning */
+
     sat_log_log (SAT_LOG_LEVEL_BUG, _("%s: Not implemented!"), __FUNCTION__);
 }
 
@@ -230,7 +232,7 @@ draw_page (GtkPrintOperation *operation,
     PangoFontDescription *desc;
     gchar *page_str;
 
-
+    (void) operation; /* avoid unused parameter compiler warning */
 
     cr = gtk_print_context_get_cairo_context (context);
 
@@ -303,7 +305,10 @@ static void end_print (GtkPrintOperation *operation,
                        gpointer           user_data)
 {
     PrintData *data = (PrintData *)user_data;
-
+    
+    (void) operation; /* avoid unused parameter compiler warning */
+    (void) context; /* avoid unused parameter compiler warning */
+    
     g_free (data->pgheader);
     g_strfreev (data->lines);
     g_free (data);

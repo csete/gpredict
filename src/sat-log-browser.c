@@ -308,6 +308,10 @@ static gint
                                     gpointer   data)
 {
 
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) event; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+
     /* return FALSE to indicate that message window
        should be destroyed */
     return FALSE;
@@ -319,6 +323,10 @@ static void
         message_window_destroy    (GtkWidget *widget,
                                    gpointer   data)
 {
+
+    (void) widget; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
     /* clean up memory */
     /* GSList, ... */
 
@@ -332,6 +340,8 @@ static void
                                  gint       response,
                                  gpointer   data)
 {
+    (void) data; /* avoid unused parameter compiler warning */
+    
     switch (response) {
 
         /* close button */
