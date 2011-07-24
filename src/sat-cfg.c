@@ -148,6 +148,7 @@ sat_cfg_int_t sat_cfg_int[SAT_CFG_INT_NUM] = {
     { "MODULES", "VIEW_1", GTK_SAT_MOD_VIEW_MAP}, /* FIXME */
     { "MODULES", "VIEW_2", GTK_SAT_MOD_VIEW_POLAR}, /* FIXME */
     { "MODULES", "VIEW_3", GTK_SAT_MOD_VIEW_SINGLE}, /* FIXME */
+    { "GLOBAL", "CURRENT_PAGE", -1}, /* FIXME */
     { "GLOBAL",  "WARP", 1},
     { "MODULES", "LIST_REFRESH", 1},
     { "MODULES", "LIST_COLUMNS", LIST_COLUMNS_DEFAULTS},

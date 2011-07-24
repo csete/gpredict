@@ -101,6 +101,7 @@ mod_mgr_create (void)
     GtkWidget *module;
     gchar     *modfile;
     gchar     *confdir;
+    gint    page;
 
     /* create notebook */
     nbook = gtk_notebook_new ();
@@ -112,6 +113,7 @@ mod_mgr_create (void)
 
     /* get list of modules which should be open */
     openmods = sat_cfg_get_str (SAT_CFG_STR_OPEN_MODULES);
+    page = sat_cfg_get_int (SAT_CFG_INT_MODULE_CURRENT_PAGE);
 
     if (openmods) {
         mods = g_strsplit (openmods, ";", 0);
@@ -147,11 +149,18 @@ mod_mgr_create (void)
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Failed to restore %s"),
                              __FUNCTION__, mods[i]);
+
+                /* try to smartly handle disappearing modules */
+                page--;
             }
 
             g_free (modfile);
 
         }
+
+        /* set to the page open when gpredict was closed */
+        if (page >=0)
+            gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
         g_strfreev (mods);
         g_free (openmods);
@@ -320,6 +329,7 @@ mod_mgr_save_state ()
     GtkWidget *module;
     gchar     *mods = NULL;
     gchar     *buff;
+    gint       page;
 
     
     if (!nbook) {
@@ -362,11 +372,15 @@ mod_mgr_save_state ()
                      __FUNCTION__, GTK_SAT_MODULE (module)->name);
 
     }
+    
+    /* store the currently open page number */
+    page = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbook));
 
     sat_log_log (SAT_LOG_LEVEL_MSG, _("%s: Saved states for %d modules."),
                  __FUNCTION__, num);
 
     sat_cfg_set_str (SAT_CFG_STR_OPEN_MODULES, mods);
+    sat_cfg_set_int (SAT_CFG_INT_MODULE_CURRENT_PAGE, page);
 
     g_free (mods);
 }
