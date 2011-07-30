@@ -38,7 +38,7 @@
 
 #include <glib.h>
 #include <gdk/gdk.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtk.h>
 
 
 
