@@ -774,7 +774,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
         break;
 
     default:
-        state = gdk_window_get_state (GDK_WINDOW (GTK_WIDGET (module)->window));
+        state = gdk_window_get_state (GDK_WINDOW (gtk_widget_get_window (GTK_WIDGET (module))));
 
         if (state & GDK_WINDOW_STATE_ICONIFIED) {
             needupdate = FALSE;
@@ -1251,6 +1251,7 @@ void
 gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 {
     GtkSatModule        *module = GTK_SAT_MODULE (data);
+    GtkAllocation        alloc;
     GtkWidget           *toplevel;
     gchar               *name;
     gchar               *cfgfile;
@@ -1307,8 +1308,9 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 
                 /* store state and size */
                 laststate = module->state;
-                w = GTK_WIDGET (module)->allocation.width;
-                h = GTK_WIDGET (module)->allocation.height;
+                gtk_widget_get_allocation( GTK_WIDGET(module),&alloc);
+                w = alloc.width;
+                h = alloc.height;
 
                 gtk_sat_module_close_cb (NULL, module);
 

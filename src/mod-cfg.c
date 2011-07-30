@@ -441,6 +441,7 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     GtkWidget   *label;
     GtkWidget   *swin;
     GtkWidget   *addbut, *delbut;
+    GtkWidget   *vbox;
     GtkTooltips *tooltips;
     gchar       *icon;      /* window icon file name */
     GtkWidget *frame;
@@ -541,14 +542,14 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_table_attach (GTK_TABLE (table), add, 3, 4, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
 
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-                        gtk_hseparator_new (), FALSE, FALSE, 5);
+    vbox = gtk_dialog_get_content_area (GTK_DIALOG( dialog ));
+    gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 5);
 
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label), _("<b>Satellites</b>"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 5);
+    gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
 
 
     /* satellite selector */
@@ -588,9 +589,9 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     gtk_table_attach (GTK_TABLE (table), delbut, 4, 5, 5, 6, GTK_SHRINK, GTK_SHRINK, 2, 5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 5, 9, 0, 2);
 
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), table, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), table, TRUE, TRUE, 0);
 
-    gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
+    gtk_widget_show_all (vbox);
 
     return dialog;
 }
@@ -1063,7 +1064,7 @@ static void edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
     contents = sat_pref_modules_create (cfgdata);
     gtk_widget_show_all (contents);
 
-    gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog)->vbox), contents);
+    gtk_box_pack_start_defaults (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), contents);
 
     /* execute dialog */
     switch (gtk_dialog_run (GTK_DIALOG (dialog))) {

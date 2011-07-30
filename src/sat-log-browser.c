@@ -164,7 +164,7 @@ void
 
         gtk_window_set_default_size (GTK_WINDOW (window), 850, 400);
 
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(window)->vbox), hbox);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG(window))), hbox);
 
         /* connect response signal */
         g_signal_connect (G_OBJECT (window), "response",

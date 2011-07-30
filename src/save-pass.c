@@ -193,7 +193,7 @@ void save_pass   (GtkWidget *parent)
     gtk_table_attach_defaults (GTK_TABLE (table), contents, 1, 2, 3, 4);
 
     gtk_widget_show_all (table);
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), table);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), table);
 
 
     /* run the dialog */
@@ -354,7 +354,7 @@ void save_passes (GtkWidget *parent)
     gtk_table_attach_defaults (GTK_TABLE (table), contents, 1, 2, 3, 4);
 
     gtk_widget_show_all (table);
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), table);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), table);
 
 
     /* run the dialog */

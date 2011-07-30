@@ -99,7 +99,7 @@ sat_pref_rot_editor_run (rotor_conf_t *conf)
                                                 GTK_RESPONSE_OK,
                                                 FALSE);
 
-     gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
+     gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))),
                             create_editor_widgets (conf));
 
      /* this hacky-thing is to keep the dialog running in case the

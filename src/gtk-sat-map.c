@@ -484,10 +484,9 @@ update_map_size (GtkSatMap *satmap)
     gfloat ratio;   /* ratio between map width and height */
     gfloat size;    /* size = min (alloc.w, ratio*alloc.h) */
 
-    if (GTK_WIDGET_REALIZED (satmap)) {
+    if (gtk_widget_get_realized (GTK_WIDGET(satmap))) {
         /* get graph dimensions */
-        allocation.width = GTK_WIDGET (satmap)->allocation.width;
-        allocation.height = GTK_WIDGET (satmap)->allocation.height;
+        gtk_widget_get_allocation( GTK_WIDGET(satmap), &allocation);
 
         if (satmap->keepratio) {
             /* Use allocation->width and allocation->height to calculate

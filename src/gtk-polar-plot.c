@@ -774,7 +774,7 @@ static void
     GtkAnchorType anch = GTK_ANCHOR_CENTER;
 
 
-    if (GTK_WIDGET_REALIZED (widget)) {
+    if (gtk_widget_get_realized (widget)) {
 
         /* get graph dimensions */
         polv = GTK_POLAR_PLOT (data);
@@ -894,8 +894,7 @@ static void
 {
     GtkAllocation aloc;
 
-    aloc.width = canvas->allocation.width;
-    aloc.height = canvas->allocation.height;
+    gtk_widget_get_allocation (canvas, &aloc);
     size_allocate_cb (canvas, &aloc, data);
 
 }

@@ -409,7 +409,7 @@ gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer dat
     (void) data; /* prevent unused parameter compiler warning */
 
     /* data is only useful when window is visible */
-    if (GTK_WIDGET_VISIBLE (widget))
+    if (gtk_widget_get_visible (widget))
         gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
     else
         return FALSE; /* carry on normally */

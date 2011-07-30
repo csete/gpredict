@@ -523,7 +523,7 @@ void show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *tople
                       G_CALLBACK (single_pass_dialog_delete), NULL);    
 
 
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), notebook);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), notebook);
 
     gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 300);
     gtk_widget_show_all (dialog);
@@ -1129,7 +1129,7 @@ void show_passes (const gchar *satname, qth_t *qth, GSList *passes, GtkWidget *t
                       G_CALLBACK (multi_pass_dialog_delete), NULL);
 
 
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), swin);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), swin);
 
     gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 300);
     gtk_widget_show_all (dialog);

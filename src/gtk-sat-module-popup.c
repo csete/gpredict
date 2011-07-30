@@ -313,6 +313,8 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
     GtkWidget    *label;
     GtkWidget    *toggle;
     GtkTooltips  *tooltips;
+    GtkWidget    *vbox;
+    GtkAllocation aloc;
     guint         response;
     GtkSatModule *module = GTK_SAT_MODULE (data);
     GtkSatModule *newmod;
@@ -335,7 +337,8 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
 
     /* label */
     label = gtk_label_new (_("Name of new module:"));
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, FALSE, 0);
+    vbox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
     /* name entry */
     entry = gtk_entry_new ();
@@ -357,8 +360,7 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
                                        GTK_RESPONSE_OK,
                                        FALSE);
     g_signal_connect (entry, "changed", G_CALLBACK (name_changed), dialog);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-                        entry, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX( vbox ), entry, FALSE, FALSE, 0);
 
 
     /* check button */
@@ -369,11 +371,11 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
                           _("If checked, the new module will be opened "\
                             "after it has been created"),
                           NULL);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+    gtk_box_pack_start (GTK_BOX (vbox),
                         toggle, FALSE, FALSE, 20);
 
 
-    gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
+    gtk_widget_show_all (vbox);
 
     /* run dialog */
     response = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -433,9 +435,10 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
                     g_free (title);
 
                     /* use size of source module */
+                    gtk_widget_get_allocation(GTK_WIDGET (module), &aloc);
                     gtk_window_set_default_size (GTK_WINDOW (newmod->win),
-                                                 GTK_WIDGET (module)->allocation.width,
-                                                 GTK_WIDGET (module)->allocation.height);
+                                                 aloc.width,
+                                                 aloc.height);
 
                     g_signal_connect (G_OBJECT (newmod->win), "configure_event",
                                       G_CALLBACK (module_window_config_cb), newmod);
@@ -496,12 +499,15 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
 static void docking_state_cb (GtkWidget *menuitem, gpointer data)
 {
     GtkWidget *module = GTK_WIDGET (data);
+    GtkAllocation aloc;
     gint       w,h;
     gchar     *icon;      /* icon file name */
     gchar     *title;     /* window title */
 
     (void) menuitem; /* avoid unused parameter compiler warning */
 
+    gtk_widget_get_allocation ( module, &aloc);
+    
     switch (GTK_SAT_MODULE (module)->state) {
 
     case GTK_SAT_MOD_STATE_DOCKED:
@@ -517,7 +523,7 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
                                         NULL);
         }
         else {
-            w = module->allocation.width;
+            w = aloc.width;
         }
         if (g_key_file_has_key (GTK_SAT_MODULE (module)->cfgdata,
                                 MOD_CFG_GLOBAL_SECTION,
@@ -529,7 +535,7 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
                                         NULL);
         }
         else {
-            h = module->allocation.height;
+            h = aloc.height;
         }
         
         /* increase reference count of module */
@@ -1198,7 +1204,7 @@ gboolean module_window_config_cb (GtkWidget *widget, GdkEventConfigure *event, g
 
 
     /* data is only useful when window is visible */
-    if (GTK_WIDGET_VISIBLE (widget))
+    if (gtk_widget_get_visible (widget))
         gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
     else
         return FALSE; /* carry on normally */

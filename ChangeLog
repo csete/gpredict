@@ -11,6 +11,31 @@
     * src/gtk-sky-glance.h
     Change gtk headers to only include from short list at <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
 
+    * src/gpredict-help.c
+    * src/gpredict-utils.c
+    * src/gtk-azel-plot.c
+    * src/gtk-polar-plot.c
+    * src/gtk-polar-view.c
+    * src/gtk-sat-map.c
+    * src/gtk-sat-module.c
+    * src/gtk-sat-module-popup.c
+    * src/gtk-sky-glance.c
+    * src/loc-tree.c
+    * src/main.c
+    * src/menubar.c
+    * src/mod-cfg.c
+    * src/mod-mgr.c
+    * src/qth-editor.c
+    * src/sat-info.c
+    * src/sat-log-browser.c
+    * src/sat-pass-dialogs.c
+    * src/sat-pref.c
+    * src/sat-pref-qth-editor.c
+    * src/sat-pref-rig-editor.c
+    * src/sat-pref-rot-editor.c
+    * src/save-pass.c
+    Use access functions instead of private elements per <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
+
 
 2011-07-23 Charles Suprin <hamaa1vs at gmail.com>
 

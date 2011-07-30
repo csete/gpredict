@@ -270,7 +270,7 @@ loc_tree_create (const gchar *fname,
      gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
                                                 GTK_RESPONSE_ACCEPT,
                                                 FALSE);
-     gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG(dialog)->vbox), swin);
+     gtk_box_pack_start_defaults (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
 
      /* connect selection checker for the tree-view;
         we have waited so far, because we want to pass the dialog as

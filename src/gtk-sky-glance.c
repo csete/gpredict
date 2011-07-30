@@ -454,7 +454,7 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
     gdouble           x,y,w,h;
 
 
-    if (GTK_WIDGET_REALIZED (widget)) {
+    if (gtk_widget_get_realized (widget)) {
 
         /* get graph dimensions */
         skg = GTK_SKY_GLANCE (data);
@@ -605,9 +605,8 @@ static void
 on_canvas_realized (GtkWidget *canvas, gpointer data)
 {
     GtkAllocation aloc;
-
-    aloc.width = canvas->allocation.width;
-    aloc.height = canvas->allocation.height;
+    
+    gtk_widget_get_allocation (canvas, &aloc);
     size_allocate_cb (canvas, &aloc, data);
 
 }

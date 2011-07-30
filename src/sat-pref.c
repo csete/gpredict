@@ -174,8 +174,8 @@ sat_pref_run ()
                                            NULL);
      g_free (iconfile);
 
-     gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG(window)->vbox), hbox);
-     gtk_box_set_spacing (GTK_BOX (GTK_DIALOG(window)->vbox), 10);
+     gtk_box_pack_start_defaults (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG(window))), hbox);
+     gtk_box_set_spacing (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG(window))), 10);
 
      gtk_button_clicked (GTK_BUTTON (genbut));
 

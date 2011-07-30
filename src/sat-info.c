@@ -340,7 +340,7 @@ show_sat_info (sat_t *sat, gpointer data)
     g_signal_connect (dialog, "response",
                 G_CALLBACK (gtk_widget_destroy), NULL);
 
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), notebook);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), notebook);
     
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 

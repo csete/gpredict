@@ -85,7 +85,7 @@ static GtkVBoxClass *parent_class = NULL;
 GtkType
 gtk_azel_plot_get_type ()
 {
-     static GType gtk_azel_plot_type = 0;
+     static GtkType gtk_azel_plot_type = 0;
 
      if (!gtk_azel_plot_type) {
           static const GTypeInfo gtk_azel_plot_info = {
@@ -449,7 +449,7 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
      pass_detail_t *detail;
 
 
-     if (GTK_WIDGET_REALIZED (widget)) {
+     if (gtk_widget_get_realized (widget)) {
 
           /* get graph dimensions */
           polv = GTK_AZEL_PLOT (data);
@@ -605,8 +605,7 @@ on_canvas_realized (GtkWidget *canvas, gpointer data)
 {
      GtkAllocation aloc;
 
-     aloc.width = canvas->allocation.width;
-     aloc.height = canvas->allocation.height;
+     gtk_widget_get_allocation(canvas, &aloc);
      size_allocate_cb (canvas, &aloc, data);
 
 }

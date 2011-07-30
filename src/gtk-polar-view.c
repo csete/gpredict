@@ -529,18 +529,16 @@ size_allocate_cb (GtkWidget *widget, GtkAllocation *allocation, gpointer data)
 static void
 update_polv_size (GtkPolarView *polv)
 {
-    //GtkPolarView *polv;
     GtkAllocation allocation;
     GooCanvasPoints *prec;
     gfloat x,y;
     GtkAnchorType anch = GTK_ANCHOR_CENTER;
 
 
-    if (GTK_WIDGET_REALIZED (polv)) {
+    if (gtk_widget_get_realized (GTK_WIDGET(polv))) {
         
         /* get graph dimensions */
-        allocation.width = GTK_WIDGET (polv)->allocation.width;
-        allocation.height = GTK_WIDGET (polv)->allocation.height;
+        gtk_widget_get_allocation ( GTK_WIDGET(polv), &allocation);
 
         polv->size = MIN(allocation.width, allocation.height);
         polv->r = (polv->size / 2) - POLV_DEFAULT_MARGIN;
@@ -668,8 +666,7 @@ on_canvas_realized (GtkWidget *canvas, gpointer data)
 {
     GtkAllocation aloc;
 
-    aloc.width = canvas->allocation.width;
-    aloc.height = canvas->allocation.height;
+    gtk_widget_get_allocation (canvas, &aloc);
     size_allocate_cb (canvas, &aloc, data);
 
 }

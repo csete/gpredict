@@ -496,7 +496,7 @@ menubar_tle_net_cb       (GtkWidget *widget, gpointer data)
     gtk_box_pack_start (GTK_BOX (box), label2, TRUE, TRUE, 0);        
 
     /* finalise dialog */
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), box);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), box);
     g_signal_connect_swapped (dialog,
                               "response", 
                               G_CALLBACK (gtk_widget_destroy),
@@ -595,7 +595,7 @@ menubar_tle_local_cb       (GtkWidget *widget, gpointer data)
                                           GTK_STOCK_OK,
                                           GTK_RESPONSE_ACCEPT,
                                           NULL);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), box, TRUE, TRUE, 30);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box, TRUE, TRUE, 30);
 
     response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -668,7 +668,7 @@ menubar_tle_local_cb       (GtkWidget *widget, gpointer data)
         gtk_box_pack_start (GTK_BOX (box), label2, TRUE, TRUE, 0);        
 
         /* finalise dialog */
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), box);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), box);
         g_signal_connect_swapped (dialog,
                                   "response", 
                                   G_CALLBACK (gtk_widget_destroy),
@@ -793,7 +793,7 @@ menubar_help_cb (GtkWidget *widget, gpointer data)
     button = gtk_link_button_new ("http://gpredict.oz9aec.net/documents.php");
     gtk_widget_show (button);
 
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), button, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), button, FALSE, FALSE, 0);
 
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
@@ -964,7 +964,7 @@ select_module        ()
     gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 200);
      gtk_container_add (GTK_CONTAINER (swin), modlist);
     gtk_widget_show (swin);
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), swin);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), swin);
 
     switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
 
@@ -1017,8 +1017,9 @@ create_module_window (GtkWidget *module)
     gint       w,h;
     gchar     *icon;      /* icon file name */
     gchar     *title;     /* window title */
+    GtkAllocation aloc;
 
-
+    gtk_widget_get_allocation (module, &aloc);
     /* get stored size; use size from main window if size not explicitly stoed */
     if (g_key_file_has_key (GTK_SAT_MODULE (module)->cfgdata,
                             MOD_CFG_GLOBAL_SECTION,
@@ -1030,7 +1031,7 @@ create_module_window (GtkWidget *module)
                                     NULL);
     }
     else {
-        w = module->allocation.width;
+        w = aloc.width;
     }
     if (g_key_file_has_key (GTK_SAT_MODULE (module)->cfgdata,
                             MOD_CFG_GLOBAL_SECTION,
@@ -1042,7 +1043,7 @@ create_module_window (GtkWidget *module)
                                     NULL);
     }
     else {
-        h = module->allocation.height;
+        h = aloc.height;
     }
         
     /* increase reference count of module */

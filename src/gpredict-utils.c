@@ -60,7 +60,6 @@ gpredict_hpixmap_button (const gchar *file, const gchar *text, const gchar *tool
      GtkWidget *image;
      GtkWidget *box;
      gchar     *path;
-     GtkTooltips *tips;
 
      path = icon_file_name (file);
      image = gtk_image_new_from_file (path);
@@ -71,11 +70,8 @@ gpredict_hpixmap_button (const gchar *file, const gchar *text, const gchar *tool
           gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
 
      button = gtk_button_new ();
+     gtk_widget_set_tooltip_text (button, tooltip);
      gtk_container_add (GTK_CONTAINER (button), box);
-
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
-
 
      return button;
 }
@@ -95,7 +91,6 @@ gpredict_vpixmap_button (const gchar *file, const gchar *text, const gchar *tool
      GtkWidget *image;
      GtkWidget *box;
      gchar     *path;
-     GtkTooltips *tips;
 
      path = icon_file_name (file);
      image = gtk_image_new_from_file (path);
@@ -106,11 +101,8 @@ gpredict_vpixmap_button (const gchar *file, const gchar *text, const gchar *tool
           gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
 
      button = gtk_button_new ();
+     gtk_widget_set_tooltip_text (button, tooltip);
      gtk_container_add (GTK_CONTAINER (button), box);
-
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
-
 
      return button;
 }
@@ -127,8 +119,6 @@ gpredict_hstock_button (const gchar *stock_id, const gchar *text, const gchar *t
      GtkWidget *button;
      GtkWidget *image;
      GtkWidget *box;
-     GtkTooltips *tips;
-     
 
      image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
      box = gtk_hbox_new (FALSE, 0);
@@ -137,11 +127,8 @@ gpredict_hstock_button (const gchar *stock_id, const gchar *text, const gchar *t
           gtk_box_pack_start (GTK_BOX (box), gtk_label_new (text), TRUE, TRUE, 0);
 
      button = gtk_button_new ();
+     gtk_widget_set_tooltip_text (button, tooltip);
      gtk_container_add (GTK_CONTAINER (button), box);
-
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
-
 
      return button;
 }
@@ -192,14 +179,7 @@ set_combo_tooltip (GtkWidget *combo, gpointer text)
 
      /* if current child is a button we have BINGO! */
      if (GTK_IS_BUTTON (combo)) {
-
-          GtkTooltips *tips;
-
-          tips = gtk_tooltips_new ();
-
-          gtk_tooltips_set_tip (tips, combo,
-                                     (gchar *) text,
-                                     NULL);
+         gtk_widget_set_tooltip_text (combo, text);
      }
 
 }
@@ -264,7 +244,6 @@ gpredict_mini_mod_button (const gchar *pixmapfile, const gchar *tooltip)
      GtkWidget *button;
      GtkWidget *image;
      gchar     *path;
-     GtkTooltips *tips;
 
      path = icon_file_name (pixmapfile);
      image = gtk_image_new_from_file (path);
@@ -272,11 +251,8 @@ gpredict_mini_mod_button (const gchar *pixmapfile, const gchar *tooltip)
 
      button = gtk_button_new ();
      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+     gtk_widget_set_tooltip_text (button, tooltip);
      gtk_container_add (GTK_CONTAINER (button), image);
-
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, button, tooltip, NULL);
-
 
      return button;
 }

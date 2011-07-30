@@ -110,6 +110,7 @@ config_help (void)
 {
      GtkWidget *dialog;
      GtkWidget *label;
+     GtkBox *vbox;
      gint resp;
 
 
@@ -124,11 +125,11 @@ config_help (void)
                                NULL);
 
      label = gtk_label_new (_("Please select a HTML browser to be used to view the help."));
-     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, FALSE, TRUE, 0);
-     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-                   sat_pref_help_create (), TRUE, FALSE, 0);
+     vbox = GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG(dialog)));
+     gtk_box_pack_start (vbox, label, FALSE, TRUE, 0);
+     gtk_box_pack_start (vbox, sat_pref_help_create (), TRUE, FALSE, 0);
 
-     gtk_widget_show_all (GTK_DIALOG (dialog)->vbox);
+     gtk_widget_show_all (GTK_WIDGET(vbox));
 
      resp = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -247,7 +248,7 @@ gpredict_help_show_txt (const gchar *filename)
      g_signal_connect_swapped (dialog, "response", 
                                      G_CALLBACK (gtk_widget_destroy), dialog);
 
-     gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox), swin);
+     gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
      gtk_widget_show_all (dialog);
 
 }

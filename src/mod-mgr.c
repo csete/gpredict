@@ -640,8 +640,9 @@ create_module_window (GtkWidget *module)
     gint       w,h;
     gchar     *icon;      /* icon file name */
     gchar     *title;     /* window title */
+    GtkAllocation aloc;
 
-
+    gtk_widget_get_allocation ( module, &aloc);
     /* get stored size; use size from main window if size not explicitly stoed */
     if (g_key_file_has_key (GTK_SAT_MODULE (module)->cfgdata,
                             MOD_CFG_GLOBAL_SECTION,
@@ -653,7 +654,7 @@ create_module_window (GtkWidget *module)
                                     NULL);
     }
     else {
-        w = module->allocation.width;
+        w = aloc.width;
     }
     if (g_key_file_has_key (GTK_SAT_MODULE (module)->cfgdata,
                             MOD_CFG_GLOBAL_SECTION,
@@ -665,7 +666,7 @@ create_module_window (GtkWidget *module)
                                     NULL);
     }
     else {
-        h = module->allocation.height;
+        h = aloc.height;
     }
         
     /* increase reference count of module */

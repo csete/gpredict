@@ -129,7 +129,7 @@ GtkResponseType qth_editor_run (qth_t *qth, GtkWindow *parent)
                                        GTK_RESPONSE_OK,
                                        FALSE);
 
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))),
                        create_editor_widgets (qth));
 
     /* this hacky-thing is to keep the dialog running in case the
