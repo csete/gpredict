@@ -312,7 +312,6 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
     GtkWidget    *entry;
     GtkWidget    *label;
     GtkWidget    *toggle;
-    GtkTooltips  *tooltips;
     GtkWidget    *vbox;
     GtkAllocation aloc;
     guint         response;
@@ -344,14 +343,15 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
     entry = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (entry), 25);
     gtk_entry_set_text (GTK_ENTRY (entry), module->name);
-    tooltips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tooltips, entry,
+    gtk_widget_set_tooltip_text (entry,
                           _("Enter a short name for this module.\n"\
-                            "Allowed characters: 0..9, a..z, A..Z, - and _"),
-                          _("The name will be used to identify the module "\
+                            "Allowed characters: 0..9, a..z, A..Z, - and _"));
+        
+    /*not sure what to do with the old private tip the new api does not like them
+      _("The name will be used to identify the module "                 \
                             "and it is also used a file name for saving the data."\
                             "Max length is 25 characters."));
-
+    */
     /* attach changed signal so that we can enable OK button when
         a proper name has been entered
         oh, btw. disable OK button to begin with....
@@ -366,11 +366,9 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
     /* check button */
     toggle = gtk_check_button_new_with_label (_("Open module when created"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), TRUE);
-    tooltips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tooltips, toggle,
+    gtk_widget_set_tooltip_text ( toggle,                          
                           _("If checked, the new module will be opened "\
-                            "after it has been created"),
-                          NULL);
+                            "after it has been created"));
     gtk_box_pack_start (GTK_BOX (vbox),
                         toggle, FALSE, FALSE, 20);
 

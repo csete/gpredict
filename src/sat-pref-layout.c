@@ -358,7 +358,6 @@ static void layout_selected_cb (GtkComboBox *combo, gpointer data)
 static void create_window_placement (GtkBox *vbox)
 {
     GtkWidget *label;
-    GtkTooltips *tips;
 
 
     /* create header */
@@ -372,13 +371,11 @@ static void create_window_placement (GtkBox *vbox)
     mwin = gtk_check_button_new_with_label (_("Restore position of main window"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (mwin),
                                   sat_cfg_get_bool (SAT_CFG_BOOL_MAIN_WIN_POS));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mwin,
-                          _("If you check this button, gpredict will try to "\
-                            "place the main window at the position it was "\
-                            "during the last session.\n"\
-                            "Note that window managers can ignore this request."),
-                          NULL);
+    gtk_widget_set_tooltip_text (mwin,
+                                 _("If you check this button, gpredict will try to " \
+                                   "place the main window at the position it was " \
+                                   "during the last session.\n"         \
+                                   "Note that window managers can ignore this request."));
     g_signal_connect (G_OBJECT (mwin), "toggled",
                       G_CALLBACK (window_pos_toggle_cb), NULL);
     gtk_box_pack_start (vbox, mwin, FALSE, FALSE, 0);
@@ -387,13 +384,11 @@ static void create_window_placement (GtkBox *vbox)
     mod = gtk_check_button_new_with_label (_("Restore position of module windows"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (mod),
                                   sat_cfg_get_bool (SAT_CFG_BOOL_MOD_WIN_POS));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod,
-                          _("If you check this button, gpredict will try to "\
-                            "place the module windows at the position they were "\
-                            "the last time.\n"\
-                            "Note that window managers can ignore this request."),
-                          NULL);
+    gtk_widget_set_tooltip_text (mod,
+                                 _("If you check this button, gpredict will try to " \
+                                   "place the module windows at the position they were " \
+                                   "the last time.\n"                   \
+                                   "Note that window managers can ignore this request."));
     g_signal_connect (G_OBJECT (mod), "toggled",
                       G_CALLBACK (window_pos_toggle_cb), NULL);
     gtk_box_pack_start (vbox, mod, FALSE, FALSE, 0);
@@ -402,11 +397,9 @@ static void create_window_placement (GtkBox *vbox)
     state = gtk_check_button_new_with_label (_("Restore the state of modules when reopened (docked or window)"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (state),
                                   sat_cfg_get_bool (SAT_CFG_BOOL_MOD_STATE));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, state,
-                          _("If you check this button, gpredict will restore "\
-                            "the states of the modules from the last time they were used."),
-                          NULL);
+    gtk_widget_set_tooltip_text (state,
+                                 _("If you check this button, gpredict will restore " \
+                                   "the states of the modules from the last time they were used."));
     g_signal_connect (G_OBJECT (state), "toggled",
                       G_CALLBACK (window_pos_toggle_cb), NULL);
     gtk_box_pack_start (vbox, state, FALSE, FALSE, 0);
@@ -424,23 +417,19 @@ static void create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget   *button;
     GtkWidget   *butbox;
-    GtkTooltips *tips;
 
 
     button = gtk_button_new_with_label (_("Reset"));
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (reset_cb), cfg);
 
-    tips = gtk_tooltips_new ();
     if (cfg == NULL) {
-        gtk_tooltips_set_tip (tips, button,
-                              _("Reset settings to the default values."),
-                              NULL);
+        gtk_widget_set_tooltip_text (button,
+                                     _("Reset settings to the default values."));
     }
     else {
-        gtk_tooltips_set_tip (tips, button,
-                              _("Reset module settings to the global values."),
-                              NULL);
+        gtk_widget_set_tooltip_text (button,
+                                     _("Reset module settings to the global values."));
     }
 
     butbox = gtk_hbutton_box_new ();

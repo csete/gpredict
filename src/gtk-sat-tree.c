@@ -178,7 +178,6 @@ GtkWidget *
     GtkCellRenderer    *renderer;
     GtkTreeViewColumn  *column;
     GtkWidget          *hbox;
-    GtkTooltips        *tips;
     GtkWidget          *expbut;
     GtkWidget          *colbut;
 

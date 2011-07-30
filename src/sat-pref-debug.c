@@ -62,7 +62,6 @@ GtkWidget *sat_pref_debug_create ()
      GtkWidget   *vbox;    /* vbox containing the list part and the details part */
      GtkWidget   *hbox;
      GtkWidget   *rbut;
-     GtkTooltips *tips;
      GtkWidget   *label;
      GtkWidget   *butbox;
      gchar       *msg;
@@ -139,10 +138,8 @@ GtkWidget *sat_pref_debug_create ()
 
      /* reset button */
      rbut = gtk_button_new_with_label (_("Reset"));
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, rbut,
-                                _("Reset settings to the default values."),
-                                NULL);
+     gtk_widget_set_tooltip_text (rbut,
+                                  _("Reset settings to the default values."));
      g_signal_connect (G_OBJECT (rbut), "clicked",
                            G_CALLBACK (reset_cb), NULL);
      butbox = gtk_hbutton_box_new ();

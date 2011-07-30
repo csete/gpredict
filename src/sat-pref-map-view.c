@@ -121,7 +121,6 @@ static void create_map_selector  (GKeyFile *cfg, GtkBox *vbox)
     GtkWidget *table;
     gchar     *mapfile;
     GdkPixbuf *obuf,*sbuf;
-    GtkTooltips *tips;
 
 
     /* create header */
@@ -179,9 +178,8 @@ static void create_map_selector  (GKeyFile *cfg, GtkBox *vbox)
 
     /* select button */
     button = gtk_button_new_with_label (_("Select map"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, button,
-                          _("Click to select a map"), NULL);
+    gtk_widget_set_tooltip_text (button,
+                          _("Click to select a map"));
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (select_map_cb), NULL);
     gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
@@ -204,7 +202,6 @@ static void create_map_selector  (GKeyFile *cfg, GtkBox *vbox)
 static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget *label;
-    GtkTooltips *tips;
     GtkWidget *hbox;
 
 
@@ -221,10 +218,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* QTH info */
     qth = gtk_check_button_new_with_label (_("QTH Info"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, qth,
-                          _("Show location information on the map"),
-                          NULL);
+    gtk_widget_set_tooltip_text (qth,
+                          _("Show location information on the map"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (qth),
                                       mod_cfg_get_bool (cfg,
@@ -241,10 +236,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* Next Event */
     next = gtk_check_button_new_with_label (_("Next Event"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, next,
-                          _("Show which satellite comes up next and at what time"),
-                          NULL);
+    gtk_widget_set_tooltip_text (next,
+                          _("Show which satellite comes up next and at what time"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (next),
                                       mod_cfg_get_bool (cfg,
@@ -261,10 +254,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* Cursor position */
     curs = gtk_check_button_new_with_label (_("Cursor Position"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, curs,
-                          _("Show the latitude and longitude of the mouse pointer"),
-                          NULL);
+    gtk_widget_set_tooltip_text (curs,
+                          _("Show the latitude and longitude of the mouse pointer"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (curs),
                                       mod_cfg_get_bool (cfg,
@@ -282,10 +273,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* Grid */
     grid = gtk_check_button_new_with_label (_("Grid Lines"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, grid,
-                          _("Show horizontal and vertical grid lines"),
-                          NULL);
+    gtk_widget_set_tooltip_text (grid,
+                          _("Show horizontal and vertical grid lines"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (grid),
                                       mod_cfg_get_bool (cfg,
@@ -313,7 +302,6 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget   *label;
-    GtkTooltips *tips;
     GtkWidget   *table;
     guint        rgba;   /* RRGGBBAA encoded colour */
     guint16      alpha;  /* alpha channel 16 bits */
@@ -342,10 +330,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (qthc), TRUE);
     gtk_table_attach (GTK_TABLE (table), qthc, 1, 2, 0, 1,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, qthc,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (qthc,
+                          _("Click to select a colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -369,10 +355,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (gridc), TRUE);
     gtk_table_attach (GTK_TABLE (table), gridc, 3, 4, 0, 1,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, gridc,
-                          _("Click to select the grid colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (gridc,
+                          _("Click to select the grid colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -396,10 +380,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (tickc), TRUE);
     gtk_table_attach (GTK_TABLE (table), tickc, 5, 6, 0, 1,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, tickc,
-                          _("Click to select the colour for tick labels"),
-                          NULL);
+    gtk_widget_set_tooltip_text (tickc,
+                          _("Click to select the colour for tick labels"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -423,10 +405,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (satc), TRUE);
     gtk_table_attach (GTK_TABLE (table), satc, 1, 2, 1, 2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, satc,
-                          _("Click to select satellite colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (satc,
+                          _("Click to select satellite colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -450,10 +430,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (ssatc), TRUE);
     gtk_table_attach (GTK_TABLE (table), ssatc, 3, 4, 1, 2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, ssatc,
-                          _("Click to select colour for selected satellites"),
-                          NULL);
+    gtk_widget_set_tooltip_text (ssatc,
+                          _("Click to select colour for selected satellites"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -477,10 +455,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (trackc), TRUE);
     gtk_table_attach (GTK_TABLE (table), trackc, 5, 6, 1, 2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, trackc,
-                          _("Click to select ground track colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (trackc,
+                          _("Click to select ground track colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -504,10 +480,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (covc), TRUE);
     gtk_table_attach (GTK_TABLE (table), covc, 1, 2, 2, 3,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, covc,
-                          _("Colour for coverage Area (make it transparent)"),
-                          NULL);
+    gtk_widget_set_tooltip_text (covc,
+                          _("Colour for coverage Area (make it transparent)"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -531,10 +505,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (infofg), TRUE);
     gtk_table_attach (GTK_TABLE (table), infofg, 3, 4, 2, 3,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, infofg,
-                          _("Click to select info text foreground colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (infofg,
+                          _("Click to select info text foreground colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -559,10 +531,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (infobg), TRUE);
     gtk_table_attach (GTK_TABLE (table), infobg, 5, 6, 2, 3,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, infobg,
-                          _("Click to select info text background colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (infobg,
+                          _("Click to select info text background colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_MAP_SECTION,
@@ -672,23 +642,19 @@ static void create_reset_button     (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget   *button;
     GtkWidget   *butbox;
-    GtkTooltips *tips;
 
 
     button = gtk_button_new_with_label (_("Reset"));
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (reset_cb), cfg);
 
-    tips = gtk_tooltips_new ();
     if (cfg == NULL) {
-        gtk_tooltips_set_tip (tips, button,
-                              _("Reset settings to the default values."),
-                              NULL);
+        gtk_widget_set_tooltip_text (button,
+                                     _("Reset settings to the default values."));
     }
     else {
-        gtk_tooltips_set_tip (tips, button,
-                              _("Reset module settings to the global values."),
-                              NULL);
+        gtk_widget_set_tooltip_text (button,
+                                     _("Reset module settings to the global values."));
     }
 
     butbox = gtk_hbutton_box_new ();

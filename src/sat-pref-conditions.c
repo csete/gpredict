@@ -61,7 +61,6 @@ GtkWidget *sat_pref_conditions_create ()
 {
      GtkWidget   *table;
      GtkWidget   *label;
-     GtkTooltips *tips;
      GtkWidget   *vbox;
 
 
@@ -81,12 +80,10 @@ GtkWidget *sat_pref_conditions_create ()
                            GTK_SHRINK,
                            0, 0);
      minel = gtk_spin_button_new_with_range (0, 90, 1);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, minel,
+     gtk_widget_set_tooltip_text (minel,
                                 _("Elevation threshold for passes.\n"\
                                    "Passes with maximum elevation below this limit "\
-                                   "will be omitted"),
-                                NULL);
+                                  "will be omitted"));
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (minel), 0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (minel), TRUE);
      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (minel), FALSE);
@@ -133,10 +130,8 @@ GtkWidget *sat_pref_conditions_create ()
                            GTK_SHRINK,
                            0, 0);
      numpass = gtk_spin_button_new_with_range (5, 50, 1);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, numpass,
-                                _("The maximum number of passes to predict."),
-                                NULL);
+     gtk_widget_set_tooltip_text (numpass,
+                                  _("The maximum number of passes to predict."));
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (numpass), 0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (numpass), TRUE);
      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (numpass), FALSE);
@@ -159,11 +154,9 @@ GtkWidget *sat_pref_conditions_create ()
                            GTK_SHRINK,
                            0, 0);
      lookahead = gtk_spin_button_new_with_range (1, 14, 1);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, lookahead,
+     gtk_widget_set_tooltip_text (lookahead,
                                 _("Only passes that occur within the specified "\
-                                   "number of days will be shown."),
-                                NULL);
+                                  "number of days will be shown."));
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lookahead), 0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lookahead), TRUE);
      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (lookahead), FALSE);
@@ -211,11 +204,9 @@ GtkWidget *sat_pref_conditions_create ()
                            GTK_SHRINK,
                            0, 0);
      res = gtk_spin_button_new_with_range (1, 600, 1);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, res,
+     gtk_widget_set_tooltip_text (res,
                                 _("Gpredict will try to show the pass details "\
-                                   "with the specified time resolution."),
-                                NULL);
+                                  "with the specified time resolution."));
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (res), 0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (res), TRUE);
      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (res), FALSE);
@@ -245,11 +236,9 @@ GtkWidget *sat_pref_conditions_create ()
                            GTK_SHRINK,
                            0, 0);
      nument = gtk_spin_button_new_with_range (10, 200, 1);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, nument,
-                                _("Gpredict will try to keep the number of rows "\
-                                   "in the detailed prediction within this limit."),
-                                NULL);
+     gtk_widget_set_tooltip_text (nument,
+                                  _("Gpredict will try to keep the number of rows " \
+                                    "in the detailed prediction within this limit."));
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (nument), 0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (nument), TRUE);
      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (nument), FALSE);
@@ -424,17 +413,14 @@ create_reset_button (GtkBox *vbox)
 {
      GtkWidget   *button;
      GtkWidget   *butbox;
-     GtkTooltips *tips;
 
 
      button = gtk_button_new_with_label (_("Reset"));
      g_signal_connect (G_OBJECT (button), "clicked",
                            G_CALLBACK (reset_cb), NULL);
 
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, button,
-                                _("Reset settings to the default values."),
-                                NULL);
+     gtk_widget_set_tooltip_text (button,
+                                  _("Reset settings to the default values."));
 
      butbox = gtk_hbutton_box_new ();
      gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);

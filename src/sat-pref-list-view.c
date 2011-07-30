@@ -71,7 +71,6 @@ static void toggle_rh_cb        (GtkToggleButton *toggle, gpointer data);
 GtkWidget *sat_pref_list_view_create (GKeyFile *cfg)
 {
      GtkWidget *vbox;
-     GtkTooltips *tips;
      gint      i;
      GtkWidget *table,*label;
 
@@ -158,13 +157,11 @@ GtkWidget *sat_pref_list_view_create (GKeyFile *cfg)
           g_signal_connect (G_OBJECT (ruleshint), "toggled",
                                 G_CALLBACK (toggle_rh_cb), NULL);
 
-          tips = gtk_tooltips_new ();
-          gtk_tooltips_set_tip (tips, ruleshint,
+          gtk_widget_set_tooltip_text (ruleshint,
                                      _("Enabling rules hint may make reading across many "\
                                         "columns easier. By default the satlist will be rendered "\
                                         "with alternating colours, but the exact behaviour is "\
-                                        "up to the theme engine."),
-                                     NULL);
+                                       "up to the theme engine."));
 
           gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
@@ -248,23 +245,19 @@ create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 {
      GtkWidget   *button;
      GtkWidget   *butbox;
-     GtkTooltips *tips;
 
 
      button = gtk_button_new_with_label (_("Reset"));
      g_signal_connect (G_OBJECT (button), "clicked",
                  G_CALLBACK (reset_cb), cfg);
 
-     tips = gtk_tooltips_new ();
      if (cfg == NULL) {
-          gtk_tooltips_set_tip (tips, button,
-                          _("Reset settings to the default values."),
-                          NULL);
+         gtk_widget_set_tooltip_text (button,
+                                      _("Reset settings to the default values."));
      }
      else {
-          gtk_tooltips_set_tip (tips, button,
-                          _("Reset module settings to the global values."),
-                          NULL);
+          gtk_widget_set_tooltip_text (button,
+                                       _("Reset module settings to the global values."));
      }
 
      butbox = gtk_hbutton_box_new ();

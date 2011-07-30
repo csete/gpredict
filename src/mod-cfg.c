@@ -442,7 +442,6 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     GtkWidget   *swin;
     GtkWidget   *addbut, *delbut;
     GtkWidget   *vbox;
-    GtkTooltips *tooltips;
     gchar       *icon;      /* window icon file name */
     GtkWidget *frame;
 
@@ -500,14 +499,14 @@ static GtkWidget *mod_cfg_editor_create (const gchar *modname, GKeyFile *cfgdata
     else {
         /* connect changed signal to text-checker */
         gtk_entry_set_max_length (GTK_ENTRY (namew), 25);
-        tooltips = gtk_tooltips_new ();
-        gtk_tooltips_set_tip (tooltips, namew,
+        gtk_widget_set_tooltip_text (namew,
                               _("Enter a short name for this module.\n"\
-                                "Allowed characters: 0..9, a..z, A..Z, - and _"),
-                              _("The name will be used to identify the module "\
-                                "and it is also used a file name for saving the data."\
-                                "Max length is 25 characters."));
-
+                                "Allowed characters: 0..9, a..z, A..Z, - and _"));
+        /*new tooltip api does not allow for private 
+          _("The name will be used to identify the module "             \
+          "and it is also used a file name for saving the data."        \
+          "Max length is 25 characters."));
+        */
         /* attach changed signal so that we can enable OK button when
                    a proper name has been entered
                    oh, btw. disable OK button to begin with....

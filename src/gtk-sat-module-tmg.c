@@ -64,7 +64,6 @@ void tmg_create (GtkSatModule *mod)
     GtkWidget   *vbox, *hbox, *table;
     GtkWidget   *image;
     GtkWidget   *label;
-    GtkTooltips *tips;
     gchar       *title;
     gchar       *buff;
 
@@ -95,8 +94,7 @@ void tmg_create (GtkSatModule *mod)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (mod->tmgFwd), TRUE);
     image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PLAY, GTK_ICON_SIZE_BUTTON);
     gtk_container_add (GTK_CONTAINER (mod->tmgFwd), image);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgFwd, _("Play forward"), NULL);
+    gtk_widget_set_tooltip_text (mod->tmgFwd, _("Play forward"));
     g_signal_connect (mod->tmgFwd, "toggled", G_CALLBACK (tmg_fwd), mod);
     gtk_box_pack_end (GTK_BOX (hbox), mod->tmgFwd, FALSE, FALSE, 0);
 
@@ -105,8 +103,7 @@ void tmg_create (GtkSatModule *mod)
     gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (mod->tmgStop), FALSE);
     image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_BUTTON);
     gtk_container_add (GTK_CONTAINER (mod->tmgStop), image);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgStop, _("Stop"), NULL);
+    gtk_widget_set_tooltip_text (mod->tmgStop, _("Stop"));
     g_signal_connect (mod->tmgStop, "toggled", G_CALLBACK (tmg_stop), mod);
     gtk_box_pack_end (GTK_BOX (hbox), mod->tmgStop, FALSE, FALSE, 0);
 
@@ -116,15 +113,13 @@ void tmg_create (GtkSatModule *mod)
     image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PLAY, GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_direction (image, GTK_TEXT_DIR_RTL);
     gtk_container_add (GTK_CONTAINER (mod->tmgBwd), image);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgBwd, _("Play backwards"), NULL);
+    gtk_widget_set_tooltip_text (mod->tmgBwd, _("Play backwards"));
     g_signal_connect (mod->tmgBwd, "toggled", G_CALLBACK (tmg_bwd), mod);
     gtk_box_pack_end (GTK_BOX (hbox), mod->tmgBwd, FALSE, FALSE, 0);
 
     /* reset time */
     mod->tmgReset = gtk_button_new_with_label (_("Reset"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgReset, _("Reset to current date and time"), NULL);
+    gtk_widget_set_tooltip_text (mod->tmgReset, _("Reset to current date and time"));
     g_signal_connect (mod->tmgReset, "clicked", G_CALLBACK (tmg_reset), mod);
     gtk_box_pack_end (GTK_BOX (hbox), mod->tmgReset, FALSE, FALSE, 10);
 
@@ -168,10 +163,8 @@ void tmg_create (GtkSatModule *mod)
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (mod->tmgHour), 0);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (mod->tmgHour), TRUE);
     //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgHour), 2);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgHour,
-                          _("Use this control to set the hour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (mod->tmgHour,
+                                 _("Use this control to set the hour"));
     g_signal_connect (mod->tmgHour, "value-changed",
                       G_CALLBACK (tmg_time_set), mod);
     g_signal_connect (mod->tmgHour, "wrapped", G_CALLBACK (tmg_hour_wrap), mod);
@@ -190,10 +183,8 @@ void tmg_create (GtkSatModule *mod)
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (mod->tmgMin), 0);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (mod->tmgMin), TRUE);
     //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgMin), 2);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgMin,
-                          _("Use this control to set the minutes"),
-                          NULL);
+    gtk_widget_set_tooltip_text (mod->tmgMin,
+                                 _("Use this control to set the minutes"));
     g_signal_connect (mod->tmgMin, "value-changed",
                       G_CALLBACK (tmg_time_set), mod);
     g_signal_connect (mod->tmgMin, "wrapped", G_CALLBACK (tmg_min_wrap), mod);
@@ -212,10 +203,8 @@ void tmg_create (GtkSatModule *mod)
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (mod->tmgSec), 0);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (mod->tmgSec), TRUE);
     //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgSec), 2);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgSec,
-                          _("Use this control to set the seconds"),
-                          NULL);
+    gtk_widget_set_tooltip_text (mod->tmgSec,
+                                 _("Use this control to set the seconds"));
     g_signal_connect (mod->tmgSec, "value-changed",
                       G_CALLBACK (tmg_time_set), mod);
     g_signal_connect (mod->tmgSec, "wrapped", G_CALLBACK (tmg_sec_wrap), mod);
@@ -234,10 +223,8 @@ void tmg_create (GtkSatModule *mod)
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (mod->tmgMsec), 0);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (mod->tmgMsec), TRUE);
     //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgMsec), 2);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgMsec,
-                          _("Use this control to set the milliseconds"),
-                          NULL);
+    gtk_widget_set_tooltip_text (mod->tmgMsec,
+                                 _("Use this control to set the milliseconds"));
     g_signal_connect (mod->tmgMsec, "value-changed",
                       G_CALLBACK (tmg_time_set), mod);
     g_signal_connect (mod->tmgMsec, "wrapped", G_CALLBACK (tmg_msec_wrap), mod);
@@ -255,10 +242,8 @@ void tmg_create (GtkSatModule *mod)
                                        GTK_UPDATE_IF_VALID);
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (mod->tmgFactor), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgFactor), 1);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, mod->tmgFactor,
-                          _("Time throttle / compression factor"),
-                          NULL);
+    gtk_widget_set_tooltip_text (mod->tmgFactor,
+                                 _("Time throttle / compression factor"));
     g_signal_connect (mod->tmgFactor, "value-changed",
                       G_CALLBACK (tmg_throttle), mod);
     gtk_table_attach (GTK_TABLE (table), mod->tmgFactor,

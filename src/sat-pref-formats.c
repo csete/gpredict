@@ -89,21 +89,18 @@ static void     reset_cb    (GtkWidget *button, gpointer data);
 GtkWidget *sat_pref_formats_create ()
 {
      GtkWidget   *vbox,*tfbox;
-     GtkTooltips *tips;
      gchar       *text;
 
      /* use local time */
      tzcheck = gtk_check_button_new_with_label (_("Show local time instead of UTC."));
      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tzcheck),
                                           sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME));
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, tzcheck, _(tztips), NULL);
+     gtk_widget_set_tooltip_text (tzcheck, _(tztips));
 
      /* time format */
      tfentry = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (tfentry), TIME_FORMAT_MAX_LENGTH);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, tfentry, _(tftips), NULL);
+     gtk_widget_set_tooltip_text (tfentry, _(tftips));
 
      text = sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT);
      gtk_entry_set_text (GTK_ENTRY (tfentry), text);
@@ -117,8 +114,7 @@ GtkWidget *sat_pref_formats_create ()
      /* reset button */
      tfreset = gtk_button_new_with_label (_("Reset"));
      g_signal_connect (tfreset, "clicked", G_CALLBACK (reset_cb), NULL);
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, tfreset, _("Reset to default value"), NULL);
+     gtk_widget_set_tooltip_text (tfreset, _("Reset to default value"));
 
      tfbox = gtk_hbox_new (FALSE, 5);
      gtk_box_pack_start (GTK_BOX (tfbox), gtk_label_new (_("Time format:")),
@@ -131,15 +127,13 @@ GtkWidget *sat_pref_formats_create ()
      nsewcheck = gtk_check_button_new_with_label (_("Use N/S/E/W for geographical coordinates."));
      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (nsewcheck),
                                           sat_cfg_get_bool (SAT_CFG_BOOL_USE_NSEW));     
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, nsewcheck, _(nsewtips), NULL);
+     gtk_widget_set_tooltip_text (nsewcheck, _(nsewtips));
 
      /* unit */
      useimporg = sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL);
      impcheck = gtk_check_button_new_with_label (_("Use Imperial units instead of Metric."));
      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (impcheck), useimporg);     
-     tips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tips, impcheck, _(imptips), NULL);
+     gtk_widget_set_tooltip_text (impcheck, _(imptips));
      /* connect sat-pref-qth hook */
      g_signal_connect (impcheck, "toggled", G_CALLBACK (systog_cb), NULL);
                 

@@ -417,23 +417,18 @@ create_reset_button (GKeyFile *cfg, GtkBox *vbox)
 {
      GtkWidget   *button;
      GtkWidget   *butbox;
-     GtkTooltips *tips;
-
 
      button = gtk_button_new_with_label (_("Reset"));
      g_signal_connect (G_OBJECT (button), "clicked",
                  G_CALLBACK (reset_cb), cfg);
 
-     tips = gtk_tooltips_new ();
      if (cfg == NULL) {
-          gtk_tooltips_set_tip (tips, button,
-                          _("Reset settings to the default values."),
-                          NULL);
+          gtk_widget_set_tooltip_text (button,
+                                       _("Reset settings to the default values."));
      }
      else {
-          gtk_tooltips_set_tip (tips, button,
-                          _("Reset module settings to the global values."),
-                          NULL);
+          gtk_widget_set_tooltip_text (button,
+                                       _("Reset module settings to the global values."));
      }
 
      butbox = gtk_hbutton_box_new ();

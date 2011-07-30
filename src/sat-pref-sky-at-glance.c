@@ -61,7 +61,6 @@ GtkWidget *sat_pref_sky_at_glance_create ()
 {
     GtkWidget   *table;
     GtkWidget   *label;
-    GtkTooltips *tips;
     GtkWidget   *vbox;
     GdkColor     col;
     guint        rgb;   /* 0xRRGGBB encoded colour */
@@ -95,11 +94,9 @@ GtkWidget *sat_pref_sky_at_glance_create ()
                       GTK_SHRINK,
                       0, 0);
     timesp = gtk_spin_button_new_with_range (1, 24, 1);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, timesp,
+    gtk_widget_set_tooltip_text (timesp,
                           _("The passes shown on the Sky at a Glance chart\n"\
-                            "will begin within this number of hours."),
-                          NULL);
+                            "will begin within this number of hours."));
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (timesp), 0);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (timesp), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (timesp), FALSE);
@@ -152,10 +149,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col1,
                       1, 2, y+1, y+2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col1,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text ( col1,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_01);
 
     rgb2gdk (rgb, &col);
@@ -174,10 +169,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col2,
                       1, 2, y+2, y+3,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col2,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text ( col2,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_02);
 
     rgb2gdk (rgb, &col);
@@ -196,10 +189,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col3,
                       1, 2, y+3, y+4,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col3,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col3,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_03);
 
     rgb2gdk (rgb, &col);
@@ -218,10 +209,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col4,
                       1, 2, y+4, y+5,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col4,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col4,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_04);
 
     rgb2gdk (rgb, &col);
@@ -240,10 +229,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col5,
                       1, 2, y+5, y+6,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col5,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col5,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_05);
 
     rgb2gdk (rgb, &col);
@@ -263,10 +250,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col6,
                       4, 5, y+1, y+2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col6,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col6,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_06);
 
     rgb2gdk (rgb, &col);
@@ -285,10 +270,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col7,
                       4, 5, y+2, y+3,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col7,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col7,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_07);
 
     rgb2gdk (rgb, &col);
@@ -307,10 +290,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col8,
                       4, 5, y+3, y+4,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col8,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col8,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_08);
 
     rgb2gdk (rgb, &col);
@@ -329,10 +310,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col9,
                       4, 5, y+4, y+5,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col9,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col9,
+                                 _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_09);
 
     rgb2gdk (rgb, &col);
@@ -351,10 +330,8 @@ GtkWidget *sat_pref_sky_at_glance_create ()
     gtk_table_attach (GTK_TABLE (table), col10,
                       4, 5, y+5, y+6,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, col10,
-                          _("Click to select a colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (col10,
+                          _("Click to select a colour"));
     rgb = sat_cfg_get_int (SAT_CFG_INT_SKYATGL_COL_10);
 
     rgb2gdk (rgb, &col);
@@ -488,17 +465,13 @@ create_reset_button (GtkBox *vbox)
 {
     GtkWidget   *button;
     GtkWidget   *butbox;
-    GtkTooltips *tips;
-
 
     button = gtk_button_new_with_label (_("Reset"));
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (reset_cb), NULL);
 
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, button,
-                          _("Reset settings to the default values."),
-                          NULL);
+    gtk_widget_set_tooltip_text (button,
+                                 _("Reset settings to the default values."));
 
     butbox = gtk_hbutton_box_new ();
     gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);

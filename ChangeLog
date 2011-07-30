@@ -36,6 +36,27 @@
     * src/save-pass.c
     Use access functions instead of private elements per <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
 
+    * src/gtk-sat-module-popup.c
+    * src/sat-pref-single-sat.c
+    * src/sat-pref-layout.c
+    * src/sat-pref-debug.c
+    * src/sat-pref-qth-editor.c
+    * src/sat-pref-polar-view.c
+    * src/sat-pref-map-view.c
+    * src/sat-pref-multi-pass.c
+    * src/mod-cfg.c
+    * src/gtk-sat-module-tmg.c
+    * src/sat-pref-conditions.c
+    * src/sat-pref-formats.c
+    * src/sat-pref-tle.c
+    * src/sat-pref-sky-at-glance.c
+    * src/qth-editor.c
+    * src/sat-pref-list-view.c
+    * src/sat-pref-single-pass.c
+    * src/gtk-sat-tree.c
+    * src/sat-pref-refresh.c
+    Eliminate use of deprecated GtkTooltips for GtkTooltip per <http://developer.gnome.org/gtk/2.22/gtk-migrating-tooltips.html>.
+
 
 2011-07-23 Charles Suprin <hamaa1vs at gmail.com>
 

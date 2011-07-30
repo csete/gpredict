@@ -176,7 +176,6 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
 {
      GtkWidget   *table;
      GtkWidget   *label;
-     GtkTooltips *tooltips;
      GtkWidget   *locbut;
      GtkWidget   *wxbut;
 
@@ -193,13 +192,14 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      
      name = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (name), 25);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, name,
-                                _("Enter a short name for this ground station, e.g. callsign.\n"\
-                                   "Allowed characters: 0..9, a..z, A..Z, - and _"),
+     gtk_widget_set_tooltip_text (name,
+                           _("Enter a short name for this ground station, e.g. callsign.\n" \
+                             "Allowed characters: 0..9, a..z, A..Z, - and _"));
+     /* new api does not allow private tip 
                                 _("The name will be used to identify the ground station when "\
                                    "it is presented to the user. Maximum allowed length "\
                                    "is 25 characters."));
+     */
      gtk_table_attach_defaults (GTK_TABLE (table), name, 1, 4, 0, 1);
 
      /* attach changed signal so that we can enable OK button when
@@ -214,12 +214,13 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      
      desc = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (desc), 256);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, desc,
-                                _("Enter an optional description for this ground station."),
+     gtk_widget_set_tooltip_text (desc,
+                                  _("Enter an optional description for this ground station."));
+     /* new api does not have private tip 
                                 _("The description can be used as additional "\
                                    "information. It may be included when generating reports. "\
                                    "The maximum length for the description is 256 characters."));
+     */
      gtk_table_attach_defaults (GTK_TABLE (table), desc, 1, 4, 1, 2);
 
      /* location */
@@ -229,10 +230,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      
      location = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (location), 50);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, location,
-                                _("Optional location of the ground station, fx. Copenhagen, Denmark."),
-                                NULL);
+     gtk_widget_set_tooltip_text (location,
+                                _("Optional location of the ground station, fx. Copenhagen, Denmark."));
      gtk_table_attach_defaults (GTK_TABLE (table), location, 1, 3, 2, 3);
 
      locbut = gpredict_hstock_button (GTK_STOCK_INDEX, _("Select"),
@@ -252,10 +251,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      gtk_spin_button_set_increments (GTK_SPIN_BUTTON (lat), 0.0001, 1.0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lat), TRUE);
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lat), 4);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, lat,
-                                _("Select the latitude of the ground station in decimal degrees."),
-                                NULL);
+     gtk_widget_set_tooltip_text (lat,
+                                  _("Select the latitude of the ground station in decimal degrees."));
      gtk_table_attach_defaults (GTK_TABLE (table), lat, 1, 2, 3, 4);
 
      ns = gtk_combo_box_new_text ();
@@ -274,9 +271,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      gtk_spin_button_set_increments (GTK_SPIN_BUTTON (lon), 0.0001, 1.0);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (lon), TRUE);
      gtk_spin_button_set_digits (GTK_SPIN_BUTTON (lon), 4);
-     gtk_tooltips_set_tip (tooltips, lon,
-                                _("Select the longitude of the ground station in decimal degrees."),
-                                NULL);
+     gtk_widget_set_tooltip_text (lon,
+                                  _("Select the longitude of the ground station in decimal degrees."));
      gtk_table_attach_defaults (GTK_TABLE (table), lon, 1, 2, 4, 5);
 
      ew = gtk_combo_box_new_text ();
@@ -311,10 +307,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
 
      qra = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (qra), 6);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, qra,
-                                _("Maidenhead locator grid."),
-                                NULL);
+     gtk_widget_set_tooltip_text (qra,
+                                  _("Maidenhead locator grid."));
      gtk_table_attach_defaults (GTK_TABLE (table), qra, 1, 2, 5, 6);
      qrasigid = g_signal_connect (qra, "changed",
                                          G_CALLBACK (qra_changed),
@@ -328,10 +322,9 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      alt = gtk_spin_button_new_with_range (0, 5000, 1);
      gtk_spin_button_set_increments (GTK_SPIN_BUTTON (alt), 1, 100);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (alt), TRUE);
-     gtk_tooltips_set_tip (tooltips, alt,
-                                _("Select the altitude of the ground station in meters or feet "\
-                                   "depending on your settings"),
-                                NULL);
+     gtk_widget_set_tooltip_text (alt,
+                                  _("Select the altitude of the ground station in meters or feet " \
+                                    "depending on your settings"));
      gtk_table_attach_defaults (GTK_TABLE (table), alt, 1, 2, 6, 7);
 
      if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_IMPERIAL)) {
@@ -350,10 +343,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
 
      wx = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (wx), 4);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, wx,
-                                _("Four letter code for weather station"),
-                                NULL);
+     gtk_widget_set_tooltip_text (wx,
+                                  _("Four letter code for weather station"));
      gtk_table_attach_defaults (GTK_TABLE (table), wx, 1, 3, 7, 8);
 
      wxbut = gpredict_hstock_button (GTK_STOCK_INDEX, _("Select"),
@@ -373,9 +364,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      gtk_combo_box_append_text (GTK_COMBO_BOX (type), "Static");
      gtk_combo_box_append_text (GTK_COMBO_BOX (type), "GPSD");
      gtk_combo_box_set_active (GTK_COMBO_BOX (type), 0);
-     gtk_tooltips_set_tip (tooltips, type,
-                                _("A qth can be static, ie. it does not change, or gpsd based for computers with gps attached."),
-                                NULL);
+     gtk_widget_set_tooltip_text (type,
+                                  _("A qth can be static, ie. it does not change, or gpsd based for computers with gps attached."));
      gtk_table_attach_defaults (GTK_TABLE (table), type, 1, 2, 8, 9);
      /* GPSD Server */
      label = gtk_label_new (_("GPSD Server"));
@@ -384,10 +374,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
 
      server = gtk_entry_new ();
      gtk_entry_set_max_length (GTK_ENTRY (server), 6000);
-     tooltips = gtk_tooltips_new ();
-     gtk_tooltips_set_tip (tooltips, server,
-                                _("GPSD Server."),
-                                NULL);
+     gtk_widget_set_tooltip_text (server,
+                                  _("GPSD Server."));
      gtk_table_attach_defaults (GTK_TABLE (table), server, 1, 2, 9, 10);
      
      /* GPSD Port*/
@@ -398,9 +386,8 @@ create_editor_widgets (GtkTreeView *treeview, gboolean new)
      port = gtk_spin_button_new_with_range (0, 32768, 1);
      gtk_spin_button_set_increments (GTK_SPIN_BUTTON (port), 1, 100);
      gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (port), TRUE);
-     gtk_tooltips_set_tip (tooltips, port,
-                                _("Set the port for GPSD to use. Default for gpsd is 2947."),
-                                NULL);
+     gtk_widget_set_tooltip_text (port,
+                                  _("Set the port for GPSD to use. Default for gpsd is 2947."));
      gtk_table_attach_defaults (GTK_TABLE (table), port, 1, 2, 10, 11);
 #  endif
 

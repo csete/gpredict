@@ -116,8 +116,6 @@ static void create_orient_selector  (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget *label;
     GtkWidget *hbox;
-    GtkTooltips *tips;
-
 
 
     /* create header */
@@ -134,42 +132,33 @@ static void create_orient_selector  (GKeyFile *cfg, GtkBox *vbox)
     /* N/E/S/W */
     nesw = gtk_radio_button_new_with_label (NULL, "N/E/S/W");
     gtk_box_pack_start (GTK_BOX (hbox), nesw, FALSE, TRUE, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, nesw,
-                          "\tN\n"\
-                          "W\t\tE\n"\
-                          "\tS",
-                          NULL);
+    gtk_widget_set_tooltip_text (nesw,
+                                 "\tN\n"        \
+                                 "W\t\tE\n"     \
+                                 "\tS");
 
     /* N/W/S/E */
     nwse = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), "N/W/S/E");
     gtk_box_pack_start (GTK_BOX (hbox), nwse, FALSE, TRUE, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, nwse,
-                          "\tN\n"\
-                          "E\t\tW\n"\
-                          "\tS",
-                          NULL);
-
+    gtk_widget_set_tooltip_text (nwse,
+                                 "\tN\n"        \
+                                 "E\t\tW\n"     \
+                                 "\tS");
     /* S/E/N/W */
     senw = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), "S/E/N/W");
     gtk_box_pack_start (GTK_BOX (hbox), senw, FALSE, TRUE, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, senw,
-                          "\tS\n"\
-                          "W\t\tE\n"\
-                          "\tN",
-                          NULL);
+    gtk_widget_set_tooltip_text (senw,
+                                 "\tS\n"        \
+                                 "W\t\tE\n"     \
+                                 "\tN");
 
     /* S/W/N/E */
     swne = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), "S/W/N/E");
     gtk_box_pack_start (GTK_BOX (hbox), swne, FALSE, TRUE, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, swne,
-                          "\tS\n"\
-                          "E\t\tW\n"\
-                          "\tW",
-                          NULL);
+    gtk_widget_set_tooltip_text (swne,
+                                 "\tS\n"        \
+                                 "E\t\tW\n"     \
+                                 "\tW");
 
     /* read orientation */
     if (cfg != NULL) {
@@ -237,7 +226,6 @@ static void create_orient_selector  (GKeyFile *cfg, GtkBox *vbox)
 static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget *label;
-    GtkTooltips *tips;
     GtkWidget *hbox;
 
 
@@ -254,10 +242,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* QTH info */
     qth = gtk_check_button_new_with_label (_("QTH Info"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, qth,
-                          _("Show location information on the polar plot"),
-                          NULL);
+    gtk_widget_set_tooltip_text (qth,
+                                 _("Show location information on the polar plot"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (qth),
                                       mod_cfg_get_bool (cfg,
@@ -274,10 +260,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* Next Event */
     next = gtk_check_button_new_with_label (_("Next Event"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, next,
-                          _("Show which satellites comes up next and at what time"),
-                          NULL);
+    gtk_widget_set_tooltip_text (next,
+                                 _("Show which satellites comes up next and at what time"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (next),
                                       mod_cfg_get_bool (cfg,
@@ -294,10 +278,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* Cursor position */
     curs = gtk_check_button_new_with_label (_("Cursor Position"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, curs,
-                          _("Show the azimuth and elevation of the mouse pointer"),
-                          NULL);
+    gtk_widget_set_tooltip_text (curs,
+                                 _("Show the azimuth and elevation of the mouse pointer"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (curs),
                                       mod_cfg_get_bool (cfg,
@@ -315,10 +297,8 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 
     /* Extra tick marks */
     xtick = gtk_check_button_new_with_label (_("Extra Az Ticks"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, xtick,
-                          _("Show extra tick marks for every 30\302\260"),
-                          NULL);
+    gtk_widget_set_tooltip_text (xtick,
+                                 _("Show extra tick marks for every 30\302\260"));
     if (cfg != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (xtick),
                                       mod_cfg_get_bool (cfg,
@@ -346,7 +326,6 @@ static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox)
 static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
 {
     GtkWidget   *label;
-    GtkTooltips *tips;
     GtkWidget   *table;
     guint        rgba;   /* RRGGBBAA encoded colour */
     guint16      alpha;  /* alpha channel 16 bits */
@@ -376,10 +355,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (bgd), TRUE);
     gtk_table_attach (GTK_TABLE (table), bgd, 1, 2, 0, 1,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, bgd,
-                          _("Click to select background colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (bgd,
+                                 _("Click to select background colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,
@@ -403,10 +380,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (axis), TRUE);
     gtk_table_attach (GTK_TABLE (table), axis, 3, 4, 0, 1,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, axis,
-                          _("Click to select the axis colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (axis,
+                                 _("Click to select the axis colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,
@@ -430,10 +405,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (tick), TRUE);
     gtk_table_attach (GTK_TABLE (table), tick, 5, 6, 0, 1,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, tick,
-                          _("Click to select the colour for tick labels"),
-                          NULL);
+    gtk_widget_set_tooltip_text (tick,
+                                 _("Click to select the colour for tick labels"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,
@@ -457,10 +430,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (sat), TRUE);
     gtk_table_attach (GTK_TABLE (table), sat, 1, 2, 1, 2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, sat,
-                          _("Click to select satellite colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (sat,
+                                 _("Click to select satellite colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,
@@ -484,10 +455,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (ssat), TRUE);
     gtk_table_attach (GTK_TABLE (table), ssat, 3, 4, 1, 2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, ssat,
-                          _("Click to select colour for selected satellites"),
-                          NULL);
+    gtk_widget_set_tooltip_text (ssat,
+                                 _("Click to select colour for selected satellites"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,
@@ -511,10 +480,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (track), TRUE);
     gtk_table_attach (GTK_TABLE (table), track, 5, 6, 1, 2,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, track,
-                          _("Click to select track colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (track,
+                                 _("Click to select track colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,
@@ -538,10 +505,8 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (info), TRUE);
     gtk_table_attach (GTK_TABLE (table), info, 1, 2, 2, 3,
                       GTK_FILL , GTK_FILL, 0, 0);
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, info,
-                          _("Click to select background colour"),
-                          NULL);
+    gtk_widget_set_tooltip_text (info,
+                                 _("Click to select background colour"));
     if (cfg != NULL) {
         rgba = mod_cfg_get_int (cfg,
                                 MOD_CFG_POLAR_SECTION,

@@ -224,7 +224,6 @@ create_network (GtkWidget *vbox)
 {
     GtkWidget   *label;
     GtkWidget   *table;
-    GtkTooltips *tips;
 
     /* auto update */
     label = gtk_label_new (NULL);
@@ -245,12 +244,11 @@ create_network (GtkWidget *vbox)
     server = gtk_entry_new ();
     if (sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER))
         gtk_entry_set_text (GTK_ENTRY (server), sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, server,
-                            _("Enter URL for remote server including directory, i.e.\n"\
-                            "protocol://servername/directory\n"\
-                            "Protocol can be both http and ftp."),
-                            NULL); 
+
+    gtk_widget_set_tooltip_text(server,_("Enter URL for remote server including directory, i.e.\n" \
+                                         "protocol://servername/directory\n" \
+                                         "Protocol can be both http and ftp."));
+
     g_signal_connect (server, "changed", G_CALLBACK (value_changed_cb), NULL);
     gtk_table_attach (GTK_TABLE (table), server, 1, 2, 0, 1,
                         GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
@@ -263,11 +261,9 @@ create_network (GtkWidget *vbox)
     proxy = gtk_entry_new ();
     if (sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY))
         gtk_entry_set_text (GTK_ENTRY (proxy), sat_cfg_get_str (SAT_CFG_STR_TLE_PROXY));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, proxy,
+    gtk_widget_set_tooltip_text(proxy,
                             _("Enter URL for local proxy server. e.g.\n"\
-                            "http://my.proxy.com"),
-                            NULL); 
+                            "http://my.proxy.com")); 
     g_signal_connect (proxy, "changed", G_CALLBACK (value_changed_cb), NULL);
     gtk_table_attach (GTK_TABLE (table), proxy, 1, 2, 1, 2,
                         GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
@@ -280,15 +276,13 @@ create_network (GtkWidget *vbox)
     files = gtk_entry_new ();
     if (sat_cfg_get_str (SAT_CFG_STR_TLE_FILES))
         gtk_entry_set_text (GTK_ENTRY (files), sat_cfg_get_str (SAT_CFG_STR_TLE_FILES));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, files,
-                            _("Enter list of files to fetch from remote server.\n"\
-                            "The files should be separated with ; (semicolon)"),
-                            NULL); 
+    gtk_widget_set_tooltip_text(files,
+                                _("Enter list of files to fetch from remote server.\n" \
+                                  "The files should be separated with ; (semicolon)")); 
     g_signal_connect (files, "changed", G_CALLBACK (value_changed_cb), NULL);
     gtk_table_attach (GTK_TABLE (table), files, 1, 2, 2, 3,
                         GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-
+    
     /* put table into vbox */
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
 }
@@ -298,14 +292,10 @@ create_network (GtkWidget *vbox)
 static void
 create_misc (GtkWidget *vbox)
 {
-    GtkTooltips *tips;
-    
-    tips = gtk_tooltips_new ();
-    
     addnew = gtk_check_button_new_with_label (_("Add new satellites to local database"));
-    gtk_tooltips_set_tip (tips, addnew,
-                          _("Note that new satellites will be added to a group called Other"),
-                            NULL);
+    gtk_widget_set_tooltip_text(addnew,
+                                _("Note that new satellites will be added to a group called Other"));
+
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (addnew),
                                   sat_cfg_get_bool (SAT_CFG_BOOL_TLE_ADD_NEW));
     g_signal_connect (addnew, "toggled", G_CALLBACK (value_changed_cb), NULL);
@@ -342,17 +332,14 @@ create_reset_button (GtkBox *vbox)
 {
     GtkWidget   *button;
     GtkWidget   *butbox;
-    GtkTooltips *tips;
 
 
     button = gtk_button_new_with_label (_("Reset"));
     g_signal_connect (G_OBJECT (button), "clicked",
                         G_CALLBACK (reset_cb), NULL);
 
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, button,
-                            _("Reset settings to the default values."),
-                            NULL);
+    gtk_widget_set_tooltip_text(button,
+                            _("Reset settings to the default values."));
 
     butbox = gtk_hbutton_box_new ();
     gtk_button_box_set_layout (GTK_BUTTON_BOX (butbox), GTK_BUTTONBOX_END);
