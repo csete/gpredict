@@ -46,11 +46,11 @@ extern "C" {
 #define TRACK_TICK_NUM 4
 
 
-#define GTK_POLAR_VIEW(obj)          GTK_CHECK_CAST (obj, gtk_polar_view_get_type (), GtkPolarView)
-#define GTK_POLAR_VIEW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_polar_view_get_type (), GtkPolarViewClass)
-#define GTK_IS_POLAR_VIEW(obj)       GTK_CHECK_TYPE (obj, gtk_polar_view_get_type ())
+#define GTK_POLAR_VIEW(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_polar_view_get_type (), GtkPolarView)
+#define GTK_POLAR_VIEW_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_polar_view_get_type (), GtkPolarViewClass)
+#define GTK_IS_POLAR_VIEW(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_polar_view_get_type ())
 #define GTK_TYPE_POLAR_VIEW          (gtk_polar_view_get_type ())
-#define IS_GTK_POLAR_VIEW(obj)       GTK_CHECK_TYPE (obj, gtk_polar_view_get_type ())
+#define IS_GTK_POLAR_VIEW(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_polar_view_get_type ())
 
 typedef struct _GtkPolarView        GtkPolarView;
 typedef struct _GtkPolarViewClass   GtkPolarViewClass;
@@ -140,7 +140,7 @@ struct _GtkPolarViewClass
 
 
 
-GtkType        gtk_polar_view_get_type   (void);
+GType        gtk_polar_view_get_type   (void);
 
 GtkWidget*     gtk_polar_view_new        (GKeyFile   *cfgdata,
                       GHashTable *sats,

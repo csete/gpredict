@@ -114,7 +114,7 @@ static GooCanvasPoints *points2;
 
 
 /** \brief Register the satellite map widget. */
-GtkType
+GType  
 gtk_sat_map_get_type ()
 {
     static GType gtk_sat_map_type = 0;
@@ -281,9 +281,9 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
     g_signal_connect (GTK_SAT_MAP (satmap)->canvas, "size-allocate",
                       G_CALLBACK (size_allocate_cb), satmap);
     g_signal_connect (GTK_SAT_MAP (satmap)->canvas, "item_created",
-                      (GtkSignalFunc) on_item_created, satmap);
+                      (GCallback) on_item_created, satmap);
     g_signal_connect_after (GTK_SAT_MAP (satmap)->canvas, "realize",
-                            (GtkSignalFunc) on_canvas_realized, satmap);
+                            (GCallback) on_canvas_realized, satmap);
 
     gtk_widget_show (GTK_SAT_MAP (satmap)->canvas);
 
@@ -875,14 +875,14 @@ on_item_created (GooCanvas *canvas,
     if (!goo_canvas_item_model_get_parent (model)) {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
-                          (GtkSignalFunc) on_motion_notify, data);
+                          (GCallback) on_motion_notify, data);
     }
 
     else if (!g_object_get_data (G_OBJECT (item), "skip-signal-connection")) {
         g_signal_connect (item, "button_press_event",
-                          (GtkSignalFunc) on_button_press, data);
+                          (GCallback) on_button_press, data);
         g_signal_connect (item, "button_release_event",
-                          (GtkSignalFunc) on_button_release, data);
+                          (GCallback) on_button_release, data);
     }
 }
 

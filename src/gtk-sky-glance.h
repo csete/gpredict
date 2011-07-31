@@ -43,11 +43,11 @@ extern "C" {
 
 
 
-#define GTK_SKY_GLANCE(obj)          GTK_CHECK_CAST (obj, gtk_sky_glance_get_type (), GtkSkyGlance)
-#define GTK_SKY_GLANCE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_sky_glance_get_type (), GtkSkyGlanceClass)
-#define GTK_IS_SKY_GLANCE(obj)       GTK_CHECK_TYPE (obj, gtk_sky_glance_get_type ())
+#define GTK_SKY_GLANCE(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_sky_glance_get_type (), GtkSkyGlance)
+#define GTK_SKY_GLANCE_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_sky_glance_get_type (), GtkSkyGlanceClass)
+#define GTK_IS_SKY_GLANCE(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sky_glance_get_type ())
 #define GTK_TYPE_SKY_GLANCE          (gtk_sky_glance_get_type ())
-#define IS_GTK_SKY_GLANCE(obj)       GTK_CHECK_TYPE (obj, gtk_sky_glance_get_type ())
+#define IS_GTK_SKY_GLANCE(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sky_glance_get_type ())
 
 typedef struct _GtkSkyGlance        GtkSkyGlance;
 typedef struct _GtkSkyGlanceClass   GtkSkyGlanceClass;
@@ -113,7 +113,7 @@ struct _GtkSkyGlanceClass
 
 
 
-GtkType        gtk_sky_glance_get_type   (void);
+GType          gtk_sky_glance_get_type   (void);
 GtkWidget*     gtk_sky_glance_new        (GHashTable *sats, qth_t *qth, gdouble ts);
 
 /*

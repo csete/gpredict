@@ -61,15 +61,15 @@ typedef enum {
 
 
 #define GTK_TYPE_SAT_SELECTOR  (gtk_sat_selector_get_type ())
-#define GTK_SAT_SELECTOR(obj)  GTK_CHECK_CAST (obj,\
+#define GTK_SAT_SELECTOR(obj)  G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                                gtk_sat_selector_get_type (),\
                                                GtkSatSelector)
 
-#define GTK_SAT_SELECTOR_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_SAT_SELECTOR_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                                              gtk_sat_selector_get_type (),\
                                                              GtkSatSelectorClass)
 
-#define IS_GTK_SAT_SELECTOR(obj)       GTK_CHECK_TYPE (obj, gtk_sat_selector_get_type ())
+#define IS_GTK_SAT_SELECTOR(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_selector_get_type ())
 
 
 /** \brief The GtkSatSelector structure */
@@ -99,7 +99,7 @@ struct _GtkSatSelectorClass
 };
 
 
-GtkType    gtk_sat_selector_get_type  (void);
+GType      gtk_sat_selector_get_type  (void);
 GtkWidget *gtk_sat_selector_new       (guint flags);
 guint32    gtk_sat_selector_get_flags (GtkSatSelector *selector);
 void       gtk_sat_selector_get_selected (GtkSatSelector *selector, gint *catnum, gchar **satname, gdouble *epoch);

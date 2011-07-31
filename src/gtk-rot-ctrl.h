@@ -43,15 +43,15 @@ extern "C" {
 
 
 #define GTK_TYPE_ROT_CTRL          (gtk_rot_ctrl_get_type ())
-#define GTK_ROT_CTRL(obj)          GTK_CHECK_CAST (obj,\
+#define GTK_ROT_CTRL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                    gtk_rot_ctrl_get_type (),\
                                    GtkRotCtrl)
 
-#define GTK_ROT_CTRL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_ROT_CTRL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                              gtk_rot_ctrl_get_type (),\
                              GtkRotCtrlClass)
 
-#define IS_GTK_ROT_CTRL(obj)       GTK_CHECK_TYPE (obj, gtk_rot_ctrl_get_type ())
+#define IS_GTK_ROT_CTRL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_rot_ctrl_get_type ())
 
 
 typedef struct _gtk_rot_ctrl      GtkRotCtrl;
@@ -108,7 +108,7 @@ struct _GtkRotCtrlClass
 
 
 
-GtkType    gtk_rot_ctrl_get_type (void);
+GType      gtk_rot_ctrl_get_type (void);
 GtkWidget* gtk_rot_ctrl_new      (GtkSatModule *module);
 void       gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t);
 

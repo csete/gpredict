@@ -46,11 +46,11 @@ extern "C" {
 #define SAT_MAP_RANGE_CIRCLE_POINTS    180  /*!< Number of points used to plot a satellite range half circle. */
 
 
-#define GTK_SAT_MAP(obj)          GTK_CHECK_CAST (obj, gtk_sat_map_get_type (), GtkSatMap)
-#define GTK_SAT_MAP_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_sat_map_get_type (), GtkSatMapClass)
-#define GTK_IS_SAT_MAP(obj)       GTK_CHECK_TYPE (obj, gtk_sat_map_get_type ())
+#define GTK_SAT_MAP(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_sat_map_get_type (), GtkSatMap)
+#define GTK_SAT_MAP_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_sat_map_get_type (), GtkSatMapClass)
+#define GTK_IS_SAT_MAP(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_map_get_type ())
 #define GTK_TYPE_SAT_MAP          (gtk_sat_map_get_type ())
-#define IS_GTK_SAT_MAP(obj)       GTK_CHECK_TYPE (obj, gtk_sat_map_get_type ())
+#define IS_GTK_SAT_MAP(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_map_get_type ())
 
 
 //typedef struct _GtkSatMap        GtkSatMap;
@@ -169,7 +169,7 @@ struct _GtkSatMapClass
 };
 
 
-GtkType        gtk_sat_map_get_type (void);
+GType          gtk_sat_map_get_type (void);
 GtkWidget*     gtk_sat_map_new      (GKeyFile   *cfgdata,
                                      GHashTable *sats,
                                      qth_t      *qth);

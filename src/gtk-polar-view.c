@@ -97,7 +97,7 @@ static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat);
 static GtkVBoxClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_polar_view_get_type ()
 {
     static GType gtk_polar_view_type = 0;
@@ -255,9 +255,9 @@ gtk_polar_view_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
     g_signal_connect (GTK_POLAR_VIEW (polv)->canvas, "size-allocate",
                       G_CALLBACK (size_allocate_cb), polv);
     g_signal_connect (GTK_POLAR_VIEW (polv)->canvas, "item_created",
-                      (GtkSignalFunc) on_item_created, polv);
+                      (GCallback) on_item_created, polv);
     g_signal_connect_after (GTK_POLAR_VIEW (polv)->canvas, "realize",
-                            (GtkSignalFunc) on_canvas_realized, polv);
+                            (GCallback) on_canvas_realized, polv);
 
     gtk_widget_show (GTK_POLAR_VIEW (polv)->canvas);
 
@@ -1395,14 +1395,14 @@ on_item_created (GooCanvas *canvas,
     if (!goo_canvas_item_model_get_parent (model))    {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
-                          (GtkSignalFunc) on_motion_notify, data);
+                          (GCallback) on_motion_notify, data);
     }
 
     else if (!g_object_get_data (G_OBJECT (item), "skip-signal-connection")) {
         g_signal_connect (item, "button_press_event",
-                          (GtkSignalFunc) on_button_press, data);
+                          (GCallback) on_button_press, data);
         g_signal_connect (item, "button_release_event",
-                          (GtkSignalFunc) on_button_release, data);
+                          (GCallback) on_button_release, data);
     }
 }
 

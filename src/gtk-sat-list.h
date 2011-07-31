@@ -41,15 +41,15 @@ extern "C" {
 
 
 #define GTK_TYPE_SAT_LIST          (gtk_sat_list_get_type ())
-#define GTK_SAT_LIST(obj)          GTK_CHECK_CAST (obj,\
+#define GTK_SAT_LIST(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                  gtk_sat_list_get_type (),\
                                  GtkSatList)
 
-#define GTK_SAT_LIST_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_SAT_LIST_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                     gtk_sat_list_get_type (),\
                                     GtkSatListClass)
 
-#define IS_GTK_SAT_LIST(obj)       GTK_CHECK_TYPE (obj, gtk_sat_list_get_type ())
+#define IS_GTK_SAT_LIST(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_list_get_type ())
 
 
 typedef struct _gtk_sat_list      GtkSatList;
@@ -143,7 +143,7 @@ typedef enum {
 } sat_list_flag_t;
 
 
-GtkType        gtk_sat_list_get_type        (void);
+GType          gtk_sat_list_get_type        (void);
 GtkWidget*     gtk_sat_list_new             (GKeyFile   *cfgdata,
                                                         GHashTable *sats,
                                                         qth_t      *qth,

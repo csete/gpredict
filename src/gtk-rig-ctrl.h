@@ -44,15 +44,15 @@ extern "C" {
 
 
 #define GTK_TYPE_RIG_CTRL          (gtk_rig_ctrl_get_type ())
-#define GTK_RIG_CTRL(obj)          GTK_CHECK_CAST (obj,\
+#define GTK_RIG_CTRL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                    gtk_rig_ctrl_get_type (),\
                                    GtkRigCtrl)
 
-#define GTK_RIG_CTRL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_RIG_CTRL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                    gtk_rig_ctrl_get_type (),\
                                    GtkRigCtrlClass)
 
-#define IS_GTK_RIG_CTRL(obj)       GTK_CHECK_TYPE (obj, gtk_rig_ctrl_get_type ())
+#define IS_GTK_RIG_CTRL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_rig_ctrl_get_type ())
 
 
 typedef struct _gtk_rig_ctrl      GtkRigCtrl;
@@ -123,7 +123,7 @@ struct _GtkRigCtrlClass
 
 
 
-GtkType    gtk_rig_ctrl_get_type (void);
+GType      gtk_rig_ctrl_get_type (void);
 GtkWidget* gtk_rig_ctrl_new      (GtkSatModule *module);
 void       gtk_rig_ctrl_update   (GtkRigCtrl *ctrl, gdouble t);
 

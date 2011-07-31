@@ -82,10 +82,10 @@ static void el_to_xy (GtkAzelPlot *p, gdouble t, gdouble el, gdouble *x, gdouble
 static GtkVBoxClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_azel_plot_get_type ()
 {
-     static GtkType gtk_azel_plot_type = 0;
+     static GType gtk_azel_plot_type = 0;
 
      if (!gtk_azel_plot_type) {
           static const GTypeInfo gtk_azel_plot_info = {
@@ -206,11 +206,11 @@ gtk_azel_plot_new (qth_t *qth, pass_t *pass)
 
      /* connect size-request signal */
      g_signal_connect (GTK_AZEL_PLOT (polv)->canvas, "size-allocate",
-                           G_CALLBACK (size_allocate_cb), polv);
+                       G_CALLBACK (size_allocate_cb), polv);
      g_signal_connect (GTK_AZEL_PLOT (polv)->canvas, "item_created",
-                           (GtkSignalFunc) on_item_created, polv);
+                       G_CALLBACK (on_item_created), polv);
      g_signal_connect_after (GTK_AZEL_PLOT (polv)->canvas, "realize",
-                                   (GtkSignalFunc) on_canvas_realized, polv);
+                             G_CALLBACK (on_canvas_realized), polv);
 
      gtk_widget_show (GTK_AZEL_PLOT (polv)->canvas);
 
@@ -745,7 +745,7 @@ on_item_created (GooCanvas *canvas,
     if (!goo_canvas_item_model_get_parent (model)) {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
-                          (GtkSignalFunc) on_motion_notify, data);
+                          G_CALLBACK (on_motion_notify), data);
     }
     
 }

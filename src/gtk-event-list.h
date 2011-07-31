@@ -41,15 +41,15 @@ extern "C" {
 
 
 #define GTK_TYPE_EVENT_LIST       (gtk_event_list_get_type ())
-#define GTK_EVENT_LIST(obj)       GTK_CHECK_CAST (obj,\
+#define GTK_EVENT_LIST(obj)       G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                                   gtk_event_list_get_type (),\
                                                   GtkEventList)
 
-#define GTK_EVENT_LIST_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_EVENT_LIST_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                                            gtk_event_list_get_type (),\
                                                            GtkEventListClass)
 
-#define IS_GTK_EVENT_LIST(obj)       GTK_CHECK_TYPE (obj, gtk_event_list_get_type ())
+#define IS_GTK_EVENT_LIST(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_event_list_get_type ())
 
 
 typedef struct _gtk_event_list      GtkEventList;
@@ -103,7 +103,7 @@ typedef enum {
 } event_list_flag_t;
 
 
-GtkType        gtk_event_list_get_type (void);
+GType          gtk_event_list_get_type (void);
 GtkWidget*     gtk_event_list_new      (GKeyFile   *cfgdata,
                                         GHashTable *sats,
                                         qth_t      *qth,

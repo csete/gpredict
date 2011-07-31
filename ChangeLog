@@ -1,3 +1,32 @@
+2011-07-31 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rot-knob.c
+    * src/gtk-rot-knob.h
+    * src/gtk-sky-glance.c
+    * src/gtk-sky-glance.h
+    * src/gtk-rig-ctrl.h
+    * src/gtk-sat-list.h
+    * src/gtk-sat-module.h
+    * src/gtk-sat-list-col-sel.h
+    * src/gtk-sat-selector.h
+    * src/gtk-single-sat.h
+    * src/gtk-polar-plot.c
+    * src/gtk-polar-plot.h
+    * src/gtk-event-list.h
+    * src/gtk-sat-map.c
+    * src/gtk-sat-map.h
+    * src/gtk-freq-knob.c
+    * src/gtk-freq-knob.h
+    * src/gtk-azel-plot.c
+    * src/gtk-rot-ctrl.h
+    * src/gtk-azel-plot.h
+    * src/mod-mgr.c
+    * src/gtk-polar-view.c
+    * src/gtk-sat-tree.h
+    * src/gtk-polar-view.h
+    Remove deprecated calls and functions to allow make CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED" to work per <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
+
+
 2011-07-30 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-azel-plot.h

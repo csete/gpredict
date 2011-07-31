@@ -72,15 +72,15 @@ typedef enum {
 
 
 #define GTK_TYPE_SAT_MODULE         (gtk_sat_module_get_type ())
-#define GTK_SAT_MODULE(obj)         GTK_CHECK_CAST (obj,\
+#define GTK_SAT_MODULE(obj)         G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                     gtk_sat_module_get_type (),     \
                                     GtkSatModule)
 
-#define GTK_SAT_MODULE_CLASS(klass) GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_SAT_MODULE_CLASS(klass) G_TYPE_CHECK_CLASS_CAST (klass,\
 gtk_sat_module_get_type (),\
 GtkSatModuleClass)
 
-#define IS_GTK_SAT_MODULE(obj)      GTK_CHECK_TYPE (obj, gtk_sat_module_get_type ())
+#define IS_GTK_SAT_MODULE(obj)      G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_module_get_type ())
 
 
 typedef struct _gtk_sat_module      GtkSatModule;
@@ -165,7 +165,7 @@ struct _GtkSatModuleClass
 };
 
 
-GtkType        gtk_sat_module_get_type        (void);
+GType          gtk_sat_module_get_type        (void);
 GtkWidget*     gtk_sat_module_new             (const gchar *cfgfile);
 
 

@@ -41,15 +41,15 @@ extern "C" {
 
 
 #define GTK_TYPE_ROT_KNOB          (gtk_rot_knob_get_type ())
-#define GTK_ROT_KNOB(obj)          GTK_CHECK_CAST (obj,\
+#define GTK_ROT_KNOB(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                        gtk_rot_knob_get_type (),\
                                          GtkRotKnob)
 
-#define GTK_ROT_KNOB_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_ROT_KNOB_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                     gtk_rot_knob_get_type (),\
                                     GtkRotKnobClass)
 
-#define IS_GTK_ROT_KNOB(obj)       GTK_CHECK_TYPE (obj, gtk_rot_knob_get_type ())
+#define IS_GTK_ROT_KNOB(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_rot_knob_get_type ())
 
 
 typedef struct _gtk_rot_knob      GtkRotKnob;
@@ -77,7 +77,7 @@ struct _GtkRotKnobClass
 
 
 
-GtkType    gtk_rot_knob_get_type  (void);
+GType      gtk_rot_knob_get_type  (void);
 GtkWidget* gtk_rot_knob_new       (gdouble min, gdouble max, gdouble val);
 void       gtk_rot_knob_set_value (GtkRotKnob *knob, gdouble val);
 gdouble    gtk_rot_knob_get_value (GtkRotKnob *knob);

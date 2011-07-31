@@ -38,15 +38,15 @@ extern "C" {
 
 
 #define GTK_TYPE_SAT_LIST_COL_SEL  (gtk_sat_list_col_sel_get_type ())
-#define GTK_SAT_LIST_COL_SEL(obj)  GTK_CHECK_CAST (obj,\
+#define GTK_SAT_LIST_COL_SEL(obj)  G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                  gtk_sat_list_col_sel_get_type (),\
                                  GtkSatListColSel)
 
-#define GTK_SAT_LIST_COL_SEL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_SAT_LIST_COL_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                     gtk_sat_list_col_sel_get_type (),\
                                     GtkSatListColSelClass)
 
-#define IS_GTK_SAT_LIST_COL_SEL(obj)       GTK_CHECK_TYPE (obj, gtk_sat_list_col_sel_get_type ())
+#define IS_GTK_SAT_LIST_COL_SEL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_list_col_sel_get_type ())
 
 
 
@@ -70,7 +70,7 @@ struct _GtkSatListColSelClass
 };
 
 
-GtkType    gtk_sat_list_col_sel_get_type  (void);
+GType      gtk_sat_list_col_sel_get_type  (void);
 GtkWidget *gtk_sat_list_col_sel_new       (guint32 flags);
 guint32    gtk_sat_list_col_sel_get_flags (GtkSatListColSel *sel);
 void       gtk_sat_list_col_sel_set_flags (GtkSatListColSel *sel, guint32 flags);

@@ -114,7 +114,7 @@ static gdouble x2t (GtkSkyGlance *skg, gdouble x);
 static GtkVBoxClass *parent_class = NULL;
 
 
-GtkType
+GType  
 gtk_sky_glance_get_type ()
 {
     static GType gtk_sky_glance_type = 0;
@@ -303,9 +303,9 @@ gtk_sky_glance_new (GHashTable *sats, qth_t *qth, gdouble ts)
     g_signal_connect (GTK_SKY_GLANCE (skg)->canvas, "size-allocate",
                       G_CALLBACK (size_allocate_cb), skg);
     g_signal_connect (GTK_SKY_GLANCE (skg)->canvas, "item_created",
-                      (GtkSignalFunc) on_item_created, skg);
+                      (GCallback) on_item_created, skg);
     g_signal_connect_after (GTK_SKY_GLANCE (skg)->canvas, "realize",
-                            (GtkSignalFunc) on_canvas_realized, skg);
+                            (GCallback) on_canvas_realized, skg);
 
     gtk_widget_show (GTK_SKY_GLANCE (skg)->canvas);
 
@@ -691,14 +691,14 @@ on_item_created (GooCanvas *canvas,
 
     if (!goo_canvas_item_model_get_parent (model))     {
         /* root item / canvas */
-        g_signal_connect (item, "motion_notify_event", (GtkSignalFunc) on_motion_notify, data);
+        g_signal_connect (item, "motion_notify_event", (GCallback) on_motion_notify, data);
     }
 
     else if (!g_object_get_data (G_OBJECT (item), "skip-signal-connection")) {
-        //g_signal_connect (item, "button_press_event", (GtkSignalFunc) on_button_press, data);
-        g_signal_connect (item, "button_release_event", (GtkSignalFunc) on_button_release, data);
-        g_signal_connect (item, "enter_notify_event", (GtkSignalFunc) on_mouse_enter, data);
-        g_signal_connect (item, "leave_notify_event", (GtkSignalFunc) on_mouse_leave, data);
+        //g_signal_connect (item, "button_press_event", (GCallback) on_button_press, data);
+        g_signal_connect (item, "button_release_event", (GCallback) on_button_release, data);
+        g_signal_connect (item, "enter_notify_event", (GCallback) on_mouse_enter, data);
+        g_signal_connect (item, "leave_notify_event", (GCallback) on_mouse_leave, data);
     }
 }
 

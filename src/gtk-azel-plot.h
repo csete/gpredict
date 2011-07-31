@@ -46,11 +46,11 @@ extern "C" {
 #define AZEL_PLOT_NUM_TICKS 5
 
 
-#define GTK_AZEL_PLOT(obj)          GTK_CHECK_CAST (obj, gtk_azel_plot_get_type (), GtkAzelPlot)
-#define GTK_AZEL_PLOT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_azel_plot_get_type (), GtkAzelPlotClass)
-#define GTK_IS_AZEL_PLOT(obj)       GTK_CHECK_TYPE (obj, gtk_azel_plot_get_type ())
+#define GTK_AZEL_PLOT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_azel_plot_get_type (), GtkAzelPlot)
+#define GTK_AZEL_PLOT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_azel_plot_get_type (), GtkAzelPlotClass)
+#define GTK_IS_AZEL_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_azel_plot_get_type ())
 #define GTK_TYPE_AZEL_PLOT          (gtk_azel_plot_get_type ())
-#define IS_GTK_AZEL_PLOT(obj)       GTK_CHECK_TYPE (obj, gtk_azel_plot_get_type ())
+#define IS_GTK_AZEL_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_azel_plot_get_type ())
 
 typedef struct _GtkAzelPlot        GtkAzelPlot;
 typedef struct _GtkAzelPlotClass   GtkAzelPlotClass;
@@ -102,7 +102,7 @@ struct _GtkAzelPlotClass
 
 
 
-GtkType        gtk_azel_plot_get_type   (void);
+GType        gtk_azel_plot_get_type   (void);
 
 GtkWidget*     gtk_azel_plot_new        (qth_t *qth, pass_t *pass);
 

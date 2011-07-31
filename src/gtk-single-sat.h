@@ -100,15 +100,15 @@ typedef enum {
 
 
 #define GTK_TYPE_SINGLE_SAT          (gtk_single_sat_get_type ())
-#define GTK_SINGLE_SAT(obj)          GTK_CHECK_CAST (obj,\
+#define GTK_SINGLE_SAT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                          gtk_single_sat_get_type (),\
                                    GtkSingleSat)
 
-#define GTK_SINGLE_SAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_SINGLE_SAT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                     gtk_single_sat_get_type (),\
                                     GtkSingleSatClass)
 
-#define IS_GTK_SINGLE_SAT(obj)       GTK_CHECK_TYPE (obj, gtk_single_sat_get_type ())
+#define IS_GTK_SINGLE_SAT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_single_sat_get_type ())
 
 
 typedef struct _gtk_single_sat      GtkSingleSat;
@@ -152,7 +152,7 @@ struct _GtkSingleSatClass
 
 
 
-GtkType        gtk_single_sat_get_type        (void);
+GType          gtk_single_sat_get_type        (void);
 GtkWidget*     gtk_single_sat_new             (GKeyFile   *cfgdata,
                                                           GHashTable *sats,
                                                           qth_t      *qth,

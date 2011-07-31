@@ -62,15 +62,15 @@ typedef enum {
 
 
 #define GTK_TYPE_SAT_TREE  (gtk_sat_tree_get_type ())
-#define GTK_SAT_TREE(obj)  GTK_CHECK_CAST (obj,\
+#define GTK_SAT_TREE(obj)  G_TYPE_CHECK_INSTANCE_CAST (obj,\
                             gtk_sat_tree_get_type (),\
                             GtkSatTree)
 
-#define GTK_SAT_TREE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass,\
+#define GTK_SAT_TREE_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
                                     gtk_sat_tree_get_type (),\
                                     GtkSatTreeClass)
 
-#define IS_GTK_SAT_TREE(obj)       GTK_CHECK_TYPE (obj, gtk_sat_tree_get_type ())
+#define IS_GTK_SAT_TREE(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_tree_get_type ())
 
 
 /** \brief The GtkSatTree structure */
@@ -96,7 +96,7 @@ struct _GtkSatTreeClass
 };
 
 
-GtkType    gtk_sat_tree_get_type  (void);
+GType      gtk_sat_tree_get_type  (void);
 GtkWidget *gtk_sat_tree_new       (guint flags);
 guint32    gtk_sat_tree_get_flags (GtkSatTree *tree);
 void       gtk_sat_tree_select    (GtkSatTree *sat_tree, guint catnum);

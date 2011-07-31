@@ -93,7 +93,7 @@ static void xy_to_azel                         (GtkPolarPlot *p, gfloat x, gfloa
 static GtkVBoxClass *parent_class = NULL;
 
 
-GtkType
+GType
         gtk_polar_plot_get_type ()
 {
     static GType gtk_polar_plot_type = 0;
@@ -211,9 +211,9 @@ GtkWidget*
     g_signal_connect (GTK_POLAR_PLOT (polv)->canvas, "size-allocate",
                       G_CALLBACK (size_allocate_cb), polv);
     g_signal_connect (GTK_POLAR_PLOT (polv)->canvas, "item_created",
-                      (GtkSignalFunc) on_item_created, polv);
+                      (GCallback) on_item_created, polv);
     g_signal_connect_after (GTK_POLAR_PLOT (polv)->canvas, "realize",
-                            (GtkSignalFunc) on_canvas_realized, polv);
+                            (GCallback) on_canvas_realized, polv);
 
     gtk_widget_show (GTK_POLAR_PLOT (polv)->canvas);
 
@@ -1216,7 +1216,7 @@ static void
     if (!goo_canvas_item_model_get_parent (model))     {
         /* root item / canvas */
         g_signal_connect (item, "motion_notify_event",
-                          (GtkSignalFunc) on_motion_notify, data);
+                          (GCallback) on_motion_notify, data);
     }
 
 }

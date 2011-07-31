@@ -199,9 +199,9 @@ gtk_freq_knob_new (gdouble val, gboolean buttons)
                               idx[i], idx[i]+1, 1, 2, GTK_SHRINK, GTK_FILL | GTK_EXPAND, 0, 0);
                           
             g_signal_connect (GTK_FREQ_KNOB(widget)->evtbox[i], "button_press_event",
-                              (GtkSignalFunc) on_button_press, widget);
+                              (GCallback) on_button_press, widget);
             g_signal_connect (GTK_FREQ_KNOB(widget)->evtbox[i], "scroll_event",
-                              (GtkSignalFunc) on_button_scroll, widget);
+                              (GCallback) on_button_scroll, widget);
 
             
             /* UP buttons */

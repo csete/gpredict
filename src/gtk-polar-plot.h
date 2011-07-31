@@ -46,11 +46,11 @@ extern "C" {
 #define TRACK_TICK_NUM 5
 
 
-#define GTK_POLAR_PLOT(obj)          GTK_CHECK_CAST (obj, gtk_polar_plot_get_type (), GtkPolarPlot)
-#define GTK_POLAR_PLOT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_polar_plot_get_type (), GtkPolarPlotClass)
-#define GTK_IS_POLAR_PLOT(obj)       GTK_CHECK_TYPE (obj, gtk_polar_plot_get_type ())
+#define GTK_POLAR_PLOT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_polar_plot_get_type (), GtkPolarPlot)
+#define GTK_POLAR_PLOT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_polar_plot_get_type (), GtkPolarPlotClass)
+#define GTK_IS_POLAR_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_polar_plot_get_type ())
 #define GTK_TYPE_POLAR_PLOT          (gtk_polar_plot_get_type ())
-#define IS_GTK_POLAR_PLOT(obj)       GTK_CHECK_TYPE (obj, gtk_polar_plot_get_type ())
+#define IS_GTK_POLAR_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_polar_plot_get_type ())
 
     typedef struct _GtkPolarPlot        GtkPolarPlot;
     typedef struct _GtkPolarPlotClass   GtkPolarPlotClass;
@@ -118,7 +118,7 @@ extern "C" {
 
 
 
-    GtkType        gtk_polar_plot_get_type   (void);
+    GType          gtk_polar_plot_get_type   (void);
 
     GtkWidget*     gtk_polar_plot_new        (qth_t *qth, pass_t *pass);
 

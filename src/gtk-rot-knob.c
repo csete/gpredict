@@ -299,9 +299,9 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
                           i, i+1, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
                           
         g_signal_connect (GTK_ROT_KNOB(widget)->evtbox[i], "button_press_event",
-                         (GtkSignalFunc) on_button_press, widget);
+                         (GCallback) on_button_press, widget);
         g_signal_connect (GTK_ROT_KNOB(widget)->evtbox[i], "scroll_event",
-                         (GtkSignalFunc) on_button_scroll, widget);
+                         (GCallback) on_button_scroll, widget);
 
     }
     

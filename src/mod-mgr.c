@@ -76,7 +76,7 @@ static GtkWidget *nbook = NULL;
 
 static void update_window_title (void);
 static void switch_page_cb      (GtkNotebook     *notebook,
-                                 GtkNotebookPage *page,
+                                 gpointer *page,
                                  guint            page_num,
                                  gpointer         user_data);
 
@@ -571,7 +571,7 @@ update_window_title ()
 }
 
 static void switch_page_cb      (GtkNotebook     *notebook,
-                                 GtkNotebookPage *page,
+                                 gpointer *page,
                                  guint            page_num,
                                  gpointer         user_data)
 {
