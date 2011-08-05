@@ -140,6 +140,8 @@ typedef struct {
     qth_t      *qth;                    /*!< Pointer to current location. */
     
     GHashTable *obj;                    /*!< Canvas items representing each satellite. */
+    GHashTable *showtracks;             /*!< A hash of satellites to show tracks for. */
+    GHashTable *hidecovs;               /*!< A hash of satellites to hide coverage for. */
     
     guint       x0;                     /*!< X0 of the canvas map. */
     guint       y0;                     /*!< Y0 of the canvas map. */

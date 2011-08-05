@@ -106,6 +106,8 @@
 #define MOD_CFG_MAP_TRACK_NUM        "TRACK_NUMBER"
 #define MOD_CFG_MAP_KEEP_RATIO       "KEEP_RATIO"
 #define MOD_CFG_MAP_SHADOW_ALPHA     "SHADOW_ALPHA"
+#define MOD_CFG_MAP_SHOWTRACKS       "SHOWTRACKS"
+#define MOD_CFG_MAP_HIDECOVS         "HIDECOVS"
 
 /* polar view specific */
 #define MOD_CFG_POLAR_SECTION          "POLAR"

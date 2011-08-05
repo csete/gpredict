@@ -107,6 +107,10 @@ static void update_selected        (GtkSatMap *satmap, sat_t *sat);
 static void draw_grid_lines        (GtkSatMap *satmap, GooCanvasItemModel *root);
 static void redraw_grid_lines      (GtkSatMap *satmap);
 static gchar *aoslos_time_to_str   (GtkSatMap *satmap, sat_t *sat);
+static void gtk_sat_map_load_showtracks (GtkSatMap *map);
+static void gtk_sat_map_load_hide_coverages (GtkSatMap *map);
+static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest);
+static void store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey);
 
 static GtkVBoxClass *parent_class = NULL;
 static GooCanvasPoints *points1;
@@ -171,6 +175,8 @@ gtk_sat_map_init (GtkSatMap *satmap)
     satmap->sats      = NULL;
     satmap->qth       = NULL;
     satmap->obj       = NULL;
+    satmap->showtracks= g_hash_table_new_full(g_int_hash,g_int_equal,NULL,NULL);
+    satmap->hidecovs  = g_hash_table_new_full(g_int_hash,g_int_equal,NULL,NULL);
     satmap->naos      = 0.0;
     satmap->ncat      = 0;
     satmap->tstamp    = 2458849.5;
@@ -193,6 +199,18 @@ gtk_sat_map_init (GtkSatMap *satmap)
 static void
 gtk_sat_map_destroy (GtkObject *object)
 {
+    gint *showtrack;
+    gint *something;
+    gint  i,length;
+    store_binary_hash_cfgdata(GTK_SAT_MAP(object)->cfgdata,
+                              GTK_SAT_MAP(object)->showtracks,
+                              MOD_CFG_MAP_SECTION,
+                              MOD_CFG_MAP_SHOWTRACKS);
+    store_binary_hash_cfgdata(GTK_SAT_MAP(object)->cfgdata,
+                              GTK_SAT_MAP(object)->hidecovs,
+                              MOD_CFG_MAP_SECTION,
+                              MOD_CFG_MAP_HIDECOVS);
+    
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -292,6 +310,11 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
     goo_canvas_set_root_item_model (GOO_CANVAS (GTK_SAT_MAP (satmap)->canvas), root);
 
     g_object_unref (root);
+
+    /* load the satellites we want to show tracks for */
+    gtk_sat_map_load_showtracks (GTK_SAT_MAP(satmap));
+    /* load the satellites we want to show tracks for */
+    gtk_sat_map_load_hide_coverages (GTK_SAT_MAP(satmap));
 
     /* plot each sat on the canvas */
     g_hash_table_foreach (GTK_SAT_MAP (satmap)->sats, plot_sat, GTK_SAT_MAP (satmap));
@@ -1805,8 +1828,18 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     }
 
     obj->selected = FALSE;
-    obj->showtrack = FALSE;
-    obj->showcov = TRUE;
+
+    if (g_hash_table_lookup(satmap->showtracks,catnum)==NULL) {
+        obj->showtrack = FALSE;
+    } else {
+        obj->showtrack = TRUE;
+    }
+    
+    if (g_hash_table_lookup(satmap->hidecovs,catnum)==NULL) {
+        obj->showcov = TRUE;
+    } else {
+        obj->showcov = FALSE;
+    }
     obj->istarget = FALSE;
     obj->oldrcnum = 0;
     obj->newrcnum = 0;
@@ -1827,6 +1860,17 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                               MOD_CFG_MAP_SECTION,
                               MOD_CFG_MAP_SAT_COV_COL,
                               SAT_CFG_INT_MAP_SAT_COV_COL);
+    /* coverage color */
+    if (obj->showcov) {
+        covcol = mod_cfg_get_int (satmap->cfgdata,
+                                  MOD_CFG_MAP_SECTION,
+                                  MOD_CFG_MAP_SAT_COV_COL,
+                                  SAT_CFG_INT_MAP_SAT_COV_COL);
+    }
+    else {
+        covcol = 0x00000000;
+    }
+
 
     /* shadow colour (only alpha channel) */
     shadowcol = mod_cfg_get_int (satmap->cfgdata,
@@ -2550,4 +2594,101 @@ static gchar *aoslos_time_to_str (GtkSatMap *satmap, sat_t *sat)
     }
 
     return text;
+}
+
+/** \brief Load the satellites that we should show tracks for */
+static void
+gtk_sat_map_load_showtracks      (GtkSatMap *satmap)
+{
+        load_integer_list_boolean(satmap->cfgdata,
+                              MOD_CFG_MAP_SECTION,
+                              MOD_CFG_MAP_SHOWTRACKS,
+                              satmap->showtracks);
+}
+
+/** \brief Load the satellites that we should not highlight coverage */
+static void
+gtk_sat_map_load_hide_coverages      (GtkSatMap *satmap) 
+{
+    load_integer_list_boolean(satmap->cfgdata,
+                              MOD_CFG_MAP_SECTION,
+                              MOD_CFG_MAP_HIDECOVS,
+                              satmap->hidecovs);
+}
+
+/** \brief Load an integer list into a hash table that uses the 
+    data in the hash as a boolean 
+*/
+static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest) {
+    gint   *sats = NULL;
+    gsize   length;
+    GError *error = NULL;
+    guint   i;
+    guint  *tkey;
+
+    sats = g_key_file_get_integer_list (cfgdata,
+                                        section,
+                                        key,
+                                        &length,
+                                        &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Failed to get list of satellites (%s)"),
+                     __FUNCTION__, error->message);
+        
+        g_clear_error (&error);
+        
+        /* GLib API says nothing about the contents in case of error */
+        if (sats) {
+            g_free (sats);
+        }
+        
+        return;
+    }
+     
+    /* read each satellite into hash table */
+    for (i = 0; i < length; i++) {
+        tkey = g_new0 (guint, 1);
+        *tkey = sats[i];
+        //printf("loading sat %d\n",sats[i]);
+        if (g_hash_table_lookup (dest, tkey) == NULL) {
+            /* just add a one to the value so there is presence indicator */
+            g_hash_table_insert (dest,
+                                 tkey,
+                                 (gpointer)0x1);
+        }
+    }
+    g_free(sats);
+}
+
+/** \brief Convert the "boolean" hash back into an integer list and save it. */
+static void 
+store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey) 
+{
+    gint *showtrack;
+    gint *something;
+    gint i,length;
+    GList *keys = g_hash_table_get_keys(hash);
+    
+    length = g_list_length(keys);
+    if (g_list_length(keys)>0) {
+        
+        showtrack = g_try_new0(gint,g_list_length(keys));
+        for (i=0;i<length;i++) {
+            something=g_list_nth_data(keys,i);
+            showtrack[i]=*something;
+        }
+        g_key_file_set_integer_list (cfgdata,
+                                     cfgsection,
+                                     cfgkey,
+                                     showtrack,
+                                     g_list_length(keys)
+                                     );
+        
+    } else  {
+        g_key_file_remove_key(cfgdata,
+                              cfgsection,
+                              cfgkey,
+                              NULL);
+    }
 }

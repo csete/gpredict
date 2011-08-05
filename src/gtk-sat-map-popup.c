@@ -183,12 +183,14 @@ static void
 coverage_toggled (GtkCheckMenuItem *item, gpointer data)
 {
      sat_map_obj_t *obj = NULL;
+     sat_t         *sat;
      GtkSatMap     *satmap = GTK_SAT_MAP(data);
      guint32        covcol;
 
-
+     
      /* get satellite object */
      obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
+     sat = SAT(g_object_get_data (G_OBJECT (item), "sat"));
 
      if (obj == NULL) {
           sat_log_log (SAT_LOG_LEVEL_BUG,
@@ -201,6 +203,17 @@ coverage_toggled (GtkCheckMenuItem *item, gpointer data)
      obj->showcov = !obj->showcov;
      gtk_check_menu_item_set_active (item, obj->showcov);
 
+     if (obj->showcov) {
+         /* remove it from the storage structure */
+         g_hash_table_remove (satmap->hidecovs,
+                              &(sat->tle.catnr));
+         
+     } else {
+         g_hash_table_insert (satmap->hidecovs,
+                              &(sat->tle.catnr),
+                              (gpointer)0x1);
+     }
+     
      /* set or clear coverage colour */
      if (obj->showcov) {
           covcol = mod_cfg_get_int (satmap->cfgdata,
@@ -257,11 +270,20 @@ track_toggled (GtkCheckMenuItem *item, gpointer data)
      if (obj->showtrack) {
           /* create ground track */
           ground_track_create (satmap, sat, qth, obj);
+          
+          /* add it to the storage structure */
+          g_hash_table_insert (satmap->showtracks,
+                               &(sat->tle.catnr),
+                               (gpointer)0x1);
 
      }
      else {
           /* delete ground track with clear_ssp = TRUE */
           ground_track_delete (satmap, sat, qth, obj, TRUE);
+          
+          /* remove it from the storage structure */
+          g_hash_table_remove (satmap->showtracks,
+                               &(sat->tle.catnr));
      }
 
 }
