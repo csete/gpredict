@@ -930,11 +930,16 @@ static gboolean
         if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0)) {
             setaz = setaz- 360.0;
         }
+        if (!(ctrl->engaged)) {
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->AzSet), setaz);
+            gtk_rot_knob_set_value (GTK_ROT_KNOB (ctrl->ElSet), setel);
+        }
 
     } else {
         setaz = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->AzSet));
         setel = gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet));
     }
+
 
     if ((ctrl->engaged) && (ctrl->conf != NULL)) {
         
@@ -1038,7 +1043,7 @@ static gboolean
                     setaz = sat->az;
                 }
             }
-
+        
             /* send controller values to rotator device */
             /* this is the newly computed value which should be ahead of the current position */
             if (!set_pos (ctrl, setaz, setel)) {
@@ -1063,7 +1068,7 @@ static gboolean
                              _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
                              __FUNCTION__, MAX_ERROR_COUNT);
                 ctrl->errcnt = 0;
-                g_print ("ERROR. WROPS: %d   RDOPS: %d\n", ctrl->wrops, ctrl->rdops);
+                //g_print ("ERROR. WROPS: %d   RDOPS: %d\n", ctrl->wrops, ctrl->rdops);
             }
             else {
                 /* increment error counter */

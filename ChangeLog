@@ -4,6 +4,11 @@
     * src/tle-update.c
     Use newest tle available in file tle update.
 
+    * ChangeLog
+    * NEWS
+    * src/gtk-rot-ctrl.c
+    Fixes bug 3271573: Track button in rotator controller has no effect.
+
 
 2011-08-04 Charles Suprin <hamaa1vs at gmail.com>
 
