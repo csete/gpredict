@@ -9,6 +9,10 @@
     * src/gtk-rot-ctrl.c
     Fixes bug 3271573: Track button in rotator controller has no effect.
 
+    * ChangeLog
+    * src/Makefile.am
+    Eliminates DATADIR from defines to avoid mingw32 problem with winsock.
+
 
 2011-08-04 Charles Suprin <hamaa1vs at gmail.com>
 
