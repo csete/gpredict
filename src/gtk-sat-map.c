@@ -108,9 +108,12 @@ static void draw_grid_lines        (GtkSatMap *satmap, GooCanvasItemModel *root)
 static void redraw_grid_lines      (GtkSatMap *satmap);
 static gchar *aoslos_time_to_str   (GtkSatMap *satmap, sat_t *sat);
 static void gtk_sat_map_load_showtracks (GtkSatMap *map);
+static void gtk_sat_map_store_showtracks (GtkSatMap *satmap);
 static void gtk_sat_map_load_hide_coverages (GtkSatMap *map);
+static void gtk_sat_map_store_hidecovs (GtkSatMap *satmap);
 static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest);
 static void store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey);
+
 
 static GtkVBoxClass *parent_class = NULL;
 static GooCanvasPoints *points1;
@@ -199,18 +202,10 @@ gtk_sat_map_init (GtkSatMap *satmap)
 static void
 gtk_sat_map_destroy (GtkObject *object)
 {
-    gint *showtrack;
-    gint *something;
-    gint  i,length;
-    store_binary_hash_cfgdata(GTK_SAT_MAP(object)->cfgdata,
-                              GTK_SAT_MAP(object)->showtracks,
-                              MOD_CFG_MAP_SECTION,
-                              MOD_CFG_MAP_SHOWTRACKS);
-    store_binary_hash_cfgdata(GTK_SAT_MAP(object)->cfgdata,
-                              GTK_SAT_MAP(object)->hidecovs,
-                              MOD_CFG_MAP_SECTION,
-                              MOD_CFG_MAP_HIDECOVS);
-    
+    gtk_sat_map_store_showtracks (GTK_SAT_MAP(object));
+
+    gtk_sat_map_store_hidecovs (GTK_SAT_MAP(object));
+
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -1829,13 +1824,13 @@ plot_sat (gpointer key, gpointer value, gpointer data)
 
     obj->selected = FALSE;
 
-    if (g_hash_table_lookup(satmap->showtracks,catnum)==NULL) {
+    if (!g_hash_table_lookup_extended(satmap->showtracks,catnum,NULL,NULL)) {
         obj->showtrack = FALSE;
     } else {
         obj->showtrack = TRUE;
     }
     
-    if (g_hash_table_lookup(satmap->hidecovs,catnum)==NULL) {
+    if (!g_hash_table_lookup_extended(satmap->hidecovs,catnum,NULL,NULL)) {
         obj->showcov = TRUE;
     } else {
         obj->showcov = FALSE;
@@ -2604,6 +2599,22 @@ gtk_sat_map_load_showtracks      (GtkSatMap *satmap)
                               MOD_CFG_MAP_SECTION,
                               MOD_CFG_MAP_SHOWTRACKS,
                               satmap->showtracks);
+
+}
+static void
+gtk_sat_map_store_showtracks      (GtkSatMap *satmap) {
+    store_binary_hash_cfgdata(satmap->cfgdata,
+                              satmap->showtracks,
+                              MOD_CFG_MAP_SECTION,
+                              MOD_CFG_MAP_SHOWTRACKS);
+}
+
+static void
+gtk_sat_map_store_hidecovs      (GtkSatMap *satmap) {
+    store_binary_hash_cfgdata(satmap->cfgdata,
+                              satmap->hidecovs,
+                              MOD_CFG_MAP_SECTION,
+                              MOD_CFG_MAP_HIDECOVS);   
 }
 
 /** \brief Load the satellites that we should not highlight coverage */
@@ -2617,7 +2628,8 @@ gtk_sat_map_load_hide_coverages      (GtkSatMap *satmap)
 }
 
 /** \brief Load an integer list into a hash table that uses the 
-    data in the hash as a boolean 
+    existinence of datain the hash as a boolean.
+    It loads NULL's into the hash table.  
 */
 static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest) {
     gint   *sats = NULL;
@@ -2651,17 +2663,18 @@ static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,co
         tkey = g_new0 (guint, 1);
         *tkey = sats[i];
         //printf("loading sat %d\n",sats[i]);
-        if (g_hash_table_lookup (dest, tkey) == NULL) {
+        if (!(g_hash_table_lookup_extended (dest, tkey, NULL, NULL))) {
             /* just add a one to the value so there is presence indicator */
             g_hash_table_insert (dest,
                                  tkey,
-                                 (gpointer)0x1);
+                                 NULL);
         }
     }
     g_free(sats);
 }
 
-/** \brief Convert the "boolean" hash back into an integer list and save it. */
+/** \brief Convert the "boolean" hash back into an integer list and 
+    save it to the cfgdata. */
 static void 
 store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey) 
 {
@@ -2691,4 +2704,6 @@ store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfg
                               cfgkey,
                               NULL);
     }
+    
+    g_list_free (keys);
 }

@@ -13,6 +13,10 @@
     * src/Makefile.am
     Eliminates DATADIR from defines to avoid mingw32 problem with winsock.
 
+    * ChangeLog
+    * src/gtk-sat-map.c
+    Refactors code that stores per satellite show track and highlight coverage.
+
 
 2011-08-04 Charles Suprin <hamaa1vs at gmail.com>
 
