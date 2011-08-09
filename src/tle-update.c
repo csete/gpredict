@@ -891,11 +891,28 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     ntle->srcfile = g_strdup (fnam);
                     ntle->isnew   = TRUE; /* flag will be reset when using data */
 
-
                     g_hash_table_insert (data, key, ntle);
                     retcode++;
                 }
                 else {
+                    /* if the satellite in the hash is older than 
+                       the one just loaded, copy the values over. */
+                    ntle = g_hash_table_lookup (data, key);
+                    
+                    if (ntle->epoch <tle.epoch) {
+                        ntle->catnum = catnr;
+                        ntle->epoch = tle.epoch;
+                        g_free (ntle->satname);
+                        ntle->satname = g_strdup (g_strchomp(tle_str[0]));
+                        g_free (ntle->line1);
+                        ntle->line1   = g_strdup (tle_str[1]);
+                        g_free (ntle->line2);
+                        ntle->line2   = g_strdup (tle_str[2]);
+                        g_free (ntle->srcfile);
+                        ntle->srcfile = g_strdup (fnam);
+                        ntle->isnew   = TRUE; /* flag will be reset when using data */
+                    }
+                    /* free the key since we do not commit it to the cache */
                     g_free (key);
                 }
             }
