@@ -636,6 +636,10 @@ void tle_update_from_network (gboolean   silent,
                 }
                 fclose (outfile);
 
+            } else {
+                sat_log_log (SAT_LOG_LEVEL_MSG,
+                             _("%s: Failed to open %s preventing update"),
+                                         __FUNCTION__, locfile);
             }
             /* update progress indicator */
             if (!silent && (progress != NULL)) {
@@ -981,10 +985,11 @@ static void update_tle_in_file (const gchar *ldname,
     new_tle_t *ntle;
     GError    *error = NULL;
     GKeyFile  *satdata;
-    gchar     *tlestr1, *tlestr2, *rawtle;
+    gchar     *tlestr1, *tlestr2, *rawtle, *satname, *satnickname;
     gchar     *cfgstr;
     GIOChannel *cfgfile;
     gsize      length, written;
+    gboolean   updateddata;
 
 
     /* open input file (file containing old tle) */
@@ -1029,6 +1034,8 @@ static void update_tle_in_file (const gchar *ldname,
             /* get TLE data */
             tlestr1 = g_key_file_get_string (satdata, "Satellite", "TLE1", NULL);
             tlestr2 = g_key_file_get_string (satdata, "Satellite", "TLE2", NULL);
+            satname = g_key_file_get_string (satdata, "Satellite", "NAME", NULL);
+            satnickname = g_key_file_get_string (satdata, "Satellite", "NAME", NULL);
             rawtle = g_strconcat (tlestr1, tlestr2, NULL);
 
             if (!Good_Elements (rawtle)) {
@@ -1041,13 +1048,37 @@ static void update_tle_in_file (const gchar *ldname,
             g_free (tlestr1);
             g_free (tlestr2);
             g_free (rawtle);
-
+            updateddata = FALSE;
+            if (ntle->satname != NULL) {
+                /* when a satellite first appears in the elements it is sometimes refered to by the 
+                   international designator which is awkward after it is given a name */
+                if (!g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) {
+                    
+                    if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satname,0,0)) {
+                        g_key_file_set_string (satdata, "Satellite", "NAME", ntle->satname);
+                        updateddata = TRUE;
+                    }
+                    
+                    /* FIXME what to do about nickname Possibilities: */
+                    /* clobber with name */
+                    /* clobber if nickname and name were same before */ 
+                    /* clobber if international designator */
+                    if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satnickname,0,0)) {
+                        g_key_file_set_string (satdata, "Satellite", "NICKNAME", ntle->satname);
+                        updateddata = TRUE;
+                    }
+                }
+            }
             if (tle.epoch < ntle->epoch) {
                 /* new data is newer than what we already have */
                 /* store new data */
                 g_key_file_set_string (satdata, "Satellite", "TLE1", ntle->line1);
                 g_key_file_set_string (satdata, "Satellite", "TLE2", ntle->line2);
+                updated = TRUE;
 
+            }
+            
+            if (updateddata ==TRUE) {
                 /* convert configuration data struct to charachter string */
                 cfgstr = g_key_file_to_data (satdata, &length, NULL); /* this function never reports error */
 
