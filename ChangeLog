@@ -4,6 +4,10 @@
     * src/tle-update.c
     Eliminates memory leak and cut and paste error and removes whitespace around tle before importing.
 
+    * ChangeLog
+    * src/gtk-sat-tree.c
+    Eliminates use of deprecated tooltips code.
+
 
 2011-08-20 Charles Suprin <hamaa1vs at gmail.com>
 

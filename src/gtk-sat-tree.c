@@ -265,17 +265,13 @@ GtkWidget *
 
     /* expand and collabse buttons */
     expbut = gtk_button_new_with_label (_("Expand"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, expbut,
-                          _("Expand all nodes in the tree to make it searchable"),
-                          NULL);
+    gtk_widget_set_tooltip_text (expbut,
+                          _("Expand all nodes in the tree to make it searchable"));
     g_signal_connect (expbut, "clicked", G_CALLBACK (expand_cb), sat_tree);
 
     colbut = gtk_button_new_with_label (_("Collapse"));
-    tips = gtk_tooltips_new ();
-    gtk_tooltips_set_tip (tips, colbut,
-                          _("Collapse all nodes in the tree"),
-                          NULL);
+    gtk_widget_set_tooltip_text (colbut,
+                          _("Collapse all nodes in the tree"));
     g_signal_connect (colbut, "clicked", G_CALLBACK (collapse_cb), sat_tree);
 
     hbox = gtk_hbutton_box_new ();
