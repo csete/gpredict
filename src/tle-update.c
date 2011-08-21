@@ -852,6 +852,11 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             b = fgets (tle_str[1], 80, fp);
             b = fgets (tle_str[2], 80, fp);
 
+            /* remove leading and trailing whitespace to be more forgiving */
+            g_strstrip(tle_str[0]);
+            g_strstrip(tle_str[1]);
+            g_strstrip(tle_str[2]);
+            
             tle_str[1][69] = '\0';
             tle_str[2][69] = '\0';
 
@@ -1035,7 +1040,7 @@ static void update_tle_in_file (const gchar *ldname,
             tlestr1 = g_key_file_get_string (satdata, "Satellite", "TLE1", NULL);
             tlestr2 = g_key_file_get_string (satdata, "Satellite", "TLE2", NULL);
             satname = g_key_file_get_string (satdata, "Satellite", "NAME", NULL);
-            satnickname = g_key_file_get_string (satdata, "Satellite", "NAME", NULL);
+            satnickname = g_key_file_get_string (satdata, "Satellite", "NICKNAME", NULL);
             rawtle = g_strconcat (tlestr1, tlestr2, NULL);
 
             if (!Good_Elements (rawtle)) {
@@ -1048,7 +1053,10 @@ static void update_tle_in_file (const gchar *ldname,
             g_free (tlestr1);
             g_free (tlestr2);
             g_free (rawtle);
+            
+            /* Initialize flag for update */
             updateddata = FALSE;
+
             if (ntle->satname != NULL) {
                 /* when a satellite first appears in the elements it is sometimes refered to by the 
                    international designator which is awkward after it is given a name */
@@ -1069,6 +1077,10 @@ static void update_tle_in_file (const gchar *ldname,
                     }
                 }
             }
+
+            g_free(satname);
+            g_free(satnickname);
+            
             if (tle.epoch < ntle->epoch) {
                 /* new data is newer than what we already have */
                 /* store new data */
