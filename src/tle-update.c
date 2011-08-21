@@ -1063,6 +1063,9 @@ static void update_tle_in_file (const gchar *ldname,
                 if (!g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) {
                     
                     if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satname,0,0)) {
+                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                                     _("%s: Data for  %d updated for name."),
+                                     __FUNCTION__, catnr);
                         g_key_file_set_string (satdata, "Satellite", "NAME", ntle->satname);
                         updateddata = TRUE;
                     }
@@ -1072,6 +1075,9 @@ static void update_tle_in_file (const gchar *ldname,
                     /* clobber if nickname and name were same before */ 
                     /* clobber if international designator */
                     if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satnickname,0,0)) {
+                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                                     _("%s: Data for  %d updated for nickname."),
+                                     __FUNCTION__, catnr);
                         g_key_file_set_string (satdata, "Satellite", "NICKNAME", ntle->satname);
                         updateddata = TRUE;
                     }
@@ -1084,9 +1090,12 @@ static void update_tle_in_file (const gchar *ldname,
             if (tle.epoch < ntle->epoch) {
                 /* new data is newer than what we already have */
                 /* store new data */
+                sat_log_log (SAT_LOG_LEVEL_MSG,
+                             _("%s: Data for  %d updated for tle."),
+                             __FUNCTION__, catnr);
                 g_key_file_set_string (satdata, "Satellite", "TLE1", ntle->line1);
                 g_key_file_set_string (satdata, "Satellite", "TLE2", ntle->line2);
-                updated = TRUE;
+                updateddata = TRUE;
 
             }
             
