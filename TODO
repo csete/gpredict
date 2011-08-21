@@ -23,8 +23,6 @@ Future plans for gpredict development include:
 * Predict satellite parameters over a given time period (Tools).
 * Solar illumination prediction.
 * Treat Sun and Moon as satellites.
-* Improve time controller to have tuning-like behaviour, i.e. when
-   minutes flip from 59 to 0 the hour is incremented.
 * Toggle the ground track on and off for all the satellites on the map.
 * New layout engine allowing any number of views per module.
 * SpaceView: New view show the satellites using a movable camera in space.
