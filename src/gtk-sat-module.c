@@ -934,7 +934,7 @@ update_child (GtkWidget *child, gdouble tstamp)
 
     else {
         sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%f:%d: Unknown child type"),
+                     _("%s:%d: Unknown child type"),
                      __FILE__, __LINE__);
     }
 }
@@ -1514,11 +1514,13 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
 
     else if (IS_GTK_SAT_LIST (widget)) {
     }
+    else if (IS_GTK_EVENT_LIST (widget)) {
+    }
 
 
     else {
         sat_log_log (SAT_LOG_LEVEL_BUG,
-                     _("%f:%d: Unknown child type"),
+                     _("%s:%d: Unknown child type"),
                      __FILE__, __LINE__);
     }
 

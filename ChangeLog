@@ -1,6 +1,12 @@
 2011-08-21 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog
+    * src/gtk-sat-module.c
+    Adds Event list to modules support in satellite reload and corrects some error messages.
+
+2011-08-21 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
     * src/tle-update.c
     Eliminates memory leak and cut and paste error and removes whitespace around tle before importing.
 
