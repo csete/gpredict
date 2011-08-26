@@ -201,6 +201,16 @@ gtk_polar_view_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
                                                          g_free,
                                                          NULL);
 
+    GTK_POLAR_VIEW (polv)->showtracks_on  = g_hash_table_new_full (g_int_hash,
+                                                         g_int_equal,
+                                                         g_free,
+                                                         NULL);
+
+    GTK_POLAR_VIEW (polv)->showtracks_off  = g_hash_table_new_full (g_int_hash,
+                                                         g_int_equal,
+                                                         g_free,
+                                                         NULL);
+
     /* get settings */
     GTK_POLAR_VIEW (polv)->refresh = mod_cfg_get_int (cfgdata,
                                                       MOD_CFG_POLAR_SECTION,
@@ -832,7 +842,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             }
             
             /* free pass info */
-            free_pass (obj->pass);
+            //free_pass (obj->pass);
             obj->pass=NULL;
 
             /* if this was the selected satellite we need to
@@ -842,7 +852,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                 g_object_set (polv->sel, "text", "", NULL);
             }
 
-            g_free (obj);
+            // g_free (obj);
 
             /* remove sat object from hash table */ 
             g_hash_table_remove (polv->obj, catnum);
@@ -946,7 +956,15 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             if ( obj != NULL) {
                 /* space was allocated now use it */
                 obj->selected = FALSE;
-                obj->showtrack = polv->showtrack;
+                
+                if (g_hash_table_lookup_extended(polv->showtracks_on,catnum,NULL,NULL)){
+                    obj->showtrack = TRUE;
+                } 
+                else if (g_hash_table_lookup_extended(polv->showtracks_off,catnum,NULL,NULL)){
+                    obj->showtrack = FALSE;
+                } else {
+                    obj->showtrack = polv->showtrack;
+                }
                 obj->istarget = FALSE;
                 
                 root = goo_canvas_get_root_item_model (GOO_CANVAS (polv->canvas));

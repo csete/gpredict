@@ -1,4 +1,12 @@
-2011-08-21 Charles Suprin <hamaa1vs at gmail.com>
+2011-08-26 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * src/gtk-polar-view.h
+    * src/gtk-polar-view.c
+    Add hashes to support storing polar view sky track on and off.
+
+
+2011-08-23 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog
     * src/gtk-sat-module.c

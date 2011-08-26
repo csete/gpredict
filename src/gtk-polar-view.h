@@ -104,6 +104,9 @@ struct _GtkPolarView
     GooCanvasItemModel *next;            /*!< next event text */
     GooCanvasItemModel *sel;             /*!< Text showing info about selected satellite. */
 
+    GHashTable *showtracks_on;
+    GHashTable *showtracks_off;
+    
     gdouble     naos;     /*!< Next event time */
     gint        ncat;     /*!< Next event catnum */
     
