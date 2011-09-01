@@ -65,6 +65,7 @@ typedef struct {
     gchar   *line2;   /*!< Line 2. */
     gchar   *srcfile; /*!< The file where TLE comes from (needed for cat) */
     gboolean isnew;   /*!< Flag indicating whether sat is new. */
+    op_stat_t status; /*!< Enum indicating current satellite status. */
 } new_tle_t;
 
 

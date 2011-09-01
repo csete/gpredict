@@ -12,6 +12,7 @@ Changes in version 1.4 (TBD)
 - Fixed bug 3272993: Issue controlling Yaesu FT-847.
 - Fixed bug 3334657: Old log files not being saved.
 - Fixed bug 3271573: Track button in rotator controller has no effect.
+- Fixed bug 3400534: Operational Status.
 
 
 Changes in version 1.3 (1 Mar 2011)

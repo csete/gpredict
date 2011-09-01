@@ -1,3 +1,14 @@
+2011-09-01 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * NEWS
+    * src/tle-update.c
+    * src/tle-update.h
+    * src/gtk-sat-data.c
+    Tracks operational status through tle-update and stores it in .sat files when available.
+    Fixes Bug 3400534: Operational Status
+
+
 2011-08-26 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog

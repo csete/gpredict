@@ -100,6 +100,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         /* get TLE data */
         tlestr1 = g_key_file_get_string (data, "Satellite", "TLE1", NULL);
         tlestr2 = g_key_file_get_string (data, "Satellite", "TLE2", NULL);
+
         rawtle = g_strconcat (tlestr1, tlestr2, NULL);
 
         if (!Good_Elements (rawtle)) {
@@ -109,6 +110,9 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
             errorcode = 2;
         }
         Convert_Satellite_Data (rawtle, &sat->tle);
+        
+        if (g_key_file_has_key(data, "Satellite", "STATUS",NULL))
+            sat->tle.status = g_key_file_get_integer (data, "Satellite", "STATUS", NULL);
 
         g_free (tlestr1);
         g_free (tlestr2);
