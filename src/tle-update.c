@@ -889,9 +889,11 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 /* add data to hash table */
                 key = g_try_new0 (guint, 1);
                 *key = catnr;
-
+                
+                ntle = g_hash_table_lookup (data, key);
+                
                 /* check if satellite already in hash table */
-                if (g_hash_table_lookup (data, key) == NULL) {
+                if ( ntle == NULL) {
 
                     /* create new_tle structure */
                     ntle = g_try_new (new_tle_t, 1);
@@ -908,23 +910,26 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     retcode++;
                 }
                 else {
-                    /* if the satellite in the hash is older than 
-                       the one just loaded, copy the values over. */
-                    ntle = g_hash_table_lookup (data, key);
+                    /* satellite is already in hash */
+                    /* apply various merge routines */
                     if (ntle->epoch == tle.epoch) {
-                        if (ntle->status!=tle.status) {
-                            if (tle.status != OP_STAT_UNKNOWN) {
-                                if (ntle->status!= OP_STAT_UNKNOWN) {
-                                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                                 _("%s:%s: Two different statuses for the same satellite at the same time."),
-                                                 __FILE__, __FUNCTION__);
-
-                                }
-                                ntle->status =  tle.status;
+                        /* if satellite epoch has the same time,  merge status as appropriate */
+                        if ( (ntle->status != tle.status) && ( ntle->status != OP_STAT_UNKNOWN )) {
+                            /* update status */
+                            ntle->status =  tle.status;
+                            if ( tle.status != OP_STAT_UNKNOWN ) {
+                                /* log if there is something funny about the data coming in */
+                                sat_log_log (SAT_LOG_LEVEL_WARN,
+                                             _("%s:%s: Two different statuses for %s:%d at the same time."),
+                                             __FILE__, __FUNCTION__, ntle->satname,ntle->catnum);
+                                
                             }
                         }
                     } 
-                    else if (ntle->epoch <tle.epoch) {
+                    else if ( ntle->epoch < tle.epoch ) {
+                        /* if the satellite in the hash is older than 
+                           the one just loaded, copy the values over. */
+
                         ntle->catnum = catnr;
                         ntle->epoch = tle.epoch;
                         ntle->status = tle.status;
