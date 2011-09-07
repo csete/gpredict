@@ -2,6 +2,13 @@
 
     * ChangeLog
     * src/tle-update.c
+    Update progress bar calculation for tle update.
+
+
+2011-09-07 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * src/tle-update.c
     Save status for new satellites.
 
 

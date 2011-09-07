@@ -296,15 +296,31 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                         }
 
                         if (progress != NULL) {
-
-                            /* calculate and saturate fraction
-                                (number of sats in TLE files is greater
-                                than the number of sats in link table)
-                            */
-                            fraction = start + (1.0-start) * ((gdouble) total) / ((gdouble) num);
-                            if (fraction >= 0.95)
-                                fraction = 0.98;
-                            
+                            /* two different calculations for completeness depending on whether 
+                               we are adding new satellites or not. */
+                            if (sat_cfg_get_bool (SAT_CFG_BOOL_TLE_ADD_NEW)) {
+                                /* In this case we are possibly processing more than num satellites
+                                   How many more? We do not know yet.  Worst case is g_hash_table_size more.
+                                   
+                                   As we update skipped and updated we can reduce the denominator count
+                                   as those are in both pools (files and hash table). When we have processed 
+                                   all the files, updated and skipped are completely correct and the progress 
+                                   is correct. It may be correct sooner if the missed satellites are the 
+                                   last files to process.
+                                   
+                                   Until then, if we eliminate the ones that are updated and skipped from being 
+                                   double counted, our progress will shown will always be less or equal to our 
+                                   true progress since the denominator will be larger than is correct.
+                                   
+                                   Advantages to this are that the progress bar does not stall close to 
+                                   finished when there are a large number of new satellites.
+                                */
+                                fraction = start + (1.0-start) * ((gdouble) total) / 
+                                    ((gdouble) num + g_hash_table_size(data) - updated - skipped);
+                            } else {
+                                /* here we only process satellites we have have files for so divide by num */
+                                fraction = start + (1.0-start) * ((gdouble) total) / ((gdouble) num);
+                            }
                             gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress),
                                                            fraction);
 
@@ -644,7 +660,7 @@ void tle_update_from_network (gboolean   silent,
             if (!silent && (progress != NULL)) {
 
                 /* complete download corresponds to 50% */
-                fraction = start + (0.5-start) * i / (2.0 * numfiles);
+                fraction = start + (0.5-start) * i / (1.0 * numfiles);
                 gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), fraction);
 
                 /* Force the drawing queue to be processed otherwise there will
