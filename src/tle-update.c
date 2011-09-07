@@ -395,6 +395,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
         g_key_file_set_string (satdata, "Satellite", "NICKNAME", ntle->satname);
         g_key_file_set_string (satdata, "Satellite", "TLE1", ntle->line1);
         g_key_file_set_string (satdata, "Satellite", "TLE2", ntle->line2);
+        g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
 
         /* convert data to text */
         cfgstr = g_key_file_to_data (satdata, &length, NULL);
