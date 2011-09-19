@@ -811,11 +811,15 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
     tle_t      tle;
     gchar     *path;
     gchar      tle_str[3][80];
+    gchar      tle_working[3][80];
+    gchar      linetmp[80];
+    guint      linesneeded = 3;
     gchar      catstr[6];
+    gchar      idstr[7]="\0\0\0\0\0\0\0",idyearstr[3];
     gchar     *b;
     FILE      *fp;
     gint       retcode = 0;
-    guint      catnr,i;
+    guint      catnr,i,idyear;
     guint     *key = NULL;
 
     /* category sync related */
@@ -877,16 +881,90 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
         
 
         /* read 3 lines at a time */
-        while (fgets (tle_str[0], 80, fp)) {
-            /* read second and third lines */
-            b = fgets (tle_str[1], 80, fp);
-            b = fgets (tle_str[2], 80, fp);
-
+        while (fgets (linetmp, 80, fp)) {
+            /*read in the number of lines needed to potentially get to a new tle*/
+            switch (linesneeded) {
+            case 3:
+                strncpy(tle_working[0],linetmp,80);
+                b = fgets (tle_working[1], 80, fp);
+                b = fgets (tle_working[2], 80, fp);
+                break;
+            case 2:
+                strncpy(tle_working[0],tle_working[2],80);
+                strncpy(tle_working[1],linetmp,80);
+                b = fgets (tle_working[2], 80, fp);
+                break;
+            case 1:
+                strncpy(tle_working[0],tle_working[1],80);
+                strncpy(tle_working[1],tle_working[2],80);
+                strncpy(tle_working[2],linetmp,80);
+                break;
+            default:
+                sat_log_log (SAT_LOG_LEVEL_BUG,
+                             _("%s:%s: Something wrote linesneeded to an illegal value %d"),
+                             __FILE__, __FUNCTION__, linesneeded);
+                break;
+            }
             /* remove leading and trailing whitespace to be more forgiving */
-            g_strstrip(tle_str[0]);
-            g_strstrip(tle_str[1]);
-            g_strstrip(tle_str[2]);
+            g_strstrip(tle_working[0]);
+            g_strstrip(tle_working[1]);
+            g_strstrip(tle_working[2]);
             
+            /* there are three possibilities at this point */
+            /* first is that line 0 is a name and normal text for three line element and that lines 1 and 2 
+               are the corresponding tle */
+            /* second is that line 0 and line 1 are a tle for a bare tle */
+            /* third is that neither of these is true and we are consuming either text at the top of the 
+               file or a text file that happens to be in the update directory 
+            */ 
+            if (Checksum_Good(tle_working[1]) && (tle_working[1][0]=='1')) {
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s:%s: Processing a three line TLE"),
+                             __FILE__, __FUNCTION__);
+                                
+                /* it appears that the first line may be a name followed by a tle */
+                strncpy(tle_str[0],tle_working[0],80);
+                strncpy(tle_str[1],tle_working[1],80);
+                strncpy(tle_str[2],tle_working[2],80);
+                /* we consumed three lines so we need three lines */
+                linesneeded = 3;
+                
+            } else if (Checksum_Good(tle_working[0]) && (tle_working[0][0]=='1')) {
+                sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                             _("%s:%s: Processing a bare two line TLE"),
+                             __FILE__, __FUNCTION__);
+                
+                /* first line appears to belong to the start of bare TLE */
+                /* put in a dummy name of form yyyy-nnaa base on international id */
+                /* this special form will be overwritten if a three line tle ever has another name */
+                
+                strncpy(idstr,&tle_working[0][11],6);
+                g_strstrip(idstr);
+                strncpy(idyearstr,&tle_working[0][9],2);
+                idstr[6]= '\0';
+                idyearstr[2]= '\0';
+                idyear = g_ascii_strtod(idyearstr,NULL);
+                
+                /* there is a two digit year field that started around sputnik */
+                if (idyear >= 57)
+                    idyear += 1900;
+                else
+                    idyear += 2000;
+
+                snprintf(tle_str[0],79,"%d-%s",idyear,idstr);
+                strncpy(tle_str[1],tle_working[0],80);
+                strncpy(tle_str[2],tle_working[1],80);        
+        
+                /* we consumed two lines so we need two lines */
+                linesneeded = 2;
+            } else {
+                /* we appear to have junk 
+                   read another line in and do nothing else */
+                linesneeded = 1;
+                continue;
+            }
+
+
             tle_str[1][69] = '\0';
             tle_str[2][69] = '\0';
 

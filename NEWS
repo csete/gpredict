@@ -4,6 +4,7 @@ Changes in version 1.4 (TBD)
 - Feature request 3141555: gpsd support.
 - Feature request 2130926: Change frequency using mouse wheel. Also for rotator controller.
 - Feature request 3322786: Show More Information in Edit Module Sat Selection.
+- Feature request 3314813: Resolves Requested TLE files from Celestrak.
 - Applied and extended patch 3237220: natural sort for sat list in module config
 - Improve handling of decayed satellites.
 - Fixed bug 3250344: Win32 build not working with hamlib.
