@@ -326,17 +326,27 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 
                         }
 
-                        /* Force the drawing queue to be processed otherwise there will
-                            not be any visual feedback, ie. frozen GUI
-                            - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
-                        */
-                        while (g_main_context_iteration (NULL, FALSE));
-
-                        /* give user a chance to follow progress */
-                        g_usleep (G_USEC_PER_SEC / 1000);
+                        /* update the gui only every so often to speed up the process */
+                        /* 47 was selected empirically to balance the update looking smooth but not take too much time. */
+                        /* it also tumbles all digits in the numbers so that there is no obvious pattern. */
+                        /* on a developer machine this improved an update from 5 minutes to under 20 seconds. */
+                        if (total%47 == 0) {
+                            /* Force the drawing queue to be processed otherwise there will
+                               not be any visual feedback, ie. frozen GUI
+                               - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
+                            */
+                            while (g_main_context_iteration (NULL, FALSE));
+                        
+                            /* give user a chance to follow progress */
+                            g_usleep (G_USEC_PER_SEC / 1000);
+                        }
                     }
                 }
             }
+            
+            /* force gui update */
+            while (g_main_context_iteration (NULL, FALSE));
+
 
             /* close directory handle */
             g_dir_close (loc_dir);

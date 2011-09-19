@@ -1,6 +1,13 @@
 2011-09-18 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog
+    * src/tle-update.c
+    Speed up tle-update by updating the gui less frequently.
+
+
+2011-09-18 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
     * src/qth-data.c
     Remove error message if latitude, longitude, or altitude is zero.
 
