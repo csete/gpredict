@@ -99,7 +99,19 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
 
         /* get TLE data */
         tlestr1 = g_key_file_get_string (data, "Satellite", "TLE1", NULL);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Error reading TLE line 1 from %s (%s)"),
+                         __FUNCTION__, path, error->message);
+            g_clear_error (&error);
+        }
         tlestr2 = g_key_file_get_string (data, "Satellite", "TLE2", NULL);
+        if (error != NULL) {
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
+                         _("%s: Error reading TLE line 2 from %s (%s)"),
+                         __FUNCTION__, path, error->message);
+            g_clear_error (&error);
+        }
 
         rawtle = g_strconcat (tlestr1, tlestr2, NULL);
 
@@ -108,9 +120,9 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
                          _("%s: TLE data for %d appears to be bad"),
                          __FUNCTION__, catnum);
             errorcode = 2;
+        } else {
+            Convert_Satellite_Data (rawtle, &sat->tle);
         }
-        Convert_Satellite_Data (rawtle, &sat->tle);
-        
         if (g_key_file_has_key(data, "Satellite", "STATUS",NULL))
             sat->tle.status = g_key_file_get_integer (data, "Satellite", "STATUS", NULL);
 

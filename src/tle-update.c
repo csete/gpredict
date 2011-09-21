@@ -880,7 +880,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
         }
         
 
-        /* read 3 lines at a time */
+        /* read lines from tle file */
         while (fgets (linetmp, 80, fp)) {
             /*read in the number of lines needed to potentially get to a new tle*/
             switch (linesneeded) {
@@ -1166,9 +1166,25 @@ static void update_tle_in_file (const gchar *ldname,
 
             /* get TLE data */
             tlestr1 = g_key_file_get_string (satdata, "Satellite", "TLE1", NULL);
+            if (error != NULL) {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Error reading TLE line 2 from %s (%s)"),
+                             __FUNCTION__, path, error->message);
+                g_clear_error (&error);
+            }
             tlestr2 = g_key_file_get_string (satdata, "Satellite", "TLE2", NULL);
+            if (error != NULL) {
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
+                             _("%s: Error reading TLE line 2 from %s (%s)"),
+                             __FUNCTION__, path, error->message);
+                g_clear_error (&error);
+            }
+            
+            /* get name data */
             satname = g_key_file_get_string (satdata, "Satellite", "NAME", NULL);
             satnickname = g_key_file_get_string (satdata, "Satellite", "NICKNAME", NULL);
+
+            /* get status data */
             if (g_key_file_has_key(satdata,"Satellite","STATUS", NULL)) {
                 status = g_key_file_get_integer (satdata, "Satellite", "STATUS", NULL);
             }
@@ -1182,9 +1198,11 @@ static void update_tle_in_file (const gchar *ldname,
                 sat_log_log (SAT_LOG_LEVEL_WARN,
                              _("%s: Current TLE data for %d appears to be bad"),
                              __FUNCTION__, catnr);
+                /* set epoch to zero so it gets overwritten */
+                tle.epoch = 0;
+            } else {
+                Convert_Satellite_Data (rawtle, &tle);
             }
-            Convert_Satellite_Data (rawtle, &tle);
-
             g_free (tlestr1);
             g_free (tlestr2);
             g_free (rawtle);

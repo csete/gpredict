@@ -54,7 +54,11 @@ int
 Checksum_Good (char *tle_set)
 {
 	int i, check_digit, value, checksum = 0;
-
+	
+	if ( tle_set ==  NULL ) {
+		return 0;
+	}
+	
 	for (i = 0; i < 68; i++) {
 		if ( (tle_set[i] >= '0') && (tle_set[i] <= '9') )
 			value = tle_set[i] - '0';
