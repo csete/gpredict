@@ -1250,15 +1250,6 @@ static void update_tle_in_file (const gchar *ldname,
             g_free(satname);
             g_free(satnickname);
 
-            if ( status != ntle->status ){
-
-                sat_log_log (SAT_LOG_LEVEL_MSG,
-                             _("%s: Data for  %d updated for operational status."),
-                             __FUNCTION__, catnr);
-                g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
-                updateddata = TRUE;
-            }
-
             if (tle.epoch < ntle->epoch) {
                 /* new data is newer than what we already have */
                 /* store new data */
@@ -1267,8 +1258,17 @@ static void update_tle_in_file (const gchar *ldname,
                              __FUNCTION__, catnr);
                 g_key_file_set_string (satdata, "Satellite", "TLE1", ntle->line1);
                 g_key_file_set_string (satdata, "Satellite", "TLE2", ntle->line2);
+                g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
                 updateddata = TRUE;
 
+            } else if (tle.epoch == ntle->epoch) {
+                if  ((status != ntle->status) && (ntle->status != OP_STAT_UNKNOWN)){
+                    sat_log_log (SAT_LOG_LEVEL_MSG,
+                                 _("%s: Data for  %d updated for operational status."),
+                                 __FUNCTION__, catnr);
+                    g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
+                    updateddata = TRUE;
+                }
             }
             
             if (updateddata ==TRUE) {

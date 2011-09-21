@@ -2,7 +2,11 @@
 
     * ChangeLog
     * src/tle-update.c
-    Corrects satellite name not being update correctly when a satellite occurs with international ID and name in same update.
+    Corrects satellite name not being updated correctly when a satellite occurs with international ID and name in same update.
+
+    * ChangeLog
+    * src/tle-update.c
+    Corrects satellite status not being updated correctly when a .sat and update data have different status.
 
 
 2011-09-20 Charles Suprin <hamaa1vs at gmail.com>
