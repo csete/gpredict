@@ -1017,6 +1017,8 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 else {
                     /* satellite is already in hash */
                     /* apply various merge routines */
+                    
+                    /*time merge */
                     if (ntle->epoch == tle.epoch) {
                         /* if satellite epoch has the same time,  merge status as appropriate */
                         if ( (ntle->status != tle.status) && ( ntle->status != OP_STAT_UNKNOWN )) {
@@ -1038,8 +1040,6 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                         ntle->catnum = catnr;
                         ntle->epoch = tle.epoch;
                         ntle->status = tle.status;
-                        g_free (ntle->satname);
-                        ntle->satname = g_strdup (g_strchomp(tle_str[0]));
                         g_free (ntle->line1);
                         ntle->line1   = g_strdup (tle_str[1]);
                         g_free (ntle->line2);
@@ -1048,8 +1048,18 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                         ntle->srcfile = g_strdup (fnam);
                         ntle->isnew   = TRUE; /* flag will be reset when using data */
                     }
+                    
+                    /* merge based on name */
+                    if ((!g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) && 
+                        (!g_regex_match_simple ("\\d{4,}-\\d{3,}",tle_str[0],0,0))) {
+                        g_free (ntle->satname);
+                        ntle->satname = g_strdup (g_strchomp(tle_str[0]));
+                    }
+                    
                     /* free the key since we do not commit it to the cache */
                     g_free (key);
+                    
+
                 }
             }
 
