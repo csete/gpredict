@@ -1,3 +1,11 @@
+2011-09-22 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * src/gtk-polar-view.c
+    * src/gtk-polar-view-popup.c
+    Saves polarview showtrack information from one session to another.
+
+
 2011-09-21 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog

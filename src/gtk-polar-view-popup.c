@@ -208,6 +208,15 @@ static void
 
     if (obj->showtrack) {
         /* add sky track */
+        
+        /* add it to the storage structure */
+        g_hash_table_insert (pv->showtracks_on,
+                             &(sat->tle.catnr),
+                             NULL);
+        /* remove it from the don't show */
+        g_hash_table_remove (pv->showtracks_off,
+                             &(sat->tle.catnr));
+
 
         /* create points */
         num = g_slist_length (obj->pass->details);
@@ -273,6 +282,13 @@ static void
 
     }
     else {
+        /* add it to the hide */
+        g_hash_table_insert (pv->showtracks_off,
+                             &(sat->tle.catnr),
+                             NULL);
+        /* remove it from the show */
+        g_hash_table_remove (pv->showtracks_on,
+                             &(sat->tle.catnr));
         /* delete sky track */
         idx = goo_canvas_item_model_find_child (root, obj->track);
 
