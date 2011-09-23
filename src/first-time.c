@@ -453,10 +453,7 @@ first_time_check_step_05 (guint *error)
     gchar     *satfilename,*targetfilename;
     gchar     *datadir;
     gchar    **satellites;
-    gchar     *cfgstr;
     GKeyFile  *satfile,*target;
-    gsize      length;
-    gsize      written;
     gsize      num;
     GError    *err = NULL;
     guint      i;
@@ -464,7 +461,6 @@ first_time_check_step_05 (guint *error)
 
     //gdouble    cfgver;
     gchar     *name, *nickname, *website, *tle1, *tle2, *cfgver;
-    GIOChannel *cfgfile;
 
     GDir *srcdir;
     gchar *srcdirname;
@@ -521,52 +517,14 @@ first_time_check_step_05 (guint *error)
                 g_key_file_set_string (target, "Satellite", "TLE1", tle1);
                 g_key_file_set_string (target, "Satellite", "TLE2", tle2);
 
-                /* convert configuration data struct to charachter string */
-                cfgstr = g_key_file_to_data (target, &length, NULL); /* this function never reports error */
-
-                /* create and open a file for writing */
-                cfgfile = g_io_channel_new_file (targetfilename, "w", &err);
-
-                if (err != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                 _("%s: Could not create satellite file (%s)."),
-                                 __FUNCTION__, err->message);
-                    g_clear_error (&err);
+                if (gpredict_save_key_file ( target, targetfilename)) {
                     *error |= FTC_ERROR_STEP_05;
+                } else {
+                    newsats++;
                 }
-                else {
-                    g_io_channel_write_chars (cfgfile,
-                                              cfgstr,
-                                              length,
-                                              &written,
-                                              &err);
-
-                    g_io_channel_shutdown (cfgfile, TRUE, NULL);
-                    g_io_channel_unref (cfgfile);
-
-                    if (err != NULL) {
-                        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                     _("%s: Error writing satellite data (%s)."),
-                                     __FUNCTION__, err->message);
-                        g_clear_error (&err);
-                        *error |= FTC_ERROR_STEP_05;
-                    }
-                    else if (length != written) {
-                        sat_log_log (SAT_LOG_LEVEL_WARN,
-                                     _("%s: Wrote only %d out of %d chars for satellite data."),
-                                     __FUNCTION__, written, length);
-                    }
-                    else {
-                        sat_log_log (SAT_LOG_LEVEL_MSG,
-                                     _("%s: Satellite data written for %s."),
-                                     __FUNCTION__, satellites[i]);
-                        newsats++;
-                    }
-                }
-
+                
                 g_key_file_free (target);
 
-                g_free (cfgstr);
                 g_free (cfgver);
                 g_free (name);
                 g_free (nickname);

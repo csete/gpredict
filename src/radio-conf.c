@@ -31,6 +31,7 @@
 #include <glib/gi18n.h>
 #include "sat-log.h"
 #include "compat.h"
+#include "gpredict-utils.h"
 
 #include "radio-conf.h"
 
@@ -216,8 +217,6 @@ void radio_conf_save (radio_conf_t *conf)
     GKeyFile *cfg = NULL;
     gchar    *confdir;
     gchar    *fname;
-    gchar    *data;
-    gsize     len;
     
     if (conf->name == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -240,22 +239,14 @@ void radio_conf_save (radio_conf_t *conf)
         g_key_file_set_integer (cfg, GROUP, KEY_VFO_UP, conf->vfoUp);
         g_key_file_set_integer (cfg, GROUP, KEY_VFO_DOWN, conf->vfoDown);
     }
-    
-    /* convert to text sdata */
-    data = g_key_file_to_data (cfg, &len, NULL);
-    
+
     confdir = get_hwconf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
                          conf->name, ".rig", NULL);
     g_free (confdir);
-        
-    g_file_set_contents (fname, data, len, NULL);
+            
+    gpredict_save_key_file (cfg, fname);
     
     g_free (fname);
-    g_free (data);
     g_key_file_free (cfg);
-    
-    sat_log_log (SAT_LOG_LEVEL_MSG,
-                 _("%s: Saved radio configuration %s"),
-                 __FUNCTION__, conf->name);
 }

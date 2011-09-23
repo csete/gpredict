@@ -64,4 +64,5 @@ void   gdk2rgba  (const GdkColor *color, guint16 alpha, guint *rgba);
 gchar *rgba2html (guint rgba);
 int gpredict_strcmp (const char *s1, const char *s2);
 char  *gpredict_strcasestr(const char *s1, const char *s2);
+gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename);
 #endif

@@ -45,7 +45,7 @@
 #include "sat-pass-dialogs.h"
 #include "compat.h"
 #include "sat-cfg.h"
-
+#include "gpredict-utils.h"
 
 #define LIST_COLUMNS_DEFAULTS (SAT_LIST_FLAG_NAME |\
 SAT_LIST_FLAG_AZ   |\
@@ -311,81 +311,16 @@ guint sat_cfg_load        ()
  */
 guint sat_cfg_save        ()
 {
-    gsize       length;
-    gsize       written;
-    GError     *error = NULL;
-    gchar      *cfgstr;
     gchar      *keyfile;
     gchar      *confdir;
-    GIOChannel *cfgfile;
     guint       err = 0;
+    
+    confdir = get_user_conf_dir ();
+    keyfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    
+    err = gpredict_save_key_file( config , keyfile);
 
-    /* convert configuration data struct to charachter string */
-    cfgstr = g_key_file_to_data (config, &length, &error);
-
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not create config data (%s)."),
-                     __FUNCTION__, error->message);
-
-        g_clear_error (&error);
-
-        err = 1;
-    }
-    else {
-        /* create and open a file for writing */
-        confdir = get_user_conf_dir ();
-        keyfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-        g_free (confdir);
-        cfgfile = g_io_channel_new_file (keyfile, "w", &error);
-        g_free (keyfile);
-
-        if (error != NULL) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Could not create config file (%s)."),
-                         __FUNCTION__, error->message);
-
-            g_clear_error (&error);
-
-            err = 1;
-        }
-        else {
-            g_io_channel_write_chars (cfgfile,
-                                      cfgstr,
-                                      length,
-                                      &written,
-                                      &error);
-
-            g_io_channel_shutdown (cfgfile, TRUE, NULL);
-            g_io_channel_unref (cfgfile);
-
-            if (error != NULL) {
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Error writing config data (%s)."),
-                             __FUNCTION__, error->message);
-
-                g_clear_error (&error);
-
-                err = 1;
-            }
-            else if (length != written) {
-                sat_log_log (SAT_LOG_LEVEL_WARN,
-                             _("%s: Wrote only %d out of %d chars."),
-                             __FUNCTION__, written, length);
-
-                err = 1;
-            }
-            else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
-                             _("%s: Configuration saved."),
-                             __FUNCTION__);
-
-                err = 0;
-            }
-        }
-
-        g_free (cfgstr);
-    }
+    g_free (confdir);
 
     return err;
 }

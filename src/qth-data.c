@@ -40,6 +40,7 @@
 #include "orbit-tools.h"
 #include "time-tools.h"
 #include "locator.h"
+#include "gpredict-utils.h"
 #ifdef HAS_LIBGPS
 #  include <gps.h>
 #endif
@@ -279,12 +280,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
 gint
 qth_data_save (const gchar *filename, qth_t *qth)
 {
-    GError     *error = NULL;
     gchar      *buff;
-    GIOChannel *cfgfile;
-    gsize       length;
-    gsize       written;
-    gchar      *cfgstr;
     gint        ok = 1;
 
     qth->data = g_key_file_new ();
@@ -369,68 +365,7 @@ qth_data_save (const gchar *filename, qth_t *qth)
     
     /* saving code */
 
-    /* convert configuration data struct to charachter string */
-    cfgstr = g_key_file_to_data (qth->data, &length, &error);
-
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not create QTH data (%s)."),
-                     __FUNCTION__, error->message);
-
-        g_clear_error (&error);
-
-        ok = 0;
-    }
-    else {
-
-        cfgfile = g_io_channel_new_file (filename, "w", &error);
-
-        if (error != NULL) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Could not create QTH file %s\n%s."),
-                         __FUNCTION__, filename, error->message);
-
-            g_clear_error (&error);
-
-            ok = 0;
-        }
-        else {
-            g_io_channel_write_chars (cfgfile,
-                                      cfgstr,
-                                      length,
-                                      &written,
-                                      &error);
-
-            g_io_channel_shutdown (cfgfile, TRUE, NULL);
-            g_io_channel_unref (cfgfile);
-
-            if (error != NULL) {
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Error writing QTH data (%s)."),
-                             __FUNCTION__, error->message);
-
-                g_clear_error (&error);
-
-                ok = 0;
-            }
-            else if (length != written) {
-                sat_log_log (SAT_LOG_LEVEL_WARN,
-                             _("%s: Wrote only %d out of %d chars."),
-                             __FUNCTION__, written, length);
-
-                ok = 0;
-            }
-            else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
-                             _("%s: QTH data saved."),
-                             __FUNCTION__);
-
-                ok = 1;
-            }
-        }
-
-        g_free (cfgstr);
-    }
+    ok = !(gpredict_save_key_file (qth->data, filename));
 
     return ok;
 }

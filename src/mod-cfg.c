@@ -310,13 +310,8 @@ mod_cfg_status_t mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *t
  */
 mod_cfg_status_t mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
 {
-    GError     *error = NULL;  /* Error handler */
-    gchar      *datastream;    /* cfgdata string */
-    GIOChannel *cfgfile;       /* .mod file */
     gchar      *filename;      /* file name */
     gchar      *confdir;
-    gsize       length;        /* length of the data stream */
-    gsize       written;       /* number of bytes actually written */
     gboolean    err;
 
 
@@ -335,71 +330,14 @@ mod_cfg_status_t mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
         return MOD_CFG_ERROR;
     }
 
-    /* ok, go on and convert the data */
-    datastream = g_key_file_to_data (cfgdata, &length, &error);
-
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not create config data (%s)."),
-                     __FUNCTION__, error->message);
-
-        g_clear_error (&error);
-
-        return MOD_CFG_ERROR;
-    }
-
+    
     /* create file and write data stream */
     confdir = get_modules_dir ();
     filename = g_strconcat (confdir, G_DIR_SEPARATOR_S, modname, ".mod", NULL);
     g_free (confdir);
 
-    cfgfile = g_io_channel_new_file (filename, "w", &error);
+    err = gpredict_save_key_file (cfgdata, filename);
 
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not create config file (%s)."),
-                     __FUNCTION__, error->message);
-
-        g_clear_error (&error);
-
-        err = 1;
-    }
-    else {
-        g_io_channel_write_chars (cfgfile,
-                                  datastream,
-                                  length,
-                                  &written,
-                                  &error);
-
-        g_io_channel_shutdown (cfgfile, TRUE, NULL);
-        g_io_channel_unref (cfgfile);
-
-        if (error != NULL) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Error writing config data (%s)."),
-                         __FUNCTION__, error->message);
-
-            g_clear_error (&error);
-
-            err = 1;
-        }
-        else if (length != written) {
-            sat_log_log (SAT_LOG_LEVEL_WARN,
-                         _("%s: Wrote only %d out of %d chars."),
-                         __FUNCTION__, written, length);
-
-            err = 1;
-        }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
-                         _("%s: Configuration saved for module %s."),
-                         __FUNCTION__, modname);
-
-            err = 0;
-        }
-    }
-
-    g_free (datastream);
     g_free (filename);
 
     if (err)

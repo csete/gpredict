@@ -39,7 +39,7 @@
 #include "sat-cfg.h"
 #include "compat.h"
 #include "tle-update.h"
-
+#include "gpredict-utils.h"
 
 /* Flag indicating whether TLE update is in progress.
    This should avoid multiple attempts to update TLE,
@@ -165,7 +165,6 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 
         /* scan directory for tle files */
         while ((fnam = g_dir_read_name (cache_dir)) != NULL) {
-
             /* check that we got a TLE file */
             if (is_tle_file(dir, fnam)) {
                 
@@ -188,6 +187,8 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     
                 /* now, do read the fresh data */
                 num = read_fresh_tle (dir, fnam, data);
+            } else {
+                num = 0;
             }
             
             if (num < 1) {
@@ -405,7 +406,6 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
     GKeyFile   *satdata;
     GIOChannel *satfile;
     gchar      *cfgstr, *cfgfile;
-    gsize       length, written;
     GError     *err = NULL;
 
     (void) key; /* avoid unused parameter compiler warning */
@@ -423,45 +423,13 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
         g_key_file_set_string (satdata, "Satellite", "TLE2", ntle->line2);
         g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
 
-        /* convert data to text */
-        cfgstr = g_key_file_to_data (satdata, &length, NULL);
-
         /* create an I/O channel and store data */
         cfgfile = sat_file_name_from_catnum (ntle->catnum);
-        satfile = g_io_channel_new_file (cfgfile, "w", &err);
-
-        if (err != NULL) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Could not create satellite file (%s)."),
-                         __FUNCTION__, err->message);
-            g_clear_error (&err);
-        }
-        else {
-            g_io_channel_write_chars (satfile, cfgstr, length, &written, &err);
-            g_io_channel_shutdown (satfile, TRUE, NULL);
-            g_io_channel_unref (satfile);
-
-            if (err != NULL) {
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Error writing satellite data for %d (%s)."),
-                             __FUNCTION__, ntle->catnum, err->message);
-                g_clear_error (&err);
-            }
-            else if (length != written) {
-                sat_log_log (SAT_LOG_LEVEL_WARN,
-                             _("%s: Wrote only %d out of %d chars for satellite data %d."),
-                             __FUNCTION__, written, length, ntle->catnum);
-            }
-            else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
-                             _("%s: Data for new sat %d successfully added."),
-                             __FUNCTION__, ntle->catnum);
-                *num += 1;
-            }
+        if (!gpredict_save_key_file (satdata, cfgfile)){
+            *num += 1;
         }
 
         /* clean up memory */
-        g_free (cfgstr);
         g_free (cfgfile);
         g_key_file_free (satdata);
 
@@ -1129,9 +1097,6 @@ static void update_tle_in_file (const gchar *ldname,
     GError    *error = NULL;
     GKeyFile  *satdata;
     gchar     *tlestr1, *tlestr2, *rawtle, *satname, *satnickname;
-    gchar     *cfgstr;
-    GIOChannel *cfgfile;
-    gsize      length, written;
     gboolean   updateddata;
 
 
@@ -1272,46 +1237,12 @@ static void update_tle_in_file (const gchar *ldname,
             }
             
             if (updateddata ==TRUE) {
-                /* convert configuration data struct to charachter string */
-                cfgstr = g_key_file_to_data (satdata, &length, NULL); /* this function never reports error */
-
-                /* create and open a file for writing */
-                cfgfile = g_io_channel_new_file (path, "w", &error);
-
-                if (error != NULL) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                 _("%s: Could not create satellite data file (%s)."),
-                                 __FUNCTION__, error->message);
-                    g_clear_error (&error);
+                if (gpredict_save_key_file(satdata, path)) {
                     skipped++;
+                } else {
+                    updated++;
                 }
-                else {
-                    g_io_channel_write_chars (cfgfile, cfgstr, length, &written, &error);
-
-                    g_io_channel_shutdown (cfgfile, TRUE, NULL);
-                    g_io_channel_unref (cfgfile);
-
-                    if (error != NULL) {
-                        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                     _("%s: Error writing satellite data (%s)."),
-                                     __FUNCTION__, error->message);
-                        g_clear_error (&error);
-                        skipped++;
-                    }
-                    else if (length != written) {
-                        sat_log_log (SAT_LOG_LEVEL_WARN,
-                                     _("%s: Wrote only %d out of %d chars for satellite data."),
-                                     __FUNCTION__, written, length);
-                        skipped++;
-                    }
-                    else {
-                        sat_log_log (SAT_LOG_LEVEL_MSG,
-                                     _("%s: Satellite data written for %d."),
-                                     __FUNCTION__, catnr);
-                        updated++;
-                    }
-                }
-                g_free (cfgstr);
+                
             }
             else {
                 skipped++;

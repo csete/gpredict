@@ -33,6 +33,7 @@
 #include "compat.h"
 
 #include "rotor-conf.h"
+#include "gpredict-utils.h"
 
 #define GROUP           "Rotator"
 #define KEY_HOST        "Host"
@@ -172,8 +173,6 @@ void rotor_conf_save (rotor_conf_t *conf)
     GKeyFile *cfg = NULL;
     gchar    *confdir;
     gchar    *fname;
-    gchar    *data;
-    gsize     len;
     
     if (conf->name == NULL)
         return;
@@ -189,17 +188,16 @@ void rotor_conf_save (rotor_conf_t *conf)
     g_key_file_set_double  (cfg, GROUP, KEY_MINEL, conf->minel);
     g_key_file_set_double  (cfg, GROUP, KEY_MAXEL, conf->maxel);
     
-    /* convert to text sdata */
-    data = g_key_file_to_data (cfg, &len, NULL);
-    
+    /* build filename */
     confdir = get_hwconf_dir();
     fname = g_strconcat (confdir, G_DIR_SEPARATOR_S,
                          conf->name, ".rot", NULL);
     g_free (confdir);
         
-    g_file_set_contents (fname, data, len, NULL);
-    
+    /* save information */
+    gpredict_save_key_file (cfg, fname);
+
+    /* cleanup */
     g_free (fname);
-    g_free (data);
     g_key_file_free (cfg);
 }
