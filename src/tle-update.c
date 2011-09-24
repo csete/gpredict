@@ -1018,7 +1018,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     }
                     
                     /* merge based on name */
-                    if ((!g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) && 
+                    if ((g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) && 
                         (!g_regex_match_simple ("\\d{4,}-\\d{3,}",tle_str[0],0,0))) {
                         g_free (ntle->satname);
                         ntle->satname = g_strdup (g_strchomp(tle_str[0]));
