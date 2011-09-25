@@ -612,6 +612,7 @@ static gint compare_func (GtkTreeModel *model,
                           gpointer      userdata)
 {
     gchar *sat1,*sat2;
+    gint   catnr1, catnr2;
     gint ret = 0;
 
     (void) userdata; /* avoid unused parameter compiler warning */
@@ -620,6 +621,19 @@ static gint compare_func (GtkTreeModel *model,
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
 
     ret = gpredict_strcmp (sat1, sat2);
+    
+    if (ret == 0){
+        gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_CATNUM, &catnr1, -1);
+        gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_CATNUM, &catnr2, -1);
+        if (catnr1 < catnr2)
+            ret = -1;
+        else if (catnr1 > catnr2)
+            ret = 1;
+        else
+            /* never supposed to happen */
+            ret=0;
+    }
+    
 
     g_free (sat1);
     g_free (sat2);

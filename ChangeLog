@@ -4,6 +4,11 @@
     * src/tle-update.c
     Fix bugs in tle-update for two line tle's at end of file.
 
+    * ChangeLog
+    * src/gtk-sat-selector.c
+    * src/mod-cfg.c
+    Update sort routines to include catalog number to handle ties in name.
+
 
 2011-09-22 Charles Suprin <hamaa1vs at gmail.com>
 
