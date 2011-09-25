@@ -796,6 +796,18 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
     gchar      category[80];
     gboolean   catsync = FALSE; /* whether .cat file should be synced */
 
+    /* 
+       Normal cases to check
+       1. 3 line tle file as in amatuer.txt from celestrak
+       2. 2 line tle file as in .... from celestrak
+
+       corner cases to check 
+       1. 3 line tle with something at the end. (nasa.all from amsat)
+       2. 2 line tle with only one in the file
+       3. 2 line tle file reading the last one.
+    */
+
+
 
 
     path = g_strconcat (dir, G_DIR_SEPARATOR_S, fnam, NULL);
@@ -847,6 +859,8 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                satellite catnums will be added during update in the while loop */
         }
         
+        /* set b to non-null as a flag */
+        b = 1;
 
         /* read lines from tle file */
         while (fgets (linetmp, 80, fp)) {
@@ -854,13 +868,31 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             switch (linesneeded) {
             case 3:
                 strncpy(tle_working[0],linetmp,80);
+                /* b is being used a flag here
+                   if b==NULL then we only have one line read in 
+                   and there is no way we have a full tle as there 
+                   is only one line in the buffer.
+                   A TLE must be two or three lines.
+                */
                 b = fgets (tle_working[1], 80, fp);
-                b = fgets (tle_working[2], 80, fp);
+                if (b==NULL) {
+                    /* make sure there is no junk in tle_working[1] */
+                    tle_working[1][0]='\0';
+                    break;
+                }
+                /* make sure there is no junk in tle_working[2] */
+                if (fgets (tle_working[2], 80, fp)==NULL) {
+                    tle_working[2][0]='\0';
+                }
+                
                 break;
             case 2:
                 strncpy(tle_working[0],tle_working[2],80);
                 strncpy(tle_working[1],linetmp,80);
-                b = fgets (tle_working[2], 80, fp);
+                /* make sure there is no junk in tle_working[2] */
+                if (fgets (tle_working[2], 80, fp)==NULL) {
+                    tle_working[2][0]='\0';
+                }
                 break;
             case 1:
                 strncpy(tle_working[0],tle_working[1],80);
@@ -871,6 +903,11 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 sat_log_log (SAT_LOG_LEVEL_BUG,
                              _("%s:%s: Something wrote linesneeded to an illegal value %d"),
                              __FILE__, __FUNCTION__, linesneeded);
+                break;
+            }
+            /* b can only be null if there is only one line in the buffer*/
+            /* a tle must be two or three */
+            if (b == NULL) {
                 break;
             }
             /* remove leading and trailing whitespace to be more forgiving */
@@ -929,6 +966,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 /* we appear to have junk 
                    read another line in and do nothing else */
                 linesneeded = 1;
+                /* skip back to beginning of loop */
                 continue;
             }
 
