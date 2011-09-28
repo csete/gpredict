@@ -6,6 +6,12 @@
     * src/gtk-event-list.h
     Save and restore sort information for event lists.
 
+    * ChangeLog
+    * src/config-keys.c
+    * src/gtk-sat-list.c
+    * src/gtk-sat-list.h
+    Save and restore sort information for satellite lists.
+
 
 2011-09-25 Charles Suprin <hamaa1vs at gmail.com>
 

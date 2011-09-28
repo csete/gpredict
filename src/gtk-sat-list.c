@@ -304,6 +304,14 @@ gtk_sat_list_init (GtkSatList *list)
 static void
 gtk_sat_list_destroy (GtkObject *object)
 {
+    GtkSatList *list = GTK_SAT_LIST(object);
+    
+    g_key_file_set_integer(list->cfgdata, MOD_CFG_LIST_SECTION, 
+                           MOD_CFG_LIST_SORT_COLUMN, list->sort_column);
+
+    g_key_file_set_integer(list->cfgdata, MOD_CFG_LIST_SECTION, 
+                           MOD_CFG_LIST_SORT_ORDER, list->sort_order);
+    
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -327,6 +335,36 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
 
     /* Read configuration data. */
     /* ... */
+    GTK_SAT_LIST (widget)->cfgdata = cfgdata;
+    /* read initial sorting criteria */
+    GTK_SAT_LIST (widget)->sort_column = SAT_LIST_COL_NAME;
+    GTK_SAT_LIST (widget)->sort_order = GTK_SORT_ASCENDING;
+    if (g_key_file_has_key (GTK_SAT_LIST (widget)->cfgdata,MOD_CFG_LIST_SECTION, 
+                            MOD_CFG_LIST_SORT_COLUMN, NULL)) {
+        GTK_SAT_LIST (widget)->sort_column = g_key_file_get_integer (GTK_SAT_LIST (widget)->cfgdata, 
+                                                      MOD_CFG_LIST_SECTION, 
+                                                      MOD_CFG_LIST_SORT_COLUMN, 
+                                                      NULL);
+        if ((GTK_SAT_LIST (widget)->sort_column >SAT_LIST_COL_NUMBER)
+            ||(GTK_SAT_LIST (widget)->sort_column<0)) {
+            GTK_SAT_LIST (widget)->sort_column = SAT_LIST_COL_NAME;
+        }
+    }
+    if (g_key_file_has_key (GTK_SAT_LIST (widget)->cfgdata,
+                            MOD_CFG_EVENT_LIST_SECTION, 
+                            MOD_CFG_EVENT_LIST_SORT_ORDER, 
+                            NULL)) {
+        GTK_SAT_LIST (widget)->sort_order = g_key_file_get_integer (GTK_SAT_LIST (widget)->cfgdata, 
+                                                     MOD_CFG_EVENT_LIST_SECTION, 
+                                                     MOD_CFG_EVENT_LIST_SORT_ORDER, 
+                                                     NULL);
+        if ((GTK_SAT_LIST (widget)->sort_order >1)||(GTK_SAT_LIST (widget)->sort_order<0)) {
+            GTK_SAT_LIST (widget)->sort_order=GTK_SORT_ASCENDING;
+        }
+    }
+
+
+
 
     GTK_SAT_LIST (widget)->satellites = sats;
     GTK_SAT_LIST (widget)->qth = qth;
@@ -413,8 +451,8 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
 
     /* satellite name should be initial sorting criteria */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-                                          SAT_LIST_COL_NAME,
-                                          GTK_SORT_ASCENDING),
+                                          GTK_SAT_LIST(widget)->sort_column,
+                                          GTK_SAT_LIST(widget)->sort_order);
 
     g_object_unref (model);
 
@@ -555,6 +593,11 @@ gtk_sat_list_update          (GtkWidget *widget)
 
         /* get and tranverse the model */
         model = gtk_tree_view_get_model (GTK_TREE_VIEW (satlist->treeview));
+        
+        /*save the sort information */
+        gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+                                              &(satlist->sort_column),
+                                              &(satlist->sort_order));
 
         /* optimisation: detach model from view while updating */
         /* No, we do not do it, because it makes selections and scrolling

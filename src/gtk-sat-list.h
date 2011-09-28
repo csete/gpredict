@@ -71,7 +71,10 @@ struct _gtk_sat_list
      guint            counter;      /*!< cycle counter */
 
      gdouble          tstamp;       /*!< time stamp of calculations; set by GtkSatModule */
-     
+    GKeyFile         *cfgdata;
+    gint              sort_column;
+    GtkSortType       sort_order;
+    
      void (* update) (GtkWidget *widget);  /*!< update function */
 };
 
