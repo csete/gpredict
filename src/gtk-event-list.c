@@ -211,6 +211,14 @@ static void gtk_event_list_init (GtkEventList *list)
 
 static void gtk_event_list_destroy (GtkObject *object)
 {
+    GtkEventList *evlist = GTK_EVENT_LIST(object);
+    
+    g_key_file_set_integer(evlist->cfgdata, MOD_CFG_EVENT_LIST_SECTION, MOD_CFG_EVENT_LIST_SORT_COLUMN, evlist->sort_column);
+
+    g_key_file_set_integer(evlist->cfgdata, MOD_CFG_EVENT_LIST_SECTION, MOD_CFG_EVENT_LIST_SORT_ORDER, evlist->sort_order);
+    
+
+
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
@@ -232,7 +240,6 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
     GtkTreeViewColumn *column;
 
     /* FIXME */
-    (void) cfgdata; /* avoid unused warning compiler warning. */
     (void) columns; /* avoid unused warning compiler warning. */
 
     widget = g_object_new (GTK_TYPE_EVENT_LIST, NULL);
@@ -242,6 +249,36 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 
     /* Read configuration data. */
     /* ... */
+    evlist->cfgdata = cfgdata;
+     /* read initial sorting criteria */
+    evlist->sort_column = EVENT_LIST_COL_TIME;
+    evlist->sort_order = GTK_SORT_ASCENDING;
+    if (g_key_file_has_key (evlist->cfgdata,MOD_CFG_EVENT_LIST_SECTION, 
+                            MOD_CFG_EVENT_LIST_SORT_COLUMN, NULL)) {
+        evlist->sort_column = g_key_file_get_integer (evlist->cfgdata, 
+                                                      MOD_CFG_EVENT_LIST_SECTION, 
+                                                      MOD_CFG_EVENT_LIST_SORT_COLUMN, 
+                                                      NULL);
+        if ((evlist->sort_column >EVENT_LIST_COL_NUMBER)
+            ||(evlist->sort_column<0)) {
+            evlist->sort_column = EVENT_LIST_COL_TIME;
+        }
+    }
+    if (g_key_file_has_key (evlist->cfgdata,
+                            MOD_CFG_EVENT_LIST_SECTION, 
+                            MOD_CFG_EVENT_LIST_SORT_ORDER, 
+                            NULL)) {
+        evlist->sort_order = g_key_file_get_integer (evlist->cfgdata, 
+                                                     MOD_CFG_EVENT_LIST_SECTION, 
+                                                     MOD_CFG_EVENT_LIST_SORT_ORDER, 
+                                                     NULL);
+        if ((evlist->sort_order >1)||(evlist->sort_order<0)) {
+            evlist->sort_order=GTK_SORT_ASCENDING;
+        }
+    }
+
+
+
 
     evlist->satellites = sats;
     evlist->qth = qth;
@@ -299,8 +336,8 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 
     /* initial sorting criteria */
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-                                          EVENT_LIST_COL_TIME,
-                                          GTK_SORT_ASCENDING),
+                                          evlist->sort_column,
+                                          evlist->sort_order),
 
     g_object_unref (model);
 
@@ -392,6 +429,12 @@ void gtk_event_list_update          (GtkWidget *widget)
 
     /* get and tranverse the model */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview));
+
+    /*save the sort information */
+    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+                                          &(evlist->sort_column),
+                                          &(evlist->sort_order));
+
 
     /* update */
     gtk_tree_model_foreach (model, event_list_update_sats, evlist);

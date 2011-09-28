@@ -69,6 +69,9 @@ struct _gtk_event_list
      guint32          flags;        /*!< Flags indicating which columns are visible */
 
      gdouble          tstamp;       /*!< time stamp of calculations; set by GtkSatModule */
+    GKeyFile         *cfgdata;
+    gint              sort_column;
+    GtkSortType       sort_order;
      
      void (* update) (GtkWidget *widget);  /*!< update function */
 };
