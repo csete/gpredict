@@ -1,3 +1,10 @@
+2011-10-01 Alexandru Csete <oz9aec at gmail.com>
+
+   * src/gtk-sat-moduile-tmg.c:
+   Use GTK_STOCK_MEDIA_FORWARD and REWIND (bug 3309111: Wrong icon in time
+   controller).
+   
+
 2011-09-28 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog
@@ -44,15 +51,18 @@
     * src/tle-update.c
     Unifies saving glib key file routine into one place instead of eight.
 
+
 2011-09-21 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog
     * src/tle-update.c
-    Corrects satellite name not being updated correctly when a satellite occurs with international ID and name in same update.
+    Corrects satellite name not being updated correctly when a satellite occurs 
+    with international ID and name in same update.
 
     * ChangeLog
     * src/tle-update.c
-    Corrects satellite status not being updated correctly when a .sat and update data have different status.
+    Corrects satellite status not being updated correctly when a .sat and update
+    data have different status.
 
 
 2011-09-20 Charles Suprin <hamaa1vs at gmail.com>
@@ -113,8 +123,8 @@
     * src/tle-update.c
     * src/tle-update.h
     * src/gtk-sat-data.c
-    Tracks operational status through tle-update and stores it in .sat files when available.
-    Fixes Bug 3400534: Operational Status
+    Tracks operational status through tle-update and stores it in .sat files 
+    when available. Fixes Bug 3400534: Operational Status
 
 
 2011-08-26 Charles Suprin <hamaa1vs at gmail.com>
@@ -129,13 +139,15 @@
 
     * ChangeLog
     * src/gtk-sat-module.c
-    Adds Event list to modules support in satellite reload and corrects some error messages.
+    Adds Event list to modules support in satellite reload and corrects some 
+    error messages.
 
 2011-08-21 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog
     * src/tle-update.c
-    Eliminates memory leak and cut and paste error and removes whitespace around tle before importing.
+    Eliminates memory leak and cut and paste error and removes whitespace around
+    tle before importing.
 
     * ChangeLog
     * src/gtk-sat-tree.c
@@ -149,7 +161,8 @@
 
     * ChangeLog
     * src/tle-update.c
-    Updates satellite name and nickname if of form YYYY-NNNAAA indicating first TLE downloaded before celestrak used given name and improves error reporting.
+    Updates satellite name and nickname if of form YYYY-NNNAAA indicating first 
+    TLE downloaded before celestrak used given name and improves error reporting.
 
 
 2011-08-09 Charles Suprin <hamaa1vs at gmail.com>
@@ -208,7 +221,9 @@
     * src/gtk-polar-view.c
     * src/gtk-sat-tree.h
     * src/gtk-polar-view.h
-    Remove deprecated calls and functions to allow make CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED" to work per <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
+    Remove deprecated calls and functions to allow make 
+    CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED" to work per 
+    <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
 
 
 2011-07-30 Charles Suprin <hamaa1vs at gmail.com>
@@ -222,7 +237,8 @@
     * src/gtk-sat-module.h
     * src/gtk-sat-module-tmg.h
     * src/gtk-sky-glance.h
-    Change gtk headers to only include from short list at <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
+    Change gtk headers to only include from short list at 
+    <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
 
     * src/gpredict-help.c
     * src/gpredict-utils.c
@@ -247,7 +263,8 @@
     * src/sat-pref-rig-editor.c
     * src/sat-pref-rot-editor.c
     * src/save-pass.c
-    Use access functions instead of private elements per <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
+    Use access functions instead of private elements per 
+    <http://developer.gnome.org/gtk3/3.0/gtk-migrating-2-to-3.html>.
 
     * src/gtk-sat-module-popup.c
     * src/sat-pref-single-sat.c
@@ -268,7 +285,8 @@
     * src/sat-pref-single-pass.c
     * src/gtk-sat-tree.c
     * src/sat-pref-refresh.c
-    Eliminate use of deprecated GtkTooltips for GtkTooltip per <http://developer.gnome.org/gtk/2.22/gtk-migrating-tooltips.html>.
+    Eliminate use of deprecated GtkTooltips for GtkTooltip per
+    <http://developer.gnome.org/gtk/2.22/gtk-migrating-tooltips.html>.
 
 
 2011-07-23 Charles Suprin <hamaa1vs at gmail.com>
@@ -310,7 +328,8 @@
 2011-06-29 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/tle-update.c
-    Fix SEGFAULT in tle-update.c when unable to open file for writing in network updates.
+    Fix SEGFAULT in tle-update.c when unable to open file for writing in network
+    updates.
 
 
 2011-06-26 Charles Suprin <hamaa1vs at gmail.com>
