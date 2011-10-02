@@ -2033,7 +2033,11 @@ update_sat (gpointer key, gpointer value, gpointer data)
         if (idx !=-1)
             goo_canvas_item_model_remove_child (root, idx);
         g_hash_table_remove (satmap->obj, catnum);
-        g_free (obj);                
+        if (obj->showtrack)
+            ground_track_update (satmap, sat, satmap->qth, obj, TRUE);
+        g_free (obj);  
+        /* remove obj from hash */
+        g_hash_table_remove (satmap->obj, catnum);
         return;
     }
 

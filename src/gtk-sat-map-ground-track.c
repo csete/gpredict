@@ -191,6 +191,11 @@ ground_track_update (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
                      _("%s: Updating ground track for %s"),
                  __FUNCTION__, sat->nickname);
 
+     if (decayed(sat)) {
+         ground_track_delete (satmap, sat, qth, obj, TRUE);
+         return;
+     }
+
      if (recalc == TRUE) {
           ground_track_delete (satmap, sat, qth, obj, TRUE);
           ground_track_create (satmap, sat, qth, obj);
