@@ -2,6 +2,7 @@
 
    * src/gtk-sat-map.c
    * src/gtk-sat-map-ground-track.c
+   Delete ground track of decayed satellite.
 
 
 2011-10-01 Alexandru Csete <oz9aec at gmail.com>
@@ -9,7 +10,7 @@
    * src/gtk-sat-moduile-tmg.c:
    Use GTK_STOCK_MEDIA_FORWARD and REWIND (bug 3309111: Wrong icon in time
    controller).
-   
+
 
 2011-09-28 Charles Suprin <hamaa1vs at gmail.com>
 
