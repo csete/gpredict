@@ -186,6 +186,7 @@ static void
     gfloat             x,y;
     guint32            col;
     guint              tres,ttidx;
+    gint              *catnum;
 
 
     /* get satellite object */
@@ -206,16 +207,19 @@ static void
 
     root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
 
+    catnum = g_new0 (gint, 1);
+    *catnum = sat->tle.catnr;
+    
     if (obj->showtrack) {
         /* add sky track */
         
         /* add it to the storage structure */
         g_hash_table_insert (pv->showtracks_on,
-                             &(sat->tle.catnr),
+                             catnum,
                              NULL);
         /* remove it from the don't show */
         g_hash_table_remove (pv->showtracks_off,
-                             &(sat->tle.catnr));
+                             catnum);
 
 
         /* create points */
@@ -284,11 +288,11 @@ static void
     else {
         /* add it to the hide */
         g_hash_table_insert (pv->showtracks_off,
-                             &(sat->tle.catnr),
+                             catnum,
                              NULL);
         /* remove it from the show */
         g_hash_table_remove (pv->showtracks_on,
-                             &(sat->tle.catnr));
+                             catnum);
         /* delete sky track */
         idx = goo_canvas_item_model_find_child (root, obj->track);
 
