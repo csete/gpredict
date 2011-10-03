@@ -1,4 +1,10 @@
-2011-09-28 Charles Suprin <hamaa1vs at gmail.com>
+2011-10-02 Charles Suprin <hamaa1vs at gmail.com>
+
+   * src/sgpsdp/sgp4sdp4.h
+   * src/gtk-sat-map-ground-track.c
+   Make groundtrack show on orbit zero. (bug 3416451: No ground track for new satellites)
+
+2011-10-02 Charles Suprin <hamaa1vs at gmail.com>
 
    * src/gtk-sat-map.c
    * src/gtk-sat-map-ground-track.c

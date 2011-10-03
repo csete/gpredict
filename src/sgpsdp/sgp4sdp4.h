@@ -191,7 +191,7 @@ typedef struct {
 	double          footprint;   /*!< footprint */
 	double          phase;       /*!< orbit phase */
 	double          meanmo;      /*!< mean motion kept in rev/day */
-	unsigned long   orbit;       /*!< orbit number */
+	long   orbit;       /*!< orbit number */
 	orbit_type_t    otype;       /*!< orbit type. */
 } sat_t;
 

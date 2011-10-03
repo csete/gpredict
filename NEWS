@@ -16,7 +16,7 @@ Changes in version 1.4 (TBD)
 - Fixed bug 3400534: Operational Status.
 - Fixed bug 3309111: Wrong icon in time controller.
 - Fixed bug 3413571: UARS Ground Track not Updated on TLE update.
-
+- Fixed bug 3416451: No ground track for new satellites.
 
 Changes in version 1.3 (1 Mar 2011)
 

@@ -71,8 +71,8 @@ static void     free_ssp          (gpointer ssp, gpointer data);
 void
 ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj)
 {
-     unsigned long  this_orbit;  /* current orbit number */
-     unsigned long  max_orbit;   /* target orbit number, ie. this + num - 1 */
+     long  this_orbit;  /* current orbit number */
+     long  max_orbit;   /* target orbit number, ie. this + num - 1 */
      double         t0;          /* time when this_orbit starts */
      double         t;
      ssp_t         *this_ssp;
