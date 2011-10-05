@@ -1,3 +1,19 @@
+2011-10-05 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-rot-ctrl.c
+    Eliminate compiler warning.
+
+    * src/gtk-sat-list.c
+    * src/gtk-single-sat.c
+    * src/gtk-sat-map.h
+    * src/predict-tools.h
+    Use signed 32 bit integers for orbit counts.
+
+2011-10-03 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-polar-view-popup.c
+    Fix segfault when turning on and off skytrack. Bug 3417553: Gpredict crashes.
+
 2011-10-02 Charles Suprin <hamaa1vs at gmail.com>
 
    * src/sgpsdp/sgp4sdp4.h
