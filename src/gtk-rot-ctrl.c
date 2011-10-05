@@ -1444,7 +1444,7 @@ static gint rot_name_compare (const gchar* a,const gchar *b){
 /** \brief  Compute if a pass is flipped or not.  this is a function of the rotator and the particular pass. 
  */
 static gboolean is_flipped_pass (pass_t * pass,rot_az_type_t type){
-    gdouble max_az,min_az;
+    gdouble max_az = 0,min_az = 0;
     gdouble caz,last_az=pass->aos_az;
     guint num,i;
     pass_detail_t      *detail;
