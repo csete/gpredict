@@ -511,7 +511,7 @@ create_and_fill_model   (GHashTable      *sats)
                                     G_TYPE_DOUBLE,     // delay
                                     G_TYPE_DOUBLE,     // mean anomaly
                                     G_TYPE_DOUBLE,     // phase
-                                    G_TYPE_ULONG,      // orbit
+                                    G_TYPE_LONG,      // orbit
                                     G_TYPE_STRING);    // visibility
 
 

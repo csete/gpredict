@@ -46,7 +46,7 @@ typedef struct {
     gdouble     max_el;   /*!< Maximum elevation during pass */
     gdouble     aos_az;   /*!< Azimuth at AOS */
     gdouble     los_az;   /*!< Azimuth at LOS */
-    guint       orbit;    /*!< Orbit number */
+    gint        orbit;    /*!< Orbit number */
     gdouble     maxel_az; /*!< Azimuth at maximum elevation */
     gchar       vis[4];   /*!< Visibility string, e.g. VSE, -S-, V-- */
     GSList     *details;  /*!< List of pass_detail_t entries */
@@ -78,7 +78,7 @@ typedef struct {
     gdouble   phase;
     gdouble   footprint;
     sat_vis_t vis;
-    guint     orbit;
+    gint      orbit;
 } pass_detail_t;
 
 

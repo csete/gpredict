@@ -101,7 +101,7 @@ typedef struct {
     guint           newrcnum;     /*!< Number of RC parts in this cycle. */
     
     ground_track_t  track_data;   /*!< Ground track data. */
-    unsigned long   track_orbit;  /*!< Orbit when the ground track has been updated. */
+    long   track_orbit;  /*!< Orbit when the ground track has been updated. */
     
 } sat_map_obj_t;
     

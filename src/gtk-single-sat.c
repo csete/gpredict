@@ -700,7 +700,7 @@ update_field            (GtkSingleSat *ssat, guint i)
 
 
     case SINGLE_SAT_FIELD_ORBIT:
-        buff = g_strdup_printf ("%lu", sat->orbit);
+        buff = g_strdup_printf ("%ld", sat->orbit);
         break;
 
 
