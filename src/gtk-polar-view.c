@@ -886,6 +886,9 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                 losstr = g_strdup_printf (_("%s\nAlways in range"), sat->nickname);
             }
 
+            /* update label */
+            g_object_set (obj->label,"text",sat->nickname,NULL);
+
             /* update tooltip */
             tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
                                       "<tt>Az: %5.1f\302\260\n" \

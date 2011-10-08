@@ -2061,6 +2061,10 @@ update_sat (gpointer key, gpointer value, gpointer data)
     //sat->ssplon = ssplo;
     //sat->ssplat = sspla;
 
+    /* update the label */
+    g_object_set (obj->label,"text",sat->nickname,NULL);
+    g_object_set (obj->shadowl,"text",sat->nickname,NULL);
+
     /* we update tooltips every time */
     aosstr = aoslos_time_to_str(satmap, sat);
     tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
