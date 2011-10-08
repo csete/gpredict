@@ -153,6 +153,10 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
           
      }
 
+     /* Reset satellite structure to eliminate glitches in single sat view and other places 
+        when new ground track is layed out */
+     predict_calc(sat, qth, satmap->tstamp);
+
      /* reverse GSList */
      obj->track_data.latlon = g_slist_reverse (obj->track_data.latlon);
 
