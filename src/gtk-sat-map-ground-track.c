@@ -109,7 +109,8 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
         more than 12 hours back in time.
      */
      t0 = satmap->tstamp;//get_current_daynum ();
-     for (t = t0; (sat->orbit >= this_orbit) && ((t+0.5) > t0); t -= 0.0007) {
+     /* use == instead of >= as it is more robust */
+     for (t = t0; (sat->orbit == this_orbit) && ((t+0.5) > t0); t -= 0.0007) {
 
           predict_calc (sat, qth, t);
 
