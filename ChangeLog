@@ -1,3 +1,10 @@
+2011-10-08 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-sat-map-groundtrack.c
+    Use more robust check on orbit change time.
+    Reset satellite after computing ground track.
+
+
 2011-10-07 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-polar-view.c
