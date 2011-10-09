@@ -3,6 +3,9 @@
     * src/tle-update.c
     Eliminate compiler warning.
 
+    * data/trsp/37772.trsp
+    Add transponder file for ARISSAT/Radioskaf-b from Michael Schulz, K5TRI.
+
 
 2011-10-08 Charles Suprin <hamaa1vs at gmail.com>
 
