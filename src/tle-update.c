@@ -860,7 +860,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
         }
         
         /* set b to non-null as a flag */
-        b = 1;
+        b = path;
 
         /* read lines from tle file */
         while (fgets (linetmp, 80, fp)) {
