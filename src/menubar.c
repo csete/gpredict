@@ -1058,7 +1058,7 @@ create_module_window (GtkWidget *module)
 
     /* create window */
     GTK_SAT_MODULE (module)->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    title = g_strconcat ("GPREDICT: ",
+    title = g_strconcat (_("GPREDICT: "),
                          GTK_SAT_MODULE (module)->name,
                          " (", GTK_SAT_MODULE (module)->qth->name, ")",
                          NULL);

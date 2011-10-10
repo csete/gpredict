@@ -1,3 +1,11 @@
+2011-10-10 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * src/gtk-sat-module-popup.c
+    * src/menubar.c
+    * src/mod-mgr.c
+    Add internationalization to several strings.
+
 2011-10-09 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/tle-update.c

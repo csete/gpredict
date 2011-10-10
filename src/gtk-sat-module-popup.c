@@ -425,7 +425,7 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
                     newmod->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
                     gtk_window_set_title (GTK_WINDOW (newmod->win),
                                           newmod->name);
-                    title = g_strconcat ("GPREDICT: ",
+                    title = g_strconcat (_("GPREDICT: "),
                                          newmod->name,
                                          " (", newmod->qth->name, ")",
                                          NULL);
@@ -548,7 +548,7 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
 
         /* create window */
         GTK_SAT_MODULE (module)->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        title = g_strconcat ("GPREDICT: ",
+        title = g_strconcat (_("GPREDICT: "),
                              GTK_SAT_MODULE (module)->name,
                              " (", GTK_SAT_MODULE (module)->qth->name, ")",
                              NULL);
@@ -688,7 +688,7 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
 
         /* create window */
         GTK_SAT_MODULE (module)->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        title = g_strconcat ("GPREDICT: ",
+        title = g_strconcat (_("GPREDICT: "),
                              GTK_SAT_MODULE (module)->name,
                              " (", GTK_SAT_MODULE (module)->qth->name, ")",
                              NULL);
