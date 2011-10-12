@@ -1,3 +1,11 @@
+2011-10-12 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * src/gtk-sat-list.c
+    * src/gtk-sat-list.h
+    Filter decayed satellites from satellite list. (Bug 3414666)
+
+
 2011-10-10 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog

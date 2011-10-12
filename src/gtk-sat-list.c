@@ -322,7 +322,7 @@ GtkWidget *
 gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 columns)
 {
     GtkWidget    *widget;
-    GtkTreeModel *model;
+    GtkTreeModel *model, *filter, *sortable;
     guint         i;
 
     GtkCellRenderer   *renderer;
@@ -435,7 +435,11 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
 
     /* create model and finalise treeview */
     model = create_and_fill_model (GTK_SAT_LIST (widget)->satellites);
-    gtk_tree_view_set_model (GTK_TREE_VIEW (GTK_SAT_LIST (widget)->treeview), model);
+    filter = gtk_tree_model_filter_new (model, NULL);
+    sortable = gtk_tree_model_sort_new_with_model(filter);
+    GTK_SAT_LIST(widget)->sortable = sortable;
+    gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), SAT_LIST_COL_DECAY);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (GTK_SAT_LIST (widget)->treeview), sortable);
 
     /* We need a special sort function for AOS/LOS events that works
        with all date and time formats (see bug #1861323)
@@ -443,18 +447,20 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
                                      SAT_LIST_COL_AOS,
                                      event_cell_compare_function,
-                                     NULL, NULL);
+                                     widget, NULL);
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
                                      SAT_LIST_COL_LOS,
                                      event_cell_compare_function,
-                                     NULL, NULL);
+                                     widget, NULL);
 
     /* satellite name should be initial sorting criteria */
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sortable),
                                           GTK_SAT_LIST(widget)->sort_column,
                                           GTK_SAT_LIST(widget)->sort_order);
 
     g_object_unref (model);
+    g_object_unref (filter);
+    g_object_unref (sortable);
 
     g_signal_connect (GTK_SAT_LIST (widget)->treeview, "button-press-event",
                       G_CALLBACK (button_press_cb), widget);
@@ -512,7 +518,8 @@ create_and_fill_model   (GHashTable      *sats)
                                     G_TYPE_DOUBLE,     // mean anomaly
                                     G_TYPE_DOUBLE,     // phase
                                     G_TYPE_LONG,      // orbit
-                                    G_TYPE_STRING);    // visibility
+                                    G_TYPE_STRING,     // visibility
+                                    G_TYPE_BOOLEAN);   // decay
 
 
     g_hash_table_foreach (sats, sat_list_add_satellites, liststore);
@@ -559,6 +566,7 @@ sat_list_add_satellites (gpointer key, gpointer value, gpointer user_data)
                         SAT_LIST_COL_MA, sat->ma,
                         SAT_LIST_COL_PHASE, sat->phase,
                         SAT_LIST_COL_ORBIT, sat->orbit,
+                        SAT_LIST_COL_DECAY, !decayed(sat),
                         -1);
 
     
@@ -592,10 +600,12 @@ gtk_sat_list_update          (GtkWidget *widget)
 
 
         /* get and tranverse the model */
-        model = gtk_tree_view_get_model (GTK_TREE_VIEW (satlist->treeview));
+        model = gtk_tree_model_filter_get_model( GTK_TREE_MODEL_FILTER(
+                  gtk_tree_model_sort_get_model( GTK_TREE_MODEL_SORT(
+                  gtk_tree_view_get_model (GTK_TREE_VIEW (satlist->treeview))))));
         
         /*save the sort information */
-        gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+        gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (satlist->sortable),
                                               &(satlist->sort_column),
                                               &(satlist->sort_order));
 
@@ -670,6 +680,7 @@ sat_list_update_sats (GtkTreeModel *model,
                             SAT_LIST_COL_MA, sat->ma,
                             SAT_LIST_COL_PHASE, sat->phase,
                             SAT_LIST_COL_ORBIT, sat->orbit,
+                            SAT_LIST_COL_DECAY, !decayed(sat),
                             -1);
 
         /* doppler shift @ 100 MHz */
@@ -1204,12 +1215,11 @@ static gint event_cell_compare_function (GtkTreeModel *model,
     gdouble ta,tb;
     gint sort_col;
     GtkSortType sort_type;
-
-    (void) user_data; /* avoid unusued parameter compiler warning */
+    GtkSatList *satlist = GTK_SAT_LIST(user_data);
 
     /* Since this function is used for both AOS and LOS columns,
        we need to get the sort column */
-    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (satlist->sortable),
                                           &sort_col,
                                           &sort_type);
 
