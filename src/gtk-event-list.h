@@ -72,8 +72,10 @@ struct _gtk_event_list
     GKeyFile         *cfgdata;
     gint              sort_column;
     GtkSortType       sort_order;
+    GtkTreeModel      *sortable;
      
      void (* update) (GtkWidget *widget);  /*!< update function */
+
 };
 
 struct _GtkEventListClass
@@ -90,6 +92,7 @@ typedef enum {
         EVENT_LIST_COL_EL,          /*!< Satellite Elevation. */
         EVENT_LIST_COL_EVT,         /*!< Next event (AOS or LOS). */
         EVENT_LIST_COL_TIME,        /*!< Time countdown. */
+        EVENT_LIST_COL_DECAY,        /*!< Whether satellite is decayed or not. */
         EVENT_LIST_COL_NUMBER
 } event_list_col_t;
 

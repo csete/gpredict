@@ -43,6 +43,7 @@
 #include "locator.h"
 #include "sat-vis.h"
 #include "sat-info.h"
+#include "orbit-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -234,7 +235,7 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 {
     GtkWidget    *widget;
     GtkEventList *evlist;
-    GtkTreeModel *model;
+    GtkTreeModel *model, *filter, *sortable;
     guint         i;
     GtkCellRenderer   *renderer;
     GtkTreeViewColumn *column;
@@ -326,20 +327,26 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
 
     /* create model and finalise treeview */
     model = create_and_fill_model (evlist->satellites);
-    gtk_tree_view_set_model (GTK_TREE_VIEW (evlist->treeview), model);
+    filter = gtk_tree_model_filter_new (model, NULL);
+    sortable =gtk_tree_model_sort_new_with_model(filter);
+    evlist->sortable =  sortable;
+    gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), EVENT_LIST_COL_DECAY);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (evlist->treeview), sortable);
 
     /* The time sort function needs to be special */
-    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sortable),
                                      EVENT_LIST_COL_TIME,
                                      event_cell_compare_function,
                                      NULL, NULL);
 
     /* initial sorting criteria */
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sortable),
                                           evlist->sort_column,
-                                          evlist->sort_order),
+                                          evlist->sort_order);
 
     g_object_unref (model);
+    g_object_unref (filter);
+    g_object_unref (sortable);
 
     g_signal_connect (evlist->treeview, "button-press-event",
                       G_CALLBACK (button_press_cb), widget);
@@ -374,7 +381,8 @@ static GtkTreeModel *create_and_fill_model   (GHashTable      *sats)
                                     G_TYPE_DOUBLE,     // az
                                     G_TYPE_DOUBLE,     // el
                                     G_TYPE_BOOLEAN,    // TRUE if AOS, FALSE if LOS
-                                    G_TYPE_DOUBLE);    // time
+                                    G_TYPE_DOUBLE,     // time
+                                    G_TYPE_BOOLEAN);   // decayed 
 
     /* add each satellite from hash table */
     g_hash_table_foreach (sats, event_list_add_satellites, liststore);
@@ -407,6 +415,7 @@ static void event_list_add_satellites (gpointer key, gpointer value, gpointer us
                         EVENT_LIST_COL_EL, sat->el,
                         EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
                         EVENT_LIST_COL_TIME, 0.0,
+                        EVENT_LIST_COL_DECAY, !decayed(sat),
                         -1);    
 }
 
@@ -428,10 +437,12 @@ void gtk_event_list_update          (GtkWidget *widget)
     }
 
     /* get and tranverse the model */
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview));
+    model = gtk_tree_model_filter_get_model( GTK_TREE_MODEL_FILTER(
+             gtk_tree_model_sort_get_model( GTK_TREE_MODEL_SORT (
+             gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview))))));
 
     /*save the sort information */
-    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
+    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (evlist->sortable),
                                           &(evlist->sort_column),
                                           &(evlist->sort_order));
 
@@ -449,7 +460,8 @@ void gtk_event_list_update          (GtkWidget *widget)
         evlist->counter = 1;
 
         /* get and tranverse the model */
-        model = gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview));
+        model = gtk_tree_model_filter_get_model(gtk_tree_view_get_model (GTK_TREE_VIEW (evlist->treeview)));
+
 
         /* update */
         gtk_tree_model_foreach (model, event_list_update_sats, evlist);
@@ -518,6 +530,7 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
                             EVENT_LIST_COL_EL, sat->el,
                             EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
                             EVENT_LIST_COL_TIME, number,
+                            EVENT_LIST_COL_DECAY, !decayed(sat),
                             -1);
 
     }
@@ -712,16 +725,11 @@ static gint event_cell_compare_function (GtkTreeModel *model,
 {
     gint result;
     gdouble ta,tb;
-    gint sort_col;
-    GtkSortType sort_type;
+    gint sort_col = EVENT_LIST_COL_TIME; /* hard coded as it is the only option */
+                                         /* extracting from models was not working */
+                                         /* with filter and sorting */
 
     (void) user_data; /* avoid unused warning compiler warning. */
-
-    /* Since this function is used for both AOS and LOS columns,
-       we need to get the sort column */
-    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
-                                          &sort_col,
-                                          &sort_type);
 
     /* get a and b */
     gtk_tree_model_get (model, a, sort_col, &ta, -1);

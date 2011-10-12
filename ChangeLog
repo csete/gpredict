@@ -5,6 +5,11 @@
     * src/gtk-sat-list.h
     Filter decayed satellites from satellite list. (Bug 3414666)
 
+    * ChangeLog
+    * src/gtk-event-list.c
+    * src/gtk-event-list.h
+    Filter decayed satellites from event list. (Bug 3414666)
+
 
 2011-10-10 Charles Suprin <hamaa1vs at gmail.com>
 
