@@ -6,6 +6,10 @@
     * src/gtk-polar-view-popup.c
     Eliminate unused variables to clean compiler output.
 
+    * ChangeLog
+    * src/sat-log-browser.c
+    Add currently shown file name in title.
+
 2011-10-12 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog

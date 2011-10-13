@@ -134,6 +134,8 @@ void
     GtkWidget *hbox;
     gchar     *fname;
     gchar     *confdir;
+    gchar     *title;
+    gint       error; /* error code returned by by read_debug_file */
 
     if (!initialised) {
 
@@ -185,11 +187,21 @@ void
                              "logs", G_DIR_SEPARATOR_S,
                              "gpredict.log", NULL);
 
-        read_debug_file (fname);
+        error = read_debug_file (fname);
+
+        if (error == 0) {
+            /* update window title if file read cleanly */
+            title = g_strdup_printf ( _("Log Browser: %s"), fname);
+            gtk_window_set_title (GTK_WINDOW(window), title);
+            
+            g_free(title);
+        } else {
+            /* Remove filename if file not read */
+            gtk_window_set_title (GTK_WINDOW(window), _("Log Browser"));
+        }
+                
         g_free (fname);
         g_free (confdir);
-
-        /*** FIXME: add currently shown file name in title; chech read_debug_file status */
 
         initialised = TRUE;
     }
@@ -376,6 +388,7 @@ static void
 {
     gchar *confdir;
     gchar *filename;
+    gchar *title;
     gint   error; /* error code returned by by read_debug_file */
 
 
@@ -404,8 +417,15 @@ static void
         /* sanity check of filename will be performed
            in read_debug_file */
         error = read_debug_file (filename);
-
-        /*** FIXME: add currently shown file name in title; chech read_debug_file status */
+        if (error == 0){
+            /* Update title with filename */
+            title = g_strdup_printf ( _("Log Browser: %s"), filename);
+            gtk_window_set_title (GTK_WINDOW(window), title);
+            g_free(title);
+        } else {
+            /* clear filename from title if unable to read file */
+            gtk_window_set_title (GTK_WINDOW(window), _("Log Browser"));
+        }
 
         g_free (filename);
     }
