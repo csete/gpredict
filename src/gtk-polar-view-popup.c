@@ -176,7 +176,7 @@ static void
     GtkPolarView       *pv = GTK_POLAR_VIEW (data);
     sat_obj_t          *obj = NULL;
     sat_t              *sat;
-    qth_t              *qth;
+    /* qth_t              *qth; Unused */ 
     gint               idx;
     guint              i;
     GooCanvasItemModel *root;
@@ -192,7 +192,7 @@ static void
     /* get satellite object */
     obj = SAT_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
     sat = SAT(g_object_get_data (G_OBJECT (item), "sat"));
-    qth = (qth_t *)(g_object_get_data (G_OBJECT (item), "qth"));
+    /*qth = (qth_t *)(g_object_get_data (G_OBJECT (item), "qth"));*/
 
     if (obj == NULL) {
         sat_log_log (SAT_LOG_LEVEL_BUG,

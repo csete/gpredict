@@ -1,3 +1,11 @@
+2011-10-13 Charles Suprin <hamaa1vs at gmail.com>
+
+    * ChangeLog
+    * src/qth-data.c
+    * src/save-pass.c
+    * src/gtk-polar-view-popup.c
+    Eliminate unused variables to clean compiler output.
+
 2011-10-12 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog

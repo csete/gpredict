@@ -549,7 +549,9 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
  *and other like services to update the qth position.
  */
 gboolean qth_data_update_init(qth_t * qth) {
+#ifdef HAS_LIBGPS
     char *port;
+#endif
     gboolean retval=FALSE;
 
     switch (qth->type){

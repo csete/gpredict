@@ -95,7 +95,7 @@ void save_pass   (GtkWidget *parent)
     GtkWidget *label;
     gint       response;
     pass_t    *pass;
-    gchar     *sat;
+    //gchar     *sat;
     qth_t     *qth;
     gchar     *savedir = NULL;
     gchar     *savefile;
@@ -104,7 +104,7 @@ void save_pass   (GtkWidget *parent)
 
 
     /* get data attached to parent */
-    sat = (gchar *) g_object_get_data (G_OBJECT (parent), "sat");
+    //sat = (gchar *) g_object_get_data (G_OBJECT (parent), "sat");
     qth = (qth_t *) g_object_get_data (G_OBJECT (parent), "qth");
     pass = (pass_t *) g_object_get_data (G_OBJECT (parent), "pass");
 
