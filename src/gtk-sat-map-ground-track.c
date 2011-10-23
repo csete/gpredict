@@ -106,17 +106,21 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
      /* Iterate backwards in time until we reach sat->orbit < this_orbit.
         Use predict_calc from predict-tools.c as SGP/SDP driver.
         As a built-in safety, we stop iteration if the orbit crossing is
-        more than 12 hours back in time.
+        more than 24 hours back in time.
      */
      t0 = satmap->tstamp;//get_current_daynum ();
      /* use == instead of >= as it is more robust */
-     for (t = t0; (sat->orbit == this_orbit) && ((t+0.5) > t0); t -= 0.0007) {
+     for (t = t0; (sat->orbit == this_orbit) && ((t + 1.0) > t0); t -= 0.0007) {
 
           predict_calc (sat, qth, t);
 
      }
 
-     t0 = t;
+     /* set it so that we are in the same orbit as this_orbit
+        and not a different one */
+     t += 0.0007;
+     t0 = t;     
+     predict_calc (sat, qth, t0);
 
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: T0: %f (%d)"),
@@ -124,7 +128,9 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
 
      /* calculate (lat,lon) for the required orbits */
-     while (sat->orbit <= max_orbit && !decayed(sat)) {
+     while ((sat->orbit <= max_orbit) &&
+            (sat->orbit >= this_orbit) &&
+            (!decayed(sat))) {
 
           /* We use 30 sec time steps. If resolution is too fine, the
              line drawing routine will filter out unnecessary points
@@ -152,9 +158,17 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
           obj->track_data.latlon = g_slist_prepend (obj->track_data.latlon, this_ssp);
           
      }
+     /* log if there is a problem with the orbit calculation */
+     if (sat->orbit != (max_orbit+1)) {
+         sat_log_log (SAT_LOG_LEVEL_ERROR,
+                      _("%s: Problem computing ground track for %s"),
+                      __FUNCTION__, sat->nickname);
+         return;
+     }
+     
 
-     /* Reset satellite structure to eliminate glitches in single sat view and other places 
-        when new ground track is layed out */
+     /* Reset satellite structure to eliminate glitches in single sat 
+        view and other places when new ground track is layed out */
      predict_calc(sat, qth, satmap->tstamp);
 
      /* reverse GSList */
