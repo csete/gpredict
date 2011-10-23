@@ -21,6 +21,10 @@
     * data/trsp/5580.trsp
     Add transponder data for Prospero and SRMVU satellites.
 
+    * src/gtk-sat-module.c
+    Replace part of satellite update with call to predict_calc.
+
+
 2011-10-13 Charles Suprin <hamaa1vs at gmail.com>
 
     * ChangeLog

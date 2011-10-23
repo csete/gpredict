@@ -1035,62 +1035,7 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
         sat->los = find_los (sat, module->qth, daynum, maxdt);
     }
 
-    /*data may have been updated by gpsd*/
-    obs_geodetic.lon = module->qth->lon * de2ra;
-    obs_geodetic.lat = module->qth->lat * de2ra;
-    obs_geodetic.alt = module->qth->alt / 1000.0;
-    obs_geodetic.theta = 0;
-
-
-    sat->jul_utc = daynum;
-    sat->tsince = (sat->jul_utc - sat->jul_epoch) * xmnpda;
-
-
-
-    /* call the norad routines according to the deep-space flag */
-    if (sat->flags & DEEP_SPACE_EPHEM_FLAG)
-        SDP4 (sat, sat->tsince);
-    else
-        SGP4 (sat, sat->tsince);
-
-    /* scale position and velocity to km and km/sec */
-    Convert_Sat_State (&sat->pos, &sat->vel);
-
-    /* get the velocity of the satellite */
-    Magnitude (&sat->vel);
-    sat->velo = sat->vel.w;
-    Calculate_Obs (sat->jul_utc, &sat->pos, &sat->vel, &obs_geodetic, &obs_set);
-    Calculate_LatLonAlt (sat->jul_utc, &sat->pos, &sat_geodetic);
-
-    /*** FIXME: should we ensure sat_geodetic.lon stays between -pi and pi? */
-    while (sat_geodetic.lon < -pi)
-        sat_geodetic.lon += twopi;
-
-    while (sat_geodetic.lon > (pi))
-        sat_geodetic.lon -= twopi;
-
-    sat->az = Degrees (obs_set.az);
-    sat->el = Degrees (obs_set.el);
-    sat->range = obs_set.range;
-    sat->range_rate = obs_set.range_rate;
-    sat->ssplat = Degrees (sat_geodetic.lat);
-    sat->ssplon = Degrees (sat_geodetic.lon);
-    sat->alt = sat_geodetic.alt;
-    sat->ma = Degrees (sat->phase);
-    sat->ma *= 256.0/360.0;
-    sat->phase = Degrees (sat->phase);
-
-    /* same formulas, but the one from predict is nicer */
-    //sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
-    sat->footprint = 12756.33 * acos (xkmper / (xkmper+sat->alt));
-    age = sat->jul_utc - sat->jul_epoch;
-    sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
-                               age * sat->tle.bstar * ae) * age +
-                              sat->tle.xmo/twopi) + sat->tle.revnum - 1;
-
-
-    /*** FIXME: Squint + AOS / LOS code */
-
+    predict_calc( sat, module->qth, daynum);
 
 }
 
