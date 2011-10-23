@@ -118,7 +118,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
      /* set it so that we are in the same orbit as this_orbit
         and not a different one */
-     t += 0.0007;
+     t += 2*0.0007;
      t0 = t;     
      predict_calc (sat, qth, t0);
 
