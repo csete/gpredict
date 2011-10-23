@@ -428,7 +428,7 @@ static GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
     /* satellite downlink frequency */
     ctrl->SatFreqDown = gtk_freq_knob_new (145890000.0, TRUE);
     g_signal_connect (ctrl->SatFreqDown, "freq-changed", G_CALLBACK (downlink_changed_cb), ctrl);
-    gtk_box_pack_start_defaults (GTK_BOX (vbox), ctrl->SatFreqDown);
+    gtk_box_pack_start (GTK_BOX (vbox), ctrl->SatFreqDown, TRUE, TRUE, 0);
     
     /* Downlink doppler */
     label = gtk_label_new (_("Doppler:"));
@@ -453,13 +453,13 @@ static GtkWidget *create_downlink_widgets (GtkRigCtrl *ctrl)
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label),"<span size='large'><b>Radio:</b></span>");
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_box_pack_start_defaults (GTK_BOX (hbox2), label); 
+    gtk_box_pack_start (GTK_BOX (hbox2), label, TRUE, TRUE, 0); 
     ctrl->RigFreqDown = gtk_freq_knob_new (145890000.0, FALSE);
-    gtk_box_pack_start_defaults (GTK_BOX (hbox2), ctrl->RigFreqDown);
+    gtk_box_pack_start (GTK_BOX (hbox2), ctrl->RigFreqDown, TRUE, TRUE, 0);
     
     /* finish packing ... */
-    gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox1);
-    gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox2);
+    gtk_box_pack_start (GTK_BOX (vbox), hbox1, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), hbox2, TRUE, TRUE, 0);
     gtk_container_add (GTK_CONTAINER (frame), vbox);
     
     return frame;
@@ -492,7 +492,7 @@ static GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
     /* satellite uplink frequency */
     ctrl->SatFreqUp = gtk_freq_knob_new (145890000.0, TRUE);
     g_signal_connect (ctrl->SatFreqUp, "freq-changed", G_CALLBACK (uplink_changed_cb), ctrl);
-    gtk_box_pack_start_defaults (GTK_BOX (vbox), ctrl->SatFreqUp);
+    gtk_box_pack_start (GTK_BOX (vbox), ctrl->SatFreqUp, TRUE, TRUE, 0);
     
     /* Uplink doppler */
     label = gtk_label_new (_("Doppler:"));
@@ -517,13 +517,13 @@ static GtkWidget *create_uplink_widgets (GtkRigCtrl *ctrl)
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label),"<span size='large'><b>Radio:</b></span>");
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_box_pack_start_defaults (GTK_BOX (hbox2), label); 
+    gtk_box_pack_start (GTK_BOX (hbox2), label, TRUE, TRUE, 0); 
     ctrl->RigFreqUp = gtk_freq_knob_new (145890000.0, FALSE);
-    gtk_box_pack_start_defaults (GTK_BOX (hbox2), ctrl->RigFreqUp);
+    gtk_box_pack_start (GTK_BOX (hbox2), ctrl->RigFreqUp, TRUE, TRUE, 0);
     
 
-    gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox1);
-    gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox2);
+    gtk_box_pack_start (GTK_BOX (vbox), hbox1, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (vbox), hbox2, TRUE, TRUE, 0);
     gtk_container_add (GTK_CONTAINER (frame), vbox);
 
 

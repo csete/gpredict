@@ -32,10 +32,10 @@ sat_debugger_run (void)
 
      hbox = gtk_hbox_new (TRUE,5);
      
-     gtk_box_pack_start_defaults (GTK_BOX (hbox), gtk_label_new ("LON:"));
-     gtk_box_pack_start_defaults (GTK_BOX (hbox), lonsp);
-     gtk_box_pack_start_defaults (GTK_BOX (hbox), gtk_label_new ("LAT:"));
-     gtk_box_pack_start_defaults (GTK_BOX (hbox), latsp);
+     gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new ("LON:"), TRUE, TRUE, 0);
+     gtk_box_pack_start (GTK_BOX (hbox), lonsp, TRUE, TRUE, 0);
+     gtk_box_pack_start (GTK_BOX (hbox), gtk_label_new ("LAT:"), TRUE, TRUE, 0);
+     gtk_box_pack_start (GTK_BOX (hbox), latsp, TRUE, TRUE, 0);
 
      gtk_container_add (GTK_CONTAINER (window), hbox);
      gtk_container_set_border_width (GTK_CONTAINER (window), 20);

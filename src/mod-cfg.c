@@ -1001,7 +1001,7 @@ static void edit_advanced_settings (GtkDialog *parent, GKeyFile *cfgdata)
     contents = sat_pref_modules_create (cfgdata);
     gtk_widget_show_all (contents);
 
-    gtk_box_pack_start_defaults (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), contents);
+    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), contents, TRUE, TRUE, 0);
 
     /* execute dialog */
     switch (gtk_dialog_run (GTK_DIALOG (dialog))) {

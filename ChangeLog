@@ -3,6 +3,14 @@
     * src/gtk-sat-map-groundtrack.c
     Use more robust check on orbit change time.
 
+    * src/gtk-rig-ctrl.c
+    * src/sat-debugger.c
+    * src/sat-pref.c
+    * src/sat-log-browser.c
+    * src/mod-cfg.c
+    * src/loc-tree.c
+    Eliminate calls to deprecated gtk_box_pack_start_defaults.
+
 
 2011-10-13 Charles Suprin <hamaa1vs at gmail.com>
 
