@@ -11,6 +11,12 @@
     * src/loc-tree.c
     Eliminate calls to deprecated gtk_box_pack_start_defaults.
 
+    * src/mod-cfg-get-param.c
+    * src/mod-cfg-get-param.h
+    * src/gtk-sat-map.c
+    * src/gtk-polar-view.c
+    Migrate satellite map and polar view to single mod-cfg functions for getting lists of integers.
+
 
 2011-10-13 Charles Suprin <hamaa1vs at gmail.com>
 

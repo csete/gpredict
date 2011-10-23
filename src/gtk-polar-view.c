@@ -94,8 +94,6 @@ static void get_canvas_bg_color        (GtkPolarView *polv, GdkColor *color);
 static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat);
 static void gtk_polar_view_store_showtracks (GtkPolarView *pv);
 static void gtk_polar_view_load_showtracks (GtkPolarView *pv);
-static void store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey) ;
-static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -1766,11 +1764,11 @@ static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat)
 
 static void
 gtk_polar_view_store_showtracks     (GtkPolarView *pv) {
-    store_binary_hash_cfgdata(pv->cfgdata,
+    mod_cfg_set_integer_list_boolean(pv->cfgdata,
                               pv->showtracks_on,
                               MOD_CFG_POLAR_SECTION,
                               MOD_CFG_POLAR_SHOWTRACKS);   
-    store_binary_hash_cfgdata(pv->cfgdata,
+    mod_cfg_set_integer_list_boolean(pv->cfgdata,
                               pv->showtracks_off,
                               MOD_CFG_POLAR_SECTION,
                               MOD_CFG_POLAR_HIDETRACKS);   
@@ -1780,95 +1778,15 @@ gtk_polar_view_store_showtracks     (GtkPolarView *pv) {
 static void
 gtk_polar_view_load_showtracks      (GtkPolarView *pv) 
 {
-    load_integer_list_boolean(pv->cfgdata,
+    mod_cfg_get_integer_list_boolean(pv->cfgdata,
                               MOD_CFG_POLAR_SECTION,
                               MOD_CFG_POLAR_HIDETRACKS,
                               pv->showtracks_off);
 
-    load_integer_list_boolean(pv->cfgdata,
+    mod_cfg_get_integer_list_boolean(pv->cfgdata,
                               MOD_CFG_POLAR_SECTION,
                               MOD_CFG_POLAR_SHOWTRACKS,
                               pv->showtracks_on);
 
 }
 
-/** \brief Load an integer list into a hash table that uses the 
-    existinence of datain the hash as a boolean.
-    It loads NULL's into the hash table.  
-*/
-static void load_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest) {
-    gint   *sats = NULL;
-    gsize   length;
-    GError *error = NULL;
-    guint   i;
-    guint  *tkey;
-
-    sats = g_key_file_get_integer_list (cfgdata,
-                                        section,
-                                        key,
-                                        &length,
-                                        &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to get list of satellites (%s)"),
-                     __FUNCTION__, error->message);
-        
-        g_clear_error (&error);
-        
-        /* GLib API says nothing about the contents in case of error */
-        if (sats) {
-            g_free (sats);
-        }
-        
-        return;
-    }
-     
-    /* read each satellite into hash table */
-    for (i = 0; i < length; i++) {
-        tkey = g_new0 (guint, 1);
-        *tkey = sats[i];
-        //printf("loading sat %d\n",sats[i]);
-        if (!(g_hash_table_lookup_extended (dest, tkey, NULL, NULL))) {
-            /* just add a one to the value so there is presence indicator */
-            g_hash_table_insert (dest,
-                                 tkey,
-                                 NULL);
-        }
-    }
-    g_free(sats);
-}
-
-/** \brief Convert the "boolean" hash back into an integer list and 
-    save it to the cfgdata. */
-static void 
-store_binary_hash_cfgdata (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey) 
-{
-    gint *showtrack;
-    gint *something;
-    gint i,length;
-    GList *keys = g_hash_table_get_keys(hash);
-    
-    length = g_list_length(keys);
-    if (g_list_length(keys)>0) {
-        
-        showtrack = g_try_new0(gint,g_list_length(keys));
-        for (i=0;i<length;i++) {
-            something=g_list_nth_data(keys,i);
-            showtrack[i]=*something;
-        }
-        g_key_file_set_integer_list (cfgdata,
-                                     cfgsection,
-                                     cfgkey,
-                                     showtrack,
-                                     g_list_length(keys)
-                                     );
-        
-    } else  {
-        g_key_file_remove_key(cfgdata,
-                              cfgsection,
-                              cfgkey,
-                              NULL);
-    }
-    
-    g_list_free (keys);
-}
