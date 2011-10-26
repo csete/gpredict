@@ -1136,44 +1136,42 @@ static void update_tle_in_file (const gchar *ldname,
     GKeyFile  *satdata;
     gchar     *tlestr1, *tlestr2, *rawtle, *satname, *satnickname;
     gboolean   updateddata;
+    
+    /* get catalog number for this satellite */
+    catstr = g_strsplit (fname, ".sat", 0);
+    catnr = (guint) g_ascii_strtod (catstr[0], NULL);
+    
 
+    /* see if we have new data for this satellite */
+    key = g_try_new0 (guint, 1);
+    *key = catnr;
+    ntle = (new_tle_t *) g_hash_table_lookup (data, key);
+    g_free (key);
 
-    /* open input file (file containing old tle) */
-    path = g_strconcat (ldname, G_DIR_SEPARATOR_S, fname, NULL);
-    satdata = g_key_file_new ();
-    if (!g_key_file_load_from_file (satdata, path, G_KEY_FILE_KEEP_COMMENTS, &error)) {
+    if (ntle == NULL) {
+        /* no new data found for this sat => obsolete */
+        nodata++;
+        
+        /* check if obsolete sats should be deleted */
+        /**** FIXME: This is dangereous, so we omit it */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error loading %s (%s)"),
-                     __FUNCTION__, path, error->message);
-        g_clear_error (&error);
-
-        skipped++;
-
+                     _("%s: No new TLE data found for %d. Satellite might be obsolete."),
+                     __FUNCTION__, catnr);
     }
-
-    else {
-
-        /* get catalog number for this satellite */
-        catstr = g_strsplit (fname, ".sat", 0);
-        catnr = (guint) g_ascii_strtod (catstr[0], NULL);
-
-        /* see if we have new data for this satellite */
-        key = g_try_new0 (guint, 1);
-        *key = catnr;
-        ntle = (new_tle_t *) g_hash_table_lookup (data, key);
-        g_free (key);
-
-        if (ntle == NULL) {
-            /* no new data found for this sat => obsolete */
-            nodata++;
-
-            /* check if obsolete sats should be deleted */
-            /**** FIXME: This is dangereous, so we omit it */
+    else { 
+        /* open input file (file containing old tle) */
+        path = g_strconcat (ldname, G_DIR_SEPARATOR_S, fname, NULL);
+        satdata = g_key_file_new ();
+        if (!g_key_file_load_from_file (satdata, path, G_KEY_FILE_KEEP_COMMENTS, &error)) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: No new TLE data found for %d. Satellite might be obsolete."),
-                         __FUNCTION__, catnr);
-        }
-        else {
+                         _("%s: Error loading %s (%s)"),
+                         __FUNCTION__, path, error->message);
+            g_clear_error (&error);
+            
+            skipped++;
+            
+        } else {
+            
             /* This satellite is not new */
             ntle->isnew = FALSE;
 
@@ -1286,10 +1284,12 @@ static void update_tle_in_file (const gchar *ldname,
                 skipped++;
             }
         }
-        g_strfreev (catstr);
+     
+        g_key_file_free (satdata);
+        g_free (path);
+        
     }
-    g_key_file_free (satdata);
-    g_free (path);
+    g_strfreev (catstr);
 
     /* update out parameters */
     *sat_upd = updated;
