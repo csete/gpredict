@@ -67,7 +67,7 @@ static void    update_tle_in_file (const gchar *ldname,
                                    guint       *sat_tot);
 
 static guint add_new_sats (GHashTable *data);
-
+static gboolean is_computer_generated_name (gchar *satname);
 
 
 /** \bief Free a new_tle_t structure. */
@@ -1056,8 +1056,8 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     }
                     
                     /* merge based on name */
-                    if ((g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) && 
-                        (!g_regex_match_simple ("\\d{4,}-\\d{3,}",tle_str[0],0,0))) {
+                    if (is_computer_generated_name (ntle->satname) && 
+                        !is_computer_generated_name(tle_str[0])) {
                         g_free (ntle->satname);
                         ntle->satname = g_strdup (g_strchomp(tle_str[0]));
                     }
@@ -1224,9 +1224,9 @@ static void update_tle_in_file (const gchar *ldname,
             if (ntle->satname != NULL) {
                 /* when a satellite first appears in the elements it is sometimes refered to by the 
                    international designator which is awkward after it is given a name */
-                if (!g_regex_match_simple ("\\d{4,}-\\d{3,}",ntle->satname,0,0)) {
+                if (!is_computer_generated_name(ntle->satname)) {
                     
-                    if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satname,0,0)) {
+                    if (is_computer_generated_name (satname)) {
                         sat_log_log (SAT_LOG_LEVEL_MSG,
                                      _("%s: Data for  %d updated for name."),
                                      __FUNCTION__, catnr);
@@ -1238,7 +1238,7 @@ static void update_tle_in_file (const gchar *ldname,
                     /* clobber with name */
                     /* clobber if nickname and name were same before */ 
                     /* clobber if international designator */
-                    if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satnickname,0,0)) {
+                    if ( is_computer_generated_name (satnickname) ) {
                         sat_log_log (SAT_LOG_LEVEL_MSG,
                                      _("%s: Data for  %d updated for nickname."),
                                      __FUNCTION__, catnr);
@@ -1321,4 +1321,24 @@ const gchar *
     }
 
     return _(freq_to_str[freq]);
+}
+
+/** \brief Determine if name is generic.
+ *  \param satname The satellite name that might be old.
+ *
+ * This function determines if the satellite name is generic. Examples of this are the names YYYY-NNNAAA 
+ * international ID names used by Celestrak. Also space-track.org will give items names of OBJECT A as 
+ * well until the name is advertised.  
+ *
+ */
+static gboolean is_computer_generated_name (gchar *satname) {
+    /* celestrak generic satellite name */
+    if (g_regex_match_simple ("\\d{4,}-\\d{3,}",satname,0,0)){
+        return (TRUE);
+    }
+    /* space-track generic satellite name */
+    if (g_regex_match_simple ("OBJECT",satname,0,0)){
+        return (TRUE);
+    }
+    return (FALSE);
 }

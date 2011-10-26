@@ -3,6 +3,9 @@
     * src/tle-update.c
     Read .sat files only when there is data to compare.
 
+    * src/tle-update.c
+    Restructure satellite name test and add "OBJECT A" name type to list for replacement.
+
 
 2011-10-23 Charles Suprin <hamaa1vs at gmail.com>
 
