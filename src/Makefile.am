@@ -52,6 +52,7 @@ gpredict_SOURCES = \
     gtk-sat-module.c gtk-sat-module.h \
     gtk-sat-module-popup.c gtk-sat-module-popup.h \
     gtk-sat-module-tmg.c gtk-sat-module-tmg.h \
+    gtk-sat-popup-common.c gtk-sat-popup-common.h \
     gtk-sat-selector.c gtk-sat-selector.h \
     gtk-single-sat.c gtk-single-sat.h \
     gtk-sky-glance.c gtk-sky-glance.h \

@@ -50,6 +50,7 @@
 #include "predict-tools.h"
 #include "sat-pass-dialogs.h"
 #include "time-tools.h"
+#include "gtk-sat-popup-common.h"
 
 /** \brief Column titles indexed with column symb. refs. */
 const gchar *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
@@ -116,8 +117,6 @@ static void update_field            (GtkSingleSat *ssat, guint i);
 static void Calculate_RADec         (sat_t *sat, qth_t *qth, obs_astro_t *obs_set);
 static void gtk_single_sat_popup_cb (GtkWidget *button, gpointer data);
 static void select_satellite        (GtkWidget *menuitem, gpointer data);
-static void show_next_pass_cb       (GtkWidget *menuitem, gpointer data);
-static void show_next_passes_cb     (GtkWidget *menuitem, gpointer data);
 static gint sat_name_compare (sat_t *a,sat_t *b);
 
 static GtkVBoxClass *parent_class = NULL;
@@ -855,6 +854,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
     g_object_set_data (G_OBJECT (menuitem), "qth", single_sat->qth);
+    g_object_set_data (G_OBJECT (menuitem), "tstamp", &(single_sat->tstamp));
 /*    g_signal_connect (menuitem, "activate",
                       G_CALLBACK (show_next_pass),
                       gtk_widget_get_toplevel (button));*/
@@ -870,11 +870,12 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
     g_object_set_data (G_OBJECT (menuitem), "qth", single_sat->qth);
+    g_object_set_data (G_OBJECT (menuitem), "tstamp", &(single_sat->tstamp));
 /*    g_signal_connect (menuitem, "activate",
                       G_CALLBACK (show_future_passes),
                       gtk_widget_get_toplevel (button));*/
     g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_next_passes_cb), data);
+                      G_CALLBACK (show_future_passes_cb), data);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     /* separator */
@@ -1021,143 +1022,6 @@ gtk_single_sat_reconf          (GtkWidget    *widget,
                                                         MOD_CFG_SINGLE_SAT_REFRESH,
                                                         SAT_CFG_INT_SINGLE_SAT_REFRESH);
     GTK_SINGLE_SAT (widget)->counter = 1;
-}
-
-
-
-static void
-show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
-{
-    GtkSingleSat *ssat = GTK_SINGLE_SAT (data);
-    sat_t        *sat;
-    qth_t        *qth;
-    pass_t       *pass;
-    GtkWidget    *dialog;
-    GtkWindow    *toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (data)));
-
-
-    /* get next pass */
-    sat = SAT(g_object_get_data (G_OBJECT (menuitem), "sat"));
-    qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
-
-    /* check wheather sat actially has AOS */
-    if (has_aos (sat, qth)) {
-        if (sat_cfg_get_bool(SAT_CFG_BOOL_PRED_USE_REAL_T0)) {
-            pass = get_next_pass (sat, qth,
-                                  sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
-        }
-        else {
-            pass = get_pass (sat, qth, ssat->tstamp,
-                             sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
-        }
-
-        if (pass != NULL) {
-            show_pass (sat->nickname, qth, pass, GTK_WIDGET (toplevel));
-        }
-        else {
-            /* show dialog that there are no passes within time frame */
-            dialog = gtk_message_dialog_new (toplevel,
-                                             GTK_DIALOG_MODAL |
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_MESSAGE_INFO,
-                                             GTK_BUTTONS_OK,
-                                             _("Satellite %s has no passes\n"\
-                                               "within the next %d days"),
-                                             sat->nickname,
-                                             sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
-
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy (dialog);
-        }
-    }
-    else {
-        /* show dialog telling that this sat never reaches AOS*/
-        dialog = gtk_message_dialog_new (toplevel,
-                                         GTK_DIALOG_MODAL |
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_ERROR,
-                                         GTK_BUTTONS_OK,
-                                         _("Satellite %s has no passes for\n"\
-                                           "the current ground station!\n\n"\
-                                           "This can be because the satellite\n"\
-                                           "is geostationary, decayed or simply\n"\
-                                           "never comes above the horizon"),
-                                          sat->nickname);
-
-         gtk_dialog_run (GTK_DIALOG (dialog));
-         gtk_widget_destroy (dialog);
-    }
-
-}
-
-
-static void
-show_next_passes_cb     (GtkWidget *menuitem, gpointer data)
-{
-    GtkSingleSat *ssat = GTK_SINGLE_SAT (data);
-    GtkWidget *dialog;
-    GtkWindow *toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (data)));
-    GSList    *passes = NULL;
-    sat_t     *sat;
-    qth_t     *qth;
-
-
-    sat = SAT(g_object_get_data (G_OBJECT (menuitem), "sat"));
-    qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
-
-    /* check wheather sat actially has AOS */
-    if (has_aos (sat, qth)) {
-
-        if (sat_cfg_get_bool(SAT_CFG_BOOL_PRED_USE_REAL_T0)) {
-            passes = get_next_passes (sat, qth,
-                                      sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD),
-                                      sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_PASS));
-        }
-        else {
-            passes = get_passes (sat, qth, ssat->tstamp,
-                                 sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD),
-                                 sat_cfg_get_int (SAT_CFG_INT_PRED_NUM_PASS));
-
-        }
-
-
-        if (passes != NULL) {
-            show_passes (sat->nickname, qth, passes, GTK_WIDGET (toplevel));
-        }
-        else {
-            /* show dialog that there are no passes within time frame */
-            dialog = gtk_message_dialog_new (toplevel,
-                                             GTK_DIALOG_MODAL |
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_MESSAGE_INFO,
-                                             GTK_BUTTONS_OK,
-                                            _("Satellite %s has no passes\n"\
-                                              "within the next %d days"),
-                                             sat->nickname,
-                                             sat_cfg_get_int (SAT_CFG_INT_PRED_LOOK_AHEAD));
-
-            gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy (dialog);
-        }
-
-     }
-     else {
-         /* show dialog */
-         GtkWidget *dialog;
-
-         dialog = gtk_message_dialog_new (toplevel,
-                                          GTK_DIALOG_MODAL |
-                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_MESSAGE_ERROR,
-                                          GTK_BUTTONS_OK,
-                                          _("Satellite %s has no passes for\n"\
-                                            "the current ground station!"),
-                                          sat->nickname);
-
-         gtk_dialog_run (GTK_DIALOG (dialog));
-         gtk_widget_destroy (dialog);
-     }
-
 }
 
 static gint sat_name_compare (sat_t *a,sat_t *b) {

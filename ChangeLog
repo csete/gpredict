@@ -1,3 +1,16 @@
+2011-10-27 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-event-list-popup.c
+    * src/gtk-sat-list-popup.c
+    * src/gtk-sat-map-popup.c
+    * src/gtk-polar-view-popup.c
+    * src/gtk-sat-popup-common.c
+    * src/gtk-sat-popup-common.h
+    * src/gtk-single-sat.c
+    * src/Makefile.am
+    Consolidate popup callback functions into single function and file.	
+
+
 2011-10-26 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/tle-update.c
