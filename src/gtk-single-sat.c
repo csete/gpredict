@@ -847,36 +847,8 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     menuitem = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    /* Show next pass */
-    menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
-    image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL,
-                                      GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-    g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-    g_object_set_data (G_OBJECT (menuitem), "qth", single_sat->qth);
-    g_object_set_data (G_OBJECT (menuitem), "tstamp", &(single_sat->tstamp));
-/*    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_next_pass),
-                      gtk_widget_get_toplevel (button));*/
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_next_pass_cb), data);
-    
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-        
-    /* Show future passes */
-    menuitem = gtk_image_menu_item_new_with_label (_("Future passes"));
-    image = gtk_image_new_from_stock (GTK_STOCK_INDEX,
-                                      GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-    g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-    g_object_set_data (G_OBJECT (menuitem), "qth", single_sat->qth);
-    g_object_set_data (G_OBJECT (menuitem), "tstamp", &(single_sat->tstamp));
-/*    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_future_passes),
-                      gtk_widget_get_toplevel (button));*/
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_future_passes_cb), data);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    /* add the menu items for current,next, and future passes. */
+    add_pass_menu_items(menu,sat,single_sat->qth,&single_sat->tstamp,data);
 
     /* separator */
 //     menuitem = gtk_separator_menu_item_new ();

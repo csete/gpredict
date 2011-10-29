@@ -87,31 +87,8 @@ gtk_sat_list_popup_exec (sat_t *sat, qth_t *qth, GdkEventButton *event, GtkSatLi
      menuitem = gtk_separator_menu_item_new ();
      gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-     /* next pass and predict passes */
-     menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
-     image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL,
-                           GTK_ICON_SIZE_MENU);
-     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-     g_object_set_data (G_OBJECT (menuitem), "tstamp", &(list->tstamp));
-     g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_next_pass_cb),
-                      list);
-     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-          
-     menuitem = gtk_image_menu_item_new_with_label (_("Future passes"));
-     image = gtk_image_new_from_stock (GTK_STOCK_INDEX,
-                           GTK_ICON_SIZE_MENU);
-     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-     g_object_set_data (G_OBJECT (menuitem), "tstamp", &(list->tstamp));
-     g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_future_passes_cb),
-                      list);
-     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
+     /* add the menu items for current,next, and future passes. */
+     add_pass_menu_items(menu,sat,qth,&list->tstamp,GTK_WIDGET(list));
 
      gtk_widget_show_all (menu);
 

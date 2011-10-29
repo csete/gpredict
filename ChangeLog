@@ -1,4 +1,21 @@
-2011-10-27 Charles Suprin <hamaa1vs at gmail.com>
+2011-10-29 Charles Suprin <hamaa1vs at gmail.com>
+
+    * data/trsp/37841.trsp
+    Move SRVMU to correct catalog number.
+
+    * data/trsp/37841.trsp
+    Add transponder data for JUGNU.
+
+    * src/gtk-event-list-popup.c
+    * src/gtk-sat-list-popup.c
+    * src/gtk-sat-map-popup.c
+    * src/gtk-polar-view-popup.c
+    * src/gtk-single-sat.c
+    * NEWS
+    Add current pass menuitem to popups. (Bug 3292729: Show next pass shows the current pass.)
+
+
+2011-10-28 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-popup-common.c
     * src/gtk-sat-popup-common.h
