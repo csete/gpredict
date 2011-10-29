@@ -1,5 +1,12 @@
 2011-10-27 Charles Suprin <hamaa1vs at gmail.com>
 
+    * src/gtk-sat-popup-common.c
+    * src/gtk-sat-popup-common.h
+    * src/gtk-sat-map-popup.c
+    Attempt to resolve "Show next pass shows the current pass".
+
+2011-10-27 Charles Suprin <hamaa1vs at gmail.com>
+
     * src/gtk-event-list-popup.c
     * src/gtk-sat-list-popup.c
     * src/gtk-sat-map-popup.c

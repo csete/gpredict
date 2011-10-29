@@ -39,7 +39,46 @@
 #include "gtk-sat-popup-common.h"
 #include "sat-pass-dialogs.h"
 
-void show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
+void add_pass_menu_items (GtkWidget *menu, sat_t *sat, qth_t *qth, gdouble *tstamp, GtkWidget *widget) {
+    GtkWidget      *menuitem;
+    GtkWidget      *image;
+
+    /* next pass and predict passes */
+    if (sat->el > 0.0) {
+        menuitem = gtk_image_menu_item_new_with_label (_("Show current pass"));
+        image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
+        gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+        g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+        g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+        g_object_set_data (G_OBJECT (menuitem), "tstamp", tstamp);
+        g_signal_connect (menuitem, "activate", G_CALLBACK (show_current_pass_cb), widget);
+        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    }
+
+    /* the next pass menu item */
+    menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
+    image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+    g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+    g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+    g_object_set_data (G_OBJECT (menuitem), "tstamp", tstamp);
+    g_signal_connect (menuitem, "activate", G_CALLBACK (show_next_pass_cb), widget);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    
+    /* finally the future pass menu item */
+    menuitem = gtk_image_menu_item_new_with_label (_("Future passes"));
+    image = gtk_image_new_from_stock (GTK_STOCK_INDEX, GTK_ICON_SIZE_MENU);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+    g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+    g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+    g_object_set_data (G_OBJECT (menuitem), "tstamp", tstamp);
+    g_signal_connect (menuitem, "activate", G_CALLBACK (show_future_passes_cb), widget);
+    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    
+    
+}
+
+void show_current_pass_cb       (GtkWidget *menuitem, gpointer data)
 {
     sat_t        *sat;
     qth_t        *qth;
@@ -50,7 +89,27 @@ void show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
     qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
     tstamp = (gdouble *) (g_object_get_data (G_OBJECT (menuitem), "tstamp"));
 
-    show_next_pass_dialog (sat,qth,*tstamp,toplevel);
+    if (sat->el>0.0)
+        show_next_pass_dialog (sat,qth,*tstamp,toplevel);
+}
+
+void show_next_pass_cb       (GtkWidget *menuitem, gpointer data)
+{
+    sat_t        *sat;
+    qth_t        *qth;
+    GtkWindow    *toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (data)));
+    gdouble      *tstamp;
+
+    sat = SAT(g_object_get_data (G_OBJECT (menuitem), "sat"));
+    qth = (qth_t *) (g_object_get_data (G_OBJECT (menuitem), "qth"));
+    tstamp = (gdouble *) (g_object_get_data (G_OBJECT (menuitem), "tstamp"));
+    
+    if (sat->el <0)
+        show_next_pass_dialog (sat,qth,*tstamp,toplevel);
+    else 
+        /*if the satellite is currently visible
+          go to end of pass and then add 10 minutes*/
+        show_next_pass_dialog (sat,qth,sat->los+0.007,toplevel);
 }
 
 

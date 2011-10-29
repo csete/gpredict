@@ -99,8 +99,20 @@ gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
      /* separator */
      menuitem = gtk_separator_menu_item_new ();
      gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
+#if 1
+     add_pass_menu_items(menu,sat,qth,&satmap->tstamp,GTK_WIDGET(satmap));
+#else
      /* next pass and predict passes */
+     if (sat->el > 0.0) {
+         menuitem = gtk_image_menu_item_new_with_label (_("Show current pass"));
+         image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
+         gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+         g_object_set_data (G_OBJECT (menuitem), "sat", sat);
+         g_object_set_data (G_OBJECT (menuitem), "qth", qth);
+         g_object_set_data (G_OBJECT (menuitem), "tstamp", &(satmap->tstamp));
+         g_signal_connect (menuitem, "activate", G_CALLBACK (show_current_pass_cb), satmap);
+         gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+     }
      menuitem = gtk_image_menu_item_new_with_label (_("Show next pass"));
      image = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -118,7 +130,7 @@ gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
      g_object_set_data (G_OBJECT (menuitem), "tstamp", &(satmap->tstamp));
      g_signal_connect (menuitem, "activate", G_CALLBACK (show_future_passes_cb), satmap);
      gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
+#endif
      /* separator */
      menuitem = gtk_separator_menu_item_new ();
      gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
