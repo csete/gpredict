@@ -258,6 +258,13 @@ qth_data_read (const gchar *filename, qth_t *qth)
         g_clear_error (&error);
     }
 
+    /* set QRA based on data */
+    if (longlat2locator (qth->lon, qth->lat, qth->qra,2) != RIG_OK) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not set QRA for %s at %f, %f."),
+                     __FUNCTION__, qth->name, qth->lon, qth->lat);
+    }
+    
     qth_validate(qth);
 
     /* Now, send debug message and return */
@@ -539,6 +546,14 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
     }
     /* check that data is valid */
     qth_validate(qth);
+
+    /* update qra */
+    if (longlat2locator (qth->lon, qth->lat, qth->qra,2) != RIG_OK) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                     _("%s: Could not set QRA for %s at %f, %f."),
+                     __FUNCTION__, qth->name, qth->lon, qth->lat);
+    }
+
     return retval;
 }
 
@@ -671,6 +686,7 @@ void qth_init(qth_t* qth) {
     qth->gpsd_server=NULL;
     qth->gpsd_update=0.0;
     qth->gpsd_connected=0.0;
+    qth->qra = g_strdup ("AA00");
 }
 
 /** \brief Load safe values into the qth_t data structure
