@@ -401,10 +401,9 @@ create_canvas_model (GtkSatMap *satmap)
            Note: I used pango markup to set the background color, I didn't find any
            other obvious ways to get the text height in pixels to draw rectangle.
         */
-        buff = g_strdup_printf ("<span background=\"#%s\"> %s \302\267 %s %s</span>",
+        buff = g_strdup_printf ("<span background=\"#%s\"> %s \302\267 %s </span>",
                                 satmap->infobgd,
                                 satmap->qth->name,
-                                satmap->qth->qra,
                                 satmap->qth->loc);
         g_object_set (satmap->locnam, "text", buff, NULL);
         g_free (buff);
@@ -641,15 +640,6 @@ gtk_sat_map_update (GtkWidget  *widget)
     if (satmap->resize) 
         update_map_size (satmap);
 
-    /* update the location name */
-    /* mainly for qra field */
-    buff = g_strdup_printf ("<span background=\"#%s\"> %s \302\267 %s %s</span>",
-                            satmap->infobgd,
-                            satmap->qth->name,
-                            satmap->qth->qra,
-                            satmap->qth->loc);
-    g_object_set (satmap->locnam, "text", buff, NULL);
-    g_free (buff);
     /* check if qth has moved significantly if so move it*/
     lonlat_to_xy (satmap,  satmap->qth->lon, satmap->qth->lat, &x, &y);
     g_object_get (satmap->qthmark,
@@ -1283,18 +1273,7 @@ pole_is_covered   (sat_t *sat)
 
     ret1 = qrb (sat->ssplon, sat->ssplat, 0.0, 90.0, &qrb1, &az1);
     ret2 = qrb (sat->ssplon, sat->ssplat, 0.0, -90.0, &qrb2, &az2);
-    
-    if (ret1 !=RIG_OK){
-        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                     _("%s: Invalid lat lon pair for %d."),
-                     __FUNCTION__, sat->tle.catnr);
-    }
-    if (ret2 !=RIG_OK){
-        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                     _("%s: Invalid lat lon pair for %d."),
-                     __FUNCTION__, sat->tle.catnr);
-    }
-    
+
     if ((qrb1 <= 0.5*sat->footprint) || (qrb2 <= 0.5*sat->footprint))
         return TRUE;
     
