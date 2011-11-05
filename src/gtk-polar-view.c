@@ -845,7 +845,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             }
             
             /* free pass info */
-            //free_pass (obj->pass);
+            free_pass (obj->pass);
             obj->pass=NULL;
 
             /* if this was the selected satellite we need to
@@ -855,7 +855,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                 g_object_set (polv->sel, "text", "", NULL);
             }
 
-            // g_free (obj);
+            g_free (obj);
 
             /* remove sat object from hash table */ 
             g_hash_table_remove (polv->obj, catnum);
