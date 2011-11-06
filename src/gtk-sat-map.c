@@ -2607,6 +2607,7 @@ gtk_sat_map_load_showtracks      (GtkSatMap *satmap)
                                          satmap->showtracks);
 
 }
+/** \brief save the satellites that we should not show ground tracks */
 static void
 gtk_sat_map_store_showtracks      (GtkSatMap *satmap) {
     mod_cfg_set_integer_list_boolean(satmap->cfgdata,
@@ -2614,7 +2615,7 @@ gtk_sat_map_store_showtracks      (GtkSatMap *satmap) {
                                      MOD_CFG_MAP_SECTION,
                                      MOD_CFG_MAP_SHOWTRACKS);
 }
-
+/** \brief save the satellites that we should not highlight coverage */
 static void
 gtk_sat_map_store_hidecovs      (GtkSatMap *satmap) {
     mod_cfg_set_integer_list_boolean(satmap->cfgdata,
