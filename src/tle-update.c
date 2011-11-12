@@ -922,7 +922,10 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             /* third is that neither of these is true and we are consuming either text at the top of the 
                file or a text file that happens to be in the update directory 
             */ 
-            if (Checksum_Good(tle_working[1]) && (tle_working[1][0]=='1')) {
+            if ((tle_working[1][0] == '1') && 
+                (tle_working[2][0] == '2') && 
+                Checksum_Good(tle_working[1]) &&
+                Checksum_Good(tle_working[2])) {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s:%s: Processing a three line TLE"),
                              __FILE__, __FUNCTION__);
@@ -934,7 +937,10 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 /* we consumed three lines so we need three lines */
                 linesneeded = 3;
                 
-            } else if (Checksum_Good(tle_working[0]) && (tle_working[0][0]=='1')) {
+            } else if ((tle_working[0][0] == '1') && 
+                       (tle_working[1][0] == '2') &&
+                       Checksum_Good(tle_working[0]) && 
+                       Checksum_Good(tle_working[1])) {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s:%s: Processing a bare two line TLE"),
                              __FILE__, __FUNCTION__);

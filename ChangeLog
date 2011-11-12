@@ -6,6 +6,9 @@
     * src/gtk-sat-module-popup.c
     Sort satellite list in popup.
 
+    * src/tle-update.c
+    Change decision of two versus three line tle's to do simpler checks first.
+
 
 2011-11-06 Charles Suprin <hamaa1vs at gmail.com>
 
