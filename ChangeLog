@@ -3,6 +3,9 @@
     * doc/um/gpredict-user-manual.odt
     Update user manual for GPSD and other features.
 
+    * src/gtk-sat-module-popup.c
+    Sort satellite list in popup.
+
 
 2011-11-06 Charles Suprin <hamaa1vs at gmail.com>
 
