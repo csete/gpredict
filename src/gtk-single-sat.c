@@ -155,15 +155,15 @@ gtk_single_sat_get_type ()
 static void
 gtk_single_sat_class_init (GtkSingleSatClass *class)
 {
-    GObjectClass      *gobject_class;
+    /*GObjectClass      *gobject_class;*/
     GtkObjectClass    *object_class;
-    GtkWidgetClass    *widget_class;
-    GtkContainerClass *container_class;
+    /*GtkWidgetClass    *widget_class;*/
+    /*GtkContainerClass *container_class;*/
 
-    gobject_class   = G_OBJECT_CLASS (class);
+    /*gobject_class   = G_OBJECT_CLASS (class);*/
     object_class    = (GtkObjectClass*) class;
-    widget_class    = (GtkWidgetClass*) class;
-    container_class = (GtkContainerClass*) class;
+    /*widget_class    = (GtkWidgetClass*) class;*/
+    /*container_class = (GtkContainerClass*) class;*/
 
     parent_class = g_type_class_peek_parent (class);
 

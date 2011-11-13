@@ -65,7 +65,7 @@ static void destroy_rotctrl  (GtkWidget *window, gpointer data);
 static void destroy_rigctrl  (GtkWidget *window, gpointer data);
 static void destroy_skg      (GtkWidget *window, gpointer data);
 static gint window_delete    (GtkWidget *widget, GdkEvent *event, gpointer data);
-static sat_nickname_compare (sat_t *a, sat_t *b);
+static gint sat_nickname_compare (const sat_t *a, const sat_t *b);
 
 
 /** \brief Create and run GtkSatModule popup menu.
@@ -158,7 +158,7 @@ void gtk_sat_module_popup (GtkSatModule *module)
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), satsubmenu);
     
     sats = g_hash_table_get_values(module->satellites);  
-    sats = g_list_sort(sats , sat_nickname_compare );
+    sats = g_list_sort(sats , (GCompareFunc) sat_nickname_compare );
 
     n = g_list_length(sats);
     for (i = 0; i < n; i++) {
@@ -1233,6 +1233,6 @@ gboolean module_window_config_cb (GtkWidget *widget, GdkEventConfigure *event, g
     return FALSE;
 }
 
-static sat_nickname_compare (sat_t *a, sat_t *b) {
-    gpredict_strcmp(a->nickname, b->nickname);
+static gint sat_nickname_compare (const sat_t *a, const sat_t *b) {
+    return gpredict_strcmp(a->nickname, b->nickname);
 }

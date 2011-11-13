@@ -152,15 +152,15 @@ gtk_sat_map_get_type ()
 static void
 gtk_sat_map_class_init (GtkSatMapClass *class)
 {
-    GObjectClass      *gobject_class;
+    /*GObjectClass      *gobject_class;*/
     GtkObjectClass    *object_class;
-    GtkWidgetClass    *widget_class;
-    GtkContainerClass *container_class;
+    /*GtkWidgetClass    *widget_class;*/
+    /*GtkContainerClass *container_class;*/
 
-    gobject_class   = G_OBJECT_CLASS (class);
+    /*gobject_class   = G_OBJECT_CLASS (class);*/
     object_class    = (GtkObjectClass*) class;
-    widget_class    = (GtkWidgetClass*) class;
-    container_class = (GtkContainerClass*) class;
+    /*widget_class    = (GtkWidgetClass*) class;*/
+    /*container_class = (GtkContainerClass*) class;*/
 
     parent_class = g_type_class_peek_parent (class);
 
@@ -1272,8 +1272,19 @@ pole_is_covered   (sat_t *sat)
     gdouble qrb1, qrb2, az1, az2;
 
     ret1 = qrb (sat->ssplon, sat->ssplat, 0.0, 90.0, &qrb1, &az1);
+    if (ret1 != RIG_OK) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                     _("%s: Bad data measuring distance to North Pole %f %f."),
+                     __FUNCTION__, sat->ssplon, sat->ssplat);
+    }
     ret2 = qrb (sat->ssplon, sat->ssplat, 0.0, -90.0, &qrb2, &az2);
-
+    if (ret2 != RIG_OK) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                     _("%s: Bad data measuring distance to South Pole %f %f."),
+                     __FUNCTION__, sat->ssplon, sat->ssplat);
+    }
+    
+    
     if ((qrb1 <= 0.5*sat->footprint) || (qrb2 <= 0.5*sat->footprint))
         return TRUE;
     

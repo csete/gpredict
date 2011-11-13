@@ -114,17 +114,17 @@ gtk_azel_plot_get_type ()
 static void
 gtk_azel_plot_class_init (GtkAzelPlotClass *class)
 {
-     GObjectClass      *gobject_class;
-     GtkObjectClass    *object_class;
-     GtkWidgetClass    *widget_class;
-     GtkContainerClass *container_class;
+    /*GObjectClass      *gobject_class;*/
+    GtkObjectClass    *object_class;
+    /*GtkWidgetClass    *widget_class;*/
+    /*GtkContainerClass *container_class;*/
 
-     gobject_class   = G_OBJECT_CLASS (class);
-     object_class    = (GtkObjectClass*) class;
-     widget_class    = (GtkWidgetClass*) class;
-     container_class = (GtkContainerClass*) class;
-
-     parent_class = g_type_class_peek_parent (class);
+    /*gobject_class   = G_OBJECT_CLASS (class);*/
+    object_class    = (GtkObjectClass*) class;
+    /*widget_class    = (GtkWidgetClass*) class;*/
+    /*container_class = (GtkContainerClass*) class;*/
+    
+    parent_class = g_type_class_peek_parent (class);
 
      object_class->destroy = gtk_azel_plot_destroy;
      //widget_class->size_allocate = gtk_azel_plot_size_allocate;

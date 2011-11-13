@@ -180,15 +180,15 @@ GType gtk_rig_ctrl_get_type ()
 
 static void gtk_rig_ctrl_class_init (GtkRigCtrlClass *class)
 {
-    GObjectClass      *gobject_class;
+    //GObjectClass      *gobject_class;
     GtkObjectClass    *object_class;
-    GtkWidgetClass    *widget_class;
-    GtkContainerClass *container_class;
+    //GtkWidgetClass    *widget_class;
+    //GtkContainerClass *container_class;
 
-    gobject_class   = G_OBJECT_CLASS (class);
+    //gobject_class   = G_OBJECT_CLASS (class);
     object_class    = (GtkObjectClass*) class;
-    widget_class    = (GtkWidgetClass*) class;
-    container_class = (GtkContainerClass*) class;
+    //widget_class    = (GtkWidgetClass*) class;
+    //container_class = (GtkContainerClass*) class;
 
     parent_class = g_type_class_peek_parent (class);
 
@@ -2871,7 +2871,11 @@ static gboolean close_rigctld_socket (gint *sock) {
   gint written;
   /*shutdown the rigctld connect*/
   written = send(*sock, "q\x0a", 2, 0);
-  
+  if (written != 2) {
+      sat_log_log (SAT_LOG_LEVEL_BUG,
+                   _("%s:%s: Sent 2 bytes but sent %d."),
+                   __FILE__, __FUNCTION__, written);
+  }
 #ifndef WIN32
   shutdown (*sock, SHUT_RDWR);
   close (*sock);

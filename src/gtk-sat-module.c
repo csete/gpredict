@@ -137,15 +137,15 @@ gtk_sat_module_get_type ()
 static void
 gtk_sat_module_class_init (GtkSatModuleClass *class)
 {
-    GObjectClass      *gobject_class;
+    /*GObjectClass      *gobject_class;*/
     GtkObjectClass    *object_class;
-    GtkWidgetClass    *widget_class;
-    GtkContainerClass *container_class;
+    /*GtkWidgetClass    *widget_class;*/
+    /*GtkContainerClass *container_class;*/
 
-    gobject_class   = G_OBJECT_CLASS (class);
+    /*gobject_class   = G_OBJECT_CLASS (class);*/
     object_class    = (GtkObjectClass*) class;
-    widget_class    = (GtkWidgetClass*) class;
-    container_class = (GtkContainerClass*) class;
+    /*widget_class    = (GtkWidgetClass*) class;*/
+    /*container_class = (GtkContainerClass*) class;*/
 
     parent_class = g_type_class_peek_parent (class);
 
@@ -842,9 +842,10 @@ gtk_sat_module_timeout_cb     (gpointer module)
             qth_small_save(mod->qth,&(mod->qth_event));
         }
         /* update satellite data */
-        g_hash_table_foreach (mod->satellites,
-                              gtk_sat_module_update_sat,
-                              module);
+        if (mod->satellites != NULL)
+            g_hash_table_foreach (mod->satellites,
+                                  gtk_sat_module_update_sat,
+                                  module);
 
         /* update children */
         for (i = 0; i < mod->nviews; i++) {
@@ -854,9 +855,10 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
 
         /* update satellite data (it may have got out of sync during child updates) */
-        g_hash_table_foreach (mod->satellites,
-                              gtk_sat_module_update_sat,
-                              module);
+        if (mod->satellites != NULL) 
+            g_hash_table_foreach (mod->satellites,
+                                  gtk_sat_module_update_sat,
+                                  module);
 
         /* send notice to radio and rotator controller */
         if (mod->rigctrl)
@@ -954,10 +956,6 @@ gtk_sat_module_update_sat    (gpointer key, gpointer val, gpointer data)
     sat_t        *sat;
     GtkSatModule *module;
     gdouble       daynum;
-    double        age;
-    obs_set_t     obs_set = {0,0,0,0};
-    geodetic_t    sat_geodetic = {0,0,0,0};
-    geodetic_t    obs_geodetic = {0,0,0,0};
     gdouble       maxdt;
 
     (void) key; /* prevent unused parameter compiler warning */
