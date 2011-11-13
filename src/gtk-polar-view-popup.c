@@ -49,7 +49,6 @@
 
 static void track_toggled (GtkCheckMenuItem *item, gpointer data);
 /* static void target_toggled (GtkCheckMenuItem *item, gpointer data); */
-static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y);
 
 
 /** \brief Show satellite popup menu.
@@ -161,15 +160,6 @@ static void
     sat_obj_t          *obj = NULL;
     sat_t              *sat;
     /* qth_t              *qth; Unused */ 
-    gint               idx;
-    guint              i;
-    GooCanvasItemModel *root;
-    pass_detail_t      *detail;
-    guint              num;
-    GooCanvasPoints    *points;
-    gfloat             x,y;
-    guint32            col;
-    guint              tres,ttidx;
     gint              *catnum;
 
 
@@ -189,8 +179,6 @@ static void
     obj->showtrack = !obj->showtrack;
     gtk_check_menu_item_set_active (item, obj->showtrack);
 
-    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
-
     catnum = g_new0 (gint, 1);
     *catnum = sat->tle.catnr;
     
@@ -205,69 +193,7 @@ static void
         g_hash_table_remove (pv->showtracks_off,
                              catnum);
 
-
-        /* create points */
-        num = g_slist_length (obj->pass->details);
-        if (num == 0) {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
-                         _("%s:%d: Pass has no details."),
-                         __FILE__, __LINE__);
-            return;
-        }
-
-        /* time resolution for time ticks; we need
-                   3 additional points to AOS and LOS ticks.
-                */
-        tres = (num-2) / (TRACK_TICK_NUM-1);
-
-        points = goo_canvas_points_new (num);
-
-        /* first point should be (aos_az,0.0) */
-        azel_to_xy (pv, obj->pass->aos_az, 0.0, &x, &y);
-        points->coords[0] = (double) x;
-        points->coords[1] = (double) y;
-        obj->trtick[0] = create_time_tick (pv, obj->pass->aos, x, y);
-
-        ttidx = 1;
-
-        for (i = 1; i < num-1; i++) {
-            detail = PASS_DETAIL(g_slist_nth_data (obj->pass->details, i));
-            if (detail->el >=0.0)
-                azel_to_xy (pv, detail->az, detail->el, &x, &y);
-            points->coords[2*i] = (double) x;
-            points->coords[2*i+1] = (double) y;
-
-            if (!(i % tres)) {
-                /* create a time tick */
-                if (ttidx<TRACK_TICK_NUM)
-                    obj->trtick[ttidx] = create_time_tick (pv, detail->time, x, y);
-                ttidx++;
-            }
-        }
-
-        /* last point should be (los_az, 0.0)  */
-        azel_to_xy (pv, obj->pass->los_az, 0.0, &x, &y);
-        points->coords[2*(num-1)] = (double) x;
-        points->coords[2*(num-1)+1] = (double) y;
-
-        /* create poly-line */
-        col = mod_cfg_get_int (pv->cfgdata,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_TRACK_COL,
-                               SAT_CFG_INT_POLAR_TRACK_COL);
-
-        obj->track = goo_canvas_polyline_model_new (root, FALSE, 0,
-                                                    "points", points,
-                                                    "line-width", 1.0,
-                                                    "stroke-color-rgba", col,
-                                                    "line-cap", CAIRO_LINE_CAP_SQUARE,
-                                                    "line-join", CAIRO_LINE_JOIN_MITER,
-                                                    NULL);
-        goo_canvas_points_unref (points);
-
-        /* put track on the bottom of the sack */
-        goo_canvas_item_model_lower (obj->track, NULL);
-
+        gtk_polar_view_create_track (pv, obj, sat);
     }
     else {
         /* add it to the hide */
@@ -277,20 +203,9 @@ static void
         /* remove it from the show */
         g_hash_table_remove (pv->showtracks_on,
                              catnum);
+
         /* delete sky track */
-        idx = goo_canvas_item_model_find_child (root, obj->track);
-
-        if (idx != -1) {
-            goo_canvas_item_model_remove_child (root, idx);
-        }
-
-        for (i = 0; i < TRACK_TICK_NUM; i++) {
-            idx = goo_canvas_item_model_find_child (root, obj->trtick[i]);
-
-            if (idx != -1) {
-                goo_canvas_item_model_remove_child (root, idx);
-            }
-        }
+        gtk_polar_view_delete_track (pv, obj, sat);
     }
 
 }
@@ -324,43 +239,3 @@ static void
     gtk_check_menu_item_set_active (item, obj->istarget);
 }
 #endif
-
-
-static GooCanvasItemModel *
-        create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y)
-{
-    GooCanvasItemModel *item;
-    gchar              buff[7];
-    GtkAnchorType      anchor;
-    GooCanvasItemModel *root;
-    guint32            col;
-
-    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
-
-    col = mod_cfg_get_int (pv->cfgdata,
-                           MOD_CFG_POLAR_SECTION,
-                           MOD_CFG_POLAR_TRACK_COL,
-                           SAT_CFG_INT_POLAR_TRACK_COL);
-
-    daynum_to_str (buff, 8, "%H:%M", time);
-
-    if (x > pv->cx) {
-        anchor = GTK_ANCHOR_EAST;
-        x -= 5;
-    }
-    else {
-        anchor = GTK_ANCHOR_WEST;
-        x += 5;
-    }
-
-    item = goo_canvas_text_model_new (root, buff,
-                                      (gdouble) x, (gdouble) y,
-                                      -1, anchor,
-                                      "font", "Sans 7",
-                                      "fill-color-rgba", col,
-                                      NULL);
-
-    goo_canvas_item_model_lower (item, NULL);
-
-    return item;
-}

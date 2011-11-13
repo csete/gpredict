@@ -15,6 +15,11 @@
     * src/gtk-sat-map.c
     Add comments.
 
+    * src/gtk-polar-view.c
+    * src/gtk-polar-view.h
+    * src/gtk-polar-view-popup.c
+    Eliminate duplicate code in polar view and the popup.
+
 
 2011-11-05 Charles Suprin <hamaa1vs at gmail.com>
 

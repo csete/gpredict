@@ -152,11 +152,11 @@ GtkWidget*     gtk_polar_view_new        (GKeyFile   *cfgdata,
 void           gtk_polar_view_update     (GtkWidget  *widget);
 void           gtk_polar_view_reconf     (GtkWidget  *widget, GKeyFile *cfgdat);
 
-void azel_to_xy     (GtkPolarView *p, gdouble az, gdouble el, gfloat *x, gfloat *y);
-void xy_to_azel     (GtkPolarView *p, gfloat x, gfloat y, gfloat *az, gfloat *el);
-
 void gtk_polar_view_reload_sats (GtkWidget *polv, GHashTable *sats);
 void gtk_polar_view_select_sat  (GtkWidget *widget, gint catnum);
+
+void gtk_polar_view_create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat);
+void gtk_polar_view_delete_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat);
 
 #ifdef __cplusplus
 }

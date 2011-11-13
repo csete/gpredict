@@ -68,7 +68,6 @@ static void size_allocate_cb           (GtkWidget *widget,
                                         gpointer data);
 static void update_sat                 (gpointer key, gpointer value, gpointer data);
 static void update_track               (gpointer key, gpointer value, gpointer data);
-static void create_track               (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat);
 static void correct_pole_coor          (GtkPolarView *polv, polar_view_pole_t pole,
                                         gfloat *x, gfloat *y, GtkAnchorType *anch);
 static gboolean on_motion_notify       (GooCanvasItem *item,
@@ -94,6 +93,11 @@ static void get_canvas_bg_color        (GtkPolarView *polv, GdkColor *color);
 static gchar *los_time_to_str (GtkPolarView *polv, sat_t *sat);
 static void gtk_polar_view_store_showtracks (GtkPolarView *pv);
 static void gtk_polar_view_load_showtracks (GtkPolarView *pv);
+static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y);
+static void azel_to_xy     (GtkPolarView *p, gdouble az, gdouble el, gfloat *x, gfloat *y);
+static void xy_to_azel     (GtkPolarView *p, gfloat x, gfloat y, gfloat *az, gfloat *el);
+
+
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -833,17 +837,9 @@ update_sat    (gpointer key, gpointer value, gpointer data)
 
             /* remove sky track */
             if (obj->showtrack) {
-                idx = goo_canvas_item_model_find_child (root, obj->track);
-                if (idx != -1)
-                    goo_canvas_item_model_remove_child (root, idx);
-
-                for (i = 0; i < TRACK_TICK_NUM; i++) {
-                    idx = goo_canvas_item_model_find_child (root, obj->trtick[i]);
-                    if (idx != -1)
-                        goo_canvas_item_model_remove_child (root, idx);
-                }
+                gtk_polar_view_delete_track(polv,obj,sat);
             }
-            
+
             /* free pass info */
             free_pass (obj->pass);
             obj->pass=NULL;
@@ -946,7 +942,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                     
                     /* Finally, create the sky track if necessary */
                     if (obj->showtrack)
-                        create_track (polv, obj, sat);
+                        gtk_polar_view_create_track (polv, obj, sat);
                     
                 }
             }
@@ -1033,7 +1029,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                 
                 /* Finally, create the sky track if necessary */
                 if (obj->showtrack)
-                    create_track (polv, obj, sat);
+                    gtk_polar_view_create_track (polv, obj, sat);
                 
             } else {
                 /* obj == NULL */
@@ -1128,7 +1124,6 @@ update_track (gpointer key, gpointer value, gpointer data)
 }
 
 
-/**** FIXME: DUPLICATE from gtk-polar-view-popup.c - needed by create_track  ******/
 static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfloat x, gfloat y)
 {
     GooCanvasItemModel *item;
@@ -1175,7 +1170,7 @@ static GooCanvasItemModel *create_time_tick (GtkPolarView *pv, gdouble time, gfl
  * Note: This function is only used when the the satellite comes within range
  *       and the ALWAYS_SHOW_SKY_TRACK option is TRUE.
  */
-static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
+void gtk_polar_view_create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 {
     guint              i;
     GooCanvasItemModel *root;
@@ -1277,12 +1272,29 @@ static void create_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 
 }
 
-
-
-
+void gtk_polar_view_delete_track (GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
+{
+    gint              idx,i;
+    GooCanvasItemModel *root;
+    
+    root = goo_canvas_get_root_item_model (GOO_CANVAS (pv->canvas));
+    idx = goo_canvas_item_model_find_child (root, obj->track);
+    
+    if (idx != -1) {
+        goo_canvas_item_model_remove_child (root, idx);
+    }
+    
+    for (i = 0; i < TRACK_TICK_NUM; i++) {
+        idx = goo_canvas_item_model_find_child (root, obj->trtick[i]);
+        
+        if (idx != -1) {
+            goo_canvas_item_model_remove_child (root, idx);
+        }
+    }
+}
 
 /** \brief Convert Az/El to canvas based XY coordinates. */
-void
+static void
 azel_to_xy (GtkPolarView *p, gdouble az, gdouble el, gfloat *x, gfloat *y)
 {
     gdouble rel;
@@ -1328,7 +1340,7 @@ azel_to_xy (GtkPolarView *p, gdouble az, gdouble el, gfloat *x, gfloat *y)
 
 
 /** \brief Convert canvas based coordinates to Az/El. */
-void
+static void
 xy_to_azel    (GtkPolarView *p, gfloat x, gfloat y, gfloat *az, gfloat *el)
 {
     gfloat rel;
