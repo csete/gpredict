@@ -77,7 +77,9 @@ const gchar *SAT_LIST_COL_TITLE[SAT_LIST_COL_NUMBER] = {
     N_("MA"),
     N_("Phase"),
     N_("Orbit"),
-    N_("Vis")
+    N_("Vis"),
+    N_("Decay"),
+    N_("BOLD") /*should never be seen*/
 };
 
 
@@ -412,6 +414,7 @@ gtk_sat_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 colum
         column = gtk_tree_view_column_new_with_attributes (_(SAT_LIST_COL_TITLE[i]),
                                                            renderer,
                                                            "text", i,
+                                                           "weight",SAT_LIST_COL_BOLD,
                                                            NULL);
         gtk_tree_view_insert_column (GTK_TREE_VIEW (GTK_SAT_LIST (widget)->treeview),
                                      column, -1);
@@ -517,9 +520,11 @@ create_and_fill_model   (GHashTable      *sats)
                                     G_TYPE_DOUBLE,     // delay
                                     G_TYPE_DOUBLE,     // mean anomaly
                                     G_TYPE_DOUBLE,     // phase
-                                    G_TYPE_LONG,      // orbit
+                                    G_TYPE_LONG,       // orbit
                                     G_TYPE_STRING,     // visibility
-                                    G_TYPE_BOOLEAN);   // decay
+                                    G_TYPE_BOOLEAN,    // decay
+                                    G_TYPE_INT         // weight/bold
+                                    );   
 
 
     g_hash_table_foreach (sats, sat_list_add_satellites, liststore);
@@ -681,6 +686,7 @@ sat_list_update_sats (GtkTreeModel *model,
                             SAT_LIST_COL_PHASE, sat->phase,
                             SAT_LIST_COL_ORBIT, sat->orbit,
                             SAT_LIST_COL_DECAY, !decayed(sat),
+                            SAT_LIST_COL_BOLD,(sat->el>0.0)?PANGO_WEIGHT_BOLD:PANGO_WEIGHT_NORMAL,
                             -1);
 
         /* doppler shift @ 100 MHz */

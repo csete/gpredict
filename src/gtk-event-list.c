@@ -59,7 +59,9 @@ const gchar *EVENT_LIST_COL_TITLE[EVENT_LIST_COL_NUMBER] = {
     N_("Az"),
     N_("El"),
     N_("Event"),
-    N_("AOS/LOS")
+    N_("AOS/LOS"),
+    N_("Decayed"), /*should never be seen*/
+    N_("BOLD") /*should never be seen*/
 };
 
 
@@ -304,6 +306,7 @@ GtkWidget *gtk_event_list_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, 
         column = gtk_tree_view_column_new_with_attributes (_(EVENT_LIST_COL_TITLE[i]),
                                                            renderer,
                                                            "text", i,
+                                                           "weight", EVENT_LIST_COL_BOLD,
                                                            NULL);
 
         gtk_tree_view_insert_column (GTK_TREE_VIEW (evlist->treeview),
@@ -382,7 +385,8 @@ static GtkTreeModel *create_and_fill_model   (GHashTable      *sats)
                                     G_TYPE_DOUBLE,     // el
                                     G_TYPE_BOOLEAN,    // TRUE if AOS, FALSE if LOS
                                     G_TYPE_DOUBLE,     // time
-                                    G_TYPE_BOOLEAN);   // decayed 
+                                    G_TYPE_BOOLEAN,    // decayed 
+                                    G_TYPE_INT);       // bold for storing weight
 
     /* add each satellite from hash table */
     g_hash_table_foreach (sats, event_list_add_satellites, liststore);
@@ -531,6 +535,7 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
                             EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
                             EVENT_LIST_COL_TIME, number,
                             EVENT_LIST_COL_DECAY, !decayed(sat),
+                            EVENT_LIST_COL_BOLD,(sat->el>0.0)?PANGO_WEIGHT_BOLD:PANGO_WEIGHT_NORMAL,
                             -1);
 
     }

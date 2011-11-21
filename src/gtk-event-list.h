@@ -92,7 +92,8 @@ typedef enum {
         EVENT_LIST_COL_EL,          /*!< Satellite Elevation. */
         EVENT_LIST_COL_EVT,         /*!< Next event (AOS or LOS). */
         EVENT_LIST_COL_TIME,        /*!< Time countdown. */
-        EVENT_LIST_COL_DECAY,        /*!< Whether satellite is decayed or not. */
+        EVENT_LIST_COL_DECAY,       /*!< Whether satellite is decayed or not. */
+        EVENT_LIST_COL_BOLD,        /*!< Stores weight for rendering text. */
         EVENT_LIST_COL_NUMBER
 } event_list_col_t;
 

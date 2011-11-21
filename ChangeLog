@@ -3,6 +3,11 @@
     * src/gtk-sat-map.c
     Apply consistent checking of pole to eliminate disagreements. (Bug 3437555: Graphical Glitch Plotting Footprints near pole)
 
+    * src/gtk-sat-list.c
+    * src/gtk-sat-list.h
+    * src/gtk-event-list.c
+    * src/gtk-event-list.c
+    Bold entries for satellites above horizon. (Feature Request 3169710: Highlight satellites within range in the list view)
 2011-11-13 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-module-popup.c

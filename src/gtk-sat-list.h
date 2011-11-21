@@ -113,6 +113,7 @@ typedef enum {
      SAT_LIST_COL_ORBIT,       /*!< Orbit Number. */
      SAT_LIST_COL_VISIBILITY,  /*!< Visibility. */
      SAT_LIST_COL_DECAY,       /*!< Whether the satellite is decayed or not. */
+     SAT_LIST_COL_BOLD,        /*!< Used to render the satellites above the horizon bold. */
      SAT_LIST_COL_NUMBER
 } sat_list_col_t;
 
