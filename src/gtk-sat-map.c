@@ -96,6 +96,8 @@ static void load_map_file          (GtkSatMap *satmap);
 static GooCanvasItemModel*         create_canvas_model (GtkSatMap *satmap);
 static gdouble arccos              (gdouble, gdouble);
 static gboolean pole_is_covered    (sat_t *sat);
+static gboolean north_pole_is_covered    (sat_t *sat);
+static gboolean south_pole_is_covered    (sat_t *sat);
 static gboolean mirror_lon         (sat_t *sat, gdouble rangelon, gdouble *mlon);
 static guint calculate_footprint   (GtkSatMap *satmap, sat_t *sat);
 static void  split_points          (GtkSatMap *satmap, sat_t *sat, gdouble sspx);
@@ -1268,8 +1270,18 @@ arccos (gdouble x, gdouble y)
 static gboolean
 pole_is_covered   (sat_t *sat)
 {
-    int ret1,ret2;
-    gdouble qrb1, qrb2, az1, az2;
+    if (north_pole_is_covered(sat) ||south_pole_is_covered(sat))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+/** \brief Check whether the footprint covers the North pole. */
+static gboolean
+north_pole_is_covered (sat_t *sat) 
+{
+    int ret1;
+    gdouble qrb1, az1;
 
     ret1 = qrb (sat->ssplon, sat->ssplat, 0.0, 90.0, &qrb1, &az1);
     if (ret1 != RIG_OK) {
@@ -1277,17 +1289,28 @@ pole_is_covered   (sat_t *sat)
                      _("%s: Bad data measuring distance to North Pole %f %f."),
                      __FUNCTION__, sat->ssplon, sat->ssplat);
     }
-    ret2 = qrb (sat->ssplon, sat->ssplat, 0.0, -90.0, &qrb2, &az2);
-    if (ret2 != RIG_OK) {
+    if (qrb1 <= 0.5*sat->footprint) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/** \brief Check whether the footprint covers the South pole. */
+static gboolean
+south_pole_is_covered (sat_t *sat) 
+{
+    int ret1;
+    gdouble qrb1, az1;
+
+    ret1 = qrb (sat->ssplon, sat->ssplat, 0.0, -90.0, &qrb1, &az1);
+    if (ret1 != RIG_OK) {
         sat_log_log (SAT_LOG_LEVEL_ERROR, 
                      _("%s: Bad data measuring distance to South Pole %f %f."),
                      __FUNCTION__, sat->ssplon, sat->ssplat);
     }
-    
-    
-    if ((qrb1 <= 0.5*sat->footprint) || (qrb2 <= 0.5*sat->footprint))
+    if (qrb1 <= 0.5*sat->footprint) {
         return TRUE;
-    
+    }
     return FALSE;
 }
 
@@ -1384,10 +1407,10 @@ calculate_footprint (GtkSatMap *satmap, sat_t *sat)
         num = cos (beta) - (sin (ssplat) * sin (rangelat));
         dem = cos (ssplat) * cos (rangelat);
             
-        if (azi == 0 && (beta > pio2 - ssplat))
+        if (azi == 0 && north_pole_is_covered(sat))
             rangelon = ssplon + pi;
             
-        else if (azi == 180 && (beta > pio2 + ssplat))
+        else if (azi == 180 && south_pole_is_covered(sat))
             rangelon = ssplon + pi;
                 
         else if (fabs (num / dem) > 1.0)
@@ -1433,8 +1456,7 @@ calculate_footprint (GtkSatMap *satmap, sat_t *sat)
 
         sort_points_x (satmap, sat, points1, 360);
         numrc = 1;
-
-    }
+    } 
 
     /* pole not covered but range circle has been warped
        => split points */
