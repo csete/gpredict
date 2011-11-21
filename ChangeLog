@@ -8,6 +8,10 @@
     * src/gtk-event-list.c
     * src/gtk-event-list.c
     Bold entries for satellites above horizon. (Feature Request 3169710: Highlight satellites within range in the list view)
+    * src/gtk-single-sat.c
+    Eliminate segfault.
+
+
 2011-11-13 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-module-popup.c

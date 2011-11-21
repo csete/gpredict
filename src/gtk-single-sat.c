@@ -200,7 +200,8 @@ gtk_single_sat_destroy (GtkObject *object)
 {
     GtkSingleSat *ssat = GTK_SINGLE_SAT(object);
     sat_t      *sat = SAT (g_slist_nth_data (ssat->sats, ssat->selected));
-    g_key_file_set_integer (ssat->cfgdata,MOD_CFG_SINGLE_SAT_SECTION,MOD_CFG_SINGLE_SAT_SELECT,sat->tle.catnr);
+    if (sat !=NULL)
+        g_key_file_set_integer (ssat->cfgdata,MOD_CFG_SINGLE_SAT_SECTION,MOD_CFG_SINGLE_SAT_SELECT,sat->tle.catnr);
 
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
