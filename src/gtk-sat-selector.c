@@ -673,6 +673,11 @@ static void group_selected_cb (GtkComboBox *combobox, gpointer data)
     newmodel = GTK_TREE_MODEL (g_slist_nth_data (selector->models, sel));
 
     /* We changed the GtkTreeModel so we need to reset the sort column ID */
+    gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (newmodel),
+                                     GTK_SAT_SELECTOR_COL_NAME,
+                                     compare_func,
+                                     NULL,
+                                     NULL);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (newmodel),
                                           GTK_SAT_SELECTOR_COL_NAME,
                                           GTK_SORT_ASCENDING);

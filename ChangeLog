@@ -1,5 +1,11 @@
 2011-11-21 Charles Suprin <hamaa1vs at gmail.com>
 
+    * src/gtk-sat-selector.c
+    Apply compare function to all categories.
+
+
+2011-11-21 Charles Suprin <hamaa1vs at gmail.com>
+
     * src/gtk-sat-map.c
     Apply consistent checking of pole to eliminate disagreements. (Bug 3437555: Graphical Glitch Plotting Footprints near pole)
 
