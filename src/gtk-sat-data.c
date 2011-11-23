@@ -95,7 +95,6 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
             g_clear_error (&error);
             sat->nickname = g_strdup (sat->name);
         }
-        sat->escapednickname = g_markup_escape_text (sat->nickname, -1);
 
         sat->website = g_key_file_get_string (data, "Satellite", "WEBSITE", NULL); /* website may be NULL */
 

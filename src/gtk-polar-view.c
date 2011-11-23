@@ -884,13 +884,13 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             g_object_set (obj->label,"text",sat->nickname,NULL);
 
             /* update tooltip */
-            tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
-                                      "<tt>Az: %5.1f\302\260\n" \
-                                      "El: %5.1f\302\260\n" \
-                                      "%s</tt>",
-                                      sat->escapednickname,
-                                      sat->az, sat->el,
-                                      losstr);
+            tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"\
+                                              "<tt>Az: %5.1f\302\260\n" \
+                                              "El: %5.1f\302\260\n" \
+                                              "%s</tt>",
+                                              sat->nickname,
+                                              sat->az, sat->el,
+                                              losstr);
 
             g_object_set (obj->marker,
                           "x", x - MARKER_SIZE_HALF,
@@ -977,12 +977,12 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                           SAT_CFG_INT_POLAR_SAT_COL);
                 
                 /* create tooltip */
-                tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"  \
-                                          "<tt>Az: %5.1f\302\260\n" \
-                                          "El: %5.1f\302\260\n"     \
-                                          "</tt>",
-                                          sat->escapednickname,
-                                          sat->az, sat->el);
+                tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"  \
+                                                  "<tt>Az: %5.1f\302\260\n" \
+                                                  "El: %5.1f\302\260\n"     \
+                                                  "</tt>",
+                                                  sat->nickname,
+                                                  sat->az, sat->el);
                 
                 obj->marker = goo_canvas_rect_model_new (root,
                                                          x - MARKER_SIZE_HALF,

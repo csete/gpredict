@@ -749,17 +749,17 @@ gtk_sat_map_update (GtkWidget  *widget)
                         cs = g_strdup (":");
 
                     if (h > 0) 
-                        buff = g_strdup_printf (_("<span background=\"#%s\"> "\
-                                                "Next: %s in %s%d:%s%d%s%d </span>"),
-                                                satmap->infobgd,
-                                                sat->escapednickname,
-                                                ch, h, cm, m, cs, s);
+                        buff = g_markup_printf_escaped(_("<span background=\"#%s\"> "\
+                                                       "Next: %s in %s%d:%s%d%s%d </span>"),
+                                                       satmap->infobgd,
+                                                       sat->nickname,
+                                                       ch, h, cm, m, cs, s);
                     else 
-                        buff = g_strdup_printf (_("<span background=\"#%s\"> " \
-                                                "Next: %s in %s%d%s%d </span>"),
-                                                satmap->infobgd,
-                                                sat->escapednickname,
-                                                cm, m, cs, s);
+                        buff = g_markup_printf_escaped(_("<span background=\"#%s\"> " \
+                                                       "Next: %s in %s%d%s%d </span>"),
+                                                       satmap->infobgd,
+                                                       sat->nickname,
+                                                       cm, m, cs, s);
 
                     g_object_set (satmap->next,
                                   "text", buff,
@@ -1905,14 +1905,14 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                  SAT_CFG_INT_MAP_SHADOW_ALPHA);
 
     /* create tooltip */
-    tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
-                              "<tt>Lon: %5.1f\302\260\n" \
-                              "Lat: %5.1f\302\260\n" \
-                              " Az: %5.1f\302\260\n" \
-                              " El: %5.1f\302\260</tt>",
-                              sat->escapednickname,
-                              sat->ssplon, sat->ssplat,
-                              sat->az, sat->el);
+    tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"\
+                                      "<tt>Lon: %5.1f\302\260\n" \
+                                      "Lat: %5.1f\302\260\n" \
+                                      " Az: %5.1f\302\260\n" \
+                                      " El: %5.1f\302\260</tt>",
+                                      sat->nickname,
+                                      sat->ssplon, sat->ssplat,
+                                      sat->az, sat->el);
 
     /* create satellite marker and label + shadows. We create shadows first */
     obj->shadowm = goo_canvas_rect_model_new (root,
@@ -2097,16 +2097,16 @@ update_sat (gpointer key, gpointer value, gpointer data)
 
     /* we update tooltips every time */
     aosstr = aoslos_time_to_str(satmap, sat);
-    tooltip = g_strdup_printf("<big><b>%s</b>\n</big>"\
-                              "<tt>Lon: %5.1f\302\260\n" \
-                              "Lat: %5.1f\302\260\n" \
-                              " Az: %5.1f\302\260\n" \
-                              " El: %5.1f\302\260\n" \
-                              "%s</tt>",
-                              sat->escapednickname,
-                              sat->ssplon, sat->ssplat,
-                              sat->az, sat->el,
-                              aosstr);
+    tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"\
+                                      "<tt>Lon: %5.1f\302\260\n" \
+                                      "Lat: %5.1f\302\260\n" \
+                                      " Az: %5.1f\302\260\n" \
+                                      " El: %5.1f\302\260\n" \
+                                      "%s</tt>",
+                                      sat->nickname,
+                                      sat->ssplon, sat->ssplat,
+                                      sat->az, sat->el,
+                                      aosstr);
     g_object_set (obj->marker, "tooltip", tooltip, NULL);
     g_object_set (obj->label, "tooltip", tooltip, NULL);
     g_free (tooltip);
@@ -2310,12 +2310,12 @@ update_selected (GtkSatMap *satmap, sat_t *sat)
     /* if satellite appears to be GEO don't attempt to show AOS/LOS */
     if (isgeo) {
         if (sat->el > 0.0) {
-            text = g_strdup_printf ("<span background=\"#%s\"> %s: Always in range </span>",
-                                    satmap->infobgd, sat->escapednickname);
+            text = g_markup_printf_escaped("<span background=\"#%s\"> %s: Always in range </span>",
+                                           satmap->infobgd, sat->nickname);
         }
         else {
-            text = g_strdup_printf ("<span background=\"#%s\"> %s: Always out of range </span>",
-                                    satmap->infobgd, sat->escapednickname);
+            text = g_markup_printf_escaped("<span background=\"#%s\"> %s: Always out of range </span>",
+                                           satmap->infobgd, sat->nickname);
         }
     }
     else {
@@ -2349,16 +2349,16 @@ update_selected (GtkSatMap *satmap, sat_t *sat)
             cs = g_strdup (":");
 
         if (h > 0) {
-            text = g_strdup_printf ("<span background=\"#%s\"> "\
-                                    "%s %s in %s%d:%s%d%s%d </span>",
-                                    satmap->infobgd, sat->escapednickname,
-                                    alsstr, ch, h, cm, m, cs, s);
+            text = g_markup_printf_escaped("<span background=\"#%s\"> "\
+                                           "%s %s in %s%d:%s%d%s%d </span>",
+                                           satmap->infobgd, sat->nickname,
+                                           alsstr, ch, h, cm, m, cs, s);
         }
         else {
-            text = g_strdup_printf ("<span background=\"#%s\"> "\
-                                    "%s %s in %s%d%s%d </span>",
-                                    satmap->infobgd, sat->escapednickname,
-                                    alsstr, cm, m, cs, s);
+            text = g_markup_printf_escaped("<span background=\"#%s\"> "\
+                                           "%s %s in %s%d%s%d </span>",
+                                           satmap->infobgd, sat->nickname,
+                                           alsstr, cm, m, cs, s);
         }
 
         g_free (ch);
