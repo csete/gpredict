@@ -73,7 +73,7 @@ void
     gchar            *buff;
     sat_obj_t  *obj = NULL;
     gint           *catnum;
-
+    
 
 
     menu = gtk_menu_new ();
@@ -82,7 +82,7 @@ void
     menuitem = gtk_image_menu_item_new ();
     label = gtk_label_new (NULL);
     gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-    buff = g_strdup_printf ("<b>%s</b>", sat->nickname);
+    buff = g_strdup_printf ("<b>%s</b>", sat->escapednickname);
     gtk_label_set_markup (GTK_LABEL (label), buff);
     g_free (buff);
     gtk_container_add (GTK_CONTAINER (menuitem), label);

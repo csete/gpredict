@@ -888,7 +888,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                       "<tt>Az: %5.1f\302\260\n" \
                                       "El: %5.1f\302\260\n" \
                                       "%s</tt>",
-                                      sat->nickname,
+                                      sat->escapednickname,
                                       sat->az, sat->el,
                                       losstr);
 
@@ -981,7 +981,7 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                           "<tt>Az: %5.1f\302\260\n" \
                                           "El: %5.1f\302\260\n"     \
                                           "</tt>",
-                                          sat->nickname,
+                                          sat->escapednickname,
                                           sat->az, sat->el);
                 
                 obj->marker = goo_canvas_rect_model_new (root,

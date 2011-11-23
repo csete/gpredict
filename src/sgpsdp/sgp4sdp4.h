@@ -156,6 +156,7 @@ typedef struct {
 typedef struct {
         char           *name;
         char           *nickname;
+   	char           *escapednickname;
         char           *website;
 	tle_t           tle;     /*!< Keplerian elements */
 	int             flags;   /*!< Flags for algo ctrl */

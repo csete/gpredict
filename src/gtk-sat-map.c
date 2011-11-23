@@ -752,13 +752,13 @@ gtk_sat_map_update (GtkWidget  *widget)
                         buff = g_strdup_printf (_("<span background=\"#%s\"> "\
                                                 "Next: %s in %s%d:%s%d%s%d </span>"),
                                                 satmap->infobgd,
-                                                sat->nickname,
+                                                sat->escapednickname,
                                                 ch, h, cm, m, cs, s);
                     else 
                         buff = g_strdup_printf (_("<span background=\"#%s\"> " \
                                                 "Next: %s in %s%d%s%d </span>"),
                                                 satmap->infobgd,
-                                                sat->nickname,
+                                                sat->escapednickname,
                                                 cm, m, cs, s);
 
                     g_object_set (satmap->next,
@@ -1831,7 +1831,7 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     guint32 col,covcol,shadowcol;
     gfloat x,y;
     gchar *tooltip;
-    
+
     (void) key; /* avoid unusued parameter compiler warning */
 
     if (decayed(sat)) {
@@ -1910,10 +1910,9 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                               "Lat: %5.1f\302\260\n" \
                               " Az: %5.1f\302\260\n" \
                               " El: %5.1f\302\260</tt>",
-                              sat->nickname,
+                              sat->escapednickname,
                               sat->ssplon, sat->ssplat,
                               sat->az, sat->el);
-
 
     /* create satellite marker and label + shadows. We create shadows first */
     obj->shadowm = goo_canvas_rect_model_new (root,
@@ -2104,7 +2103,7 @@ update_sat (gpointer key, gpointer value, gpointer data)
                               " Az: %5.1f\302\260\n" \
                               " El: %5.1f\302\260\n" \
                               "%s</tt>",
-                              sat->nickname,
+                              sat->escapednickname,
                               sat->ssplon, sat->ssplat,
                               sat->az, sat->el,
                               aosstr);
@@ -2312,11 +2311,11 @@ update_selected (GtkSatMap *satmap, sat_t *sat)
     if (isgeo) {
         if (sat->el > 0.0) {
             text = g_strdup_printf ("<span background=\"#%s\"> %s: Always in range </span>",
-                                    satmap->infobgd, sat->nickname);
+                                    satmap->infobgd, sat->escapednickname);
         }
         else {
             text = g_strdup_printf ("<span background=\"#%s\"> %s: Always out of range </span>",
-                                    satmap->infobgd, sat->nickname);
+                                    satmap->infobgd, sat->escapednickname);
         }
     }
     else {
@@ -2352,13 +2351,13 @@ update_selected (GtkSatMap *satmap, sat_t *sat)
         if (h > 0) {
             text = g_strdup_printf ("<span background=\"#%s\"> "\
                                     "%s %s in %s%d:%s%d%s%d </span>",
-                                    satmap->infobgd, sat->nickname,
+                                    satmap->infobgd, sat->escapednickname,
                                     alsstr, ch, h, cm, m, cs, s);
         }
         else {
             text = g_strdup_printf ("<span background=\"#%s\"> "\
                                     "%s %s in %s%d%s%d </span>",
-                                    satmap->infobgd, sat->nickname,
+                                    satmap->infobgd, sat->escapednickname,
                                     alsstr, cm, m, cs, s);
         }
 

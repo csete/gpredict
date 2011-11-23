@@ -1,4 +1,19 @@
-2011-11-21 Charles Suprin <hamaa1vs at gmail.com>
+2011-11-23 Charles Suprin <hamaa1vs at gmail.com>
+
+    * src/gtk-event-list-popup.c
+    * src/gtk-sat-data.c
+    * src/gtk-sat-list-popup.c
+    * src/gtk-sat-map.c
+    * src/gtk-sat-map-popup.c
+    * src/gtk-polar-view.c
+    * src/gtk-polar-view-popup.c
+    * src/gtk-single-sat.c
+    * src/sat-info.c
+    * src/sgpsdp/sgp4sdp4.h
+    Escape satellite nicknames and use them when in markup. (Bug 3441490: Satellite Nickname Not escaped for PANGO.)
+
+
+2011-11-22 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-selector.c
     Apply compare function to all categories.

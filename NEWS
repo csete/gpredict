@@ -22,6 +22,7 @@ Changes in version 1.4 (TBD)
 - Fixed bug 3419879: gpredict doesn't change the satellite names on world map.
 - Fixed bug 3292729: Show next pass shows the current pass.
 - Fixed bug 3437555: Graphical Glitch Plotting Footprints near pole.
+- Fixed bug 3441490: Satellite Nickname Not escaped for PANGO.
 
 Changes in version 1.3 (1 Mar 2011)
 
