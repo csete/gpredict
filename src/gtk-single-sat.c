@@ -268,8 +268,7 @@ gtk_single_sat_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth, guint32 fie
 
     /* create header */
     sat = SAT (g_slist_nth_data (GTK_SINGLE_SAT (widget)->sats, 0));
-    title = g_strdup_printf ("<b>%s</b>", sat ? sat->nickname : "noname");
-
+    title = g_strdup_printf ("<b>%s</b>", sat ? sat->escapednickname : "noname");
     GTK_SINGLE_SAT (widget)->header = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (GTK_SINGLE_SAT (widget)->header), title);
     g_free (title);
@@ -371,8 +370,7 @@ void gtk_single_sat_select_sat (GtkWidget *single_sat, gint catnum)
                     __FUNCTION__, catnum);
         return;
     }
-
-    title = g_strdup_printf ("<b>%s</b>", sat->nickname);
+    title = g_strdup_printf ("<b>%s</b>", sat->escapednickname);
     gtk_label_set_markup (GTK_LABEL (ssat->header), title);
     g_free (title);
 
@@ -827,7 +825,7 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
     menuitem = gtk_image_menu_item_new ();
     label = gtk_label_new (NULL);
     gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-    buff = g_strdup_printf ("<b>%s</b>", sat->nickname);
+    buff = g_strdup_printf ("<b>%s</b>", sat->escapednickname);
     gtk_label_set_markup (GTK_LABEL (label), buff);
     g_free (buff);
     gtk_container_add (GTK_CONTAINER (menuitem), label);
@@ -923,7 +921,7 @@ select_satellite        (GtkWidget *menuitem, gpointer data)
 
         sat = SAT (g_slist_nth_data (ssat->sats, i));
 
-        title = g_strdup_printf ("<b>%s</b>", sat->nickname);
+        title = g_strdup_printf ("<b>%s</b>", sat->escapednickname);
         gtk_label_set_markup (GTK_LABEL (ssat->header), title);
         g_free (title);
 
