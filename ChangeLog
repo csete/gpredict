@@ -1,3 +1,16 @@
+2011-12-06 Alexandru Csete <oz9aec at gmail.com>
+
+    * src/about.c:
+    * src/gtk-sat-module.c:
+    * src/gtk-sat-module.c:
+    * src/sat-info.c:
+    * src/sat-pass-dialogs.c:
+    * src/sat-pref-qth.c:
+    * src/sat-pref-rot.c:
+    * src/sat-pref-rot-editor.c:
+    Fix typos (bug 3451841).
+
+
 2011-11-23 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-event-list-popup.c
@@ -10,7 +23,8 @@
     * src/gtk-single-sat.c
     * src/sat-info.c
     * src/sgpsdp/sgp4sdp4.h
-    Escape satellite nicknames and use them when in markup. (Bug 3441490: Satellite Nickname Not escaped for PANGO.)
+    Escape satellite nicknames and use them when in markup.
+    (Bug 3441490: Satellite Nickname Not escaped for PANGO.)
 
 
 2011-11-22 Charles Suprin <hamaa1vs at gmail.com>
@@ -22,13 +36,16 @@
 2011-11-21 Charles Suprin <hamaa1vs at gmail.com>
 
     * src/gtk-sat-map.c
-    Apply consistent checking of pole to eliminate disagreements. (Bug 3437555: Graphical Glitch Plotting Footprints near pole)
+    Apply consistent checking of pole to eliminate disagreements.
+    (Bug 3437555: Graphical Glitch Plotting Footprints near pole)
 
     * src/gtk-sat-list.c
     * src/gtk-sat-list.h
     * src/gtk-event-list.c
     * src/gtk-event-list.c
-    Bold entries for satellites above horizon. (Feature Request 3169710: Highlight satellites within range in the list view)
+    Bold entries for satellites above horizon.
+    (Feature Request 3169710: Highlight satellites within range in the list view)
+
     * src/gtk-single-sat.c
     Eliminate segfault.
 

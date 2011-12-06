@@ -980,7 +980,7 @@ delete_location_files ()
                     /* remove file */
                     if (g_remove (buff)) {
                          sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                         _("%s:%d: Failed top remove %s"),
+                                         _("%s:%d: Failed to remove %s"),
                                          __FILE__, __LINE__, filename);
                     }
                     else {

@@ -690,7 +690,7 @@ static void render_aztype (GtkTreeViewColumn *col,
             break;
             
         default:
-            text = g_strdup_printf (_("Uknown (%d)"), number);
+            text = g_strdup_printf (_("Unknown (%d)"), number);
             break;
     }
     

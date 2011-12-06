@@ -67,7 +67,7 @@ const gchar *authors[] = {
 const gchar license[] = N_("Copyright (C) 2001-2011 Alexandru Csete OZ9AEC and contributors.\n"\
                            "Contact: oz9aec at gmail.com\n\n"\
                            "Gpredict is free software; you can redistribute it and "\
-                           "mofdify it under the terms of the GNU General Public License "\
+                           "modify it under the terms of the GNU General Public License "\
                            "as published by the Free Software Foundation; either version 2 "\
                            "of the License, or (at your option) any later version.\n\n"\
                            "This program is distributed free of charge in the hope that it will "\

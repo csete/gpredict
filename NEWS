@@ -23,6 +23,8 @@ Changes in version 1.4 (TBD)
 - Fixed bug 3292729: Show next pass shows the current pass.
 - Fixed bug 3437555: Graphical Glitch Plotting Footprints near pole.
 - Fixed bug 3441490: Satellite Nickname Not escaped for PANGO.
+- Fixed bug 3451841: Typos.
+
 
 Changes in version 1.3 (1 Mar 2011)
 

@@ -176,7 +176,7 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_entry_set_max_length (GTK_ENTRY (host), 50);
     gtk_entry_set_text (GTK_ENTRY (host), "localhost");
     gtk_widget_set_tooltip_text (host,
-                                 _("Enter the host where rigctld is running. "\
+                                 _("Enter the host where rotctld is running. "\
                                  "You can use both host name and IP address, "\
                                  "e.g. 192.168.1.100\n\n"\
                                  "If gpredict and rotctld are running on the "\

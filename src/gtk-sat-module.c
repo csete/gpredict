@@ -1077,7 +1077,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     name = g_strdup (module->name);
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                 _("%s: Module %s recevied CLOSE signal."),
+                 _("%s: Module %s received CLOSE signal."),
                  __FUNCTION__, name);
 
     switch (module->state) {
@@ -1212,7 +1212,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
     name = g_strdup (module->name);
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                 _("%s: Module %s recevied CONFIG signal."),
+                 _("%s: Module %s received CONFIG signal."),
                  __FUNCTION__, name);
 
     /* stop timeout */

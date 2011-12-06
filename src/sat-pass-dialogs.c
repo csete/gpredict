@@ -71,7 +71,7 @@ const gchar *MULTI_PASS_COL_TITLE[MULTI_PASS_COL_NUMBER] = {
 
 /** \brief Descriptive text for multi-pass list columns. */
 const gchar *MULTI_PASS_COL_HINT[MULTI_PASS_COL_NUMBER] = {
-    N_("Aquisition of signal (AOS)"),
+    N_("Acquisition of signal (AOS)"),
     N_("Time of Closest Approach (TCA)"),
     N_("Loss of signal (LOS)"),
     N_("Duration of pass"),

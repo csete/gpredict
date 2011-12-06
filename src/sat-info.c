@@ -155,7 +155,7 @@ show_sat_info (sat_t *sat, gpointer data)
     g_free (str);
 
     /* international designator */
-    label = gtk_label_new (_("Internation designator:"));
+    label = gtk_label_new (_("International designator:"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, 3, 4);
 
