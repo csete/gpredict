@@ -117,6 +117,8 @@ typedef struct {
     
     GooCanvasItemModel *map;            /*!< The canvas map item. */
     
+    gdouble             left_side_lon;  /*!< Left-most longitude (used when center is not 0 lon). */
+    
     GooCanvasItemModel *qthmark;        /*!< QTH marker, e.g. small rectangle. */
     GooCanvasItemModel *qthlabel;       /*!< Label showing the QTH name. */
     

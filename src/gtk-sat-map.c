@@ -58,6 +58,7 @@
 #include "sat-info.h"
 #include "predict-tools.h"
 #include "orbit-tools.h"
+#include "map-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -92,13 +93,13 @@ static gboolean on_button_release  (GooCanvasItem *item,
                                     GdkEventButton *event,
                                     gpointer data);
 static void clear_selection        (gpointer key, gpointer val, gpointer data);
-static void load_map_file          (GtkSatMap *satmap);
+static void load_map_file          (GtkSatMap *satmap, float clon);
 static GooCanvasItemModel*         create_canvas_model (GtkSatMap *satmap);
 static gdouble arccos              (gdouble, gdouble);
 static gboolean pole_is_covered    (sat_t *sat);
 static gboolean north_pole_is_covered    (sat_t *sat);
 static gboolean south_pole_is_covered    (sat_t *sat);
-static gboolean mirror_lon         (sat_t *sat, gdouble rangelon, gdouble *mlon);
+static gboolean mirror_lon         (sat_t *sat, gdouble rangelon, gdouble *mlon, gdouble mapbreak);
 static guint calculate_footprint   (GtkSatMap *satmap, sat_t *sat);
 static void  split_points          (GtkSatMap *satmap, sat_t *sat, gdouble sspx);
 static void sort_points_x          (GtkSatMap *satmap, sat_t *sat, GooCanvasPoints *points, gint num);
@@ -274,7 +275,7 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
     g_object_set (G_OBJECT (GTK_SAT_MAP (satmap)->canvas), "has-tooltip", TRUE, NULL);
 
     /* safely load a background map */
-    load_map_file (GTK_SAT_MAP (satmap));
+    load_map_file (GTK_SAT_MAP(satmap), 0.0);
 
     /* Initial size request should be based on map size
        but if we do this we can not shrink the canvas below this size
@@ -806,8 +807,14 @@ gtk_sat_map_update (GtkWidget  *widget)
 static void
 lonlat_to_xy (GtkSatMap *p, gdouble lon, gdouble lat, gfloat *x, gfloat *y)
 {
-    *x = p->x0 + (180.0 + lon) * p->width / 360.0;
-    *y = p->y0 + (90.0 - lat) * p->height / 180.0;;
+    *x = p->x0 + (lon - p->left_side_lon) * p->width / 360.0;
+    *y = p->y0 + (90.0 - lat) * p->height / 180.0;
+    while (*x < 0) {
+        *x += p->width;
+    }
+    while (*x > p->width) {
+        *x -= p->width;
+    }
 }
 
 
@@ -826,7 +833,13 @@ static void
 xy_to_lonlat (GtkSatMap *p, gfloat x, gfloat y, gfloat *lon, gfloat *lat)
 {
     *lat = 90.0 - (180.0 / p->height) * (y - p->y0);
-    *lon = (360.0 / p->width) * (x - p->x0) - 180.0;
+    *lon = (360.0 / p->width) * (x - p->x0) + p->left_side_lon;
+    while (*lon > 180) {
+        *lon -= 360;
+    }
+    while (*lon < -180) {
+        *lon += 360;
+    }
 }
 
 
@@ -1164,6 +1177,7 @@ gtk_sat_map_reconf (GtkWidget  *widget, GKeyFile *cfgdat)
 
 /** \brief Safely load a map file.
  *  \param satmap The GtkSatMap widget
+ *  \param clon The longitude that should be the center of the map
  *
  * This function is called shortly after the canvas has been created. Its purpose
  * is to load a mapfile into satmap->origmap.
@@ -1176,15 +1190,16 @@ gtk_sat_map_reconf (GtkWidget  *widget, GKeyFile *cfgdat)
  *   - If loading of default map does not succeed, create a dummy GdkPixbuf
  *     (and raise all possible alarms)
  *
- * \note satmap->cfgdata cshould contain a valid GKeyFile.
+ * \note satmap->cfgdata should contain a valid GKeyFile.
  *
  */
 static void
-load_map_file (GtkSatMap *satmap)
+load_map_file (GtkSatMap *satmap, float clon)
 {
     gchar *buff;
     gchar *mapfile;
     GError *error = NULL;
+    GdkPixbuf *tmpbuf;
 
     /* get local, global or default map file */
     buff = mod_cfg_get_str (satmap->cfgdata,
@@ -1227,7 +1242,7 @@ load_map_file (GtkSatMap *satmap)
     }
 
     /* try to load the map file */
-    satmap->origmap = gdk_pixbuf_new_from_file (mapfile, &error);
+    tmpbuf = gdk_pixbuf_new_from_file (mapfile, &error);
 
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -1236,13 +1251,30 @@ load_map_file (GtkSatMap *satmap)
         g_clear_error (&error);
 
         /* create a dummy GdkPixbuf to avoid crash */
-        satmap->origmap = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-                                          FALSE,
-                                          8, 400, 200);
-        gdk_pixbuf_fill (satmap->origmap, 0x0F0F0F0F);
+        tmpbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+                                 FALSE,
+                                 8, 400, 200);
+        gdk_pixbuf_fill (tmpbuf, 0x0F0F0F0F);
     }
-                
-    g_free (mapfile);
+    
+    /* create a blank map with same parameters as tmpbuf */
+    satmap->origmap = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
+                                     FALSE,
+                                     gdk_pixbuf_get_bits_per_sample(tmpbuf),
+                                     gdk_pixbuf_get_width(tmpbuf),
+                                     gdk_pixbuf_get_height(tmpbuf));
+
+    map_tools_shift_center(tmpbuf, satmap->origmap, clon);
+    g_object_unref(tmpbuf);
+    g_free(mapfile);
+
+    /* Calculate longitude at the left side (-180 deg if center is at 0 deg longitude) */
+    satmap->left_side_lon = -180.0;
+    if (clon > 0.0)
+        satmap->left_side_lon += clon;
+    else if (clon < 0.0)
+        satmap->left_side_lon = 180.0 + clon;
+
 }
 
 
@@ -1317,31 +1349,37 @@ south_pole_is_covered (sat_t *sat)
 
 /** \brief Mirror the footprint longitude. */
 static gboolean
-mirror_lon (sat_t *sat, gdouble rangelon, gdouble *mlon)
+mirror_lon (sat_t *sat, gdouble rangelon, gdouble *mlon, gdouble mapbreak)
 {
     gdouble diff;
     gboolean warped = FALSE;
+  
+    /* make it so rangelon is on left of ssplon */
+    diff = (sat->ssplon - rangelon);
+    while (diff < 0 )
+        diff += 360;
+    while (diff > 360 )
+        diff -= 360;
 
-    if (sat->ssplon < 0.0) {
-        /* western longitude */
-        if (rangelon < 0.0) {
-            /* rangelon has not been warped over */
-            *mlon = sat->ssplon + fabs (rangelon - sat->ssplon);
-        }
-        else {
-            /* rangelon has been warped over */
-            diff = 360.0 + sat->ssplon - rangelon;
-            *mlon = sat->ssplon + diff;
+    *mlon = sat->ssplon + fabs(diff);
+    while (*mlon > 180)
+        *mlon -= 360;
+    while (*mlon < -180)
+        *mlon += 360;
+    //printf("Something %s %f %f %f\n",sat->nickname, sat->ssplon, rangelon,mapbreak);
+    if (((sat->ssplon >= mapbreak) && (sat->ssplon < mapbreak + 180)) ||
+        ((sat->ssplon < mapbreak - 180) && (sat->ssplon >= mapbreak - 360))) {
+        if (((rangelon >= mapbreak) && (rangelon < mapbreak + 180)) ||
+            ((rangelon < mapbreak - 180) && (rangelon >= mapbreak - 360))) {
+        } else {
             warped = TRUE;
-        }
-    }
-    else {
-        /* eastern longitude */
-        *mlon = sat->ssplon + fabs (rangelon - sat->ssplon);
-        
-        if (*mlon > 180.0) {
-            *mlon -= 360;
-            warped = TRUE;
+            //printf ("sat %s warped for first \n",sat->nickname);
+        } 
+    } else {
+        if (((*mlon >= mapbreak) && (*mlon < mapbreak + 180)) || 
+            ((*mlon < mapbreak - 180) && (*mlon >= mapbreak - 360))) {
+             warped = TRUE;
+            //printf ("sat %s warped for second \n",sat->nickname);
         }
     }
 
@@ -1433,7 +1471,7 @@ calculate_footprint (GtkSatMap *satmap, sat_t *sat)
         rangelon = rangelon / de2ra;
 
         /* mirror longitude */
-        if (mirror_lon (sat, rangelon, &mlon))
+        if (mirror_lon (sat, rangelon, &mlon, satmap->left_side_lon))
             warped = TRUE;
 
         lonlat_to_xy (satmap, rangelon, rangelat, &sx, &sy);
@@ -1447,7 +1485,7 @@ calculate_footprint (GtkSatMap *satmap, sat_t *sat)
         points1->coords[719-2*azi] = msy;
     }
 
-    /* points1 ow contains 360 pairs of map-based XY coordinates.
+    /* points1 now contains 360 pairs of map-based XY coordinates.
        Check whether actions 1, 2 or 3 have to be performed.
     */
 
