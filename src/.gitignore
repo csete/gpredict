@@ -1,3 +1,7 @@
 Makefile
 Makefile.in
 *.o
+gpredict
+sgpsdp/test-001
+sgpsdp/test-002
+.deps
