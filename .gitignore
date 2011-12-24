@@ -1,5 +1,7 @@
 Makefile
 Makefile.in
+build-config.h
+build-config.h.in
 configure
 config.guess
 config.h
@@ -8,8 +10,11 @@ config.log
 config.status
 config.sub
 config.cache
+depcomp
 aclocal.m4
 autom4te.cache
+INSTALL
+install-sh
 intltool-extract
 intltool-extract.in
 intltool-merge
@@ -17,6 +22,7 @@ intltool-merge.in
 intltool-update
 intltool-update.in
 ltmain.sh
+missing
 stamp-h.in
 stamp-h
 stamp-h1
