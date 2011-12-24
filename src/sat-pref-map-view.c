@@ -56,6 +56,9 @@ static GtkWidget *shadow;
 /* ground track orbit number selector */
 static GtkWidget *orbit;
 
+/* map center spin box */
+static GtkWidget *center;
+
 /* misc bookkeeping */
 static gboolean dirty = FALSE;
 static gboolean reset = FALSE;
@@ -65,12 +68,14 @@ static void create_map_selector     (GKeyFile *cfg, GtkBox *vbox);
 static void create_bool_selectors   (GKeyFile *cfg, GtkBox *vbox);
 static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox);
 static void create_orbit_selector   (GKeyFile *cfg, GtkBox *vbox);
+static void create_center_selector  (GKeyFile *cfg, GtkBox *vbox);
 static void create_reset_button     (GKeyFile *cfg, GtkBox *vbox);
 
 /* private function: callbacks */
 static void content_changed (GtkToggleButton *but, gpointer data);
 static void colour_changed  (GtkWidget *but, gpointer data);
 static void orbit_changed   (GtkWidget *spin, gpointer data);
+static void center_changed   (GtkWidget *spin, gpointer data);
 static void reset_cb        (GtkWidget *button, gpointer cfg);
 
 static void select_map_cb   (GtkWidget *button, gpointer data);
@@ -88,7 +93,7 @@ static gboolean shadow_changed (GtkRange *range, GtkScrollType scroll, gdouble v
 GtkWidget *sat_pref_map_view_create (GKeyFile *cfg)
 {
     GtkWidget *vbox;
-
+    GtkWidget *swin;
 
     /* create vertical box */
     vbox = gtk_vbox_new (FALSE, 2); // !!!
@@ -102,13 +107,20 @@ GtkWidget *sat_pref_map_view_create (GKeyFile *cfg)
     create_colour_selectors (cfg, GTK_BOX (vbox));
     gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 10);
     create_orbit_selector (cfg, GTK_BOX (vbox));
+    create_center_selector (cfg, GTK_BOX (vbox));
     gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 10);
     create_reset_button (cfg, GTK_BOX (vbox));
 
     reset = FALSE;
     dirty = FALSE;
 
-    return vbox;
+    /* pack vbox into a scrolled window to reduce vertical size of the window */
+    swin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
+                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), vbox);
+
+    return swin;
 
 }
 
@@ -130,9 +142,9 @@ static void create_map_selector  (GKeyFile *cfg, GtkBox *vbox)
                           _("<b>Background Map:</b>"));
     gtk_box_pack_start (vbox, label, FALSE, TRUE, 0);
 
-    /* create a table to pu the map preview and select button in.
-        using a simple hbox won't do it because the button would have
-        the same height as the map preview
+    /* create a table to put the map preview and select button in.
+       using a simple hbox won't do it because the button would have
+       the same height as the map preview
      */
     table = gtk_table_new (3, 2, TRUE);
     gtk_box_pack_start (vbox, table, FALSE, FALSE, 0);
@@ -632,6 +644,51 @@ static void create_orbit_selector   (GKeyFile *cfg, GtkBox *vbox)
 }
 
 
+/** \brief Create map center selector widget.
+ *  \param cfg The module configuration or NULL in global mode.
+ *  \param vbox The container box in which the widgets should be packed into.
+ *
+ * This function creates the widgets for selecting the longitude around which
+ * to center the map.
+ *
+ */
+static void create_center_selector(GKeyFile *cfg, GtkBox *vbox)
+{
+    GtkWidget   *label;
+    GtkWidget   *hbox;
+    gint         clon;
+
+    hbox = gtk_hbox_new (FALSE, 10);
+    gtk_box_pack_start (vbox, hbox, FALSE, TRUE, 0);
+
+    label = gtk_label_new (_("Center map at longitude"));
+    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+    center = gtk_spin_button_new_with_range(-180, 180, 1);
+    gtk_widget_set_tooltip_text(center, _("Select longitude. West is negative."));
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (center), 0);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (center), TRUE);
+
+    if (cfg != NULL) {
+        clon = mod_cfg_get_int (cfg,
+                                MOD_CFG_MAP_SECTION,
+                                MOD_CFG_MAP_CENTER,
+                                SAT_CFG_INT_MAP_CENTER);
+    }
+    else {
+        clon = sat_cfg_get_int (SAT_CFG_INT_MAP_CENTER);
+    }
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (center), clon);
+    g_signal_connect (G_OBJECT (center), "value-changed",
+                      G_CALLBACK (center_changed), NULL);
+
+    gtk_box_pack_start (GTK_BOX (hbox), center, FALSE, FALSE, 0);
+
+    label = gtk_label_new (_("[deg]"));
+    gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+}
+
+
 /** \brief Create RESET button.
  *  \param cfg Config data or NULL in global mode.
  *  \param vbox The container.
@@ -700,6 +757,14 @@ static void colour_changed (GtkWidget *but, gpointer data)
 
 
 static void orbit_changed (GtkWidget *spin, gpointer data)
+{
+    (void) spin; /* avoid unused parameter compiler warning */
+    (void) data; /* avoid unused parameter compiler warning */
+    
+    dirty = TRUE;
+}
+
+static void center_changed (GtkWidget *spin, gpointer data)
 {
     (void) spin; /* avoid unused parameter compiler warning */
     (void) data; /* avoid unused parameter compiler warning */
@@ -811,6 +876,9 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (orbit),
                                    sat_cfg_get_int_def (SAT_CFG_INT_MAP_TRACK_NUM));
 
+        /* center longitude */
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (center),
+                                   sat_cfg_get_int_def (SAT_CFG_INT_MAP_CENTER));
     }
     else {
         /* local mode, get global value */
@@ -882,6 +950,10 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
         /* ground track orbits */
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (orbit),
                                    sat_cfg_get_int (SAT_CFG_INT_MAP_TRACK_NUM));
+
+        /* center longitude */
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (center),
+                                   sat_cfg_get_int (SAT_CFG_INT_MAP_CENTER));
     }
 
     /* map file */
@@ -995,6 +1067,10 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
             /* orbit */
             g_key_file_set_integer (cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_TRACK_NUM,
                                     gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (orbit)));
+
+            /* map center */
+            g_key_file_set_integer (cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_CENTER,
+                                    gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (center)));
         }
         else {
             /* use sat_cfg_set_xxx */
@@ -1067,6 +1143,9 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
             sat_cfg_set_int (SAT_CFG_INT_MAP_TRACK_NUM,
                              gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (orbit)));
 
+            /* map center */
+            sat_cfg_set_int (SAT_CFG_INT_MAP_CENTER,
+                             gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (center)));
         }
 
         dirty = FALSE;
@@ -1140,7 +1219,10 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
                                    MOD_CFG_MAP_SECTION,
                                    MOD_CFG_MAP_TRACK_NUM,
                                    NULL);
-
+            g_key_file_remove_key (cfg,
+                                   MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_CENTER,
+                                   NULL);
         }
         else {
             /* use sat_cfg_reset_xxx */
@@ -1165,8 +1247,12 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
             sat_cfg_reset_int (SAT_CFG_INT_MAP_INFO_COL);
             sat_cfg_reset_int (SAT_CFG_INT_MAP_INFO_BGD_COL);
             sat_cfg_reset_int (SAT_CFG_INT_MAP_SHADOW_ALPHA);
+
+            /* orbit */
             sat_cfg_reset_int (SAT_CFG_INT_MAP_TRACK_NUM);
 
+            /* map center */
+            sat_cfg_reset_int (SAT_CFG_INT_MAP_CENTER);
         }
         reset = FALSE;
     }
