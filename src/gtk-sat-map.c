@@ -275,7 +275,12 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
     g_object_set (G_OBJECT (GTK_SAT_MAP (satmap)->canvas), "has-tooltip", TRUE, NULL);
 
     /* safely load a background map */
-    load_map_file (GTK_SAT_MAP(satmap), 0.0);
+    float clon = (float) mod_cfg_get_int(cfgdata,
+                                         MOD_CFG_MAP_SECTION,
+                                         MOD_CFG_MAP_CENTER,
+                                         SAT_CFG_INT_MAP_CENTER);
+    load_map_file(GTK_SAT_MAP(satmap), clon);
+                  
 
     /* Initial size request should be based on map size
        but if we do this we can not shrink the canvas below this size

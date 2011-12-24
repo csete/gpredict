@@ -74,6 +74,7 @@ typedef enum {
     SAT_CFG_INT_WARP_FACTOR,          /*!< Time compression factor. */
     SAT_CFG_INT_LIST_REFRESH,         /*!< List refresh rate (cycle). */
     SAT_CFG_INT_LIST_COLUMNS,         /*!< List column visibility. */
+    SAT_CFG_INT_MAP_CENTER,           /*!< Longitude around which the map is centered. */
     SAT_CFG_INT_MAP_REFRESH,          /*!< Map refresh rate (cycle). */
     SAT_CFG_INT_MAP_INFO_COL,         /*!< Info text colour on maps. */
     SAT_CFG_INT_MAP_INFO_BGD_COL,     /*!< Info text bgd colour on maps. */
