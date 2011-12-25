@@ -25,6 +25,7 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
+#include <math.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
@@ -49,7 +50,7 @@ void map_tools_shift_center(GdkPixbuf *in, GdkPixbuf *out, float clon)
     else if (clon < -180.0)
         clon = -180.0;
 
-    float lon_x = (clon+180.0) * gdk_pixbuf_get_width(in)/360.0;
+    int lon_x = round((clon+180.0) * gdk_pixbuf_get_width(in)/360.0);
     int img_w = gdk_pixbuf_get_width(in);
     int img_h = gdk_pixbuf_get_height(in);
     
@@ -103,8 +104,6 @@ void map_tools_shift_center(GdkPixbuf *in, GdkPixbuf *out, float clon)
                              out,
                              0,
                              0);
-    }
-
-    
+    }   
 }
 
