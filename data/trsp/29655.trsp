@@ -1,0 +1,3 @@
+[Mode TLM Beacon]
+DOWN_LOW=4370750
+MODE=1k2 AFSK

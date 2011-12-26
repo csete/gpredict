@@ -1,0 +1,5 @@
+[MCubed GMSK Beacon]
+DOWN_LOW = 437485000
+
+[Explorer 1 Prime Unit 2 Beacon]
+DOWN_LOW = 437505000
