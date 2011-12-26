@@ -152,6 +152,7 @@ sat_cfg_int_t sat_cfg_int[SAT_CFG_INT_NUM] = {
     { "GLOBAL",  "WARP", 1},
     { "MODULES", "LIST_REFRESH", 1},
     { "MODULES", "LIST_COLUMNS", LIST_COLUMNS_DEFAULTS},
+    { "MODULES", "MAP_CENTER", 0},
     { "MODULES", "MAP_REFRESH", 10},
     { "MODULES", "MAP_INFO_COLOUR", 0x00FF00FF},
     { "MODULES", "MAP_INFO_BGD_COLOUR", 0x000000FF},

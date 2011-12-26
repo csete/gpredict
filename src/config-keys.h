@@ -89,6 +89,7 @@
 
 /* map specific */
 #define MOD_CFG_MAP_SECTION          "MAP"
+#define MOD_CFG_MAP_CENTER           "CENTER"  /*!< Center longitude. */
 #define MOD_CFG_MAP_REFRESH          "REFRESH"
 #define MOD_CFG_MAP_FILE             "MAP_FILE" /* abs. path = home dir */
 #define MOD_CFG_MAP_FONT             "TEXT_FONT"

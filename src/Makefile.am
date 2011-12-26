@@ -61,6 +61,7 @@ gpredict_SOURCES = \
     locator.c locator.h \
     main.c \
     map-selector.c map-selector.h \
+    map-tools.c map-tools.h \
     menubar.c menubar.h \
     mod-cfg.c mod-cfg.h \
     mod-cfg-get-param.c mod-cfg-get-param.h \
