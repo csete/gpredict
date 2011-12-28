@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -37,10 +37,11 @@
 #include <goocanvas.h>
 
 
+/* *INDENT-OFF* */
 #ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+extern          "C" {
+#endif                          /* __cplusplus */
+/* *INDENT-ON* */
 
 
 #define GTK_SKY_GLANCE(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_sky_glance_get_type (), GtkSkyGlance)
@@ -49,15 +50,15 @@ extern "C" {
 #define GTK_TYPE_SKY_GLANCE          (gtk_sky_glance_get_type ())
 #define IS_GTK_SKY_GLANCE(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sky_glance_get_type ())
 
-typedef struct _GtkSkyGlance        GtkSkyGlance;
-typedef struct _GtkSkyGlanceClass   GtkSkyGlanceClass;
+typedef struct _GtkSkyGlance GtkSkyGlance;
+typedef struct _GtkSkyGlanceClass GtkSkyGlanceClass;
 
 
 /** \brief Satellite object on graph. */
 typedef struct {
-    guint              catnum;  /*!< Catalogue number of satellite */
-    pass_t             *pass;    /*!< Details of the corresponding pass. */
-    GooCanvasItemModel *box;     /*!< Canvas item showing the pass */
+    guint           catnum;     /*!< Catalogue number of satellite */
+    pass_t         *pass;       /*!< Details of the corresponding pass. */
+    GooCanvasItemModel *box;    /*!< Canvas item showing the pass */
 } sky_pass_t;
 
 
@@ -65,56 +66,54 @@ typedef struct {
 
 
 /** \brief GtkSkyGlance widget */
-struct _GtkSkyGlance
-{
-    GtkVBox vbox;
+struct _GtkSkyGlance {
+    GtkVBox         vbox;
 
-    GtkWidget  *canvas;   /*!< The canvas widget */
+    GtkWidget      *canvas;     /*!< The canvas widget */
 
-    GHashTable *sats;     /*!< Copy of satellites. */
-    qth_t      *qth;      /*!< Pointer to current location. */
+    GHashTable     *sats;       /*!< Copy of satellites. */
+    qth_t          *qth;        /*!< Pointer to current location. */
 
-    GSList *passes;      /*!< Canvas items representing each pass.
-                              Each element in the list is of type sky_pass_t.
-                          */
-    GSList *satlab;      /*!< Canvas items showing satellite names. */
+    GSList         *passes;     /*!< Canvas items representing each pass.
+                                   Each element in the list is of type sky_pass_t.
+                                 */
+    GSList         *satlab;     /*!< Canvas items showing satellite names. */
 
 
-    guint       x0;       /*!< X0 */
-    guint       y0;       /*!< Y0 */
-    guint       w;        /*!< width of the plot */
-    guint       h;        /*!< height of the plot */
-    guint       pps;      /*!< pixels per satellite */
+    guint           x0;         /*!< X0 */
+    guint           y0;         /*!< Y0 */
+    guint           w;          /*!< width of the plot */
+    guint           h;          /*!< height of the plot */
+    guint           pps;        /*!< pixels per satellite */
 
-    guint       numsat;   /*!< Number of satellites */
-    guint       satcnt;   /*!< Counter to keep track of how many satellites we have
-                               plotted so far when creating the boxes.
-                               This is needed to ensure that we do not plot more
-                               than 10 satellites and to know which colour to fetch
-                               from sat-cfg.
-                            */
-    gdouble     ts,te;    /*!< Start and end times (Julian date) */
+    guint           numsat;     /*!< Number of satellites */
+    guint           satcnt;     /*!< Counter to keep track of how many satellites we have
+                                   plotted so far when creating the boxes.
+                                   This is needed to ensure that we do not plot more
+                                   than 10 satellites and to know which colour to fetch
+                                   from sat-cfg.
+                                 */
+    gdouble         ts, te;     /*!< Start and end times (Julian date) */
 
-    GSList     *majors;   /*!< Major ticks for every hour */
-    GSList     *minors;   /*!< Minor ticks for every 30 min */
-    GSList     *labels;   /*!< Tick labels for every hour */
+    GSList         *majors;     /*!< Major ticks for every hour */
+    GSList         *minors;     /*!< Minor ticks for every 30 min */
+    GSList         *labels;     /*!< Tick labels for every hour */
 
-    GooCanvasItemModel *footer;  /*!< Footer area with time ticks and labels */
-    GooCanvasItemModel *axisl;   /*!< Axis label */
-    GooCanvasItemModel *cursor;  /*!< Vertical line tracking the cursor */
-    GooCanvasItemModel *timel;   /*!< Label showing time under cursor */
+    GooCanvasItemModel *footer; /*!< Footer area with time ticks and labels */
+    GooCanvasItemModel *axisl;  /*!< Axis label */
+    GooCanvasItemModel *cursor; /*!< Vertical line tracking the cursor */
+    GooCanvasItemModel *timel;  /*!< Label showing time under cursor */
 
 };
 
-struct _GtkSkyGlanceClass
-{
-    GtkVBoxClass parent_class;
+struct _GtkSkyGlanceClass {
+    GtkVBoxClass    parent_class;
 };
 
 
 
-GType          gtk_sky_glance_get_type   (void);
-GtkWidget*     gtk_sky_glance_new        (GHashTable *sats, qth_t *qth, gdouble ts);
+GType           gtk_sky_glance_get_type(void);
+GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts);
 
 /*
 void           gtk_sky_glance_reconf     (GtkWidget *skg);
@@ -122,9 +121,10 @@ void           gtk_sky_glance_reconf     (GtkWidget *skg);
 void gtk_sky_glance_reload_sats (GtkWidget *skg, GHashTable *sats);
 */
 
-
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif                          /* __cplusplus */
+/* *INDENT-ON* */
 
 #endif /* __GTK_SKY_GLANCE_H__ */

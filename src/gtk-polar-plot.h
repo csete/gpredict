@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -36,11 +36,11 @@
 #include "predict-tools.h"
 #include <goocanvas.h>
 
-
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
+/* *INDENT-ON* */
 
     /** \brief Number of time ticks. */
 #define TRACK_TICK_NUM 5
@@ -52,85 +52,87 @@ extern "C" {
 #define GTK_TYPE_POLAR_PLOT          (gtk_polar_plot_get_type ())
 #define IS_GTK_POLAR_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_polar_plot_get_type ())
 
-    typedef struct _GtkPolarPlot        GtkPolarPlot;
-    typedef struct _GtkPolarPlotClass   GtkPolarPlotClass;
-
+typedef struct _GtkPolarPlot GtkPolarPlot;
+typedef struct _GtkPolarPlotClass GtkPolarPlotClass;
 
 
     /* graph orientation; start at 12
-   o'clock and go clockwise */
-    typedef enum {
-        POLAR_PLOT_NESW = 0,  /*!< Normal / usual */
-        POLAR_PLOT_NWSE = 1,
-        POLAR_PLOT_SENW = 2,
-        POLAR_PLOT_SWNE = 3
-                      } polar_plot_swap_t;
+       o'clock and go clockwise */
+typedef enum {
+    POLAR_PLOT_NESW = 0,        /*!< Normal / usual */
+    POLAR_PLOT_NWSE = 1,
+    POLAR_PLOT_SENW = 2,
+    POLAR_PLOT_SWNE = 3
+} polar_plot_swap_t;
 
 
     /* pole identifier */
-    typedef enum {
-        POLAR_PLOT_POLE_N = 0,
-        POLAR_PLOT_POLE_E = 1,
-        POLAR_PLOT_POLE_S = 2,
-        POLAR_PLOT_POLE_W = 3
-                        } polar_plot_pole_t;
+typedef enum {
+    POLAR_PLOT_POLE_N = 0,
+    POLAR_PLOT_POLE_E = 1,
+    POLAR_PLOT_POLE_S = 2,
+    POLAR_PLOT_POLE_W = 3
+} polar_plot_pole_t;
 
 
-    struct _GtkPolarPlot
-    {
-        GtkVBox vbox;
+struct _GtkPolarPlot {
+    GtkVBox         vbox;
 
-        GtkWidget  *canvas;   /*!< The canvas widget */
+    GtkWidget      *canvas;     /*!< The canvas widget */
 
-        GooCanvasItemModel *C00, *C30, *C60; /*!< 0, 30 and 60 deg elevation circles */
-        GooCanvasItemModel *hl, *vl;         /*!< horizontal and vertical lines */
-        GooCanvasItemModel *N,*S,*E,*W;      /*!< North, South, East and West labels */
-        GooCanvasItemModel *locnam;          /*!< Location name */
-        GooCanvasItemModel *curs;            /*!< cursor tracking text */
+    GooCanvasItemModel *C00, *C30, *C60;        /*!< 0, 30 and 60 deg elevation circles */
+    GooCanvasItemModel *hl, *vl;        /*!< horizontal and vertical lines */
+    GooCanvasItemModel *N, *S, *E, *W;  /*!< North, South, East and West labels */
+    GooCanvasItemModel *locnam; /*!< Location name */
+    GooCanvasItemModel *curs;   /*!< cursor tracking text */
 
-        pass_t             *pass;
-        GooCanvasItemModel *track;                  /*!< Sky track. */
-        GooCanvasItemModel *target;                 /*!< Target object marker */
-        GooCanvasItemModel *ctrl;                   /*!< Position marker for the controller */
-        GooCanvasItemModel *rot1,*rot2,*rot3,*rot4; /*!< Position marker for the rotor */
-        GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
+    pass_t         *pass;
+    GooCanvasItemModel *track;  /*!< Sky track. */
+    GooCanvasItemModel *target; /*!< Target object marker */
+    GooCanvasItemModel *ctrl;   /*!< Position marker for the controller */
+    GooCanvasItemModel *rot1, *rot2, *rot3, *rot4;      /*!< Position marker for the rotor */
+    GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
 
-        qth_t      *qth;      /*!< Pointer to current location. */
-
-
-        guint       cx;       /*!< center X */
-        guint       cy;       /*!< center Y */
-        guint       r;        /*!< radius */
-        guint       size;     /*!< Size of the box = min(h,w) */
+    qth_t          *qth;        /*!< Pointer to current location. */
 
 
-        polar_plot_swap_t swap;
+    guint           cx;         /*!< center X */
+    guint           cy;         /*!< center Y */
+    guint           r;          /*!< radius */
+    guint           size;       /*!< Size of the box = min(h,w) */
 
-        gboolean    qthinfo;     /*!< Show the QTH info. */
-        gboolean    cursinfo;    /*!< Track the mouse cursor. */
-        gboolean    extratick;   /*!< Show extra ticks */
-    };
 
-    struct _GtkPolarPlotClass
-    {
-        GtkVBoxClass parent_class;
-    };
+    polar_plot_swap_t swap;
+
+    gboolean        qthinfo;    /*!< Show the QTH info. */
+    gboolean        cursinfo;   /*!< Track the mouse cursor. */
+    gboolean        extratick;  /*!< Show extra ticks */
+};
+
+struct _GtkPolarPlotClass {
+    GtkVBoxClass    parent_class;
+};
 
 
 
-    GType          gtk_polar_plot_get_type   (void);
+GType           gtk_polar_plot_get_type(void);
 
-    GtkWidget*     gtk_polar_plot_new        (qth_t *qth, pass_t *pass);
+GtkWidget      *gtk_polar_plot_new(qth_t * qth, pass_t * pass);
 
-    void gtk_polar_plot_set_pass (GtkPolarPlot *plot, pass_t *pass);
-    void gtk_polar_plot_set_target_pos (GtkPolarPlot *plot, gdouble az, gdouble el);
-    void gtk_polar_plot_set_ctrl_pos (GtkPolarPlot *plot, gdouble az, gdouble el);
-    void gtk_polar_plot_set_rotor_pos (GtkPolarPlot *plot, gdouble az, gdouble el);
-    void gtk_polar_plot_show_time_ticks (GtkPolarPlot *plot, gboolean show);
+void            gtk_polar_plot_set_pass(GtkPolarPlot * plot, pass_t * pass);
+void            gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az,
+                                              gdouble el);
+void            gtk_polar_plot_set_ctrl_pos(GtkPolarPlot * plot, gdouble az,
+                                            gdouble el);
+void            gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az,
+                                             gdouble el);
+void            gtk_polar_plot_show_time_ticks(GtkPolarPlot * plot,
+                                               gboolean show);
 
-
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+/* *INDENT-ON* */
 
 #endif /* __GTK_POLAR_PLOT_H__ */

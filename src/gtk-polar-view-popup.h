@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -34,9 +34,9 @@
 #include "gtk-polar-view.h"
 
 
-void gtk_polar_view_popup_exec (sat_t *sat, qth_t *qth,
-                    GtkPolarView *polv,
-                    GdkEventButton *event,
-                    GtkWidget *toplevel);
+void            gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth,
+                                          GtkPolarView * polv,
+                                          GdkEventButton * event,
+                                          GtkWidget * toplevel);
 
 #endif
