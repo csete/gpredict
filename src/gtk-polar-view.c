@@ -884,10 +884,10 @@ update_sat    (gpointer key, gpointer value, gpointer data)
             g_object_set (obj->label,"text",sat->nickname,NULL);
 
             /* update tooltip */
-            tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"\
-                                              "<tt>Az: %5.1f\302\260\n" \
+            tooltip = g_markup_printf_escaped("<b>%s</b>\n"\
+                                              "Az: %5.1f\302\260\n" \
                                               "El: %5.1f\302\260\n" \
-                                              "%s</tt>",
+                                              "%s",
                                               sat->nickname,
                                               sat->az, sat->el,
                                               losstr);
@@ -977,10 +977,9 @@ update_sat    (gpointer key, gpointer value, gpointer data)
                                           SAT_CFG_INT_POLAR_SAT_COL);
                 
                 /* create tooltip */
-                tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"  \
-                                                  "<tt>Az: %5.1f\302\260\n" \
-                                                  "El: %5.1f\302\260\n"     \
-                                                  "</tt>",
+                tooltip = g_markup_printf_escaped("<b>%s</b>\n"  \
+                                                  "Az: %5.1f\302\260\n" \
+                                                  "El: %5.1f\302\260\n",
                                                   sat->nickname,
                                                   sat->az, sat->el);
                 

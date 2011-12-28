@@ -871,9 +871,6 @@ on_motion_notify (GooCanvasItem *item,
 
         xy_to_lonlat (satmap, event->x, event->y, &lon, &lat);
 
-        /*** FIXME:
-             - Add QRA?
-        */
         /* cursor track */
         text = g_strdup_printf ("<span background=\"#%s\"> "\
                                 "LON:%.0f\302\260 LAT:%.0f\302\260 </span>",
@@ -1948,11 +1945,11 @@ plot_sat (gpointer key, gpointer value, gpointer data)
                                  SAT_CFG_INT_MAP_SHADOW_ALPHA);
 
     /* create tooltip */
-    tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"\
-                                      "<tt>Lon: %5.1f\302\260\n" \
+    tooltip = g_markup_printf_escaped("<b>%s</b>\n"\
+                                      "Lon: %5.1f\302\260\n" \
                                       "Lat: %5.1f\302\260\n" \
                                       " Az: %5.1f\302\260\n" \
-                                      " El: %5.1f\302\260</tt>",
+                                      " El: %5.1f\302\260",
                                       sat->nickname,
                                       sat->ssplon, sat->ssplat,
                                       sat->az, sat->el);
@@ -2084,9 +2081,9 @@ update_sat (gpointer key, gpointer value, gpointer data)
 
     obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catnum));
     
-    /*get rid of a decayed satellite*/
+    /* get rid of a decayed satellite */
     if (decayed(sat) && obj!=NULL) {
-        /*remove items*/
+        /* remove items */
         idx = goo_canvas_item_model_find_child (root,obj->marker);
         if (idx !=-1)
             goo_canvas_item_model_remove_child (root, idx);;
@@ -2118,8 +2115,8 @@ update_sat (gpointer key, gpointer value, gpointer data)
         if (decayed(sat)) {
             return;
         } else {
-            /*satellite was decayed now is visible*/
-            /*time controller backed up time*/
+            /* satellite was decayed now is visible
+               time controller backed up time */
             plot_sat(key,value,data);
             return;
         }
@@ -2140,12 +2137,12 @@ update_sat (gpointer key, gpointer value, gpointer data)
 
     /* we update tooltips every time */
     aosstr = aoslos_time_to_str(satmap, sat);
-    tooltip = g_markup_printf_escaped("<big><b>%s</b>\n</big>"\
-                                      "<tt>Lon: %5.1f\302\260\n" \
+    tooltip = g_markup_printf_escaped("<b>%s</b>\n"\
+                                      "Lon: %5.1f\302\260\n" \
                                       "Lat: %5.1f\302\260\n" \
                                       " Az: %5.1f\302\260\n" \
                                       " El: %5.1f\302\260\n" \
-                                      "%s</tt>",
+                                      "%s",
                                       sat->nickname,
                                       sat->ssplon, sat->ssplat,
                                       sat->az, sat->el,
@@ -2682,7 +2679,8 @@ gtk_sat_map_load_showtracks      (GtkSatMap *satmap)
                                          satmap->showtracks);
 
 }
-/** \brief save the satellites that we should not show ground tracks */
+
+/** \brief Save the satellites that we should not show ground tracks */
 static void
 gtk_sat_map_store_showtracks      (GtkSatMap *satmap) {
     mod_cfg_set_integer_list_boolean(satmap->cfgdata,

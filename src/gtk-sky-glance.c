@@ -1046,11 +1046,11 @@ create_sat (gpointer key, gpointer value, gpointer data)
                 daynum_to_str (tcastr,TIME_FORMAT_MAX_LENGTH, sat_cfg_get_str (SAT_CFG_STR_TIME_FORMAT),skypass->pass->tca);
 
                 /* box tooltip will contain pass summary */
-                tooltip = g_strdup_printf("<big><b>%s</b>\n</big>\n"\
-                                          "<tt>AOS: %s  Az:%.0f\302\260\n" \
-                                          "TCA: %s  Az:%.0f\302\260 / El:%.1f\302\260\n" \
-                                          "LOS: %s  Az:%.0f\302\260</tt>\n" \
-                                          "\n<i>Click for details</i>",
+                tooltip = g_strdup_printf("<b>%s</b>\n"\
+                                          "AOS: %s  Az:%.0f\302\260\n" \
+                                          "TCA: %s  Az:%.0f\302\260  El:%.1f\302\260\n" \
+                                          "LOS: %s  Az:%.0f\302\260\n" \
+                                          "<i>Click for details</i>",
                                           skypass->pass->satname,
                                           aosstr, skypass->pass->aos_az,
                                           tcastr, skypass->pass->maxel_az, skypass->pass->max_el,
