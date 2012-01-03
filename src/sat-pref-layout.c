@@ -233,7 +233,7 @@ static void create_layout_selector (GKeyFile *cfg, GtkTable *table)
 
     for (i = 0; i < PREDEF_NUM; i++) {
         /* append default layout string to combo box */
-        gtk_combo_box_append_text (GTK_COMBO_BOX (selector), predef_layout[i][1]);
+        gtk_combo_box_append_text (GTK_COMBO_BOX (selector), _(predef_layout[i][1]));
 
         /* check if this layout corresponds to the settings */
         if (!g_ascii_strcasecmp (buffer, predef_layout[i][0])) {

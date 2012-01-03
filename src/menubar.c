@@ -101,7 +101,7 @@ static GtkActionEntry entries[] = {
       N_("Create a new module"), G_CALLBACK (menubar_new_mod_cb) },
     { "Open", GTK_STOCK_OPEN, N_("_Open module"), "<control>O",
       N_("Open an existing module"), G_CALLBACK (menubar_open_mod_cb) },
-    { "Log", GTK_STOCK_JUSTIFY_LEFT, "_Log browser", "<control>L",
+    { "Log", GTK_STOCK_JUSTIFY_LEFT, N_("_Log browser"), "<control>L",
       N_("Open the message log browser"), G_CALLBACK (menubar_message_log) },
     { "Exit", GTK_STOCK_QUIT, N_("E_xit"), "<control>Q",
       N_("Exit the program"), G_CALLBACK (menubar_app_exit_cb) },

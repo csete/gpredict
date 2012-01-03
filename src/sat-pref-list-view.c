@@ -46,6 +46,7 @@
 
 /* column selector */
 static GtkWidget *check[SAT_LIST_COL_NUMBER];
+extern const gchar *SAT_LIST_COL_TITLE[];
 extern const gchar *SAT_LIST_COL_HINT[];
 static GtkWidget *ruleshint;
 static gboolean dirty = FALSE;
@@ -105,8 +106,8 @@ GtkWidget *sat_pref_list_view_create (GKeyFile *cfg)
 
      for (i = 0; i < SAT_LIST_COL_NUMBER; i++) {
 
-          check[i] = gtk_check_button_new_with_label (SAT_LIST_COL_HINT[i]);
-
+          check[i] = gtk_check_button_new_with_label (_(SAT_LIST_COL_TITLE[i]));
+          gtk_widget_set_tooltip_text (check[i], _(SAT_LIST_COL_HINT[i]));
           gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check[i]),
                                                flags & (1 << i));
 

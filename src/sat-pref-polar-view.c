@@ -158,7 +158,7 @@ static void create_orient_selector  (GKeyFile *cfg, GtkBox *vbox)
     gtk_widget_set_tooltip_text (swne,
                                  "\tS\n"        \
                                  "E\t\tW\n"     \
-                                 "\tW");
+                                 "\tN");
 
     /* read orientation */
     if (cfg != NULL) {
