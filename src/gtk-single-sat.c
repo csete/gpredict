@@ -816,6 +816,9 @@ gtk_single_sat_popup_cb       (GtkWidget *button, gpointer data)
 
 
     sat = SAT (g_slist_nth_data (single_sat->sats, single_sat->selected));
+    if (sat == NULL) {
+        return;
+    }
     n = g_slist_length (single_sat->sats);
     
     menu = gtk_menu_new ();
