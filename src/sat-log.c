@@ -123,7 +123,7 @@ void sat_log_init()
     if (!err)
     {
         initialised = TRUE;
-        sat_log_log(SAT_LOG_LEVEL_MSG, _("%s: Session started"), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Session started"), __FUNCTION__);
     }
 }
 
@@ -134,7 +134,7 @@ void sat_log_close()
 {
     if (initialised)
     {
-        sat_log_log(SAT_LOG_LEVEL_MSG, _("%s: Session ended"), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Session ended"), __FUNCTION__);
         g_io_channel_shutdown(logfile, TRUE, NULL);
         g_io_channel_unref(logfile);
         logfile = NULL;
@@ -330,16 +330,12 @@ static void clean_log_dir(const gchar * dirname, glong age)
         {
             vbuf = g_strsplit_set(fname, "-.", -1);
 
-            //g_print ("%s <=> %s\n", vbuf[1], ages);
-
             /* Remove file if too old */
             if (g_ascii_strcasecmp(vbuf[1], ages) <= 0)
             {
-
                 buff = g_strconcat(dirname, G_DIR_SEPARATOR_S, fname, NULL);
                 g_remove(buff);
                 g_free(buff);
-
             }
 
             g_strfreev(vbuf);

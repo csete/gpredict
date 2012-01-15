@@ -34,11 +34,10 @@
 
 typedef enum {
      SAT_LOG_LEVEL_NONE  = 0,
-     SAT_LOG_LEVEL_BUG   = 1,
-     SAT_LOG_LEVEL_ERROR = 2,
-     SAT_LOG_LEVEL_WARN  = 3,
-     SAT_LOG_LEVEL_MSG   = 4,
-     SAT_LOG_LEVEL_DEBUG = 5
+     SAT_LOG_LEVEL_ERROR = 1,
+     SAT_LOG_LEVEL_WARN  = 2,
+     SAT_LOG_LEVEL_INFO  = 3,
+     SAT_LOG_LEVEL_DEBUG = 4
 } sat_log_level_t;
 
 void sat_log_init        (void);

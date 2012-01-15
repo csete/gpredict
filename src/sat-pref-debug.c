@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2012  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -81,17 +81,16 @@ GtkWidget *sat_pref_debug_create ()
 
      level = gtk_combo_box_new_text ();
      gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 0: None"));
-     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 1: Bug"));
-     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 2: Error"));
-     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 3: Warning"));
-     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 4: Info"));
-     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 5: Trace"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 1: Error"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 2: Warning"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 3: Info"));
+     gtk_combo_box_append_text (GTK_COMBO_BOX (level), _("Level 4: Debug"));
      gtk_combo_box_set_active (GTK_COMBO_BOX (level),
                                      sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
      g_signal_connect (G_OBJECT (level), "realize",
                            G_CALLBACK (gpredict_set_combo_tooltips),
                            _("Select the debug level. The higher the level, the more "
-                              "messages will be logged (so be careful with eLevel 5)."));
+                              "messages will be logged."));
      g_signal_connect (G_OBJECT (level), "changed",
                            G_CALLBACK (state_change_cb), NULL);
 
@@ -124,13 +123,13 @@ GtkWidget *sat_pref_debug_create ()
      /* info label */
     confdir = get_user_conf_dir ();
      msg = g_strdup_printf (_("Gpredict stores all run-time messages "
-                             "in the %s%slogs%s folder. The "
-                                    "current log file is called gpredict.log and the "
-                                    "file is always kept until the next execution so "
-                                    "that you can examine it in case of a failure. "
-                                    "If old log files are kept, they are called "
-                                    "gpredict-XYZ.log where XYZ is a uniques timestamp."),
-                           confdir, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+                              "in the %s%slogs%s folder. The "
+                              "current log file is called gpredict.log and the "
+                              "file is always kept until the next execution so "
+                              "that you can examine it in case of a failure. "
+                              "If old log files are kept, they are called "
+                              "gpredict-XYZ.log where XYZ is a uniques timestamp."),
+                            confdir, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
      label = gtk_label_new (msg);
      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);

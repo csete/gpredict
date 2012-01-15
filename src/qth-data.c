@@ -111,7 +111,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
                                       QTH_CFG_LOC_KEY,
                                       &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: QTH has no location (%s)."),
                      __FUNCTION__, error->message);
 
@@ -125,7 +125,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
                                        QTH_CFG_DESC_KEY,
                                        &error);
     if ((qth->desc == NULL) || (error != NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: QTH has no description."),
                      __FUNCTION__);
 
@@ -139,7 +139,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
                                      QTH_CFG_WX_KEY,
                                      &error);
     if ((qth->wx == NULL) || (error != NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: QTH has no weather station."),
                      __FUNCTION__);
 
@@ -250,7 +250,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
                                      QTH_CFG_GPSD_SERVER_KEY,
                                      &error);
     if ((qth->gpsd_server == NULL) || (error != NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: QTH has no GPSD Server."),
                      __FUNCTION__);
 
@@ -268,7 +268,7 @@ qth_data_read (const gchar *filename, qth_t *qth)
     qth_validate(qth);
 
     /* Now, send debug message and return */
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: QTH data: %s, %.4f, %.4f, %d"),
                  __FUNCTION__,
                  qth->name,

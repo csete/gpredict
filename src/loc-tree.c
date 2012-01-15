@@ -289,7 +289,7 @@ loc_tree_create (const gchar *fname,
           gtk_widget_destroy (dialog);
 
           /* send debug message */
-          sat_log_log (SAT_LOG_LEVEL_MSG,
+          sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s: Selected %s"),
                           __FUNCTION__, *loc);
 
@@ -300,7 +300,7 @@ loc_tree_create (const gchar *fname,
           gtk_widget_destroy (dialog);
 
           /* send debug message */
-          sat_log_log (SAT_LOG_LEVEL_MSG,
+          sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s: No location selected"),
                           __FUNCTION__);
 
@@ -350,7 +350,7 @@ loc_tree_create_and_fill_model (const gchar *fname)
      */
      if (!g_file_test (fname, G_FILE_TEST_EXISTS)) {
 
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: %s does not exist!"),
                           __FUNCTION__, fname);
 
@@ -522,7 +522,7 @@ loc_tree_float_cell_data_function (GtkTreeViewColumn *col,
                }
           }
           else {
-               sat_log_log (SAT_LOG_LEVEL_BUG,
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s: Invalid column: %d"),
                                __FUNCTION__, coli);
                hmf = '?';
@@ -675,7 +675,7 @@ loc_tree_get_selection            (GtkWidget *view,
                /* well no luck; send a warning message and return city
                   only (actually, this is a bug, if it happens).
                */
-               sat_log_log (SAT_LOG_LEVEL_BUG,
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s: Failed to get parent for %s."),
                                __FUNCTION__, city);
 
@@ -689,7 +689,7 @@ loc_tree_get_selection            (GtkWidget *view,
           /* nothing selected; this function should not have been called
              => BUG!
           */
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: No selection found!"),
                           __FUNCTION__);
      }

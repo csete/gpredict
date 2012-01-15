@@ -197,7 +197,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
 
     g_key_file_free (cfg);
     
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Read radio configuration %s"),
                  __FUNCTION__, conf->name);
     

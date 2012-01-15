@@ -93,7 +93,7 @@ void gtk_sat_module_popup (GtkSatModule *module)
 
 
     if ((module == NULL) || !IS_GTK_SAT_MODULE (module)) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: %s called with NULL parameter!"),
                      __FILE__, __LINE__, __FUNCTION__);
 
@@ -383,7 +383,7 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
     switch (response) {
 
     case GTK_RESPONSE_OK:
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%d: Cloning %s => %s"),
                      __FILE__, __LINE__, module->name,
                      gtk_entry_get_text (GTK_ENTRY (entry)));
@@ -403,7 +403,7 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
                          __FILE__, __LINE__, module->name);
         }
         else {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%d: Successfully cloned %s."),
                          __FILE__, __LINE__, module->name);
 
@@ -468,13 +468,13 @@ static void clone_cb (GtkWidget *menuitem, gpointer data)
         break;
 
      case GTK_RESPONSE_CANCEL:
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%d: Cloning cancelled by user."),
                      __FILE__, __LINE__);
         break;
 
      default:
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%d: Cloning interrupted."),
                      __FILE__, __LINE__);
         break;
@@ -652,7 +652,7 @@ static void docking_state_cb (GtkWidget *menuitem, gpointer data)
 
      default:
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Unknown module state: %d"),
                      __FILE__, __LINE__, GTK_SAT_MODULE (module)->state);
         break;
@@ -774,7 +774,7 @@ static void screen_state_cb  (GtkWidget *menuitem, gpointer data)
 
      default:
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Unknown module state: %d"),
                      __FILE__, __LINE__, GTK_SAT_MODULE (module)->state);
         break;

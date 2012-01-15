@@ -270,7 +270,7 @@ rgb2gdk  (guint rgb, GdkColor *color)
 
      /* sanity checks */
      if (color == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
@@ -309,13 +309,13 @@ rgba2gdk (guint rgba, GdkColor *color, guint16 *alpha)
 
      /* sanity checks */
      if (color == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
      }
      if (alpha == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with alpha = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
@@ -356,13 +356,13 @@ gdk2rgb  (const GdkColor *color, guint *rgb)
 
      /* sanity checks */
      if (color == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
      }
      if (rgb == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with rgb = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
@@ -398,13 +398,13 @@ gdk2rgba (const GdkColor *color, guint16 alpha, guint *rgba)
 
      /* sanity checks */
      if (color == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
      }
      if (rgba == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with rgba = NULL"),
                           __FILE__, __LINE__, __FUNCTION__);
           return;
@@ -571,7 +571,7 @@ gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename) {
                 err = 1;
             }
             else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Configuration saved for %s."),
                              __FUNCTION__, filename);
                 

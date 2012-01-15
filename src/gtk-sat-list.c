@@ -590,7 +590,7 @@ gtk_sat_list_update          (GtkWidget *widget)
     /* first, do some sanity checks */
     if ((satlist == NULL) || !IS_GTK_SAT_LIST (satlist)) {
         
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSatList!"),
                      __FUNCTION__);
     }
@@ -660,13 +660,13 @@ sat_list_update_sats (GtkTreeModel *model,
 
     if (sat == NULL) {
         /* satellite not tracked anymore => remove */
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Failed to get data for #%d."),
                      __FUNCTION__, *catnum);
 
         gtk_list_store_remove (GTK_LIST_STORE (model), iter);
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Satellite #%d removed from list."),
                      __FUNCTION__, *catnum);
     }
@@ -1008,7 +1008,7 @@ latlon_cell_data_function (GtkTreeViewColumn *col,
             }
         }
         else {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%d: Invalid column: %d"),
                          __FILE__, __LINE__,
                          coli);
@@ -1350,7 +1350,7 @@ row_activated_cb (GtkTreeView       *tree_view,
     sat = SAT (g_hash_table_lookup (GTK_SAT_LIST (list)->satellites, catnum));
 
     if (sat == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%d Failed to get data for %d."),
                      __FILE__, __LINE__, *catnum);
     }
@@ -1384,7 +1384,7 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
         sat = SAT (g_hash_table_lookup (GTK_SAT_LIST (list)->satellites, catnum));
 
         if (sat == NULL) {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%d Failed to get data for %d."),
                          __FILE__, __LINE__, *catnum);
 
@@ -1397,7 +1397,7 @@ view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointer list)
 
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: There is no selection; skip popup."),
                      __FILE__, __LINE__);
     }

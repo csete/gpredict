@@ -388,7 +388,7 @@ gtk_single_sat_update          (GtkWidget *widget)
     /* first, do some sanity checks */
     if ((ssat == NULL) || !IS_GTK_SINGLE_SAT (ssat)) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSingleSat!"),
                      __FUNCTION__);
     }
@@ -446,7 +446,7 @@ update_field            (GtkSingleSat *ssat, guint i)
     /* make some sanity checks */
     if (ssat->labels[i] == NULL) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Can not update invisible field (I:%d F:%d)"),
                      __FILE__, __LINE__, i, ssat->flags);
 
@@ -457,7 +457,7 @@ update_field            (GtkSingleSat *ssat, guint i)
     sat = SAT (g_slist_nth_data (ssat->sats, ssat->selected));
     
     if G_UNLIKELY(!sat) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Can not update non-existing sat"),
                      __FILE__, __LINE__);
         return;
@@ -709,7 +709,7 @@ update_field            (GtkSingleSat *ssat, guint i)
 
 
     default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Invalid field number (%d)"),
                      __FILE__, __LINE__, i);
 

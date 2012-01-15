@@ -275,7 +275,7 @@ gtk_sat_module_new (const gchar *cfgfile)
     */
     if ((cfgfile == NULL) || !g_file_test (cfgfile, G_FILE_TEST_EXISTS)) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s is not valid."),
                      __FUNCTION__, cfgfile);
 
@@ -476,7 +476,7 @@ create_view (GtkSatModule *module, guint num)
         break;
 
     default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Invalid child type (%d). Using GtkSatList."),
                      __FILE__, __LINE__, num);
 
@@ -727,7 +727,7 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
         }
     }
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Read %d out of %d satellites"),
                  __FUNCTION__,
                  succ,
@@ -935,7 +935,7 @@ update_child (GtkWidget *child, gdouble tstamp)
     }
 
     else {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Unknown child type"),
                      __FILE__, __LINE__);
     }
@@ -1090,7 +1090,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
         retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
         if (retcode) {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module %s was not found in mod-mgr (%d)\n"\
                            "Internal state is corrupt?"),
                          __FUNCTION__, name, retcode);
@@ -1106,7 +1106,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
         retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
         if (retcode) {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module %s was not found in mod-mgr (%d)\n"\
                            "Internal state is corrupt?"),
                          __FUNCTION__, name, retcode);
@@ -1134,7 +1134,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
         retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
         if (retcode) {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module %s was not found in mod-mgr (%d)\n"\
                            "Internal state is corrupt?"),
                          __FUNCTION__, name, retcode);
@@ -1156,7 +1156,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
         break;
 
     default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s has unknown state: %d"),
                      __FUNCTION__, name, module->state);
         break;
@@ -1169,7 +1169,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     /* appearantly, module will be destroyed when removed from notebook */
     /* gtk_widget_destroy (GTK_WIDGET (module)); */
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Module %s closed."),
                  __FUNCTION__, name);
 
@@ -1220,7 +1220,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
         /* internal error, since the timerid appears
            to be invalid.
         */
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not stop timeout callback\n"\
                        "%s: Source ID %d seems invalid."),
                      __FUNCTION__, __FUNCTION__, module->timerid);
@@ -1322,7 +1322,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
                     break;
 
                 default:
-                    sat_log_log (SAT_LOG_LEVEL_BUG,
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s: Module %s has unknown state: %d"),
                                  __FUNCTION__, name, module->state);
                     break;
@@ -1411,7 +1411,7 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
     /* lock module */
     g_mutex_lock(module->busy);
      
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Reloading satellites for module %s"),
                  __FUNCTION__, module->name);
 
@@ -1462,7 +1462,7 @@ reload_sats_in_child (GtkWidget *widget, GtkSatModule *module)
 
 
     else {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: Unknown child type"),
                      __FILE__, __LINE__);
     }
@@ -1498,7 +1498,7 @@ void gtk_sat_module_select_sat (GtkSatModule *module, gint catnum)
             gtk_polar_view_select_sat(child, catnum);
         }
         else {
-            sat_log_log(SAT_LOG_LEVEL_BUG, _("%s: Unknown child type"), __FUNCTION__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Unknown child type"), __FUNCTION__);
         }
     }
 
@@ -1576,7 +1576,7 @@ static void update_skg (GtkSatModule *module)
 
     if (G_UNLIKELY(update_needed==TRUE)) {
         
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Updating GtkSkyGlance for %s"),
                      __FUNCTION__, module->name);
         

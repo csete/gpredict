@@ -494,7 +494,7 @@ update_widgets (GtkTreeView *treeview)
 
      }
      else {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%d: No ground station selected!"),
                           __FILE__, __LINE__);
      }
@@ -588,7 +588,7 @@ apply_changes         (GtkTreeView *treeview, gboolean new)
           }
           else {
                /* no selection; internal error */
-               sat_log_log (SAT_LOG_LEVEL_BUG,
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s:%d: Oooops, gpredict encountered an internal error "\
                                  "(no selection in qth list)"),
                                __FILE__, __LINE__);

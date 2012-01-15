@@ -64,14 +64,14 @@ gpredict_help_launch (gpredict_help_type_t type)
      }
 
      if (idx == BROWSER_TYPE_NONE) {
-          sat_log_log (SAT_LOG_LEVEL_MSG,
+          sat_log_log (SAT_LOG_LEVEL_INFO,
                     _("%s: Help browser is not set up yet."),
                     __FUNCTION__);
 
           resp = config_help ();
 
           if (resp == GTK_RESPONSE_CANCEL) {
-               sat_log_log (SAT_LOG_LEVEL_MSG,
+               sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Configure help browser cancelled."),
                          __FUNCTION__);
 

@@ -776,7 +776,7 @@ on_button_release(GooCanvasItem * item,
     if G_UNLIKELY
         (pass == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s::%s: Could not retrieve pass_t object"),
                     __FILE__, __FUNCTION__);
         return TRUE;
@@ -789,7 +789,7 @@ on_button_release(GooCanvasItem * item,
         /* LEFT button released */
     case 1:
         new_pass = copy_pass(pass);
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _
                     ("%s::%s: Showing pass details for %s - we may have a memory leak here"),
                     __FILE__, __FUNCTION__, pass->satname);
@@ -836,7 +836,7 @@ static gboolean on_mouse_enter(GooCanvasItem * item,
     if G_UNLIKELY
         (pass == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s::%s: Could not retrieve pass_t object"),
                     __FILE__, __FUNCTION__);
         return TRUE;
@@ -967,7 +967,7 @@ static void get_colours(guint i, guint * bcol, guint * fcol)
         break;
 
     default:
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Colour index out of valid range (%d)"),
                     __FILE__, __LINE__, i);
         tmp = sat_cfg_get_int(SAT_CFG_INT_SKYATGL_COL_01);

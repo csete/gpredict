@@ -704,7 +704,7 @@ static void latlon_cell_data_function (GtkTreeViewColumn *col,
             }
         }
         else {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%d: Invalid column: %d"),
                          __FILE__, __LINE__,
                          coli);
@@ -1390,7 +1390,7 @@ static void view_popup_menu (GtkWidget *treeview, GdkEventButton *event, gpointe
 
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: There is no selection; skip popup."),
                      __FILE__, __LINE__);
     }
@@ -1441,7 +1441,7 @@ static void row_activated_cb (GtkTreeView *treeview, GtkTreePath *path,
 
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: There is no selection; skip popup."),
                      __FILE__, __LINE__);
     }

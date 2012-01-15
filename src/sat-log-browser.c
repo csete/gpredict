@@ -60,11 +60,10 @@ const gfloat    MSG_LIST_COL_TITLE_ALIGN[MSG_LIST_COL_NUMBER] = {
 
 const gchar    *DEBUG_STR[6] = {
     N_("NONE"),
-    N_("BUG"),
     N_("ERROR"),
     N_("WARNING"),
-    N_("DEBUG"),
-    N_("TRACE")
+    N_("INFO"),
+    N_("DEBUG")
 };
 
 
@@ -74,15 +73,13 @@ extern GtkWidget *app;
 static gboolean initialised = FALSE;    /* Is module initialised? */
 
 /* counters */
-static guint32  bugs = 0;       /* Number of bug messages */
 static guint32  errors = 0;     /* Number of error messages */
 static guint32  warnings = 0;   /* Number of warning messages */
-static guint32  verboses = 0;   /* Number of verbose messages */
-static guint32  traces = 0;     /* Number of trace messages */
+static guint32  infos = 0;      /* Number of verbose messages */
+static guint32  debugs = 0;     /* Number of trace messages */
 
 /* summary labels; they need to be accessible at runtime */
-static GtkWidget *buglabel, *errlabel, *warnlabel, *verblabel, *tracelabel,
-    *sumlabel;
+static GtkWidget *errorlabel, *warnlabel, *infolabel, *debuglabel, *sumlabel;
 
 /* The message window itself */
 static GtkWidget *window;
@@ -211,19 +208,11 @@ static void add_debug_message(const gchar * datetime,
     switch (debug_level)
     {
 
-        /* internal bugs */
-    case SAT_LOG_LEVEL_BUG:
-        bugs++;
-        str = g_strdup_printf("%d", bugs);
-        gtk_label_set_text(GTK_LABEL(buglabel), str);
-        g_free(str);
-        break;
-
         /* runtime error */
     case SAT_LOG_LEVEL_ERROR:
         errors++;
         str = g_strdup_printf("%d", errors);
-        gtk_label_set_text(GTK_LABEL(errlabel), str);
+        gtk_label_set_text(GTK_LABEL(errorlabel), str);
         g_free(str);
         break;
 
@@ -235,19 +224,19 @@ static void add_debug_message(const gchar * datetime,
         g_free(str);
         break;
 
-        /* verbose info */
-    case SAT_LOG_LEVEL_MSG:
-        verboses++;
-        str = g_strdup_printf("%d", verboses);
-        gtk_label_set_text(GTK_LABEL(verblabel), str);
+        /* info */
+    case SAT_LOG_LEVEL_INFO:
+        infos++;
+        str = g_strdup_printf("%d", infos);
+        gtk_label_set_text(GTK_LABEL(infolabel), str);
         g_free(str);
         break;
 
-        /* trace */
+        /* debug */
     case SAT_LOG_LEVEL_DEBUG:
-        traces++;
-        str = g_strdup_printf("%d", traces);
-        gtk_label_set_text(GTK_LABEL(tracelabel), str);
+        debugs++;
+        str = g_strdup_printf("%d", debugs);
+        gtk_label_set_text(GTK_LABEL(debuglabel), str);
         g_free(str);
         break;
 
@@ -256,7 +245,7 @@ static void add_debug_message(const gchar * datetime,
     }
 
     /* the sum does not have to be updated for each line */
-    total = bugs + errors + warnings + verboses + traces;
+    total = errors + warnings + infos + debugs;
     str = g_strdup_printf("<b>%d</b>", total);
     gtk_label_set_markup(GTK_LABEL(sumlabel), str);
     g_free(str);
@@ -299,7 +288,6 @@ message_window_response(GtkWidget * widget, gint response, gpointer data)
 
     switch (response)
     {
-
         /* close button */
     case GTK_RESPONSE_CLOSE:
         gtk_widget_destroy(widget);
@@ -501,17 +489,14 @@ static void clear_message_list()
     gtk_list_store_clear(GTK_LIST_STORE(model));
 
     /* reset the counters and text widgets */
-    bugs = 0;
     errors = 0;
     warnings = 0;
-    verboses = 0;
-    traces = 0;
+    debugs = 0;
 
-    gtk_label_set_text(GTK_LABEL(buglabel), "0");
-    gtk_label_set_text(GTK_LABEL(errlabel), "0");
+    gtk_label_set_text(GTK_LABEL(errorlabel), "0");
     gtk_label_set_text(GTK_LABEL(warnlabel), "0");
-    gtk_label_set_text(GTK_LABEL(verblabel), "0");
-    gtk_label_set_text(GTK_LABEL(tracelabel), "0");
+    gtk_label_set_text(GTK_LABEL(infolabel), "0");
+    gtk_label_set_text(GTK_LABEL(debuglabel), "0");
     gtk_label_set_markup(GTK_LABEL(sumlabel), "<b>0</b>");
 }
 
@@ -568,7 +553,6 @@ static GtkTreeModel *create_list_model()
     GtkListStore   *liststore;
 
     liststore = gtk_list_store_new(MSG_LIST_COL_NUMBER, G_TYPE_STRING,
-                                   //G_TYPE_STRING,
                                    G_TYPE_STRING, G_TYPE_STRING);
 
     /*** Fill existing data into the list here ***/
@@ -586,20 +570,17 @@ static GtkWidget *create_message_summary()
     GtkWidget      *label;      /* dummy label */
 
     /* create labels */
-    buglabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(buglabel), 1.0, 0.5);
-
-    errlabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(errlabel), 1.0, 0.5);
+    errorlabel = gtk_label_new("0");
+    gtk_misc_set_alignment(GTK_MISC(errorlabel), 1.0, 0.5);
 
     warnlabel = gtk_label_new("0");
     gtk_misc_set_alignment(GTK_MISC(warnlabel), 1.0, 0.5);
 
-    verblabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(verblabel), 1.0, 0.5);
+    infolabel = gtk_label_new("0");
+    gtk_misc_set_alignment(GTK_MISC(infolabel), 1.0, 0.5);
 
-    tracelabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(tracelabel), 1.0, 0.5);
+    debuglabel = gtk_label_new("0");
+    gtk_misc_set_alignment(GTK_MISC(debuglabel), 1.0, 0.5);
 
     sumlabel = gtk_label_new(NULL);
     gtk_label_set_use_markup(GTK_LABEL(sumlabel), TRUE);
@@ -607,45 +588,40 @@ static GtkWidget *create_message_summary()
     gtk_misc_set_alignment(GTK_MISC(sumlabel), 1.0, 0.5);
 
     /* create table and add widgets */
-    table = gtk_table_new(7, 2, TRUE);
+    table = gtk_table_new(6, 2, TRUE);
     gtk_table_set_col_spacings(GTK_TABLE(table), 5);
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
 
-    label = gtk_label_new(_("Bugs"));
+    label = gtk_label_new(_("Errors"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
 
-    label = gtk_label_new(_("Errors"));
+    label = gtk_label_new(_("Warnings"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
 
-    label = gtk_label_new(_("Warnings"));
+    label = gtk_label_new(_("Info"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
 
-    label = gtk_label_new(_("Messages"));
+    label = gtk_label_new(_("Debug"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
-    label = gtk_label_new(_("Debug"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 4, 5);
-
     gtk_table_attach_defaults(GTK_TABLE(table),
-                              gtk_hseparator_new(), 0, 2, 5, 6);
+                              gtk_hseparator_new(), 0, 2, 4, 5);
 
     label = gtk_label_new(NULL);
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Total</b>"));
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 6, 7);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
 
-    gtk_table_attach_defaults(GTK_TABLE(table), buglabel, 1, 2, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), errlabel, 1, 2, 1, 2);
-    gtk_table_attach_defaults(GTK_TABLE(table), warnlabel, 1, 2, 2, 3);
-    gtk_table_attach_defaults(GTK_TABLE(table), verblabel, 1, 2, 3, 4);
-    gtk_table_attach_defaults(GTK_TABLE(table), tracelabel, 1, 2, 4, 5);
-    gtk_table_attach_defaults(GTK_TABLE(table), sumlabel, 1, 2, 6, 7);
+    gtk_table_attach_defaults(GTK_TABLE(table), errorlabel, 1, 2, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(table), warnlabel, 1, 2, 1, 2);
+    gtk_table_attach_defaults(GTK_TABLE(table), infolabel, 1, 2, 2, 3);
+    gtk_table_attach_defaults(GTK_TABLE(table), debuglabel, 1, 2, 3, 4);
+    gtk_table_attach_defaults(GTK_TABLE(table), sumlabel, 1, 2, 5, 6);
 
     /* frame around the table */
     frame = gtk_frame_new(_(" Summary "));

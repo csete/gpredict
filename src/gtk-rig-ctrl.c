@@ -907,7 +907,7 @@ static void trsp_selected_cb (GtkComboBox *box, gpointer data)
         ctrl->trsp = (trsp_t *) g_slist_nth_data (ctrl->trsplist, i);
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Inconsistency detected in internal transponder data (%d,%d)"),
                      __FUNCTION__, i, n);
     }
@@ -1061,7 +1061,7 @@ static void primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     /* load new configuration */
     ctrl->conf->name = gtk_combo_box_get_active_text (box);
     if (radio_conf_read (ctrl->conf)) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%s: Loaded new radio configuration %s"),
                      __FILE__, __FUNCTION__, ctrl->conf->name);
         /* update LO widgets */
@@ -1161,7 +1161,7 @@ static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     /* load new configuration */
     ctrl->conf2->name = gtk_combo_box_get_active_text (box);
     if (radio_conf_read (ctrl->conf2)) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%s: Loaded new radio configuration %s"),
                      __FILE__, __FUNCTION__, ctrl->conf2->name);
         /* update LO widgets */
@@ -2313,7 +2313,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     gboolean retval=TRUE;
 
     if (freq == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: NULL storage."),
                      __FILE__, __LINE__);
         return FALSE;
@@ -2369,7 +2369,7 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
         break;
         
     default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid VFO argument. Using VFOA."),
                      __FUNCTION__);
         buff = g_strdup_printf ("V VFOA\x0a");
@@ -2468,7 +2468,7 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
     
     /* check if there is a target satellite */
     if G_UNLIKELY (ctrl->target == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%s: GtkSatModule has no target satellite."),
                      __FILE__, __FUNCTION__);
         return;
@@ -2720,7 +2720,7 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
             
             /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
         case GDK_space:
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Detected SPACEBAR pressed event"),
                          __FUNCTION__);
                          
@@ -2785,7 +2785,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
                      __FUNCTION__);
 
         if (ctrl->engaged == FALSE) {       
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage button)"),
                          __FUNCTION__);
         }
@@ -2872,7 +2872,7 @@ static gboolean close_rigctld_socket (gint *sock) {
   /*shutdown the rigctld connect*/
   written = send(*sock, "q\x0a", 2, 0);
   if (written != 2) {
-      sat_log_log (SAT_LOG_LEVEL_BUG,
+      sat_log_log (SAT_LOG_LEVEL_ERROR,
                    _("%s:%s: Sent 2 bytes but sent %d."),
                    __FILE__, __FUNCTION__, written);
   }

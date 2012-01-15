@@ -372,7 +372,7 @@ static GtkTreeModel *
             g_free (nodename);
             g_strfreev (buffv);
 
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%d: Read %d sats from %s "),
                          __FILE__, __LINE__, num, fname);
         }
@@ -532,7 +532,7 @@ static void
 
         }
         else {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%d: Satellite %d already selected; skip..."),
                          __FILE__, __LINE__, catnum);
         }
@@ -576,7 +576,7 @@ void
     /* sanity check */
     if ((sat_tree == NULL) || !IS_GTK_SAT_TREE (sat_tree)) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSatTree!"),
                      __FUNCTION__);
 
@@ -598,7 +598,7 @@ void
     }
     else {
         /* else do nothing since the sat is already selected */
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Satellite %d already selected; skip..."),
                      __FUNCTION__, catnum);
     }
@@ -655,7 +655,7 @@ static gboolean
                          __FILE__, __LINE__, cat1);
         }
         else {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%d: Satellite %d already selected; skip..."),
                          __FILE__, __LINE__, cat1);
         }
@@ -731,7 +731,7 @@ guint *
     /* sanity check */
     if ((sat_tree == NULL) || !IS_GTK_SAT_TREE (sat_tree)) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSatTree!"),
                      __FUNCTION__);
 

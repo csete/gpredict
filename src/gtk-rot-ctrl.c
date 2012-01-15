@@ -813,7 +813,7 @@ static void
     /* load new configuration */
     ctrl->conf->name = gtk_combo_box_get_active_text (box);
     if (rotor_conf_read (ctrl->conf)) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("Loaded new rotator configuration %s"),
                      ctrl->conf->name);
         
@@ -1120,7 +1120,7 @@ static gboolean get_pos (GtkRotCtrl *ctrl, gdouble *az, gdouble *el)
     gboolean retcode;
     
     if ((az == NULL) || (el == NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: NULL storage."),
                      __FILE__, __LINE__);
         return FALSE;
@@ -1355,7 +1355,7 @@ static gboolean close_rotctld_socket (gint *sock) {
   /*shutdown the rigctld connect*/
   written = send(*sock, "q\x0a", 2, 0);
   if (written != 2) {
-      sat_log_log (SAT_LOG_LEVEL_BUG,
+      sat_log_log (SAT_LOG_LEVEL_ERROR,
                    _("%s:%s: Sent 2 bytes but sent %d."),
                    __FILE__, __FUNCTION__, written);
   }

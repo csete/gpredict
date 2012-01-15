@@ -177,7 +177,7 @@ void print_passes (GSList *passes)
 {
     (void) passes; /* avoid unused parameter compiler warning */
 
-    sat_log_log (SAT_LOG_LEVEL_BUG, _("%s: Not implemented!"), __FUNCTION__);
+    sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __FUNCTION__);
 }
 
 

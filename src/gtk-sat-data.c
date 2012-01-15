@@ -89,7 +89,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         }
         sat->nickname = g_key_file_get_string (data, "Satellite", "NICKNAME", &error);
         if (error != NULL) {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Satellite %d has no NICKNAME"),
                          __FUNCTION__, catnum);
             g_clear_error (&error);

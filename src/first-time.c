@@ -484,7 +484,7 @@ first_time_check_step_05 (guint *error)
     }
     else {
         satellites = g_key_file_get_groups (satfile, &num);
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Found %d satellites in %s"),
                      __FUNCTION__, num, satfilename);
 
@@ -534,7 +534,7 @@ first_time_check_step_05 (guint *error)
             g_free (targetfilename);
         }
         g_strfreev (satellites);
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Written %d new satellite to user config"),
                      __FUNCTION__, newsats);
     }
@@ -820,7 +820,7 @@ static void first_time_check_step_09 (guint *error)
                     
                     /* check if .trsp file already in user dir */
                     if (!g_file_test (destfile, G_FILE_TEST_EXISTS)) {
-                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                        sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: %s does not appear to be in user conf dir; adding."),
                                      __FUNCTION__, filename);
 
@@ -836,7 +836,7 @@ static void first_time_check_step_09 (guint *error)
                         g_free (srcfile);
                     }
                     else {
-                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                        sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: %s already in user conf dir."),
                                      __FUNCTION__, filename);
                     }

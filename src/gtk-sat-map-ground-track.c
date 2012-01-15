@@ -262,7 +262,7 @@ ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
                /* find its ID and remove it */
                j = goo_canvas_item_model_find_child (root, line);
                if (j == -1) {
-                    sat_log_log (SAT_LOG_LEVEL_BUG,
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
                                     _("%s: Could not find part %d of ground track"),
                                     __FUNCTION__, j);
                }

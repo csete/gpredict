@@ -316,14 +316,14 @@ mod_cfg_status_t mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
 
 
     if (!modname) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Attempt to save data to empty file name."),
                      __FUNCTION__);
 
         return MOD_CFG_ERROR;
     }
     if (!cfgdata) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Attempt to save NULL data."),
                      __FUNCTION__);
 
@@ -797,7 +797,7 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
         g_strfreev(buffv);
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Module has no QTH; use default."),
                      __FUNCTION__);
 
@@ -957,7 +957,7 @@ static void mod_cfg_apply         (GKeyFile *cfgdata)
     g_free (satstr);
 
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Applied changes to %s."),
                  __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
 }

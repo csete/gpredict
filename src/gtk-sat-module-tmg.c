@@ -70,7 +70,7 @@ void tmg_create (GtkSatModule *mod)
 
     /* make sure controller is not already active */
     if (mod->tmgActive) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Time Controller for %s is already active"),
                      __FUNCTION__, mod->name);
 
@@ -290,7 +290,7 @@ void tmg_create (GtkSatModule *mod)
 
     mod->tmgActive = TRUE;
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Time Controller for %s launched"),
                  __FUNCTION__, mod->name);
 }
@@ -324,7 +324,7 @@ static void tmg_destroy  (GtkWidget *tmg, gpointer data)
     /* reset time */
     tmg_reset (NULL, data);
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Time Controller for %s closed. Time reset."),
                  __FUNCTION__, mod->name);
 

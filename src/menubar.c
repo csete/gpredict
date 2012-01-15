@@ -620,7 +620,7 @@ menubar_tle_local_cb       (GtkWidget *widget, gpointer data)
 
     if (doupdate) {
 
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Running TLE update from %s"),
                      __FUNCTION__, dir);
 
@@ -983,7 +983,7 @@ select_module        ()
                          __FILE__, __FUNCTION__, dirname);
         }
         else {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%s: No selection is list of modules."),
                          __FILE__, __FUNCTION__);
 

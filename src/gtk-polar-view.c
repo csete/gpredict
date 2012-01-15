@@ -725,7 +725,7 @@ void gtk_polar_view_update(GtkWidget * widget)
                 }
                 else
                 {
-                    sat_log_log(SAT_LOG_LEVEL_BUG,
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
                                 _("%s: Can not find NEXT satellite."),
                                 __FUNCTION__);
                     g_object_set(polv->next, "text", _("Next: ERR"), NULL);
@@ -1054,7 +1054,7 @@ static void update_track(gpointer key, gpointer value, gpointer data)
     {
         if (obj->pass == NULL)
         {
-            sat_log_log(SAT_LOG_LEVEL_BUG,
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: Failed to get satellite pass."),
                         __FILE__, __LINE__);
             return;
@@ -1064,7 +1064,7 @@ static void update_track(gpointer key, gpointer value, gpointer data)
         num = g_slist_length(obj->pass->details);
         if (num == 0)
         {
-            sat_log_log(SAT_LOG_LEVEL_BUG,
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: Pass had no points in it."),
                         __FILE__, __LINE__);
             return;
@@ -1185,7 +1185,7 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj,
 
     if (obj == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Failed to get satellite object."),
                     __FILE__, __LINE__);
         return;
@@ -1193,7 +1193,7 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj,
 
     if (obj->pass == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Failed to get satellite pass."),
                     __FILE__, __LINE__);
         return;
@@ -1207,7 +1207,7 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj,
     num = g_slist_length(obj->pass->details);
     if (num == 0)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Pass had no points in it."), __FILE__, __LINE__);
         return;
     }
@@ -1525,7 +1525,7 @@ on_button_press(GooCanvasItem * item,
         }
         else
         {
-            sat_log_log(SAT_LOG_LEVEL_BUG,
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _
                         ("%s:%d: Could not find satellite (%d) in hash table"),
                         __FILE__, __LINE__, catnum);
@@ -1578,7 +1578,7 @@ on_button_release(GooCanvasItem * item,
         obj = SAT_OBJ(g_hash_table_lookup(polv->obj, catpoint));
         if (obj == NULL)
         {
-            sat_log_log(SAT_LOG_LEVEL_BUG,
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _
                         ("%s:%d: Can not find clicked object (%d) in hash table"),
                         __FILE__, __LINE__, catnum);

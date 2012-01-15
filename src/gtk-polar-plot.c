@@ -775,7 +775,7 @@ correct_pole_coor(GtkPolarPlot * polv,
         break;
 
     default:
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Incorrect polar plot orientation."),
                     __FILE__, __LINE__);
         break;

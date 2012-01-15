@@ -534,7 +534,7 @@ static void save_passes_exec (GtkWidget *parent,
         break;
 
     default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid file format: %d"),
                      __FUNCTION__, format);
         break;
@@ -635,7 +635,7 @@ static void save_pass_exec (GtkWidget *parent,
         break;
 
     default:
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid file format: %d"),
                      __FUNCTION__, format);
         break;

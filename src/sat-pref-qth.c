@@ -450,7 +450,7 @@ read_qth_file (GtkListStore *liststore, gchar *filename)
      if (g_str_has_suffix (filename, defqth)) {
           is_default = TRUE;
 
-          sat_log_log (SAT_LOG_LEVEL_MSG,
+          sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s:%d: This appears to be the default QTH."),
                           __FILE__, __LINE__);
      }
@@ -659,7 +659,7 @@ delete_cb (GtkWidget *button, gpointer data)
                     }
                     else {
                          /* huh? no more entries, this is a bug! */
-                         sat_log_log (SAT_LOG_LEVEL_BUG,
+                         sat_log_log (SAT_LOG_LEVEL_ERROR,
                                          _("%s:%d: Empty ground station list!"),
                                          __FILE__, __LINE__);
                     }
@@ -704,7 +704,7 @@ default_toggled (GtkCellRendererToggle *cell,
 
      if (fixed) {
           /* do nothing except sending a message */
-          sat_log_log (SAT_LOG_LEVEL_MSG,
+          sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s:%d: Default QTH can not be cleared! "\
                             "Select another QTH to change default."),
                           __FILE__, __LINE__);
@@ -720,7 +720,7 @@ default_toggled (GtkCellRendererToggle *cell,
                                    QTH_LIST_COL_NAME, &defqth,
                                    -1);
 
-          sat_log_log (SAT_LOG_LEVEL_MSG,
+          sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s:%d: New default QTH is %s.qth."),
                           __FILE__, __LINE__, defqth);
 
@@ -828,7 +828,7 @@ float_cell_data_function (GtkTreeViewColumn *col,
                }
           }
           else {
-               sat_log_log (SAT_LOG_LEVEL_BUG,
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s:%d: Invalid column: %d"),
                                __FILE__, __LINE__,
                                coli);
@@ -924,7 +924,7 @@ save_qth (GtkTreeModel *model,
           
           /* saved ok, go on check whether qth is default */
           if (def) {
-               sat_log_log (SAT_LOG_LEVEL_MSG,
+               sat_log_log (SAT_LOG_LEVEL_INFO,
                                _("%s:%d: %s appears to be default QTH"),
                                __FILE__, __LINE__, qth.name);
                

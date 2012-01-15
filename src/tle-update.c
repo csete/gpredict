@@ -197,7 +197,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                              __FUNCTION__, fnam);
             }
             else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Read %d sats from %s into memory"),
                              __FUNCTION__, num, fnam);
             }
@@ -368,7 +368,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 
                 }
                 
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Added %d new satellites to local database"),
                              __FUNCTION__, newsats);
             }
@@ -385,7 +385,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 
         g_free (ldname);
 
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: TLE elements updated."),
                      __FUNCTION__);
     }
@@ -480,7 +480,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
                 g_clear_error (&err);
             }
             else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Added satellite %d to %s."),
                              __FUNCTION__, ntle->catnum, cfgfile);
             }
@@ -622,7 +622,7 @@ void tle_update_from_network (gboolean   silent,
                                  __FUNCTION__, curfile, curl_easy_strerror (res));
                 }
                 else {
-                    sat_log_log (SAT_LOG_LEVEL_MSG,
+                    sat_log_log (SAT_LOG_LEVEL_INFO,
                                  _("%s: Successfully fetched %s"),
                                  __FUNCTION__, curfile);
                     success++;
@@ -630,7 +630,7 @@ void tle_update_from_network (gboolean   silent,
                 fclose (outfile);
 
             } else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Failed to open %s preventing update"),
                                          __FUNCTION__, locfile);
             }
@@ -658,7 +658,7 @@ void tle_update_from_network (gboolean   silent,
 
         /* continue update if we have fetched at least one file */
         if (success > 0) {
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Fetched %d files from network; updating..."),
                          __FUNCTION__, success);
             /* call update_from_files */
@@ -837,7 +837,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
         }
         else {
             /* There is no category with this name (could be update from custom file) */
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%s: There is no category called %s"),
                          __FILE__, __FUNCTION__, fnam);
         }
@@ -900,7 +900,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 strncpy(tle_working[2],linetmp,80);
                 break;
             default:
-                sat_log_log (SAT_LOG_LEVEL_BUG,
+                sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s:%s: Something wrote linesneeded to an illegal value %d"),
                              __FILE__, __FUNCTION__, linesneeded);
                 break;
@@ -1233,7 +1233,7 @@ static void update_tle_in_file (const gchar *ldname,
                 if (!is_computer_generated_name(ntle->satname)) {
                     
                     if (is_computer_generated_name (satname)) {
-                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                        sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: Data for  %d updated for name."),
                                      __FUNCTION__, catnr);
                         g_key_file_set_string (satdata, "Satellite", "NAME", ntle->satname);
@@ -1245,7 +1245,7 @@ static void update_tle_in_file (const gchar *ldname,
                     /* clobber if nickname and name were same before */ 
                     /* clobber if international designator */
                     if ( is_computer_generated_name (satnickname) ) {
-                        sat_log_log (SAT_LOG_LEVEL_MSG,
+                        sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: Data for  %d updated for nickname."),
                                      __FUNCTION__, catnr);
                         g_key_file_set_string (satdata, "Satellite", "NICKNAME", ntle->satname);
@@ -1260,7 +1260,7 @@ static void update_tle_in_file (const gchar *ldname,
             if (tle.epoch < ntle->epoch) {
                 /* new data is newer than what we already have */
                 /* store new data */
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Data for  %d updated for tle."),
                              __FUNCTION__, catnr);
                 g_key_file_set_string (satdata, "Satellite", "TLE1", ntle->line1);
@@ -1270,7 +1270,7 @@ static void update_tle_in_file (const gchar *ldname,
 
             } else if (tle.epoch == ntle->epoch) {
                 if  ((status != ntle->status) && (ntle->status != OP_STAT_UNKNOWN)){
-                    sat_log_log (SAT_LOG_LEVEL_MSG,
+                    sat_log_log (SAT_LOG_LEVEL_INFO,
                                  _("%s: Data for  %d updated for operational status."),
                                  __FUNCTION__, catnr);
                     g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);

@@ -172,7 +172,7 @@ static void track_toggled(GtkCheckMenuItem * item, gpointer data)
 
     if (obj == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Failed to get satellite object."),
                     __FILE__, __LINE__);
         return;
@@ -227,7 +227,7 @@ static void target_toggled(GtkCheckMenuItem * item, gpointer data)
 
     if (obj == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_BUG,
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Failed to get satellite object."),
                     __FILE__, __LINE__);
         return;

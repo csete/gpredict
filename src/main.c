@@ -616,7 +616,7 @@ static void clean_tle (void)
     targetdirname = get_satdata_dir ();
     targetdir = g_dir_open (targetdirname, 0, NULL);
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Cleaning TLE data in %s"), __FUNCTION__, targetdirname);
 
 
@@ -629,7 +629,7 @@ static void clean_tle (void)
                              _("%s: Failed to delete %s"), __FUNCTION__, filename);
             }
             else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Removed %s"), __FUNCTION__, filename);
             }
             g_free (path);
@@ -657,7 +657,7 @@ static void clean_trsp (void)
     targetdirname = get_trsp_dir ();
     targetdir = g_dir_open (targetdirname, 0, NULL);
 
-    sat_log_log (SAT_LOG_LEVEL_MSG,
+    sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Cleaning transponder data in %s"), __FUNCTION__, targetdirname);
 
 
@@ -670,7 +670,7 @@ static void clean_trsp (void)
                              _("%s: Failed to delete %s"), __FUNCTION__, filename);
             }
             else {
-                sat_log_log (SAT_LOG_LEVEL_MSG,
+                sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Removed %s"), __FUNCTION__, filename);
             }
             g_free (path);

@@ -502,7 +502,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
     have been disabled. */
     if (gtk_tree_model_iter_n_children (model, NULL) < 1) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Edit button should have been disabled."),
                        __FILE__, __FUNCTION__);
         //gtk_widget_set_sensitive (button, FALSE);
@@ -589,7 +589,7 @@ static void delete_cb (GtkWidget *button, gpointer data)
        have been disabled. */
     if (gtk_tree_model_iter_n_children (model, NULL) < 1) {
 
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Delete button should have been disabled."),
                      __FILE__, __FUNCTION__);
         //gtk_widget_set_sensitive (button, FALSE);

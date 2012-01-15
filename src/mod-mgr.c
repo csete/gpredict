@@ -175,7 +175,7 @@ mod_mgr_create (void)
 
     }
     else {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: No modules have to be restored."),
                      __FUNCTION__);
     }
@@ -218,13 +218,13 @@ mod_mgr_add_module     (GtkWidget *module, gboolean dock)
             gtk_notebook_set_current_page (GTK_NOTEBOOK (nbook), page);
 
             /* send message to logger */
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Added %s to module manager (page %d)."),
                          __FUNCTION__, GTK_SAT_MODULE (module)->name, page);
         }
         else {
             /* send message to logger */
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Added %s to module manager (NOT DOCKED)."),
                          __FUNCTION__, GTK_SAT_MODULE (module)->name);
         }
@@ -272,7 +272,7 @@ mod_mgr_remove_module (GtkWidget *module)
 
         if (page == -1) {
             /* this is some kind of bug (inconsistency between internal states) */
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Could not find child in notebook. This may hurt..."),
                          __FUNCTION__);
 
@@ -281,7 +281,7 @@ mod_mgr_remove_module (GtkWidget *module)
         else {
             gtk_notebook_remove_page (GTK_NOTEBOOK (nbook), page);
 
-            sat_log_log (SAT_LOG_LEVEL_MSG,
+            sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Removed child from notebook page %d."),
                          __FUNCTION__, page);
 
@@ -333,7 +333,7 @@ mod_mgr_save_state ()
 
     
     if (!nbook) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Attempt to save state but mod-mgr is NULL?"),
                      __FUNCTION__);
         return;
@@ -342,7 +342,7 @@ mod_mgr_save_state ()
     num = g_slist_length (modules);
 
     if (num == 0) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: No modules need to save state."),
                      __FUNCTION__);
 
@@ -376,7 +376,7 @@ mod_mgr_save_state ()
     /* store the currently open page number */
     page = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbook));
 
-    sat_log_log (SAT_LOG_LEVEL_MSG, _("%s: Saved states for %d modules."),
+    sat_log_log (SAT_LOG_LEVEL_INFO, _("%s: Saved states for %d modules."),
                  __FUNCTION__, num);
 
     sat_cfg_set_str (SAT_CFG_STR_OPEN_MODULES, mods);
@@ -440,7 +440,7 @@ mod_mgr_dock_module    (GtkWidget *module)
 
     
     if (!g_slist_find (modules, module)) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s not found in list. Trying to recover."),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name);
         modules = g_slist_append (modules, module);
@@ -448,7 +448,7 @@ mod_mgr_dock_module    (GtkWidget *module)
 
     page = gtk_notebook_page_num (GTK_NOTEBOOK (nbook), module);
     if (page != -1) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s already in notebook!"),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name);
         retcode = 1;
@@ -459,7 +459,7 @@ mod_mgr_dock_module    (GtkWidget *module)
                                          module,
                                          gtk_label_new (GTK_SAT_MODULE (module)->name));
 
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Docked %s into notebook (page %d)"),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name, page);
         
@@ -506,7 +506,7 @@ mod_mgr_undock_module  (GtkWidget *module)
 
 
     if (!g_slist_find (modules, module)) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s not found in list. Trying to recover."),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name);
         modules = g_slist_append (modules, module);
@@ -514,7 +514,7 @@ mod_mgr_undock_module  (GtkWidget *module)
 
     page = gtk_notebook_page_num (GTK_NOTEBOOK (nbook), module);
     if (page == -1) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s does not seem to be docked!"),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name);
         retcode = 1;
@@ -523,7 +523,7 @@ mod_mgr_undock_module  (GtkWidget *module)
 
         gtk_notebook_remove_page (GTK_NOTEBOOK (nbook), page);
 
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Removed %s from notebook page %d."),
                      __FUNCTION__, GTK_SAT_MODULE (module)->name, page);
 
@@ -600,7 +600,7 @@ mod_mgr_reload_sats    ()
 
     
     if (!nbook) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Attempt to reload sats but mod-mgr is NULL?"),
                      __FUNCTION__);
         return;
@@ -609,7 +609,7 @@ mod_mgr_reload_sats    ()
     num = g_slist_length (modules);
 
     if (num == 0) {
-        sat_log_log (SAT_LOG_LEVEL_MSG,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: No modules need to reload sats."),
                      __FUNCTION__);
 

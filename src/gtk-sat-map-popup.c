@@ -177,7 +177,7 @@ coverage_toggled (GtkCheckMenuItem *item, gpointer data)
      sat = SAT(g_object_get_data (G_OBJECT (item), "sat"));
 
      if (obj == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%d: Failed to get satellite object."),
                           __FILE__, __LINE__);
           return;
@@ -241,7 +241,7 @@ track_toggled (GtkCheckMenuItem *item, gpointer data)
      qth = (qth_t *)(g_object_get_data (G_OBJECT (item), "qth"));
 
      if (obj == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%d: Failed to get satellite object."),
                           __FILE__, __LINE__);
           return;
@@ -289,7 +289,7 @@ target_toggled (GtkCheckMenuItem *item, gpointer data)
      obj = SAT_MAP_OBJ(g_object_get_data (G_OBJECT (item), "obj"));
 
      if (obj == NULL) {
-          sat_log_log (SAT_LOG_LEVEL_BUG,
+          sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%d: Failed to get satellite object."),
                           __FILE__, __LINE__);
           return;

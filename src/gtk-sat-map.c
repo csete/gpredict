@@ -777,7 +777,7 @@ gtk_sat_map_update (GtkWidget  *widget)
                     g_free (cs);
                 }
                 else {
-                    sat_log_log (SAT_LOG_LEVEL_BUG,
+                    sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s: Can not find NEXT satellite."),
                                  __FUNCTION__);
                     g_object_set (satmap->next,
@@ -1019,7 +1019,7 @@ on_button_release (GooCanvasItem *item,
     case 1:
         obj = SAT_MAP_OBJ (g_hash_table_lookup (satmap->obj, catpoint));
         if (obj == NULL) {
-            sat_log_log (SAT_LOG_LEVEL_BUG,
+            sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%d: Can not find clicked object (%d) in hash table"),
                          __FILE__, __LINE__, catnum);
         }
@@ -1126,7 +1126,7 @@ void gtk_sat_map_select_sat  (GtkWidget *satmap, gint catnum)
 
     obj = SAT_MAP_OBJ (g_hash_table_lookup (smap->obj, catpoint));
     if (obj == NULL) {
-        sat_log_log (SAT_LOG_LEVEL_BUG,
+        sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Can not find clicked object (%d) in hash table"),
                      __FUNCTION__, catnum);
     }
