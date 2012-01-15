@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2012  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -32,14 +32,6 @@
 
 #define SAT_LOG_MSG_SEPARATOR "|"
 
-/** \brief Debug message sources. */
-typedef enum {
-     SAT_LOG_SRC_NONE     = 0,     /*!< No source, unknown source. */
-     SAT_LOG_SRC_HAMLIB   = 1,     /*!< Debug message comes from hamlib */
-     SAT_LOG_SRC_GPREDICT = 2      /*!< Debug message comes from grig itself */
-} sat_log_src_t;
-
-
 typedef enum {
      SAT_LOG_LEVEL_NONE  = 0,
      SAT_LOG_LEVEL_BUG   = 1,
@@ -49,12 +41,10 @@ typedef enum {
      SAT_LOG_LEVEL_DEBUG = 5
 } sat_log_level_t;
 
-
 void sat_log_init        (void);
 void sat_log_close       (void);
 void sat_log_log         (sat_log_level_t level, const char *fmt, ...);
 void sat_log_set_visible (gboolean visible);
 void sat_log_set_level   (sat_log_level_t level);
-
 
 #endif
