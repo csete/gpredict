@@ -357,6 +357,7 @@ qth_data_save (const gchar *filename, qth_t *qth)
                             QTH_CFG_MAIN_SECTION,
                             QTH_CFG_TYPE_KEY,
                             qth->type);
+#if HAS_LIBGPS
     /* gpsd server */
     if (qth->gpsd_server && (g_utf8_strlen (qth->gpsd_server, -1) > 0)) {
         g_key_file_set_string (qth->data,
@@ -369,7 +370,7 @@ qth_data_save (const gchar *filename, qth_t *qth)
                             QTH_CFG_MAIN_SECTION,
                             QTH_CFG_GPSD_PORT_KEY,
                             qth->gpsd_port);
-    
+#endif
     /* saving code */
 
     ok = !(gpredict_save_key_file (qth->data, filename));
