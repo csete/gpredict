@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2012  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -80,6 +80,10 @@ static void   menubar_license_cb   (GtkWidget *widget, gpointer data);
 static void   menubar_news_cb      (GtkWidget *widget, gpointer data);
 static void   menubar_about_cb     (GtkWidget *widget, gpointer data);
 static gchar *select_module        (void);
+static void   select_module_row_activated_cb(GtkTreeView * tree_view,
+                                             GtkTreePath * path,
+                                             GtkTreeViewColumn * column,
+                                             gpointer data);
 static void   create_module_window (GtkWidget *module);
 static gint compare_func (GtkTreeModel *model,
                           GtkTreeIter  *a,
@@ -850,8 +854,8 @@ select_module        ()
     GtkTreeIter        item;       /* new item added to the list store */
     GtkTreeSelection  *selection;
     GtkTreeModel      *selmod;
-     GtkTreeModel      *listtreemodel;
-     GtkWidget         *swin;
+    GtkTreeModel      *listtreemodel;
+    GtkWidget         *swin;
     GDir              *dir = NULL;   /* directory handle */
     GError            *error = NULL; /* error flag and info */
     gchar             *dirname;      /* directory name */
@@ -920,16 +924,17 @@ select_module        ()
     }
 
     /* create tree view */
-    modlist = gtk_tree_view_new ();
-     listtreemodel=GTK_TREE_MODEL (liststore);
-     gtk_tree_view_set_model (GTK_TREE_VIEW (modlist), listtreemodel);
-    g_object_unref (liststore);
+    modlist = gtk_tree_view_new();
+    listtreemodel = GTK_TREE_MODEL (liststore);
+    gtk_tree_view_set_model(GTK_TREE_VIEW (modlist), listtreemodel);
+    g_object_unref(liststore);
+    /* connecting row activated signal postponed so that we can attach dialog window */
 
-     swin = gtk_scrolled_window_new(NULL,NULL);
-     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
-                                    GTK_POLICY_AUTOMATIC,
-                                    GTK_POLICY_AUTOMATIC);
-     /* sort the tree by name */
+    swin = gtk_scrolled_window_new(NULL,NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (swin),
+                                   GTK_POLICY_AUTOMATIC,
+                                   GTK_POLICY_AUTOMATIC);
+    /* sort the tree by name */
     gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (listtreemodel),
                                      0,
                                      compare_func,
@@ -961,16 +966,20 @@ select_module        ()
                                           GTK_RESPONSE_OK,
                                           NULL);
 
-    gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 200);
-     gtk_container_add (GTK_CONTAINER (swin), modlist);
-    gtk_widget_show (swin);
-    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG (dialog))), swin);
+    gtk_window_set_default_size(GTK_WINDOW (dialog), -1, 200);
+    gtk_container_add(GTK_CONTAINER(swin), modlist);
+    gtk_widget_show(swin);
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG (dialog))), swin);
+
+    /* double clicking in list will open clicked module */
+    g_signal_connect(modlist, "row-activated",
+                     G_CALLBACK(select_module_row_activated_cb), dialog);
+
 
     switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
 
         /* user pressed OK */
     case GTK_RESPONSE_OK:
-
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (modlist));
 
         if (gtk_tree_selection_get_selected (selection, &selmod, &item)) {
@@ -1002,6 +1011,27 @@ select_module        ()
     
 
     return dirname;
+}
+
+
+/** \brief Manage row activated (double click) event in the module selector window.
+ *  \param tree_view
+ *  \param path
+ *  \param column
+ *  \param data Pointer to the parent dialog.
+ * 
+ * This event handler is triggered when the user double clicks on a row in the
+ * "Open module" dialog window. This function will simply emit GTK_RESPONSE_OK
+ * which will be interpreted as if th euser clicked on the OK button.
+ */
+static void select_module_row_activated_cb(GtkTreeView * tree_view,
+                                           GtkTreePath * path,
+                                           GtkTreeViewColumn * column,
+                                           gpointer data)
+{
+    GtkDialog *dialog = GTK_DIALOG(data);
+
+    gtk_dialog_response(dialog, GTK_RESPONSE_OK);
 }
 
 
