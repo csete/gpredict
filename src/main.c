@@ -134,9 +134,13 @@ int main (int argc, char *argv[])
         g_print (_("Option parsing failed: %s\n"), err->message);
     }
 
-
     /* start logger first, so that we can catch error messages if any */
     sat_log_init ();
+
+    sat_cfg_load ();
+
+    /* get logging level */
+    sat_log_set_level (sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
      
     if (!g_thread_supported ())
         g_thread_init (NULL);
@@ -161,11 +165,6 @@ int main (int argc, char *argv[])
 
         return 1;
     }
-
-    sat_cfg_load ();
-
-    /* get logging level */
-    sat_log_set_level (sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
 
     /* create application */
     gpredict_app_create ();
