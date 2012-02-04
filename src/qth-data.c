@@ -2,10 +2,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2012  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
-  Charles Suprin <hamaa1vs@gmail.com>
+           Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -30,7 +30,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
 
 #include "sgpsdp/sgp4sdp4.h"
@@ -42,10 +42,10 @@
 #include "locator.h"
 #include "gpredict-utils.h"
 #ifdef HAS_LIBGPS
-#  include <gps.h>
+#include <gps.h>
 #endif
 
-void qth_validate(qth_t*qth);
+void qth_validate(qth_t *qth);
 
 
 /** \brief Read QTH data from file.
@@ -55,226 +55,195 @@ void qth_validate(qth_t*qth);
  *
  *  \note The function uses the new key=value file parser from glib.
  */
-gint
-qth_data_read (const gchar *filename, qth_t *qth)
+gint qth_data_read(const gchar *filename, qth_t *qth)
 {
     GError *error = NULL;
-    gchar  *buff;
-    gchar  **buffv;
+    gchar *buff;
+    gchar **buffv;
 
-    qth->data = g_key_file_new ();
-    g_key_file_set_list_separator (qth->data, ';');
+    qth->data = g_key_file_new();
+    g_key_file_set_list_separator(qth->data, ';');
 
     /* bail out with error message if data can not be read */
-    if (!g_key_file_load_from_file (qth->data, filename,
-                                    G_KEY_FILE_KEEP_COMMENTS, &error)) {
+    if (!g_key_file_load_from_file(qth->data, filename, G_KEY_FILE_KEEP_COMMENTS, &error))
+    {
 
-        g_key_file_free (qth->data);
+        g_key_file_free(qth->data);
         qth->data = NULL;
 
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not load data from %s (%s)"),
-                     __FUNCTION__, filename, error->message);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not load data from %s (%s)"),
+                    __FUNCTION__, filename, error->message);
 
         return FALSE;
     }
 
     /* send a debug message, then read data */
-    sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                 _("%s: QTH data: %s"),
-                 __FUNCTION__, filename);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: QTH data: %s"), __FUNCTION__, filename);
 
     /*** FIXME: should check that strings are UTF-8? */
     /* QTH Name */
-    buff = g_path_get_basename (filename);
-    buffv = g_strsplit (buff, ".qth", 0);
-    qth->name = g_strdup (buffv[0]);
+    buff = g_path_get_basename(filename);
+    buffv = g_strsplit(buff, ".qth", 0);
+    qth->name = g_strdup(buffv[0]);
 
-    g_free (buff);
-    g_strfreev (buffv);
+    g_free(buff);
+    g_strfreev(buffv);
     /* g_key_file_get_string (qth->data, */
     /*                        QTH_CFG_MAIN_SECTION, */
     /*                        QTH_CFG_NAME_KEY, */
     /*                        &error); */
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                     _("%s: Error reading QTH name (%s)."),
-                     __FUNCTION__, error->message);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error reading QTH name (%s)."), __FUNCTION__, error->message);
 
-        qth->name = g_strdup (_("ERROR"));
-        g_clear_error (&error);
+        qth->name = g_strdup(_("ERROR"));
+        g_clear_error(&error);
     }
 
     /* QTH location */
-    qth->loc = g_key_file_get_string (qth->data,
-                                      QTH_CFG_MAIN_SECTION,
-                                      QTH_CFG_LOC_KEY,
-                                      &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_INFO,
-                     _("%s: QTH has no location (%s)."),
-                     __FUNCTION__, error->message);
+    qth->loc = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_LOC_KEY, &error);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO,
+                    _("%s: QTH has no location (%s)."), __FUNCTION__, error->message);
 
-        qth->loc = g_strdup ("");
-        g_clear_error (&error);
+        qth->loc = g_strdup("");
+        g_clear_error(&error);
     }
 
     /* QTH description */
-    qth->desc = g_key_file_get_string (qth->data,
-                                       QTH_CFG_MAIN_SECTION,
-                                       QTH_CFG_DESC_KEY,
-                                       &error);
-    if ((qth->desc == NULL) || (error != NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_INFO,
-                     _("%s: QTH has no description."),
-                     __FUNCTION__);
+    qth->desc = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_DESC_KEY, &error);
+    if ((qth->desc == NULL) || (error != NULL))
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no description."), __FUNCTION__);
 
-        qth->desc = g_strdup ("");
-        g_clear_error (&error);
+        qth->desc = g_strdup("");
+        g_clear_error(&error);
     }
 
     /* Weather station */
-    qth->wx = g_key_file_get_string (qth->data,
-                                     QTH_CFG_MAIN_SECTION,
-                                     QTH_CFG_WX_KEY,
-                                     &error);
-    if ((qth->wx == NULL) || (error != NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_INFO,
-                     _("%s: QTH has no weather station."),
-                     __FUNCTION__);
+    qth->wx = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_WX_KEY, &error);
+    if ((qth->wx == NULL) || (error != NULL))
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no weather station."), __FUNCTION__);
 
-        qth->wx = g_strdup ("");
-        g_clear_error (&error);
+        qth->wx = g_strdup("");
+        g_clear_error(&error);
     }
 
     /* QTH Latitude */
-    buff = g_key_file_get_string (qth->data,
-                                  QTH_CFG_MAIN_SECTION,
-                                  QTH_CFG_LAT_KEY,
-                                  &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading QTH latitude (%s)."),
-                     __FUNCTION__, error->message);
+    buff = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_LAT_KEY, &error);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error reading QTH latitude (%s)."), __FUNCTION__, error->message);
 
-        g_clear_error (&error);
+        g_clear_error(&error);
 
         if (buff != NULL)
-            g_free (buff);
+            g_free(buff);
 
         qth->lat = 0.0;
     }
-    else {
-        qth->lat = g_ascii_strtod (buff, NULL);
-        g_free (buff);
+    else
+    {
+        qth->lat = g_ascii_strtod(buff, NULL);
+        g_free(buff);
     }
 
     /* QTH Longitude */
-    buff = g_key_file_get_string (qth->data,
-                                  QTH_CFG_MAIN_SECTION,
-                                  QTH_CFG_LON_KEY,
-                                  &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading QTH longitude (%s)."),
-                     __FUNCTION__, error->message);
+    buff = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_LON_KEY, &error);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error reading QTH longitude (%s)."), __FUNCTION__, error->message);
 
-        g_clear_error (&error);
+        g_clear_error(&error);
 
         if (buff != NULL)
-            g_free (buff);
+            g_free(buff);
 
         qth->lon = 0.0;
     }
-    else {
-        qth->lon = g_ascii_strtod (buff, NULL);
-        g_free (buff);
+    else
+    {
+        qth->lon = g_ascii_strtod(buff, NULL);
+        g_free(buff);
     }
 
     /* QTH Altitude */
-    qth->alt = g_key_file_get_integer (qth->data,
-                                       QTH_CFG_MAIN_SECTION,
-                                       QTH_CFG_ALT_KEY,
-                                       &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading QTH altitude (%s)."),
-                     __FUNCTION__, error->message);
+    qth->alt = g_key_file_get_integer(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_ALT_KEY, &error);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error reading QTH altitude (%s)."), __FUNCTION__, error->message);
 
-        g_clear_error (&error);
+        g_clear_error(&error);
 
         if (buff != NULL)
-            g_free (buff);
+            g_free(buff);
 
         qth->alt = 0;
     }
-    else {
+    else
+    {
     }
 
 
     /* QTH Type */
-    qth->type = g_key_file_get_integer (qth->data,
-                                       QTH_CFG_MAIN_SECTION,
-                                       QTH_CFG_TYPE_KEY,
-                                       &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading QTH type (%s)."),
-                     __FUNCTION__, error->message);
+    qth->type = g_key_file_get_integer(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_TYPE_KEY, &error);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error reading QTH type (%s)."), __FUNCTION__, error->message);
 
-        g_clear_error (&error);
+        g_clear_error(&error);
 
 
         qth->type = QTH_STATIC_TYPE;
     }
 
     /* GPSD Port */
-    qth->gpsd_port = g_key_file_get_integer (qth->data,
-                                        QTH_CFG_MAIN_SECTION,
-                                        QTH_CFG_GPSD_PORT_KEY,
-                                        &error);
-    if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Error reading QTH type (%s)."),
-                     __FUNCTION__, error->message);
+    qth->gpsd_port = g_key_file_get_integer(qth->data,
+                                            QTH_CFG_MAIN_SECTION, QTH_CFG_GPSD_PORT_KEY, &error);
+    if (error != NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error reading QTH type (%s)."), __FUNCTION__, error->message);
 
-        g_clear_error (&error);
+        g_clear_error(&error);
 
-        /*if not set put it on the default port*/
+        /*if not set put it on the default port */
         qth->gpsd_port = 2947;
     }
 
     /* GPSD Server */
-    qth->gpsd_server = g_key_file_get_string (qth->data,
-                                     QTH_CFG_MAIN_SECTION,
-                                     QTH_CFG_GPSD_SERVER_KEY,
-                                     &error);
-    if ((qth->gpsd_server == NULL) || (error != NULL)) {
-        sat_log_log (SAT_LOG_LEVEL_INFO,
-                     _("%s: QTH has no GPSD Server."),
-                     __FUNCTION__);
+    qth->gpsd_server = g_key_file_get_string(qth->data,
+                                             QTH_CFG_MAIN_SECTION, QTH_CFG_GPSD_SERVER_KEY, &error);
+    if ((qth->gpsd_server == NULL) || (error != NULL))
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no GPSD Server."), __FUNCTION__);
 
-        qth->gpsd_server = g_strdup ("");
-        g_clear_error (&error);
+        qth->gpsd_server = g_strdup("");
+        g_clear_error(&error);
     }
 
     /* set QRA based on data */
-    if (longlat2locator (qth->lon, qth->lat, qth->qra,2) != RIG_OK) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not set QRA for %s at %f, %f."),
-                     __FUNCTION__, qth->name, qth->lon, qth->lat);
+    if (longlat2locator(qth->lon, qth->lat, qth->qra, 2) != RIG_OK)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not set QRA for %s at %f, %f."),
+                    __FUNCTION__, qth->name, qth->lon, qth->lat);
     }
-    
+
     qth_validate(qth);
 
     /* Now, send debug message and return */
-    sat_log_log (SAT_LOG_LEVEL_INFO,
-                 _("%s: QTH data: %s, %.4f, %.4f, %d"),
-                 __FUNCTION__,
-                 qth->name,
-                 qth->lat,
-                 qth->lon,
-                 qth->alt);
+    sat_log_log(SAT_LOG_LEVEL_INFO,
+                _("%s: QTH data: %s, %.4f, %.4f, %d"),
+                __FUNCTION__, qth->name, qth->lat, qth->lon, qth->alt);
 
     return TRUE;
 }
@@ -284,14 +253,13 @@ qth_data_read (const gchar *filename, qth_t *qth)
  * \param filename The file to save to.
  * \param qth Pointer to a qth_t data structure from which the data will be read.
  */
-gint
-qth_data_save (const gchar *filename, qth_t *qth)
+gint qth_data_save(const gchar * filename, qth_t * qth)
 {
-    gchar      *buff;
-    gint        ok = 1;
+    gchar *buff;
+    gint ok = 1;
 
-    qth->data = g_key_file_new ();
-    g_key_file_set_list_separator (qth->data, ';');
+    qth->data = g_key_file_new();
+    g_key_file_set_list_separator(qth->data, ';');
 
     /* name */
     /*     if (qth->name) { */
@@ -302,78 +270,57 @@ qth_data_save (const gchar *filename, qth_t *qth)
     /*     } */
 
     /* description */
-    if (qth->desc && (g_utf8_strlen (qth->desc, -1) > 0)) {
-        g_key_file_set_string (qth->data,
-                               QTH_CFG_MAIN_SECTION,
-                               QTH_CFG_DESC_KEY,
-                               qth->desc);
+    if (qth->desc && (g_utf8_strlen(qth->desc, -1) > 0))
+    {
+        g_key_file_set_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_DESC_KEY, qth->desc);
     }
-    
+
     /* location */
-    if (qth->loc && (g_utf8_strlen (qth->loc, -1) > 0)) {
-        g_key_file_set_string (qth->data,
-                               QTH_CFG_MAIN_SECTION,
-                               QTH_CFG_LOC_KEY,
-                               qth->loc);
+    if (qth->loc && (g_utf8_strlen(qth->loc, -1) > 0))
+    {
+        g_key_file_set_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_LOC_KEY, qth->loc);
     }
 
     /* latitude */
-    /*    buff = g_strdup_printf ("%.4f", qth->lat);*/
-    buff = g_malloc (10);
-    buff = g_ascii_dtostr (buff, 9, qth->lat);
-    g_key_file_set_string (qth->data,
-                           QTH_CFG_MAIN_SECTION,
-                           QTH_CFG_LAT_KEY,
-                           buff);
-    g_free (buff);
+    /*    buff = g_strdup_printf ("%.4f", qth->lat); */
+    buff = g_malloc(10);
+    buff = g_ascii_dtostr(buff, 9, qth->lat);
+    g_key_file_set_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_LAT_KEY, buff);
+    g_free(buff);
 
     /* longitude */
     /*     buff = g_strdup_printf ("%.4f", qth->lon); */
-    buff = g_malloc (10);
-    buff = g_ascii_dtostr (buff, 9, qth->lon);
-    g_key_file_set_string (qth->data,
-                           QTH_CFG_MAIN_SECTION,
-                           QTH_CFG_LON_KEY,
-                           buff);
-    g_free (buff);
+    buff = g_malloc(10);
+    buff = g_ascii_dtostr(buff, 9, qth->lon);
+    g_key_file_set_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_LON_KEY, buff);
+    g_free(buff);
 
     /* altitude */
-    g_key_file_set_integer (qth->data,
-                            QTH_CFG_MAIN_SECTION,
-                            QTH_CFG_ALT_KEY,
-                            qth->alt);
+    g_key_file_set_integer(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_ALT_KEY, qth->alt);
 
     /* weather station */
-    if (qth->wx && (g_utf8_strlen (qth->wx, -1) > 0)) {
-        g_key_file_set_string (qth->data,
-                               QTH_CFG_MAIN_SECTION,
-                               QTH_CFG_WX_KEY,
-                               qth->wx);
+    if (qth->wx && (g_utf8_strlen(qth->wx, -1) > 0))
+    {
+        g_key_file_set_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_WX_KEY, qth->wx);
     }
 
     /* qth type */
-    /* static, gpsd...*/
-    g_key_file_set_integer (qth->data,
-                            QTH_CFG_MAIN_SECTION,
-                            QTH_CFG_TYPE_KEY,
-                            qth->type);
+    /* static, gpsd... */
+    g_key_file_set_integer(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_TYPE_KEY, qth->type);
+
 #if HAS_LIBGPS
     /* gpsd server */
-    if (qth->gpsd_server && (g_utf8_strlen (qth->gpsd_server, -1) > 0)) {
-        g_key_file_set_string (qth->data,
-                               QTH_CFG_MAIN_SECTION,
-                               QTH_CFG_GPSD_SERVER_KEY,
-                               qth->gpsd_server);
+    if (qth->gpsd_server && (g_utf8_strlen(qth->gpsd_server, -1) > 0))
+    {
+        g_key_file_set_string(qth->data,
+                              QTH_CFG_MAIN_SECTION, QTH_CFG_GPSD_SERVER_KEY, qth->gpsd_server);
     }
     /* gpsd port */
-    g_key_file_set_integer (qth->data,
-                            QTH_CFG_MAIN_SECTION,
-                            QTH_CFG_GPSD_PORT_KEY,
-                            qth->gpsd_port);
+    g_key_file_set_integer(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_GPSD_PORT_KEY, qth->gpsd_port);
 #endif
-    /* saving code */
 
-    ok = !(gpredict_save_key_file (qth->data, filename));
+    /* saving code */
+    ok = !(gpredict_save_key_file(qth->data, filename));
 
     return ok;
 }
@@ -382,106 +329,131 @@ qth_data_save (const gchar *filename, qth_t *qth)
 /** \brief Free QTH resources.
  *  \param qth The qth data structure to free.
  */
-void
-qth_data_free (qth_t *qth)
+void qth_data_free(qth_t * qth)
 {
     /* stop any updating */
     qth_data_update_stop(qth);
 
-    if (qth->name) {
-        g_free (qth->name);
+    if (qth->name)
+    {
+        g_free(qth->name);
         qth->name = NULL;
     }
 
-    if (qth->loc) {
-        g_free (qth->loc);
+    if (qth->loc)
+    {
+        g_free(qth->loc);
         qth->loc = NULL;
     }
 
-    if (qth->desc) {
-        g_free (qth->desc);
+    if (qth->desc)
+    {
+        g_free(qth->desc);
         qth->desc = NULL;
     }
 
-    if (qth->qra) {
-        g_free (qth->qra);
+    if (qth->qra)
+    {
+        g_free(qth->qra);
         qth->qra = NULL;
     }
 
-    if (qth->wx) {
-        g_free (qth->wx);
+    if (qth->wx)
+    {
+        g_free(qth->wx);
         qth->wx = NULL;
     }
 
-    if (qth->data) {
-        g_key_file_free (qth->data);
+    if (qth->data)
+    {
+        g_key_file_free(qth->data);
         qth->data = NULL;
     }
 
-    g_free (qth);
+    g_free(qth);
 }
 
 /** \brief Update the qth data by whatever method is appropriate.
  * \param qth the qth data structure to update
  * \param qth the time at which the qth is to be computed. this may be ignored by gps updates.
  */
-gboolean qth_data_update(qth_t * qth, gdouble t) {
+gboolean qth_data_update(qth_t * qth, gdouble t)
+{
     gboolean retval = FALSE;
+
 #ifdef HAS_LIBGPS
-    guint num_loops=0;
+    guint num_loops = 0;
 #endif
-    switch (qth->type) {
+
+    switch (qth->type)
+    {
     case QTH_STATIC_TYPE:
         /* never changes */
         break;
     case QTH_GPSD_TYPE:
-        if (((t-qth->gpsd_update)>30.0/86400.0)&&(t-qth->gpsd_connected>30.0/86400.0)){
+        if (((t - qth->gpsd_update) > 30.0 / 86400.0) && (t - qth->gpsd_connected > 30.0 / 86400.0))
+        {
             /* if needed restart the gpsd interface */
             qth_data_update_stop(qth);
             qth_data_update_init(qth);
-            qth->gpsd_connected=t;
-        
+            qth->gpsd_connected = t;
+
         }
 
-        if (qth->gps_data!=NULL) {
+        if (qth->gps_data != NULL)
+        {
+
 #ifdef HAS_LIBGPS
-            switch (GPSD_API_MAJOR_VERSION){
+            switch (GPSD_API_MAJOR_VERSION)
+            {
             case 4:
 #if GPSD_API_MAJOR_VERSION==4
-                while(gps_waiting(qth->gps_data) == TRUE) {
-                    /* this is a watchdog in case there is a problem with the gpsd code.*/
+                while (gps_waiting(qth->gps_data) == TRUE)
+                {
+                    /* this is a watchdog in case there is a problem with the gpsd code. */
                     /* if the server was up and has failed then gps_waiting in 2.92 confirmed */
-                    /* will return 1 (supposedly fixed in later versions.)*/
+                    /* will return 1 (supposedly fixed in later versions.) */
                     /* if we do not do this as a while loop, the gpsd packets can backup  */
-                    /*   and no longer be in sync with the gps receiver*/
+                    /*   and no longer be in sync with the gps receiver */
                     num_loops++;
-                    if (num_loops>1000){
-                        retval=FALSE;
+                    if (num_loops > 1000)
+                    {
+                        retval = FALSE;
                         break;
                     }
-                    if(gps_poll(qth->gps_data) == 0){
+                    if (gps_poll(qth->gps_data) == 0)
+                    {
                         /* handling packet_set inline with 
                            http://gpsd.berlios.de/client-howto.html
-                        */
-                        if (qth->gps_data->set&PACKET_SET) {
-                            if (qth->gps_data->fix.mode >= MODE_2D) {
-                                if (qth->lat != qth->gps_data->fix.latitude) {
+                         */
+                        if (qth->gps_data->set & PACKET_SET)
+                        {
+                            if (qth->gps_data->fix.mode >= MODE_2D)
+                            {
+                                if (qth->lat != qth->gps_data->fix.latitude)
+                                {
                                     qth->lat = qth->gps_data->fix.latitude;
                                     retval = TRUE;
                                 }
-                                if (qth->lon!=qth->gps_data->fix.longitude) {
+                                if (qth->lon != qth->gps_data->fix.longitude)
+                                {
                                     qth->lon = qth->gps_data->fix.longitude;
                                     retval = TRUE;
                                 }
                             }
-                            
-                            if (qth->gps_data->fix.mode == MODE_3D) {
-                                if (qth->alt != qth->gps_data->fix.altitude) {
+
+                            if (qth->gps_data->fix.mode == MODE_3D)
+                            {
+                                if (qth->alt != qth->gps_data->fix.altitude)
+                                {
                                     qth->alt = qth->gps_data->fix.altitude;
                                     retval = TRUE;
                                 }
-                            } else {
-                                if (qth->alt != 0) {
+                            }
+                            else
+                            {
+                                if (qth->alt != 0)
+                                {
                                     qth->alt = 0;
                                     retval = TRUE;
                                 }
@@ -493,37 +465,49 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
                 break;
             case 5:
 #if GPSD_API_MAJOR_VERSION==5
-                while(gps_waiting(qth->gps_data,0) == 1) {
+                while (gps_waiting(qth->gps_data, 0) == 1)
+                {
                     /* see comment from above */
                     /* hopefully not needed but does not hurt anything. */
                     num_loops++;
-                    if (num_loops>1000){
-                        retval=FALSE;
+                    if (num_loops > 1000)
+                    {
+                        retval = FALSE;
                         break;
                     }
-                    if(gps_read(qth->gps_data) == 0){
+                    if (gps_read(qth->gps_data) == 0)
+                    {
                         /* handling packet_set inline with 
                            http://gpsd.berlios.de/client-howto.html
-                        */
-                        if (qth->gps_data->set&PACKET_SET) {
-                            if (qth->gps_data->fix.mode >= MODE_2D) {
-                                if (qth->lat != qth->gps_data->fix.latitude) {
+                         */
+                        if (qth->gps_data->set & PACKET_SET)
+                        {
+                            if (qth->gps_data->fix.mode >= MODE_2D)
+                            {
+                                if (qth->lat != qth->gps_data->fix.latitude)
+                                {
                                     qth->lat = qth->gps_data->fix.latitude;
                                     retval = TRUE;
                                 }
-                                if (qth->lon!=qth->gps_data->fix.longitude) {
+                                if (qth->lon != qth->gps_data->fix.longitude)
+                                {
                                     qth->lon = qth->gps_data->fix.longitude;
                                     retval = TRUE;
                                 }
                             }
-                            
-                            if (qth->gps_data->fix.mode == MODE_3D) {
-                                if (qth->alt != qth->gps_data->fix.altitude) {
+
+                            if (qth->gps_data->fix.mode == MODE_3D)
+                            {
+                                if (qth->alt != qth->gps_data->fix.altitude)
+                                {
                                     qth->alt = qth->gps_data->fix.altitude;
                                     retval = TRUE;
                                 }
-                            } else {
-                                if (qth->alt != 0) {
+                            }
+                            else
+                            {
+                                if (qth->alt != 0)
+                                {
                                     qth->alt = 0;
                                     retval = TRUE;
                                 }
@@ -534,10 +518,11 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
 #endif
                 break;
             default:
-                break;    
-            }         
+                break;
+            }
 #endif
-            if (retval == TRUE){
+            if (retval == TRUE)
+            {
                 qth->gpsd_update = t;
             }
         }
@@ -549,10 +534,11 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
     qth_validate(qth);
 
     /* update qra */
-    if (longlat2locator (qth->lon, qth->lat, qth->qra,2) != RIG_OK) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not set QRA for %s at %f, %f."),
-                     __FUNCTION__, qth->name, qth->lon, qth->lat);
+    if (longlat2locator(qth->lon, qth->lat, qth->qra, 2) != RIG_OK)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not set QRA for %s at %f, %f."),
+                    __FUNCTION__, qth->name, qth->lon, qth->lat);
     }
 
     return retval;
@@ -564,33 +550,40 @@ gboolean qth_data_update(qth_t * qth, gdouble t) {
  *Initial intention of this is to open sockets and ports to gpsd 
  *and other like services to update the qth position.
  */
-gboolean qth_data_update_init(qth_t * qth) {
+gboolean qth_data_update_init(qth_t * qth)
+{
 #ifdef HAS_LIBGPS
     char *port;
 #endif
-    gboolean retval=FALSE;
+    gboolean retval = FALSE;
 
-    switch (qth->type){
+    switch (qth->type)
+    {
 
     case QTH_STATIC_TYPE:
         /* nothing to do.  the data never updates */
         break;
     case QTH_GPSD_TYPE:
 #ifdef HAS_LIBGPS
-        switch (GPSD_API_MAJOR_VERSION) {
+        switch (GPSD_API_MAJOR_VERSION)
+        {
         case 4:
 #if GPSD_API_MAJOR_VERSION==4
             /* open the connection to gpsd and start the stream */
-            qth->gps_data = g_try_new0(struct gps_data_t,1);
-            port=g_strdup_printf("%d",qth->gpsd_port);
-            if (gps_open_r(qth->gpsd_server,port,qth->gps_data)==-1) {
+            qth->gps_data = g_try_new0(struct gps_data_t, 1);
+
+            port = g_strdup_printf("%d", qth->gpsd_port);
+            if (gps_open_r(qth->gpsd_server, port, qth->gps_data) == -1)
+            {
                 free(qth->gps_data);
                 qth->gps_data = NULL;
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Could not open gpsd at  %s:%d"),
-                             __FUNCTION__, qth->gpsd_server, qth->gpsd_port);
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _("%s: Could not open gpsd at  %s:%d"),
+                            __FUNCTION__, qth->gpsd_server, qth->gpsd_port);
                 retval = FALSE;
-            } else {
+            }
+            else
+            {
                 (void)gps_stream(qth->gps_data, WATCH_ENABLE, NULL);
                 retval = TRUE;
             }
@@ -600,16 +593,20 @@ gboolean qth_data_update_init(qth_t * qth) {
         case 5:
 #if GPSD_API_MAJOR_VERSION==5
             /* open the connection to gpsd and start the stream */
-            qth->gps_data = g_try_new0(struct gps_data_t,1);
-            port=g_strdup_printf("%d",qth->gpsd_port);
-            if (gps_open(qth->gpsd_server,port,qth->gps_data)==-1) {
+            qth->gps_data = g_try_new0(struct gps_data_t, 1);
+
+            port = g_strdup_printf("%d", qth->gpsd_port);
+            if (gps_open(qth->gpsd_server, port, qth->gps_data) == -1)
+            {
                 free(qth->gps_data);
                 qth->gps_data = NULL;
-                sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Could not open gpsd at  %s:%d"),
-                             __FUNCTION__, qth->gpsd_server, qth->gpsd_port);
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _("%s: Could not open gpsd at  %s:%d"),
+                            __FUNCTION__, qth->gpsd_server, qth->gpsd_port);
                 retval = FALSE;
-            } else {
+            }
+            else
+            {
                 (void)gps_stream(qth->gps_data, WATCH_ENABLE, NULL);
                 retval = TRUE;
             }
@@ -617,19 +614,19 @@ gboolean qth_data_update_init(qth_t * qth) {
 #endif
             break;
         default:
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Unsupported gpsd api major version (%d)"),
-                         __FUNCTION__, GPSD_API_MAJOR_VERSION);
-            
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Unsupported gpsd api major version (%d)"),
+                        __FUNCTION__, GPSD_API_MAJOR_VERSION);
+
 
             return FALSE;
             break;
         }
-#else 
+#else
         return FALSE;
 #endif
         break;
-        
+
     default:
         break;
     }
@@ -642,66 +639,72 @@ gboolean qth_data_update_init(qth_t * qth) {
  *Initial intention of this is to open sockets and ports to gpsd 
  *and other like services to update the qth position.
  */
-void qth_data_update_stop (qth_t *qth) {
-    switch (qth->type) {
-        case QTH_STATIC_TYPE:
-            /* nothing to do.  the data never updates */
-            break;
-        case QTH_GPSD_TYPE:
+void qth_data_update_stop(qth_t * qth)
+{
+    switch (qth->type)
+    {
+    case QTH_STATIC_TYPE:
+        /* nothing to do.  the data never updates */
+        break;
+    case QTH_GPSD_TYPE:
 
-            /* close gpsd socket */
-            if (qth->gps_data !=NULL){
+        /* close gpsd socket */
+        if (qth->gps_data != NULL)
+        {
 #ifdef HAS_LIBGPS
-                switch (GPSD_API_MAJOR_VERSION) {
-                case 4:
-                    gps_close(qth->gps_data);
-                    break;
-                case 5:
-                    gps_close(qth->gps_data);
-                    break;
-                default:
-                    break;
-                }
+            switch (GPSD_API_MAJOR_VERSION)
+            {
+            case 4:
+                gps_close(qth->gps_data);
+                break;
+            case 5:
+                gps_close(qth->gps_data);
+                break;
+            default:
+                break;
+            }
 #endif
-                qth->gps_data = NULL;
-            }            
-
-            break;
-        default:
-            break;
+            qth->gps_data = NULL;
         }
+
+        break;
+    default:
+        break;
+    }
 }
 
 /** \brief Load initial values into the qth_t data structure
  * \param qth the qth data structure to update
  */
-void qth_init(qth_t* qth) {
-    qth->lat=0;
-    qth->lon=0;
-    qth->alt=0;
-    qth->type=QTH_STATIC_TYPE;
-    qth->gps_data=NULL;
-    qth->name=NULL;
-    qth->loc=NULL;
-    qth->gpsd_port=0;
-    qth->gpsd_server=NULL;
-    qth->gpsd_update=0.0;
-    qth->gpsd_connected=0.0;
-    qth->qra = g_strdup ("AA00");
+void qth_init(qth_t * qth)
+{
+    qth->lat = 0;
+    qth->lon = 0;
+    qth->alt = 0;
+    qth->type = QTH_STATIC_TYPE;
+    qth->gps_data = NULL;
+    qth->name = NULL;
+    qth->loc = NULL;
+    qth->gpsd_port = 0;
+    qth->gpsd_server = NULL;
+    qth->gpsd_update = 0.0;
+    qth->gpsd_connected = 0.0;
+    qth->qra = g_strdup("AA00");
 }
 
 /** \brief Load safe values into the qth_t data structure
  * \param qth the qth data structure to update
  * This can be used if some operation is suspected of corrupting the structure or entering invalid data.  Originally it is based on code that reset values if a load/read of a .qth failed.
  */
-void qth_safe(qth_t* qth) {
-    qth->name = g_strdup (_("Error"));
-    qth->loc  = g_strdup (_("Error"));
-    qth->type=QTH_STATIC_TYPE;
-    qth->lat=0;
-    qth->lon=0;
-    qth->alt=0;
-    qth->gps_data=NULL;
+void qth_safe(qth_t * qth)
+{
+    qth->name = g_strdup(_("Error"));
+    qth->loc = g_strdup(_("Error"));
+    qth->type = QTH_STATIC_TYPE;
+    qth->lat = 0;
+    qth->lon = 0;
+    qth->alt = 0;
+    qth->gps_data = NULL;
 }
 
 /** \brief Copy values from qth structure to qth_small structure
@@ -709,75 +712,81 @@ void qth_safe(qth_t* qth) {
  * \param qth_small the data structure to store values
  * This is intended for copying only the minimal qth data to a structure for tagging and later comparison.
  */
-void qth_small_save(qth_t*qth,qth_small_t *qth_small){
-    qth_small->lat=qth->lat;
-    qth_small->lon=qth->lon;
-    qth_small->alt=qth->alt;
+void qth_small_save(qth_t * qth, qth_small_t * qth_small)
+{
+    qth_small->lat = qth->lat;
+    qth_small->lon = qth->lon;
+    qth_small->alt = qth->alt;
 }
 
 /** \brief Validate the contents of a qth structure and correct if neccessary
  * \param qth the qth data structure to cleanup
  */
-void qth_validate(qth_t*qth){
+void qth_validate(qth_t * qth)
+{
     /* check that the values are not set to nonsense such as nan or inf. if so error it and set to zero. */
-    if (!isnormal(qth->lat) && (qth->lat != 0)){
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: QTH data had bogus lat %f"),
-                     __FUNCTION__,qth->lat);
-        qth->lat=0.0;
+    if (!isnormal(qth->lat) && (qth->lat != 0))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: QTH data had bogus lat %f"), __FUNCTION__, qth->lat);
+        qth->lat = 0.0;
 
     }
-    if (!isnormal(qth->lon) && (qth->lon != 0)){
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: QTH data had bogus lon %f"),
-                     __FUNCTION__,qth->lon);
-        qth->lon=0.0;
+    if (!isnormal(qth->lon) && (qth->lon != 0))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: QTH data had bogus lon %f"), __FUNCTION__, qth->lon);
+        qth->lon = 0.0;
     }
-    if (!isnormal(qth->alt) && (qth->alt != 0)){
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: QTH data had bogus alt %f"),
-                     __FUNCTION__,qth->alt);
-        qth->alt=0.0;
+    if (!isnormal(qth->alt) && (qth->alt != 0))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: QTH data had bogus alt %f"), __FUNCTION__, qth->alt);
+        qth->alt = 0.0;
     }
 
     /* check that qth->lat and qth->lon are in a reasonable range 
        and if not wrap them back */
-    if (fabs(qth->lat)>90.0||fabs(qth->lon)>180.0) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"),
-                     __FUNCTION__,
-                     qth->name,
-                     qth->lat,
-                     qth->lon,
-                     qth->alt);
-        
-        qth->lat=fmod(qth->lat,360.0);
-        while ((qth->lat)>180.0){
-            qth->lat=qth->lat-180.0;
-            qth->lon=qth->lon+180.0;
+    if (fabs(qth->lat) > 90.0 || fabs(qth->lon) > 180.0)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"),
+                    __FUNCTION__, qth->name, qth->lat, qth->lon, qth->alt);
+
+        qth->lat = fmod(qth->lat, 360.0);
+        while ((qth->lat) > 180.0)
+        {
+            qth->lat = qth->lat - 180.0;
+            qth->lon = qth->lon + 180.0;
         }
-        
-        while ((qth->lat)<-180.0){
-            qth->lat=qth->lat+180.0;
-            qth->lon=qth->lon+180.0;
+
+        while ((qth->lat) < -180.0)
+        {
+            qth->lat = qth->lat + 180.0;
+            qth->lon = qth->lon + 180.0;
         }
-        if (qth->lat>90.0){
-            qth->lat=180.0-qth->lat;
-            qth->lon=qth->lon+180.0;
+        if (qth->lat > 90.0)
+        {
+            qth->lat = 180.0 - qth->lat;
+            qth->lon = qth->lon + 180.0;
         }
-        
-        if (qth->lat<-90.0){
-            qth->lat=-180.0-qth->lat;
-            qth->lon=qth->lon+180.0;
+
+        if (qth->lat < -90.0)
+        {
+            qth->lat = -180.0 - qth->lat;
+            qth->lon = qth->lon + 180.0;
         }
-        
-        qth->lon=fmod(qth->lon+180.0,360.0)-180;
-        if (qth->lon<-180.0) {
-            qth->lon+=360.0;
-        } else if (qth->lon>180.0) {
-            qth->lon-=360.0;
+
+        qth->lon = fmod(qth->lon + 180.0, 360.0) - 180;
+        if (qth->lon < -180.0)
+        {
+            qth->lon += 360.0;
         }
-        
+        else if (qth->lon > 180.0)
+        {
+            qth->lon -= 360.0;
+        }
+
     }
 }
 
@@ -786,10 +795,12 @@ void qth_validate(qth_t*qth){
  * \param qth_small the data structure
  * This is intended for measuring distance between the current qth and the position that tagged some data in qth_small.
  */
-double qth_small_dist(qth_t *qth,qth_small_t qth_small){
-    double distance,azimuth;
+double qth_small_dist(qth_t * qth, qth_small_t qth_small)
+{
+    double distance, azimuth;
+
     /* FIXME Is this the right coordinate system to use? */
     /* a 3d coordinate system might make more sense long term */
-    qrb(qth->lon,qth->lat,qth_small.lon,qth_small.lat,&distance,&azimuth);
-    return(distance);
+    qrb(qth->lon, qth->lat, qth_small.lon, qth_small.lat, &distance, &azimuth);
+    return (distance);
 }
