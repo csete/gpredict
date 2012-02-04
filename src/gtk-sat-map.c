@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2012  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
   Copyright (C)  2011       Charles Suprin,  AA1VS.
 
@@ -114,7 +114,7 @@ static void gtk_sat_map_load_showtracks (GtkSatMap *map);
 static void gtk_sat_map_store_showtracks (GtkSatMap *satmap);
 static void gtk_sat_map_load_hide_coverages (GtkSatMap *map);
 static void gtk_sat_map_store_hidecovs (GtkSatMap *satmap);
-
+static void reset_ground_track(gpointer key, gpointer value, gpointer user_data);
 
 static GtkVBoxClass *parent_class = NULL;
 static GooCanvasPoints *points1;
@@ -2621,15 +2621,23 @@ void gtk_sat_map_lonlat_to_xy (GtkSatMap *m,
 
 
 /** \brief Reload reference to satellites (e.g. after TLE update). */
-void
-gtk_sat_map_reload_sats (GtkWidget *satmap, GHashTable *sats)
+void gtk_sat_map_reload_sats(GtkWidget *satmap, GHashTable *sats)
 {
-    GTK_SAT_MAP (satmap)->sats = sats;
-    GTK_SAT_MAP (satmap)->naos = 0.0;
-    GTK_SAT_MAP (satmap)->ncat = 0;
+    GTK_SAT_MAP(satmap)->sats = sats;
+    GTK_SAT_MAP(satmap)->naos = 0.0;
+    GTK_SAT_MAP(satmap)->ncat = 0;
+    
+    /* reset ground track orbit to force repaint */
+    g_hash_table_foreach(GTK_SAT_MAP(satmap)->obj, reset_ground_track, NULL);
 }
 
-
+/** \brief Reset ground track orbit to force redraw. */
+static void reset_ground_track(gpointer key, gpointer value, gpointer user_data)
+{
+    sat_map_obj_t *obj = (sat_map_obj_t *) value;
+    
+    obj->track_orbit = 0;
+}
 
 /** \brief Convert AOS or LOS timestamp to human readable countdown string */
 static gchar *aoslos_time_to_str (GtkSatMap *satmap, sat_t *sat)
