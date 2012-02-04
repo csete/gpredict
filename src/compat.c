@@ -35,7 +35,6 @@
 #endif
 
 
-
 /** \brief Get data directory.
  *
  * On linux it corresponds to the PACKAGE_DATA_DIR macro defined in build-config.h
@@ -219,8 +218,7 @@ gchar *get_user_conf_dir (void)
     gchar *dir = NULL;
 
 #ifdef G_OS_UNIX
-    dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
-                       ".config", G_DIR_SEPARATOR_S,
+    dir = g_strconcat (g_get_user_config_dir(), G_DIR_SEPARATOR_S,
                        "Gpredict", NULL);
 #endif
 #ifdef G_OS_WIN32
