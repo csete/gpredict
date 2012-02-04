@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2012  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
            Charles Suprin <hamaa1vs@gmail.com>
@@ -835,7 +835,6 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
     /* sat is within range */
     else
     {
-
         obj = SAT_OBJ(g_hash_table_lookup(polv->obj, catnum));
         azel_to_xy(polv, sat->az, sat->el, &x, &y);
 
@@ -883,30 +882,33 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 g_free(text);
             }
 
-            /*check if pass was computed near current qth otherwise update */
+            /* Current pass and sky track needs update if they were calculated at
+             * a different location or time (time controller)
+             */
             if (obj->pass)
             {
-                /* FIXME once again threshold should be user configurable */
-                if (qth_small_dist(polv->qth, (obj->pass->qth_comp)) > 1.0)
-                {
+                /** FIXME: threshold */
+                gboolean qth_upd = qth_small_dist(polv->qth, (obj->pass->qth_comp)) > 1.0;
+                gboolean time_upd = !((obj->pass->aos <= now) && (obj->pass->los >= now));
 
-                    root =
-                        goo_canvas_get_root_item_model(GOO_CANVAS
-                                                       (polv->canvas));
+                if (qth_upd || time_upd)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                                _("%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"),
+                                __FILE__, __FUNCTION__, *catnum, qth_upd, time_upd);
+
+                    root = goo_canvas_get_root_item_model(GOO_CANVAS(polv->canvas));
+
                     /* remove sky track */
                     if (obj->showtrack)
                     {
-                        idx =
-                            goo_canvas_item_model_find_child(root, obj->track);
+                        idx = goo_canvas_item_model_find_child(root, obj->track);
                         if (idx != -1)
                             goo_canvas_item_model_remove_child(root, idx);
 
                         for (i = 0; i < TRACK_TICK_NUM; i++)
                         {
-                            idx =
-                                goo_canvas_item_model_find_child(root,
-                                                                 obj->
-                                                                 trtick[i]);
+                            idx = goo_canvas_item_model_find_child(root, obj->trtick[i]);
                             if (idx != -1)
                                 goo_canvas_item_model_remove_child(root, idx);
                         }
@@ -922,13 +924,10 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                     /* Finally, create the sky track if necessary */
                     if (obj->showtrack)
                         gtk_polar_view_create_track(polv, obj, sat);
-
                 }
             }
             g_free(losstr);
             g_free(catnum);     // FIXME: why free here, what about else?
-
-
         }
         else
         {
