@@ -31,7 +31,7 @@
 #include <glib.h>
 #include "compat.h"
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
 
 
@@ -41,26 +41,24 @@
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
  */
-gchar *
-get_data_dir   ()
+gchar *get_data_dir()
 {
-        gchar *dir = NULL;
+    gchar *dir = NULL;
 
 
 #ifdef G_OS_UNIX
-        dir = g_strconcat (PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, "data", NULL);
+    dir = g_strconcat(PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, "data", NULL);
 #else
-#  ifdef G_OS_WIN32
-        gchar *buff = g_win32_get_package_installation_directory (NULL, NULL);
-        dir = g_strconcat (buff, G_DIR_SEPARATOR_S,
-                           "share", G_DIR_SEPARATOR_S,
-                           "gpredict", G_DIR_SEPARATOR_S,
-                           "data", NULL);
-        g_free (buff);
-#  endif
+#ifdef G_OS_WIN32
+    gchar *buff = g_win32_get_package_installation_directory(NULL, NULL);
+
+    dir = g_strconcat(buff, G_DIR_SEPARATOR_S,
+                      "share", G_DIR_SEPARATOR_S, "gpredict", G_DIR_SEPARATOR_S, "data", NULL);
+    g_free(buff);
+#endif
 #endif
 
-        return dir;
+    return dir;
 }
 
 
@@ -70,17 +68,16 @@ get_data_dir   ()
  * be a one-line filename constructor.
  * The returned gchar * should be freed when no longer needed.
  */
-gchar *
-data_file_name (const gchar *data)
+gchar *data_file_name(const gchar * data)
 {
-        gchar *filename = NULL;
-        gchar *buff;
+    gchar *filename = NULL;
+    gchar *buff;
 
-        buff = get_data_dir ();
-        filename = g_strconcat (buff, G_DIR_SEPARATOR_S, data, NULL);
-        g_free (buff);
+    buff = get_data_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, data, NULL);
+    g_free(buff);
 
-        return filename;
+    return filename;
 }
 
 
@@ -91,29 +88,25 @@ data_file_name (const gchar *data)
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
  */
-gchar *
-get_maps_dir   ()
+gchar *get_maps_dir()
 {
-        gchar *dir = NULL;
+    gchar *dir = NULL;
 
 
 #ifdef G_OS_UNIX
-        dir = g_strconcat (PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S,
-                           "maps", NULL);
+    dir = g_strconcat(PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S, "maps", NULL);
 #else
-#  ifdef G_OS_WIN32
-        gchar *buff = g_win32_get_package_installation_directory (NULL, NULL);
-        dir = g_strconcat (buff, G_DIR_SEPARATOR_S,
-                           "share", G_DIR_SEPARATOR_S,
-                  /* FIXME */
-                           "gpredict", G_DIR_SEPARATOR_S,
-                           "pixmaps", G_DIR_SEPARATOR_S,
-                           "maps", NULL);
-        g_free (buff);
-#  endif
+#ifdef G_OS_WIN32
+    gchar *buff = g_win32_get_package_installation_directory(NULL, NULL);
+
+    dir = g_strconcat(buff, G_DIR_SEPARATOR_S, "share", G_DIR_SEPARATOR_S,
+                      /* FIXME */
+                      "gpredict", G_DIR_SEPARATOR_S, "pixmaps", G_DIR_SEPARATOR_S, "maps", NULL);
+    g_free(buff);
+#endif
 #endif
 
-        return dir;
+    return dir;
 }
 
 
@@ -123,17 +116,16 @@ get_maps_dir   ()
  * be a one-line filename constructor.
  * The returned gchar * should be freed when no longer needed.
  */
-gchar *
-map_file_name (const gchar *map)
+gchar *map_file_name(const gchar * map)
 {
-        gchar *filename = NULL;
-        gchar *buff;
+    gchar *filename = NULL;
+    gchar *buff;
 
-        buff = get_maps_dir ();
-        filename = g_strconcat (buff, G_DIR_SEPARATOR_S, map, NULL);
-        g_free (buff);
+    buff = get_maps_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, map, NULL);
+    g_free(buff);
 
-        return filename;
+    return filename;
 }
 
 
@@ -144,28 +136,25 @@ map_file_name (const gchar *map)
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
  */
-gchar *
-get_icon_dir   ()
+gchar *get_icon_dir()
 {
-        gchar *dir = NULL;
+    gchar *dir = NULL;
 
 
 #ifdef G_OS_UNIX
-        dir = g_strconcat (PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S,
-                           "icons", NULL);
+    dir = g_strconcat(PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S, "icons", NULL);
 #else
-#  ifdef G_OS_WIN32
-        gchar *buff = g_win32_get_package_installation_directory (NULL, NULL);
-        dir = g_strconcat (buff, G_DIR_SEPARATOR_S,
-                           "share", G_DIR_SEPARATOR_S,
-                           "gpredict", G_DIR_SEPARATOR_S,
-                           "pixmaps", G_DIR_SEPARATOR_S,
-                           "icons", NULL);
-        g_free (buff);
-#  endif
+#ifdef G_OS_WIN32
+    gchar *buff = g_win32_get_package_installation_directory(NULL, NULL);
+
+    dir = g_strconcat(buff, G_DIR_SEPARATOR_S,
+                      "share", G_DIR_SEPARATOR_S,
+                      "gpredict", G_DIR_SEPARATOR_S, "pixmaps", G_DIR_SEPARATOR_S, "icons", NULL);
+    g_free(buff);
+#endif
 #endif
 
-        return dir;
+    return dir;
 }
 
 
@@ -175,17 +164,16 @@ get_icon_dir   ()
  * be a one-line filename constructor.
  * The returned gchar * should be freed when no longer needed.
  */
-gchar *
-icon_file_name (const gchar *icon)
+gchar *icon_file_name(const gchar * icon)
 {
-        gchar *filename = NULL;
-        gchar *buff;
+    gchar *filename = NULL;
+    gchar *buff;
 
-        buff = get_icon_dir ();
-        filename = g_strconcat (buff, G_DIR_SEPARATOR_S, icon, NULL);
-        g_free (buff);
+    buff = get_icon_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, icon, NULL);
+    g_free(buff);
 
-        return filename;
+    return filename;
 }
 
 
@@ -195,11 +183,11 @@ icon_file_name (const gchar *icon)
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
  */
-gchar *get_old_conf_dir   (void)
+gchar *get_old_conf_dir(void)
 {
     gchar *dir;
-    
-    dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S, ".gpredict2", NULL);
+
+    dir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, ".gpredict2", NULL);
     return dir;
 }
 
@@ -213,99 +201,94 @@ gchar *get_old_conf_dir   (void)
  * The function returns a newly allocated gchar * which must be free when
  * it is no longer needed.
  */
-gchar *get_user_conf_dir (void)
+gchar *get_user_conf_dir(void)
 {
     gchar *dir = NULL;
 
 #ifdef G_OS_UNIX
-    dir = g_strconcat (g_get_user_config_dir(), G_DIR_SEPARATOR_S,
-                       "Gpredict", NULL);
+    dir = g_strconcat(g_get_user_config_dir(), G_DIR_SEPARATOR_S, "Gpredict", NULL);
 #endif
 #ifdef G_OS_WIN32
-                       // FIXME: does this work?
-    dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
-                       "Gpredict", NULL);
+    // FIXME: does this work?
+    dir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, "Gpredict", NULL);
 #endif
 /* see gtk-osx.sourceforge.net -> Integration */
 #ifdef MAC_INTEGRATION
-        dir = g_strconcat (g_get_home_dir(), G_DIR_SEPARATOR_S,
-                           "Library", G_DIR_SEPARATOR_S,
-                           "Application Support", G_DIR_SEPARATOR_S,
-                           "Gpredict", NULL);
+    dir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S,
+                      "Library", G_DIR_SEPARATOR_S,
+                      "Application Support", G_DIR_SEPARATOR_S, "Gpredict", NULL);
 #endif
 
     return dir;
-
 }
 
 /** \brief Get USER_CONF_DIR/modules */
-gchar *get_modules_dir (void)
+gchar *get_modules_dir(void)
 {
     gchar *confdir;
     gchar *dir;
 
-    confdir = get_user_conf_dir ();
-    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "modules", NULL);
-    g_free (confdir);
+    confdir = get_user_conf_dir();
+    dir = g_strconcat(confdir, G_DIR_SEPARATOR_S, "modules", NULL);
+    g_free(confdir);
 
     return dir;
 }
 
 /** \brief Get USER_CONF_DIR/satdata */
-gchar *get_satdata_dir (void)
+gchar *get_satdata_dir(void)
 {
     gchar *confdir;
     gchar *dir;
 
-    confdir = get_user_conf_dir ();
-    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "satdata", NULL);
-    g_free (confdir);
+    confdir = get_user_conf_dir();
+    dir = g_strconcat(confdir, G_DIR_SEPARATOR_S, "satdata", NULL);
+    g_free(confdir);
 
     return dir;
 }
 
 
 /** \brief Get USER_CONF_DIR/trsp */
-gchar *get_trsp_dir (void)
+gchar *get_trsp_dir(void)
 {
     gchar *confdir;
     gchar *dir;
 
-    confdir = get_user_conf_dir ();
-    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "trsp", NULL);
-    g_free (confdir);
+    confdir = get_user_conf_dir();
+    dir = g_strconcat(confdir, G_DIR_SEPARATOR_S, "trsp", NULL);
+    g_free(confdir);
 
     return dir;
 }
 
 
 /** \brief Get USER_CONF_DIR/hwconf */
-gchar *get_hwconf_dir (void)
+gchar *get_hwconf_dir(void)
 {
     gchar *confdir;
     gchar *dir;
 
-    confdir = get_user_conf_dir ();
-    dir = g_strconcat (confdir, G_DIR_SEPARATOR_S, "hwconf", NULL);
-    g_free (confdir);
+    confdir = get_user_conf_dir();
+    dir = g_strconcat(confdir, G_DIR_SEPARATOR_S, "hwconf", NULL);
+    g_free(confdir);
 
     return dir;
 }
-
 
 
 /** \brief Get full path of a .sat or .cat file
   * \param satfile The file name for the satellite
   * \return A newly allocated gchar * that should be freed when no longer needed
   */
-gchar *sat_file_name  (const gchar *satfile)
+gchar *sat_file_name(const gchar * satfile)
 {
     gchar *filename = NULL;
     gchar *buff;
 
-    buff = get_satdata_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, satfile, NULL);
-    g_free (buff);
+    buff = get_satdata_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, satfile, NULL);
+    g_free(buff);
 
     return filename;
 
@@ -313,60 +296,57 @@ gchar *sat_file_name  (const gchar *satfile)
 
 
 /** \brief Build satellite file path from catnum (integer) */
-gchar *sat_file_name_from_catnum (guint catnum)
+gchar *sat_file_name_from_catnum(guint catnum)
 {
     gchar *filename;
     gchar *buff;
     gchar *dir;
 
-    buff = g_strdup_printf ("%d.sat", catnum);
-    dir = get_satdata_dir ();
+    buff = g_strdup_printf("%d.sat", catnum);
+    dir = get_satdata_dir();
 
-    filename = g_strconcat (dir, G_DIR_SEPARATOR_S, buff, NULL);
+    filename = g_strconcat(dir, G_DIR_SEPARATOR_S, buff, NULL);
 
-    g_free (buff);
-    g_free (dir);
+    g_free(buff);
+    g_free(dir);
 
     return filename;
 }
 
 
 /** \brief Build satellite file path from catnum (string) */
-gchar *sat_file_name_from_catnum_s (gchar *catnum)
+gchar *sat_file_name_from_catnum_s(gchar * catnum)
 {
     gchar *filename;
     gchar *buff;
     gchar *dir;
 
-    buff = g_strdup_printf ("%s.sat", catnum);
-    dir = get_satdata_dir ();
+    buff = g_strdup_printf("%s.sat", catnum);
+    dir = get_satdata_dir();
 
-    filename = g_strconcat (dir, G_DIR_SEPARATOR_S, buff, NULL);
+    filename = g_strconcat(dir, G_DIR_SEPARATOR_S, buff, NULL);
 
-    g_free (buff);
-    g_free (dir);
+    g_free(buff);
+    g_free(dir);
 
     return filename;
 }
-
-
 
 
 /** \brief Get full path of a .trsp file
   * \param trspfile The file name for the satellite
   * \return A newly allocated gchar * that should be freed when no longer needed
   */
-gchar *trsp_file_name (const gchar *trspfile)
+gchar *trsp_file_name(const gchar * trspfile)
 {
     gchar *filename = NULL;
     gchar *buff;
 
-    buff = get_trsp_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, trspfile, NULL);
-    g_free (buff);
+    buff = get_trsp_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, trspfile, NULL);
+    g_free(buff);
 
     return filename;
-
 }
 
 
@@ -374,15 +354,14 @@ gchar *trsp_file_name (const gchar *trspfile)
   * \param hwfile The file name for the configuration
   * \return A newly allocated gchar * that should be freed when no longer needed
   */
-gchar *hw_file_name   (const gchar *hwfile)
+gchar *hw_file_name(const gchar * hwfile)
 {
     gchar *filename = NULL;
     gchar *buff;
 
-    buff = get_hwconf_dir ();
-    filename = g_strconcat (buff, G_DIR_SEPARATOR_S, hwfile, NULL);
-    g_free (buff);
+    buff = get_hwconf_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, hwfile, NULL);
+    g_free(buff);
 
     return filename;
-
 }
