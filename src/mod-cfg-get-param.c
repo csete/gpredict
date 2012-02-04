@@ -67,7 +67,7 @@ mod_cfg_get_bool (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_bool_
 
           if (error != NULL) {
 
-               sat_log_log (SAT_LOG_LEVEL_ERROR,
+               sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Failed to read boolean (%s)"),
                          __FUNCTION__, error->message);
 
@@ -103,7 +103,7 @@ mod_cfg_get_int  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_int_e
 
           if (error != NULL) {
 
-               sat_log_log (SAT_LOG_LEVEL_ERROR,
+               sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Failed to read integer (%s)"),
                          __FUNCTION__, error->message);
 
@@ -139,7 +139,7 @@ mod_cfg_get_str  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_str_e
 
           if (error != NULL) {
 
-               sat_log_log (SAT_LOG_LEVEL_ERROR,
+               sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Failed to read string (%s)"),
                          __FUNCTION__, error->message);
 
@@ -166,7 +166,9 @@ mod_cfg_get_str  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_str_e
     existinence of datain the hash as a boolean.
     It loads NULL's into the hash table.  
 */
-void mod_cfg_get_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest) {
+void mod_cfg_get_integer_list_boolean(GKeyFile *cfgdata, const gchar* section,
+                                      const gchar *key, GHashTable *dest)
+{
     gint   *sats = NULL;
     gsize   length;
     GError *error = NULL;
@@ -179,8 +181,8 @@ void mod_cfg_get_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,co
                                         &length,
                                         &error);
     if (error != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to get list of satellites (%s)"),
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: Failed to get integer list: %s"),
                      __FUNCTION__, error->message);
         
         g_clear_error (&error);

@@ -85,9 +85,6 @@ static void free_new_tle (gpointer data)
 }
 
 
-
-
-
 /** \brief Update TLE files from local files.
  *  \param dir Directory where files are located.
  *  \param filter File filter, e.g. *.txt (not used at the moment!)
@@ -137,7 +134,6 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     /* create hash table */
     data = g_hash_table_new_full (g_int_hash, g_int_equal, g_free, free_new_tle);
 
-
     /* open directory and read files one by one */
     cache_dir = g_dir_open (dir, 0, &err);
 
@@ -173,24 +169,23 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                     text = g_strdup_printf (_("Reading data from %s"), fnam);
                     gtk_label_set_text (GTK_LABEL (label1), text);
                     g_free (text);
-    
-    
+
                     /* Force the drawing queue to be processed otherwise there will
                         not be any visual feedback, ie. frozen GUI
                         - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
                     */
                     while (g_main_context_iteration (NULL, FALSE));
-    
+
                     /* give user a chance to follow progress */
                     g_usleep (G_USEC_PER_SEC / 100);
                 }
-    
+
                 /* now, do read the fresh data */
                 num = read_fresh_tle (dir, fnam, data);
             } else {
                 num = 0;
             }
-            
+
             if (num < 1) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: No valid TLE data found in %s"),
@@ -265,7 +260,6 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                     skipped_tmp = 0;
                     nodata_tmp = 0;
                     total_tmp = 0;
-                    
 
                     /* update TLE data in this file */
                     update_tle_in_file (ldname, fnam, data, 
@@ -432,7 +426,6 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
         /* clean up memory */
         g_free (cfgfile);
         g_key_file_free (satdata);
-
 
         /**** FIXME: NEED TO CREATE COPY of cache */
         /* finally, new satellite must be added to proper category */
@@ -1160,7 +1153,7 @@ static void update_tle_in_file (const gchar *ldname,
         
         /* check if obsolete sats should be deleted */
         /**** FIXME: This is dangereous, so we omit it */
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
+        sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: No new TLE data found for %d. Satellite might be obsolete."),
                      __FUNCTION__, catnr);
     }
@@ -1304,9 +1297,6 @@ static void update_tle_in_file (const gchar *ldname,
     *sat_tot = total;
 
 }
-
-
-
 
 
 const gchar *freq_to_str[TLE_AUTO_UPDATE_NUM] = {
