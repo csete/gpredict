@@ -1080,6 +1080,9 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
                  _("%s: Module %s received CLOSE signal."),
                  __FUNCTION__, name);
 
+    /* save configuration to ensure that dynamic data like state is stored */
+    mod_cfg_save (module->name, module->cfgdata);
+
     switch (module->state) {
 
     case GTK_SAT_MOD_STATE_DOCKED:
@@ -1161,8 +1164,6 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
                      __FUNCTION__, name, module->state);
         break;
     }
-    /* save configuration to ensure that dynamic data like state is stored */
-    mod_cfg_save (module->name, module->cfgdata);
 
 
 
