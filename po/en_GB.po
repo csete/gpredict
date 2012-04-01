@@ -7,19 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-15 21:35+0100\n"
-"PO-Revision-Date: 2011-02-28 03:29+0000\n"
+"POT-Creation-Date: 2012-02-04 23:01+0000\n"
+"PO-Revision-Date: 2012-01-16 02:11+0000\n"
 "Last-Translator: Alex Csete <oz9aec@gmail.com>\n"
 "Language-Team: British English\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-01 15:24+0000\n"
-"X-Generator: Launchpad (build 12460)\n"
+"X-Launchpad-Export-Date: 2012-04-01 14:48+0000\n"
+"X-Generator: Launchpad (build 15032)\n"
+"Language: \n"
 
 #: ../src/about.c:67
-#, fuzzy
 msgid ""
 "Copyright (C) 2001-2011 Alexandru Csete OZ9AEC and contributors.\n"
 "Contact: oz9aec at gmail.com\n"
@@ -45,47 +44,20 @@ msgid ""
 "MA 02111-1307\n"
 "USA.\n"
 msgstr ""
-"Copyright (C) 2001-2009 Alexandru Csete OZ9AEC and contributors.\n"
-"Contact: oz9aec at googlemail.com\n"
-"\n"
-"Gpredict is free software; you can redistribute it and mofdify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version.\n"
-"\n"
-"This program is distributed free of charge in the hope that it will be "
-"useful, but WITHOUT ANY WARRANTY; without even the implied warranty of "
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library "
-"General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License along with "
-"this program (see Help->License). Otherwise you can find a copy on the FSF "
-"website http://www.fsf.org/licensing/licenses/gpl.html or you can write to "
-"the\n"
-"\n"
-"Free Software Foundation, Inc.\n"
-"59 Temple Place - Suite 330\n"
-"Boston\n"
-"MA 02111-1307\n"
-"USA.\n"
 
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:99 ../src/main.c:256
+#: ../src/about.c:99 ../src/main.c:255
 msgid "GPREDICT"
 msgstr "GPREDICT"
 
 #: ../src/about.c:102
-#, fuzzy
 msgid ""
 "Copyright (C) 2001-2011 Alexandru Csete OZ9AEC\n"
 "\n"
 "Gpredict is available free of charge from:"
 msgstr ""
-"Copyright (C) 2001-2009 Alexandru Csete OZ9AEC\n"
-"\n"
-"Gpredict is available free of charge from:"
 
 #: ../src/about.c:119
 msgid "translator-credits"
@@ -94,7 +66,6 @@ msgstr ""
 "\n"
 "Launchpad Contributions:\n"
 "  AA1VS https://launchpad.net/~hamaa1vs\n"
-"  Alex Csete https://launchpad.net/~alexc\n"
 "  Michael Stephenson https://launchpad.net/~mickstephenson\n"
 "  ascenseur https://launchpad.net/~joseph-odell"
 
@@ -282,9 +253,9 @@ msgid "%s: Wrote only %d out of %d chars."
 msgstr "%s: Wrote only %d out of %d chars."
 
 #: ../src/gpredict-utils.c:575
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Configuration saved for %s."
-msgstr "%s: Configuration saved for module %s."
+msgstr ""
 
 #: ../src/gtk-azel-plot.c:364
 msgid "Local Time"
@@ -333,22 +304,18 @@ msgid "%s:%d: Incorrect polar plot orientation."
 msgstr "%s:%d: Incorrect polar plot orientation."
 
 #: ../src/gtk-polar-view.c:715
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Next: %s\n"
 "in %02d:%02d:%02d"
 msgstr ""
-"Next: %s\n"
-"in %s%d:%s%d%s%d"
 
 #: ../src/gtk-polar-view.c:718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Next: %s\n"
 "in %02d:%02d"
 msgstr ""
-"Next: %s\n"
-"in %s%d%s%d"
 
 #: ../src/gtk-polar-view.c:729 ../src/gtk-sat-map.c:781
 #, c-format
@@ -363,7 +330,7 @@ msgstr "Next: ERR"
 msgid "Next: N/A"
 msgstr "Next: N/A"
 
-#: ../src/gtk-polar-view.c:854
+#: ../src/gtk-polar-view.c:853
 #, c-format
 msgid ""
 "%s\n"
@@ -372,62 +339,67 @@ msgstr ""
 "%s\n"
 "Always in range"
 
-#: ../src/gtk-polar-view.c:997
+#: ../src/gtk-polar-view.c:897
+#, c-format
+msgid "%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"
+msgstr ""
+
+#: ../src/gtk-polar-view.c:996
 #, c-format
 msgid "%s: marker added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1005
-#, fuzzy, c-format
+#: ../src/gtk-polar-view.c:1004
+#, c-format
 msgid "%s: label added to polarview not showing %d."
-msgstr "%s: Failed to get parent for %s."
+msgstr ""
 
-#: ../src/gtk-polar-view.c:1028 ../src/gtk-sat-map.c:1891
-#, fuzzy, c-format
+#: ../src/gtk-polar-view.c:1027 ../src/gtk-sat-map.c:1891
+#, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
-msgstr "%s: Could not allocate memory for KEY"
+msgstr ""
 
-#: ../src/gtk-polar-view.c:1058 ../src/gtk-polar-view.c:1197
+#: ../src/gtk-polar-view.c:1057 ../src/gtk-polar-view.c:1196
 #, c-format
 msgid "%s:%d: Failed to get satellite pass."
 msgstr "%s:%d: Failed to get satellite pass."
 
-#: ../src/gtk-polar-view.c:1068 ../src/gtk-polar-view.c:1211
+#: ../src/gtk-polar-view.c:1067 ../src/gtk-polar-view.c:1210
 #, c-format
 msgid "%s:%d: Pass had no points in it."
 msgstr "%s:%d: Pass had no points in it."
 
-#: ../src/gtk-polar-view.c:1189 ../src/gtk-polar-view-popup.c:176
+#: ../src/gtk-polar-view.c:1188 ../src/gtk-polar-view-popup.c:176
 #: ../src/gtk-polar-view-popup.c:231 ../src/gtk-sat-map-popup.c:181
 #: ../src/gtk-sat-map-popup.c:245 ../src/gtk-sat-map-popup.c:293
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
 msgstr "%s:%d: Failed to get satellite object."
 
-#: ../src/gtk-polar-view.c:1530
+#: ../src/gtk-polar-view.c:1529
 #, c-format
 msgid "%s:%d: Could not find satellite (%d) in hash table"
 msgstr "%s:%d: Could not find satellite (%d) in hash table"
 
-#: ../src/gtk-polar-view.c:1583 ../src/gtk-sat-map.c:1023
+#: ../src/gtk-polar-view.c:1582 ../src/gtk-sat-map.c:1023
 #, c-format
 msgid "%s:%d: Can not find clicked object (%d) in hash table"
 msgstr "%s:%d: Can not find clicked object (%d) in hash table"
 
-#: ../src/gtk-polar-view.c:1730
-#, fuzzy, c-format
+#: ../src/gtk-polar-view.c:1729
+#, c-format
 msgid "%s Requested satellite (%d) is not within range"
-msgstr "Track the satellite when it is within range"
+msgstr ""
 
-#: ../src/gtk-polar-view.c:1783
-#, fuzzy, c-format
+#: ../src/gtk-polar-view.c:1782
+#, c-format
 msgid "LOS in %02d:%02d:%02d"
-msgstr "LOS in %s%d:%s%d%s%d"
+msgstr ""
 
-#: ../src/gtk-polar-view.c:1787
-#, fuzzy, c-format
+#: ../src/gtk-polar-view.c:1786
+#, c-format
 msgid "LOS in %02d:%02d"
-msgstr "LOS in %s%d%s%d"
+msgstr ""
 
 #. show track
 #: ../src/gtk-polar-view-popup.c:118
@@ -834,9 +806,9 @@ msgid "%s: Connection opened to %s:%d"
 msgstr "%s: Connection opened to %s:%d"
 
 #: ../src/gtk-rig-ctrl.c:2876 ../src/gtk-rot-ctrl.c:1359
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
-msgstr "%s:%s: Got 0 bytes from rigctld"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2918 ../src/gtk-rig-ctrl.c:2936
 #, c-format
@@ -883,7 +855,8 @@ msgid "Engage the selected rotor device"
 msgstr "Engage the selected rotor device"
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "This parameter controls the delay between commands sent to the rotator."
 
@@ -925,7 +898,8 @@ msgstr "%s:%d: Failed to load rotator configuration %s"
 
 #: ../src/gtk-rot-ctrl.c:965 ../src/gtk-rot-ctrl.c:966
 #: ../src/gtk-sat-module-popup.c:906 ../src/gtk-sat-module-popup.c:981
-#: ../src/qth-data.c:104 ../src/sat-log-browser.c:64 ../src/sat-pref-rig.c:757
+#: ../src/qth-data.c:101 ../src/sat-log-browser.c:63 ../src/sat-log.c:63
+#: ../src/sat-pref-rig.c:757
 msgid "ERROR"
 msgstr "ERROR"
 
@@ -940,9 +914,9 @@ msgid "%s:%d: rotctld returned bad response (%s)"
 msgstr "%s:%d: rotctld returned bad response (%s)"
 
 #: ../src/gtk-rot-ctrl.c:1208
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%d: rotctld returned error %d with az %f el %f(%s)"
-msgstr "%s:%d: rotctld returned error %d (%s)"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1400 ../src/gtk-rot-ctrl.c:1410
 #, c-format
@@ -965,14 +939,14 @@ msgid "%s: Satellite %d has no NICKNAME"
 msgstr "%s: Satellite %d has no NICKNAME"
 
 #: ../src/gtk-sat-data.c:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Error reading TLE line 1 from %s (%s)"
-msgstr "%s: Error reading NAME from %s (%s)"
+msgstr ""
 
 #: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1188 ../src/tle-update.c:1195
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
-msgstr "%s: Error reading NAME from %s (%s)"
+msgstr ""
 
 #: ../src/gtk-sat-data.c:121
 #, c-format
@@ -1252,9 +1226,9 @@ msgid "<span background=\"#%s\"> Next: %s in %s%d%s%d </span>"
 msgstr "<span background=\"#%s\"> Next: %s in %s%d%s%d </span>"
 
 #: ../src/gtk-sat-map.c:1130
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Can not find clicked object (%d) in hash table"
-msgstr "%s:%d: Can not find clicked object (%d) in hash table"
+msgstr ""
 
 #: ../src/gtk-sat-map.c:1223
 #, c-format
@@ -1327,9 +1301,9 @@ msgid "%s: MAYDAY: Insufficient memory for ground track!"
 msgstr "%s: MAYDAY: Insufficient memory for ground track!"
 
 #: ../src/gtk-sat-map-ground-track.c:164
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Problem computing ground track for %s"
-msgstr "%s: Creating ground track for %s"
+msgstr ""
 
 #: ../src/gtk-sat-map-ground-track.c:210
 #, c-format
@@ -1415,9 +1389,9 @@ msgid "%s: GRID(%d): %s"
 msgstr "%s: GRID(%d): %s"
 
 #: ../src/gtk-sat-module.c:634
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Unable to allocate memory for grid."
-msgstr "%s:%s: Failed to allocate memory for radio config"
+msgstr ""
 
 #: ../src/gtk-sat-module.c:667 ../src/mod-cfg.c:615
 #: ../src/mod-cfg-get-param.c:183
@@ -1451,14 +1425,14 @@ msgid "%s: Previous cycle missed it's deadline."
 msgstr "%s: Previous cycle missed it's deadline."
 
 #: ../src/gtk-sat-module.c:939 ../src/gtk-sat-module.c:1466
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%d: Unknown child type"
-msgstr "%f:%d: Unknown child type"
+msgstr ""
 
 #: ../src/gtk-sat-module.c:1080
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Module %s received CLOSE signal."
-msgstr "%s: Module %s recevied CLOSE signal."
+msgstr ""
 
 #: ../src/gtk-sat-module.c:1087
 #, c-format
@@ -1496,9 +1470,9 @@ msgid "%s: Module %s closed."
 msgstr "%s: Module %s closed."
 
 #: ../src/gtk-sat-module.c:1215
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Module %s received CONFIG signal."
-msgstr "%s: Module %s recevied CONFIG signal."
+msgstr ""
 
 #: ../src/gtk-sat-module.c:1224
 #, c-format
@@ -1520,9 +1494,9 @@ msgid "%s: Reloading satellites for module %s"
 msgstr "%s: Reloading satellites for module %s"
 
 #: ../src/gtk-sat-module.c:1501
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Unknown child type"
-msgstr "%f:%d: Unknown child type"
+msgstr ""
 
 #: ../src/gtk-sat-module.c:1580
 #, c-format
@@ -1655,9 +1629,8 @@ msgstr "%s:%d: Successfully cloned %s."
 #: ../src/gtk-sat-module-popup.c:430 ../src/gtk-sat-module-popup.c:553
 #: ../src/gtk-sat-module-popup.c:693 ../src/menubar.c:1061
 #: ../src/mod-mgr.c:684
-#, fuzzy
 msgid "GPREDICT: "
-msgstr "GPREDICT: %s"
+msgstr ""
 
 #: ../src/gtk-sat-module-popup.c:472
 #, c-format
@@ -1748,7 +1721,7 @@ msgstr "Play backwards"
 #. reset time
 #. reset button
 #: ../src/gtk-sat-module-tmg.c:120 ../src/sat-pref-conditions.c:418
-#: ../src/sat-pref-debug.c:140 ../src/sat-pref-formats.c:115
+#: ../src/sat-pref-debug.c:139 ../src/sat-pref-formats.c:115
 #: ../src/sat-pref-layout.c:422 ../src/sat-pref-list-view.c:251
 #: ../src/sat-pref-map-view.c:704 ../src/sat-pref-multi-pass.c:189
 #: ../src/sat-pref-polar-view.c:592 ../src/sat-pref-refresh.c:421
@@ -1769,7 +1742,7 @@ msgstr "<b>Real-Time</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2095,9 +2068,9 @@ msgid "Satellite options / shortcuts"
 msgstr "Satellite options / shortcuts"
 
 #: ../src/gtk-single-sat.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Could not find satellite with catalog number %d"
-msgstr "%s:%d: Could not find satellite (%d) in hash table"
+msgstr ""
 
 #: ../src/gtk-single-sat.c:392
 #, c-format
@@ -2241,7 +2214,7 @@ msgstr ""
 msgid "Option parsing failed: %s\n"
 msgstr "Option parsing failed: %s\n"
 
-#: ../src/main.c:157
+#: ../src/main.c:161
 #, c-format
 msgid ""
 "%s: User config check failed (code %d). This is fatal.\n"
@@ -2252,27 +2225,27 @@ msgstr ""
 "A possible solution would be to remove the .config/Gpredict data dir\n"
 "in your home directory"
 
-#: ../src/main.c:465
+#: ../src/main.c:464
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:517
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr "%s: Time threshold has been passed."
 
-#: ../src/main.c:525
+#: ../src/main.c:524
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr "%s: Starting new update thread."
 
-#: ../src/main.c:533
+#: ../src/main.c:532
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr "%s: Failed to create TLE update thread (%s)"
 
-#: ../src/main.c:543
+#: ../src/main.c:542
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2284,27 +2257,27 @@ msgstr ""
 "<b>Edit -> Update TLE</b>\n"
 "in the menubar."
 
-#: ../src/main.c:574
+#: ../src/main.c:573
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr "%s: Could not find TLE monitoring task (ID = %d)"
 
-#: ../src/main.c:620
+#: ../src/main.c:619
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr "%s: Cleaning TLE data in %s"
 
-#: ../src/main.c:629 ../src/main.c:670
+#: ../src/main.c:628 ../src/main.c:669
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr "%s: Failed to delete %s"
 
-#: ../src/main.c:633 ../src/main.c:674
+#: ../src/main.c:632 ../src/main.c:673
 #, c-format
 msgid "%s: Removed %s"
 msgstr "%s: Removed %s"
 
-#: ../src/main.c:661
+#: ../src/main.c:660
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr "%s: Cleaning transponder data in %s"
@@ -2361,9 +2334,8 @@ msgid "Open an existing module"
 msgstr "Open an existing module"
 
 #: ../src/menubar.c:104
-#, fuzzy
 msgid "_Log browser"
-msgstr "Log Browser"
+msgstr ""
 
 #: ../src/menubar.c:105
 msgid "Open the message log browser"
@@ -2731,10 +2703,10 @@ msgstr "%s: Module has no QTH; use default."
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#.
+#. 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** DEFAULT **"
@@ -2780,14 +2752,14 @@ msgid "%s: No modules have to be restored."
 msgstr "%s: No modules have to be restored."
 
 #: ../src/mod-mgr.c:222
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Added %s to module manager (page %d)."
-msgstr "%s: Added %s to module manger (page %d)."
+msgstr ""
 
 #: ../src/mod-mgr.c:228
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Added %s to module manager (NOT DOCKED)."
-msgstr "%s: Added %s to module manger (NOT DOCKED)."
+msgstr ""
 
 #: ../src/mod-mgr.c:235
 #, c-format
@@ -3027,106 +2999,105 @@ msgstr ""
 msgid "%s: Returning a pass for %s that ends before the seeded time."
 msgstr ""
 
-#: ../src/qth-data.c:76
+#: ../src/qth-data.c:75
 #, c-format
 msgid "%s: Could not load data from %s (%s)"
 msgstr "%s: Could not load data from %s (%s)"
 
-#: ../src/qth-data.c:84
+#. send a debug message, then read data
+#: ../src/qth-data.c:82
 #, c-format
 msgid "%s: QTH data: %s"
 msgstr "%s: QTH data: %s"
 
-#: ../src/qth-data.c:101
+#: ../src/qth-data.c:99
 #, c-format
 msgid "%s: Error reading QTH name (%s)."
 msgstr "%s: Error reading QTH name (%s)."
 
-#: ../src/qth-data.c:115
+#: ../src/qth-data.c:110
 #, c-format
 msgid "%s: QTH has no location (%s)."
 msgstr "%s: QTH has no location (%s)."
 
-#: ../src/qth-data.c:129
+#: ../src/qth-data.c:120
 #, c-format
 msgid "%s: QTH has no description."
 msgstr "%s: QTH has no description."
 
-#: ../src/qth-data.c:143
+#: ../src/qth-data.c:130
 #, c-format
 msgid "%s: QTH has no weather station."
 msgstr "%s: QTH has no weather station."
 
-#: ../src/qth-data.c:157
+#: ../src/qth-data.c:141
 #, c-format
 msgid "%s: Error reading QTH latitude (%s)."
 msgstr "%s: Error reading QTH latitude (%s)."
 
-#: ../src/qth-data.c:179
+#: ../src/qth-data.c:161
 #, c-format
 msgid "%s: Error reading QTH longitude (%s)."
 msgstr "%s: Error reading QTH longitude (%s)."
 
-#: ../src/qth-data.c:201
+#: ../src/qth-data.c:181
 #, c-format
 msgid "%s: Error reading QTH altitude (%s)."
 msgstr "%s: Error reading QTH altitude (%s)."
 
-#: ../src/qth-data.c:222 ../src/qth-data.c:238
-#, fuzzy, c-format
+#: ../src/qth-data.c:200 ../src/qth-data.c:214
+#, c-format
 msgid "%s: Error reading QTH type (%s)."
-msgstr "%s: Error reading QTH name (%s)."
+msgstr ""
 
-#: ../src/qth-data.c:254
-#, fuzzy, c-format
+#: ../src/qth-data.c:227
+#, c-format
 msgid "%s: QTH has no GPSD Server."
-msgstr "%s: QTH has no description."
+msgstr ""
 
-#: ../src/qth-data.c:264 ../src/qth-data.c:553
-#, fuzzy, c-format
+#: ../src/qth-data.c:237 ../src/qth-data.c:540
+#, c-format
 msgid "%s: Could not set QRA for %s at %f, %f."
 msgstr ""
-"%s: Could not create QTH file %s\n"
-"%s."
 
-#: ../src/qth-data.c:272
+#: ../src/qth-data.c:245
 #, c-format
 msgid "%s: QTH data: %s, %.4f, %.4f, %d"
 msgstr "%s: QTH data: %s, %.4f, %.4f, %d"
 
-#: ../src/qth-data.c:589 ../src/qth-data.c:608
-#, fuzzy, c-format
+#: ../src/qth-data.c:581 ../src/qth-data.c:604
+#, c-format
 msgid "%s: Could not open gpsd at  %s:%d"
-msgstr "%s: Could not open %s (%s)."
+msgstr ""
 
-#: ../src/qth-data.c:620
+#: ../src/qth-data.c:618
 #, c-format
 msgid "%s: Unsupported gpsd api major version (%d)"
 msgstr ""
 
-#: ../src/qth-data.c:697 ../src/qth-data.c:698
+#: ../src/qth-data.c:701 ../src/qth-data.c:702
 msgid "Error"
 msgstr "Error"
 
-#: ../src/qth-data.c:724
-#, fuzzy, c-format
-msgid "%s: QTH data had bogus lat %f"
-msgstr "%s: QTH data saved."
-
 #: ../src/qth-data.c:731
-#, fuzzy, c-format
+#, c-format
+msgid "%s: QTH data had bogus lat %f"
+msgstr ""
+
+#: ../src/qth-data.c:738
+#, c-format
 msgid "%s: QTH data had bogus lon %f"
-msgstr "%s: QTH data saved."
+msgstr ""
 
-#: ../src/qth-data.c:737
-#, fuzzy, c-format
+#: ../src/qth-data.c:744
+#, c-format
 msgid "%s: QTH data had bogus alt %f"
-msgstr "%s: QTH data saved."
+msgstr ""
 
-#: ../src/qth-data.c:746
-#, fuzzy, c-format
+#: ../src/qth-data.c:753
+#, c-format
 msgid "%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"
-msgstr "%s: QTH data: %s, %.4f, %.4f, %d"
+msgstr ""
 
 #. crate dialog and add contents
 #: ../src/qth-editor.c:115 ../src/sat-pref-qth-editor.c:118
@@ -3256,9 +3227,8 @@ msgstr "Select a predefined weather station from a list."
 
 #. GPSD enabled
 #: ../src/qth-editor.c:374 ../src/sat-pref-qth-editor.c:359
-#, fuzzy
 msgid "QTH Type"
-msgstr "Rig Type"
+msgstr ""
 
 #: ../src/qth-editor.c:383 ../src/sat-pref-qth-editor.c:368
 msgid ""
@@ -3277,9 +3247,8 @@ msgstr ""
 
 #. GPSD Port
 #: ../src/qth-editor.c:397 ../src/sat-pref-qth-editor.c:382
-#, fuzzy
 msgid "GPSD Port"
-msgstr "Port"
+msgstr ""
 
 #: ../src/qth-editor.c:405 ../src/sat-pref-qth-editor.c:390
 msgid "Set the port for GPSD to use. Default for gpsd is 2947."
@@ -3455,9 +3424,8 @@ msgstr "Catalogue number:"
 
 #. international designator
 #: ../src/sat-info.c:158
-#, fuzzy
 msgid "International designator:"
-msgstr "Internation designator:"
+msgstr ""
 
 #. elset number
 #: ../src/sat-info.c:167
@@ -3584,90 +3552,93 @@ msgstr "Message"
 msgid "NONE"
 msgstr "NONE"
 
-#: ../src/sat-log-browser.c:63
-msgid "BUG"
-msgstr "BUG"
-
-#: ../src/sat-log-browser.c:65
+#: ../src/sat-log-browser.c:64
 msgid "WARNING"
 msgstr "WARNING"
 
-#: ../src/sat-log-browser.c:66
+#: ../src/sat-log-browser.c:65
+msgid "INFO"
+msgstr ""
+
+#: ../src/sat-log-browser.c:66 ../src/sat-log.c:66
 msgid "DEBUG"
 msgstr "DEBUG"
 
-#: ../src/sat-log-browser.c:67
-msgid "TRACE"
-msgstr "TRACE"
-
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
-#: ../src/sat-log-browser.c:139 ../src/sat-log-browser.c:185
-#: ../src/sat-log-browser.c:374
+#: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
+#: ../src/sat-log-browser.c:362
 msgid "Log Browser"
 msgstr "Log Browser"
 
 #. update window title if file read cleanly
 #. Update title with filename
-#: ../src/sat-log-browser.c:177 ../src/sat-log-browser.c:367
-#, fuzzy, c-format
+#: ../src/sat-log-browser.c:174 ../src/sat-log-browser.c:355
+#, c-format
 msgid "Log Browser: %s"
-msgstr "Log Browser"
+msgstr ""
 
 #. create file chooser dialog
-#: ../src/sat-log-browser.c:341
+#: ../src/sat-log-browser.c:329
 msgid "Select Log File"
 msgstr "Select Log File"
 
-#: ../src/sat-log-browser.c:452
-#, fuzzy
+#: ../src/sat-log-browser.c:440
 msgid "Log file is corrupt"
-msgstr "Log file seems corrupt"
+msgstr ""
 
-#: ../src/sat-log-browser.c:475
+#: ../src/sat-log-browser.c:463
 #, c-format
 msgid "%s:%d: Error open debug log (%s)"
 msgstr "%s:%d: Error open debug log (%s)"
 
-#: ../src/sat-log-browser.c:614
-msgid "Bugs"
-msgstr "Bugs"
-
-#: ../src/sat-log-browser.c:618
+#: ../src/sat-log-browser.c:595
 msgid "Errors"
 msgstr "Errors"
 
-#: ../src/sat-log-browser.c:622
+#: ../src/sat-log-browser.c:599
 msgid "Warnings"
 msgstr "Warnings"
 
-#: ../src/sat-log-browser.c:626
-msgid "Messages"
-msgstr "Messages"
+#: ../src/sat-log-browser.c:603
+msgid "Info"
+msgstr ""
 
-#: ../src/sat-log-browser.c:630
+#: ../src/sat-log-browser.c:607
 msgid "Debug"
 msgstr "Debug"
 
-#: ../src/sat-log-browser.c:640
+#: ../src/sat-log-browser.c:617
 msgid "<b>Total</b>"
 msgstr "<b>Total</b>"
 
 #. frame around the table
-#: ../src/sat-log-browser.c:651
+#: ../src/sat-log-browser.c:627
 msgid " Summary "
 msgstr " Summary "
 
+#: ../src/sat-log.c:62
+msgid " --- "
+msgstr ""
+
+#: ../src/sat-log.c:64
+msgid " WARN"
+msgstr ""
+
+#: ../src/sat-log.c:65
+msgid " INFO"
+msgstr ""
+
 #. print an error message
-#: ../src/sat-log.c:91
+#: ../src/sat-log.c:101
 #, c-format
 msgid "ERROR: Could not create %s\n"
 msgstr "ERROR: Could not create %s\n"
 
-#: ../src/sat-log.c:113
+#: ../src/sat-log.c:123
 #, c-format
 msgid ""
 "\n"
@@ -3682,12 +3653,12 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ../src/sat-log.c:126
+#: ../src/sat-log.c:136
 #, c-format
 msgid "%s: Session started"
 msgstr "%s: Session started"
 
-#: ../src/sat-log.c:137
+#: ../src/sat-log.c:147
 #, c-format
 msgid "%s: Session ended"
 msgstr "%s: Session ended"
@@ -3705,9 +3676,8 @@ msgid "LOS"
 msgstr "LOS"
 
 #: ../src/sat-pass-dialogs.c:74
-#, fuzzy
 msgid "Acquisition of signal (AOS)"
-msgstr "Aquisition of signal (AOS)"
+msgstr ""
 
 #: ../src/sat-pass-dialogs.c:75
 msgid "Time of Closest Approach (TCA)"
@@ -3936,7 +3906,7 @@ msgstr ""
 "will use the time from the time controller as starting time for predicting "
 "satellite passes."
 
-#: ../src/sat-pref-conditions.c:423 ../src/sat-pref-debug.c:142
+#: ../src/sat-pref-conditions.c:423 ../src/sat-pref-debug.c:141
 #: ../src/sat-pref-layout.c:428 ../src/sat-pref-list-view.c:257
 #: ../src/sat-pref-map-view.c:710 ../src/sat-pref-multi-pass.c:194
 #: ../src/sat-pref-polar-view.c:598 ../src/sat-pref-refresh.c:427
@@ -3954,58 +3924,52 @@ msgid "Level 0: None"
 msgstr "Level 0: None"
 
 #: ../src/sat-pref-debug.c:84
-msgid "Level 1: Bug"
-msgstr "Level 1: Bug"
+msgid "Level 1: Error"
+msgstr ""
 
 #: ../src/sat-pref-debug.c:85
-msgid "Level 2: Error"
-msgstr "Level 2: Error"
+msgid "Level 2: Warning"
+msgstr ""
 
 #: ../src/sat-pref-debug.c:86
-msgid "Level 3: Warning"
-msgstr "Level 3: Warning"
+msgid "Level 3: Info"
+msgstr ""
 
 #: ../src/sat-pref-debug.c:87
-msgid "Level 4: Info"
-msgstr "Level 4: Info"
+msgid "Level 4: Debug"
+msgstr ""
 
-#: ../src/sat-pref-debug.c:88
-msgid "Level 5: Trace"
-msgstr "Level 5: Trace"
-
-#: ../src/sat-pref-debug.c:93
+#: ../src/sat-pref-debug.c:92
 msgid ""
 "Select the debug level. The higher the level, the more messages will be "
-"logged (so be careful with eLevel 5)."
+"logged."
 msgstr ""
-"Select the debug level. The higher the level, the more messages will be "
-"logged (so be careful with eLevel 5)."
 
-#: ../src/sat-pref-debug.c:104
+#: ../src/sat-pref-debug.c:103
 msgid "Delete log files older than:"
 msgstr "Delete log files older than:"
 
-#: ../src/sat-pref-debug.c:108
+#: ../src/sat-pref-debug.c:107
 msgid "Always delete"
 msgstr "Always delete"
 
-#: ../src/sat-pref-debug.c:109
+#: ../src/sat-pref-debug.c:108
 msgid "1 day"
 msgstr "1 day"
 
-#: ../src/sat-pref-debug.c:110
+#: ../src/sat-pref-debug.c:109
 msgid "1 week"
 msgstr "1 week"
 
-#: ../src/sat-pref-debug.c:111
+#: ../src/sat-pref-debug.c:110
 msgid "1 month"
 msgstr "1 month"
 
-#: ../src/sat-pref-debug.c:115
+#: ../src/sat-pref-debug.c:114
 msgid "Select how often gpredict should delete old log files."
 msgstr "Select how often gpredict should delete old log files."
 
-#: ../src/sat-pref-debug.c:126
+#: ../src/sat-pref-debug.c:125
 #, c-format
 msgid ""
 "Gpredict stores all run-time messages in the %s%slogs%s folder. The current "
@@ -4574,11 +4538,10 @@ msgid "Sky at a Glance"
 msgstr "Sky at a Glance"
 
 #: ../src/sat-pref-qth.c:230
-#, fuzzy
 msgid ""
 "Alt\n"
 "(ft)"
-msgstr "Alt (ft)"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:236
 msgid ""
@@ -4601,11 +4564,10 @@ msgid ""
 msgstr ""
 
 #: ../src/sat-pref-qth.c:284
-#, fuzzy
 msgid ""
 "GPSD\n"
 "Port"
-msgstr "Port"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:292
 msgid ""
@@ -4712,9 +4674,9 @@ msgid "%s:%d: %s appears to be default QTH"
 msgstr "%s:%d: %s appears to be default QTH"
 
 #: ../src/sat-pref-qth.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%d: Failed to remove %s"
-msgstr "%s:%d: Failed top remove %s"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:988
 #, c-format
@@ -5116,7 +5078,8 @@ msgid "LO Up:"
 msgstr "LO Up:"
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 "Enter the frequency of the local oscillator of the upconverter, if any."
 
@@ -5170,9 +5133,9 @@ msgstr ""
 "and try again!"
 
 #: ../src/sat-pref-rot.c:693
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown (%d)"
-msgstr "Unknown (%d)"
+msgstr ""
 
 #. crate dialog and add contents
 #: ../src/sat-pref-rot-editor.c:85
@@ -5188,17 +5151,12 @@ msgstr ""
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 
 #: ../src/sat-pref-rot-editor.c:179
-#, fuzzy
 msgid ""
 "Enter the host where rotctld is running. You can use both host name and IP "
 "address, e.g. 192.168.1.100\n"
 "\n"
 "If gpredict and rotctld are running on the same computer, use localhost"
 msgstr ""
-"Enter the host where rigctld is running. You can use both host name and IP "
-"address, e.g. 192.168.1.100\n"
-"\n"
-"If gpredict and rotctld are running on the same computer, use localhost"
 
 #: ../src/sat-pref-rot-editor.c:195
 msgid "Enter the port number where rotctld is listening. Default is 4533."
@@ -5658,9 +5616,9 @@ msgid "%s: Successfully fetched %s"
 msgstr "%s: Successfully fetched %s"
 
 #: ../src/tle-update.c:634
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Failed to open %s preventing update"
-msgstr "%s: Failed to open %s"
+msgstr ""
 
 #: ../src/tle-update.c:662
 #, c-format
@@ -5678,9 +5636,9 @@ msgid "%s: Error opening %s (%s)"
 msgstr "%s: Error opening %s (%s)"
 
 #: ../src/tle-update.c:832
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: There is no category in %s"
-msgstr "%s:%s: There is no category called %s"
+msgstr ""
 
 #: ../src/tle-update.c:841
 #, c-format
@@ -5688,9 +5646,9 @@ msgid "%s:%s: There is no category called %s"
 msgstr "%s:%s: There is no category called %s"
 
 #: ../src/tle-update.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
-msgstr "%s: Could not open category file file %s (%s)."
+msgstr ""
 
 #: ../src/tle-update.c:904
 #, c-format
@@ -5698,9 +5656,9 @@ msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 
 #: ../src/tle-update.c:930
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Processing a three line TLE"
-msgstr "%s:%s: Error reading satellite %d."
+msgstr ""
 
 #: ../src/tle-update.c:945
 #, c-format
@@ -5738,9 +5696,9 @@ msgid "%s: Current TLE data for %d appears to be bad"
 msgstr "%s: Current TLE data for %d appears to be bad"
 
 #: ../src/tle-update.c:1237
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Data for  %d updated for name."
-msgstr "%s: Data for new sat %d successfully added."
+msgstr ""
 
 #: ../src/tle-update.c:1249
 #, c-format
@@ -5748,9 +5706,9 @@ msgid "%s: Data for  %d updated for nickname."
 msgstr ""
 
 #: ../src/tle-update.c:1264
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Data for  %d updated for tle."
-msgstr "%s: Data for new sat %d successfully added."
+msgstr ""
 
 #: ../src/tle-update.c:1274
 #, c-format
@@ -5811,399 +5769,3 @@ msgstr "%s: Error reading %s:%s from %s"
 #, c-format
 msgid "%s: Not implemented!"
 msgstr "%s: Not implemented!"
-
-#~ msgid "%s: Could not create satellite file (%s)."
-#~ msgstr "%s: Could not create satellite file (%s)."
-
-#~ msgid "%s: Error writing satellite data (%s)."
-#~ msgstr "%s: Error writing satellite data (%s)."
-
-#~ msgid "%s: Wrote only %d out of %d chars for satellite data."
-#~ msgstr "%s: Wrote only %d out of %d chars for satellite data."
-
-#~ msgid "%s: Satellite data written for %s."
-#~ msgstr "%s: Satellite data written for %s."
-
-#~ msgid "Show next pass"
-#~ msgstr "Show next pass"
-
-#~ msgid "Future passes"
-#~ msgstr "Future passes"
-
-#~ msgid "%s:%d: Pass has no details."
-#~ msgstr "%s:%d: Pass has no details."
-
-#~ msgid ""
-#~ "Satellite %s has no passes\n"
-#~ "within the next %d days"
-#~ msgstr ""
-#~ "Satellite %s has no passes\n"
-#~ "within the next %d days"
-
-#~ msgid ""
-#~ "Satellite %s has no passes for\n"
-#~ "the current ground station!\n"
-#~ "\n"
-#~ "This can be because the satellite\n"
-#~ "is geostationary, decayed or simply\n"
-#~ "never comes above the horizon"
-#~ msgstr ""
-#~ "Satellite %s has no passes for\n"
-#~ "the current ground station!\n"
-#~ "\n"
-#~ "This can be because the satellite\n"
-#~ "is geostationary, decayed or simply\n"
-#~ "never comes above the horizon"
-
-#~ msgid ""
-#~ "Satellite %s has no passes for\n"
-#~ "the current ground station!"
-#~ msgstr ""
-#~ "Satellite %s has no passes for\n"
-#~ "the current ground station!"
-
-#~ msgid "%s:%d: NULL object for %d (yes, this is a bug)"
-#~ msgstr "%s:%d: NULL object for %d (yes, this is a bug)"
-
-#~ msgid ""
-#~ "The name will be used to identify the module and it is also used a file "
-#~ "name for saving the data.Max length is 25 characters."
-#~ msgstr ""
-#~ "The name will be used to identify the module and it is also used a file "
-#~ "name for saving the data.Max length is 25 characters."
-
-#~ msgid "%s: Could not create QTH data (%s)."
-#~ msgstr "%s: Could not create QTH data (%s)."
-
-#~ msgid "%s: Error writing QTH data (%s)."
-#~ msgstr "%s: Error writing QTH data (%s)."
-
-#~ msgid ""
-#~ "The name will be used to identify the ground station when it is presented "
-#~ "to the user. Maximum allowed length is 25 characters."
-#~ msgstr ""
-#~ "The name will be used to identify the ground station when it is presented "
-#~ "to the user. Maximum allowed length is 25 characters."
-
-#~ msgid ""
-#~ "The description for the ground station can be used as additional "
-#~ "information. It may be included when generating reports. The maximum "
-#~ "length for the description is 256 characters."
-#~ msgstr ""
-#~ "The description for the ground station can be used as additional "
-#~ "information. It may be included when generating reports. The maximum "
-#~ "length for the description is 256 characters."
-
-#~ msgid "ft asl"
-#~ msgstr "ft asl"
-
-#~ msgid "m asl"
-#~ msgstr "m asl"
-
-#~ msgid "%s: Saved radio configuration %s"
-#~ msgstr "%s: Saved radio configuration %s"
-
-#~ msgid "%s: Configuration saved."
-#~ msgstr "%s: Configuration saved."
-
-#~ msgid "Source"
-#~ msgstr "Source"
-
-#~ msgid "SYS"
-#~ msgstr "SYS"
-
-#~ msgid "Hamlib"
-#~ msgstr "Hamlib"
-
-#~ msgid "Gpredict"
-#~ msgstr "Gpredict"
-
-#~ msgid "Other"
-#~ msgstr "Other"
-
-#~ msgid "HAMLIB"
-#~ msgstr "HAMLIB"
-
-#~ msgid ""
-#~ "The description can be used as additional information. It may be included "
-#~ "when generating reports. The maximum length for the description is 256 "
-#~ "characters."
-#~ msgstr ""
-#~ "The description can be used as additional information. It may be included "
-#~ "when generating reports. The maximum length for the description is 256 "
-#~ "characters."
-
-#~ msgid "%s: Error writing satellite data for %d (%s)."
-#~ msgstr "%s: Error writing satellite data for %d (%s)."
-
-#~ msgid "%s: Wrote only %d out of %d chars for satellite data %d."
-#~ msgstr "%s: Wrote only %d out of %d chars for satellite data %d."
-
-#~ msgid "%s: Could not create satellite data file (%s)."
-#~ msgstr "%s: Could not create satellite data file (%s)."
-
-#~ msgid "%s: Satellite data written for %d."
-#~ msgstr "%s: Satellite data written for %d."
-
-#~ msgid ""
-#~ "Copyright (C) 2001-2009 Alexandru Csete OZ9AEC\n"
-#~ "Contact: oz9aec at googlemail.com\n"
-#~ "\n"
-#~ "Gpredict is free software; you can redistribute it and mofdify it under "
-#~ "the terms of the GNU General Public License as published by the Free "
-#~ "Software Foundation; either version 2 of the License, or (at your option) "
-#~ "any later version.\n"
-#~ "\n"
-#~ "This program is distributed free of charge in the hope that it will be "
-#~ "useful, but WITHOUT ANY WARRANTY; without even the implied warranty of "
-#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library "
-#~ "General Public License for more details.\n"
-#~ "\n"
-#~ "You should have received a copy of the GNU General Public License along "
-#~ "with this program (see Help->License). Otherwise you can find a copy on "
-#~ "the FSF website http://www.fsf.org/licensing/licenses/gpl.html or you can "
-#~ "write to the\n"
-#~ "\n"
-#~ "Free Software Foundation, Inc.\n"
-#~ "59 Temple Place - Suite 330\n"
-#~ "Boston\n"
-#~ "MA 02111-1307\n"
-#~ "USA.\n"
-#~ msgstr ""
-#~ "Copyright (C) 2001-2009 Alexandru Csete OZ9AEC\n"
-#~ "Contact: oz9aec at googlemail.com\n"
-#~ "\n"
-#~ "Gpredict is free software; you can redistribute it and mofdify it under "
-#~ "the terms of the GNU General Public License as published by the Free "
-#~ "Software Foundation; either version 2 of the License, or (at your option) "
-#~ "any later version.\n"
-#~ "\n"
-#~ "This program is distributed free of charge in the hope that it will be "
-#~ "useful, but WITHOUT ANY WARRANTY; without even the implied warranty of "
-#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library "
-#~ "General Public License for more details.\n"
-#~ "\n"
-#~ "You should have received a copy of the GNU General Public License along "
-#~ "with this program (see Help->License). Otherwise you can find a copy on "
-#~ "the FSF website http://www.fsf.org/licensing/licenses/gpl.html or you can "
-#~ "write to the\n"
-#~ "\n"
-#~ "Free Software Foundation, Inc.\n"
-#~ "59 Temple Place - Suite 330\n"
-#~ "Boston\n"
-#~ "MA 02111-1307\n"
-#~ "USA.\n"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "LOS in %s%d:%s%d%s%d"
-#~ msgstr ""
-#~ "%s\n"
-#~ "LOS in %s%d:%s%d%s%d"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "LOS in %s%d%s%d"
-#~ msgstr ""
-#~ "%s\n"
-#~ "LOS in %s%d%s%d"
-
-#~ msgid "%s:%d: Failed to create socket"
-#~ msgstr "%s:%d: Failed to create socket"
-
-#~ msgid "%s:%d Network socket created successfully"
-#~ msgstr "%s:%d Network socket created successfully"
-
-#~ msgid "%s:%d: Failed to connect to %s:%d"
-#~ msgstr "%s:%d: Failed to connect to %s:%d"
-
-#~ msgid "%s:%d: Connection opened to %s:%d"
-#~ msgstr "%s:%d: Connection opened to %s:%d"
-
-#~ msgid "%s:%d: SIZE ERROR %d / %d"
-#~ msgstr "%s:%d: SIZE ERROR %d / %d"
-
-#~ msgid "%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"
-#~ msgstr "%s:%s: Failed to allocate 128 bytes (yes, this means trouble)"
-
-#~ msgid "%s:%s: Read %d bytes from rotctld"
-#~ msgstr "%s:%s: Read %d bytes from rotctld"
-
-#~ msgid "%s:%d: Invalid module layout (%d)"
-#~ msgstr "%s:%d: Invalid module layout (%d)"
-
-#~ msgid "%s:%d: Invalid child number (%d)"
-#~ msgstr "%s:%d: Invalid child number (%d)"
-
-#~ msgid ""
-#~ "%s:%d: Invalid child type (%d)\n"
-#~ "Using GtkSatList..."
-#~ msgstr ""
-#~ "%s:%d: Invalid child type (%d)\n"
-#~ "Using GtkSatList..."
-
-#~ msgid "Leave fullscreen"
-#~ msgstr "Leave fullscreen"
-
-#~ msgid "Fullscreen"
-#~ msgstr "Fullscreen"
-
-#~ msgid "User Manual"
-#~ msgstr "User Manual"
-
-#~ msgid "<b>Default Layout:</b>"
-#~ msgstr "<b>Default Layout:</b>"
-
-#~ msgid "%s: Invalid module layout (%d)"
-#~ msgstr "%s: Invalid module layout (%d)"
-
-#~ msgid "<b>Views:</b>"
-#~ msgstr "<b>Views:</b>"
-
-#~ msgid "View 1:"
-#~ msgstr "View 1:"
-
-#~ msgid "View 2:"
-#~ msgstr "View 2:"
-
-#~ msgid "View 3:"
-#~ msgstr "View 3:"
-
-#~ msgid "Single Sat"
-#~ msgstr "Single Sat"
-
-#~ msgid ""
-#~ "<b>RX only:</b>  The radio shall only be used as receiver. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is ON (manual TX). If not, the controller will always perform doppler "
-#~ "tuning and you cannot use the same RIG for uplink.\n"
-#~ "<b>TX only:</b>  The radio shall only be used for uplink. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is OFF (manual RX).\n"
-#~ "<b>Simplex TRX:</b>  The radio should be used for both up- and downlink "
-#~ "but in simplex mode only. This option requires that the PTT status is "
-#~ "monitored (otherwise gpredict cannot know whether to tune the RX or the "
-#~ "TX).\n"
-#~ "<b>Duplex:</b>  The radio is a full duplex radio, such as the IC910H. "
-#~ "Gpredict will be continuously tuning both uplink and downlink "
-#~ "simultaneously and not care about PTT setting."
-#~ msgstr ""
-#~ "<b>RX only:</b>  The radio shall only be used as receiver. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is ON (manual TX). If not, the controller will always perform doppler "
-#~ "tuning and you cannot use the same RIG for uplink.\n"
-#~ "<b>TX only:</b>  The radio shall only be used for uplink. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is OFF (manual RX).\n"
-#~ "<b>Simplex TRX:</b>  The radio should be used for both up- and downlink "
-#~ "but in simplex mode only. This option requires that the PTT status is "
-#~ "monitored (otherwise gpredict cannot know whether to tune the RX or the "
-#~ "TX).\n"
-#~ "<b>Duplex:</b>  The radio is a full duplex radio, such as the IC910H. "
-#~ "Gpredict will be continuously tuning both uplink and downlink "
-#~ "simultaneously and not care about PTT setting."
-
-#~ msgid "%s: Directory is: %s"
-#~ msgstr "%s: Directory is: %s"
-
-#~ msgid "%s: No .tle files found in %s."
-#~ msgstr "%s: No .tle files found in %s."
-
-#~ msgid "%s: Read %d sats from %s "
-#~ msgstr "%s: Read %d sats from %s "
-
-#~ msgid "%s: Hash table destroyed, resources freed."
-#~ msgstr "%s: Hash table destroyed, resources freed."
-
-#~ msgid "%s: Link table is NULL!"
-#~ msgstr "%s: Link table is NULL!"
-
-#~ msgid "%s: Catnum %d found more than once."
-#~ msgstr "%s: Catnum %d found more than once."
-
-#~ msgid "%s:%s: Original data for %d seems to be bad"
-#~ msgstr "%s:%s: Original data for %d seems to be bad"
-
-#~ msgid "%s: Could not remove %s (file open?)"
-#~ msgstr "%s: Could not remove %s (file open?)"
-
-#~ msgid "%s: Could not rename %s to %s"
-#~ msgstr "%s: Could not rename %s to %s"
-
-#~ msgid "%s: Failed to open temp file %s"
-#~ msgstr "%s: Failed to open temp file %s"
-
-#~ msgid "%s: Update statistics for %s (U/O/N/T): %d/%d/%d/%d"
-#~ msgstr "%s: Update statistics for %s (U/O/N/T): %d/%d/%d/%d"
-
-#~ msgid "%s: Found at least one .tle file."
-#~ msgstr "%s: Found at least one .tle file."
-
-#~ msgid "%s: Can not find #%d in any .tle file."
-#~ msgstr "%s: Can not find #%d in any .tle file."
-
-#~ msgid "%s: Invalid data for #%d"
-#~ msgstr "%s: Invalid data for #%d"
-
-#~ msgid "%s: Good data for #%d"
-#~ msgstr "%s: Good data for #%d"
-
-#~ msgid "%s: TLE check failed! This is fatal."
-#~ msgstr "%s: TLE check failed! This is fatal."
-
-#~ msgid ""
-#~ "Enter the host where rogctld is running. You can use both host name  and "
-#~ "IP address, e.g. 192.168.1.100"
-#~ msgstr ""
-#~ "Enter the host where rogctld is running. You can use both host name  and "
-#~ "IP address, e.g. 192.168.1.100"
-
-#~ msgid "FT817/857/897"
-#~ msgstr "FT817/857/897"
-
-#~ msgid ""
-#~ "<b>RX only:</b>  The radio shall only be used as receiver. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is ON (manual TX). If not, the controller will always perform doppler "
-#~ "tuning and you cannot use the same RIG for uplink.\n"
-#~ "\n"
-#~ "<b>TX only:</b>  The radio shall only be used for uplink. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is OFF (manual RX).\n"
-#~ "\n"
-#~ "<b>Simplex TRX:</b>  The radio should be used for both up- and downlink "
-#~ "but in simplex mode only. This option requires that the PTT status is "
-#~ "monitored (otherwise gpredict cannot know whether to tune the RX or the "
-#~ "TX).\n"
-#~ "\n"
-#~ "<b>Duplex:</b>  The radio is a full duplex radio, such as the IC910H. "
-#~ "Gpredict will be continuously tuning both uplink and downlink "
-#~ "simultaneously and not care about PTT setting.\n"
-#~ "\n"
-#~ "<b>FT817/857/897:</b> This is a special mode that can be used with YAESU "
-#~ "FT-817, 857 and 897 radios. These radios do not allow computer control "
-#~ "while in TX mode. Therefore, TX Doppler correction is applied while the "
-#~ "radio is in RX mode by toggling between VFO A/B."
-#~ msgstr ""
-#~ "<b>RX only:</b> The radio shall only be used as receiver. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is ON (manual TX). If not, the controller will always perform doppler "
-#~ "tuning and you cannot use the same RIG for uplink.\n"
-#~ "\n"
-#~ "<b>TX only:</b> The radio shall only be used for uplink. If <i>Monitor "
-#~ "PTT status</i> is checked the doppler tuning will be suspended while PTT "
-#~ "is OFF (manual RX).\n"
-#~ "\n"
-#~ "<b>Simplex TRX:</b> The radio should be used for both up- and downlink "
-#~ "but in simplex mode only. This option requires that the PTT status is "
-#~ "monitored (otherwise gpredict cannot know whether to tune the RX or the "
-#~ "TX).\n"
-#~ "\n"
-#~ "<b>Duplex:</b> The radio is a full duplex radio, such as the IC910H. "
-#~ "Gpredict will be continuously tuning both uplink and downlink "
-#~ "simultaneously and not care about PTT setting.\n"
-#~ "\n"
-#~ "<b>FT817/857/897:</b> This is a special mode that can be used with YAESU "
-#~ "FT-817, 857 and 897 radios. These radios do not allow computer control "
-#~ "while in TX mode. Therefore, TX Doppler correction is applied while the "
-#~ "radio is in RX mode by toggling between VFO A/B."

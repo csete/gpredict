@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-15 21:35+0100\n"
-"PO-Revision-Date: 2010-10-15 00:04+0000\n"
+"POT-Creation-Date: 2012-02-04 23:01+0000\n"
+"PO-Revision-Date: 2011-03-02 12:51+0000\n"
 "Last-Translator: Gpredict Team <Unknown>\n"
 "Language-Team: Thai <th@li.org>\n"
-"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-01 15:24+0000\n"
-"X-Generator: Launchpad (build 12460)\n"
+"X-Launchpad-Export-Date: 2012-04-01 14:48+0000\n"
+"X-Generator: Launchpad (build 15032)\n"
+"Language: th\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -48,7 +48,7 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:99 ../src/main.c:256
+#: ../src/about.c:99 ../src/main.c:255
 msgid "GPREDICT"
 msgstr "GPREDICT"
 
@@ -250,9 +250,9 @@ msgid "%s: Wrote only %d out of %d chars."
 msgstr ""
 
 #: ../src/gpredict-utils.c:575
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Configuration saved for %s."
-msgstr "%s: สร้างแล้ว %s."
+msgstr ""
 
 #: ../src/gtk-azel-plot.c:364
 msgid "Local Time"
@@ -327,66 +327,71 @@ msgstr ""
 msgid "Next: N/A"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:854
+#: ../src/gtk-polar-view.c:853
 #, c-format
 msgid ""
 "%s\n"
 "Always in range"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:997
+#: ../src/gtk-polar-view.c:897
+#, c-format
+msgid "%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"
+msgstr ""
+
+#: ../src/gtk-polar-view.c:996
 #, c-format
 msgid "%s: marker added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1005
+#: ../src/gtk-polar-view.c:1004
 #, c-format
 msgid "%s: label added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1028 ../src/gtk-sat-map.c:1891
-#, fuzzy, c-format
+#: ../src/gtk-polar-view.c:1027 ../src/gtk-sat-map.c:1891
+#, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
-msgstr "%s: ไม่สามารถสร้าง satellite file (%s)."
+msgstr ""
 
-#: ../src/gtk-polar-view.c:1058 ../src/gtk-polar-view.c:1197
+#: ../src/gtk-polar-view.c:1057 ../src/gtk-polar-view.c:1196
 #, c-format
 msgid "%s:%d: Failed to get satellite pass."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1068 ../src/gtk-polar-view.c:1211
+#: ../src/gtk-polar-view.c:1067 ../src/gtk-polar-view.c:1210
 #, c-format
 msgid "%s:%d: Pass had no points in it."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1189 ../src/gtk-polar-view-popup.c:176
+#: ../src/gtk-polar-view.c:1188 ../src/gtk-polar-view-popup.c:176
 #: ../src/gtk-polar-view-popup.c:231 ../src/gtk-sat-map-popup.c:181
 #: ../src/gtk-sat-map-popup.c:245 ../src/gtk-sat-map-popup.c:293
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1530
+#: ../src/gtk-polar-view.c:1529
 #, c-format
 msgid "%s:%d: Could not find satellite (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1583 ../src/gtk-sat-map.c:1023
+#: ../src/gtk-polar-view.c:1582 ../src/gtk-sat-map.c:1023
 #, c-format
 msgid "%s:%d: Can not find clicked object (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1730
+#: ../src/gtk-polar-view.c:1729
 #, c-format
 msgid "%s Requested satellite (%d) is not within range"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1783
+#: ../src/gtk-polar-view.c:1782
 #, c-format
 msgid "LOS in %02d:%02d:%02d"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1787
+#: ../src/gtk-polar-view.c:1786
 #, c-format
 msgid "LOS in %02d:%02d"
 msgstr ""
@@ -820,7 +825,8 @@ msgid "Engage the selected rotor device"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 
 #. Tolerance
@@ -857,7 +863,8 @@ msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:965 ../src/gtk-rot-ctrl.c:966
 #: ../src/gtk-sat-module-popup.c:906 ../src/gtk-sat-module-popup.c:981
-#: ../src/qth-data.c:104 ../src/sat-log-browser.c:64 ../src/sat-pref-rig.c:757
+#: ../src/qth-data.c:101 ../src/sat-log-browser.c:63 ../src/sat-log.c:63
+#: ../src/sat-pref-rig.c:757
 msgid "ERROR"
 msgstr ""
 
@@ -1577,9 +1584,8 @@ msgstr ""
 #: ../src/gtk-sat-module-popup.c:430 ../src/gtk-sat-module-popup.c:553
 #: ../src/gtk-sat-module-popup.c:693 ../src/menubar.c:1061
 #: ../src/mod-mgr.c:684
-#, fuzzy
 msgid "GPREDICT: "
-msgstr "GPREDICT"
+msgstr ""
 
 #: ../src/gtk-sat-module-popup.c:472
 #, c-format
@@ -1662,7 +1668,7 @@ msgstr ""
 #. reset time
 #. reset button
 #: ../src/gtk-sat-module-tmg.c:120 ../src/sat-pref-conditions.c:418
-#: ../src/sat-pref-debug.c:140 ../src/sat-pref-formats.c:115
+#: ../src/sat-pref-debug.c:139 ../src/sat-pref-formats.c:115
 #: ../src/sat-pref-layout.c:422 ../src/sat-pref-list-view.c:251
 #: ../src/sat-pref-map-view.c:704 ../src/sat-pref-multi-pass.c:189
 #: ../src/sat-pref-polar-view.c:592 ../src/sat-pref-refresh.c:421
@@ -1683,7 +1689,7 @@ msgstr ""
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2008,9 +2014,9 @@ msgid "Satellite options / shortcuts"
 msgstr ""
 
 #: ../src/gtk-single-sat.c:369
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Could not find satellite with catalog number %d"
-msgstr "%s: ไม่สามารถสร้าง satellite file (%s)."
+msgstr ""
 
 #: ../src/gtk-single-sat.c:392
 #, c-format
@@ -2151,7 +2157,7 @@ msgstr ""
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:157
+#: ../src/main.c:161
 #, c-format
 msgid ""
 "%s: User config check failed (code %d). This is fatal.\n"
@@ -2159,27 +2165,27 @@ msgid ""
 "in your home directory"
 msgstr ""
 
-#: ../src/main.c:465
+#: ../src/main.c:464
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:517
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:525
+#: ../src/main.c:524
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
-#: ../src/main.c:533
+#: ../src/main.c:532
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:543
+#: ../src/main.c:542
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2187,27 +2193,27 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:574
+#: ../src/main.c:573
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:620
+#: ../src/main.c:619
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:629 ../src/main.c:670
+#: ../src/main.c:628 ../src/main.c:669
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:633 ../src/main.c:674
+#: ../src/main.c:632 ../src/main.c:673
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:661
+#: ../src/main.c:660
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
@@ -2619,10 +2625,10 @@ msgstr ""
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#.
+#. 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr ""
@@ -2907,101 +2913,102 @@ msgstr ""
 msgid "%s: Returning a pass for %s that ends before the seeded time."
 msgstr ""
 
-#: ../src/qth-data.c:76
+#: ../src/qth-data.c:75
 #, c-format
 msgid "%s: Could not load data from %s (%s)"
 msgstr ""
 
-#: ../src/qth-data.c:84
+#. send a debug message, then read data
+#: ../src/qth-data.c:82
 #, c-format
 msgid "%s: QTH data: %s"
 msgstr ""
 
-#: ../src/qth-data.c:101
+#: ../src/qth-data.c:99
 #, c-format
 msgid "%s: Error reading QTH name (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:115
+#: ../src/qth-data.c:110
 #, c-format
 msgid "%s: QTH has no location (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:129
+#: ../src/qth-data.c:120
 #, c-format
 msgid "%s: QTH has no description."
 msgstr ""
 
-#: ../src/qth-data.c:143
+#: ../src/qth-data.c:130
 #, c-format
 msgid "%s: QTH has no weather station."
 msgstr ""
 
-#: ../src/qth-data.c:157
+#: ../src/qth-data.c:141
 #, c-format
 msgid "%s: Error reading QTH latitude (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:179
+#: ../src/qth-data.c:161
 #, c-format
 msgid "%s: Error reading QTH longitude (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:201
+#: ../src/qth-data.c:181
 #, c-format
 msgid "%s: Error reading QTH altitude (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:222 ../src/qth-data.c:238
+#: ../src/qth-data.c:200 ../src/qth-data.c:214
 #, c-format
 msgid "%s: Error reading QTH type (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:254
+#: ../src/qth-data.c:227
 #, c-format
 msgid "%s: QTH has no GPSD Server."
 msgstr ""
 
-#: ../src/qth-data.c:264 ../src/qth-data.c:553
-#, fuzzy, c-format
+#: ../src/qth-data.c:237 ../src/qth-data.c:540
+#, c-format
 msgid "%s: Could not set QRA for %s at %f, %f."
-msgstr "%s: ไม่สามารถเปิด %s (%s)."
+msgstr ""
 
-#: ../src/qth-data.c:272
+#: ../src/qth-data.c:245
 #, c-format
 msgid "%s: QTH data: %s, %.4f, %.4f, %d"
 msgstr ""
 
-#: ../src/qth-data.c:589 ../src/qth-data.c:608
-#, fuzzy, c-format
+#: ../src/qth-data.c:581 ../src/qth-data.c:604
+#, c-format
 msgid "%s: Could not open gpsd at  %s:%d"
-msgstr "%s: ไม่สามารถเปิด %s (%s)."
+msgstr ""
 
-#: ../src/qth-data.c:620
+#: ../src/qth-data.c:618
 #, c-format
 msgid "%s: Unsupported gpsd api major version (%d)"
 msgstr ""
 
-#: ../src/qth-data.c:697 ../src/qth-data.c:698
+#: ../src/qth-data.c:701 ../src/qth-data.c:702
 msgid "Error"
-msgstr ""
-
-#: ../src/qth-data.c:724
-#, c-format
-msgid "%s: QTH data had bogus lat %f"
 msgstr ""
 
 #: ../src/qth-data.c:731
 #, c-format
+msgid "%s: QTH data had bogus lat %f"
+msgstr ""
+
+#: ../src/qth-data.c:738
+#, c-format
 msgid "%s: QTH data had bogus lon %f"
 msgstr ""
 
-#: ../src/qth-data.c:737
+#: ../src/qth-data.c:744
 #, c-format
 msgid "%s: QTH data had bogus alt %f"
 msgstr ""
 
-#: ../src/qth-data.c:746
+#: ../src/qth-data.c:753
 #, c-format
 msgid "%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"
 msgstr ""
@@ -3450,89 +3457,93 @@ msgstr ""
 msgid "NONE"
 msgstr ""
 
-#: ../src/sat-log-browser.c:63
-msgid "BUG"
-msgstr ""
-
-#: ../src/sat-log-browser.c:65
+#: ../src/sat-log-browser.c:64
 msgid "WARNING"
 msgstr ""
 
-#: ../src/sat-log-browser.c:66
-msgid "DEBUG"
+#: ../src/sat-log-browser.c:65
+msgid "INFO"
 msgstr ""
 
-#: ../src/sat-log-browser.c:67
-msgid "TRACE"
+#: ../src/sat-log-browser.c:66 ../src/sat-log.c:66
+msgid "DEBUG"
 msgstr ""
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
-#: ../src/sat-log-browser.c:139 ../src/sat-log-browser.c:185
-#: ../src/sat-log-browser.c:374
+#: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
+#: ../src/sat-log-browser.c:362
 msgid "Log Browser"
 msgstr ""
 
 #. update window title if file read cleanly
 #. Update title with filename
-#: ../src/sat-log-browser.c:177 ../src/sat-log-browser.c:367
+#: ../src/sat-log-browser.c:174 ../src/sat-log-browser.c:355
 #, c-format
 msgid "Log Browser: %s"
 msgstr ""
 
 #. create file chooser dialog
-#: ../src/sat-log-browser.c:341
+#: ../src/sat-log-browser.c:329
 msgid "Select Log File"
 msgstr ""
 
-#: ../src/sat-log-browser.c:452
+#: ../src/sat-log-browser.c:440
 msgid "Log file is corrupt"
 msgstr ""
 
-#: ../src/sat-log-browser.c:475
+#: ../src/sat-log-browser.c:463
 #, c-format
 msgid "%s:%d: Error open debug log (%s)"
 msgstr ""
 
-#: ../src/sat-log-browser.c:614
-msgid "Bugs"
-msgstr ""
-
-#: ../src/sat-log-browser.c:618
+#: ../src/sat-log-browser.c:595
 msgid "Errors"
 msgstr ""
 
-#: ../src/sat-log-browser.c:622
+#: ../src/sat-log-browser.c:599
 msgid "Warnings"
 msgstr ""
 
-#: ../src/sat-log-browser.c:626
-msgid "Messages"
+#: ../src/sat-log-browser.c:603
+msgid "Info"
 msgstr ""
 
-#: ../src/sat-log-browser.c:630
+#: ../src/sat-log-browser.c:607
 msgid "Debug"
 msgstr ""
 
-#: ../src/sat-log-browser.c:640
+#: ../src/sat-log-browser.c:617
 msgid "<b>Total</b>"
 msgstr ""
 
 #. frame around the table
-#: ../src/sat-log-browser.c:651
+#: ../src/sat-log-browser.c:627
 msgid " Summary "
 msgstr ""
 
+#: ../src/sat-log.c:62
+msgid " --- "
+msgstr ""
+
+#: ../src/sat-log.c:64
+msgid " WARN"
+msgstr ""
+
+#: ../src/sat-log.c:65
+msgid " INFO"
+msgstr ""
+
 #. print an error message
-#: ../src/sat-log.c:91
+#: ../src/sat-log.c:101
 #, c-format
 msgid "ERROR: Could not create %s\n"
 msgstr ""
 
-#: ../src/sat-log.c:113
+#: ../src/sat-log.c:123
 #, c-format
 msgid ""
 "\n"
@@ -3542,12 +3553,12 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../src/sat-log.c:126
+#: ../src/sat-log.c:136
 #, c-format
 msgid "%s: Session started"
 msgstr ""
 
-#: ../src/sat-log.c:137
+#: ../src/sat-log.c:147
 #, c-format
 msgid "%s: Session ended"
 msgstr ""
@@ -3777,7 +3788,7 @@ msgid ""
 "satellite passes."
 msgstr ""
 
-#: ../src/sat-pref-conditions.c:423 ../src/sat-pref-debug.c:142
+#: ../src/sat-pref-conditions.c:423 ../src/sat-pref-debug.c:141
 #: ../src/sat-pref-layout.c:428 ../src/sat-pref-list-view.c:257
 #: ../src/sat-pref-map-view.c:710 ../src/sat-pref-multi-pass.c:194
 #: ../src/sat-pref-polar-view.c:598 ../src/sat-pref-refresh.c:427
@@ -3795,56 +3806,52 @@ msgid "Level 0: None"
 msgstr ""
 
 #: ../src/sat-pref-debug.c:84
-msgid "Level 1: Bug"
+msgid "Level 1: Error"
 msgstr ""
 
 #: ../src/sat-pref-debug.c:85
-msgid "Level 2: Error"
+msgid "Level 2: Warning"
 msgstr ""
 
 #: ../src/sat-pref-debug.c:86
-msgid "Level 3: Warning"
+msgid "Level 3: Info"
 msgstr ""
 
 #: ../src/sat-pref-debug.c:87
-msgid "Level 4: Info"
+msgid "Level 4: Debug"
 msgstr ""
 
-#: ../src/sat-pref-debug.c:88
-msgid "Level 5: Trace"
-msgstr ""
-
-#: ../src/sat-pref-debug.c:93
+#: ../src/sat-pref-debug.c:92
 msgid ""
 "Select the debug level. The higher the level, the more messages will be "
-"logged (so be careful with eLevel 5)."
+"logged."
 msgstr ""
 
-#: ../src/sat-pref-debug.c:104
+#: ../src/sat-pref-debug.c:103
 msgid "Delete log files older than:"
 msgstr ""
 
-#: ../src/sat-pref-debug.c:108
+#: ../src/sat-pref-debug.c:107
 msgid "Always delete"
 msgstr ""
 
-#: ../src/sat-pref-debug.c:109
+#: ../src/sat-pref-debug.c:108
 msgid "1 day"
 msgstr ""
 
-#: ../src/sat-pref-debug.c:110
+#: ../src/sat-pref-debug.c:109
 msgid "1 week"
 msgstr ""
 
-#: ../src/sat-pref-debug.c:111
+#: ../src/sat-pref-debug.c:110
 msgid "1 month"
 msgstr ""
 
-#: ../src/sat-pref-debug.c:115
+#: ../src/sat-pref-debug.c:114
 msgid "Select how often gpredict should delete old log files."
 msgstr ""
 
-#: ../src/sat-pref-debug.c:126
+#: ../src/sat-pref-debug.c:125
 #, c-format
 msgid ""
 "Gpredict stores all run-time messages in the %s%slogs%s folder. The current "
@@ -4501,9 +4508,9 @@ msgid "%s:%d: %s appears to be default QTH"
 msgstr ""
 
 #: ../src/sat-pref-qth.c:983
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%d: Failed to remove %s"
-msgstr "%s: ล้มเหลวต่อการสร้าง %s"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:988
 #, c-format
@@ -4846,7 +4853,8 @@ msgid "LO Up:"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #: ../src/sat-pref-rot.c:143
@@ -5350,9 +5358,9 @@ msgid "%s: Successfully fetched %s"
 msgstr ""
 
 #: ../src/tle-update.c:634
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Failed to open %s preventing update"
-msgstr "%s: ล้มเหลวในการสำเนา %s"
+msgstr ""
 
 #: ../src/tle-update.c:662
 #, c-format
