@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-04 23:01+0000\n"
-"PO-Revision-Date: 2012-02-23 11:46+0000\n"
-"Last-Translator: Jan Simon <Unknown>\n"
+"POT-Creation-Date: 2012-04-01 16:44+0200\n"
+"PO-Revision-Date: 2012-04-01 18:51+0000\n"
+"Last-Translator: AA1VS <hamaa1vs@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-01 14:48+0000\n"
-"X-Generator: Launchpad (build 15032)\n"
+"X-Launchpad-Export-Date: 2012-04-06 18:32+0000\n"
+"X-Generator: Launchpad (build 15060)\n"
 "Language: de\n"
 
 #: ../src/about.c:67
@@ -91,6 +91,7 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  AA1VS https://launchpad.net/~hamaa1vs\n"
+"  Gpredict Team https://launchpad.net/~gpredict-team\n"
 "  Jan Simon https://launchpad.net/~jan-simon\n"
 "  Patrick Eigensatz https://launchpad.net/~p.eigensatz\n"
 "  Peter Hürlimann https://launchpad.net/~phnet-li\n"
@@ -301,13 +302,13 @@ msgid "UTC"
 msgstr "UTC"
 
 #. Az legend
-#: ../src/gtk-azel-plot.c:395 ../src/gtk-sat-list.c:58
+#: ../src/gtk-azel-plot.c:395 ../src/gtk-sat-list.c:57
 #: ../src/sat-pass-dialogs.c:103
 msgid "Az"
 msgstr "Az."
 
 #. El legend
-#: ../src/gtk-azel-plot.c:405 ../src/gtk-sat-list.c:59
+#: ../src/gtk-azel-plot.c:405 ../src/gtk-sat-list.c:58
 #: ../src/sat-pass-dialogs.c:104
 msgid "El"
 msgstr "El."
@@ -862,7 +863,7 @@ msgstr "%s:%s: 2 Bytes gesendet, aber gesendet wurden %d."
 msgid "%s: %s rigctld returned error (%s)"
 msgstr "%s: %s rigctld gibt Fehler zurück (%s)"
 
-#: ../src/gtk-rot-ctrl.c:394 ../src/gtk-sat-list.c:90
+#: ../src/gtk-rot-ctrl.c:394 ../src/gtk-sat-list.c:89
 #: ../src/gtk-single-sat.c:57 ../src/sat-pass-dialogs.c:127
 msgid "Azimuth"
 msgstr "Azimut"
@@ -871,7 +872,7 @@ msgstr "Azimut"
 msgid "Read:"
 msgstr "Lesen:"
 
-#: ../src/gtk-rot-ctrl.c:433 ../src/gtk-sat-list.c:91
+#: ../src/gtk-rot-ctrl.c:433 ../src/gtk-sat-list.c:90
 #: ../src/gtk-single-sat.c:58 ../src/sat-pass-dialogs.c:128
 msgid "Elevation"
 msgstr "Elevation"
@@ -992,7 +993,7 @@ msgstr "%s: Satellit %d hat keinen NICKNAME"
 msgid "%s: Error reading TLE line 1 from %s (%s)"
 msgstr "%s: Fehler beim Lesen von TLE Zeile 1 von %s (%s)"
 
-#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1188 ../src/tle-update.c:1195
+#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1181 ../src/tle-update.c:1188
 #, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
 msgstr "%s: Fehler beim Lesen von TLE Zeile 2 von %s (%s)"
@@ -1002,228 +1003,228 @@ msgstr "%s: Fehler beim Lesen von TLE Zeile 2 von %s (%s)"
 msgid "%s: TLE data for %d appears to be bad"
 msgstr "%s: TLE-Daten für %d scheinen beschädigt zu sein"
 
-#: ../src/gtk-sat-list.c:56 ../src/gtk-sat-tree.c:213
+#: ../src/gtk-sat-list.c:55 ../src/gtk-sat-tree.c:213
 msgid "Satellite"
 msgstr "Satellit"
 
-#: ../src/gtk-sat-list.c:57 ../src/gtk-sat-selector.c:301
+#: ../src/gtk-sat-list.c:56 ../src/gtk-sat-selector.c:301
 #: ../src/gtk-sat-tree.c:222 ../src/mod-cfg.c:563
 msgid "Catnum"
 msgstr "Katalognummer"
 
-#: ../src/gtk-sat-list.c:60
+#: ../src/gtk-sat-list.c:59
 msgid "Dir"
 msgstr "Rich."
 
-#: ../src/gtk-sat-list.c:61 ../src/sat-pass-dialogs.c:105
+#: ../src/gtk-sat-list.c:60 ../src/sat-pass-dialogs.c:105
 msgid "Ra"
 msgstr "RA"
 
-#: ../src/gtk-sat-list.c:62 ../src/sat-pass-dialogs.c:106
+#: ../src/gtk-sat-list.c:61 ../src/sat-pass-dialogs.c:106
 msgid "Dec"
 msgstr "Dek."
 
-#: ../src/gtk-sat-list.c:63 ../src/pass-to-txt.c:53
+#: ../src/gtk-sat-list.c:62 ../src/pass-to-txt.c:53
 #: ../src/sat-pass-dialogs.c:107
 msgid "Range"
 msgstr "SE"
 
-#: ../src/gtk-sat-list.c:64 ../src/sat-pass-dialogs.c:108
+#: ../src/gtk-sat-list.c:63 ../src/sat-pass-dialogs.c:108
 msgid "Rate"
 msgstr "Änd."
 
 #. Next Event
-#: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:97
+#: ../src/gtk-sat-list.c:64 ../src/gtk-sat-list.c:96
 #: ../src/gtk-single-sat.c:64 ../src/sat-pref-map-view.c:250
 #: ../src/sat-pref-polar-view.c:262
 msgid "Next Event"
 msgstr "Nächstes Ereignis"
 
-#: ../src/gtk-sat-list.c:66 ../src/gtk-sat-list.c:98
+#: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:97
 #: ../src/gtk-single-sat.c:65
 msgid "Next AOS"
 msgstr "Nächstes AOS"
 
-#: ../src/gtk-sat-list.c:67 ../src/gtk-sat-list.c:99
+#: ../src/gtk-sat-list.c:66 ../src/gtk-sat-list.c:98
 #: ../src/gtk-single-sat.c:66
 msgid "Next LOS"
 msgstr "Nächstes LOS"
 
-#: ../src/gtk-sat-list.c:68 ../src/loc-tree.c:146
+#: ../src/gtk-sat-list.c:67 ../src/loc-tree.c:146
 #: ../src/sat-pass-dialogs.c:109 ../src/sat-pref-qth.c:203
 msgid "Lat"
 msgstr "Lat"
 
-#: ../src/gtk-sat-list.c:69 ../src/loc-tree.c:166
+#: ../src/gtk-sat-list.c:68 ../src/loc-tree.c:166
 #: ../src/sat-pass-dialogs.c:110 ../src/sat-pref-qth.c:216
 msgid "Lon"
 msgstr "Lon"
 
-#: ../src/gtk-sat-list.c:70 ../src/sat-pass-dialogs.c:111
+#: ../src/gtk-sat-list.c:69 ../src/sat-pass-dialogs.c:111
 msgid "SSP"
 msgstr "SSP"
 
-#: ../src/gtk-sat-list.c:71 ../src/pass-to-txt.c:58
+#: ../src/gtk-sat-list.c:70 ../src/pass-to-txt.c:58
 #: ../src/sat-pass-dialogs.c:112
 msgid "Footp"
 msgstr "Footp."
 
-#: ../src/gtk-sat-list.c:72 ../src/loc-tree.c:186
+#: ../src/gtk-sat-list.c:71 ../src/loc-tree.c:186
 #: ../src/sat-pass-dialogs.c:113
 msgid "Alt"
 msgstr "Höhe"
 
-#: ../src/gtk-sat-list.c:73 ../src/sat-pass-dialogs.c:114
+#: ../src/gtk-sat-list.c:72 ../src/sat-pass-dialogs.c:114
 msgid "Vel"
 msgstr "Geschw."
 
-#: ../src/gtk-sat-list.c:74 ../src/sat-pass-dialogs.c:115
+#: ../src/gtk-sat-list.c:73 ../src/sat-pass-dialogs.c:115
 msgid "Dop"
 msgstr "Dop."
 
-#: ../src/gtk-sat-list.c:75 ../src/sat-pass-dialogs.c:116
+#: ../src/gtk-sat-list.c:74 ../src/sat-pass-dialogs.c:116
 msgid "Loss"
 msgstr "Verl."
 
-#: ../src/gtk-sat-list.c:76 ../src/sat-pass-dialogs.c:117
+#: ../src/gtk-sat-list.c:75 ../src/sat-pass-dialogs.c:117
 msgid "Del"
 msgstr "Verz."
 
-#: ../src/gtk-sat-list.c:77 ../src/sat-pass-dialogs.c:118
+#: ../src/gtk-sat-list.c:76 ../src/sat-pass-dialogs.c:118
 msgid "MA"
 msgstr "MA"
 
-#: ../src/gtk-sat-list.c:78 ../src/sat-pass-dialogs.c:119
+#: ../src/gtk-sat-list.c:77 ../src/sat-pass-dialogs.c:119
 msgid "Phase"
 msgstr "Phase"
 
-#: ../src/gtk-sat-list.c:79 ../src/pass-to-txt.c:102
+#: ../src/gtk-sat-list.c:78 ../src/pass-to-txt.c:102
 #: ../src/sat-pass-dialogs.c:68
 msgid "Orbit"
 msgstr "Orbit"
 
-#: ../src/gtk-sat-list.c:80 ../src/pass-to-txt.c:66 ../src/pass-to-txt.c:103
+#: ../src/gtk-sat-list.c:79 ../src/pass-to-txt.c:66 ../src/pass-to-txt.c:103
 #: ../src/sat-pass-dialogs.c:69 ../src/sat-pass-dialogs.c:120
 msgid "Vis"
 msgstr "Sicht."
 
-#: ../src/gtk-sat-list.c:81
+#: ../src/gtk-sat-list.c:80
 msgid "Decay"
 msgstr "Abfall"
 
-#: ../src/gtk-sat-list.c:82
+#: ../src/gtk-sat-list.c:81
 msgid "BOLD"
 msgstr "FETT"
 
-#: ../src/gtk-sat-list.c:88
+#: ../src/gtk-sat-list.c:87
 msgid "Satellite Name"
 msgstr "Satellitenname"
 
-#: ../src/gtk-sat-list.c:89
+#: ../src/gtk-sat-list.c:88
 msgid "Catalogue Number"
 msgstr "Katalognummer"
 
-#: ../src/gtk-sat-list.c:92 ../src/gtk-single-sat.c:59
+#: ../src/gtk-sat-list.c:91 ../src/gtk-single-sat.c:59
 msgid "Direction"
 msgstr "Richtung"
 
-#: ../src/gtk-sat-list.c:93 ../src/sat-pass-dialogs.c:129
+#: ../src/gtk-sat-list.c:92 ../src/sat-pass-dialogs.c:129
 msgid "Right Ascension"
 msgstr "Rektaszension"
 
-#: ../src/gtk-sat-list.c:94 ../src/gtk-single-sat.c:61
+#: ../src/gtk-sat-list.c:93 ../src/gtk-single-sat.c:61
 #: ../src/sat-pass-dialogs.c:130
 msgid "Declination"
 msgstr "Deklination"
 
-#: ../src/gtk-sat-list.c:95 ../src/gtk-single-sat.c:62
+#: ../src/gtk-sat-list.c:94 ../src/gtk-single-sat.c:62
 #: ../src/sat-pass-dialogs.c:131
 msgid "Slant Range"
 msgstr "Schrägentfernung"
 
-#: ../src/gtk-sat-list.c:96 ../src/gtk-single-sat.c:63
+#: ../src/gtk-sat-list.c:95 ../src/gtk-single-sat.c:63
 #: ../src/sat-pass-dialogs.c:132
 msgid "Range Rate"
 msgstr "Distanzänderung"
 
-#: ../src/gtk-sat-list.c:100 ../src/sat-pass-dialogs.c:133
+#: ../src/gtk-sat-list.c:99 ../src/sat-pass-dialogs.c:133
 msgid "Latitude"
 msgstr "Breitengrad"
 
-#: ../src/gtk-sat-list.c:101 ../src/sat-pass-dialogs.c:134
+#: ../src/gtk-sat-list.c:100 ../src/sat-pass-dialogs.c:134
 msgid "Longitude"
 msgstr "Längengrad"
 
-#: ../src/gtk-sat-list.c:102 ../src/sat-pass-dialogs.c:135
+#: ../src/gtk-sat-list.c:101 ../src/sat-pass-dialogs.c:135
 msgid "Sub-Satellite Point"
 msgstr "Sub-Satelliten-Punkt"
 
-#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:70
+#: ../src/gtk-sat-list.c:102 ../src/gtk-single-sat.c:70
 #: ../src/sat-pass-dialogs.c:136
 msgid "Footprint"
 msgstr "Footprint"
 
 #. altitude
-#: ../src/gtk-sat-list.c:104 ../src/gtk-single-sat.c:71
+#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:71
 #: ../src/qth-editor.c:333 ../src/sat-pass-dialogs.c:137
 #: ../src/sat-pref-qth-editor.c:318
 msgid "Altitude"
 msgstr "Höhe"
 
-#: ../src/gtk-sat-list.c:105 ../src/gtk-single-sat.c:72
+#: ../src/gtk-sat-list.c:104 ../src/gtk-single-sat.c:72
 #: ../src/sat-pass-dialogs.c:138
 msgid "Velocity"
 msgstr "Geschwindigkeit"
 
-#: ../src/gtk-sat-list.c:106 ../src/gtk-single-sat.c:101
+#: ../src/gtk-sat-list.c:105 ../src/gtk-single-sat.c:101
 #: ../src/sat-pass-dialogs.c:139
 msgid "Doppler Shift @ 100MHz"
 msgstr "Dopplerverschiebung @ 100MHz"
 
-#: ../src/gtk-sat-list.c:107 ../src/sat-pass-dialogs.c:140
+#: ../src/gtk-sat-list.c:106 ../src/sat-pass-dialogs.c:140
 msgid "Signal Loss @ 100MHz"
 msgstr "Signalverlust @ 100MHz"
 
-#: ../src/gtk-sat-list.c:108 ../src/gtk-single-sat.c:103
+#: ../src/gtk-sat-list.c:107 ../src/gtk-single-sat.c:103
 #: ../src/sat-pass-dialogs.c:141
 msgid "Signal Delay"
 msgstr "Signalverzögerung"
 
-#: ../src/gtk-sat-list.c:109 ../src/gtk-single-sat.c:104
+#: ../src/gtk-sat-list.c:108 ../src/gtk-single-sat.c:104
 #: ../src/sat-pass-dialogs.c:142
 msgid "Mean Anomaly"
 msgstr "Mittlere Anomalie"
 
-#: ../src/gtk-sat-list.c:110 ../src/gtk-single-sat.c:77
+#: ../src/gtk-sat-list.c:109 ../src/gtk-single-sat.c:77
 #: ../src/gtk-single-sat.c:105 ../src/sat-pass-dialogs.c:143
 msgid "Orbit Phase"
 msgstr "Orbitphase"
 
-#: ../src/gtk-sat-list.c:111 ../src/gtk-single-sat.c:106
+#: ../src/gtk-sat-list.c:110 ../src/gtk-single-sat.c:106
 msgid "Orbit Number"
 msgstr "Orbitnummer"
 
-#: ../src/gtk-sat-list.c:112 ../src/gtk-single-sat.c:79
+#: ../src/gtk-sat-list.c:111 ../src/gtk-single-sat.c:79
 #: ../src/sat-pass-dialogs.c:144
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-#: ../src/gtk-sat-list.c:594
+#: ../src/gtk-sat-list.c:519
 #, c-format
 msgid "%s: Invalid GtkSatList!"
 msgstr "%s: Ungültige GtkSatList!"
 
-#: ../src/gtk-sat-list.c:664
+#: ../src/gtk-sat-list.c:589
 #, c-format
 msgid "%s: Failed to get data for #%d."
 msgstr "%s: Abruf der Daten für #%d fehlgeschlagen."
 
-#: ../src/gtk-sat-list.c:670
+#: ../src/gtk-sat-list.c:594
 #, c-format
 msgid "%s: Satellite #%d removed from list."
 msgstr "%s: Satellit #%d wurde von der Liste entfernt."
 
-#: ../src/gtk-sat-list.c:1012 ../src/sat-pass-dialogs.c:708
+#: ../src/gtk-sat-list.c:929 ../src/sat-pass-dialogs.c:708
 #: ../src/sat-pref-qth.c:832
 #, c-format
 msgid "%s:%d: Invalid column: %d"
@@ -1231,23 +1232,23 @@ msgstr "%s:%d: Ungültige Spalte: %d"
 
 #. avoid unusued parameter compiler warning
 #. avoid unusued parameter compiler warning
-#: ../src/gtk-sat-list.c:1256
+#: ../src/gtk-sat-list.c:1153
 #, c-format
 msgid "%s: FIXME I am not implemented"
 msgstr "%s: FIXME Ich bin nicht implementiert"
 
-#: ../src/gtk-sat-list.c:1354 ../src/gtk-sat-list.c:1388
+#: ../src/gtk-sat-list.c:1248 ../src/gtk-sat-list.c:1279
 #, c-format
 msgid "%s:%d Failed to get data for %d."
 msgstr "%s:%d: Abruf der Daten für %d fehlgeschlagen."
 
-#: ../src/gtk-sat-list.c:1401 ../src/sat-pass-dialogs.c:1394
+#: ../src/gtk-sat-list.c:1290 ../src/sat-pass-dialogs.c:1394
 #: ../src/sat-pass-dialogs.c:1445
 #, c-format
 msgid "%s:%d: There is no selection; skip popup."
 msgstr "%s:%d: Keine Auswahl vorhanden; Popup wird übersprungen."
 
-#: ../src/gtk-sat-list.c:1499
+#: ../src/gtk-sat-list.c:1383
 #, c-format
 msgid "%s: GtkSatList has not child with index %d"
 msgstr "%s: GtkSatList hat kein Kind mit Index %d"
@@ -1315,12 +1316,12 @@ msgstr "%s: Falsche Daten beim Messen der Distanz zum Nordpol %f %f."
 msgid "%s: Bad data measuring distance to South Pole %f %f."
 msgstr "%s: Falsche Daten beim Messen der Distanz zum Südpol %f %f."
 
-#: ../src/gtk-sat-map.c:2663
+#: ../src/gtk-sat-map.c:2671
 #, c-format
 msgid "LOS in %d minutes"
 msgstr "LOS in %d Minuten"
 
-#: ../src/gtk-sat-map.c:2666
+#: ../src/gtk-sat-map.c:2674
 #, c-format
 msgid "AOS in %d minutes"
 msgstr "AOS in %d Minuten"
@@ -1446,7 +1447,6 @@ msgid "%s: Unable to allocate memory for grid."
 msgstr "%s: Speicherzuordnung für das Gitter nicht möglich."
 
 #: ../src/gtk-sat-module.c:667 ../src/mod-cfg.c:615
-#: ../src/mod-cfg-get-param.c:183
 #, c-format
 msgid "%s: Failed to get list of satellites (%s)"
 msgstr "%s: Liste der Satelliten konnte nicht geladen werden (%s)"
@@ -1682,7 +1682,7 @@ msgid "%s:%d: Successfully cloned %s."
 msgstr "%s:%d: Erfolgeich geklont. %s."
 
 #: ../src/gtk-sat-module-popup.c:430 ../src/gtk-sat-module-popup.c:553
-#: ../src/gtk-sat-module-popup.c:693 ../src/menubar.c:1061
+#: ../src/gtk-sat-module-popup.c:693 ../src/menubar.c:1003
 #: ../src/mod-mgr.c:684
 msgid "GPREDICT: "
 msgstr "GPREDICT: "
@@ -2524,44 +2524,48 @@ msgstr "_Über Gpredict"
 msgid "Show about dialog"
 msgstr "»Über«-Dialog anzeigen"
 
-#: ../src/menubar.c:238
+#: ../src/menubar.c:234
 #, c-format
 msgid "Failed to build menubar: %s"
 msgstr "Erzeugen der Menüleiste gescheitert: %s"
 
-#: ../src/menubar.c:276
+#. avoid unused parameter compiler warning
+#. avoid unused parameter compiler warning
+#: ../src/menubar.c:270
 #, c-format
 msgid "%s: Starting new module configurator..."
 msgstr "%s: Starte neuen Modulkonfigurierer …"
 
-#: ../src/menubar.c:283
+#: ../src/menubar.c:276
 #, c-format
 msgid "%s: New module name is %s."
 msgstr "%s: Neuer Modulname ist %s."
 
-#: ../src/menubar.c:303 ../src/menubar.c:364
+#: ../src/menubar.c:295 ../src/menubar.c:351
 #, c-format
 msgid "Could not open %s. Please examine the log messages for details."
 msgstr ""
 "%s konnte nicht geöffnet werden. Bitte die Log-Benachrichtigungen nach "
 "Details überprüfen."
 
-#: ../src/menubar.c:319
+#: ../src/menubar.c:311
 #, c-format
 msgid "%s: New module config cancelled."
 msgstr "%s: Neue Modulkonfiguration abgebrochen."
 
-#: ../src/menubar.c:337
+#. avoid unused parameter compiler warning
+#. avoid unused parameter compiler warning
+#: ../src/menubar.c:326
 #, c-format
 msgid "%s: Open existing module..."
 msgstr "%s: Vorhandenes Modul öffnen …"
 
-#: ../src/menubar.c:344
+#: ../src/menubar.c:332
 #, c-format
 msgid "%s: Open module %s."
 msgstr "%s: Modul %s öffnen."
 
-#: ../src/menubar.c:392
+#: ../src/menubar.c:381
 #, c-format
 msgid "%s: Open module cancelled."
 msgstr "%s: Öffnen des Moduls abgebrochen."
@@ -2569,16 +2573,16 @@ msgstr "%s: Öffnen des Moduls abgebrochen."
 #. avoid unused parameter compiler warning
 #. avoid unused parameter compiler warning
 #. create new dialog with progress indicator
-#: ../src/menubar.c:459 ../src/menubar.c:631 ../src/sat-pref-general.c:61
+#: ../src/menubar.c:441 ../src/menubar.c:597 ../src/sat-pref-general.c:61
 msgid "TLE Update"
 msgstr "TLE-Aktualisierung"
 
-#: ../src/menubar.c:480
+#: ../src/menubar.c:456
 msgid "<b>Updating TLE files from network</b>"
 msgstr "<b>TLE-Daten werden aus dem Internet aktualisiert</b>"
 
 #. statistics
-#: ../src/menubar.c:493 ../src/menubar.c:665
+#: ../src/menubar.c:469 ../src/menubar.c:625
 msgid ""
 "Satellites updated:\t 0\n"
 "Satellites skipped:\t 0\n"
@@ -2588,39 +2592,39 @@ msgstr ""
 "Übersprungene Satelliten:       \t 0\n"
 "Fehlende Satelliten:        \t         0\n"
 
-#: ../src/menubar.c:519 ../src/menubar.c:691
+#: ../src/menubar.c:491 ../src/menubar.c:647
 msgid "Finished"
 msgstr "Abgeschlossen"
 
 #. create file chooser
-#: ../src/menubar.c:574
+#: ../src/menubar.c:543
 msgid "Select directory"
 msgstr "Verzeichnis wählen"
 
 #. create label
-#: ../src/menubar.c:580
+#: ../src/menubar.c:549
 msgid "Select TLE directory:"
 msgstr "TLE-Verzeichnis wählen:"
 
 #. create the dalog
-#: ../src/menubar.c:589
+#: ../src/menubar.c:558
 msgid "Update TLE from files"
 msgstr "TLE-Daten aus Dateien aktualisieren"
 
-#: ../src/menubar.c:624
+#: ../src/menubar.c:591
 #, c-format
 msgid "%s: Running TLE update from %s"
 msgstr "%s: TLE-Datenaktualisierung von %s läuft"
 
-#: ../src/menubar.c:651
+#: ../src/menubar.c:612
 msgid "<b>Updating TLE files from files</b>"
 msgstr "<b>TLE-Daten werden aus Dateien aktualisiert</b>"
 
-#: ../src/menubar.c:733 ../src/menubar.c:756
+#: ../src/menubar.c:680 ../src/menubar.c:699
 msgid "This function is still under development."
 msgstr "Diese Funktion ist noch in der Entwicklung."
 
-#: ../src/menubar.c:789
+#: ../src/menubar.c:728
 msgid ""
 "A comprehensive PDF user manual and \n"
 "video tutorials are available from the \n"
@@ -2630,17 +2634,17 @@ msgstr ""
 "Videotutorials sind auf der Gpredict Internetseite\n"
 "verfügbar:"
 
-#: ../src/menubar.c:874
+#: ../src/menubar.c:809
 #, c-format
 msgid "%s:%s: Scanning directory %s for modules."
 msgstr "%s:%s: Scanne Verzeichnis %s nach Modulen."
 
-#: ../src/menubar.c:897
+#: ../src/menubar.c:833
 #, c-format
 msgid "%s:%d: Failed to open module dir %s (%s)"
 msgstr "%s:%d: Öffnen des Modulverzeichnisses %s fehlgeschlagen (%s)"
 
-#: ../src/menubar.c:912
+#: ../src/menubar.c:849
 msgid ""
 "You do not have any modules set up yet. Please use File->New in order to "
 "create a module."
@@ -2648,21 +2652,21 @@ msgstr ""
 "Sie haben noch keine Module eingerichtet. Bitte benutzen sie Datei -> Neues "
 "Modul um eines zu erstellen."
 
-#: ../src/menubar.c:946
+#: ../src/menubar.c:877
 msgid "Module"
 msgstr "Modul"
 
 #. create dialog
-#: ../src/menubar.c:954
+#: ../src/menubar.c:883
 msgid "Select a module"
 msgstr "Ein Modul wählen"
 
-#: ../src/menubar.c:982
+#: ../src/menubar.c:911
 #, c-format
 msgid "%s:%s: Selected module is: %s"
 msgstr "%s:%s: Gewählte Modul ist: %s"
 
-#: ../src/menubar.c:987
+#: ../src/menubar.c:916
 #, c-format
 msgid "%s:%s: No selection is list of modules."
 msgstr "%s:%s: Keine Auswahl ist die Modulliste."
@@ -2807,6 +2811,11 @@ msgstr "%s: Integerwert lesen fehlgeschlagen (%s)"
 #, c-format
 msgid "%s: Failed to read string (%s)"
 msgstr "%s: Stringwert lesen fehlgeschlagen (%s)"
+
+#: ../src/mod-cfg-get-param.c:185
+#, c-format
+msgid "%s: Failed to get integer list: %s"
+msgstr ""
 
 #: ../src/mod-mgr.c:150
 #, c-format
@@ -5609,17 +5618,17 @@ msgstr "%s: NULL Eingabedaten!"
 msgid "%s: NULL output storage!"
 msgstr "%s: NULL Ausgabedaten!"
 
-#: ../src/tle-update.c:131 ../src/tle-update.c:543
+#: ../src/tle-update.c:128 ../src/tle-update.c:536
 #, c-format
 msgid "%s: A TLE update process is already running. Aborting."
 msgstr "%s: Ein TLE-Aktualisierungsvorgang läuft bereits. Abbruch."
 
-#: ../src/tle-update.c:148 ../src/tle-update.c:221
+#: ../src/tle-update.c:144 ../src/tle-update.c:216
 #, c-format
 msgid "%s: Error opening directory %s (%s)"
 msgstr "%s: Fehler beim Öffnen von Verzeichnis %s (%s)"
 
-#: ../src/tle-update.c:153 ../src/tle-update.c:226
+#: ../src/tle-update.c:149 ../src/tle-update.c:221
 #, c-format
 msgid ""
 "<b>ERROR</b> opening directory %s\n"
@@ -5628,26 +5637,26 @@ msgstr ""
 "<b>FEHLER</b> beim Öffnen von Verzeichnis %s\n"
 "%s"
 
-#: ../src/tle-update.c:173
+#: ../src/tle-update.c:169
 #, c-format
 msgid "Reading data from %s"
 msgstr "Lese Daten aus %s"
 
-#: ../src/tle-update.c:196
+#: ../src/tle-update.c:191
 #, c-format
 msgid "%s: No valid TLE data found in %s"
 msgstr "%s: Keine gültigen TLE-Daten in %s gefunden"
 
-#: ../src/tle-update.c:201
+#: ../src/tle-update.c:196
 #, c-format
 msgid "%s: Read %d sats from %s into memory"
 msgstr "%s: %d Satelliten aus %s in den Speicher geladen"
 
-#: ../src/tle-update.c:287
+#: ../src/tle-update.c:281
 msgid "Updating data..."
 msgstr "Daten werden aktualisiert…"
 
-#: ../src/tle-update.c:291
+#: ../src/tle-update.c:285
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5658,7 +5667,7 @@ msgstr ""
 "Übersprungene Satelliten:\t %d\n"
 "Fehlende Satelliten:\t %d\n"
 
-#: ../src/tle-update.c:361
+#: ../src/tle-update.c:355
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5671,174 +5680,174 @@ msgstr ""
 "Fehlende Satelliten:\t %d\n"
 "Neue Satelliten:\t\t %d"
 
-#: ../src/tle-update.c:372
+#: ../src/tle-update.c:366
 #, c-format
 msgid "%s: Added %d new satellites to local database"
 msgstr "%s: %d neue Satelliten zur lokalen Datenbank hinzugefügt"
 
-#: ../src/tle-update.c:389
+#: ../src/tle-update.c:383
 #, c-format
 msgid "%s: TLE elements updated."
 msgstr "%s: TLE-Daten aktualisiert."
 
-#: ../src/tle-update.c:456
+#: ../src/tle-update.c:449
 #, c-format
 msgid "%s: Could not open category file file %s (%s)."
 msgstr "%s: Kategoriendatei %s konnte nicht geöffnet werden (%s)."
 
-#: ../src/tle-update.c:478
+#: ../src/tle-update.c:471
 #, c-format
 msgid "%s: Error adding %d to %s (%s)."
 msgstr "%s: Fehler beim Hinzufügen von %d zu %s (%s)."
 
-#: ../src/tle-update.c:484
+#: ../src/tle-update.c:477
 #, c-format
 msgid "%s: Added satellite %d to %s."
 msgstr "%s: Satellite %d zu %s hinzugefügt."
 
-#: ../src/tle-update.c:561
+#: ../src/tle-update.c:554
 #, c-format
 msgid "%s: No files to fetch from network."
 msgstr "%s: Keine Dateien aus dem Internet zu laden."
 
-#: ../src/tle-update.c:567
+#: ../src/tle-update.c:560
 msgid "No files to fetch from network"
 msgstr "Keine Dateien aus dem Internet herunterzuladen"
 
-#: ../src/tle-update.c:594
+#: ../src/tle-update.c:587
 #, c-format
 msgid "Fetching %s"
 msgstr "Hole %s"
 
-#: ../src/tle-update.c:621
+#: ../src/tle-update.c:614
 #, c-format
 msgid "%s: Error fetching %s (%s)"
 msgstr "%s: Fehler beim Holen von %s (%s)"
 
-#: ../src/tle-update.c:626
+#: ../src/tle-update.c:619
 #, c-format
 msgid "%s: Successfully fetched %s"
 msgstr "%s: Erfolgreich %s geholt"
 
-#: ../src/tle-update.c:634
+#: ../src/tle-update.c:627
 #, c-format
 msgid "%s: Failed to open %s preventing update"
 msgstr "%s: Fehler beim öffnen von %s verhindert Aktualisierung"
 
-#: ../src/tle-update.c:662
+#: ../src/tle-update.c:655
 #, c-format
 msgid "%s: Fetched %d files from network; updating..."
 msgstr "%s: %d Dateien aus dem Internet geholt; aktualisiere …"
 
-#: ../src/tle-update.c:672
+#: ../src/tle-update.c:665
 #, c-format
 msgid "%s: Could not fetch any new TLE files from network; aborting..."
 msgstr ""
 "%s: Es konnten keine neuen TLE-Dateien aus dem Internet geholt werden; "
 "Abbruch …"
 
-#: ../src/tle-update.c:692
+#: ../src/tle-update.c:685
 #, c-format
 msgid "%s: Error opening %s (%s)"
 msgstr "%s: Fehler beim Öffnen von %s (%s)"
 
-#: ../src/tle-update.c:832
+#: ../src/tle-update.c:825
 #, c-format
 msgid "%s:%s: There is no category in %s"
 msgstr "%s:%s: Es gibt keine Kategorie in %s"
 
-#: ../src/tle-update.c:841
+#: ../src/tle-update.c:834
 #, c-format
 msgid "%s:%s: There is no category called %s"
 msgstr "%s:%s: Es gibt keine %s benannte Kategorie"
 
-#: ../src/tle-update.c:854
+#: ../src/tle-update.c:847
 #, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
 msgstr ""
 "%s:%s: .cat-Datei konnte nicht erneut geöffnet werden währned des Lesens der "
 "TLE aus %s"
 
-#: ../src/tle-update.c:904
+#: ../src/tle-update.c:897
 #, c-format
 msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 "%s:%s: Etwas hat »linesneeded« auf den unzulässigen Wert %d geschrieben"
 
-#: ../src/tle-update.c:930
+#: ../src/tle-update.c:923
 #, c-format
 msgid "%s:%s: Processing a three line TLE"
 msgstr "%s:%s: Verarbeite ein Drei-Zeilen-TLE"
 
-#: ../src/tle-update.c:945
+#: ../src/tle-update.c:938
 #, c-format
 msgid "%s:%s: Processing a bare two line TLE"
 msgstr "%s:%s: Verarbeite ein Zwei-Zeilen-TLE"
 
-#: ../src/tle-update.c:994
+#: ../src/tle-update.c:987
 #, c-format
 msgid "%s:%s: Invalid data for %d"
 msgstr "%s:%s: Ungültige Daten für %d"
 
-#: ../src/tle-update.c:1042
+#: ../src/tle-update.c:1035
 #, c-format
 msgid "%s:%s: Two different statuses for %s:%d at the same time."
 msgstr "%s:%s: Gleichzeitig zwei unterschiedliche Status für %s:%d."
 
-#: ../src/tle-update.c:1094
+#: ../src/tle-update.c:1087
 #, c-format
 msgid "%s:%s: Failed to open %s"
 msgstr "%s:%s: %s konnte nicht geöffnet werden"
 
-#: ../src/tle-update.c:1164
+#: ../src/tle-update.c:1157
 #, c-format
 msgid "%s: No new TLE data found for %d. Satellite might be obsolete."
 msgstr ""
 "%s: Keine neuen TLE-Daten für %d gefunden. Satellit kann veraltet sein."
 
-#: ../src/tle-update.c:1173
+#: ../src/tle-update.c:1166
 #, c-format
 msgid "%s: Error loading %s (%s)"
 msgstr "%s: Fehler beim Laden von %s (%s)"
 
-#: ../src/tle-update.c:1216
+#: ../src/tle-update.c:1209
 #, c-format
 msgid "%s: Current TLE data for %d appears to be bad"
 msgstr "%s: Derzeitige TLE-Daten für %d scheinen falsch zu sein"
 
-#: ../src/tle-update.c:1237
+#: ../src/tle-update.c:1230
 #, c-format
 msgid "%s: Data for  %d updated for name."
 msgstr "%s: Name in Daten für %d aktualisiert."
 
-#: ../src/tle-update.c:1249
+#: ../src/tle-update.c:1242
 #, c-format
 msgid "%s: Data for  %d updated for nickname."
 msgstr "%s: Nickname in Daten für %d aktualisiert."
 
-#: ../src/tle-update.c:1264
+#: ../src/tle-update.c:1257
 #, c-format
 msgid "%s: Data for  %d updated for tle."
 msgstr "%s: TLE in Daten für %d aktualisiert."
 
-#: ../src/tle-update.c:1274
+#: ../src/tle-update.c:1267
 #, c-format
 msgid "%s: Data for  %d updated for operational status."
 msgstr "%s: Betriebsstatus in Daten für %d aktualisiert."
 
-#: ../src/tle-update.c:1313
+#: ../src/tle-update.c:1303
 msgid "Never"
 msgstr "Nie"
 
-#: ../src/tle-update.c:1314
+#: ../src/tle-update.c:1304
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: ../src/tle-update.c:1315
+#: ../src/tle-update.c:1305
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: ../src/tle-update.c:1316
+#: ../src/tle-update.c:1306
 msgid "Daily"
 msgstr "Täglich"
 
