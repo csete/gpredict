@@ -7,8 +7,8 @@ A ICON             "icons/gpredict-icon.ico"
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 1 VERSIONINFO
-    FILEVERSION     1,3,0,0
-    PRODUCTVERSION  1,3,0,0
+    FILEVERSION     1,4,0,0
+    PRODUCTVERSION  1,4,0,0
     FILEOS          VOS__WINDOWS32
     FILETYPE        VFT_APP
     FILESUBTYPE     VFT2_UNKNOWN
@@ -21,11 +21,11 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
         {
             VALUE "CompanyName", "Alexandru Csete, OZ9AEC"
             VALUE "FileDescription", "Gpredict: Real-time satellite tracking and orbit prediction program"
-            VALUE "FileVersion", "1.3.0.0"
+            VALUE "FileVersion", "1.4.0.0"
             VALUE "InternalName", "GPredict"
-            VALUE "LegalCopyright", "Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC"
+            VALUE "LegalCopyright", "Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC"
             VALUE "ProductName", "GPredict"
-            VALUE "ProductVersion", "1.3"
+            VALUE "ProductVersion", "1.4Git"
         }
     }
     BLOCK "VarFileInfo"

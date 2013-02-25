@@ -86,7 +86,7 @@
 #undef STDC_HEADERS
 
 /* Version number of package */
-#define VERSION "1.3"
+#define VERSION "1.4git"
 
 #define GETTEXT_PACKAGE "gpredict"
 
