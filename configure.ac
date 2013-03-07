@@ -1,14 +1,17 @@
-AC_INIT(src/main.c)
-
+AC_INIT([gpredict],
+        m4_esyscmd([./git-version-gen .tarball-version]),
+        [gpredict-discussion@lists.sourceforge.net])
+AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(build-config.h)
-
-AM_INIT_AUTOMAKE(gpredict, 1.4git)
+AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.6])
 
 AM_MAINTAINER_MODE
 AC_PROG_INTLTOOL([0.21])
 
+# kernel style compile messages
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
-dnl check for programs
+# check for programs
 AC_PROG_CC
 AC_ISC_POSIX
 AC_HEADER_STDC
@@ -20,40 +23,40 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
   CFLAGS="${CFLAGS} -Wall"
 fi
 
-dnl check for libm
+# check for libm
 AC_CHECK_LIB([m], [sin],, AC_MSG_ERROR([Can't find libm. Check your libc installation]))
 
-dnl check for glib, gtk, and goocanvas libraries
-pkg_modules="gtk+-2.0 >= 2.18.0 glib-2.0 >= 2.22.0 gthread-2.0 >= 2.22.0 goocanvas >= 0.15 libcurl >= 7.19.0"
-PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
+# check for goocanvas (depends on gtk and glib)
+if pkg-config --atleast-version=7.19 libcurl; then
+    CFLAGS="$CFLAGS `pkg-config --cflags libcurl`"
+    LIBS="$LIBS `pkg-config --libs libcurl`"
+else
+    AC_MSG_ERROR(Gpredict requires libcurl-dev 7.19 or later)
+fi
+
+# check for goocanvas (depends on gtk and glib)
+if pkg-config --atleast-version=0.15 goocanvas; then
+    CFLAGS="$CFLAGS `pkg-config --cflags goocanvas`"
+    LIBS="$LIBS `pkg-config --libs goocanvas`"
+else
+    AC_MSG_ERROR(Gpredict requires libgoocanvas-dev 0.15 or later)
+fi
+
+# check for libgps (optional)
+if pkg-config --atleast-version=2.90 libgps; then
+    CFLAGS="$CFLAGS `pkg-config --cflags libgps`"
+    LIBS="$LIBS `pkg-config --libs libgps`"
+    havelibgps=true;
+    AC_DEFINE(HAS_LIBGPS, 1, [Define if libgps is available])
+else
+    havelibgps=false;
+fi
+
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
-dnl optional check for libgps
-PKG_CHECK_MODULES(LIBGPS, [ libgps >= 2.90 ], [
-       CFLAGS="$CFLAGS $LIBGPS_CFLAGS";
-       LIBS="$LIBS $LIBGPS_LIBS"; 
-        havelibgps=true;            
-        AC_DEFINE(HAS_LIBGPS, 1, [Define if libgps is available])
-   ], [
-        havelibgps=false;            
-])
-
-dnl Hamlib not needed if we go for the TCP based I/F
-dnl check for hamlib
-dnl PKG_CHECK_MODULES(HAMLIB, hamlib, [
-dnl        CFLAGS="$CFLAGS $HAMLIB_CFLAGS";
-dnl        LIBS="$LIBS $HAMLIB_LIBS"; 
-dnl        havehamlib=true;            
-dnl        AC_DEFINE(HAVE_HAMLIB, 1, [Define if hamlib is available])
-dnl   ], [
-dnl        havehamlib=false;            
-dnl        AC_DEFINE(HAVE_HAMLIB, 0, [Define if hamlib is unvailable])
-
-dnl])
-
-dnl Add the languages which your application supports here.
-dnl Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
+# Add the languages which your application supports here.
+# Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
 ALL_LINGUAS="cs da de en_GB en_US es fi fr it lt ru th uk"
 GETTEXT_PACKAGE=gpredict
 AC_SUBST(GETTEXT_PACKAGE)
@@ -63,8 +66,8 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,
                    "definition of GETTEXT_PACKAGE")
 
 
-dnl compiler flags to enable generating coverage report
-dnl using gcov
+# compiler flags to enable generating coverage report
+# using gcov
 AC_ARG_ENABLE(coverage, [  --enable-coverage       enable coverge reports],enable_coerage=yes,enable_coverage=no)
 if test "$enable_coverage" = yes ; then
         CFLAGS="$CFLAGS -fprofile-arcs -ftest-coverage";
@@ -73,8 +76,6 @@ fi
 
 AC_ARG_ENABLE(caches,[  --enable-caches	  Run update-* to update desktop and icon caches when installing (disable if you install as not root)],,[enable_caches="no"])
 AM_CONDITIONAL(UPDATE_CACHES, test x"$enable_caches" = "xyes")
-
-
 
 
 GLIB_V=`pkg-config --modversion glib-2.0`
@@ -87,10 +88,6 @@ CURL_V=`pkg-config --modversion libcurl`
 if test "$havelibgps" = true ; then
    GPS_V=`pkg-config --modversion libgps`
 fi
-dnl SQL_V=`pkg-config --modversion sqlite3`
-dnl if test "$havehamlib" = true ; then
-dnl    HAML_V=`pkg-config --modversion hamlib`
-dnl fi
  
 
 AC_SUBST(CFLAGS)
@@ -129,12 +126,6 @@ echo Libcurl version..... : $CURL_V
 if test "$havelibgps" = true ; then
    echo Libgps version..... : $GPS_V
 fi
-dnl echo SQLite version..... : $SQL_V
-dnl if test "$havehamlib" = true ; then
-dnl echo Hamlib version..... : $HAML_V
-dnl else
-dnl echo Hamlib version..... : none
-dnl fi
-dnl echo Enable coverage.... : $enable_coverage
-dnl echo
+# echo Enable coverage.... : $enable_coverage
+# echo
 
