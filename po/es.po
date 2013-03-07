@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-01 16:44+0200\n"
+"POT-Creation-Date: 2013-03-07 15:53+0100\n"
 "PO-Revision-Date: 2012-04-01 18:50+0000\n"
 "Last-Translator: Fitoschido <fitoschido@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2012-04-06 18:32+0000\n"
 "X-Generator: Launchpad (build 15060)\n"
 "X-Poedit-Country: CUBA\n"
-"Language: es\n"
 "X-Poedit-Language: Spanish\n"
 
 #: ../src/about.c:67
@@ -166,8 +166,7 @@ msgstr "%s: Copiado satisfactoriamente %s"
 #: ../src/first-time.c:824
 #, c-format
 msgid "%s: %s does not appear to be in user conf dir; adding."
-msgstr ""
-"%s: %s no aparece en la carpeta de configuración del usuario; añadir."
+msgstr "%s: %s no aparece en la carpeta de configuración del usuario; añadir."
 
 #: ../src/first-time.c:840
 #, c-format
@@ -182,8 +181,7 @@ msgstr "%s: %s el directorio no existe. Instalación incompleta."
 #: ../src/gpredict-help.c:68
 #, c-format
 msgid "%s: Help browser is not set up yet."
-msgstr ""
-"%s: El navegador para visualizar la ayuda aún no ha sido determinado."
+msgstr "%s: El navegador para visualizar la ayuda aún no ha sido determinado."
 
 #: ../src/gpredict-help.c:75
 #, c-format
@@ -201,8 +199,7 @@ msgstr "Configurar navegador de ayuda"
 
 #: ../src/gpredict-help.c:127
 msgid "Please select a HTML browser to be used to view the help."
-msgstr ""
-"Por favor, seleccione un navegador HTML para ver el archivo de ayuda."
+msgstr "Por favor, seleccione un navegador HTML para ver el archivo de ayuda."
 
 #: ../src/gpredict-help.c:194
 #, c-format
@@ -531,8 +528,7 @@ msgstr " Rango:"
 #: ../src/gtk-rig-ctrl.c:651 ../src/gtk-rig-ctrl.c:654
 msgid ""
 "The rate of change for the distance between the satellite and the observer."
-msgstr ""
-"La tasa de cambio para la distancia entre el observador y el satélite."
+msgstr "La tasa de cambio para la distancia entre el observador y el satélite."
 
 #: ../src/gtk-rig-ctrl.c:657 ../src/gtk-rot-ctrl.c:523
 msgid "Target"
@@ -768,8 +764,7 @@ msgstr "%s: Detectado el evento de presionado de SPACEBAR"
 #: ../src/gtk-rig-ctrl.c:2737
 #, c-format
 msgid "%s:%s: Keypress value %i not managed by this function"
-msgstr ""
-"%s:%s: El valor de la tecla presionada %i no se maneja en esta función"
+msgstr "%s:%s: El valor de la tecla presionada %i no se maneja en esta función"
 
 #: ../src/gtk-rig-ctrl.c:2784
 #, c-format
@@ -871,8 +866,7 @@ msgid "Engage the selected rotor device"
 msgstr "Enlaza el dispositivo de rotor seleccionado"
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid ""
-"This parameter controls the delay between commands sent to the rotator."
+msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Este parámetro controla el retraso entre los comandos enviados al rotor"
 
@@ -1443,7 +1437,7 @@ msgstr "%s: Leídos %d de %d satélites"
 msgid "%s: Previous cycle missed it's deadline."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:939 ../src/gtk-sat-module.c:1466
+#: ../src/gtk-sat-module.c:939 ../src/gtk-sat-module.c:1467
 #, c-format
 msgid "%s:%d: Unknown child type"
 msgstr ""
@@ -1453,13 +1447,13 @@ msgstr ""
 msgid "%s: Module %s received CLOSE signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1087
+#: ../src/gtk-sat-module.c:1090
 #, c-format
 msgid "%s: Module %s is in DOCKED state."
 msgstr "%s: Módulo %s está en estado DOCKED."
 
-#: ../src/gtk-sat-module.c:1094 ../src/gtk-sat-module.c:1110
-#: ../src/gtk-sat-module.c:1138
+#: ../src/gtk-sat-module.c:1097 ../src/gtk-sat-module.c:1113
+#: ../src/gtk-sat-module.c:1141
 #, c-format
 msgid ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
@@ -1468,32 +1462,32 @@ msgstr ""
 "%s: El módulo %s no fue encontrado en mod-mgr (%d)\n"
 "El estado interno es corrupto?"
 
-#: ../src/gtk-sat-module.c:1103
+#: ../src/gtk-sat-module.c:1106
 #, c-format
 msgid "%s: Module %s is in WINDOW state."
 msgstr "%s: El módulo %s está en estado WINDOW."
 
-#: ../src/gtk-sat-module.c:1131
+#: ../src/gtk-sat-module.c:1134
 #, c-format
 msgid "%s: Module %s is in FULLSCREEN state."
 msgstr "%s: El módulo %s está en estado FULLSCREEN."
 
-#: ../src/gtk-sat-module.c:1160 ../src/gtk-sat-module.c:1326
+#: ../src/gtk-sat-module.c:1163 ../src/gtk-sat-module.c:1327
 #, c-format
 msgid "%s: Module %s has unknown state: %d"
 msgstr "%s: El módulo %s tiene un estado desconocido: %d"
 
-#: ../src/gtk-sat-module.c:1173
+#: ../src/gtk-sat-module.c:1174
 #, c-format
 msgid "%s: Module %s closed."
 msgstr "%s: El módulo %s se ha cerrado."
 
-#: ../src/gtk-sat-module.c:1215
+#: ../src/gtk-sat-module.c:1216
 #, c-format
 msgid "%s: Module %s received CONFIG signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1224
+#: ../src/gtk-sat-module.c:1225
 #, c-format
 msgid ""
 "%s: Could not stop timeout callback\n"
@@ -1502,22 +1496,22 @@ msgstr ""
 "%s: No puedo parar la llamada de timeout\n"
 "%s: El ID %d parece no válido."
 
-#: ../src/gtk-sat-module.c:1242
+#: ../src/gtk-sat-module.c:1243
 #, c-format
 msgid "%s: Module configuration failed for some reason."
 msgstr "%s: La configuración del módulo falló por alguna razón."
 
-#: ../src/gtk-sat-module.c:1415
+#: ../src/gtk-sat-module.c:1416
 #, c-format
 msgid "%s: Reloading satellites for module %s"
 msgstr "%s: Recargando satélites para el módulo %s"
 
-#: ../src/gtk-sat-module.c:1501
+#: ../src/gtk-sat-module.c:1502
 #, c-format
 msgid "%s: Unknown child type"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1580
+#: ../src/gtk-sat-module.c:1581
 #, c-format
 msgid "%s: Updating GtkSkyGlance for %s"
 msgstr ""
@@ -1761,7 +1755,7 @@ msgstr "<b>Tiempo Real</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#. 
+#.
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2248,8 +2242,8 @@ msgid ""
 msgstr ""
 "%s: Chequeo de las configuraciones del usuario fallida (código %d). Esto es "
 "fatal.\n"
-"Una posible solución puede ser remover el directorio de datos "
-"./config/Gpredict\n"
+"Una posible solución puede ser remover el directorio de datos ./config/"
+"Gpredict\n"
 "de tu directorio personal (home)"
 
 #: ../src/main.c:464
@@ -2739,10 +2733,10 @@ msgstr "%s: El módulo no tiene QTH; usando el predeterminado."
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#. 
+#.
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#. 
+#.
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** PREDETERMINADO **"
@@ -2811,8 +2805,7 @@ msgstr "%s: Módulo %s parece ser NULO"
 #: ../src/mod-mgr.c:276
 #, c-format
 msgid "%s: Could not find child in notebook. This may hurt..."
-msgstr ""
-"%s: No puedo encontrar el hijo en las anotaciones. Esto puede doler..."
+msgstr "%s: No puedo encontrar el hijo en las anotaciones. Esto puede doler..."
 
 #: ../src/mod-mgr.c:285
 #, c-format
@@ -3612,7 +3605,7 @@ msgstr "DEBUG"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#. 
+#.
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -4036,8 +4029,8 @@ msgid ""
 "tracking reference."
 msgstr ""
 "Mostrar la hora local en ves de UTC. Nota: la hora local es la que usa tu "
-"sistema operativo base y no la que usas localmente en tu uso horario "
-"(GNU/Linux usa el reloj interno en UTC)"
+"sistema operativo base y no la que usas localmente en tu uso horario (GNU/"
+"Linux usa el reloj interno en UTC)"
 
 #: ../src/sat-pref-formats.c:53
 msgid ""
@@ -4631,8 +4624,7 @@ msgstr "%s:%d: Error leyendo %s (ver mensaje previo)"
 #: ../src/sat-pref-qth.c:374 ../src/sat-pref-qth.c:998
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir (%s)"
-msgstr ""
-"%s:%d: Fallo al abrir el directorio de configuración del usuario (%s)"
+msgstr "%s:%d: Fallo al abrir el directorio de configuración del usuario (%s)"
 
 #: ../src/sat-pref-qth.c:415
 #, c-format
@@ -5069,8 +5061,7 @@ msgid "LO Up:"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid ""
-"Enter the frequency of the local oscillator of the upconverter, if any."
+msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #: ../src/sat-pref-rot.c:143
