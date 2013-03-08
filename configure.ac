@@ -24,9 +24,9 @@ if test "${ac_cv_c_compiler_gnu}" = "yes"; then
 fi
 
 # check for libm
-AC_CHECK_LIB([m], [sin],, AC_MSG_ERROR([Can't find libm. Check your libc installation]))
+AC_CHECK_LIB([m], [sin],, AC_MSG_ERROR([Can not find libm. Check your libc installation]))
 
-# check for goocanvas (depends on gtk and glib)
+# check for libcurl
 if pkg-config --atleast-version=7.19 libcurl; then
     CFLAGS="$CFLAGS `pkg-config --cflags libcurl`"
     LIBS="$LIBS `pkg-config --libs libcurl`"
