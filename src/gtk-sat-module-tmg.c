@@ -36,7 +36,6 @@
 #include "compat.h"
 
 
-
 static gint tmg_delete   (GtkWidget *, GdkEvent *, gpointer);
 static void tmg_destroy  (GtkWidget *, gpointer);
 
@@ -54,6 +53,7 @@ static void tmg_msec_wrap (GtkWidget *widget, gpointer data);
 static void tmg_cal_add_one_day (GtkSatModule *mod);
 static void tmg_cal_sub_one_day (GtkSatModule *mod);
 
+static gdouble calculate_time(GtkSatModule *mod);
 
 /** \brief Create and initialise time controller widgets.
  *  \param module The parent GtkSatModule
@@ -477,45 +477,9 @@ static void tmg_time_set (GtkWidget *widget, gpointer data)
     (void) widget; /* avoid unused parameter compiler warning */
         
     /* update time only if we are in manual time control */
-    if (!mod->throttle && !mod->reset) {
-
-        /* get date and time from widgets */
-        gtk_calendar_get_date (GTK_CALENDAR (mod->tmgCal),
-                               &year, &month, &day);
-
-        hr = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgHour));
-        min = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMin));
-        sec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgSec));
-        msec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMsec));
-
-        /* build struct_tm */
-        tim.tm_year = (int) (year);
-        tim.tm_mon = (int) (month+1);
-        tim.tm_mday = (int) day;
-        tim.tm_hour = (int) hr;
-        tim.tm_min = (int) min;
-        tim.tm_sec = (int) sec;
-
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: %d/%d/%d %d:%d:%d.%d"),
-                     __FUNCTION__,
-                     tim.tm_year, tim.tm_mon, tim.tm_mday,
-                     tim.tm_hour, tim.tm_min, tim.tm_sec, msec);
-
-        /* convert UTC time to Julian Date  */
-        if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
-            /* convert local time to UTC */
-            Time_to_UTC (&tim, &utim);
-
-            /* Convert to JD */
-            jd = Julian_Date (&utim);
-        }
-        else {
-            /* Already UTC, just convert to JD */
-            jd = Julian_Date (&tim);
-        }
-
-        jd = jd + (gdouble)msec/8.64e+7;
+    if (!mod->throttle && !mod->reset)
+    {
+        jd = calculate_time(mod);
 
         /* get slider offset */
         slider = gtk_range_get_value (GTK_RANGE (mod->tmgSlider));
@@ -784,54 +748,11 @@ void tmg_update_state (GtkSatModule *mod)
 /** \brief Add one day to the calendar */
 static void tmg_cal_add_one_day (GtkSatModule *mod)
 {
-    guint year, month, day;
-    gint  hr, min, sec, msec;
-    struct tm tim,utim;
     gdouble jd;
 
-
-    /* calculate the new time as in tmg_time_set */
-    gtk_calendar_get_date (GTK_CALENDAR (mod->tmgCal), &year, &month, &day);
-    hr = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgHour));
-    min = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMin));
-    sec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgSec));
-    msec = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMsec));
-
-    /* build struct_tm */
-    tim.tm_year = (int) (year);
-    tim.tm_mon = (int) (month+1);
-    tim.tm_mday = (int) day;
-    tim.tm_hour = (int) hr;
-    tim.tm_min = (int) min;
-    tim.tm_sec = (int) sec;
-
-    sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                 _("%s: %d/%d/%d %d:%d:%d.%d"),
-                 __FUNCTION__,
-                 tim.tm_year, tim.tm_mon, tim.tm_mday,
-                 tim.tm_hour, tim.tm_min, tim.tm_sec, msec);
-
-    /* convert UTC time to Julian Date  */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
-        /* convert local time to UTC */
-        Time_to_UTC (&tim, &utim);
-
-        /* Convert to JD */
-        jd = Julian_Date (&utim);
-    }
-    else {
-        /* Already UTC, just convert to JD */
-        jd = Julian_Date (&tim);
-    }
-
-    jd = jd + (gdouble)msec/8.64e+7;
-
-    /* add one day */
+    jd = calculate_time(mod);
     jd += 1;
-
     mod->tmgCdnum = jd;
-
-    /* now call tmg_update_widgets */
     tmg_update_widgets (mod);
 }
 
@@ -839,13 +760,27 @@ static void tmg_cal_add_one_day (GtkSatModule *mod)
 /** \brief Substract one day from the calendar */
 static void tmg_cal_sub_one_day (GtkSatModule *mod)
 {
+    gdouble jd;
+
+    jd = calculate_time(mod);
+    jd -= 1;
+    mod->tmgCdnum = jd;
+    tmg_update_widgets(mod);
+}
+
+
+/*! \brief Calculate the time as Julian day (and fraction) from the TMG widgets.
+ *  \param mod Pointer to the GtkSatModule this time manager belongs to.
+ *  \returns The current date and time in Julian days and fraction of days.
+ */
+static gdouble calculate_time(GtkSatModule *mod)
+{
     guint year, month, day;
     gint  hr, min, sec, msec;
     struct tm tim,utim;
-    gdouble jd;
+    gdouble jd = 0.0;
 
-
-    /* calculate the new time as in tmg_time_set */
+    /* get date and time from widgets */
     gtk_calendar_get_date (GTK_CALENDAR (mod->tmgCal), &year, &month, &day);
     hr = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgHour));
     min = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgMin));
@@ -867,27 +802,21 @@ static void tmg_cal_sub_one_day (GtkSatModule *mod)
                  tim.tm_hour, tim.tm_min, tim.tm_sec, msec);
 
     /* convert UTC time to Julian Date  */
-    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME)) {
+    if (sat_cfg_get_bool (SAT_CFG_BOOL_USE_LOCAL_TIME))
+    {
         /* convert local time to UTC */
         Time_to_UTC (&tim, &utim);
 
         /* Convert to JD */
         jd = Julian_Date (&utim);
     }
-    else {
+    else
+    {
         /* Already UTC, just convert to JD */
         jd = Julian_Date (&tim);
     }
 
     jd = jd + (gdouble)msec/8.64e+7;
 
-    /* substract one day */
-    jd -= 1;
-
-    mod->tmgCdnum = jd;
-
-    /* now call tmg_update_widgets */
-    tmg_update_widgets (mod);
+    return jd;
 }
-
-
