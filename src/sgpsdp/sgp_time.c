@@ -236,6 +236,28 @@ Check_Date(struct tm *cdate)
 
 /*------------------------------------------------------------------*/
 
+/* Procedure gmtime_r is used to convert the calendar */
+/* time time_t to a broken-down time representation,  */
+/* expressed in Coordinated Universal Time (UTC).     */
+/* This function is not present in WIN32              */
+
+#ifdef WIN32
+struct tm *
+gmtime_r (const time_t *timer, struct tm *result)
+{
+   struct tm *local_result;
+   local_result = gmtime (timer);
+
+   if (local_result == NULL || result == NULL)
+     return NULL;
+
+   memcpy (result, local_result, sizeof (result));
+   return result;
+} /*Procedure gmtime_r*/
+#endif
+
+/*------------------------------------------------------------------*/
+
 /* Procedures Time_to_UTC and Time_from_UTC are used to  */
 /* convert 'struct tm' dates between UTC and local time. */
 /* The procedures JD_to_UTC and JD_from_UTC are used to  */

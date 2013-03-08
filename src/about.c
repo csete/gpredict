@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2011  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -64,7 +64,7 @@ const gchar *authors[] = {
 };
 
 
-const gchar license[] = N_("Copyright (C) 2001-2011 Alexandru Csete OZ9AEC and contributors.\n"\
+const gchar license[] = N_("Copyright (C) 2001-2013 Alexandru Csete OZ9AEC and contributors.\n"\
                            "Contact: oz9aec at gmail.com\n\n"\
                            "Gpredict is free software; you can redistribute it and "\
                            "modify it under the terms of the GNU General Public License "\
@@ -99,7 +99,7 @@ void about_dialog_create ()
     gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
     gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
     gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
-                                    _("Copyright (C) 2001-2011 Alexandru Csete OZ9AEC\n\n"\
+                                    _("Copyright (C) 2001-2013 Alexandru Csete OZ9AEC\n\n"\
                                       "Gpredict is available free of charge from:"));
     gtk_about_dialog_set_url_hook (gpredict_url_hook_cb, NULL, NULL);
     gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog),

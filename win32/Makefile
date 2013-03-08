@@ -13,7 +13,7 @@ gpreddir = $(topsrc)/src
 sgpsdpdir = $(gpreddir)/sgpsdp
 
 # tools
-CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32
+CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32 -Wl,-subsystem,windows 
 AS = $(MGW_PREFIX)as
 DLLWRAP = $(MGW_PREFIX)dllwrap
 DLLWRAP_FLAGS = --as=$(AS) --export-all --driver-name $(CC) -s
@@ -106,6 +106,7 @@ GPREDICTSRC = \
 	gtk-sat-module.c \
 	gtk-sat-module-popup.c \
 	gtk-sat-module-tmg.c \
+    gtk-sat-popup-common.c \
 	gtk-sat-selector.c \
 	gtk-single-sat.c \
 	gtk-sky-glance.c \
@@ -114,6 +115,7 @@ GPREDICTSRC = \
 	loc-tree.c \
 	main.c \
 	map-selector.c \
+	map-tools.c \
 	menubar.c \
 	mod-cfg.c \
 	mod-cfg-get-param.c \
@@ -184,7 +186,7 @@ all: libsgpsdp.dll gpredict.exe
 # Use -mconsole to always open a console window when gpredicxt is started
 # Use -mwindows for no copnsole
 gpredict.exe: $(OBJS) gpredict_res.o
-	$(CC) -mconsole -mthread -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
+	$(CC) -mconsole -mthreads -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
 
 gpredict_res.o: gpredict.rc 
 	$(RC) $(RCFLAGS) $< $@
