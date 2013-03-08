@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-07 15:53+0100\n"
-"PO-Revision-Date: 2012-04-01 18:50+0000\n"
+"PO-Revision-Date: 2012-04-06 22:54+0000\n"
 "Last-Translator: AA1VS <hamaa1vs@gmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
-"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-06 18:32+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2013-03-08 23:44+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
+"Language: fi\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -613,7 +613,8 @@ msgstr "%s:%s: Virheellinen satelliitin valinta: %d"
 #: ../src/gtk-rig-ctrl.c:911
 #, c-format
 msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
-msgstr "%s: epäjohdonmukaisuutta havaittu sisäisen transponderi tiedot(%d,%d)"
+msgstr ""
+"%s: epäjohdonmukaisuutta havaittu sisäisen transponderi tiedot(%d,%d)"
 
 #: ../src/gtk-rig-ctrl.c:1042
 #, c-format
@@ -851,7 +852,8 @@ msgid "Engage the selected rotor device"
 msgstr "Sido valittu rotaattori"
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Tämä parametri ohjaa viiveettä komentja jotka lähetetään rotaattorille."
 
@@ -1717,7 +1719,7 @@ msgstr ""
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2657,10 +2659,10 @@ msgstr ""
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#.
+#. 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr ""
@@ -3508,7 +3510,7 @@ msgstr ""
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -4890,7 +4892,8 @@ msgid "LO Up:"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #: ../src/sat-pref-rot.c:143

@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-07 15:53+0100\n"
-"PO-Revision-Date: 2012-04-01 18:50+0000\n"
-"Last-Translator: Fitoschido <fitoschido@gmail.com>\n"
+"PO-Revision-Date: 2012-08-25 12:06+0000\n"
+"Last-Translator: Monkey <monkey.libre@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-06 18:32+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2013-03-08 23:44+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
 "X-Poedit-Country: CUBA\n"
+"Language: es\n"
 "X-Poedit-Language: Spanish\n"
 
 #: ../src/about.c:67
@@ -60,19 +60,24 @@ msgid ""
 "\n"
 "Gpredict is available free of charge from:"
 msgstr ""
+"Copyright (C) 2001-2011 Alexandru Csete OZ9AEC\n"
+"\n"
+"Gpredict está disponible libre de cargos desde:"
 
 #: ../src/about.c:119
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  AA1VS https://launchpad.net/~hamaa1vs\n"
+"  Adolfo Jayme Barrientos https://launchpad.net/~fitoschido\n"
 "  Alexis Martínez https://launchpad.net/~alexismartinezfer\n"
 "  DiegoJ https://launchpad.net/~diegojromerolopez\n"
+"  Eduardo Alberto Calvo https://launchpad.net/~edu5800\n"
 "  Fido https://launchpad.net/~fedevera\n"
-"  Fitoschido https://launchpad.net/~fitoschido\n"
 "  Gpredict Team https://launchpad.net/~gpredict-team\n"
 "  Ing. Pavel Milanes Costa https://launchpad.net/~pavelmc\n"
-"  Sergio Aldana https://launchpad.net/~sangtrinkulo"
+"  Monkey https://launchpad.net/~monkey-libre\n"
+"  Sergio Romero Aldana https://launchpad.net/~sangtrinkulo"
 
 #: ../src/first-time.c:193 ../src/first-time.c:798
 #, c-format
@@ -166,7 +171,8 @@ msgstr "%s: Copiado satisfactoriamente %s"
 #: ../src/first-time.c:824
 #, c-format
 msgid "%s: %s does not appear to be in user conf dir; adding."
-msgstr "%s: %s no aparece en la carpeta de configuración del usuario; añadir."
+msgstr ""
+"%s: %s no aparece en la carpeta de configuración del usuario; añadir."
 
 #: ../src/first-time.c:840
 #, c-format
@@ -181,7 +187,8 @@ msgstr "%s: %s el directorio no existe. Instalación incompleta."
 #: ../src/gpredict-help.c:68
 #, c-format
 msgid "%s: Help browser is not set up yet."
-msgstr "%s: El navegador para visualizar la ayuda aún no ha sido determinado."
+msgstr ""
+"%s: El navegador para visualizar la ayuda aún no ha sido determinado."
 
 #: ../src/gpredict-help.c:75
 #, c-format
@@ -199,7 +206,8 @@ msgstr "Configurar navegador de ayuda"
 
 #: ../src/gpredict-help.c:127
 msgid "Please select a HTML browser to be used to view the help."
-msgstr "Por favor, seleccione un navegador HTML para ver el archivo de ayuda."
+msgstr ""
+"Por favor, seleccione un navegador HTML para ver el archivo de ayuda."
 
 #: ../src/gpredict-help.c:194
 #, c-format
@@ -260,7 +268,7 @@ msgstr "%s: Escritos solamente %d de %d caracteres."
 #: ../src/gpredict-utils.c:575
 #, c-format
 msgid "%s: Configuration saved for %s."
-msgstr ""
+msgstr "%s: Configuración guardada para %s."
 
 #: ../src/gtk-azel-plot.c:364
 msgid "Local Time"
@@ -285,7 +293,7 @@ msgstr "El"
 
 #: ../src/gtk-freq-knob.c:191 ../src/gtk-rot-knob.c:292
 msgid "Use mouse buttons and wheel to change value"
-msgstr ""
+msgstr "Use los botones y la rueda del ratón para cambiar el valor"
 
 #: ../src/gtk-polar-plot.c:645 ../src/gtk-polar-view.c:352
 msgid "N"
@@ -314,6 +322,8 @@ msgid ""
 "Next: %s\n"
 "in %02d:%02d:%02d"
 msgstr ""
+"Siguiente: %s\n"
+"en %02d:%02d:%02d"
 
 #: ../src/gtk-polar-view.c:718
 #, c-format
@@ -321,6 +331,8 @@ msgid ""
 "Next: %s\n"
 "in %02d:%02d"
 msgstr ""
+"Siguiente: %s\n"
+"en %02d:%02d"
 
 #: ../src/gtk-polar-view.c:729 ../src/gtk-sat-map.c:781
 #, c-format
@@ -411,7 +423,7 @@ msgstr ""
 #. show track
 #: ../src/gtk-polar-view-popup.c:118
 msgid "Sky track"
-msgstr "Rastrear cielo"
+msgstr "Rastreo en el cielo"
 
 #: ../src/gtk-rig-ctrl.c:419
 msgid "<b> Downlink </b>"
@@ -528,7 +540,8 @@ msgstr " Rango:"
 #: ../src/gtk-rig-ctrl.c:651 ../src/gtk-rig-ctrl.c:654
 msgid ""
 "The rate of change for the distance between the satellite and the observer."
-msgstr "La tasa de cambio para la distancia entre el observador y el satélite."
+msgstr ""
+"La tasa de cambio para la distancia entre el observador y el satélite."
 
 #: ../src/gtk-rig-ctrl.c:657 ../src/gtk-rot-ctrl.c:523
 msgid "Target"
@@ -764,7 +777,8 @@ msgstr "%s: Detectado el evento de presionado de SPACEBAR"
 #: ../src/gtk-rig-ctrl.c:2737
 #, c-format
 msgid "%s:%s: Keypress value %i not managed by this function"
-msgstr "%s:%s: El valor de la tecla presionada %i no se maneja en esta función"
+msgstr ""
+"%s:%s: El valor de la tecla presionada %i no se maneja en esta función"
 
 #: ../src/gtk-rig-ctrl.c:2784
 #, c-format
@@ -866,7 +880,8 @@ msgid "Engage the selected rotor device"
 msgstr "Enlaza el dispositivo de rotor seleccionado"
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Este parámetro controla el retraso entre los comandos enviados al rotor"
 
@@ -976,7 +991,7 @@ msgstr "NumCatag"
 
 #: ../src/gtk-sat-list.c:59
 msgid "Dir"
-msgstr ""
+msgstr "Dir"
 
 #: ../src/gtk-sat-list.c:60 ../src/sat-pass-dialogs.c:105
 msgid "Ra"
@@ -1072,7 +1087,7 @@ msgstr "Vis"
 
 #: ../src/gtk-sat-list.c:80
 msgid "Decay"
-msgstr ""
+msgstr "Decremento"
 
 #: ../src/gtk-sat-list.c:81
 msgid "BOLD"
@@ -1107,7 +1122,7 @@ msgstr "Rango de inclinación"
 #: ../src/gtk-sat-list.c:95 ../src/gtk-single-sat.c:63
 #: ../src/sat-pass-dialogs.c:132
 msgid "Range Rate"
-msgstr ""
+msgstr "Intervalo de frecuencia"
 
 #: ../src/gtk-sat-list.c:99 ../src/sat-pass-dialogs.c:133
 msgid "Latitude"
@@ -1160,7 +1175,7 @@ msgstr ""
 #: ../src/gtk-sat-list.c:109 ../src/gtk-single-sat.c:77
 #: ../src/gtk-single-sat.c:105 ../src/sat-pass-dialogs.c:143
 msgid "Orbit Phase"
-msgstr ""
+msgstr "Fase Orbital"
 
 #: ../src/gtk-sat-list.c:110 ../src/gtk-single-sat.c:106
 msgid "Orbit Number"
@@ -1644,7 +1659,7 @@ msgstr "%s:%d: Clonado satisfactoriamente %s."
 #: ../src/gtk-sat-module-popup.c:693 ../src/menubar.c:1003
 #: ../src/mod-mgr.c:684
 msgid "GPREDICT: "
-msgstr ""
+msgstr "GPREDICT: "
 
 #: ../src/gtk-sat-module-popup.c:472
 #, c-format
@@ -1755,7 +1770,7 @@ msgstr "<b>Tiempo Real</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2242,8 +2257,8 @@ msgid ""
 msgstr ""
 "%s: Chequeo de las configuraciones del usuario fallida (código %d). Esto es "
 "fatal.\n"
-"Una posible solución puede ser remover el directorio de datos ./config/"
-"Gpredict\n"
+"Una posible solución puede ser remover el directorio de datos "
+"./config/Gpredict\n"
 "de tu directorio personal (home)"
 
 #: ../src/main.c:464
@@ -2386,7 +2401,7 @@ msgstr ""
 
 #: ../src/menubar.c:115
 msgid "From l_ocal files"
-msgstr ""
+msgstr "Desde archivos l_ocales"
 
 #: ../src/menubar.c:116
 msgid "Update Keplerian elements from local files"
@@ -2733,10 +2748,10 @@ msgstr "%s: El módulo no tiene QTH; usando el predeterminado."
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#.
+#. 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** PREDETERMINADO **"
@@ -2805,7 +2820,8 @@ msgstr "%s: Módulo %s parece ser NULO"
 #: ../src/mod-mgr.c:276
 #, c-format
 msgid "%s: Could not find child in notebook. This may hurt..."
-msgstr "%s: No puedo encontrar el hijo en las anotaciones. Esto puede doler..."
+msgstr ""
+"%s: No puedo encontrar el hijo en las anotaciones. Esto puede doler..."
 
 #: ../src/mod-mgr.c:285
 #, c-format
@@ -3597,7 +3613,7 @@ msgstr "WARNING"
 
 #: ../src/sat-log-browser.c:65
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 #: ../src/sat-log-browser.c:66 ../src/sat-log.c:66
 msgid "DEBUG"
@@ -3605,7 +3621,7 @@ msgstr "DEBUG"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -3627,7 +3643,7 @@ msgstr "Seleccione el fichero de log"
 
 #: ../src/sat-log-browser.c:440
 msgid "Log file is corrupt"
-msgstr ""
+msgstr "El archivo de reportes está corrupto"
 
 #: ../src/sat-log-browser.c:463
 #, c-format
@@ -3644,7 +3660,7 @@ msgstr "Avisos"
 
 #: ../src/sat-log-browser.c:603
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../src/sat-log-browser.c:607
 msgid "Debug"
@@ -3661,7 +3677,7 @@ msgstr " Resumen "
 
 #: ../src/sat-log.c:62
 msgid " --- "
-msgstr ""
+msgstr " --- "
 
 #: ../src/sat-log.c:64
 msgid " WARN"
@@ -3669,7 +3685,7 @@ msgstr ""
 
 #: ../src/sat-log.c:65
 msgid " INFO"
-msgstr ""
+msgstr " INFO"
 
 #. print an error message
 #: ../src/sat-log.c:101
@@ -3961,25 +3977,27 @@ msgstr "Nivel 0: Ninguno"
 
 #: ../src/sat-pref-debug.c:84
 msgid "Level 1: Error"
-msgstr ""
+msgstr "Nivel 1: Error"
 
 #: ../src/sat-pref-debug.c:85
 msgid "Level 2: Warning"
-msgstr ""
+msgstr "Nivel 2: Advertencia"
 
 #: ../src/sat-pref-debug.c:86
 msgid "Level 3: Info"
-msgstr ""
+msgstr "Nivel 3:Info"
 
 #: ../src/sat-pref-debug.c:87
 msgid "Level 4: Debug"
-msgstr ""
+msgstr "Nivel 4: Depurar"
 
 #: ../src/sat-pref-debug.c:92
 msgid ""
 "Select the debug level. The higher the level, the more messages will be "
 "logged."
 msgstr ""
+"Seleccione el nivel de depuración. En el nivel más alto, más mensajes seran "
+"reportados."
 
 #: ../src/sat-pref-debug.c:103
 msgid "Delete log files older than:"
@@ -4029,8 +4047,8 @@ msgid ""
 "tracking reference."
 msgstr ""
 "Mostrar la hora local en ves de UTC. Nota: la hora local es la que usa tu "
-"sistema operativo base y no la que usas localmente en tu uso horario (GNU/"
-"Linux usa el reloj interno en UTC)"
+"sistema operativo base y no la que usas localmente en tu uso horario "
+"(GNU/Linux usa el reloj interno en UTC)"
 
 #: ../src/sat-pref-formats.c:53
 msgid ""
@@ -4439,7 +4457,7 @@ msgstr "órbita(s)"
 
 #: ../src/sat-pref-map-view.c:664
 msgid "Center map at longitude"
-msgstr ""
+msgstr "Centrar mapa en longitud"
 
 #: ../src/sat-pref-map-view.c:668
 msgid "Select longitude. West is negative."
@@ -4624,7 +4642,8 @@ msgstr "%s:%d: Error leyendo %s (ver mensaje previo)"
 #: ../src/sat-pref-qth.c:374 ../src/sat-pref-qth.c:998
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir (%s)"
-msgstr "%s:%d: Fallo al abrir el directorio de configuración del usuario (%s)"
+msgstr ""
+"%s:%d: Fallo al abrir el directorio de configuración del usuario (%s)"
 
 #: ../src/sat-pref-qth.c:415
 #, c-format
@@ -5061,7 +5080,8 @@ msgid "LO Up:"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #: ../src/sat-pref-rot.c:143
@@ -5597,12 +5617,12 @@ msgstr ""
 #: ../src/tle-update.c:825
 #, c-format
 msgid "%s:%s: There is no category in %s"
-msgstr ""
+msgstr "%s:%s: No hay categoría en %s"
 
 #: ../src/tle-update.c:834
 #, c-format
 msgid "%s:%s: There is no category called %s"
-msgstr ""
+msgstr "%s:%s: No hay categoría llamada %s"
 
 #: ../src/tle-update.c:847
 #, c-format
@@ -5627,7 +5647,7 @@ msgstr ""
 #: ../src/tle-update.c:987
 #, c-format
 msgid "%s:%s: Invalid data for %d"
-msgstr ""
+msgstr "%s:%s: dato no válido para %d"
 
 #: ../src/tle-update.c:1035
 #, c-format
@@ -5637,7 +5657,7 @@ msgstr ""
 #: ../src/tle-update.c:1087
 #, c-format
 msgid "%s:%s: Failed to open %s"
-msgstr ""
+msgstr "%s:%s: fallo al abrir %s"
 
 #: ../src/tle-update.c:1157
 #, c-format
@@ -5647,7 +5667,7 @@ msgstr ""
 #: ../src/tle-update.c:1166
 #, c-format
 msgid "%s: Error loading %s (%s)"
-msgstr ""
+msgstr "%s: Error al cargar %s (%s)"
 
 #: ../src/tle-update.c:1209
 #, c-format

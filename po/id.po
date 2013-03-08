@@ -1,22 +1,21 @@
-# Russian translation for gpredict
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# Indonesian translation for gpredict
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
 # This file is distributed under the same license as the gpredict package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-03-07 15:53+0100\n"
-"PO-Revision-Date: 2012-04-06 22:52+0000\n"
-"Last-Translator: Alexander 'FONTER' Zinin <spore_09@mail.ru>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"PO-Revision-Date: 2012-05-04 07:41+0000\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-03-08 23:44+0000\n"
 "X-Generator: Launchpad (build 16523)\n"
-"Language: ru\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -58,209 +57,207 @@ msgid ""
 "\n"
 "Gpredict is available free of charge from:"
 msgstr ""
+"Hak Cipta (C) 2001-2011 Alexandru Csete OZ9AEC\n"
+"\n"
+"Gpredict tersedia gratis dari:"
 
 #: ../src/about.c:119
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Alexander 'FONTER' Zinin https://launchpad.net/~spore-09\n"
-"  Eugene Marshal https://launchpad.net/~lowrider\n"
-"  Горобец Виктор (VikTHOR) https://launchpad.net/~victhor"
+"  Andika Triwidada https://launchpad.net/~andika"
 
 #: ../src/first-time.c:193 ../src/first-time.c:798
 #, c-format
 msgid "%s: Could not open %s."
-msgstr "%s: Невозможно открыть %s."
+msgstr "%s: Tak bisa membuka %s."
 
 #: ../src/first-time.c:217
 #, c-format
 msgid "%s: Found at least one .qth file."
-msgstr "%s: Найден как минимум один файл .qth."
+msgstr "%s: Menemukan paling tidak satu berkas .qth."
 
 #: ../src/first-time.c:259
 #, c-format
 msgid "%s: Failed to copy sample.qth"
-msgstr "%s: Ошибка копирования sample.qth"
+msgstr "%s: Gagal menyalin sample.qth"
 
 #: ../src/first-time.c:266
 #, c-format
 msgid "%s: Copied sample.qth to %s/"
-msgstr "%s: Скопировано sample.qth в %s/"
+msgstr "%s: Menyalin sample.qth ke %s/"
 
 #: ../src/first-time.c:307 ../src/first-time.c:412 ../src/first-time.c:620
 #: ../src/first-time.c:671 ../src/first-time.c:747
 #, c-format
 msgid "%s: Check successful."
-msgstr "%s: Успешная проверка."
+msgstr "%s: Pemeriksaan sukses."
 
 #: ../src/first-time.c:313 ../src/first-time.c:417 ../src/first-time.c:625
 #: ../src/first-time.c:677 ../src/first-time.c:752
 #, c-format
 msgid "%s: Check failed. Creating %s"
-msgstr "%s: Ошибка проверки. Создание %s"
+msgstr "%s: Pemeriksaan gagal. Membuat %s"
 
 #: ../src/first-time.c:324 ../src/first-time.c:426 ../src/first-time.c:634
 #: ../src/first-time.c:688 ../src/first-time.c:761
 #, c-format
 msgid "%s: Failed to create %s"
-msgstr "%s: Невозможно создать %s"
+msgstr "%s: Gagal membuat %s"
 
 #: ../src/first-time.c:329 ../src/first-time.c:431 ../src/first-time.c:639
 #: ../src/first-time.c:693 ../src/first-time.c:766
 #, c-format
 msgid "%s: Created %s."
-msgstr "%s: Создан %s."
+msgstr "%s: Membuat %s."
 
 #: ../src/first-time.c:373
 #, c-format
 msgid "%s: Failed to copy Amateur.mod"
-msgstr "%s: Ошибка копирования Amateur.mod"
+msgstr "%s: Gagal menyalin Amateur.mod"
 
 #: ../src/first-time.c:380
 #, c-format
 msgid "%s: Copied amateur.mod to %s/"
-msgstr "%s: Скопировано amateur.mod в %s/"
+msgstr "%s: Menyalin amateur.mod ke %s/"
 
 #: ../src/first-time.c:479 ../src/gtk-sat-data.c:73
 #, c-format
 msgid "%s: Failed to load data from %s (%s)"
-msgstr "%s: Ошибка загрузки данных из %s (%s)"
+msgstr "%s: Gagal memuat data dari %s (%s)"
 
 #: ../src/first-time.c:488
 #, c-format
 msgid "%s: Found %d satellites in %s"
-msgstr "%s: Найдено %d спутников за %s"
+msgstr "%s: Menemukan %d satelit dalam %s"
 
 #: ../src/first-time.c:496
 #, c-format
 msgid "%s: %s.sat already exists. Skipped."
-msgstr "%s: %s.sat уже существует. Будет пропущено."
+msgstr "%s: %s.sat telah ada. Dilewati."
 
 #: ../src/first-time.c:538
 #, c-format
 msgid "%s: Written %d new satellite to user config"
-msgstr "%s: Записан %d новый спутник в конфигурацию пользователя"
+msgstr "%s: Menulis %d satelit baru ke konfig pengguna"
 
 #: ../src/first-time.c:555
 #, c-format
 msgid "%s: Could not open %s (%s)."
-msgstr "%s: Невозможно открыть %s (%s)."
+msgstr "%s: Tak bisa membuka %s (%s)."
 
 #: ../src/first-time.c:580 ../src/first-time.c:831
 #, c-format
 msgid "%s: Failed to copy %s"
-msgstr "%s: Ошибка копирования %s"
+msgstr "%s: Gagal menyalin %s"
 
 #: ../src/first-time.c:585
 #, c-format
 msgid "%s: Successfully copied %s"
-msgstr "%s: Успешно скопирован %s"
+msgstr "%s: Sukses menyalin %s"
 
 #: ../src/first-time.c:824
 #, c-format
 msgid "%s: %s does not appear to be in user conf dir; adding."
-msgstr ""
-"%s: %s не добавлен в каталог конфигурации пользователя; будет добавлено."
+msgstr "%s: %s sepertinya bukan di dir konf pengguna; menambahkan."
 
 #: ../src/first-time.c:840
 #, c-format
 msgid "%s: %s already in user conf dir."
-msgstr "%s: %s уже в каталоге конфигурации пользователя."
+msgstr "%s: %s telah di dir konf pengguna."
 
 #: ../src/first-time.c:850
 #, c-format
 msgid "%s: %s directory does not exist. Incomplete installation."
-msgstr "%s: %s не существует. Установка не завершена."
+msgstr "%s: %s direktori tak ada. Pemasangan tak komplit."
 
 #: ../src/gpredict-help.c:68
 #, c-format
 msgid "%s: Help browser is not set up yet."
-msgstr "%s: Справочный обозреватель еще не установлен."
+msgstr "%s: Peramban bantuan belum disiapkan."
 
 #: ../src/gpredict-help.c:75
 #, c-format
 msgid "%s: Configure help browser cancelled."
-msgstr "%s: Настройка справочного обозревателя отменена."
+msgstr "%s: Penataan peramban bantuan dibatalkan."
 
 #: ../src/gpredict-help.c:91
 #, c-format
 msgid "%s: Launching help browser %s."
-msgstr "%s: Запуск справочного обозревателя %s."
+msgstr "%s: Meluncurkan peramban bantuan %s."
 
 #: ../src/gpredict-help.c:117
 msgid "Configure Help Browser"
-msgstr "Настроить справочный обозреватель"
+msgstr "Tata Peramban Bantuan"
 
 #: ../src/gpredict-help.c:127
 msgid "Please select a HTML browser to be used to view the help."
-msgstr ""
-"Пожалуйста, выберите HTML обозреватель, с помощью которого вы хотите "
-"просматривать справку."
+msgstr "Silakan pilih peramban HTML untuk dipakai menilik bantuan."
 
 #: ../src/gpredict-help.c:194
 #, c-format
 msgid "%s: Failed to load %s (%s)"
-msgstr "%s: Ошибка загрузки %s (%s)"
+msgstr "%s: Gagal memuat %s (%s)"
 
 #: ../src/gpredict-help.c:205
 #, c-format
 msgid "%s: Error reading %s (%s)"
-msgstr "%s: Ошибка чтения %s (%s)"
+msgstr "%s: Galat membaca %s (%s)"
 
 #. create and show dialogue with textbuffer
 #: ../src/gpredict-help.c:237
 msgid "Gpredict Info"
-msgstr "Сведения Gpredict"
+msgstr "Info Gpredict"
 
 #: ../src/gpredict-utils.c:274 ../src/gpredict-utils.c:313
 #: ../src/gpredict-utils.c:360 ../src/gpredict-utils.c:402
 #, c-format
 msgid "%s:%s: %s called with color = NULL"
-msgstr "%s:%s: %s вызвано с цветом = NULL"
+msgstr "%s:%s: %s dipanggil dengan color = NULL"
 
 #: ../src/gpredict-utils.c:319
 #, c-format
 msgid "%s:%s: %s called with alpha = NULL"
-msgstr "%s:%s: %s вызвано с альфой = NULL"
+msgstr "%s:%s: %s dipanggil dengan alpha = NULL"
 
 #: ../src/gpredict-utils.c:366
 #, c-format
 msgid "%s:%s: %s called with rgb = NULL"
-msgstr "%s:%s: %s вызвано с rgb = NULL"
+msgstr "%s:%s: %s dipanggil dengan rgb = NULL"
 
 #: ../src/gpredict-utils.c:408
 #, c-format
 msgid "%s:%s: %s called with rgba = NULL"
-msgstr "%s:%s: %s вызвано с rgba = NULL"
+msgstr "%s:%s: %s dipanggil dengan rgba = NULL"
 
 #: ../src/gpredict-utils.c:529
 #, c-format
 msgid "%s: Could not create config data (%s)."
-msgstr ""
+msgstr "%s: Tak bisa membuat data konfig (%s)."
 
 #: ../src/gpredict-utils.c:540
 #, c-format
 msgid "%s: Could not create config file (%s)."
-msgstr ""
+msgstr "%s: Tak bisa membuat berkas konfig (%s)."
 
 #: ../src/gpredict-utils.c:559
 #, c-format
 msgid "%s: Error writing config data (%s)."
-msgstr ""
+msgstr "%s: Galat menulis data konfig (%s)."
 
 #: ../src/gpredict-utils.c:568
 #, c-format
 msgid "%s: Wrote only %d out of %d chars."
-msgstr ""
+msgstr "%s: Menulis hanya %d dari %d karakter."
 
 #: ../src/gpredict-utils.c:575
 #, c-format
 msgid "%s: Configuration saved for %s."
-msgstr ""
+msgstr "%s: Konfigurasi disimpan bagi %s."
 
 #: ../src/gtk-azel-plot.c:364
 msgid "Local Time"
-msgstr "Местное время"
+msgstr "Waktu Lokal"
 
 #: ../src/gtk-azel-plot.c:374 ../src/gtk-sky-glance.c:378
 #: ../src/pass-to-txt.c:160
@@ -271,7 +268,7 @@ msgstr "UTC"
 #: ../src/gtk-azel-plot.c:395 ../src/gtk-sat-list.c:57
 #: ../src/sat-pass-dialogs.c:103
 msgid "Az"
-msgstr "Азимут"
+msgstr ""
 
 #. El legend
 #: ../src/gtk-azel-plot.c:405 ../src/gtk-sat-list.c:58
@@ -281,28 +278,28 @@ msgstr ""
 
 #: ../src/gtk-freq-knob.c:191 ../src/gtk-rot-knob.c:292
 msgid "Use mouse buttons and wheel to change value"
-msgstr ""
+msgstr "Gunakan tombol dan roda tetikus untuk mengubah nilai"
 
 #: ../src/gtk-polar-plot.c:645 ../src/gtk-polar-view.c:352
 msgid "N"
-msgstr "С"
+msgstr "U"
 
 #: ../src/gtk-polar-plot.c:655 ../src/gtk-polar-view.c:362
 msgid "S"
-msgstr "Ю"
+msgstr "S"
 
 #: ../src/gtk-polar-plot.c:665 ../src/gtk-polar-view.c:372
 msgid "E"
-msgstr "В"
+msgstr "T"
 
 #: ../src/gtk-polar-plot.c:675 ../src/gtk-polar-view.c:382
 msgid "W"
-msgstr "З"
+msgstr "B"
 
 #: ../src/gtk-polar-plot.c:779
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
-msgstr "%s:%d: Неправильное направление графика в полярных координатах."
+msgstr "%s:%d: Orientasi plot polar tak benar."
 
 #: ../src/gtk-polar-view.c:715
 #, c-format
@@ -310,6 +307,8 @@ msgid ""
 "Next: %s\n"
 "in %02d:%02d:%02d"
 msgstr ""
+"Selanjutnya: %s\n"
+"dalam %02d:%02d:%02d"
 
 #: ../src/gtk-polar-view.c:718
 #, c-format
@@ -317,19 +316,21 @@ msgid ""
 "Next: %s\n"
 "in %02d:%02d"
 msgstr ""
+"Selanjutnya: %s\n"
+"dalam %02d:%02d"
 
 #: ../src/gtk-polar-view.c:729 ../src/gtk-sat-map.c:781
 #, c-format
 msgid "%s: Can not find NEXT satellite."
-msgstr "%s: Невозможно найти СЛЕДУЮЩИЙ спутник."
+msgstr "%s: Tak bisa temukan satelit SELANJUTNYA"
 
 #: ../src/gtk-polar-view.c:731 ../src/gtk-sat-map.c:784
 msgid "Next: ERR"
-msgstr "Следующий: ОШИБКА"
+msgstr "Selanjutnya: GALAT"
 
 #: ../src/gtk-polar-view.c:736 ../src/gtk-sat-map.c:790
 msgid "Next: N/A"
-msgstr "Следующий: Н/Д"
+msgstr "Selanjutnya: T/A"
 
 #: ../src/gtk-polar-view.c:853
 #, c-format
@@ -338,7 +339,7 @@ msgid ""
 "Always in range"
 msgstr ""
 "%s\n"
-"Всегда в диапазоне"
+"Selalu dalam jangkauan"
 
 #: ../src/gtk-polar-view.c:897
 #, c-format
@@ -358,7 +359,7 @@ msgstr ""
 #: ../src/gtk-polar-view.c:1027 ../src/gtk-sat-map.c:1891
 #, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
-msgstr ""
+msgstr "%s: Tak bisa mengalokasikan memori bagi satelit %d."
 
 #: ../src/gtk-polar-view.c:1057 ../src/gtk-polar-view.c:1196
 #, c-format
@@ -375,32 +376,32 @@ msgstr ""
 #: ../src/gtk-sat-map-popup.c:245 ../src/gtk-sat-map-popup.c:293
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
-msgstr "%s:%d: Ошибка получения объекта спутника."
+msgstr "%s:%d: Gagal mendapat objek satelit."
 
 #: ../src/gtk-polar-view.c:1529
 #, c-format
 msgid "%s:%d: Could not find satellite (%d) in hash table"
-msgstr "%s:%d: Невозможно найти спутник (%d) в хэш таблице"
+msgstr "%s:%d: Tak bisa temukan satelit (%d) dalam tabel hash"
 
 #: ../src/gtk-polar-view.c:1582 ../src/gtk-sat-map.c:1023
 #, c-format
 msgid "%s:%d: Can not find clicked object (%d) in hash table"
-msgstr "%s:%d: Невозможно найти нажатый объект (%d) в хэш таблице"
+msgstr "%s:%d: Tak bisa temukan objek yang diklik (%d) dalam tabel hash"
 
 #: ../src/gtk-polar-view.c:1729
 #, c-format
 msgid "%s Requested satellite (%d) is not within range"
-msgstr ""
+msgstr "%s Satelit (%d) yang diminta tidak dalam jangkauan"
 
 #: ../src/gtk-polar-view.c:1782
 #, c-format
 msgid "LOS in %02d:%02d:%02d"
-msgstr ""
+msgstr "LOS dalam %02d:%02d:%02d"
 
 #: ../src/gtk-polar-view.c:1786
 #, c-format
 msgid "LOS in %02d:%02d"
-msgstr ""
+msgstr "LOS dalam %02d:%02d"
 
 #. show track
 #: ../src/gtk-polar-view-popup.c:118
@@ -415,7 +416,7 @@ msgstr ""
 #. Uplink doppler
 #: ../src/gtk-rig-ctrl.c:434 ../src/gtk-rig-ctrl.c:498
 msgid "Doppler:"
-msgstr ""
+msgstr "Doppler:"
 
 #: ../src/gtk-rig-ctrl.c:436 ../src/gtk-rig-ctrl.c:500
 msgid ""
@@ -425,20 +426,20 @@ msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:448 ../src/gtk-rig-ctrl.c:512
 msgid "LO:"
-msgstr ""
+msgstr "LO:"
 
 #: ../src/gtk-rig-ctrl.c:483
 msgid "<b> Uplink </b>"
-msgstr ""
+msgstr "<b> Uplink </b>"
 
 #: ../src/gtk-rig-ctrl.c:562 ../src/gtk-rot-ctrl.c:486
 msgid "Select target object"
-msgstr "Выберите конечный объект"
+msgstr ""
 
 #. tracking button
 #: ../src/gtk-rig-ctrl.c:567 ../src/gtk-rot-ctrl.c:491
 msgid "Track"
-msgstr "Путь"
+msgstr "Trek"
 
 #: ../src/gtk-rig-ctrl.c:568
 msgid ""
@@ -449,12 +450,12 @@ msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:576
 msgid "Select a transponder"
-msgstr "Выберите ретранслятор"
+msgstr ""
 
 #. buttons
 #: ../src/gtk-rig-ctrl.c:583
 msgid "T"
-msgstr ""
+msgstr "T"
 
 #: ../src/gtk-rig-ctrl.c:585
 msgid ""
@@ -465,7 +466,7 @@ msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:591
 msgid "L"
-msgstr ""
+msgstr "L"
 
 #: ../src/gtk-rig-ctrl.c:593
 msgid ""
@@ -482,21 +483,21 @@ msgstr ""
 #. Azimuth
 #: ../src/gtk-rig-ctrl.c:612 ../src/gtk-rot-ctrl.c:497
 msgid "Az:"
-msgstr ""
+msgstr "Az:"
 
 #. Elevation
 #: ../src/gtk-rig-ctrl.c:620 ../src/gtk-rot-ctrl.c:507
 msgid "El:"
-msgstr ""
+msgstr "El:"
 
 #. Range
 #: ../src/gtk-rig-ctrl.c:628
 msgid " Range:"
-msgstr " Диапазон:"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:636 ../src/gtk-rig-ctrl.c:639
 msgid "This is the current distance between the satellite and the observer."
-msgstr "Это текущая дистанция между спутником и обсерваторией."
+msgstr ""
 
 #. Range rate
 #: ../src/gtk-rig-ctrl.c:643
@@ -510,12 +511,12 @@ msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:657 ../src/gtk-rot-ctrl.c:523
 msgid "Target"
-msgstr "Объект"
+msgstr "Target"
 
 #. Primary device
 #: ../src/gtk-rig-ctrl.c:684
 msgid "1. Device:"
-msgstr "1. Устройство:"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:689
 msgid ""
@@ -529,13 +530,13 @@ msgstr ""
 #: ../src/sat-pref-rot.c:272
 #, c-format
 msgid "%s:%d: Failed to open hwconf dir (%s)"
-msgstr "%s:%d: Ошибка открытия каталога hwconf (%s)"
+msgstr ""
 
 #. config will be force-loaded after LO spin is created
 #. Secondary device
 #: ../src/gtk-rig-ctrl.c:735
 msgid "2. Device:"
-msgstr "2. Устройство:"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:740
 msgid ""
@@ -547,68 +548,70 @@ msgstr ""
 #: ../src/gtk-rig-ctrl.c:744 ../src/sat-pref-rig.c:788
 #: ../src/sat-pref-rig.c:797 ../src/sat-pref-rig-editor.c:246
 msgid "None"
-msgstr "Нет"
+msgstr ""
 
 #. Engage button
 #: ../src/gtk-rig-ctrl.c:780 ../src/gtk-rot-ctrl.c:600
 msgid "Engage"
-msgstr "Задействовать"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:781
 msgid "Engage the selected radio device"
-msgstr "Задействовать выбранное радио устройство"
+msgstr ""
 
 #. Timeout
 #: ../src/gtk-rig-ctrl.c:789 ../src/gtk-rot-ctrl.c:606
 msgid "Cycle:"
-msgstr "Цикл:"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:796
 msgid "This parameter controls the delay between commands sent to the rig."
-msgstr "Этот параметр управляет задержкой между отправками команд устройству"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:803 ../src/gtk-rot-ctrl.c:620
 msgid "msec"
-msgstr "мс"
+msgstr "mdet"
 
 #: ../src/gtk-rig-ctrl.c:807 ../src/gtk-rot-ctrl.c:649
 msgid "Settings"
-msgstr "Настройки"
+msgstr "Pengaturan"
 
 #: ../src/gtk-rig-ctrl.c:823
 msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
-msgstr ""
+msgstr "<span size='large'><b>ΔT: 00:00:00</b></span>"
 
 #: ../src/gtk-rig-ctrl.c:825
 msgid ""
 "The time remaining until the next AOS or LOS event, depending on which one "
 "comes first."
 msgstr ""
+"Waktu tersisa sampai AOS atau LOS berikutnya, tergantung mana yang lebih "
+"dulu."
 
 #: ../src/gtk-rig-ctrl.c:874 ../src/gtk-rot-ctrl.c:717
 #, c-format
 msgid "%s:%s: Invalid satellite selection: %d"
-msgstr "%s:%s: Неправильный выбор спутника: %d"
+msgstr "%s:%s: Pemilihan satelit tak valid: %d"
 
 #: ../src/gtk-rig-ctrl.c:911
 #, c-format
 msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
-msgstr ""
+msgstr "%s: Inkonsistensi terdeteksi dalam data transponder internal (%d,%d)"
 
 #: ../src/gtk-rig-ctrl.c:1042
 #, c-format
 msgid "%s:%s: Primary device selected: %d"
-msgstr ""
+msgstr "%s:%s: Perangkat primer dipilih: %d"
 
 #: ../src/gtk-rig-ctrl.c:1056 ../src/gtk-rig-ctrl.c:2620
 #, c-format
 msgid "%s:%d: Failed to allocate memory for radio config"
-msgstr ""
+msgstr "%s:%d: Gagal mengalokasikan memori bagi konfig radio"
 
 #: ../src/gtk-rig-ctrl.c:1065 ../src/gtk-rig-ctrl.c:1165
 #, c-format
 msgid "%s:%s: Loaded new radio configuration %s"
-msgstr ""
+msgstr "%s:%s: Memuat konfigurasi radio baru %s"
 
 #. update LO widgets
 #: ../src/gtk-rig-ctrl.c:1068 ../src/gtk-rig-ctrl.c:1073
@@ -616,22 +619,22 @@ msgstr ""
 #: ../src/gtk-rig-ctrl.c:1168
 #, c-format
 msgid "%.0f MHz"
-msgstr ""
+msgstr "%.0f MHz"
 
 #: ../src/gtk-rig-ctrl.c:1080 ../src/gtk-rig-ctrl.c:1174
 #, c-format
 msgid "%s:%s: Failed to load radio configuration %s"
-msgstr ""
+msgstr "%s:%s: Gagal memuat konfigurasi radio %s"
 
 #: ../src/gtk-rig-ctrl.c:1108
 #, c-format
 msgid "%s:%s: Secondary device selected: %d"
-msgstr ""
+msgstr "%s:%s: Perangkat sekunder dipilih: %d"
 
 #: ../src/gtk-rig-ctrl.c:1156
 #, c-format
 msgid "%s:%s: Failed to allocate memory for radio config"
-msgstr ""
+msgstr "%s:%s: Gagal mengalokasikan memori bagi konfig radio"
 
 #: ../src/gtk-rig-ctrl.c:1201 ../src/gtk-rig-ctrl.c:1374
 #: ../src/gtk-rot-ctrl.c:864
@@ -642,7 +645,7 @@ msgstr ""
 #: ../src/gtk-rig-ctrl.c:1316
 #, c-format
 msgid "%s called but TX VFO is %d."
-msgstr ""
+msgstr "%s dipanggil tapi TX VFO %d."
 
 #: ../src/gtk-rig-ctrl.c:1382 ../src/gtk-rot-ctrl.c:896
 #, c-format
@@ -652,7 +655,7 @@ msgstr ""
 #: ../src/gtk-rig-ctrl.c:1417
 #, c-format
 msgid "%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
-msgstr ""
+msgstr "%s: Jenis radio %d tak valid. Menata jenis ke RIG_TYPE_RX"
 
 #: ../src/gtk-rig-ctrl.c:1431 ../src/gtk-rot-ctrl.c:1068
 #, c-format
@@ -667,7 +670,7 @@ msgstr ""
 #: ../src/gtk-rig-ctrl.c:2373
 #, c-format
 msgid "%s: Invalid VFO argument. Using VFOA."
-msgstr ""
+msgstr "%s: Argumen VFO tak valid. Memakai VFOA."
 
 #: ../src/gtk-rig-ctrl.c:2406
 #, c-format
