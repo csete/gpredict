@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -212,7 +212,7 @@ static void gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->tracking = FALSE;
     ctrl->sock = 0;
     ctrl->sock2 = 0;
-    g_static_mutex_init(&(ctrl->busy));
+    g_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
@@ -1378,7 +1378,7 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
     }
     
     
-    if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
+    if (g_mutex_trylock(&(ctrl->busy)) == FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
     }
@@ -1436,7 +1436,7 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
     
     //g_print ("       WROPS = %d\n", ctrl->wrops);
     
-    g_static_mutex_unlock(&(ctrl->busy));
+    g_mutex_unlock(&(ctrl->busy));
     
     return TRUE;
 }
@@ -2768,12 +2768,12 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
 
     /* wait for controller to be idle or until the timeout triggers */
     while (timeout < 5) {
-        if (g_static_mutex_trylock(&(ctrl->busy)) == TRUE) {
+        if (g_mutex_trylock(&(ctrl->busy)) == TRUE) {
             timeout = 17; /* use an arbitrary value that is large enough */
         }
         else {
             /* wait for 100 msec */
-            g_usleep (100000);
+            g_usleep(100000);
             timeout++;
         }
     }
@@ -2813,7 +2813,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
         }
         
         /* release controller lock */
-        g_static_mutex_unlock(&(ctrl->busy));
+        g_mutex_unlock(&(ctrl->busy));
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,

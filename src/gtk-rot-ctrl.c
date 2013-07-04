@@ -172,7 +172,7 @@ static void
     ctrl->sock = 0;
 
     ctrl->tracking = FALSE;
-    g_static_mutex_init(&(ctrl->busy));
+    g_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
@@ -892,7 +892,7 @@ static gboolean
     gdouble step_size;
     
     
-    if (g_static_mutex_trylock(&(ctrl->busy))==FALSE) {
+    if (g_mutex_trylock(&(ctrl->busy)) == FALSE) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
         return TRUE;
     }
@@ -1100,7 +1100,7 @@ static gboolean
                                          gtk_rot_knob_get_value (GTK_ROT_KNOB (ctrl->ElSet)));
         }
     }
-    g_static_mutex_unlock(&(ctrl->busy));
+    g_mutex_unlock(&(ctrl->busy));
 
     return TRUE;
 }

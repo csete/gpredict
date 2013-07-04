@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -98,7 +98,7 @@ struct _gtk_rig_ctrl
     guint timerid;     /*!< Timer ID */
     
     gboolean tracking;  /*!< Flag set when we are tracking a target. */
-    GStaticMutex busy;/*!< Flag set when control algorithm is busy. */
+    GMutex   busy;      /*!< Flag set when control algorithm is busy. */
     gboolean engaged;   /*!< Flag indicating that rig device is engaged. */
     gint     errcnt;    /*!< Error counter. */
     
