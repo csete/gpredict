@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -817,13 +817,13 @@ static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
     (void) menuitem; /* avoid unused parameter compiler warning */
 
     /* if module is busy wait until done then go on */
-    g_mutex_lock(module->busy);
+    g_mutex_lock(&module->busy);
 
 
     if (module->skgwin != NULL) {
         /* there is already a sky at glance for this module */
         gtk_window_present (GTK_WINDOW (module->skgwin));
-        g_mutex_unlock(module->busy);
+        g_mutex_unlock(&module->busy);
 
         return;
     }
@@ -859,7 +859,7 @@ static void sky_at_glance_cb (GtkWidget *menuitem, gpointer data)
 
     gtk_widget_show_all (module->skgwin);
 
-    g_mutex_unlock(module->busy);
+    g_mutex_unlock(&module->busy);
 
 }
 

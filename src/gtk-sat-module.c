@@ -179,7 +179,8 @@ gtk_sat_module_init (GtkSatModule *module)
     module->lastSkgUpd = 0.0;
 
     module->state = GTK_SAT_MOD_STATE_DOCKED;
-    module->busy = g_mutex_new();
+
+    g_mutex_init(&module->busy);
 
     /* open the gpsd device */
     module->gps_data = NULL;
@@ -787,7 +788,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
     if (needupdate) {
         
-        if (g_mutex_trylock(mod->busy)==FALSE) {
+        if (g_mutex_trylock(&mod->busy) == FALSE) {
             
             sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Previous cycle missed it's deadline."),
@@ -892,7 +893,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
 
         }
 
-          g_mutex_unlock(mod->busy);
+        g_mutex_unlock(&mod->busy);
 
     }
     return TRUE;
@@ -1410,7 +1411,7 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
     g_return_if_fail (IS_GTK_SAT_MODULE (module));
 
     /* lock module */
-    g_mutex_lock(module->busy);
+    g_mutex_lock(&module->busy);
      
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Reloading satellites for module %s"),
@@ -1434,7 +1435,7 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
     /* FIXME: radio and rotator controller */
     
     /* unlock module */
-    g_mutex_unlock(module->busy);
+    g_mutex_unlock(&module->busy);
 }
 
 

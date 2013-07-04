@@ -127,7 +127,7 @@ struct _gtk_sat_module
     gtk_sat_mod_state_t  state;   /*!< The state of the module. */
 
     guint          timerid;      /*!< The timeout ID (FIXME: REMOVE) */
-    GMutex        *busy;         /*!< Flag indicating whether timeout has
+    GMutex         busy;         /*!< Flag indicating whether timeout has
                                       finished or not. Also used for blocking
                                       the module during TLE update. */
 
