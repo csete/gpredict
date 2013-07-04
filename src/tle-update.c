@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
     Copyright (C)  2009 Charles Suprin AA1VS.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
@@ -41,16 +41,6 @@
 #include "tle-update.h"
 #include "gpredict-utils.h"
 
-/* Flag indicating whether TLE update is in progress.
-   This should avoid multiple attempts to update TLE,
-   e.g. user starts update from menubar while automatic
-   update is in progress
-*/
-/* static gboolean tle_in_progress = FALSE; */
-/* Replace flag with lock */
-/* http://library.gnome.org/devel/glib/unstable/glib-Threads.html */
-static GStaticMutex tle_in_progress = G_STATIC_MUTEX_INIT ;
-static GStaticMutex tle_file_in_progress = G_STATIC_MUTEX_INIT ;
 
 /* private function prototypes */
 static size_t  my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream);
@@ -104,6 +94,8 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                             gboolean silent, GtkWidget *progress,
                             GtkWidget *label1, GtkWidget *label2)
 {
+    static GMutex tle_file_in_progress;
+
     GHashTable  *data;        /* hash table with fresh TLE data */
     GDir        *cache_dir;   /* directory to scan fresh TLE */
     GDir        *loc_dir;     /* directory for gpredict TLE files */
@@ -120,10 +112,11 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     guint        total,total_tmp;
     gdouble      fraction = 0.0;
     gdouble      start = 0.0;
-    
+
     (void) filter; /* avoid unused parameter compiler warning */
 
-    if (g_static_mutex_trylock(&tle_file_in_progress)==FALSE) {
+    if (g_mutex_trylock(&tle_file_in_progress) == FALSE)
+    {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: A TLE update process is already running. Aborting."),
                      __FUNCTION__);
@@ -387,7 +380,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     /* destroy hash tables */
     g_hash_table_destroy (data);
 
-    g_static_mutex_unlock(&tle_file_in_progress);
+    g_mutex_unlock(&tle_file_in_progress);
 }
 
 
@@ -510,6 +503,8 @@ void tle_update_from_network (gboolean   silent,
                               GtkWidget *label1,
                               GtkWidget *label2)
 {
+    static GMutex tle_in_progress;
+
     gchar       *server;
     gchar       *proxy = NULL;
     gchar       *files_tmp;
@@ -530,17 +525,14 @@ void tle_update_from_network (gboolean   silent,
     guint        success = 0; /* no. of successfull downloads */ 
 
     /* bail out if we are already in an update process */
-    /*if (tle_in_progress)*/
-    if (g_static_mutex_trylock(&tle_in_progress)==FALSE) {
+    if (g_mutex_trylock(&tle_in_progress) == FALSE)
+    {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: A TLE update process is already running. Aborting."),
                      __FUNCTION__);
 
         return;
     }
-
-
-    /*tle_in_progress = TRUE;*/
 
     /* get server, proxy, and list of files */
     server = sat_cfg_get_str (SAT_CFG_STR_TLE_SERVER);
@@ -702,9 +694,7 @@ void tle_update_from_network (gboolean   silent,
 
     g_free (cache);
 
-    /* clear busy flag */
-    /* tle_in_progress = FALSE; */
-    g_static_mutex_unlock(&tle_in_progress);
+    g_mutex_unlock(&tle_in_progress);
 
 }
 
