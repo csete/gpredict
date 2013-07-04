@@ -2,7 +2,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -142,9 +142,6 @@ int main (int argc, char *argv[])
     /* get logging level */
     sat_log_set_level (sat_cfg_get_int (SAT_CFG_INT_LOG_LEVEL));
      
-    if (!g_thread_supported ())
-        g_thread_init (NULL);
-
     /* check command line options */
     if (cleantle)
         clean_tle ();
@@ -451,8 +448,7 @@ gpredict_app_config   (GtkWidget *widget, GdkEventConfigure *event, gpointer dat
  * In case of notification, the task will be removed in order to
  * avoid a new notification the next time the taks would be run.
  */
-static gboolean
-tle_mon_task          (gpointer data)
+static gboolean tle_mon_task(gpointer data)
 {
     /*GtkWidget *selector;*/
     glong last,now,thrld;
@@ -464,20 +460,8 @@ tle_mon_task          (gpointer data)
         sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Passed a non-null pointer which should never happen.\n"), __FUNCTION__);
     }
 
-    /*      sat_log_log (SAT_LOG_LEVEL_DEBUG, */
-    /*                      _("%s: Checking whether TLE check should be executed..."), */
-    /*                      __FUNCTION__); */
-
     /* get time of last update */
     last = sat_cfg_get_int (SAT_CFG_INT_TLE_LAST_UPDATE);
-    /*if (last == 0) {
-        selector = gtk_sat_selector_new (0);
-        last = (glong) gtk_sat_selector_get_latest_epoch (GTK_SAT_SELECTOR (selector));
-        gtk_widget_destroy (selector);
-    }
-
-    g_print ("LAST: %ld\n", last); */
-
 
     /* get current time */
     g_get_current_time (&tval);
@@ -524,8 +508,8 @@ tle_mon_task          (gpointer data)
                          _("%s: Starting new update thread."),
                          __FUNCTION__);
 
-
-            g_thread_create (update_tle_thread, NULL, FALSE, &err);
+            /** FIXME: store thread and destroy on exit? **/
+            g_thread_try_new(_("gpredict_tle_update"), update_tle_thread, NULL, &err);
 
             if (err != NULL)
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
