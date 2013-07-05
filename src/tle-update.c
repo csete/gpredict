@@ -1000,7 +1000,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     ntle->catnum = catnr;
                     ntle->epoch = tle.epoch;
                     ntle->status = tle.status;
-                    ntle->satname = g_strdup (g_strchomp(tle_str[0]));
+                    ntle->satname = g_strdup (tle.sat_name);
                     ntle->line1   = g_strdup (tle_str[1]);
                     ntle->line2   = g_strdup (tle_str[2]);
                     ntle->srcfile = g_strdup (fnam);
@@ -1013,19 +1013,16 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     /* satellite is already in hash */
                     /* apply various merge routines */
                     
-                    /*time merge */
+                    /* time merge */
                     if (ntle->epoch == tle.epoch) {
                         /* if satellite epoch has the same time,  merge status as appropriate */
-                        if ( (ntle->status != tle.status) && ( ntle->status != OP_STAT_UNKNOWN )) {
-                            /* update status */
-                            ntle->status =  tle.status;
-                            if ( tle.status != OP_STAT_UNKNOWN ) {
-                                /* log if there is something funny about the data coming in */
-                                sat_log_log (SAT_LOG_LEVEL_WARN,
-                                             _("%s:%s: Two different statuses for %s:%d at the same time."),
-                                             __FILE__, __FUNCTION__, ntle->satname,ntle->catnum);
-                                
-                            }
+                        if (ntle->status != tle.status) {
+                            /* log if there is something funny about the data coming in */
+                            sat_log_log (SAT_LOG_LEVEL_WARN,
+                                         _("%s:%s: Two different statuses for %d (%s) at the same time."),
+                                         __FILE__, __FUNCTION__, ntle->catnum, ntle->satname);
+                            if ( tle.status != OP_STAT_UNKNOWN )
+                                ntle->status = tle.status;
                         }
                     } 
                     else if ( ntle->epoch < tle.epoch ) {
@@ -1048,7 +1045,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                     if (is_computer_generated_name (ntle->satname) && 
                         !is_computer_generated_name(tle_str[0])) {
                         g_free (ntle->satname);
-                        ntle->satname = g_strdup (g_strchomp(tle_str[0]));
+                        ntle->satname = g_strdup (tle.sat_name);
                     }
                     
                     /* free the key since we do not commit it to the cache */

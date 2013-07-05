@@ -300,7 +300,7 @@ Get_Next_Tle_Set (char line[3][80], tle_t *tle)
 
 
 				/* terminate sat_name string */
-				tle->sat_name[idx] = '\0';
+				tle->sat_name[idx-1] = '\0';
 
 				/* force loop exit */
 				idx = 25;
