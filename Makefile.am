@@ -1,3 +1,4 @@
+ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src doc pixmaps data po
 
 install-data-local:

@@ -1,6 +1,7 @@
 AC_INIT([gpredict],
         m4_esyscmd([./git-version-gen .tarball-version]),
         [gpredict-discussion@lists.sourceforge.net])
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(build-config.h)
 AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.6])

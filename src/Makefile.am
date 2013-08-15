@@ -2,7 +2,7 @@
 
 SUBDIRS = sgpsdp
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	@PACKAGE_CFLAGS@ -I.. \
 	-DPACKAGE_DATA_DIR=\""$(datadir)/gpredict"\" \
 	-DPACKAGE_PIXMAPS_DIR=\""$(datadir)/pixmaps/gpredict"\" \

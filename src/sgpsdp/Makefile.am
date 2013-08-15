@@ -2,7 +2,7 @@ SUBDIRS = TR
 
 ##noinst_LIBRARIES = libsgp4sdp4.a
 
-INCLUDES = $(all_includes) @PACKAGE_CFLAGS@
+AM_CPPFLAGS = $(all_includes) @PACKAGE_CFLAGS@
 
 ##libsgp4sdp4_a_METASOURCES = AUTO
 
