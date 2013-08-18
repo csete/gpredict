@@ -7,22 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-07 15:53+0100\n"
-"PO-Revision-Date: 2012-08-25 12:06+0000\n"
+"POT-Creation-Date: 2013-07-07 22:17+0000\n"
+"PO-Revision-Date: 2013-03-09 23:26+0000\n"
 "Last-Translator: Monkey <monkey.libre@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-08 23:44+0000\n"
-"X-Generator: Launchpad (build 16523)\n"
+"X-Launchpad-Export-Date: 2013-08-18 09:08+0000\n"
+"X-Generator: Launchpad (build 16723)\n"
 "X-Poedit-Country: CUBA\n"
 "Language: es\n"
 "X-Poedit-Language: Spanish\n"
 
 #: ../src/about.c:67
 msgid ""
-"Copyright (C) 2001-2011 Alexandru Csete OZ9AEC and contributors.\n"
+"Copyright (C) 2001-2013 Alexandru Csete OZ9AEC and contributors.\n"
 "Contact: oz9aec at gmail.com\n"
 "\n"
 "Gpredict is free software; you can redistribute it and modify it under the "
@@ -50,19 +50,16 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:99 ../src/main.c:255
+#: ../src/about.c:99 ../src/main.c:252
 msgid "GPREDICT"
 msgstr "GPREDICT"
 
 #: ../src/about.c:102
 msgid ""
-"Copyright (C) 2001-2011 Alexandru Csete OZ9AEC\n"
+"Copyright (C) 2001-2013 Alexandru Csete OZ9AEC\n"
 "\n"
 "Gpredict is available free of charge from:"
 msgstr ""
-"Copyright (C) 2001-2011 Alexandru Csete OZ9AEC\n"
-"\n"
-"Gpredict está disponible libre de cargos desde:"
 
 #: ../src/about.c:119
 msgid "translator-credits"
@@ -970,7 +967,7 @@ msgstr "%s: Satélite %d no tiene NICKNAME"
 msgid "%s: Error reading TLE line 1 from %s (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1181 ../src/tle-update.c:1188
+#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1168 ../src/tle-update.c:1175
 #, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
 msgstr ""
@@ -1362,113 +1359,113 @@ msgstr "Pista sobre tierra"
 msgid "Set Target"
 msgstr "Establecer objetivo"
 
-#: ../src/gtk-sat-module.c:279
+#: ../src/gtk-sat-module.c:280
 #, c-format
 msgid "%s: Module %s is not valid."
 msgstr "%s: Modulo %s no es válido."
 
-#: ../src/gtk-sat-module.c:297
+#: ../src/gtk-sat-module.c:298
 #, c-format
 msgid "%s: Module %s has problems."
 msgstr "%s: Modulo %s tiene problemas."
 
-#: ../src/gtk-sat-module.c:333
+#: ../src/gtk-sat-module.c:334
 msgid "Module options / shortcuts"
 msgstr "Opciones de Módulo / atajos"
 
-#: ../src/gtk-sat-module.c:339
+#: ../src/gtk-sat-module.c:340
 msgid "Close this module."
 msgstr "Cerrar este módulo."
 
-#: ../src/gtk-sat-module.c:408
+#: ../src/gtk-sat-module.c:409
 #, c-format
 msgid "%s: Layout has %d columns and %d rows."
 msgstr "%s: El diseño tiene %d columnas y %d filas."
 
-#: ../src/gtk-sat-module.c:480
+#: ../src/gtk-sat-module.c:481
 #, c-format
 msgid "%s:%d: Invalid child type (%d). Using GtkSatList."
 msgstr "%s:%d: Tipo de hijo no válido (%d). Usando GtkSatList."
 
-#: ../src/gtk-sat-module.c:521
+#: ../src/gtk-sat-module.c:522
 #, c-format
 msgid "%s: Could not load config data from %s (%s)."
 msgstr "%s: No se puede cargar los datos de configuración desde %s (%s)."
 
-#: ../src/gtk-sat-module.c:531
+#: ../src/gtk-sat-module.c:532
 #, c-format
 msgid "%s: Reading configuration from %s"
 msgstr "%s: Leyendo configuración desde %s"
 
-#: ../src/gtk-sat-module.c:573
+#: ../src/gtk-sat-module.c:574
 #, c-format
 msgid "%s: Can not load default QTH file %s; using built-in defaults"
 msgstr ""
 "%s: No puedo cargar el fichero de QTH por defecto %s; usando los datos "
 "preestablecidos"
 
-#: ../src/gtk-sat-module.c:604
+#: ../src/gtk-sat-module.c:605
 #, c-format
 msgid "%s: Module layout is invalid: %s. Using default."
 msgstr "%s: El diseño del módulono es válido: %s. Usando el predefinido."
 
-#: ../src/gtk-sat-module.c:616
+#: ../src/gtk-sat-module.c:617
 #, c-format
 msgid "%s: GRID(%d): %s"
 msgstr "%s: GRID(%d): %s"
 
-#: ../src/gtk-sat-module.c:634
+#: ../src/gtk-sat-module.c:635
 #, c-format
 msgid "%s: Unable to allocate memory for grid."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:667 ../src/mod-cfg.c:615
+#: ../src/gtk-sat-module.c:668 ../src/mod-cfg.c:615
 #, c-format
 msgid "%s: Failed to get list of satellites (%s)"
 msgstr "%s: Fallo al obtener la lista de satélites (%s)"
 
-#: ../src/gtk-sat-module.c:689
+#: ../src/gtk-sat-module.c:690
 #, c-format
 msgid "%s: Error reading data for #%d"
 msgstr "%s: Error leyendo datos para #%d"
 
-#: ../src/gtk-sat-module.c:713
+#: ../src/gtk-sat-module.c:714
 #, c-format
 msgid "%s: Read data for #%d"
 msgstr "%s: Leer datos para #%d"
 
-#: ../src/gtk-sat-module.c:720
+#: ../src/gtk-sat-module.c:721
 #, c-format
 msgid "%s: Sat #%d already in list"
 msgstr "%s: Satélite #%d ya está en la lista"
 
-#: ../src/gtk-sat-module.c:731
+#: ../src/gtk-sat-module.c:732
 #, c-format
 msgid "%s: Read %d out of %d satellites"
 msgstr "%s: Leídos %d de %d satélites"
 
-#: ../src/gtk-sat-module.c:793
+#: ../src/gtk-sat-module.c:794
 #, c-format
 msgid "%s: Previous cycle missed it's deadline."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:939 ../src/gtk-sat-module.c:1467
+#: ../src/gtk-sat-module.c:940 ../src/gtk-sat-module.c:1468
 #, c-format
 msgid "%s:%d: Unknown child type"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1080
+#: ../src/gtk-sat-module.c:1081
 #, c-format
 msgid "%s: Module %s received CLOSE signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1090
+#: ../src/gtk-sat-module.c:1091
 #, c-format
 msgid "%s: Module %s is in DOCKED state."
 msgstr "%s: Módulo %s está en estado DOCKED."
 
-#: ../src/gtk-sat-module.c:1097 ../src/gtk-sat-module.c:1113
-#: ../src/gtk-sat-module.c:1141
+#: ../src/gtk-sat-module.c:1098 ../src/gtk-sat-module.c:1114
+#: ../src/gtk-sat-module.c:1142
 #, c-format
 msgid ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
@@ -1477,32 +1474,32 @@ msgstr ""
 "%s: El módulo %s no fue encontrado en mod-mgr (%d)\n"
 "El estado interno es corrupto?"
 
-#: ../src/gtk-sat-module.c:1106
+#: ../src/gtk-sat-module.c:1107
 #, c-format
 msgid "%s: Module %s is in WINDOW state."
 msgstr "%s: El módulo %s está en estado WINDOW."
 
-#: ../src/gtk-sat-module.c:1134
+#: ../src/gtk-sat-module.c:1135
 #, c-format
 msgid "%s: Module %s is in FULLSCREEN state."
 msgstr "%s: El módulo %s está en estado FULLSCREEN."
 
-#: ../src/gtk-sat-module.c:1163 ../src/gtk-sat-module.c:1327
+#: ../src/gtk-sat-module.c:1164 ../src/gtk-sat-module.c:1328
 #, c-format
 msgid "%s: Module %s has unknown state: %d"
 msgstr "%s: El módulo %s tiene un estado desconocido: %d"
 
-#: ../src/gtk-sat-module.c:1174
+#: ../src/gtk-sat-module.c:1175
 #, c-format
 msgid "%s: Module %s closed."
 msgstr "%s: El módulo %s se ha cerrado."
 
-#: ../src/gtk-sat-module.c:1216
+#: ../src/gtk-sat-module.c:1217
 #, c-format
 msgid "%s: Module %s received CONFIG signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1225
+#: ../src/gtk-sat-module.c:1226
 #, c-format
 msgid ""
 "%s: Could not stop timeout callback\n"
@@ -1511,22 +1508,22 @@ msgstr ""
 "%s: No puedo parar la llamada de timeout\n"
 "%s: El ID %d parece no válido."
 
-#: ../src/gtk-sat-module.c:1243
+#: ../src/gtk-sat-module.c:1244
 #, c-format
 msgid "%s: Module configuration failed for some reason."
 msgstr "%s: La configuración del módulo falló por alguna razón."
 
-#: ../src/gtk-sat-module.c:1416
+#: ../src/gtk-sat-module.c:1417
 #, c-format
 msgid "%s: Reloading satellites for module %s"
 msgstr "%s: Recargando satélites para el módulo %s"
 
-#: ../src/gtk-sat-module.c:1502
+#: ../src/gtk-sat-module.c:1503
 #, c-format
 msgid "%s: Unknown child type"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1581
+#: ../src/gtk-sat-module.c:1582
 #, c-format
 msgid "%s: Updating GtkSkyGlance for %s"
 msgstr ""
@@ -1762,7 +1759,7 @@ msgstr "Reiniciar"
 msgid "Reset to current date and time"
 msgstr "Restablecer a la fecha y hora actual"
 
-#: ../src/gtk-sat-module-tmg.c:128 ../src/gtk-sat-module-tmg.c:778
+#: ../src/gtk-sat-module-tmg.c:128 ../src/gtk-sat-module-tmg.c:742
 msgid "<b>Real-Time</b>"
 msgstr "<b>Tiempo Real</b>"
 
@@ -1826,19 +1823,18 @@ msgstr "%s: Controlador de tiempo para %s lanzado"
 msgid "%s: Time Controller for %s closed. Time reset."
 msgstr "%s: Controlador de tiempo para %s cerrado. Tiempo restablecido."
 
-#: ../src/gtk-sat-module-tmg.c:500 ../src/gtk-sat-module-tmg.c:809
-#: ../src/gtk-sat-module-tmg.c:864
-#, c-format
-msgid "%s: %d/%d/%d %d:%d:%d.%d"
-msgstr "%s: %d/%d/%d %d:%d:%d.%d"
-
-#: ../src/gtk-sat-module-tmg.c:769
+#: ../src/gtk-sat-module-tmg.c:733
 msgid "<b>Simulated Real-Time</b>"
 msgstr "<b>Tiempo Real Simulado</b>"
 
-#: ../src/gtk-sat-module-tmg.c:773
+#: ../src/gtk-sat-module-tmg.c:737
 msgid "<b>Manual Control</b>"
 msgstr "<b>Control Manual</b>"
+
+#: ../src/gtk-sat-module-tmg.c:799
+#, c-format
+msgid "%s: %d/%d/%d %d:%d:%d.%d"
+msgstr "%s: %d/%d/%d %d:%d:%d.%d"
 
 #: ../src/gtk-sat-selector.c:247
 msgid "Select a satellite group or category to narrow your search."
@@ -2248,7 +2244,7 @@ msgstr ""
 msgid "Option parsing failed: %s\n"
 msgstr "Procesamiento de la opción fallida: %s\n"
 
-#: ../src/main.c:161
+#: ../src/main.c:158
 #, c-format
 msgid ""
 "%s: User config check failed (code %d). This is fatal.\n"
@@ -2261,27 +2257,32 @@ msgstr ""
 "./config/Gpredict\n"
 "de tu directorio personal (home)"
 
-#: ../src/main.c:464
+#: ../src/main.c:460
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:516
+#: ../src/main.c:500
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr "%s: El límite de tiempo ha sido alcanzado."
 
-#: ../src/main.c:524
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr "%s: Iniciando un nuevo hilo de actualización."
 
-#: ../src/main.c:532
+#. * FIXME: store thread and destroy on exit? *
+#: ../src/main.c:512
+msgid "gpredict_tle_update"
+msgstr ""
+
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr "%s: Fallo al crear el hilo de actualización de los TLE (%s)"
 
-#: ../src/main.c:542
+#: ../src/main.c:526
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2293,27 +2294,27 @@ msgstr ""
 "<b>Editar -> Actualizar TLE</b>\n"
 "En al barra de menú"
 
-#: ../src/main.c:573
+#: ../src/main.c:557
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr "%s: No pude encontrar la tarea de monitoreo de los TLE (ID = %d)"
 
-#: ../src/main.c:619
+#: ../src/main.c:603
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr "%s: Limpiando los datos de los TLE en %s"
 
-#: ../src/main.c:628 ../src/main.c:669
+#: ../src/main.c:612 ../src/main.c:653
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr "%s: Fallo al eliminar %s"
 
-#: ../src/main.c:632 ../src/main.c:673
+#: ../src/main.c:616 ../src/main.c:657
 #, c-format
 msgid "%s: Removed %s"
 msgstr "%s: Eliminado %s"
 
-#: ../src/main.c:660
+#: ../src/main.c:644
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr "%s: Limpiando datos del transpondedor en %s"
@@ -5490,17 +5491,17 @@ msgstr ""
 msgid "%s: NULL output storage!"
 msgstr ""
 
-#: ../src/tle-update.c:128 ../src/tle-update.c:536
+#: ../src/tle-update.c:121 ../src/tle-update.c:531
 #, c-format
 msgid "%s: A TLE update process is already running. Aborting."
 msgstr ""
 
-#: ../src/tle-update.c:144 ../src/tle-update.c:216
+#: ../src/tle-update.c:137 ../src/tle-update.c:209
 #, c-format
 msgid "%s: Error opening directory %s (%s)"
 msgstr "%s: Error abriendo el directorio %s (%s)"
 
-#: ../src/tle-update.c:149 ../src/tle-update.c:221
+#: ../src/tle-update.c:142 ../src/tle-update.c:214
 #, c-format
 msgid ""
 "<b>ERROR</b> opening directory %s\n"
@@ -5509,26 +5510,26 @@ msgstr ""
 "<b>ERROR</b> Abriendo el directorio %s\n"
 "%s"
 
-#: ../src/tle-update.c:169
+#: ../src/tle-update.c:162
 #, c-format
 msgid "Reading data from %s"
 msgstr "Leyendo datos desde %s"
 
-#: ../src/tle-update.c:191
+#: ../src/tle-update.c:184
 #, c-format
 msgid "%s: No valid TLE data found in %s"
 msgstr ""
 
-#: ../src/tle-update.c:196
+#: ../src/tle-update.c:189
 #, c-format
 msgid "%s: Read %d sats from %s into memory"
 msgstr ""
 
-#: ../src/tle-update.c:281
+#: ../src/tle-update.c:274
 msgid "Updating data..."
 msgstr "Actualizando datos..."
 
-#: ../src/tle-update.c:285
+#: ../src/tle-update.c:278
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5536,7 +5537,7 @@ msgid ""
 "Missing Satellites:\t %d\n"
 msgstr ""
 
-#: ../src/tle-update.c:355
+#: ../src/tle-update.c:348
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5545,168 +5546,168 @@ msgid ""
 "New Satellites:\t\t %d"
 msgstr ""
 
-#: ../src/tle-update.c:366
+#: ../src/tle-update.c:359
 #, c-format
 msgid "%s: Added %d new satellites to local database"
 msgstr "%s: Se agregaron %d nuevos satélites a la base de datos local"
 
-#: ../src/tle-update.c:383
+#: ../src/tle-update.c:376
 #, c-format
 msgid "%s: TLE elements updated."
 msgstr ""
 
-#: ../src/tle-update.c:449
+#: ../src/tle-update.c:442
 #, c-format
 msgid "%s: Could not open category file file %s (%s)."
 msgstr ""
 
-#: ../src/tle-update.c:471
+#: ../src/tle-update.c:464
 #, c-format
 msgid "%s: Error adding %d to %s (%s)."
 msgstr ""
 
-#: ../src/tle-update.c:477
+#: ../src/tle-update.c:470
 #, c-format
 msgid "%s: Added satellite %d to %s."
 msgstr ""
 
-#: ../src/tle-update.c:554
+#: ../src/tle-update.c:546
 #, c-format
 msgid "%s: No files to fetch from network."
 msgstr ""
 
-#: ../src/tle-update.c:560
+#: ../src/tle-update.c:552
 msgid "No files to fetch from network"
 msgstr ""
 
-#: ../src/tle-update.c:587
+#: ../src/tle-update.c:579
 #, c-format
 msgid "Fetching %s"
 msgstr ""
 
-#: ../src/tle-update.c:614
+#: ../src/tle-update.c:606
 #, c-format
 msgid "%s: Error fetching %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:619
+#: ../src/tle-update.c:611
 #, c-format
 msgid "%s: Successfully fetched %s"
 msgstr ""
 
-#: ../src/tle-update.c:627
+#: ../src/tle-update.c:619
 #, c-format
 msgid "%s: Failed to open %s preventing update"
 msgstr ""
 
-#: ../src/tle-update.c:655
+#: ../src/tle-update.c:647
 #, c-format
 msgid "%s: Fetched %d files from network; updating..."
 msgstr ""
 
-#: ../src/tle-update.c:665
+#: ../src/tle-update.c:657
 #, c-format
 msgid "%s: Could not fetch any new TLE files from network; aborting..."
 msgstr ""
 
-#: ../src/tle-update.c:685
+#: ../src/tle-update.c:677
 #, c-format
 msgid "%s: Error opening %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:825
+#: ../src/tle-update.c:815
 #, c-format
 msgid "%s:%s: There is no category in %s"
 msgstr "%s:%s: No hay categoría en %s"
 
-#: ../src/tle-update.c:834
+#: ../src/tle-update.c:824
 #, c-format
 msgid "%s:%s: There is no category called %s"
 msgstr "%s:%s: No hay categoría llamada %s"
 
-#: ../src/tle-update.c:847
+#: ../src/tle-update.c:837
 #, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
 msgstr ""
 
-#: ../src/tle-update.c:897
+#: ../src/tle-update.c:887
 #, c-format
 msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 
-#: ../src/tle-update.c:923
+#: ../src/tle-update.c:913
 #, c-format
 msgid "%s:%s: Processing a three line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:938
+#: ../src/tle-update.c:928
 #, c-format
 msgid "%s:%s: Processing a bare two line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:987
+#: ../src/tle-update.c:977
 #, c-format
 msgid "%s:%s: Invalid data for %d"
 msgstr "%s:%s: dato no válido para %d"
 
-#: ../src/tle-update.c:1035
+#: ../src/tle-update.c:1022
 #, c-format
-msgid "%s:%s: Two different statuses for %s:%d at the same time."
+msgid "%s:%s: Two different statuses for %d (%s) at the same time."
 msgstr ""
 
-#: ../src/tle-update.c:1087
+#: ../src/tle-update.c:1074
 #, c-format
 msgid "%s:%s: Failed to open %s"
 msgstr "%s:%s: fallo al abrir %s"
 
-#: ../src/tle-update.c:1157
+#: ../src/tle-update.c:1144
 #, c-format
 msgid "%s: No new TLE data found for %d. Satellite might be obsolete."
 msgstr ""
 
-#: ../src/tle-update.c:1166
+#: ../src/tle-update.c:1153
 #, c-format
 msgid "%s: Error loading %s (%s)"
 msgstr "%s: Error al cargar %s (%s)"
 
-#: ../src/tle-update.c:1209
+#: ../src/tle-update.c:1196
 #, c-format
 msgid "%s: Current TLE data for %d appears to be bad"
 msgstr ""
 
-#: ../src/tle-update.c:1230
+#: ../src/tle-update.c:1217
 #, c-format
 msgid "%s: Data for  %d updated for name."
 msgstr ""
 
-#: ../src/tle-update.c:1242
+#: ../src/tle-update.c:1229
 #, c-format
 msgid "%s: Data for  %d updated for nickname."
 msgstr ""
 
-#: ../src/tle-update.c:1257
+#: ../src/tle-update.c:1244
 #, c-format
 msgid "%s: Data for  %d updated for tle."
 msgstr ""
 
-#: ../src/tle-update.c:1267
+#: ../src/tle-update.c:1254
 #, c-format
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
-#: ../src/tle-update.c:1303
+#: ../src/tle-update.c:1290
 msgid "Never"
 msgstr "Nunca"
 
-#: ../src/tle-update.c:1304
+#: ../src/tle-update.c:1291
 msgid "Monthly"
 msgstr "Mensualmente"
 
-#: ../src/tle-update.c:1305
+#: ../src/tle-update.c:1292
 msgid "Weekly"
 msgstr "Semanalmente"
 
-#: ../src/tle-update.c:1306
+#: ../src/tle-update.c:1293
 msgid "Daily"
 msgstr "Diariamente"
 
