@@ -179,7 +179,7 @@ gpredict_help_show_txt (const gchar *filename)
      fname = g_strconcat (PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, filename, NULL);
 #else
 #  ifdef G_OS_WIN32
-        buff = g_win32_get_package_installation_directory (NULL, NULL);
+        buff = g_win32_get_package_installation_directory_of_module (NULL);
         fname = g_strconcat (buff, G_DIR_SEPARATOR_S,
                                     "doc", G_DIR_SEPARATOR_S,
                                     filename, ".txt", NULL);

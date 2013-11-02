@@ -6,7 +6,7 @@ include config.mk
 # directories
 topsrc = ..
 glibdir = c:/mingw/include/glib-2.0
-gcincdir = c:/mingw/include/goocanvas/
+gcincdir = c:/mingw/include/goocanvas-1.0/
 gcsrcdir = $(topsrc)/goocanvas-0.15/src
 
 gpreddir = $(topsrc)/src
@@ -24,7 +24,7 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC \
 # libraries
 GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-win32-2.0)
 GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs glib-2.0 gthread-2.0)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) -lgoocanvas libsgpsdp.lib -lcurl.dll -lwinmm -lws2_32
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) -lgoocanvas libsgpsdp.lib -lcurldll -lwinmm -lws2_32
 LIBS = -lm
 
 # flags/defines

@@ -50,7 +50,7 @@ gchar *get_data_dir()
     dir = g_strconcat(PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, "data", NULL);
 #else
 #ifdef G_OS_WIN32
-    gchar *buff = g_win32_get_package_installation_directory(NULL, NULL);
+    gchar *buff = g_win32_get_package_installation_directory_of_module(NULL);
 
     dir = g_strconcat(buff, G_DIR_SEPARATOR_S,
                       "share", G_DIR_SEPARATOR_S, "gpredict", G_DIR_SEPARATOR_S, "data", NULL);
@@ -97,7 +97,7 @@ gchar *get_maps_dir()
     dir = g_strconcat(PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S, "maps", NULL);
 #else
 #ifdef G_OS_WIN32
-    gchar *buff = g_win32_get_package_installation_directory(NULL, NULL);
+    gchar *buff = g_win32_get_package_installation_directory_of_module(NULL);
 
     dir = g_strconcat(buff, G_DIR_SEPARATOR_S, "share", G_DIR_SEPARATOR_S,
                       /* FIXME */
@@ -145,7 +145,7 @@ gchar *get_icon_dir()
     dir = g_strconcat(PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S, "icons", NULL);
 #else
 #ifdef G_OS_WIN32
-    gchar *buff = g_win32_get_package_installation_directory(NULL, NULL);
+    gchar *buff = g_win32_get_package_installation_directory_of_module(NULL);
 
     dir = g_strconcat(buff, G_DIR_SEPARATOR_S,
                       "share", G_DIR_SEPARATOR_S,
