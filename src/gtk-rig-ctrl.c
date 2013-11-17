@@ -2645,14 +2645,12 @@ static gboolean is_rig_tx_capable (const gchar *confname)
 }
 
 
-
-
 gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *buffout, gint sizeout)
 {
     gint    written;
     gint    size;
     
-    size = strlen(buff)-1;
+    size = strlen(buff);
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s:%s: sending %d bytes to rigctld as \"%s\""),
