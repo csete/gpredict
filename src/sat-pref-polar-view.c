@@ -130,35 +130,35 @@ static void create_orient_selector  (GKeyFile *cfg, GtkBox *vbox)
     gtk_box_pack_start (vbox, hbox, FALSE, TRUE, 0);
 
     /* N/E/S/W */
-    nesw = gtk_radio_button_new_with_label (NULL, "N/E/S/W");
+    nesw = gtk_radio_button_new_with_label (NULL, _("N/E/S/W"));
     gtk_box_pack_start (GTK_BOX (hbox), nesw, FALSE, TRUE, 0);
     gtk_widget_set_tooltip_text (nesw,
-                                 "\tN\n"        \
+                                 _("\tN\n"        \
                                  "W\t\tE\n"     \
-                                 "\tS");
+                                 "\tS"));
 
     /* N/W/S/E */
-    nwse = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), "N/W/S/E");
+    nwse = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), _("N/W/S/E"));
     gtk_box_pack_start (GTK_BOX (hbox), nwse, FALSE, TRUE, 0);
     gtk_widget_set_tooltip_text (nwse,
-                                 "\tN\n"        \
+                                 _("\tN\n"        \
                                  "E\t\tW\n"     \
-                                 "\tS");
+                                 "\tS"));
     /* S/E/N/W */
-    senw = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), "S/E/N/W");
+    senw = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), _("S/E/N/W"));
     gtk_box_pack_start (GTK_BOX (hbox), senw, FALSE, TRUE, 0);
     gtk_widget_set_tooltip_text (senw,
-                                 "\tS\n"        \
+                                 _("\tS\n"        \
                                  "W\t\tE\n"     \
-                                 "\tN");
+                                 "\tN"));
 
     /* S/W/N/E */
-    swne = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), "S/W/N/E");
+    swne = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (nesw), _("S/W/N/E"));
     gtk_box_pack_start (GTK_BOX (hbox), swne, FALSE, TRUE, 0);
     gtk_widget_set_tooltip_text (swne,
-                                 "\tS\n"        \
+                                 _("\tS\n"        \
                                  "E\t\tW\n"     \
-                                 "\tN");
+                                 "\tN"));
 
     /* read orientation */
     if (cfg != NULL) {

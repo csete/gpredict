@@ -95,7 +95,7 @@ const gchar *SINGLE_SAT_FIELD_HINT[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Latitude of the sub-satellite point"),
     N_("Longitude of the sub-satellite point"),
     N_("Sub-Satellite Point as Maidenhead grid square"),
-    N_("Size of the satellite footprint"),
+    N_("Diameter of the satellite footprint"),
     N_("Altitude of the satellite"),
     N_("Tangential velocity of the satellite"),
     N_("Doppler Shift @ 100MHz"),

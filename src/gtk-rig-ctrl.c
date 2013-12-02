@@ -566,7 +566,7 @@ static GtkWidget *create_target_widgets (GtkRigCtrl *ctrl)
     /* tracking button */
     track = gtk_toggle_button_new_with_label (_("Track"));
     gtk_widget_set_tooltip_text (track, _("Track the satellite transponder.\n"\
-                                          "Enabling this button will apply Dopper correction "\
+                                          "Enabling this button will apply Doppler correction "\
                                           "to the frequency of the radio."));
     gtk_table_attach_defaults (GTK_TABLE (table), track, 3, 4, 0, 1);
     g_signal_connect (track, "toggled", G_CALLBACK (track_toggle_cb), ctrl);
