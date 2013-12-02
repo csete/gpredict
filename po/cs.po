@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-17 21:28+0000\n"
+"POT-Creation-Date: 2013-12-02 13:51+0100\n"
 "PO-Revision-Date: 2013-10-10 20:11+0000\n"
 "Last-Translator: pschonmann <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-11-18 05:24+0000\n"
 "X-Generator: Launchpad (build 16831)\n"
-"Language: cs\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -194,8 +194,7 @@ msgstr "Nastavit prohlížeč nápovědy"
 
 #: ../src/gpredict-help.c:127
 msgid "Please select a HTML browser to be used to view the help."
-msgstr ""
-"Vyberte prosím prohlížeče HTML, který bude použit k zobrazení nápovědy"
+msgstr "Vyberte prosím prohlížeče HTML, který bude použit k zobrazení nápovědy"
 
 #: ../src/gpredict-help.c:194
 #, c-format
@@ -447,9 +446,10 @@ msgid "Track"
 msgstr "Sledovat"
 
 #: ../src/gtk-rig-ctrl.c:568
+#, fuzzy
 msgid ""
 "Track the satellite transponder.\n"
-"Enabling this button will apply Dopper correction to the frequency of the "
+"Enabling this button will apply Doppler correction to the frequency of the "
 "radio."
 msgstr ""
 "Sledovat satelitní transpondér.\n"
@@ -858,8 +858,7 @@ msgid "Engage the selected rotor device"
 msgstr "Zapojit zvolené zařízení rotoru"
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid ""
-"This parameter controls the delay between commands sent to the rotator."
+msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr "Tento parametr kontroluje zpoždění příkazů odesílaných k rotoru."
 
 #. Tolerance
@@ -1742,7 +1741,7 @@ msgstr "<b>Opravdový čas<b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#. 
+#.
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2042,7 +2041,8 @@ msgid "Sub-Satellite Point as Maidenhead grid square"
 msgstr "Podsatelitní bod jako čtverec mřížky Maidenhead"
 
 #: ../src/gtk-single-sat.c:98
-msgid "Size of the satellite footprint"
+#, fuzzy
+msgid "Diameter of the satellite footprint"
 msgstr "Velikost stopy satelitu"
 
 #: ../src/gtk-single-sat.c:99
@@ -2713,10 +2713,10 @@ msgstr "%s: Modul nemá žádné QTH; použít výchozí."
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#. 
+#.
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#. 
+#.
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** VÝcHOZÍ **"
@@ -3584,7 +3584,7 @@ msgstr "LADĚNÍ"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#. 
+#.
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -4454,6 +4454,54 @@ msgstr "<b>Viditelné sloupce:</b>"
 msgid "<b>Orientation:</b>"
 msgstr "<b>Orientace:</b>"
 
+#. N/E/S/W
+#: ../src/sat-pref-polar-view.c:133
+msgid "N/E/S/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:136
+msgid ""
+"\tN\n"
+"W\t\tE\n"
+"\tS"
+msgstr ""
+
+#. N/W/S/E
+#: ../src/sat-pref-polar-view.c:141
+msgid "N/W/S/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:144
+msgid ""
+"\tN\n"
+"E\t\tW\n"
+"\tS"
+msgstr ""
+
+#. S/E/N/W
+#: ../src/sat-pref-polar-view.c:148
+msgid "S/E/N/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:151
+msgid ""
+"\tS\n"
+"W\t\tE\n"
+"\tN"
+msgstr ""
+
+#. S/W/N/E
+#: ../src/sat-pref-polar-view.c:156
+msgid "S/W/N/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:159
+msgid ""
+"\tS\n"
+"E\t\tW\n"
+"\tN"
+msgstr ""
+
 #: ../src/sat-pref-polar-view.c:194
 #, c-format
 msgid "%f:%d: Invalid PolarView orientation (%d)"
@@ -5073,8 +5121,8 @@ msgid ""
 "<b>TS-2000:</b> B↑ / A↓"
 msgstr ""
 "Vyberte, které VFO chcete použít jako sestupný a vzestupný směr. Toto "
-"nastavení je použito pouze pro plně duplexní rádia, jako např. IC-910H, FT-"
-"847 a TS-2000.\n"
+"nastavení je použito pouze pro plně duplexní rádia, jako např. IC-910H, "
+"FT-847 a TS-2000.\n"
 "\n"
 "<b>IC-910H:</b> MAIN↑ / SUB↓\n"
 "<b>FT-847:</b> SUB↑ / MAIN↓\n"
@@ -5102,8 +5150,7 @@ msgid "LO Up:"
 msgstr "LO Zvýš:"
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid ""
-"Enter the frequency of the local oscillator of the upconverter, if any."
+msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 "Zadejte frekvenci místního oscilátoru převaděče zvýšení frekvence, pokud "
 "existuje."
@@ -5410,8 +5457,7 @@ msgstr "Přidat nové satelity do místní databáze"
 
 #: ../src/sat-pref-tle.c:297
 msgid "Note that new satellites will be added to a group called Other"
-msgstr ""
-"Nezapomeňte, že nové satelity budou přidány do skupiny nazvané ostatní"
+msgstr "Nezapomeňte, že nové satelity budou přidány do skupiny nazvané ostatní"
 
 #: ../src/sat-pref-tle.c:317
 msgid "<b>Update from Local Files:</b>"

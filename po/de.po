@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-17 21:28+0000\n"
+"POT-Creation-Date: 2013-12-02 13:51+0100\n"
 "PO-Revision-Date: 2013-08-18 14:18+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-11-18 05:24+0000\n"
 "X-Generator: Launchpad (build 16831)\n"
-"Language: de\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -484,9 +484,10 @@ msgid "Track"
 msgstr "Folgen"
 
 #: ../src/gtk-rig-ctrl.c:568
+#, fuzzy
 msgid ""
 "Track the satellite transponder.\n"
-"Enabling this button will apply Dopper correction to the frequency of the "
+"Enabling this button will apply Doppler correction to the frequency of the "
 "radio."
 msgstr ""
 "Verfolgt den Satelliten-Transponder.\n"
@@ -662,8 +663,7 @@ msgstr "%s:%s: Ungültige Satellitenauswahl: %d"
 #: ../src/gtk-rig-ctrl.c:911
 #, c-format
 msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
-msgstr ""
-"%s: Unstimmigkeit in den internen Transponder-Daten gefunden. (%d,%d)"
+msgstr "%s: Unstimmigkeit in den internen Transponder-Daten gefunden. (%d,%d)"
 
 #: ../src/gtk-rig-ctrl.c:1042
 #, c-format
@@ -905,8 +905,7 @@ msgid "Engage the selected rotor device"
 msgstr "Startet die Steuerung des gewählten Geräts"
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid ""
-"This parameter controls the delay between commands sent to the rotator."
+msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Dieser Parameter steuert die Pausen zwischen den Befehlen die an den Rotor "
 "gesendet werden."
@@ -1799,7 +1798,7 @@ msgstr "<b>Echtzeit</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#. 
+#.
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2103,7 +2102,8 @@ msgid "Sub-Satellite Point as Maidenhead grid square"
 msgstr "Subsatellitenpunkt als Maidenhead-Gitterfeld"
 
 #: ../src/gtk-single-sat.c:98
-msgid "Size of the satellite footprint"
+#, fuzzy
+msgid "Diameter of the satellite footprint"
 msgstr "Durchmesser der Ausleuchtungszone (Footprint)"
 
 #: ../src/gtk-single-sat.c:99
@@ -2194,8 +2194,7 @@ msgstr "%s:%d: %s hat %d Überflüge in %.4f Tagen\n"
 #: ../src/gtk-sky-glance.c:1103
 #, c-format
 msgid "%s:%d: Could not allocate memory for pass object"
-msgstr ""
-"%s:%d: Konnte den Speicher für das überfliegende Objekt nicht zuweisen"
+msgstr "%s:%d: Konnte den Speicher für das überfliegende Objekt nicht zuweisen"
 
 #. location
 #: ../src/loc-tree.c:133 ../src/qth-editor.c:242 ../src/sat-pref-qth.c:195
@@ -2441,8 +2440,7 @@ msgstr "TLE-_Editor benutzen"
 
 #: ../src/menubar.c:119
 msgid "Add or update Keplerian elements using the TLE editor"
-msgstr ""
-"Keplerelemente mit Hilfe des TLE-Editors hinzufügen oder aktualisieren"
+msgstr "Keplerelemente mit Hilfe des TLE-Editors hinzufügen oder aktualisieren"
 
 #: ../src/menubar.c:121
 msgid "_Transponders"
@@ -2680,8 +2678,7 @@ msgstr "%s:%s: Keine Auswahl ist die Modulliste."
 #: ../src/mod-cfg.c:134
 #, c-format
 msgid "%s: Already have module %s. Ask user to confirm..."
-msgstr ""
-"%s: Es gibt bereits ein Modul %s. Frage den Benutzer um Bestätigung …"
+msgstr "%s: Es gibt bereits ein Modul %s. Frage den Benutzer um Bestätigung …"
 
 #: ../src/mod-cfg.c:143
 #, c-format
@@ -2779,10 +2776,10 @@ msgstr "%s: Modul hat kein QTH; Standard wird benutzt."
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#. 
+#.
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#. 
+#.
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** DEFAULT **"
@@ -2851,8 +2848,7 @@ msgstr "%s: Modul %s scheint NULL zu sein"
 #: ../src/mod-mgr.c:276
 #, c-format
 msgid "%s: Could not find child in notebook. This may hurt..."
-msgstr ""
-"%s: Kind konnte im Notebook nicht gefunden werden. Das kann weh tun …"
+msgstr "%s: Kind konnte im Notebook nicht gefunden werden. Das kann weh tun …"
 
 #: ../src/mod-mgr.c:285
 #, c-format
@@ -2882,8 +2878,7 @@ msgstr "%s: Status von %d Modulen gesichert."
 #: ../src/mod-mgr.c:444 ../src/mod-mgr.c:510
 #, c-format
 msgid "%s: Module %s not found in list. Trying to recover."
-msgstr ""
-"%s: Modul %s nicht in der Liste gefunden. Versuche Wiederherstellung."
+msgstr "%s: Modul %s nicht in der Liste gefunden. Versuche Wiederherstellung."
 
 #: ../src/mod-mgr.c:452
 #, c-format
@@ -3652,7 +3647,7 @@ msgstr "DEBUG"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#. 
+#.
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -4119,8 +4114,8 @@ msgid ""
 "a suffix instead of sign (eg. 23.43°W instead of -23.43°)."
 msgstr ""
 "Durch das Markieren dieses Kästchens werden geographische Koordinaten mit "
-"einem Suffix anstatt eines Zeichens angezeigt (z.B. 23.43°W anstatt von -"
-"23.43°)"
+"einem Suffix anstatt eines Zeichens angezeigt (z.B. 23.43°W anstatt von "
+"-23.43°)"
 
 #: ../src/sat-pref-formats.c:68
 msgid ""
@@ -4535,6 +4530,54 @@ msgstr "<b>Anzuzeigende Spalten:</b>"
 #: ../src/sat-pref-polar-view.c:125
 msgid "<b>Orientation:</b>"
 msgstr "<b>Orientierung:</b>"
+
+#. N/E/S/W
+#: ../src/sat-pref-polar-view.c:133
+msgid "N/E/S/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:136
+msgid ""
+"\tN\n"
+"W\t\tE\n"
+"\tS"
+msgstr ""
+
+#. N/W/S/E
+#: ../src/sat-pref-polar-view.c:141
+msgid "N/W/S/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:144
+msgid ""
+"\tN\n"
+"E\t\tW\n"
+"\tS"
+msgstr ""
+
+#. S/E/N/W
+#: ../src/sat-pref-polar-view.c:148
+msgid "S/E/N/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:151
+msgid ""
+"\tS\n"
+"W\t\tE\n"
+"\tN"
+msgstr ""
+
+#. S/W/N/E
+#: ../src/sat-pref-polar-view.c:156
+msgid "S/W/N/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:159
+msgid ""
+"\tS\n"
+"E\t\tW\n"
+"\tN"
+msgstr ""
 
 #: ../src/sat-pref-polar-view.c:194
 #, c-format
@@ -5190,8 +5233,7 @@ msgid "LO Up:"
 msgstr "LO Up:"
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid ""
-"Enter the frequency of the local oscillator of the upconverter, if any."
+msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 "Frequenz des Lokaloszillators des Upconverters eingeben, falls vorhanden."
 

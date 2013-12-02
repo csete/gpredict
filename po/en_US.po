@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-07 15:53+0100\n"
+"POT-Creation-Date: 2013-12-02 13:51+0100\n"
 "PO-Revision-Date: 2009-08-05 00:53+0100\n"
 "Last-Translator: Michael Stephenson <mickstephenson@googlemail.com>\n"
 "Language-Team: US English\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: ../src/about.c:67
 #, fuzzy
 msgid ""
-"Copyright (C) 2001-2011 Alexandru Csete OZ9AEC and contributors.\n"
+"Copyright (C) 2001-2013 Alexandru Csete OZ9AEC and contributors.\n"
 "Contact: oz9aec at gmail.com\n"
 "\n"
 "Gpredict is free software; you can redistribute it and modify it under the "
@@ -70,14 +70,14 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:99 ../src/main.c:255
+#: ../src/about.c:99 ../src/main.c:252
 msgid "GPREDICT"
 msgstr "GPREDICT"
 
 #: ../src/about.c:102
 #, fuzzy
 msgid ""
-"Copyright (C) 2001-2011 Alexandru Csete OZ9AEC\n"
+"Copyright (C) 2001-2013 Alexandru Csete OZ9AEC\n"
 "\n"
 "Gpredict is available free of charge from:"
 msgstr ""
@@ -470,9 +470,10 @@ msgid "Track"
 msgstr "Track"
 
 #: ../src/gtk-rig-ctrl.c:568
+#, fuzzy
 msgid ""
 "Track the satellite transponder.\n"
-"Enabling this button will apply Dopper correction to the frequency of the "
+"Enabling this button will apply Doppler correction to the frequency of the "
 "radio."
 msgstr ""
 "Track the satellite transponder.\n"
@@ -749,94 +750,94 @@ msgstr "%s:&s: Read transponder '%s' for satellite %d"
 msgid "%s:%d: Error reading radio configuration %s"
 msgstr "%s:%d: Error reading radio configuration %s"
 
-#: ../src/gtk-rig-ctrl.c:2658
+#: ../src/gtk-rig-ctrl.c:2656
 #, fuzzy, c-format
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr "%s:%s: Read %d bytes from rigctld"
 
-#: ../src/gtk-rig-ctrl.c:2664 ../src/gtk-rot-ctrl.c:1395
+#: ../src/gtk-rig-ctrl.c:2662 ../src/gtk-rot-ctrl.c:1395
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr "%s: SIZE ERROR %d / %d"
 
-#: ../src/gtk-rig-ctrl.c:2669 ../src/gtk-rig-ctrl.c:2677
+#: ../src/gtk-rig-ctrl.c:2667 ../src/gtk-rig-ctrl.c:2675
 #, c-format
 msgid "%s: rigctld port closed"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2685
+#: ../src/gtk-rig-ctrl.c:2683
 #, c-format
 msgid "%s:%s: Got 0 bytes from rigctld"
 msgstr "%s:%s: Got 0 bytes from rigctld"
 
-#: ../src/gtk-rig-ctrl.c:2690
+#: ../src/gtk-rig-ctrl.c:2688
 #, c-format
 msgid "%s:%s: Read %d bytes from rigctld"
 msgstr "%s:%s: Read %d bytes from rigctld"
 
-#: ../src/gtk-rig-ctrl.c:2724
+#: ../src/gtk-rig-ctrl.c:2722
 #, c-format
 msgid "%s: Detected SPACEBAR pressed event"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2737
+#: ../src/gtk-rig-ctrl.c:2735
 #, c-format
 msgid "%s:%s: Keypress value %i not managed by this function"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2784
+#: ../src/gtk-rig-ctrl.c:2782
 #, fuzzy, c-format
 msgid "%s: Acquired controller lock"
 msgstr "%s: Time Controller for %s launched"
 
-#: ../src/gtk-rig-ctrl.c:2789
+#: ../src/gtk-rig-ctrl.c:2787
 #, c-format
 msgid ""
 "%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage "
 "button)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2799
+#: ../src/gtk-rig-ctrl.c:2797
 #, c-format
 msgid "%s: PTT is OFF => Set TX freq and PTT=ON"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2808
+#: ../src/gtk-rig-ctrl.c:2806
 #, c-format
 msgid "%s: PTT is ON = Set PTT=OFF"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2820
+#: ../src/gtk-rig-ctrl.c:2818
 #, c-format
 msgid "%s: Failed to acquire controller lock; PTT event not handled"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2835 ../src/gtk-rot-ctrl.c:1316
+#: ../src/gtk-rig-ctrl.c:2833 ../src/gtk-rot-ctrl.c:1316
 #, c-format
 msgid "%s: Failed to create socket"
 msgstr "%s: Failed to create socket"
 
-#: ../src/gtk-rig-ctrl.c:2842 ../src/gtk-rot-ctrl.c:1323
+#: ../src/gtk-rig-ctrl.c:2840 ../src/gtk-rot-ctrl.c:1323
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr "%s: Network socket created successfully"
 
-#: ../src/gtk-rig-ctrl.c:2856 ../src/gtk-rot-ctrl.c:1337
+#: ../src/gtk-rig-ctrl.c:2854 ../src/gtk-rot-ctrl.c:1337
 #, c-format
 msgid "%s: Failed to connect to %s:%d"
 msgstr "%s: Failed to connect to %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:2863 ../src/gtk-rot-ctrl.c:1344
+#: ../src/gtk-rig-ctrl.c:2861 ../src/gtk-rot-ctrl.c:1344
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr "%s: Connection opened to %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:2876 ../src/gtk-rot-ctrl.c:1359
+#: ../src/gtk-rig-ctrl.c:2874 ../src/gtk-rot-ctrl.c:1359
 #, fuzzy, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr "%s:%s: Got 0 bytes from rigctld"
 
-#: ../src/gtk-rig-ctrl.c:2918 ../src/gtk-rig-ctrl.c:2936
+#: ../src/gtk-rig-ctrl.c:2916 ../src/gtk-rig-ctrl.c:2934
 #, fuzzy, c-format
 msgid "%s: %s rigctld returned error (%s)"
 msgstr "%s: Failed to read integer (%s)"
@@ -968,7 +969,7 @@ msgstr "%s:%s: Satellite %d has %d transponder modes."
 msgid "%s: Error reading TLE line 1 from %s (%s)"
 msgstr "%s: Error reading %s (%s)"
 
-#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1181 ../src/tle-update.c:1188
+#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1168 ../src/tle-update.c:1175
 #, fuzzy, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
 msgstr "%s: Error reading %s (%s)"
@@ -1360,113 +1361,113 @@ msgstr "Ground Track"
 msgid "Set Target"
 msgstr "Set Target"
 
-#: ../src/gtk-sat-module.c:279
+#: ../src/gtk-sat-module.c:280
 #, c-format
 msgid "%s: Module %s is not valid."
 msgstr "%s: Module %s is not valid."
 
-#: ../src/gtk-sat-module.c:297
+#: ../src/gtk-sat-module.c:298
 #, fuzzy, c-format
 msgid "%s: Module %s has problems."
 msgstr "%s: Module %s closed."
 
-#: ../src/gtk-sat-module.c:333
+#: ../src/gtk-sat-module.c:334
 msgid "Module options / shortcuts"
 msgstr "Module options / shortcuts"
 
-#: ../src/gtk-sat-module.c:339
+#: ../src/gtk-sat-module.c:340
 msgid "Close this module."
 msgstr "Close this module."
 
-#: ../src/gtk-sat-module.c:408
+#: ../src/gtk-sat-module.c:409
 #, c-format
 msgid "%s: Layout has %d columns and %d rows."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:480
+#: ../src/gtk-sat-module.c:481
 #, fuzzy, c-format
 msgid "%s:%d: Invalid child type (%d). Using GtkSatList."
 msgstr ""
 "%s:%d: Invalid child type (%d)\n"
 "Using GtkSatList..."
 
-#: ../src/gtk-sat-module.c:521
+#: ../src/gtk-sat-module.c:522
 #, c-format
 msgid "%s: Could not load config data from %s (%s)."
 msgstr "%s: Could not load config data from %s (%s)."
 
-#: ../src/gtk-sat-module.c:531
+#: ../src/gtk-sat-module.c:532
 #, c-format
 msgid "%s: Reading configuration from %s"
 msgstr "%s: Reading configuration from %s"
 
-#: ../src/gtk-sat-module.c:573
+#: ../src/gtk-sat-module.c:574
 #, c-format
 msgid "%s: Can not load default QTH file %s; using built-in defaults"
 msgstr "%s: Can not load default QTH file %s; using built-in defaults"
 
-#: ../src/gtk-sat-module.c:604
+#: ../src/gtk-sat-module.c:605
 #, fuzzy, c-format
 msgid "%s: Module layout is invalid: %s. Using default."
 msgstr "%s: Module has no QTH; use default."
 
-#: ../src/gtk-sat-module.c:616
+#: ../src/gtk-sat-module.c:617
 #, fuzzy, c-format
 msgid "%s: GRID(%d): %s"
 msgstr "%s:%d: Read %s"
 
-#: ../src/gtk-sat-module.c:634
+#: ../src/gtk-sat-module.c:635
 #, fuzzy, c-format
 msgid "%s: Unable to allocate memory for grid."
 msgstr "%s:%s: Failed to allocate memory for radio config"
 
-#: ../src/gtk-sat-module.c:667 ../src/mod-cfg.c:615
+#: ../src/gtk-sat-module.c:668 ../src/mod-cfg.c:615
 #, c-format
 msgid "%s: Failed to get list of satellites (%s)"
 msgstr "%s: Failed to get list of satellites (%s)"
 
-#: ../src/gtk-sat-module.c:689
+#: ../src/gtk-sat-module.c:690
 #, c-format
 msgid "%s: Error reading data for #%d"
 msgstr "%s: Error reading data for #%d"
 
-#: ../src/gtk-sat-module.c:713
+#: ../src/gtk-sat-module.c:714
 #, c-format
 msgid "%s: Read data for #%d"
 msgstr "%s: Read data for #%d"
 
-#: ../src/gtk-sat-module.c:720
+#: ../src/gtk-sat-module.c:721
 #, c-format
 msgid "%s: Sat #%d already in list"
 msgstr "%s: Sat #%d already in list"
 
-#: ../src/gtk-sat-module.c:731
+#: ../src/gtk-sat-module.c:732
 #, c-format
 msgid "%s: Read %d out of %d satellites"
 msgstr "%s: Read %d out of %d satellites"
 
-#: ../src/gtk-sat-module.c:793
+#: ../src/gtk-sat-module.c:794
 #, c-format
 msgid "%s: Previous cycle missed it's deadline."
 msgstr "%s: Previous cycle missed it's deadline."
 
-#: ../src/gtk-sat-module.c:939 ../src/gtk-sat-module.c:1467
+#: ../src/gtk-sat-module.c:940 ../src/gtk-sat-module.c:1468
 #, fuzzy, c-format
 msgid "%s:%d: Unknown child type"
 msgstr "%f:%d: Unknown child type"
 
-#: ../src/gtk-sat-module.c:1080
+#: ../src/gtk-sat-module.c:1081
 #, fuzzy, c-format
 msgid "%s: Module %s received CLOSE signal."
 msgstr "%s: Module %s recevied CLOSE signal."
 
-#: ../src/gtk-sat-module.c:1090
+#: ../src/gtk-sat-module.c:1091
 #, c-format
 msgid "%s: Module %s is in DOCKED state."
 msgstr "%s: Module %s is in DOCKED state."
 
-#: ../src/gtk-sat-module.c:1097 ../src/gtk-sat-module.c:1113
-#: ../src/gtk-sat-module.c:1141
+#: ../src/gtk-sat-module.c:1098 ../src/gtk-sat-module.c:1114
+#: ../src/gtk-sat-module.c:1142
 #, c-format
 msgid ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
@@ -1475,32 +1476,32 @@ msgstr ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
 "Internal state is corrupt?"
 
-#: ../src/gtk-sat-module.c:1106
+#: ../src/gtk-sat-module.c:1107
 #, c-format
 msgid "%s: Module %s is in WINDOW state."
 msgstr "%s: Module %s is in WINDOW state."
 
-#: ../src/gtk-sat-module.c:1134
+#: ../src/gtk-sat-module.c:1135
 #, c-format
 msgid "%s: Module %s is in FULLSCREEN state."
 msgstr "%s: Module %s is in FULLSCREEN state."
 
-#: ../src/gtk-sat-module.c:1163 ../src/gtk-sat-module.c:1327
+#: ../src/gtk-sat-module.c:1164 ../src/gtk-sat-module.c:1328
 #, c-format
 msgid "%s: Module %s has unknown state: %d"
 msgstr "%s: Module %s has unknown state: %d"
 
-#: ../src/gtk-sat-module.c:1174
+#: ../src/gtk-sat-module.c:1175
 #, c-format
 msgid "%s: Module %s closed."
 msgstr "%s: Module %s closed."
 
-#: ../src/gtk-sat-module.c:1216
+#: ../src/gtk-sat-module.c:1217
 #, fuzzy, c-format
 msgid "%s: Module %s received CONFIG signal."
 msgstr "%s: Module %s recevied CONFIG signal."
 
-#: ../src/gtk-sat-module.c:1225
+#: ../src/gtk-sat-module.c:1226
 #, c-format
 msgid ""
 "%s: Could not stop timeout callback\n"
@@ -1509,22 +1510,22 @@ msgstr ""
 "%s: Could not stop timeout callback\n"
 "%s: Source ID %d seems invalid."
 
-#: ../src/gtk-sat-module.c:1243
+#: ../src/gtk-sat-module.c:1244
 #, c-format
 msgid "%s: Module configuration failed for some reason."
 msgstr "%s: Module configuration failed for some reason."
 
-#: ../src/gtk-sat-module.c:1416
+#: ../src/gtk-sat-module.c:1417
 #, c-format
 msgid "%s: Reloading satellites for module %s"
 msgstr "%s: Reloading satellites for module %s"
 
-#: ../src/gtk-sat-module.c:1502
+#: ../src/gtk-sat-module.c:1503
 #, fuzzy, c-format
 msgid "%s: Unknown child type"
 msgstr "%f:%d: Unknown child type"
 
-#: ../src/gtk-sat-module.c:1581
+#: ../src/gtk-sat-module.c:1582
 #, fuzzy, c-format
 msgid "%s: Updating GtkSkyGlance for %s"
 msgstr "%s: Updating ground track for %s"
@@ -1763,7 +1764,7 @@ msgstr "Reset"
 msgid "Reset to current date and time"
 msgstr "Reset to current date and time"
 
-#: ../src/gtk-sat-module-tmg.c:128 ../src/gtk-sat-module-tmg.c:778
+#: ../src/gtk-sat-module-tmg.c:128 ../src/gtk-sat-module-tmg.c:742
 msgid "<b>Real-Time</b>"
 msgstr "<b>Real-Time</b>"
 
@@ -1827,19 +1828,18 @@ msgstr "%s: Time Controller for %s launched"
 msgid "%s: Time Controller for %s closed. Time reset."
 msgstr "%s: Time Controller for %s closed. Time reset."
 
-#: ../src/gtk-sat-module-tmg.c:500 ../src/gtk-sat-module-tmg.c:809
-#: ../src/gtk-sat-module-tmg.c:864
-#, c-format
-msgid "%s: %d/%d/%d %d:%d:%d.%d"
-msgstr "%s: %d/%d/%d %d:%d:%d.%d"
-
-#: ../src/gtk-sat-module-tmg.c:769
+#: ../src/gtk-sat-module-tmg.c:733
 msgid "<b>Simulated Real-Time</b>"
 msgstr "<b>Simulated Real-Time</b>"
 
-#: ../src/gtk-sat-module-tmg.c:773
+#: ../src/gtk-sat-module-tmg.c:737
 msgid "<b>Manual Control</b>"
 msgstr "<b>Manual Control</b>"
+
+#: ../src/gtk-sat-module-tmg.c:799
+#, c-format
+msgid "%s: %d/%d/%d %d:%d:%d.%d"
+msgstr "%s: %d/%d/%d %d:%d:%d.%d"
 
 #: ../src/gtk-sat-selector.c:247
 msgid "Select a satellite group or category to narrow your search."
@@ -2075,7 +2075,8 @@ msgid "Sub-Satellite Point as Maidenhead grid square"
 msgstr "Sub-Satellite Point as Maidenhead grid square"
 
 #: ../src/gtk-single-sat.c:98
-msgid "Size of the satellite footprint"
+#, fuzzy
+msgid "Diameter of the satellite footprint"
 msgstr "Size of the satellite footprint"
 
 #: ../src/gtk-single-sat.c:99
@@ -2243,7 +2244,7 @@ msgstr ""
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:161
+#: ../src/main.c:158
 #, fuzzy, c-format
 msgid ""
 "%s: User config check failed (code %d). This is fatal.\n"
@@ -2254,27 +2255,32 @@ msgstr ""
 "A possible solution would be to remove the .gpredict2 data dir\n"
 "in your home directory"
 
-#: ../src/main.c:464
+#: ../src/main.c:460
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:516
+#: ../src/main.c:500
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr "%s: Time threshold has been passed."
 
-#: ../src/main.c:524
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr "%s: Starting new update thread."
 
-#: ../src/main.c:532
+#. * FIXME: store thread and destroy on exit? *
+#: ../src/main.c:512
+msgid "gpredict_tle_update"
+msgstr ""
+
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr "%s: Failed to create TLE update thread (%s)"
 
-#: ../src/main.c:542
+#: ../src/main.c:526
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2286,27 +2292,27 @@ msgstr ""
 "<b>Edit -> Update TLE</b>\n"
 "in the menubar."
 
-#: ../src/main.c:573
+#: ../src/main.c:557
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr "%s: Could not find TLE monitoring task (ID = %d)"
 
-#: ../src/main.c:619
+#: ../src/main.c:603
 #, fuzzy, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr "%s: Running TLE update from %s"
 
-#: ../src/main.c:628 ../src/main.c:669
+#: ../src/main.c:612 ../src/main.c:653
 #, fuzzy, c-format
 msgid "%s: Failed to delete %s"
 msgstr "%s:%d: Failed to delete %s."
 
-#: ../src/main.c:632 ../src/main.c:673
+#: ../src/main.c:616 ../src/main.c:657
 #, fuzzy, c-format
 msgid "%s: Removed %s"
 msgstr "%s:%d: Removed %s"
 
-#: ../src/main.c:660
+#: ../src/main.c:644
 #, fuzzy, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr "%s: Creating ground track for %s"
@@ -4490,6 +4496,54 @@ msgstr "<b>Visible Columns:</b>"
 msgid "<b>Orientation:</b>"
 msgstr "<b>Orientation:</b>"
 
+#. N/E/S/W
+#: ../src/sat-pref-polar-view.c:133
+msgid "N/E/S/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:136
+msgid ""
+"\tN\n"
+"W\t\tE\n"
+"\tS"
+msgstr ""
+
+#. N/W/S/E
+#: ../src/sat-pref-polar-view.c:141
+msgid "N/W/S/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:144
+msgid ""
+"\tN\n"
+"E\t\tW\n"
+"\tS"
+msgstr ""
+
+#. S/E/N/W
+#: ../src/sat-pref-polar-view.c:148
+msgid "S/E/N/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:151
+msgid ""
+"\tS\n"
+"W\t\tE\n"
+"\tN"
+msgstr ""
+
+#. S/W/N/E
+#: ../src/sat-pref-polar-view.c:156
+msgid "S/W/N/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:159
+msgid ""
+"\tS\n"
+"E\t\tW\n"
+"\tN"
+msgstr ""
+
 #: ../src/sat-pref-polar-view.c:194
 #, c-format
 msgid "%f:%d: Invalid PolarView orientation (%d)"
@@ -5547,17 +5601,17 @@ msgstr "%s: NULL input data!"
 msgid "%s: NULL output storage!"
 msgstr "%s: NULL output storage!"
 
-#: ../src/tle-update.c:128 ../src/tle-update.c:536
+#: ../src/tle-update.c:121 ../src/tle-update.c:531
 #, c-format
 msgid "%s: A TLE update process is already running. Aborting."
 msgstr ""
 
-#: ../src/tle-update.c:144 ../src/tle-update.c:216
+#: ../src/tle-update.c:137 ../src/tle-update.c:209
 #, c-format
 msgid "%s: Error opening directory %s (%s)"
 msgstr "%s: Error opening directory %s (%s)"
 
-#: ../src/tle-update.c:149 ../src/tle-update.c:221
+#: ../src/tle-update.c:142 ../src/tle-update.c:214
 #, c-format
 msgid ""
 "<b>ERROR</b> opening directory %s\n"
@@ -5566,26 +5620,26 @@ msgstr ""
 "<b>ERROR</b> opening directory %s\n"
 "%s"
 
-#: ../src/tle-update.c:169
+#: ../src/tle-update.c:162
 #, c-format
 msgid "Reading data from %s"
 msgstr "Reading data from %s"
 
-#: ../src/tle-update.c:191
+#: ../src/tle-update.c:184
 #, c-format
 msgid "%s: No valid TLE data found in %s"
 msgstr "%s: No valid TLE data found in %s"
 
-#: ../src/tle-update.c:196
+#: ../src/tle-update.c:189
 #, c-format
 msgid "%s: Read %d sats from %s into memory"
 msgstr "%s: Read %d sats from %s into memory"
 
-#: ../src/tle-update.c:281
+#: ../src/tle-update.c:274
 msgid "Updating data..."
 msgstr "Updating data..."
 
-#: ../src/tle-update.c:285
+#: ../src/tle-update.c:278
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5596,7 +5650,7 @@ msgstr ""
 "Satellites skipped:\t %d\n"
 "Missing Satellites:\t %d\n"
 
-#: ../src/tle-update.c:355
+#: ../src/tle-update.c:348
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5609,168 +5663,168 @@ msgstr ""
 "Missing Satellites:\t %d\n"
 "New Satellites:\t\t %d"
 
-#: ../src/tle-update.c:366
+#: ../src/tle-update.c:359
 #, c-format
 msgid "%s: Added %d new satellites to local database"
 msgstr "%s: Added %d new satellites to local database"
 
-#: ../src/tle-update.c:383
+#: ../src/tle-update.c:376
 #, c-format
 msgid "%s: TLE elements updated."
 msgstr "%s: TLE elements updated."
 
-#: ../src/tle-update.c:449
+#: ../src/tle-update.c:442
 #, fuzzy, c-format
 msgid "%s: Could not open category file file %s (%s)."
 msgstr "%s: Could not create file %s (%s)"
 
-#: ../src/tle-update.c:471
+#: ../src/tle-update.c:464
 #, fuzzy, c-format
 msgid "%s: Error adding %d to %s (%s)."
 msgstr "%s: Error reading %s (%s)"
 
-#: ../src/tle-update.c:477
+#: ../src/tle-update.c:470
 #, fuzzy, c-format
 msgid "%s: Added satellite %d to %s."
 msgstr "%s: Reloading satellites for module %s"
 
-#: ../src/tle-update.c:554
+#: ../src/tle-update.c:546
 #, c-format
 msgid "%s: No files to fetch from network."
 msgstr "%s: No files to fetch from network."
 
-#: ../src/tle-update.c:560
+#: ../src/tle-update.c:552
 msgid "No files to fetch from network"
 msgstr "No files to fetch from network"
 
-#: ../src/tle-update.c:587
+#: ../src/tle-update.c:579
 #, c-format
 msgid "Fetching %s"
 msgstr "Fetching %s"
 
-#: ../src/tle-update.c:614
+#: ../src/tle-update.c:606
 #, c-format
 msgid "%s: Error fetching %s (%s)"
 msgstr "%s: Error fetching %s (%s)"
 
-#: ../src/tle-update.c:619
+#: ../src/tle-update.c:611
 #, c-format
 msgid "%s: Successfully fetched %s"
 msgstr "%s: Successfully fetched %s"
 
-#: ../src/tle-update.c:627
+#: ../src/tle-update.c:619
 #, fuzzy, c-format
 msgid "%s: Failed to open %s preventing update"
 msgstr "%s: Failed to open %s"
 
-#: ../src/tle-update.c:655
+#: ../src/tle-update.c:647
 #, fuzzy, c-format
 msgid "%s: Fetched %d files from network; updating..."
 msgstr "%s: Removed %s from notebook page %d."
 
-#: ../src/tle-update.c:665
+#: ../src/tle-update.c:657
 #, c-format
 msgid "%s: Could not fetch any new TLE files from network; aborting..."
 msgstr ""
 
-#: ../src/tle-update.c:685
+#: ../src/tle-update.c:677
 #, c-format
 msgid "%s: Error opening %s (%s)"
 msgstr "%s: Error opening %s (%s)"
 
-#: ../src/tle-update.c:825
+#: ../src/tle-update.c:815
 #, fuzzy, c-format
 msgid "%s:%s: There is no category in %s"
 msgstr "%s:%d: There is no selection; skip popup."
 
-#: ../src/tle-update.c:834
+#: ../src/tle-update.c:824
 #, c-format
 msgid "%s:%s: There is no category called %s"
 msgstr ""
 
-#: ../src/tle-update.c:847
+#: ../src/tle-update.c:837
 #, fuzzy, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
 msgstr "%s: Could not create file %s (%s)"
 
-#: ../src/tle-update.c:897
+#: ../src/tle-update.c:887
 #, c-format
 msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 
-#: ../src/tle-update.c:923
+#: ../src/tle-update.c:913
 #, fuzzy, c-format
 msgid "%s:%s: Processing a three line TLE"
 msgstr "%s: Error reading %s: %s"
 
-#: ../src/tle-update.c:938
+#: ../src/tle-update.c:928
 #, c-format
 msgid "%s:%s: Processing a bare two line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:987
+#: ../src/tle-update.c:977
 #, c-format
 msgid "%s:%s: Invalid data for %d"
 msgstr "%s:%s: Invalid data for %d"
 
-#: ../src/tle-update.c:1035
+#: ../src/tle-update.c:1022
 #, c-format
-msgid "%s:%s: Two different statuses for %s:%d at the same time."
+msgid "%s:%s: Two different statuses for %d (%s) at the same time."
 msgstr ""
 
-#: ../src/tle-update.c:1087
+#: ../src/tle-update.c:1074
 #, c-format
 msgid "%s:%s: Failed to open %s"
 msgstr "%s:%s: Failed to open %s"
 
-#: ../src/tle-update.c:1157
+#: ../src/tle-update.c:1144
 #, c-format
 msgid "%s: No new TLE data found for %d. Satellite might be obsolete."
 msgstr ""
 
-#: ../src/tle-update.c:1166
+#: ../src/tle-update.c:1153
 #, fuzzy, c-format
 msgid "%s: Error loading %s (%s)"
 msgstr "%s: Error reading %s (%s)"
 
-#: ../src/tle-update.c:1209
+#: ../src/tle-update.c:1196
 #, fuzzy, c-format
 msgid "%s: Current TLE data for %d appears to be bad"
 msgstr "%s:%s: Original data for %d seems to be bad"
 
-#: ../src/tle-update.c:1230
+#: ../src/tle-update.c:1217
 #, fuzzy, c-format
 msgid "%s: Data for  %d updated for name."
 msgstr "%s: Network socket created successfully"
 
-#: ../src/tle-update.c:1242
+#: ../src/tle-update.c:1229
 #, c-format
 msgid "%s: Data for  %d updated for nickname."
 msgstr ""
 
-#: ../src/tle-update.c:1257
+#: ../src/tle-update.c:1244
 #, fuzzy, c-format
 msgid "%s: Data for  %d updated for tle."
 msgstr "%s: Network socket created successfully"
 
-#: ../src/tle-update.c:1267
+#: ../src/tle-update.c:1254
 #, c-format
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
-#: ../src/tle-update.c:1303
+#: ../src/tle-update.c:1290
 msgid "Never"
 msgstr "Never"
 
-#: ../src/tle-update.c:1304
+#: ../src/tle-update.c:1291
 msgid "Monthly"
 msgstr "Monthly"
 
-#: ../src/tle-update.c:1305
+#: ../src/tle-update.c:1292
 msgid "Weekly"
 msgstr "Weekly"
 
-#: ../src/tle-update.c:1306
+#: ../src/tle-update.c:1293
 msgid "Daily"
 msgstr "Daily"
 

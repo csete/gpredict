@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-17 21:28+0000\n"
+"POT-Creation-Date: 2013-12-02 13:51+0100\n"
 "PO-Revision-Date: 2013-08-18 14:16+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-11-18 05:24+0000\n"
 "X-Generator: Launchpad (build 16831)\n"
-"Language: fr\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -288,8 +288,7 @@ msgstr "El"
 
 #: ../src/gtk-freq-knob.c:191 ../src/gtk-rot-knob.c:292
 msgid "Use mouse buttons and wheel to change value"
-msgstr ""
-"Utilisez les boutons de la souris et la molette pour changer la valeur"
+msgstr "Utilisez les boutons de la souris et la molette pour changer la valeur"
 
 #: ../src/gtk-polar-plot.c:645 ../src/gtk-polar-view.c:352
 msgid "N"
@@ -453,9 +452,10 @@ msgid "Track"
 msgstr "Suivi"
 
 #: ../src/gtk-rig-ctrl.c:568
+#, fuzzy
 msgid ""
 "Track the satellite transponder.\n"
-"Enabling this button will apply Dopper correction to the frequency of the "
+"Enabling this button will apply Doppler correction to the frequency of the "
 "radio."
 msgstr ""
 "Traque le transpondeur du satellite.\n"
@@ -656,8 +656,7 @@ msgstr "%s:%s: Périphérique secondaire sélectionné: %d"
 #: ../src/gtk-rig-ctrl.c:1156
 #, c-format
 msgid "%s:%s: Failed to allocate memory for radio config"
-msgstr ""
-"%s:%s: Impossible d'allouer de la mémoire pour la configuration radio"
+msgstr "%s:%s: Impossible d'allouer de la mémoire pour la configuration radio"
 
 #: ../src/gtk-rig-ctrl.c:1201 ../src/gtk-rig-ctrl.c:1374
 #: ../src/gtk-rot-ctrl.c:864
@@ -857,8 +856,7 @@ msgid "Engage the selected rotor device"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:613
-msgid ""
-"This parameter controls the delay between commands sent to the rotator."
+msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Ce paramètre contrôle le délai entre les commandes envoyées à l'appareil de "
 "rotation"
@@ -1367,8 +1365,7 @@ msgstr ""
 #: ../src/gtk-sat-module.c:522
 #, c-format
 msgid "%s: Could not load config data from %s (%s)."
-msgstr ""
-"%s: Impossible de charger les données de configuration depuis %s (%s)."
+msgstr "%s: Impossible de charger les données de configuration depuis %s (%s)."
 
 #: ../src/gtk-sat-module.c:532
 #, c-format
@@ -1600,8 +1597,7 @@ msgstr "Ouvrir le module lors de sa création"
 
 #: ../src/gtk-sat-module-popup.c:372
 msgid "If checked, the new module will be opened after it has been created"
-msgstr ""
-"Si sélectionné, le nouveau module sera ouvert après qu'il ait été créé"
+msgstr "Si sélectionné, le nouveau module sera ouvert après qu'il ait été créé"
 
 #: ../src/gtk-sat-module-popup.c:387
 #, c-format
@@ -1732,7 +1728,7 @@ msgstr "<b>Temps-Réel</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#. 
+#.
 #. hour
 #: ../src/gtk-sat-module-tmg.c:154
 msgid " Hour:"
@@ -2036,7 +2032,8 @@ msgid "Sub-Satellite Point as Maidenhead grid square"
 msgstr ""
 
 #: ../src/gtk-single-sat.c:98
-msgid "Size of the satellite footprint"
+#, fuzzy
+msgid "Diameter of the satellite footprint"
 msgstr "Taille de l'empreinte du satellite"
 
 #: ../src/gtk-single-sat.c:99
@@ -2690,10 +2687,10 @@ msgstr ""
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#. 
+#.
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#. 
+#.
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** PAR DÉFAUT **"
@@ -3553,7 +3550,7 @@ msgstr "DÉBOGAGE"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#. 
+#.
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -4370,6 +4367,54 @@ msgstr "<b>Colonnes visibles:</b>"
 msgid "<b>Orientation:</b>"
 msgstr "<b>Orientation:</b>"
 
+#. N/E/S/W
+#: ../src/sat-pref-polar-view.c:133
+msgid "N/E/S/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:136
+msgid ""
+"\tN\n"
+"W\t\tE\n"
+"\tS"
+msgstr ""
+
+#. N/W/S/E
+#: ../src/sat-pref-polar-view.c:141
+msgid "N/W/S/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:144
+msgid ""
+"\tN\n"
+"E\t\tW\n"
+"\tS"
+msgstr ""
+
+#. S/E/N/W
+#: ../src/sat-pref-polar-view.c:148
+msgid "S/E/N/W"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:151
+msgid ""
+"\tS\n"
+"W\t\tE\n"
+"\tN"
+msgstr ""
+
+#. S/W/N/E
+#: ../src/sat-pref-polar-view.c:156
+msgid "S/W/N/E"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:159
+msgid ""
+"\tS\n"
+"E\t\tW\n"
+"\tN"
+msgstr ""
+
 #: ../src/sat-pref-polar-view.c:194
 #, c-format
 msgid "%f:%d: Invalid PolarView orientation (%d)"
@@ -4944,8 +4989,7 @@ msgid "LO Up:"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:310
-msgid ""
-"Enter the frequency of the local oscillator of the upconverter, if any."
+msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #: ../src/sat-pref-rot.c:143
