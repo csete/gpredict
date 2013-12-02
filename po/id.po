@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-07-07 22:17+0000\n"
+"POT-Creation-Date: 2013-11-17 21:28+0000\n"
 "PO-Revision-Date: 2013-03-09 23:26+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-18 09:08+0000\n"
-"X-Generator: Launchpad (build 16723)\n"
+"X-Launchpad-Export-Date: 2013-11-18 05:24+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -699,94 +699,94 @@ msgstr ""
 msgid "%s:%d: Error reading radio configuration %s"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2658
+#: ../src/gtk-rig-ctrl.c:2656
 #, c-format
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2664 ../src/gtk-rot-ctrl.c:1395
+#: ../src/gtk-rig-ctrl.c:2662 ../src/gtk-rot-ctrl.c:1395
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2669 ../src/gtk-rig-ctrl.c:2677
+#: ../src/gtk-rig-ctrl.c:2667 ../src/gtk-rig-ctrl.c:2675
 #, c-format
 msgid "%s: rigctld port closed"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2685
+#: ../src/gtk-rig-ctrl.c:2683
 #, c-format
 msgid "%s:%s: Got 0 bytes from rigctld"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2690
+#: ../src/gtk-rig-ctrl.c:2688
 #, c-format
 msgid "%s:%s: Read %d bytes from rigctld"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2724
+#: ../src/gtk-rig-ctrl.c:2722
 #, c-format
 msgid "%s: Detected SPACEBAR pressed event"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2737
+#: ../src/gtk-rig-ctrl.c:2735
 #, c-format
 msgid "%s:%s: Keypress value %i not managed by this function"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2784
+#: ../src/gtk-rig-ctrl.c:2782
 #, c-format
 msgid "%s: Acquired controller lock"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2789
+#: ../src/gtk-rig-ctrl.c:2787
 #, c-format
 msgid ""
 "%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage "
 "button)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2799
+#: ../src/gtk-rig-ctrl.c:2797
 #, c-format
 msgid "%s: PTT is OFF => Set TX freq and PTT=ON"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2808
+#: ../src/gtk-rig-ctrl.c:2806
 #, c-format
 msgid "%s: PTT is ON = Set PTT=OFF"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2820
+#: ../src/gtk-rig-ctrl.c:2818
 #, c-format
 msgid "%s: Failed to acquire controller lock; PTT event not handled"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2835 ../src/gtk-rot-ctrl.c:1316
+#: ../src/gtk-rig-ctrl.c:2833 ../src/gtk-rot-ctrl.c:1316
 #, c-format
 msgid "%s: Failed to create socket"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2842 ../src/gtk-rot-ctrl.c:1323
+#: ../src/gtk-rig-ctrl.c:2840 ../src/gtk-rot-ctrl.c:1323
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2856 ../src/gtk-rot-ctrl.c:1337
+#: ../src/gtk-rig-ctrl.c:2854 ../src/gtk-rot-ctrl.c:1337
 #, c-format
 msgid "%s: Failed to connect to %s:%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2863 ../src/gtk-rot-ctrl.c:1344
+#: ../src/gtk-rig-ctrl.c:2861 ../src/gtk-rot-ctrl.c:1344
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2876 ../src/gtk-rot-ctrl.c:1359
+#: ../src/gtk-rig-ctrl.c:2874 ../src/gtk-rot-ctrl.c:1359
 #, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2918 ../src/gtk-rig-ctrl.c:2936
+#: ../src/gtk-rig-ctrl.c:2916 ../src/gtk-rig-ctrl.c:2934
 #, c-format
 msgid "%s: %s rigctld returned error (%s)"
 msgstr ""
