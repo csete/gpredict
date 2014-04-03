@@ -134,6 +134,13 @@ Convert_Satellite_Data (char *tle_set, tle_t *tle)
 	   unconverted epoch.
 	*/
 	strncpy (buff, &tle_set[18], 14);
+	/* The DDD field may be padded with spaces instead of zeros,
+	   but we're about to interpret it as a single real number
+	   with g_ascii_strtod, so convert spaces to zeros if needed. */
+	if (buff[2] == ' ')
+		buff[2] = '0';
+	if (buff[3] == ' ')
+		buff[3] = '0';
 	buff[14] = '\0';
 	//        tle->epoch = atof (buff);
 	tle->epoch = g_ascii_strtod (buff, NULL);
