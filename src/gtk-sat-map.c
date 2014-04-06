@@ -223,66 +223,66 @@ gtk_sat_map_destroy (GtkObject *object)
 GtkWidget*
 gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
 {
-    GtkWidget *satmap;
+    GtkSatMap *satmap;
     GooCanvasItemModel *root;
     guint32 col;
 
     satmap = g_object_new (GTK_TYPE_SAT_MAP, NULL);
 
-    GTK_SAT_MAP (satmap)->cfgdata = cfgdata;
-    GTK_SAT_MAP (satmap)->sats = sats;
-    GTK_SAT_MAP (satmap)->qth  = qth;
+    satmap->cfgdata = cfgdata;
+    satmap->sats = sats;
+    satmap->qth  = qth;
 
-    GTK_SAT_MAP (satmap)->obj  = g_hash_table_new_full (g_int_hash, g_int_equal, g_free, NULL);
+    satmap->obj  = g_hash_table_new_full (g_int_hash, g_int_equal, g_free, NULL);
 
     /* get settings */
-    GTK_SAT_MAP (satmap)->refresh = mod_cfg_get_int (cfgdata,
-                                                     MOD_CFG_MAP_SECTION,
-                                                     MOD_CFG_MAP_REFRESH,
-                                                     SAT_CFG_INT_MAP_REFRESH);
-    GTK_SAT_MAP (satmap)->counter = 1;
+    satmap->refresh = mod_cfg_get_int (cfgdata,
+                                       MOD_CFG_MAP_SECTION,
+                                       MOD_CFG_MAP_REFRESH,
+                                       SAT_CFG_INT_MAP_REFRESH);
+    satmap->counter = 1;
 
-    GTK_SAT_MAP (satmap)->qthinfo = mod_cfg_get_bool (cfgdata,
-                                                      MOD_CFG_MAP_SECTION,
-                                                      MOD_CFG_MAP_SHOW_QTH_INFO,
-                                                      SAT_CFG_BOOL_MAP_SHOW_QTH_INFO);
+    satmap->qthinfo = mod_cfg_get_bool (cfgdata,
+                                        MOD_CFG_MAP_SECTION,
+                                        MOD_CFG_MAP_SHOW_QTH_INFO,
+                                        SAT_CFG_BOOL_MAP_SHOW_QTH_INFO);
 
-    GTK_SAT_MAP (satmap)->eventinfo = mod_cfg_get_bool (cfgdata,
-                                                        MOD_CFG_MAP_SECTION,
-                                                        MOD_CFG_MAP_SHOW_NEXT_EVENT,
-                                                        SAT_CFG_BOOL_MAP_SHOW_NEXT_EV);
+    satmap->eventinfo = mod_cfg_get_bool (cfgdata,
+                                          MOD_CFG_MAP_SECTION,
+                                          MOD_CFG_MAP_SHOW_NEXT_EVENT,
+                                          SAT_CFG_BOOL_MAP_SHOW_NEXT_EV);
 
-    GTK_SAT_MAP (satmap)->cursinfo = mod_cfg_get_bool (cfgdata,
-                                                       MOD_CFG_MAP_SECTION,
-                                                       MOD_CFG_MAP_SHOW_CURS_TRACK,
-                                                       SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK);
+    satmap->cursinfo = mod_cfg_get_bool (cfgdata,
+                                         MOD_CFG_MAP_SECTION,
+                                         MOD_CFG_MAP_SHOW_CURS_TRACK,
+                                         SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK);
 
-    GTK_SAT_MAP (satmap)->showgrid = mod_cfg_get_bool (cfgdata,
-                                                       MOD_CFG_MAP_SECTION,
-                                                       MOD_CFG_MAP_SHOW_GRID,
-                                                       SAT_CFG_BOOL_MAP_SHOW_GRID);
-
-    GTK_SAT_MAP (satmap)->keepratio = mod_cfg_get_bool (cfgdata,
-                                                        MOD_CFG_MAP_SECTION,
-                                                        MOD_CFG_MAP_KEEP_RATIO,
-                                                        SAT_CFG_BOOL_MAP_KEEP_RATIO);
+    satmap->showgrid = mod_cfg_get_bool (cfgdata,
+                                         MOD_CFG_MAP_SECTION,
+                                         MOD_CFG_MAP_SHOW_GRID,
+                                         SAT_CFG_BOOL_MAP_SHOW_GRID);
+    
+    satmap->keepratio = mod_cfg_get_bool (cfgdata,
+                                          MOD_CFG_MAP_SECTION,
+                                          MOD_CFG_MAP_KEEP_RATIO,
+                                          SAT_CFG_BOOL_MAP_KEEP_RATIO);
     col = mod_cfg_get_int (cfgdata,
                            MOD_CFG_MAP_SECTION,
                            MOD_CFG_MAP_INFO_BGD_COL,
                            SAT_CFG_INT_MAP_INFO_BGD_COL);
 
-    GTK_SAT_MAP (satmap)->infobgd = rgba2html (col);
+    satmap->infobgd = rgba2html (col);
 
     /* create the canvas */
-    GTK_SAT_MAP (satmap)->canvas = goo_canvas_new ();
-    g_object_set (G_OBJECT (GTK_SAT_MAP (satmap)->canvas), "has-tooltip", TRUE, NULL);
+    satmap->canvas = goo_canvas_new ();
+    g_object_set (G_OBJECT (satmap->canvas), "has-tooltip", TRUE, NULL);
 
     /* safely load a background map */
     float clon = (float) mod_cfg_get_int(cfgdata,
                                          MOD_CFG_MAP_SECTION,
                                          MOD_CFG_MAP_CENTER,
                                          SAT_CFG_INT_MAP_CENTER);
-    load_map_file(GTK_SAT_MAP(satmap), clon);
+    load_map_file(satmap, clon);
                   
 
     /* Initial size request should be based on map size
@@ -290,43 +290,43 @@ gtk_sat_map_new (GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
        even though the map shrinks => better to set default size of
        main container window.
     */
-    /*  gtk_widget_set_size_request (GTK_SAT_MAP (satmap)->canvas, */
-    /*  gdk_pixbuf_get_width (GTK_SAT_MAP (satmap)->origmap), */
-    /*  gdk_pixbuf_get_height (GTK_SAT_MAP (satmap)->origmap)); */
+    /*  gtk_widget_set_size_request (satmap->canvas, */
+    /*  gdk_pixbuf_get_width (satmap->origmap), */
+    /*  gdk_pixbuf_get_height (satmap->origmap)); */
 
-    goo_canvas_set_bounds (GOO_CANVAS (GTK_SAT_MAP (satmap)->canvas), 0, 0,
-                           gdk_pixbuf_get_width (GTK_SAT_MAP (satmap)->origmap),
-                           gdk_pixbuf_get_height (GTK_SAT_MAP (satmap)->origmap));
+    goo_canvas_set_bounds (GOO_CANVAS (satmap->canvas), 0, 0,
+                           gdk_pixbuf_get_width (satmap->origmap),
+                           gdk_pixbuf_get_height (satmap->origmap));
     
                            
     /* connect size-request signal */
-    g_signal_connect (GTK_SAT_MAP (satmap)->canvas, "size-allocate",
+    g_signal_connect (satmap->canvas, "size-allocate",
                       G_CALLBACK (size_allocate_cb), satmap);
-    g_signal_connect (GTK_SAT_MAP (satmap)->canvas, "item_created",
+    g_signal_connect (satmap->canvas, "item_created",
                       (GCallback) on_item_created, satmap);
-    g_signal_connect_after (GTK_SAT_MAP (satmap)->canvas, "realize",
+    g_signal_connect_after (satmap->canvas, "realize",
                             (GCallback) on_canvas_realized, satmap);
 
-    gtk_widget_show (GTK_SAT_MAP (satmap)->canvas);
+    gtk_widget_show (satmap->canvas);
 
     /* create the canvas model */
-    root = create_canvas_model (GTK_SAT_MAP (satmap));
-    goo_canvas_set_root_item_model (GOO_CANVAS (GTK_SAT_MAP (satmap)->canvas), root);
+    root = create_canvas_model (satmap);
+    goo_canvas_set_root_item_model (GOO_CANVAS (satmap->canvas), root);
 
     g_object_unref (root);
 
     /* load the satellites we want to show tracks for */
-    gtk_sat_map_load_showtracks (GTK_SAT_MAP(satmap));
+    gtk_sat_map_load_showtracks (satmap);
     /* load the satellites we want to show tracks for */
-    gtk_sat_map_load_hide_coverages (GTK_SAT_MAP(satmap));
+    gtk_sat_map_load_hide_coverages (satmap);
 
     /* plot each sat on the canvas */
-    g_hash_table_foreach (GTK_SAT_MAP (satmap)->sats, plot_sat, GTK_SAT_MAP (satmap));
+    g_hash_table_foreach (satmap->sats, plot_sat, satmap);
 
-    /* gtk_box_pack_start (GTK_BOX (satmap), GTK_SAT_MAP (satmap)->swin, TRUE, TRUE, 0); */
-    gtk_container_add (GTK_CONTAINER (satmap), GTK_SAT_MAP (satmap)->canvas);
+    /* gtk_box_pack_start (GTK_BOX (satmap), satmap->swin, TRUE, TRUE, 0); */
+    gtk_container_add (GTK_CONTAINER (satmap), satmap->canvas);
 
-    return satmap;
+    return GTK_WIDGET (satmap);
 }
 
 
