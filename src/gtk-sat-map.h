@@ -131,6 +131,10 @@ typedef struct {
     GooCanvasItemModel *gridvlab[11];   /*!< Vertical grid  labels. */
     GooCanvasItemModel *gridh[5];       /*!< Horizontal grid lines, 30 deg resolution. */
     GooCanvasItemModel *gridhlab[5];    /*!< Horizontal grid labels. */
+
+    GooCanvasItemModel *terminator;     /*!< Outline of sun shadow on Earth. */
+
+    gint terminator_time_out;           /*!< Re-draw the Solar Terminator every hundred satellite updates; this keeps the score. */
     
     gdouble     naos;                   /*!< Next event time. */
     gint        ncat;                   /*!< Next event catnum. */

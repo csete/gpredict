@@ -59,6 +59,7 @@
 #include "predict-tools.h"
 #include "orbit-tools.h"
 #include "map-tools.h"
+#include "time-tools.h"
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
@@ -109,6 +110,8 @@ static gint compare_coordinates_y  (gconstpointer a, gconstpointer b, gpointer d
 static void update_selected        (GtkSatMap *satmap, sat_t *sat);
 static void draw_grid_lines        (GtkSatMap *satmap, GooCanvasItemModel *root);
 static void redraw_grid_lines      (GtkSatMap *satmap);
+static void draw_terminator        (GtkSatMap *satmap, GooCanvasItemModel *root);
+static void redraw_terminator      (GtkSatMap *satmap);
 static gchar *aoslos_time_to_str   (GtkSatMap *satmap, sat_t *sat);
 static void gtk_sat_map_load_showtracks (GtkSatMap *map);
 static void gtk_sat_map_store_showtracks (GtkSatMap *satmap);
@@ -362,6 +365,9 @@ create_canvas_model (GtkSatMap *satmap)
     /* grid lines */
     draw_grid_lines (satmap, root);
 
+    /* Solar terminator. */
+    draw_terminator (satmap, root);
+
     /* QTH mark */
     col = mod_cfg_get_int (satmap->cfgdata,
                            MOD_CFG_MAP_SECTION,
@@ -561,6 +567,9 @@ update_map_size (GtkSatMap *satmap)
 
         /* grid lines */
         redraw_grid_lines (satmap);
+
+        /* Solar terminator. */
+        redraw_terminator (satmap);
         
         /* QTH */
         lonlat_to_xy (satmap,  satmap->qth->lon, satmap->qth->lat, &x, &y);
@@ -709,6 +718,13 @@ gtk_sat_map_update (GtkWidget  *widget)
         /* update sats */
         g_hash_table_foreach (satmap->sats, update_sat, satmap);
 
+        /* Update the Solar Terminator, only once in a hundred satellite
+           updates. */
+        if (++satmap->terminator_time_out >= 100) {
+            redraw_terminator (satmap);
+            satmap->terminator_time_out = 0;
+        }
+        
         /* update countdown to NEXT AOS label */
         if (satmap->eventinfo) {
 
@@ -2532,6 +2548,41 @@ draw_grid_lines (GtkSatMap *satmap, GooCanvasItemModel *root)
 }
 
 
+/** \brief Add solar terminator to the map. */
+static void
+draw_terminator (GtkSatMap *satmap, GooCanvasItemModel *root)
+{
+    guint32 terminator_col;
+    guint32 globe_shadow_col;
+
+    /* initialize algo parameters */
+    terminator_col = mod_cfg_get_int (satmap->cfgdata,
+                                      MOD_CFG_MAP_SECTION,
+                                      MOD_CFG_MAP_TERMINATOR_COL,
+                                      SAT_CFG_INT_MAP_TERMINATOR_COL);
+
+    globe_shadow_col = mod_cfg_get_int (satmap->cfgdata,
+                                        MOD_CFG_MAP_SECTION,
+                                        MOD_CFG_MAP_GLOBAL_SHADOW_COL,
+                                        SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL);
+
+    /* We do not set any polygon vertices here, but trust that the redraw_terminator
+       will be called in due course to do the job. */
+
+    satmap->terminator = goo_canvas_polyline_model_new (root, FALSE, 0,
+                                                        "line-width", 1.0,
+                                                        "fill-color-rgba", globe_shadow_col,
+                                                        "stroke-color-rgba", terminator_col,
+                                                        "line-cap", CAIRO_LINE_CAP_SQUARE,
+                                                        "line-join", CAIRO_LINE_JOIN_MITER,
+                                                        NULL);
+
+    goo_canvas_item_model_raise (satmap->terminator, satmap->map);
+
+    satmap->terminator_time_out = 0;
+}
+
+
 /** \brief Redraw grid lines and labels. */
 static void redraw_grid_lines (GtkSatMap *satmap)
 {
@@ -2600,6 +2651,94 @@ static void redraw_grid_lines (GtkSatMap *satmap)
             goo_canvas_item_model_lower (satmap->gridvlab[i], satmap->map);
         }
     }
+}
+
+
+
+static inline gdouble sgn (gdouble const t)
+{
+    return t < 0.0 ? -1.0 : 1.0;
+}
+
+
+
+/** \brief Redraw solar terminator. */
+static void redraw_terminator (GtkSatMap *satmap)
+{
+    /* Set of (x, y) points along the terminator, one on each line of longitude in
+       increments of longitudinal degrees. */
+    GooCanvasPoints *line;
+
+    /* A variable which iterates over the longitudes. */
+    int longitude;
+
+    /* Working variables in the computation of the terminator coordinates. */
+    gfloat x, y;
+
+    /* Vector normal to plane containing a line of longitude (z component is
+       always zero). */
+    /* Note: our coordinates have z along the Earth's axis, x pointing through the
+       intersection of the Greenwich Meridian and the Equator, and y right-handedly
+       perpendicular to both. */
+    gdouble lx, ly;
+
+    /* The position of the sun as latitude, longitude. */
+    geodetic_t geodetic;
+
+    /* Vector which points from the centre of the Earth to the Sun in inertial
+       coordinates. */
+    vector_t sun_;
+
+    /* The same vector in geodesic coordinates. */
+    gdouble sx, sy, sz;
+
+    /* Vector cross-product of (lx,ly,lz) and sun vector. */
+    gdouble rx, ry, rz;
+
+
+
+    line = goo_canvas_points_new (363);
+
+    Calculate_Solar_Position (satmap->tstamp, &sun_);
+    Calculate_LatLonAlt (satmap->tstamp, &sun_, &geodetic);
+
+    sx = cos (geodetic.lat) * cos (geodetic.lon);
+    sy = cos (geodetic.lat) * sin (-geodetic.lon);
+    sz = sin (geodetic.lat);
+    
+
+    for (longitude = -180; longitude <= 180; ++longitude) {
+
+        lx = cos (de2ra * (longitude + sgn (sz) * 90));
+        ly = sin (de2ra * (longitude + sgn (sz) * 90));
+        /* lz = 0.0; */
+
+        rx = ly*sz /* -lz*sy */;
+        ry = /* lz*sx */ - lx*sz;
+        rz = - lx*sy - ly*sx;
+
+        gdouble length = sqrt (rx*rx + ry*ry + rz*rz);
+
+        lonlat_to_xy (satmap,
+                      longitude,
+                      asin (rz / length) * (1.0 / de2ra),
+                      &x,
+                      &y);
+        
+        line->coords [2 * (longitude + 181)] = x;
+        line->coords [2 * (longitude + 181) + 1] = y;
+    }
+
+    lonlat_to_xy (satmap, -180.0, sz < 0.0 ? 90.0 : -90.0, &x, &y);
+    line->coords [0] = x;
+    line->coords [1] = y;
+
+    lonlat_to_xy (satmap, 180.0, sz < 0.0 ? 90.0 : -90.0, &x, &y);
+    line->coords [724] = x;
+    line->coords [725] = y;
+
+    g_object_set (satmap->terminator, "points", line, NULL);
+    goo_canvas_points_unref (line);
 }
 
 

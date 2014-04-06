@@ -83,6 +83,8 @@ typedef enum {
     SAT_CFG_INT_MAP_SAT_SEL_COL,      /*!< Selected satellite colour */
     SAT_CFG_INT_MAP_SAT_COV_COL,      /*!< Map coverage area colour */
     SAT_CFG_INT_MAP_GRID_COL,         /*!< Grid colour. */
+    SAT_CFG_INT_MAP_TERMINATOR_COL,   /*!< Solar terminator colour. */
+    SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL,/*!< Earth shadow colour. */
     SAT_CFG_INT_MAP_TICK_COL,         /*!< Tick labels colour. */
     SAT_CFG_INT_MAP_TRACK_COL,        /*!< Ground Track colour. */
     SAT_CFG_INT_MAP_TRACK_NUM,        /*!< Number of orbits to show ground track for */

@@ -51,6 +51,7 @@ static GtkWidget *qth,*next,*curs,*grid;
 static GtkWidget *qthc,*gridc,*tickc;
 static GtkWidget *satc,*ssatc,*trackc;
 static GtkWidget *covc,*infofg,*infobg;
+static GtkWidget *terminator, *globe_shadow;
 static GtkWidget *shadow;
 
 /* ground track orbit number selector */
@@ -559,20 +560,70 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
     gtk_color_button_set_alpha (GTK_COLOR_BUTTON (infobg), alpha);
     g_signal_connect (infobg, "color-set", G_CALLBACK (colour_changed), NULL);
 
+    /* Solar terminator */
+    label = gtk_label_new (_("Solar terminator:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+                      GTK_FILL, GTK_FILL, 0, 0);
+    terminator = gtk_color_button_new ();
+    gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (terminator), TRUE);
+    gtk_table_attach (GTK_TABLE (table), terminator, 1, 2, 3, 4,
+                      GTK_FILL , GTK_FILL, 0, 0);
+    gtk_widget_set_tooltip_text (terminator,
+                                 _("Click to select terminator colour"));
+    if (cfg != NULL) {
+        rgba = mod_cfg_get_int (cfg,
+                                MOD_CFG_MAP_SECTION,
+                                MOD_CFG_MAP_TERMINATOR_COL,
+                                SAT_CFG_INT_MAP_TERMINATOR_COL);
+    }
+    else {
+        rgba = sat_cfg_get_int (SAT_CFG_INT_MAP_TERMINATOR_COL);
+    }
+    rgba2gdk (rgba, &col, &alpha);
+    gtk_color_button_set_color (GTK_COLOR_BUTTON (terminator), &col);
+    gtk_color_button_set_alpha (GTK_COLOR_BUTTON (terminator), alpha);
+    g_signal_connect (terminator, "color-set", G_CALLBACK (colour_changed), NULL);
+
+    /* Earth shadow */
+    label = gtk_label_new (_("Global shadow:"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach (GTK_TABLE (table), label, 2, 3, 3, 4,
+                      GTK_FILL, GTK_FILL, 0, 0);
+    globe_shadow = gtk_color_button_new ();
+    gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (globe_shadow), TRUE);
+    gtk_table_attach (GTK_TABLE (table), globe_shadow, 3, 4, 3, 4,
+                      GTK_FILL , GTK_FILL, 0, 0);
+    gtk_widget_set_tooltip_text (globe_shadow,
+                                 _("Click to select Earth shadow colour"));
+    if (cfg != NULL) {
+        rgba = mod_cfg_get_int (cfg,
+                                MOD_CFG_MAP_SECTION,
+                                MOD_CFG_MAP_GLOBAL_SHADOW_COL,
+                                SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL);
+    }
+    else {
+        rgba = sat_cfg_get_int (SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL);
+    }
+    rgba2gdk (rgba, &col, &alpha);
+    gtk_color_button_set_color (GTK_COLOR_BUTTON (globe_shadow), &col);
+    gtk_color_button_set_alpha (GTK_COLOR_BUTTON (globe_shadow), alpha);
+    g_signal_connect (globe_shadow, "color-set", G_CALLBACK (colour_changed), NULL);
+
     /* Shadow */
     label = gtk_label_new (_("Shadow:"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+    gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
                       GTK_FILL, GTK_FILL, 0, 0);
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label), _("<i>Transparent</i>"));
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-    gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+    gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
                       GTK_FILL, GTK_FILL, 0, 0);
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label), _("<i>Strong</i>"));
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-    gtk_table_attach (GTK_TABLE (table), label, 5, 6, 3, 4,
+    gtk_table_attach (GTK_TABLE (table), label, 5, 6, 4, 5,
                       GTK_FILL, GTK_FILL, 0, 0);
     shadow = gtk_hscale_new_with_range (0, 255, 1);
     gtk_scale_set_draw_value (GTK_SCALE (shadow), FALSE);
@@ -591,7 +642,7 @@ static void create_colour_selectors (GKeyFile *cfg, GtkBox *vbox)
                                    "The shadow improves the visibility of the satellites where the colour of "\
                                    "the background is light, e.g. the South Pole.\n\n"\
                                    "Transparent corresponds to no shadow."));
-    gtk_table_attach (GTK_TABLE (table), shadow, 2, 5, 3, 4,
+    gtk_table_attach (GTK_TABLE (table), shadow, 2, 5, 4, 5,
                       GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
     g_signal_connect (shadow, "value-changed", G_CALLBACK (shadow_changed), NULL);
 
@@ -869,6 +920,16 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
         gtk_color_button_set_color (GTK_COLOR_BUTTON (infobg), &col);
         gtk_color_button_set_alpha (GTK_COLOR_BUTTON (infobg), alpha);
 
+        rgba = sat_cfg_get_int_def (SAT_CFG_INT_MAP_TERMINATOR_COL);
+        rgba2gdk (rgba, &col, &alpha);
+        gtk_color_button_set_color (GTK_COLOR_BUTTON (terminator), &col);
+        gtk_color_button_set_alpha (GTK_COLOR_BUTTON (terminator), alpha);
+
+        rgba = sat_cfg_get_int_def (SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL);
+        rgba2gdk (rgba, &col, &alpha);
+        gtk_color_button_set_color (GTK_COLOR_BUTTON (globe_shadow), &col);
+        gtk_color_button_set_alpha (GTK_COLOR_BUTTON (globe_shadow), alpha);
+
         /* shadow */
         gtk_range_set_value (GTK_RANGE (shadow), sat_cfg_get_int_def (SAT_CFG_INT_MAP_SHADOW_ALPHA));
 
@@ -943,6 +1004,16 @@ static void reset_cb (GtkWidget *button, gpointer cfg)
         rgba2gdk (rgba, &col, &alpha);
         gtk_color_button_set_color (GTK_COLOR_BUTTON (infobg), &col);
         gtk_color_button_set_alpha (GTK_COLOR_BUTTON (infobg), alpha);
+
+        rgba = sat_cfg_get_int (SAT_CFG_INT_MAP_TERMINATOR_COL);
+        rgba2gdk (rgba, &col, &alpha);
+        gtk_color_button_set_color (GTK_COLOR_BUTTON (terminator), &col);
+        gtk_color_button_set_alpha (GTK_COLOR_BUTTON (terminator), alpha);
+
+        rgba = sat_cfg_get_int (SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL);
+        rgba2gdk (rgba, &col, &alpha);
+        gtk_color_button_set_color (GTK_COLOR_BUTTON (globe_shadow), &col);
+        gtk_color_button_set_alpha (GTK_COLOR_BUTTON (globe_shadow), alpha);
 
         /* shadow */
         gtk_range_set_value (GTK_RANGE (shadow), sat_cfg_get_int (SAT_CFG_INT_MAP_SHADOW_ALPHA));
@@ -1060,6 +1131,16 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
             gdk2rgba (&col, alpha, &rgba);
             g_key_file_set_integer (cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_INFO_BGD_COL, rgba);
 
+            gtk_color_button_get_color (GTK_COLOR_BUTTON (terminator), &col);
+            alpha = gtk_color_button_get_alpha (GTK_COLOR_BUTTON (terminator));
+            gdk2rgba (&col, alpha, &rgba);
+            g_key_file_set_integer (cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_TERMINATOR_COL, rgba);
+
+            gtk_color_button_get_color (GTK_COLOR_BUTTON (globe_shadow), &col);
+            alpha = gtk_color_button_get_alpha (GTK_COLOR_BUTTON (globe_shadow));
+            gdk2rgba (&col, alpha, &rgba);
+            g_key_file_set_integer (cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_GLOBAL_SHADOW_COL, rgba);
+
             /* shadow */
             g_key_file_set_integer (cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_SHADOW_ALPHA,
                                     (gint) gtk_range_get_value (GTK_RANGE (shadow)));
@@ -1134,6 +1215,16 @@ void sat_pref_map_view_ok     (GKeyFile *cfg)
             alpha = gtk_color_button_get_alpha (GTK_COLOR_BUTTON (infobg));
             gdk2rgba (&col, alpha, &rgba);
             sat_cfg_set_int (SAT_CFG_INT_MAP_INFO_BGD_COL, rgba);
+
+            gtk_color_button_get_color (GTK_COLOR_BUTTON (terminator), &col);
+            alpha = gtk_color_button_get_alpha (GTK_COLOR_BUTTON (terminator));
+            gdk2rgba (&col, alpha, &rgba);
+            sat_cfg_set_int (SAT_CFG_INT_MAP_TERMINATOR_COL, rgba);
+
+            gtk_color_button_get_color (GTK_COLOR_BUTTON (globe_shadow), &col);
+            alpha = gtk_color_button_get_alpha (GTK_COLOR_BUTTON (globe_shadow));
+            gdk2rgba (&col, alpha, &rgba);
+            sat_cfg_set_int (SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL, rgba);
 
             /* shadow */
             sat_cfg_set_int (SAT_CFG_INT_MAP_SHADOW_ALPHA,
