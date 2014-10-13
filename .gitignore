@@ -2,6 +2,7 @@ Makefile
 Makefile.in
 build-config.h
 build-config.h.in
+compile
 configure
 config.guess
 config.h
