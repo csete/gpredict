@@ -278,7 +278,7 @@ gtk_sat_module_new (const gchar *cfgfile)
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s is not valid."),
-                     __FUNCTION__, cfgfile);
+                     __func__, cfgfile);
 
         return NULL;
     }
@@ -296,7 +296,7 @@ gtk_sat_module_new (const gchar *cfgfile)
     if (GTK_SAT_MODULE(widget)->cfgdata==NULL){
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s has problems."),
-                     __FUNCTION__, cfgfile);
+                     __func__, cfgfile);
         
         return NULL;
     }
@@ -407,7 +407,7 @@ create_module_layout (GtkSatModule *module)
     get_grid_size (module, &rows, &cols);
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: Layout has %d columns and %d rows."),
-                 __FUNCTION__, cols, rows);
+                 __func__, cols, rows);
 
     table = gtk_table_new (rows, cols, TRUE);
 
@@ -520,7 +520,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
           module->cfgdata=NULL;
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not load config data from %s (%s)."),
-                     __FUNCTION__, cfgfile, error->message);
+                     __func__, cfgfile, error->message);
         
         g_clear_error (&error);
 
@@ -530,7 +530,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     /* debug message */
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: Reading configuration from %s"),
-                 __FUNCTION__, cfgfile);
+                 __func__, cfgfile);
 
     /* set module name */
     buffer = g_path_get_basename (cfgfile);
@@ -572,7 +572,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
 
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Can not load default QTH file %s; using built-in defaults"),
-                         __FUNCTION__, buffer);
+                         __func__, buffer);
 
             /* settings are really screwed up; we need some safe values here */
             qth_safe(module->qth);
@@ -603,7 +603,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
         /* the grid configuration is bogus; override with global default */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module layout is invalid: %s. Using default."),
-                     __FUNCTION__, buffer);
+                     __func__, buffer);
         g_free (buffer);
         g_strfreev (buffv);
 
@@ -615,7 +615,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
     /* make a debug log entry */
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: GRID(%d): %s"),
-                 __FUNCTION__, length, buffer);
+                 __func__, length, buffer);
     g_free (buffer);
 
     /* number of views: we have five numbers per view (type,left,right,top,bottom) */
@@ -633,7 +633,7 @@ gtk_sat_module_read_cfg_data (GtkSatModule *module, const gchar *cfgfile)
         module->nviews = 0;
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unable to allocate memory for grid."),
-                     __FUNCTION__);
+                     __func__);
     }
     g_strfreev (buffv);
 
@@ -666,7 +666,7 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to get list of satellites (%s)"),
-                     __FUNCTION__, error->message);
+                     __func__, error->message);
 
         g_clear_error (&error);
 
@@ -688,7 +688,7 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
             /* the satellite could not be read */
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error reading data for #%d"),
-                         __FUNCTION__, sats[i]);
+                         __func__, sats[i]);
 
             g_free (sat);
         }
@@ -712,14 +712,14 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
 
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: Read data for #%d"),
-                             __FUNCTION__, sats[i]);
+                             __func__, sats[i]);
 
 
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_WARN,
                              _("%s: Sat #%d already in list"),
-                             __FUNCTION__, sats[i]);
+                             __func__, sats[i]);
 
                 /* it is not needed in this case */
                 g_free (sat);
@@ -730,7 +730,7 @@ gtk_sat_module_load_sats      (GtkSatModule *module)
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Read %d out of %d satellites"),
-                 __FUNCTION__,
+                 __func__,
                  succ,
                  length);
 
@@ -792,7 +792,7 @@ gtk_sat_module_timeout_cb     (gpointer module)
             
             sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Previous cycle missed it's deadline."),
-                         __FUNCTION__);
+                         __func__);
             
             return TRUE;
             
@@ -1079,7 +1079,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: Module %s received CLOSE signal."),
-                 __FUNCTION__, name);
+                 __func__, name);
 
     /* save configuration to ensure that dynamic data like state is stored */
     mod_cfg_save (module->name, module->cfgdata);
@@ -1089,7 +1089,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     case GTK_SAT_MOD_STATE_DOCKED:
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Module %s is in DOCKED state."),
-                     __FUNCTION__, name);
+                     __func__, name);
 
         retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
@@ -1097,7 +1097,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module %s was not found in mod-mgr (%d)\n"\
                            "Internal state is corrupt?"),
-                         __FUNCTION__, name, retcode);
+                         __func__, name, retcode);
         }
 
         break;
@@ -1105,7 +1105,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     case GTK_SAT_MOD_STATE_WINDOW:
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Module %s is in WINDOW state."),
-                     __FUNCTION__, name);
+                     __func__, name);
 
         retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
@@ -1113,7 +1113,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module %s was not found in mod-mgr (%d)\n"\
                            "Internal state is corrupt?"),
-                         __FUNCTION__, name, retcode);
+                         __func__, name, retcode);
         }
 
         /* increase referene count */
@@ -1133,7 +1133,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     case GTK_SAT_MOD_STATE_FULLSCREEN:
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Module %s is in FULLSCREEN state."),
-                     __FUNCTION__, name);
+                     __func__, name);
 
         retcode = mod_mgr_remove_module (GTK_WIDGET (module));
 
@@ -1141,7 +1141,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module %s was not found in mod-mgr (%d)\n"\
                            "Internal state is corrupt?"),
-                         __FUNCTION__, name, retcode);
+                         __func__, name, retcode);
         }
 
 
@@ -1162,7 +1162,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
     default:
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Module %s has unknown state: %d"),
-                     __FUNCTION__, name, module->state);
+                     __func__, name, module->state);
         break;
     }
 
@@ -1173,7 +1173,7 @@ gtk_sat_module_close_cb       (GtkWidget *button, gpointer data)
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Module %s closed."),
-                 __FUNCTION__, name);
+                 __func__, name);
 
     g_free (name);
              
@@ -1215,7 +1215,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: Module %s received CONFIG signal."),
-                 __FUNCTION__, name);
+                 __func__, name);
 
     /* stop timeout */
     if (!g_source_remove (module->timerid)) {
@@ -1225,7 +1225,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not stop timeout callback\n"\
                        "%s: Source ID %d seems invalid."),
-                     __FUNCTION__, __FUNCTION__, module->timerid);
+                     __func__, __func__, module->timerid);
 
     }
     else {
@@ -1242,7 +1242,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
                 /**** FIXME: dialog */
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Module configuration failed for some reason."),
-                             __FUNCTION__);
+                             __func__);
 
                 /* don't try to reload config since it may be
                    invalid; keep original
@@ -1326,7 +1326,7 @@ gtk_sat_module_config_cb       (GtkWidget *button, gpointer data)
                 default:
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s: Module %s has unknown state: %d"),
-                                 __FUNCTION__, name, module->state);
+                                 __func__, name, module->state);
                     break;
                 }
 
@@ -1415,7 +1415,7 @@ gtk_sat_module_reload_sats    (GtkSatModule *module)
      
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Reloading satellites for module %s"),
-                 __FUNCTION__, module->name);
+                 __func__, module->name);
 
     /* remove each element from the hash table, but keep the hash table */
     g_hash_table_foreach_remove (module->satellites, empty, NULL);
@@ -1500,7 +1500,7 @@ void gtk_sat_module_select_sat (GtkSatModule *module, gint catnum)
             gtk_polar_view_select_sat(child, catnum);
         }
         else {
-            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Unknown child type"), __FUNCTION__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Unknown child type"), __func__);
         }
     }
 
@@ -1580,7 +1580,7 @@ static void update_skg (GtkSatModule *module)
         
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Updating GtkSkyGlance for %s"),
-                     __FUNCTION__, module->name);
+                     __func__, module->name);
         
         gtk_container_remove (GTK_CONTAINER (module->skgwin), module->skg);
         module->skg = gtk_sky_glance_new (module->satellites, module->qth, module->tmgCdnum);

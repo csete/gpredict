@@ -447,7 +447,7 @@ void sat_pref_rig_ok     ()
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Failed to get RIG %s"),
-                           __FUNCTION__, i);
+                           __func__, i);
         }
     }
     
@@ -545,7 +545,7 @@ static void edit_cb   (GtkWidget *button, gpointer data)
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Edit button should have been disabled."),
-                       __FILE__, __FUNCTION__);
+                       __FILE__, __func__);
         //gtk_widget_set_sensitive (button, FALSE);
         
         return;
@@ -633,7 +633,7 @@ static void delete_cb (GtkWidget *button, gpointer data)
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Delete button should have been disabled."),
-                     __FILE__, __FUNCTION__);
+                     __FILE__, __func__);
         //gtk_widget_set_sensitive (button, FALSE);
         
         return;

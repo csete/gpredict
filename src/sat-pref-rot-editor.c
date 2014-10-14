@@ -432,7 +432,7 @@ static void aztype_changed_cb     (GtkComboBox *box, gpointer data)
         default:
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%s: Invalid AZ rotator type."),
-                           __FILE__, __FUNCTION__);
+                           __FILE__, __func__);
             break;
     }
 

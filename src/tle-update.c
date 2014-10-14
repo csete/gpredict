@@ -119,7 +119,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
     {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: A TLE update process is already running. Aborting."),
-                     __FUNCTION__);
+                     __func__);
 
         return;
     }
@@ -135,7 +135,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
         /* send an error message */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error opening directory %s (%s)"),
-                     __FUNCTION__, dir, err->message);
+                     __func__, dir, err->message);
 
         /* insert error message into the status string, too */
         if (!silent && (label1 != NULL)) {
@@ -182,12 +182,12 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
             if (num < 1) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: No valid TLE data found in %s"),
-                             __FUNCTION__, fnam);
+                             __func__, fnam);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Read %d sats from %s into memory"),
-                             __FUNCTION__, num, fnam);
+                             __func__, num, fnam);
             }
         }
 
@@ -207,7 +207,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
             /* send an error message */
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error opening directory %s (%s)"),
-                         __FUNCTION__, dir, err->message);
+                         __func__, dir, err->message);
 
             /* insert error message into the status string, too */
             if (!silent && (label1 != NULL)) {
@@ -357,7 +357,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
                 
                 sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Added %d new satellites to local database"),
-                             __FUNCTION__, newsats);
+                             __func__, newsats);
             }
 
             /* store time of update if we have updated something */
@@ -374,7 +374,7 @@ void tle_update_from_files (const gchar *dir, const gchar *filter,
 
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: TLE elements updated."),
-                     __FUNCTION__);
+                     __func__);
     }
 
     /* destroy hash tables */
@@ -440,7 +440,7 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
         if (err != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Could not open category file file %s (%s)."),
-                         __FUNCTION__, cfgfile, err->message);
+                         __func__, cfgfile, err->message);
             g_clear_error (&err);
         }
         else {
@@ -462,13 +462,13 @@ static void check_and_add_sat (gpointer key, gpointer value, gpointer user_data)
             if (err != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error adding %d to %s (%s)."),
-                             __FUNCTION__, ntle->catnum, cfgfile, err->message);
+                             __func__, ntle->catnum, cfgfile, err->message);
                 g_clear_error (&err);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Added satellite %d to %s."),
-                             __FUNCTION__, ntle->catnum, cfgfile);
+                             __func__, ntle->catnum, cfgfile);
             }
         }
 
@@ -529,7 +529,7 @@ void tle_update_from_network (gboolean   silent,
     {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: A TLE update process is already running. Aborting."),
-                     __FUNCTION__);
+                     __func__);
 
         return;
     }
@@ -544,7 +544,7 @@ void tle_update_from_network (gboolean   silent,
     if (numfiles < 1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: No files to fetch from network."),
-                     __FUNCTION__);
+                     __func__);
 
         /* set activity string, so user knows why nothing happens */
         if (!silent && (label1 != NULL)) {
@@ -604,12 +604,12 @@ void tle_update_from_network (gboolean   silent,
                 if (res != CURLE_OK) {
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s: Error fetching %s (%s)"),
-                                 __FUNCTION__, curfile, curl_easy_strerror (res));
+                                 __func__, curfile, curl_easy_strerror (res));
                 }
                 else {
                     sat_log_log (SAT_LOG_LEVEL_INFO,
                                  _("%s: Successfully fetched %s"),
-                                 __FUNCTION__, curfile);
+                                 __func__, curfile);
                     success++;
                 }
                 fclose (outfile);
@@ -617,7 +617,7 @@ void tle_update_from_network (gboolean   silent,
             } else {
                 sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Failed to open %s preventing update"),
-                                         __FUNCTION__, locfile);
+                                         __func__, locfile);
             }
             /* update progress indicator */
             if (!silent && (progress != NULL)) {
@@ -645,7 +645,7 @@ void tle_update_from_network (gboolean   silent,
         if (success > 0) {
             sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Fetched %d files from network; updating..."),
-                         __FUNCTION__, success);
+                         __func__, success);
             /* call update_from_files */
             cache = sat_file_name ("cache");
             tle_update_from_files (cache, NULL, silent, progress, label1, label2);
@@ -655,7 +655,7 @@ void tle_update_from_network (gboolean   silent,
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Could not fetch any new TLE files from network; aborting..."),
-                         __FUNCTION__);
+                         __func__);
         }
 
     }
@@ -675,7 +675,7 @@ void tle_update_from_network (gboolean   silent,
         /* send an error message */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error opening %s (%s)"),
-                     __FUNCTION__, dir, err->message);
+                     __func__, dir, err->message);
         g_clear_error (&err);
     }
     else {
@@ -813,7 +813,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             if (b == NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s:%s: There is no category in %s"),
-                             __FILE__, __FUNCTION__, catpath);                
+                             __FILE__, __func__, catpath);                
             }
             fclose (catfile);
             catsync = TRUE;
@@ -822,7 +822,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             /* There is no category with this name (could be update from custom file) */
             sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%s: There is no category called %s"),
-                         __FILE__, __FUNCTION__, fnam);
+                         __FILE__, __func__, fnam);
         }
 
         /* reopen a new catfile and write category name */
@@ -835,7 +835,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 catsync = FALSE;
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s:%s: Could not reopen .cat file while reading TLE from %s"),
-                             __FILE__, __FUNCTION__, fnam);
+                             __FILE__, __func__, fnam);
             }
             
             /* .cat file now contains the category name;
@@ -885,7 +885,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
             default:
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s:%s: Something wrote linesneeded to an illegal value %d"),
-                             __FILE__, __FUNCTION__, linesneeded);
+                             __FILE__, __func__, linesneeded);
                 break;
             }
             /* b can only be null if there is only one line in the buffer*/
@@ -911,7 +911,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 Checksum_Good(tle_working[2])) {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s:%s: Processing a three line TLE"),
-                             __FILE__, __FUNCTION__);
+                             __FILE__, __func__);
                                 
                 /* it appears that the first line may be a name followed by a tle */
                 strncpy(tle_str[0],tle_working[0],80);
@@ -926,7 +926,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                        Checksum_Good(tle_working[1])) {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s:%s: Processing a bare two line TLE"),
-                             __FILE__, __FUNCTION__);
+                             __FILE__, __func__);
                 
                 /* first line appears to belong to the start of bare TLE */
                 /* put in a dummy name of form yyyy-nnaa base on international id */
@@ -975,7 +975,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                 /* TLE data not good */
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s:%s: Invalid data for %d"),
-                             __FILE__, __FUNCTION__, catnr);
+                             __FILE__, __func__, catnr);
             }
             else {
 
@@ -1020,7 +1020,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
                             /* log if there is something funny about the data coming in */
                             sat_log_log (SAT_LOG_LEVEL_WARN,
                                          _("%s:%s: Two different statuses for %d (%s) at the same time."),
-                                         __FILE__, __FUNCTION__, ntle->catnum, ntle->satname);
+                                         __FILE__, __func__, ntle->catnum, ntle->satname);
                             if ( tle.status != OP_STAT_UNKNOWN )
                                 ntle->status = tle.status;
                         }
@@ -1072,7 +1072,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to open %s"),
-                     __FILE__, __FUNCTION__, path);
+                     __FILE__, __func__, path);
     }
 
     g_free (path);
@@ -1142,7 +1142,7 @@ static void update_tle_in_file (const gchar *ldname,
         /**** FIXME: This is dangereous, so we omit it */
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: No new TLE data found for %d. Satellite might be obsolete."),
-                     __FUNCTION__, catnr);
+                     __func__, catnr);
     }
     else { 
         /* open input file (file containing old tle) */
@@ -1151,7 +1151,7 @@ static void update_tle_in_file (const gchar *ldname,
         if (!g_key_file_load_from_file (satdata, path, G_KEY_FILE_KEEP_COMMENTS, &error)) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error loading %s (%s)"),
-                         __FUNCTION__, path, error->message);
+                         __func__, path, error->message);
             g_clear_error (&error);
             
             skipped++;
@@ -1166,14 +1166,14 @@ static void update_tle_in_file (const gchar *ldname,
             if (error != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error reading TLE line 2 from %s (%s)"),
-                             __FUNCTION__, path, error->message);
+                             __func__, path, error->message);
                 g_clear_error (&error);
             }
             tlestr2 = g_key_file_get_string (satdata, "Satellite", "TLE2", NULL);
             if (error != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error reading TLE line 2 from %s (%s)"),
-                             __FUNCTION__, path, error->message);
+                             __func__, path, error->message);
                 g_clear_error (&error);
             }
             
@@ -1194,7 +1194,7 @@ static void update_tle_in_file (const gchar *ldname,
             if (!Good_Elements (rawtle)) {
                 sat_log_log (SAT_LOG_LEVEL_WARN,
                              _("%s: Current TLE data for %d appears to be bad"),
-                             __FUNCTION__, catnr);
+                             __func__, catnr);
                 /* set epoch to zero so it gets overwritten */
                 tle.epoch = 0;
             } else {
@@ -1215,7 +1215,7 @@ static void update_tle_in_file (const gchar *ldname,
                     if (is_computer_generated_name (satname)) {
                         sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: Data for  %d updated for name."),
-                                     __FUNCTION__, catnr);
+                                     __func__, catnr);
                         g_key_file_set_string (satdata, "Satellite", "NAME", ntle->satname);
                         updateddata = TRUE;
                     }
@@ -1227,7 +1227,7 @@ static void update_tle_in_file (const gchar *ldname,
                     if ( is_computer_generated_name (satnickname) ) {
                         sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: Data for  %d updated for nickname."),
-                                     __FUNCTION__, catnr);
+                                     __func__, catnr);
                         g_key_file_set_string (satdata, "Satellite", "NICKNAME", ntle->satname);
                         updateddata = TRUE;
                     }
@@ -1242,7 +1242,7 @@ static void update_tle_in_file (const gchar *ldname,
                 /* store new data */
                 sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Data for  %d updated for tle."),
-                             __FUNCTION__, catnr);
+                             __func__, catnr);
                 g_key_file_set_string (satdata, "Satellite", "TLE1", ntle->line1);
                 g_key_file_set_string (satdata, "Satellite", "TLE2", ntle->line2);
                 g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
@@ -1252,7 +1252,7 @@ static void update_tle_in_file (const gchar *ldname,
                 if  ((status != ntle->status) && (ntle->status != OP_STAT_UNKNOWN)){
                     sat_log_log (SAT_LOG_LEVEL_INFO,
                                  _("%s: Data for  %d updated for operational status."),
-                                 __FUNCTION__, catnr);
+                                 __func__, catnr);
                     g_key_file_set_integer (satdata, "Satellite", "STATUS", ntle->status);
                     updateddata = TRUE;
                 }

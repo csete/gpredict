@@ -78,7 +78,7 @@ GSList *read_transponders (guint catnum)
     if (numgrp == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: %s contains 0 transponders"),
-                     __FUNCTION__, fname);
+                     __func__, fname);
     }
     else {
         for (i = 0; i < numgrp; i++) {
@@ -86,7 +86,7 @@ GSList *read_transponders (guint catnum)
             if G_UNLIKELY(trsp == NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                               _("%s: Failed to allocate memory for transponder data :-("),
-                              __FUNCTION__);
+                              __func__);
             }
             else {
                 /* read transponder data */
@@ -96,7 +96,7 @@ GSList *read_transponders (guint catnum)
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s. Using default."),
-                                  __FUNCTION__, groups[i], KEY_UP_LOW, name);
+                                  __func__, groups[i], KEY_UP_LOW, name);
                     g_clear_error (&error);
                     trsp->uplow = 0.0;
                 }
@@ -105,7 +105,7 @@ GSList *read_transponders (guint catnum)
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s. Using default."),
-                                  __FUNCTION__, groups[i], KEY_UP_HIGH, name);
+                                  __func__, groups[i], KEY_UP_HIGH, name);
                     g_clear_error (&error);
                     trsp->uphigh = trsp->uplow;
                 }
@@ -114,7 +114,7 @@ GSList *read_transponders (guint catnum)
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s. Using default."),
-                                  __FUNCTION__, groups[i], KEY_DOWN_LOW, name);
+                                  __func__, groups[i], KEY_DOWN_LOW, name);
                     g_clear_error (&error);
                     trsp->downlow = 0.0;
                 }
@@ -123,7 +123,7 @@ GSList *read_transponders (guint catnum)
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s. Using default."),
-                                  __FUNCTION__, groups[i], KEY_DOWN_HIGH, name);
+                                  __func__, groups[i], KEY_DOWN_HIGH, name);
                     g_clear_error (&error);
                     trsp->downhigh = trsp->downlow;
                 }
@@ -132,7 +132,7 @@ GSList *read_transponders (guint catnum)
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s. Assume non-inverting."),
-                                  __FUNCTION__, groups[i], KEY_INVERT, name);
+                                  __func__, groups[i], KEY_INVERT, name);
                     g_clear_error (&error);
                     trsp->invert = FALSE;
                 }
@@ -141,7 +141,7 @@ GSList *read_transponders (guint catnum)
                 if (error != NULL) {
                     sat_log_log (SAT_LOG_LEVEL_WARN,
                                   _("%s: Error reading %s:%s from %s"),
-                                  __FUNCTION__, groups[i], KEY_MODE, name);
+                                  __func__, groups[i], KEY_MODE, name);
                     g_clear_error (&error);
                 }
 
@@ -171,7 +171,7 @@ void write_transponders (guint catnum, GSList *trsplist)
     // FIXME
     (void) catnum; /* avoid unused parameter compiler warning */
     (void) trsplist; /* avoid unused parameter compiler warning */
-    sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __FUNCTION__);
+    sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __func__);
 }
 
 /** \brief Free transponder list.

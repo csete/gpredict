@@ -536,7 +536,7 @@ static void save_passes_exec (GtkWidget *parent,
     default:
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid file format: %d"),
-                     __FUNCTION__, format);
+                     __func__, format);
         break;
     }
 
@@ -637,7 +637,7 @@ static void save_pass_exec (GtkWidget *parent,
     default:
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid file format: %d"),
-                     __FUNCTION__, format);
+                     __func__, format);
         break;
     }
 
@@ -659,7 +659,7 @@ static void save_to_file (GtkWidget *parent, const gchar *fname, const gchar *da
     if (err != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not create file %s (%s)"),
-                     __FUNCTION__, fname, err->message);
+                     __func__, fname, err->message);
 
         /* error dialog */
         dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
@@ -683,7 +683,7 @@ static void save_to_file (GtkWidget *parent, const gchar *fname, const gchar *da
     if (err != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: An error occurred while saving data to %s (%s)"),
-                     __FUNCTION__, fname, err->message);
+                     __func__, fname, err->message);
 
         dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
                                          GTK_DIALOG_MODAL |
@@ -699,7 +699,7 @@ static void save_to_file (GtkWidget *parent, const gchar *fname, const gchar *da
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Written %d characters to %s"),
-                     __FUNCTION__, count, fname);
+                     __func__, count, fname);
     }
 
     /* close file, we don't care about errors here */

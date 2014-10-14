@@ -64,7 +64,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (conf->name == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: NULL configuration name!"),
-                       __FUNCTION__);
+                       __func__);
         return FALSE;
     }
     
@@ -80,7 +80,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (cfg == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not load file %s\n"),
-                     __FUNCTION__, fname);
+                     __func__, fname);
         g_free (fname);
         
         return FALSE;
@@ -93,7 +93,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+                       __func__, conf->name, error->message);
         g_clear_error (&error);
         g_key_file_free (cfg);
         return FALSE;
@@ -103,7 +103,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading rotor conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+                       __func__, conf->name, error->message);
         g_clear_error (&error);
         g_key_file_free (cfg);
         return FALSE;
@@ -113,7 +113,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: Az type not defined for %s. Assuming 0..360\302\260"),
-                       __FUNCTION__, conf->name);
+                       __func__, conf->name);
         g_clear_error (&error);
         
         conf->aztype = ROT_AZ_TYPE_360;
@@ -123,7 +123,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: MinAz not defined for %s. Assuming 0\302\260."),
-                       __FUNCTION__, conf->name);
+                       __func__, conf->name);
         g_clear_error (&error);
         conf->minaz = 0.0;
     }
@@ -132,7 +132,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: MaxAz not defined for %s. Assuming 360\302\260."),
-                       __FUNCTION__, conf->name);
+                       __func__, conf->name);
         g_clear_error (&error);
         conf->maxaz = 360.0;
     }
@@ -141,7 +141,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: MinEl not defined for %s. Assuming 0\302\260."),
-                       __FUNCTION__, conf->name);
+                       __func__, conf->name);
         g_clear_error (&error);
         conf->minel = 0.0;
     }
@@ -150,7 +150,7 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: MaxEl not defined for %s. Assuming 90\302\260."),
-                       __FUNCTION__, conf->name);
+                       __func__, conf->name);
         g_clear_error (&error);
         conf->maxel = 90.0;
     }

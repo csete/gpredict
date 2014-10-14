@@ -437,7 +437,7 @@ void gtk_event_list_update          (GtkWidget *widget)
     if ((evlist == NULL) || !IS_GTK_EVENT_LIST (evlist)) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkEventList!"),
-                     __FUNCTION__);
+                     __func__);
     }
 
     /* get and tranverse the model */
@@ -498,13 +498,13 @@ static gboolean event_list_update_sats (GtkTreeModel *model,
         /* satellite not tracked anymore => remove */
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Failed to get data for #%d."),
-                     __FUNCTION__, *catnum);
+                     __func__, *catnum);
 
         gtk_list_store_remove (GTK_LIST_STORE (model), iter);
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Satellite #%d removed from list."),
-                     __FUNCTION__, *catnum);
+                     __func__, *catnum);
     }
     else {
 
@@ -944,7 +944,7 @@ void gtk_event_list_select_sat  (GtkWidget *widget, gint catnum)
         else {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s: GtkEventList has not child with index %d"),
-                        __FUNCTION__, i);
+                        __func__, i);
         }
     }
 

@@ -95,7 +95,7 @@ void gtk_sat_module_popup (GtkSatModule *module)
     if ((module == NULL) || !IS_GTK_SAT_MODULE (module)) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%d: %s called with NULL parameter!"),
-                     __FILE__, __LINE__, __FUNCTION__);
+                     __FILE__, __LINE__, __func__);
 
         return;
     }

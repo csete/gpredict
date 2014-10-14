@@ -580,7 +580,7 @@ void gtk_polar_plot_show_time_ticks(GtkPolarPlot * plot, gboolean show)
 {
     (void)plot;                 /* avoid unused parameter compiler warning */
     (void)show;                 /* avoid unused parameter compiler warning */
-    g_print("NOT IMPLEMENTED %s\n", __FUNCTION__);
+    g_print("NOT IMPLEMENTED %s\n", __func__);
 }
 
 

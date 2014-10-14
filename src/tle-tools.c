@@ -70,12 +70,12 @@ twoline2tle (gchar *line1, gchar *line2, gchar *line3,
     /* check function parameters */
     if G_UNLIKELY((line1 == NULL) || (line2 == NULL) || (line3 == NULL)) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: NULL input data!"), __FUNCTION__);
+                     _("%s: NULL input data!"), __func__);
         return TLE_CONV_ERROR;
     }
     if G_UNLIKELY(tle == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: NULL output storage!"), __FUNCTION__);
+                     _("%s: NULL output storage!"), __func__);
         return TLE_CONV_ERROR;
     }
 

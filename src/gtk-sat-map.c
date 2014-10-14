@@ -795,7 +795,7 @@ gtk_sat_map_update (GtkWidget  *widget)
                 else {
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s: Can not find NEXT satellite."),
-                                 __FUNCTION__);
+                                 __func__);
                     g_object_set (satmap->next,
                                   "text", _("Next: ERR"),
                                   NULL);
@@ -1144,7 +1144,7 @@ void gtk_sat_map_select_sat  (GtkWidget *satmap, gint catnum)
     if (obj == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Can not find clicked object (%d) in hash table"),
-                     __FUNCTION__, catnum);
+                     __func__, catnum);
     }
     else {
         obj->selected = TRUE;
@@ -1337,7 +1337,7 @@ north_pole_is_covered (sat_t *sat)
     if (ret1 != RIG_OK) {
         sat_log_log (SAT_LOG_LEVEL_ERROR, 
                      _("%s: Bad data measuring distance to North Pole %f %f."),
-                     __FUNCTION__, sat->ssplon, sat->ssplat);
+                     __func__, sat->ssplon, sat->ssplat);
     }
     if (qrb1 <= 0.5*sat->footprint) {
         return TRUE;
@@ -1356,7 +1356,7 @@ south_pole_is_covered (sat_t *sat)
     if (ret1 != RIG_OK) {
         sat_log_log (SAT_LOG_LEVEL_ERROR, 
                      _("%s: Bad data measuring distance to South Pole %f %f."),
-                     __FUNCTION__, sat->ssplon, sat->ssplat);
+                     __func__, sat->ssplon, sat->ssplat);
     }
     if (qrb1 <= 0.5*sat->footprint) {
         return TRUE;
@@ -1905,7 +1905,7 @@ plot_sat (gpointer key, gpointer value, gpointer data)
     if ( obj == NULL ) {
         sat_log_log (SAT_LOG_LEVEL_ERROR, 
                      _("%s: Cannot allocate memory for satellite %d."),
-                     __FUNCTION__, sat->tle.catnr);
+                     __func__, sat->tle.catnr);
         return;
     }
 

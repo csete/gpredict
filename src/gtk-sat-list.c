@@ -516,7 +516,7 @@ void gtk_sat_list_update(GtkWidget * widget)
     /* first, do some sanity checks */
     if ((satlist == NULL) || !IS_GTK_SAT_LIST(satlist))
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Invalid GtkSatList!"), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Invalid GtkSatList!"), __func__);
     }
 
     /* check refresh rate */
@@ -586,12 +586,12 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
     {
         /* satellite not tracked anymore => remove */
         sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s: Failed to get data for #%d."), __FUNCTION__, *catnum);
+                    _("%s: Failed to get data for #%d."), __func__, *catnum);
 
         gtk_list_store_remove(GTK_LIST_STORE(model), iter);
 
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Satellite #%d removed from list."), __FUNCTION__, *catnum);
+                    _("%s: Satellite #%d removed from list."), __func__, *catnum);
     }
     else
     {
@@ -1380,7 +1380,7 @@ void gtk_sat_list_select_sat(GtkWidget * satlist, gint catnum)
         else
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: GtkSatList has not child with index %d"), __FUNCTION__, i);
+                        _("%s: GtkSatList has not child with index %d"), __func__, i);
         }
     }
 }

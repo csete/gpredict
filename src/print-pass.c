@@ -147,7 +147,7 @@ void print_pass   (pass_t *pass, qth_t *qth, GtkWindow *parent)
 
     if (error) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     "%s: %s", __FUNCTION__, error->message);
+                     "%s: %s", __func__, error->message);
 
         GtkWidget *dialog;
 
@@ -177,7 +177,7 @@ void print_passes (GSList *passes)
 {
     (void) passes; /* avoid unused parameter compiler warning */
 
-    sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __FUNCTION__);
+    sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __func__);
 }
 
 

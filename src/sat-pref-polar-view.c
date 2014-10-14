@@ -817,7 +817,7 @@ static void reset_cb           (GtkWidget *button, gpointer cfg)
     default:
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Invalid chart orientation %d (using N/E/S/W)"),
-                     __FILE__, __FUNCTION__, orient);
+                     __FILE__, __func__, orient);
         orient = POLAR_VIEW_NESW;
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (nesw), TRUE);
         break;

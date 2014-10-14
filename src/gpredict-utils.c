@@ -206,7 +206,7 @@ gpredict_file_copy (const gchar *in, const gchar *out)
      /* read source file */
      if (!g_file_get_contents (in, &contents, &ulen, &err)) {
 
-          sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __FUNCTION__, err->message);
+          sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __func__, err->message);
           g_clear_error (&err);
 
           status = 1;
@@ -218,7 +218,7 @@ gpredict_file_copy (const gchar *in, const gchar *out)
 
           if (!g_file_set_contents (out, contents, slen, &err)) {
 
-               sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __FUNCTION__, err->message);
+               sat_log_log (SAT_LOG_LEVEL_ERROR, "%s: %s", __func__, err->message);
                g_clear_error (&err);
 
                status = 1;
@@ -272,7 +272,7 @@ rgb2gdk  (guint rgb, GdkColor *color)
      if (color == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
 
@@ -311,13 +311,13 @@ rgba2gdk (guint rgba, GdkColor *color, guint16 *alpha)
      if (color == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
      if (alpha == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with alpha = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
 
@@ -358,13 +358,13 @@ gdk2rgb  (const GdkColor *color, guint *rgb)
      if (color == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
      if (rgb == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with rgb = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
 
@@ -400,13 +400,13 @@ gdk2rgba (const GdkColor *color, guint16 alpha, guint *rgba)
      if (color == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with color = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
      if (rgba == NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s:%s: %s called with rgba = NULL"),
-                          __FILE__, __LINE__, __FUNCTION__);
+                          __FILE__, __LINE__, __func__);
           return;
      }
 
@@ -527,7 +527,7 @@ gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename) {
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not create config data (%s)."),
-                     __FUNCTION__, error->message);
+                     __func__, error->message);
         
         g_clear_error (&error);
         
@@ -538,7 +538,7 @@ gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename) {
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Could not create config file (%s)."),
-                         __FUNCTION__, error->message);
+                         __func__, error->message);
             
             g_clear_error (&error);
             
@@ -557,7 +557,7 @@ gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename) {
             if (error != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error writing config data (%s)."),
-                             __FUNCTION__, error->message);
+                             __func__, error->message);
                 
                 g_clear_error (&error);
                 
@@ -566,14 +566,14 @@ gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename) {
             else if (length != written) {
                 sat_log_log (SAT_LOG_LEVEL_WARN,
                              _("%s: Wrote only %d out of %d chars."),
-                             __FUNCTION__, written, length);
+                             __func__, written, length);
                 
                 err = 1;
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_INFO,
                              _("%s: Configuration saved for %s."),
-                             __FUNCTION__, filename);
+                             __func__, filename);
                 
                 err = 0;
             }

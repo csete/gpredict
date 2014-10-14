@@ -578,7 +578,7 @@ void
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSatTree!"),
-                     __FUNCTION__);
+                     __func__);
 
         return;
     }
@@ -600,7 +600,7 @@ void
         /* else do nothing since the sat is already selected */
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Satellite %d already selected; skip..."),
-                     __FUNCTION__, catnum);
+                     __func__, catnum);
     }
 }
 
@@ -733,7 +733,7 @@ guint *
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSatTree!"),
-                     __FUNCTION__);
+                     __func__);
 
         return NULL;
     }
@@ -744,7 +744,7 @@ guint *
     if (s < 1) {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: There are no satellites selected => NULL."),
-                     __FUNCTION__);
+                     __func__);
 
         *size = 0;
 

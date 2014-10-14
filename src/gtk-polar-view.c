@@ -727,7 +727,7 @@ void gtk_polar_view_update(GtkWidget * widget)
                 {
                     sat_log_log(SAT_LOG_LEVEL_ERROR,
                                 _("%s: Can not find NEXT satellite."),
-                                __FUNCTION__);
+                                __func__);
                     g_object_set(polv->next, "text", _("Next: ERR"), NULL);
                 }
             }
@@ -895,7 +895,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 {
                     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                                 _("%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"),
-                                __FILE__, __FUNCTION__, *catnum, qth_upd, time_upd);
+                                __FILE__, __func__, *catnum, qth_upd, time_upd);
 
                     root = goo_canvas_get_root_item_model(GOO_CANVAS(polv->canvas));
 
@@ -994,7 +994,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                     sat_log_log(SAT_LOG_LEVEL_ERROR,
                                 _
                                 ("%s: marker added to polarview not showing %d."),
-                                __FUNCTION__, *catnum);
+                                __func__, *catnum);
 
                 if (goo_canvas_item_model_find_child(root, obj->label) != -1)
                     goo_canvas_item_model_raise(obj->label, NULL);
@@ -1002,7 +1002,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                     sat_log_log(SAT_LOG_LEVEL_ERROR,
                                 _
                                 ("%s: label added to polarview not showing %d."),
-                                __FUNCTION__, *catnum);
+                                __func__, *catnum);
 
                 g_object_set_data(G_OBJECT(obj->marker), "catnum",
                                   GINT_TO_POINTER(*catnum));
@@ -1025,7 +1025,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 /* obj == NULL */
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s: Cannot allocate memory for satellite %d."),
-                            __FUNCTION__, sat->tle.catnr);
+                            __func__, sat->tle.catnr);
                 return;
 
             }
@@ -1727,7 +1727,7 @@ void gtk_polar_view_select_sat(GtkWidget * widget, gint catnum)
     {
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
                     _("%s Requested satellite (%d) is not within range"),
-                    __FUNCTION__, catnum);
+                    __func__, catnum);
     }
     else
     {

@@ -872,7 +872,7 @@ static void sat_selected_cb (GtkComboBox *satsel, gpointer data)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Invalid satellite selection: %d"),
-                     __FILE__, __FUNCTION__, i);
+                     __FILE__, __func__, i);
         
         /* clear pass just in case... */
         if (ctrl->pass != NULL) {
@@ -909,7 +909,7 @@ static void trsp_selected_cb (GtkComboBox *box, gpointer data)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Inconsistency detected in internal transponder data (%d,%d)"),
-                     __FUNCTION__, i, n);
+                     __func__, i, n);
     }
 }
 
@@ -1040,7 +1040,7 @@ static void primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s:%s: Primary device selected: %d"),
-                 __FILE__, __FUNCTION__, gtk_combo_box_get_active (box));
+                 __FILE__, __func__, gtk_combo_box_get_active (box));
 
     
     /* free previous configuration */
@@ -1063,7 +1063,7 @@ static void primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     if (radio_conf_read (ctrl->conf)) {
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%s: Loaded new radio configuration %s"),
-                     __FILE__, __FUNCTION__, ctrl->conf->name);
+                     __FILE__, __func__, ctrl->conf->name);
         /* update LO widgets */
         buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf->lo/1.0e6);
         gtk_label_set_text (GTK_LABEL (ctrl->LoDown), buff);
@@ -1078,7 +1078,7 @@ static void primary_rig_selected_cb (GtkComboBox *box, gpointer data)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to load radio configuration %s"),
-                     __FILE__, __FUNCTION__, ctrl->conf->name);
+                     __FILE__, __func__, ctrl->conf->name);
 
         g_free (ctrl->conf->name);
         if (ctrl->conf->host)
@@ -1106,7 +1106,7 @@ static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s:%s: Secondary device selected: %d"),
-                 __FILE__, __FUNCTION__, gtk_combo_box_get_active (box));
+                 __FILE__, __func__, gtk_combo_box_get_active (box));
     
     /* free previous configuration */
     if (ctrl->conf2 != NULL) {
@@ -1154,7 +1154,7 @@ static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     if (ctrl->conf2 == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to allocate memory for radio config"),
-                     __FILE__, __FUNCTION__);
+                     __FILE__, __func__);
         return;
     }
     
@@ -1163,7 +1163,7 @@ static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     if (radio_conf_read (ctrl->conf2)) {
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%s: Loaded new radio configuration %s"),
-                     __FILE__, __FUNCTION__, ctrl->conf2->name);
+                     __FILE__, __func__, ctrl->conf2->name);
         /* update LO widgets */
         buff = g_strdup_printf (_("%.0f MHz"), ctrl->conf2->loup/1.0e6);
         gtk_label_set_text (GTK_LABEL (ctrl->LoUp), buff);
@@ -1172,7 +1172,7 @@ static void secondary_rig_selected_cb (GtkComboBox *box, gpointer data)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to load radio configuration %s"),
-                     __FILE__, __FUNCTION__, ctrl->conf->name);
+                     __FILE__, __func__, ctrl->conf->name);
 
         g_free (ctrl->conf2->name);
         if (ctrl->conf2->host)
@@ -1199,7 +1199,7 @@ static void rig_engaged_cb (GtkToggleButton *button, gpointer data)
         /* we don't have a working configuration */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Controller does not have a valid configuration"),
-                     __FUNCTION__);
+                     __func__);
         return;
     }
 
@@ -1313,7 +1313,7 @@ static gboolean setup_split(GtkRigCtrl *ctrl)
             
         default:
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s called but TX VFO is %d."), __FUNCTION__, ctrl->conf->vfoUp);
+                        _("%s called but TX VFO is %d."), __func__, ctrl->conf->vfoUp);
             return FALSE;
         }
 
@@ -1321,7 +1321,7 @@ static gboolean setup_split(GtkRigCtrl *ctrl)
     
     g_free(buff);
     
-    return(check_set_response(buffback, retcode, __FUNCTION__));
+    return(check_set_response(buffback, retcode, __func__));
 
 }
 
@@ -1372,14 +1372,14 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
     if (ctrl->conf == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Controller does not have a valid configuration"),
-                     __FUNCTION__);
+                     __func__);
         return (TRUE);
 
     }
     
     
     if (g_mutex_trylock(&(ctrl->busy)) == FALSE) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__func__);
         return TRUE;
     }
     
@@ -1415,7 +1415,7 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
             /* invalid mode */
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"),
-                         __FUNCTION__, ctrl->conf->type);
+                         __func__, ctrl->conf->type);
             ctrl->conf->type = RIG_TYPE_RX;
             
         }
@@ -1429,7 +1429,7 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
         ctrl->errcnt = 0;
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                     __FUNCTION__, MAX_ERROR_COUNT);
+                     __func__, MAX_ERROR_COUNT);
         
         //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
     }
@@ -2158,7 +2158,7 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt)
     retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
     
     g_free (buff);
-    return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__func__));
 
 }
 
@@ -2185,7 +2185,7 @@ static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble freq)
     retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
     
     g_free(buff);
-    return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__func__));
 
 }
 
@@ -2214,7 +2214,7 @@ static gboolean set_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble freq)
     
     g_free(buff);
 
-    return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__func__));
 
 }
 
@@ -2236,7 +2236,7 @@ static gboolean set_toggle (GtkRigCtrl *ctrl, gint sock)
     retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
     
     g_free(buff);
-    return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__func__));
 
 }
 
@@ -2260,7 +2260,7 @@ static gboolean unset_toggle (GtkRigCtrl *ctrl, gint sock)
     
     g_free(buff);
 
-    return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__func__));
 
 }
 
@@ -2284,7 +2284,7 @@ static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     buff = g_strdup_printf ("f\x0a");
 
     retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-    retcode=check_get_response(buffback,retcode,__FUNCTION__);
+    retcode=check_get_response(buffback,retcode,__func__);
     if (retcode) {
         vbuff = g_strsplit (buffback, "\n", 3);
         if (vbuff[0])
@@ -2323,7 +2323,7 @@ static gboolean get_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble *freq)
     buff = g_strdup_printf ("i\x0a");    
 
     retcode=send_rigctld_command(ctrl,sock,buff,buffback,128);
-    retcode=check_get_response(buffback,retcode,__FUNCTION__);
+    retcode=check_get_response(buffback,retcode,__func__);
     if (retcode) {
         vbuff = g_strsplit (buffback, "\n", 3);
         if (vbuff[0]) 
@@ -2371,7 +2371,7 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
     default:
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid VFO argument. Using VFOA."),
-                     __FUNCTION__);
+                     __func__);
         buff = g_strdup_printf ("V VFOA\x0a");
         break;
     }
@@ -2380,7 +2380,7 @@ static gboolean set_vfo (GtkRigCtrl *ctrl, vfo_t vfo)
  
     g_free(buff);
     
-    return(check_set_response(buffback,retcode,__FUNCTION__));
+    return(check_set_response(buffback,retcode,__func__));
 }
 #endif
 
@@ -2470,7 +2470,7 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
     if G_UNLIKELY (ctrl->target == NULL) {
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s:%s: GtkSatModule has no target satellite."),
-                     __FILE__, __FUNCTION__);
+                     __FILE__, __func__);
         return;
     }
 
@@ -2482,7 +2482,7 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
     
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s:%s: Satellite %d has %d transponder modes."),
-                 __FILE__, __FUNCTION__, ctrl->target->tle.catnr, n);
+                 __FILE__, __func__, ctrl->target->tle.catnr, n);
     
     if (n == 0)
         return;
@@ -2493,7 +2493,7 @@ static void load_trsp_list (GtkRigCtrl *ctrl)
         
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:&s: Read transponder '%s' for satellite %d"),
-                     __FILE__, __FUNCTION__, trsp->name, ctrl->target->tle.catnr);
+                     __FILE__, __func__, trsp->name, ctrl->target->tle.catnr);
     }
     
     /* make an initial selection */
@@ -2654,18 +2654,18 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s:%s: sending %d bytes to rigctld as \"%s\""),
-                 __FILE__, __FUNCTION__, size, buff);
+                 __FILE__, __func__, size, buff);
     /* send command */
     written = send(sock, buff, strlen(buff), 0);
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
+                     __func__, written, size);
     }
     if (written == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rigctld port closed"),
-                     __FUNCTION__);
+                     __func__);
         return FALSE;
     }
     /* try to read answer */
@@ -2673,7 +2673,7 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
     if (size == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rigctld port closed"),
-                     __FUNCTION__);
+                     __func__);
         return FALSE;
     }
 
@@ -2681,12 +2681,12 @@ gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff, gchar *b
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rigctld"),
-                     __FILE__, __FUNCTION__);
+                     __FILE__, __func__);
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%s: Read %d bytes from rigctld"),
-                     __FILE__, __FUNCTION__, size);
+                     __FILE__, __func__, size);
         
     }
     ctrl->wrops++;
@@ -2720,7 +2720,7 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
         case GDK_space:
             sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Detected SPACEBAR pressed event"),
-                         __FUNCTION__);
+                         __func__);
                          
             /* manage PTT event but only if rig is of type TOGGLE_MAN */
             if (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN) {
@@ -2733,7 +2733,7 @@ static gboolean key_press_cb (GtkWidget *widget, GdkEventKey *pKey, gpointer dat
         default:
             sat_log_log (SAT_LOG_LEVEL_DEBUG,
                          _("%s:%s: Keypress value %i not managed by this function"),
-                         __FILE__, __FUNCTION__, pKey->keyval);
+                         __FILE__, __func__, pKey->keyval);
             break;
 
         }
@@ -2780,12 +2780,12 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
         /* timeout did not expire, we've got the controller lock */
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Acquired controller lock"),
-                     __FUNCTION__);
+                     __func__);
 
         if (ctrl->engaged == FALSE) {       
             sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage button)"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
 
@@ -2795,7 +2795,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
                 /* PTT is OFF => set TX freq then set PTT to ON */
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: PTT is OFF => Set TX freq and PTT=ON"),
-                             __FUNCTION__);
+                             __func__);
                              
                 exec_toggle_tx_cycle (ctrl);
                 set_ptt(ctrl, ctrl->sock, TRUE);
@@ -2804,7 +2804,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
                 /* PTT is ON => set to OFF */
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: PTT is ON = Set PTT=OFF"),
-                             __FUNCTION__);
+                             __func__);
                              
                 set_ptt(ctrl, ctrl->sock, FALSE);
             }
@@ -2816,7 +2816,7 @@ static void manage_ptt_event (GtkRigCtrl *ctrl)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to acquire controller lock; PTT event not handled"),
-                     __FUNCTION__);
+                     __func__);
     }
    
 }
@@ -2831,14 +2831,14 @@ static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
     if (*sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                     __FUNCTION__);
+                     __func__);
         *sock = 0;
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                     __FUNCTION__);
+                     __func__);
     }
 
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
@@ -2852,14 +2852,14 @@ static gboolean open_rigctld_socket (radio_conf_t *conf, gint *sock) {
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
+                     __func__, conf->host, conf->port);
         *sock = 0;
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, conf->host, conf->port);
+                     __func__, conf->host, conf->port);
     }
 
     return TRUE;
@@ -2872,7 +2872,7 @@ static gboolean close_rigctld_socket (gint *sock) {
   if (written != 2) {
       sat_log_log (SAT_LOG_LEVEL_ERROR,
                    _("%s:%s: Sent 2 bytes but sent %d."),
-                   __FILE__, __FUNCTION__, written);
+                   __FILE__, __func__, written);
   }
 #ifndef WIN32
   shutdown (*sock, SHUT_RDWR);

@@ -71,7 +71,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         /* an error occurred */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to load data from %s (%s)"),
-                     __FUNCTION__, path, error->message);
+                     __func__, path, error->message);
 
         g_clear_error (&error);
 
@@ -83,7 +83,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error reading NAME from %s (%s)"),
-                         __FUNCTION__, path, error->message);
+                         __func__, path, error->message);
             g_clear_error (&error);
             sat->name = g_strdup ("Error");
         }
@@ -91,7 +91,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Satellite %d has no NICKNAME"),
-                         __FUNCTION__, catnum);
+                         __func__, catnum);
             g_clear_error (&error);
             sat->nickname = g_strdup (sat->name);
         }
@@ -103,14 +103,14 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error reading TLE line 1 from %s (%s)"),
-                         __FUNCTION__, path, error->message);
+                         __func__, path, error->message);
             g_clear_error (&error);
         }
         tlestr2 = g_key_file_get_string (data, "Satellite", "TLE2", NULL);
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Error reading TLE line 2 from %s (%s)"),
-                         __FUNCTION__, path, error->message);
+                         __func__, path, error->message);
             g_clear_error (&error);
         }
 
@@ -119,7 +119,7 @@ gtk_sat_data_read_sat (gint catnum, sat_t *sat)
         if (!Good_Elements (rawtle)) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: TLE data for %d appears to be bad"),
-                         __FUNCTION__, catnum);
+                         __func__, catnum);
             errorcode = 2;
         } else {
             Convert_Satellite_Data (rawtle, &sat->tle);

@@ -133,7 +133,7 @@ void sat_log_init()
     if (!err)
     {
         initialised = TRUE;
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Session started"), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Session started"), __func__);
     }
 }
 
@@ -144,7 +144,7 @@ void sat_log_close()
 {
     if (initialised)
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Session ended"), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Session ended"), __func__);
         g_io_channel_shutdown(logfile, TRUE, NULL);
         g_io_channel_unref(logfile);
         logfile = NULL;

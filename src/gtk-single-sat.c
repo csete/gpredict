@@ -367,7 +367,7 @@ void gtk_single_sat_select_sat (GtkWidget *single_sat, gint catnum)
     if (!foundsat) {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Could not find satellite with catalog number %d"),
-                    __FUNCTION__, catnum);
+                    __func__, catnum);
         return;
     }
     title = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
@@ -390,7 +390,7 @@ gtk_single_sat_update          (GtkWidget *widget)
 
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSingleSat!"),
-                     __FUNCTION__);
+                     __func__);
     }
 
 

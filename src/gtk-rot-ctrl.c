@@ -715,7 +715,7 @@ static void
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Invalid satellite selection: %d"),
-                     __FILE__, __FUNCTION__, i);
+                     __FILE__, __func__, i);
         
         /* clear pass just in case... */
         if (ctrl->pass != NULL) {
@@ -862,7 +862,7 @@ static void
             /* we don't have a working configuration */
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Controller does not have a valid configuration"),
-                         __FUNCTION__);
+                         __func__);
             return;
         }
         gtk_widget_set_sensitive (ctrl->DevSel, FALSE);
@@ -893,7 +893,7 @@ static gboolean
     
     
     if (g_mutex_trylock(&(ctrl->busy)) == FALSE) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__func__);
         return TRUE;
     }
     
@@ -1066,7 +1066,7 @@ static gboolean
                 ctrl->engaged = FALSE;
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                             __FUNCTION__, MAX_ERROR_COUNT);
+                             __func__, MAX_ERROR_COUNT);
                 ctrl->errcnt = 0;
                 //g_print ("ERROR. WROPS: %d   RDOPS: %d\n", ctrl->wrops, ctrl->rdops);
             }
@@ -1314,14 +1314,14 @@ static gboolean open_rotctld_socket (GtkRotCtrl * ctrl) {
     if (ctrl->sock < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to create socket"),
-                     __FUNCTION__);
+                     __func__);
         ctrl->sock = 0;
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Network socket created successfully"),
-                     __FUNCTION__);
+                     __func__);
     }
 
     memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
@@ -1335,14 +1335,14 @@ static gboolean open_rotctld_socket (GtkRotCtrl * ctrl) {
     if (status < 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to connect to %s:%d"),
-                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                     __func__, ctrl->conf->host, ctrl->conf->port);
         ctrl->sock = 0;
         return FALSE;
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Connection opened to %s:%d"),
-                     __FUNCTION__, ctrl->conf->host, ctrl->conf->port);
+                     __func__, ctrl->conf->host, ctrl->conf->port);
     }
 
     return TRUE;
@@ -1357,7 +1357,7 @@ static gboolean close_rotctld_socket (gint *sock) {
   if (written != 2) {
       sat_log_log (SAT_LOG_LEVEL_ERROR,
                    _("%s:%s: Sent 2 bytes but sent %d."),
-                   __FILE__, __FUNCTION__, written);
+                   __FILE__, __func__, written);
   }
 #ifndef WIN32
   shutdown (*sock, SHUT_RDWR);
@@ -1385,7 +1385,7 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
     
     //sat_log_log (SAT_LOG_LEVEL_DEBUG,
     //             _("%s:%s: Sending %d bytes as %s."),
-    //             __FILE__, __FUNCTION__, size, buff);
+    //             __FILE__, __func__, size, buff);
 
 
     /* send command */
@@ -1393,12 +1393,12 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
     if (written != size) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: SIZE ERROR %d / %d"),
-                     __FUNCTION__, written, size);
+                     __func__, written, size);
     }
     if (written == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rotctld Socket Down"),
-                     __FUNCTION__);
+                     __func__);
         return FALSE;
     }
 
@@ -1408,7 +1408,7 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
     if (size == -1) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: rotctld Socket Down"),
-                     __FUNCTION__);
+                     __func__);
         return FALSE;
     }  
 
@@ -1416,12 +1416,12 @@ gboolean send_rotctld_command(GtkRotCtrl *ctrl, gchar *buff, gchar *buffout, gin
     if (size == 0) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Got 0 bytes from rotctld"),
-                     __FILE__, __FUNCTION__);
+                     __FILE__, __func__);
     }
     else {
         //sat_log_log (SAT_LOG_LEVEL_DEBUG,
         //             _("%s:%s: Read %d bytes as %s from rotctld"),
-        //             __FILE__, __FUNCTION__, size, buffout);
+        //             __FILE__, __func__, size, buffout);
         
     }
 

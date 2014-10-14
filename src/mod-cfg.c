@@ -132,7 +132,7 @@ gchar *mod_cfg_new    ()
 
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                                  _("%s: Already have module %s. Ask user to confirm..."),
-                                 __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
+                                 __func__, gtk_entry_get_text (GTK_ENTRY (namew)));
 
                     warn = gtk_message_dialog_new (//NULL,
                             GTK_WINDOW (app),
@@ -167,7 +167,7 @@ gchar *mod_cfg_new    ()
                         /* send an error message */
                         sat_log_log (SAT_LOG_LEVEL_ERROR,
                                      _("%s: Error while saving module data (%d)."),
-                                     __FUNCTION__, status);
+                                     __func__, status);
                     }
 
                     finished = TRUE;
@@ -176,7 +176,7 @@ gchar *mod_cfg_new    ()
             else {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: User tried to create module with no sats."),
-                             __FUNCTION__);
+                             __func__);
 
                 /* tell user to behave nicely */
                 GtkWidget *errdialog;
@@ -262,7 +262,7 @@ mod_cfg_status_t mod_cfg_edit   (gchar *modname, GKeyFile *cfgdata, GtkWidget *t
             else {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: User tried to create module with no sats."),
-                             __FUNCTION__);
+                             __func__);
 
                 /* tell user not to do that */
                 GtkWidget *errdialog;
@@ -318,14 +318,14 @@ mod_cfg_status_t mod_cfg_save   (gchar *modname, GKeyFile *cfgdata)
     if (!modname) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Attempt to save data to empty file name."),
-                     __FUNCTION__);
+                     __func__);
 
         return MOD_CFG_ERROR;
     }
     if (!cfgdata) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Attempt to save NULL data."),
-                     __FUNCTION__);
+                     __func__);
 
         return MOD_CFG_ERROR;
     }
@@ -613,7 +613,7 @@ static GtkWidget *create_selected_sats_list (GKeyFile *cfgdata, gboolean new, Gt
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Failed to get list of satellites (%s)"),
-                         __FUNCTION__, error->message);
+                         __func__, error->message);
 
             g_clear_error (&error);
 
@@ -672,7 +672,7 @@ static void add_selected_sat (GtkListStore *store, gint catnum)
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%s: Could not fetch entry %d in satellite list"),
-                         __FILE__, __FUNCTION__, i);
+                         __FILE__, __func__, i);
         }
 
     }
@@ -687,7 +687,7 @@ static void add_selected_sat (GtkListStore *store, gint catnum)
         /* error */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Error reading satellite %d."),
-                     __FILE__, __FUNCTION__, catnum);
+                     __FILE__, __func__, catnum);
     }
     else {
         /* insert satellite into liststore */
@@ -799,7 +799,7 @@ static GtkWidget *create_loc_selector   (GKeyFile *cfgdata)
     else {
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Module has no QTH; use default."),
-                     __FUNCTION__);
+                     __func__);
 
         defqth = g_strdup (_("** DEFAULT **"));
         defqthshort = g_strdup(defqth);
@@ -945,7 +945,7 @@ static void mod_cfg_apply         (GKeyFile *cfgdata)
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%s: Could not fetch entry %d in satellite list"),
-                         __FILE__, __FUNCTION__, i);
+                         __FILE__, __func__, i);
         }
 
     }
@@ -959,7 +959,7 @@ static void mod_cfg_apply         (GKeyFile *cfgdata)
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Applied changes to %s."),
-                 __FUNCTION__, gtk_entry_get_text (GTK_ENTRY (namew)));
+                 __func__, gtk_entry_get_text (GTK_ENTRY (namew)));
 }
 
 

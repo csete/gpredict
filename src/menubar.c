@@ -267,13 +267,13 @@ static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
     (void)widget;               /* avoid unused parameter compiler warning */
     (void)data;                 /* avoid unused parameter compiler warning */
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Starting new module configurator..."), __FUNCTION__);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Starting new module configurator..."), __func__);
 
     modnam = mod_cfg_new();
 
     if (modnam)
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module name is %s."), __FUNCTION__, modnam);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module name is %s."), __func__, modnam);
 
         confdir = get_modules_dir();
         modfile = g_strconcat(confdir, G_DIR_SEPARATOR_S, modnam, ".mod", NULL);
@@ -308,7 +308,7 @@ static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module config cancelled."), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module config cancelled."), __func__);
     }
 }
 
@@ -323,13 +323,13 @@ static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
     (void)widget;               /* avoid unused parameter compiler warning */
     (void)data;                 /* avoid unused parameter compiler warning */
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open existing module..."), __FUNCTION__);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open existing module..."), __func__);
 
     modnam = select_module();
 
     if (modnam)
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module %s."), __FUNCTION__, modnam);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module %s."), __func__, modnam);
 
         confdir = get_modules_dir();
         modfile = g_strconcat(confdir, G_DIR_SEPARATOR_S, modnam, ".mod", NULL);
@@ -378,7 +378,7 @@ static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module cancelled."), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module cancelled."), __func__);
     }
 }
 
@@ -588,7 +588,7 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
 
     if (doupdate)
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running TLE update from %s"), __FUNCTION__, dir);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running TLE update from %s"), __func__, dir);
 
         /* store last used TLE dir */
         sat_cfg_set_str(SAT_CFG_STR_TLE_FILE_DIR, dir);
@@ -807,7 +807,7 @@ static gchar *select_module()
     {
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
                     _("%s:%s: Scanning directory %s for modules."),
-                    __FILE__, __FUNCTION__, dirname);
+                    __FILE__, __func__, dirname);
 
         while ((filename = g_dir_read_name(dir)))
         {
@@ -908,12 +908,12 @@ static gchar *select_module()
             gtk_tree_model_get(selmod, &item, 0, &dirname, -1);
 
             sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                        _("%s:%s: Selected module is: %s"), __FILE__, __FUNCTION__, dirname);
+                        _("%s:%s: Selected module is: %s"), __FILE__, __func__, dirname);
         }
         else
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%s: No selection is list of modules."), __FILE__, __FUNCTION__);
+                        _("%s:%s: No selection is list of modules."), __FILE__, __func__);
 
             dirname = NULL;
         }

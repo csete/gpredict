@@ -779,7 +779,7 @@ static void
         /* debug message */
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%s: %.2f %.2f => %s"),
-                     __FILE__, __FUNCTION__,
+                     __FILE__, __func__,
                      gtk_spin_button_get_value (GTK_SPIN_BUTTON (lon)),
                      gtk_spin_button_get_value (GTK_SPIN_BUTTON (lat)),
                      locator);
@@ -825,7 +825,7 @@ static void
         /* debug message */
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s:%s: %s => %.2f %.2f"),
-                     __FILE__, __FUNCTION__,
+                     __FILE__, __func__,
                      gtk_entry_get_text (GTK_ENTRY (qra)),
                      lonf, latf);
 

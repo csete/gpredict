@@ -66,14 +66,14 @@ gpredict_help_launch (gpredict_help_type_t type)
      if (idx == BROWSER_TYPE_NONE) {
           sat_log_log (SAT_LOG_LEVEL_INFO,
                     _("%s: Help browser is not set up yet."),
-                    __FUNCTION__);
+                    __func__);
 
           resp = config_help ();
 
           if (resp == GTK_RESPONSE_CANCEL) {
                sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s: Configure help browser cancelled."),
-                         __FUNCTION__);
+                         __func__);
 
                return;
           }
@@ -89,7 +89,7 @@ gpredict_help_launch (gpredict_help_type_t type)
      /* launch help browser */
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                _("%s: Launching help browser %s."),
-               __FUNCTION__, sat_help[idx].type);
+               __func__, sat_help[idx].type);
 
      g_print ("FIXME: FINSH IMPELMTATION\n");
 }
@@ -192,7 +192,7 @@ gpredict_help_show_txt (const gchar *filename)
      if (error != NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: Failed to load %s (%s)"),
-                          __FUNCTION__, fname, error->message);
+                          __func__, fname, error->message);
           g_free (fname);
           g_clear_error (&error);
 
@@ -203,7 +203,7 @@ gpredict_help_show_txt (const gchar *filename)
      if (error != NULL) {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: Error reading %s (%s)"),
-                          __FUNCTION__, fname, error->message);
+                          __func__, fname, error->message);
 
           g_free (buff);
           g_clear_error (&error);

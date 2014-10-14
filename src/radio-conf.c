@@ -67,7 +67,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     if (conf->name == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: NULL configuration name!"),
-                       __FUNCTION__);
+                       __func__);
         return FALSE;
     }
     
@@ -83,7 +83,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     if (cfg == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not load file %s\n"),
-                     __FUNCTION__, fname);
+                     __func__, fname);
         g_free (fname);
         
         return FALSE;
@@ -96,7 +96,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading radio conf from %s (%s)."),
-                     __FUNCTION__, conf->name, error->message);
+                     __func__, conf->name, error->message);
         g_clear_error (&error);
         g_key_file_free (cfg);
         return FALSE;
@@ -106,7 +106,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading radio conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+                       __func__, conf->name, error->message);
         g_clear_error (&error);
         g_key_file_free (cfg);
         return FALSE;
@@ -118,7 +118,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                         _("%s: Error reading radio conf from %s (%s)."),
-                        __FUNCTION__, conf->name, error->message);
+                        __func__, conf->name, error->message);
             g_clear_error (&error);
             g_key_file_free (cfg);
             return FALSE;
@@ -134,7 +134,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
         if (error != NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                         _("%s: Error reading radio conf from %s (%s)."),
-                        __FUNCTION__, conf->name, error->message);
+                        __func__, conf->name, error->message);
             g_clear_error (&error);
             g_key_file_free (cfg);
             return FALSE;
@@ -149,7 +149,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading radio conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+                       __func__, conf->name, error->message);
         g_clear_error (&error);
         g_key_file_free (cfg);
         return FALSE;
@@ -160,7 +160,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Error reading radio conf from %s (%s)."),
-                       __FUNCTION__, conf->name, error->message);
+                       __func__, conf->name, error->message);
         g_clear_error (&error);
         g_key_file_free (cfg);
         return FALSE;
@@ -175,7 +175,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
             if (error != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error reading radio conf from %s (%s)."),
-                             __FUNCTION__, conf->name, error->message);
+                             __func__, conf->name, error->message);
                 g_clear_error (&error);
                 conf->vfoDown = VFO_SUB;
             }
@@ -187,7 +187,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
             if (error != NULL) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Error reading radio conf from %s (%s)."),
-                             __FUNCTION__, conf->name, error->message);
+                             __func__, conf->name, error->message);
                 g_clear_error (&error);
                 conf->vfoUp = VFO_MAIN;
             }
@@ -199,7 +199,7 @@ gboolean radio_conf_read (radio_conf_t *conf)
     
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Read radio configuration %s"),
-                 __FUNCTION__, conf->name);
+                 __func__, conf->name);
     
     return TRUE;
 }
@@ -221,7 +221,7 @@ void radio_conf_save (radio_conf_t *conf)
     if (conf->name == NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: NULL configuration name!"),
-                     __FUNCTION__);
+                     __func__);
         return;
     }
     

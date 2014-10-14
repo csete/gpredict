@@ -72,7 +72,7 @@ void tmg_create (GtkSatModule *mod)
     if (mod->tmgActive) {
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Time Controller for %s is already active"),
-                     __FUNCTION__, mod->name);
+                     __func__, mod->name);
 
         /* try to make window visible in case it is covered
                    by something else */
@@ -292,7 +292,7 @@ void tmg_create (GtkSatModule *mod)
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Time Controller for %s launched"),
-                 __FUNCTION__, mod->name);
+                 __func__, mod->name);
 }
 
 
@@ -326,7 +326,7 @@ static void tmg_destroy  (GtkWidget *tmg, gpointer data)
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Time Controller for %s closed. Time reset."),
-                 __FUNCTION__, mod->name);
+                 __func__, mod->name);
 
 }
 
@@ -345,7 +345,7 @@ static void tmg_stop     (GtkWidget *widget, gpointer data)
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_DEBUG, __func__);
 
         /* set throttle to 0 */
         mod->throttle = 0;
@@ -370,7 +370,7 @@ static void tmg_fwd      (GtkWidget *widget, gpointer data)
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_DEBUG, __func__);
 
         /* set throttle */
         mod->throttle = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgFactor));
@@ -394,7 +394,7 @@ static void tmg_bwd      (GtkWidget *widget, gpointer data)
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_DEBUG, __func__);
 
         /* set throttle to -1 */
         mod->throttle = -gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (mod->tmgFactor));;
@@ -797,7 +797,7 @@ static gdouble calculate_time(GtkSatModule *mod)
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                  _("%s: %d/%d/%d %d:%d:%d.%d"),
-                 __FUNCTION__,
+                 __func__,
                  tim.tm_year, tim.tm_mon, tim.tm_mday,
                  tim.tm_hour, tim.tm_min, tim.tm_sec, msec);
 

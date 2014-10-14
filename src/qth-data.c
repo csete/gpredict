@@ -73,13 +73,13 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
 
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Could not load data from %s (%s)"),
-                    __FUNCTION__, filename, error->message);
+                    __func__, filename, error->message);
 
         return FALSE;
     }
 
     /* send a debug message, then read data */
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: QTH data: %s"), __FUNCTION__, filename);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: QTH data: %s"), __func__, filename);
 
     /*** FIXME: should check that strings are UTF-8? */
     /* QTH Name */
@@ -96,7 +96,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Error reading QTH name (%s)."), __FUNCTION__, error->message);
+                    _("%s: Error reading QTH name (%s)."), __func__, error->message);
 
         qth->name = g_strdup(_("ERROR"));
         g_clear_error(&error);
@@ -107,7 +107,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s: QTH has no location (%s)."), __FUNCTION__, error->message);
+                    _("%s: QTH has no location (%s)."), __func__, error->message);
 
         qth->loc = g_strdup("");
         g_clear_error(&error);
@@ -117,7 +117,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     qth->desc = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_DESC_KEY, &error);
     if ((qth->desc == NULL) || (error != NULL))
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no description."), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no description."), __func__);
 
         qth->desc = g_strdup("");
         g_clear_error(&error);
@@ -127,7 +127,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     qth->wx = g_key_file_get_string(qth->data, QTH_CFG_MAIN_SECTION, QTH_CFG_WX_KEY, &error);
     if ((qth->wx == NULL) || (error != NULL))
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no weather station."), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no weather station."), __func__);
 
         qth->wx = g_strdup("");
         g_clear_error(&error);
@@ -138,7 +138,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Error reading QTH latitude (%s)."), __FUNCTION__, error->message);
+                    _("%s: Error reading QTH latitude (%s)."), __func__, error->message);
 
         g_clear_error(&error);
 
@@ -158,7 +158,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Error reading QTH longitude (%s)."), __FUNCTION__, error->message);
+                    _("%s: Error reading QTH longitude (%s)."), __func__, error->message);
 
         g_clear_error(&error);
 
@@ -178,7 +178,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Error reading QTH altitude (%s)."), __FUNCTION__, error->message);
+                    _("%s: Error reading QTH altitude (%s)."), __func__, error->message);
 
         g_clear_error(&error);
 
@@ -197,7 +197,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Error reading QTH type (%s)."), __FUNCTION__, error->message);
+                    _("%s: Error reading QTH type (%s)."), __func__, error->message);
 
         g_clear_error(&error);
 
@@ -211,7 +211,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     if (error != NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Error reading QTH type (%s)."), __FUNCTION__, error->message);
+                    _("%s: Error reading QTH type (%s)."), __func__, error->message);
 
         g_clear_error(&error);
 
@@ -224,7 +224,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
                                              QTH_CFG_MAIN_SECTION, QTH_CFG_GPSD_SERVER_KEY, &error);
     if ((qth->gpsd_server == NULL) || (error != NULL))
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no GPSD Server."), __FUNCTION__);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: QTH has no GPSD Server."), __func__);
 
         qth->gpsd_server = g_strdup("");
         g_clear_error(&error);
@@ -235,7 +235,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Could not set QRA for %s at %f, %f."),
-                    __FUNCTION__, qth->name, qth->lon, qth->lat);
+                    __func__, qth->name, qth->lon, qth->lat);
     }
 
     qth_validate(qth);
@@ -243,7 +243,7 @@ gint qth_data_read(const gchar *filename, qth_t *qth)
     /* Now, send debug message and return */
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: QTH data: %s, %.4f, %.4f, %d"),
-                __FUNCTION__, qth->name, qth->lat, qth->lon, qth->alt);
+                __func__, qth->name, qth->lat, qth->lon, qth->alt);
 
     return TRUE;
 }
@@ -538,7 +538,7 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Could not set QRA for %s at %f, %f."),
-                    __FUNCTION__, qth->name, qth->lon, qth->lat);
+                    __func__, qth->name, qth->lon, qth->lat);
     }
 
     return retval;
@@ -579,7 +579,7 @@ gboolean qth_data_update_init(qth_t * qth)
                 qth->gps_data = NULL;
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s: Could not open gpsd at  %s:%d"),
-                            __FUNCTION__, qth->gpsd_server, qth->gpsd_port);
+                            __func__, qth->gpsd_server, qth->gpsd_port);
                 retval = FALSE;
             }
             else
@@ -602,7 +602,7 @@ gboolean qth_data_update_init(qth_t * qth)
                 qth->gps_data = NULL;
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s: Could not open gpsd at  %s:%d"),
-                            __FUNCTION__, qth->gpsd_server, qth->gpsd_port);
+                            __func__, qth->gpsd_server, qth->gpsd_port);
                 retval = FALSE;
             }
             else
@@ -616,7 +616,7 @@ gboolean qth_data_update_init(qth_t * qth)
         default:
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s: Unsupported gpsd api major version (%d)"),
-                        __FUNCTION__, GPSD_API_MAJOR_VERSION);
+                        __func__, GPSD_API_MAJOR_VERSION);
 
 
             return FALSE;
@@ -728,20 +728,20 @@ void qth_validate(qth_t * qth)
     if (!isnormal(qth->lat) && (qth->lat != 0))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: QTH data had bogus lat %f"), __FUNCTION__, qth->lat);
+                    _("%s: QTH data had bogus lat %f"), __func__, qth->lat);
         qth->lat = 0.0;
 
     }
     if (!isnormal(qth->lon) && (qth->lon != 0))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: QTH data had bogus lon %f"), __FUNCTION__, qth->lon);
+                    _("%s: QTH data had bogus lon %f"), __func__, qth->lon);
         qth->lon = 0.0;
     }
     if (!isnormal(qth->alt) && (qth->alt != 0))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: QTH data had bogus alt %f"), __FUNCTION__, qth->alt);
+                    _("%s: QTH data had bogus alt %f"), __func__, qth->alt);
         qth->alt = 0.0;
     }
 
@@ -751,7 +751,7 @@ void qth_validate(qth_t * qth)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"),
-                    __FUNCTION__, qth->name, qth->lat, qth->lon, qth->alt);
+                    __func__, qth->name, qth->lat, qth->lon, qth->alt);
 
         qth->lat = fmod(qth->lat, 360.0);
         while ((qth->lat) > 180.0)

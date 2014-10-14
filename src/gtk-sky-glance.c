@@ -735,7 +735,7 @@ on_button_press(GooCanvasItem * item,
     default:
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
                     _("%s::%s: Button %d has no function..."),
-                    __FILE__, __FUNCTION__, event->button);
+                    __FILE__, __func__, event->button);
 
         break;
     }
@@ -778,7 +778,7 @@ on_button_release(GooCanvasItem * item,
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s::%s: Could not retrieve pass_t object"),
-                    __FILE__, __FUNCTION__);
+                    __FILE__, __func__);
         return TRUE;
     }
 
@@ -792,7 +792,7 @@ on_button_release(GooCanvasItem * item,
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _
                     ("%s::%s: Showing pass details for %s - we may have a memory leak here"),
-                    __FILE__, __FUNCTION__, pass->satname);
+                    __FILE__, __func__, pass->satname);
 
         /* show the pass details */
         show_pass(pass->satname, skg->qth, new_pass, NULL);
@@ -802,7 +802,7 @@ on_button_release(GooCanvasItem * item,
     default:
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
                     _("%s::%s: Button %d has no function..."),
-                    __FILE__, __FUNCTION__, event->button);
+                    __FILE__, __func__, event->button);
         break;
     }
 
@@ -838,7 +838,7 @@ static gboolean on_mouse_enter(GooCanvasItem * item,
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s::%s: Could not retrieve pass_t object"),
-                    __FILE__, __FUNCTION__);
+                    __FILE__, __func__);
         return TRUE;
     }
 

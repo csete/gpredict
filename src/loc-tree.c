@@ -291,7 +291,7 @@ loc_tree_create (const gchar *fname,
           /* send debug message */
           sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s: Selected %s"),
-                          __FUNCTION__, *loc);
+                          __func__, *loc);
 
           return TRUE;
           break;
@@ -302,7 +302,7 @@ loc_tree_create (const gchar *fname,
           /* send debug message */
           sat_log_log (SAT_LOG_LEVEL_INFO,
                           _("%s: No location selected"),
-                          __FUNCTION__);
+                          __func__);
 
           return FALSE;
 
@@ -352,7 +352,7 @@ loc_tree_create_and_fill_model (const gchar *fname)
 
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: %s does not exist!"),
-                          __FUNCTION__, fname);
+                          __func__, fname);
 
           g_free(continent);
           g_free(country);
@@ -445,7 +445,7 @@ loc_tree_create_and_fill_model (const gchar *fname)
 
           sat_log_log (SAT_LOG_LEVEL_DEBUG,
                           _("%s: Read %d cities."),
-                          __FUNCTION__, i);
+                          __func__, i);
 
           if (continent)
                g_free (continent);
@@ -463,7 +463,7 @@ loc_tree_create_and_fill_model (const gchar *fname)
      else {
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: Failed to open locfile (%s)"),
-                          __FUNCTION__, error->message);
+                          __func__, error->message);
           g_clear_error (&error);
      }
 
@@ -524,7 +524,7 @@ loc_tree_float_cell_data_function (GtkTreeViewColumn *col,
           else {
                sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s: Invalid column: %d"),
-                               __FUNCTION__, coli);
+                               __func__, coli);
                hmf = '?';
           }
      }
@@ -677,7 +677,7 @@ loc_tree_get_selection            (GtkWidget *view,
                */
                sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s: Failed to get parent for %s."),
-                               __FUNCTION__, city);
+                               __func__, city);
 
                *loc = g_strdup (city);
                g_free (city);
@@ -691,6 +691,6 @@ loc_tree_get_selection            (GtkWidget *view,
           */
           sat_log_log (SAT_LOG_LEVEL_ERROR,
                           _("%s: No selection found!"),
-                          __FUNCTION__);
+                          __func__);
      }
 }

@@ -277,11 +277,11 @@ guint sat_cfg_load        ()
 
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: Error reading config file (%s)"),
-                     __FUNCTION__, error->message);
+                     __func__, error->message);
 
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: Using built-in defaults"),
-                     __FUNCTION__);
+                     __func__);
 
         g_clear_error (&error);
 
@@ -289,7 +289,7 @@ guint sat_cfg_load        ()
     }
     else {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Everything OK."), __FUNCTION__);
+                     _("%s: Everything OK."), __func__);
     }
 
     /* if config version is < 1.1; reset SAT_CFG_STR_TLE_FILES */
@@ -358,7 +358,7 @@ gboolean
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
 
             /* return default value */
             value = sat_cfg_bool[param].defval;
@@ -381,7 +381,7 @@ gboolean
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown BOOL param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 
     return value;
@@ -398,7 +398,7 @@ gboolean sat_cfg_get_bool_def (sat_cfg_bool_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown BOOL param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 
     return value;
@@ -419,7 +419,7 @@ void sat_cfg_set_bool (sat_cfg_bool_e param, gboolean value)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
             g_key_file_set_boolean (config,
@@ -432,7 +432,7 @@ void sat_cfg_set_bool (sat_cfg_bool_e param, gboolean value)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown BOOL param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 }
 
@@ -445,7 +445,7 @@ void
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
             g_key_file_remove_key (config,
@@ -458,7 +458,7 @@ void
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown BOOL param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 }
 
@@ -477,7 +477,7 @@ gchar *sat_cfg_get_str (sat_cfg_str_e param)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
 
             /* return default value */
             value = g_strdup (sat_cfg_str[param].defval);
@@ -500,7 +500,7 @@ gchar *sat_cfg_get_str (sat_cfg_str_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown STR param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
 
         value = g_strdup ("ERROR");
     }
@@ -522,7 +522,7 @@ gchar *sat_cfg_get_str_def (sat_cfg_str_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown STR param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
 
         value = g_strdup ("ERROR");
     }
@@ -540,7 +540,7 @@ void sat_cfg_set_str (sat_cfg_str_e param, const gchar *value)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
             if (value) {
@@ -562,7 +562,7 @@ void sat_cfg_set_str (sat_cfg_str_e param, const gchar *value)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown STR param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 }
 
@@ -575,7 +575,7 @@ void sat_cfg_reset_str (sat_cfg_str_e param)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
             g_key_file_remove_key (config,
@@ -588,7 +588,7 @@ void sat_cfg_reset_str (sat_cfg_str_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown STR param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 }
 
@@ -602,7 +602,7 @@ gint sat_cfg_get_int      (sat_cfg_int_e param)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
 
             /* return default value */
             value = sat_cfg_int[param].defval;
@@ -625,7 +625,7 @@ gint sat_cfg_get_int      (sat_cfg_int_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown INT param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 
     return value;
@@ -642,7 +642,7 @@ gint sat_cfg_get_int_def  (sat_cfg_int_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown INT param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 
     return value;
@@ -656,7 +656,7 @@ void sat_cfg_set_int      (sat_cfg_int_e param, gint value)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
             g_key_file_set_integer (config,
@@ -669,7 +669,7 @@ void sat_cfg_set_int      (sat_cfg_int_e param, gint value)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown INT param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 }
 
@@ -681,7 +681,7 @@ void sat_cfg_reset_int    (sat_cfg_int_e param)
         if (config == NULL) {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Module not initialised\n"),
-                         __FUNCTION__);
+                         __func__);
         }
         else {
             g_key_file_remove_key (config,
@@ -694,7 +694,7 @@ void sat_cfg_reset_int    (sat_cfg_int_e param)
     else {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Unknown INT param index (%d)\n"),
-                     __FUNCTION__, param);
+                     __func__, param);
     }
 }
 

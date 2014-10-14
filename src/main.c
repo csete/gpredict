@@ -158,7 +158,7 @@ int main (int argc, char *argv[])
                      _("%s: User config check failed (code %d). This is fatal.\n"\
                        "A possible solution would be to remove the .config/Gpredict data dir\n"\
                        "in your home directory"),
-                     __FUNCTION__, error);
+                     __func__, error);
 
         return 1;
     }
@@ -457,7 +457,7 @@ static gboolean tle_mon_task(gpointer data)
     GError    *err = NULL;
     
     if (data != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Passed a non-null pointer which should never happen.\n"), __FUNCTION__);
+        sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Passed a non-null pointer which should never happen.\n"), __func__);
     }
 
     /* get time of last update */
@@ -492,13 +492,13 @@ static gboolean tle_mon_task(gpointer data)
         /* too early */
         /*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
         /*                           _("%s: Threshold has not been passed yet."), */
-        /*                           __FUNCTION__, last, now, thrld); */
+        /*                           __func__, last, now, thrld); */
     }
     else {
         /* time to update */
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Time threshold has been passed."),
-                     __FUNCTION__);
+                     __func__);
 
         /* find out what to do */
         if (sat_cfg_get_int (SAT_CFG_INT_TLE_AUTO_UPD_ACTION) == TLE_AUTO_UPDATE_GOAHEAD) {
@@ -506,7 +506,7 @@ static gboolean tle_mon_task(gpointer data)
             /* start update process in separate thread */
             sat_log_log (SAT_LOG_LEVEL_DEBUG,
                          _("%s: Starting new update thread."),
-                         __FUNCTION__);
+                         __func__);
 
             /** FIXME: store thread and destroy on exit? **/
             g_thread_try_new(_("gpredict_tle_update"), update_tle_thread, NULL, &err);
@@ -514,7 +514,7 @@ static gboolean tle_mon_task(gpointer data)
             if (err != NULL)
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Failed to create TLE update thread (%s)"),
-                             __FUNCTION__, err->message);
+                             __func__, err->message);
 
         }
         else if (!tle_upd_note_sent) {
@@ -555,7 +555,7 @@ tle_mon_stop          ()
         if (!retcode)
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s: Could not find TLE monitoring task (ID = %d)"),
-                         __FUNCTION__, tle_mon_id);
+                         __func__, tle_mon_id);
 
     }
 
@@ -600,7 +600,7 @@ static void clean_tle (void)
     targetdir = g_dir_open (targetdirname, 0, NULL);
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
-                 _("%s: Cleaning TLE data in %s"), __FUNCTION__, targetdirname);
+                 _("%s: Cleaning TLE data in %s"), __func__, targetdirname);
 
 
     while ((filename = g_dir_read_name (targetdir))) {
@@ -609,11 +609,11 @@ static void clean_tle (void)
             path = sat_file_name (filename);
             if G_UNLIKELY(g_unlink (path)) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Failed to delete %s"), __FUNCTION__, filename);
+                             _("%s: Failed to delete %s"), __func__, filename);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_INFO,
-                             _("%s: Removed %s"), __FUNCTION__, filename);
+                             _("%s: Removed %s"), __func__, filename);
             }
             g_free (path);
         }
@@ -641,7 +641,7 @@ static void clean_trsp (void)
     targetdir = g_dir_open (targetdirname, 0, NULL);
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
-                 _("%s: Cleaning transponder data in %s"), __FUNCTION__, targetdirname);
+                 _("%s: Cleaning transponder data in %s"), __func__, targetdirname);
 
 
     while ((filename = g_dir_read_name (targetdir))) {
@@ -650,11 +650,11 @@ static void clean_trsp (void)
             path = trsp_file_name (filename);
             if G_UNLIKELY(g_unlink (path)) {
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
-                             _("%s: Failed to delete %s"), __FUNCTION__, filename);
+                             _("%s: Failed to delete %s"), __func__, filename);
             }
             else {
                 sat_log_log (SAT_LOG_LEVEL_INFO,
-                             _("%s: Removed %s"), __FUNCTION__, filename);
+                             _("%s: Removed %s"), __func__, filename);
             }
             g_free (path);
         }

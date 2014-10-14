@@ -191,7 +191,7 @@ first_time_check_step_02 (guint *error)
     if (!dir) {
         sat_log_log (SAT_LOG_LEVEL_ERROR, 
                         _("%s: Could not open %s."),
-                        __FUNCTION__, dirname);
+                        __func__, dirname);
         
         /* no reason to continue */
         *error |= FTC_ERROR_STEP_02;
@@ -215,7 +215,7 @@ first_time_check_step_02 (guint *error)
         if (foundqth) {
             sat_log_log (SAT_LOG_LEVEL_DEBUG,
                             _("%s: Found at least one .qth file."),
-                            __FUNCTION__);
+                            __func__);
         }
         else {
             /* try to see if there are any .qth file in pre-1.1 configuration */
@@ -257,14 +257,14 @@ first_time_check_step_02 (guint *error)
                 if (gpredict_file_copy (filename, target)) {
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                 _("%s: Failed to copy sample.qth"),
-                                __FUNCTION__);
+                                __func__);
 
                     *error |= FTC_ERROR_STEP_02;
                 }
                 else {
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                                 _("%s: Copied sample.qth to %s/"),
-                                __FUNCTION__, dirname);
+                                __func__, dirname);
                 }
 
                 g_free (target);
@@ -305,13 +305,13 @@ first_time_check_step_03 (guint *error)
     if (g_file_test (confdir, G_FILE_TEST_IS_DIR)) {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                         _("%s: Check successful."),
-                        __FUNCTION__);
+                        __func__);
     }
     else {
         /* try to create directory */
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                         _("%s: Check failed. Creating %s"),
-                        __FUNCTION__,
+                        __func__,
                         confdir);
 
         status = g_mkdir_with_parents (confdir, 0755);
@@ -322,12 +322,12 @@ first_time_check_step_03 (guint *error)
 
             sat_log_log (SAT_LOG_LEVEL_ERROR, 
                             _("%s: Failed to create %s"),
-                            __FUNCTION__, confdir);
+                            __func__, confdir);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_DEBUG,
                             _("%s: Created %s."),
-                            __FUNCTION__, confdir);
+                            __func__, confdir);
 
 
             /* try to see if there are any .mod file in pre-1.1 configuration */
@@ -371,14 +371,14 @@ first_time_check_step_03 (guint *error)
                 if (gpredict_file_copy (filename, target)) {
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                 _("%s: Failed to copy Amateur.mod"),
-                                __FUNCTION__);
+                                __func__);
 
                     *error |= FTC_ERROR_STEP_02;
                 }
                 else {
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                                 _("%s: Copied amateur.mod to %s/"),
-                                __FUNCTION__, dir);
+                                __func__, dir);
                 }
 
                 g_free (target);
@@ -409,13 +409,13 @@ first_time_check_step_04 (guint *error)
 
     if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
         sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check successful."), __FUNCTION__);
+                        _("%s: Check successful."), __func__);
     }
     else {
         /* try to create directory */
         sat_log_log (SAT_LOG_LEVEL_DEBUG, 
                         _("%s: Check failed. Creating %s"),
-                        __FUNCTION__, dir);
+                        __func__, dir);
 
         status = g_mkdir_with_parents (dir, 0755);
 
@@ -424,12 +424,12 @@ first_time_check_step_04 (guint *error)
             *error |= FTC_ERROR_STEP_04;
 
             sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
-                            __FUNCTION__, dir);
+                            __func__, dir);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_DEBUG, 
                             _("%s: Created %s."),
-                            __FUNCTION__, dir);
+                            __func__, dir);
         }
     }
 
@@ -477,7 +477,7 @@ first_time_check_step_05 (guint *error)
         /* an error occurred */
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Failed to load data from %s (%s)"),
-                     __FUNCTION__, satfilename, err->message);
+                     __func__, satfilename, err->message);
 
         g_clear_error (&err);
         *error |= FTC_ERROR_STEP_05;
@@ -486,7 +486,7 @@ first_time_check_step_05 (guint *error)
         satellites = g_key_file_get_groups (satfile, &num);
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Found %d satellites in %s"),
-                     __FUNCTION__, num, satfilename);
+                     __func__, num, satfilename);
 
         for (i = 0; i < num; i++) {
             /* first, check if this satellite already has a .sat file */
@@ -494,7 +494,7 @@ first_time_check_step_05 (guint *error)
             if (g_file_test (targetfilename, G_FILE_TEST_EXISTS)) {
                 sat_log_log (SAT_LOG_LEVEL_DEBUG,
                              _("%s: %s.sat already exists. Skipped."),
-                             __FUNCTION__, satellites[i]);
+                             __func__, satellites[i]);
             }
             else {
                 /* read data for this satellite */
@@ -536,7 +536,7 @@ first_time_check_step_05 (guint *error)
         g_strfreev (satellites);
         sat_log_log (SAT_LOG_LEVEL_INFO,
                      _("%s: Written %d new satellite to user config"),
-                     __FUNCTION__, newsats);
+                     __func__, newsats);
     }
 
     g_key_file_free (satfile);
@@ -553,7 +553,7 @@ first_time_check_step_05 (guint *error)
     if (!srcdir) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Could not open %s (%s)."),
-                     __FUNCTION__, srcdirname, err->message);
+                     __func__, srcdirname, err->message);
 
         /* no reason to continue */
         g_clear_error (&err);
@@ -578,12 +578,12 @@ first_time_check_step_05 (guint *error)
                     if (gpredict_file_copy (source, catfilename)) {
                         sat_log_log (SAT_LOG_LEVEL_ERROR,
                                     _("%s: Failed to copy %s"),
-                                    __FUNCTION__, filename);
+                                    __func__, filename);
                     }
                     else {
                         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                                     _("%s: Successfully copied %s"),
-                                    __FUNCTION__, filename);
+                                    __func__, filename);
                     }
                     g_free (source);
                 }
@@ -617,13 +617,13 @@ first_time_check_step_06 (guint *error)
 
     if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
         sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check successful."), __FUNCTION__);
+                        _("%s: Check successful."), __func__);
     }
     else {
         /* try to create directory */
         sat_log_log (SAT_LOG_LEVEL_DEBUG, 
                         _("%s: Check failed. Creating %s"),
-                        __FUNCTION__, dir);
+                        __func__, dir);
 
         status = g_mkdir_with_parents (dir, 0755);
 
@@ -632,12 +632,12 @@ first_time_check_step_06 (guint *error)
             *error |= FTC_ERROR_STEP_06;
 
             sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
-                            __FUNCTION__, dir);
+                            __func__, dir);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_DEBUG, 
                             _("%s: Created %s."),
-                            __FUNCTION__, dir);
+                            __func__, dir);
         }
     }
 
@@ -669,13 +669,13 @@ static void first_time_check_step_07 (guint *error)
     if (g_file_test (confdir, G_FILE_TEST_IS_DIR)) {
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                         _("%s: Check successful."),
-                        __FUNCTION__);
+                        __func__);
     }
     else {
         /* try to create directory */
         sat_log_log (SAT_LOG_LEVEL_DEBUG,
                         _("%s: Check failed. Creating %s"),
-                        __FUNCTION__,
+                        __func__,
                         confdir);
 
         status = g_mkdir_with_parents (confdir, 0755);
@@ -686,12 +686,12 @@ static void first_time_check_step_07 (guint *error)
 
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                             _("%s: Failed to create %s"),
-                            __FUNCTION__, confdir);
+                            __func__, confdir);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_DEBUG,
                             _("%s: Created %s."),
-                            __FUNCTION__, confdir);
+                            __func__, confdir);
 
 
             /* try to see if there are any .rig or .rot file in pre-1.1 configuration */
@@ -744,13 +744,13 @@ static void first_time_check_step_08 (guint *error)
 
     if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
         sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                     _("%s: Check successful."), __FUNCTION__);
+                     _("%s: Check successful."), __func__);
     }
     else {
         /* try to create directory */
         sat_log_log (SAT_LOG_LEVEL_DEBUG, 
                      _("%s: Check failed. Creating %s"),
-                       __FUNCTION__, dir);
+                       __func__, dir);
 
         status = g_mkdir_with_parents (dir, 0755);
 
@@ -759,12 +759,12 @@ static void first_time_check_step_08 (guint *error)
             *error |= FTC_ERROR_STEP_08;
 
             sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
-                         __FUNCTION__, dir);
+                         __func__, dir);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_DEBUG, 
                          _("%s: Created %s."),
-                           __FUNCTION__, dir);
+                           __func__, dir);
         }
     }
 
@@ -796,7 +796,7 @@ static void first_time_check_step_09 (guint *error)
     if (!targetdir) {
         sat_log_log (SAT_LOG_LEVEL_ERROR, 
                         _("%s: Could not open %s."),
-                        __FUNCTION__, targetdirname);
+                        __func__, targetdirname);
         
         /* no reason to continue */
         *error |= FTC_ERROR_STEP_09;
@@ -822,14 +822,14 @@ static void first_time_check_step_09 (guint *error)
                     if (!g_file_test (destfile, G_FILE_TEST_EXISTS)) {
                         sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: %s does not appear to be in user conf dir; adding."),
-                                     __FUNCTION__, filename);
+                                     __func__, filename);
 
                         /* copy new .trsp file to user dir */
                         srcfile = g_strconcat (datadirname, G_DIR_SEPARATOR_S, filename,NULL);
                         if (gpredict_file_copy (srcfile, destfile)) {
                             sat_log_log (SAT_LOG_LEVEL_ERROR, 
                                          _("%s: Failed to copy %s"),
-                                         __FUNCTION__, filename);
+                                         __func__, filename);
 
                             *error |= FTC_ERROR_STEP_09;
                         }
@@ -838,7 +838,7 @@ static void first_time_check_step_09 (guint *error)
                     else {
                         sat_log_log (SAT_LOG_LEVEL_INFO,
                                      _("%s: %s already in user conf dir."),
-                                     __FUNCTION__, filename);
+                                     __func__, filename);
                     }
                     
                     g_free (destfile);
@@ -848,7 +848,7 @@ static void first_time_check_step_09 (guint *error)
         } else {
                sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s: %s directory does not exist. Incomplete installation."),
-                               __FUNCTION__, datadirname);
+                               __func__, datadirname);
           }
         g_free (datadirname);
     }

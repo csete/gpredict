@@ -505,7 +505,7 @@ get_pass_engine   (sat_t *sat_in, qth_t *qth, gdouble start, gdouble maxdt, gdou
         aos = find_aos (sat, qth, t0, start + maxdt - t0);
         /* sat_log_log(SAT_LOG_LEVEL_INFO, "%s:%s:%d: found aos %f and los %f for t0=%f", */
         /*          __FILE__,  */
-        /*          __FUNCTION__, */
+        /*          __func__, */
         /*          __LINE__, */
         /*          aos, */
         /*          los,  */
@@ -716,7 +716,7 @@ get_passes (sat_t *sat, qth_t *qth, gdouble start, gdouble maxdt, guint num)
 
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s: Found %d passes for %s in time window [%f;%f]"),
-                 __FUNCTION__, g_slist_length (passes), sat->nickname, start, start+maxdt);
+                 __func__, g_slist_length (passes), sat->nickname, start, start+maxdt);
 
     return passes;
 }
@@ -952,12 +952,12 @@ get_current_pass (sat_t *sat_in, qth_t *qth, gdouble start)
             if (pass->aos > t0)
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Returning a pass for %s that starts after the seeded time."),
-                             __FUNCTION__,sat->nickname);
+                             __func__,sat->nickname);
 
             if (pass->los < t0)
                 sat_log_log (SAT_LOG_LEVEL_ERROR,
                              _("%s: Returning a pass for %s that ends before the seeded time."),
-                             __FUNCTION__,sat->nickname);
+                             __func__,sat->nickname);
         }
     }
     return pass;

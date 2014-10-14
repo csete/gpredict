@@ -105,21 +105,21 @@ gboolean gtk_sat_selector_search_equal_func (GtkTreeModel *model,
 
     gtk_tree_model_get(model, iter, GTK_SAT_SELECTOR_COL_NAME, &name, -1);
     /* sat_log_log(SAT_LOG_LEVEL_INFO, "%s: key %s, name %s", */
-    /*             __FUNCTION__,  */
+    /*             __func__,  */
     /*             key,  */
     /*             (name==NULL) ? NULLSTR : name);  */ 
     if (name == NULL){
-        sat_log_log(SAT_LOG_LEVEL_INFO, "%s:%s: name is NULL", __FILE__, __FUNCTION__); 
+        sat_log_log(SAT_LOG_LEVEL_INFO, "%s:%s: name is NULL", __FILE__, __func__); 
         return TRUE;
     }
     match = strstr(name, key);
 
     if (match == NULL) {
-        //sat_log_log(SAT_LOG_LEVEL_ERROR, "%s: no match", __FUNCTION__);
+        //sat_log_log(SAT_LOG_LEVEL_ERROR, "%s: no match", __func__);
         return TRUE;
     } 
     else {
-        //sat_log_log(SAT_LOG_LEVEL_ERROR, "%s: MATCH at %s", __FUNCTION__, match);
+        //sat_log_log(SAT_LOG_LEVEL_ERROR, "%s: MATCH at %s", __func__, match);
         return FALSE;
     }
 }
@@ -423,7 +423,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
     if (!dir) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to open satdata directory %s."),
-                     __FILE__, __FUNCTION__, dirname);
+                     __FILE__, __func__, dirname);
 
         g_free (dirname);
 
@@ -465,7 +465,7 @@ static void create_and_fill_models (GtkSatSelector *selector)
     }
     sat_log_log (SAT_LOG_LEVEL_INFO,
                  _("%s:%s: Read %d satellites into MAIN group."),
-                 __FILE__, __FUNCTION__, num);
+                 __FILE__, __func__, num);
 
     /* load satellites from each .cat file into selector->models[i] */
     g_dir_rewind (dir);
@@ -521,7 +521,7 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to open %s: %s"),
-                     __FILE__, __FUNCTION__, fname, error->message);
+                     __FILE__, __func__, fname, error->message);
         g_clear_error (&error);
     }
     else {
@@ -559,7 +559,7 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
                     /* error */
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                  _("%s:%s: Error reading satellite %d."),
-                                 __FILE__, __FUNCTION__, catnum);
+                                 __FILE__, __func__, catnum);
                 }
                 else {
                     /* insert satellite into liststore */
@@ -579,12 +579,12 @@ static void load_cat_file (GtkSatSelector *selector, const gchar *fname)
             }
             sat_log_log (SAT_LOG_LEVEL_INFO,
                          _("%s:%s: Read %d satellites from %s"),
-                         __FILE__, __FUNCTION__, num, fname);
+                         __FILE__, __func__, num, fname);
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
                          _("%s:%s: Failed to read %s"),
-                         __FILE__, __FUNCTION__, fname);
+                         __FILE__, __func__, fname);
         }
 
     }
@@ -859,7 +859,7 @@ gdouble gtk_sat_selector_get_latest_epoch (GtkSatSelector *selector)
         }
         else {
             sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Error getting %dth satellite"), __FUNCTION__, i);
+                         _("%s: Error getting %dth satellite"), __func__, i);
         }
     }
 
@@ -890,7 +890,7 @@ static gchar *load_cat_file_cat (const gchar *fname)
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s:%s: Failed to open %s: %s"),
-                     __FILE__, __FUNCTION__, fname, error->message);
+                     __FILE__, __func__, fname, error->message);
         g_clear_error (&error);
     }
     else {

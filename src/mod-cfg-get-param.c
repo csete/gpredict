@@ -69,7 +69,7 @@ mod_cfg_get_bool (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_bool_
 
                sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Failed to read boolean (%s)"),
-                         __FUNCTION__, error->message);
+                         __func__, error->message);
 
                g_clear_error (&error);
 
@@ -83,7 +83,7 @@ mod_cfg_get_bool (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_bool_
 
 /*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
 /*                     _("%s: Boolean value not found, using default (%d)"), */
-/*                     __FUNCTION__, param); */
+/*                     __func__, param); */
      }
 
      return param;
@@ -105,7 +105,7 @@ mod_cfg_get_int  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_int_e
 
                sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Failed to read integer (%s)"),
-                         __FUNCTION__, error->message);
+                         __func__, error->message);
 
                g_clear_error (&error);
 
@@ -119,7 +119,7 @@ mod_cfg_get_int  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_int_e
 
 /*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
 /*                     _("%s: Integer value not found, using default (%d)"), */
-/*                     __FUNCTION__, param); */
+/*                     __func__, param); */
      }
 
      return param;
@@ -141,7 +141,7 @@ mod_cfg_get_str  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_str_e
 
                sat_log_log (SAT_LOG_LEVEL_WARN,
                          _("%s: Failed to read string (%s)"),
-                         __FUNCTION__, error->message);
+                         __func__, error->message);
 
                g_clear_error (&error);
 
@@ -155,7 +155,7 @@ mod_cfg_get_str  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_str_e
 
 /*           sat_log_log (SAT_LOG_LEVEL_DEBUG, */
 /*                     _("%s: String not found, using default (%s)"), */
-/*                     __FUNCTION__, param); */
+/*                     __func__, param); */
      }
 
      return param;
@@ -183,7 +183,7 @@ void mod_cfg_get_integer_list_boolean(GKeyFile *cfgdata, const gchar* section,
     if (error != NULL) {
         sat_log_log (SAT_LOG_LEVEL_WARN,
                      _("%s: Failed to get integer list: %s"),
-                     __FUNCTION__, error->message);
+                     __func__, error->message);
         
         g_clear_error (&error);
         

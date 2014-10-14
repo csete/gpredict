@@ -80,7 +80,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Creating ground track for %s"),
-                 __FUNCTION__, sat->nickname);
+                 __func__, sat->nickname);
 
      /* just to be safe... if empty GSList is not NULL => segfault */
      obj->track_data.latlon = NULL;
@@ -95,10 +95,10 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
                                
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Start orbit: %d"),
-                     __FUNCTION__, this_orbit);
+                     __func__, this_orbit);
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: End orbit %d"),
-                     __FUNCTION__, max_orbit);
+                     __func__, max_orbit);
 
 
      /* find the time when the current orbit started */
@@ -124,7 +124,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: T0: %f (%d)"),
-                     __FUNCTION__, t0, sat->orbit);
+                     __func__, t0, sat->orbit);
 
 
      /* calculate (lat,lon) for the required orbits */
@@ -149,7 +149,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
           if (this_ssp == NULL) {
                sat_log_log (SAT_LOG_LEVEL_ERROR,
                                _("%s: MAYDAY: Insufficient memory for ground track!"),
-                               __FUNCTION__);
+                               __func__);
                return;
           }
           
@@ -162,7 +162,7 @@ ground_track_create (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
      if (sat->orbit != (max_orbit+1)) {
          sat_log_log (SAT_LOG_LEVEL_ERROR,
                       _("%s: Problem computing ground track for %s"),
-                      __FUNCTION__, sat->nickname);
+                      __func__, sat->nickname);
          return;
      }
      
@@ -208,7 +208,7 @@ ground_track_update (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 {
      sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Updating ground track for %s"),
-                 __FUNCTION__, sat->nickname);
+                 __func__, sat->nickname);
 
      if (decayed(sat)) {
          ground_track_delete (satmap, sat, qth, obj, TRUE);
@@ -246,7 +246,7 @@ ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
 
     sat_log_log (SAT_LOG_LEVEL_DEBUG,
                      _("%s: Deleting ground track for %s"),
-                 __FUNCTION__, sat->nickname);
+                 __func__, sat->nickname);
 
      root = goo_canvas_get_root_item_model (GOO_CANVAS (satmap->canvas));
 
@@ -264,7 +264,7 @@ ground_track_delete (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *o
                if (j == -1) {
                     sat_log_log (SAT_LOG_LEVEL_ERROR,
                                     _("%s: Could not find part %d of ground track"),
-                                    __FUNCTION__, j);
+                                    __func__, j);
                }
                else {
                     goo_canvas_item_model_remove_child (root, j);
