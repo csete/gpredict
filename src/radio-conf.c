@@ -195,6 +195,10 @@ gboolean radio_conf_read (radio_conf_t *conf)
     
     }
 
+    /** FIXME **/
+    conf->signal_aos = TRUE;
+    conf->signal_los = TRUE;
+
     g_key_file_free (cfg);
     
     sat_log_log (SAT_LOG_LEVEL_INFO,

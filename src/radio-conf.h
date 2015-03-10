@@ -69,6 +69,9 @@ typedef struct {
     ptt_type_t   ptt;       /*!< PTT type (needed for RX, TX, and TRX) */
     vfo_t        vfoDown;   /*!< Downlink VFO for full-duplex radios */
     vfo_t        vfoUp;     /*!< Uplink VFO for full-duplex radios */
+
+    gboolean     signal_aos;    /*!< Send AOS notification to RIG */
+    gboolean     signal_los;    /*!< Send LOS notification to RIG */
 } radio_conf_t;
 
 

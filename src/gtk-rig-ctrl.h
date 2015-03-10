@@ -93,6 +93,8 @@ struct _gtk_rig_ctrl
     sat_t  *target;     /*!< Target satellite */
     pass_t *pass;       /*!< Next pass of target satellite */
     qth_t  *qth;        /*!< The QTH for this module */
+
+    double  prev_ele;   /*!< Previous elevation (used for AOS/LOS signalling) */
     
     guint delay;       /*!< Timeout delay. */
     guint timerid;     /*!< Timer ID */

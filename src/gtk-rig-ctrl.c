@@ -110,6 +110,7 @@ static void exec_toggle_tx_cycle (GtkRigCtrl *ctrl);
 static void exec_duplex_cycle (GtkRigCtrl *ctrl);
 static void exec_duplex_tx_cycle(GtkRigCtrl *ctrl);
 static void exec_dual_rig_cycle (GtkRigCtrl *ctrl);
+static gboolean check_aos_los(GtkRigCtrl *ctrl);
 static gboolean set_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble freq);
 static gboolean get_freq_simplex (GtkRigCtrl *ctrl, gint sock, gdouble *freq);
 static gboolean set_freq_toggle (GtkRigCtrl *ctrl, gint sock, gdouble freq);
@@ -210,6 +211,7 @@ static void gtk_rig_ctrl_init (GtkRigCtrl *ctrl)
     ctrl->trsplist = NULL;
     ctrl->trsplock = FALSE;
     ctrl->tracking = FALSE;
+    ctrl->prev_ele = 0.0;
     ctrl->sock = 0;
     ctrl->sock2 = 0;
     g_mutex_init(&(ctrl->busy));
@@ -860,6 +862,8 @@ static void sat_selected_cb (GtkComboBox *satsel, gpointer data)
     i = gtk_combo_box_get_active (satsel);
     if (i >= 0) {
         ctrl->target = SAT (g_slist_nth_data (ctrl->sats, i));
+
+        ctrl->prev_ele = ctrl->target->el;
         
         /* update next pass */
         if (ctrl->pass != NULL)
@@ -1382,7 +1386,9 @@ static gboolean rig_ctrl_timeout_cb (gpointer data)
         sat_log_log (SAT_LOG_LEVEL_ERROR,_("%s missed the deadline"),__func__);
         return TRUE;
     }
-    
+
+    check_aos_los(ctrl);
+
     if (ctrl->conf2 != NULL) {
         exec_dual_rig_cycle (ctrl);
     }
@@ -2162,7 +2168,62 @@ static gboolean set_ptt (GtkRigCtrl *ctrl, gint sock, gboolean ptt)
 
 }
 
+/**
+ * \brief Check for AOS and LOS and send signal if enabled for rig.
+ * \param ctrl Pointer to the GtkRigCtrl handle.
+ * \return TRUE if the operation was successful, FALSE if a connection error
+ *         occurred.
+ *
+ * This function checks whether AOS or LOS just happened and sends the
+ * apropriate signal to the RIG if this signalling is enabled.
+ */
+static gboolean check_aos_los(GtkRigCtrl *ctrl)
+{
+    gboolean    retcode = TRUE;
+    gchar       retbuf[10];
 
+    if (ctrl->engaged && ctrl->tracking)
+    {
+        if (ctrl->prev_ele < 0.0 && ctrl->target->el >= 0.0)
+        {
+            /* AOS has occurred */
+            if (ctrl->conf->signal_aos)
+            {
+                retcode &= send_rigctld_command(ctrl, ctrl->sock, "AOS\n",
+                                                retbuf, 10);
+            }
+            if (ctrl->conf2 != NULL)
+            {
+                if (ctrl->conf2->signal_aos)
+                {
+                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "AOS\n",
+                                                    retbuf, 10);
+                }
+            }
+        }
+        else if (ctrl->prev_ele >= 0.0 && ctrl->target->el < 0.0)
+        {
+            /* LOS has occurred */
+            if (ctrl->conf->signal_los)
+            {
+                retcode &= send_rigctld_command(ctrl, ctrl->sock, "LOS\n",
+                                                retbuf, 10);
+            }
+            if (ctrl->conf2 != NULL)
+            {
+                if (ctrl->conf2->signal_los)
+                {
+                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "LOS\n",
+                                                    retbuf, 10);
+                }
+            }
+        }
+    }
+
+    ctrl->prev_ele = ctrl->target->el;
+
+    return retcode;
+}
 
 /** \brief Set frequency in simplex mode
  * \param ctrl Pointer to the GtkRigCtrl structure.
