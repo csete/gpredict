@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -35,18 +34,18 @@
 
 /** \brief Radio types. */
 typedef enum {
-    RIG_TYPE_RX = 0,        /*!< Rig can only be used as receiver */
-    RIG_TYPE_TX,            /*!< Rig can only be used as transmitter */
-    RIG_TYPE_TRX,           /*!< Rig can be used as RX/TX (simplex only) */
-    RIG_TYPE_DUPLEX,        /*!< Rig is a full duplex radio, e.g. IC910 */
-    RIG_TYPE_TOGGLE_AUTO,   /*!< Special mode for FT-817, 857 and 897 using auto T/R switch */
-    RIG_TYPE_TOGGLE_MAN     /*!< Special mode for FT-817, 857 and 897 using manual T/R switch */
+    RIG_TYPE_RX = 0,            /*!< Rig can only be used as receiver */
+    RIG_TYPE_TX,                /*!< Rig can only be used as transmitter */
+    RIG_TYPE_TRX,               /*!< Rig can be used as RX/TX (simplex only) */
+    RIG_TYPE_DUPLEX,            /*!< Rig is a full duplex radio, e.g. IC910 */
+    RIG_TYPE_TOGGLE_AUTO,       /*!< Special mode for FT-817, 857 and 897 using auto T/R switch */
+    RIG_TYPE_TOGGLE_MAN         /*!< Special mode for FT-817, 857 and 897 using manual T/R switch */
 } rig_type_t;
 
 typedef enum {
-    PTT_TYPE_NONE = 0,  /*!< Don't read PTT */
-    PTT_TYPE_CAT,       /*!< Read PTT using get_ptt CAT command */
-    PTT_TYPE_DCD        /*!< Read PTT using get_dcd */
+    PTT_TYPE_NONE = 0,          /*!< Don't read PTT */
+    PTT_TYPE_CAT,               /*!< Read PTT using get_ptt CAT command */
+    PTT_TYPE_DCD                /*!< Read PTT using get_dcd */
 } ptt_type_t;
 
 typedef enum {
@@ -59,24 +58,24 @@ typedef enum {
 
 /** \brief Radio configuration. */
 typedef struct {
-    gchar       *name;      /*!< Configuration file name, without .rig. */
-    gchar       *host;      /*!< hostname or IP */
-    gint         port;      /*!< port number */
-    gdouble      lo;        /*!< local oscillator freq in Hz (using double for
-                                 compatibility with rest of code). Downlink. */
-    gdouble      loup;      /*!< local oscillator freq in Hz for uplink. */
-    rig_type_t   type;      /*!< Radio type */
-    ptt_type_t   ptt;       /*!< PTT type (needed for RX, TX, and TRX) */
-    vfo_t        vfoDown;   /*!< Downlink VFO for full-duplex radios */
-    vfo_t        vfoUp;     /*!< Uplink VFO for full-duplex radios */
+    gchar          *name;       /*!< Configuration file name, without .rig. */
+    gchar          *host;       /*!< hostname or IP */
+    gint            port;       /*!< port number */
+    gdouble         lo;         /*!< local oscillator freq in Hz (using double for
+                                   compatibility with rest of code). Downlink. */
+    gdouble         loup;       /*!< local oscillator freq in Hz for uplink. */
+    rig_type_t      type;       /*!< Radio type */
+    ptt_type_t      ptt;        /*!< PTT type (needed for RX, TX, and TRX) */
+    vfo_t           vfoDown;    /*!< Downlink VFO for full-duplex radios */
+    vfo_t           vfoUp;      /*!< Uplink VFO for full-duplex radios */
 
-    gboolean     signal_aos;    /*!< Send AOS notification to RIG */
-    gboolean     signal_los;    /*!< Send LOS notification to RIG */
+    gboolean        signal_aos; /*!< Send AOS notification to RIG */
+    gboolean        signal_los; /*!< Send LOS notification to RIG */
 } radio_conf_t;
 
 
-gboolean radio_conf_read (radio_conf_t *conf);
-void radio_conf_save (radio_conf_t *conf);
+gboolean        radio_conf_read(radio_conf_t * conf);
+void            radio_conf_save(radio_conf_t * conf);
 
 
 #endif
