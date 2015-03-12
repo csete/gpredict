@@ -1,7 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete.
+    Copyright (C)  2001-2015  Alexandru Csete.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 

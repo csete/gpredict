@@ -1,8 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2015  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -30,16 +29,18 @@
 
 /** \brief Coumn definitions for radio list. */
 typedef enum {
-    RIG_LIST_COL_NAME = 0,  /*!< File name. */
-    RIG_LIST_COL_HOST,      /*!< Hostname, e.g. localhost */
-    RIG_LIST_COL_PORT,      /*!< Port number */
-    RIG_LIST_COL_TYPE,      /*!< Radio type */
-    RIG_LIST_COL_PTT,       /*!< PTT */
-    RIG_LIST_COL_VFOUP,     /*!< VFO Up */
-    RIG_LIST_COL_VFODOWN,   /*!< VFO down */
-    RIG_LIST_COL_LO,        /*!< Local oscillator freq (downlink) */
-    RIG_LIST_COL_LOUP,      /*!< Local oscillato freq (uplink) */
-    RIG_LIST_COL_NUM        /*!< The number of fields in the list. */
+    RIG_LIST_COL_NAME = 0,      /*!< File name. */
+    RIG_LIST_COL_HOST,          /*!< Hostname, e.g. localhost */
+    RIG_LIST_COL_PORT,          /*!< Port number */
+    RIG_LIST_COL_TYPE,          /*!< Radio type */
+    RIG_LIST_COL_PTT,           /*!< PTT */
+    RIG_LIST_COL_VFOUP,         /*!< VFO Up */
+    RIG_LIST_COL_VFODOWN,       /*!< VFO down */
+    RIG_LIST_COL_LO,            /*!< Local oscillator freq (downlink) */
+    RIG_LIST_COL_LOUP,          /*!< Local oscillato freq (uplink) */
+    RIG_LIST_COL_SIGAOS,        /*!< Signal AOS */
+    RIG_LIST_COL_SIGLOS,        /*!< Signal LOS */
+    RIG_LIST_COL_NUM            /*!< The number of fields in the list. */
 } rig_list_col_t;
 
 

@@ -1,7 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete.
+    Copyright (C)  2001-2015  Alexandru Csete.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -42,13 +42,14 @@
 #define KEY_PTT         "PTT"
 #define KEY_VFO_DOWN    "VFO_DOWN"
 #define KEY_VFO_UP      "VFO_UP"
-
+#define KEY_SIG_AOS     "SIGNAL_AOS"
+#define KEY_SIG_LOS     "SIGNAL_LOS"
 
 /**
  * \brief Read radio configuration.
  * \param conf Pointer to a radio_conf_t structure where the data will be
  *             stored.
- * \return TRUE if the configuration was read successfully, FALSe if an
+ * \return TRUE if the configuration was read successfully, FALSE if an
  *         error has occurred.
  * 
  * This function reads a radio configuration from a .rig file into conf.
@@ -177,7 +178,6 @@ gboolean radio_conf_read(radio_conf_t * conf)
     /* VFO up and down, only if radio is full-duplex */
     if (conf->type == RIG_TYPE_DUPLEX)
     {
-
         /* downlink */
         if (g_key_file_has_key(cfg, GROUP, KEY_VFO_DOWN, NULL))
         {
@@ -207,15 +207,13 @@ gboolean radio_conf_read(radio_conf_t * conf)
                 conf->vfoUp = VFO_MAIN;
             }
         }
-
     }
 
-    /** FIXME **/
-    conf->signal_aos = TRUE;
-    conf->signal_los = TRUE;
+    /* Signal AOS and LOS */
+    conf->signal_aos = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_AOS, NULL);
+    conf->signal_los = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_LOS, NULL);
 
     g_key_file_free(cfg);
-
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Read radio configuration %s"), __func__, conf->name);
 
@@ -258,6 +256,9 @@ void radio_conf_save(radio_conf_t * conf)
         g_key_file_set_integer(cfg, GROUP, KEY_VFO_UP, conf->vfoUp);
         g_key_file_set_integer(cfg, GROUP, KEY_VFO_DOWN, conf->vfoDown);
     }
+
+    g_key_file_set_boolean(cfg, GROUP, KEY_SIG_AOS, conf->signal_aos);
+    g_key_file_set_boolean(cfg, GROUP, KEY_SIG_LOS, conf->signal_los);
 
     confdir = get_hwconf_dir();
     fname = g_strconcat(confdir, G_DIR_SEPARATOR_S, conf->name, ".rig", NULL);

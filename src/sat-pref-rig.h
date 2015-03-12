@@ -1,8 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2015  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -28,10 +27,8 @@
 #ifndef SAT_PREF_RIG_H
 #define SAT_PREF_RIG_H 1
 
-
-GtkWidget *sat_pref_rig_create (void);
-void       sat_pref_rig_cancel (void);
-void       sat_pref_rig_ok     (void);
-
+GtkWidget      *sat_pref_rig_create(void);
+void            sat_pref_rig_cancel(void);
+void            sat_pref_rig_ok(void);
 
 #endif
