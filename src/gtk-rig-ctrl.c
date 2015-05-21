@@ -288,7 +288,8 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     widget = g_object_new(GTK_TYPE_RIG_CTRL, NULL);
 
     /* connect calback to catch key press events */
-    g_signal_connect(widget, "key-press-event", G_CALLBACK(key_press_cb), NULL);
+    g_signal_connect(widget, "key-press-event", G_CALLBACK(key_press_cb),
+                     NULL);
 
     /* store satellites */
     g_hash_table_foreach(module->satellites, store_sats, widget);
@@ -358,50 +359,56 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
 
     /* added by Marcel Cimander */
     /** if auto flag is set (--automatic, -a), radio will change target automatically */
-    if (auto_mode) {
-      int i=0; 
-      int index=9999;
-      int n= g_slist_length(ctrl->sats);
-     
+    if (auto_mode)
+    {
+        int             i = 0;
+        int             index = 9999;
+        int             n = g_slist_length(ctrl->sats);
 
-      if(satlist_mc_nick && ctrl->engaged && ctrl->target){
-        for(i;i<n;i++){
+
+        if (satlist_mc_nick && ctrl->engaged && ctrl->target)
+        {
+            for (i; i < n; i++)
+            {
           /** check if next sat from gtk_sat_map.c is same as one in out sat_list_nick 
            * and get index of it */
-          if (!strcmp(next_sat_mc,satlist_mc_nick[i])) { 
-            index = i; 
-            break;
-          }
-        }
+                if (!strcmp(next_sat_mc, satlist_mc_nick[i]))
+                {
+                    index = i;
+                    break;
+                }
+            }
 
-        /* check if target satellite is between AOS and LOS */
-        if (!target_aquired && ctrl->target->el > 0.0) 
-          target_aquired = 1; 
-        if (target_aquired && ctrl->target->el < 0.0) 
-          target_aquired = 0; 
+            /* check if target satellite is between AOS and LOS */
+            if (!target_aquired && ctrl->target->el > 0.0)
+                target_aquired = 1;
+            if (target_aquired && ctrl->target->el < 0.0)
+                target_aquired = 0;
 
-        strncpy(active_target_nick, ctrl->target->nickname,sizeof(active_target_nick));
-        if (verbose_mode)
-          printf("active target(rig): %s\n",active_target_nick);
+            strncpy(active_target_nick, ctrl->target->nickname,
+                    sizeof(active_target_nick));
+            if (verbose_mode)
+                printf("active target(rig): %s\n", active_target_nick);
 
         /** change radio target if the tracked satellite had LOS 
          * and the next satellite != current target */
-        if (ctrl->target->nickname != next_sat_mc && !target_aquired) {
-          ctrl->target = SAT(g_slist_nth_data(ctrl->sats, index));
-          /* *Do we need that here?*/
-          /*   
-          if (ctrl->pass != NULL)
-            free_pass (ctrl->pass);
+            if (ctrl->target->nickname != next_sat_mc && !target_aquired)
+            {
+                ctrl->target = SAT(g_slist_nth_data(ctrl->sats, index));
+                /* Do we need that here? */
+                /*
+                   if (ctrl->pass != NULL)
+                   free_pass (ctrl->pass);
 
-          if (ctrl->target->el > 0.0)
-            ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, 3.0);
-          else
-            ctrl->pass = get_pass (ctrl->target, ctrl->qth, 3.0);
+                   if (ctrl->target->el > 0.0)
+                   ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, 3.0);
+                   else
+                   ctrl->pass = get_pass (ctrl->target, ctrl->qth, 3.0);
 
-          set_flipped_pass(ctrl);*/
+                   set_flipped_pass(ctrl); */
+            }
+
         }
-
-      }    
     }
 
 
@@ -1036,8 +1043,7 @@ static void trsp_selected_cb(GtkComboBox * box, gpointer data)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Inconsistency detected in internal transponder "
-                      "data (%d,%d)"),
-                    __func__, i, n);
+                      "data (%d,%d)"), __func__, i, n);
     }
 }
 
@@ -1582,8 +1588,7 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
             /* invalid mode */
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s: Invalid radio type %d. Setting type to "
-                          "RIG_TYPE_RX"),
-                        __func__, ctrl->conf->type);
+                          "RIG_TYPE_RX"), __func__, ctrl->conf->type);
             ctrl->conf->type = RIG_TYPE_RX;
 
         }
@@ -2386,7 +2391,7 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     {
         vbuff = g_strsplit(buffback, "\n", 3);
         if (vbuff[0])
-            pttstat = g_ascii_strtoull(vbuff[0], NULL, 0); //FIXME base = 0 ok?
+            pttstat = g_ascii_strtoull(vbuff[0], NULL, 0);      //FIXME base = 0 ok?
         g_strfreev(vbuff);
     }
     g_free(buff);
@@ -3058,7 +3063,7 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
     {
         switch (pKey->keyval)
         {
-        /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
+            /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
         case GDK_space:
             sat_log_log(SAT_LOG_LEVEL_INFO,
                         _("%s: Detected SPACEBAR pressed event"), __func__);
@@ -3131,8 +3136,7 @@ static void manage_ptt_event(GtkRigCtrl * ctrl)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO,
                         _("%s: Controller not engaged; PTT event ignored "
-                          "(Hint: Enable the Engage button)"),
-                        __func__);
+                          "(Hint: Enable the Engage button)"), __func__);
         }
         else
         {
@@ -3165,8 +3169,7 @@ static void manage_ptt_event(GtkRigCtrl * ctrl)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Failed to acquire controller lock; PTT event "
-                      "not handled"),
-                    __func__);
+                      "not handled"), __func__);
     }
 
 }
