@@ -64,6 +64,8 @@
 #  include <build-config.h>
 #endif
 #include <goocanvas.h>
+#include <string.h>
+#include "next_sat_head_mc.h"
 
 #define MARKER_SIZE_HALF    1
 
@@ -122,6 +124,7 @@ static void reset_ground_track(gpointer key, gpointer value, gpointer user_data)
 static GtkVBoxClass *parent_class = NULL;
 static GooCanvasPoints *points1;
 static GooCanvasPoints *points2;
+char next_sat_mc[256];
 
 
 /** \brief Register the satellite map widget. */
@@ -782,6 +785,14 @@ gtk_sat_map_update (GtkWidget  *widget)
                                                        satmap->infobgd,
                                                        sat->nickname,
                                                        cm, m, cs, s);
+
+                    /* added by Marcel Cimander */
+                    /* if auto flag is set (--automatic, -a), set the name of the next passing 
+                     * satellite to make it available to other files */
+                    if (auto_mode) {
+                      if (!strcmp(next_sat_mc, "") || strcmp(next_sat_mc, sat->nickname))
+                        strncpy(next_sat_mc, sat->nickname, sizeof(next_sat_mc));
+                    }
 
                     g_object_set (satmap->next,
                                   "text", buff,
@@ -2808,9 +2819,15 @@ static gchar *aoslos_time_to_str (GtkSatMap *satmap, sat_t *sat)
 
     if (sat->el > 0.0) {
         text = g_strdup_printf (_("LOS in %d minutes"), m+60*h);
+        /* added by Marcel Cimander */
+        if (!strcmp(sat->nickname, active_target_nick) && verbose_mode)
+          printf("Next event for %s: \n\tLOS in %d minutes\n",sat->nickname, m+60*h);
     }
     else {
         text = g_strdup_printf (_("AOS in %d minutes"), m+60*h);
+        /* added by Marcel Cimander */
+        if (!strcmp(sat->nickname, active_target_nick) && verbose_mode)
+          printf("Next event for %s: \n\tAOS in %d minutes\n",sat->nickname, m+60*h);
     }
 
     return text;

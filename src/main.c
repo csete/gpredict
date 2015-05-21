@@ -47,6 +47,7 @@
 #include "sat-cfg.h"
 #include "gtk-sat-selector.h"
 #include "sat-debugger.h"
+#include "next_sat_head_mc.h"
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -62,15 +63,24 @@ static gboolean cleantle = FALSE;
 /** \brief Command line flag for cleaning TRSP data */
 static gboolean cleantrsp = FALSE;
 
+/** \added by Marcel Cimander; verbose mode, -> output informations on console */
+static gboolean verbose = FALSE;
+
+/** \added by Marcel Cimander; auto mode, -> automatically switch to next satellite available after LOS of current sat */
+static gboolean automode = FALSE;
+
 /** \brief Command line options. */
 static GOptionEntry entries[] =
 {
   { "clean-tle", 0, 0, G_OPTION_ARG_NONE, &cleantle, "Clean the TLE data in user's configuration directory", NULL },
   { "clean-trsp", 0, 0, G_OPTION_ARG_NONE, &cleantrsp, "Clean the transponder data in user's configuration directory", NULL },
+  { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL },
+  { "automatic", 'a', 0, G_OPTION_ARG_NONE, &automode, "Track next sat automatically after LOS of current sat", NULL },
   { NULL }
 };
 
-
+int verbose_mode = 0;
+int auto_mode = 0;
 
 const gchar *dummy = N_("just to have a pot");
 
@@ -148,6 +158,17 @@ int main (int argc, char *argv[])
 
     if (cleantrsp)
         clean_trsp ();
+
+    /* added by Marcel Cimander */
+    if (verbose) {
+      printf("started in verbose mode\n");
+      verbose_mode = 1;
+    }
+
+    if (automode) {
+      printf("started in automode\n");
+      auto_mode = 1;
+    }
 
     /* check that user settings are ok */
     error = first_time_check_run ();
