@@ -40,8 +40,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-
-
 #define GTK_TYPE_ROT_CTRL          (gtk_rot_ctrl_get_type ())
 #define GTK_ROT_CTRL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
                                    gtk_rot_ctrl_get_type (),\
@@ -53,68 +51,60 @@ extern "C" {
 
 #define IS_GTK_ROT_CTRL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_rot_ctrl_get_type ())
 
+typedef struct _gtk_rot_ctrl GtkRotCtrl;
+typedef struct _GtkRotCtrlClass GtkRotCtrlClass;
 
-typedef struct _gtk_rot_ctrl      GtkRotCtrl;
-typedef struct _GtkRotCtrlClass   GtkRotCtrlClass;
+struct _gtk_rot_ctrl {
+    GtkVBox         vbox;
 
-
-
-struct _gtk_rot_ctrl
-{
-    GtkVBox vbox;
-    
     /* Azimuth widgets */
-    GtkWidget *AzSat,*AzSet,*AzRead,*AzDevSel;
-    
+    GtkWidget      *AzSat, *AzSet, *AzRead, *AzDevSel;
+
     /* Elevation widgets */
-    GtkWidget *ElSat,*ElSet,*ElRead,*ElDevSel,*ElDev;
-    
+    GtkWidget      *ElSat, *ElSet, *ElRead, *ElDevSel, *ElDev;
+
     /* other widgets */
-    GtkWidget *SatCnt;
-    GtkWidget *DevSel;
-    GtkWidget *plot;    /*!< Polar plot widget */
-    GtkWidget *LockBut;
-                        
-    rotor_conf_t *conf;
-    gdouble       t;  /*!< Time when sat data last has been updated. */
-    
+    GtkWidget      *SatCnt;
+    GtkWidget      *DevSel;
+    GtkWidget      *plot;       /*!< Polar plot widget */
+    GtkWidget      *LockBut;
+
+    rotor_conf_t   *conf;
+    gdouble         t;          /*!< Time when sat data last has been updated. */
+
     /* satellites */
-    GSList *sats;       /*!< List of sats in parent module */
-    sat_t  *target;     /*!< Target satellite */
-    pass_t *pass;       /*!< Next pass of target satellite */
-    qth_t  *qth;        /*!< The QTH for this module */
-    gboolean flipped;   /*!< Whether the current pass loaded is a flip pass or not */
+    GSList         *sats;       /*!< List of sats in parent module */
+    sat_t          *target;     /*!< Target satellite */
+    pass_t         *pass;       /*!< Next pass of target satellite */
+    qth_t          *qth;        /*!< The QTH for this module */
+    gboolean        flipped;    /*!< Whether the current pass loaded is a flip pass or not */
 
-    guint delay;       /*!< Timeout delay. */
-    guint timerid;     /*!< Timer ID */
-    gdouble tolerance;  /*!< Error tolerance */
-    
-    gboolean tracking;  /*!< Flag set when we are tracking a target. */
-    GMutex   busy;      /*!< Flag set when control algorithm is busy. */
-    gboolean engaged;   /*!< Flag indicating that rotor device is engaged. */
-                        
-    gint     errcnt;    /*!< Error counter. */
-    gint     sock;      /*!< socket for connecting to rotctld. */
-    
+    guint           delay;      /*!< Timeout delay. */
+    guint           timerid;    /*!< Timer ID */
+    gdouble         tolerance;  /*!< Error tolerance */
+
+    gboolean        tracking;   /*!< Flag set when we are tracking a target. */
+    GMutex          busy;       /*!< Flag set when control algorithm is busy. */
+    gboolean        engaged;    /*!< Flag indicating that rotor device is engaged. */
+
+    gint            errcnt;     /*!< Error counter. */
+    gint            sock;       /*!< socket for connecting to rotctld. */
+
     /* debug related */
-    guint    wrops;
-    guint    rdops;
+    guint           wrops;
+    guint           rdops;
 };
 
-struct _GtkRotCtrlClass
-{
-    GtkVBoxClass parent_class;
+struct _GtkRotCtrlClass {
+    GtkVBoxClass    parent_class;
 };
 
-
-
-GType      gtk_rot_ctrl_get_type (void);
-GtkWidget* gtk_rot_ctrl_new      (GtkSatModule *module);
-void       gtk_rot_ctrl_update   (GtkRotCtrl *ctrl, gdouble t);
-
+GType           gtk_rot_ctrl_get_type(void);
+GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module);
+void            gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
-#endif /* __GTK_ROT_ctrl_H__ */
+#endif /* __GTK_ROT_CTRL_H__ */

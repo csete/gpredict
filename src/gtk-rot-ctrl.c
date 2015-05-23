@@ -26,8 +26,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief ROTOR control window.
- *  \ingroup widgets
+/**
+ * \brief ROTOR control window.
+ * \ingroup widgets
  *
  * The master rotator control UI is implemented as a Gtk+ Widget in order
  * to allow multiple instances. The widget is created from the module
@@ -66,11 +67,9 @@
 #define FMTSTR "%7.2f\302\260"
 #define MAX_ERROR_COUNT 5
 
-
 static void     gtk_rot_ctrl_class_init(GtkRotCtrlClass * class);
 static void     gtk_rot_ctrl_init(GtkRotCtrl * list);
 static void     gtk_rot_ctrl_destroy(GtkObject * object);
-
 
 static GtkWidget *create_az_widgets(GtkRotCtrl * ctrl);
 static GtkWidget *create_el_widgets(GtkRotCtrl * ctrl);
@@ -123,7 +122,6 @@ GType gtk_rot_ctrl_get_type()
 
     if (!gtk_rot_ctrl_type)
     {
-
         static const GTypeInfo gtk_rot_ctrl_info = {
             sizeof(GtkRotCtrlClass),
             NULL,               /* base_init */
@@ -145,7 +143,6 @@ GType gtk_rot_ctrl_get_type()
     return gtk_rot_ctrl_type;
 }
 
-
 static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
 {
     //GObjectClass      *gobject_class;
@@ -160,12 +157,8 @@ static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
     //container_class = (GtkContainerClass*) class;
 
     parent_class = g_type_class_peek_parent(class);
-
     object_class->destroy = gtk_rot_ctrl_destroy;
-
 }
-
-
 
 static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
 {
@@ -189,7 +182,6 @@ static void gtk_rot_ctrl_destroy(GtkObject * object)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(object);
 
-
     /* stop timer */
     if (ctrl->timerid > 0)
         g_source_remove(ctrl->timerid);
@@ -212,11 +204,9 @@ static void gtk_rot_ctrl_destroy(GtkObject * object)
     (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
-
-
-/** \brief Create a new rotor control widget.
+/**
+ * \brief Create a new rotor control widget.
  * \return A new rotor control window.
- * 
  */
 GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
 {
@@ -290,12 +280,11 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
     GTK_ROT_CTRL(widget)->timerid = g_timeout_add(GTK_ROT_CTRL(widget)->delay,
                                                   rot_ctrl_timeout_cb,
                                                   GTK_ROT_CTRL(widget));
-
     return widget;
 }
 
-
-/** \brief Update rotator control state.
+/**
+ * \brief Update rotator control state.
  * \param ctrl Pointer to the GtkRotCtrl.
  * 
  * This function is called by the parent, i.e. GtkSatModule, indicating that
@@ -307,7 +296,7 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
     gchar          *buff;
 
     /* added by Marcel Cimander */
-  /** if auto flag is set (--automatic, -a), rotator will change target automatically */
+    /* if auto flag is set (--automatic, -a), rotator will change target automatically */
     if (auto_mode)
     {
         int             i = 0;
@@ -356,12 +345,9 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
                 if (ctrl->plot != NULL)
                     gtk_polar_plot_set_pass(GTK_POLAR_PLOT(ctrl->plot),
                                             ctrl->pass);
-
             }
-
         }
     }
-
 
     ctrl->t = t;
 
@@ -464,8 +450,8 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
     }
 }
 
-
-/** \brief Create azimuth control widgets.
+/**
+ * \brief Create azimuth control widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  * 
  * This function creates and initialises the widgets for controlling the
@@ -477,7 +463,6 @@ GtkWidget      *create_az_widgets(GtkRotCtrl * ctrl)
     GtkWidget      *frame;
     GtkWidget      *table;
     GtkWidget      *label;
-
 
     frame = gtk_frame_new(_("Azimuth"));
 
@@ -503,8 +488,8 @@ GtkWidget      *create_az_widgets(GtkRotCtrl * ctrl)
     return frame;
 }
 
-
-/** \brief Create elevation control widgets.
+/**
+ * \brief Create elevation control widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  * 
  * This function creates and initialises the widgets for controlling the
@@ -516,7 +501,6 @@ GtkWidget      *create_el_widgets(GtkRotCtrl * ctrl)
     GtkWidget      *frame;
     GtkWidget      *table;
     GtkWidget      *label;
-
 
     frame = gtk_frame_new(_("Elevation"));
 
@@ -542,7 +526,8 @@ GtkWidget      *create_el_widgets(GtkRotCtrl * ctrl)
     return frame;
 }
 
-/** \brief Create target widgets.
+/**
+ * \brief Create target widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  */
 static
@@ -552,7 +537,6 @@ GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
     gchar          *buff;
     guint           i, n;
     sat_t          *sat = NULL;
-
 
     buff = g_strdup_printf(FMTSTR, 0.0);
 
@@ -638,7 +622,6 @@ GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
     return frame;
 }
 
-
 static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame, *table, *label, *timer, *toler;
@@ -649,12 +632,10 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     const gchar    *filename;   /* file name */
     gchar          *rotname;
 
-
     table = gtk_table_new(3, 3, FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table), 5);
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-
 
     label = gtk_label_new(_("Device:"));
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -677,10 +658,8 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
 
         while ((filename = g_dir_read_name(dir)))
         {
-
             if (g_str_has_suffix(filename, ".rot"))
             {
-
                 vbuff = g_strsplit(filename, ".rot", 0);
                 rots =
                     g_slist_insert_sorted(rots, g_strdup(vbuff[0]),
@@ -764,7 +743,6 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_table_attach(GTK_TABLE(table), toler, 1, 2, 2, 3, GTK_FILL, GTK_FILL,
                      0, 0);
 
-
     label = gtk_label_new(_("deg"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 2, 3);
@@ -778,8 +756,8 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     return frame;
 }
 
-
-/** \brief Create target widgets.
+/**
+ * \brief Create target widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  */
 static
@@ -795,9 +773,7 @@ GtkWidget      *create_plot_widget(GtkRotCtrl * ctrl)
     return frame;
 }
 
-
-/** \brief Copy satellite from hash table to singly linked list.
- */
+/** Copy satellite from hash table to singly linked list. */
 static void store_sats(gpointer key, gpointer value, gpointer user_data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(user_data);
@@ -805,13 +781,12 @@ static void store_sats(gpointer key, gpointer value, gpointer user_data)
 
     (void)key;                  /* avoid unused variable warning */
 
-    ctrl->sats =
-        g_slist_insert_sorted(ctrl->sats, sat,
-                              (GCompareFunc) sat_name_compare);
+    ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
+                                       (GCompareFunc) sat_name_compare);
 }
 
-
-/** \brief Manage satellite selections
+/**
+ ' \brief Manage satellite selections
  * \param satsel Pointer to the GtkComboBox.
  * \param data Pointer to the GtkRotCtrl widget.
  * 
@@ -837,7 +812,6 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
             ctrl->pass = get_pass(ctrl->target, ctrl->qth, ctrl->t, 3.0);
 
         set_flipped_pass(ctrl);
-
     }
     else
     {
@@ -851,7 +825,6 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
             free_pass(ctrl->pass);
             ctrl->pass = NULL;
         }
-
     }
 
     /* in either case, we set the new pass (even if NULL) on the polar plot */
@@ -859,8 +832,8 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
         gtk_polar_plot_set_pass(GTK_POLAR_PLOT(ctrl->plot), ctrl->pass);
 }
 
-
-/** \brief Manage toggle signals (tracking)
+/**
+ * \brief Manage toggle signals (tracking)
  * \param button Pointer to the GtkToggle button.
  * \param data Pointer to the GtkRotCtrl widget.
  */
@@ -871,8 +844,8 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
     ctrl->tracking = gtk_toggle_button_get_active(button);
 }
 
-
-/** \brief Manage cycle delay changes.
+/**
+ * \brief Manage cycle delay changes.
  * \param spin Pointer to the spin button.
  * \param data Pointer to the GtkRotCtrl widget.
  * 
@@ -883,7 +856,6 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
-
     ctrl->delay = (guint) gtk_spin_button_get_value(spin);
 
     if (ctrl->timerid > 0)
@@ -892,9 +864,8 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
     ctrl->timerid = g_timeout_add(ctrl->delay, rot_ctrl_timeout_cb, ctrl);
 }
 
-
-
-/** \brief Manage tolerance changes.
+/**
+ * \brief Manage tolerance changes.
  * \param spin Pointer to the spin button.
  * \param data Pointer to the GtkRotCtrl widget.
  * 
@@ -908,8 +879,8 @@ static void toler_changed_cb(GtkSpinButton * spin, gpointer data)
     ctrl->tolerance = gtk_spin_button_get_value(spin);
 }
 
-
-/** \brief New rotor device selected.
+/**
+ * \brief New rotor device selected.
  * \param box Pointer to the rotor selector combo box.
  * \param data Pointer to the GtkRotCtrl widget.
  * 
@@ -968,9 +939,8 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
     }
 }
 
-
-
-/** \brief Rotor locked.
+/**
+ * \brief Rotor locked.
  * \param button Pointer to the "Engage" button.
  * \param data Pointer to the GtkRotCtrl widget.
  * 
@@ -1008,11 +978,12 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
 }
 
 
-/** \brief Rotator controller timeout function
+/**
+ * \brief Rotator controller timeout function
  * \param data Pointer to the GtkRotCtrl widget.
  * \return Always TRUE to let the timer continue.
  */
-static          gboolean rot_ctrl_timeout_cb(gpointer data)
+static gboolean rot_ctrl_timeout_cb(gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
     gdouble         rotaz = 0.0, rotel = 0.0;
@@ -1024,7 +995,6 @@ static          gboolean rot_ctrl_timeout_cb(gpointer data)
     /*parameters for path predictions */
     gdouble         time_delta;
     gdouble         step_size;
-
 
     if (g_mutex_trylock(&(ctrl->busy)) == FALSE)
     {
@@ -1297,8 +1267,8 @@ static          gboolean rot_ctrl_timeout_cb(gpointer data)
     return TRUE;
 }
 
-
-/** \brief Read rotator position from device.
+/**
+ * \brief Read rotator position from device.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  * \param az The current Az as read from the device
  * \param el The current El as read from the device
@@ -1361,8 +1331,8 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
     return retcode;
 }
 
-
-/** \brief Send new position to rotator device
+/**
+ * \brief Send new position to rotator device
  * \param ctrl Pointer to the GtkRotCtrl widget
  * \param az The new Azimuth
  * \param el The new Elevation
@@ -1406,8 +1376,7 @@ static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
             /*over time a database of this is needed */
             g_strstrip(buffback);
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _
-                        ("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
+                        _("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
                         __FILE__, __LINE__, retval, az, el, buffback);
 
             //retcode=FALSE;
@@ -1418,10 +1387,8 @@ static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
     return (retcode);
 }
 
-
-
-
-/** \brief Update count down label.
+/**
+ * \brief Update count down label.
  * \param[in] ctrl Pointer to the RotCtrl widget.
  * \param[in] t The current time.
  * 
@@ -1434,7 +1401,6 @@ static void update_count_down(GtkRotCtrl * ctrl, gdouble t)
     gdouble         delta;
     gchar          *buff;
     guint           h, m, s;
-
 
     /* select AOS or LOS time depending on target elevation */
     if (ctrl->target->el < 0.0)
@@ -1466,8 +1432,7 @@ static void update_count_down(GtkRotCtrl * ctrl, gdouble t)
 
 }
 
-
-/** \brief Check that we have at least one .rot file */
+/** Check that we have at least one .rot file */
 static gboolean have_conf()
 {
     GDir           *dir = NULL; /* directory handle */
@@ -1475,7 +1440,6 @@ static gboolean have_conf()
     gchar          *dirname;    /* directory name */
     const gchar    *filename;   /* file name */
     gint            i = 0;
-
 
     /* open configuration directory */
     dirname = get_hwconf_dir();
@@ -1486,7 +1450,6 @@ static gboolean have_conf()
         /* read each .rot file */
         while ((filename = g_dir_read_name(dir)))
         {
-
             if (g_str_has_suffix(filename, ".rot"))
             {
                 i++;
@@ -1509,8 +1472,7 @@ static gboolean have_conf()
     return (i > 0) ? TRUE : FALSE;
 }
 
-/** \brief open the rotcld socket. return true if successful false otherwise.*/
-
+/** Open the rotcld socket. return true if successful false otherwise.*/
 static gboolean open_rotctld_socket(GtkRotCtrl * ctrl)
 {
     struct sockaddr_in ServAddr;
@@ -1558,8 +1520,7 @@ static gboolean open_rotctld_socket(GtkRotCtrl * ctrl)
     return TRUE;
 }
 
-
-/*close a rotcld socket. First send a q command to cleanly shut down rotctld*/
+/** Close a rotcld socket. First send a q command to cleanly shut down rotctld */
 static gboolean close_rotctld_socket(gint * sock)
 {
     gint            written;
@@ -1585,10 +1546,12 @@ static gboolean close_rotctld_socket(gint * sock)
     return TRUE;
 }
 
-/** \brief  Send a command to rigctld
- *   Inputs are a controller, a string command, and a buffer and length for returning the output from rigctld.
+/**
+ * \brief  Send a command to rigctld
+ *
+ * Inputs are a controller, a string command, and a buffer and length for
+ * returning the output from rigctld.
  */
-
 gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff, gchar * buffout,
                               gint sizeout)
 {
@@ -1606,7 +1569,6 @@ gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff, gchar * buffout,
     //sat_log_log (SAT_LOG_LEVEL_DEBUG,
     //             _("%s:%s: Sending %d bytes as %s."),
     //             __FILE__, __func__, size, buff);
-
 
     /* send command */
     written = send(ctrl->sock, buff, size, 0);
@@ -1651,24 +1613,28 @@ gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff, gchar * buffout,
     return TRUE;
 }
 
-/** \brief  Compare Satellite Names.
- *simple function to sort the list of satellites in the combo box.
+/**
+ * \brief Compare Satellite Names.
+ *
+ * Simple function to sort the list of satellites in the combo box.
  */
 static gint sat_name_compare(sat_t * a, sat_t * b)
 {
     return (gpredict_strcmp(a->nickname, b->nickname));
 }
 
-
-/** \brief  Compare Rotator Names.
+/**
+ * \brief  Compare Rotator Names.
  */
 static gint rot_name_compare(const gchar * a, const gchar * b)
 {
     return (gpredict_strcmp(a, b));
 }
 
-
-/** \brief  Compute if a pass is flipped or not.  this is a function of the rotator and the particular pass. 
+/**
+ * \brief  Compute if a pass is flipped or not.
+ *
+ * This is a function of the rotator and the particular pass. 
  */
 static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
 {
@@ -1719,8 +1685,8 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
             {
                 retval = TRUE;
             }
-            last_az = caz;
 
+            last_az = caz;
         }
     }
     caz = pass->los_az;
@@ -1747,5 +1713,4 @@ static inline void set_flipped_pass(GtkRotCtrl * ctrl)
         {
             ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype);
         }
-
 }
