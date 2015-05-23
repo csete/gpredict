@@ -208,7 +208,7 @@ static void gtk_rot_ctrl_destroy(GtkObject * object)
  * \brief Create a new rotor control widget.
  * \return A new rotor control window.
  */
-GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
+GtkWidget *gtk_rot_ctrl_new(GtkSatModule * module)
 {
     GtkWidget      *widget;
     GtkWidget      *table;
@@ -299,16 +299,16 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
     /* if auto flag is set (--automatic, -a), rotator will change target automatically */
     if (auto_mode)
     {
-        int             i = 0;
+        int             i;
         int             index = 9999;
         int             n = g_slist_length(ctrl->sats);
 
         if (satlist_mc_nick && ctrl->engaged && ctrl->target)
         {
-            for (i; i < n; i++)
+            for (i = 0; i < n; i++)
             {
-        /** check if next sat from gtk_sat_map.c is same as one in out sat_list_nick 
-         * and get index of it */
+                /* check if next sat from gtk_sat_map.c is same as one in our
+                   sat_list_nick and get index of it */
                 if (!strcmp(next_sat_mc, satlist_mc_nick[i]))
                 {
                     index = i;
@@ -327,8 +327,8 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
             if (verbose_mode)
                 printf("active target(rot): %s\n", active_target_nick);
 
-      /** change rotator target if the tracked satellite had LOS 
-       * and the next satellite != current target */
+            /* change rotator target if the tracked satellite had LOS 
+               and the next satellite != current target */
             if (ctrl->target->nickname != next_sat_mc && !target_aquired)
             {
                 ctrl->target = SAT(g_slist_nth_data(ctrl->sats, index));
@@ -518,8 +518,7 @@ GtkWidget      *create_az_widgets(GtkRotCtrl * ctrl)
  * This function creates and initialises the widgets for controlling the
  * elevation of the the rotator.
  */
-static
-GtkWidget      *create_el_widgets(GtkRotCtrl * ctrl)
+static GtkWidget * create_el_widgets(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame;
     GtkWidget      *table;
@@ -553,8 +552,7 @@ GtkWidget      *create_el_widgets(GtkRotCtrl * ctrl)
  * \brief Create target widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  */
-static
-GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
+static GtkWidget * create_target_widgets(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame, *table, *label, *track;
     gchar          *buff;
@@ -618,7 +616,6 @@ GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
     ctrl->AzSat = gtk_label_new(buff);
     gtk_misc_set_alignment(GTK_MISC(ctrl->AzSat), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->AzSat, 1, 2, 1, 2);
-
 
     /* Elevation */
     label = gtk_label_new(_("El:"));
@@ -783,8 +780,7 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
  * \brief Create target widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  */
-static
-GtkWidget      *create_plot_widget(GtkRotCtrl * ctrl)
+static GtkWidget *create_plot_widget(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame;
 
@@ -1084,11 +1080,9 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
 
     if ((ctrl->engaged) && (ctrl->conf != NULL))
     {
-
         /* read back current value from device */
         if (get_pos(ctrl, &rotaz, &rotel))
         {
-
             /* update display widgets */
             text = g_strdup_printf("%.2f\302\260", rotaz);
             gtk_label_set_text(GTK_LABEL(ctrl->AzRead), text);
@@ -1122,7 +1116,6 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         if ((fabs(setaz - rotaz) > ctrl->tolerance) ||
             (fabs(setel - rotel) > ctrl->tolerance))
         {
-
             if (ctrl->tracking)
             {
                 /*if we are in a pass try to lead the satellite 
@@ -1198,13 +1191,11 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                     }
                     setel = sat->el;
                     if (setel < 0.0)
-                    {
                         setel = 0.0;
-                    }
+
                     if (setel > 180.0)
-                    {
                         setel = 180.0;
-                    }
+
                     setaz = sat->az;
                 }
             }
@@ -1313,7 +1304,6 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
 
     /* send command */
     buff = g_strdup_printf("p\x0a");
-
     retcode = send_rotctld_command(ctrl, buff, buffback, 128);
 
     /* try to read answer */
@@ -1321,7 +1311,6 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
     {
         if (strncmp(buffback, "RPRT", 4) == 0)
         {
-            //retcode=FALSE;
             g_strstrip(buffback);
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: rotctld returned error (%s)"),
@@ -1342,7 +1331,6 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s:%d: rotctld returned bad response (%s)"),
                             __FILE__, __LINE__, buffback);
-                //retcode=FALSE;
             }
 
             g_strfreev(vbuff);
@@ -1384,26 +1372,14 @@ static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
 
     if (retcode == TRUE)
     {
+        /* treat errors as soft errors */
         retval = (gint) g_strtod(buffback + 4, NULL);
-        /*treat errors as soft errors unless there is good reason */
-        /*good reasons come from operator experience or documentation */
-        switch (retval)
+        if (retval != 0)
         {
-
-        case 0:
-            /*no error case */
-            break;
-        default:
-            /*any other case */
-            /*not sure what is a hard error or soft error */
-            /*over time a database of this is needed */
             g_strstrip(buffback);
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
                         __FILE__, __LINE__, retval, az, el, buffback);
-
-            //retcode=FALSE;
-            break;
         }
     }
 
@@ -1679,8 +1655,8 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
         max_az = 180;
     }
 
-    /* Assume that min_az and max_az are atleat 360 degrees apart */
-    /*get the azimuth that is in a settable range */
+    /* Assume that min_az and max_az are atleat 360 degrees apart
+       get the azimuth that is in a settable range */
     while (last_az > max_az)
     {
         last_az -= 360;
@@ -1731,9 +1707,6 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
 
 static inline void set_flipped_pass(GtkRotCtrl * ctrl)
 {
-    if (ctrl->conf)
-        if (ctrl->pass)
-        {
-            ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype);
-        }
+    if (ctrl->conf && ctrl->pass)
+        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype);
 }
