@@ -916,7 +916,7 @@ static void rigctrl_cb(GtkWidget * menuitem, gpointer data)
 
     if (module->rigctrlwin != NULL)
     {
-        /* there is already a roto controller for this module */
+        /* there is already a radio controller for this module */
         gtk_window_present(GTK_WINDOW(module->rigctrlwin));
         return;
     }
@@ -925,7 +925,7 @@ static void rigctrl_cb(GtkWidget * menuitem, gpointer data)
 
     if (module->rigctrl == NULL)
     {
-        /* gtk_rot_ctrl_new returned NULL becasue no radios are configured */
+        /* gtk_rig_ctrl_new returned NULL becasue no radios are configured */
         GtkWidget      *dialog;
 
         dialog = gtk_message_dialog_new(GTK_WINDOW(app),
