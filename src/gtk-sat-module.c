@@ -1418,7 +1418,7 @@ void gtk_sat_module_select_sat(GtkSatModule * module, gint catnum)
     GtkWidget      *child;
     guint           i;
 
-    /* select satellite in each child */
+    /* select satellite in each view */
     for (i = 0; i < module->nviews; i++)
     {
         child = GTK_WIDGET(g_slist_nth_data(module->views, i));
@@ -1449,6 +1449,13 @@ void gtk_sat_module_select_sat(GtkSatModule * module, gint catnum)
                         __func__);
         }
     }
+
+    /* select sat in radio and rotator controllers */
+    if (module->rigctrl != NULL)
+        gtk_rig_ctrl_select_sat(GTK_RIG_CTRL(module->rigctrl), catnum);
+
+    if (module->rotctrl != NULL)
+        gtk_rot_ctrl_select_sat(GTK_ROT_CTRL(module->rotctrl), catnum);
 }
 
 /**

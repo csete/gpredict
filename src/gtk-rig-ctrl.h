@@ -67,6 +67,7 @@ struct _gtk_rig_ctrl {
     GtkWidget      *SatRng, *SatRngRate, *SatDop;
 
     /* other widgets */
+    GtkWidget      *SatSel;     /*!< Satellite selector */
     GtkWidget      *TrspSel;    /*!< Transponder selector */
     GtkWidget      *DevSel;     /*!< Device selector */
     GtkWidget      *DevSel2;    /*!< Second device selector */
@@ -114,6 +115,6 @@ struct _GtkRigCtrlClass {
 GType           gtk_rig_ctrl_get_type(void);
 GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module);
 void            gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t);
+void            gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum);
 
-
-#endif /* __GTK_RIG_ctrl_H__ */
+#endif /* __GTK_RIG_CTRL_H__ */

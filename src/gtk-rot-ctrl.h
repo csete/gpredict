@@ -64,6 +64,7 @@ struct _gtk_rot_ctrl {
     GtkWidget      *ElSat, *ElSet, *ElRead, *ElDevSel, *ElDev;
 
     /* other widgets */
+    GtkWidget      *SatSel;
     GtkWidget      *SatCnt;
     GtkWidget      *DevSel;
     GtkWidget      *plot;       /*!< Polar plot widget */
@@ -102,6 +103,7 @@ struct _GtkRotCtrlClass {
 GType           gtk_rot_ctrl_get_type(void);
 GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module);
 void            gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t);
+void            gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum);
 
 #ifdef __cplusplus
 }

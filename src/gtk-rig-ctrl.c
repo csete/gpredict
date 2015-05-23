@@ -483,6 +483,28 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
     }
 }
 
+/** Select a satellite */
+void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
+{
+    sat_t      *sat;
+    int         i, n;
+
+    /* find index in satellite list */
+    n = g_slist_length(ctrl->sats);
+    for (i = 0; i < n; i++)
+    {
+        sat = SAT(g_slist_nth_data(ctrl->sats, i));
+        if (sat)
+        {
+            if (sat->tle.catnr == catnum)
+            {
+                /* assume the index is the same in sat selector */
+                gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), i);
+                break;
+            }
+        }
+    }
+}
 
 /**
  * \brief Create freq control widgets for downlink.
@@ -628,7 +650,7 @@ static GtkWidget *create_uplink_widgets(GtkRigCtrl * ctrl)
  */
 static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
 {
-    GtkWidget      *frame, *table, *label, *satsel, *track;
+    GtkWidget      *frame, *table, *label, *track;
     GtkWidget      *tune, *trsplock, *hbox;
     gchar          *buff;
     guint           i, n;
@@ -643,20 +665,20 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 
     /* sat selector */
-    satsel = gtk_combo_box_new_text();
+    ctrl->SatSel = gtk_combo_box_new_text();
     n = g_slist_length(ctrl->sats);
     for (i = 0; i < n; i++)
     {
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
         if (sat)
         {
-            gtk_combo_box_append_text(GTK_COMBO_BOX(satsel), sat->nickname);
+            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel), sat->nickname);
         }
     }
-    gtk_combo_box_set_active(GTK_COMBO_BOX(satsel), 0);
-    gtk_widget_set_tooltip_text(satsel, _("Select target object"));
-    g_signal_connect(satsel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), satsel, 0, 3, 0, 1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
+    gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 3, 0, 1);
 
     /* tracking button */
     track = gtk_toggle_button_new_with_label(_("Track"));
@@ -1019,8 +1041,8 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
  *  \param box Pointer to the transponder selector widget.
  *  \param data Pointer to the GtkRigCtrl structure
  *
- * This function is called when the user selects a new transponder.
- * It updates ctrl->trsp with the new selection.
+ * This function is called when a new transponder is selected.
+ * It updates ctrl->trsp with the new selection and issues a "tune" event.
  */
 static void trsp_selected_cb(GtkComboBox * box, gpointer data)
 {
@@ -1038,6 +1060,7 @@ static void trsp_selected_cb(GtkComboBox * box, gpointer data)
     else if (i < n)
     {
         ctrl->trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, i);
+        trsp_tune_cb(NULL, data);
     }
     else
     {

@@ -450,6 +450,29 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
     }
 }
 
+/** Select a satellite. */
+void gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum)
+{
+    sat_t      *sat;
+    int         i, n;
+
+    /* find index in satellite list */
+    n = g_slist_length(ctrl->sats);
+    for (i = 0; i < n; i++)
+    {
+        sat = SAT(g_slist_nth_data(ctrl->sats, i));
+        if (sat)
+        {
+            if (sat->tle.catnr == catnum)
+            {
+                /* assume the index is the same in sat selector */
+                gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), i);
+                break;
+            }
+        }
+    }
+}
+
 /**
  * \brief Create azimuth control widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
@@ -533,7 +556,7 @@ GtkWidget      *create_el_widgets(GtkRotCtrl * ctrl)
 static
 GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
 {
-    GtkWidget      *frame, *table, *label, *satsel, *track;
+    GtkWidget      *frame, *table, *label, *track;
     gchar          *buff;
     guint           i, n;
     sat_t          *sat = NULL;
@@ -546,7 +569,7 @@ GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 
     /* sat selector */
-    satsel = gtk_combo_box_new_text();
+    ctrl->SatSel = gtk_combo_box_new_text();
     n = g_slist_length(ctrl->sats);
 
     /* added by Marcel Cimander; allocate space for n satellites */
@@ -558,7 +581,7 @@ GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
         if (sat)
         {
-            gtk_combo_box_append_text(GTK_COMBO_BOX(satsel), sat->nickname);
+            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel), sat->nickname);
 
             /** added by Marcel Cimander; allocate space for nickname and write the nickname of 
              * all selected satellites to it */
@@ -574,10 +597,10 @@ GtkWidget      *create_target_widgets(GtkRotCtrl * ctrl)
 
         }
     }
-    gtk_combo_box_set_active(GTK_COMBO_BOX(satsel), 0);
-    gtk_widget_set_tooltip_text(satsel, _("Select target object"));
-    g_signal_connect(satsel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), satsel, 0, 2, 0, 1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
+    gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 2, 0, 1);
 
     /* tracking button */
     track = gtk_toggle_button_new_with_label(_("Track"));
