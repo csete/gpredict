@@ -333,6 +333,9 @@ GtkWidget *gtk_rig_ctrl_new(GtkSatModule * module)
                                                   rig_ctrl_timeout_cb,
                                                   GTK_RIG_CTRL(widget));
 
+    if (module->target > 0)
+        gtk_rig_ctrl_select_sat(GTK_RIG_CTRL(widget), module->target);
+
     return widget;
 }
 

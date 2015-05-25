@@ -275,6 +275,10 @@ GtkWidget *gtk_rot_ctrl_new(GtkSatModule * module)
     GTK_ROT_CTRL(widget)->timerid = g_timeout_add(GTK_ROT_CTRL(widget)->delay,
                                                   rot_ctrl_timeout_cb,
                                                   GTK_ROT_CTRL(widget));
+
+    if (module->target > 0)
+        gtk_rot_ctrl_select_sat(GTK_ROT_CTRL(widget), module->target);
+
     return widget;
 }
 
