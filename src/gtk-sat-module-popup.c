@@ -58,6 +58,7 @@ static void     tmgr_cb(GtkWidget * menuitem, gpointer data);
 static void     rigctrl_cb(GtkWidget * menuitem, gpointer data);
 static void     rotctrl_cb(GtkWidget * menuitem, gpointer data);
 static void     delete_cb(GtkWidget * menuitem, gpointer data);
+static void     autotrack_cb(GtkCheckMenuItem * menuitem, gpointer data);
 static void     close_cb(GtkWidget * menuitem, gpointer data);
 static void     name_changed(GtkWidget * widget, gpointer data);
 static void     destroy_rotctrl(GtkWidget * window, gpointer data);
@@ -149,6 +150,13 @@ void gtk_sat_module_popup(GtkSatModule * module)
     /* separator */
     menuitem = gtk_separator_menu_item_new();
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* autotrack */
+    menuitem = gtk_check_menu_item_new_with_label(_("Autotrack"));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
+                                   module->autotrack);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(autotrack_cb), module);
 
     /* select satellite submenu */
     menuitem = gtk_menu_item_new_with_label(_("Select satellite"));
@@ -584,12 +592,12 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
         {
 
             gtk_window_move(GTK_WINDOW(GTK_SAT_MODULE(module)->win),
-                            g_key_file_get_integer(GTK_SAT_MODULE(module)->
-                                                   cfgdata,
+                            g_key_file_get_integer(GTK_SAT_MODULE
+                                                   (module)->cfgdata,
                                                    MOD_CFG_GLOBAL_SECTION,
                                                    MOD_CFG_WIN_POS_X, NULL),
-                            g_key_file_get_integer(GTK_SAT_MODULE(module)->
-                                                   cfgdata,
+                            g_key_file_get_integer(GTK_SAT_MODULE
+                                                   (module)->cfgdata,
                                                    MOD_CFG_GLOBAL_SECTION,
                                                    MOD_CFG_WIN_POS_Y, NULL));
 
@@ -617,8 +625,8 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
         {
             gtk_window_set_transient_for(GTK_WINDOW
                                          (GTK_SAT_MODULE(module)->tmgWin),
-                                         GTK_WINDOW(GTK_SAT_MODULE(module)->
-                                                    win));
+                                         GTK_WINDOW(GTK_SAT_MODULE
+                                                    (module)->win));
         }
 
         break;
@@ -729,8 +737,8 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
         {
             gtk_window_set_transient_for(GTK_WINDOW
                                          (GTK_SAT_MODULE(module)->tmgWin),
-                                         GTK_WINDOW(GTK_SAT_MODULE(module)->
-                                                    win));
+                                         GTK_WINDOW(GTK_SAT_MODULE
+                                                    (module)->win));
         }
         break;
 
@@ -785,12 +793,12 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
         {
 
             gtk_window_move(GTK_WINDOW(GTK_SAT_MODULE(module)->win),
-                            g_key_file_get_integer(GTK_SAT_MODULE(module)->
-                                                   cfgdata,
+                            g_key_file_get_integer(GTK_SAT_MODULE
+                                                   (module)->cfgdata,
                                                    MOD_CFG_GLOBAL_SECTION,
                                                    MOD_CFG_WIN_POS_X, NULL),
-                            g_key_file_get_integer(GTK_SAT_MODULE(module)->
-                                                   cfgdata,
+                            g_key_file_get_integer(GTK_SAT_MODULE
+                                                   (module)->cfgdata,
                                                    MOD_CFG_GLOBAL_SECTION,
                                                    MOD_CFG_WIN_POS_Y, NULL));
         }
@@ -878,7 +886,7 @@ static void sky_at_glance_cb(GtkWidget * menuitem, gpointer data)
     else
     {
         module->skg = gtk_sky_glance_new(module->satellites, module->qth,
-                            module->tmgCdnum);
+                                         module->tmgCdnum);
     }
 
     /* store time at which GtkSkyGlance has been created */
@@ -1011,8 +1019,9 @@ static void rotctrl_cb(GtkWidget * menuitem, gpointer data)
                                         GTK_DIALOG_MODAL |
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
-                                        _("You have no rotator configuration!\n"
-                                          "Please configure an antenna rotator first."));
+                                        _
+                                        ("You have no rotator configuration!\n"
+                                         "Please configure an antenna rotator first."));
         g_signal_connect_swapped(dialog, "response",
                                  G_CALLBACK(gtk_widget_destroy), dialog);
         gtk_window_set_title(GTK_WINDOW(dialog), _("ERROR"));
@@ -1084,6 +1093,12 @@ static gint window_delete(GtkWidget * widget, GdkEvent * event, gpointer data)
     (void)data;                 /* avoid unused parameter compiler warning */
 
     return FALSE;
+}
+
+/** Autotrack activated */
+static void autotrack_cb(GtkCheckMenuItem * menuitem, gpointer data)
+{
+    GTK_SAT_MODULE(data)->autotrack = gtk_check_menu_item_get_active(menuitem);
 }
 
 /**

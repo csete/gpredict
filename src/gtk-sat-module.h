@@ -151,6 +151,10 @@ struct _gtk_sat_module {
 
     gboolean        reset;      /*!< Flag indicating whether time reset is in progress */
 
+    /* auto-tracking */
+    gint            target;     /*!< Target satellite */
+    gboolean        autotrack;  /*!< Whether automatic tracking is enabled */
+
     /* location structure */
     struct gps_data_t *gps_data;        /*!< GPSD data structure */
 };

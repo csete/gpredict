@@ -102,6 +102,7 @@ static void     reload_sats_in_child(GtkWidget * widget,
                                      GtkSatModule * module);
 
 static void     update_skg(GtkSatModule * module);
+static void     update_autotrack(GtkSatModule * module);
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -193,6 +194,9 @@ static void gtk_sat_module_init(GtkSatModule * module)
     module->tmgPdnum = 0.0;
     module->tmgCdnum = 0.0;
     module->tmgReset = FALSE;
+
+    module->target = -1;
+    module->autotrack = FALSE;
 }
 
 
@@ -731,25 +735,20 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
     switch (mod->state)
     {
     case GTK_SAT_MOD_STATE_DOCKED:
-
         if (mod_mgr_mod_is_visible(GTK_WIDGET(module)))
-        {
             needupdate = TRUE;
-        }
+
         break;
 
     default:
         state = gdk_window_get_state(GDK_WINDOW
-                                 (gtk_widget_get_window(GTK_WIDGET(module))));
-
+                                     (gtk_widget_get_window
+                                      (GTK_WIDGET(module))));
         if (state & GDK_WINDOW_STATE_ICONIFIED)
-        {
             needupdate = FALSE;
-        }
         else
-        {
             needupdate = TRUE;
-        }
+
         break;
     }
 
@@ -781,32 +780,23 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
         {
             /* reset counter */
             mod->head_count = 0;
-
             update_header(mod);
         }
 
-        /* time to update events? */
-        if (mod->event_count == mod->event_timeout)
+        /* reset event update counter if is has expired or if we have moved
+           significantly */
+        if (mod->event_count == mod->event_timeout ||
+            qth_small_dist(mod->qth, mod->qth_event) > 1.0)
         {
-            /* reset counter, this will make gtk_sat_module_update_sat
-               recalculate events */
-            mod->event_count = 0;
-        }
-        /*only trigger an update if adequate movement has occurred */
-        /*FIXME position threshhold should be configurable */
-        if (qth_small_dist(mod->qth, mod->qth_event) > 1.0)
-        {
-            /* reset counter, this will make gtk_sat_module_update_sat
-               recalculate events
-             */
-            mod->event_count = 0;
+            mod->event_count = 0;       // will trigger find_aos() and find_los()
         }
 
-        /*if the events are going to be recalculated store the position */
+        /* if the events are going to be recalculated store the position */
         if (mod->event_count == 0)
         {
             qth_small_save(mod->qth, &(mod->qth_event));
         }
+
         /* update satellite data */
         if (mod->satellites != NULL)
             g_hash_table_foreach(mod->satellites,
@@ -824,6 +814,10 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
             g_hash_table_foreach(mod->satellites,
                                  gtk_sat_module_update_sat, module);
 
+        /* update target if autotracking is enabled */
+        if (mod->autotrack)
+            update_autotrack(mod);
+
         /* send notice to radio and rotator controller */
         if (mod->rigctrl)
             gtk_rig_ctrl_update(GTK_RIG_CTRL(mod->rigctrl), mod->tmgCdnum);
@@ -832,10 +826,9 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
 
         /* check and update Sky at glance */
         /* FIXME: We should have some timeout counter to ensure that we don't
-         * update GtkSkyGlance too often when running with high throttle values;
-         * however, the update does not seem to add any significant load even
-         * when running at max throttle
-         */
+           update GtkSkyGlance too often when running with high throttle values;
+           however, the update does not seem to add any significant load even
+           when running at max throttle */
         if (mod->skg)
             update_skg(mod);
 
@@ -850,9 +843,7 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
             /* update time control spin buttons when we are
                in RT or SRT mode */
             if (mod->throttle)
-            {
                 tmg_update_widgets(mod);
-            }
         }
 
         g_mutex_unlock(&mod->busy);
@@ -917,7 +908,8 @@ static void update_child(GtkWidget * child, gdouble tstamp)
  * This function updates the tracking data for a given satelite. It is called by
  * the timeout handler for each element in the hash table.
  */
-static void gtk_sat_module_update_sat(gpointer key, gpointer val, gpointer data)
+static void gtk_sat_module_update_sat(gpointer key, gpointer val,
+                                      gpointer data)
 {
     sat_t          *sat;
     GtkSatModule   *module;
@@ -983,7 +975,7 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val, gpointer data)
        no assurance that the current stored aos is the next aos. As a 
        practical matter the above code handles time reversing acceptably 
        for most circumstances. 
-    */
+     */
     if (sat->aos > 0 && sat->aos < daynum)
     {
         maxdt = (gdouble) sat_cfg_get_int(SAT_CFG_INT_PRED_LOOK_AHEAD);
@@ -1418,6 +1410,8 @@ void gtk_sat_module_select_sat(GtkSatModule * module, gint catnum)
     GtkWidget      *child;
     guint           i;
 
+    module->target = catnum;
+
     /* select satellite in each view */
     for (i = 0; i < module->nviews; i++)
     {
@@ -1517,20 +1511,9 @@ static void get_grid_size(GtkSatModule * module, guint * rows, guint * cols)
  */
 static void update_skg(GtkSatModule * module)
 {
-    gboolean        update_needed = FALSE;
-
-    /* threshold is ~60 seconds */
-    if (G_UNLIKELY(fabs(module->tmgCdnum - module->lastSkgUpd) > 7.0e-4))
-    {
-        update_needed = TRUE;
-    }
-    /* threshold is 1km */
-    if (G_UNLIKELY(qth_small_dist(module->qth, module->lastSkgUpdqth) > 1.0))
-    {
-        update_needed = TRUE;
-    }
-
-    if (G_UNLIKELY(update_needed == TRUE))
+    /* update SKG if ~60 seconds have passed or we have moved 1 km */
+    if (G_UNLIKELY(fabs(module->tmgCdnum - module->lastSkgUpd) > 7.0e-4) ||
+        G_UNLIKELY(qth_small_dist(module->qth, module->lastSkgUpdqth) > 1.0))
     {
 
         sat_log_log(SAT_LOG_LEVEL_INFO,
@@ -1547,4 +1530,64 @@ static void update_skg(GtkSatModule * module)
         module->lastSkgUpd = module->tmgCdnum;
         qth_small_save(module->qth, &(module->lastSkgUpdqth));
     }
+}
+
+/** Check and update autotrack target */
+static void update_autotrack(GtkSatModule * module)
+{
+    GList          *satlist = NULL;
+    GList          *iter;
+    sat_t          *sat = NULL;
+    guint           i, n;
+    double          next_aos;
+    gint            next_sat;
+
+    if (module->target > 0)
+        sat = g_hash_table_lookup(module->satellites, &module->target);
+
+    /* do nothing if current target is still above horizon */
+    if (sat != NULL && sat->el > 0.0)
+        return;
+
+    /* set target to satellite with next AOS */
+    satlist = g_hash_table_get_values(module->satellites);
+    iter = satlist;
+    n = g_list_length(satlist);
+    if (n == 0)
+        return;
+
+    next_aos = module->tmgCdnum + 10.f; /* hope there is AOS within 10 days */
+    next_sat = module->target;
+
+    i = 0;
+    while (i++ < n)
+    {
+        sat = (sat_t *) iter->data;
+
+        /* if sat is above horizon, select it and we are done */
+        if (sat->el > 0.0)
+        {
+            next_sat = sat->tle.catnr;
+            break;
+        }
+
+        /* we have a candidate if AOS is in the future */
+        if (sat->aos > module->tmgCdnum && sat->aos < next_aos)
+        {
+            next_aos = sat->aos;
+            next_sat = sat->tle.catnr;
+        }
+
+        iter = iter->next;
+    }
+
+    if (next_sat != module->target)
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO,
+                    _("Autotrack: Changing target satellite %d -> %d"),
+                    module->target, next_sat);
+        gtk_sat_module_select_sat(module, next_sat);
+    }
+
+    g_list_free(satlist);
 }
