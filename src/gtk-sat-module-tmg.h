@@ -26,12 +26,10 @@
     along with this program; if not, visit http://www.fsf.org/
 */
 
-/****
-
-     NOTE: This file is an internal part of gtk-sat-module and should not
-     be used by other files than gtk-sat-module.c and gtk-sat-module-popup.c
-
-*****/
+/*
+ * NOTE: This file is an internal part of gtk-sat-module and should not
+ * be used by other files than gtk-sat-module.c and gtk-sat-module-popup.c
+ */
 
 #ifndef __GTK_SAT_MODULE_TMG_H__
 #define __GTK_SAT_MODULE_TMG_H__ 1
@@ -48,9 +46,9 @@ extern "C" {
 
 
 
-void tmg_create (GtkSatModule *mod);
-void tmg_update_widgets (GtkSatModule *mod);
-void tmg_update_state (GtkSatModule *mod);
+void            tmg_create(GtkSatModule * mod);
+void            tmg_update_widgets(GtkSatModule * mod);
+void            tmg_update_state(GtkSatModule * mod);
 
 
 #ifdef __cplusplus
