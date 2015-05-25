@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,14 +27,14 @@
 #ifndef __GTK_SKY_GLANCE_H__
 #define __GTK_SKY_GLANCE_H__ 1
 
+#include <gdk/gdk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gdk/gdk.h>
+#include <goocanvas.h>
 #include <gtk/gtk.h>
 #include "gtk-sat-data.h"
-#include "predict-tools.h"
-#include <goocanvas.h>
 
+#include "predict-tools.h"
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus
@@ -111,15 +110,8 @@ struct _GtkSkyGlanceClass {
 };
 
 
-
 GType           gtk_sky_glance_get_type(void);
 GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts);
-
-/*
-void           gtk_sky_glance_reconf     (GtkWidget *skg);
-
-void gtk_sky_glance_reload_sats (GtkWidget *skg, GHashTable *sats);
-*/
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus
