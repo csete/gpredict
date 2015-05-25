@@ -922,6 +922,7 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val,
 
     sat = SAT(val);
     module = GTK_SAT_MODULE(data);
+    maxdt = (gdouble) sat_cfg_get_int(SAT_CFG_INT_PRED_LOOK_AHEAD);
 
     /* get current time (real or simulated */
     daynum = module->tmgCdnum;
@@ -936,7 +937,6 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val,
            find_aos and find_los will not go beyond the time limit
            we specify (in those cases they return 0.0 for AOS/LOS times.
            We use SAT_CFG_INT_PRED_LOOK_AHEAD for upper time limit */
-        maxdt = (gdouble) sat_cfg_get_int(SAT_CFG_INT_PRED_LOOK_AHEAD);
         sat->aos = find_aos(sat, module->qth, daynum, maxdt);
         sat->los = find_los(sat, module->qth, daynum, maxdt);
     }
@@ -977,15 +977,10 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val,
        for most circumstances. 
      */
     if (sat->aos > 0 && sat->aos < daynum)
-    {
-        maxdt = (gdouble) sat_cfg_get_int(SAT_CFG_INT_PRED_LOOK_AHEAD);
         sat->aos = find_aos(sat, module->qth, daynum, maxdt);
-    }
+
     if (sat->los > 0 && sat->los < daynum)
-    {
-        maxdt = (gdouble) sat_cfg_get_int(SAT_CFG_INT_PRED_LOOK_AHEAD);
         sat->los = find_los(sat, module->qth, daynum, maxdt);
-    }
 
     predict_calc(sat, module->qth, daynum);
 }
