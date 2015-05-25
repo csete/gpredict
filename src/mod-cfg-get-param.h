@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -30,12 +29,19 @@
 
 #include "sat-cfg.h"
 
-gboolean mod_cfg_get_bool (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_bool_e p);
-gint     mod_cfg_get_int  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_int_e p);
-gchar   *mod_cfg_get_str  (GKeyFile *f, const gchar *sec, const gchar *key, sat_cfg_str_e p);
-void     mod_cfg_get_integer_list_boolean (GKeyFile *cfgdata,const gchar* section,const gchar *key,GHashTable *dest);
-void     mod_cfg_set_integer_list_boolean (GKeyFile *cfgdata, GHashTable *hash, const gchar *cfgsection, const gchar *cfgkey);
-
-
+gboolean        mod_cfg_get_bool(GKeyFile * f, const gchar * sec,
+                                 const gchar * key, sat_cfg_bool_e p);
+gint            mod_cfg_get_int(GKeyFile * f, const gchar * sec,
+                                const gchar * key, sat_cfg_int_e p);
+gchar          *mod_cfg_get_str(GKeyFile * f, const gchar * sec,
+                                const gchar * key, sat_cfg_str_e p);
+void            mod_cfg_get_integer_list_boolean(GKeyFile * cfgdata,
+                                                 const gchar * section,
+                                                 const gchar * key,
+                                                 GHashTable * dest);
+void            mod_cfg_set_integer_list_boolean(GKeyFile * cfgdata,
+                                                 GHashTable * hash,
+                                                 const gchar * cfgsection,
+                                                 const gchar * cfgkey);
 
 #endif
