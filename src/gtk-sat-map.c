@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -30,7 +29,8 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 
-/** \brief Satellite Map Widget.
+/**
+ * \brief Satellite Map Widget.
  *
  * The satellite map widget is responsible for plotting and updating information
  * relevent to each satellite. This information includes the satellite position,
@@ -39,33 +39,35 @@
  * the map.
  *
  */
+
+#ifdef HAVE_CONFIG_H
+#include <build-config.h>
+#endif
+
+#include <goocanvas.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <math.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
-#include "config-keys.h"
-#include "sat-cfg.h"
-#include "mod-cfg-get-param.h"
-#include "gtk-sat-data.h"
-#include "gpredict-utils.h"
+#include <string.h>
+
 #include "compat.h"
+#include "config-keys.h"
+#include "gpredict-utils.h"
+#include "gtk-sat-data.h"
 #include "gtk-sat-map-popup.h"
 #include "gtk-sat-map-ground-track.h"
 #include "gtk-sat-map.h"
 #include "locator.h"
+#include "map-tools.h"
+#include "mod-cfg-get-param.h"
+#include "orbit-tools.h"
+#include "predict-tools.h"
+#include "sat-cfg.h"
 #include "sat-debugger.h"
 #include "sat-info.h"
-#include "predict-tools.h"
-#include "orbit-tools.h"
-#include "map-tools.h"
+#include "sat-log.h"
+#include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
-#ifdef HAVE_CONFIG_H
-#include <build-config.h>
-#endif
-#include <goocanvas.h>
-#include <string.h>
-#include "next_sat_head_mc.h"
 
 #define MARKER_SIZE_HALF    1
 
@@ -127,10 +129,9 @@ static void     reset_ground_track(gpointer key, gpointer value,
 static GtkVBoxClass *parent_class = NULL;
 static GooCanvasPoints *points1;
 static GooCanvasPoints *points2;
-char            next_sat_mc[256];
 
 
-/** \brief Register the satellite map widget. */
+/** Register the satellite map widget. */
 GType gtk_sat_map_get_type()
 {
     static GType    gtk_sat_map_type = 0;
@@ -769,17 +770,6 @@ void gtk_sat_map_update(GtkWidget * widget)
                                                     satmap->infobgd,
                                                     sat->nickname, cm, m, cs,
                                                     s);
-
-                    /* added by Marcel Cimander */
-                    /* if auto flag is set (--automatic, -a), set the name of the next passing 
-                     * satellite to make it available to other files */
-                    if (auto_mode)
-                    {
-                        if (!strcmp(next_sat_mc, "") ||
-                            strcmp(next_sat_mc, sat->nickname))
-                            strncpy(next_sat_mc, sat->nickname,
-                                    sizeof(next_sat_mc));
-                    }
 
                     g_object_set(satmap->next, "text", buff, NULL);
 
@@ -2919,23 +2909,10 @@ static gchar   *aoslos_time_to_str(GtkSatMap * satmap, sat_t * sat)
     m = (guint) floor(s / 60);
     s -= 60 * m;
 
-
     if (sat->el > 0.0)
-    {
         text = g_strdup_printf(_("LOS in %d minutes"), m + 60 * h);
-        /* added by Marcel Cimander */
-        if (!strcmp(sat->nickname, active_target_nick) && verbose_mode)
-            printf("Next event for %s: \n\tLOS in %d minutes\n", sat->nickname,
-                   m + 60 * h);
-    }
     else
-    {
         text = g_strdup_printf(_("AOS in %d minutes"), m + 60 * h);
-        /* added by Marcel Cimander */
-        if (!strcmp(sat->nickname, active_target_nick) && verbose_mode)
-            printf("Next event for %s: \n\tAOS in %d minutes\n", sat->nickname,
-                   m + 60 * h);
-    }
 
     return text;
 }

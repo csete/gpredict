@@ -30,9 +30,11 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include "sgpsdp/sgp4sdp4.h"
+
 #include "gtk-sat-module.h"
+#include "predict-tools.h"
 #include "radio-conf.h"
+#include "sgpsdp/sgp4sdp4.h"
 #include "trsp-conf.h"
 
 

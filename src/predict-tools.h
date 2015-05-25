@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -30,11 +29,9 @@
 #define PREDICT_TOOLS_H 1
 
 #include <glib.h>
-#include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-data.h"
 #include "sat-vis.h"
-
-
+#include "sgpsdp/sgp4sdp4.h"
 
 
 /** \brief Brief satellite pass info. */
@@ -53,8 +50,8 @@ typedef struct {
     qth_small_t qth_comp; /*!< Short version of qth at time computed */
 } pass_t;
 
-
-/** \brief Pass detail entry.
+/**
+ * \brief Pass detail entry.
  *
  * In order to ensure maximum flexibility at a minimal effort, only the
  * raw position and velocity is calculated. Calculations of the
@@ -81,11 +78,9 @@ typedef struct {
     gint      orbit;
 } pass_detail_t;
 
-
 /* type casting macros */
 #define PASS(x) ((pass_t *) x)
 #define PASS_DETAIL(x) ((pass_detail_t *) x)
-
 
 /* SGP4/SDP4 driver */
 void predict_calc (sat_t *sat, qth_t *qth, gdouble t);
@@ -115,6 +110,5 @@ void free_pass         (pass_t *pass);
 void free_passes       (GSList *passes);
 void free_pass_detail  (pass_detail_t *detail);
 void free_pass_details (GSList *details);
-
 
 #endif

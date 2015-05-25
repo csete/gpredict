@@ -24,8 +24,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief RIG control window.
- *  \ingroup widgets
+/**
+ * \brief RIG control window.
+ * \ingroup widgets
  *
  * The master radio control UI is implemented as a Gtk+ Widget in order
  * to allow multiple instances. The widget is created from the module
@@ -37,36 +38,35 @@
  * TODO Transponder passband display somewhere, below Sat freq?
  * 
  */
-#include "next_sat_head_mc.h"
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#include <glib/gi18n.h>
-#include <math.h>
-#include <glib.h>
-#include "compat.h"
-#include "sat-log.h"
-#include "predict-tools.h"
-#include "gpredict-utils.h"
-#include "sat-cfg.h"
-#include "gtk-freq-knob.h"
-#include "radio-conf.h"
-#include "trsp-conf.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
 
+#include <gdk/gdkkeysyms.h>
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <math.h>
+
 /* NETWORK */
-//#include <sys/types.h>
 #ifndef WIN32
-#include <sys/socket.h>         /* socket(), connect(), send() */
-#include <netinet/in.h>         /* struct sockaddr_in */
 #include <arpa/inet.h>          /* htons() */
 #include <netdb.h>              /* gethostbyname() */
+#include <netinet/in.h>         /* struct sockaddr_in */
+#include <sys/socket.h>         /* socket(), connect(), send() */
 #else
 #include <winsock2.h>
 #endif
-/* END */
+
+#include "compat.h"
+#include "gpredict-utils.h"
+#include "gtk-freq-knob.h"
 #include "gtk-rig-ctrl.h"
+#include "predict-tools.h"
+#include "radio-conf.h"
+#include "sat-log.h"
+#include "sat-cfg.h"
+#include "trsp-conf.h"
 
 
 #define AZEL_FMTSTR "%7.2f\302\260"
@@ -77,7 +77,6 @@
 static void     gtk_rig_ctrl_class_init(GtkRigCtrlClass * class);
 static void     gtk_rig_ctrl_init(GtkRigCtrl * list);
 static void     gtk_rig_ctrl_destroy(GtkObject * object);
-
 
 static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl);
 static GtkWidget *create_uplink_widgets(GtkRigCtrl * ctrl);
@@ -349,57 +348,6 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
 {
     gdouble         satfreq;
     gchar          *buff;
-
-    /* if auto flag is set (--automatic, -a), radio will change target automatically */
-    if (auto_mode)
-    {
-        int             i;
-        int             index = 9999;
-        int             n = g_slist_length(ctrl->sats);
-
-        if (satlist_mc_nick && ctrl->engaged && ctrl->target)
-        {
-            for (i = 0; i < n; i++)
-            {
-                /* check if next sat from gtk_sat_map.c is same as one in out
-                   sat_list_nick and get index of it */
-                if (!strcmp(next_sat_mc, satlist_mc_nick[i]))
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            /* check if target satellite is between AOS and LOS */
-            if (!target_aquired && ctrl->target->el > 0.0)
-                target_aquired = 1;
-            if (target_aquired && ctrl->target->el < 0.0)
-                target_aquired = 0;
-
-            strncpy(active_target_nick, ctrl->target->nickname,
-                    sizeof(active_target_nick));
-            if (verbose_mode)
-                printf("active target(rig): %s\n", active_target_nick);
-
-            /* change radio target if the tracked satellite had LOS 
-               and the next satellite != current target */
-            if (ctrl->target->nickname != next_sat_mc && !target_aquired)
-            {
-                ctrl->target = SAT(g_slist_nth_data(ctrl->sats, index));
-                /* Do we need that here? */
-                /*
-                   if (ctrl->pass != NULL)
-                   free_pass (ctrl->pass);
-
-                   if (ctrl->target->el > 0.0)
-                   ctrl->pass = get_current_pass (ctrl->target, ctrl->qth, 3.0);
-                   else
-                   ctrl->pass = get_pass (ctrl->target, ctrl->qth, 3.0);
-
-                   set_flipped_pass(ctrl); */
-            }
-        }
-    }
 
     if (ctrl->target)
     {

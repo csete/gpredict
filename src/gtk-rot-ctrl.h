@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -31,14 +30,15 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include "sgpsdp/sgp4sdp4.h"
+
 #include "gtk-sat-module.h"
+#include "predict-tools.h"
 #include "rotor-conf.h"
+#include "sgpsdp/sgp4sdp4.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
 
 #define GTK_TYPE_ROT_CTRL          (gtk_rot_ctrl_get_type ())
 #define GTK_ROT_CTRL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\

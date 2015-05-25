@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -25,49 +24,46 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \file    main.c
- *  \ingroup main
- *  \bief    Main program file.
+
+/**
+ * \file    main.c
+ * \ingroup main
+ * \brief    Main program file.
  *
  */
-#include <stdlib.h>
-#include <signal.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
+
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
-#include "sat-log.h"
-#include "first-time.h"
-#include "compat.h"
-#include "gui.h"
-#include "mod-mgr.h"
-#include "tle-update.h"
-#include "sat-cfg.h"
-#include "gtk-sat-selector.h"
-#include "sat-debugger.h"
-#include "next_sat_head_mc.h"
 
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <stdlib.h>
+#include <signal.h>
 #ifdef WIN32
 #include <winsock2.h>
 #endif
 
-/** \brief Main application widget. */
+#include "compat.h"
+#include "gtk-sat-selector.h"
+#include "gui.h"
+#include "first-time.h"
+#include "tle-update.h"
+#include "mod-mgr.h"
+#include "sat-cfg.h"
+#include "sat-debugger.h"
+#include "sat-log.h"
+
+
+/** Main application widget. */
 GtkWidget      *app;
 
-
-/** \brief Command line flag for cleaning TLE data. */
+/** Command line flag for cleaning TLE data. */
 static gboolean cleantle = FALSE;
 
-/** \brief Command line flag for cleaning TRSP data */
+/** Command line flag for cleaning TRSP data */
 static gboolean cleantrsp = FALSE;
-
-/** \added by Marcel Cimander; verbose mode, -> output informations on console */
-static gboolean verbose = FALSE;
-
-/** \added by Marcel Cimander; auto mode, -> automatically switch to next satellite available after LOS of current sat */
-static gboolean automode = FALSE;
 
 /** \brief Command line options. */
 static GOptionEntry entries[] = {
@@ -75,17 +71,10 @@ static GOptionEntry entries[] = {
      "Clean the TLE data in user's configuration directory", NULL},
     {"clean-trsp", 0, 0, G_OPTION_ARG_NONE, &cleantrsp,
      "Clean the transponder data in user's configuration directory", NULL},
-    {"verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL},
-    {"automatic", 'a', 0, G_OPTION_ARG_NONE, &automode,
-     "Track next sat automatically after LOS of current sat", NULL},
     {NULL}
 };
 
-int             verbose_mode = 0;
-int             auto_mode = 0;
-
 const gchar    *dummy = N_("just to have a pot");
-
 
 /* ID of TLE monitoring task */
 static guint    tle_mon_id = 0;
@@ -123,10 +112,6 @@ int main(int argc, char *argv[])
     guint           error = 0;
 
 
-#ifdef G_OS_WIN32
-    printf("Starting gpredict. This may take some time...\n");
-#endif
-
 
 #ifdef ENABLE_NLS
     bindtextdomain(PACKAGE, PACKAGE_LOCALE_DIR);
@@ -145,9 +130,7 @@ int main(int argc, char *argv[])
                                   "nominal operation."));
     g_option_context_add_group(context, gtk_get_option_group(TRUE));
     if (!g_option_context_parse(context, &argc, &argv, &err))
-    {
         g_print(_("Option parsing failed: %s\n"), err->message);
-    }
 
     /* start logger first, so that we can catch error messages if any */
     sat_log_init();
@@ -164,22 +147,8 @@ int main(int argc, char *argv[])
     if (cleantrsp)
         clean_trsp();
 
-    /* added by Marcel Cimander */
-    if (verbose)
-    {
-        printf("started in verbose mode\n");
-        verbose_mode = 1;
-    }
-
-    if (automode)
-    {
-        printf("started in automode\n");
-        auto_mode = 1;
-    }
-
     /* check that user settings are ok */
     error = first_time_check_run();
-
 
     if (error)
     {
@@ -201,7 +170,6 @@ int main(int argc, char *argv[])
     /* launch TLE monitoring task; 10 min interval */
     tle_mon_id = g_timeout_add(600000, tle_mon_task, NULL);
 
-
 #ifdef WIN32
     // Initializing Windozze Sockets
     InitWinSock2();
@@ -215,12 +183,10 @@ int main(int argc, char *argv[])
     sat_log_close();
     sat_cfg_close();
 
-
-
 #ifdef WIN32
-    // Cleanup Windozze Sockets
     CloseWinSock2();
 #endif
+
     return 0;
 }
 
