@@ -79,7 +79,7 @@ GtkWidget *sat_pref_conditions_create ()
                            GTK_FILL,
                            GTK_SHRINK,
                            0, 0);
-     minel = gtk_spin_button_new_with_range (0, 90, 1);
+     minel = gtk_spin_button_new_with_range (1, 90, 1);
      gtk_widget_set_tooltip_text (minel,
                                 _("Elevation threshold for passes.\n"\
                                    "Passes with maximum elevation below this limit "\
