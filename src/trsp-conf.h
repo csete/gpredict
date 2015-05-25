@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -24,8 +23,6 @@
   
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
- 
-
 */
 #ifndef TRSP_CONF_H
 #define TRSP_CONF_H 1
@@ -34,20 +31,19 @@
 
 /* NOTE For beacons uplow=uphigh=0 and downlow=downhigh */
 typedef struct {
-    gchar   *name;      /*!< The name of the transponder (same as config group) */
-    gdouble  uplow;     /*!< Lower limit of uplink. */
-    gdouble  uphigh;    /*!< Upper limit of uplink. */
-    gdouble  downlow;   /*!< Lower limit of downlink. */
-    gdouble  downhigh;  /*!< Upper limit of donlink. */
-    gboolean invert;    /*!< Flag indicating whether transponder is inverting. */
-    gchar   *mode;      /*!< Mode descriptor. */
+    gchar          *name;       /*!< The name of the transponder (same as config group) */
+    gdouble         uplow;      /*!< Lower limit of uplink. */
+    gdouble         uphigh;     /*!< Upper limit of uplink. */
+    gdouble         downlow;    /*!< Lower limit of downlink. */
+    gdouble         downhigh;   /*!< Upper limit of donlink. */
+    gboolean        invert;     /*!< Flag indicating whether transponder is inverting. */
+    gchar          *mode;       /*!< Mode descriptor. */
 } trsp_t;
 
 /* The actual data would then be a singly linked list with pointers to transponder_t structures */
 
-GSList *read_transponders (guint catnum);
-void write_transponders (guint catnum, GSList *trsplist);
-void free_transponders (GSList *trsplist);
-
+GSList         *read_transponders(guint catnum);
+void            write_transponders(guint catnum, GSList * trsplist);
+void            free_transponders(GSList * trsplist);
 
 #endif
