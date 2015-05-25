@@ -407,11 +407,14 @@ GSList         *get_next_passes(sat_t * sat, qth_t * qth, gdouble maxdt,
  *   This function assumes that you want a pass that achieves the 
  *   minimum elevation of is configured for.
  */
-pass_t         *get_pass(sat_t * sat_in, qth_t * qth, gdouble start,
-                         gdouble maxdt)
+pass_t *get_pass(sat_t * sat_in, qth_t * qth, gdouble start, gdouble maxdt)
 {
-    return get_pass_engine(sat_in, qth, start, maxdt,
-                           1.0 * sat_cfg_get_int(SAT_CFG_INT_PRED_MIN_EL));
+    int      min_ele = sat_cfg_get_int(SAT_CFG_INT_PRED_MIN_EL);
+
+    if (min_ele == 0)
+        min_ele = 1;
+
+    return get_pass_engine(sat_in, qth, start, maxdt, min_ele);
 }
 
 /**
