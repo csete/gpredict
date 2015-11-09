@@ -1,0 +1,9 @@
+[Telemetry]
+DOWN_LOW=437525000
+MODE=CW, 1k2 AFSK, 9k6 GMSK
+
+[ Digi parrot ]
+UP_LOW=437600000
+DOWN_LOW=437600000
+MODE=Digipeater,Digitalker,SSTV
+
