@@ -1,10 +1,10 @@
-[Beacon] 
+[Mode V Beacon]
 DOWN_LOW=145790000
-MODE=CW
+MODE=CW 22wpm
 
-[Telemetry]
+[Mode V Telemetry]
 DOWN_LOW=145770000
-MODE=9.6/19.2k GMSK
+MODE=9k6/19k2 GMSK
 
 [Mode U/V Linear]
 UP_LOW=435150000
