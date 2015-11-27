@@ -1,8 +1,7 @@
-[Mode U Beacon]
-DOWN_LOW=437400000
-MODE=CW
+[Mode U Telemetry]
+DOWN_LOW=437470000
+MODE=1k2 AFSK AX.25
 
-[Mode U TLM]
+[Mode U Beacon]
 DOWN_LOW=436837500
 MODE=CW
-
