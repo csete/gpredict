@@ -1,0 +1,12 @@
+[Mode V Telemetry]
+DOWN_LOW=145980000
+MODE=1k2 BPSK AX.25
+
+[Mode V Beacon]
+DOWN_LOW=145980000
+MODE=CW 15wpm (1m interval)
+
+[Mode U/V Compressed APRS]
+DOWN_LOW=145980000
+UP_LOW=435220000
+MODE=Up: 1k2 AFSK ; Down: 1k2 BPSK

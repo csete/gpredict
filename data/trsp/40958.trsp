@@ -1,0 +1,11 @@
+[Mode U Telemetry]
+DOWN_LOW=437650000
+MODE=4k8 MSK CSP
+
+[Mode U Beacon]
+DOWN_LOW=437650000
+MODE=CW 25wpm
+
+[Mode S Telemetry]
+DOWN_LOW=2404000000
+MODE=1Mbps QPSK

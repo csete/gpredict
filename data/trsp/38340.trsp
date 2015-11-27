@@ -1,0 +1,7 @@
+[Mode U Telemetry]
+DOWN_LOW=437372000
+MODE=1k2 AFSK
+
+[Mode U Beacon]
+DOWN_LOW=437372000
+MODE=CW 20wpm
