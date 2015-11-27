@@ -1,7 +1,11 @@
-[Mode V BPSK TLM primary]
-DOWN_LOW=145868000
-MODE=SSB
+[Mode V Telemetry primary]
+DOWN_LOW=145870000
+MODE=1k2 BPSK
 
-[Mode V BPSK TLM secondary]
+[Mode V Telemetry secondary]
 DOWN_LOW=145930000
-MODE=SSB
+MODE=1k2 BPSK
+
+[Mode V Beacon]
+DOWN_LOW=145870000
+MODE=CW

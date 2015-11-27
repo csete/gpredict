@@ -1,9 +1,15 @@
-[Mode U TLM]
+[Mode U Telemetry]
 DOWN_LOW=437485000
+MODE=1k2 AFSK AX.25
+
+[Mode U Beacon]
+DOWN_LOW=437485000
+MODE=CW
 
 [Mode U SSTV]
 DOWN_LOW=437485000
+MODE=FM SSTV
 
-[Mode U Digi]
+[Mode U Digitalker]
 DOWN_LOW=437485000
-
+MODE=FM

@@ -1,5 +1,7 @@
-[Telemetry Beacon 1 Beacon]
-DOWN_LOW = 435215000
-
-[Telemetry Beacon 2 Beacon]
+[Mode U Beacon]
 DOWN_LOW = 435315000
+MODE=CW
+
+[Mode U FM]
+DOWN_LOW = 435215000
+MODE=FM

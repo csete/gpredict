@@ -1,5 +1,7 @@
-[MCubed GMSK Beacon]
+[Mode U Telemetry MCubed-2]
 DOWN_LOW = 437485000
+MODE=9k6 FSK
 
-[Explorer 1 Prime Unit 2 Beacon]
+[Mode U Telemetry E1P-U2]
 DOWN_LOW = 437505000
+MODE=1k2 AFSK, LSB
