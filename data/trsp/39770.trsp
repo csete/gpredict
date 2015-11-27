@@ -1,9 +1,15 @@
-[Telemetry]
+[Mode U Telemetry]
 DOWN_LOW=437525000
-MODE=CW, 1k2 AFSK, 9k6 GMSK
+MODE=1k2 AFSK / 9k6 GMSK
 
-[ Digi parrot ]
-UP_LOW=437600000
+[Mode U Beacon]
+DOWN_LOW=437525000
+MODE=CW
+
+[Mode U Digi-talker]
 DOWN_LOW=437600000
-MODE=Digipeater,Digitalker,SSTV
+MODE=FM
 
+[Mode U SSTV]
+DOWN_LOW=437600000
+MODE=FM SSTV
