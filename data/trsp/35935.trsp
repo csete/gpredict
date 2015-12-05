@@ -1,6 +1,7 @@
-[CW Beacon]
+[Mode U Beacon]
 DOWN_LOW=437325000
+MODE=CW
 
-[GFSK 19k2]
+[Mode U Telemetry]
 DOWN_LOW=437325000
-
+MODE=19k2 GFSK

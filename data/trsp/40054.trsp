@@ -1,0 +1,7 @@
+[Mode U Telemetry]
+DOWN_LOW=437513000
+MODE=CW
+
+[Mode U Beacon]
+DOWN_LOW=437250000
+MODE=CW
