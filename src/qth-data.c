@@ -724,7 +724,8 @@ void qth_small_save(qth_t * qth, qth_small_t * qth_small)
  */
 void qth_validate(qth_t * qth)
 {
-    /* check that the values are not set to nonsense such as nan or inf. if so error it and set to zero. */
+    /* check that the values are not set to nonsense such as nan or inf.
+     * if so error it and set to zero. */
     if (!isnormal(qth->lat) && (qth->lat != 0))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
@@ -737,12 +738,6 @@ void qth_validate(qth_t * qth)
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: QTH data had bogus lon %f"), __func__, qth->lon);
         qth->lon = 0.0;
-    }
-    if (!isnormal(qth->alt) && (qth->alt != 0))
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: QTH data had bogus alt %f"), __func__, qth->alt);
-        qth->alt = 0.0;
     }
 
     /* check that qth->lat and qth->lon are in a reasonable range 
@@ -787,7 +782,6 @@ void qth_validate(qth_t * qth)
         {
             qth->lon -= 360.0;
         }
-
     }
 }
 
