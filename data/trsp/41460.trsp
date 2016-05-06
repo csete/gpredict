@@ -1,0 +1,7 @@
+[Mode U Beacon]
+DOWN_LOW=437425000
+MODE=CW 30wpm
+
+[Mode U Telemetry]
+DOWN_LOW=437425000
+MODE=9k6 FSK FEC CSP
