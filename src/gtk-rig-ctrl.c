@@ -1386,11 +1386,11 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
     switch (ctrl->conf->vfoUp)
     {
     case VFO_A:
-        buff = g_strdup("S 1 A\x0a");
+        buff = g_strdup("S 1 VFOA\x0a");
         break;
 
     case VFO_B:
-        buff = g_strdup("S 1 B\x0a");
+        buff = g_strdup("S 1 VFOB\x0a");
         break;
 
     case VFO_MAIN:
