@@ -54,6 +54,7 @@ typedef enum {
     SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO,     /*!< Automatically show the sky track. */
     SAT_CFG_BOOL_TLE_SERVER_AUTH,     /*!< TLE server requires authentication. */
     SAT_CFG_BOOL_TLE_PROXY_AUTH,      /*!< Proxy requires authentication. */
+    SAT_CFG_BOOL_FRQ_ADD_NEW,         /*!< Add new satellites to database. */
     SAT_CFG_BOOL_TLE_ADD_NEW,         /*!< Add new satellites to database. */
     SAT_CFG_BOOL_KEEP_LOG_FILES,      /*!< Whether to keep old log files */
     SAT_CFG_BOOL_PRED_USE_REAL_T0,    /*!< Whether to use current time as T0 fro predictions */
@@ -128,6 +129,9 @@ typedef enum {
     SAT_CFG_INT_WINDOW_WIDTH,         /*!< Main window width during last session */
     SAT_CFG_INT_WINDOW_HEIGHT,        /*!< Main window height during last session */
     SAT_CFG_INT_WEB_BROWSER_TYPE,     /*!< Web browser type, see browser_type_t */
+    SAT_CFG_INT_FRQ_AUTO_UPD_FREQ,    /*!< TLE auto-update frequency. */
+    SAT_CFG_INT_FRQ_AUTO_UPD_ACTION,  /*!< TLE auto-update action. */
+    SAT_CFG_INT_FRQ_LAST_UPDATE,      /*!< Date and time of last update, Unix seconds. */
     SAT_CFG_INT_TLE_AUTO_UPD_FREQ,    /*!< TLE auto-update frequency. */
     SAT_CFG_INT_TLE_AUTO_UPD_ACTION,  /*!< TLE auto-update action. */
     SAT_CFG_INT_TLE_LAST_UPDATE,      /*!< Date and time of last update, Unix seconds. */
@@ -147,6 +151,11 @@ typedef enum {
     SAT_CFG_STR_MAP_FILE,       /*!< Map file (abs or rel). */
     SAT_CFG_STR_MAP_FONT,       /*!< Map font. */
     SAT_CFG_STR_POL_FONT,       /*!< Polar view font. */
+    SAT_CFG_STR_FRQ_SERVER,     /*!< Server for TLE updates. */
+    SAT_CFG_STR_FRQ_FILES,      /*!< ; separated list of files on server. */
+    SAT_CFG_STR_FRQ_PROXY,      /*!< Proxy server. */
+    SAT_CFG_STR_FRQ_FILE_DIR,   /*!< Local directory from which tle were last updated. */
+    SAT_CFG_STR_FRQ_FILE_EXT,   /*!< File extensions. */
     SAT_CFG_STR_TLE_SERVER,     /*!< Server for TLE updates. */
     SAT_CFG_STR_TLE_FILES,      /*!< ; separated list of files on server. */
     SAT_CFG_STR_TLE_PROXY,      /*!< Proxy server. */

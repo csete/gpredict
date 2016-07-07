@@ -224,6 +224,11 @@ sat_cfg_str_t sat_cfg_str[SAT_CFG_STR_NUM] = {
     { "MODULES", "MAP_FILE", "nasa-bmng-07_1024.jpg"},
     { "MODULES", "MAP_FONT", "Sans 8"},
     { "MODULES", "POLAR_FONT", "Sans 10"},
+    { "FRQ",     "SERVER", "https://db.satnogs.org/api/transmitters/?format=json"},
+    { "FRQ",     "FILES", "?format=json"},
+    { "FRQ",     "PROXY", NULL},
+    { "FRQ",     "FILE_DIR", NULL},
+    { "FRQ",     "EXTENSION", "*.*"},
     { "TLE",     "SERVER", "http://www.celestrak.com/NORAD/elements/"},
     { "TLE",     "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"\
       "engineering.txt;galileo.txt;geo.txt;geodetic.txt;globalstar.txt;"\
