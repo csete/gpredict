@@ -50,6 +50,7 @@
 #include "gpredict-help.h"
 #include "gpredict-utils.h"
 #include "tle-update.h"
+#include "frq-update.h"
 #include "compat.h"
 #include "menubar.h"
 #include "config-keys.h"
@@ -95,7 +96,6 @@ static GtkActionEntry entries[] = {
     {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
     {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
     {"TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE"), NULL, NULL, NULL},
-    {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update FRQ"), NULL, NULL, NULL},
     {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update FRQ"), NULL, NULL, NULL},
     {"ToolsMenu", NULL, N_("_Tools"), NULL, NULL, NULL},
     {"HelpMenu", NULL, N_("_Help"), NULL, NULL, NULL},

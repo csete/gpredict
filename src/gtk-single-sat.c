@@ -51,7 +51,6 @@
 #include "sat-pass-dialogs.h"
 #include "time-tools.h"
 #include "gtk-sat-popup-common.h"
-#include "compat.h"
 
 /** \brief Column titles indexed with column symb. refs. */
 const gchar *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
@@ -77,7 +76,7 @@ const gchar *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Mean Anom."),
     N_("Orbit Phase"),
     N_("Orbit Num."),
-    N_("Frequencies")
+    N_("Visibility")
 };
 
 
@@ -105,7 +104,7 @@ const gchar *SINGLE_SAT_FIELD_HINT[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Mean Anomaly"),
     N_("Orbit Phase"),
     N_("Orbit Number"),
-    N_("Frequency List of Transceivers on board")
+    N_("Visibility of the satellite")
 };
 
 
@@ -704,32 +703,6 @@ update_field            (GtkSingleSat *ssat, guint i)
 
 
     case SINGLE_SAT_FIELD_VISIBILITY:
-        vis = get_sat_vis (sat, ssat->qth, sat->jul_utc);
-	char c;
-	char mbuff[1024];
-	char catnum[20];
-	FILE *pFile;
-	gchar   *frq_filename;
-
-
-	//pFile = fopen("/home/baris/.config/Gpredict/satdata/frq_40012.json","rt");
-	sprintf(catnum,"%d",sat->tle.catnr);
- 	frq_filename = g_strconcat (get_user_conf_dir(), G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, "frq_",catnum, ".json", NULL);	
-	printf("DIZIN %s \n",frq_filename);
-	pFile = fopen(frq_filename,"rt");
-	if (pFile) 
-		{
-		while ((c=fgetc(pFile))!=EOF){
-		//printf("%c",c);
-		//if (!(c== 10 || c==13)) sprintf(mbuff,"%s %c",mbuff,c);
-		sprintf(mbuff,"%s%c",mbuff,c);
-       		buff =  g_strdup_printf ("%s", mbuff);
-			}
-    		fclose(pFile);
-		}
-        break;
-
-    case SINGLE_SAT_FIELD_FREQUENCY:
         vis = get_sat_vis (sat, ssat->qth, sat->jul_utc);
         buff = vis_to_str (vis);
         break;

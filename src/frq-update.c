@@ -21,166 +21,141 @@
 #include "frq-update.h"
 #include "gpredict-utils.h"
 
-#include "../../jsmn/jsmn.h"
+//library to parse json
+#include "nxjson.h"
+#include <locale.h>
 
-
-gchar	*frq_filename;
-char	frq_buffer[BUFSIZ];
-int	dmp_state = 0;
-int	dmp_tofile = 0;
 
 /* private function prototypes */
 static size_t  my_write_func (void *ptr, size_t size, size_t nmemb, FILE *stream);
 
-/*Copied from jsmn exmple... */
-static inline void *realloc_it(void *ptrmem, size_t size) {
-        void *p = realloc(ptrmem, size);
-        if (!p)  {
-                free (ptrmem);
-                fprintf(stderr, "realloc(): err\n");
-        }
-        return p;
-}
-
-static int dump(const char *js, jsmntok_t *t, size_t count, int indent) {
-        int i, j, k;
-        char buf[BUFSIZ];
-        //gchar	*buf;
-
-
-        if (count == 0) {
-                return 0;
-        }
-        if (t->type == JSMN_PRIMITIVE) {
-                //printf("%.*s", t->end - t->start, js+t->start);
-                if (dmp_tofile == 1) sprintf(frq_buffer,"%s%.*s", frq_buffer, t->end - t->start, js+t->start);
-                sprintf(buf,"%.*s", t->end - t->start, js+t->start);
-		if (dmp_state == 1) 
-			{
-			  frq_filename = g_strconcat (get_user_conf_dir(), G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, "frq_",buf, ".json", NULL);
-                          printf("myfile : %s \n",frq_filename);
-			}
-                return 1;
-        } else if (t->type == JSMN_STRING) {
-                //printf("'%.*s'", t->end - t->start, js+t->start);
-                if (dmp_tofile == 1) sprintf(frq_buffer,"%s'%.*s'", frq_buffer, t->end - t->start, js+t->start);
-                sprintf(buf,"%.*s", t->end - t->start, js+t->start);
-                if ( strcmp(buf,"norad_cat_id") == 0)  
-			dmp_state = 1;
-		else
-			dmp_state = 0;
-		if ( (strcmp(buf,"uplink_low") && strcmp(buf,"uplink_high") && strcmp(buf,"downlink_low") && strcmp(buf,"downlink_high")) == 0) dmp_tofile = 1 ; else dmp_tofile = 0;
-                return 1;
-        } else if (t->type == JSMN_OBJECT) {
-                j = 0;
-		sprintf(frq_buffer,"{ \n");
-		//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-                for (i = 0; i < t->size; i++) {
-                        //printf(" ");
-                        for (k = 0; k < indent; k++) printf("  ");
-                        j += dump(js, t+1+j, count-j, indent+1);
-                        //printf(": ");
-                        //sprintf(frq_buffer,"%s : ",frq_buffer);
-                        j += dump(js, t+1+j, count-j, indent+1);
-			//sprintf(frq_buffer,"%s , \n",frq_buffer);
-                }
-		//printf("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
-		sprintf(frq_buffer,"%s 'place_holder' : 'nope' \n}\n ",frq_buffer);
-		//printf("OKUNAN : %s \n",frq_buffer);
-		//printf("DOSYA  : %s \n",frq_filename);
-		//write per satellite transceiver information to corresponding frq_CATID.json file
-		FILE* pFile;
-		pFile = fopen(frq_filename,"w");
-		if (pFile) fprintf(pFile,"%s",frq_buffer);
-		fclose(pFile);
-
-                return j+1;
-        } else if (t->type == JSMN_ARRAY) {
-                j = 0;
-                printf("SIZE : %d \n", t->size);
-                for (i = 0; i < t->size; i++) {
-                        for (k = 0; k < indent-1; k++) printf("  ");
-                        printf(" ");
-                        j += dump(js, t+1+j, count-j, indent+1);
-                        printf("\n");
-                }
-                return j+1;
-        }
-        return 0;
-}
-
-
 
 void frq_update_files ( gchar *frqfile )
 {
-        int r;
-        int eof_expected = 0;
-        char *js = NULL;
-        size_t jslen = 0;
-        char buf[BUFSIZ];
+
+    FILE *mfp;              //transmitter information json file
+    FILE *ffile;          //transponder output file in gpredict formar
+    char symbol;            //characters to read from json file
+    char frq_object[10000]; //json array will be in this buffer before parsing
+    m_state jsn_state=START;      //json parsing state
+
+    gchar   *userconfdir;
+    gchar   *trspfile;
+    gchar   *trspfolder;
+    GDir    *dir;
+    GError  *err = NULL;
+    const gchar   *fname;
+    gchar   *remfile;
 
 
+    setlocale(LC_NUMERIC, "C"); // I had to set locale, orherwise float delimeter was comma instead of dot, and was hard to parse the json file
+    userconfdir = get_user_conf_dir ();
+    trspfolder = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "trsp",NULL);
 
-        jsmn_parser p;
-        jsmntok_t *tok;
-        size_t tokcount = 2;
+    /** Clean the existing transponder
+	files before we start */
+    dir = g_dir_open (trspfolder, 0, &err);
 
-        /* Prepare parser */
-        jsmn_init(&p);
+    if (err != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Error opening %s (%s)"), __func__, dir, err->message);
+        g_clear_error (&err);
+    }
+    else {
+        /* delete files in cache one by one */
+        while ((fname = g_dir_read_name (dir)) != NULL) {
 
-        /* Allocate some tokens as a start */
-        tok = malloc(sizeof(*tok) * tokcount);
-        if (tok == NULL) {
-                fprintf(stderr, "malloc(): err\n");
-                return ;
+	  if (strstr(fname,".trsp") != NULL)
+	   {
+            remfile = g_strconcat (trspfolder, G_DIR_SEPARATOR_S, fname, NULL);
+            g_remove (remfile);
+            g_free (remfile);
+	   }
         }
-        FILE *mfp;
-        //mfp = fopen("../../transmitters.txt","r");
-        mfp = fopen(frqfile,"r");
-        sat_log_log (SAT_LOG_LEVEL_INFO, _("%s: File Opened.............................."), __func__);
+        /* close cache */
+        g_dir_close (dir);
+    }
 
 
-        for (;;) {
-                /* Read another chunk */
-                //r = fread(buf, 1, sizeof(buf), stdin);
-                r = fread(buf, 1, sizeof(buf), mfp);
-                if (r < 0) {
-                        fprintf(stderr, "fread(): %d, err\n", r);
-                        return ;
-                }
-                if (r == 0) {
-                        if (eof_expected != 0) {
-                                return ;
-                        } else {
-                                fprintf(stderr, "fread(): unexpected EOF\n");
-                                return ;
-                        }
-                }
 
-                js = realloc_it(js, jslen + r + 1);
-                if (js == NULL) {
-                        return ;
-                }
-                strncpy(js + jslen, buf, r);
-                jslen = jslen + r;
-again:
-                r = jsmn_parse(&p, js, jslen, tok, tokcount);
-                if (r < 0) {
-                        if (r == JSMN_ERROR_NOMEM) {
-                                tokcount = tokcount * 2;
-                                tok = realloc_it(tok, sizeof(*tok) * tokcount);
-                                if (tok == NULL) {
-                                        return ;
-                                }
-                                goto again;
-                        }
-                } else {
-                        dump(js, tok, p.toknext, 0);
-                        eof_expected = 1;
-                }
-        }
+    sprintf(frq_object," "); //initialize buffer
+    mfp = fopen(frqfile,"r");
+    if(mfp != NULL)
+    {
+          while((symbol = getc(mfp)) != EOF)
+          {
+            if (symbol == '[')  jsn_state = START;
+            if (((jsn_state == START) || (jsn_state == NXDLM)) && (symbol == '{')) jsn_state = OBBGN;
+            if  ((jsn_state == OBBGN) && (symbol == '}')) jsn_state = OBEND;
+            if  ((jsn_state == OBEND) && (symbol == ',')) jsn_state = NXDLM;
+            if  ((jsn_state == OBEND) && (symbol == ']')) jsn_state = FINISH;
 
+            if (jsn_state == OBBGN) sprintf(frq_object,"%s%c",frq_object,symbol);
 
+            if (jsn_state == OBEND)
+                {
+                sprintf(frq_object,"%s}",frq_object);
+                //printf("%s \n\n",frq_object); 
+        	const nx_json* json=nx_json_parse(frq_object, 0);
+        	if (json) {
+			struct transponder m_trsp;
+			strcpy(m_trsp.description,nx_json_get(json,"description")->text_value);
+                        m_trsp.catnum        = nx_json_get(json,  "norad_cat_id")->int_value;
+			m_trsp.uplink_low    = nx_json_get(json,    "uplink_low")->int_value;
+			m_trsp.uplink_high   = nx_json_get(json,   "uplink_high")->int_value;
+			m_trsp.downlink_low  = nx_json_get(json,  "downlink_low")->int_value;
+			m_trsp.downlink_high = nx_json_get(json, "downlink_high")->int_value;
+			m_trsp.mode_id       = nx_json_get(json,       "mode_id")->int_value;
+			m_trsp.invert        = nx_json_get(json,        "invert")->int_value;
+			m_trsp.baud          = nx_json_get(json,          "baud")->dbl_value;
+			m_trsp.alive         = nx_json_get(json,         "alive")->int_value;
+			//strcpy(m_trsp.uuid,nx_json_get(json,              "uuid")->text_value);
+
+			sat_log_log (SAT_LOG_LEVEL_INFO, _(">>> Preparing information for transponders of cat_id %d <<<"), m_trsp.catnum, __func__);
+
+			//sat_log_log (SAT_LOG_LEVEL_INFO, _("         uuid : %s"), m_trsp.uuid, __func__);
+			sat_log_log (SAT_LOG_LEVEL_INFO, _("  description : %s"), m_trsp.description, __func__);
+			sat_log_log (SAT_LOG_LEVEL_INFO, _("        alive : %s"), m_trsp.alive ? "true":"false", __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _("   uplink_low : %Ld"),m_trsp.uplink_low,    __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _("  uplink_high : %Ld"),m_trsp.uplink_high,   __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _(" downink_low  : %Ld"),m_trsp.downlink_low,  __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _("downlink_high : %Ld"),m_trsp.downlink_high, __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _("      Mode ID : %Ld"),m_trsp.mode_id, __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _("       Invert : %s"), m_trsp.invert ? "true":"false", __func__);
+                	sat_log_log (SAT_LOG_LEVEL_INFO, _("         Baud : %lf"),m_trsp.baud, __func__);
+               	 	sat_log_log (SAT_LOG_LEVEL_INFO, _(" norad_cat_id : %Ld"),m_trsp.catnum, __func__);
+                        char m_catnum[20];
+			sprintf(m_catnum,"%d",m_trsp.catnum);
+    			trspfile = g_strconcat (trspfolder, G_DIR_SEPARATOR_S, m_catnum,".trsp", NULL);
+    			sat_log_log (SAT_LOG_LEVEL_INFO, _("%s: Writing to file : %s "), __func__, trspfile);
+            		
+			ffile = g_fopen (trspfile, "a");
+            		if (ffile != NULL) {
+				char fcontent[1000];
+				sprintf(fcontent,"[%s]\n",m_trsp.description);
+				sprintf(fcontent,"%sUP_LOW=%d\n",fcontent,m_trsp.uplink_low);
+				sprintf(fcontent,"%sUP_HIGH=%d\n",fcontent,m_trsp.uplink_high);
+				sprintf(fcontent,"%sDOWN_LOW=%d\n",fcontent,m_trsp.downlink_low);
+				sprintf(fcontent,"%sDOWN_HIGH=%d\n",fcontent,m_trsp.downlink_high);
+				sprintf(fcontent,"%sMODE=%d baud:%f\n",fcontent,m_trsp.mode_id,m_trsp.baud);
+				sprintf(fcontent,"%sINVERT=%s\n\n",fcontent,m_trsp.invert?"true":"false");
+
+                		fputs (fcontent,ffile);
+				fclose(ffile);
+            		}
+            		else
+			{
+				sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s:%s: Could not open .trsp file for writing..."), __FILE__, __func__);
+			}
+
+        		nx_json_free(json);
+        	} //if(json)
+                sprintf(frq_object," "); //empty the buffer
+          } //if(OBEND)
+        } //while(symbol)
+    fclose(mfp);
+    } //if(mfp)
+
+return;
 }
 
 /** \brief Update FRQ files from network.
@@ -255,7 +230,7 @@ void frq_update_from_network (gboolean   silent,
         /* set activity message */
         if (!silent && (label1 != NULL)) {
 
-        text = g_strdup_printf (_("Fetching %s"), "satellites.json");
+        text = g_strdup_printf (_("Fetching %s"), "transmitters.json");
         gtk_label_set_text (GTK_LABEL (label1), text);
         g_free (text);
 
@@ -268,10 +243,7 @@ void frq_update_from_network (gboolean   silent,
 
         /* create local cache file */
         userconfdir = get_user_conf_dir ();
-        //locfile = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, "cache", G_DIR_SEPARATOR_S, files[i], NULL);
-        locfile = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, "cache", G_DIR_SEPARATOR_S, "satellites.json", NULL);
-	//baris
-        locfile = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "satdata", G_DIR_SEPARATOR_S, "satellites.json", NULL);
+        locfile = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "trsp", G_DIR_SEPARATOR_S, "transmitters.json", NULL);
         sat_log_log (SAT_LOG_LEVEL_INFO, _("%s: File to open %s "), __func__, locfile);
 
         outfile = g_fopen (locfile, "wb");
@@ -336,28 +308,6 @@ void frq_update_from_network (gboolean   silent,
     g_free (files_tmp);
     if (proxy != NULL)
         g_free (proxy);
-
-    /* open cache */
-//    cache = sat_file_name ("cache");
-//    dir = g_dir_open (cache, 0, &err);
-
-//    if (err != NULL) {
-        /* send an error message */
-//        sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Error opening %s (%s)"), __func__, dir, err->message);
-//        g_clear_error (&err);
-//    }
-//    else {
-        /* delete files in cache one by one */
-//        while ((fname = g_dir_read_name (dir)) != NULL) {
-//            locfile = g_strconcat (cache, G_DIR_SEPARATOR_S, fname, NULL);
-//            g_remove (locfile);
-//            g_free (locfile);
-//        }
-        /* close cache */
-//        g_dir_close (dir);
-//    }
-
-//    g_free (cache);
 
     g_mutex_unlock(&frq_in_progress);
 
