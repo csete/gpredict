@@ -42,39 +42,11 @@ void frq_update_files ( gchar *frqfile )
     gchar   *userconfdir;
     gchar   *trspfile;
     gchar   *trspfolder;
-    GDir    *dir;
-    GError  *err = NULL;
-    const gchar   *fname;
-    gchar   *remfile;
 
 
     setlocale(LC_NUMERIC, "C"); // I had to set locale, orherwise float delimeter was comma instead of dot, and was hard to parse the json file
     userconfdir = get_user_conf_dir ();
     trspfolder = g_strconcat (userconfdir, G_DIR_SEPARATOR_S, "trsp",NULL);
-
-    /** Clean the existing transponder
-	files before we start */
-    dir = g_dir_open (trspfolder, 0, &err);
-
-    if (err != NULL) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Error opening %s (%s)"), __func__, dir, err->message);
-        g_clear_error (&err);
-    }
-    else {
-        /* delete files in cache one by one */
-        while ((fname = g_dir_read_name (dir)) != NULL) {
-
-	  if (strstr(fname,".trsp") != NULL)
-	   {
-            remfile = g_strconcat (trspfolder, G_DIR_SEPARATOR_S, fname, NULL);
-            g_remove (remfile);
-            g_free (remfile);
-	   }
-        }
-        /* close cache */
-        g_dir_close (dir);
-    }
-
 
 
     sprintf(frq_object," "); //initialize buffer
@@ -127,7 +99,12 @@ void frq_update_files ( gchar *frqfile )
 			sprintf(m_catnum,"%d",m_trsp.catnum);
     			trspfile = g_strconcat (trspfolder, G_DIR_SEPARATOR_S, m_catnum,".trsp", NULL);
     			sat_log_log (SAT_LOG_LEVEL_INFO, _("%s: Writing to file : %s "), __func__, trspfile);
+
+
+			//first lets delete the file we already have, to make space for the new version
+            		g_remove (trspfile);
             		
+			//now lets write the new version
 			ffile = g_fopen (trspfile, "a");
             		if (ffile != NULL) {
 				char fcontent[1000];
