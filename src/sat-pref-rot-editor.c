@@ -59,7 +59,8 @@ static GtkWidget *minaz;
 static GtkWidget *maxaz;
 static GtkWidget *minel;
 static GtkWidget *maxel;
-
+static GtkWidget *azstoppos;
+static GtkWidget *azstopposdefault;
 
 static GtkWidget    *create_editor_widgets (rotor_conf_t *conf);
 static void          update_widgets        (rotor_conf_t *conf);
@@ -67,6 +68,8 @@ static void          clear_widgets         (void);
 static gboolean      apply_changes         (rotor_conf_t *conf);
 static void          name_changed          (GtkWidget *widget, gpointer data);
 static void          aztype_changed_cb     (GtkComboBox *box, gpointer data);
+static void          azstoppos_toggled    (GtkCheckButton *button, gpointer data);
+
 
 
 /** \brief Add or edit a rotor configuration.
@@ -251,6 +254,35 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (maxel), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (maxel), FALSE);
     gtk_table_attach_defaults (GTK_TABLE (table), maxel, 3, 4, 6, 7);
+
+    gtk_table_attach_defaults (GTK_TABLE (table), gtk_hseparator_new(), 0, 4, 7, 8);
+
+    
+    label = gtk_label_new (_(" Azimuth Rotation Stop Position"));
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 4, 8, 9);
+    
+
+
+    label = gtk_label_new (_(" Custom Stop Position"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 2, 10, 11);
+    azstoppos = gtk_spin_button_new_with_range (-180, 360, 1);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), 0);
+    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (azstoppos), TRUE);
+    gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (azstoppos), FALSE);
+    gtk_widget_set_sensitive(azstoppos, FALSE);
+    gtk_table_attach_defaults (GTK_TABLE (table), azstoppos, 2, 4, 10, 11);
+    
+
+    label = gtk_label_new (_(" Use Default for Az Type"));
+    gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+    gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 2, 9, 10);
+    azstopposdefault = gtk_check_button_new();
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(azstopposdefault), TRUE);
+    g_signal_connect (G_OBJECT (azstopposdefault), "toggled", G_CALLBACK (azstoppos_toggled), NULL);
+    gtk_table_attach_defaults (GTK_TABLE (table), azstopposdefault, 2, 4, 9, 10);
+    
+    
     
     if (conf->name != NULL)
           update_widgets (conf);
@@ -287,6 +319,8 @@ update_widgets (rotor_conf_t *conf)
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), conf->maxaz);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), conf->minel);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), conf->maxel);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), conf->azstoppos);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (azstopposdefault), conf->azstopposdefault);
     
 
 }
@@ -309,6 +343,9 @@ clear_widgets ()
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (minel), 0);
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxel), 90);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), 0);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (azstopposdefault), TRUE);
+    
 }
 
 
@@ -345,6 +382,12 @@ apply_changes         (rotor_conf_t *conf)
     conf->maxaz = gtk_spin_button_get_value (GTK_SPIN_BUTTON (maxaz));
     conf->minel = gtk_spin_button_get_value (GTK_SPIN_BUTTON (minel));
     conf->maxel = gtk_spin_button_get_value (GTK_SPIN_BUTTON (maxel));
+
+    /* az stop position */
+    conf->azstoppos = gtk_spin_button_get_value (GTK_SPIN_BUTTON (azstoppos));
+    
+    /* az stop position is/isn't default */
+    conf->azstopposdefault = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (azstopposdefault));
     
      return TRUE;
 }
@@ -422,12 +465,18 @@ static void aztype_changed_cb     (GtkComboBox *box, gpointer data)
         case ROT_AZ_TYPE_360:
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0.0);
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360.0);
+	    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(azstopposdefault))) {
+	     gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), 0.0);
+	    }
             break;
             
         case ROT_AZ_TYPE_180:
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), -180.0);
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), +180.0);
-            break;
+	    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(azstopposdefault))) {
+	     gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), -180.0);
+	    }
+	    break;
             
         default:
             sat_log_log (SAT_LOG_LEVEL_ERROR,
@@ -436,4 +485,22 @@ static void aztype_changed_cb     (GtkComboBox *box, gpointer data)
             break;
     }
 
+}
+
+static void azstoppos_toggled    (GtkCheckButton *button, gpointer data)
+{
+ 
+     
+    
+    (void) data; /* avoid unused parameter compiler warning */
+  
+  
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button))) {
+      gtk_widget_set_sensitive(azstoppos, FALSE);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), gtk_spin_button_get_value( GTK_SPIN_BUTTON (minaz)));
+      
+    } else {
+      gtk_widget_set_sensitive(azstoppos, TRUE);
+    }
+  
 }

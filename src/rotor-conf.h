@@ -48,6 +48,10 @@ typedef struct {
     gdouble      maxaz;     /*!< Upper azimuth limit */
     gdouble      minel;     /*!< Lower elevation limit */
     gdouble      maxel;     /*!< Upper elevation limit */
+    gdouble      azstoppos; /*!< absolute position of rotation stops;
+                             *   will normally be equal to minaz */
+    gboolean     azstopposdefault; /*!< boolean of whethr or not the az stops
+                                    are in the default position */
 } rotor_conf_t;
 
 
