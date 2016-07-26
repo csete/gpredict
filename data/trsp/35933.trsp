@@ -1,7 +1,12 @@
-[Mode U Beacon]
-DOWN_LOW=436000000
+[Mode U Beacon (disabled)]
+DOWN_LOW=435950000
 MODE=CW
 
-[Mode U Telemetry]
-DOWN_LOW=436000000
-MODE=9k6/4k8 GMSK
+[Mode U TLM (broken)]
+DOWN_LOW=435950000
+MODE=4k8/9k6 GMSK Mobitex
+
+[Mode U/U DIGI]
+UP_LOW=435950000
+DOWN_LOW=435950000
+MODE=4k8 GMSK Mobitex (idle mode: 10 sec interval)
