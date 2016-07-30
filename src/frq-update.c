@@ -1,5 +1,31 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Added by TA7W (Baris Dinc) on July 2016
+  Gpredict: Real-time satellite tracking and orbit prediction program
+
+  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2016       Baris DINC (TA7W)
+
+  Comments, questions and bugreports should be submitted via
+  http://sourceforge.net/projects/gpredict/
+  More details can be found at the project home page:
+
+  http://gpredict.oz9aec.net/
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, visit http://www.fsf.org/
+*/
+
+/*
  * Downloads Frequency list from SATNOGS db 
  * and exports json transmitter information into satellite files
  * identified by catalog id
@@ -99,31 +125,30 @@ void frq_update_files(gchar * frqfile)
                     m_trsp.alive = nx_json_get(json, "alive")->int_value;
                     //strcpy(m_trsp.uuid,nx_json_get(json,              "uuid")->text_value);
 
-                    sat_log_log(SAT_LOG_LEVEL_INFO,
-                                _
-                                (">>> Preparing information for transponders of cat_id %d <<<"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                                _(">>> Preparing information for transponders of cat_id %d <<<"),
                                 m_trsp.catnum, __func__);
 
                     //sat_log_log (SAT_LOG_LEVEL_INFO, _("         uuid : %s"), m_trsp.uuid, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("  description : %s"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  description : %s"),
                                 m_trsp.description, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("        alive : %s"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("        alive : %s"),
                                 m_trsp.alive ? "true" : "false", __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("   uplink_low : %Ld"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("   uplink_low : %Ld"),
                                 m_trsp.uplink_low, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("  uplink_high : %Ld"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  uplink_high : %Ld"),
                                 m_trsp.uplink_high, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _(" downink_low  : %Ld"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" downink_low  : %Ld"),
                                 m_trsp.downlink_low, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("downlink_high : %Ld"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("downlink_high : %Ld"),
                                 m_trsp.downlink_high, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("      Mode ID : %Ld"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("      Mode ID : %Ld"),
                                 m_trsp.mode_id, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("       Invert : %s"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("       Invert : %s"),
                                 m_trsp.invert ? "true" : "false", __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("         Baud : %lf"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Baud : %lf"),
                                 m_trsp.baud, __func__);
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _(" norad_cat_id : %Ld"),
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" norad_cat_id : %Ld"),
                                 m_trsp.catnum, __func__);
                     char            m_catnum[20];
 
@@ -131,7 +156,7 @@ void frq_update_files(gchar * frqfile)
                     trspfile =
                         g_strconcat(trspfolder, G_DIR_SEPARATOR_S, m_catnum,
                                     ".trsp", NULL);
-                    sat_log_log(SAT_LOG_LEVEL_INFO,
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG,
                                 _("%s: Writing to file : %s "), __func__,
                                 trspfile);
 
