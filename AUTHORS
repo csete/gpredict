@@ -18,6 +18,8 @@ Contributors:
   see http://sourcefrog.net/projects/natsort/
 - Patrick Strasser, OE6PSE (natural sorting)
 - Marcel Cimander (autotracking)
+- Yaroslav Stavnichiy (JSON parser)
+- Baris Dinc TA7W (Satnogs DB interface)
 
 Imagery:
 Most of the maps originate from NASA Visible Earth, http://visibleearth.nasa.gov/
