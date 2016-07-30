@@ -17,10 +17,10 @@
 
 /** \brief FRQ auto update frequency. */
 typedef enum {
-    FRQ_AUTO_UPDATE_NEVER   = 0,  /*!< No auto-update, just warn after one week. */
+    FRQ_AUTO_UPDATE_NEVER = 0,  /*!< No auto-update, just warn after one week. */
     FRQ_AUTO_UPDATE_MONTHLY = 1,
-    FRQ_AUTO_UPDATE_WEEKLY  = 2,
-    FRQ_AUTO_UPDATE_DAILY   = 3,
+    FRQ_AUTO_UPDATE_WEEKLY = 2,
+    FRQ_AUTO_UPDATE_DAILY = 3,
     FRQ_AUTO_UPDATE_NUM
 } frq_auto_upd_freq_t;
 
@@ -28,12 +28,12 @@ typedef enum {
  *         this struct is used to manipulate the json object array
 */
 typedef enum {
-	START = 0, //starting point
-	OBBGN,	   //new obbject starts here
-	OBEND,	   //objct end here, next char should be delimiter (comma) or next obect start, or array end
-	NXDLM,     //we have the delimiter, next one will be new object
-	FINISH     //array fineshes here
-} m_state;	
+    START = 0,                  //starting point
+    OBBGN,                      //new obbject starts here
+    OBEND,                      //objct end here, next char should be delimiter (comma) or next obect start, or array end
+    NXDLM,                      //we have the delimiter, next one will be new object
+    FINISH                      //array fineshes here
+} m_state;
 
 
 /** \brief Action to perform when it's time to update FRQ. */
@@ -45,20 +45,19 @@ typedef enum {
 
 
 /** \brief Data structure to hold a FRQ set. */
-struct transponder
-{
-    char   uuid[30];         /*!< uuid */
-    int    catnum;           /*!< Catalog number. */
-    char   description[99];  /*!< Transponder descriptoion */
-    int    uplink_low;       /*!< Uplink starting frequency */
-    int    uplink_high;      /*!< uplink end frequency  */
-    int    downlink_low;     /*!< downlink starting frequency */
-    int    downlink_high;    /*!< downlink end frequency */
-    int    mode_id;          /*!< mode id (from modes files) */
-    int    invert;           /*!< inverting / noninverting */
-    double baud;             /*!< baudrate */
-    int    alive;            /*!< alive or dead */
-} ;
+struct transponder {
+    char            uuid[30];   /*!< uuid */
+    int             catnum;     /*!< Catalog number. */
+    char            description[99];    /*!< Transponder descriptoion */
+    int             uplink_low; /*!< Uplink starting frequency */
+    int             uplink_high;        /*!< uplink end frequency  */
+    int             downlink_low;       /*!< downlink starting frequency */
+    int             downlink_high;      /*!< downlink end frequency */
+    int             mode_id;    /*!< mode id (from modes files) */
+    int             invert;     /*!< inverting / noninverting */
+    double          baud;       /*!< baudrate */
+    int             alive;      /*!< alive or dead */
+};
 
 
 /** \brief Data structure to hold local FRQ data. */
@@ -75,10 +74,10 @@ struct transponder
 //                            GtkWidget *label1,
 //                            GtkWidget *label2);
 
-void frq_update_from_network (gboolean silent,
-                              GtkWidget *progress,
-                              GtkWidget *label1,
-                              GtkWidget *label2);
+void            frq_update_from_network(gboolean silent,
+                                        GtkWidget * progress,
+                                        GtkWidget * label1,
+                                        GtkWidget * label2);
 
 //const gchar *frq_update_freq_to_str (frq_auto_upd_freq_t freq);
 
