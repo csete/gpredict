@@ -40,16 +40,14 @@
 #include <build-config.h>
 #endif
 #include <curl/curl.h>
+#include <locale.h>
 #include "sgpsdp/sgp4sdp4.h"
 #include "sat-log.h"
 #include "sat-cfg.h"
 #include "compat.h"
 #include "frq-update.h"
 #include "gpredict-utils.h"
-
-//library to parse json
-#include "nxjson.h"
-#include <locale.h>
+#include "nxjson/nxjson.h"
 
 
 /* private function prototypes */

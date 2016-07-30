@@ -26,6 +26,7 @@ gpredict_SOURCES = \
     sgpsdp/sgp_obs.c \
     sgpsdp/sgp_time.c \
     sgpsdp/solar.c \
+    nxjson/nxjson.c nxjson/nxjson.h \
     about.c about.h \
     compat.c compat.h config-keys.h \
     first-time.c first-time.h \
@@ -114,7 +115,6 @@ gpredict_SOURCES = \
     tle-tools.c tle-tools.h \
     tle-update.c tle-update.h \
     frq-update.c frq-update.h \
-    nxjson.c nxjson.h \
     sat-debugger.c sat-debugger.h \
     strnatcmp.c strnatcmp.h
 
