@@ -243,7 +243,7 @@ void frq_update_from_network(gboolean silent,
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _
-                    ("%s: A FRQ update process is already running. Aborting."),
+                    ("%s: A frequency update process is already running. Aborting."),
                     __func__);
 
         return;
@@ -368,7 +368,7 @@ void frq_update_from_network(gboolean silent,
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _
-                    ("%s: Could not fetch any new FRQ files from network; aborting..."),
+                    ("%s: Could not fetch any new frequency files from network; aborting..."),
                     __func__);
     }
 
