@@ -1,6 +1,5 @@
 Changes in version 1.4 (TBD)
 
-- Import transponder data from Satnogs DB (http://db.satnogs.org).
 - New menu item in the module menu for selecting a satellite in all views.
 - AOS and LOS signalling in rigctl interface.
 - Autotracking of satellites in a given module.
