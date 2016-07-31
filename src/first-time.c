@@ -38,6 +38,7 @@
 #include "first-time.h"
 
 
+
 /* private function prototypes */
 static void first_time_check_step_01 (guint *error);
 static void first_time_check_step_02 (guint *error);
@@ -47,6 +48,8 @@ static void first_time_check_step_05 (guint *error);
 static void first_time_check_step_06 (guint *error);
 static void first_time_check_step_07 (guint *error);
 static void first_time_check_step_08 (guint *error);
+static void first_time_check_step_09 (guint *error);
+
 
 
 /** \brief Perform first time checks.
@@ -85,7 +88,9 @@ static void first_time_check_step_08 (guint *error);
  *    If the directory is newly created, check if we have any existing configuration
  *    in the pre-1.1 configuration directory (use get_old_conf_dir()).
  * 8. Check for the existence of USER_CONF_DIR/trsp directory. This
- *    directory will contain transponder data for satellites.
+ *    directory contains transponder data for satellites.
+ * 9. Check the .trsp files in USER_CONF_DIR/trsp/ and compare to the ones
+ *    available in PACKAGE_DATA_DIR/data/trsp/xxx.trsp, and update if necessary.
  *
  * Send both error, warning and verbose debug messages to sat-log during this
  * process.
@@ -109,6 +114,7 @@ first_time_check_run ()
     first_time_check_step_06 (&error);
     first_time_check_step_07 (&error);
     first_time_check_step_08 (&error);
+    first_time_check_step_09 (&error);
 
     return error;
 }
@@ -763,4 +769,88 @@ static void first_time_check_step_08 (guint *error)
     }
 
     g_free (dir);
+}
+
+/** \brief Execute step 9 of the first time checks.
+ *
+ * 9. Check the .trsp files in USER_CONF_DIR/trsp/ and compare to the ones
+ *    available in PACKAGE_DATA_DIR/data/trsp/xxx.trsp, and update if necessary.
+ *
+ */
+static void first_time_check_step_09 (guint *error)
+{
+    GDir     *targetdir,*dir;
+    gchar    *targetdirname;
+    gchar    *datadirname;
+    const gchar *filename;
+    gchar    *srcfile,*destfile;
+    gchar    *buff;
+
+
+    /* open data directory */
+    targetdirname = get_trsp_dir ();
+
+    targetdir = g_dir_open (targetdirname, 0, NULL);
+
+    /* directory does not exist, something went wrong in step 8 */
+    if (!targetdir) {
+        sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                        _("%s: Could not open %s."),
+                        __func__, targetdirname);
+        
+        /* no reason to continue */
+        *error |= FTC_ERROR_STEP_09;
+    }
+    else {
+        /* no need to keep this dir open */
+        g_dir_close (targetdir);
+        
+        /* open data dir */
+        buff = get_data_dir ();
+        datadirname = g_strconcat (buff, G_DIR_SEPARATOR_S, "trsp", NULL);
+        g_free (buff);
+        dir = g_dir_open (datadirname, 0, NULL);
+        
+        if (dir) {
+            /* for each .trsp file found in data dir */
+            while ((filename = g_dir_read_name (dir))) {
+                if (g_str_has_suffix (filename, ".trsp")) {
+                    /* check if .trsp file already in user dir */
+                    destfile = g_strconcat (targetdirname, G_DIR_SEPARATOR_S, filename, NULL);
+                    
+                    /* check if .trsp file already in user dir */
+                    if (!g_file_test (destfile, G_FILE_TEST_EXISTS)) {
+                        sat_log_log (SAT_LOG_LEVEL_INFO,
+                                     _("%s: %s does not appear to be in user conf dir; adding."),
+                                     __func__, filename);
+
+                        /* copy new .trsp file to user dir */
+                        srcfile = g_strconcat (datadirname, G_DIR_SEPARATOR_S, filename,NULL);
+                        if (gpredict_file_copy (srcfile, destfile)) {
+                            sat_log_log (SAT_LOG_LEVEL_ERROR, 
+                                         _("%s: Failed to copy %s"),
+                                         __func__, filename);
+
+                            *error |= FTC_ERROR_STEP_09;
+                        }
+                        g_free (srcfile);
+                    }
+                    else {
+                        sat_log_log (SAT_LOG_LEVEL_INFO,
+                                     _("%s: %s already in user conf dir."),
+                                     __func__, filename);
+                    }
+                    
+                    g_free (destfile);
+                }
+            }
+            g_dir_close (dir);
+        } else {
+               sat_log_log (SAT_LOG_LEVEL_ERROR,
+                               _("%s: %s directory does not exist. Incomplete installation."),
+                               __func__, datadirname);
+          }
+        g_free (datadirname);
+    }
+    g_free (targetdirname);
 }
