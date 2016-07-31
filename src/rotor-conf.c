@@ -44,7 +44,6 @@
 #define KEY_MINEL       "MinEl"
 #define KEY_MAXEL       "MaxEl"
 #define KEY_AZSTOPPOS   "AzStopPos"
-#define KEY_AZSTOPPOSDEFAULT "AzStopPosDefault"
 
 
 /** \brief Read rotator configuration.
@@ -166,25 +165,8 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
         conf->azstoppos = conf->minaz;
     }
     
-    conf->azstopposdefault = g_key_file_get_boolean (cfg, GROUP, KEY_AZSTOPPOSDEFAULT, &error);
-    if (error != NULL) {
-        if (conf->minaz == conf->azstoppos) {
-            sat_log_log (SAT_LOG_LEVEL_WARN,
-                     _("%s: AzStopPosDefault not defined for %s, but AzStopPos matches default for this type, so assuming default."),
-                       __func__, conf->name );
-            conf->azstopposdefault = TRUE;
-            g_clear_error (&error);
-        } else {
-            sat_log_log (SAT_LOG_LEVEL_WARN,
-                     _("%s: AzStopPosDefault not defined for %s, and AzStopPos does not match default for this type, so assuming non-default."),
-                       __func__, conf->name );
-            conf->azstopposdefault = FALSE;
-            g_clear_error (&error);
-        }
-    }
-    
     g_key_file_free (cfg);
-
+    
     return TRUE;
 }
 
@@ -216,7 +198,6 @@ void rotor_conf_save (rotor_conf_t *conf)
     g_key_file_set_double  (cfg, GROUP, KEY_MINEL, conf->minel);
     g_key_file_set_double  (cfg, GROUP, KEY_MAXEL, conf->maxel);
     g_key_file_set_double  (cfg, GROUP, KEY_AZSTOPPOS, conf->azstoppos);
-    g_key_file_set_boolean (cfg, GROUP, KEY_AZSTOPPOSDEFAULT, conf->azstopposdefault);
     
     /* build filename */
     confdir = get_hwconf_dir();

@@ -217,8 +217,7 @@ static GtkTreeModel *create_and_fill_model ()
                                     G_TYPE_DOUBLE,    // Min El
                                     G_TYPE_DOUBLE,    // Max El
                                     G_TYPE_INT,       // Az type
-                                    G_TYPE_DOUBLE,    // Az Stop Position
-                                    G_TYPE_BOOLEAN    // Az Stop Position is default for type
+                                    G_TYPE_DOUBLE     // Az Stop Position
                                    );
      gtk_tree_sortable_set_sort_column_id( GTK_TREE_SORTABLE(liststore),ROT_LIST_COL_NAME,GTK_SORT_ASCENDING);
     /* open configuration directory */
@@ -247,7 +246,6 @@ static GtkTreeModel *create_and_fill_model ()
                                         ROT_LIST_COL_MAXEL, conf.maxel,
                                         ROT_LIST_COL_AZTYPE, conf.aztype,
                                         ROT_LIST_COL_AZSTOPPOS, conf.azstoppos,
-                                        ROT_LIST_COL_AZSTOPPOSDEFAULT, conf.azstopposdefault,
                                         -1);
                     
                     sat_log_log (SAT_LOG_LEVEL_DEBUG,
@@ -361,7 +359,6 @@ void sat_pref_rot_ok     ()
         .maxel = 90,
         .aztype = ROT_AZ_TYPE_360,
         .azstoppos = 0,
-        .azstopposdefault = TRUE,
     };
 
     
@@ -404,7 +401,6 @@ void sat_pref_rot_ok     ()
                                 ROT_LIST_COL_MAXEL, &conf.maxel,
                                 ROT_LIST_COL_AZTYPE, &conf.aztype,
                                 ROT_LIST_COL_AZSTOPPOS, &conf.azstoppos,
-                                ROT_LIST_COL_AZSTOPPOSDEFAULT, &conf.azstopposdefault,
                                 -1);
             rotor_conf_save (&conf);
         
@@ -449,8 +445,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .minel = 0,
         .maxel = 90,
         .aztype = ROT_AZ_TYPE_360,
-        .azstoppos = 0,
-	.azstopposdefault = TRUE,
+        .azstoppos = 45,
     };
     
     /* run rot conf editor */
@@ -470,7 +465,6 @@ static void add_cb    (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_MAXEL, conf.maxel,
                             ROT_LIST_COL_AZTYPE, conf.aztype,
                             ROT_LIST_COL_AZSTOPPOS, conf.azstoppos,
-                            ROT_LIST_COL_AZSTOPPOSDEFAULT, conf.azstopposdefault,
                             -1);
         
         g_free (conf.name);
@@ -509,7 +503,6 @@ static void edit_cb   (GtkWidget *button, gpointer data)
         .maxel = 90,
         .aztype = ROT_AZ_TYPE_360,
         .azstoppos = 0, //used in the "new rotator" dialog
-	.azstopposdefault = TRUE,
     };
 
     
@@ -540,7 +533,6 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_MAXEL, &conf.maxel,
                             ROT_LIST_COL_AZTYPE, &conf.aztype,
                             ROT_LIST_COL_AZSTOPPOS, &conf.azstoppos,
-                            ROT_LIST_COL_AZSTOPPOSDEFAULT, &conf.azstopposdefault,
                             -1);
 
     }
@@ -574,7 +566,6 @@ static void edit_cb   (GtkWidget *button, gpointer data)
                             ROT_LIST_COL_MAXEL, conf.maxel,
                             ROT_LIST_COL_AZTYPE, conf.aztype,
                             ROT_LIST_COL_AZSTOPPOS, conf.azstoppos,
-                            ROT_LIST_COL_AZSTOPPOSDEFAULT, conf.azstopposdefault,
                             -1);
         
     }

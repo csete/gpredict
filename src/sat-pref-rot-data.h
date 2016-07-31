@@ -41,9 +41,6 @@ typedef enum {
     ROT_LIST_COL_AZSTOPPOS, /*!< Position of the azimuth rotation stops.
                                  Should default to MINAZ, unless specified
                                  otherwise */
-    ROT_LIST_COL_AZSTOPPOSDEFAULT, /*!< Boolean of whether or not the AZSTOPPOS
-                                        supposed to be the default for this rotor
-                                        type */
     ROT_LIST_COL_NUM        /*!< The number of fields in the list. */
 } rotor_list_col_t;
 

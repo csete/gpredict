@@ -985,17 +985,17 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                 setaz -= 180;
             else
                 setaz += 180;
-
-            while (setaz > ctrl->conf->maxaz)
-            {
-                setaz -= 360;
-            }
-            while (setaz < ctrl->conf->minaz)
-            {
-                setaz += 360;
-            }
-
-
+	    
+	    while (setaz > ctrl->conf->maxaz)
+	    {
+		setaz -= 360;
+	    }
+	    while (setaz < ctrl->conf->minaz)
+	    {
+		setaz += 360;
+	    }
+	    
+	    
         }
         if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0))
         {
