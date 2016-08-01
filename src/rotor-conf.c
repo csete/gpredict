@@ -43,6 +43,7 @@
 #define KEY_MAXAZ       "MaxAz"
 #define KEY_MINEL       "MinEl"
 #define KEY_MAXEL       "MaxEl"
+#define KEY_AZSTOPPOS   "AzStopPos"
 
 
 /** \brief Read rotator configuration.
@@ -154,6 +155,15 @@ gboolean rotor_conf_read (rotor_conf_t *conf)
         g_clear_error (&error);
         conf->maxel = 90.0;
     }
+
+    conf->azstoppos = g_key_file_get_double (cfg, GROUP, KEY_AZSTOPPOS, &error);
+    if (error != NULL) {
+        sat_log_log (SAT_LOG_LEVEL_WARN,
+                     _("%s: AzStopPos not defined for %s. Assuming at minaz (%f\302\260)."),
+                       __func__, conf->name, conf->minaz);
+        g_clear_error (&error);
+        conf->azstoppos = conf->minaz;
+    }
     
     g_key_file_free (cfg);
     
@@ -187,6 +197,7 @@ void rotor_conf_save (rotor_conf_t *conf)
     g_key_file_set_double  (cfg, GROUP, KEY_MAXAZ, conf->maxaz);
     g_key_file_set_double  (cfg, GROUP, KEY_MINEL, conf->minel);
     g_key_file_set_double  (cfg, GROUP, KEY_MAXEL, conf->maxel);
+    g_key_file_set_double  (cfg, GROUP, KEY_AZSTOPPOS, conf->azstoppos);
     
     /* build filename */
     confdir = get_hwconf_dir();

@@ -100,7 +100,7 @@ static gboolean have_conf(void);
 static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rot_name_compare(const gchar * a, const gchar * b);
 
-static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type);
+static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type, gdouble azstoppos);
 static inline void set_flipped_pass(GtkRotCtrl * ctrl);
 
 static GtkVBoxClass *parent_class = NULL;
@@ -985,6 +985,17 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                 setaz -= 180;
             else
                 setaz += 180;
+	    
+	    while (setaz > ctrl->conf->maxaz)
+	    {
+		setaz -= 360;
+	    }
+	    while (setaz < ctrl->conf->minaz)
+	    {
+		setaz += 360;
+	    }
+	    
+	    
         }
         if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0))
         {
@@ -1561,9 +1572,9 @@ static gint rot_name_compare(const gchar * a, const gchar * b)
  *
  * This is a function of the rotator and the particular pass. 
  */
-static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
+static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type, gdouble azstoppos)
 {
-    gdouble         max_az = 0, min_az = 0;
+    gdouble         max_az = 0, min_az = 0, offset=0;
     gdouble         caz, last_az = pass->aos_az;
     guint           num, i;
     pass_detail_t  *detail;
@@ -1580,7 +1591,17 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
         min_az = -180;
         max_az = 180;
     }
-
+        
+    /* Offset by (azstoppos-min_az) to handle
+     * rotators with non-default positions.
+     * Note that the default positions of the rotator stops
+     * (eg. -180 for ROT_AZ_TYPE_180, and 0 for 
+     * ROT_AZ_TYPE_360) will create an offset of 0, which
+     * seems like a pretty sane default. */
+    offset = azstoppos-min_az; 
+    min_az += offset;
+    max_az += offset;
+    
     /* Assume that min_az and max_az are atleat 360 degrees apart
        get the azimuth that is in a settable range */
     while (last_az > max_az)
@@ -1598,6 +1619,7 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
         {
             detail = PASS_DETAIL(g_slist_nth_data(pass->details, i));
             caz = detail->az;
+            
             while (caz > max_az)
             {
                 caz -= 360;
@@ -1606,6 +1628,7 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
             {
                 caz += 360;
             }
+            
             if (fabs(caz - last_az) > 180)
             {
                 retval = TRUE;
@@ -1627,12 +1650,11 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type)
     {
         retval = TRUE;
     }
-
     return retval;
 }
 
 static inline void set_flipped_pass(GtkRotCtrl * ctrl)
 {
     if (ctrl->conf && ctrl->pass)
-        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype);
+        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype, ctrl->conf->azstoppos);
 }
