@@ -445,7 +445,7 @@ static void add_cb    (GtkWidget *button, gpointer data)
         .minel = 0,
         .maxel = 90,
         .aztype = ROT_AZ_TYPE_360,
-        .azstoppos = 45,
+        .azstoppos = 0,
     };
     
     /* run rot conf editor */

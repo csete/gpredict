@@ -259,9 +259,15 @@ create_editor_widgets (rotor_conf_t *conf)
     gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
     gtk_table_attach_defaults (GTK_TABLE (table), label, 1, 3, 7, 8);
     azstoppos = gtk_spin_button_new_with_range (-180, 360, 1);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), 90);
+    gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), 0);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (azstoppos), TRUE);
     gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (azstoppos), FALSE);
+    gtk_widget_set_tooltip_text (azstoppos,
+                                 _("Set the position of the azimuth rotation stops here, where "
+                                  "0\302\260 is at North, -180\302\260 is south, etc. "
+				  "The default for a 0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260 rotor is 0\302\260, and the default for a "\
+                                  "-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260 rotor "
+				  "is -180\302\260."));
     gtk_table_attach_defaults (GTK_TABLE (table), azstoppos, 3, 4, 7, 8);
     
     
@@ -444,12 +450,14 @@ static void aztype_changed_cb     (GtkComboBox *box, gpointer data)
         case ROT_AZ_TYPE_360:
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), 0.0);
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), 360.0);
+	    gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), 0.0);
             break;
             
         case ROT_AZ_TYPE_180:
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (minaz), -180.0);
             gtk_spin_button_set_value (GTK_SPIN_BUTTON (maxaz), +180.0);
-            break;
+            gtk_spin_button_set_value (GTK_SPIN_BUTTON (azstoppos), -180.0);
+	    break;
             
         default:
             sat_log_log (SAT_LOG_LEVEL_ERROR,
