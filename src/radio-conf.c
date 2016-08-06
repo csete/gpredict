@@ -75,7 +75,7 @@ gboolean radio_conf_read(radio_conf_t * conf)
     fname = g_strconcat(confdir, G_DIR_SEPARATOR_S, conf->name, ".rig", NULL);
     g_free(confdir);
 
-    /* open .grc file */
+    /* open .rig file */
     cfg = g_key_file_new();
     g_key_file_load_from_file(cfg, fname, 0, NULL);
 
