@@ -3,6 +3,7 @@ Changes in version 1.4 (TBD)
 - New menu item in the module menu for selecting a satellite in all views.
 - AOS and LOS signalling in rigctl interface.
 - Autotracking of satellites in a given module.
+- Support for user defined end stops on Azimuth axis.
 - Feature request 3141555: gpsd support.
 - Feature request 2130926: Change frequency using mouse wheel. Also for rotator controller.
 - Feature request 3322786: Show More Information in Edit Module Sat Selection.
