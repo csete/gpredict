@@ -30,18 +30,18 @@
 
 /** \brief Coumn definitions for rotator list. */
 typedef enum {
-    ROT_LIST_COL_NAME = 0,  /*!< File name. */
-    ROT_LIST_COL_HOST,      /*!< Hostname */
-    ROT_LIST_COL_PORT,      /*!< Port number */
-    ROT_LIST_COL_MINAZ,     /*!< Lower Az limit. */
-    ROT_LIST_COL_MAXAZ,     /*!< Upper Az limit. */
-    ROT_LIST_COL_MINEL,     /*!< Lower El limit. */
-    ROT_LIST_COL_MAXEL,     /*!< Upper El limit. */
-    ROT_LIST_COL_AZTYPE,    /*!< Azimuth type. */
-    ROT_LIST_COL_AZSTOPPOS, /*!< Position of the azimuth rotation stops.
-                                 Should default to MINAZ, unless specified
-                                 otherwise */
-    ROT_LIST_COL_NUM        /*!< The number of fields in the list. */
+    ROT_LIST_COL_NAME = 0,      /*!< File name. */
+    ROT_LIST_COL_HOST,          /*!< Hostname */
+    ROT_LIST_COL_PORT,          /*!< Port number */
+    ROT_LIST_COL_MINAZ,         /*!< Lower Az limit. */
+    ROT_LIST_COL_MAXAZ,         /*!< Upper Az limit. */
+    ROT_LIST_COL_MINEL,         /*!< Lower El limit. */
+    ROT_LIST_COL_MAXEL,         /*!< Upper El limit. */
+    ROT_LIST_COL_AZTYPE,        /*!< Azimuth type. */
+    ROT_LIST_COL_AZSTOPPOS,     /*!< Position of the azimuth rotation stops.
+                                   Should default to MINAZ, unless specified
+                                   otherwise */
+    ROT_LIST_COL_NUM            /*!< The number of fields in the list. */
 } rotor_list_col_t;
 
 

@@ -100,7 +100,8 @@ static gboolean have_conf(void);
 static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rot_name_compare(const gchar * a, const gchar * b);
 
-static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type, gdouble azstoppos);
+static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
+                                gdouble azstoppos);
 static inline void set_flipped_pass(GtkRotCtrl * ctrl);
 
 static GtkVBoxClass *parent_class = NULL;
@@ -140,17 +141,9 @@ GType gtk_rot_ctrl_get_type()
 
 static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
 {
-    //GObjectClass      *gobject_class;
     GtkObjectClass *object_class;
 
-    //GtkWidgetClass    *widget_class;
-    //GtkContainerClass *container_class;
-
-    //gobject_class   = G_OBJECT_CLASS (class);
     object_class = (GtkObjectClass *) class;
-    //widget_class    = (GtkWidgetClass*) class;
-    //container_class = (GtkContainerClass*) class;
-
     parent_class = g_type_class_peek_parent(class);
     object_class->destroy = gtk_rot_ctrl_destroy;
 }
@@ -192,9 +185,7 @@ static void gtk_rot_ctrl_destroy(GtkObject * object)
 
     /*close the socket if it is still open */
     if (ctrl->sock != 0)
-    {
         close_rotctld_socket(&(ctrl->sock));
-    }
 
     (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
@@ -203,16 +194,14 @@ static void gtk_rot_ctrl_destroy(GtkObject * object)
  * \brief Create a new rotor control widget.
  * \return A new rotor control window.
  */
-GtkWidget *gtk_rot_ctrl_new(GtkSatModule * module)
+GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
 {
     GtkWidget      *widget;
     GtkWidget      *table;
 
     /* check that we have rot conf */
     if (!have_conf())
-    {
         return NULL;
-    }
 
     widget = g_object_new(GTK_TYPE_ROT_CTRL, NULL);
 
@@ -327,14 +316,14 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
         /* update next pass if necessary */
         if (ctrl->pass != NULL)
         {
-            /*if we are not in the current pass */
+            /* if we are not in the current pass */
             if ((ctrl->pass->aos > t) || (ctrl->pass->los < t))
             {
                 /* the pass may not have met the minimum 
                    elevation, calculate the pass and plot it */
                 if (ctrl->target->el >= 0.0)
                 {
-                    /*inside an unexpected/unpredicted pass */
+                    /* inside an unexpected/unpredicted pass */
                     free_pass(ctrl->pass);
                     ctrl->pass = NULL;
                     ctrl->pass = get_current_pass(ctrl->target, ctrl->qth, t);
@@ -345,13 +334,13 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
                 else if ((ctrl->target->aos - ctrl->pass->aos) >
                          (ctrl->delay / secday / 1000 / 4.0))
                 {
-                    /*the target is expected to appear in a new pass 
+                    /* the target is expected to appear in a new pass 
                        sufficiently later after the current pass says */
 
-                    /*converted milliseconds to gpredict time and took a 
+                    /* converted milliseconds to gpredict time and took a 
                        fraction of it as a threshold for deciding a new pass */
 
-                    /*if the next pass is not the one for the target */
+                    /* if the next pass is not the one for the target */
                     free_pass(ctrl->pass);
                     ctrl->pass = NULL;
                     ctrl->pass = get_pass(ctrl->target, ctrl->qth, t, 3.0);
@@ -381,13 +370,10 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
         {
             /* we don't have any current pass; store the current one */
             if (ctrl->target->el > 0.0)
-            {
                 ctrl->pass = get_current_pass(ctrl->target, ctrl->qth, t);
-            }
             else
-            {
                 ctrl->pass = get_pass(ctrl->target, ctrl->qth, t, 3.0);
-            }
+
             set_flipped_pass(ctrl);
             /* update polar plot */
             gtk_polar_plot_set_pass(GTK_POLAR_PLOT(ctrl->plot), ctrl->pass);
@@ -398,22 +384,19 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
 /** Select a satellite. */
 void gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum)
 {
-    sat_t      *sat;
-    int         i, n;
+    sat_t          *sat;
+    int             i, n;
 
     /* find index in satellite list */
     n = g_slist_length(ctrl->sats);
     for (i = 0; i < n; i++)
     {
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
-        if (sat)
+        if (sat && sat->tle.catnr == catnum)
         {
-            if (sat->tle.catnr == catnum)
-            {
-                /* assume the index is the same in sat selector */
-                gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), i);
-                break;
-            }
+            /* assume the index is the same in sat selector */
+            gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), i);
+            break;
         }
     }
 }
@@ -425,8 +408,7 @@ void gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum)
  * This function creates and initialises the widgets for controlling the
  * azimuth of the the rotator.
  */
-static
-GtkWidget      *create_az_widgets(GtkRotCtrl * ctrl)
+static GtkWidget *create_az_widgets(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame;
     GtkWidget      *table;
@@ -463,7 +445,7 @@ GtkWidget      *create_az_widgets(GtkRotCtrl * ctrl)
  * This function creates and initialises the widgets for controlling the
  * elevation of the the rotator.
  */
-static GtkWidget * create_el_widgets(GtkRotCtrl * ctrl)
+static GtkWidget *create_el_widgets(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame;
     GtkWidget      *table;
@@ -497,7 +479,7 @@ static GtkWidget * create_el_widgets(GtkRotCtrl * ctrl)
  * \brief Create target widgets.
  * \param ctrl Pointer to the GtkRotCtrl widget.
  */
-static GtkWidget * create_target_widgets(GtkRotCtrl * ctrl)
+static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
 {
     GtkWidget      *frame, *table, *label, *track;
     gchar          *buff;
@@ -519,11 +501,13 @@ static GtkWidget * create_target_widgets(GtkRotCtrl * ctrl)
     {
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
         if (sat)
-            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel), sat->nickname);
+            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel),
+                                      sat->nickname);
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
-    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
+                     ctrl);
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 2, 0, 1);
 
     /* tracking button */
@@ -867,7 +851,7 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
         gtk_rot_knob_set_range(GTK_ROT_KNOB(ctrl->ElSet), ctrl->conf->minel,
                                ctrl->conf->maxel);
 
-        /*Update flipped when changing rotor if there is a plot */
+        /* Update flipped when changing rotor if there is a plot */
         set_flipped_pass(ctrl);
     }
     else
@@ -937,7 +921,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
     gboolean        error = FALSE;
     sat_t           sat_working, *sat;
 
-    /*parameters for path predictions */
+    /* parameters for path predictions */
     gdouble         time_delta;
     gdouble         step_size;
 
@@ -985,22 +969,17 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                 setaz -= 180;
             else
                 setaz += 180;
-	    
-	    while (setaz > ctrl->conf->maxaz)
-	    {
-		setaz -= 360;
-	    }
-	    while (setaz < ctrl->conf->minaz)
-	    {
-		setaz += 360;
-	    }
-	    
-	    
+
+            while (setaz > ctrl->conf->maxaz)
+                setaz -= 360;
+
+            while (setaz < ctrl->conf->minaz)
+                setaz += 360;
         }
+
         if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (setaz > 180.0))
-        {
             setaz = setaz - 360.0;
-        }
+
         if (!(ctrl->engaged))
         {
             gtk_rot_knob_set_value(GTK_ROT_KNOB(ctrl->AzSet), setaz);
@@ -1013,7 +992,6 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         setaz = gtk_rot_knob_get_value(GTK_ROT_KNOB(ctrl->AzSet));
         setel = gtk_rot_knob_get_value(GTK_ROT_KNOB(ctrl->ElSet));
     }
-
 
     if ((ctrl->engaged) && (ctrl->conf != NULL))
     {
@@ -1055,21 +1033,20 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         {
             if (ctrl->tracking)
             {
-                /*if we are in a pass try to lead the satellite 
+                /* if we are in a pass try to lead the satellite 
                    some so we are not always chasing it */
                 if (ctrl->target->el > 0.0)
                 {
-                    /*starting the rotator moving while we do some computation can lead to errors later */
-                    /* 
-                       compute a time in the future when the position is 
+                    /* starting the rotator moving while we do some computation
+                     * can lead to errors later */
+                    /* compute a time in the future when the position is 
                        within tolerance so and send the rotor there.
                      */
 
-                    /*use a working copy so data does not get corrupted */
+                    /* use a working copy so data does not get corrupted */
                     sat = memcpy(&(sat_working), ctrl->target, sizeof(sat_t));
 
-                    /*
-                       compute az/el in the future that is past end of pass 
+                    /* compute az/el in the future that is past end of pass 
                        or exceeds tolerance
                      */
                     if (ctrl->pass)
@@ -1090,8 +1067,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                     {
                         step_size = ctrl->delay / 1000.0 / (secday);
                     }
-                    /*
-                       find a time when satellite is above horizon and at the 
+                    /* find a time when satellite is above horizon and at the 
                        edge of tolerance. the final step size needs to be smaller
                        than delay. otherwise the az/el could be further away than
                        tolerance the next time we enter the loop and we end up 
@@ -1252,7 +1228,6 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: rotctld returned error (%s)"),
                         __FILE__, __LINE__, buffback);
-
         }
         else
         {
@@ -1315,7 +1290,8 @@ static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
         {
             g_strstrip(buffback);
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
+                        _
+                        ("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
                         __FILE__, __LINE__, retval, az, el, buffback);
         }
     }
@@ -1572,9 +1548,10 @@ static gint rot_name_compare(const gchar * a, const gchar * b)
  *
  * This is a function of the rotator and the particular pass. 
  */
-static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type, gdouble azstoppos)
+static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
+                                gdouble azstoppos)
 {
-    gdouble         max_az = 0, min_az = 0, offset=0;
+    gdouble         max_az = 0, min_az = 0, offset = 0;
     gdouble         caz, last_az = pass->aos_az;
     guint           num, i;
     pass_detail_t  *detail;
@@ -1591,27 +1568,24 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type, gdouble azsto
         min_az = -180;
         max_az = 180;
     }
-        
+
     /* Offset by (azstoppos-min_az) to handle
      * rotators with non-default positions.
      * Note that the default positions of the rotator stops
      * (eg. -180 for ROT_AZ_TYPE_180, and 0 for 
      * ROT_AZ_TYPE_360) will create an offset of 0, which
      * seems like a pretty sane default. */
-    offset = azstoppos-min_az; 
+    offset = azstoppos - min_az;
     min_az += offset;
     max_az += offset;
-    
+
     /* Assume that min_az and max_az are atleat 360 degrees apart
        get the azimuth that is in a settable range */
     while (last_az > max_az)
-    {
         last_az -= 360;
-    }
+
     while (last_az < min_az)
-    {
         last_az += 360;
-    }
 
     if (num > 1)
     {
@@ -1619,42 +1593,36 @@ static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type, gdouble azsto
         {
             detail = PASS_DETAIL(g_slist_nth_data(pass->details, i));
             caz = detail->az;
-            
+
             while (caz > max_az)
-            {
                 caz -= 360;
-            }
+
             while (caz < min_az)
-            {
                 caz += 360;
-            }
-            
+
+
             if (fabs(caz - last_az) > 180)
-            {
                 retval = TRUE;
-            }
 
             last_az = caz;
         }
     }
     caz = pass->los_az;
     while (caz > max_az)
-    {
         caz -= 360;
-    }
+
     while (caz < min_az)
-    {
         caz += 360;
-    }
+
     if (fabs(caz - last_az) > 180)
-    {
         retval = TRUE;
-    }
+
     return retval;
 }
 
 static inline void set_flipped_pass(GtkRotCtrl * ctrl)
 {
     if (ctrl->conf && ctrl->pass)
-        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype, ctrl->conf->azstoppos);
+        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype,
+                                        ctrl->conf->azstoppos);
 }
