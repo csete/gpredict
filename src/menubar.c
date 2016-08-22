@@ -50,6 +50,7 @@
 #include "gpredict-help.h"
 #include "gpredict-utils.h"
 #include "tle-update.h"
+#include "frq-update.h"
 #include "compat.h"
 #include "menubar.h"
 #include "config-keys.h"
@@ -70,7 +71,9 @@ static void menubar_app_exit_cb(GtkWidget * widget, gpointer data);
 static void menubar_freq_edit_cb(GtkWidget * widget, gpointer data);
 static void menubar_pref_cb(GtkWidget * widget, gpointer data);
 static void menubar_tle_net_cb(GtkWidget * widget, gpointer data);
+static void menubar_frq_net_cb(GtkWidget * widget, gpointer data);
 static void menubar_tle_local_cb(GtkWidget * widget, gpointer data);
+static void menubar_frq_local_cb(GtkWidget * widget, gpointer data);
 static void menubar_tle_manual_cb(GtkWidget * widget, gpointer data);
 static void menubar_window_cb(GtkWidget * widget, gpointer data);
 static void menubar_predict_cb(GtkWidget * widget, gpointer data);
@@ -92,7 +95,8 @@ static gint compare_func(GtkTreeModel * model, GtkTreeIter * a, GtkTreeIter * b,
 static GtkActionEntry entries[] = {
     {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
     {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
-    {"TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE"), NULL, NULL, NULL},
+    {"TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE data"), NULL, NULL, NULL},
+    {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update Transponder data"), NULL, NULL, NULL},
     {"ToolsMenu", NULL, N_("_Tools"), NULL, NULL, NULL},
     {"HelpMenu", NULL, N_("_Help"), NULL, NULL, NULL},
 
@@ -112,9 +116,15 @@ static GtkActionEntry entries[] = {
     {"Net", GTK_STOCK_NETWORK, N_("From _network"), NULL,
      N_("Update Keplerian elements from a network server"),
      G_CALLBACK(menubar_tle_net_cb)},
+    {"FNet", GTK_STOCK_NETWORK, N_("From _network"), NULL,
+     N_("Update transponders from a network server"),
+     G_CALLBACK(menubar_frq_net_cb)},
     {"Local", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
      N_("Update Keplerian elements from local files"),
      G_CALLBACK(menubar_tle_local_cb)},
+    {"FLocal", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
+     N_("Update transponders from local files"),
+     G_CALLBACK(menubar_frq_local_cb)},
     {"Man", GTK_STOCK_DND, N_("Using TLE _editor"), NULL,
      N_("Add or update Keplerian elements using the TLE editor"),
      G_CALLBACK(menubar_tle_manual_cb)},
@@ -167,6 +177,9 @@ static const char *menu_desc =
     "         <menu action='TleMenu'>"
     "            <menuitem action='Net'/>" "            <menuitem action='Local'/>"
 /*"            <menuitem action='Man'/>"*/
+    "         </menu>"
+    "         <menu action='FrqMenu'>"
+    "            <menuitem action='FNet'/>" "            <menuitem action='FLocal'/>"
     "         </menu>"
 /* "         <menuitem action='Freq'/>" */
     "         <separator/>" "         <menuitem action='Pref'/>" "      </menu>"
@@ -417,6 +430,91 @@ static void menubar_pref_cb(GtkWidget * widget, gpointer data)
 }
 
 
+/** \brief Update Frequency information from Network
+ *  \param widget The menu item *unused)
+ *  \param data user data (unused)
+ *
+ * This function is all when the user selects
+ * Edit -> Update frequency from network
+ * in the menubar.
+ * the function calls the frq_update_from_network with silent flag FALSE
+ */
+
+static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
+{
+
+    GtkWidget *dialog;          /* dialog window  */
+    GtkWidget *label;           /* misc labels */
+    GtkWidget *progress;        /* progress indicator */
+    GtkWidget *label1, *label2; /* activitity and stats labels */
+    GtkWidget *box;
+
+    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)data;                 /* avoid unused parameter compiler warning */
+
+    /* create new dialog with progress indicator */
+    dialog = gtk_dialog_new_with_buttons(_("Transponder Update"),
+                                         GTK_WINDOW(app),
+                                         GTK_DIALOG_MODAL |
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
+    //gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, FALSE);
+    /* create a vbox */
+    box = gtk_vbox_new(FALSE, 0);
+    gtk_container_set_border_width(GTK_CONTAINER(box), 20);
+
+    /* add static label */
+    label = gtk_label_new(NULL);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating transponder files from network</b>"));
+    gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
+
+    /* activity label */
+    label1 = gtk_label_new("...");
+    gtk_misc_set_alignment(GTK_MISC(label1), 0.5, 0.5);
+    gtk_box_pack_start(GTK_BOX(box), label1, FALSE, FALSE, 0);
+
+    /* add progress bar */
+    progress = gtk_progress_bar_new();
+    gtk_box_pack_start(GTK_BOX(box), progress, FALSE, FALSE, 10);
+
+    /* statistics */
+    //label2 = gtk_label_new(_("Transponders updated:\t 0\n"));
+    label2 = gtk_label_new(_("\n"));
+    gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
+
+    /* finalise dialog */
+    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+
+    gtk_widget_show_all(dialog);
+
+    /* Force the drawing queue to be processed otherwise the dialog
+       may not appear before we enter the FRQ updating func
+       - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
+     */
+    while (g_main_context_iteration(NULL, FALSE));
+
+    /* update FRQ */
+    frq_update_from_network(FALSE, progress, label1, label2);
+
+    /* set progress bar to 100% */
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 1.0);
+
+    gtk_label_set_text(GTK_LABEL(label1), _("Finished"));
+
+    /* enable close button */
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, TRUE);
+
+    /* reload satellites */
+    mod_mgr_reload_sats();
+
+
+
+
+}
+
 /** \brief Update TLE from network.
  *  \param widget The menu item (unused).
  *  \param data User data (unused).
@@ -610,6 +708,166 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
         label = gtk_label_new(NULL);
         gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
         gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating TLE files from files</b>"));
+        gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
+
+        /* activity label */
+        label1 = gtk_label_new("...");
+        gtk_misc_set_alignment(GTK_MISC(label1), 0.5, 0.5);
+        gtk_box_pack_start(GTK_BOX(box), label1, FALSE, FALSE, 0);
+
+        /* add progress bar */
+        progress = gtk_progress_bar_new();
+        gtk_box_pack_start(GTK_BOX(box), progress, FALSE, FALSE, 10);
+
+        /* statistics */
+        label2 = gtk_label_new(_("Satellites updated:\t 0\n"
+                                 "Satellites skipped:\t 0\n" "Missing Satellites:\t 0\n"));
+        gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
+
+        /* finalise dialog */
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+        g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+
+        gtk_widget_show_all(dialog);
+
+        /* Force the drawing queue to be processed otherwise the dialog
+           may not appear before we enter the TLE updating func
+           - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
+         */
+        while (g_main_context_iteration(NULL, FALSE));
+
+        /* update TLE */
+        tle_update_from_files(dir, NULL, FALSE, progress, label1, label2);
+
+        /* set progress bar to 100% */
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 1.0);
+
+        gtk_label_set_text(GTK_LABEL(label1), _("Finished"));
+
+        /* enable close button */
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, TRUE);
+    }
+
+    if (dir)
+        g_free(dir);
+
+    /* reload satellites */
+    mod_mgr_reload_sats();
+}
+
+
+/** \brief Update FRQ from local files.
+ *  \param widget The menu item (unused).
+ *  \param data User data (unused).
+ *
+ * This function is called when the user selects
+ *      Edit -> Update FRQ -> From local files
+ * in the menubar.
+ *
+ * First the function creates the GUI status indicator infrastructure
+ * with the possibility to select a directory, then it calls the
+ * tle_update_from_files with the corresponding parameters.
+ *
+ * Finally, the programs signals the module manager to reload the
+ * satellites in each module.
+ *
+ * FIXME: fork as a thread?
+ */
+static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
+{
+    gchar *dir;                 /* selected directory */
+    GtkWidget *dir_chooser;     /* directory chooser button */
+    GtkWidget *dialog;          /* dialog window  */
+    GtkWidget *label;           /* misc labels */
+    GtkWidget *progress;        /* progress indicator */
+    GtkWidget *label1, *label2; /* activitity and stats labels */
+    GtkWidget *box;
+    gint response;              /* dialog response */
+    gboolean doupdate = FALSE;
+
+    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)data;                 /* avoid unused parameter compiler warning */
+
+    /* get last used directory */
+    dir = sat_cfg_get_str(SAT_CFG_STR_TLE_FILE_DIR);
+
+    /* if there is no last used dir fall back to $HOME */
+    if (dir == NULL)
+    {
+        dir = g_strdup(g_get_home_dir());
+    }
+
+    /* create file chooser */
+    dir_chooser = gtk_file_chooser_button_new(_("Select directory"),
+                                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dir_chooser), dir);
+    g_free(dir);
+
+    /* create label */
+    label = gtk_label_new(_("Select transponder directory:"));
+
+    /* pack label and chooser into a hbox */
+    box = gtk_hbox_new(FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(box), dir_chooser, TRUE, TRUE, 5);
+    gtk_widget_show_all(box);
+
+    /* create the dalog */
+    dialog = gtk_dialog_new_with_buttons(_("Update transponders from files"),
+                                         GTK_WINDOW(app),
+                                         GTK_DIALOG_MODAL |
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_STOCK_CANCEL,
+                                         GTK_RESPONSE_REJECT,
+                                         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box, TRUE, TRUE,
+                       30);
+
+    response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+    switch (response)
+    {
+
+    case GTK_RESPONSE_ACCEPT:
+        /* set flag to indicate that we should do an update */
+        doupdate = TRUE;
+        break;
+
+    default:
+        doupdate = FALSE;
+        break;
+    }
+
+    /* get directory before we destroy the dialog */
+    dir = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dir_chooser));
+
+    /* nuke the dialog */
+    gtk_widget_destroy(dialog);
+
+    if (doupdate)
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running transponder update from %s"), __func__, dir);
+
+        /* store last used TLE dir */
+        sat_cfg_set_str(SAT_CFG_STR_TLE_FILE_DIR, dir);
+
+        /* create new dialog with progress indicator */
+        dialog = gtk_dialog_new_with_buttons(_("Transponder Update"),
+                                             GTK_WINDOW(app),
+                                             GTK_DIALOG_MODAL |
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
+        //gtk_window_set_default_size (GTK_WINDOW (dialog), 400,250);
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, FALSE);
+
+        /* create a vbox */
+        box = gtk_vbox_new(FALSE, 0);
+        gtk_container_set_border_width(GTK_CONTAINER(box), 20);
+
+        /* add static label */
+        label = gtk_label_new(NULL);
+        gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
+        gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating transponders files from files</b>"));
         gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
         /* activity label */

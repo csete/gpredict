@@ -773,6 +773,7 @@ static gint read_fresh_tle (const gchar *dir, const gchar *fnam, GHashTable *dat
     guint      catnr,i,idyear;
     guint     *key = NULL;
 
+
     /* category sync related */
     gchar     *catname, *catpath, *buff, **buffv;
     FILE      *catfile;
