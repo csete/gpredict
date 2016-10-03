@@ -438,6 +438,7 @@ void gtk_event_list_update          (GtkWidget *widget)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkEventList!"),
                      __func__);
+		return;
     }
 
     /* get and tranverse the model */
