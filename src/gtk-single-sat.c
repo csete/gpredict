@@ -391,6 +391,7 @@ gtk_single_sat_update          (GtkWidget *widget)
         sat_log_log (SAT_LOG_LEVEL_ERROR,
                      _("%s: Invalid GtkSingleSat!"),
                      __func__);
+		return;
     }
 
 
