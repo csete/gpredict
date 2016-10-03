@@ -517,6 +517,7 @@ void gtk_sat_list_update(GtkWidget * widget)
     if ((satlist == NULL) || !IS_GTK_SAT_LIST(satlist))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Invalid GtkSatList!"), __func__);
+		return;
     }
 
     /* check refresh rate */
