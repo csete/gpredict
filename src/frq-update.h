@@ -75,18 +75,36 @@ struct transponder {
     int             uplink_high;        /*!< uplink end frequency  */
     int             downlink_low;       /*!< downlink starting frequency */
     int             downlink_high;      /*!< downlink end frequency */
-    int             mode_id;    /*!< mode id (from modes files) */
+    char            mode[20];    /*!< mode (from modes files) */
     int             invert;     /*!< inverting / noninverting */
     double          baud;       /*!< baudrate */
     int             alive;      /*!< alive or dead */
 };
 
 
+/** \brief Data structure to hold a MODES set. */
+struct modes {
+    int             id;   /*!< id */
+    char            name[99];    /*!< Mode name */
+};
+
 /** \brief Data structure to hold local FRQ data. */
 //typedef struct {
 //    tle_t  frq;       /*!< FRQ data. */
 //    gchar *filename;  /*!< File name where the FRQ data is from */
 //} loc_frq_t;
+
+/** \brief Data structure to hold a MODE set. */
+typedef struct {
+    guint    modnum;  /*!< Mode number. */
+    gchar   *modname; /*!< Mode description. */
+} new_mode_t;
+
+/** \brief Data structure to hold a TRSP list. */
+typedef struct {
+    guint    catnum;  /*!< Catalog number. */
+    guint    numtrsp; /*!< Number of transponders. */
+} new_trsp_t;
 
 
 //void frq_update_from_files (const gchar *dir,

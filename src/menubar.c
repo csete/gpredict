@@ -96,7 +96,7 @@ static GtkActionEntry entries[] = {
     {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
     {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
     {"TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE data"), NULL, NULL, NULL},
-    {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update frequency data"), NULL, NULL, NULL},
+    {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update Transponder data"), NULL, NULL, NULL},
     {"ToolsMenu", NULL, N_("_Tools"), NULL, NULL, NULL},
     {"HelpMenu", NULL, N_("_Help"), NULL, NULL, NULL},
 
@@ -117,13 +117,13 @@ static GtkActionEntry entries[] = {
      N_("Update Keplerian elements from a network server"),
      G_CALLBACK(menubar_tle_net_cb)},
     {"FNet", GTK_STOCK_NETWORK, N_("From _network"), NULL,
-     N_("Update frequencies from a network server"),
+     N_("Update transponders from a network server"),
      G_CALLBACK(menubar_frq_net_cb)},
     {"Local", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
      N_("Update Keplerian elements from local files"),
      G_CALLBACK(menubar_tle_local_cb)},
     {"FLocal", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
-     N_("Update frequencies from local files"),
+     N_("Update transponders from local files"),
      G_CALLBACK(menubar_frq_local_cb)},
     {"Man", GTK_STOCK_DND, N_("Using TLE _editor"), NULL,
      N_("Add or update Keplerian elements using the TLE editor"),
@@ -453,7 +453,7 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     (void)data;                 /* avoid unused parameter compiler warning */
 
     /* create new dialog with progress indicator */
-    dialog = gtk_dialog_new_with_buttons(_("Frequency Update"),
+    dialog = gtk_dialog_new_with_buttons(_("Transponder Update"),
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -467,7 +467,7 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     /* add static label */
     label = gtk_label_new(NULL);
     gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-    gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating frequency files from network</b>"));
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating transponder files from network</b>"));
     gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
     /* activity label */
@@ -480,8 +480,8 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     gtk_box_pack_start(GTK_BOX(box), progress, FALSE, FALSE, 10);
 
     /* statistics */
-    label2 = gtk_label_new(_("Satellites updated:\t 0\n"
-                             "Satellites skipped:\t 0\n" "Missing Satellites:\t 0\n"));
+    //label2 = gtk_label_new(_("Transponders updated:\t 0\n"));
+    label2 = gtk_label_new(_("\n"));
     gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
 
     /* finalise dialog */
@@ -804,7 +804,7 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
     g_free(dir);
 
     /* create label */
-    label = gtk_label_new(_("Select freq directory:"));
+    label = gtk_label_new(_("Select transponder directory:"));
 
     /* pack label and chooser into a hbox */
     box = gtk_hbox_new(FALSE, 0);
@@ -813,7 +813,7 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
     gtk_widget_show_all(box);
 
     /* create the dalog */
-    dialog = gtk_dialog_new_with_buttons(_("Update frequencies from files"),
+    dialog = gtk_dialog_new_with_buttons(_("Update transponders from files"),
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -846,13 +846,13 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
 
     if (doupdate)
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running frequency update from %s"), __func__, dir);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running transponder update from %s"), __func__, dir);
 
         /* store last used TLE dir */
         sat_cfg_set_str(SAT_CFG_STR_TLE_FILE_DIR, dir);
 
         /* create new dialog with progress indicator */
-        dialog = gtk_dialog_new_with_buttons(_("Frequency Update"),
+        dialog = gtk_dialog_new_with_buttons(_("Transponder Update"),
                                              GTK_WINDOW(app),
                                              GTK_DIALOG_MODAL |
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -867,7 +867,7 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
         /* add static label */
         label = gtk_label_new(NULL);
         gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-        gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating frequency files from files</b>"));
+        gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating transponders files from files</b>"));
         gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
         /* activity label */
