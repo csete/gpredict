@@ -880,8 +880,8 @@ static gchar *load_cat_file_cat (const gchar *fname)
     GIOChannel   *catfile;
     GError       *error = NULL;
 
-    gchar        *path;
-    gchar        *buff;
+    gchar        *path = NULL;
+    gchar        *buff = NULL;
 
     /* .cat files contains clear text category name in the first line
                then one satellite catalog number per line */

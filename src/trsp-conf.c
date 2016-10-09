@@ -201,9 +201,9 @@ void free_transponders(GSList * trsplist)
     {
         trsp = (trsp_t *) g_slist_nth_data(trsplist, i);
         g_free(trsp->name);
-        g_free(trsp);
         if (trsp->mode)
             g_free(trsp->mode);
+        g_free(trsp);
     }
     g_slist_free(trsplist);
     trsplist = NULL;
