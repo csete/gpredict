@@ -50,6 +50,7 @@
 #include "gpredict-help.h"
 #include "gpredict-utils.h"
 #include "tle-update.h"
+#include "frq-update.h"
 #include "compat.h"
 #include "menubar.h"
 #include "config-keys.h"
@@ -70,7 +71,9 @@ static void menubar_app_exit_cb(GtkWidget * widget, gpointer data);
 static void menubar_freq_edit_cb(GtkWidget * widget, gpointer data);
 static void menubar_pref_cb(GtkWidget * widget, gpointer data);
 static void menubar_tle_net_cb(GtkWidget * widget, gpointer data);
+static void menubar_frq_net_cb(GtkWidget * widget, gpointer data);
 static void menubar_tle_local_cb(GtkWidget * widget, gpointer data);
+static void menubar_frq_local_cb(GtkWidget * widget, gpointer data);
 static void menubar_tle_manual_cb(GtkWidget * widget, gpointer data);
 static void menubar_window_cb(GtkWidget * widget, gpointer data);
 static void menubar_predict_cb(GtkWidget * widget, gpointer data);
@@ -174,6 +177,9 @@ static const char *menu_desc =
     "         <menu action='TleMenu'>"
     "            <menuitem action='Net'/>" "            <menuitem action='Local'/>"
 /*"            <menuitem action='Man'/>"*/
+    "         </menu>"
+    "         <menu action='FrqMenu'>"
+    "            <menuitem action='FNet'/>" "            <menuitem action='FLocal'/>"
     "         </menu>"
 /* "         <menuitem action='Freq'/>" */
     "         <separator/>" "         <menuitem action='Pref'/>" "      </menu>"
@@ -422,6 +428,7 @@ static void menubar_pref_cb(GtkWidget * widget, gpointer data)
 
     sat_pref_run();
 }
+
 
 /** \brief Update Frequency information from Network
  *  \param widget The menu item *unused)
@@ -748,6 +755,7 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
     mod_mgr_reload_sats();
 }
 
+
 /** \brief Update FRQ from local files.
  *  \param widget The menu item (unused).
  *  \param data User data (unused).
@@ -906,6 +914,7 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
     /* reload satellites */
     mod_mgr_reload_sats();
 }
+
 
 /** \brief Start Manual TLE editor. */
 static void menubar_tle_manual_cb(GtkWidget * widget, gpointer data)

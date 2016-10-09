@@ -19,6 +19,7 @@ AM_CPPFLAGS = \
 bin_PROGRAMS = gpredict
 
 gpredict_SOURCES = \
+	nxjson/nxjson.c nxjson/nxjson.h \
     sgpsdp/sgp4sdp4.c \
     sgpsdp/sgp4sdp4.h \
     sgpsdp/sgp_in.c \
@@ -29,6 +30,7 @@ gpredict_SOURCES = \
     about.c about.h \
     compat.c compat.h config-keys.h \
     first-time.c first-time.h \
+    frq-update.c frq-update.h \
     gpredict-help.c gpredict-help.h \
     gpredict-url-hook.c gpredict-url-hook.h \
     gpredict-utils.c gpredict-utils.h \
