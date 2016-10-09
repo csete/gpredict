@@ -29,7 +29,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
 #include "compat.h"
 #include "sat-log.h"
@@ -37,22 +37,19 @@
 #include "gpredict-utils.h"
 #include "first-time.h"
 
-
-
 /* private function prototypes */
-static void first_time_check_step_01 (guint *error);
-static void first_time_check_step_02 (guint *error);
-static void first_time_check_step_03 (guint *error);
-static void first_time_check_step_04 (guint *error);
-static void first_time_check_step_05 (guint *error);
-static void first_time_check_step_06 (guint *error);
-static void first_time_check_step_07 (guint *error);
-static void first_time_check_step_08 (guint *error);
-static void first_time_check_step_09 (guint *error);
+static void     first_time_check_step_01(guint * error);
+static void     first_time_check_step_02(guint * error);
+static void     first_time_check_step_03(guint * error);
+static void     first_time_check_step_04(guint * error);
+static void     first_time_check_step_05(guint * error);
+static void     first_time_check_step_06(guint * error);
+static void     first_time_check_step_07(guint * error);
+static void     first_time_check_step_08(guint * error);
+static void     first_time_check_step_09(guint * error);
 
-
-
-/** \brief Perform first time checks.
+/**
+ * Perform first time checks.
  *
  * This function is called by the main function very early during program
  * startup. It's purpose is to check the user configuration to see whether
@@ -101,70 +98,68 @@ static void first_time_check_step_09 (guint *error);
  *
  * FIXME: Should only have one parameterized function for checking directories.
  */
-guint
-first_time_check_run ()
+guint first_time_check_run()
 {
-    guint error = 0;
+    guint           error = 0;
 
-    first_time_check_step_01 (&error);
-    first_time_check_step_02 (&error);
-    first_time_check_step_03 (&error);
-    first_time_check_step_04 (&error);
-    first_time_check_step_05 (&error);
-    first_time_check_step_06 (&error);
-    first_time_check_step_07 (&error);
-    first_time_check_step_08 (&error);
-    first_time_check_step_09 (&error);
+    first_time_check_step_01(&error);
+    first_time_check_step_02(&error);
+    first_time_check_step_03(&error);
+    first_time_check_step_04(&error);
+    first_time_check_step_05(&error);
+    first_time_check_step_06(&error);
+    first_time_check_step_07(&error);
+    first_time_check_step_08(&error);
+    first_time_check_step_09(&error);
 
     return error;
 }
 
-
-
-/** \brief Execute step 1 of the first time checks.
+/**
+ * Execute step 1 of the first time checks.
  *
  * 1. Check for USER_CONF_DIR/gpredict.cfg - if not found, check if there is a
  *    gpredict.cfg in the old configuration directory and copy it to the new location.
  *
  */
-static void
-first_time_check_step_01 (guint *error)
+static void first_time_check_step_01(guint * error)
 {
-    gchar *newdir,*olddir;
-    gchar *source,*target;
-    
-    /* FIXME */
-    (void) error; /* avoid unused parameter compiler warning */
-    
-    newdir = get_user_conf_dir ();
-    target = g_strconcat (newdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-    g_free (newdir);
+    gchar          *newdir, *olddir;
+    gchar          *source, *target;
 
-    if (g_file_test (target, G_FILE_TEST_EXISTS)) {
+    /* FIXME */
+    (void)error;                /* avoid unused parameter compiler warning */
+
+    newdir = get_user_conf_dir();
+    target = g_strconcat(newdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    g_free(newdir);
+
+    if (g_file_test(target, G_FILE_TEST_EXISTS))
+    {
         /* already have config file => return */
-        g_free (target);
+        g_free(target);
 
         return;
     }
 
     /* check if we have old configuration */
-    olddir = get_old_conf_dir ();
-    source = g_strconcat (olddir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-    g_free (olddir);
+    olddir = get_old_conf_dir();
+    source = g_strconcat(olddir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    g_free(olddir);
 
-    if (g_file_test (source, G_FILE_TEST_EXISTS)) {
+    if (g_file_test(source, G_FILE_TEST_EXISTS))
+    {
         /* copy old config file to new location */
-        gpredict_file_copy (source, target);
+        gpredict_file_copy(source, target);
 
     }
 
-    g_free (source);
-    g_free (target);
+    g_free(source);
+    g_free(target);
 }
 
-
-
-/** \brief Execute step 2 of the first time checks.
+/**
+ * Execute step 2 of the first time checks.
  *
  * 2. Check for the existence of at least one .qth file in USER_CONF_DIR
  *    If no such file found, check if there are any in the pre-1.1 configuration.
@@ -172,114 +167,117 @@ first_time_check_step_01 (guint *error)
  *    directory.
  *
  */
-static void
-first_time_check_step_02 (guint *error)
+static void first_time_check_step_02(guint * error)
 {
-    GDir        *dir;
-    gchar       *dirname;
-    gchar       *filename;
-    const gchar *datafile;
-    gchar       *target;
-    gboolean     foundqth = FALSE;
+    GDir           *dir;
+    gchar          *dirname;
+    gchar          *filename;
+    const gchar    *datafile;
+    gchar          *target;
+    gboolean        foundqth = FALSE;
 
-
-    dirname = get_user_conf_dir ();
-
-    dir = g_dir_open (dirname, 0, NULL);
+    dirname = get_user_conf_dir();
+    dir = g_dir_open(dirname, 0, NULL);
 
     /* directory does not exist, something went wrong in step 1 */
-    if (!dir) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                        _("%s: Could not open %s."),
-                        __func__, dirname);
-        
+    if (!dir)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not open %s."), __func__, dirname);
+
         /* no reason to continue */
         *error |= FTC_ERROR_STEP_02;
     }
-    else {
+    else
+    {
         /* read files, if any; count number of .qth files */
-        while ((datafile = g_dir_read_name (dir))) {
+        while ((datafile = g_dir_read_name(dir)))
+        {
 
             /* note: filename is not a newly allocated gchar *,
-                so we must not free it
-            */
+               so we must not free it
+             */
 
-            if (g_str_has_suffix (datafile, ".qth")) {
+            if (g_str_has_suffix(datafile, ".qth"))
                 foundqth = TRUE;
-            }
-
         }
 
-        g_dir_close (dir);
+        g_dir_close(dir);
 
-        if (foundqth) {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                            _("%s: Found at least one .qth file."),
-                            __func__);
-        }
-        else {
+        if (foundqth)
+            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                        _("%s: Found at least one .qth file."), __func__);
+        else
+        {
             /* try to see if there are any .qth file in pre-1.1 configuration */
-            gchar *olddir = get_old_conf_dir ();
+            gchar          *olddir = get_old_conf_dir();
 
-            dir = g_dir_open (olddir, 0, NULL);
+            dir = g_dir_open(olddir, 0, NULL);
 
-            if (dir) {
+            if (dir)
+            {
                 /* read files, if any; count number of .qth files */
-                while ((datafile = g_dir_read_name (dir))) {
+                while ((datafile = g_dir_read_name(dir)))
+                {
 
                     /* note: filename is not a newly allocated gchar *,
                        so we must not free it
-                    */
-                    if (g_str_has_suffix (datafile, ".qth")) {
+                     */
+                    if (g_str_has_suffix(datafile, ".qth"))
+                    {
 
-                        gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
+                        gchar          *source =
+                            g_strconcat(olddir, G_DIR_SEPARATOR_S, datafile,
+                                        NULL);
 
                         /* copy .qth file to USER_CONF_DIR */
-                        target = g_strconcat (dirname, G_DIR_SEPARATOR_S, datafile, NULL);
-                        if (!gpredict_file_copy (source, target)) {
+                        target =
+                            g_strconcat(dirname, G_DIR_SEPARATOR_S, datafile,
+                                        NULL);
+                        if (!gpredict_file_copy(source, target))
+                        {
                             /* success */
                             foundqth = TRUE;
                         }
-                        g_free (target);
-                        g_free (source);
+                        g_free(target);
+                        g_free(source);
                     }
 
                 }
-
-                g_dir_close (dir);
-
+                g_dir_close(dir);
             }
-            else if (!foundqth) {
+            else if (!foundqth)
+            {
                 /* try to copy sample.qth */
-                filename = data_file_name ("sample.qth");
-                target = g_strconcat (dirname, G_DIR_SEPARATOR_S, "sample.qth", NULL);
+                filename = data_file_name("sample.qth");
+                target =
+                    g_strconcat(dirname, G_DIR_SEPARATOR_S, "sample.qth",
+                                NULL);
 
-                if (gpredict_file_copy (filename, target)) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                _("%s: Failed to copy sample.qth"),
-                                __func__);
+                if (gpredict_file_copy(filename, target))
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Failed to copy sample.qth"), __func__);
 
                     *error |= FTC_ERROR_STEP_02;
                 }
-                else {
-                    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                else
+                {
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG,
                                 _("%s: Copied sample.qth to %s/"),
                                 __func__, dirname);
                 }
-
-                g_free (target);
-                g_free (filename);
+                g_free(target);
+                g_free(filename);
             }
-            g_free (olddir);
+            g_free(olddir);
         }
     }
-
-    g_free (dirname);
+    g_free(dirname);
 }
 
-
-
-/** \brief Execute step 3 of the first time checks.
+/**
+ * Execute step 3 of the first time checks.
  *
  * 3. Check for the existence of USER_CONF_DIR/modules directory and create
  *    it if it does not exist. Moreover, if this is a new installation, check
@@ -288,364 +286,387 @@ first_time_check_step_02 (guint *error)
  *    USER_CONF_DIR/modules/
  *
  */
-static void
-first_time_check_step_03 (guint *error)
+static void first_time_check_step_03(guint * error)
 {
-    GDir   *dir;
-    gchar  *confdir,*olddir,*buff;
-    int     status;
-    gchar  *target;
-    gchar  *filename;
-    const gchar *datafile;
-    gboolean foundmod = FALSE;
+    GDir           *dir;
+    gchar          *confdir, *olddir, *buff;
+    int             status;
+    gchar          *target;
+    gchar          *filename;
+    const gchar    *datafile;
+    gboolean        foundmod = FALSE;
 
 
-    confdir = get_modules_dir ();
+    confdir = get_modules_dir();
 
-    if (g_file_test (confdir, G_FILE_TEST_IS_DIR)) {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                        _("%s: Check successful."),
-                        __func__);
+    if (g_file_test(confdir, G_FILE_TEST_IS_DIR))
+    {
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Check successful."), __func__);
     }
-    else {
+    else
+    {
         /* try to create directory */
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                        _("%s: Check failed. Creating %s"),
-                        __func__,
-                        confdir);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: Check failed. Creating %s"), __func__, confdir);
 
-        status = g_mkdir_with_parents (confdir, 0755);
+        status = g_mkdir_with_parents(confdir, 0755);
 
-        if (status) {
+        if (status)
+        {
             /* set error flag */
             *error |= FTC_ERROR_STEP_03;
 
-            sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                            _("%s: Failed to create %s"),
-                            __func__, confdir);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Failed to create %s"), __func__, confdir);
         }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                            _("%s: Created %s."),
-                            __func__, confdir);
-
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                        _("%s: Created %s."), __func__, confdir);
 
             /* try to see if there are any .mod file in pre-1.1 configuration */
-            buff = get_old_conf_dir ();
-            olddir = g_strconcat (buff, G_DIR_SEPARATOR_S, "modules", NULL);
+            buff = get_old_conf_dir();
+            olddir = g_strconcat(buff, G_DIR_SEPARATOR_S, "modules", NULL);
+            dir = g_dir_open(olddir, 0, NULL);
 
-            dir = g_dir_open (olddir, 0, NULL);
+            g_free(buff);
 
-            g_free (buff);
-
-            if (dir) {
+            if (dir)
+            {
                 /* read files, if any; count number of .qth files */
-                while ((datafile = g_dir_read_name (dir))) {
+                while ((datafile = g_dir_read_name(dir)))
+                {
 
                     /* note: filename is not a newly allocated gchar *,
                        so we must not free it
-                    */
-                    if (g_str_has_suffix (datafile, ".mod")) {
-                        gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
+                     */
+                    if (g_str_has_suffix(datafile, ".mod"))
+                    {
+                        gchar          *source =
+                            g_strconcat(olddir, G_DIR_SEPARATOR_S, datafile,
+                                        NULL);
 
                         /* copy .qth file to USER_CONF_DIR */
-                        target = g_strconcat (confdir, G_DIR_SEPARATOR_S, datafile, NULL);
-                        if (!gpredict_file_copy (source, target)) {
+                        target =
+                            g_strconcat(confdir, G_DIR_SEPARATOR_S, datafile,
+                                        NULL);
+                        if (!gpredict_file_copy(source, target))
+                        {
                             /* success */
                             foundmod = TRUE;
                         }
-                        g_free (target);
-                        g_free (source);
+                        g_free(target);
+                        g_free(source);
                     }
 
                 }
-
-                g_dir_close (dir);
-
+                g_dir_close(dir);
             }
-            else if (!foundmod) {
+            else if (!foundmod)
+            {
                 /* copy Amateur.mod to this directory */
-                filename = data_file_name ("Amateur.mod");
-                target = g_strconcat (confdir, G_DIR_SEPARATOR_S, "Amateur.mod", NULL);
+                filename = data_file_name("Amateur.mod");
+                target =
+                    g_strconcat(confdir, G_DIR_SEPARATOR_S, "Amateur.mod",
+                                NULL);
 
-                if (gpredict_file_copy (filename, target)) {
-                    sat_log_log (SAT_LOG_LEVEL_ERROR,
-                                _("%s: Failed to copy Amateur.mod"),
-                                __func__);
+                if (gpredict_file_copy(filename, target))
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Failed to copy Amateur.mod"), __func__);
 
                     *error |= FTC_ERROR_STEP_02;
                 }
-                else {
-                    sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                else
+                {
+                    sat_log_log(SAT_LOG_LEVEL_DEBUG,
                                 _("%s: Copied amateur.mod to %s/"),
                                 __func__, dir);
                 }
-
-                g_free (target);
-                g_free (filename);
+                g_free(target);
+                g_free(filename);
             }
-            g_free (olddir);
+            g_free(olddir);
         }
     }
-
-    g_free (confdir);
+    g_free(confdir);
 }
 
-
-
-/** \brief Execute step 4 of the first time checks.
+/**
+ * Execute step 4 of the first time checks.
  *
  * 4. Check for the existence of USER_CONF_DIR/satdata directory and create it if
  *    it does not exist.
  *
  */
-static void
-first_time_check_step_04 (guint *error)
+static void first_time_check_step_04(guint * error)
 {
-    gchar *dir;
-    int    status;
+    gchar          *dir;
+    int             status;
 
-    dir = get_satdata_dir ();
+    dir = get_satdata_dir();
 
-    if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check successful."), __func__);
+    if (g_file_test(dir, G_FILE_TEST_IS_DIR))
+    {
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Check successful."), __func__);
     }
-    else {
+    else
+    {
         /* try to create directory */
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check failed. Creating %s"),
-                        __func__, dir);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: Check failed. Creating %s"), __func__, dir);
 
-        status = g_mkdir_with_parents (dir, 0755);
+        status = g_mkdir_with_parents(dir, 0755);
 
-        if (status) {
+        if (status)
+        {
             /* set error flag */
             *error |= FTC_ERROR_STEP_04;
 
-            sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
-                            __func__, dir);
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
+                        __func__, dir);
         }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                            _("%s: Created %s."),
-                            __func__, dir);
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                        _("%s: Created %s."), __func__, dir);
         }
     }
-
-    g_free (dir);
+    g_free(dir);
 }
 
-
-
-/** \brief Execute step 5 of the first time checks.
+/**
+ * Execute step 5 of the first time checks.
  *
  * 5. Check if there are any .sat files in USER_CONF_DIR/satdata/ - if not extract
  *    PACKAGE_DATA_DIR/data/satdata/satellites.dat to .sat files.
  *    Do the same with .cat files.
  *
- * \bug Thus function could probably need some clean-up
+ * @bug Thus function could probably need some clean-up
  *
  */
-static void
-first_time_check_step_05 (guint *error)
+static void first_time_check_step_05(guint * error)
 {
-    gchar     *satfilename,*targetfilename;
-    gchar     *datadir;
-    gchar    **satellites;
-    GKeyFile  *satfile,*target;
-    gsize      num;
-    GError    *err = NULL;
-    guint      i;
-    guint      newsats = 0;
-
-    //gdouble    cfgver;
-    gchar     *name, *nickname, *website, *tle1, *tle2, *cfgver;
-
-    GDir *srcdir;
-    gchar *srcdirname;
-    const gchar *filename;
-
+    gchar          *satfilename, *targetfilename;
+    gchar          *datadir;
+    gchar         **satellites;
+    GKeyFile       *satfile, *target;
+    gsize           num;
+    GError         *err = NULL;
+    guint           i;
+    guint           newsats = 0;
+    gchar          *name, *nickname, *website, *tle1, *tle2, *cfgver;
+    GDir           *srcdir;
+    gchar          *srcdirname;
+    const gchar    *filename;
 
     /* open datellites.dat and load into memory */
-    datadir = get_data_dir ();
-    satfilename = g_strconcat (datadir, G_DIR_SEPARATOR_S, "satdata",
-                               G_DIR_SEPARATOR_S, "satellites.dat", NULL);
+    datadir = get_data_dir();
+    satfilename = g_strconcat(datadir, G_DIR_SEPARATOR_S, "satdata",
+                              G_DIR_SEPARATOR_S, "satellites.dat", NULL);
 
-    satfile = g_key_file_new ();
-    if (!g_key_file_load_from_file (satfile, satfilename, G_KEY_FILE_KEEP_COMMENTS, &err)) {
+    satfile = g_key_file_new();
+    if (!g_key_file_load_from_file
+        (satfile, satfilename, G_KEY_FILE_KEEP_COMMENTS, &err))
+    {
         /* an error occurred */
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Failed to load data from %s (%s)"),
-                     __func__, satfilename, err->message);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Failed to load data from %s (%s)"),
+                    __func__, satfilename, err->message);
 
-        g_clear_error (&err);
+        g_clear_error(&err);
         *error |= FTC_ERROR_STEP_05;
     }
-    else {
-        satellites = g_key_file_get_groups (satfile, &num);
-        sat_log_log (SAT_LOG_LEVEL_INFO,
-                     _("%s: Found %d satellites in %s"),
-                     __func__, num, satfilename);
+    else
+    {
+        satellites = g_key_file_get_groups(satfile, &num);
+        sat_log_log(SAT_LOG_LEVEL_INFO,
+                    _("%s: Found %d satellites in %s"),
+                    __func__, num, satfilename);
 
-        for (i = 0; i < num; i++) {
+        for (i = 0; i < num; i++)
+        {
             /* first, check if this satellite already has a .sat file */
-            targetfilename = sat_file_name_from_catnum_s (satellites[i]);
-            if (g_file_test (targetfilename, G_FILE_TEST_EXISTS)) {
-                sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                             _("%s: %s.sat already exists. Skipped."),
-                             __func__, satellites[i]);
+            targetfilename = sat_file_name_from_catnum_s(satellites[i]);
+            if (g_file_test(targetfilename, G_FILE_TEST_EXISTS))
+            {
+                sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                            _("%s: %s.sat already exists. Skipped."),
+                            __func__, satellites[i]);
             }
-            else {
+            else
+            {
                 /* read data for this satellite */
-                cfgver = g_key_file_get_string (satfile, satellites[i], "VERSION", NULL);
-                name = g_key_file_get_string (satfile, satellites[i], "NAME", NULL);
-                nickname = g_key_file_get_string (satfile, satellites[i], "NICKNAME", NULL);
-                website = g_key_file_get_string (satfile, satellites[i], "WEBSITE", NULL);
-                tle1 = g_key_file_get_string (satfile, satellites[i], "TLE1", NULL);
-                tle2 = g_key_file_get_string (satfile, satellites[i], "TLE2", NULL);
+                cfgver =
+                    g_key_file_get_string(satfile, satellites[i], "VERSION",
+                                          NULL);
+                name =
+                    g_key_file_get_string(satfile, satellites[i], "NAME",
+                                          NULL);
+                nickname =
+                    g_key_file_get_string(satfile, satellites[i], "NICKNAME",
+                                          NULL);
+                website =
+                    g_key_file_get_string(satfile, satellites[i], "WEBSITE",
+                                          NULL);
+                tle1 =
+                    g_key_file_get_string(satfile, satellites[i], "TLE1",
+                                          NULL);
+                tle2 =
+                    g_key_file_get_string(satfile, satellites[i], "TLE2",
+                                          NULL);
 
                 /* create output .sat file */
-                target = g_key_file_new ();
-                g_key_file_set_string (target, "Satellite", "VERSION", cfgver);
-                g_key_file_set_string (target, "Satellite", "NAME", name);
-                g_key_file_set_string (target, "Satellite", "NICKNAME", nickname);
-                if (website != NULL) {
-                    g_key_file_set_string (target, "Satellite", "WEBSITE", website);
-                    g_free (website);
+                target = g_key_file_new();
+                g_key_file_set_string(target, "Satellite", "VERSION", cfgver);
+                g_key_file_set_string(target, "Satellite", "NAME", name);
+                g_key_file_set_string(target, "Satellite", "NICKNAME",
+                                      nickname);
+                if (website != NULL)
+                {
+                    g_key_file_set_string(target, "Satellite", "WEBSITE",
+                                          website);
+                    g_free(website);
                 }
-                g_key_file_set_string (target, "Satellite", "TLE1", tle1);
-                g_key_file_set_string (target, "Satellite", "TLE2", tle2);
+                g_key_file_set_string(target, "Satellite", "TLE1", tle1);
+                g_key_file_set_string(target, "Satellite", "TLE2", tle2);
 
-                if (gpredict_save_key_file ( target, targetfilename)) {
+                if (gpredict_save_key_file(target, targetfilename))
+                {
                     *error |= FTC_ERROR_STEP_05;
-                } else {
+                }
+                else
+                {
                     newsats++;
                 }
-                
-                g_key_file_free (target);
 
-                g_free (cfgver);
-                g_free (name);
-                g_free (nickname);
-                g_free (tle1);
-                g_free (tle2);
+                g_key_file_free(target);
+
+                g_free(cfgver);
+                g_free(name);
+                g_free(nickname);
+                g_free(tle1);
+                g_free(tle2);
             }
-            g_free (targetfilename);
+            g_free(targetfilename);
         }
-        g_strfreev (satellites);
-        sat_log_log (SAT_LOG_LEVEL_INFO,
-                     _("%s: Written %d new satellite to user config"),
-                     __func__, newsats);
+        g_strfreev(satellites);
+        sat_log_log(SAT_LOG_LEVEL_INFO,
+                    _("%s: Written %d new satellite to user config"),
+                    __func__, newsats);
     }
 
-    g_key_file_free (satfile);
-    g_free (satfilename);
-
+    g_key_file_free(satfile);
+    g_free(satfilename);
 
     /* .cat files: if .cat file does not exist, copy it, otherwise skip */
-    srcdirname = g_strconcat (datadir, G_DIR_SEPARATOR_S, "satdata", NULL);
-    g_free (datadir);
+    srcdirname = g_strconcat(datadir, G_DIR_SEPARATOR_S, "satdata", NULL);
+    g_free(datadir);
     //targetdirname = get_satdata_dir ();
-    srcdir = g_dir_open (srcdirname, 0, &err);
+    srcdir = g_dir_open(srcdirname, 0, &err);
 
     /* directory does not exist, something went wrong in step 4 */
-    if (!srcdir) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Could not open %s (%s)."),
-                     __func__, srcdirname, err->message);
+    if (!srcdir)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not open %s (%s)."),
+                    __func__, srcdirname, err->message);
 
         /* no reason to continue */
-        g_clear_error (&err);
+        g_clear_error(&err);
         *error |= FTC_ERROR_STEP_05;
     }
-    else {
-
+    else
+    {
         /* get each .cat file and check if they already exist in user conf */
         /* read files one by one, if any; count number of .tle files */
-        while ((filename = g_dir_read_name (srcdir))) {
+        while ((filename = g_dir_read_name(srcdir)))
+        {
             /* note: filename is not a newly allocated gchar *,
-                so we must not free it
-            */
-            if (g_str_has_suffix (filename, ".cat")) {
+               so we must not free it
+             */
+            if (g_str_has_suffix(filename, ".cat"))
+            {
 
                 /* check whether .cat file exisits in user conf */
-                gchar *catfilename = sat_file_name (filename);
+                gchar          *catfilename = sat_file_name(filename);
 
-                if (!g_file_test (catfilename, G_FILE_TEST_EXISTS)) {
+                if (!g_file_test(catfilename, G_FILE_TEST_EXISTS))
+                {
                     /* copy file to target dir */
-                    gchar *source = g_strconcat (srcdirname, G_DIR_SEPARATOR_S, filename, NULL);
-                    if (gpredict_file_copy (source, catfilename)) {
-                        sat_log_log (SAT_LOG_LEVEL_ERROR,
+                    gchar          *source =
+                        g_strconcat(srcdirname, G_DIR_SEPARATOR_S, filename,
+                                    NULL);
+                    if (gpredict_file_copy(source, catfilename))
+                    {
+                        sat_log_log(SAT_LOG_LEVEL_ERROR,
                                     _("%s: Failed to copy %s"),
                                     __func__, filename);
                     }
-                    else {
-                        sat_log_log (SAT_LOG_LEVEL_DEBUG,
+                    else
+                    {
+                        sat_log_log(SAT_LOG_LEVEL_DEBUG,
                                     _("%s: Successfully copied %s"),
                                     __func__, filename);
                     }
-                    g_free (source);
+                    g_free(source);
                 }
-                    g_free (catfilename);
+                g_free(catfilename);
             }
         }
-        g_dir_close (srcdir);
+        g_dir_close(srcdir);
     }
-
-    g_free (srcdirname);
+    g_free(srcdirname);
 }
 
-
-/** \brief Execute step 6 of the first time checks.
+/**
+ * Execute step 6 of the first time checks.
  *
  * 6. Check for the existence of USER_CONF_DIR/satdata/cache directory. This
  *    directory is used to store temporary TLE files when updating from
  *    network.
  *
  */
-static void
-first_time_check_step_06 (guint *error)
+static void first_time_check_step_06(guint * error)
 {
-    gchar *buff,*dir;
-    int    status;
+    gchar          *buff, *dir;
+    int             status;
 
+    buff = get_satdata_dir();
+    dir = g_strconcat(buff, G_DIR_SEPARATOR_S, "cache", NULL);
+    g_free(buff);
 
-    buff = get_satdata_dir ();
-    dir = g_strconcat (buff, G_DIR_SEPARATOR_S, "cache", NULL);
-    g_free (buff);
-
-    if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check successful."), __func__);
+    if (g_file_test(dir, G_FILE_TEST_IS_DIR))
+    {
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Check successful."), __func__);
     }
-    else {
+    else
+    {
         /* try to create directory */
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                        _("%s: Check failed. Creating %s"),
-                        __func__, dir);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: Check failed. Creating %s"), __func__, dir);
 
-        status = g_mkdir_with_parents (dir, 0755);
+        status = g_mkdir_with_parents(dir, 0755);
 
-        if (status) {
+        if (status)
+        {
             /* set error flag */
             *error |= FTC_ERROR_STEP_06;
 
-            sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
-                            __func__, dir);
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
+                        __func__, dir);
         }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                            _("%s: Created %s."),
-                            __func__, dir);
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                        _("%s: Created %s."), __func__, dir);
         }
     }
-
-    g_free (dir);
+    g_free(dir);
 }
 
-
-/** \brief Execute step 7 of the first time checks.
+/**
+ * Execute step 7 of the first time checks.
  *
  * 7. Check for the existence of USER_CONF_DIR/hwconf directory. This
  *    directory contains radio and rotator configurations (.rig and .rot files).
@@ -653,204 +674,214 @@ first_time_check_step_06 (guint *error)
  *    in the pre-1.1 configuration directory (use get_old_conf_dir()).
  *
  */
-static void first_time_check_step_07 (guint *error)
+static void first_time_check_step_07(guint * error)
 {
-    GDir   *dir;
-    gchar  *confdir,*olddir,*buff;
-    int     status;
-    gchar  *target;
+    GDir           *dir;
+    gchar          *confdir, *olddir, *buff;
+    int             status;
+    gchar          *target;
+    const gchar    *datafile;
 
-    const gchar *datafile;
+    confdir = get_hwconf_dir();
 
-
-
-    confdir = get_hwconf_dir ();
-
-    if (g_file_test (confdir, G_FILE_TEST_IS_DIR)) {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                        _("%s: Check successful."),
-                        __func__);
+    if (g_file_test(confdir, G_FILE_TEST_IS_DIR))
+    {
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Check successful."), __func__);
     }
-    else {
+    else
+    {
         /* try to create directory */
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                        _("%s: Check failed. Creating %s"),
-                        __func__,
-                        confdir);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: Check failed. Creating %s"), __func__, confdir);
 
-        status = g_mkdir_with_parents (confdir, 0755);
+        status = g_mkdir_with_parents(confdir, 0755);
 
-        if (status) {
+        if (status)
+        {
             /* set error flag */
             *error |= FTC_ERROR_STEP_03;
-
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                            _("%s: Failed to create %s"),
-                            __func__, confdir);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Failed to create %s"), __func__, confdir);
         }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                            _("%s: Created %s."),
-                            __func__, confdir);
-
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                        _("%s: Created %s."), __func__, confdir);
 
             /* try to see if there are any .rig or .rot file in pre-1.1 configuration */
-            buff = get_old_conf_dir ();
-            olddir = g_strconcat (buff, G_DIR_SEPARATOR_S, "hwconf", NULL);
+            buff = get_old_conf_dir();
+            olddir = g_strconcat(buff, G_DIR_SEPARATOR_S, "hwconf", NULL);
 
-            dir = g_dir_open (olddir, 0, NULL);
+            dir = g_dir_open(olddir, 0, NULL);
 
-            g_free (buff);
+            g_free(buff);
 
-            if (dir) {
+            if (dir)
+            {
                 /* read files, if any; count number of .qth files */
-                while ((datafile = g_dir_read_name (dir))) {
-
-                    gchar *source = g_strconcat (olddir, G_DIR_SEPARATOR_S, datafile, NULL);
+                while ((datafile = g_dir_read_name(dir)))
+                {
+                    gchar          *source =
+                        g_strconcat(olddir, G_DIR_SEPARATOR_S, datafile, NULL);
 
                     /* note: filename is not a newly allocated gchar *,
                        so we must not free it
-                    */
+                     */
 
                     /* copy file to USER_CONF_DIR */
-                    target = g_strconcat (confdir, G_DIR_SEPARATOR_S, datafile, NULL);
-                    gpredict_file_copy (source, target);
-
-                    g_free (target);
-                    g_free (source);
+                    target = g_strconcat(confdir, G_DIR_SEPARATOR_S,
+                                    datafile, NULL);
+                    gpredict_file_copy(source, target);
+                    g_free(target);
+                    g_free(source);
                 }
-                g_dir_close (dir);
+                g_dir_close(dir);
             }
-            g_free (olddir);
+            g_free(olddir);
         }
     }
-
-    g_free (confdir);
+    g_free(confdir);
 
 }
 
-/** \brief Execute step 8 of the first time checks.
+/**
+ * Execute step 8 of the first time checks.
  *
  * 8. Check for the existence of USER_CONF_DIR/trsp directory. This
  *    directory contains transponder data for satellites.
  *
  */
-static void first_time_check_step_08 (guint *error)
+static void first_time_check_step_08(guint * error)
 {
-    gchar *dir;
-    int    status;
+    gchar          *dir;
+    int             status;
 
-    dir = get_trsp_dir ();
+    dir = get_trsp_dir();
 
-    if (g_file_test (dir, G_FILE_TEST_IS_DIR)) {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                     _("%s: Check successful."), __func__);
+    if (g_file_test(dir, G_FILE_TEST_IS_DIR))
+    {
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Check successful."), __func__);
     }
-    else {
+    else
+    {
         /* try to create directory */
-        sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                     _("%s: Check failed. Creating %s"),
-                       __func__, dir);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: Check failed. Creating %s"), __func__, dir);
 
-        status = g_mkdir_with_parents (dir, 0755);
+        status = g_mkdir_with_parents(dir, 0755);
 
-        if (status) {
+        if (status)
+        {
             /* set error flag */
             *error |= FTC_ERROR_STEP_08;
-
-            sat_log_log (SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
-                         __func__, dir);
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Failed to create %s"),
+                        __func__, dir);
         }
-        else {
-            sat_log_log (SAT_LOG_LEVEL_DEBUG, 
-                         _("%s: Created %s."),
-                           __func__, dir);
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                        _("%s: Created %s."), __func__, dir);
         }
     }
 
-    g_free (dir);
+    g_free(dir);
 }
 
-/** \brief Execute step 9 of the first time checks.
+/**
+ * Execute step 9 of the first time checks.
  *
  * 9. Check the .trsp files in USER_CONF_DIR/trsp/ and compare to the ones
  *    available in PACKAGE_DATA_DIR/data/trsp/xxx.trsp, and update if necessary.
  *
  */
-static void first_time_check_step_09 (guint *error)
+static void first_time_check_step_09(guint * error)
 {
-    GDir     *targetdir,*dir;
-    gchar    *targetdirname;
-    gchar    *datadirname;
-    const gchar *filename;
-    gchar    *srcfile,*destfile;
-    gchar    *buff;
-
+    GDir           *targetdir, *dir;
+    gchar          *targetdirname;
+    gchar          *datadirname;
+    const gchar    *filename;
+    gchar          *srcfile, *destfile;
+    gchar          *buff;
 
     /* open data directory */
-    targetdirname = get_trsp_dir ();
+    targetdirname = get_trsp_dir();
 
-    targetdir = g_dir_open (targetdirname, 0, NULL);
+    targetdir = g_dir_open(targetdirname, 0, NULL);
 
     /* directory does not exist, something went wrong in step 8 */
-    if (!targetdir) {
-        sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                        _("%s: Could not open %s."),
-                        __func__, targetdirname);
-        
+    if (!targetdir)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not open %s."), __func__, targetdirname);
+
         /* no reason to continue */
         *error |= FTC_ERROR_STEP_09;
     }
-    else {
+    else
+    {
         /* no need to keep this dir open */
-        g_dir_close (targetdir);
-        
+        g_dir_close(targetdir);
+
         /* open data dir */
-        buff = get_data_dir ();
-        datadirname = g_strconcat (buff, G_DIR_SEPARATOR_S, "trsp", NULL);
-        g_free (buff);
-        dir = g_dir_open (datadirname, 0, NULL);
-        
-        if (dir) {
+        buff = get_data_dir();
+        datadirname = g_strconcat(buff, G_DIR_SEPARATOR_S, "trsp", NULL);
+        g_free(buff);
+        dir = g_dir_open(datadirname, 0, NULL);
+
+        if (dir)
+        {
             /* for each .trsp file found in data dir */
-            while ((filename = g_dir_read_name (dir))) {
-                if (g_str_has_suffix (filename, ".trsp")) {
+            while ((filename = g_dir_read_name(dir)))
+            {
+                if (g_str_has_suffix(filename, ".trsp"))
+                {
                     /* check if .trsp file already in user dir */
-                    destfile = g_strconcat (targetdirname, G_DIR_SEPARATOR_S, filename, NULL);
-                    
+                    destfile =
+                        g_strconcat(targetdirname, G_DIR_SEPARATOR_S, filename,
+                                    NULL);
+
                     /* check if .trsp file already in user dir */
-                    if (!g_file_test (destfile, G_FILE_TEST_EXISTS)) {
-                        sat_log_log (SAT_LOG_LEVEL_INFO,
-                                     _("%s: %s does not appear to be in user conf dir; adding."),
-                                     __func__, filename);
+                    if (!g_file_test(destfile, G_FILE_TEST_EXISTS))
+                    {
+                        sat_log_log(SAT_LOG_LEVEL_INFO,
+                                    _
+                                    ("%s: %s does not appear to be in user conf dir; adding."),
+                                    __func__, filename);
 
                         /* copy new .trsp file to user dir */
-                        srcfile = g_strconcat (datadirname, G_DIR_SEPARATOR_S, filename,NULL);
-                        if (gpredict_file_copy (srcfile, destfile)) {
-                            sat_log_log (SAT_LOG_LEVEL_ERROR, 
-                                         _("%s: Failed to copy %s"),
-                                         __func__, filename);
+                        srcfile =
+                            g_strconcat(datadirname, G_DIR_SEPARATOR_S,
+                                        filename, NULL);
+                        if (gpredict_file_copy(srcfile, destfile))
+                        {
+                            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                        _("%s: Failed to copy %s"),
+                                        __func__, filename);
 
                             *error |= FTC_ERROR_STEP_09;
                         }
-                        g_free (srcfile);
+                        g_free(srcfile);
                     }
-                    else {
-                        sat_log_log (SAT_LOG_LEVEL_INFO,
-                                     _("%s: %s already in user conf dir."),
-                                     __func__, filename);
+                    else
+                    {
+                        sat_log_log(SAT_LOG_LEVEL_INFO,
+                                    _("%s: %s already in user conf dir."),
+                                    __func__, filename);
                     }
-                    
-                    g_free (destfile);
+
+                    g_free(destfile);
                 }
             }
-            g_dir_close (dir);
-        } else {
-               sat_log_log (SAT_LOG_LEVEL_ERROR,
-                               _("%s: %s directory does not exist. Incomplete installation."),
-                               __func__, datadirname);
-          }
-        g_free (datadirname);
+            g_dir_close(dir);
+        }
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _
+                        ("%s: %s directory does not exist. Incomplete installation."),
+                        __func__, datadirname);
+        }
+        g_free(datadirname);
     }
-    g_free (targetdirname);
+    g_free(targetdirname);
 }
