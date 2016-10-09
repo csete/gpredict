@@ -25,17 +25,6 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \defgroup menu The menubar
- *  \ingroup gui
- *
- */
-/** \defgroup menuif Interface
- *  \ingroup menu
- *
- */
-/** \defgroup menupriv Private
- *  \ingroup menu
- */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "sat-pref.h"
@@ -59,9 +48,7 @@
 #include <build-config.h>
 #endif
 
-
 extern GtkWidget *app;
-
 
 /* private function prototypes */
 static void menubar_new_mod_cb(GtkWidget * widget, gpointer data);
@@ -89,9 +76,7 @@ static void select_module_row_activated_cb(GtkTreeView * tree_view,
 static void create_module_window(GtkWidget * module);
 static gint compare_func(GtkTreeModel * model, GtkTreeIter * a, GtkTreeIter * b, gpointer userdata);
 
-/** \brief Regular menu items.
- *  \ingroup menupriv
- */
+/** Regular menu items. */
 static GtkActionEntry entries[] = {
     {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
     {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
@@ -159,9 +144,7 @@ static GtkActionEntry entries[] = {
 };
 
 
-/** \brief Menubar UI description.
- *  \ingroup menupriv
- */
+/** Menubar UI description. */
 static const char *menu_desc =
     "<ui>"
     "   <menubar name='GpredictMenu'>"
@@ -176,21 +159,12 @@ static const char *menu_desc =
     "      <menu action='EditMenu'>"
     "         <menu action='TleMenu'>"
     "            <menuitem action='Net'/>" "            <menuitem action='Local'/>"
-/*"            <menuitem action='Man'/>"*/
     "         </menu>"
     "         <menu action='FrqMenu'>"
     "            <menuitem action='FNet'/>" "            <menuitem action='FLocal'/>"
     "         </menu>"
-/* "         <menuitem action='Freq'/>" */
     "         <separator/>" "         <menuitem action='Pref'/>" "      </menu>"
-/*"      <menu action='ToolsMenu'>"
-"         <menuitem action='SatLab'/>"
-"         <separator/>"
-"         <menuitem action='Window'/>"
-"         <menuitem action='Predict'/>"
-"      </menu>"*/
     "      <menu action='HelpMenu'>"
-/* "         <menuitem action='GettingStarted'/>" */
     "         <menuitem action='Help'/>"
     "         <separator/>"
     "         <menuitem action='License'/>"
@@ -198,10 +172,10 @@ static const char *menu_desc =
     "         <separator/>"
     "         <menuitem action='About'/>" "      </menu>" "   </menubar>" "</ui>";
 
-
-/** \brief Create menubar.
- *  \param window The main application window.
- *  \return The menubar widget.
+/**
+ * Create menubar.
+ * @param window The main application window.
+ * @return The menubar widget.
  *
  * This function creates and initializes the main menubar for gpredict.
  * It should be called from the main gui_create function.
@@ -213,12 +187,7 @@ GtkWidget *menubar_create(GtkWidget * window)
     GtkUIManager *uimgr;
     GtkAccelGroup *accgrp;
     GError *error = NULL;
-
-    //GtkWidget      *menuitem;
-    //GtkWidget      *image;
-    //gchar          *icon;
     guint i;
-
 
     /* create action group */
     actgrp = gtk_action_group_new("MenuActions");
@@ -263,8 +232,8 @@ GtkWidget *menubar_create(GtkWidget * window)
     return menubar;
 }
 
-
-/** \brief Create new module.
+/**
+ * Create new module.
  *
  * This function first executes the mod-cfg editor. If the editor returns
  * the name of an existing .mod file it will create the corresponding module
@@ -277,8 +246,8 @@ static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
     gchar *confdir;
     GtkWidget *module = NULL;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Starting new module configurator..."), __func__);
 
@@ -333,8 +302,8 @@ static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
     gchar *confdir;
     GtkWidget *module = NULL;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open existing module..."), __func__);
 
@@ -395,51 +364,46 @@ static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
     }
 }
 
-
 static void menubar_message_log(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     sat_log_browser_open();
 }
 
-
 static void menubar_app_exit_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     gtk_widget_destroy(app);
 }
 
-
 static void menubar_freq_edit_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 }
-
 
 static void menubar_pref_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     sat_pref_run();
 }
 
-
-/** \brief Update Frequency information from Network
- *  \param widget The menu item *unused)
- *  \param data user data (unused)
+/**
+ * Update Frequency information from Network
+ * @param widget The menu item *unused)
+ * @param data user data (unused)
  *
  * This function is all when the user selects
  * Edit -> Update frequency from network
  * in the menubar.
  * the function calls the frq_update_from_network with silent flag FALSE
  */
-
 static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
 {
 
@@ -449,8 +413,8 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     GtkWidget *label1, *label2; /* activitity and stats labels */
     GtkWidget *box;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     /* create new dialog with progress indicator */
     dialog = gtk_dialog_new_with_buttons(_("Transponder Update"),
@@ -509,15 +473,12 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
 
     /* reload satellites */
     mod_mgr_reload_sats();
-
-
-
-
 }
 
-/** \brief Update TLE from network.
- *  \param widget The menu item (unused).
- *  \param data User data (unused).
+/**
+ * Update TLE from network.
+ * @param widget The menu item (unused).
+ * @param data User data (unused).
  *
  * This function is called when the user selects
  *      Edit -> Update TLE -> Update from network
@@ -532,8 +493,8 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
     GtkWidget *label1, *label2; /* activitity and stats labels */
     GtkWidget *box;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     /* create new dialog with progress indicator */
     dialog = gtk_dialog_new_with_buttons(_("TLE Update"),
@@ -595,10 +556,10 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
     mod_mgr_reload_sats();
 }
 
-
-/** \brief Update TLE from local files.
- *  \param widget The menu item (unused).
- *  \param data User data (unused).
+/**
+ * Update TLE from local files.
+ * @param widget The menu item (unused).
+ * @param data User data (unused).
  *
  * This function is called when the user selects
  *      Edit -> Update TLE -> From local files
@@ -625,8 +586,8 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
     gint response;              /* dialog response */
     gboolean doupdate = FALSE;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     /* get last used directory */
     dir = sat_cfg_get_str(SAT_CFG_STR_TLE_FILE_DIR);
@@ -755,10 +716,10 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
     mod_mgr_reload_sats();
 }
 
-
-/** \brief Update FRQ from local files.
- *  \param widget The menu item (unused).
- *  \param data User data (unused).
+/**
+ * Update FRQ from local files.
+ * @param widget The menu item (unused).
+ * @param data User data (unused).
  *
  * This function is called when the user selects
  *      Edit -> Update FRQ -> From local files
@@ -785,8 +746,8 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
     gint response;              /* dialog response */
     gboolean doupdate = FALSE;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     /* get last used directory */
     dir = sat_cfg_get_str(SAT_CFG_STR_TLE_FILE_DIR);
@@ -915,22 +876,20 @@ static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
     mod_mgr_reload_sats();
 }
 
-
-/** \brief Start Manual TLE editor. */
+/** Start Manual TLE editor. */
 static void menubar_tle_manual_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
     //satellite_editor_run ();
 }
-
 
 static void menubar_window_cb(GtkWidget * widget, gpointer data)
 {
     GtkWidget *dialog;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(app),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -942,14 +901,13 @@ static void menubar_window_cb(GtkWidget * widget, gpointer data)
 
     gtk_widget_show_all(dialog);
 }
-
 
 static void menubar_predict_cb(GtkWidget * widget, gpointer data)
 {
     GtkWidget *dialog;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(app),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -962,11 +920,10 @@ static void menubar_predict_cb(GtkWidget * widget, gpointer data)
     gtk_widget_show_all(dialog);
 }
 
-
 static void menubar_getting_started_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     gpredict_help_launch(GPREDICT_HELP_GETTING_STARTED);
 }
@@ -976,8 +933,8 @@ static void menubar_help_cb(GtkWidget * widget, gpointer data)
     GtkWidget *dialog;
     GtkWidget *button;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(app),
                                     GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -998,35 +955,32 @@ static void menubar_help_cb(GtkWidget * widget, gpointer data)
 
 }
 
-
 static void menubar_license_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     gpredict_help_show_txt("COPYING");
 }
 
-
 static void menubar_news_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     gpredict_help_show_txt("NEWS");
 }
 
-
 static void menubar_about_cb(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     about_dialog_create();
 }
 
-
-/** \brief Select an existing module.
+/**
+ * Select an existing module.
  *
  * This function creates a dialog with a list of existing modules
  * from /homedir/.config/Gpredict/modules/ and lets the user select one
@@ -1069,10 +1023,8 @@ static gchar *select_module()
 
         while ((filename = g_dir_read_name(dir)))
         {
-
             if (g_str_has_suffix(filename, ".mod"))
             {
-
                 /* strip extension and add to list */
                 buffv = g_strsplit(filename, ".mod", 0);
 
@@ -1186,16 +1138,15 @@ static gchar *select_module()
 
     gtk_widget_destroy(dialog);
 
-
     return dirname;
 }
 
-
-/** \brief Manage row activated (double click) event in the module selector window.
- *  \param tree_view
- *  \param path
- *  \param column
- *  \param data Pointer to the parent dialog.
+/**
+ * Manage row activated (double click) event in the module selector window.
+ * @param tree_view
+ * @param path
+ * @param column
+ * @param data Pointer to the parent dialog.
  * 
  * This event handler is triggered when the user double clicks on a row in the
  * "Open module" dialog window. This function will simply emit GTK_RESPONSE_OK
@@ -1210,8 +1161,8 @@ static void select_module_row_activated_cb(GtkTreeView * tree_view,
     gtk_dialog_response(dialog, GTK_RESPONSE_OK);
 }
 
-
-/** \brief Create a module window.
+/**
+ * Create a module window.
  *
  * This function is used to create a module window when opening modules
  * that should not be packed into the notebook.
@@ -1307,7 +1258,6 @@ static void create_module_window(GtkWidget * module)
                                      GTK_WINDOW(GTK_SAT_MODULE(module)->win));
     }
 }
-
 
 static gint compare_func(GtkTreeModel * model, GtkTreeIter * a, GtkTreeIter * b, gpointer userdata)
 {
