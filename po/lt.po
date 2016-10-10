@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-30 10:36+0000\n"
+"POT-Creation-Date: 2016-10-10 23:32+0200\n"
 "PO-Revision-Date: 2012-04-06 22:51+0000\n"
 "Last-Translator: AA1VS <hamaa1vs@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2016-07-31 05:42+0000\n"
 "X-Generator: Launchpad (build 18169)\n"
-"Language: lt\n"
 
 #: ../src/about.c:67
 msgid ""
@@ -66,109 +66,173 @@ msgstr ""
 "  Gpredict Team https://launchpad.net/~gpredict-team\n"
 "  LY2SS https://launchpad.net/~zilvinas-atkociunas"
 
-#: ../src/first-time.c:193 ../src/first-time.c:798
+#: ../src/first-time.c:182
 #, c-format
 msgid "%s: Could not open %s."
 msgstr "%s: Nepavyko atverti %s."
 
-#: ../src/first-time.c:217
+#: ../src/first-time.c:205
 #, c-format
 msgid "%s: Found at least one .qth file."
 msgstr "%s: Rasta mažiausiai viena .qth byla."
 
-#: ../src/first-time.c:259
+#: ../src/first-time.c:256
 #, c-format
 msgid "%s: Failed to copy sample.qth"
 msgstr "%s: Nepavyko nukopijuoti sample.qth"
 
-#: ../src/first-time.c:266
+#: ../src/first-time.c:263
 #, c-format
 msgid "%s: Copied sample.qth to %s/"
 msgstr "%s: Nukopijuotas sample.qth į %s/"
 
-#: ../src/first-time.c:307 ../src/first-time.c:412 ../src/first-time.c:620
-#: ../src/first-time.c:671 ../src/first-time.c:747
+#: ../src/first-time.c:300 ../src/first-time.c:407 ../src/first-time.c:637
+#: ../src/first-time.c:685 ../src/first-time.c:759
 #, c-format
 msgid "%s: Check successful."
 msgstr "%s: Patikrinimas sėkmingas."
 
-#: ../src/first-time.c:313 ../src/first-time.c:417 ../src/first-time.c:625
-#: ../src/first-time.c:677 ../src/first-time.c:752
+#: ../src/first-time.c:306 ../src/first-time.c:413 ../src/first-time.c:643
+#: ../src/first-time.c:691 ../src/first-time.c:765
 #, c-format
 msgid "%s: Check failed. Creating %s"
 msgstr "%s: Patikrinimas nepavyko. Sukuriama %s"
 
-#: ../src/first-time.c:324 ../src/first-time.c:426 ../src/first-time.c:634
-#: ../src/first-time.c:688 ../src/first-time.c:761
+#: ../src/first-time.c:316 ../src/first-time.c:422 ../src/first-time.c:652
+#: ../src/first-time.c:700 ../src/first-time.c:773
 #, c-format
 msgid "%s: Failed to create %s"
 msgstr "%s: Nepavyko sukurti %s"
 
-#: ../src/first-time.c:329 ../src/first-time.c:431 ../src/first-time.c:639
-#: ../src/first-time.c:693 ../src/first-time.c:766
+#: ../src/first-time.c:321 ../src/first-time.c:428 ../src/first-time.c:658
+#: ../src/first-time.c:705 ../src/first-time.c:779
 #, c-format
 msgid "%s: Created %s."
 msgstr "%s: Sukurtas %s."
 
-#: ../src/first-time.c:373
+#: ../src/first-time.c:372
 #, c-format
 msgid "%s: Failed to copy Amateur.mod"
 msgstr "%s: Nepavyko nukopijuoti Amateur.mod"
 
-#: ../src/first-time.c:380
+#: ../src/first-time.c:379
 #, c-format
 msgid "%s: Copied amateur.mod to %s/"
 msgstr "%s: amateur.mod nukopijuotas į %s/"
 
-#: ../src/first-time.c:479 ../src/gtk-sat-data.c:73
+#: ../src/first-time.c:470 ../src/gtk-sat-data.c:73
 #, c-format
 msgid "%s: Failed to load data from %s (%s)"
 msgstr "%s: Nepavyko nuskaityti duomenų iš %s (%s)"
 
-#: ../src/first-time.c:488
+#: ../src/first-time.c:480
 #, c-format
 msgid "%s: Found %d satellites in %s"
 msgstr "%s: Surasta %d palydovų faile %s"
 
-#: ../src/first-time.c:496
+#: ../src/first-time.c:490
 #, c-format
 msgid "%s: %s.sat already exists. Skipped."
 msgstr "%s: %s.sat jau egzistuoja. Praleidžiamas."
 
-#: ../src/first-time.c:538
+#: ../src/first-time.c:551
 #, c-format
 msgid "%s: Written %d new satellite to user config"
 msgstr "%s: Įrašomas %d naujas palydovas į user config"
 
-#: ../src/first-time.c:555
+#: ../src/first-time.c:568
 #, c-format
 msgid "%s: Could not open %s (%s)."
 msgstr "%s: Nepavyko atverti %s (%s)."
 
-#: ../src/first-time.c:580 ../src/first-time.c:831
+#: ../src/first-time.c:599
 #, c-format
 msgid "%s: Failed to copy %s"
 msgstr "%s: Nepavyko nukopijuoti %s"
 
-#: ../src/first-time.c:585
+#: ../src/first-time.c:605
 #, c-format
 msgid "%s: Successfully copied %s"
 msgstr "%s: Sėkmingai nukopijuotas %s"
 
-#: ../src/first-time.c:824
+#: ../src/frq-update.c:179
 #, c-format
-msgid "%s: %s does not appear to be in user conf dir; adding."
-msgstr "%s: %s nerastas vartotojo nuostatų kataloge; pridedamas."
+msgid "MODE %d %s"
+msgstr ""
 
-#: ../src/first-time.c:840
-#, c-format
-msgid "%s: %s already in user conf dir."
-msgstr "%s: %s jau egzistuoja vartotojo nuostatų kataloge."
+#: ../src/frq-update.c:259
+#, fuzzy, c-format
+msgid "%s: Writing to file : %s "
+msgstr "%s:%d: Įkraunamas žemėlapis %s"
 
-#: ../src/first-time.c:850
+#: ../src/frq-update.c:305
+#, fuzzy, c-format
+msgid "%s:%s: Could not open .trsp file for writing..."
+msgstr "%s: nepavyko parsiusti naujų TLE bylų; nutraukiama..."
+
+#: ../src/frq-update.c:345
+msgid "Ready to fetch modes list from satnogs..."
+msgstr ""
+
+#: ../src/frq-update.c:364 ../src/frq-update.c:506
+#, fuzzy, c-format
+msgid "%s: File to open %s "
+msgstr "%s:%s: Nepavyko atverti %s"
+
+#: ../src/frq-update.c:377 ../src/frq-update.c:519 ../src/tle-update.c:606
 #, c-format
-msgid "%s: %s directory does not exist. Incomplete installation."
-msgstr "%s: %s katalogas nesukurtas. Nepilna instaliacija."
+msgid "%s: Error fetching %s (%s)"
+msgstr "%s: Klaida siunčiant %s (%s)"
+
+#: ../src/frq-update.c:381 ../src/frq-update.c:523 ../src/tle-update.c:611
+#, c-format
+msgid "%s: Successfully fetched %s"
+msgstr "%s: Sėkmingai parsiusta %s"
+
+#: ../src/frq-update.c:389 ../src/frq-update.c:531 ../src/tle-update.c:619
+#, c-format
+msgid "%s: Failed to open %s preventing update"
+msgstr ""
+
+#: ../src/frq-update.c:401 ../src/frq-update.c:562 ../src/tle-update.c:647
+#, c-format
+msgid "%s: Fetched %d files from network; updating..."
+msgstr "%s: Parsiusta %d bylų; atnaujinama..."
+
+#: ../src/frq-update.c:408 ../src/frq-update.c:572
+#, fuzzy, c-format
+msgid "%s: Could not fetch any new frequency files from network; aborting..."
+msgstr "%s: nepavyko parsiusti naujų TLE bylų; nutraukiama..."
+
+#: ../src/frq-update.c:454
+#, c-format
+msgid "%s: A frequency update process is already running. Aborting."
+msgstr ""
+
+#: ../src/frq-update.c:471
+msgid "Ready to fetch transponder list from satnogs..."
+msgstr ""
+
+#: ../src/frq-update.c:491 ../src/tle-update.c:579
+#, c-format
+msgid "Fetching %s"
+msgstr "Siunčiama %s"
+
+#: ../src/frq-update.c:609 ../src/tle-update.c:1291
+msgid "Never"
+msgstr "Niekada"
+
+#: ../src/frq-update.c:610 ../src/tle-update.c:1292
+msgid "Monthly"
+msgstr "Kas mėnesį"
+
+#: ../src/frq-update.c:611 ../src/tle-update.c:1293
+msgid "Weekly"
+msgstr "Kas savaitę"
+
+#: ../src/frq-update.c:612 ../src/tle-update.c:1294
+msgid "Daily"
+msgstr "Kasdien"
 
 #: ../src/gpredict-help.c:68
 #, c-format
@@ -429,12 +493,12 @@ msgstr "LO:"
 msgid "<b> Uplink </b>"
 msgstr "<b> Uplink </b>"
 
-#: ../src/gtk-rig-ctrl.c:613 ../src/gtk-rot-ctrl.c:525
+#: ../src/gtk-rig-ctrl.c:613 ../src/gtk-rot-ctrl.c:508
 msgid "Select target object"
 msgstr "Pasirinkite objektą"
 
 #. tracking button
-#: ../src/gtk-rig-ctrl.c:618 ../src/gtk-rot-ctrl.c:530
+#: ../src/gtk-rig-ctrl.c:618 ../src/gtk-rot-ctrl.c:514
 msgid "Track"
 msgstr "Sekti"
 
@@ -487,12 +551,12 @@ msgstr ""
 "dažnis bus panaudotas siuntimo dažnio nustatymui."
 
 #. Azimuth
-#: ../src/gtk-rig-ctrl.c:668 ../src/gtk-rot-ctrl.c:538
+#: ../src/gtk-rig-ctrl.c:668 ../src/gtk-rot-ctrl.c:522
 msgid "Az:"
 msgstr "Azimutas:"
 
 #. Elevation
-#: ../src/gtk-rig-ctrl.c:676 ../src/gtk-rot-ctrl.c:547
+#: ../src/gtk-rig-ctrl.c:676 ../src/gtk-rot-ctrl.c:531
 msgid "El:"
 msgstr "Elevacija"
 
@@ -515,7 +579,7 @@ msgid ""
 "The rate of change for the distance between the satellite and the observer."
 msgstr "Atstumo tarp palydovo ir stebėtojo kitimo greitis."
 
-#: ../src/gtk-rig-ctrl.c:713 ../src/gtk-rot-ctrl.c:563
+#: ../src/gtk-rig-ctrl.c:713 ../src/gtk-rot-ctrl.c:547
 msgid "Target"
 msgstr "Taikinys"
 
@@ -533,9 +597,9 @@ msgstr ""
 "priėmimui ir siuntimui jei neturite pasirinkę antrinio įrenginio siuntimui."
 
 #: ../src/gtk-rig-ctrl.c:786 ../src/gtk-rig-ctrl.c:835
-#: ../src/gtk-rig-ctrl.c:2773 ../src/gtk-rot-ctrl.c:632
-#: ../src/gtk-rot-ctrl.c:1389 ../src/sat-pref-rig.c:326
-#: ../src/sat-pref-rot.c:272
+#: ../src/gtk-rig-ctrl.c:2773 ../src/gtk-rot-ctrl.c:616
+#: ../src/gtk-rot-ctrl.c:1376 ../src/sat-pref-rig.c:326
+#: ../src/sat-pref-rot.c:275
 #, c-format
 msgid "%s:%d: Failed to open hwconf dir (%s)"
 msgstr "%s:%d: Nepavyko atverti hwconf katalogo (%s)"
@@ -561,7 +625,7 @@ msgid "None"
 msgstr "Nėra"
 
 #. Engage button
-#: ../src/gtk-rig-ctrl.c:849 ../src/gtk-rot-ctrl.c:646
+#: ../src/gtk-rig-ctrl.c:849 ../src/gtk-rot-ctrl.c:630
 msgid "Engage"
 msgstr "Susijungti"
 
@@ -570,7 +634,7 @@ msgid "Engage the selected radio device"
 msgstr "Susijungti su pasirinktu radijo įrenginiu"
 
 #. Timeout
-#: ../src/gtk-rig-ctrl.c:860 ../src/gtk-rot-ctrl.c:654
+#: ../src/gtk-rig-ctrl.c:860 ../src/gtk-rot-ctrl.c:638
 msgid "Cycle:"
 msgstr "Ciklas:"
 
@@ -578,11 +642,11 @@ msgstr "Ciklas:"
 msgid "This parameter controls the delay between commands sent to the rig."
 msgstr "Vėlinimas tarp siunčiamų įrenginiui komandų."
 
-#: ../src/gtk-rig-ctrl.c:875 ../src/gtk-rot-ctrl.c:669
+#: ../src/gtk-rig-ctrl.c:875 ../src/gtk-rot-ctrl.c:653
 msgid "msec"
 msgstr "milisek"
 
-#: ../src/gtk-rig-ctrl.c:879 ../src/gtk-rot-ctrl.c:699
+#: ../src/gtk-rig-ctrl.c:879 ../src/gtk-rot-ctrl.c:683
 msgid "Settings"
 msgstr "Nustatymai"
 
@@ -598,7 +662,7 @@ msgstr ""
 "Laikas iki sekančio AOS ar LOS įvykio, priklausomai nuo to kuris bus "
 "anksčiau."
 
-#: ../src/gtk-rig-ctrl.c:951 ../src/gtk-rot-ctrl.c:764
+#: ../src/gtk-rig-ctrl.c:951 ../src/gtk-rot-ctrl.c:748
 #, c-format
 msgid "%s:%s: Invalid satellite selection: %d"
 msgstr "%s:%s: Pasirinktas neteisingas palydovas: %d"
@@ -647,7 +711,7 @@ msgid "%s:%s: Failed to allocate memory for radio config"
 msgstr "%s:%s: Nepavyko paskirti atminties radijo įrangos nustatymams"
 
 #: ../src/gtk-rig-ctrl.c:1287 ../src/gtk-rig-ctrl.c:1471
-#: ../src/gtk-rot-ctrl.c:913
+#: ../src/gtk-rot-ctrl.c:897
 #, c-format
 msgid "%s: Controller does not have a valid configuration"
 msgstr "%s: Kontroleris neturi teisingų nustatymų"
@@ -657,7 +721,7 @@ msgstr "%s: Kontroleris neturi teisingų nustatymų"
 msgid "%s called but TX VFO is %d."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1479 ../src/gtk-rot-ctrl.c:946
+#: ../src/gtk-rig-ctrl.c:1479 ../src/gtk-rot-ctrl.c:930
 #, c-format
 msgid "%s missed the deadline"
 msgstr "%s praleistas terminas"
@@ -667,12 +731,12 @@ msgstr "%s praleistas terminas"
 msgid "%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
 msgstr "%s: Neteisingas radijo įrenginio tipas %d. Nustatoma į RIG_TYPE_RX"
 
-#: ../src/gtk-rig-ctrl.c:1534 ../src/gtk-rot-ctrl.c:1158
+#: ../src/gtk-rig-ctrl.c:1534 ../src/gtk-rot-ctrl.c:1145
 #, c-format
 msgid "%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr "%s: MAX_ERROR_COUNT (%d) pasiektas. Atsijungiama nuo įrenginio!"
 
-#: ../src/gtk-rig-ctrl.c:2546 ../src/gtk-rot-ctrl.c:1227
+#: ../src/gtk-rig-ctrl.c:2546 ../src/gtk-rot-ctrl.c:1214
 #, c-format
 msgid "%s:%d: NULL storage."
 msgstr ""
@@ -717,7 +781,7 @@ msgstr "%s:%d: Klaida nuskaitant radijo įrangos nustatymus %s"
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2916 ../src/gtk-rot-ctrl.c:1503
+#: ../src/gtk-rig-ctrl.c:2916 ../src/gtk-rot-ctrl.c:1490
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr ""
@@ -776,27 +840,27 @@ msgstr ""
 msgid "%s: Failed to acquire controller lock; PTT event not handled"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:3095 ../src/gtk-rot-ctrl.c:1411
+#: ../src/gtk-rig-ctrl.c:3095 ../src/gtk-rot-ctrl.c:1398
 #, c-format
 msgid "%s: Failed to create socket"
 msgstr "%s: Nepavyko sukurti socket"
 
-#: ../src/gtk-rig-ctrl.c:3102 ../src/gtk-rot-ctrl.c:1418
+#: ../src/gtk-rig-ctrl.c:3102 ../src/gtk-rot-ctrl.c:1405
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr "%s: Network socket sukurtas sėkmingai"
 
-#: ../src/gtk-rig-ctrl.c:3116 ../src/gtk-rot-ctrl.c:1433
+#: ../src/gtk-rig-ctrl.c:3116 ../src/gtk-rot-ctrl.c:1420
 #, c-format
 msgid "%s: Failed to connect to %s:%d"
 msgstr "%s: Nepavyko prisijungti prie %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:3124 ../src/gtk-rot-ctrl.c:1441
+#: ../src/gtk-rig-ctrl.c:3124 ../src/gtk-rot-ctrl.c:1428
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr "%s: Pavyko prisijungti prie: %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:3140 ../src/gtk-rot-ctrl.c:1458
+#: ../src/gtk-rig-ctrl.c:3140 ../src/gtk-rot-ctrl.c:1445
 #, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr ""
@@ -806,56 +870,55 @@ msgstr ""
 msgid "%s: %s rigctld returned error (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:435 ../src/gtk-sat-list.c:89
+#: ../src/gtk-rot-ctrl.c:417 ../src/gtk-sat-list.c:89
 #: ../src/gtk-single-sat.c:57 ../src/sat-pass-dialogs.c:127
 msgid "Azimuth"
 msgstr "Azimutas"
 
-#: ../src/gtk-rot-ctrl.c:447
+#: ../src/gtk-rot-ctrl.c:429
 msgid "Read:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:472 ../src/gtk-sat-list.c:90
+#: ../src/gtk-rot-ctrl.c:454 ../src/gtk-sat-list.c:90
 #: ../src/gtk-single-sat.c:58 ../src/sat-pass-dialogs.c:128
 msgid "Elevation"
 msgstr "Elevacija"
 
-#: ../src/gtk-rot-ctrl.c:484
+#: ../src/gtk-rot-ctrl.c:466
 msgid "Read: "
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:533
+#: ../src/gtk-rot-ctrl.c:517
 msgid "Track the satellite when it is within range"
 msgstr "Sekti palydovą kai jis matomas"
 
 #. count down
-#: ../src/gtk-rot-ctrl.c:556
+#: ../src/gtk-rot-ctrl.c:540
 msgid "ΔT:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:586
+#: ../src/gtk-rot-ctrl.c:570
 msgid "Device:"
 msgstr "Įrenginys:"
 
-#: ../src/gtk-rot-ctrl.c:592
+#: ../src/gtk-rot-ctrl.c:576
 msgid "Select antenna rotator device"
 msgstr "Pasirinkite antenos sukimo įrenginį"
 
-#: ../src/gtk-rot-ctrl.c:648
+#: ../src/gtk-rot-ctrl.c:632
 msgid "Engage the selected rotor device"
 msgstr "Susijungti su pasirinktu sukimo įrenginiu"
 
-#: ../src/gtk-rot-ctrl.c:661
-msgid ""
-"This parameter controls the delay between commands sent to the rotator."
+#: ../src/gtk-rot-ctrl.c:645
+msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr "Vėlinimas tarp komandų siunčiamų sukimo įrenginiui."
 
 #. Tolerance
-#: ../src/gtk-rot-ctrl.c:674
+#: ../src/gtk-rot-ctrl.c:658
 msgid "Tolerance:"
 msgstr "Tolerancija"
 
-#: ../src/gtk-rot-ctrl.c:682
+#: ../src/gtk-rot-ctrl.c:666
 msgid ""
 "This parameter controls the tolerance between the target and rotator values "
 "for the rotator.\n"
@@ -865,52 +928,52 @@ msgstr ""
 "Tolerancija tarp taikinio ir sukimo įrenginio reikšmių. Jei skirtumas tarp "
 "šių reikšmių mažesnis už toleranciją, komandos nebus siunčiamos."
 
-#: ../src/gtk-rot-ctrl.c:692
+#: ../src/gtk-rot-ctrl.c:676
 msgid "deg"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:851
+#: ../src/gtk-rot-ctrl.c:835
 #, c-format
 msgid "%s:%d: Failed to allocate memory for rotator config"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:861
+#: ../src/gtk-rot-ctrl.c:845
 #, c-format
 msgid "Loaded new rotator configuration %s"
 msgstr "Užkrauti naujo sukimo įrenginio nustatymai %s"
 
-#: ../src/gtk-rot-ctrl.c:876
+#: ../src/gtk-rot-ctrl.c:860
 #, c-format
 msgid "%s:%d: Failed to load rotator configuration %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1033 ../src/gtk-rot-ctrl.c:1034
+#: ../src/gtk-rot-ctrl.c:1022 ../src/gtk-rot-ctrl.c:1023
 #: ../src/gtk-sat-module-popup.c:947 ../src/gtk-sat-module-popup.c:1027
 #: ../src/sat-log-browser.c:63 ../src/sat-log.c:63 ../src/sat-pref-rig.c:791
 msgid "ERROR"
 msgstr "KLAIDA"
 
-#: ../src/gtk-rot-ctrl.c:1242
+#: ../src/gtk-rot-ctrl.c:1229
 #, c-format
 msgid "%s:%d: rotctld returned error (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1258
+#: ../src/gtk-rot-ctrl.c:1244
 #, c-format
 msgid "%s:%d: rotctld returned bad response (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1307
+#: ../src/gtk-rot-ctrl.c:1294
 #, c-format
 msgid "%s:%d: rotctld returned error %d with az %f el %f(%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1508 ../src/gtk-rot-ctrl.c:1518
+#: ../src/gtk-rot-ctrl.c:1495 ../src/gtk-rot-ctrl.c:1505
 #, c-format
 msgid "%s: rotctld Socket Down"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1526
+#: ../src/gtk-rot-ctrl.c:1513
 #, c-format
 msgid "%s:%s: Got 0 bytes from rotctld"
 msgstr ""
@@ -930,7 +993,7 @@ msgstr ""
 msgid "%s: Error reading TLE line 1 from %s (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1168 ../src/tle-update.c:1175
+#: ../src/gtk-sat-data.c:112 ../src/tle-update.c:1169 ../src/tle-update.c:1176
 #, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
 msgstr ""
@@ -971,26 +1034,29 @@ msgid "Rate"
 msgstr ""
 
 #. Next Event
-#: ../src/gtk-sat-list.c:64 ../src/gtk-sat-list.c:96 ../src/gtk-single-sat.c:64
-#: ../src/sat-pref-map-view.c:251 ../src/sat-pref-polar-view.c:262
+#: ../src/gtk-sat-list.c:64 ../src/gtk-sat-list.c:96
+#: ../src/gtk-single-sat.c:64 ../src/sat-pref-map-view.c:251
+#: ../src/sat-pref-polar-view.c:262
 msgid "Next Event"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:97 ../src/gtk-single-sat.c:65
+#: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:97
+#: ../src/gtk-single-sat.c:65
 msgid "Next AOS"
 msgstr "Kitas AOS"
 
-#: ../src/gtk-sat-list.c:66 ../src/gtk-sat-list.c:98 ../src/gtk-single-sat.c:66
+#: ../src/gtk-sat-list.c:66 ../src/gtk-sat-list.c:98
+#: ../src/gtk-single-sat.c:66
 msgid "Next LOS"
 msgstr "Kitas LOS"
 
-#: ../src/gtk-sat-list.c:67 ../src/loc-tree.c:146 ../src/sat-pass-dialogs.c:109
-#: ../src/sat-pref-qth.c:203
+#: ../src/gtk-sat-list.c:67 ../src/loc-tree.c:146
+#: ../src/sat-pass-dialogs.c:109 ../src/sat-pref-qth.c:203
 msgid "Lat"
 msgstr "Platuma"
 
-#: ../src/gtk-sat-list.c:68 ../src/loc-tree.c:166 ../src/sat-pass-dialogs.c:110
-#: ../src/sat-pref-qth.c:216
+#: ../src/gtk-sat-list.c:68 ../src/loc-tree.c:166
+#: ../src/sat-pass-dialogs.c:110 ../src/sat-pref-qth.c:216
 msgid "Lon"
 msgstr "Ilguma"
 
@@ -1003,7 +1069,8 @@ msgstr ""
 msgid "Footp"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:71 ../src/loc-tree.c:186 ../src/sat-pass-dialogs.c:113
+#: ../src/gtk-sat-list.c:71 ../src/loc-tree.c:186
+#: ../src/sat-pass-dialogs.c:113
 msgid "Alt"
 msgstr ""
 
@@ -1098,8 +1165,9 @@ msgid "Footprint"
 msgstr ""
 
 #. altitude
-#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:71 ../src/qth-editor.c:333
-#: ../src/sat-pass-dialogs.c:137 ../src/sat-pref-qth-editor.c:318
+#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:71
+#: ../src/qth-editor.c:333 ../src/sat-pass-dialogs.c:137
+#: ../src/sat-pref-qth-editor.c:318
 msgid "Altitude"
 msgstr "Aukštis"
 
@@ -1146,17 +1214,17 @@ msgstr "Matomumas"
 msgid "%s: Invalid GtkSatList!"
 msgstr "%s: neteisingas GtkSatList!"
 
-#: ../src/gtk-sat-list.c:589
+#: ../src/gtk-sat-list.c:590
 #, c-format
 msgid "%s: Failed to get data for #%d."
 msgstr "%s: Nepavyko gauti duomenų #%d."
 
-#: ../src/gtk-sat-list.c:594
+#: ../src/gtk-sat-list.c:595
 #, c-format
 msgid "%s: Satellite #%d removed from list."
 msgstr "%s: Palydovas #%d pašalintas iš sąrašo."
 
-#: ../src/gtk-sat-list.c:929 ../src/sat-pass-dialogs.c:708
+#: ../src/gtk-sat-list.c:930 ../src/sat-pass-dialogs.c:708
 #: ../src/sat-pref-qth.c:832
 #, c-format
 msgid "%s:%d: Invalid column: %d"
@@ -1164,23 +1232,23 @@ msgstr ""
 
 #. avoid unusued parameter compiler warning
 #. avoid unusued parameter compiler warning
-#: ../src/gtk-sat-list.c:1153
+#: ../src/gtk-sat-list.c:1154
 #, c-format
 msgid "%s: FIXME I am not implemented"
 msgstr "%s: FIXME Aš dar nerealizuotas"
 
-#: ../src/gtk-sat-list.c:1248 ../src/gtk-sat-list.c:1279
+#: ../src/gtk-sat-list.c:1249 ../src/gtk-sat-list.c:1280
 #, c-format
 msgid "%s:%d Failed to get data for %d."
 msgstr ""
 
-#: ../src/gtk-sat-list.c:1290 ../src/sat-pass-dialogs.c:1394
+#: ../src/gtk-sat-list.c:1291 ../src/sat-pass-dialogs.c:1394
 #: ../src/sat-pass-dialogs.c:1445
 #, c-format
 msgid "%s:%d: There is no selection; skip popup."
 msgstr ""
 
-#: ../src/gtk-sat-list.c:1383
+#: ../src/gtk-sat-list.c:1384
 #, c-format
 msgid "%s: GtkSatList has not child with index %d"
 msgstr ""
@@ -1548,7 +1616,7 @@ msgstr "Klonuoti..."
 
 #. delete module
 #: ../src/gtk-sat-module-popup.c:251 ../src/sat-pref-qth.c:532
-#: ../src/sat-pref-rig.c:365 ../src/sat-pref-rot.c:309
+#: ../src/sat-pref-rig.c:365 ../src/sat-pref-rot.c:312
 msgid "Delete"
 msgstr "Šalinti"
 
@@ -1614,7 +1682,8 @@ msgid "%s:%d: Successfully cloned %s."
 msgstr ""
 
 #: ../src/gtk-sat-module-popup.c:438 ../src/gtk-sat-module-popup.c:561
-#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:1003 ../src/mod-mgr.c:684
+#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:1212
+#: ../src/mod-mgr.c:684
 msgid "GPREDICT: "
 msgstr ""
 
@@ -1727,7 +1796,7 @@ msgstr "<b>Realus-Laikas</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#. 
+#.
 #. hour
 #: ../src/gtk-sat-module-tmg.c:157
 msgid " Hour:"
@@ -2060,22 +2129,22 @@ msgstr ""
 msgid "%s: Invalid GtkSingleSat!"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:450
+#: ../src/gtk-single-sat.c:451
 #, c-format
 msgid "%s:%d: Can not update invisible field (I:%d F:%d)"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:461
+#: ../src/gtk-single-sat.c:462
 #, c-format
 msgid "%s:%d: Can not update non-existing sat"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:554 ../src/gtk-single-sat.c:574
-#: ../src/gtk-single-sat.c:591
+#: ../src/gtk-single-sat.c:555 ../src/gtk-single-sat.c:575
+#: ../src/gtk-single-sat.c:592
 msgid "N/A"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:713
+#: ../src/gtk-single-sat.c:714
 #, c-format
 msgid "%s:%d: Invalid field number (%d)"
 msgstr ""
@@ -2115,9 +2184,9 @@ msgid "%s:%d: %s has %d passes within %.4f days\n"
 msgstr "%s:%d: %s praskries %d kartų %.4f dienų laikotarpyje\n"
 
 #: ../src/gtk-sky-glance.c:935
-#, c-format
+#, fuzzy, c-format
 msgid "%s:%s: Could not allocate memory."
-msgstr ""
+msgstr "%s:%d: Nepavyko paskirti atminties radijo įrangos nustatymams"
 
 #. location
 #: ../src/loc-tree.c:133 ../src/qth-editor.c:242 ../src/sat-pref-qth.c:195
@@ -2277,229 +2346,260 @@ msgstr "Paveikslėlių bylos"
 msgid "%s:%d: Could not stat %s"
 msgstr ""
 
-#: ../src/menubar.c:93
+#: ../src/menubar.c:81
 msgid "_File"
 msgstr "_Byla"
 
-#: ../src/menubar.c:94
+#: ../src/menubar.c:82
 msgid "_Edit"
 msgstr "_Keisti"
 
-#: ../src/menubar.c:95
-msgid "_Update TLE"
+#: ../src/menubar.c:83
+#, fuzzy
+msgid "_Update TLE data"
 msgstr "_Atnaujinti TLE"
 
-#: ../src/menubar.c:96
+#: ../src/menubar.c:84
+#, fuzzy
+msgid "_Update Transponder data"
+msgstr "_Transponderiai"
+
+#: ../src/menubar.c:85
 msgid "_Tools"
 msgstr "_Įrankiai"
 
-#: ../src/menubar.c:97
+#: ../src/menubar.c:86
 msgid "_Help"
 msgstr "_Pagalba"
 
 #. File menu
-#: ../src/menubar.c:100
+#: ../src/menubar.c:89
 msgid "_New module"
 msgstr "_Naujas modulis"
 
-#: ../src/menubar.c:101
+#: ../src/menubar.c:90
 msgid "Create a new module"
 msgstr "Sukurti naują modulį"
 
-#: ../src/menubar.c:102
+#: ../src/menubar.c:91
 msgid "_Open module"
 msgstr "_Atidaryti modulį"
 
-#: ../src/menubar.c:103
+#: ../src/menubar.c:92
 msgid "Open an existing module"
 msgstr "Atidaryti modulį"
 
-#: ../src/menubar.c:104
+#: ../src/menubar.c:93
 msgid "_Log browser"
 msgstr ""
 
-#: ../src/menubar.c:105
+#: ../src/menubar.c:94
 msgid "Open the message log browser"
 msgstr "Atidaryti pranešimų žurnalo naršyklę"
 
-#: ../src/menubar.c:106
+#: ../src/menubar.c:95
 msgid "E_xit"
 msgstr "Iš_eiti"
 
-#: ../src/menubar.c:107
+#: ../src/menubar.c:96
 msgid "Exit the program"
 msgstr "Išeiti iš programos"
 
 #. Edit menu
 #. { "Tle", GTK_STOCK_REFRESH, N_("Update TLE"), NULL,
 #. N_("Update Keplerian elements"), NULL},
-#: ../src/menubar.c:112
+#: ../src/menubar.c:101 ../src/menubar.c:104
 msgid "From _network"
 msgstr "Iš _tinklo"
 
-#: ../src/menubar.c:113
+#: ../src/menubar.c:102
 msgid "Update Keplerian elements from a network server"
 msgstr "Atnaujinti Keplerio elementus iš serverio tinkle"
 
-#: ../src/menubar.c:115
+#: ../src/menubar.c:105
+#, fuzzy
+msgid "Update transponders from a network server"
+msgstr "Atnaujinti Keplerio elementus iš serverio tinkle"
+
+#: ../src/menubar.c:107 ../src/menubar.c:110
 msgid "From l_ocal files"
 msgstr "Iš _bylų"
 
-#: ../src/menubar.c:116
+#: ../src/menubar.c:108
 msgid "Update Keplerian elements from local files"
 msgstr "Atnaujinti Keplerio elementus iš vietinių bylų"
 
-#: ../src/menubar.c:118
+#: ../src/menubar.c:111
+#, fuzzy
+msgid "Update transponders from local files"
+msgstr "Atnaujinti Keplerio elementus iš vietinių bylų"
+
+#: ../src/menubar.c:113
 msgid "Using TLE _editor"
 msgstr "Naudojant TLE _redaktorių"
 
-#: ../src/menubar.c:119
+#: ../src/menubar.c:114
 msgid "Add or update Keplerian elements using the TLE editor"
-msgstr ""
-"Papildyti arba atnaujinti Kelperio elementus naudojant TLE redaktorių"
+msgstr "Papildyti arba atnaujinti Kelperio elementus naudojant TLE redaktorių"
 
-#: ../src/menubar.c:121
+#: ../src/menubar.c:116
 msgid "_Transponders"
 msgstr "_Transponderiai"
 
-#: ../src/menubar.c:122
+#: ../src/menubar.c:117
 msgid "Edit satellite transponder frequencies"
 msgstr "Taisyti palydovų transponderių dažnius"
 
-#: ../src/menubar.c:124
+#: ../src/menubar.c:119
 msgid "_Preferences"
 msgstr "_Nustatymai"
 
-#: ../src/menubar.c:125
+#: ../src/menubar.c:120
 msgid "Edit user preferences"
 msgstr "Keisti vartotojo nustatymus"
 
 #. Tools menu
-#: ../src/menubar.c:128
+#: ../src/menubar.c:123
 msgid "Satellite Editor"
 msgstr "Palydovų redaktorius"
 
-#: ../src/menubar.c:129
+#: ../src/menubar.c:124
 msgid ""
 "Open the satellite editor where you can manually edit orbital elements and "
 "other data"
 msgstr ""
 "Atidaryti palydovų redaktorių, kuriame galite keisti orbitos elementus ir kt."
 
-#: ../src/menubar.c:131
+#: ../src/menubar.c:126
 msgid "Comm Window"
 msgstr "Comm Langas"
 
-#: ../src/menubar.c:132
+#: ../src/menubar.c:127
 msgid "Predict windows between two observers"
 msgstr "Spėti langus tarp dviejų stebėtojų"
 
-#: ../src/menubar.c:134
+#: ../src/menubar.c:129
 msgid "Advanced Predict"
 msgstr ""
 
-#: ../src/menubar.c:135
+#: ../src/menubar.c:130
 msgid "Open advanced pass predictor"
 msgstr ""
 
 #. Help menu
-#: ../src/menubar.c:138
+#: ../src/menubar.c:133
 msgid "Getting Started"
 msgstr ""
 
-#: ../src/menubar.c:139
+#: ../src/menubar.c:134
 msgid "Show online user manual, Getting Started Section"
 msgstr ""
 
-#: ../src/menubar.c:141
+#: ../src/menubar.c:136
 msgid "Online help"
 msgstr "Pagalba"
 
-#: ../src/menubar.c:142
+#: ../src/menubar.c:137
 msgid "Show online user manual"
 msgstr "Rodyti vartotojo instrukciją"
 
-#: ../src/menubar.c:143
+#: ../src/menubar.c:138
 msgid "_License"
 msgstr "_Licencija"
 
-#: ../src/menubar.c:144
+#: ../src/menubar.c:139
 msgid "Show the Gpredict license"
 msgstr "Rodyti Gpredict licenciją"
 
-#: ../src/menubar.c:145
+#: ../src/menubar.c:140
 msgid "_News"
 msgstr "_Naujienos"
 
-#: ../src/menubar.c:146
+#: ../src/menubar.c:141
 msgid "Show what's new in this release"
 msgstr "Rodyti kas nauja šiame leidime"
 
-#: ../src/menubar.c:147
+#: ../src/menubar.c:142
 msgid "_About Gpredict"
 msgstr "_Apie Gpredict"
 
-#: ../src/menubar.c:148
+#: ../src/menubar.c:143
 msgid "Show about dialog"
 msgstr "Rodyti langą apie programą"
 
-#: ../src/menubar.c:234
+#: ../src/menubar.c:216
 #, c-format
 msgid "Failed to build menubar: %s"
 msgstr ""
 
-#. avoid unused parameter compiler warning
-#. avoid unused parameter compiler warning
-#: ../src/menubar.c:270
+#: ../src/menubar.c:252
 #, c-format
 msgid "%s: Starting new module configurator..."
 msgstr ""
 
-#: ../src/menubar.c:276
+#: ../src/menubar.c:258
 #, c-format
 msgid "%s: New module name is %s."
 msgstr ""
 
-#: ../src/menubar.c:295 ../src/menubar.c:351
+#: ../src/menubar.c:277 ../src/menubar.c:333
 #, c-format
 msgid "Could not open %s. Please examine the log messages for details."
 msgstr ""
 
-#: ../src/menubar.c:311
+#: ../src/menubar.c:293
 #, c-format
 msgid "%s: New module config cancelled."
 msgstr ""
 
-#. avoid unused parameter compiler warning
-#. avoid unused parameter compiler warning
-#: ../src/menubar.c:326
+#: ../src/menubar.c:308
 #, c-format
 msgid "%s: Open existing module..."
 msgstr ""
 
-#: ../src/menubar.c:332
+#: ../src/menubar.c:314
 #, c-format
 msgid "%s: Open module %s."
 msgstr ""
 
-#: ../src/menubar.c:381
+#: ../src/menubar.c:363
 #, c-format
 msgid "%s: Open module cancelled."
 msgstr ""
 
-#. avoid unused parameter compiler warning
-#. avoid unused parameter compiler warning
 #. create new dialog with progress indicator
-#: ../src/menubar.c:441 ../src/menubar.c:597 ../src/sat-pref-general.c:61
+#: ../src/menubar.c:420 ../src/menubar.c:816
+#, fuzzy
+msgid "Transponder Update"
+msgstr "Transponderiai"
+
+#: ../src/menubar.c:434
+#, fuzzy
+msgid "<b>Updating transponder files from network</b>"
+msgstr "<b>Atnaujinamos TLE bylos iš tinklo</b>"
+
+#. statistics
+#. label2 = gtk_label_new(_("Transponders updated:\t 0\n"));
+#: ../src/menubar.c:448
+msgid "\n"
+msgstr ""
+
+#: ../src/menubar.c:469 ../src/menubar.c:550 ../src/menubar.c:706
+#: ../src/menubar.c:866
+msgid "Finished"
+msgstr "Baigta"
+
+#. create new dialog with progress indicator
+#: ../src/menubar.c:500 ../src/menubar.c:656 ../src/sat-pref-general.c:61
 msgid "TLE Update"
 msgstr "TLE atnaujinimas"
 
-#: ../src/menubar.c:456
+#: ../src/menubar.c:515
 msgid "<b>Updating TLE files from network</b>"
 msgstr "<b>Atnaujinamos TLE bylos iš tinklo</b>"
 
 #. statistics
-#: ../src/menubar.c:469 ../src/menubar.c:625
+#: ../src/menubar.c:528 ../src/menubar.c:684 ../src/menubar.c:844
 msgid ""
 "Satellites updated:\t 0\n"
 "Satellites skipped:\t 0\n"
@@ -2509,39 +2609,57 @@ msgstr ""
 "Praleista palydovų:\t 0\n"
 "Trūksta palydovų:\t 0\n"
 
-#: ../src/menubar.c:491 ../src/menubar.c:647
-msgid "Finished"
-msgstr "Baigta"
-
 #. create file chooser
-#: ../src/menubar.c:543
+#: ../src/menubar.c:602 ../src/menubar.c:762
 msgid "Select directory"
 msgstr "Pasirinkti katalogą"
 
 #. create label
-#: ../src/menubar.c:549
+#: ../src/menubar.c:608
 msgid "Select TLE directory:"
 msgstr "Pasirinkti TLE katalogą"
 
 #. create the dalog
-#: ../src/menubar.c:558
+#: ../src/menubar.c:617
 msgid "Update TLE from files"
 msgstr "Atnaujinti TLE iš bylų"
 
-#: ../src/menubar.c:591
+#: ../src/menubar.c:650
 #, c-format
 msgid "%s: Running TLE update from %s"
 msgstr ""
 
-#: ../src/menubar.c:612
+#: ../src/menubar.c:671
 msgid "<b>Updating TLE files from files</b>"
 msgstr "<b>Atnaujinami TLE iš bylų</b>"
 
-#: ../src/menubar.c:680 ../src/menubar.c:699
+#. create label
+#: ../src/menubar.c:768
+#, fuzzy
+msgid "Select transponder directory:"
+msgstr "Pasirinkite transponderį"
+
+#. create the dalog
+#: ../src/menubar.c:777
+#, fuzzy
+msgid "Update transponders from files"
+msgstr "Atnaujinti TLE iš bylų"
+
+#: ../src/menubar.c:810
+#, c-format
+msgid "%s: Running transponder update from %s"
+msgstr ""
+
+#: ../src/menubar.c:831
+#, fuzzy
+msgid "<b>Updating transponders files from files</b>"
+msgstr "<b>Atnaujinami TLE iš bylų</b>"
+
+#: ../src/menubar.c:897 ../src/menubar.c:915
 msgid "This function is still under development."
 msgstr "Ši funkcija vystymo stadijoje."
 
-#: ../src/menubar.c:728
+#: ../src/menubar.c:943
 msgid ""
 "A comprehensive PDF user manual and \n"
 "video tutorials are available from the \n"
@@ -2551,17 +2669,17 @@ msgstr ""
 "ir video pamokas rasite \n"
 "Gpredict svetainėje:"
 
-#: ../src/menubar.c:809
+#: ../src/menubar.c:1021
 #, c-format
 msgid "%s:%s: Scanning directory %s for modules."
 msgstr ""
 
-#: ../src/menubar.c:833
+#: ../src/menubar.c:1043
 #, c-format
 msgid "%s:%d: Failed to open module dir %s (%s)"
 msgstr ""
 
-#: ../src/menubar.c:849
+#: ../src/menubar.c:1059
 msgid ""
 "You do not have any modules set up yet. Please use File->New in order to "
 "create a module."
@@ -2569,21 +2687,21 @@ msgstr ""
 "Nėra nustatyta jokių modulių. Meniu punkto Byla -> Naujas pagalba sukurkite "
 "modulį."
 
-#: ../src/menubar.c:877
+#: ../src/menubar.c:1087
 msgid "Module"
 msgstr "Modulis"
 
 #. create dialog
-#: ../src/menubar.c:883
+#: ../src/menubar.c:1093
 msgid "Select a module"
 msgstr "Pasirinkite modulį"
 
-#: ../src/menubar.c:911
+#: ../src/menubar.c:1121
 #, c-format
 msgid "%s:%s: Selected module is: %s"
 msgstr ""
 
-#: ../src/menubar.c:916
+#: ../src/menubar.c:1126
 #, c-format
 msgid "%s:%s: No selection is list of modules."
 msgstr ""
@@ -2688,10 +2806,10 @@ msgstr ""
 #. finally, add "** DEFAULT **" string; secting this will
 #. clear the MOD_CFG_QTH_FILE_KEY module configuration
 #. key ensuring that the module will use the default QTH
-#. 
+#.
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#. 
+#.
 #: ../src/mod-cfg.c:804 ../src/mod-cfg.c:856 ../src/mod-cfg.c:906
 msgid "** DEFAULT **"
 msgstr "** NUMATYTOJI **"
@@ -3028,9 +3146,9 @@ msgid "%s: Error reading QTH type (%s)."
 msgstr ""
 
 #: ../src/qth-data.c:216
-#, c-format
+#, fuzzy, c-format
 msgid "%s: Error reading GPSD port (%s)."
-msgstr ""
+msgstr "%s: Klaida skaitant %s (%s)"
 
 #: ../src/qth-data.c:229
 #, c-format
@@ -3096,7 +3214,7 @@ msgstr ""
 #. Config name
 #: ../src/qth-editor.c:204 ../src/sat-pref-qth.c:187
 #: ../src/sat-pref-qth-editor.c:189 ../src/sat-pref-rig-editor.c:149
-#: ../src/sat-pref-rot-editor.c:154
+#: ../src/sat-pref-rot-editor.c:142
 msgid "Name"
 msgstr ""
 
@@ -3256,7 +3374,7 @@ msgstr ""
 msgid "%s:%d: Invalid locator: %s"
 msgstr ""
 
-#: ../src/radio-conf.c:70 ../src/radio-conf.c:240 ../src/rotor-conf.c:66
+#: ../src/radio-conf.c:70 ../src/radio-conf.c:240 ../src/rotor-conf.c:67
 #, c-format
 msgid "%s: NULL configuration name!"
 msgstr ""
@@ -3278,72 +3396,77 @@ msgstr ""
 msgid "%s: Read radio configuration %s"
 msgstr ""
 
-#: ../src/rotor-conf.c:95 ../src/rotor-conf.c:105
+#: ../src/rotor-conf.c:95 ../src/rotor-conf.c:106
 #, c-format
 msgid "%s: Error reading rotor conf from %s (%s)."
 msgstr ""
 
-#: ../src/rotor-conf.c:115
+#: ../src/rotor-conf.c:117
 #, c-format
 msgid "%s: Az type not defined for %s. Assuming 0..360°"
 msgstr ""
 
-#: ../src/rotor-conf.c:125
+#: ../src/rotor-conf.c:128
 #, c-format
 msgid "%s: MinAz not defined for %s. Assuming 0°."
 msgstr ""
 
-#: ../src/rotor-conf.c:134
+#: ../src/rotor-conf.c:138
 #, c-format
 msgid "%s: MaxAz not defined for %s. Assuming 360°."
 msgstr ""
 
-#: ../src/rotor-conf.c:143
+#: ../src/rotor-conf.c:148
 #, c-format
 msgid "%s: MinEl not defined for %s. Assuming 0°."
 msgstr ""
 
-#: ../src/rotor-conf.c:152
+#: ../src/rotor-conf.c:158
 #, c-format
 msgid "%s: MaxEl not defined for %s. Assuming 90°."
 msgstr ""
 
-#: ../src/sat-cfg.c:279
+#: ../src/rotor-conf.c:168
+#, c-format
+msgid "%s: AzStopPos not defined for %s. Assuming at minaz (%f°)."
+msgstr ""
+
+#: ../src/sat-cfg.c:277
 #, c-format
 msgid "%s: Error reading config file (%s)"
 msgstr ""
 
-#: ../src/sat-cfg.c:283
+#: ../src/sat-cfg.c:280
 #, c-format
 msgid "%s: Using built-in defaults"
 msgstr ""
 
-#: ../src/sat-cfg.c:292
+#: ../src/sat-cfg.c:287
 #, c-format
 msgid "%s: Everything OK."
 msgstr ""
 
-#: ../src/sat-cfg.c:360 ../src/sat-cfg.c:421 ../src/sat-cfg.c:447
-#: ../src/sat-cfg.c:479 ../src/sat-cfg.c:542 ../src/sat-cfg.c:577
-#: ../src/sat-cfg.c:604 ../src/sat-cfg.c:658 ../src/sat-cfg.c:683
+#: ../src/sat-cfg.c:353 ../src/sat-cfg.c:419 ../src/sat-cfg.c:444
+#: ../src/sat-cfg.c:479 ../src/sat-cfg.c:545 ../src/sat-cfg.c:583
+#: ../src/sat-cfg.c:613 ../src/sat-cfg.c:670 ../src/sat-cfg.c:697
 #, c-format
 msgid "%s: Module not initialised\n"
 msgstr ""
 
-#: ../src/sat-cfg.c:383 ../src/sat-cfg.c:400 ../src/sat-cfg.c:434
-#: ../src/sat-cfg.c:460
+#: ../src/sat-cfg.c:378 ../src/sat-cfg.c:397 ../src/sat-cfg.c:433
+#: ../src/sat-cfg.c:459
 #, c-format
 msgid "%s: Unknown BOOL param index (%d)\n"
 msgstr ""
 
-#: ../src/sat-cfg.c:502 ../src/sat-cfg.c:524 ../src/sat-cfg.c:564
-#: ../src/sat-cfg.c:590
+#: ../src/sat-cfg.c:503 ../src/sat-cfg.c:528 ../src/sat-cfg.c:570
+#: ../src/sat-cfg.c:598
 #, c-format
 msgid "%s: Unknown STR param index (%d)\n"
 msgstr ""
 
-#: ../src/sat-cfg.c:627 ../src/sat-cfg.c:644 ../src/sat-cfg.c:671
-#: ../src/sat-cfg.c:696
+#: ../src/sat-cfg.c:638 ../src/sat-cfg.c:656 ../src/sat-cfg.c:685
+#: ../src/sat-cfg.c:712
 #, c-format
 msgid "%s: Unknown INT param index (%d)\n"
 msgstr ""
@@ -3539,7 +3662,7 @@ msgstr ""
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#. 
+#.
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:136 ../src/sat-log-browser.c:182
@@ -4313,8 +4436,9 @@ msgid "Solar terminator:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:573
+#, fuzzy
 msgid "Click to select terminator colour"
-msgstr ""
+msgstr "Tinklelio spalva"
 
 #. Earth shadow
 #: ../src/sat-pref-map-view.c:589
@@ -4322,8 +4446,9 @@ msgid "Global shadow:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:598
+#, fuzzy
 msgid "Click to select Earth shadow colour"
-msgstr ""
+msgstr "Tinklelio spalva"
 
 #. Shadow
 #: ../src/sat-pref-map-view.c:614
@@ -4611,7 +4736,7 @@ msgid "%s:%d: This appears to be the default QTH."
 msgstr ""
 
 #: ../src/sat-pref-qth.c:520 ../src/sat-pref-rig.c:352
-#: ../src/sat-pref-rot.c:297
+#: ../src/sat-pref-rot.c:300
 msgid "Add New"
 msgstr ""
 
@@ -4620,7 +4745,7 @@ msgid "Add a new ground station to the list"
 msgstr ""
 
 #: ../src/sat-pref-qth.c:526 ../src/sat-pref-rig.c:358
-#: ../src/sat-pref-rot.c:303
+#: ../src/sat-pref-rot.c:306
 msgid "Edit"
 msgstr ""
 
@@ -4744,13 +4869,13 @@ msgstr ""
 
 #. Host
 #: ../src/sat-pref-rig.c:135 ../src/sat-pref-rig-editor.c:168
-#: ../src/sat-pref-rot.c:129 ../src/sat-pref-rot-editor.c:171
+#: ../src/sat-pref-rot.c:129 ../src/sat-pref-rot-editor.c:160
 msgid "Host"
 msgstr ""
 
 #. port
 #: ../src/sat-pref-rig.c:142 ../src/sat-pref-rig-editor.c:184
-#: ../src/sat-pref-rot.c:136 ../src/sat-pref-rot-editor.c:187
+#: ../src/sat-pref-rot.c:136 ../src/sat-pref-rot-editor.c:176
 msgid "Port"
 msgstr ""
 
@@ -4781,19 +4906,21 @@ msgid "LO Up"
 msgstr ""
 
 #: ../src/sat-pref-rig.c:213
+#, fuzzy
 msgid "Signal AOS"
-msgstr ""
+msgstr "Signalo Vėlinimas"
 
 #: ../src/sat-pref-rig.c:225
+#, fuzzy
 msgid "Signal LOS"
-msgstr ""
+msgstr "Signalo Vėlinimas"
 
-#: ../src/sat-pref-rig.c:302 ../src/sat-pref-rot.c:249
+#: ../src/sat-pref-rig.c:302 ../src/sat-pref-rot.c:252
 #, c-format
 msgid "%s:%d: Read %s"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:315 ../src/sat-pref-rot.c:262
+#: ../src/sat-pref-rig.c:315 ../src/sat-pref-rot.c:265
 #, c-format
 msgid "%s:%d: Failed to read %s"
 msgstr ""
@@ -4815,7 +4942,7 @@ msgstr ""
 msgid "%s: Failed to get RIG %s"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:576 ../src/sat-pref-rot.c:506
+#: ../src/sat-pref-rig.c:576 ../src/sat-pref-rot.c:514
 #, c-format
 msgid "%s:%s: Edit button should have been disabled."
 msgstr ""
@@ -4826,7 +4953,7 @@ msgid ""
 "and try again!"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:668 ../src/sat-pref-rot.c:593
+#: ../src/sat-pref-rig.c:668 ../src/sat-pref-rot.c:603
 #, c-format
 msgid "%s:%s: Delete button should have been disabled."
 msgstr ""
@@ -5013,14 +5140,14 @@ msgid "MHz"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:323
-msgid ""
-"Enter the frequency of the local oscillator of the upconverter, if any."
+msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #. AOS / LOS signalling
 #: ../src/sat-pref-rig-editor.c:332
+#, fuzzy
 msgid "Signalling"
-msgstr ""
+msgstr "Signalo Vėlinimas"
 
 #: ../src/sat-pref-rig-editor.c:339
 msgid "Enable AOS signalling for this radio."
@@ -5046,52 +5173,55 @@ msgstr ""
 msgid "Azimuth Type"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:298
+#: ../src/sat-pref-rot.c:301
 msgid "Add a new rotator to the list"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:304
+#: ../src/sat-pref-rot.c:307
 msgid "Edit the currently selected rotator"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:310
+#: ../src/sat-pref-rot.c:313
 msgid "Delete the selected rotator"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:412
+#: ../src/sat-pref-rot.c:417
 #, c-format
 msgid "%s: Failed to get ROT %s"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:537
+#: ../src/sat-pref-rot.c:546
 msgid ""
 "Select the rotator you want to edit\n"
 "and try again!"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:612
+#: ../src/sat-pref-rot.c:622
 msgid ""
 "Select the rotator you want to delete\n"
 "and try again!"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:693
+#: ../src/sat-pref-rot.c:703
 #, c-format
 msgid "Unknown (%d)"
 msgstr ""
 
 #. crate dialog and add contents
-#: ../src/sat-pref-rot-editor.c:85
+#: ../src/sat-pref-rot-editor.c:80
 msgid "Edit rotator configuration"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:161
+#: ../src/sat-pref-rot-editor.c:149
+#, fuzzy
 msgid ""
-"Enter a short name for this configuration, e.g. ROTOR-1.\n"
+"Enter a short name for this configuration,  e.g. ROTOR-1.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 msgstr ""
+"Suteikite šiai antžeminėi stočiai trumpą vardą, pvz. šaukinys.\n"
+"Leidžiami simboliai: 0..9, a..z, A..Z, - ir _"
 
-#: ../src/sat-pref-rot-editor.c:179
+#: ../src/sat-pref-rot-editor.c:168
 msgid ""
 "Enter the host where rotctld is running. You can use both host name and IP "
 "address, e.g. 192.168.1.100\n"
@@ -5099,39 +5229,50 @@ msgid ""
 "If gpredict and rotctld are running on the same computer, use localhost"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:195
+#: ../src/sat-pref-rot-editor.c:184
 msgid "Enter the port number where rotctld is listening. Default is 4533."
 msgstr ""
 
 #. Az-type
-#: ../src/sat-pref-rot-editor.c:201
+#: ../src/sat-pref-rot-editor.c:192
 msgid "Az type"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:212
+#: ../src/sat-pref-rot-editor.c:203
 msgid ""
 "Select your azimuth range here. Note that gpredict assumes that 0° is at "
 "North and + direction is clockwise for both types"
 msgstr ""
 
 #. Az and El limits
-#: ../src/sat-pref-rot-editor.c:219
+#: ../src/sat-pref-rot-editor.c:211
 msgid " Min Az"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:228
+#: ../src/sat-pref-rot-editor.c:220
 msgid " Max Az"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:237
+#: ../src/sat-pref-rot-editor.c:229
 msgid " Min El"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:246
+#: ../src/sat-pref-rot-editor.c:238
 msgid " Max El"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:434
+#: ../src/sat-pref-rot-editor.c:249
+msgid " Azimuth end stop position"
+msgstr ""
+
+#: ../src/sat-pref-rot-editor.c:257
+msgid ""
+"Set the position of the azimuth end stop here, where 0° is at North, -180° "
+"is south, etc. The default for a 0° → 180° → 360° rotor is 0°, and the "
+"default for a -180° → 0° → +180° rotor is -180°."
+msgstr ""
+
+#: ../src/sat-pref-rot-editor.c:438
 #, c-format
 msgid "%s:%s: Invalid AZ rotator type."
 msgstr ""
@@ -5522,31 +5663,6 @@ msgstr ""
 msgid "No files to fetch from network"
 msgstr "Nėra naujų failų"
 
-#: ../src/tle-update.c:579
-#, c-format
-msgid "Fetching %s"
-msgstr "Siunčiama %s"
-
-#: ../src/tle-update.c:606
-#, c-format
-msgid "%s: Error fetching %s (%s)"
-msgstr "%s: Klaida siunčiant %s (%s)"
-
-#: ../src/tle-update.c:611
-#, c-format
-msgid "%s: Successfully fetched %s"
-msgstr "%s: Sėkmingai parsiusta %s"
-
-#: ../src/tle-update.c:619
-#, c-format
-msgid "%s: Failed to open %s preventing update"
-msgstr ""
-
-#: ../src/tle-update.c:647
-#, c-format
-msgid "%s: Fetched %d files from network; updating..."
-msgstr "%s: Parsiusta %d bylų; atnaujinama..."
-
 #: ../src/tle-update.c:657
 #, c-format
 msgid "%s: Could not fetch any new TLE files from network; aborting..."
@@ -5557,106 +5673,90 @@ msgstr "%s: nepavyko parsiusti naujų TLE bylų; nutraukiama..."
 msgid "%s: Error opening %s (%s)"
 msgstr "%s: Klaida atidarant %s (%s)"
 
-#: ../src/tle-update.c:815
+#: ../src/tle-update.c:816
 #, c-format
 msgid "%s:%s: There is no category in %s"
 msgstr ""
 
-#: ../src/tle-update.c:824
+#: ../src/tle-update.c:825
 #, c-format
 msgid "%s:%s: There is no category called %s"
 msgstr ""
 
-#: ../src/tle-update.c:837
+#: ../src/tle-update.c:838
 #, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
 msgstr ""
 
-#: ../src/tle-update.c:887
+#: ../src/tle-update.c:888
 #, c-format
 msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 
-#: ../src/tle-update.c:913
+#: ../src/tle-update.c:914
 #, c-format
 msgid "%s:%s: Processing a three line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:928
+#: ../src/tle-update.c:929
 #, c-format
 msgid "%s:%s: Processing a bare two line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:977
+#: ../src/tle-update.c:978
 #, c-format
 msgid "%s:%s: Invalid data for %d"
 msgstr "%s:%s: Neteisingi duomenys %d"
 
-#: ../src/tle-update.c:1022
+#: ../src/tle-update.c:1023
 #, c-format
 msgid "%s:%s: Two different statuses for %d (%s) at the same time."
 msgstr ""
 
-#: ../src/tle-update.c:1074
+#: ../src/tle-update.c:1075
 #, c-format
 msgid "%s:%s: Failed to open %s"
 msgstr "%s:%s: Nepavyko atverti %s"
 
-#: ../src/tle-update.c:1144
+#: ../src/tle-update.c:1145
 #, c-format
 msgid "%s: No new TLE data found for %d. Satellite might be obsolete."
 msgstr "%s: Nėra naujų TLE duomenų %d. Palydovas gali būti pasenęs."
 
-#: ../src/tle-update.c:1153
+#: ../src/tle-update.c:1154
 #, c-format
 msgid "%s: Error loading %s (%s)"
 msgstr "%s: Klaida nuskaitant %s (%s)"
 
-#: ../src/tle-update.c:1196
+#: ../src/tle-update.c:1197
 #, c-format
 msgid "%s: Current TLE data for %d appears to be bad"
 msgstr "%s: %d palydovo TLE duomenys neteisingi"
 
-#: ../src/tle-update.c:1217
+#: ../src/tle-update.c:1218
 #, c-format
 msgid "%s: Data for  %d updated for name."
 msgstr ""
 
-#: ../src/tle-update.c:1229
+#: ../src/tle-update.c:1230
 #, c-format
 msgid "%s: Data for  %d updated for nickname."
 msgstr ""
 
-#: ../src/tle-update.c:1244
+#: ../src/tle-update.c:1245
 #, c-format
 msgid "%s: Data for  %d updated for tle."
 msgstr ""
 
-#: ../src/tle-update.c:1254
+#: ../src/tle-update.c:1255
 #, c-format
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
-#: ../src/tle-update.c:1290
-msgid "Never"
-msgstr "Niekada"
-
-#: ../src/tle-update.c:1291
-msgid "Monthly"
-msgstr "Kas mėnesį"
-
-#: ../src/tle-update.c:1292
-msgid "Weekly"
-msgstr "Kas savaitę"
-
-#: ../src/tle-update.c:1293
-msgid "Daily"
-msgstr "Kasdien"
-
 #: ../src/trsp-conf.c:59
-#, c-format
+#, fuzzy, c-format
 msgid "%s: Could not read %s from %s:'%s'. Using default."
-msgstr ""
+msgstr "%s: Klaida skaitant %s (%s)"
 
 #: ../src/trsp-conf.c:69
 #, c-format
@@ -5669,9 +5769,9 @@ msgid "%s: %s contains 0 transponders"
 msgstr ""
 
 #: ../src/trsp-conf.c:96
-#, c-format
+#, fuzzy, c-format
 msgid "%s: Failed to allocate memory for transponder data"
-msgstr ""
+msgstr "%s:%s: Nepavyko paskirti atminties radijo įrangos nustatymams"
 
 #. FIXME
 #. avoid unused parameter compiler warning
@@ -5680,3 +5780,20 @@ msgstr ""
 #, c-format
 msgid "%s: Not implemented!"
 msgstr ""
+
+#~ msgid "%s: %s does not appear to be in user conf dir; adding."
+#~ msgstr "%s: %s nerastas vartotojo nuostatų kataloge; pridedamas."
+
+#~ msgid "%s: %s already in user conf dir."
+#~ msgstr "%s: %s jau egzistuoja vartotojo nuostatų kataloge."
+
+#~ msgid "%s: %s directory does not exist. Incomplete installation."
+#~ msgstr "%s: %s katalogas nesukurtas. Nepilna instaliacija."
+
+#, fuzzy
+#~ msgid "%s: Error reading QTH name (%s)."
+#~ msgstr "%s: Klaida skaitant %s (%s)"
+
+#, fuzzy
+#~ msgid "%s: Error reading %s:%s from %s"
+#~ msgstr "%s: Klaida skaitant %s (%s)"
