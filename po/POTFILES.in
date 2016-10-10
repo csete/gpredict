@@ -2,6 +2,7 @@
 src/about.c
 src/compat.c
 src/first-time.c
+src/frq-update.c
 src/gpredict-help.c
 src/gpredict-url-hook.c
 src/gpredict-utils.c
