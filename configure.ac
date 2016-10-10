@@ -66,7 +66,7 @@ AC_SUBST(PACKAGE_LIBS)
 
 # Add the languages which your application supports here.
 # Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
-ALL_LINGUAS="cs da de en_GB en_US es fi fr id it lt ru th uk"
+ALL_LINGUAS="cs da de el en_GB en_US es fi fr id it lt ru th uk"
 GETTEXT_PACKAGE=gpredict
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
