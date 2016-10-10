@@ -1,5 +1,4 @@
 *.gmo
-gpredict.pot
 .intltool-merge-cache
 Makefile
 Makefile
