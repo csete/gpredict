@@ -2733,7 +2733,7 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
         gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->TrspSel), trsp->name);
 
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s:&s: Read transponder '%s' for satellite %d"),
+                    _("%s:%s: Read transponder '%s' for satellite %d"),
                     __FILE__, __func__, trsp->name, ctrl->target->tle.catnr);
     }
 
