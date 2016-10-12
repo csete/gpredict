@@ -505,6 +505,13 @@ static GtkWidget *create_transponder_table (guint catnum)
                 g_free (text);
                 gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
             }
+	    if (trsp->baud) {
+                text = g_strdup_printf (_("Baudrate: %9.2f"), trsp->baud);
+                label = gtk_label_new (text);
+                gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+                g_free (text);
+                gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+            }
         }
         free_transponders (trsplist);
 

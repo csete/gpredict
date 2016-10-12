@@ -250,13 +250,13 @@ void frq_update_files(gchar * frqfile)
                     //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("downlink_high : %Ld"),m_trsp.downlink_high, __func__);
                     //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Mode : %s"), m_trsp.mode, __func__);
                     //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("       Invert : %s"), m_trsp.invert ? "true" : "false", __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Baud : %lf"),m_trsp.baud, __func__);
+                    // sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Baud : %lf"),m_trsp.baud, __func__);
                     //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" norad_cat_id : %Ld"),m_trsp.catnum, __func__);
                     char            m_catnum[20];
 
                     sprintf(m_catnum, "%d", m_trsp.catnum);
                     trspfile = g_strconcat(trspfolder, G_DIR_SEPARATOR_S, m_catnum,".trsp", NULL);
-                    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Writing to file : %s "), __func__, trspfile);
+                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Writing to file : %s "), __func__, trspfile);
 
                     //first lets delete the file we already have, to make space for the new version
                     /* check existence and add data to hash table for future check */
@@ -292,14 +292,8 @@ void frq_update_files(gchar * frqfile)
                         sprintf(fcontent, "%sUP_HIGH=%d\n", fcontent, m_trsp.uplink_high);
                         sprintf(fcontent, "%sDOWN_LOW=%d\n", fcontent, m_trsp.downlink_low);
                         sprintf(fcontent, "%sDOWN_HIGH=%d\n", fcontent, m_trsp.downlink_high);
-                        if (m_trsp.baud!=0)
-			{
-				sprintf(fcontent, "%sMODE=%s baud: %9.2f\n", fcontent, m_trsp.mode, m_trsp.baud);
-			}
-			else
-			{
-				sprintf(fcontent, "%sMODE= %s\n",fcontent,m_trsp.mode);
-			}
+			sprintf(fcontent, "%sMODE= %s\n",fcontent,m_trsp.mode);
+			sprintf(fcontent, "%sBAUD= %9.2f\n", fcontent, m_trsp.baud);
 			sprintf(fcontent, "%sINVERT=%s\n\n", fcontent, m_trsp.invert ? "true" : "false");
 
                         fputs(fcontent, ffile);
