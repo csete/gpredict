@@ -94,7 +94,8 @@ GSList         *read_transponders(guint catnum)
         if (G_UNLIKELY(trsp == NULL))
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: Failed to allocate memory for transponder data"),
+                        _
+                        ("%s: Failed to allocate memory for transponder data"),
                         __func__);
             goto done;
         }
@@ -102,7 +103,8 @@ GSList         *read_transponders(guint catnum)
         /* read transponder data */
         trsp->name = g_strdup(groups[i]);
 
-        trsp->uplow = g_key_file_get_double(cfg, groups[i], KEY_UP_LOW, &error);
+        trsp->uplow = g_key_file_get_double(cfg, groups[i], KEY_UP_LOW,
+                                            &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_UP_LOW,
@@ -151,17 +153,15 @@ GSList         *read_transponders(guint catnum)
             trsp->invert = FALSE;
         }
 
-        trsp->mode = g_key_file_get_string(cfg, groups[i],
-                                           KEY_MODE, &error);
+        trsp->mode = g_key_file_get_string(cfg, groups[i], KEY_MODE, &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_MODE,
                         name, groups[i]);
             g_clear_error(&error);
         }
-	
-	trsp->baud = g_key_file_get_double(cfg, groups[i],
-                                           KEY_BAUD, &error);
+
+        trsp->baud = g_key_file_get_double(cfg, groups[i], KEY_BAUD, &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_BAUD,
@@ -174,7 +174,7 @@ GSList         *read_transponders(guint catnum)
         trsplist = g_slist_append(trsplist, trsp);
     }
 
-done:
+  done:
     g_strfreev(groups);
     g_key_file_free(cfg);
     g_free(name);
