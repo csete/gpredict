@@ -36,9 +36,10 @@ typedef struct {
     gdouble         uphigh;     /*!< Upper limit of uplink. */
     gdouble         downlow;    /*!< Lower limit of downlink. */
     gdouble         downhigh;   /*!< Upper limit of donlink. */
+    gdouble	    baud;	/*!< Baud rate > */
     gboolean        invert;     /*!< Flag indicating whether transponder is inverting. */
     gchar          *mode;       /*!< Mode descriptor. */
-} trsp_t;
+ } trsp_t;
 
 /* The actual data would then be a singly linked list with pointers to transponder_t structures */
 

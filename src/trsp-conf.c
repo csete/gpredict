@@ -39,6 +39,7 @@
 #define KEY_DOWN_HIGH   "DOWN_HIGH"
 #define KEY_INVERT      "INVERT"
 #define KEY_MODE        "MODE"
+#define KEY_BAUD	"BAUD"
 
 /**
  * Read transponder data file.
@@ -124,7 +125,7 @@ GSList         *read_transponders(guint catnum)
                                               KEY_DOWN_LOW, &error);
         if (error != NULL)
         {
-            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_UP_HIGH,
+            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_DOWN_LOW,
                         name, groups[i]);
             g_clear_error(&error);
             trsp->downlow = 0.0;
@@ -144,7 +145,7 @@ GSList         *read_transponders(guint catnum)
                                               KEY_INVERT, &error);
         if (error != NULL)
         {
-            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_DOWN_HIGH,
+            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_INVERT,
                         name, groups[i]);
             g_clear_error(&error);
             trsp->invert = FALSE;
@@ -154,10 +155,20 @@ GSList         *read_transponders(guint catnum)
                                            KEY_MODE, &error);
         if (error != NULL)
         {
-            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_DOWN_HIGH,
+            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_MODE,
                         name, groups[i]);
             g_clear_error(&error);
         }
+	
+	trsp->baud = g_key_file_get_double(cfg, groups[i],
+                                           KEY_BAUD, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_BAUD,
+                        name, groups[i]);
+            g_clear_error(&error);
+        }
+
 
         /* add transponder to list */
         trsplist = g_slist_append(trsplist, trsp);
