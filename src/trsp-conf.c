@@ -25,9 +25,8 @@
     along with this program; if not, visit http://www.fsf.org/
  
 */
-
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "compat.h"
 #include "sat-log.h"
@@ -39,15 +38,15 @@
 #define KEY_DOWN_HIGH   "DOWN_HIGH"
 #define KEY_INVERT      "INVERT"
 #define KEY_MODE        "MODE"
-#define KEY_BAUD	"BAUD"
+#define KEY_BAUD        "BAUD"
 
 /**
  * Read transponder data file.
  * 
- * \param catnum The catalog number of the satellite to read transponders for.
- * \return  The new transponder list.
+ * @param catnum The catalog number of the satellite to read transponders for.
+ * @return  The new transponder list.
  */
-GSList         *read_transponders(guint catnum)
+GSList *read_transponders(guint catnum)
 {
     GSList         *trsplist = NULL;
     trsp_t         *trsp;
@@ -94,8 +93,7 @@ GSList         *read_transponders(guint catnum)
         if (G_UNLIKELY(trsp == NULL))
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _
-                        ("%s: Failed to allocate memory for transponder data"),
+                        _("%s: Failed to allocate memory for trsp data"),
                         __func__);
             goto done;
         }
@@ -169,7 +167,6 @@ GSList         *read_transponders(guint catnum)
             g_clear_error(&error);
         }
 
-
         /* add transponder to list */
         trsplist = g_slist_append(trsplist, trsp);
     }
@@ -184,23 +181,24 @@ GSList         *read_transponders(guint catnum)
 }
 
 /**
- * Write transponder list for satellite.
- * \param catnum The catlog number of the satellite.
- * \param trsplist Pointer to a GSList of trsp_t structures.
+ * Write transponder list to file.
+ *
+ * @param catnum The catlog number of the satellite.
+ * @param trsplist Pointer to a GSList of trsp_t structures.
+ *
+ * The transponder list is written to a file called "catnum.trsp".
  */
 void write_transponders(guint catnum, GSList * trsplist)
 {
-    // FIXME
-    (void)catnum;               /* avoid unused parameter compiler warning */
-    (void)trsplist;             /* avoid unused parameter compiler warning */
+    (void)catnum;
+    (void)trsplist;
     sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __func__);
 }
 
 /**
  * Free transponder list.
- * \param trsplist Pointer to a GSList of trsp_t structures.
  *
- * This functions free all memory occupied by the transponder list.
+ * @param trsplist Pointer to a GSList of trsp_t structures.
  */
 void free_transponders(GSList * trsplist)
 {
