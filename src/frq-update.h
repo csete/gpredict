@@ -68,17 +68,17 @@ typedef enum {
 
 /** \brief Data structure to hold a FRQ set. */
 struct transponder {
-    char            uuid[30];   /*!< uuid */
-    int             catnum;     /*!< Catalog number. */
-    char            description[99];    /*!< Transponder descriptoion */
-    int             uplink_low; /*!< Uplink starting frequency */
-    int             uplink_high;        /*!< uplink end frequency  */
-    int             downlink_low;       /*!< downlink starting frequency */
-    int             downlink_high;      /*!< downlink end frequency */
-    char            mode[20];    /*!< mode (from modes files) */
-    int             invert;     /*!< inverting / noninverting */
-    double          baud;       /*!< baudrate */
-    int             alive;      /*!< alive or dead */
+    char               uuid[30];        /*!< uuid */
+    int                catnum;          /*!< Catalog number. */
+    char               description[99]; /*!< Transponder descriptoion */
+    unsigned long long uplink_low;      /*!< Uplink starting frequency */
+    unsigned long long uplink_high;     /*!< uplink end frequency  */
+    unsigned long long downlink_low;    /*!< downlink starting frequency */
+    unsigned long long downlink_high;   /*!< downlink end frequency */
+    char               mode[20];        /*!< mode (from modes files) */
+    int                invert;          /*!< inverting / noninverting */
+    double             baud;            /*!< baudrate */
+    int                alive;           /*!< alive or dead */
 };
 
 

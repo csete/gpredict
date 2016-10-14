@@ -288,10 +288,10 @@ void frq_update_files(gchar * frqfile)
                         char            fcontent[1000];
 
                         sprintf(fcontent, "[%s]\n", m_trsp.description);
-                        sprintf(fcontent, "%sUP_LOW=%d\n", fcontent, m_trsp.uplink_low);
-                        sprintf(fcontent, "%sUP_HIGH=%d\n", fcontent, m_trsp.uplink_high);
-                        sprintf(fcontent, "%sDOWN_LOW=%d\n", fcontent, m_trsp.downlink_low);
-                        sprintf(fcontent, "%sDOWN_HIGH=%d\n", fcontent, m_trsp.downlink_high);
+                        sprintf(fcontent, "%sUP_LOW=%llu\n", fcontent, m_trsp.uplink_low);
+                        sprintf(fcontent, "%sUP_HIGH=%llu\n", fcontent, m_trsp.uplink_high);
+                        sprintf(fcontent, "%sDOWN_LOW=%llu\n", fcontent, m_trsp.downlink_low);
+                        sprintf(fcontent, "%sDOWN_HIGH=%llu\n", fcontent, m_trsp.downlink_high);
                         sprintf(fcontent, "%sMODE=%s\n",fcontent,m_trsp.mode);
                         sprintf(fcontent, "%sBAUD=%.2f\n", fcontent, m_trsp.baud);
                         sprintf(fcontent, "%sINVERT=%s\n\n", fcontent, m_trsp.invert ? "true" : "false");
