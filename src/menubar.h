@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,8 +27,6 @@
 #ifndef MENUBAR_H
 #define MENUBAR_H 1
 
-
-GtkWidget *menubar_create (GtkWidget *window);
-
+GtkWidget      *menubar_create(GtkWidget * window);
 
 #endif

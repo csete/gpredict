@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -27,23 +26,24 @@
 */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "sat-pref.h"
-#include "mod-cfg.h"
-#include "sat-cfg.h"
-#include "mod-mgr.h"
-#include "sat-log.h"
-#include "sat-log-browser.h"
+
 #include "about.h"
-#include "gtk-sat-module.h"
-#include "gtk-sat-module-popup.h"
+#include "compat.h"
+#include "config-keys.h"
+#include "frq-update.h"
 #include "gpredict-help.h"
 #include "gpredict-utils.h"
-#include "tle-update.h"
-#include "frq-update.h"
-#include "compat.h"
+#include "gtk-sat-module.h"
+#include "gtk-sat-module-popup.h"
 #include "menubar.h"
-#include "config-keys.h"
-//#include "satellite-editor.h"
+#include "mod-cfg.h"
+#include "mod-mgr.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sat-log-browser.h"
+#include "sat-pref.h"
+#include "tle-update.h"
+
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
@@ -51,38 +51,34 @@
 extern GtkWidget *app;
 
 /* private function prototypes */
-static void menubar_new_mod_cb(GtkWidget * widget, gpointer data);
-static void menubar_open_mod_cb(GtkWidget * widget, gpointer data);
-static void menubar_message_log(GtkWidget * widget, gpointer data);
-static void menubar_app_exit_cb(GtkWidget * widget, gpointer data);
-static void menubar_freq_edit_cb(GtkWidget * widget, gpointer data);
-static void menubar_pref_cb(GtkWidget * widget, gpointer data);
-static void menubar_tle_net_cb(GtkWidget * widget, gpointer data);
-static void menubar_frq_net_cb(GtkWidget * widget, gpointer data);
-static void menubar_tle_local_cb(GtkWidget * widget, gpointer data);
-static void menubar_frq_local_cb(GtkWidget * widget, gpointer data);
-static void menubar_tle_manual_cb(GtkWidget * widget, gpointer data);
-static void menubar_window_cb(GtkWidget * widget, gpointer data);
-static void menubar_predict_cb(GtkWidget * widget, gpointer data);
-static void menubar_getting_started_cb(GtkWidget * widget, gpointer data);
-static void menubar_help_cb(GtkWidget * widget, gpointer data);
-static void menubar_license_cb(GtkWidget * widget, gpointer data);
-static void menubar_news_cb(GtkWidget * widget, gpointer data);
-static void menubar_about_cb(GtkWidget * widget, gpointer data);
-static gchar *select_module(void);
-static void select_module_row_activated_cb(GtkTreeView * tree_view,
-                                           GtkTreePath * path,
-                                           GtkTreeViewColumn * column, gpointer data);
-static void create_module_window(GtkWidget * module);
-static gint compare_func(GtkTreeModel * model, GtkTreeIter * a, GtkTreeIter * b, gpointer userdata);
+static void     menubar_new_mod_cb(GtkWidget * widget, gpointer data);
+static void     menubar_open_mod_cb(GtkWidget * widget, gpointer data);
+static void     menubar_message_log(GtkWidget * widget, gpointer data);
+static void     menubar_app_exit_cb(GtkWidget * widget, gpointer data);
+static void     menubar_pref_cb(GtkWidget * widget, gpointer data);
+static void     menubar_tle_net_cb(GtkWidget * widget, gpointer data);
+static void     menubar_frq_net_cb(GtkWidget * widget, gpointer data);
+static void     menubar_tle_local_cb(GtkWidget * widget, gpointer data);
+static void     menubar_help_cb(GtkWidget * widget, gpointer data);
+static void     menubar_license_cb(GtkWidget * widget, gpointer data);
+static void     menubar_news_cb(GtkWidget * widget, gpointer data);
+static void     menubar_about_cb(GtkWidget * widget, gpointer data);
+static gchar   *select_module(void);
+static void     select_module_row_activated_cb(GtkTreeView * tree_view,
+                                               GtkTreePath * path,
+                                               GtkTreeViewColumn * column,
+                                               gpointer data);
+static void     create_module_window(GtkWidget * module);
+static gint     compare_func(GtkTreeModel * model, GtkTreeIter * a,
+                             GtkTreeIter * b, gpointer userdata);
 
 /** Regular menu items. */
 static GtkActionEntry entries[] = {
     {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
     {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
     {"TleMenu", GTK_STOCK_REFRESH, N_("_Update TLE data"), NULL, NULL, NULL},
-    {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update Transponder data"), NULL, NULL, NULL},
-    {"ToolsMenu", NULL, N_("_Tools"), NULL, NULL, NULL},
+    {"FrqMenu", GTK_STOCK_REFRESH, N_("_Update Transponder data"), NULL, NULL,
+     NULL},
     {"HelpMenu", NULL, N_("_Help"), NULL, NULL, NULL},
 
     /* File menu */
@@ -96,8 +92,6 @@ static GtkActionEntry entries[] = {
      N_("Exit the program"), G_CALLBACK(menubar_app_exit_cb)},
 
     /* Edit menu */
-    /*    { "Tle", GTK_STOCK_REFRESH, N_("Update TLE"), NULL,
-       N_("Update Keplerian elements"), NULL}, */
     {"Net", GTK_STOCK_NETWORK, N_("From _network"), NULL,
      N_("Update Keplerian elements from a network server"),
      G_CALLBACK(menubar_tle_net_cb)},
@@ -107,32 +101,10 @@ static GtkActionEntry entries[] = {
     {"Local", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
      N_("Update Keplerian elements from local files"),
      G_CALLBACK(menubar_tle_local_cb)},
-    {"FLocal", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
-     N_("Update transponders from local files"),
-     G_CALLBACK(menubar_frq_local_cb)},
-    {"Man", GTK_STOCK_DND, N_("Using TLE _editor"), NULL,
-     N_("Add or update Keplerian elements using the TLE editor"),
-     G_CALLBACK(menubar_tle_manual_cb)},
-    {"Freq", NULL, N_("_Transponders"), NULL,
-     N_("Edit satellite transponder frequencies"),
-     G_CALLBACK(menubar_freq_edit_cb)},
     {"Pref", GTK_STOCK_PREFERENCES, N_("_Preferences"), NULL,
      N_("Edit user preferences"), G_CALLBACK(menubar_pref_cb)},
 
-    /* Tools menu */
-    {"SatLab", NULL, N_("Satellite Editor"), NULL,
-     N_("Open the satellite editor where you can manually edit orbital elements and other data"),
-     G_CALLBACK(menubar_tle_manual_cb)},
-    {"Window", NULL, N_("Comm Window"), NULL,
-     N_("Predict windows between two observers"),
-     G_CALLBACK(menubar_window_cb)},
-    {"Predict", GTK_STOCK_DND_MULTIPLE, N_("Advanced Predict"), NULL,
-     N_("Open advanced pass predictor"), G_CALLBACK(menubar_predict_cb)},
-
     /* Help menu */
-    {"GettingStarted", GTK_STOCK_EXECUTE, N_("Getting Started"), NULL,
-     N_("Show online user manual, Getting Started Section"),
-     G_CALLBACK(menubar_getting_started_cb)},
     {"Help", GTK_STOCK_HELP, N_("Online help"), "F1",
      N_("Show online user manual"), G_CALLBACK(menubar_help_cb)},
     {"License", NULL, N_("_License"), NULL,
@@ -158,19 +130,25 @@ static const char *menu_desc =
     "      </menu>"
     "      <menu action='EditMenu'>"
     "         <menu action='TleMenu'>"
-    "            <menuitem action='Net'/>" "            <menuitem action='Local'/>"
+    "            <menuitem action='Net'/>"
+    "            <menuitem action='Local'/>"
     "         </menu>"
     "         <menu action='FrqMenu'>"
-    "            <menuitem action='FNet'/>" "            <menuitem action='FLocal'/>"
+    "            <menuitem action='FNet'/>"
     "         </menu>"
-    "         <separator/>" "         <menuitem action='Pref'/>" "      </menu>"
+    "         <separator/>"
+    "         <menuitem action='Pref'/>"
+    "      </menu>"
     "      <menu action='HelpMenu'>"
     "         <menuitem action='Help'/>"
     "         <separator/>"
     "         <menuitem action='License'/>"
     "         <menuitem action='News'/>"
     "         <separator/>"
-    "         <menuitem action='About'/>" "      </menu>" "   </menubar>" "</ui>";
+    "         <menuitem action='About'/>"
+    "      </menu>"
+    "   </menubar>"
+    "</ui>";
 
 /**
  * Create menubar.
@@ -180,14 +158,14 @@ static const char *menu_desc =
  * This function creates and initializes the main menubar for gpredict.
  * It should be called from the main gui_create function.
  */
-GtkWidget *menubar_create(GtkWidget * window)
+GtkWidget      *menubar_create(GtkWidget * window)
 {
-    GtkWidget *menubar;
+    GtkWidget      *menubar;
     GtkActionGroup *actgrp;
-    GtkUIManager *uimgr;
-    GtkAccelGroup *accgrp;
-    GError *error = NULL;
-    guint i;
+    GtkUIManager   *uimgr;
+    GtkAccelGroup  *accgrp;
+    GError         *error = NULL;
+    guint           i;
 
     /* create action group */
     actgrp = gtk_action_group_new("MenuActions");
@@ -219,13 +197,6 @@ GtkWidget *menubar_create(GtkWidget * window)
         return NULL;
     }
 
-    /* load custom icons */
-/*    icon = icon_file_name ("gpredict-shuttle-small.png");
-    image = gtk_image_new_from_file (icon);
-    g_free (icon);
-    menuitem = gtk_ui_manager_get_widget (uimgr, "/GpredictMenu/ToolsMenu/SatLab");
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);*/
-
     /* now, finally, get the menubar */
     menubar = gtk_ui_manager_get_widget(uimgr, "/GpredictMenu");
 
@@ -241,24 +212,27 @@ GtkWidget *menubar_create(GtkWidget * window)
  */
 static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
 {
-    gchar *modnam = NULL;
-    gchar *modfile;
-    gchar *confdir;
-    GtkWidget *module = NULL;
+    gchar          *modnam = NULL;
+    gchar          *modfile;
+    gchar          *confdir;
+    GtkWidget      *module = NULL;
 
     (void)widget;
     (void)data;
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Starting new module configurator..."), __func__);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                _("%s: Starting new module configurator..."), __func__);
 
     modnam = mod_cfg_new();
 
     if (modnam)
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module name is %s."), __func__, modnam);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module name is %s."),
+                    __func__, modnam);
 
         confdir = get_modules_dir();
-        modfile = g_strconcat(confdir, G_DIR_SEPARATOR_S, modnam, ".mod", NULL);
+        modfile =
+            g_strconcat(confdir, G_DIR_SEPARATOR_S, modnam, ".mod", NULL);
         g_free(confdir);
 
         /* create new module */
@@ -266,16 +240,16 @@ static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
 
         if (module == NULL)
         {
-
-            GtkWidget *dialog;
+            GtkWidget      *dialog;
 
             dialog = gtk_message_dialog_new(GTK_WINDOW(app),
                                             GTK_DIALOG_MODAL |
                                             GTK_DIALOG_DESTROY_WITH_PARENT,
                                             GTK_MESSAGE_ERROR,
                                             GTK_BUTTONS_OK,
-                                            _("Could not open %s. Please examine "
-                                              "the log messages for details."), modnam);
+                                            _("Could not open %s. "
+                                              "Please examine the log messages "
+                                              "for details."), modnam);
 
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
@@ -290,31 +264,34 @@ static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module config cancelled."), __func__);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: New module config cancelled."),
+                    __func__);
     }
 }
 
-
 static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
 {
-    gchar *modnam = NULL;
-    gchar *modfile;
-    gchar *confdir;
-    GtkWidget *module = NULL;
+    gchar          *modnam = NULL;
+    gchar          *modfile;
+    gchar          *confdir;
+    GtkWidget      *module = NULL;
 
     (void)widget;
     (void)data;
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open existing module..."), __func__);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open existing module..."),
+                __func__);
 
     modnam = select_module();
 
     if (modnam)
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module %s."), __func__, modnam);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module %s."), __func__,
+                    modnam);
 
         confdir = get_modules_dir();
-        modfile = g_strconcat(confdir, G_DIR_SEPARATOR_S, modnam, ".mod", NULL);
+        modfile =
+            g_strconcat(confdir, G_DIR_SEPARATOR_S, modnam, ".mod", NULL);
         g_free(confdir);
 
         /* create new module */
@@ -323,30 +300,29 @@ static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
         if (module == NULL)
         {
             /* mod manager could not create the module */
-            GtkWidget *dialog;
+            GtkWidget      *dialog;
 
             dialog = gtk_message_dialog_new(GTK_WINDOW(app),
                                             GTK_DIALOG_MODAL |
                                             GTK_DIALOG_DESTROY_WITH_PARENT,
                                             GTK_MESSAGE_ERROR,
                                             GTK_BUTTONS_OK,
-                                            _("Could not open %s. Please examine "
-                                              "the log messages for details."), modnam);
+                                            _("Could not open %s. "
+                                              "Please examine the log "
+                                              "messages for details."),
+                                            modnam);
 
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
         }
         else
         {
-
             /* if module state was window or user does not want to restore the
                state of the modules, pack the module into the notebook */
             if ((GTK_SAT_MODULE(module)->state == GTK_SAT_MOD_STATE_DOCKED) ||
                 !sat_cfg_get_bool(SAT_CFG_BOOL_MOD_STATE))
             {
-
                 mod_mgr_add_module(module, TRUE);
-
             }
             else
             {
@@ -360,7 +336,8 @@ static void menubar_open_mod_cb(GtkWidget * widget, gpointer data)
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module cancelled."), __func__);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Open module cancelled."),
+                    __func__);
     }
 }
 
@@ -378,12 +355,6 @@ static void menubar_app_exit_cb(GtkWidget * widget, gpointer data)
     (void)data;
 
     gtk_widget_destroy(app);
-}
-
-static void menubar_freq_edit_cb(GtkWidget * widget, gpointer data)
-{
-    (void)widget;
-    (void)data;
 }
 
 static void menubar_pref_cb(GtkWidget * widget, gpointer data)
@@ -407,11 +378,11 @@ static void menubar_pref_cb(GtkWidget * widget, gpointer data)
 static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
 {
 
-    GtkWidget *dialog;          /* dialog window  */
-    GtkWidget *label;           /* misc labels */
-    GtkWidget *progress;        /* progress indicator */
-    GtkWidget *label1, *label2; /* activitity and stats labels */
-    GtkWidget *box;
+    GtkWidget      *dialog;     /* dialog window  */
+    GtkWidget      *label;      /* misc labels */
+    GtkWidget      *progress;   /* progress indicator */
+    GtkWidget      *label1, *label2;    /* activitity and stats labels */
+    GtkWidget      *box;
 
     (void)widget;
     (void)data;
@@ -421,9 +392,10 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
-    //gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
-    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, FALSE);
+                                         GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT,
+                                         NULL);
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT,
+                                      FALSE);
     /* create a vbox */
     box = gtk_vbox_new(FALSE, 0);
     gtk_container_set_border_width(GTK_CONTAINER(box), 20);
@@ -431,7 +403,8 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     /* add static label */
     label = gtk_label_new(NULL);
     gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-    gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating transponder files from network</b>"));
+    gtk_label_set_markup(GTK_LABEL(label),
+                         _("<b>Updating transponder files from network</b>"));
     gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
     /* activity label */
@@ -449,8 +422,10 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
 
     /* finalise dialog */
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
-    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+    gtk_container_add(GTK_CONTAINER
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+    g_signal_connect_swapped(dialog, "response",
+                             G_CALLBACK(gtk_widget_destroy), dialog);
 
     gtk_widget_show_all(dialog);
 
@@ -469,7 +444,8 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     gtk_label_set_text(GTK_LABEL(label1), _("Finished"));
 
     /* enable close button */
-    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, TRUE);
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT,
+                                      TRUE);
 
     /* reload satellites */
     mod_mgr_reload_sats();
@@ -487,11 +463,11 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
  */
 static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
 {
-    GtkWidget *dialog;          /* dialog window  */
-    GtkWidget *label;           /* misc labels */
-    GtkWidget *progress;        /* progress indicator */
-    GtkWidget *label1, *label2; /* activitity and stats labels */
-    GtkWidget *box;
+    GtkWidget      *dialog;     /* dialog window  */
+    GtkWidget      *label;      /* misc labels */
+    GtkWidget      *progress;   /* progress indicator */
+    GtkWidget      *label1, *label2;    /* activitity and stats labels */
+    GtkWidget      *box;
 
     (void)widget;
     (void)data;
@@ -501,9 +477,10 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
-    //gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
-    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, FALSE);
+                                         GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT,
+                                         NULL);
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT,
+                                      FALSE);
 
     /* create a vbox */
     box = gtk_vbox_new(FALSE, 0);
@@ -512,7 +489,8 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
     /* add static label */
     label = gtk_label_new(NULL);
     gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-    gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating TLE files from network</b>"));
+    gtk_label_set_markup(GTK_LABEL(label),
+                         _("<b>Updating TLE files from network</b>"));
     gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
     /* activity label */
@@ -526,12 +504,15 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
 
     /* statistics */
     label2 = gtk_label_new(_("Satellites updated:\t 0\n"
-                             "Satellites skipped:\t 0\n" "Missing Satellites:\t 0\n"));
+                             "Satellites skipped:\t 0\n"
+                             "Missing Satellites:\t 0\n"));
     gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
 
     /* finalise dialog */
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
-    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+    gtk_container_add(GTK_CONTAINER
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
+    g_signal_connect_swapped(dialog, "response",
+                             G_CALLBACK(gtk_widget_destroy), dialog);
 
     gtk_widget_show_all(dialog);
 
@@ -550,7 +531,8 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
     gtk_label_set_text(GTK_LABEL(label1), _("Finished"));
 
     /* enable close button */
-    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, TRUE);
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT,
+                                      TRUE);
 
     /* reload satellites */
     mod_mgr_reload_sats();
@@ -576,15 +558,15 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
  */
 static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
 {
-    gchar *dir;                 /* selected directory */
-    GtkWidget *dir_chooser;     /* directory chooser button */
-    GtkWidget *dialog;          /* dialog window  */
-    GtkWidget *label;           /* misc labels */
-    GtkWidget *progress;        /* progress indicator */
-    GtkWidget *label1, *label2; /* activitity and stats labels */
-    GtkWidget *box;
-    gint response;              /* dialog response */
-    gboolean doupdate = FALSE;
+    gchar          *dir;        /* selected directory */
+    GtkWidget      *dir_chooser;        /* directory chooser button */
+    GtkWidget      *dialog;     /* dialog window  */
+    GtkWidget      *label;      /* misc labels */
+    GtkWidget      *progress;   /* progress indicator */
+    GtkWidget      *label1, *label2;    /* activitity and stats labels */
+    GtkWidget      *box;
+    gint            response;   /* dialog response */
+    gboolean        doupdate = FALSE;
 
     (void)widget;
     (void)data;
@@ -620,24 +602,18 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_STOCK_CANCEL,
                                          GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box, TRUE, TRUE,
-                       30);
+                                         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+                                         NULL);
+    gtk_box_pack_start(GTK_BOX
+                       (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box,
+                       TRUE, TRUE, 30);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
 
-    switch (response)
-    {
-
-    case GTK_RESPONSE_ACCEPT:
-        /* set flag to indicate that we should do an update */
+    if (response == GTK_RESPONSE_ACCEPT)
         doupdate = TRUE;
-        break;
-
-    default:
+    else
         doupdate = FALSE;
-        break;
-    }
 
     /* get directory before we destroy the dialog */
     dir = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dir_chooser));
@@ -647,7 +623,8 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
 
     if (doupdate)
     {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running TLE update from %s"), __func__, dir);
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running TLE update from %s"),
+                    __func__, dir);
 
         /* store last used TLE dir */
         sat_cfg_set_str(SAT_CFG_STR_TLE_FILE_DIR, dir);
@@ -657,9 +634,10 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
                                              GTK_WINDOW(app),
                                              GTK_DIALOG_MODAL |
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
-        //gtk_window_set_default_size (GTK_WINDOW (dialog), 400,250);
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, FALSE);
+                                             GTK_STOCK_CLOSE,
+                                             GTK_RESPONSE_ACCEPT, NULL);
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_ACCEPT, FALSE);
 
         /* create a vbox */
         box = gtk_vbox_new(FALSE, 0);
@@ -668,7 +646,8 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
         /* add static label */
         label = gtk_label_new(NULL);
         gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-        gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating TLE files from files</b>"));
+        gtk_label_set_markup(GTK_LABEL(label),
+                             _("<b>Updating TLE files from files</b>"));
         gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
         /* activity label */
@@ -682,12 +661,16 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
 
         /* statistics */
         label2 = gtk_label_new(_("Satellites updated:\t 0\n"
-                                 "Satellites skipped:\t 0\n" "Missing Satellites:\t 0\n"));
+                                 "Satellites skipped:\t 0\n"
+                                 "Missing Satellites:\t 0\n"));
         gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
 
         /* finalise dialog */
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
-        g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+        gtk_container_add(GTK_CONTAINER
+                          (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                          box);
+        g_signal_connect_swapped(dialog, "response",
+                                 G_CALLBACK(gtk_widget_destroy), dialog);
 
         gtk_widget_show_all(dialog);
 
@@ -706,7 +689,8 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
         gtk_label_set_text(GTK_LABEL(label1), _("Finished"));
 
         /* enable close button */
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, TRUE);
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_ACCEPT, TRUE);
     }
 
     if (dir)
@@ -714,230 +698,19 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
 
     /* reload satellites */
     mod_mgr_reload_sats();
-}
-
-/**
- * Update FRQ from local files.
- * @param widget The menu item (unused).
- * @param data User data (unused).
- *
- * This function is called when the user selects
- *      Edit -> Update FRQ -> From local files
- * in the menubar.
- *
- * First the function creates the GUI status indicator infrastructure
- * with the possibility to select a directory, then it calls the
- * tle_update_from_files with the corresponding parameters.
- *
- * Finally, the programs signals the module manager to reload the
- * satellites in each module.
- *
- * FIXME: fork as a thread?
- */
-static void menubar_frq_local_cb(GtkWidget * widget, gpointer data)
-{
-    gchar *dir;                 /* selected directory */
-    GtkWidget *dir_chooser;     /* directory chooser button */
-    GtkWidget *dialog;          /* dialog window  */
-    GtkWidget *label;           /* misc labels */
-    GtkWidget *progress;        /* progress indicator */
-    GtkWidget *label1, *label2; /* activitity and stats labels */
-    GtkWidget *box;
-    gint response;              /* dialog response */
-    gboolean doupdate = FALSE;
-
-    (void)widget;
-    (void)data;
-
-    /* get last used directory */
-    dir = sat_cfg_get_str(SAT_CFG_STR_TLE_FILE_DIR);
-
-    /* if there is no last used dir fall back to $HOME */
-    if (dir == NULL)
-    {
-        dir = g_strdup(g_get_home_dir());
-    }
-
-    /* create file chooser */
-    dir_chooser = gtk_file_chooser_button_new(_("Select directory"),
-                                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dir_chooser), dir);
-    g_free(dir);
-
-    /* create label */
-    label = gtk_label_new(_("Select transponder directory:"));
-
-    /* pack label and chooser into a hbox */
-    box = gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(box), dir_chooser, TRUE, TRUE, 5);
-    gtk_widget_show_all(box);
-
-    /* create the dalog */
-    dialog = gtk_dialog_new_with_buttons(_("Update transponders from files"),
-                                         GTK_WINDOW(app),
-                                         GTK_DIALOG_MODAL |
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box, TRUE, TRUE,
-                       30);
-
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-
-    switch (response)
-    {
-
-    case GTK_RESPONSE_ACCEPT:
-        /* set flag to indicate that we should do an update */
-        doupdate = TRUE;
-        break;
-
-    default:
-        doupdate = FALSE;
-        break;
-    }
-
-    /* get directory before we destroy the dialog */
-    dir = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dir_chooser));
-
-    /* nuke the dialog */
-    gtk_widget_destroy(dialog);
-
-    if (doupdate)
-    {
-        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Running transponder update from %s"), __func__, dir);
-
-        /* store last used TLE dir */
-        sat_cfg_set_str(SAT_CFG_STR_TLE_FILE_DIR, dir);
-
-        /* create new dialog with progress indicator */
-        dialog = gtk_dialog_new_with_buttons(_("Transponder Update"),
-                                             GTK_WINDOW(app),
-                                             GTK_DIALOG_MODAL |
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT, NULL);
-        //gtk_window_set_default_size (GTK_WINDOW (dialog), 400,250);
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, FALSE);
-
-        /* create a vbox */
-        box = gtk_vbox_new(FALSE, 0);
-        gtk_container_set_border_width(GTK_CONTAINER(box), 20);
-
-        /* add static label */
-        label = gtk_label_new(NULL);
-        gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-        gtk_label_set_markup(GTK_LABEL(label), _("<b>Updating transponders files from files</b>"));
-        gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
-
-        /* activity label */
-        label1 = gtk_label_new("...");
-        gtk_misc_set_alignment(GTK_MISC(label1), 0.5, 0.5);
-        gtk_box_pack_start(GTK_BOX(box), label1, FALSE, FALSE, 0);
-
-        /* add progress bar */
-        progress = gtk_progress_bar_new();
-        gtk_box_pack_start(GTK_BOX(box), progress, FALSE, FALSE, 10);
-
-        /* statistics */
-        label2 = gtk_label_new(_("Satellites updated:\t 0\n"
-                                 "Satellites skipped:\t 0\n" "Missing Satellites:\t 0\n"));
-        gtk_box_pack_start(GTK_BOX(box), label2, TRUE, TRUE, 0);
-
-        /* finalise dialog */
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box);
-        g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
-
-        gtk_widget_show_all(dialog);
-
-        /* Force the drawing queue to be processed otherwise the dialog
-           may not appear before we enter the TLE updating func
-           - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
-         */
-        while (g_main_context_iteration(NULL, FALSE));
-
-        /* update TLE */
-        tle_update_from_files(dir, NULL, FALSE, progress, label1, label2);
-
-        /* set progress bar to 100% */
-        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 1.0);
-
-        gtk_label_set_text(GTK_LABEL(label1), _("Finished"));
-
-        /* enable close button */
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT, TRUE);
-    }
-
-    if (dir)
-        g_free(dir);
-
-    /* reload satellites */
-    mod_mgr_reload_sats();
-}
-
-/** Start Manual TLE editor. */
-static void menubar_tle_manual_cb(GtkWidget * widget, gpointer data)
-{
-    (void)widget;
-    (void)data;
-    //satellite_editor_run ();
-}
-
-static void menubar_window_cb(GtkWidget * widget, gpointer data)
-{
-    GtkWidget *dialog;
-
-    (void)widget;
-    (void)data;
-
-    dialog = gtk_message_dialog_new(GTK_WINDOW(app),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_INFO,
-                                    GTK_BUTTONS_OK, _("This function is still under development."));
-
-    /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
-    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
-
-    gtk_widget_show_all(dialog);
-}
-
-static void menubar_predict_cb(GtkWidget * widget, gpointer data)
-{
-    GtkWidget *dialog;
-
-    (void)widget;
-    (void)data;
-
-    dialog = gtk_message_dialog_new(GTK_WINDOW(app),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_INFO,
-                                    GTK_BUTTONS_OK, _("This function is still under development."));
-
-    /* Destroy the dialog when the user responds to it (e.g. clicks a button) */
-    g_signal_connect_swapped(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
-
-    gtk_widget_show_all(dialog);
-}
-
-static void menubar_getting_started_cb(GtkWidget * widget, gpointer data)
-{
-    (void)widget;
-    (void)data;
-
-    gpredict_help_launch(GPREDICT_HELP_GETTING_STARTED);
 }
 
 static void menubar_help_cb(GtkWidget * widget, gpointer data)
 {
-    GtkWidget *dialog;
-    GtkWidget *button;
+    GtkWidget      *dialog;
+    GtkWidget      *button;
 
     (void)widget;
     (void)data;
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(app),
-                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_DIALOG_MODAL |
+                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                     GTK_MESSAGE_INFO,
                                     GTK_BUTTONS_CLOSE,
                                     _("A comprehensive PDF user manual and \n"
@@ -947,12 +720,12 @@ static void menubar_help_cb(GtkWidget * widget, gpointer data)
     button = gtk_link_button_new("http://gpredict.oz9aec.net/documents.php");
     gtk_widget_show(button);
 
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), button, FALSE,
-                       FALSE, 0);
+    gtk_box_pack_start(GTK_BOX
+                       (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       button, FALSE, FALSE, 0);
 
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
-
 }
 
 static void menubar_license_cb(GtkWidget * widget, gpointer data)
@@ -987,24 +760,24 @@ static void menubar_about_cb(GtkWidget * widget, gpointer data)
  * of them. The function will return the name of the selected module
  * without the .mod suffix.
  */
-static gchar *select_module()
+static gchar   *select_module()
 {
-    GtkWidget *dialog;          /* the dialog window */
-    GtkWidget *modlist;         /* the treeview widget */
-    GtkListStore *liststore;    /* the list store data structure */
+    GtkWidget      *dialog;     /* the dialog window */
+    GtkWidget      *modlist;    /* the treeview widget */
+    GtkListStore   *liststore;  /* the list store data structure */
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-    GtkTreeIter item;           /* new item added to the list store */
+    GtkTreeIter     item;       /* new item added to the list store */
     GtkTreeSelection *selection;
-    GtkTreeModel *selmod;
-    GtkTreeModel *listtreemodel;
-    GtkWidget *swin;
-    GDir *dir = NULL;           /* directory handle */
-    GError *error = NULL;       /* error flag and info */
-    gchar *dirname;             /* directory name */
-    const gchar *filename;      /* file name */
-    gchar **buffv;
-    guint count = 0;
+    GtkTreeModel   *selmod;
+    GtkTreeModel   *listtreemodel;
+    GtkWidget      *swin;
+    GDir           *dir = NULL; /* directory handle */
+    GError         *error = NULL;       /* error flag and info */
+    gchar          *dirname;    /* directory name */
+    const gchar    *filename;   /* file name */
+    gchar         **buffv;
+    guint           count = 0;
 
     /* create and fill data model */
     liststore = gtk_list_store_new(1, G_TYPE_STRING);
@@ -1077,16 +850,15 @@ static gchar *select_module()
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     /* sort the tree by name */
-    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(listtreemodel), 0, compare_func, NULL, NULL);
-    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(listtreemodel), 0, GTK_SORT_ASCENDING);
-
-
-    /*** FIXME: Add g_stat info? */
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(listtreemodel), 0,
+                                    compare_func, NULL, NULL);
+    gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(listtreemodel),
+                                         0, GTK_SORT_ASCENDING);
 
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Module"), renderer, "text", 0, NULL);
+    column = gtk_tree_view_column_new_with_attributes(_("Module"), renderer,
+                                                      "text", 0, NULL);
     gtk_tree_view_insert_column(GTK_TREE_VIEW(modlist), column, -1);
-
     gtk_widget_show(modlist);
 
     /* create dialog */
@@ -1095,20 +867,21 @@ static gchar *select_module()
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+                                         GTK_RESPONSE_CANCEL, GTK_STOCK_OK,
+                                         GTK_RESPONSE_OK, NULL);
 
     gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 200);
     gtk_container_add(GTK_CONTAINER(swin), modlist);
     gtk_widget_show(swin);
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
+    gtk_container_add(GTK_CONTAINER
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
 
     /* double clicking in list will open clicked module */
-    g_signal_connect(modlist, "row-activated", G_CALLBACK(select_module_row_activated_cb), dialog);
-
+    g_signal_connect(modlist, "row-activated",
+                     G_CALLBACK(select_module_row_activated_cb), dialog);
 
     switch (gtk_dialog_run(GTK_DIALOG(dialog)))
     {
-
         /* user pressed OK */
     case GTK_RESPONSE_OK:
         selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(modlist));
@@ -1116,18 +889,17 @@ static gchar *select_module()
         if (gtk_tree_selection_get_selected(selection, &selmod, &item))
         {
             gtk_tree_model_get(selmod, &item, 0, &dirname, -1);
-
             sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                        _("%s:%s: Selected module is: %s"), __FILE__, __func__, dirname);
+                        _("%s:%s: Selected module is: %s"),
+                        __FILE__, __func__, dirname);
         }
         else
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%s: No selection is list of modules."), __FILE__, __func__);
-
+                        _("%s:%s: No selection is list of modules."),
+                        __FILE__, __func__);
             dirname = NULL;
         }
-
         break;
 
         /* everything else is regarded as CANCEL */
@@ -1154,9 +926,10 @@ static gchar *select_module()
  */
 static void select_module_row_activated_cb(GtkTreeView * tree_view,
                                            GtkTreePath * path,
-                                           GtkTreeViewColumn * column, gpointer data)
+                                           GtkTreeViewColumn * column,
+                                           gpointer data)
 {
-    GtkDialog *dialog = GTK_DIALOG(data);
+    GtkDialog      *dialog = GTK_DIALOG(data);
 
     gtk_dialog_response(dialog, GTK_RESPONSE_OK);
 }
@@ -1169,10 +942,10 @@ static void select_module_row_activated_cb(GtkTreeView * tree_view,
  */
 static void create_module_window(GtkWidget * module)
 {
-    gint w, h;
-    gchar *icon;                /* icon file name */
-    gchar *title;               /* window title */
-    GtkAllocation aloc;
+    gint            w, h;
+    gchar          *icon;       /* icon file name */
+    gchar          *title;      /* window title */
+    GtkAllocation   aloc;
 
     gtk_widget_get_allocation(module, &aloc);
     /* get stored size; use size from main window if size not explicitly stoed */
@@ -1180,7 +953,8 @@ static void create_module_window(GtkWidget * module)
                            MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_WIDTH, NULL))
     {
         w = g_key_file_get_integer(GTK_SAT_MODULE(module)->cfgdata,
-                                   MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_WIDTH, NULL);
+                                   MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_WIDTH,
+                                   NULL);
     }
     else
     {
@@ -1190,22 +964,13 @@ static void create_module_window(GtkWidget * module)
                            MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_HEIGHT, NULL))
     {
         h = g_key_file_get_integer(GTK_SAT_MODULE(module)->cfgdata,
-                                   MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_HEIGHT, NULL);
+                                   MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_HEIGHT,
+                                   NULL);
     }
     else
     {
         h = aloc.height;
     }
-
-    /* increase reference count of module */
-    //g_object_ref (module);
-
-    /* we don't need the positions */
-    //GTK_SAT_MODULE (module)->vpanedpos = -1;
-    //GTK_SAT_MODULE (module)->hpanedpos = -1;
-
-    /* undock from mod-mgr */
-    //mod_mgr_undock_module (module);
 
     /* create window */
     GTK_SAT_MODULE(module)->win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -1222,7 +987,8 @@ static void create_module_window(GtkWidget * module)
     icon = icon_file_name("gpredict-icon.png");
     if (g_file_test(icon, G_FILE_TEST_EXISTS))
     {
-        gtk_window_set_icon_from_file(GTK_WINDOW(GTK_SAT_MODULE(module)->win), icon, NULL);
+        gtk_window_set_icon_from_file(GTK_WINDOW(GTK_SAT_MODULE(module)->win),
+                                      icon, NULL);
     }
     g_free(icon);
 
@@ -1241,7 +1007,8 @@ static void create_module_window(GtkWidget * module)
                                                MOD_CFG_GLOBAL_SECTION,
                                                MOD_CFG_WIN_POS_X, NULL),
                         g_key_file_get_integer(GTK_SAT_MODULE(module)->cfgdata,
-                                               MOD_CFG_GLOBAL_SECTION, MOD_CFG_WIN_POS_Y, NULL));
+                                               MOD_CFG_GLOBAL_SECTION,
+                                               MOD_CFG_WIN_POS_Y, NULL));
 
     }
 
@@ -1254,15 +1021,17 @@ static void create_module_window(GtkWidget * module)
     /* reparent time manager window if visible */
     if (GTK_SAT_MODULE(module)->tmgActive)
     {
-        gtk_window_set_transient_for(GTK_WINDOW(GTK_SAT_MODULE(module)->tmgWin),
+        gtk_window_set_transient_for(GTK_WINDOW
+                                     (GTK_SAT_MODULE(module)->tmgWin),
                                      GTK_WINDOW(GTK_SAT_MODULE(module)->win));
     }
 }
 
-static gint compare_func(GtkTreeModel * model, GtkTreeIter * a, GtkTreeIter * b, gpointer userdata)
+static gint compare_func(GtkTreeModel * model, GtkTreeIter * a,
+                         GtkTreeIter * b, gpointer userdata)
 {
-    gchar *sat1, *sat2;
-    gint ret = 0;
+    gchar          *sat1, *sat2;
+    gint            ret = 0;
 
     (void)userdata;             /* avoid unused parameter compiler warning */
 
