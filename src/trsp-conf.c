@@ -1,7 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete.
+    Copyright (C)  2001-2016  Alexandru Csete.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 
 #include "compat.h"
+#include "gpredict-utils.h"
 #include "sat-log.h"
 #include "trsp-conf.h"
 
@@ -186,13 +187,70 @@ GSList *read_transponders(guint catnum)
  * @param catnum The catlog number of the satellite.
  * @param trsplist Pointer to a GSList of trsp_t structures.
  *
- * The transponder list is written to a file called "catnum.trsp".
+ * The transponder list is written to a file called "catnum.trsp". If the file
+ * already exists, its contents will be deleted.
  */
-void write_transponders(guint catnum, GSList * trsplist)
+void write_transponders(guint catnum, GSList * trsp_list)
 {
-    (void)catnum;
-    (void)trsplist;
-    sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Not implemented!"), __func__);
+    trsp_t         *trsp;
+    GKeyFile       *trsp_data = NULL;
+    gchar          *file_name;
+    gchar          *trsp_file;
+    gint            i, n, trsp_written;
+
+    file_name = g_strdup_printf("%d.trsp", catnum);
+    trsp_file = trsp_file_name(file_name);
+    trsp_data = g_key_file_new();
+    trsp_written = 0;
+
+    n = g_slist_length(trsp_list);
+    for (i = 0; i < n; i++)
+    {
+        trsp = (trsp_t *) g_slist_nth_data(trsp_list, i);
+        if (!trsp->name)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Skipping transponder at index %d (no name)"),
+                        __func__, i);
+            continue;
+        }
+
+        if (trsp->uplow > 0.0)
+            g_key_file_set_double(trsp_data, trsp->name, KEY_UP_LOW,
+                                  trsp->uplow);
+        if (trsp->uphigh > 0.0)
+            g_key_file_set_double(trsp_data, trsp->name, KEY_UP_HIGH,
+                                  trsp->uphigh);
+        if (trsp->downlow > 0.0)
+            g_key_file_set_double(trsp_data, trsp->name, KEY_DOWN_LOW,
+                                  trsp->downlow);
+        if (trsp->downhigh > 0.0)
+            g_key_file_set_double(trsp_data, trsp->name, KEY_DOWN_HIGH,
+                                  trsp->downhigh);
+        if (trsp->baud > 0.0)
+            g_key_file_set_double(trsp_data, trsp->name, KEY_BAUD, trsp->baud);
+        if (trsp->invert)
+            g_key_file_set_boolean(trsp_data, trsp->name, KEY_INVERT, TRUE);
+        if (trsp->mode)
+            g_key_file_set_string(trsp_data, trsp->name, KEY_MODE, trsp->name);
+    }
+
+    if (gpredict_save_key_file(trsp_data, trsp_file))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Error writing transponder data to %s"),
+                    __func__, file_name);
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO,
+                    _("Wrote %d transmponders to %s"),
+                    trsp_written, trsp_file_name);
+    }
+
+    g_key_file_free(trsp_data);
+    g_free(file_name);
+    g_free(trsp_file);
 }
 
 /**
