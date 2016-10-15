@@ -1018,15 +1018,39 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
         return;
 
     /* tune downlink */
-    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->downhigh > 0.0))
+    if (ctrl->trsp->downlow > 0.01)
     {
-        freq = ctrl->trsp->downlow +
-            fabs(ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
-        gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), freq);
+     	if (ctrl->trsp->downhigh > 0.01) 
+	{
+	freq = ctrl->trsp->downlow +
+       	fabs(ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
+	}
+	else
+	{
+	freq = ctrl->trsp->downlow;
+	}
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+         _("%s: trsp_downlow %d  trsp_downhigh %d Frequency %d"), __func__,ctrl->trsp->downlow,ctrl->trsp->downhigh,freq);
+    }
+    else
+    {
+	if (ctrl->trsp->downhigh > 0.01)
+	{
+	freq = ctrl->trsp->downhigh;
+	sat_log_log(SAT_LOG_LEVEL_ERROR,
+         _("%s: else trsp_downlow %d  trsp_downhigh %d" ), __func__,ctrl->trsp->downlow,ctrl->trsp->downhigh);
+	}
+	else
+	{
+	freq=0;	   
+	sat_log_log(SAT_LOG_LEVEL_ERROR,
+		_("%s: big problem" ), __func__);
+	}
+    } 
+    gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), freq);
 
         /* invalidate RIG<->GPREDICT sync */
         ctrl->lastrxf = 0.0;
-    }
 
     /* tune uplink */
     if ((ctrl->trsp->uplow > 0.0) && (ctrl->trsp->uphigh > 0.0))
@@ -2733,7 +2757,7 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
         gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->TrspSel), trsp->name);
 
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s:&s: Read transponder '%s' for satellite %d"),
+                    _("%s:%s: Read transponder '%s' for satellite %d / %d"),
                     __FILE__, __func__, trsp->name, ctrl->target->tle.catnr);
     }
 
