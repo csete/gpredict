@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-10 23:32+0200\n"
+"POT-Creation-Date: 2016-10-16 01:00+0200\n"
 "PO-Revision-Date: 2015-09-16 10:22+0000\n"
 "Last-Translator: Jan Simon <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -192,86 +192,82 @@ msgstr "%s: Kopieren von %s fehlgeschlagen"
 msgid "%s: Successfully copied %s"
 msgstr "%s: %s erfolgreich kopiert"
 
-#: ../src/frq-update.c:179
+#: ../src/frq-update.c:168
 #, c-format
 msgid "MODE %d %s"
 msgstr ""
 
-#: ../src/frq-update.c:259
+#: ../src/frq-update.c:300
 #, fuzzy, c-format
-msgid "%s: Writing to file : %s "
-msgstr "%s:%d: Kartendatei %s wird geladen"
-
-#: ../src/frq-update.c:305
-#, fuzzy, c-format
-msgid "%s:%s: Could not open .trsp file for writing..."
+msgid "%s: Could not open trsp file for write"
 msgstr ""
 "%s:%s: .cat-Datei konnte nicht erneut geöffnet werden währned des Lesens der "
 "TLE aus %s"
 
-#: ../src/frq-update.c:345
+#: ../src/frq-update.c:335
 msgid "Ready to fetch modes list from satnogs..."
 msgstr ""
 
-#: ../src/frq-update.c:364 ../src/frq-update.c:506
+#: ../src/frq-update.c:355 ../src/frq-update.c:505
 #, fuzzy, c-format
 msgid "%s: File to open %s "
 msgstr "%s:%s: %s konnte nicht geöffnet werden"
 
-#: ../src/frq-update.c:377 ../src/frq-update.c:519 ../src/tle-update.c:606
+#: ../src/frq-update.c:369 ../src/frq-update.c:519 ../src/tle-update.c:606
 #, c-format
 msgid "%s: Error fetching %s (%s)"
 msgstr "%s: Fehler beim Holen von %s (%s)"
 
-#: ../src/frq-update.c:381 ../src/frq-update.c:523 ../src/tle-update.c:611
+#: ../src/frq-update.c:374 ../src/frq-update.c:524 ../src/tle-update.c:611
 #, c-format
 msgid "%s: Successfully fetched %s"
 msgstr "%s: Erfolgreich %s geholt"
 
-#: ../src/frq-update.c:389 ../src/frq-update.c:531 ../src/tle-update.c:619
+#: ../src/frq-update.c:384 ../src/frq-update.c:534 ../src/tle-update.c:619
 #, c-format
 msgid "%s: Failed to open %s preventing update"
 msgstr "%s: Fehler beim öffnen von %s verhindert Aktualisierung"
 
-#: ../src/frq-update.c:401 ../src/frq-update.c:562 ../src/tle-update.c:647
+#: ../src/frq-update.c:398 ../src/frq-update.c:563 ../src/tle-update.c:647
 #, c-format
 msgid "%s: Fetched %d files from network; updating..."
 msgstr "%s: %d Dateien aus dem Internet geholt; aktualisiere …"
 
-#: ../src/frq-update.c:408 ../src/frq-update.c:572
+#: ../src/frq-update.c:407 ../src/frq-update.c:573
 #, fuzzy, c-format
-msgid "%s: Could not fetch any new frequency files from network; aborting..."
+msgid "%s: Could not fetch frequency files from network"
 msgstr ""
 "%s: Es konnten keine neuen TLE-Dateien aus dem Internet geholt werden; "
 "Abbruch …"
 
-#: ../src/frq-update.c:454
+#: ../src/frq-update.c:453
 #, fuzzy, c-format
-msgid "%s: A frequency update process is already running. Aborting."
+msgid "%s: A frequency update process is already running"
 msgstr "%s: Ein TLE-Aktualisierungsvorgang läuft bereits. Abbruch."
 
-#: ../src/frq-update.c:471
-msgid "Ready to fetch transponder list from satnogs..."
-msgstr ""
+#: ../src/frq-update.c:469
+#, fuzzy
+msgid "Ready to fetch transponder list from satnogs"
+msgstr "TLE-Daten aus Dateien aktualisieren"
 
-#: ../src/frq-update.c:491 ../src/tle-update.c:579
+#: ../src/frq-update.c:489 ../src/tle-update.c:579
 #, c-format
 msgid "Fetching %s"
 msgstr "Hole %s"
 
-#: ../src/frq-update.c:609 ../src/tle-update.c:1291
+#: ../src/frq-update.c:607 ../src/tle-update.c:1291
 msgid "Never"
 msgstr "Nie"
 
-#: ../src/frq-update.c:610 ../src/tle-update.c:1292
+#: ../src/frq-update.c:608 ../src/tle-update.c:1292
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: ../src/frq-update.c:611 ../src/tle-update.c:1293
+#: ../src/frq-update.c:609 ../src/tle-update.c:1293
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: ../src/frq-update.c:612 ../src/tle-update.c:1294
+#: ../src/frq-update.c:610 ../src/tle-update.c:1294
 msgid "Daily"
 msgstr "Täglich"
 
@@ -825,8 +821,8 @@ msgid "%s:%s: Satellite %d has %d transponder modes."
 msgstr "%s:%s: Satellit %d hat %d Transpondermodi."
 
 #: ../src/gtk-rig-ctrl.c:2736
-#, c-format
-msgid "%s:&s: Read transponder '%s' for satellite %d"
+#, fuzzy, c-format
+msgid "%s:%s: Read transponder '%s' for satellite %d"
 msgstr "%s:&s: Transponder '%s' für Satellit %d wird gelesen"
 
 #: ../src/gtk-rig-ctrl.c:2880
@@ -1757,8 +1753,7 @@ msgid "%s:%d: Successfully cloned %s."
 msgstr "%s:%d: Erfolgeich geklont. %s."
 
 #: ../src/gtk-sat-module-popup.c:438 ../src/gtk-sat-module-popup.c:561
-#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:1212
-#: ../src/mod-mgr.c:684
+#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:977 ../src/mod-mgr.c:684
 msgid "GPREDICT: "
 msgstr "GPREDICT: "
 
@@ -2435,263 +2430,198 @@ msgstr "Bilddateien"
 msgid "%s:%d: Could not stat %s"
 msgstr "%s:%d: Konnte %s nicht auswerten"
 
-#: ../src/menubar.c:81
+#: ../src/menubar.c:77
 msgid "_File"
 msgstr "_Datei"
 
-#: ../src/menubar.c:82
+#: ../src/menubar.c:78
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../src/menubar.c:83
+#: ../src/menubar.c:79
 #, fuzzy
 msgid "_Update TLE data"
 msgstr "_TLE-Daten aktualisieren"
 
-#: ../src/menubar.c:84
+#: ../src/menubar.c:80
 #, fuzzy
 msgid "_Update Transponder data"
 msgstr "_Transponder"
 
-#: ../src/menubar.c:85
-msgid "_Tools"
-msgstr "_Werkzeuge"
-
-#: ../src/menubar.c:86
+#: ../src/menubar.c:82
 msgid "_Help"
 msgstr "_Hilfe"
 
 #. File menu
-#: ../src/menubar.c:89
+#: ../src/menubar.c:85
 msgid "_New module"
 msgstr "_Neues Modul"
 
-#: ../src/menubar.c:90
+#: ../src/menubar.c:86
 msgid "Create a new module"
 msgstr "Ein neues Modul erstellen"
 
-#: ../src/menubar.c:91
+#: ../src/menubar.c:87
 msgid "_Open module"
 msgstr "Modul _öffnen"
 
-#: ../src/menubar.c:92
+#: ../src/menubar.c:88
 msgid "Open an existing module"
 msgstr "Ein existierendes Modul öffnen"
 
-#: ../src/menubar.c:93
+#: ../src/menubar.c:89
 msgid "_Log browser"
 msgstr "_Log-Browser"
 
-#: ../src/menubar.c:94
+#: ../src/menubar.c:90
 msgid "Open the message log browser"
 msgstr "Den Nachrichtenmitschnitt-Browser öffnen"
 
-#: ../src/menubar.c:95
+#: ../src/menubar.c:91
 msgid "E_xit"
 msgstr "Be_enden"
 
-#: ../src/menubar.c:96
+#: ../src/menubar.c:92
 msgid "Exit the program"
 msgstr "Das Program beenden"
 
 #. Edit menu
-#. { "Tle", GTK_STOCK_REFRESH, N_("Update TLE"), NULL,
-#. N_("Update Keplerian elements"), NULL},
-#: ../src/menubar.c:101 ../src/menubar.c:104
+#: ../src/menubar.c:95 ../src/menubar.c:98
 msgid "From _network"
 msgstr "Aus dem _Internet"
 
-#: ../src/menubar.c:102
+#: ../src/menubar.c:96
 msgid "Update Keplerian elements from a network server"
 msgstr "Keplerelemente von einem Internetserver aktualisieren"
 
-#: ../src/menubar.c:105
+#: ../src/menubar.c:99
 #, fuzzy
 msgid "Update transponders from a network server"
 msgstr "Keplerelemente von einem Internetserver aktualisieren"
 
-#: ../src/menubar.c:107 ../src/menubar.c:110
+#: ../src/menubar.c:101
 msgid "From l_ocal files"
 msgstr "Aus l_okalen Dateien"
 
-#: ../src/menubar.c:108
+#: ../src/menubar.c:102
 msgid "Update Keplerian elements from local files"
 msgstr "Keplerelemente aus lokalen Dateien aktualisieren"
 
-#: ../src/menubar.c:111
-#, fuzzy
-msgid "Update transponders from local files"
-msgstr "Keplerelemente aus lokalen Dateien aktualisieren"
-
-#: ../src/menubar.c:113
-msgid "Using TLE _editor"
-msgstr "TLE-_Editor benutzen"
-
-#: ../src/menubar.c:114
-msgid "Add or update Keplerian elements using the TLE editor"
-msgstr "Keplerelemente mit Hilfe des TLE-Editors hinzufügen oder aktualisieren"
-
-#: ../src/menubar.c:116
-msgid "_Transponders"
-msgstr "_Transponder"
-
-#: ../src/menubar.c:117
-msgid "Edit satellite transponder frequencies"
-msgstr "Satellitentransponderfrequenzen bearbeiten"
-
-#: ../src/menubar.c:119
+#: ../src/menubar.c:104
 msgid "_Preferences"
 msgstr "_Einstellungen"
 
-#: ../src/menubar.c:120
+#: ../src/menubar.c:105
 msgid "Edit user preferences"
 msgstr "Benutzereinstellungen bearbeiten"
 
-#. Tools menu
-#: ../src/menubar.c:123
-msgid "Satellite Editor"
-msgstr "Satelliteneditor"
-
-#: ../src/menubar.c:124
-msgid ""
-"Open the satellite editor where you can manually edit orbital elements and "
-"other data"
-msgstr ""
-"Satelliteneditor öffnen, mit dem Sie die Umlaufbahnendaten und andere Daten "
-"selber bearbeiten können"
-
-#: ../src/menubar.c:126
-msgid "Comm Window"
-msgstr "Komm. Fenster"
-
-#: ../src/menubar.c:127
-msgid "Predict windows between two observers"
-msgstr "Berechne Fenster zwischen zwei Beobachtern"
-
-#: ../src/menubar.c:129
-msgid "Advanced Predict"
-msgstr "Erweiterte Berechnungen"
-
-#: ../src/menubar.c:130
-msgid "Open advanced pass predictor"
-msgstr "Erweiterten Überflugsberechner öffnen"
-
 #. Help menu
-#: ../src/menubar.c:133
-msgid "Getting Started"
-msgstr "Erste Schritte"
-
-#: ../src/menubar.c:134
-msgid "Show online user manual, Getting Started Section"
-msgstr "Erste-Schritte-Kapitel des Benutzerhandbuchs online anzeigen"
-
-#: ../src/menubar.c:136
+#: ../src/menubar.c:108
 msgid "Online help"
 msgstr "Internethilfe"
 
-#: ../src/menubar.c:137
+#: ../src/menubar.c:109
 msgid "Show online user manual"
 msgstr "Benutzerhandbuch online anzeigen"
 
-#: ../src/menubar.c:138
+#: ../src/menubar.c:110
 msgid "_License"
 msgstr "_Lizenz"
 
-#: ../src/menubar.c:139
+#: ../src/menubar.c:111
 msgid "Show the Gpredict license"
 msgstr "Gpredict Lizenz anzeigen"
 
-#: ../src/menubar.c:140
+#: ../src/menubar.c:112
 msgid "_News"
 msgstr "_Neuigkeiten"
 
-#: ../src/menubar.c:141
+#: ../src/menubar.c:113
 msgid "Show what's new in this release"
 msgstr "Neuerungen in dieser Version anzeigen"
 
-#: ../src/menubar.c:142
+#: ../src/menubar.c:114
 msgid "_About Gpredict"
 msgstr "_Über Gpredict"
 
-#: ../src/menubar.c:143
+#: ../src/menubar.c:115
 msgid "Show about dialog"
 msgstr "»Über«-Dialog anzeigen"
 
-#: ../src/menubar.c:216
+#: ../src/menubar.c:194
 #, c-format
 msgid "Failed to build menubar: %s"
 msgstr "Erzeugen der Menüleiste gescheitert: %s"
 
-#: ../src/menubar.c:252
+#: ../src/menubar.c:224
 #, c-format
 msgid "%s: Starting new module configurator..."
 msgstr "%s: Starte neuen Modulkonfigurierer …"
 
-#: ../src/menubar.c:258
+#: ../src/menubar.c:230
 #, c-format
 msgid "%s: New module name is %s."
 msgstr "%s: Neuer Modulname ist %s."
 
-#: ../src/menubar.c:277 ../src/menubar.c:333
+#: ../src/menubar.c:250 ../src/menubar.c:310
 #, c-format
 msgid "Could not open %s. Please examine the log messages for details."
 msgstr ""
 "%s konnte nicht geöffnet werden. Bitte die Log-Benachrichtigungen nach "
 "Details überprüfen."
 
-#: ../src/menubar.c:293
+#: ../src/menubar.c:267
 #, c-format
 msgid "%s: New module config cancelled."
 msgstr "%s: Neue Modulkonfiguration abgebrochen."
 
-#: ../src/menubar.c:308
+#: ../src/menubar.c:282
 #, c-format
 msgid "%s: Open existing module..."
 msgstr "%s: Vorhandenes Modul öffnen …"
 
-#: ../src/menubar.c:314
+#: ../src/menubar.c:289
 #, c-format
 msgid "%s: Open module %s."
 msgstr "%s: Modul %s öffnen."
 
-#: ../src/menubar.c:363
+#: ../src/menubar.c:339
 #, c-format
 msgid "%s: Open module cancelled."
 msgstr "%s: Öffnen des Moduls abgebrochen."
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:420 ../src/menubar.c:816
+#: ../src/menubar.c:391
 #, fuzzy
 msgid "Transponder Update"
 msgstr "Transponder"
 
-#: ../src/menubar.c:434
+#: ../src/menubar.c:407
 #, fuzzy
 msgid "<b>Updating transponder files from network</b>"
 msgstr "<b>TLE-Daten werden aus dem Internet aktualisiert</b>"
 
 #. statistics
 #. label2 = gtk_label_new(_("Transponders updated:\t 0\n"));
-#: ../src/menubar.c:448
+#: ../src/menubar.c:421
 msgid "\n"
 msgstr ""
 
-#: ../src/menubar.c:469 ../src/menubar.c:550 ../src/menubar.c:706
-#: ../src/menubar.c:866
+#: ../src/menubar.c:444 ../src/menubar.c:531 ../src/menubar.c:689
 msgid "Finished"
 msgstr "Abgeschlossen"
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:500 ../src/menubar.c:656 ../src/sat-pref-general.c:61
+#: ../src/menubar.c:476 ../src/menubar.c:633 ../src/sat-pref-general.c:61
 msgid "TLE Update"
 msgstr "TLE-Aktualisierung"
 
-#: ../src/menubar.c:515
+#: ../src/menubar.c:493
 msgid "<b>Updating TLE files from network</b>"
 msgstr "<b>TLE-Daten werden aus dem Internet aktualisiert</b>"
 
 #. statistics
-#: ../src/menubar.c:528 ../src/menubar.c:684 ../src/menubar.c:844
+#: ../src/menubar.c:506 ../src/menubar.c:663
 msgid ""
 "Satellites updated:\t 0\n"
 "Satellites skipped:\t 0\n"
@@ -2702,56 +2632,30 @@ msgstr ""
 "Fehlende Satelliten:        \t         0\n"
 
 #. create file chooser
-#: ../src/menubar.c:602 ../src/menubar.c:762
+#: ../src/menubar.c:584
 msgid "Select directory"
 msgstr "Verzeichnis wählen"
 
 #. create label
-#: ../src/menubar.c:608
+#: ../src/menubar.c:590
 msgid "Select TLE directory:"
 msgstr "TLE-Verzeichnis wählen:"
 
 #. create the dalog
-#: ../src/menubar.c:617
+#: ../src/menubar.c:599
 msgid "Update TLE from files"
 msgstr "TLE-Daten aus Dateien aktualisieren"
 
-#: ../src/menubar.c:650
+#: ../src/menubar.c:626
 #, c-format
 msgid "%s: Running TLE update from %s"
 msgstr "%s: TLE-Datenaktualisierung von %s läuft"
 
-#: ../src/menubar.c:671
+#: ../src/menubar.c:650
 msgid "<b>Updating TLE files from files</b>"
 msgstr "<b>TLE-Daten werden aus Dateien aktualisiert</b>"
 
-#. create label
-#: ../src/menubar.c:768
-#, fuzzy
-msgid "Select transponder directory:"
-msgstr "Einen Transponder auswählen"
-
-#. create the dalog
-#: ../src/menubar.c:777
-#, fuzzy
-msgid "Update transponders from files"
-msgstr "TLE-Daten aus Dateien aktualisieren"
-
-#: ../src/menubar.c:810
-#, fuzzy, c-format
-msgid "%s: Running transponder update from %s"
-msgstr "%s: TLE-Datenaktualisierung von %s läuft"
-
-#: ../src/menubar.c:831
-#, fuzzy
-msgid "<b>Updating transponders files from files</b>"
-msgstr "<b>TLE-Daten werden aus Dateien aktualisiert</b>"
-
-#: ../src/menubar.c:897 ../src/menubar.c:915
-msgid "This function is still under development."
-msgstr "Diese Funktion ist noch in der Entwicklung."
-
-#: ../src/menubar.c:943
+#: ../src/menubar.c:716
 msgid ""
 "A comprehensive PDF user manual and \n"
 "video tutorials are available from the \n"
@@ -2761,17 +2665,17 @@ msgstr ""
 "Videotutorials sind auf der Gpredict Internetseite\n"
 "verfügbar:"
 
-#: ../src/menubar.c:1021
+#: ../src/menubar.c:794
 #, c-format
 msgid "%s:%s: Scanning directory %s for modules."
 msgstr "%s:%s: Scanne Verzeichnis %s nach Modulen."
 
-#: ../src/menubar.c:1043
+#: ../src/menubar.c:816
 #, c-format
 msgid "%s:%d: Failed to open module dir %s (%s)"
 msgstr "%s:%d: Öffnen des Modulverzeichnisses %s fehlgeschlagen (%s)"
 
-#: ../src/menubar.c:1059
+#: ../src/menubar.c:832
 msgid ""
 "You do not have any modules set up yet. Please use File->New in order to "
 "create a module."
@@ -2779,21 +2683,21 @@ msgstr ""
 "Sie haben noch keine Module eingerichtet. Bitte benutzen sie Datei -> Neues "
 "Modul um eines zu erstellen."
 
-#: ../src/menubar.c:1087
+#: ../src/menubar.c:859
 msgid "Module"
 msgstr "Modul"
 
 #. create dialog
-#: ../src/menubar.c:1093
+#: ../src/menubar.c:865
 msgid "Select a module"
 msgstr "Ein Modul wählen"
 
-#: ../src/menubar.c:1121
+#: ../src/menubar.c:893
 #, c-format
 msgid "%s:%s: Selected module is: %s"
 msgstr "%s:%s: Gewählte Modul ist: %s"
 
-#: ../src/menubar.c:1126
+#: ../src/menubar.c:899
 #, c-format
 msgid "%s:%s: No selection is list of modules."
 msgstr "%s:%s: Keine Auswahl ist die Modulliste."
@@ -3738,6 +3642,11 @@ msgstr "Invertierung: %s"
 #, c-format
 msgid "Mode: %s"
 msgstr "Mode: %s"
+
+#: ../src/sat-info.c:509
+#, c-format
+msgid "Baudrate: %9.2f"
+msgstr ""
 
 #: ../src/sat-log-browser.c:52 ../src/sat-pass-dialogs.c:102
 #: ../src/sat-pass-dialogs.c:126
@@ -6036,33 +5945,110 @@ msgstr "%s: TLE in Daten für %d aktualisiert."
 msgid "%s: Data for  %d updated for operational status."
 msgstr "%s: Betriebsstatus in Daten für %d aktualisiert."
 
-#: ../src/trsp-conf.c:59
+#: ../src/trsp-conf.c:60
 #, fuzzy, c-format
 msgid "%s: Could not read %s from %s:'%s'. Using default."
 msgstr "%s: Konnte %s aus %s:'%s' nicht lesen. Benutze Standard."
 
-#: ../src/trsp-conf.c:69
+#: ../src/trsp-conf.c:70
 #, c-format
 msgid "%s: Error reading %s: %s"
 msgstr "%s: Fehler beim lesen von %s: %s"
 
-#: ../src/trsp-conf.c:84
+#: ../src/trsp-conf.c:85
 #, c-format
 msgid "%s: %s contains 0 transponders"
 msgstr "%s: %s enthält 0 Transponder"
 
-#: ../src/trsp-conf.c:96
+#: ../src/trsp-conf.c:97
 #, fuzzy, c-format
-msgid "%s: Failed to allocate memory for transponder data"
+msgid "%s: Failed to allocate memory for trsp data"
 msgstr "%s: Speicherzuweisung für Transponder-Daten fehlgeschlagen"
 
-#. FIXME
-#. avoid unused parameter compiler warning
-#. avoid unused parameter compiler warning
-#: ../src/trsp-conf.c:185
-#, c-format
-msgid "%s: Not implemented!"
-msgstr "%s: Nicht implementiert!"
+#: ../src/trsp-conf.c:213
+#, fuzzy, c-format
+msgid "%s: Skipping transponder at index %d (no name)"
+msgstr "%s: Lösche Transponderdaten in %s"
+
+#: ../src/trsp-conf.c:241
+#, fuzzy, c-format
+msgid "%s: Error writing transponder data to %s"
+msgstr "%s: Lösche Transponderdaten in %s"
+
+#: ../src/trsp-conf.c:247
+#, fuzzy, c-format
+msgid "Wrote %d transmponders to %s"
+msgstr "TLE-Daten aus Dateien aktualisieren"
+
+#, fuzzy
+#~ msgid "%s: Writing to file : %s "
+#~ msgstr "%s:%d: Kartendatei %s wird geladen"
+
+#~ msgid "_Tools"
+#~ msgstr "_Werkzeuge"
+
+#, fuzzy
+#~ msgid "Update transponders from local files"
+#~ msgstr "Keplerelemente aus lokalen Dateien aktualisieren"
+
+#~ msgid "Using TLE _editor"
+#~ msgstr "TLE-_Editor benutzen"
+
+#~ msgid "Add or update Keplerian elements using the TLE editor"
+#~ msgstr ""
+#~ "Keplerelemente mit Hilfe des TLE-Editors hinzufügen oder aktualisieren"
+
+#~ msgid "_Transponders"
+#~ msgstr "_Transponder"
+
+#~ msgid "Edit satellite transponder frequencies"
+#~ msgstr "Satellitentransponderfrequenzen bearbeiten"
+
+#~ msgid "Satellite Editor"
+#~ msgstr "Satelliteneditor"
+
+#~ msgid ""
+#~ "Open the satellite editor where you can manually edit orbital elements "
+#~ "and other data"
+#~ msgstr ""
+#~ "Satelliteneditor öffnen, mit dem Sie die Umlaufbahnendaten und andere "
+#~ "Daten selber bearbeiten können"
+
+#~ msgid "Comm Window"
+#~ msgstr "Komm. Fenster"
+
+#~ msgid "Predict windows between two observers"
+#~ msgstr "Berechne Fenster zwischen zwei Beobachtern"
+
+#~ msgid "Advanced Predict"
+#~ msgstr "Erweiterte Berechnungen"
+
+#~ msgid "Open advanced pass predictor"
+#~ msgstr "Erweiterten Überflugsberechner öffnen"
+
+#~ msgid "Getting Started"
+#~ msgstr "Erste Schritte"
+
+#~ msgid "Show online user manual, Getting Started Section"
+#~ msgstr "Erste-Schritte-Kapitel des Benutzerhandbuchs online anzeigen"
+
+#, fuzzy
+#~ msgid "Select transponder directory:"
+#~ msgstr "Einen Transponder auswählen"
+
+#, fuzzy
+#~ msgid "%s: Running transponder update from %s"
+#~ msgstr "%s: TLE-Datenaktualisierung von %s läuft"
+
+#, fuzzy
+#~ msgid "<b>Updating transponders files from files</b>"
+#~ msgstr "<b>TLE-Daten werden aus Dateien aktualisiert</b>"
+
+#~ msgid "This function is still under development."
+#~ msgstr "Diese Funktion ist noch in der Entwicklung."
+
+#~ msgid "%s: Not implemented!"
+#~ msgstr "%s: Nicht implementiert!"
 
 #~ msgid "%s: %s does not appear to be in user conf dir; adding."
 #~ msgstr ""
