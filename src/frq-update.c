@@ -277,14 +277,20 @@ void frq_update_files(gchar * frqfile)
                     {
                         char            fcontent[1000];
 
-                        sprintf(fcontent, "[%s]\n", m_trsp.description);
-                        sprintf(fcontent, "%sUP_LOW=%d\n", fcontent, m_trsp.uplink_low);
-                        sprintf(fcontent, "%sUP_HIGH=%d\n", fcontent, m_trsp.uplink_high);
-                        sprintf(fcontent, "%sDOWN_LOW=%d\n", fcontent, m_trsp.downlink_low);
-                        sprintf(fcontent, "%sDOWN_HIGH=%d\n", fcontent, m_trsp.downlink_high);
-                        sprintf(fcontent, "%sMODE= %s\n",fcontent,m_trsp.mode);
-                        sprintf(fcontent, "%sBAUD= %9.2f\n", fcontent, m_trsp.baud);
-                        sprintf(fcontent, "%sINVERT=%s\n\n", fcontent, m_trsp.invert ? "true" : "false");
+                        sprintf(fcontent, "\n[%s]\n", m_trsp.description);
+                        if (m_trsp.uplink_low > 0)
+                            sprintf(fcontent, "%sUP_LOW=%lld\n", fcontent, m_trsp.uplink_low);
+                        if (m_trsp.uplink_high > 0)
+                            sprintf(fcontent, "%sUP_HIGH=%lld\n", fcontent, m_trsp.uplink_high);
+                        if (m_trsp.downlink_low > 0)
+                            sprintf(fcontent, "%sDOWN_LOW=%lld\n", fcontent, m_trsp.downlink_low);
+                        if (m_trsp.downlink_high > 0)
+                            sprintf(fcontent, "%sDOWN_HIGH=%lld\n", fcontent, m_trsp.downlink_high);
+                        sprintf(fcontent, "%sMODE=%s\n", fcontent, m_trsp.mode);
+                        if (m_trsp.baud > 0.0)
+                            sprintf(fcontent, "%sBAUD=%.0f\n", fcontent, m_trsp.baud);
+                        if (m_trsp.invert)
+                            sprintf(fcontent, "%sINVERT=%s\n", fcontent, "true");
                         fputs(fcontent, ffile);
                         fclose(ffile);
                     }

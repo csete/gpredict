@@ -54,10 +54,10 @@ struct transponder {
     char            uuid[30];           /* uuid */
     int             catnum;             /* Catalog number. */
     char            description[99];    /* Transponder descriptoion */
-    int             uplink_low;         /* Uplink starting frequency */
-    int             uplink_high;        /* uplink end frequency  */
-    int             downlink_low;       /* downlink starting frequency */
-    int             downlink_high;      /* downlink end frequency */
+    long long       uplink_low;         /* Uplink starting frequency */
+    long long       uplink_high;        /* uplink end frequency  */
+    long long       downlink_low;       /* downlink starting frequency */
+    long long       downlink_high;      /* downlink end frequency */
     char            mode[20];           /* mode (from modes files) */
     int             invert;             /* inverting / noninverting */
     double          baud;               /* baudrate */
