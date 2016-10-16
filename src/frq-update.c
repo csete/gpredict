@@ -46,6 +46,60 @@
 #include <build-config.h>
 #endif
 
+/* FRQ auto update frequency. */
+typedef enum {
+    FRQ_AUTO_UPDATE_NEVER = 0,      /* No auto-update, just warn after one week. */
+    FRQ_AUTO_UPDATE_MONTHLY = 1,
+    FRQ_AUTO_UPDATE_WEEKLY = 2,
+    FRQ_AUTO_UPDATE_DAILY = 3,
+    FRQ_AUTO_UPDATE_NUM
+} frq_auto_upd_freq_t;
+
+/*
+ * Frequency information is an json array, nxjson does not support json kbject
+ * arrays this struct is used to manipulate the json object array
+ */
+typedef enum {
+    START = 0,          /* starting point */
+    OBBGN,              /* new obbject starts here */
+    OBEND,              /* objct end here, next char should be delimiter (comma) or next obect start, or array end */
+    NXDLM,              /* we have the delimiter, next one will be new object */
+    FINISH              /* array fineshes here */
+} m_state;
+
+/* Data structure to hold a FRQ set. */
+struct transponder {
+    char            uuid[30];           /* uuid */
+    int             catnum;             /* Catalog number. */
+    char            description[99];    /* Transponder descriptoion */
+    long long       uplink_low;         /* Uplink starting frequency */
+    long long       uplink_high;        /* uplink end frequency  */
+    long long       downlink_low;       /* downlink starting frequency */
+    long long       downlink_high;      /* downlink end frequency */
+    char            mode[20];           /* mode (from modes files) */
+    int             invert;             /* inverting / noninverting */
+    double          baud;               /* baudrate */
+    int             alive;              /* alive or dead */
+};
+
+/* Data structure to hold a MODES set. */
+struct modes {
+    int             id;         /* id */
+    char            name[99];   /* Mode name */
+};
+
+/* Data structure to hold a MODE set. */
+typedef struct {
+    guint    modnum;  /* Mode number. */
+    gchar   *modname; /* Mode description. */
+} new_mode_t;
+
+/* Data structure to hold a TRSP list. */
+typedef struct {
+    guint    catnum;  /* Catalog number. */
+    guint    numtrsp; /* Number of transponders. */
+} new_trsp_t;
+
 /* private function prototypes */
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
