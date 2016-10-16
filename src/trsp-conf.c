@@ -184,7 +184,7 @@ GSList *read_transponders(guint catnum)
 /**
  * Write transponder list to file.
  *
- * @param catnum The catlog number of the satellite.
+ * @param catnum The catalog number of the satellite.
  * @param trsplist Pointer to a GSList of trsp_t structures.
  *
  * The transponder list is written to a file called "catnum.trsp". If the file
