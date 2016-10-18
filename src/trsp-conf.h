@@ -32,10 +32,10 @@
 /* NOTE For beacons uplow=uphigh=0 and downlow=downhigh */
 typedef struct {
     gchar          *name;       /*!< The name of the transponder (same as config group) */
-    gdouble         uplow;      /*!< Lower limit of uplink. */
-    gdouble         uphigh;     /*!< Upper limit of uplink. */
-    gdouble         downlow;    /*!< Lower limit of downlink. */
-    gdouble         downhigh;   /*!< Upper limit of donlink. */
+    gint64          uplow;      /*!< Lower limit of uplink. */
+    gint64          uphigh;     /*!< Upper limit of uplink. */
+    gint64          downlow;    /*!< Lower limit of downlink. */
+    gint64          downhigh;   /*!< Upper limit of donlink. */
     gdouble         baud;       /*!< Baud rate > */
     gboolean        invert;     /*!< Flag indicating whether transponder is inverting. */
     gchar          *mode;       /*!< Mode descriptor. */

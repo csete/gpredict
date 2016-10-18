@@ -41,6 +41,29 @@
 #define KEY_MODE        "MODE"
 #define KEY_BAUD        "BAUD"
 
+static void check_trsp_freq(trsp_t * trsp)
+{
+    /* ensure we don't have any negative frequencies */
+    if (trsp->downlow < 0)
+        trsp->downlow = 0;
+    if (trsp->downhigh < 0)
+        trsp->downhigh = 0;
+    if (trsp->uplow < 0)
+        trsp->uplow = 0;
+    if (trsp->uphigh < 0)
+        trsp->uphigh = 0;
+
+    if (trsp->downlow == 0 && trsp->downhigh > 0)
+        trsp->downlow = trsp->downhigh;
+    else if (trsp->downhigh == 0 && trsp->downlow > 0)
+        trsp->downhigh = trsp->downlow;
+
+    if (trsp->uplow == 0 && trsp->uphigh > 0)
+        trsp->uplow = trsp->uphigh;
+    else if (trsp->uphigh == 0 && trsp->uplow > 0)
+        trsp->uphigh = trsp->uplow;
+}
+
 /**
  * Read transponder data file.
  * 
@@ -102,45 +125,43 @@ GSList *read_transponders(guint catnum)
         /* read transponder data */
         trsp->name = g_strdup(groups[i]);
 
-        trsp->uplow = g_key_file_get_double(cfg, groups[i], KEY_UP_LOW,
-                                            &error);
+        trsp->uplow = g_key_file_get_int64(cfg, groups[i], KEY_UP_LOW, &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_UP_LOW,
                         name, groups[i]);
             g_clear_error(&error);
-            trsp->uplow = 0.0;
         }
 
-        trsp->uphigh = g_key_file_get_double(cfg, groups[i], KEY_UP_HIGH,
-                                             &error);
+        trsp->uphigh = g_key_file_get_int64(cfg, groups[i], KEY_UP_HIGH,
+                                            &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_UP_HIGH,
                         name, groups[i]);
             g_clear_error(&error);
-            trsp->uphigh = trsp->uplow;
         }
 
-        trsp->downlow = g_key_file_get_double(cfg, groups[i],
-                                              KEY_DOWN_LOW, &error);
+        trsp->downlow = g_key_file_get_int64(cfg, groups[i], KEY_DOWN_LOW,
+                                             &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_DOWN_LOW,
                         name, groups[i]);
             g_clear_error(&error);
-            trsp->downlow = 0.0;
         }
 
-        trsp->downhigh = g_key_file_get_double(cfg, groups[i], KEY_DOWN_HIGH,
-                                               &error);
+        trsp->downhigh = g_key_file_get_int64(cfg, groups[i], KEY_DOWN_HIGH,
+                                              &error);
         if (error != NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_DOWN_HIGH,
                         name, groups[i]);
             g_clear_error(&error);
-            trsp->downhigh = trsp->downlow;
         }
+
+        /* check data to ensure consistency */
+        check_trsp_freq(trsp);
 
         trsp->invert = g_key_file_get_boolean(cfg, groups[i],
                                               KEY_INVERT, &error);
@@ -215,18 +236,18 @@ void write_transponders(guint catnum, GSList * trsp_list)
             continue;
         }
 
-        if (trsp->uplow > 0.0)
-            g_key_file_set_double(trsp_data, trsp->name, KEY_UP_LOW,
-                                  trsp->uplow);
-        if (trsp->uphigh > 0.0)
-            g_key_file_set_double(trsp_data, trsp->name, KEY_UP_HIGH,
-                                  trsp->uphigh);
-        if (trsp->downlow > 0.0)
-            g_key_file_set_double(trsp_data, trsp->name, KEY_DOWN_LOW,
-                                  trsp->downlow);
-        if (trsp->downhigh > 0.0)
-            g_key_file_set_double(trsp_data, trsp->name, KEY_DOWN_HIGH,
-                                  trsp->downhigh);
+        if (trsp->uplow > 0)
+            g_key_file_set_int64(trsp_data, trsp->name, KEY_UP_LOW,
+                                 trsp->uplow);
+        if (trsp->uphigh > 0)
+            g_key_file_set_int64(trsp_data, trsp->name, KEY_UP_HIGH,
+                                 trsp->uphigh);
+        if (trsp->downlow > 0)
+            g_key_file_set_int64(trsp_data, trsp->name, KEY_DOWN_LOW,
+                                 trsp->downlow);
+        if (trsp->downhigh > 0)
+            g_key_file_set_int64(trsp_data, trsp->name, KEY_DOWN_HIGH,
+                                 trsp->downhigh);
         if (trsp->baud > 0.0)
             g_key_file_set_double(trsp_data, trsp->name, KEY_BAUD, trsp->baud);
         if (trsp->invert)

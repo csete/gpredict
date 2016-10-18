@@ -1018,10 +1018,10 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
         return;
 
     /* tune downlink */
-    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->downhigh > 0.0))
+    if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->downhigh > 0))
     {
         freq = ctrl->trsp->downlow +
-            fabs(ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
+            abs(ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), freq);
 
         /* invalidate RIG<->GPREDICT sync */
@@ -1029,10 +1029,10 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     }
 
     /* tune uplink */
-    if ((ctrl->trsp->uplow > 0.0) && (ctrl->trsp->uphigh > 0.0))
+    if ((ctrl->trsp->uplow > 0) && (ctrl->trsp->uphigh > 0))
     {
         freq = ctrl->trsp->uplow +
-            fabs(ctrl->trsp->uphigh - ctrl->trsp->uplow) / 2;
+            abs(ctrl->trsp->uphigh - ctrl->trsp->uplow) / 2;
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp), freq);
 
         /* invalidate RIG<->GPREDICT sync */
@@ -2796,7 +2796,7 @@ static void track_downlink(GtkRigCtrl * ctrl)
         return;
 
     /* ensure that we have a useable transponder config */
-    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->uplow > 0.0))
+    if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->uplow > 0))
     {
         down = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqDown));
         delta = down - ctrl->trsp->downlow;
@@ -2830,7 +2830,7 @@ static void track_uplink(GtkRigCtrl * ctrl)
         return;
 
     /* ensure that we have a useable transponder config */
-    if ((ctrl->trsp->downlow > 0.0) && (ctrl->trsp->uplow > 0.0))
+    if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->uplow > 0))
     {
         up = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqUp));
         delta = up - ctrl->trsp->uplow;
