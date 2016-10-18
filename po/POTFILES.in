@@ -2,7 +2,6 @@
 src/about.c
 src/compat.c
 src/first-time.c
-src/frq-update.c
 src/gpredict-help.c
 src/gpredict-url-hook.c
 src/gpredict-utils.c
@@ -89,3 +88,5 @@ src/time-tools.c
 src/tle-tools.c
 src/tle-update.c
 src/trsp-conf.c
+src/trsp-update.c
+

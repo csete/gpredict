@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-16 01:00+0200\n"
+"POT-Creation-Date: 2016-10-19 00:04+0200\n"
 "PO-Revision-Date: 2015-02-16 09:16+0000\n"
 "Last-Translator: Aleksey Kabanov <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -181,81 +181,6 @@ msgstr "%s: Ошибка копирования %s"
 #, c-format
 msgid "%s: Successfully copied %s"
 msgstr "%s: Успешно скопирован %s"
-
-#: ../src/frq-update.c:168
-#, c-format
-msgid "MODE %d %s"
-msgstr ""
-
-#: ../src/frq-update.c:300
-#, fuzzy, c-format
-msgid "%s: Could not open trsp file for write"
-msgstr "%s:%s: Не удалось переоткрыть файл .cat при чтении TLE из %s"
-
-#: ../src/frq-update.c:335
-msgid "Ready to fetch modes list from satnogs..."
-msgstr ""
-
-#: ../src/frq-update.c:355 ../src/frq-update.c:505
-#, fuzzy, c-format
-msgid "%s: File to open %s "
-msgstr "%s:%s: Не удалось открыть %s"
-
-#: ../src/frq-update.c:369 ../src/frq-update.c:519 ../src/tle-update.c:606
-#, c-format
-msgid "%s: Error fetching %s (%s)"
-msgstr "%s: Ошибка получения %s (%s)"
-
-#: ../src/frq-update.c:374 ../src/frq-update.c:524 ../src/tle-update.c:611
-#, c-format
-msgid "%s: Successfully fetched %s"
-msgstr "%s: Получено успешно %s"
-
-#: ../src/frq-update.c:384 ../src/frq-update.c:534 ../src/tle-update.c:619
-#, c-format
-msgid "%s: Failed to open %s preventing update"
-msgstr ""
-
-#: ../src/frq-update.c:398 ../src/frq-update.c:563 ../src/tle-update.c:647
-#, c-format
-msgid "%s: Fetched %d files from network; updating..."
-msgstr "%s: Получено %d файлов из сети; обновление..."
-
-#: ../src/frq-update.c:407 ../src/frq-update.c:573
-#, fuzzy, c-format
-msgid "%s: Could not fetch frequency files from network"
-msgstr "%s: Не удалось получить никаких файлов TLE из сети. Завершение..."
-
-#: ../src/frq-update.c:453
-#, fuzzy, c-format
-msgid "%s: A frequency update process is already running"
-msgstr "%s: Процесс обновления TLE уже запущен. Прерывание."
-
-#: ../src/frq-update.c:469
-#, fuzzy
-msgid "Ready to fetch transponder list from satnogs"
-msgstr "Обновление TLE из файлов"
-
-#: ../src/frq-update.c:489 ../src/tle-update.c:579
-#, c-format
-msgid "Fetching %s"
-msgstr "Получение %s"
-
-#: ../src/frq-update.c:607 ../src/tle-update.c:1291
-msgid "Never"
-msgstr "Никогда"
-
-#: ../src/frq-update.c:608 ../src/tle-update.c:1292
-msgid "Monthly"
-msgstr "Ежемесячно"
-
-#: ../src/frq-update.c:609 ../src/tle-update.c:1293
-msgid "Weekly"
-msgstr "Еженедельно"
-
-#: ../src/frq-update.c:610 ../src/tle-update.c:1294
-msgid "Daily"
-msgstr "Ежедневно"
 
 #: ../src/gpredict-help.c:68
 #, c-format
@@ -5690,6 +5615,31 @@ msgstr "%s: Нет файлов для получения из сети."
 msgid "No files to fetch from network"
 msgstr "Нет файлов для получения из сети"
 
+#: ../src/tle-update.c:579 ../src/trsp-update.c:543
+#, c-format
+msgid "Fetching %s"
+msgstr "Получение %s"
+
+#: ../src/tle-update.c:606 ../src/trsp-update.c:423 ../src/trsp-update.c:573
+#, c-format
+msgid "%s: Error fetching %s (%s)"
+msgstr "%s: Ошибка получения %s (%s)"
+
+#: ../src/tle-update.c:611 ../src/trsp-update.c:428 ../src/trsp-update.c:578
+#, c-format
+msgid "%s: Successfully fetched %s"
+msgstr "%s: Получено успешно %s"
+
+#: ../src/tle-update.c:619 ../src/trsp-update.c:438 ../src/trsp-update.c:588
+#, c-format
+msgid "%s: Failed to open %s preventing update"
+msgstr ""
+
+#: ../src/tle-update.c:647 ../src/trsp-update.c:452 ../src/trsp-update.c:617
+#, c-format
+msgid "%s: Fetched %d files from network; updating..."
+msgstr "%s: Получено %d файлов из сети; обновление..."
+
 #: ../src/tle-update.c:657
 #, c-format
 msgid "%s: Could not fetch any new TLE files from network; aborting..."
@@ -5780,6 +5730,22 @@ msgstr ""
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
+#: ../src/tle-update.c:1291 ../src/trsp-update.c:661
+msgid "Never"
+msgstr "Никогда"
+
+#: ../src/tle-update.c:1292 ../src/trsp-update.c:662
+msgid "Monthly"
+msgstr "Ежемесячно"
+
+#: ../src/tle-update.c:1293 ../src/trsp-update.c:663
+msgid "Weekly"
+msgstr "Еженедельно"
+
+#: ../src/tle-update.c:1294 ../src/trsp-update.c:664
+msgid "Daily"
+msgstr "Ежедневно"
+
 #: ../src/trsp-conf.c:60
 #, fuzzy, c-format
 msgid "%s: Could not read %s from %s:'%s'. Using default."
@@ -5813,6 +5779,40 @@ msgstr "%s: Ошибка записи конфигурационных данн�
 #: ../src/trsp-conf.c:247
 #, fuzzy, c-format
 msgid "Wrote %d transmponders to %s"
+msgstr "Обновление TLE из файлов"
+
+#: ../src/trsp-update.c:222
+#, c-format
+msgid "MODE %d %s"
+msgstr ""
+
+#: ../src/trsp-update.c:354
+#, fuzzy, c-format
+msgid "%s: Could not open trsp file for write"
+msgstr "%s:%s: Не удалось переоткрыть файл .cat при чтении TLE из %s"
+
+#: ../src/trsp-update.c:389
+msgid "Ready to fetch modes list from satnogs..."
+msgstr ""
+
+#: ../src/trsp-update.c:409 ../src/trsp-update.c:559
+#, fuzzy, c-format
+msgid "%s: File to open %s "
+msgstr "%s:%s: Не удалось открыть %s"
+
+#: ../src/trsp-update.c:461 ../src/trsp-update.c:627
+#, fuzzy, c-format
+msgid "%s: Could not fetch frequency files from network"
+msgstr "%s: Не удалось получить никаких файлов TLE из сети. Завершение..."
+
+#: ../src/trsp-update.c:507
+#, fuzzy, c-format
+msgid "%s: A frequency update process is already running"
+msgstr "%s: Процесс обновления TLE уже запущен. Прерывание."
+
+#: ../src/trsp-update.c:523
+#, fuzzy
+msgid "Ready to fetch transponder list from satnogs"
 msgstr "Обновление TLE из файлов"
 
 #, fuzzy

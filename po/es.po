@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-16 01:00+0200\n"
+"POT-Creation-Date: 2016-10-19 00:04+0200\n"
 "PO-Revision-Date: 2013-03-09 23:26+0000\n"
 "Last-Translator: Monkey <monkey.libre@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -164,81 +164,6 @@ msgstr "%s: Error al copiar %s"
 #, c-format
 msgid "%s: Successfully copied %s"
 msgstr "%s: Copiado satisfactoriamente %s"
-
-#: ../src/frq-update.c:168
-#, c-format
-msgid "MODE %d %s"
-msgstr ""
-
-#: ../src/frq-update.c:300
-#, fuzzy, c-format
-msgid "%s: Could not open trsp file for write"
-msgstr "%s:%d: No se ha encontrado el fichero de mapa %s"
-
-#: ../src/frq-update.c:335
-msgid "Ready to fetch modes list from satnogs..."
-msgstr ""
-
-#: ../src/frq-update.c:355 ../src/frq-update.c:505
-#, fuzzy, c-format
-msgid "%s: File to open %s "
-msgstr "%s:%s: fallo al abrir %s"
-
-#: ../src/frq-update.c:369 ../src/frq-update.c:519 ../src/tle-update.c:606
-#, c-format
-msgid "%s: Error fetching %s (%s)"
-msgstr ""
-
-#: ../src/frq-update.c:374 ../src/frq-update.c:524 ../src/tle-update.c:611
-#, c-format
-msgid "%s: Successfully fetched %s"
-msgstr ""
-
-#: ../src/frq-update.c:384 ../src/frq-update.c:534 ../src/tle-update.c:619
-#, c-format
-msgid "%s: Failed to open %s preventing update"
-msgstr ""
-
-#: ../src/frq-update.c:398 ../src/frq-update.c:563 ../src/tle-update.c:647
-#, c-format
-msgid "%s: Fetched %d files from network; updating..."
-msgstr ""
-
-#: ../src/frq-update.c:407 ../src/frq-update.c:573
-#, fuzzy, c-format
-msgid "%s: Could not fetch frequency files from network"
-msgstr "%s: No se pudo crear el archivo %s (%s)"
-
-#: ../src/frq-update.c:453
-#, c-format
-msgid "%s: A frequency update process is already running"
-msgstr ""
-
-#: ../src/frq-update.c:469
-#, fuzzy
-msgid "Ready to fetch transponder list from satnogs"
-msgstr "Actualice los TLE desde ficheros locales"
-
-#: ../src/frq-update.c:489 ../src/tle-update.c:579
-#, c-format
-msgid "Fetching %s"
-msgstr ""
-
-#: ../src/frq-update.c:607 ../src/tle-update.c:1291
-msgid "Never"
-msgstr "Nunca"
-
-#: ../src/frq-update.c:608 ../src/tle-update.c:1292
-msgid "Monthly"
-msgstr "Mensualmente"
-
-#: ../src/frq-update.c:609 ../src/tle-update.c:1293
-msgid "Weekly"
-msgstr "Semanalmente"
-
-#: ../src/frq-update.c:610 ../src/tle-update.c:1294
-msgid "Daily"
-msgstr "Diariamente"
 
 #: ../src/gpredict-help.c:68
 #, c-format
@@ -5693,6 +5618,31 @@ msgstr ""
 msgid "No files to fetch from network"
 msgstr ""
 
+#: ../src/tle-update.c:579 ../src/trsp-update.c:543
+#, c-format
+msgid "Fetching %s"
+msgstr ""
+
+#: ../src/tle-update.c:606 ../src/trsp-update.c:423 ../src/trsp-update.c:573
+#, c-format
+msgid "%s: Error fetching %s (%s)"
+msgstr ""
+
+#: ../src/tle-update.c:611 ../src/trsp-update.c:428 ../src/trsp-update.c:578
+#, c-format
+msgid "%s: Successfully fetched %s"
+msgstr ""
+
+#: ../src/tle-update.c:619 ../src/trsp-update.c:438 ../src/trsp-update.c:588
+#, c-format
+msgid "%s: Failed to open %s preventing update"
+msgstr ""
+
+#: ../src/tle-update.c:647 ../src/trsp-update.c:452 ../src/trsp-update.c:617
+#, c-format
+msgid "%s: Fetched %d files from network; updating..."
+msgstr ""
+
 #: ../src/tle-update.c:657
 #, c-format
 msgid "%s: Could not fetch any new TLE files from network; aborting..."
@@ -5783,6 +5733,22 @@ msgstr ""
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
+#: ../src/tle-update.c:1291 ../src/trsp-update.c:661
+msgid "Never"
+msgstr "Nunca"
+
+#: ../src/tle-update.c:1292 ../src/trsp-update.c:662
+msgid "Monthly"
+msgstr "Mensualmente"
+
+#: ../src/tle-update.c:1293 ../src/trsp-update.c:663
+msgid "Weekly"
+msgstr "Semanalmente"
+
+#: ../src/tle-update.c:1294 ../src/trsp-update.c:664
+msgid "Daily"
+msgstr "Diariamente"
+
 #: ../src/trsp-conf.c:60
 #, fuzzy, c-format
 msgid "%s: Could not read %s from %s:'%s'. Using default."
@@ -5818,6 +5784,40 @@ msgstr "%s: Limpiando datos del transpondedor en %s"
 #: ../src/trsp-conf.c:247
 #, fuzzy, c-format
 msgid "Wrote %d transmponders to %s"
+msgstr "Actualice los TLE desde ficheros locales"
+
+#: ../src/trsp-update.c:222
+#, c-format
+msgid "MODE %d %s"
+msgstr ""
+
+#: ../src/trsp-update.c:354
+#, fuzzy, c-format
+msgid "%s: Could not open trsp file for write"
+msgstr "%s:%d: No se ha encontrado el fichero de mapa %s"
+
+#: ../src/trsp-update.c:389
+msgid "Ready to fetch modes list from satnogs..."
+msgstr ""
+
+#: ../src/trsp-update.c:409 ../src/trsp-update.c:559
+#, fuzzy, c-format
+msgid "%s: File to open %s "
+msgstr "%s:%s: fallo al abrir %s"
+
+#: ../src/trsp-update.c:461 ../src/trsp-update.c:627
+#, fuzzy, c-format
+msgid "%s: Could not fetch frequency files from network"
+msgstr "%s: No se pudo crear el archivo %s (%s)"
+
+#: ../src/trsp-update.c:507
+#, c-format
+msgid "%s: A frequency update process is already running"
+msgstr ""
+
+#: ../src/trsp-update.c:523
+#, fuzzy
+msgid "Ready to fetch transponder list from satnogs"
 msgstr "Actualice los TLE desde ficheros locales"
 
 #, fuzzy
