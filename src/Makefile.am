@@ -30,7 +30,6 @@ gpredict_SOURCES = \
     about.c about.h \
     compat.c compat.h config-keys.h \
     first-time.c first-time.h \
-    frq-update.c frq-update.h \
     gpredict-help.c gpredict-help.h \
     gpredict-url-hook.c gpredict-url-hook.h \
     gpredict-utils.c gpredict-utils.h \
@@ -78,6 +77,7 @@ gpredict_SOURCES = \
     radio-conf.c radio-conf.h \
     rotor-conf.c rotor-conf.h \
     trsp-conf.c trsp-conf.h \
+    trsp-update.c trsp-update.h \
     sat-cfg.c sat-cfg.h \
     sat-info.c sat-info.h \
     sat-log.c sat-log.h \

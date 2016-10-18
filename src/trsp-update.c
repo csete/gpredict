@@ -36,7 +36,7 @@
 #include <locale.h>
 
 #include "compat.h"
-#include "frq-update.h"
+#include "trsp-update.h"
 #include "gpredict-utils.h"
 #include "nxjson/nxjson.h"
 #include "sat-cfg.h"
@@ -46,14 +46,14 @@
 #include <build-config.h>
 #endif
 
-/* FRQ auto update frequency. */
+/* TRSP auto update frequency. */
 typedef enum {
-    FRQ_AUTO_UPDATE_NEVER = 0,      /* No auto-update, just warn after one week. */
-    FRQ_AUTO_UPDATE_MONTHLY = 1,
-    FRQ_AUTO_UPDATE_WEEKLY = 2,
-    FRQ_AUTO_UPDATE_DAILY = 3,
-    FRQ_AUTO_UPDATE_NUM
-} frq_auto_upd_freq_t;
+    TRSP_AUTO_UPDATE_NEVER = 0,      /* No auto-update, just warn after one week. */
+    TRSP_AUTO_UPDATE_MONTHLY = 1,
+    TRSP_AUTO_UPDATE_WEEKLY = 2,
+    TRSP_AUTO_UPDATE_DAILY = 3,
+    TRSP_AUTO_UPDATE_NUM
+} trsp_auto_upd_freq_t;
 
 /*
  * Frequency information is an json array, nxjson does not support json kbject
@@ -67,7 +67,7 @@ typedef enum {
     FINISH              /* array fineshes here */
 } m_state;
 
-/* Data structure to hold a FRQ set. */
+/* Data structure to hold a TRSP set. */
 struct transponder {
     char            uuid[30];           /* uuid */
     int             catnum;             /* Catalog number. */
@@ -142,7 +142,7 @@ static void free_new_trsp (gpointer data)
     g_free (mtrsp);
 }
 
-void frq_update_files(gchar * frqfile)
+void trsp_update_files(gchar * input_file)
 {
 
     FILE           *mfp;                /* transmitter information json file */
@@ -234,7 +234,7 @@ void frq_update_files(gchar * frqfile)
 //    g_hash_table_foreach (modes_hash, check_and_print_mode, &num);
 
     sprintf(jsn_object, " ");   // initialize buffer
-    mfp = fopen(frqfile, "r");
+    mfp = fopen(input_file, "r");
     if (mfp != NULL)
     {
         while ((symbol = getc(mfp)) != EOF)
@@ -381,9 +381,9 @@ void modes_update_from_network()
     //gchar          *cache;
     guint           success = 0;        /* no. of successfull downloads */
 
-    server = sat_cfg_get_str(SAT_CFG_STR_FRQ_SERVER);
-    proxy = sat_cfg_get_str(SAT_CFG_STR_FRQ_PROXY);
-    files_tmp = sat_cfg_get_str(SAT_CFG_STR_FRQ_FILES);
+    server = sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER);
+    proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
+    files_tmp = sat_cfg_get_str(SAT_CFG_STR_TRSP_FILES);
 
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("Ready to fetch modes list from satnogs..."),
@@ -471,25 +471,25 @@ void modes_update_from_network()
 }
 
 /**
- * Update FRQ files from network.
+ * Update TRSP files from network.
  *
  * @param silent TRUE if function should execute without graphical status indicator.
  * @param progress Pointer to a GtkProgressBar progress indicator (can be NULL)
  * @param label1 GtkLabel for activity string.
  * @param label2 GtkLabel for statistics string.
  */
-void frq_update_from_network(gboolean silent,
+void trsp_update_from_network(gboolean silent,
                              GtkWidget * progress,
                              GtkWidget * label1, GtkWidget * label2)
 {
-    static GMutex   frq_in_progress;
+    static GMutex   trsp_in_progress;
 
     gchar          *server;
     gchar          *proxy = NULL;
     gchar          *files_tmp;
     gchar         **files;
     gchar          *curfile;
-    gchar          *locfile_frq;
+    gchar          *locfile_trsp;
     gchar          *userconfdir;
     CURL           *curl;
     CURLcode        res;
@@ -501,7 +501,7 @@ void frq_update_from_network(gboolean silent,
     guint           success = 0;        /* no. of successfull downloads */
 
     /* bail out if we are already in an update process */
-    if (g_mutex_trylock(&frq_in_progress) == FALSE)
+    if (g_mutex_trylock(&trsp_in_progress) == FALSE)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: A frequency update process is already running"),
@@ -513,10 +513,10 @@ void frq_update_from_network(gboolean silent,
     modes_update_from_network();
 
     /* get server, proxy, and list of files */
-    //server = sprintf("%stransmitters/?format=json", sat_cfg_get_str(SAT_CFG_STR_FRQ_SERVER));
-    server = sat_cfg_get_str(SAT_CFG_STR_FRQ_SERVER);
-    proxy = sat_cfg_get_str(SAT_CFG_STR_FRQ_PROXY);
-    files_tmp = sat_cfg_get_str(SAT_CFG_STR_FRQ_FILES);
+    //server = sprintf("%stransmitters/?format=json", sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER));
+    server = sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER);
+    proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
+    files_tmp = sat_cfg_get_str(SAT_CFG_STR_TRSP_FILES);
     files = g_strsplit(files_tmp, ";", 0);
 
     sat_log_log(SAT_LOG_LEVEL_INFO,
@@ -554,12 +554,12 @@ void frq_update_from_network(gboolean silent,
     /* create local cache file */
     userconfdir = get_user_conf_dir();
 
-    locfile_frq = g_strconcat(userconfdir, G_DIR_SEPARATOR_S, "trsp",
+    locfile_trsp = g_strconcat(userconfdir, G_DIR_SEPARATOR_S, "trsp",
                               G_DIR_SEPARATOR_S, "transmitters.json", NULL);
     sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: File to open %s "), __func__,
-                locfile_frq);
+                locfile_trsp);
 
-    outfile = g_fopen(locfile_frq, "wb");
+    outfile = g_fopen(locfile_trsp, "wb");
     if (outfile != NULL)
     {
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
@@ -586,7 +586,7 @@ void frq_update_from_network(gboolean silent,
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
                     _("%s: Failed to open %s preventing update"),
-                    __func__, locfile_frq);
+                    __func__, locfile_trsp);
     }
 
     /* update progress indicator */
@@ -606,7 +606,7 @@ void frq_update_from_network(gboolean silent,
 
     g_free(userconfdir);
     g_free(curfile);
-    //g_free (locfile_frq);
+    //g_free (locfile_trsp);
 
     curl_easy_cleanup(curl);
 
@@ -618,7 +618,7 @@ void frq_update_from_network(gboolean silent,
                     __func__, success);
         /* call update_from_files */
         cache = sat_file_name("cache");
-        frq_update_files(locfile_frq);
+        trsp_update_files(locfile_trsp);
         g_free(cache);
     }
     else
@@ -635,11 +635,11 @@ void frq_update_from_network(gboolean silent,
     if (proxy != NULL)
         g_free(proxy);
 
-    g_mutex_unlock(&frq_in_progress);
+    g_mutex_unlock(&trsp_in_progress);
 }
 
 /**
- * Write FRQ data block to file.
+ * Write TRSP data block to file.
  * 
  * @param ptr Pointer to the data block to be written.
  * @param size Size of data block.
@@ -657,18 +657,18 @@ static size_t my_write_func(void *ptr, size_t size, size_t nmemb,
     return fwrite(ptr, size, nmemb, stream);
 }
 
-const gchar    *freq_to_str2[FRQ_AUTO_UPDATE_NUM] = {
+const gchar    *freq_to_str2[TRSP_AUTO_UPDATE_NUM] = {
     N_("Never"),
     N_("Monthly"),
     N_("Weekly"),
     N_("Daily")
 };
 
-const gchar    *frq_update_freq_to_str2(frq_auto_upd_freq_t freq)
+const gchar    *trsp_update_freq_to_str2(trsp_auto_upd_freq_t freq)
 {
-    if ((freq <= FRQ_AUTO_UPDATE_NEVER) || (freq >= FRQ_AUTO_UPDATE_NUM))
+    if ((freq <= TRSP_AUTO_UPDATE_NEVER) || (freq >= TRSP_AUTO_UPDATE_NUM))
     {
-        freq = FRQ_AUTO_UPDATE_NEVER;
+        freq = TRSP_AUTO_UPDATE_NEVER;
     }
 
     return _(freq_to_str2[freq]);

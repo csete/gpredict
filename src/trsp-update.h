@@ -23,14 +23,14 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-#ifndef FRQ_UPDATE_H
-#define FRQ_UPDATE_H 1
+#ifndef TRSP_UPDATE_H
+#define TRSP_UPDATE_H 1
 
 #include <gtk/gtk.h>
 
-void            frq_update_from_network(gboolean silent,
-                                        GtkWidget * progress,
-                                        GtkWidget * label1,
-                                        GtkWidget * label2);
+void            trsp_update_from_network(gboolean silent,
+                                         GtkWidget * progress,
+                                         GtkWidget * label1,
+                                         GtkWidget * label2);
 
 #endif

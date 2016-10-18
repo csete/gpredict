@@ -127,9 +127,9 @@ typedef enum {
     SAT_CFG_INT_WINDOW_WIDTH,   /*!< Main window width during last session */
     SAT_CFG_INT_WINDOW_HEIGHT,  /*!< Main window height during last session */
     SAT_CFG_INT_WEB_BROWSER_TYPE,       /*!< Web browser type, see browser_type_t */
-    SAT_CFG_INT_FRQ_AUTO_UPD_FREQ,      /*!< TLE auto-update frequency. */
-    SAT_CFG_INT_FRQ_AUTO_UPD_ACTION,    /*!< TLE auto-update action. */
-    SAT_CFG_INT_FRQ_LAST_UPDATE,        /*!< Date and time of last update, Unix seconds. */
+    SAT_CFG_INT_TRSP_AUTO_UPD_FREQ,      /*!< transponder auto-update frequency. */
+    SAT_CFG_INT_TRSP_AUTO_UPD_ACTION,    /*!< transponder auto-update action. */
+    SAT_CFG_INT_TRSP_LAST_UPDATE,        /*!< Date and time of last transponder update, Unix seconds. */
     SAT_CFG_INT_TLE_AUTO_UPD_FREQ,      /*!< TLE auto-update frequency. */
     SAT_CFG_INT_TLE_AUTO_UPD_ACTION,    /*!< TLE auto-update action. */
     SAT_CFG_INT_TLE_LAST_UPDATE,        /*!< Date and time of last update, Unix seconds. */
@@ -148,11 +148,11 @@ typedef enum {
     SAT_CFG_STR_MAP_FILE,       /*!< Map file (abs or rel). */
     SAT_CFG_STR_MAP_FONT,       /*!< Map font. */
     SAT_CFG_STR_POL_FONT,       /*!< Polar view font. */
-    SAT_CFG_STR_FRQ_SERVER,     /*!< Server for TLE updates. */
-    SAT_CFG_STR_FRQ_FILES,      /*!< ; separated list of files on server. */
-    SAT_CFG_STR_FRQ_PROXY,      /*!< Proxy server. */
-    SAT_CFG_STR_FRQ_FILE_DIR,   /*!< Local directory from which tle were last updated. */
-    SAT_CFG_STR_FRQ_FILE_EXT,   /*!< File extensions. */
+    SAT_CFG_STR_TRSP_SERVER,    /*!< Server for transponder updates. */
+    SAT_CFG_STR_TRSP_FILES,     /*!< ; separated list of files on server. */
+    SAT_CFG_STR_TRSP_PROXY,     /*!< Proxy server. */
+    SAT_CFG_STR_TRSP_FILE_DIR,  /*!< Local directory from which tle were last updated. */
+    SAT_CFG_STR_TRSP_FILE_EXT,  /*!< File extensions. */
     SAT_CFG_STR_TLE_SERVER,     /*!< Server for TLE updates. */
     SAT_CFG_STR_TLE_FILES,      /*!< ; separated list of files on server. */
     SAT_CFG_STR_TLE_PROXY,      /*!< Proxy server. */

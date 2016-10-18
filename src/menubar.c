@@ -30,7 +30,6 @@
 #include "about.h"
 #include "compat.h"
 #include "config-keys.h"
-#include "frq-update.h"
 #include "gpredict-help.h"
 #include "gpredict-utils.h"
 #include "gtk-sat-module.h"
@@ -43,6 +42,7 @@
 #include "sat-log-browser.h"
 #include "sat-pref.h"
 #include "tle-update.h"
+#include "trsp-update.h"
 
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
@@ -57,7 +57,7 @@ static void     menubar_message_log(GtkWidget * widget, gpointer data);
 static void     menubar_app_exit_cb(GtkWidget * widget, gpointer data);
 static void     menubar_pref_cb(GtkWidget * widget, gpointer data);
 static void     menubar_tle_net_cb(GtkWidget * widget, gpointer data);
-static void     menubar_frq_net_cb(GtkWidget * widget, gpointer data);
+static void     menubar_trsp_net_cb(GtkWidget * widget, gpointer data);
 static void     menubar_tle_local_cb(GtkWidget * widget, gpointer data);
 static void     menubar_help_cb(GtkWidget * widget, gpointer data);
 static void     menubar_license_cb(GtkWidget * widget, gpointer data);
@@ -97,7 +97,7 @@ static GtkActionEntry entries[] = {
      G_CALLBACK(menubar_tle_net_cb)},
     {"FNet", GTK_STOCK_NETWORK, N_("From _network"), NULL,
      N_("Update transponders from a network server"),
-     G_CALLBACK(menubar_frq_net_cb)},
+     G_CALLBACK(menubar_trsp_net_cb)},
     {"Local", GTK_STOCK_HARDDISK, N_("From l_ocal files"), NULL,
      N_("Update Keplerian elements from local files"),
      G_CALLBACK(menubar_tle_local_cb)},
@@ -373,9 +373,9 @@ static void menubar_pref_cb(GtkWidget * widget, gpointer data)
  * This function is all when the user selects
  * Edit -> Update frequency from network
  * in the menubar.
- * the function calls the frq_update_from_network with silent flag FALSE
+ * the function calls the trsp_update_from_network with silent flag FALSE
  */
-static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
+static void menubar_trsp_net_cb(GtkWidget * widget, gpointer data)
 {
 
     GtkWidget      *dialog;     /* dialog window  */
@@ -430,13 +430,13 @@ static void menubar_frq_net_cb(GtkWidget * widget, gpointer data)
     gtk_widget_show_all(dialog);
 
     /* Force the drawing queue to be processed otherwise the dialog
-       may not appear before we enter the FRQ updating func
+       may not appear before we enter the TRSP updating func
        - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
      */
     while (g_main_context_iteration(NULL, FALSE));
 
-    /* update FRQ */
-    frq_update_from_network(FALSE, progress, label1, label2);
+    /* update TRSP */
+    trsp_update_from_network(FALSE, progress, label1, label2);
 
     /* set progress bar to 100% */
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 1.0);
