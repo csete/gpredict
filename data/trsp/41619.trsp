@@ -1,0 +1,12 @@
+[Mode U Beacon (disabled)]
+DOWN_LOW=435950000
+MODE=CW
+
+[Mode U TLM]
+DOWN_LOW=435950000
+MODE=4k8/9k6 GMSK Mobitex-NX
+
+[Mode U/U DIGI (TBD)]
+UP_LOW=435950000
+DOWN_LOW=435950000
+MODE=4k8 GMSK Mobitex-NX (idle mode: 10 sec interval)
