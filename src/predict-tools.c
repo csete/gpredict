@@ -7,6 +7,7 @@
     Authors: Alexandru Csete <oz9aec@gmail.com>
              John A. Magliacane, KD2BD.
              Charles Suprin <hamaa1vs@gmail.com>
+	     Daniel Estevez <daniel@destevez.net>
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -104,7 +105,7 @@ void predict_calc(sat_t * sat, qth_t * qth, gdouble t)
     age = sat->jul_utc - sat->jul_epoch;
     sat->orbit = (long)floor((sat->tle.xno * xmnpda / twopi +
                               age * sat->tle.bstar * ae) * age +
-                             sat->tle.xmo / twopi) + sat->tle.revnum - 1;
+                             (sat->tle.xmo + sat->tle.omegao) / twopi) + sat->tle.revnum ;
 }
 
 /**
