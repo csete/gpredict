@@ -134,7 +134,7 @@ typedef struct {
 
     GooCanvasItemModel *terminator;     /*!< Outline of sun shadow on Earth. */
 
-    gint terminator_time_out;           /*!< Re-draw the Solar Terminator every hundred satellite updates; this keeps the score. */
+    gdouble terminator_last_tstamp;        /*!< Timestamp of the last terminator drawn. Used to prevent redrawing the terminator too often. */
     
     gdouble     naos;                   /*!< Next event time. */
     gint        ncat;                   /*!< Next event catnum. */

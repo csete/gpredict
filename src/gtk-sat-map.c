@@ -71,6 +71,9 @@
 
 #define MARKER_SIZE_HALF    1
 
+/* Update terminator every 30 seconds */
+#define TERMINATOR_UPDATE_INTERVAL (15.0/86400.0)
+
 static void     gtk_sat_map_class_init(GtkSatMapClass * class);
 static void     gtk_sat_map_init(GtkSatMap * polview);
 static void     gtk_sat_map_destroy(GtkObject * object);
@@ -698,13 +701,11 @@ void gtk_sat_map_update(GtkWidget * widget)
         /* update sats */
         g_hash_table_foreach(satmap->sats, update_sat, satmap);
 
-        /* Update the Solar Terminator, only once in a hundred satellite
-           updates. */
-        if (++satmap->terminator_time_out >= 100)
-        {
+        /* Update the Solar Terminator if necessary */
+	if (fabs(satmap->tstamp - satmap->terminator_last_tstamp) > TERMINATOR_UPDATE_INTERVAL) {
+	    satmap->terminator_last_tstamp = satmap->tstamp;
             redraw_terminator(satmap);
-            satmap->terminator_time_out = 0;
-        }
+	}
 
         /* update countdown to NEXT AOS label */
         if (satmap->eventinfo)
@@ -2679,7 +2680,7 @@ static void draw_terminator(GtkSatMap * satmap, GooCanvasItemModel * root)
 
     goo_canvas_item_model_raise(satmap->terminator, satmap->map);
 
-    satmap->terminator_time_out = 0;
+    satmap->terminator_last_tstamp = satmap->tstamp;
 }
 
 
