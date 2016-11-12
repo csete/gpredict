@@ -5,6 +5,7 @@
   Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Daniel Estevez <daniel@destevez.net>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -242,8 +243,8 @@ gtk_sat_data_init_sat (sat_t *sat, qth_t *qth)
     sat->footprint = 2.0 * xkmper * acos (xkmper/sat->pos.w);
     age = 0.0;
     sat->orbit = (long) floor((sat->tle.xno * xmnpda/twopi +
-                               age * sat->tle.bstar * ae) * age +
-                              sat->tle.xmo/twopi) + sat->tle.revnum - 1;
+                               age * sat->tle.bstar * ae) * age -
+                              (sat->tle.xmo + sat->tle.omegao)/twopi) + sat->tle.revnum;
 
     /* orbit type */
     sat->otype = get_orbit_type (sat);
