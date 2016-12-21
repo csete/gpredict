@@ -30,8 +30,6 @@
 
 #include <gtk/gtk.h>
 
-
-void sat_pref_qth_editor_run (GtkTreeView *treeview, gboolean new);
-
+void            sat_pref_qth_editor_run(GtkTreeView * treeview, gboolean new);
 
 #endif
