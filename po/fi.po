@@ -959,29 +959,26 @@ msgid "Rate"
 msgstr "Nopeus"
 
 #. Next Event
-#: ../src/gtk-sat-list.c:64 ../src/gtk-sat-list.c:96
-#: ../src/gtk-single-sat.c:64 ../src/sat-pref-map-view.c:251
-#: ../src/sat-pref-polar-view.c:262
+#: ../src/gtk-sat-list.c:64 ../src/gtk-sat-list.c:96 ../src/gtk-single-sat.c:64
+#: ../src/sat-pref-map-view.c:251 ../src/sat-pref-polar-view.c:262
 msgid "Next Event"
 msgstr "Seuraava tapahtuma"
 
-#: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:97
-#: ../src/gtk-single-sat.c:65
+#: ../src/gtk-sat-list.c:65 ../src/gtk-sat-list.c:97 ../src/gtk-single-sat.c:65
 msgid "Next AOS"
 msgstr "Seuraava AOS"
 
-#: ../src/gtk-sat-list.c:66 ../src/gtk-sat-list.c:98
-#: ../src/gtk-single-sat.c:66
+#: ../src/gtk-sat-list.c:66 ../src/gtk-sat-list.c:98 ../src/gtk-single-sat.c:66
 msgid "Next LOS"
 msgstr "Seuraava LOS"
 
-#: ../src/gtk-sat-list.c:67 ../src/loc-tree.c:146
-#: ../src/sat-pass-dialogs.c:109 ../src/sat-pref-qth.c:203
+#: ../src/gtk-sat-list.c:67 ../src/loc-tree.c:146 ../src/sat-pass-dialogs.c:109
+#: ../src/sat-pref-qth.c:203
 msgid "Lat"
 msgstr "Leveysaste"
 
-#: ../src/gtk-sat-list.c:68 ../src/loc-tree.c:166
-#: ../src/sat-pass-dialogs.c:110 ../src/sat-pref-qth.c:216
+#: ../src/gtk-sat-list.c:68 ../src/loc-tree.c:166 ../src/sat-pass-dialogs.c:110
+#: ../src/sat-pref-qth.c:216
 msgid "Lon"
 msgstr "Pituusaste"
 
@@ -994,8 +991,7 @@ msgstr "SSP"
 msgid "Footp"
 msgstr "Footp"
 
-#: ../src/gtk-sat-list.c:71 ../src/loc-tree.c:186
-#: ../src/sat-pass-dialogs.c:113
+#: ../src/gtk-sat-list.c:71 ../src/loc-tree.c:186 ../src/sat-pass-dialogs.c:113
 msgid "Alt"
 msgstr "Korkeus"
 
@@ -1090,9 +1086,8 @@ msgid "Footprint"
 msgstr "Jalanjälki"
 
 #. altitude
-#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:71
-#: ../src/qth-editor.c:333 ../src/sat-pass-dialogs.c:137
-#: ../src/sat-pref-qth-editor.c:318
+#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:71 ../src/qth-editor.c:333
+#: ../src/sat-pass-dialogs.c:137 ../src/sat-pref-qth-editor.c:318
 msgid "Altitude"
 msgstr "Korkeus"
 
