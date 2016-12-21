@@ -57,21 +57,17 @@
 #include "sat-pref-qth-editor.h"
 #include "locator.h"
 
-
-
-/** \brief Symbolic refs to be used when calling select_location in order
- *         to determine which mode the selection should run in, ie.
- *         select location or select weather station.
+/**
+ * Symbolic refs to be used when calling select_location in order
+ * to determine which mode the selection should run in, ie.
+ * select location or select weather station.
  */
 enum {
     SELECTION_MODE_LOC = 1,
     SELECTION_MODE_WX = 2
 };
 
-
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
-
-
 
 /* private widgets */
 static GtkWidget *dialog;       /* dialog window */
@@ -91,8 +87,6 @@ static GtkWidget *port;         /* GPSD Port */
 static gulong   latsigid, lonsigid, nssigid, ewsigid, qrasigid;
 
 static GtkWidget *wx;           /* weather station */
-
-
 
 static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new);
 static void     update_widgets(GtkTreeView * treeview);
@@ -365,8 +359,9 @@ static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new)
     gtk_combo_box_append_text(GTK_COMBO_BOX(type), "GPSD");
     gtk_combo_box_set_active(GTK_COMBO_BOX(type), 0);
     gtk_widget_set_tooltip_text(type,
-                                _
-                                ("A qth can be static, ie. it does not change, or gpsd based for computers with gps attached."));
+                                _("A qth can be static, ie. it does not "
+                                  "change, or gpsd based for computers with "
+                                  "gps attached."));
     gtk_table_attach_defaults(GTK_TABLE(table), type, 1, 2, 8, 9);
     /* GPSD Server */
     label = gtk_label_new(_("GPSD Server"));
@@ -400,7 +395,6 @@ static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new)
     return table;
 }
 
-
 /** Update widgets from the currently selected row in the treeview */
 static void update_widgets(GtkTreeView * treeview)
 {
@@ -418,12 +412,9 @@ static void update_widgets(GtkTreeView * treeview)
     guint           qthtype;    /* type */
     guint           qthgpsdport;        /* gpsdport */
 
-
     selection = gtk_tree_view_get_selection(treeview);
-
     if (gtk_tree_selection_get_selected(selection, &model, &iter))
     {
-
         /* get values */
         gtk_tree_model_get(model, &iter,
                            QTH_LIST_COL_NAME, &qthname,
