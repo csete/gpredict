@@ -555,6 +555,8 @@ static gboolean apply_changes(GtkTreeView * treeview, gboolean new)
 
 #ifdef HAS_LIBGPS
     qthgpsdserver = gtk_entry_get_text(GTK_ENTRY(server));
+#else
+    qthgpsdserver = "";
 #endif
 
     qthlat = gtk_spin_button_get_value(GTK_SPIN_BUTTON(lat));
@@ -570,6 +572,9 @@ static gboolean apply_changes(GtkTreeView * treeview, gboolean new)
 #ifdef HAS_LIBGPS
     qthgpsdport = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(port));
     qthtype = gtk_combo_box_get_active(GTK_COMBO_BOX(type));
+#else
+    qthgpsdport = 0;
+    qthtype = 0; // FIXME: should probably use a #define
 #endif
 
     /* get liststore */
