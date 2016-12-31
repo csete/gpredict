@@ -205,8 +205,8 @@ sat_cfg_int_t sat_cfg_int[SAT_CFG_INT_NUM] = {
     { "GLOBAL",  "WINDOW_WIDTH", 700},
     { "GLOBAL",  "WINDOW_HEIGHT", 700},
     { "GLOBAL",  "HTML_BROWSER_TYPE", 0},
-    { "TLE",     "AUTO_UPDATE_FREQ", 2},
-    { "TLE",     "AUTO_UPDATE_ACTION", 1},
+    { "TLE",     "AUTO_UPDATE_FREQ", 2},   /* weekly, see tle_auto_upd_freq_t */
+    { "TLE",     "AUTO_UPDATE_ACTION", 1}, /* notify, see tle_auto_upd_action_t */
     { "TLE",     "LAST_UPDATE", 0},
     { "LOG",     "CLEAN_AGE", 0},  /* 0 = Never clean */
     { "LOG",     "LEVEL", 2}
@@ -223,7 +223,6 @@ sat_cfg_str_t sat_cfg_str[SAT_CFG_STR_NUM] = {
     { "MODULES", "MAP_FONT", "Sans 8"},
     { "MODULES", "POLAR_FONT", "Sans 10"},
     { "TRSP",    "SERVER", "https://db.satnogs.org/api/"},
-    //{ "TRSP",    "SERVER", "https://db.satnogs.org/api/transmitters/?format=json"},
     { "TRSP",    "FILES", "transmmitters/?format=json"},
     { "TRSP",    "PROXY", NULL},
     { "TRSP",    "FILE_DIR", NULL},
