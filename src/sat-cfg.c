@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -32,213 +31,213 @@
  * configuration file and also to have a central place where the min, max and
  * default values are defined.
  */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
+
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
-#include "sat-log.h"
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
+#include "compat.h"
 #include "config-keys.h"
+#include "gpredict-utils.h"
+#include "gtk-polar-view.h"
 #include "gtk-sat-module.h"
 #include "gtk-sat-list.h"
-#include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
-#include "sat-pass-dialogs.h"
-#include "compat.h"
 #include "sat-cfg.h"
-#include "gpredict-utils.h"
+#include "sat-log.h"
+#include "sat-pass-dialogs.h"
 
+/* *INDENT-OFF* */
 #define LIST_COLUMNS_DEFAULTS (SAT_LIST_FLAG_NAME |\
-SAT_LIST_FLAG_AZ   |\
-        SAT_LIST_FLAG_EL   |\
-        SAT_LIST_FLAG_RANGE |\
-        SAT_LIST_FLAG_DIR |\
-        SAT_LIST_FLAG_NEXT_EVENT |\
-        SAT_LIST_FLAG_ALT |\
-        SAT_LIST_FLAG_ORBIT)
+    SAT_LIST_FLAG_AZ   |\
+    SAT_LIST_FLAG_EL   |\
+    SAT_LIST_FLAG_RANGE |\
+    SAT_LIST_FLAG_DIR |\
+    SAT_LIST_FLAG_NEXT_EVENT |\
+    SAT_LIST_FLAG_ALT |\
+    SAT_LIST_FLAG_ORBIT)
 
 #define SINGLE_PASS_COL_DEFAULTS (SINGLE_PASS_FLAG_TIME |\
-SINGLE_PASS_FLAG_AZ |\
-SINGLE_PASS_FLAG_EL |\
-SINGLE_PASS_FLAG_RANGE |\
-SINGLE_PASS_FLAG_FOOTPRINT)
+    SINGLE_PASS_FLAG_AZ |\
+    SINGLE_PASS_FLAG_EL |\
+    SINGLE_PASS_FLAG_RANGE |\
+    SINGLE_PASS_FLAG_FOOTPRINT)
 
 #define MULTI_PASS_COL_DEFAULTS (MULTI_PASS_FLAG_AOS_TIME |\
-MULTI_PASS_FLAG_LOS_TIME |\
-MULTI_PASS_FLAG_DURATION |\
-MULTI_PASS_FLAG_AOS_AZ |\
-MULTI_PASS_FLAG_MAX_EL |\
-MULTI_PASS_FLAG_LOS_AZ)
+    MULTI_PASS_FLAG_LOS_TIME |\
+    MULTI_PASS_FLAG_DURATION |\
+    MULTI_PASS_FLAG_AOS_AZ |\
+    MULTI_PASS_FLAG_MAX_EL |\
+    MULTI_PASS_FLAG_LOS_AZ)
 
 #define SINGLE_SAT_FIELD_DEF (SINGLE_SAT_FLAG_AZ |\
-SINGLE_SAT_FLAG_EL |\
-SINGLE_SAT_FLAG_RANGE |\
-SINGLE_SAT_FLAG_RANGE_RATE |\
-SINGLE_SAT_FLAG_NEXT_EVENT |\
-SINGLE_SAT_FLAG_SSP |\
-SINGLE_SAT_FLAG_FOOTPRINT |\
-SINGLE_SAT_FLAG_ALT |\
-SINGLE_SAT_FLAG_VEL |\
-SINGLE_SAT_FLAG_DOPPLER |\
-SINGLE_SAT_FLAG_LOSS |\
-SINGLE_SAT_FLAG_DELAY |\
-SINGLE_SAT_FLAG_MA |\
-SINGLE_SAT_FLAG_PHASE |\
-SINGLE_SAT_FLAG_ORBIT |\
-SINGLE_SAT_FLAG_VISIBILITY)
+    SINGLE_SAT_FLAG_EL |\
+    SINGLE_SAT_FLAG_RANGE |\
+    SINGLE_SAT_FLAG_RANGE_RATE |\
+    SINGLE_SAT_FLAG_NEXT_EVENT |\
+    SINGLE_SAT_FLAG_SSP |\
+    SINGLE_SAT_FLAG_FOOTPRINT |\
+    SINGLE_SAT_FLAG_ALT |\
+    SINGLE_SAT_FLAG_VEL |\
+    SINGLE_SAT_FLAG_DOPPLER |\
+    SINGLE_SAT_FLAG_LOSS |\
+    SINGLE_SAT_FLAG_DELAY |\
+    SINGLE_SAT_FLAG_MA |\
+    SINGLE_SAT_FLAG_PHASE |\
+    SINGLE_SAT_FLAG_ORBIT |\
+    SINGLE_SAT_FLAG_VISIBILITY)
+/* *INDENT-ON* */
 
 /** Structure representing a boolean value */
 typedef struct {
-    gchar    *group;     /*!< The configration group */
-    gchar    *key;       /*!< The configuration key */
-    gboolean  defval;    /*!< The default value */
+    gchar          *group;      /*!< The configration group */
+    gchar          *key;        /*!< The configuration key */
+    gboolean        defval;     /*!< The default value */
 } sat_cfg_bool_t;
-
 
 /** Structure representing an integer value */
 typedef struct {
-    gchar    *group;     /*!< The configration group */
-    gchar    *key;       /*!< The configuration key */
-    gint      defval;    /*!< The default value */
+    gchar          *group;      /*!< The configration group */
+    gchar          *key;        /*!< The configuration key */
+    gint            defval;     /*!< The default value */
 } sat_cfg_int_t;
-
-
 
 /** Structure representing a string value */
 typedef struct {
-    gchar    *group;     /*!< The configration group */
-    gchar    *key;       /*!< The configuration key */
-    gchar    *defval;    /*!< The default value */
+    gchar          *group;      /*!< The configration group */
+    gchar          *key;        /*!< The configuration key */
+    gchar          *defval;     /*!< The default value */
 } sat_cfg_str_t;
 
-
 /** Array containing the boolean configuration values */
-sat_cfg_bool_t sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
-    { "GLOBAL",  "USE_LOCAL_TIME",     FALSE},
-    { "GLOBAL",  "USE_NSEW",           FALSE},
-    { "GLOBAL",  "USE_IMPERIAL",       FALSE},
-    { "GLOBAL",  "MAIN_WIN_POS",       FALSE},
-    { "GLOBAL",  "MOD_WIN_POS",        FALSE},
-    { "GLOBAL",  "MOD_STATE",          FALSE},
-    { "MODULES", "RULES_HINT",         TRUE},
-    { "MODULES", "MAP_QTH_INFO",       TRUE},
-    { "MODULES", "MAP_NEXT_EVENT",     TRUE},
-    { "MODULES", "MAP_CURSOR_TRACK",   FALSE},
-    { "MODULES", "MAP_SHOW_GRID",      TRUE},
-    { "MODULES", "MAP_KEEP_RATIO",     FALSE},
-    { "MODULES", "POLAR_QTH_INFO",     TRUE},
-    { "MODULES", "POLAR_NEXT_EVENT",   TRUE},
-    { "MODULES", "POLAR_CURSOR_TRACK", TRUE},
-    { "MODULES", "POLAR_EXTRA_AZ_TICKS", FALSE},
-    { "MODULES", "POLAR_SHOW_TRACK_AUTO", FALSE},
-    { "TLE",     "SERVER_AUTH",        FALSE},
-    { "TLE",     "PROXY_AUTH",         FALSE},
-    { "TLE",     "ADD_NEW_SATS",       TRUE},
-    { "LOG",     "KEEP_LOG_FILES",     FALSE},
-    { "PREDICT", "USE_REAL_T0",        FALSE}
+sat_cfg_bool_t  sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
+    {"GLOBAL", "USE_LOCAL_TIME", FALSE},
+    {"GLOBAL", "USE_NSEW", FALSE},
+    {"GLOBAL", "USE_IMPERIAL", FALSE},
+    {"GLOBAL", "MAIN_WIN_POS", FALSE},
+    {"GLOBAL", "MOD_WIN_POS", FALSE},
+    {"GLOBAL", "MOD_STATE", FALSE},
+    {"MODULES", "RULES_HINT", TRUE},
+    {"MODULES", "MAP_QTH_INFO", TRUE},
+    {"MODULES", "MAP_NEXT_EVENT", TRUE},
+    {"MODULES", "MAP_CURSOR_TRACK", FALSE},
+    {"MODULES", "MAP_SHOW_GRID", TRUE},
+    {"MODULES", "MAP_KEEP_RATIO", FALSE},
+    {"MODULES", "POLAR_QTH_INFO", TRUE},
+    {"MODULES", "POLAR_NEXT_EVENT", TRUE},
+    {"MODULES", "POLAR_CURSOR_TRACK", TRUE},
+    {"MODULES", "POLAR_EXTRA_AZ_TICKS", FALSE},
+    {"MODULES", "POLAR_SHOW_TRACK_AUTO", FALSE},
+    {"TLE", "SERVER_AUTH", FALSE},
+    {"TLE", "PROXY_AUTH", FALSE},
+    {"TLE", "ADD_NEW_SATS", TRUE},
+    {"LOG", "KEEP_LOG_FILES", FALSE},
+    {"PREDICT", "USE_REAL_T0", FALSE}
 };
 
 /** Array containing the integer configuration parameters */
-sat_cfg_int_t sat_cfg_int[SAT_CFG_INT_NUM] = {
-    { "VERSION", "MAJOR", 0},
-    { "VERSION", "MINOR", 0},
-    { "MODULES", "DATA_TIMEOUT", 300},
-    { "MODULES", "LAYOUT", 2},  /* FIXME */
-    { "MODULES", "VIEW_1", GTK_SAT_MOD_VIEW_MAP}, /* FIXME */
-    { "MODULES", "VIEW_2", GTK_SAT_MOD_VIEW_POLAR}, /* FIXME */
-    { "MODULES", "VIEW_3", GTK_SAT_MOD_VIEW_SINGLE}, /* FIXME */
-    { "GLOBAL", "CURRENT_PAGE", -1}, /* FIXME */
-    { "GLOBAL",  "WARP", 1},
-    { "MODULES", "LIST_REFRESH", 1},
-    { "MODULES", "LIST_COLUMNS", LIST_COLUMNS_DEFAULTS},
-    { "MODULES", "MAP_CENTER", 0},
-    { "MODULES", "MAP_REFRESH", 10},
-    { "MODULES", "MAP_INFO_COLOUR", 0x00FF00FF},
-    { "MODULES", "MAP_INFO_BGD_COLOUR", 0x000000FF},
-    { "MODULES", "MAP_QTH_COLOUR", 0x00FFFFFF}, 
-    { "MODULES", "MAP_SAT_COLOUR", 0xF0F000FF}, 
-    { "MODULES", "MAP_SELECTED_SAT_COLOUR", 0xFFFFFFFF},
-    { "MODULES", "MAP_COV_AREA_COLOUR", 0xFFFFFF1F},
-    { "MODULES", "MAP_GRID_COLOUR", 0x7F7F7FC8},
-    { "MODULES", "MAP_TERMINATOR_COLOUR", 0xFFFF0080},
-    { "MODULES", "MAP_EARTH_SHADOW_COLOUR", 0x00000060},
-    { "MODULES", "MAP_TICK_COLOUR", 0x7F7F7FC8},
-    { "MODULES", "MAP_TRACK_COLOUR", 0xFF1200BB},
-    { "MODULES", "MAP_TRACK_NUM", 3},
-    { "MODULES", "MAP_SHADOW_ALPHA", 0xDD},
-    { "MODULES", "POLAR_REFRESH", 3},
-    { "MODULES", "POLAR_CHART_ORIENT", POLAR_VIEW_NESW},
-    { "MODULES", "POLAR_BGD_COLOUR", 0xFFFFFFFF},
-    { "MODULES", "POLAR_AXIS_COLOUR", 0x0F0F0F7F},
-    { "MODULES", "POLAR_TICK_COLOUR", 0x007F00FF},
-    { "MODULES", "POLAR_SAT_COLOUR", 0x8F0000FF},
-    { "MODULES", "POLAR_SELECTED_SAT_COL", 0xFF0D0BFF},
-    { "MODULES", "POLAR_TRACK_COLOUR", 0x0000FFFF},
-    { "MODULES", "POLAR_INFO_COLOUR", 0x00007FFF},
-    { "MODULES", "SINGLE_SAT_REFRESH", 1},
-    { "MODULES", "SINGLE_SAT_FIELDS", SINGLE_SAT_FIELD_DEF},
-    { "MODULES", "SINGLE_SAT_SELECTED", 0},
-    { "MODULES", "EVENT_LIST_REFRESH", 1},
-    { "PREDICT", "MINIMUM_ELEV", 5},
-    { "PREDICT", "NUMBER_OF_PASSES", 10},
-    { "PREDICT", "LOOK_AHEAD", 3},
-    { "PREDICT", "TIME_RESOLUTION", 10},
-    { "PREDICT", "NUMBER_OF_ENTRIES", 20},
-    { "PREDICT", "SINGLE_PASS_COL", SINGLE_PASS_COL_DEFAULTS},
-    { "PREDICT", "MULTI_PASS_COL", MULTI_PASS_COL_DEFAULTS},
-    { "PREDICT", "SAVE_FORMAT", 0},
-    { "PREDICT", "SAVE_CONTENTS", 0},
-    { "PREDICT", "TWILIGHT_THRESHOLD", -6},
-    { "SKY_AT_GLANCE", "TIME_SPAN_HOURS", 8},
-    { "SKY_AT_GLANCE", "COLOUR_01", 0x3c46c8},
-    { "SKY_AT_GLANCE", "COLOUR_02", 0x00500a},
-    { "SKY_AT_GLANCE", "COLOUR_03", 0xd5472b},
-    { "SKY_AT_GLANCE", "COLOUR_04", 0xd06b38},
-    { "SKY_AT_GLANCE", "COLOUR_05", 0xcf477a},
-    { "SKY_AT_GLANCE", "COLOUR_06", 0xbf041f},
-    { "SKY_AT_GLANCE", "COLOUR_07", 0x688522},
-    { "SKY_AT_GLANCE", "COLOUR_08", 0x0420bf},
-    { "SKY_AT_GLANCE", "COLOUR_09", 0xa304bf},
-    { "SKY_AT_GLANCE", "COLOUR_10", 0x04bdbf},
-    { "GLOBAL",  "WINDOW_POS_X", 0},
-    { "GLOBAL",  "WINDOW_POS_Y", 0},
-    { "GLOBAL",  "WINDOW_WIDTH", 700},
-    { "GLOBAL",  "WINDOW_HEIGHT", 700},
-    { "GLOBAL",  "HTML_BROWSER_TYPE", 0},
-    { "TLE",     "AUTO_UPDATE_FREQ", 2},   /* weekly, see tle_auto_upd_freq_t */
-    { "TLE",     "AUTO_UPDATE_ACTION", 1}, /* notify, see tle_auto_upd_action_t */
-    { "TLE",     "LAST_UPDATE", 0},
-    { "LOG",     "CLEAN_AGE", 0},  /* 0 = Never clean */
-    { "LOG",     "LEVEL", 2}
+sat_cfg_int_t   sat_cfg_int[SAT_CFG_INT_NUM] = {
+    {"VERSION", "MAJOR", 0},
+    {"VERSION", "MINOR", 0},
+    {"MODULES", "DATA_TIMEOUT", 300},
+    {"MODULES", "LAYOUT", 2},   /* FIXME */
+    {"MODULES", "VIEW_1", GTK_SAT_MOD_VIEW_MAP},        /* FIXME */
+    {"MODULES", "VIEW_2", GTK_SAT_MOD_VIEW_POLAR},      /* FIXME */
+    {"MODULES", "VIEW_3", GTK_SAT_MOD_VIEW_SINGLE},     /* FIXME */
+    {"GLOBAL", "CURRENT_PAGE", -1},     /* FIXME */
+    {"GLOBAL", "WARP", 1},
+    {"MODULES", "LIST_REFRESH", 1},
+    {"MODULES", "LIST_COLUMNS", LIST_COLUMNS_DEFAULTS},
+    {"MODULES", "MAP_CENTER", 0},
+    {"MODULES", "MAP_REFRESH", 10},
+    {"MODULES", "MAP_INFO_COLOUR", 0x00FF00FF},
+    {"MODULES", "MAP_INFO_BGD_COLOUR", 0x000000FF},
+    {"MODULES", "MAP_QTH_COLOUR", 0x00FFFFFF},
+    {"MODULES", "MAP_SAT_COLOUR", 0xF0F000FF},
+    {"MODULES", "MAP_SELECTED_SAT_COLOUR", 0xFFFFFFFF},
+    {"MODULES", "MAP_COV_AREA_COLOUR", 0xFFFFFF1F},
+    {"MODULES", "MAP_GRID_COLOUR", 0x7F7F7FC8},
+    {"MODULES", "MAP_TERMINATOR_COLOUR", 0xFFFF0080},
+    {"MODULES", "MAP_EARTH_SHADOW_COLOUR", 0x00000060},
+    {"MODULES", "MAP_TICK_COLOUR", 0x7F7F7FC8},
+    {"MODULES", "MAP_TRACK_COLOUR", 0xFF1200BB},
+    {"MODULES", "MAP_TRACK_NUM", 3},
+    {"MODULES", "MAP_SHADOW_ALPHA", 0xDD},
+    {"MODULES", "POLAR_REFRESH", 3},
+    {"MODULES", "POLAR_CHART_ORIENT", POLAR_VIEW_NESW},
+    {"MODULES", "POLAR_BGD_COLOUR", 0xFFFFFFFF},
+    {"MODULES", "POLAR_AXIS_COLOUR", 0x0F0F0F7F},
+    {"MODULES", "POLAR_TICK_COLOUR", 0x007F00FF},
+    {"MODULES", "POLAR_SAT_COLOUR", 0x8F0000FF},
+    {"MODULES", "POLAR_SELECTED_SAT_COL", 0xFF0D0BFF},
+    {"MODULES", "POLAR_TRACK_COLOUR", 0x0000FFFF},
+    {"MODULES", "POLAR_INFO_COLOUR", 0x00007FFF},
+    {"MODULES", "SINGLE_SAT_REFRESH", 1},
+    {"MODULES", "SINGLE_SAT_FIELDS", SINGLE_SAT_FIELD_DEF},
+    {"MODULES", "SINGLE_SAT_SELECTED", 0},
+    {"MODULES", "EVENT_LIST_REFRESH", 1},
+    {"PREDICT", "MINIMUM_ELEV", 5},
+    {"PREDICT", "NUMBER_OF_PASSES", 10},
+    {"PREDICT", "LOOK_AHEAD", 3},
+    {"PREDICT", "TIME_RESOLUTION", 10},
+    {"PREDICT", "NUMBER_OF_ENTRIES", 20},
+    {"PREDICT", "SINGLE_PASS_COL", SINGLE_PASS_COL_DEFAULTS},
+    {"PREDICT", "MULTI_PASS_COL", MULTI_PASS_COL_DEFAULTS},
+    {"PREDICT", "SAVE_FORMAT", 0},
+    {"PREDICT", "SAVE_CONTENTS", 0},
+    {"PREDICT", "TWILIGHT_THRESHOLD", -6},
+    {"SKY_AT_GLANCE", "TIME_SPAN_HOURS", 8},
+    {"SKY_AT_GLANCE", "COLOUR_01", 0x3c46c8},
+    {"SKY_AT_GLANCE", "COLOUR_02", 0x00500a},
+    {"SKY_AT_GLANCE", "COLOUR_03", 0xd5472b},
+    {"SKY_AT_GLANCE", "COLOUR_04", 0xd06b38},
+    {"SKY_AT_GLANCE", "COLOUR_05", 0xcf477a},
+    {"SKY_AT_GLANCE", "COLOUR_06", 0xbf041f},
+    {"SKY_AT_GLANCE", "COLOUR_07", 0x688522},
+    {"SKY_AT_GLANCE", "COLOUR_08", 0x0420bf},
+    {"SKY_AT_GLANCE", "COLOUR_09", 0xa304bf},
+    {"SKY_AT_GLANCE", "COLOUR_10", 0x04bdbf},
+    {"GLOBAL", "WINDOW_POS_X", 0},
+    {"GLOBAL", "WINDOW_POS_Y", 0},
+    {"GLOBAL", "WINDOW_WIDTH", 700},
+    {"GLOBAL", "WINDOW_HEIGHT", 700},
+    {"GLOBAL", "HTML_BROWSER_TYPE", 0},
+    {"TLE", "AUTO_UPDATE_FREQ", 2},     /* weekly, see tle_auto_upd_freq_t */
+    {"TLE", "AUTO_UPDATE_ACTION", 1},   /* notify, see tle_auto_upd_action_t */
+    {"TLE", "LAST_UPDATE", 0},
+    {"LOG", "CLEAN_AGE", 0},    /* 0 = Never clean */
+    {"LOG", "LEVEL", 2}
 };
 
 /** Array containing the string configuration values */
-sat_cfg_str_t sat_cfg_str[SAT_CFG_STR_NUM] = {
-    { "GLOBAL", "TIME_FORMAT", "%Y/%m/%d %H:%M:%S"},
-    { "GLOBAL", "DEFAULT_QTH", "sample.qth"},
-    { "GLOBAL", "OPEN_MODULES", "Amateur"},
-    { "GLOBAL", "HTML_BROWSER", NULL},
-    { "MODULES", "GRID", "1;0;2;0;1;2;0;1;1;2;3;1;2;1;2"},
-    { "MODULES", "MAP_FILE", "nasa-bmng-07_1024.jpg"},
-    { "MODULES", "MAP_FONT", "Sans 8"},
-    { "MODULES", "POLAR_FONT", "Sans 10"},
-    { "TRSP",    "SERVER", "https://db.satnogs.org/api/"},
-    { "TRSP",    "FILES", "transmmitters/?format=json"},
-    { "TRSP",    "PROXY", NULL},
-    { "TRSP",    "FILE_DIR", NULL},
-    { "TRSP",    "EXTENSION", "*.*"},
-    { "TLE",     "SERVER", "http://www.celestrak.com/NORAD/elements/"},
-    { "TLE",     "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"\
-      "engineering.txt;galileo.txt;geo.txt;geodetic.txt;globalstar.txt;"\
-      "glo-ops.txt;goes.txt;gorizont.txt;gps-ops.txt;intelsat.txt;"\
-      "iridium.txt;military.txt;molniya.txt;musson.txt;nnss.txt;noaa.txt;"\
-      "orbcomm.txt;other.txt;other-comm.txt;radar.txt;raduga.txt;resource.txt;"\
-      "sarsat.txt;sbas.txt;science.txt;tdrss.txt;tle-new.txt;visual.txt;weather.txt;"\
-      "x-comm.txt"},
-    { "TLE",     "PROXY", NULL},
-    { "TLE",     "FILE_DIR", NULL},
-    { "TLE",     "EXTENSION", "*.*"},
-    { "PREDICT", "SAVE_DIR", NULL}
+sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
+    {"GLOBAL", "TIME_FORMAT", "%Y/%m/%d %H:%M:%S"},
+    {"GLOBAL", "DEFAULT_QTH", "sample.qth"},
+    {"GLOBAL", "OPEN_MODULES", "Amateur"},
+    {"GLOBAL", "HTML_BROWSER", NULL},
+    {"MODULES", "GRID", "1;0;2;0;1;2;0;1;1;2;3;1;2;1;2"},
+    {"MODULES", "MAP_FILE", "nasa-bmng-07_1024.jpg"},
+    {"MODULES", "MAP_FONT", "Sans 8"},
+    {"MODULES", "POLAR_FONT", "Sans 10"},
+    {"TRSP", "SERVER", "https://db.satnogs.org/api/"},
+    {"TRSP", "FILES", "transmmitters/?format=json"},
+    {"TRSP", "PROXY", NULL},
+    {"TRSP", "FILE_DIR", NULL},
+    {"TRSP", "EXTENSION", "*.*"},
+    {"TLE", "SERVER", "http://www.celestrak.com/NORAD/elements/"},
+    {"TLE", "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"
+     "engineering.txt;galileo.txt;geo.txt;geodetic.txt;globalstar.txt;"
+     "glo-ops.txt;goes.txt;gorizont.txt;gps-ops.txt;intelsat.txt;"
+     "iridium.txt;military.txt;molniya.txt;musson.txt;nnss.txt;noaa.txt;"
+     "orbcomm.txt;other.txt;other-comm.txt;radar.txt;raduga.txt;resource.txt;"
+     "sarsat.txt;sbas.txt;science.txt;tdrss.txt;tle-new.txt;visual.txt;weather.txt;"
+     "x-comm.txt"},
+    {"TLE", "PROXY", NULL},
+    {"TLE", "FILE_DIR", NULL},
+    {"TLE", "EXTENSION", "*.*"},
+    {"PREDICT", "SAVE_DIR", NULL}
 };
 
 /* The configuration data buffer */
@@ -256,43 +255,46 @@ static GKeyFile *config = NULL;
  */
 guint sat_cfg_load()
 {
-    gchar  *keyfile,*confdir;
-    GError *error = NULL;
+    gchar          *keyfile, *confdir;
+    GError         *error = NULL;
 
     if (config != NULL)
-        sat_cfg_close ();
+        sat_cfg_close();
 
     /* load the configuration file */
-    config = g_key_file_new ();
-    confdir = get_user_conf_dir ();
-    keyfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-    g_free (confdir);
-    g_key_file_load_from_file (config, keyfile, G_KEY_FILE_KEEP_COMMENTS, &error);
-    g_free (keyfile);
+    config = g_key_file_new();
+    confdir = get_user_conf_dir();
+    keyfile = g_strconcat(confdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    g_free(confdir);
+    g_key_file_load_from_file(config, keyfile, G_KEY_FILE_KEEP_COMMENTS,
+                              &error);
+    g_free(keyfile);
 
     if (error != NULL)
     {
-        sat_log_log (SAT_LOG_LEVEL_WARN,
-                     _("%s: Error reading config file (%s)"),
-                     __func__, error->message);
-        sat_log_log (SAT_LOG_LEVEL_WARN,
-                     _("%s: Using built-in defaults"),
-                     __func__);
-        g_clear_error (&error);
+        sat_log_log(SAT_LOG_LEVEL_WARN,
+                    _("%s: Error reading config file (%s)"),
+                    __func__, error->message);
+        sat_log_log(SAT_LOG_LEVEL_WARN,
+                    _("%s: Using built-in defaults"), __func__);
+        g_clear_error(&error);
         return 1;
     }
-    else {
-        sat_log_log (SAT_LOG_LEVEL_DEBUG,
-                     _("%s: Everything OK."), __func__);
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Everything OK."), __func__);
     }
 
     /* if config version is < 1.1; reset SAT_CFG_STR_TLE_FILES */
-    guint ver;
-    ver = 10*sat_cfg_get_int (SAT_CFG_INT_VERSION_MAJOR) + sat_cfg_get_int (SAT_CFG_INT_VERSION_MINOR);
-    if (ver < 11) {
-        sat_cfg_reset_str (SAT_CFG_STR_TLE_FILES);
-        sat_cfg_set_int (SAT_CFG_INT_VERSION_MAJOR, 1);
-        sat_cfg_set_int (SAT_CFG_INT_VERSION_MINOR, 1);
+    guint           ver;
+
+    ver = 10 * sat_cfg_get_int(SAT_CFG_INT_VERSION_MAJOR) +
+        sat_cfg_get_int(SAT_CFG_INT_VERSION_MINOR);
+    if (ver < 11)
+    {
+        sat_cfg_reset_str(SAT_CFG_STR_TLE_FILES);
+        sat_cfg_set_int(SAT_CFG_INT_VERSION_MAJOR, 1);
+        sat_cfg_set_int(SAT_CFG_INT_VERSION_MINOR, 1);
     }
 
     return 0;
@@ -307,18 +309,17 @@ guint sat_cfg_load()
  */
 guint sat_cfg_save()
 {
-    gchar      *keyfile;
-    gchar      *confdir;
-    guint       err = 0;
-    
-    confdir = get_user_conf_dir ();
-    keyfile = g_strconcat (confdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
-    err = gpredict_save_key_file( config , keyfile);
-    g_free (confdir);
+    gchar          *keyfile;
+    gchar          *confdir;
+    guint           err = 0;
+
+    confdir = get_user_conf_dir();
+    keyfile = g_strconcat(confdir, G_DIR_SEPARATOR_S, "gpredict.cfg", NULL);
+    err = gpredict_save_key_file(config, keyfile);
+    g_free(confdir);
 
     return err;
 }
-
 
 /**
  * Close configuration module.
@@ -331,26 +332,25 @@ guint sat_cfg_save()
  */
 void sat_cfg_close()
 {
-    if (config != NULL) {
-        g_key_file_free (config);
+    if (config != NULL)
+    {
+        g_key_file_free(config);
         config = NULL;
     }
 }
 
-
 /** Get boolean value */
 gboolean sat_cfg_get_bool(sat_cfg_bool_e param)
 {
-    gboolean  value = FALSE;
-    GError   *error = NULL;
+    gboolean        value = FALSE;
+    GError         *error = NULL;
 
     if (param < SAT_CFG_BOOL_NUM)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
 
             /* return default value */
             value = sat_cfg_bool[param].defval;
@@ -358,14 +358,13 @@ gboolean sat_cfg_get_bool(sat_cfg_bool_e param)
         else
         {
             /* fetch value */
-            value = g_key_file_get_boolean (config,
-                                            sat_cfg_bool[param].group,
-                                            sat_cfg_bool[param].key,
-                                            &error);
+            value = g_key_file_get_boolean(config,
+                                           sat_cfg_bool[param].group,
+                                           sat_cfg_bool[param].key, &error);
 
-            if (error != NULL) {
-                g_clear_error (&error);
-
+            if (error != NULL)
+            {
+                g_clear_error(&error);
                 value = sat_cfg_bool[param].defval;
             }
         }
@@ -373,18 +372,17 @@ gboolean sat_cfg_get_bool(sat_cfg_bool_e param)
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown BOOL param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown BOOL param index (%d)\n"), __func__, param);
     }
 
     return value;
 }
 
 /** Get default value of boolean parameter */
-gboolean sat_cfg_get_bool_def (sat_cfg_bool_e param)
+gboolean sat_cfg_get_bool_def(sat_cfg_bool_e param)
 {
-    gboolean value = FALSE;
+    gboolean        value = FALSE;
 
     if (param < SAT_CFG_BOOL_NUM)
     {
@@ -392,9 +390,8 @@ gboolean sat_cfg_get_bool_def (sat_cfg_bool_e param)
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown BOOL param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown BOOL param index (%d)\n"), __func__, param);
     }
 
     return value;
@@ -414,23 +411,20 @@ void sat_cfg_set_bool(sat_cfg_bool_e param, gboolean value)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
         }
         else
         {
-            g_key_file_set_boolean (config,
-                                    sat_cfg_bool[param].group,
-                                    sat_cfg_bool[param].key,
-                                    value);
+            g_key_file_set_boolean(config,
+                                   sat_cfg_bool[param].group,
+                                   sat_cfg_bool[param].key, value);
         }
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown BOOL param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown BOOL param index (%d)\n"), __func__, param);
     }
 }
 
@@ -438,25 +432,23 @@ void sat_cfg_reset_bool(sat_cfg_bool_e param)
 {
     if (param < SAT_CFG_BOOL_NUM)
     {
-        if (config == NULL) {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+        if (config == NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
         }
         else
         {
-            g_key_file_remove_key (config,
-                                   sat_cfg_bool[param].group,
-                                   sat_cfg_bool[param].key,
-                                   NULL);
+            g_key_file_remove_key(config,
+                                  sat_cfg_bool[param].group,
+                                  sat_cfg_bool[param].key, NULL);
         }
 
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown BOOL param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown BOOL param index (%d)\n"), __func__, param);
     }
 }
 
@@ -465,44 +457,40 @@ void sat_cfg_reset_bool(sat_cfg_bool_e param)
  *
  * Return a newly allocated gchar * which must be freed when no longer needed.
  */
-gchar *sat_cfg_get_str(sat_cfg_str_e param)
+gchar          *sat_cfg_get_str(sat_cfg_str_e param)
 {
-    gchar    *value;
-    GError   *error = NULL;
+    gchar          *value;
+    GError         *error = NULL;
 
     if (param < SAT_CFG_STR_NUM)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
 
             /* return default value */
-            value = g_strdup (sat_cfg_str[param].defval);
+            value = g_strdup(sat_cfg_str[param].defval);
         }
         else
         {
             /* fetch value */
-            value = g_key_file_get_string (config,
-                                           sat_cfg_str[param].group,
-                                           sat_cfg_str[param].key,
-                                           &error);
+            value = g_key_file_get_string(config,
+                                          sat_cfg_str[param].group,
+                                          sat_cfg_str[param].key, &error);
             if (error != NULL)
             {
-                g_clear_error (&error);
-
-                value = g_strdup (sat_cfg_str[param].defval);
+                g_clear_error(&error);
+                value = g_strdup(sat_cfg_str[param].defval);
             }
         }
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown STR param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown STR param index (%d)\n"), __func__, param);
 
-        value = g_strdup ("ERROR");
+        value = g_strdup("ERROR");
     }
 
     return value;
@@ -513,61 +501,56 @@ gchar *sat_cfg_get_str(sat_cfg_str_e param)
  *
  * Returns a newly allocated gchar * which must be freed when no longer needed.
  */
-gchar *sat_cfg_get_str_def(sat_cfg_str_e param)
+gchar          *sat_cfg_get_str_def(sat_cfg_str_e param)
 {
-    gchar *value;
+    gchar          *value;
 
     if (param < SAT_CFG_STR_NUM)
     {
-        value = g_strdup (sat_cfg_str[param].defval);
+        value = g_strdup(sat_cfg_str[param].defval);
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown STR param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown STR param index (%d)\n"), __func__, param);
 
-        value = g_strdup ("ERROR");
+        value = g_strdup("ERROR");
     }
 
     return value;
 }
 
 /** Store a str configuration value. */
-void sat_cfg_set_str(sat_cfg_str_e param, const gchar *value)
+void sat_cfg_set_str(sat_cfg_str_e param, const gchar * value)
 {
     if (param < SAT_CFG_STR_NUM)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
         }
         else
         {
             if (value)
             {
-                g_key_file_set_string (config,
-                                       sat_cfg_str[param].group,
-                                       sat_cfg_str[param].key,
-                                       value);
+                g_key_file_set_string(config,
+                                      sat_cfg_str[param].group,
+                                      sat_cfg_str[param].key, value);
             }
             else
             {
                 /* remove key from config */
-                g_key_file_remove_key (config,
-                                       sat_cfg_str[param].group,
-                                       sat_cfg_str[param].key,
-                                       NULL);
+                g_key_file_remove_key(config,
+                                      sat_cfg_str[param].group,
+                                      sat_cfg_str[param].key, NULL);
             }
         }
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown STR param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown STR param index (%d)\n"), __func__, param);
     }
 }
 
@@ -578,39 +561,35 @@ void sat_cfg_reset_str(sat_cfg_str_e param)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
         }
         else
         {
-            g_key_file_remove_key (config,
-                                   sat_cfg_str[param].group,
-                                   sat_cfg_str[param].key,
-                                   NULL);
+            g_key_file_remove_key(config,
+                                  sat_cfg_str[param].group,
+                                  sat_cfg_str[param].key, NULL);
         }
 
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown STR param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown STR param index (%d)\n"), __func__, param);
     }
 }
 
 gint sat_cfg_get_int(sat_cfg_int_e param)
 {
-    gint      value = 0;
-    GError   *error = NULL;
+    gint            value = 0;
+    GError         *error = NULL;
 
     if (param < SAT_CFG_INT_NUM)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
 
             /* return default value */
             value = sat_cfg_int[param].defval;
@@ -618,14 +597,13 @@ gint sat_cfg_get_int(sat_cfg_int_e param)
         else
         {
             /* fetch value */
-            value = g_key_file_get_integer (config,
-                                            sat_cfg_int[param].group,
-                                            sat_cfg_int[param].key,
-                                            &error);
+            value = g_key_file_get_integer(config,
+                                           sat_cfg_int[param].group,
+                                           sat_cfg_int[param].key, &error);
 
-            if (error != NULL) {
-                g_clear_error (&error);
-
+            if (error != NULL)
+            {
+                g_clear_error(&error);
                 value = sat_cfg_int[param].defval;
             }
         }
@@ -633,9 +611,8 @@ gint sat_cfg_get_int(sat_cfg_int_e param)
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown INT param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown INT param index (%d)\n"), __func__, param);
     }
 
     return value;
@@ -643,7 +620,7 @@ gint sat_cfg_get_int(sat_cfg_int_e param)
 
 gint sat_cfg_get_int_def(sat_cfg_int_e param)
 {
-    gint   value = 0;
+    gint            value = 0;
 
     if (param < SAT_CFG_INT_NUM)
     {
@@ -651,9 +628,8 @@ gint sat_cfg_get_int_def(sat_cfg_int_e param)
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown INT param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown INT param index (%d)\n"), __func__, param);
     }
 
     return value;
@@ -665,24 +641,21 @@ void sat_cfg_set_int(sat_cfg_int_e param, gint value)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
         }
         else
         {
-            g_key_file_set_integer (config,
-                                    sat_cfg_int[param].group,
-                                    sat_cfg_int[param].key,
-                                    value);
+            g_key_file_set_integer(config,
+                                   sat_cfg_int[param].group,
+                                   sat_cfg_int[param].key, value);
         }
 
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown INT param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown INT param index (%d)\n"), __func__, param);
     }
 }
 
@@ -692,23 +665,20 @@ void sat_cfg_reset_int(sat_cfg_int_e param)
     {
         if (config == NULL)
         {
-            sat_log_log (SAT_LOG_LEVEL_ERROR,
-                         _("%s: Module not initialised\n"),
-                         __func__);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
         }
         else
         {
-            g_key_file_remove_key (config,
-                                   sat_cfg_int[param].group,
-                                   sat_cfg_int[param].key,
-                                   NULL);
+            g_key_file_remove_key(config,
+                                  sat_cfg_int[param].group,
+                                  sat_cfg_int[param].key, NULL);
         }
 
     }
     else
     {
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: Unknown INT param index (%d)\n"),
-                     __func__, param);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown INT param index (%d)\n"), __func__, param);
     }
 }
