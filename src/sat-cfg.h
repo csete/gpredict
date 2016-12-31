@@ -53,7 +53,6 @@ typedef enum {
     SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO,   /*!< Automatically show the sky track. */
     SAT_CFG_BOOL_TLE_SERVER_AUTH,       /*!< TLE server requires authentication. */
     SAT_CFG_BOOL_TLE_PROXY_AUTH,        /*!< Proxy requires authentication. */
-    SAT_CFG_BOOL_FRQ_ADD_NEW,   /*!< Add new satellites to database. */
     SAT_CFG_BOOL_TLE_ADD_NEW,   /*!< Add new satellites to database. */
     SAT_CFG_BOOL_KEEP_LOG_FILES,        /*!< Whether to keep old log files */
     SAT_CFG_BOOL_PRED_USE_REAL_T0,      /*!< Whether to use current time as T0 fro predictions */
@@ -127,9 +126,6 @@ typedef enum {
     SAT_CFG_INT_WINDOW_WIDTH,   /*!< Main window width during last session */
     SAT_CFG_INT_WINDOW_HEIGHT,  /*!< Main window height during last session */
     SAT_CFG_INT_WEB_BROWSER_TYPE,       /*!< Web browser type, see browser_type_t */
-    SAT_CFG_INT_TRSP_AUTO_UPD_FREQ,      /*!< transponder auto-update frequency. */
-    SAT_CFG_INT_TRSP_AUTO_UPD_ACTION,    /*!< transponder auto-update action. */
-    SAT_CFG_INT_TRSP_LAST_UPDATE,        /*!< Date and time of last transponder update, Unix seconds. */
     SAT_CFG_INT_TLE_AUTO_UPD_FREQ,      /*!< TLE auto-update frequency. */
     SAT_CFG_INT_TLE_AUTO_UPD_ACTION,    /*!< TLE auto-update action. */
     SAT_CFG_INT_TLE_LAST_UPDATE,        /*!< Date and time of last update, Unix seconds. */
