@@ -282,12 +282,14 @@ guint sat_cfg_load()
         sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Everything OK."), __func__);
     }
 
-    /* if config version is < 1.1; reset SAT_CFG_STR_TLE_FILES */
-    guint           ver;
+    /* config version compatibility */
+    guint16         cfg_ver;
 
-    ver = 10 * sat_cfg_get_int(SAT_CFG_INT_VERSION_MAJOR) +
+    cfg_ver = sat_cfg_get_int(SAT_CFG_INT_VERSION_MAJOR) << 8 |
         sat_cfg_get_int(SAT_CFG_INT_VERSION_MINOR);
-    if (ver < 11)
+
+    /* if config version is < 1.1; reset SAT_CFG_STR_TLE_FILES */
+    if (cfg_ver < 0x0101)
     {
         sat_cfg_reset_str(SAT_CFG_STR_TLE_FILES);
         sat_cfg_set_int(SAT_CFG_INT_VERSION_MAJOR, 1);
