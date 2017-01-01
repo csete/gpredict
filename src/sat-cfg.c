@@ -1,7 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -222,7 +222,8 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
     {"MODULES", "MAP_FONT", "Sans 8"},
     {"MODULES", "POLAR_FONT", "Sans 10"},
     {"TRSP", "SERVER", "https://db.satnogs.org/api/"},
-    {"TRSP", "FILES", "transmmitters/?format=json"},
+    {"TRSP", "FREQ_FILE", "transmitters/?format=json"},
+    {"TRSP", "MODE_FILE", "modes/?format=json"},
     {"TRSP", "PROXY", NULL},
     {"TLE", "SERVER", "http://www.celestrak.com/NORAD/elements/"},
     {"TLE", "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"

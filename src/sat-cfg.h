@@ -1,7 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -143,8 +143,9 @@ typedef enum {
     SAT_CFG_STR_MAP_FILE,       /*!< Map file (abs or rel). */
     SAT_CFG_STR_MAP_FONT,       /*!< Map font. */
     SAT_CFG_STR_POL_FONT,       /*!< Polar view font. */
-    SAT_CFG_STR_TRSP_SERVER,    /*!< Server for transponder updates. */
-    SAT_CFG_STR_TRSP_FILES,     /*!< ; separated list of files on server. */
+    SAT_CFG_STR_TRSP_SERVER,    /*!< Server for transponder updates (since 1.4) */
+    SAT_CFG_STR_TRSP_FREQ_FILE, /*!< The file with frequency data on the server (since 1.4) */
+    SAT_CFG_STR_TRSP_MODE_FILE, /*!< The file with mode descriptions on the server (since 1.4) */
     SAT_CFG_STR_TRSP_PROXY,     /*!< Proxy server. */
     SAT_CFG_STR_TLE_SERVER,     /*!< Server for TLE updates. */
     SAT_CFG_STR_TLE_FILES,      /*!< ; separated list of files on server. */

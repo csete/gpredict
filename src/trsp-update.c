@@ -1,7 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
   Copyright (C)  2016       Baris DINC (TA7W)
 
   Comments, questions and bugreports should be submitted via
@@ -370,24 +370,18 @@ void modes_update_from_network()
 {
     gchar          *server;
     gchar          *proxy = NULL;
-    gchar          *files_tmp;
-    //gchar         **files;
-    gchar          *curfile;
+    gchar          *modes_file;
+    gchar          *file_url;
     gchar          *locfile;
     gchar          *userconfdir;
     CURL           *curl;
     CURLcode        res;
     FILE           *outfile;
-    //gchar          *cache;
     guint           success = 0;        /* no. of successfull downloads */
 
     server = sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER);
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
-    files_tmp = sat_cfg_get_str(SAT_CFG_STR_TRSP_FILES);
-
-    sat_log_log(SAT_LOG_LEVEL_INFO,
-                _("Ready to fetch modes list from satnogs..."),
-                __func__);
+    modes_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_MODE_FILE);
 
     /* initialise curl */
     curl = curl_easy_init();
@@ -399,8 +393,11 @@ void modes_update_from_network()
 
     /* get files */
     /* set URL */
-    curfile = g_strconcat(server, "modes/?format=json", NULL);
-    curl_easy_setopt(curl, CURLOPT_URL, curfile);
+    file_url = g_strconcat(server, modes_file, NULL);
+    curl_easy_setopt(curl, CURLOPT_URL, file_url);
+    sat_log_log(SAT_LOG_LEVEL_INFO,
+                _("%s: Ready to fetch modes list from %s"),
+                __func__, file_url);
 
     /* create local cache file */
     userconfdir = get_user_conf_dir();
@@ -421,12 +418,12 @@ void modes_update_from_network()
         if (res != CURLE_OK)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%s)"),
-                        __func__, curfile, curl_easy_strerror(res));
+                        __func__, file_url, curl_easy_strerror(res));
         }
         else
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
-                        __func__, curfile);
+                        __func__, file_url);
             success++;
         }
         fclose(outfile);
@@ -440,8 +437,10 @@ void modes_update_from_network()
     }
 
     g_free(userconfdir);
-    g_free(curfile);
-    //g_free (locfile);
+    g_free(file_url);
+    g_free(server);
+    g_free(proxy);
+    g_free(modes_file);
 
     curl_easy_cleanup(curl);
 
@@ -461,13 +460,6 @@ void modes_update_from_network()
                     _("%s: Could not fetch frequency files from network"),
                     __func__);
     }
-
-    /* clear cache and memory */
-    g_free(server);
-    //g_strfreev(files);
-    g_free(files_tmp);
-    if (proxy != NULL)
-        g_free(proxy);
 }
 
 /**
@@ -486,9 +478,8 @@ void trsp_update_from_network(gboolean silent,
 
     gchar          *server;
     gchar          *proxy = NULL;
-    gchar          *files_tmp;
-    gchar         **files;
-    gchar          *curfile;
+    gchar          *freq_file;
+    gchar          *file_url;
     gchar          *locfile_trsp;
     gchar          *userconfdir;
     CURL           *curl;
@@ -516,12 +507,7 @@ void trsp_update_from_network(gboolean silent,
     //server = sprintf("%stransmitters/?format=json", sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER));
     server = sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER);
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
-    files_tmp = sat_cfg_get_str(SAT_CFG_STR_TRSP_FILES);
-    files = g_strsplit(files_tmp, ";", 0);
-
-    sat_log_log(SAT_LOG_LEVEL_INFO,
-                _("Ready to fetch transponder list from satnogs"),
-                __func__);
+    freq_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_FREQ_FILE);
 
     /* initialise curl */
     curl = curl_easy_init();
@@ -533,8 +519,11 @@ void trsp_update_from_network(gboolean silent,
 
     /* get files */
     /* set URL */
-    curfile = g_strconcat(server, "transmitters/?format=json", NULL);
-    curl_easy_setopt(curl, CURLOPT_URL, curfile);
+    file_url = g_strconcat(server, freq_file, NULL);
+    curl_easy_setopt(curl, CURLOPT_URL, file_url);
+    sat_log_log(SAT_LOG_LEVEL_INFO,
+                _("%s: Ready to fetch transponder list from %s"),
+                __func__, file_url);
 
     /* set activity message */
     if (!silent && (label1 != NULL))
@@ -571,12 +560,12 @@ void trsp_update_from_network(gboolean silent,
         if (res != CURLE_OK)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%s)"),
-                        __func__, curfile, curl_easy_strerror(res));
+                        __func__, file_url, curl_easy_strerror(res));
         }
         else
         {
             sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
-                        __func__, curfile);
+                        __func__, file_url);
             success++;
         }
         fclose(outfile);
@@ -605,8 +594,10 @@ void trsp_update_from_network(gboolean silent,
     }
 
     g_free(userconfdir);
-    g_free(curfile);
-    //g_free (locfile_trsp);
+    g_free(file_url);
+    g_free(server);
+    g_free(freq_file);
+    g_free(proxy);
 
     curl_easy_cleanup(curl);
 
@@ -627,13 +618,6 @@ void trsp_update_from_network(gboolean silent,
                     _("%s: Could not fetch frequency files from network"),
                     __func__);
     }
-
-    /* clear cache and memory */
-    g_free(server);
-    g_strfreev(files);
-    g_free(files_tmp);
-    if (proxy != NULL)
-        g_free(proxy);
 
     g_mutex_unlock(&trsp_in_progress);
 }
