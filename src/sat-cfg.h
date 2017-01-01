@@ -146,13 +146,10 @@ typedef enum {
     SAT_CFG_STR_TRSP_SERVER,    /*!< Server for transponder updates. */
     SAT_CFG_STR_TRSP_FILES,     /*!< ; separated list of files on server. */
     SAT_CFG_STR_TRSP_PROXY,     /*!< Proxy server. */
-    SAT_CFG_STR_TRSP_FILE_DIR,  /*!< Local directory from which tle were last updated. */
-    SAT_CFG_STR_TRSP_FILE_EXT,  /*!< File extensions. */
     SAT_CFG_STR_TLE_SERVER,     /*!< Server for TLE updates. */
     SAT_CFG_STR_TLE_FILES,      /*!< ; separated list of files on server. */
     SAT_CFG_STR_TLE_PROXY,      /*!< Proxy server. */
     SAT_CFG_STR_TLE_FILE_DIR,   /*!< Local directory from which tle were last updated. */
-    SAT_CFG_STR_TLE_FILE_EXT,   /*!< File extensions. */
     SAT_CFG_STR_PRED_SAVE_DIR,  /*!< Last used save directory for pass predictions */
     SAT_CFG_STR_NUM             /*!< Number of string parameters */
 } sat_cfg_str_e;

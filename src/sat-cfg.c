@@ -224,8 +224,6 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
     {"TRSP", "SERVER", "https://db.satnogs.org/api/"},
     {"TRSP", "FILES", "transmmitters/?format=json"},
     {"TRSP", "PROXY", NULL},
-    {"TRSP", "FILE_DIR", NULL},
-    {"TRSP", "EXTENSION", "*.*"},
     {"TLE", "SERVER", "http://www.celestrak.com/NORAD/elements/"},
     {"TLE", "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"
      "engineering.txt;galileo.txt;geo.txt;geodetic.txt;globalstar.txt;"
@@ -236,7 +234,6 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "x-comm.txt"},
     {"TLE", "PROXY", NULL},
     {"TLE", "FILE_DIR", NULL},
-    {"TLE", "EXTENSION", "*.*"},
     {"PREDICT", "SAVE_DIR", NULL}
 };
 
