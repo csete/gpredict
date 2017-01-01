@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,6 +27,6 @@
 #ifndef SAT_PREF_H
 #define SAT_PREF_H 1
 
-void sat_pref_run (void);
+void            sat_pref_run(void);
 
 #endif

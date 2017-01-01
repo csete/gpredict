@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,12 +27,11 @@
 #ifndef SAT_PREF_QTH_H
 #define SAT_PREF_QTH_H 1
 
-
-GtkWidget *sat_pref_qth_create (void);
-void       sat_pref_qth_cancel (void);
-void       sat_pref_qth_ok     (void);
+GtkWidget      *sat_pref_qth_create(void);
+void            sat_pref_qth_cancel(void);
+void            sat_pref_qth_ok(void);
 
 /* external hooks */
-void       sat_pref_qth_sys_changed (gboolean imperial);
+void            sat_pref_qth_sys_changed(gboolean imperial);
 
 #endif

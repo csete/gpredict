@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -31,8 +30,6 @@
 #include <gtk/gtk.h>
 #include "rotor-conf.h"
 
-
-void sat_pref_rot_editor_run (rotor_conf_t *conf);
-
+void            sat_pref_rot_editor_run(rotor_conf_t * conf);
 
 #endif

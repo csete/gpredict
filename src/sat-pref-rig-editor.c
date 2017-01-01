@@ -25,19 +25,20 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 
-/** \brief Edit radio configuration */
+/** Edit radio configuration */
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <math.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <math.h>
+
 #include "gpredict-utils.h"
+#include "radio-conf.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
-#include "radio-conf.h"
 #include "sat-pref-rig-editor.h"
 
 
@@ -65,10 +66,9 @@ static void     type_changed(GtkWidget * widget, gpointer data);
 static void     ptt_changed(GtkWidget * widget, gpointer data);
 static void     vfo_changed(GtkWidget * widget, gpointer data);
 
-
 /**
- * \brief Add or edit a radio configuration.
- * \param conf Pointer to a radio configuration.
+ * Add or edit a radio configuration.
+ * @param conf Pointer to a radio configuration.
  *
  * Of conf->name is not NULL the widgets will be populated with the data.
  */
@@ -76,7 +76,6 @@ void sat_pref_rig_editor_run(radio_conf_t * conf)
 {
     gint            response;
     gboolean        finished = FALSE;
-
 
     /* crate dialog and add contents */
     dialog = gtk_dialog_new_with_buttons(_("Edit radio configuration"),
@@ -106,7 +105,7 @@ void sat_pref_rig_editor_run(radio_conf_t * conf)
 
         switch (response)
         {
-        /* OK */
+            /* OK */
         case GTK_RESPONSE_OK:
             if (apply_changes(conf))
             {
@@ -118,12 +117,12 @@ void sat_pref_rig_editor_run(radio_conf_t * conf)
             }
             break;
 
-        /* CLEAR */
+            /* CLEAR */
         case GTK_RESPONSE_REJECT:
             clear_widgets();
             break;
 
-        /* Everything else is considered CANCEL */
+            /* Everything else is considered CANCEL */
         default:
             finished = TRUE;
             break;
@@ -133,8 +132,7 @@ void sat_pref_rig_editor_run(radio_conf_t * conf)
     gtk_widget_destroy(dialog);
 }
 
-
-/** \brief Create and initialise widgets */
+/** Create and initialise widgets */
 static GtkWidget *create_editor_widgets(radio_conf_t * conf)
 {
     GtkWidget      *table;
@@ -286,12 +284,13 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 0);
     g_signal_connect(vfo, "changed", G_CALLBACK(vfo_changed), NULL);
     gtk_widget_set_tooltip_markup(vfo,
-                                  _("Select which VFO to use for uplink and downlink. "
-                                    "This setting is used for full-duplex radios only, "
-                                    "such as the IC-910H, FT-847 and the TS-2000.\n\n"
-                                    "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"
-                                    "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"
-                                    "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
+                                  _
+                                  ("Select which VFO to use for uplink and downlink. "
+                                   "This setting is used for full-duplex radios only, "
+                                   "such as the IC-910H, FT-847 and the TS-2000.\n\n"
+                                   "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"
+                                   "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"
+                                   "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
     gtk_table_attach_defaults(GTK_TABLE(table), vfo, 1, 3, 5, 6);
 
     /* Downconverter LO frequency */
@@ -303,8 +302,9 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), 0);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(lo), 0);
     gtk_widget_set_tooltip_text(lo,
-                                _("Enter the frequency of the local oscillator "
-                                  " of the downconverter, if any."));
+                                _
+                                ("Enter the frequency of the local oscillator "
+                                 " of the downconverter, if any."));
     gtk_table_attach_defaults(GTK_TABLE(table), lo, 1, 3, 6, 7);
 
     label = gtk_label_new(_("MHz"));
@@ -320,8 +320,9 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), 0);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(loup), 0);
     gtk_widget_set_tooltip_text(loup,
-                                _("Enter the frequency of the local oscillator "
-                                  "of the upconverter, if any."));
+                                _
+                                ("Enter the frequency of the local oscillator "
+                                 "of the upconverter, if any."));
     gtk_table_attach_defaults(GTK_TABLE(table), loup, 1, 3, 7, 8);
 
     label = gtk_label_new(_("MHz"));
@@ -352,8 +353,7 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     return table;
 }
 
-
-/** \brief Update widgets from the currently selected row in the treeview */
+/** Update widgets from the currently selected row in the treeview */
 static void update_widgets(radio_conf_t * conf)
 {
     /* configuration name */
@@ -400,7 +400,7 @@ static void update_widgets(radio_conf_t * conf)
 }
 
 /**
- * \brief Clear the contents of all widgets.
+ * Clear the contents of all widgets.
  *
  * This function is usually called when the user clicks on the CLEAR button
  *
@@ -421,8 +421,8 @@ static void clear_widgets()
 }
 
 /**
- * \brief Apply changes.
- * \return TRUE if things are ok, FALSE otherwise.
+ * Apply changes.
+ * @return TRUE if things are ok, FALSE otherwise.
  *
  * This function is usually called when the user clicks the OK button.
  */
@@ -491,12 +491,12 @@ static gboolean apply_changes(radio_conf_t * conf)
     /* AOS / LOS signalling */
     conf->signal_aos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(sigaos));
     conf->signal_los = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(siglos));
-    
+
     return TRUE;
 }
 
 /**
- * \brief Manage name changes.
+ * Manage name changes.
  *
  * This function is called when the contents of the name entry changes.
  * The primary purpose of this function is to check whether the char length
@@ -552,9 +552,9 @@ static void name_changed(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Manage rig type changed signals.
- * \param widget The GtkComboBox that received the signal.
- * \param data User data (always NULL).
+ * Manage rig type changed signals.
+ * @param widget The GtkComboBox that received the signal.
+ * @param data User data (always NULL).
  *  
  * This function is called when the user selects a new radio type.
  */
@@ -593,9 +593,9 @@ static void type_changed(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Manage ptt type changed signals.
- * \param widget The GtkComboBox that received the signal.
- * \param data User data (always NULL).
+ * Manage ptt type changed signals.
+ * @param widget The GtkComboBox that received the signal.
+ * @param data User data (always NULL).
  *  
  * This function is called when the user selects a new ptt type.
  */
@@ -614,9 +614,9 @@ static void ptt_changed(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Manage VFO changed signals.
- * \param widget The GtkComboBox that received the signal.
- * \param data User data (always NULL).
+ * Manage VFO changed signals.
+ * @param widget The GtkComboBox that received the signal.
+ * @param data User data (always NULL).
  *  
  * This function is called when the user selects a new VFO up/down combination.
  */

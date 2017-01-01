@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,7 +27,7 @@
 #ifndef SAT_PREF_ROT_DATA_H
 #define SAT_PREF_ROT_DATA_H 1
 
-/** \brief Coumn definitions for rotator list. */
+/** Coumn definitions for rotator list. */
 typedef enum {
     ROT_LIST_COL_NAME = 0,      /*!< File name. */
     ROT_LIST_COL_HOST,          /*!< Hostname */
@@ -43,6 +42,5 @@ typedef enum {
                                    otherwise */
     ROT_LIST_COL_NUM            /*!< The number of fields in the list. */
 } rotor_list_col_t;
-
 
 #endif

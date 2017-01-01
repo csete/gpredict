@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -25,69 +24,63 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 #include "sat-cfg.h"
-#include "sat-pref-predict.h"
 #include "sat-pref-conditions.h"
 #include "sat-pref-multi-pass.h"
+#include "sat-pref-predict.h"
 #include "sat-pref-single-pass.h"
 #include "sat-pref-sky-at-glance.h"
 
 
-/** \brief Create and initialise widgets for the predictor tab.
+/**
+ * Create and initialise widgets for the predictor tab.
  *
  * The widgets must be preloaded with values from config. If a config value
  * is NULL, sensible default values, eg. those from defaults.h should
  * be laoded.
  */
-GtkWidget *sat_pref_predict_create ()
+GtkWidget      *sat_pref_predict_create()
 {
-     GtkWidget *nbook;
+    GtkWidget      *nbook;
 
-     nbook = gtk_notebook_new ();
+    nbook = gtk_notebook_new();
 
-     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-                      sat_pref_conditions_create (),
-                      gtk_label_new (_("Pass Conditions")));
-     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-                      sat_pref_multi_pass_create (),
-                      gtk_label_new (_("Multiple Passes")));
-     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-                      sat_pref_single_pass_create (),
-                      gtk_label_new (_("Single Pass")));
-     gtk_notebook_append_page (GTK_NOTEBOOK (nbook),
-                      sat_pref_sky_at_glance_create (),
-                      gtk_label_new (_("Sky at a Glance")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nbook),
+                             sat_pref_conditions_create(),
+                             gtk_label_new(_("Pass Conditions")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nbook),
+                             sat_pref_multi_pass_create(),
+                             gtk_label_new(_("Multiple Passes")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nbook),
+                             sat_pref_single_pass_create(),
+                             gtk_label_new(_("Single Pass")));
+    gtk_notebook_append_page(GTK_NOTEBOOK(nbook),
+                             sat_pref_sky_at_glance_create(),
+                             gtk_label_new(_("Sky at a Glance")));
 
-        return nbook;
+    return nbook;
 }
 
-
-/** \brief User pressed cancel. Any changes to config must be cancelled.
- */
-void
-sat_pref_predict_cancel ()
+/** User pressed cancel. Any changes to config must be cancelled. */
+void sat_pref_predict_cancel()
 {
-     sat_pref_conditions_cancel ();
-     sat_pref_multi_pass_cancel ();
-     sat_pref_single_pass_cancel ();
-     sat_pref_sky_at_glance_cancel ();
+    sat_pref_conditions_cancel();
+    sat_pref_multi_pass_cancel();
+    sat_pref_single_pass_cancel();
+    sat_pref_sky_at_glance_cancel();
 }
 
-
-/** \brief User pressed OK. Any changes should be stored in config.
- */
-void
-sat_pref_predict_ok     ()
+/** User pressed OK. Any changes should be stored in config. */
+void sat_pref_predict_ok()
 {
-     sat_pref_conditions_ok ();
-     sat_pref_multi_pass_ok ();
-     sat_pref_single_pass_ok ();
-     sat_pref_sky_at_glance_ok ();
+    sat_pref_conditions_ok();
+    sat_pref_multi_pass_ok();
+    sat_pref_single_pass_ok();
+    sat_pref_sky_at_glance_ok();
 }
-
-

@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,37 +27,31 @@
 #ifndef SAT_PREF_HELP_H
 #define SAT_PREF_HELP_H 1
 
-
-
-/** \brief Structure representing a boolean value */
+/** Structure representing a boolean value */
 typedef struct {
-     gchar    *type;      /*!< The label shown on the selector */
-     gchar    *cmd;     /*!< The configuration key */
+    gchar          *type;       /*!< The label shown on the selector */
+    gchar          *cmd;        /*!< The configuration key */
 } sat_help_t;
 
-
 typedef enum {
-     BROWSER_TYPE_NONE = 0,
+    BROWSER_TYPE_NONE = 0,
 #ifdef G_OS_UNIX
-     BROWSER_TYPE_EPIPHANY,
-     BROWSER_TYPE_GALEON,
-     BROWSER_TYPE_KONQUEROR,
+    BROWSER_TYPE_EPIPHANY,
+    BROWSER_TYPE_GALEON,
+    BROWSER_TYPE_KONQUEROR,
 #endif
-     BROWSER_TYPE_FIREFOX,
-     BROWSER_TYPE_MOZILLA,
-     BROWSER_TYPE_OPERA,
+    BROWSER_TYPE_FIREFOX,
+    BROWSER_TYPE_MOZILLA,
+    BROWSER_TYPE_OPERA,
 #ifdef G_OS_WIN32
-     BROWSER_TYPE_IE,
+    BROWSER_TYPE_IE,
 #endif
-     BROWSER_TYPE_OTHER,
-     BROWSER_TYPE_NUM
+    BROWSER_TYPE_OTHER,
+    BROWSER_TYPE_NUM
 } browser_type_t;
 
-
-
-GtkWidget *sat_pref_help_create (void);
-void       sat_pref_help_cancel (void);
-void       sat_pref_help_ok     (void);
-
+GtkWidget      *sat_pref_help_create(void);
+void            sat_pref_help_cancel(void);
+void            sat_pref_help_ok(void);
 
 #endif

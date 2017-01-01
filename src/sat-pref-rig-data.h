@@ -43,5 +43,4 @@ typedef enum {
     RIG_LIST_COL_NUM            /*!< The number of fields in the list. */
 } rig_list_col_t;
 
-
 #endif

@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -42,20 +41,21 @@
  * entry will be added to the GtkTreeView which contains the locations.
  */
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <math.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <math.h>
+
 #include "gpredict-utils.h"
 #include "loc-tree.h"
+#include "locator.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
 #include "sat-pref-qth-data.h"
 #include "sat-pref-qth-editor.h"
-#include "locator.h"
 
 /**
  * Symbolic refs to be used when calling select_location in order
@@ -98,7 +98,6 @@ static gboolean apply_changes(GtkTreeView * treeview, gboolean new);
 static void     latlon_changed(GtkWidget * widget, gpointer data);
 static void     qra_changed(GtkEntry * entry, gpointer data);
 
-
 /**
  * Add or edit a QTH entry.
  *
@@ -109,7 +108,6 @@ void sat_pref_qth_editor_run(GtkTreeView * treeview, gboolean new)
 {
     gint            response;
     gboolean        finished = FALSE;
-
 
     /* crate dialog and add contents */
     dialog = gtk_dialog_new_with_buttons(_("Edit ground station data"),
@@ -135,7 +133,6 @@ void sat_pref_qth_editor_run(GtkTreeView * treeview, gboolean new)
      */
     while (!finished)
     {
-
         response = gtk_dialog_run(GTK_DIALOG(dialog));
 
         switch (response)
@@ -143,13 +140,10 @@ void sat_pref_qth_editor_run(GtkTreeView * treeview, gboolean new)
         case GTK_RESPONSE_OK:
             /* OK */
             if (apply_changes(treeview, new))
-            {
                 finished = TRUE;
-            }
             else
-            {
                 finished = FALSE;
-            }
+
             break;
 
         case GTK_RESPONSE_REJECT:
@@ -188,7 +182,8 @@ static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new)
     name = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(name), 25);
     gtk_widget_set_tooltip_text(name,
-                                _("Enter a short name for this ground station, "
+                                _
+                                ("Enter a short name for this ground station, "
                                  "e.g. callsign.\n"
                                  "Allowed characters: 0..9, a..z, A..Z, - and _"));
     /* new api does not allow private tip 
@@ -233,7 +228,8 @@ static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new)
     gtk_table_attach_defaults(GTK_TABLE(table), location, 1, 3, 2, 3);
 
     locbut = gpredict_hstock_button(GTK_STOCK_INDEX, _("Select"),
-                                    _("Select a predefined location from a list."));
+                                    _
+                                    ("Select a predefined location from a list."));
     g_signal_connect(locbut, "clicked", G_CALLBACK(select_location),
                      GUINT_TO_POINTER(SELECTION_MODE_LOC));
     gtk_table_attach_defaults(GTK_TABLE(table), locbut, 3, 4, 2, 3);
@@ -342,8 +338,9 @@ static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new)
     gtk_table_attach_defaults(GTK_TABLE(table), wx, 1, 3, 7, 8);
 
     wxbut = gpredict_hstock_button(GTK_STOCK_INDEX, _("Select"),
-                                   _("Select a predefined weather station from "
-                                     "a list."));
+                                   _
+                                   ("Select a predefined weather station from "
+                                    "a list."));
     g_signal_connect(wxbut, "clicked", G_CALLBACK(select_location),
                      GUINT_TO_POINTER(SELECTION_MODE_WX));
     gtk_table_attach_defaults(GTK_TABLE(table), wxbut, 3, 4, 7, 8);
@@ -565,7 +562,7 @@ static gboolean apply_changes(GtkTreeView * treeview, gboolean new)
     qthtype = gtk_combo_box_get_active(GTK_COMBO_BOX(type));
 #else
     qthgpsdport = 0;
-    qthtype = 0; // FIXME: should probably use a #define
+    qthtype = 0;                // FIXME: should probably use a #define
 #endif
 
     /* get liststore */

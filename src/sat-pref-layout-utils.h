@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,14 +27,12 @@
 #ifndef SAT_PREF_LAYOUT_UTILS_H
 #define SAT_PREF_LAYOUT_UTILS_H 1
 
-
 typedef enum {
     LAYOUT_BAD = FALSE,
     LAYOUT_GOOD = TRUE
 } layout_e;
 
-gboolean   sat_pref_layout_check (const gchar *layout);
-GtkWidget *sat_pref_layout_preview (const gchar *layout);
-
+gboolean        sat_pref_layout_check(const gchar * layout);
+GtkWidget      *sat_pref_layout_preview(const gchar * layout);
 
 #endif

@@ -27,10 +27,8 @@
 #ifndef SAT_PREF_INTERFACES_H
 #define SAT_PREF_INTERFACES_H 1
 
-
 GtkWidget      *sat_pref_interfaces_create(void);
 void            sat_pref_interfaces_cancel(void);
 void            sat_pref_interfaces_ok(void);
-
 
 #endif

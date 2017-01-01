@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -28,10 +27,8 @@
 #ifndef SAT_PREF_LIST_VIEW_H
 #define SAT_PREF_LIST_VIEW_H 1
 
-
-GtkWidget *sat_pref_list_view_create (GKeyFile *cfg);
-void       sat_pref_list_view_cancel (GKeyFile *cfg);
-void       sat_pref_list_view_ok     (GKeyFile *cfg);
-
+GtkWidget      *sat_pref_list_view_create(GKeyFile * cfg);
+void            sat_pref_list_view_cancel(GKeyFile * cfg);
+void            sat_pref_list_view_ok(GKeyFile * cfg);
 
 #endif

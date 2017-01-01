@@ -24,20 +24,21 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+
+#include "compat.h"
 #include "gpredict-utils.h"
+#include "radio-conf.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
-#include "compat.h"
-#include "radio-conf.h"
+#include "sat-pref-rig.h"
 #include "sat-pref-rig-data.h"
 #include "sat-pref-rig-editor.h"
-#include "sat-pref-rig.h"
 
 
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
@@ -81,12 +82,11 @@ static GtkWidget *editbutton;
 static GtkWidget *delbutton;
 static GtkWidget *riglist;
 
-/** \brief Create and initialise widgets for the radios tab. */
+/** Create and initialise widgets for the radios tab. */
 GtkWidget      *sat_pref_rig_create()
 {
     GtkWidget      *vbox;       /* vbox containing the list part and the details part */
     GtkWidget      *swin;
-
 
     vbox = gtk_vbox_new(FALSE, 10);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
@@ -102,15 +102,12 @@ GtkWidget      *sat_pref_rig_create()
     return vbox;
 }
 
-/**
- * \brief Create Radio configuration list widget.
- */
+/** Create Radio configuration list widget. */
 static void create_rig_list()
 {
     GtkTreeModel   *model;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-
 
     riglist = gtk_tree_view_new();
     gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(riglist), TRUE);
@@ -210,34 +207,31 @@ static void create_rig_list()
 
     /* AOS signalling */
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Signal AOS"), renderer,
-                                                      "text",
-                                                      RIG_LIST_COL_SIGAOS,
-                                                      NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer,
-                                            render_signal,
-                                            GUINT_TO_POINTER(RIG_LIST_COL_SIGAOS),
-                                            NULL);
+    column =
+        gtk_tree_view_column_new_with_attributes(_("Signal AOS"), renderer,
+                                                 "text", RIG_LIST_COL_SIGAOS,
+                                                 NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_signal,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_SIGAOS), NULL);
     gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
 
     /* LOS signalling */
     renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Signal LOS"), renderer,
-                                                      "text",
-                                                      RIG_LIST_COL_SIGLOS,
-                                                      NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer,
-                                            render_signal,
-                                            GUINT_TO_POINTER(RIG_LIST_COL_SIGLOS),
-                                            NULL);
+    column =
+        gtk_tree_view_column_new_with_attributes(_("Signal LOS"), renderer,
+                                                 "text", RIG_LIST_COL_SIGLOS,
+                                                 NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_signal,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_SIGLOS), NULL);
     gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
-
 
     g_signal_connect(riglist, "row-activated", G_CALLBACK(row_activated_cb),
                      riglist);
 }
 
-/** \brief Create data storage for radio configuration list. */
+/** Create data storage for radio configuration list. */
 static GtkTreeModel *create_and_fill_model()
 {
     GtkListStore   *liststore;  /* the list store data structure */
@@ -280,6 +274,7 @@ static GtkTreeModel *create_and_fill_model()
                 vbuff = g_strsplit(filename, ".rig", 0);
                 conf.name = g_strdup(vbuff[0]);
                 g_strfreev(vbuff);
+
                 if (radio_conf_read(&conf))
                 {
                     /* insert conf into liststore */
@@ -334,11 +329,10 @@ static GtkTreeModel *create_and_fill_model()
     return GTK_TREE_MODEL(liststore);
 }
 
-
 /**
- * \brief Create buttons.
- * \param riglist The GtkTreeView widget containing the rig data.
- * \return A button box containing the buttons.
+ * Create buttons.
+ * @param riglist The GtkTreeView widget containing the rig data.
+ * @return A button box containing the buttons.
  *
  * This function creates and initialises the three buttons below the rig list.
  * The treeview widget is needed by the buttons when they are activated.
@@ -377,16 +371,13 @@ static GtkWidget *create_buttons(void)
     return box;
 }
 
-
-
-/** \brief User pressed cancel. Any changes to config must be cancelled. */
+/** User pressed cancel. Any changes to config must be cancelled. */
 void sat_pref_rig_cancel()
 {
 }
 
-
 /**
- * \brief User pressed OK. Any changes should be stored in config.
+ * User pressed OK. Any changes should be stored in config.
  * 
  * First, all .grc files are deleted, whereafter the radio configurations in
  * the riglist are saved one by one.
@@ -456,8 +447,7 @@ void sat_pref_rig_ok()
                                RIG_LIST_COL_LO, &conf.lo,
                                RIG_LIST_COL_LOUP, &conf.loup,
                                RIG_LIST_COL_SIGAOS, &conf.signal_aos,
-                               RIG_LIST_COL_SIGLOS, &conf.signal_los,
-                               -1);
+                               RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
             radio_conf_save(&conf);
 
             /* free conf buffer */
@@ -477,9 +467,9 @@ void sat_pref_rig_ok()
 }
 
 /**
- * \brief Add a new radio configuration
- * \param button Pointer to the Add button.
- * \param data User data (null).
+ * Add a new radio configuration
+ * @param button Pointer to the Add button.
+ * @param data User data (null).
  * 
  * This function executes the radio configuration editor with the "new"
  * flag set to TRUE.
@@ -489,8 +479,8 @@ static void add_cb(GtkWidget * button, gpointer data)
     GtkTreeIter     item;       /* new item added to the list store */
     GtkListStore   *liststore;
 
-    (void)button;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)button;
+    (void)data;
 
     radio_conf_t    conf = {
         .name = NULL,
@@ -526,8 +516,7 @@ static void add_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, conf.signal_los,
-                           -1);
+                           RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
 
         g_free(conf.name);
 
@@ -537,9 +526,9 @@ static void add_cb(GtkWidget * button, gpointer data)
 }
 
 /**
- * \brief Add a new radio configuration
- * \param button Pointer to the Add button.
- * \param data User data (null).
+ * Add a new radio configuration
+ * @param button Pointer to the Add button.
+ * @param data User data (null).
  * 
  * This function executes the radio configuration editor with the "new"
  * flag set to TRUE.
@@ -551,8 +540,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
     GtkTreeSelection *selection;
     GtkTreeIter     iter;
 
-    (void)button;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)button;
+    (void)data;
 
     radio_conf_t    conf = {
         .name = NULL,
@@ -597,8 +586,7 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, &conf.lo,
                            RIG_LIST_COL_LOUP, &conf.loup,
                            RIG_LIST_COL_SIGAOS, &conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, &conf.signal_los,
-                           -1);
+                           RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
     }
     else
     {
@@ -634,8 +622,7 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, conf.signal_los,
-                           -1);
+                           RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
     }
 
     /* clean up memory */
@@ -647,7 +634,7 @@ static void edit_cb(GtkWidget * button, gpointer data)
 }
 
 /**
- * \brief Delete selected radio configuration
+ * Delete selected radio configuration
  *
  * This function is called when the user clicks the Delete button.
  */
@@ -707,12 +694,12 @@ static void row_activated_cb(GtkTreeView * tree_view,
 }
 
 /**
- * \brief Render configuration name.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
+ * Render configuration name.
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
  * 
  * This function renders the configuration name onto the riglist. Although
  * the configuration name is a plain string, it contains the file name of the
@@ -738,14 +725,13 @@ static void render_name(GtkTreeViewColumn * col,
     g_free(fname);
 }
 
-
 /**
- * \brief Render radio type.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
+ * Render radio type.
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
  * 
  * This function renders the radio type onto the riglist.
 */
@@ -757,7 +743,7 @@ static void render_type(GtkTreeViewColumn * col,
     guint           type;
     guint           coli = GPOINTER_TO_UINT(column);
 
-    (void)col;                  /* avoid unused parameter compiler warning */
+    (void)col;
 
     gtk_tree_model_get(model, iter, coli, &type, -1);
 
@@ -795,12 +781,12 @@ static void render_type(GtkTreeViewColumn * col,
 }
 
 /**
- * \brief Render PTT status usage.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
+ * Render PTT status usage.
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
  * 
  * This function renders the PTT status usage onto the riglist.
 */
@@ -812,7 +798,7 @@ static void render_ptt(GtkTreeViewColumn * col,
     gint            ptt;
     guint           coli = GPOINTER_TO_UINT(column);
 
-    (void)col;                  /* avoid unused parameter compiler warning */
+    (void)col;
 
     gtk_tree_model_get(model, iter, coli, &ptt, -1);
 
@@ -833,14 +819,13 @@ static void render_ptt(GtkTreeViewColumn * col,
     }
 }
 
-
 /**
- * \brief Render Local Oscillator frequency.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
+ * Render Local Oscillator frequency.
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
  *
  * This function is used to render the local oscillator frequency. We
  * need a special renderer so that we can automatically render as MHz
@@ -867,12 +852,12 @@ static void render_lo(GtkTreeViewColumn * col,
 }
 
 /**
- * \brief Render VFO selection.
- * \param col Pointer to the tree view column.
- * \param renderer Pointer to the renderer.
- * \param model Pointer to the tree model.
- * \param iter Pointer to the tree iterator.
- * \param column The column number in the model.
+ * Render VFO selection.
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
  *
  * This function is used to render the VFO up/down selections for
  * full duplex radios.

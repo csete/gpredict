@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -26,21 +25,20 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 
-/** \brief Edit rotator configuration.
- *
- */
+/** Edit rotator configuration. */
 
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <math.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <math.h>
+
 #include "gpredict-utils.h"
+#include "rotor-conf.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
-#include "rotor-conf.h"
 #include "sat-pref-rot-editor.h"
 
 
@@ -66,8 +64,9 @@ static void     name_changed(GtkWidget * widget, gpointer data);
 static void     aztype_changed_cb(GtkComboBox * box, gpointer data);
 
 
-/** \brief Add or edit a rotor configuration.
- * \param conf Pointer to a rotator configuration.
+/**
+ * Add or edit a rotor configuration.
+ * @param conf Pointer to a rotator configuration.
  *
  * If conf->name is not NULL the widgets will be populated with the data.
  */
@@ -127,7 +126,7 @@ void sat_pref_rot_editor_run(rotor_conf_t * conf)
     gtk_widget_destroy(dialog);
 }
 
-/** \brief Create and initialise widgets */
+/** Create and initialise widgets */
 static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
 {
     GtkWidget      *table;
@@ -272,9 +271,7 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
     return table;
 }
 
-
-/** \brief Update widgets from the currently selected row in the treeview
- */
+/** Update widgets from the currently selected row in the treeview */
 static void update_widgets(rotor_conf_t * conf)
 {
     /* configuration name */
@@ -300,7 +297,8 @@ static void update_widgets(rotor_conf_t * conf)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), conf->azstoppos);
 }
 
-/** \brief Clear the contents of all widgets.
+/**
+ * Clear the contents of all widgets.
  *
  * This function is usually called when the user clicks on the CLEAR button
  *
@@ -318,10 +316,9 @@ static void clear_widgets()
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), 0);
 }
 
-
 /**
- * \brief Apply changes.
- * \return TRUE if things are ok, FALSE otherwise.
+ * Apply changes.
+ * @return TRUE if things are ok, FALSE otherwise.
  *
  * This function is usually called when the user clicks the OK button.
  */
@@ -358,7 +355,7 @@ static gboolean apply_changes(rotor_conf_t * conf)
 }
 
 /**
- * \brief Manage name changes.
+ * Manage name changes.
  *
  * This function is called when the contents of the name entry changes.
  * The primary purpose of this function is to check whether the char length
@@ -370,7 +367,7 @@ static void name_changed(GtkWidget * widget, gpointer data)
     gchar          *entry, *end, *j;
     gint            len, pos;
 
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)data;
 
     /* step 1: ensure that only valid characters are entered
        (stolen from xlog, tnx pg4i)
@@ -417,7 +414,7 @@ static void aztype_changed_cb(GtkComboBox * box, gpointer data)
 {
     gint            type = gtk_combo_box_get_active(box);
 
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)data;
 
     switch (type)
     {

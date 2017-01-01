@@ -24,19 +24,19 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 #include "sat-cfg.h"
 #include "sat-pref-interfaces.h"
 #include "sat-pref-rig.h"
 #include "sat-pref-rot.h"
 
-
 /**
- * \brief Create and initialise widgets for the hardware interfaces prefs tab.
+ * Create and initialise widgets for the hardware interfaces prefs tab.
  *
  * The widgets must be preloaded with values from config. If a config value
  * is NULL, sensible default values, eg. those from defaults.h should
@@ -58,18 +58,14 @@ GtkWidget      *sat_pref_interfaces_create()
     return nbook;
 }
 
-/**
- * \brief User pressed cancel. Any changes to config must be cancelled.
- */
+/** User pressed cancel. Any changes to config must be cancelled. */
 void sat_pref_interfaces_cancel()
 {
     sat_pref_rig_cancel();
     sat_pref_rot_cancel();
 }
 
-/**
- * \brief User pressed OK. Any changes should be stored in config.
- */
+/** User pressed OK. Any changes should be stored in config. */
 void sat_pref_interfaces_ok()
 {
     sat_pref_rig_ok();
