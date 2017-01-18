@@ -3,8 +3,6 @@
 
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
   More details can be found at the project home page:
@@ -139,8 +137,8 @@ sat_cfg_bool_t  sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
 
 /** Array containing the integer configuration parameters */
 sat_cfg_int_t   sat_cfg_int[SAT_CFG_INT_NUM] = {
-    {"VERSION", "MAJOR", 0},
-    {"VERSION", "MINOR", 0},
+    {"VERSION", "MAJOR", 1},
+    {"VERSION", "MINOR", 3},
     {"MODULES", "DATA_TIMEOUT", 300},
     {"MODULES", "LAYOUT", 2},   /* FIXME */
     {"MODULES", "VIEW_1", GTK_SAT_MOD_VIEW_MAP},        /* FIXME */
@@ -234,6 +232,8 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "sarsat.txt;sbas.txt;science.txt;tdrss.txt;tle-new.txt;visual.txt;weather.txt;"
      "x-comm.txt"},
     {"TLE", "PROXY", NULL},
+    {"TLE", "URLS",
+     "http://www.amsat.org/amsat/ftp/keps/current/nasabare.txt"},
     {"TLE", "FILE_DIR", NULL},
     {"PREDICT", "SAVE_DIR", NULL}
 };
@@ -294,7 +294,45 @@ guint sat_cfg_load()
     {
         sat_cfg_reset_str(SAT_CFG_STR_TLE_FILES);
         sat_cfg_set_int(SAT_CFG_INT_VERSION_MAJOR, 1);
-        sat_cfg_set_int(SAT_CFG_INT_VERSION_MINOR, 1);
+        sat_cfg_set_int(SAT_CFG_INT_VERSION_MINOR, 4);
+    }
+    else if (cfg_ver < 0x0104)
+    {
+        /* Version 1.4 replaces TLE_SERVER and TLE_FILES with TLE_URLS,
+         * so import TLE_SERVER and FILES if they exist.
+         */
+        gchar          *urls = NULL;
+        gchar          *buff;
+        gchar          *tle_srv = sat_cfg_get_str(SAT_CFG_STR_TLE_SERVER);
+        gchar          *tle_fstr = sat_cfg_get_str(SAT_CFG_STR_TLE_FILES);
+        gchar         **tle_fvec = g_strsplit(tle_fstr, ";", 0);
+        int             i;
+
+        for (i = 0; i < g_strv_length(tle_fvec); i++)
+        {
+            if (i > 0)
+            {
+                buff = g_strdup_printf("%s;%s/%s", urls, tle_srv, tle_fvec[i]);
+                g_free(urls);
+            }
+            else
+            {
+                buff = g_strdup_printf("%s/%s", tle_srv, tle_fvec[i]);
+            }
+            urls = g_strdup(buff);
+            g_free(buff);
+        }
+        if (urls)
+            sat_cfg_set_str(SAT_CFG_STR_TLE_URLS, urls);
+        //sat_cfg_reset_str(SAT_CFG_STR_TLE_SERVER);
+        //sat_cfg_reset_str(SAT_CFG_STR_TLE_FILES);
+        g_free(urls);
+        g_free(tle_srv);
+        g_free(tle_fstr);
+        g_strfreev(tle_fvec);
+
+        sat_cfg_set_int(SAT_CFG_INT_VERSION_MAJOR, 1);
+        sat_cfg_set_int(SAT_CFG_INT_VERSION_MINOR, 4);
     }
 
     return 0;

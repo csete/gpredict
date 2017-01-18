@@ -3,8 +3,6 @@
 
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
   More details can be found at the project home page:
@@ -147,9 +145,10 @@ typedef enum {
     SAT_CFG_STR_TRSP_FREQ_FILE, /*!< The file with frequency data on the server (since 1.4) */
     SAT_CFG_STR_TRSP_MODE_FILE, /*!< The file with mode descriptions on the server (since 1.4) */
     SAT_CFG_STR_TRSP_PROXY,     /*!< Proxy server. */
-    SAT_CFG_STR_TLE_SERVER,     /*!< Server for TLE updates. */
-    SAT_CFG_STR_TLE_FILES,      /*!< ; separated list of files on server. */
+    SAT_CFG_STR_TLE_SERVER,     /*!< Server for TLE updates (replaced in 1.4 by TLE_URLS) */
+    SAT_CFG_STR_TLE_FILES,      /*!< ; separated list of files on server (replaced in 1.4 by TLE_URLS) */
     SAT_CFG_STR_TLE_PROXY,      /*!< Proxy server. */
+    SAT_CFG_STR_TLE_URLS,       /*!< ; separated list of TLE file URLs (since 1.4) */
     SAT_CFG_STR_TLE_FILE_DIR,   /*!< Local directory from which tle were last updated. */
     SAT_CFG_STR_PRED_SAVE_DIR,  /*!< Last used save directory for pass predictions */
     SAT_CFG_STR_NUM             /*!< Number of string parameters */
