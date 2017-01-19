@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
-# This script was used to create the initial satellite data repository by
-# converting Celestrak TLE files into a satellited.dat and .cat files.
+# This script is used to create the initial satellite data repository by
+# converting Celestrak TLE files into a satellites.dat and .cat files.
 #
 # 1. Copy this script into a temp folder
 # 2. Create subdirectories ./in/ ./tmp/ and ./out/
@@ -9,8 +9,7 @@
 # 4. You should have a .cat file for each category as well as a satellites.dat
 #    file in the ./out/ folder
 #
-# These scripts are only used during development and are not needed by
-# end users.
+# This script is only used during development and is not needed by end users.
 #
 import os
 import string
