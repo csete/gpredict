@@ -530,7 +530,6 @@ void tle_update_from_network(gboolean silent,
 {
     static GMutex   tle_in_progress;
 
-    gchar          *server;
     gchar          *proxy = NULL;
     gchar          *files_tmp;
     gchar         **files;
@@ -553,17 +552,15 @@ void tle_update_from_network(gboolean silent,
     if (g_mutex_trylock(&tle_in_progress) == FALSE)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _
-                    ("%s: A TLE update process is already running. Aborting."),
+                    _("%s: TLE update is already running. Aborting."),
                     __func__);
 
         return;
     }
 
     /* get server, proxy, and list of files */
-    server = sat_cfg_get_str(SAT_CFG_STR_TLE_SERVER);
     proxy = sat_cfg_get_str(SAT_CFG_STR_TLE_PROXY);
-    files_tmp = sat_cfg_get_str(SAT_CFG_STR_TLE_FILES);
+    files_tmp = sat_cfg_get_str(SAT_CFG_STR_TLE_URLS);
     files = g_strsplit(files_tmp, ";", 0);
     numfiles = g_strv_length(files);
 
@@ -597,7 +594,7 @@ void tle_update_from_network(gboolean silent,
         for (i = 0; i < numfiles; i++)
         {
             /* set URL */
-            curfile = g_strconcat(server, files[i], NULL);
+            curfile = g_strdup(files[i]);
             curl_easy_setopt(curl, CURLOPT_URL, curfile);
 
             /* set activity message */
@@ -615,11 +612,11 @@ void tle_update_from_network(gboolean silent,
                 while (g_main_context_iteration(NULL, FALSE));
             }
 
-            /* create local cache file */
+            /* create local cache file ~/.config/Gpredict/satdata/cache/file-%d.tle */
             userconfdir = get_user_conf_dir();
-            locfile = g_strconcat(userconfdir, G_DIR_SEPARATOR_S,
-                                  "satdata", G_DIR_SEPARATOR_S,
-                                  "cache", G_DIR_SEPARATOR_S, files[i], NULL);
+            locfile = g_strdup_printf("%s%ssatdata%scache%sfile-%d.tle",
+                                      userconfdir, G_DIR_SEPARATOR_S,
+                                      G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S, i);
             outfile = g_fopen(locfile, "wb");
             if (outfile != NULL)
             {
@@ -689,14 +686,13 @@ void tle_update_from_network(gboolean silent,
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _
-                        ("%s: Could not fetch any new TLE files from network; aborting..."),
+                        ("%s: Could not fetch TLE files from network. Aborting."),
                         __func__);
         }
 
     }
 
     /* clear cache and memory */
-    g_free(server);
     g_strfreev(files);
     g_free(files_tmp);
     if (proxy != NULL)
