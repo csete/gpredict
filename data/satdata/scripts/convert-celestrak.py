@@ -19,38 +19,16 @@ import urllib
 groups = {
     "amateur" : "Amateur Radio",
     "cubesat" : "Cubesat",
-    "dmc" : "Disaster Monitoring", 
-    "education" : "Education",
-    "engineering" : "Engineering",
     "galileo" : "Galileo Nav.",
-    "geo" : "Geostationary",
-    "geodetic" : "Geodetic", 
     "glo-ops" : "Glonass Operational",
-    "globalstar" : "Globalstar",
-    "goes" : "GOES",
-    "gorizont" : "Gorizont", 
     "gps-ops" : "GPS Operational",
-    "intelsat" : "Intelsat",
     "iridium" : "Iridium",
-    "military" : "Military",
     "molniya" : "Molniya",
-    "musson" : "Russon LEO Nav",
-    "nnss" : "Navy Nav. Sats",
     "noaa" : "NOAA",
-    "orbcomm" : "Orbcomm",
-    "other-comm" : "Other Comm",
-    "other" : "Other",
-    "radar" : "Radar Calibration",
-    "raduga" : "Raduga",
-    "resource" : "Earth Resources",
-    "sarsat" : "Search & Rescue",
-    "sbas" : "SBAS",
     "science" : "Space & Earth Science",
-    "tdrss" : "TDRSS",
     "tle-new" : "Latest Launches",
     "visual" : "Brightest",
-    "weather" : "Weather Satellites",
-    "x-comm" : "Experimental Comm."
+    "weather" : "Weather Satellites"
 }
 
 # Satellite nicknames
@@ -153,10 +131,10 @@ for group, name in groups.iteritems():
         
         satfile.write('VERSION=1.1\n')
         satfile.write('NAME='+line1+'\n')
-        if catnum in nicknames:
-            satfile.write('NICKNAME='+nicknames[catnum]+'\n')
-        else:
-            satfile.write('NICKNAME='+line1+'\n')
+#        if catnum in nicknames:
+#            satfile.write('NICKNAME='+nicknames[catnum]+'\n')
+#        else:
+        satfile.write('NICKNAME='+line1+'\n')
         satfile.write('TLE1='+line2+'\n')
         satfile.write('TLE2='+line3+'\n')
 
