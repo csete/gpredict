@@ -233,7 +233,19 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "x-comm.txt"},
     {"TLE", "PROXY", NULL},
     {"TLE", "URLS",
-     "http://www.amsat.org/amsat/ftp/keps/current/nasabare.txt"},
+     "http://www.amsat.org/amsat/ftp/keps/current/nasabare.txt;"
+     "http://www.celestrak.com/NORAD/elements/amateur.txt;"
+     "http://www.celestrak.com/NORAD/elements/cubesat.txt;"
+     "http://www.celestrak.com/NORAD/elements/galileo.txt;"
+     "http://www.celestrak.com/NORAD/elements/glo-ops.txt;"
+     "http://www.celestrak.com/NORAD/elements/gps-ops.txt;"
+     "http://www.celestrak.com/NORAD/elements/iridium.txt;"
+     "http://www.celestrak.com/NORAD/elements/molniya.txt;"
+     "http://www.celestrak.com/NORAD/elements/noaa.txt;"
+     "http://www.celestrak.com/NORAD/elements/science.txt;"
+     "http://www.celestrak.com/NORAD/elements/tle-new.txt;"
+     "http://www.celestrak.com/NORAD/elements/visual.txt;"
+     "http://www.celestrak.com/NORAD/elements/weather.txt"},
     {"TLE", "FILE_DIR", NULL},
     {"PREDICT", "SAVE_DIR", NULL}
 };
