@@ -433,18 +433,18 @@ static void create_network(GtkWidget * vbox)
 /** Create widgets for network update configuration */
 static void create_misc(GtkWidget * vbox)
 {
-    addnew =
-        gtk_check_button_new_with_label(_
-                                        ("Add new satellites to local database"));
-    gtk_widget_set_tooltip_text(addnew,
-                                _
-                                ("New satellites will be added to a group called Other"));
+#define ADBUT_TEXT  N_("Add new satellites to local database")
+#define ADBUT_TIP   N_("New satellites are added to a group called 'Other'.\n" \
+                       "Note that selecting this option may cause previously " \
+                       "deleted satellites to be re-added to the database.")
 
+    addnew = gtk_check_button_new_with_label(ADBUT_TEXT);
+    gtk_widget_set_tooltip_text(addnew, ADBUT_TIP);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(addnew),
                                  sat_cfg_get_bool(SAT_CFG_BOOL_TLE_ADD_NEW));
     g_signal_connect(addnew, "toggled", G_CALLBACK(value_changed_cb), NULL);
-
     gtk_box_pack_start(GTK_BOX(vbox), addnew, FALSE, TRUE, 0);
+
 }
 
 /**
