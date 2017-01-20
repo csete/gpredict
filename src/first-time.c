@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -431,17 +428,8 @@ static void first_time_check_step_04(guint * error)
     g_free(dir);
 }
 
-/**
- * Execute step 5 of the first time checks.
- *
- * 5. Check if there are any .sat files in USER_CONF_DIR/satdata/ - if not extract
- *    PACKAGE_DATA_DIR/data/satdata/satellites.dat to .sat files.
- *    Do the same with .cat files.
- *
- * @bug Thus function could probably need some clean-up
- *
- */
-static void first_time_check_step_05(guint * error)
+/* create .sat files from a satellites.dat file */
+static void create_sat_files(guint * error)
 {
     gchar          *satfilename, *targetfilename;
     gchar          *datadir;
@@ -452,9 +440,9 @@ static void first_time_check_step_05(guint * error)
     guint           i;
     guint           newsats = 0;
     gchar          *name, *nickname, *website, *tle1, *tle2, *cfgver;
-    GDir           *srcdir;
-    gchar          *srcdirname;
-    const gchar    *filename;
+
+    sat_log_log(SAT_LOG_LEVEL_INFO,
+                _("Copying satellite data to user config"));
 
     /* open datellites.dat and load into memory */
     datadir = get_data_dir();
@@ -551,14 +539,26 @@ static void first_time_check_step_05(guint * error)
                     _("%s: Written %d new satellite to user config"),
                     __func__, newsats);
     }
-
     g_key_file_free(satfile);
     g_free(satfilename);
+    g_free(datadir);
+}
+
+/* create .cat files in user conf directory */
+static void create_cat_files(guint * error)
+{
+    gchar          *datadir;
+    GError         *err = NULL;
+    GDir           *srcdir;
+    gchar          *srcdirname;
+    const gchar    *filename;
+
+    sat_log_log(SAT_LOG_LEVEL_INFO,
+                _("Copying satellite categories to user config"));
 
     /* .cat files: if .cat file does not exist, copy it, otherwise skip */
+    datadir = get_data_dir();
     srcdirname = g_strconcat(datadir, G_DIR_SEPARATOR_S, "satdata", NULL);
-    g_free(datadir);
-    //targetdirname = get_satdata_dir ();
     srcdir = g_dir_open(srcdirname, 0, &err);
 
     /* directory does not exist, something went wrong in step 4 */
@@ -613,6 +613,44 @@ static void first_time_check_step_05(guint * error)
         g_dir_close(srcdir);
     }
     g_free(srcdirname);
+    g_free(datadir);
+}
+
+/**
+ * Execute step 5 of the first time checks.
+ *
+ * 5. Check if there are any .sat files in USER_CONF_DIR/satdata/ - if not extract
+ *    PACKAGE_DATA_DIR/data/satdata/satellites.dat to .sat files.
+ *    Do the same with .cat files.
+ *
+ */
+static void first_time_check_step_05(guint * error)
+{
+    gchar          *datadir_str;
+    GDir           *datadir;
+    const gchar    *filename;
+    gboolean        have_sat = FALSE;
+    gboolean        have_cat = FALSE;
+
+    /* check if there already is a .sat and .cat in ~/.config/... */
+    datadir_str = get_satdata_dir();
+    datadir = g_dir_open(datadir_str, 0, NULL);
+    while ((filename = g_dir_read_name(datadir)))
+    {
+        /* note: filename is not newly allocated */
+        if (g_str_has_suffix(filename, ".sat"))
+            have_sat = TRUE;
+        if (g_str_has_suffix(filename, ".cat"))
+            have_cat = TRUE;
+    }
+    g_free(datadir_str);
+    g_dir_close(datadir);
+
+    if (!have_sat)
+        create_sat_files(error);
+
+    if (!have_cat)
+        create_cat_files(error);
 }
 
 /**
