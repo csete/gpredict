@@ -447,8 +447,11 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
         /* finally, new satellite must be added to proper category */
         gchar          *catfile;
         gchar         **buff;
-        gint            statretval;
-        struct stat     temp;
+
+// Code commented out used to create a new category, but we would prefer the user
+// to create categories
+//        gint            statretval;
+//        struct stat     temp;
 
         buff = g_strsplit(ntle->srcfile, ".", 0);
         cfgfile = g_strconcat(buff[0], ".cat", NULL);
@@ -456,7 +459,7 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
 
         /* call stat on file before opening it incase file does 
            not exist and we need to add a group name. */
-        statretval = stat(catfile, &temp);
+//        statretval = stat(catfile, &temp);
         /* g_io_channel */
         satfile = g_io_channel_new_file(catfile, "a", &err);
 
@@ -469,15 +472,15 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
         }
         else
         {
-            if (statretval == -1)
-            {
-                /* file did not exist before creating handle */
-                /* use the file name as the group description */
-                cfgstr = g_strdup_printf("%s\n", buff[0]);
-                g_io_channel_write_chars(satfile, cfgstr, -1, NULL, &err);
-                g_free(cfgstr);
-
-            }
+//            if (statretval == -1)
+//            {
+//                /* file did not exist before creating handle */
+//                /* use the file name as the group description */
+//                cfgstr = g_strdup_printf("%s\n", buff[0]);
+//                g_io_channel_write_chars(satfile, cfgstr, -1, NULL, &err);
+//                g_free(cfgstr);
+//
+//            }
 
             cfgstr = g_strdup_printf("%d\n", ntle->catnum);
             g_io_channel_write_chars(satfile, cfgstr, -1, NULL, &err);
