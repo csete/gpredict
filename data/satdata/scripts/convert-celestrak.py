@@ -134,7 +134,7 @@ for group, name in groups.iteritems():
         if catnum in nicknames:
             satfile.write('NICKNAME='+nicknames[catnum]+'\n')
         else:
-        satfile.write('NICKNAME='+line1+'\n')
+            satfile.write('NICKNAME='+line1+'\n')
         satfile.write('TLE1='+line2+'\n')
         satfile.write('TLE2='+line3+'\n')
 
