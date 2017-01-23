@@ -138,7 +138,7 @@ sat_cfg_bool_t  sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
 /** Array containing the integer configuration parameters */
 sat_cfg_int_t   sat_cfg_int[SAT_CFG_INT_NUM] = {
     {"VERSION", "MAJOR", 1},
-    {"VERSION", "MINOR", 3},
+    {"VERSION", "MINOR", 4},
     {"MODULES", "DATA_TIMEOUT", 300},
     {"MODULES", "LAYOUT", 2},   /* FIXME */
     {"MODULES", "VIEW_1", GTK_SAT_MOD_VIEW_MAP},        /* FIXME */
