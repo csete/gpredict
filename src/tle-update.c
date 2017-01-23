@@ -448,18 +448,15 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
         gchar          *catfile;
         gchar         **buff;
 
-// Code commented out used to create a new category, but we would prefer the user
-// to create categories
-//        gint            statretval;
-//        struct stat     temp;
+        gint            statretval;
+        struct stat     temp;
 
         buff = g_strsplit(ntle->srcfile, ".", 0);
-        cfgfile = g_strconcat(buff[0], ".cat", NULL);
-        catfile = sat_file_name(cfgfile);
+        catfile = sat_file_name("tle-new.cat");
 
         /* call stat on file before opening it incase file does 
            not exist and we need to add a group name. */
-//        statretval = stat(catfile, &temp);
+        statretval = stat(catfile, &temp);
         /* g_io_channel */
         satfile = g_io_channel_new_file(catfile, "a", &err);
 
@@ -467,20 +464,18 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s: Could not open category file file %s (%s)."),
-                        __func__, cfgfile, err->message);
+                        __func__, catfile, err->message);
             g_clear_error(&err);
         }
         else
         {
-//            if (statretval == -1)
-//            {
-//                /* file did not exist before creating handle */
-//                /* use the file name as the group description */
-//                cfgstr = g_strdup_printf("%s\n", buff[0]);
-//                g_io_channel_write_chars(satfile, cfgstr, -1, NULL, &err);
-//                g_free(cfgstr);
-//
-//            }
+            if (statretval == -1)
+            {
+                /* file did not exist before creating handle */
+                /* use the file name as the group description */
+                g_io_channel_write_chars(satfile, "Latest Launches\n",
+                                         -1, NULL, &err);
+            }
 
             cfgstr = g_strdup_printf("%d\n", ntle->catnum);
             g_io_channel_write_chars(satfile, cfgstr, -1, NULL, &err);
@@ -504,7 +499,6 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
         }
 
         g_free(catfile);
-        g_free(cfgfile);
         g_strfreev(buff);
     }
 }
