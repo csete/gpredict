@@ -413,94 +413,33 @@ static void check_and_add_sat(gpointer key, gpointer value, gpointer user_data)
     new_tle_t      *ntle = (new_tle_t *) value;
     guint          *num = user_data;
     GKeyFile       *satdata;
-    GIOChannel     *satfile;
-    gchar          *cfgstr, *cfgfile;
-    GError         *err = NULL;
+    gchar          *cfgfile;
 
-    (void)key;                  /* avoid unused parameter compiler warning */
+    (void)key;
+
     /* check if sat is new */
-    if (ntle->isnew)
-    {
-        /* create config data */
-        satdata = g_key_file_new();
+    if (!ntle->isnew)
+        return;
 
-        /* store data */
-        g_key_file_set_string(satdata, "Satellite", "VERSION", "1.1");
-        g_key_file_set_string(satdata, "Satellite", "NAME", ntle->satname);
-        g_key_file_set_string(satdata, "Satellite", "NICKNAME", ntle->satname);
-        g_key_file_set_string(satdata, "Satellite", "TLE1", ntle->line1);
-        g_key_file_set_string(satdata, "Satellite", "TLE2", ntle->line2);
-        g_key_file_set_integer(satdata, "Satellite", "STATUS", ntle->status);
+    /* create config data */
+    satdata = g_key_file_new();
 
-        /* create an I/O channel and store data */
-        cfgfile = sat_file_name_from_catnum(ntle->catnum);
-        if (!gpredict_save_key_file(satdata, cfgfile))
-        {
-            *num += 1;
-        }
+    /* store data */
+    g_key_file_set_string(satdata, "Satellite", "VERSION", "1.1");
+    g_key_file_set_string(satdata, "Satellite", "NAME", ntle->satname);
+    g_key_file_set_string(satdata, "Satellite", "NICKNAME", ntle->satname);
+    g_key_file_set_string(satdata, "Satellite", "TLE1", ntle->line1);
+    g_key_file_set_string(satdata, "Satellite", "TLE2", ntle->line2);
+    g_key_file_set_integer(satdata, "Satellite", "STATUS", ntle->status);
 
-        /* clean up memory */
-        g_free(cfgfile);
-        g_key_file_free(satdata);
+    /* create an I/O channel and store data */
+    cfgfile = sat_file_name_from_catnum(ntle->catnum);
+    if (!gpredict_save_key_file(satdata, cfgfile))
+        *num += 1;
 
-        /**** FIXME: NEED TO CREATE COPY of cache */
-        /* finally, new satellite must be added to proper category */
-        gchar          *catfile;
-        gchar         **buff;
-
-        gint            statretval;
-        struct stat     temp;
-
-        buff = g_strsplit(ntle->srcfile, ".", 0);
-        catfile = sat_file_name("tle-new.cat");
-
-        /* call stat on file before opening it incase file does 
-           not exist and we need to add a group name. */
-        statretval = stat(catfile, &temp);
-        /* g_io_channel */
-        satfile = g_io_channel_new_file(catfile, "a", &err);
-
-        if (err != NULL)
-        {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: Could not open category file file %s (%s)."),
-                        __func__, catfile, err->message);
-            g_clear_error(&err);
-        }
-        else
-        {
-            if (statretval == -1)
-            {
-                /* file did not exist before creating handle */
-                /* use the file name as the group description */
-                g_io_channel_write_chars(satfile, "Latest Launches\n",
-                                         -1, NULL, &err);
-            }
-
-            cfgstr = g_strdup_printf("%d\n", ntle->catnum);
-            g_io_channel_write_chars(satfile, cfgstr, -1, NULL, &err);
-            g_io_channel_shutdown(satfile, TRUE, NULL);
-            g_io_channel_unref(satfile);
-            g_free(cfgstr);
-
-            if (err != NULL)
-            {
-                sat_log_log(SAT_LOG_LEVEL_ERROR,
-                            _("%s: Error adding %d to %s (%s)."),
-                            __func__, ntle->catnum, cfgfile, err->message);
-                g_clear_error(&err);
-            }
-            else
-            {
-                sat_log_log(SAT_LOG_LEVEL_INFO,
-                            _("%s: Added satellite %d to %s."),
-                            __func__, ntle->catnum, cfgfile);
-            }
-        }
-
-        g_free(catfile);
-        g_strfreev(buff);
-    }
+    /* clean up memory */
+    g_free(cfgfile);
+    g_key_file_free(satdata);
 }
 
 /** Add new satellites to local database */
