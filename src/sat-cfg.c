@@ -224,13 +224,7 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
     {"TRSP", "MODE_FILE", "modes/?format=json"},
     {"TRSP", "PROXY", NULL},
     {"TLE", "SERVER", "http://www.celestrak.com/NORAD/elements/"},
-    {"TLE", "FILES", "amateur.txt;cubesat.txt;dmc.txt;education.txt;"
-     "engineering.txt;galileo.txt;geo.txt;geodetic.txt;globalstar.txt;"
-     "glo-ops.txt;goes.txt;gorizont.txt;gps-ops.txt;intelsat.txt;"
-     "iridium.txt;military.txt;molniya.txt;musson.txt;nnss.txt;noaa.txt;"
-     "orbcomm.txt;other.txt;other-comm.txt;radar.txt;raduga.txt;resource.txt;"
-     "sarsat.txt;sbas.txt;science.txt;tdrss.txt;tle-new.txt;visual.txt;weather.txt;"
-     "x-comm.txt"},
+    {"TLE", "FILES", "amateur.txt;cubesat.txt;visual.txt;weather.txt"},
     {"TLE", "PROXY", NULL},
     {"TLE", "URLS",
      "http://www.amsat.org/amsat/ftp/keps/current/nasabare.txt;"
