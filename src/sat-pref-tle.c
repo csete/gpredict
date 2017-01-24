@@ -434,8 +434,7 @@ static void create_network(GtkWidget * vbox)
 static void create_misc(GtkWidget * vbox)
 {
 #define ADBUT_TEXT  N_("Add new satellites to local database")
-#define ADBUT_TIP   N_("New satellites are added to a group called 'Other'.\n" \
-                       "Note that selecting this option may cause previously " \
+#define ADBUT_TIP   N_("Note that selecting this option may cause previously " \
                        "deleted satellites to be re-added to the database.")
 
     addnew = gtk_check_button_new_with_label(ADBUT_TEXT);
