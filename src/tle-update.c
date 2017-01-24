@@ -749,7 +749,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
     gchar          *catname, *catpath, *buff, **buffv;
     FILE           *catfile;
     gchar           category[80];
-    gboolean        catsync = FALSE;    /* whether .cat file should be synced */
+    gboolean        catsync = FALSE;    /* whether .cat file should be synced. NB: not effective since 1.4 */
 
     /* 
        Normal cases to check
