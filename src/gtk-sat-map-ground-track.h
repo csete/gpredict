@@ -1,11 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
-
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -31,16 +27,20 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gtk/gtk.h>
 #include <goocanvas.h>
+#include <gtk/gtk.h>
+
 #include "gtk-sat-map.h"
 
+void            ground_track_create(GtkSatMap * satmap, sat_t * sat,
+                                    qth_t * qth, sat_map_obj_t * obj);
 
+void            ground_track_update(GtkSatMap * satmap, sat_t * sat,
+                                    qth_t * qth, sat_map_obj_t * obj,
+                                    gboolean recalc);
 
-void ground_track_create  (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj);
-void ground_track_update  (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj, gboolean recalc);
-void ground_track_delete  (GtkSatMap *satmap, sat_t *sat, qth_t *qth, sat_map_obj_t *obj, gboolean clear_ssp);
-
+void            ground_track_delete(GtkSatMap * satmap, sat_t * sat,
+                                    qth_t * qth, sat_map_obj_t * obj,
+                                    gboolean clear_ssp);
 
 #endif
-
