@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -25,14 +22,15 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
 #  include <build-config.h>
 #endif
-#include "gpredict-url-hook.h"
-#include "compat.h"
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "about.h"
+#include "compat.h"
+#include "gpredict-url-hook.h"
 
 
 const gchar *authors[] = {
@@ -41,7 +39,7 @@ const gchar *authors[] = {
     "Contributors:",
     "David VK5DG (Transponder data files)",
     "Charles Suprin, AA1VS (GPS support and many other improvements)",
-    "Alan Moffet, KE7IJZ (windows build),"
+    "Alan Moffet, KE7IJZ (windows build),",
     "Valentin Yakovenkov (Windows build)",
     "Damon Chaplin (GooCanvas)",
     "Dr. T.S. Kelso (SGP4/SDP4 algorithms)",
@@ -63,8 +61,7 @@ const gchar *authors[] = {
     NULL
 };
 
-
-const gchar license[] = N_("Copyright (C) 2001-2013 Alexandru Csete OZ9AEC and contributors.\n"\
+const gchar license[] = N_("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors.\n"\
                            "Contact: oz9aec at gmail.com\n\n"\
                            "Gpredict is free software; you can redistribute it and "\
                            "modify it under the terms of the GNU General Public License "\
@@ -85,40 +82,35 @@ const gchar license[] = N_("Copyright (C) 2001-2013 Alexandru Csete OZ9AEC and c
                            "MA 02111-1307\n"
                            "USA.\n");
 
-
-
-/** \brief Create and run the gpredict about dialog. */
-void about_dialog_create ()
+/** Create and run the gpredict about dialog. */
+void about_dialog_create()
 {
-    GtkWidget *dialog;
-    GdkPixbuf *icon;
-    gchar     *iconfile;
+    GtkWidget      *dialog;
+    GdkPixbuf      *icon;
+    gchar          *iconfile;
 
-
-    dialog = gtk_about_dialog_new ();
-    gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
-    gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
-    gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
-                                    _("Copyright (C) 2001-2013 Alexandru Csete OZ9AEC\n\n"\
-                                      "Gpredict is available free of charge from:"));
-    gtk_about_dialog_set_url_hook (gpredict_url_hook_cb, NULL, NULL);
-    gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog),
-                                  "http://gpredict.oz9aec.net/");
+    dialog = gtk_about_dialog_new();
+    gtk_about_dialog_set_name(GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
+    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG (dialog), VERSION);
+    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG (dialog),
+                                   _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC\n\n"\
+                                     "Gpredict is available free of charge from:"));
+    gtk_about_dialog_set_url_hook(gpredict_url_hook_cb, NULL, NULL);
+    gtk_about_dialog_set_website(GTK_ABOUT_DIALOG (dialog),
+                                 "http://gpredict.oz9aec.net/");
 /*     gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (dialog), */
 /*                                         _("Gpredict Website")); */
-    gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (dialog), _(license));
-    gtk_about_dialog_set_wrap_license (GTK_ABOUT_DIALOG (dialog), TRUE);
-    iconfile = icon_file_name ("gpredict-icon.png");
-    icon = gdk_pixbuf_new_from_file (iconfile, NULL);
-    gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), icon);
-    g_free (iconfile);
-    g_object_unref (icon);
+    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG (dialog), _(license));
+    gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG (dialog), TRUE);
+    iconfile = icon_file_name("gpredict-icon.png");
+    icon = gdk_pixbuf_new_from_file(iconfile, NULL);
+    gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG (dialog), icon);
+    g_free(iconfile);
+    g_object_unref(icon);
 
-    gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (dialog), authors);
-    gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (dialog),
-                                             _("translator-credits"));
-
+    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG (dialog), authors);
+    gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG (dialog),
+                                            _("translator-credits"));
     gtk_dialog_run (GTK_DIALOG (dialog));
-
     gtk_widget_destroy (dialog);
 }
