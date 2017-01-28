@@ -148,7 +148,7 @@ void trsp_update_files(gchar * input_file)
 
     FILE           *mfp;        /* transmitter information json file */
     FILE           *ffile;      /* transponder output file in gpredict format */
-    char            symbol;     /* characters to read from json file */
+    int             symbol;     /* characters to read from json file */
     char            jsn_object[10000];  /* json array will be in this buffer before parsing */
     m_state         jsn_state = START;  /* json parsing state */
     new_mode_t     *nmode;
