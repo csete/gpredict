@@ -934,7 +934,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
                                             gfloat x, gfloat y)
 {
     GooCanvasItemModel *item;
-    gchar           buff[7];
+    gchar           buff[6];
     GtkAnchorType   anchor;
     GooCanvasItemModel *root;
     guint32         col;
@@ -943,7 +943,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
 
     col = sat_cfg_get_int(SAT_CFG_INT_POLAR_TRACK_COL);
 
-    daynum_to_str(buff, 8, "%H:%M", time);
+    daynum_to_str(buff, 6, "%H:%M", time);
 
     if (x > pv->cx)
     {
