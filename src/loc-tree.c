@@ -99,6 +99,7 @@ gboolean loc_tree_create(const gchar * fname,
     GtkWidget      *dialog;     /* the dialog widget */
     gint            response;   /* response ID returned by gtk_dialog_run */
     gchar          *ffname;
+    gboolean        retval;
 
     if (!fname)
         ffname = data_file_name("locations.dat");
@@ -258,34 +259,22 @@ gboolean loc_tree_create(const gchar * fname,
                                            dialog, NULL);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
-    switch (response)
+    if (response == GTK_RESPONSE_ACCEPT)
     {
-    case GTK_RESPONSE_ACCEPT:
         loc_tree_get_selection(view, loc, lat, lon, alt, wx);
-        gtk_widget_destroy(dialog);
-
-        /* send debug message */
         sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Selected %s"), __func__, *loc);
-
-        return TRUE;
-        break;
-
-    default:
-        gtk_widget_destroy(dialog);
-
-        /* send debug message */
-        sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s: No location selected"), __func__);
-
-        return FALSE;
-
-        break;
+        retval = TRUE;
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: No location selected"),
+                    __func__);
+        retval = FALSE;
     }
 
-    /*** FIXME: Never reached code; should be removed */
     gtk_widget_destroy(dialog);
 
-    return FALSE;
+    return retval;
 }
 
 static GtkTreeModel *loc_tree_create_and_fill_model(const gchar * fname)
