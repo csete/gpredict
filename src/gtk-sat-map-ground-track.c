@@ -456,7 +456,7 @@ static gboolean ssp_wrap_detected(GtkSatMap * satmap, gdouble x1, gdouble x2)
 {
     gboolean        retval = FALSE;
 
-    if (fabs(x1 - x2) > (satmap->width / 2))
+    if (fabs(x1 - x2) > satmap->width / 2.0)
         retval = TRUE;
 
     return retval;
