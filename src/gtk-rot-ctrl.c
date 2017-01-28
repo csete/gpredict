@@ -1035,7 +1035,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
             {
                 /* if we are in a pass try to lead the satellite 
                    some so we are not always chasing it */
-                if (ctrl->target->el > 0.0)
+                if (ctrl->target && ctrl->target->el > 0.0)
                 {
                     /* starting the rotator moving while we do some computation
                      * can lead to errors later */
