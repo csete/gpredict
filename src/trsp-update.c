@@ -71,7 +71,7 @@ typedef enum {
 struct transponder {
     char            uuid[30];   /* uuid */
     int             catnum;     /* Catalog number. */
-    char            description[99];    /* Transponder descriptoion */
+    char            description[80];    /* Transponder descriptoion */
     long long       uplink_low; /* Uplink starting frequency */
     long long       uplink_high;        /* uplink end frequency  */
     long long       downlink_low;       /* downlink starting frequency */
@@ -269,8 +269,9 @@ void trsp_update_files(gchar * input_file)
                 {
                     struct transponder m_trsp;
 
-                    strcpy(m_trsp.description,
-                           nx_json_get(json, "description")->text_value);
+                    strncpy(m_trsp.description,
+                            nx_json_get(json, "description")->text_value, 79);
+                    m_trsp.description[79] = 0;
                     m_trsp.catnum =
                         nx_json_get(json, "norad_cat_id")->int_value;
                     m_trsp.uplink_low =
