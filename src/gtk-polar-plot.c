@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -25,8 +22,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief Polar Plot Widget.
- * \ingroup widgets
+/**
+ * Polar Plot Widget.
+ * @ingroup widgets
  *
  * GtkPolarPlot is a graphical widget that can display a satellite pass
  * in an Az/El polar plot. The widget was originally created to display
@@ -38,21 +36,21 @@
  * position marker (thread), and a current position marker (small circle).
  * These three objects are very useful in the rotator control window.
  */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
-#include "config-keys.h"
-#include "sat-cfg.h"
-#include "time-tools.h"
-#include "gtk-sat-data.h"
-#include "gpredict-utils.h"
-#include "gtk-polar-plot.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
 #include <goocanvas.h>
+#include <gtk/gtk.h>
 
+#include "config-keys.h"
+#include "gpredict-utils.h"
+#include "gtk-polar-plot.h"
+#include "gtk-sat-data.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sgpsdp/sgp4sdp4.h"
+#include "time-tools.h"
 
 
 #define POLV_DEFAULT_SIZE 200
@@ -91,7 +89,6 @@ static void     xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y, gfloat * az,
 
 static GtkVBoxClass *parent_class = NULL;
 
-
 GType gtk_polar_plot_get_type()
 {
     static GType    gtk_polar_plot_type = 0;
@@ -119,26 +116,13 @@ GType gtk_polar_plot_get_type()
     return gtk_polar_plot_type;
 }
 
-
 static void gtk_polar_plot_class_init(GtkPolarPlotClass * class)
 {
-    /*GObjectClass      *gobject_class; */
     GtkObjectClass *object_class;
-
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
     object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
     parent_class = g_type_class_peek_parent(class);
-
     object_class->destroy = gtk_polar_plot_destroy;
-    //widget_class->size_allocate = gtk_polar_plot_size_allocate;
 }
-
 
 static void gtk_polar_plot_init(GtkPolarPlot * polview)
 {
@@ -155,10 +139,8 @@ static void gtk_polar_plot_init(GtkPolarPlot * polview)
     polview->target = NULL;
 }
 
-
 static void gtk_polar_plot_destroy(GtkObject * object)
 {
-
     if (GTK_POLAR_PLOT(object)->pass != NULL)
     {
         free_pass(GTK_POLAR_PLOT(object)->pass);
@@ -169,13 +151,15 @@ static void gtk_polar_plot_destroy(GtkObject * object)
 }
 
 
-/** \brief Create a new GtkPolarPlot widget.
- *  \param qth Pointer to the QTH.
- *  \param pass Pointer to the satellite pass to display. If NULL no
- *              pass will be displayed.
+/**
+ * Create a new GtkPolarPlot widget.
+ *
+ * @param qth  Pointer to the QTH.
+ * @param pass Pointer to the satellite pass to display. If NULL no
+ *             pass will be displayed.
  *
  */
-GtkWidget      *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
+GtkWidget *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
 {
     GtkWidget      *polv;
     GooCanvasItemModel *root;
@@ -234,17 +218,17 @@ GtkWidget      *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
     return polv;
 }
 
-
-/** \brief Set new pass
- * \param[in] plot Pointer to the GtkPolarPlot widget.
- * \param[in] pass Pointer to the new pass data. Use NULL to disable
- *                 display of pass.
+/**
+ * Set new pass
+ *
+ * @param plot Pointer to the GtkPolarPlot widget.
+ * @param pass Pointer to the new pass data. Use NULL to disable
+ *             display of pass.
  */
 void gtk_polar_plot_set_pass(GtkPolarPlot * plot, pass_t * pass)
 {
     GooCanvasItemModel *root;
     gint            idx, i;
-
 
     /* remove sky track, time ticks and the pass itself */
     if (plot->pass != NULL)
@@ -272,15 +256,14 @@ void gtk_polar_plot_set_pass(GtkPolarPlot * plot, pass_t * pass)
         plot->pass = copy_pass(pass);
         create_track(plot);
     }
-
 }
 
-
-
-/** \brief Set target object position
- * \param plot Pointer to the GtkPolarPlot widget
- * \param az Azimuth of the target object
- * \param el Elevation of the target object
+/**
+ * Set target object position
+ *
+ * @param plot Pointer to the GtkPolarPlot widget
+ * @param az Azimuth of the target object
+ * @param el Elevation of the target object
  * 
  * If either az or el are negative the target object will be hidden
  */
@@ -291,10 +274,8 @@ void gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
     gfloat          x, y;
     guint32         col;
 
-
     if (plot == NULL)
         return;
-
 
     root = goo_canvas_get_root_item_model(GOO_CANVAS(plot->canvas));
 
@@ -305,9 +286,8 @@ void gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child(root, plot->target);
             if (idx != -1)
-            {
                 goo_canvas_item_model_remove_child(root, idx);
-            }
+
             plot->target = NULL;
         }
         /* else the target object is not visible; nothing to do */
@@ -340,11 +320,12 @@ void gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
     }
 }
 
-
-/** \brief Set controller object position
- * \param plot Pointer to the GtkPolarPlot widget
- * \param az Azimuth of the controller object
- * \param el Elevation of the controller object
+/**
+ * Set controller object position
+ *
+ * @param plot Pointer to the GtkPolarPlot widget
+ * @param az Azimuth of the controller object
+ * @param el Elevation of the controller object
  * 
  * If either az or el are negative the controller object will be hidden
  */
@@ -355,10 +336,8 @@ void gtk_polar_plot_set_ctrl_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
     gfloat          x, y;
     guint32         col;
 
-
     if (plot == NULL)
         return;
-
 
     root = goo_canvas_get_root_item_model(GOO_CANVAS(plot->canvas));
 
@@ -369,9 +348,8 @@ void gtk_polar_plot_set_ctrl_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child(root, plot->ctrl);
             if (idx != -1)
-            {
                 goo_canvas_item_model_remove_child(root, idx);
-            }
+
             plot->ctrl = NULL;
         }
         /* else the target object is not visible; nothing to do */
@@ -398,14 +376,14 @@ void gtk_polar_plot_set_ctrl_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
                                                       "line-width", 0.8, NULL);
         }
     }
-
 }
 
-
-/** \brief Set rotator object position
- * \param plot Pointer to the GtkPolarPlot widget
- * \param az Azimuth of the rotator object
- * \param el Elevation of the rotator object
+/**
+ * Set rotator object position
+ *
+ * @param plot Pointer to the GtkPolarPlot widget
+ * @param az Azimuth of the rotator object
+ * @param el Elevation of the rotator object
  * 
  * If either az or el are negative the controller object will be hidden
  */
@@ -417,10 +395,8 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
     gfloat          x, y;
     guint32         col;
 
-
     if (plot == NULL)
         return;
-
 
     root = goo_canvas_get_root_item_model(GOO_CANVAS(plot->canvas));
 
@@ -431,9 +407,8 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child(root, plot->rot1);
             if (idx != -1)
-            {
                 goo_canvas_item_model_remove_child(root, idx);
-            }
+
             plot->rot1 = NULL;
         }
         if (plot->rot2 != NULL)
@@ -441,9 +416,8 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child(root, plot->rot2);
             if (idx != -1)
-            {
                 goo_canvas_item_model_remove_child(root, idx);
-            }
+
             plot->rot2 = NULL;
         }
         if (plot->rot3 != NULL)
@@ -451,9 +425,8 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child(root, plot->rot3);
             if (idx != -1)
-            {
                 goo_canvas_item_model_remove_child(root, idx);
-            }
+
             plot->rot3 = NULL;
         }
         if (plot->rot4 != NULL)
@@ -461,9 +434,8 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
             /* the target object is visible; delete it */
             idx = goo_canvas_item_model_find_child(root, plot->rot4);
             if (idx != -1)
-            {
                 goo_canvas_item_model_remove_child(root, idx);
-            }
+
             plot->rot4 = NULL;
         }
     }
@@ -472,7 +444,6 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
         /* we need to either update or create the object */
         azel_to_xy(plot, az, el, &x, &y);
         col = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
-
 
         if (plot->rot1 != NULL)
         {
@@ -567,22 +538,21 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
                                                             1.0, NULL);
         }
     }
-
 }
 
-
-/** \brief Show/hide time tick
- * \param plot Pointer to the GtkPolarPlot widget
- * \param show TRUE => show tick. FALSE => don't show
+/**
+ * Show/hide time tick
+ *
+ * @param plot Pointer to the GtkPolarPlot widget
+ * @param show TRUE => show tick. FALSE => don't show
  * 
  */
 void gtk_polar_plot_show_time_ticks(GtkPolarPlot * plot, gboolean show)
 {
-    (void)plot;                 /* avoid unused parameter compiler warning */
-    (void)show;                 /* avoid unused parameter compiler warning */
+    (void)plot;
+    (void)show;
     g_print("NOT IMPLEMENTED %s\n", __func__);
 }
-
 
 static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
 {
@@ -702,8 +672,8 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
     return root;
 }
 
-
-/** \brief Transform pole coordinates.
+/**
+ * Transform pole coordinates.
  *
  * This function transforms the pols coordinates (x,y) taking into account
  * the orientation of the polar plot.
@@ -713,10 +683,8 @@ correct_pole_coor(GtkPolarPlot * polv,
                   polar_plot_pole_t pole,
                   gfloat * x, gfloat * y, GtkAnchorType * anch)
 {
-
     switch (pole)
     {
-
     case POLAR_PLOT_POLE_N:
         if ((polv->swap == POLAR_PLOT_SENW) || (polv->swap == POLAR_PLOT_SWNE))
         {
@@ -729,7 +697,6 @@ correct_pole_coor(GtkPolarPlot * polv,
             *y = *y - POLV_LINE_EXTRA;
             *anch = GTK_ANCHOR_SOUTH;
         }
-
         break;
 
     case POLAR_PLOT_POLE_E:
@@ -782,25 +749,23 @@ correct_pole_coor(GtkPolarPlot * polv,
     }
 }
 
-
-/** \brief Manage new size allocation.
+/**
+ * Manage new size allocation.
  *
  * This function is called when the canvas receives a new size allocation,
  * e.g. when the container is re-sized. The function re-calculates the graph
  * dimensions based on the new canvas size.
  */
-static void
-size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
+static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
+                             gpointer data)
 {
     GtkPolarPlot   *polv;
     GooCanvasPoints *prec;
     gfloat          x, y;
     GtkAnchorType   anch = GTK_ANCHOR_CENTER;
 
-
     if (gtk_widget_get_realized(widget))
     {
-
         /* get graph dimensions */
         polv = GTK_POLAR_PLOT(data);
 
@@ -811,7 +776,6 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
 
         goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_PLOT(polv)->canvas), 0, 0,
                               allocation->width, allocation->height);
-
 
         /* update coordinate system */
         g_object_set(polv->C00,
@@ -877,16 +841,14 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
                      "y", (gfloat) (polv->cy - polv->r - POLV_LINE_EXTRA),
                      NULL);
 
-
         /* sky track */
         if (polv->pass != NULL)
             update_track(polv);
-
     }
 }
 
-
-/** \brief Manage canvas realise signals.
+/**
+ * Manage canvas realise signals.
  *
  * This function is used to re-initialise the graph dimensions when
  * the graph is realized, i.e. displayed for the first time. This is
@@ -899,9 +861,7 @@ static void on_canvas_realized(GtkWidget * canvas, gpointer data)
 
     gtk_widget_get_allocation(canvas, &aloc);
     size_allocate_cb(canvas, &aloc, data);
-
 }
-
 
 static void create_track(GtkPolarPlot * pv)
 {
@@ -968,10 +928,7 @@ static void create_track(GtkPolarPlot * pv)
                                               "line-join",
                                               CAIRO_LINE_JOIN_MITER, NULL);
     goo_canvas_points_unref(points);
-
-
 }
-
 
 static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
                                             gfloat x, gfloat y)
@@ -1008,8 +965,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
     return item;
 }
 
-
-/** \brief Update sky track drawing after size allocate. */
+/** Update sky track drawing after size allocate. */
 static void update_track(GtkPolarPlot * pv)
 {
     guint           num, i;
@@ -1017,7 +973,6 @@ static void update_track(GtkPolarPlot * pv)
     gfloat          x, y;
     pass_detail_t  *detail;
     guint           tres, ttidx;
-
 
     /* create points */
     num = g_slist_length(pv->pass->details);
@@ -1050,13 +1005,10 @@ static void update_track(GtkPolarPlot * pv)
         {
             /* make room between text and track */
             if (x > pv->cx)
-            {
                 x -= 5;
-            }
             else
-            {
                 x += 5;
-            }
+
             /* update time tick */
             if (ttidx < TRACK_TICK_NUM)
             {
@@ -1075,13 +1027,11 @@ static void update_track(GtkPolarPlot * pv)
     g_object_set(pv->track, "points", points, NULL);
 
     goo_canvas_points_unref(points);
-
 }
 
-
-/** \brief Convert Az/El to canvas based XY coordinates. */
-static void
-azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el, gfloat * x, gfloat * y)
+/** Convert Az/El to canvas based XY coordinates. */
+static void azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el,
+                       gfloat * x, gfloat * y)
 {
     gdouble         rel;
 
@@ -1103,7 +1053,6 @@ azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el, gfloat * x, gfloat * y)
 
     switch (p->swap)
     {
-
     case POLAR_PLOT_NWSE:
         az = 2 * M_PI - az;
         break;
@@ -1124,10 +1073,9 @@ azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el, gfloat * x, gfloat * y)
     *y = (gfloat) (p->cy - rel * cos(az));
 }
 
-
-/** \brief Convert canvas based coordinates to Az/El. */
-static void
-xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y, gfloat * az, gfloat * el)
+/** Convert canvas based coordinates to Az/El. */
+static void xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y,
+                       gfloat * az, gfloat * el)
 {
     gfloat          rel;
 
@@ -1151,7 +1099,6 @@ xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y, gfloat * az, gfloat * el)
     /* correct for orientation */
     switch (p->swap)
     {
-
     case POLAR_PLOT_NWSE:
         *az = 360.0 - *az;
         break;
@@ -1175,22 +1122,19 @@ xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y, gfloat * az, gfloat * el)
     }
 }
 
-
-/** \brief Manage mouse motion events. */
-static          gboolean
-on_motion_notify(GooCanvasItem * item,
-                 GooCanvasItem * target, GdkEventMotion * event, gpointer data)
+/** Manage mouse motion events. */
+static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
+                                 GdkEventMotion * event, gpointer data)
 {
     GtkPolarPlot   *polv = GTK_POLAR_PLOT(data);
     gfloat          az, el;
     gchar          *text;
 
-    (void)item;                 /* avoid unused parameter compiler warning */
-    (void)target;               /* avoid unused parameter compiler warning */
+    (void)item;
+    (void)target;
 
     if (polv->cursinfo)
     {
-
         xy_to_azel(polv, event->x, event->y, &az, &el);
 
         if (el > 0.0)
@@ -1209,33 +1153,26 @@ on_motion_notify(GooCanvasItem * item,
     return TRUE;
 }
 
-
-/** \brief Finish canvas item setup.
- *  \param canvas 
- *  \param item
- *  \param model 
- *  \param data Pointer to the GtkPolarPlot object.
+/**
+ * Finish canvas item setup.
  *
  * This function is called when a canvas item is created. Its purpose is to connect
  * the corresponding signals to the created items.
  */
-static void
-on_item_created(GooCanvas * canvas,
-                GooCanvasItem * item,
-                GooCanvasItemModel * model, gpointer data)
+static void on_item_created(GooCanvas * canvas, GooCanvasItem * item,
+                            GooCanvasItemModel * model, gpointer data)
 {
-    (void)canvas;               /* avoid unused parameter compiler warning */
+    (void)canvas;
     if (!goo_canvas_item_model_get_parent(model))
     {
         /* root item / canvas */
         g_signal_connect(item, "motion_notify_event",
                          (GCallback) on_motion_notify, data);
     }
-
 }
 
-
-/** \brief Retrieve background color.
+/**
+ * Retrieve background color.
  *
  * This function retrieves the canvas background color, which is in 0xRRGGBBAA
  * format and converts it to GdkColor style. Besides extractibg the RGB components
@@ -1246,7 +1183,7 @@ static void get_canvas_bg_color(GtkPolarPlot * polv, GdkColor * color)
     guint32         col, tmp;
     guint16         r, g, b;
 
-    (void)polv;                 /* avoid unused parameter compiler warning */
+    (void)polv;
 
     col = sat_cfg_get_int(SAT_CFG_INT_POLAR_BGD_COL);
 
