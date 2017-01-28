@@ -298,7 +298,7 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
         update_count_down(ctrl, t);
 
         /*if the current pass is too far away */
-        if ((ctrl->pass != NULL) && (ctrl->qth != NULL))
+        if ((ctrl->pass != NULL))
             if (qth_small_dist(ctrl->qth, ctrl->pass->qth_comp) > 1.0)
             {
                 free_pass(ctrl->pass);
