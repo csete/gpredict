@@ -827,6 +827,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
             {
             case 3:
                 strncpy(tle_working[0], linetmp, 80);
+                tle_working[0][79] = 0;         // make coverity happy
                 /* b is being used a flag here
                    if b==NULL then we only have one line read in 
                    and there is no way we have a full tle as there 
@@ -860,6 +861,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
                 strncpy(tle_working[0], tle_working[1], 80);
                 strncpy(tle_working[1], tle_working[2], 80);
                 strncpy(tle_working[2], linetmp, 80);
+                tle_working[2][79] = 0;         // make coverity happy
                 break;
             default:
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
@@ -896,6 +898,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
 
                 /* it appears that the first line may be a name followed by a tle */
                 strncpy(tle_str[0], tle_working[0], 80);
+                tle_str[0][79] = 0;         // make coverity happy
                 strncpy(tle_str[1], tle_working[1], 80);
                 strncpy(tle_str[2], tle_working[2], 80);
                 /* we consumed three lines so we need three lines */
