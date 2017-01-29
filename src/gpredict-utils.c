@@ -417,7 +417,7 @@ gchar          *rgba2html(guint rgba)
 {
     gchar          *col;
     guint8          r, g, b;
-    guint16         tmp;
+    guint           tmp;
 
     tmp = rgba & 0xFF000000;
     r = (guint8) (tmp >> 24);
