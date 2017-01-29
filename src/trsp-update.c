@@ -85,7 +85,7 @@ struct transponder {
 /* Data structure to hold a MODES set. */
 struct modes {
     int             id;         /* id */
-    char            name[99];   /* Mode name */
+    char            name[80];   /* Mode name */
 };
 
 /* Data structure to hold a MODE set. */
@@ -204,8 +204,9 @@ void trsp_update_files(gchar * input_file)
                     struct modes    m_modes;
 
                     m_modes.id = nx_json_get(json, "id")->int_value;
-                    strcpy(m_modes.name,
-                           nx_json_get(json, "name")->text_value);
+                    strncpy(m_modes.name,
+                            nx_json_get(json, "name")->text_value, 79);
+                    m_modes.name[79] = 0;
 
                     /* add data to hash table */
                     key = g_try_new0(guint, 1);
