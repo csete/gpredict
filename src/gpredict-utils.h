@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -36,33 +33,32 @@
 #define MI_TO_KM(x) (1.609344*x)
 
 
-GtkWidget *gpredict_hpixmap_button (const gchar *file,
-                                    const gchar *text,
-                                    const gchar *tooltip);
+GtkWidget      *gpredict_hpixmap_button(const gchar * file,
+                                        const gchar * text,
+                                        const gchar * tooltip);
 
-GtkWidget *gpredict_vpixmap_button (const gchar *file,
-                                    const gchar *text,
-                                    const gchar *tooltip);
+GtkWidget      *gpredict_vpixmap_button(const gchar * file,
+                                        const gchar * text,
+                                        const gchar * tooltip);
 
-GtkWidget *gpredict_hstock_button  (const gchar *stock_id,
-                                    const gchar *text,
-                                    const gchar *tooltip);
+GtkWidget      *gpredict_hstock_button(const gchar * stock_id,
+                                       const gchar * text,
+                                       const gchar * tooltip);
 
-GtkWidget *gpredict_mini_mod_button (const gchar *pixmapfile,
-                                              const gchar *tooltip);
+GtkWidget      *gpredict_mini_mod_button(const gchar * pixmapfile,
+                                         const gchar * tooltip);
 
-void gpredict_set_combo_tooltips (GtkWidget *combo, gpointer text);
+void            gpredict_set_combo_tooltips(GtkWidget * combo, gpointer text);
 
-gint       gpredict_file_copy      (const gchar *in,
-                                    const gchar *out);
+gint            gpredict_file_copy(const gchar * in, const gchar * out);
 
-
-void   rgb2gdk   (guint rgb, GdkColor *color);
-void   rgba2gdk  (guint rgba, GdkColor *color, guint16 *alpha);
-void   gdk2rgb   (const GdkColor *color, guint *rgb);
-void   gdk2rgba  (const GdkColor *color, guint16 alpha, guint *rgba);
-gchar *rgba2html (guint rgba);
-int gpredict_strcmp (const char *s1, const char *s2);
-char  *gpredict_strcasestr(const char *s1, const char *s2);
-gboolean gpredict_save_key_file (GKeyFile *cfgdata, const char *filename);
+void            rgb2gdk(guint rgb, GdkColor * color);
+void            rgba2gdk(guint rgba, GdkColor * color, guint16 * alpha);
+void            gdk2rgb(const GdkColor * color, guint * rgb);
+void            gdk2rgba(const GdkColor * color, guint16 alpha, guint * rgba);
+gchar          *rgba2html(guint rgba);
+int             gpredict_strcmp(const char *s1, const char *s2);
+char           *gpredict_strcasestr(const char *s1, const char *s2);
+gboolean        gpredict_save_key_file(GKeyFile * cfgdata,
+                                       const char *filename);
 #endif
