@@ -111,7 +111,9 @@ void sat_log_init()
            The reason for this is that we need sat-cfg parameters for
            log rotation, but sat-cfg is not initialised at this time.
          */
-        g_remove(filename);
+        if (g_remove(filename))
+            g_print(_("%s: Failed to delete old log file %s\n"),
+                    __func__, filename);
     }
 
     /* create new gpredict.log file */
@@ -274,7 +276,11 @@ static void log_rotate()
                              dirname, G_DIR_SEPARATOR_S, now.tv_sec);
 
     if (age > 0)
-        g_rename(fname1, fname2);
+    {
+        if (g_rename(fname1, fname2))
+            g_print(_("%s: Failed to rename %s to %s\n"), __func__,
+                    fname1, fname2);
+    }
 
     /* calculate age for files that should be removed */
     then = now.tv_sec - age;
@@ -322,7 +328,10 @@ static void clean_log_dir(const gchar * dirname, glong age)
             if (g_ascii_strcasecmp(vbuf[1], ages) <= 0)
             {
                 buff = g_strconcat(dirname, G_DIR_SEPARATOR_S, fname, NULL);
-                g_remove(buff);
+                if (g_remove(buff))
+                    g_print(_("%s: Failed to delete old log file %s\n"),
+                            __func__, buff);
+
                 g_free(buff);
             }
 
