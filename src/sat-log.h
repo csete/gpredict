@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -33,17 +30,17 @@
 #define SAT_LOG_MSG_SEPARATOR "|"
 
 typedef enum {
-     SAT_LOG_LEVEL_NONE  = 0,
-     SAT_LOG_LEVEL_ERROR = 1,
-     SAT_LOG_LEVEL_WARN  = 2,
-     SAT_LOG_LEVEL_INFO  = 3,
-     SAT_LOG_LEVEL_DEBUG = 4
+    SAT_LOG_LEVEL_NONE = 0,
+    SAT_LOG_LEVEL_ERROR = 1,
+    SAT_LOG_LEVEL_WARN = 2,
+    SAT_LOG_LEVEL_INFO = 3,
+    SAT_LOG_LEVEL_DEBUG = 4
 } sat_log_level_t;
 
-void sat_log_init        (void);
-void sat_log_close       (void);
-void sat_log_log         (sat_log_level_t level, const char *fmt, ...);
-void sat_log_set_visible (gboolean visible);
-void sat_log_set_level   (sat_log_level_t level);
+void            sat_log_init(void);
+void            sat_log_close(void);
+void            sat_log_log(sat_log_level_t level, const char *fmt, ...);
+void            sat_log_set_visible(gboolean visible);
+void            sat_log_set_level(sat_log_level_t level);
 
 #endif

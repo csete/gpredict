@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -25,8 +22,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief Gpredict debug message logger.
- *  \ingruop logger
+/**
+ * Gpredict debug message logger.
  *
  * This component is responsible for logging the debug messages
  * coming from gpredict and hamlib. Debug messages are stored
@@ -39,26 +36,27 @@
  * (unix time as returned by g_get_current_time).
  * 
  */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gprintf.h>
-#include <glib/gstdio.h>
-#include <time.h>
-//#include <sys/time.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <glib/gprintf.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <time.h>
+
 #include "compat.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
 
+
 static gboolean initialised = FALSE;
 static GIOChannel *logfile = NULL;
 static sat_log_level_t loglevel = SAT_LOG_LEVEL_DEBUG;
-static gboolean debug_to_stderr = TRUE;  // whether to also send debug msg to stderr
+static gboolean debug_to_stderr = TRUE; // whether to also send debug msg to stderr
 
-/*! \brief String representation of debug levels. */
-const gchar *debug_level_str[] = {
+/** String representation of debug levels. */
+const gchar    *debug_level_str[] = {
     N_(" --- "),
     N_("ERROR"),
     N_(" WARN"),
@@ -72,7 +70,8 @@ static void     log_rotate(void);
 static void     clean_log_dir(const gchar * dirname, glong age);
 
 
-/** \brief Initialise message logger.
+/**
+ * Initialise message logger.
  *
  * This function initialises the debug message logger. First, it
  * checks that the directory USER_CONF_DIR/logs/ exists, if not it
@@ -86,7 +85,6 @@ void sat_log_init()
     gchar          *dirname, *filename, *confdir;
     gboolean        err = FALSE;
     GError         *error = NULL;
-
 
     /* Check whether log directory exists, if not, create it */
     confdir = get_user_conf_dir();
@@ -137,9 +135,7 @@ void sat_log_init()
     }
 }
 
-
-
-/** \brief Close message logger. */
+/** Close message logger. */
 void sat_log_close()
 {
     if (initialised)
@@ -156,7 +152,7 @@ void sat_log_close()
 }
 
 
-/** \brief Log messages from gpredict */
+/** Log messages from gpredict */
 void sat_log_log(sat_log_level_t level, const gchar * fmt, ...)
 {
     gchar          *msg;        /* formatted debug message */
@@ -165,11 +161,8 @@ void sat_log_log(sat_log_level_t level, const gchar * fmt, ...)
     guint           i;
     va_list         ap;
 
-
     if (level > loglevel)
-    {
         return;
-    }
 
     va_start(ap, fmt);
 
@@ -191,37 +184,25 @@ void sat_log_log(sat_log_level_t level, const gchar * fmt, ...)
        a logfile
      */
     for (i = 0; i < numlines; i++)
-    {
         manage_debug_message(level, msgv[i]);
-    }
 
     va_end(ap);
-
     g_strfreev(msgv);
-
-
 }
-
-
 
 void sat_log_set_visible(gboolean visible)
 {
-    (void)visible;              /* avoid unused parameter compiler warning */
+    (void)visible;
 }
-
 
 void sat_log_set_level(sat_log_level_t level)
 {
-    if G_LIKELY(level <= SAT_LOG_LEVEL_DEBUG)
-    {
-        loglevel = level;
-    }
+    if G_LIKELY
+        (level <= SAT_LOG_LEVEL_DEBUG) loglevel = level;
 }
 
-
-
-static void
-manage_debug_message(sat_log_level_t debug_level, const gchar * message)
+static void manage_debug_message(sat_log_level_t debug_level,
+                                 const gchar * message)
 {
     gchar           msg_time[50];
     guint           size;
@@ -231,35 +212,32 @@ manage_debug_message(sat_log_level_t debug_level, const gchar * message)
     gsize           written;
     GError         *error = NULL;
 
-
     /* get the time */
     g_get_current_time(&tval);
     t = (time_t) tval.tv_sec;
     size = strftime(msg_time, 48, "%Y/%m/%d %H:%M:%S", localtime(&t));
     if (size < 49)
-    {
         msg_time[size] = '\0';
-    }
     else
-    {
         msg_time[49] = '\0';
-    }
 
     /* send debug messages to stderr */
-    if G_LIKELY(debug_to_stderr)
-    {
-        g_fprintf(stderr, "%s  %s  %s\n", msg_time, debug_level_str[debug_level], message);
-    }
+    if G_LIKELY
+        (debug_to_stderr)
+            g_fprintf(stderr, "%s  %s  %s\n", msg_time,
+                      debug_level_str[debug_level], message);
 
     msg = g_strdup_printf("%s%s%d%s%s\n", msg_time, SAT_LOG_MSG_SEPARATOR,
                           debug_level, SAT_LOG_MSG_SEPARATOR, message);
 
     /* print debug message */
-    if G_LIKELY(initialised)
+    if G_LIKELY
+        (initialised)
     {
         /* save to file */
         g_io_channel_write_chars(logfile, msg, -1, &written, &error);
-        if G_UNLIKELY(error != NULL)
+        if G_UNLIKELY
+            (error != NULL)
         {
             g_fprintf(stderr, "CRITICAL: LOG ERROR\n");
             g_clear_error(&error);
@@ -275,11 +253,7 @@ manage_debug_message(sat_log_level_t debug_level, const gchar * message)
     g_free(msg);
 }
 
-
-
-
-/** \brief Perform log rotation and other maintenance in log directory
- */
+/** Perform log rotation and other maintenance in log directory */
 static void log_rotate()
 {
     GTimeVal        now;        /* current time */
@@ -314,10 +288,7 @@ static void log_rotate()
     g_free(confdir);
 }
 
-
-/** \brief Scan directory for .log files and remove those which are
- *         older than age.
- */
+/** Scan directory for .log files and remove those which are older than age. */
 static void clean_log_dir(const gchar * dirname, glong age)
 {
     GDir           *dir;        /* directory handle */
@@ -342,7 +313,8 @@ static void clean_log_dir(const gchar * dirname, glong age)
     while ((fname = g_dir_read_name(dir)) != NULL)
     {
         /* ensure this is a .log file */
-        if G_LIKELY(g_str_has_suffix(fname, ".log"))
+        if G_LIKELY
+            (g_str_has_suffix(fname, ".log"))
         {
             vbuf = g_strsplit_set(fname, "-.", -1);
 
@@ -361,5 +333,4 @@ static void clean_log_dir(const gchar * dirname, glong age)
 
     g_dir_close(dir);
     g_free(ages);
-
 }
