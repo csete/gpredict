@@ -23,6 +23,7 @@ groups = {
     "glo-ops" : "Glonass Operational",
     "gps-ops" : "GPS Operational",
     "iridium" : "Iridium",
+    "iridium-NEXT" : "Iridium NEXT",
     "molniya" : "Molniya",
     "noaa" : "NOAA",
     "science" : "Space & Earth Science",
