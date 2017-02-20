@@ -234,6 +234,7 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "http://www.celestrak.com/NORAD/elements/glo-ops.txt;"
      "http://www.celestrak.com/NORAD/elements/gps-ops.txt;"
      "http://www.celestrak.com/NORAD/elements/iridium.txt;"
+     "http://www.celestrak.com/NORAD/elements/iridium-NEXT.txt;"
      "http://www.celestrak.com/NORAD/elements/molniya.txt;"
      "http://www.celestrak.com/NORAD/elements/noaa.txt;"
      "http://www.celestrak.com/NORAD/elements/science.txt;"
