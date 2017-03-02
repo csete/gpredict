@@ -32,3 +32,4 @@ mkinstalldirs
 libtool
 goocanvas
 m4/
+*~
