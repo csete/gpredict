@@ -1,7 +1,16 @@
 Setting up gpredict for use with a Yaesu FT-847 radio
 
+As an USB to RS232 interface I bought the converter from "TechnoFix UK",
+which can be obtained from e.g. ebay et al.
+My PC is running an actual debian with KDE as desktop environment and
+hamlib is the version delivered as distri package (currently
+Hamlib 1.2.15.3), because I have been too lazy to compile it by myself.
+
 FT-847:
 Menu 37 "CAT RATE" -> 57600
+
+rigctld:
+/usr/bin/rigctld -m 101 -r /dev/ttyUSB0 -t 4532 -s 57600 --set-conf=stop_bits=2,serial_handshake=None
 
 gpredict:
 Edit -> Preferences -> Interfaces -> Add New
@@ -15,9 +24,6 @@ Edit -> Preferences -> Interfaces -> Add New
   LO Up: <used with upconverter>
   Signalling: [ ] AOS      [ ] LOS
 
-rigctld:
-/usr/bin/rigctld -m 101 -r /dev/ttyUSB0 -t 4532 -s 57600 --set-conf=stop_bits=2,serial_handshake=None
-
 in Radiocontrol widget:
 Settings:
   1. Device: YAESUFT-847
@@ -26,15 +32,22 @@ Settings:
 
 Note on Cycle:
 You have to chose a value bigger than the communication via RS232 to
-the radio takes! This is approximately 300 ms per command. With a
+the radio takes! This is approximately 300 ms per command, existing of
+the command itself and the answer, containing the result. With a
 full-duplex radio there are 7 (!) commands executed: 1. [t] get PTT
 status, 2. [f] get current VFOA frq, 3. [F {...}] set new VFOA frq,
 4. [f] check if new VFOA frq is set, 5. [i] get current SUB frq,
-6. [I {...] set new SUB frq, 7. [i] check if new SUB frq is set. This
+6. [I {...}] set new SUB frq, 7. [i] check if new SUB frq is set. This
 results in a cycle-time of approx 2100 ms - add some time to ensure all
-commands are transmitted.
+commands are transmitted. The idea to enclose the whole communication
+into separate threads came up, because socket communication is always
+blocking. This also comes up with rotcld! Still some work to do...
 
 One full cycle:
 2017-03-02 19:24:18.918677
 t f F {...} f i I {...} i
 2017-03-02 19:24:21.036607
+
+(to be enhanced...)
+
+Mar. 2017, Patrick Dohmen (DL4PD)
