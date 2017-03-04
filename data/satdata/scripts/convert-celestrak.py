@@ -84,7 +84,8 @@ nicknames = {
     "28895" : "CO-58",
     "28941" : "CO-56",
     "35870" : "SO-67",
-    "36122" : "HO-68"
+    "36122" : "HO-68",
+    "39444" : "AO-73"
 }
 
 urlprefix = "http://celestrak.com/NORAD/elements/"
