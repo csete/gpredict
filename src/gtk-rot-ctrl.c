@@ -880,6 +880,8 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
     gchar          *buff;
     gchar           buffback[128];
+    gboolean        retcode;
+    gint            retval;
 
     if (!gtk_toggle_button_get_active(button))
     {
