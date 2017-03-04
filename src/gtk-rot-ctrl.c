@@ -878,9 +878,34 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
 static void rot_locked_cb(GtkToggleButton * button, gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+    gchar          *buff;
+    gchar           buffback[128];
+    gboolean        retcode;
+    gint            retval;
 
     if (!gtk_toggle_button_get_active(button))
     {
+        /* DL4PD: issue #51: stop moving rotor */
+        buff = g_strdup_printf("S\x0a");
+
+	retcode = send_rotctld_command(ctrl, buff, buffback, 128);
+
+	g_free(buff);
+
+	if (retcode == TRUE)
+	{
+	    /* treat errors as soft errors */
+	    retval = (gint) g_strtod(buffback + 4, NULL);
+	    if (retval != 0)
+	    {
+		g_strstrip(buffback);
+		sat_log_log(SAT_LOG_LEVEL_ERROR,
+			    _
+			    ("%s:%d: rotctld returned error %d with stop-cmd (%s)"),
+			    __FILE__, __LINE__, retval, buffback);
+	    }
+	}
+	
         gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
         close_rotctld_socket(&(ctrl->sock));
