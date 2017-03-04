@@ -22,7 +22,7 @@ Gpredict includes the following features:
       notebook or in their own windows. The module can also run in
       full-screen mode.
     * You can use many ground stations. Ground station coordinates
-      can either be entered manually or you can get some appriximate values
+      can either be entered manually or you can get some approximate values
       from a list with more than 2000 predefined locations worldwide.
     * Predict upcoming passes for satellites, including passes where a 
       satellite may be visible and communication windows
@@ -50,11 +50,11 @@ for successful compilation of Gpredict:
 - Hamlib (runtime only, not required for build)
 
 If you compile Gpredict from source you will also need the development parts
-of the above mentioned libraries, e.g. gtk+-dev or gtk+-devel and so on.
+of the above mentioned libraries, e.g. libgtk2.0-dev on Ubuntu.
 
 To install gpredict from source unpack the source package with:
 
-     tar -xvfz gpredict-x.y.z.tar.gz
+     tar -xvf gpredict-x.y.z.tar.gz
 
 Change to the gpredict-x.y.z directory and build gpredict:
 
@@ -70,6 +70,10 @@ adding --prefix=somedir to the ./configure step. For example
   ./configure --prefix=/home/alexc/predict
   
 will configure the build to install the files into /home/alexc/gpredict folder.
+
+If you are building from the git repository and there is no configure script,
+run ./autogen.sh instead. You can pass the same options to the autogen.sh
+script as you would to the configure script.
 
 If the configure step fails with an error, examine the output. It will usually
 tell you which package or libraries you need in order to build gpredict. Please
@@ -93,18 +97,20 @@ at the user manual available at
 http://gpredict.oz9aec.net/documents.php
 
 
-
 LICENSE AND WARRANTY
 ====================
 
 Gpredict is released under the GNU General Public License and comes with
-NO WARRANTY whatsoever (well, maybe except that it works for me). See the
+NO WARRANTY whatsoever (well, maybe except that it works for us). See the
 COPYING file for details. If you have problems installing or using Gpredict,
-feel free to ask for support. There is a web based forum at
-http://forum.oz9aec.net/
+feel free to ask for support for example on the forum Gpredict at SatNOGS:
+https://community.satnogs.org/c/gpredict
 
-Bug trackers, mailing lists, etc, can be accessed at the project page
-at sourceforge:
+
+Note that development environment is being moved from Sourceforge to Github:
+https://github.com/csete/gpredict
+
+Mailing lists, old bug trackers, etc, are still available on Sourceforge:
 http://sourceforge.net/projects/gpredict
 
 
