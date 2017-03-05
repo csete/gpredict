@@ -154,6 +154,8 @@ static void remove_timer (GtkRigCtrl *data );
 static void start_timer( GtkRigCtrl *data );
 
 gpointer rigctl_task_data = NULL;
+static GMutex       widgetsync;
+static GCond        widgetready;
 static GAsyncQueue *rigctlq;
 
 
@@ -240,9 +242,21 @@ static void gtk_rig_ctrl_destroy(GtkObject * object)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(object);
 
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: mutex lock..."),
+		__FILE__, __func__);
+
+    g_mutex_lock(&widgetsync);
+
     ctrl->engaged = 0;
     setconfig(ctrl);
-    
+
+    /* synchronization */
+    g_cond_wait(&widgetready, &widgetsync);
+    g_mutex_unlock(&widgetsync);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: free config..."),
+		__FILE__, __func__);
+
     /* free configuration */
     if (ctrl->conf != NULL)
     {
@@ -730,7 +744,7 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
 
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
-		_("%s:%s: context: %p"),
+		_("%s:%s: context: @%p"),
 		__FILE__, __func__, g_thread_self());
     
     table = gtk_table_new(4, 3, FALSE);
@@ -1412,18 +1426,12 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: timeout! (id:%d)"),
-                __FILE__, __func__, ctrl->timerid);
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-		_("%s:%s: context: %p"),
-		__FILE__, __func__, g_thread_self());
-
     if (ctrl->conf == NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%s: Controller does not have a valid configuration"),
                     __FILE__, __func__);
-        return (TRUE);
+        return FALSE;
 
     }
 
@@ -2421,6 +2429,7 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
+    g_free(buff);
     return retval;
 }
 
@@ -2464,6 +2473,7 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
+    g_free(buff);
     return retval;
 }
 
@@ -3224,19 +3234,19 @@ gpointer rigctl_run( gpointer data )
 	sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: started thread, wait for init..."),
 		    __FILE__, __func__);
 	sat_log_log(SAT_LOG_LEVEL_DEBUG,
-		    _("%s:%s: context: %p"),
+		    _("%s:%s: context: @%p"),
 		    __FILE__, __func__, g_thread_self());
       }
 
     while(1)
-      { 
+      {
 	sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: ...idle..."),
 		    __FILE__, __func__);
 
 	ctrl = GTK_RIG_CTRL(g_async_queue_pop(rigctlq));
 	while (g_main_context_iteration(NULL, FALSE));
 
-	sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: pop task..."),
+	sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: pop event..."),
 		    __FILE__, __func__);
 
 	if(ctrl == NULL)
@@ -3246,7 +3256,7 @@ gpointer rigctl_run( gpointer data )
 	    continue;
 	  }
 	
-	sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: ...[%p] busy..."),
+	sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: ...[@%p] busy..."),
 		    __FILE__, __func__, g_thread_self());
 
 	if(ctrl->engaged)
@@ -3263,6 +3273,10 @@ gpointer rigctl_run( gpointer data )
 	  }
 	else
 	  {
+	    g_mutex_lock(&widgetsync);
+	    
+	    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: [@%p] tidy up..."),
+			__FILE__, __func__, g_thread_self());
 
 	    if(ctrl->sock > 0)
 	      {
@@ -3273,7 +3287,15 @@ gpointer rigctl_run( gpointer data )
 	      {
 		remove_timer(ctrl);
 	      }
+
+	    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: mutex unlock..."),
+			__FILE__, __func__);
+
+	    g_cond_signal(&widgetready);
+	    g_mutex_unlock(&widgetsync);
+	    continue;
 	  }
+
 	/*snip*/
 	check_aos_los(ctrl);
 
@@ -3333,7 +3355,6 @@ gpointer rigctl_run( gpointer data )
 
 	//g_print ("       WROPS = %d\n", ctrl->wrops);
 	/*snap*/
-    
       }
 
     /* NEVEREACHED: */
@@ -3351,7 +3372,7 @@ void start_timer( GtkRigCtrl *data )
     
     ctrl->timerid = gdk_threads_add_timeout(ctrl->delay, rig_ctrl_timeout_cb, ctrl);
     
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: [%p] added timer (id:%d) with delay %d"),
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: [@%p] added timer (id:%d) with delay %d"),
 		__FILE__, __func__, g_thread_self(), ctrl->timerid, ctrl->delay);
 }
 
@@ -3371,5 +3392,9 @@ void setconfig(gpointer data)
   GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
 
   if(ctrl != NULL)
+  {
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: push event..."),
+		__FILE__, __func__);
     g_async_queue_push(rigctlq, ctrl);
+  }
 }

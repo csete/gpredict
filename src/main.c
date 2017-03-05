@@ -173,23 +173,12 @@ int main(int argc, char *argv[])
     gpredict_app_create();
     gtk_widget_show_all(app);
 
-#if 0
-    /** FIXME: store thread and destroy on exit? **/
-    g_thread_try_new(_("gpredict_gui"), gui_task, NULL,
-		     &err);
-    
-    if (err != NULL)
-      sat_log_log(SAT_LOG_LEVEL_ERROR,
-		  _("%s: Failed to create gui thread (%s)"),
-		  __func__, err->message);
-#endif
-
     //sat_debugger_run ();
 
     /* launch rigctld communication task */
     /** FIXME: store thread and destroy on exit? **/
     /** FIXME: start with timercallback to ensure config ist set? **/
-    g_thread_try_new(_("gpredict_rigtcl_task"), rigctl_run, rigctl_task_data,
+    g_thread_try_new(_("rigtcl_run"), rigctl_run, rigctl_task_data,
 		     &err);
     
     if (err != NULL)
