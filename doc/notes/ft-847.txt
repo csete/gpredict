@@ -2,9 +2,15 @@ Setting up gpredict for use with a Yaesu FT-847 radio
 
 As an USB to RS232 interface I bought the converter from "TechnoFix UK",
 which can be obtained from e.g. ebay et al.
+There might be a problem with your braille kernel driver, so you have
+to disable this from loading at system start (to get /dev/ttyUSB?).
+Remember to add the user running rigtcl[d] to the dialout group.
 My PC is running an actual debian with KDE as desktop environment and
 hamlib is the version delivered as distri package (currently
 Hamlib 1.2.15.3), because I have been too lazy to compile it by myself.
+Another issue I found while testing the threaded version of my gpredict
+build: transponder modes, such as FM, LSB, USB etc. have to be set
+manual on the radio.
 
 FT-847:
 Menu 37 "CAT RATE" -> 57600
