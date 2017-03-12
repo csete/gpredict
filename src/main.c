@@ -54,7 +54,7 @@
 #include "sat-cfg.h"
 #include "sat-debugger.h"
 #include "sat-log.h"
-#include "gtk-rig-ctrl.h"
+
 
 /** Main application widget. */
 GtkWidget      *app;
@@ -87,7 +87,6 @@ static gboolean tle_upd_note_sent = FALSE;
 
 
 /* private funtion prototypes */
-//static gpointer gui_task(gpointer data);
 static void     gpredict_app_create(void);
 static gint     gpredict_app_delete(GtkWidget *, GdkEvent *, gpointer);
 static void     gpredict_app_destroy(GtkWidget *, gpointer);
@@ -111,6 +110,7 @@ int main(int argc, char *argv[])
     GError         *err = NULL;
     GOptionContext *context;
     guint           error = 0;
+
 
 
 #ifdef ENABLE_NLS
@@ -161,31 +161,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-		_("%s:%s: context: %p"),
-		__FILE__, __func__, g_thread_self());
-    
-    /* start main gui process in separate thread */
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-		_("%s: Starting new gui thread."), __func__);
-    
     /* create application */
     gpredict_app_create();
     gtk_widget_show_all(app);
 
     //sat_debugger_run ();
 
-    /* launch rigctld communication task */
-    /** FIXME: store thread and destroy on exit? **/
-    /** FIXME: start with timercallback to ensure config ist set? **/
-    g_thread_try_new(_("rigtcl_run"), rigctl_run, rigctl_task_data,
-		     &err);
-    
-    if (err != NULL)
-      sat_log_log(SAT_LOG_LEVEL_ERROR,
-		  _("%s: Failed to create rigctl thread (%s)"),
-		  __func__, err->message);
-    
     /* launch TLE monitoring task; 10 min interval */
     tle_mon_id = g_timeout_add(600000, tle_mon_task, NULL);
 
@@ -201,7 +182,6 @@ int main(int argc, char *argv[])
     sat_cfg_save();
     sat_log_close();
     sat_cfg_close();
-
 
 #ifdef WIN32
     CloseWinSock2();
@@ -696,24 +676,3 @@ static void clean_trsp(void)
     g_free(targetdirname);
 
 }
-
-#if 0
-static gpointer gui_task(gpointer data)
-{
-  (void)data;
-
-  sat_log_log(SAT_LOG_LEVEL_DEBUG,
-		_("%s: Starting new gui thread."), __func__);
-  sat_log_log(SAT_LOG_LEVEL_DEBUG,
-	      _("%s:%s: context: %p"),
-	      __FILE__, __func__, g_thread_self());
-  
-  /* create application */
-  gpredict_app_create();
-  gtk_widget_show_all(app);
-
-  while(1);
-  return NULL;
-}
-#endif
-
