@@ -145,11 +145,12 @@ static inline gboolean check_get_response(gchar * buff, gboolean retcode,
 static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rig_name_compare(const gchar * a, const gchar * b);
 
+
+
 /* DL4PD: add thread for hamlib communication */
+gpointer        rigctl_run( gpointer data );
 static void     rigctrl_open(GtkRigCtrl * data);
 static void     rigctrl_close(GtkRigCtrl * data);
-
-//static void rigctrl_thread_func_close( GtkRigCtrl *data );
 static void     setconfig(gpointer data);
 static void     remove_timer(GtkRigCtrl * data);
 static void     start_timer(GtkRigCtrl * data);
@@ -158,6 +159,9 @@ static GThread *rigctl_thread = NULL;
 static GMutex   widgetsync;
 static GCond    widgetready;
 static GAsyncQueue *rigctlq;
+
+G_LOCK_DEFINE_STATIC(writelock);
+
 
 
 static GtkVBoxClass *parent_class = NULL;
@@ -1334,7 +1338,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 
         /* DL4PD: start worker thread... */
         rigctlq = g_async_queue_new();
-        rigctl_thread = g_thread_new("rigtcl_run", rigctl_run, ctrl);
+        rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
         setconfig(ctrl);
     }
 }
@@ -1352,7 +1356,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[128];
+    gchar           buffback[256/*128*/]; /* DL4PD: issues with receiving rigctld answer (assertion failed) */
     gboolean        retcode;
 
     /* select TX VFO */
@@ -1383,7 +1387,13 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
 
     retcode = send_rigctld_command(ctrl, ctrl->sock, buff, buffback, 128);
 
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
 
     return (check_set_response(buffback, retcode, __func__));
 }
@@ -2231,7 +2241,14 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
             pttstat = g_ascii_strtoull(vbuff[0], NULL, 0);      //FIXME base = 0 ok?
         g_strfreev(vbuff);
     }
+    
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
 
     return (pttstat == 1) ? TRUE : FALSE;
 }
@@ -2257,7 +2274,14 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
 
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
 
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
+
     return (check_set_response(buffback, retcode, __func__));
 
 }
@@ -2338,7 +2362,14 @@ static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
 
     buff = g_strdup_printf("F %10.0f\x0a", freq);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
 
     return (check_set_response(buffback, retcode, __func__));
 }
@@ -2364,7 +2395,14 @@ static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
     /* send command */
     buff = g_strdup_printf("I %10.0f\x0a", freq);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
 
     return (check_set_response(buffback, retcode, __func__));
 
@@ -2385,7 +2423,14 @@ static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
 
     buff = g_strdup_printf("S 1 %d\x0a", ctrl->conf->vfoDown);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
 
     return (check_set_response(buffback, retcode, __func__));
 }
@@ -2405,7 +2450,14 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
     /* send command */
     buff = g_strdup_printf("S 0 %d\x0a", ctrl->conf->vfoDown);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <prefree>"),
+		__FILE__, __func__);
+
     g_free(buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postfree>"),
+		__FILE__, __func__);
 
     return (check_set_response(buffback, retcode, __func__));
 }
@@ -2441,7 +2493,7 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
-    g_free(buff);
+    //g_free(buff);
     return retval;
 }
 
@@ -2485,7 +2537,7 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
-    g_free(buff);
+    //g_free(buff);
     return retval;
 }
 
@@ -2818,6 +2870,9 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     gint            written;
     gint            size;
 
+    /* Enter critical section! */
+    G_LOCK(writelock);
+    
     /* added by Marcel Cimander; win32 newline -> \10\13 */
 #ifdef WIN32
     size = strlen(buff) - 1;
@@ -2829,6 +2884,10 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s:%s: sending %d bytes to rigctld as \"%s\""),
                 __FILE__, __func__, size, buff);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <precmd>"),
+		__FILE__, __func__);
+
     /* send command */
     written = send(sock, buff, strlen(buff), 0);
     if (written != size)
@@ -2866,6 +2925,12 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     }
     ctrl->wrops++;
 
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: <postcmd>"),
+		__FILE__, __func__);
+
+    /* Leave critical section! */
+    G_UNLOCK(writelock);
+    
     return TRUE;
 }
 
@@ -3243,20 +3308,6 @@ gpointer rigctl_run(gpointer data)
 
         return NULL;
     }
-
-#if 0
-    if (!ctrl)
-    {
-        rigctlq = g_async_queue_new();
-
-        /* thread is just started... */
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s:%s: started thread, wait for init..."), __FILE__,
-                    __func__);
-        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: context: @%p"), __FILE__,
-                    __func__, g_thread_self());
-    }
-#endif
 
     while (1)
     {

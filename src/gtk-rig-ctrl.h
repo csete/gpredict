@@ -118,9 +118,5 @@ GType           gtk_rig_ctrl_get_type(void);
 GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module);
 void            gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t);
 void            gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum);
-gpointer rigctl_run( gpointer data );
-
-extern gpointer rigctl_task_data;
-
 
 #endif /* __GTK_RIG_CTRL_H__ */
