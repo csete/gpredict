@@ -196,14 +196,15 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
-    type = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), _("RX only"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), _("TX only"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), _("Simplex TRX"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), _("Duplex TRX"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), _("FT817/857/897 (auto)"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type),
-                              _("FT817/857/897 (manual)"));
+    type = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("RX only"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("TX only"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("Simplex TRX"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("Duplex TRX"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type),
+                                   _("FT817/857/897 (auto)"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type),
+                                   _("FT817/857/897 (manual)"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(type), RIG_TYPE_RX);
     g_signal_connect(type, "changed", G_CALLBACK(type_changed), NULL);
     gtk_widget_set_tooltip_markup(type,
@@ -249,10 +250,10 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 4, 5);
 
-    ptt = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ptt), _("None"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ptt), _("Read PTT"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ptt), _("Read DCD"));
+    ptt = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ptt), _("None"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ptt), _("Read PTT"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ptt), _("Read DCD"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), 0);
     g_signal_connect(ptt, "changed", G_CALLBACK(ptt_changed), NULL);
     gtk_widget_set_tooltip_markup(ptt,
@@ -271,16 +272,16 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
 
-    vfo = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(vfo), _("Not applicable"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(vfo),
-                              _("MAIN \342\206\221 / SUB \342\206\223"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(vfo),
-                              _("SUB \342\206\221 / MAIN \342\206\223"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(vfo),
-                              _("A \342\206\221 / B \342\206\223"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(vfo),
-                              _("B \342\206\221 / A \342\206\223"));
+    vfo = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(vfo), _("Not applicable"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(vfo),
+                                   _("MAIN \342\206\221 / SUB \342\206\223"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(vfo),
+                                   _("SUB \342\206\221 / MAIN \342\206\223"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(vfo),
+                                   _("A \342\206\221 / B \342\206\223"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(vfo),
+                                   _("B \342\206\221 / A \342\206\223"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 0);
     g_signal_connect(vfo, "changed", G_CALLBACK(vfo_changed), NULL);
     gtk_widget_set_tooltip_markup(vfo,
