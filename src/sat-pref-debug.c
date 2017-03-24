@@ -71,20 +71,25 @@ GtkWidget      *sat_pref_debug_create()
     label = gtk_label_new(_("Debug level:"));
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-    level = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(level), _("Level 0: None"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(level), _("Level 1: Error"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(level), _("Level 2: Warning"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(level), _("Level 3: Info"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(level), _("Level 4: Debug"));
+    level = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(level),
+                                   _("Level 0: None"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(level),
+                                   _("Level 1: Error"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(level),
+                                   _("Level 2: Warning"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(level),
+                                   _("Level 3: Info"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(level),
+                                   _("Level 4: Debug"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(level),
                              sat_cfg_get_int(SAT_CFG_INT_LOG_LEVEL));
     g_signal_connect(G_OBJECT(level), "realize",
                      G_CALLBACK(gpredict_set_combo_tooltips),
                      _("Select the debug level. The higher the level, "
                        "the more messages will be logged."));
-    g_signal_connect(G_OBJECT(level), "changed",
-                     G_CALLBACK(state_change_cb), NULL);
+    g_signal_connect(G_OBJECT(level), "changed", G_CALLBACK(state_change_cb),
+                     NULL);
 
     gtk_box_pack_start(GTK_BOX(hbox), level, FALSE, FALSE, 10);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
@@ -95,11 +100,12 @@ GtkWidget      *sat_pref_debug_create()
     label = gtk_label_new(_("Delete log files older than:"));
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-    age = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(age), _("Always delete"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(age), _("1 day"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(age), _("1 week"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(age), _("1 month"));
+    age = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(age),
+                                   _("Always delete"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(age), _("1 day"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(age), _("1 week"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(age), _("1 month"));
     select_age();
     g_signal_connect(G_OBJECT(age), "realize",
                      G_CALLBACK(gpredict_set_combo_tooltips),
