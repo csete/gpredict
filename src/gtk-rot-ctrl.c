@@ -1496,7 +1496,7 @@ gpointer rotctl_run(gpointer data)
                     _("%s:%s: rotctl_run already running. Aborting."),
                     __FILE__, __func__);
 
-        return NULL;
+        goto exit_thread;
     }
 
 
@@ -1818,6 +1818,7 @@ gpointer rotctl_run(gpointer data)
 	}
     }
 
+exit_thread:
     g_mutex_unlock(&rotctl_in_progress);
     return NULL;
 }
