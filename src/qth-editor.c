@@ -264,9 +264,9 @@ static GtkWidget *create_editor_widgets(qth_t * qth)
                                 ("Select the latitude of the ground station in decimal degrees."));
     gtk_table_attach_defaults(GTK_TABLE(table), lat, 1, 2, 3, 4);
 
-    ns = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ns), _("North"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ns), _("South"));
+    ns = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ns), _("North"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ns), _("South"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ns), 0);
     /*** FIXME tooltips */
     gtk_table_attach_defaults(GTK_TABLE(table), ns, 2, 3, 3, 4);
@@ -285,9 +285,9 @@ static GtkWidget *create_editor_widgets(qth_t * qth)
                                 ("Select the longitude of the ground station in decimal degrees."));
     gtk_table_attach_defaults(GTK_TABLE(table), lon, 1, 2, 4, 5);
 
-    ew = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ew), _("East"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(ew), _("West"));
+    ew = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ew), _("East"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ew), _("West"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ew), 0);
     /*** FIXME tooltips */
     gtk_table_attach_defaults(GTK_TABLE(table), ew, 2, 3, 4, 5);
