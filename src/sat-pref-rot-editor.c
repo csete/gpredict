@@ -192,11 +192,11 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 4, 5);
 
-    aztype = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(aztype),
-                              "0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
-    gtk_combo_box_append_text(GTK_COMBO_BOX(aztype),
-                              "-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
+    aztype = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(aztype),
+                                   "0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(aztype),
+                                   "-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
     gtk_combo_box_set_active(GTK_COMBO_BOX(aztype), 0);
     gtk_widget_set_tooltip_text(aztype,
                                 _("Select your azimuth range here. Note that "
