@@ -106,11 +106,6 @@ static inline void set_flipped_pass(GtkRotCtrl * ctrl);
 
 static GtkVBoxClass *parent_class = NULL;
 
-static GdkColor ColBlack = { 0, 0, 0, 0 };
-static GdkColor ColWhite = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
-static GdkColor ColRed = { 0, 0xFFFF, 0, 0 };
-static GdkColor ColGreen = { 0, 0, 0xFFFF, 0 };
-
 
 GType gtk_rot_ctrl_get_type()
 {
@@ -233,12 +228,6 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
                               GTK_ROT_CTRL(widget)->qth, 3.0);
         }
     }
-
-    /* initialise custom colors */
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColBlack);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColWhite);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColRed);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColGreen);
 
     /* create contents */
     table = gtk_table_new(2, 3, FALSE);

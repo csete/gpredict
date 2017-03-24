@@ -148,11 +148,6 @@ static gint     rig_name_compare(const gchar * a, const gchar * b);
 
 static GtkVBoxClass *parent_class = NULL;
 
-static GdkColor ColBlack = { 0, 0, 0, 0 };
-static GdkColor ColWhite = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
-static GdkColor ColRed = { 0, 0xFFFF, 0, 0 };
-static GdkColor ColGreen = { 0, 0, 0xFFFF, 0 };
-
 
 GType gtk_rig_ctrl_get_type()
 {
@@ -300,11 +295,6 @@ GtkWidget *gtk_rig_ctrl_new(GtkSatModule * module)
             get_next_pass(GTK_RIG_CTRL(widget)->target,
                           GTK_RIG_CTRL(widget)->qth, 3.0);
     }
-    /* initialise custom colors */
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColBlack);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColWhite);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColRed);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColGreen);
 
     /* create contents */
     table = gtk_table_new(3, 2, FALSE);
