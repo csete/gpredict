@@ -90,9 +90,10 @@ GtkWidget      *sat_pref_help_create()
     gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL, GTK_FILL,
                      0, 0);
 
-    combo = gtk_combo_box_new_text();
+    combo = gtk_combo_box_text_new();
     for (i = 0; i < BROWSER_TYPE_NUM; i++)
-        gtk_combo_box_append_text(GTK_COMBO_BOX(combo), sat_help[i].type);
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo),
+                                       sat_help[i].type);
     gtk_table_attach(GTK_TABLE(table), combo, 1, 2, 0, 1, GTK_FILL, GTK_FILL,
                      0, 0);
     g_signal_connect(combo, "changed", G_CALLBACK(browser_changed_cb), NULL);
