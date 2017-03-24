@@ -7,11 +7,16 @@ AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)/gpredict"\" \
 	-DPACKAGE_PIXMAPS_DIR=\""$(datadir)/pixmaps/gpredict"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/share/locale"\" \
-	-DGTK_DISABLE_SINGLE_INCLUDES
+	-DGTK_DISABLE_SINGLE_INCLUDES \
+	-DG_DISABLE_DEPRECATED \
+	-DGDK_DISABLE_DEPRECATED \
+	-DGTK_DISABLE_DEPRECATED
 
 ## Added while preparing for Gtk+ 3 migration:
-##-DGTK_DISABLE_SINGLE_INCLUDES
-
+##  -DGTK_DISABLE_SINGLE_INCLUDES
+##  -DG_DISABLE_DEPRECATED
+##  -DGDK_DISABLE_DEPRECATED
+##  -DGTK_DISABLE_DEPRECATED
 
 ## We have to disable these for now because GtkTooltips have been
 ## deprecated in Gtk+ 2.12
