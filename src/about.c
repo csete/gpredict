@@ -30,7 +30,6 @@
 
 #include "about.h"
 #include "compat.h"
-#include "gpredict-url-hook.h"
 
 
 const gchar *authors[] = {
@@ -95,8 +94,6 @@ void about_dialog_create()
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
                                    _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC\n\n"\
                                      "Gpredict is available free of charge from:"));
-    g_signal_connect(dialog, "activate-link", G_CALLBACK(gpredict_url_hook_cb),
-                     NULL);
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
                                  "http://gpredict.oz9aec.net/");
     gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), _(license));

@@ -43,7 +43,6 @@ gpredict_SOURCES = \
     compat.c compat.h config-keys.h \
     first-time.c first-time.h \
     gpredict-help.c gpredict-help.h \
-    gpredict-url-hook.c gpredict-url-hook.h \
     gpredict-utils.c gpredict-utils.h \
     gtk-azel-plot.c gtk-azel-plot.h \
     gtk-event-list.c gtk-event-list.h \
