@@ -90,28 +90,26 @@ void about_dialog_create()
     gchar          *iconfile;
 
     dialog = gtk_about_dialog_new();
-    gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG (dialog), _("GPREDICT"));
-    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG (dialog), VERSION);
-    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG (dialog),
+    gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("GPREDICT"));
+    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
+    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
                                    _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC\n\n"\
                                      "Gpredict is available free of charge from:"));
     g_signal_connect(dialog, "activate-link", G_CALLBACK(gpredict_url_hook_cb),
                      NULL);
-    gtk_about_dialog_set_website(GTK_ABOUT_DIALOG (dialog),
+    gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
                                  "http://gpredict.oz9aec.net/");
-/*     gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (dialog), */
-/*                                         _("Gpredict Website")); */
-    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG (dialog), _(license));
-    gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG (dialog), TRUE);
+    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), _(license));
+    gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(dialog), TRUE);
     iconfile = icon_file_name("gpredict-icon.png");
     icon = gdk_pixbuf_new_from_file(iconfile, NULL);
-    gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG (dialog), icon);
+    gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), icon);
     g_free(iconfile);
     g_object_unref(icon);
 
-    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG (dialog), authors);
-    gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG (dialog),
+    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(dialog), authors);
+    gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(dialog),
                                             _("translator-credits"));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
 }
