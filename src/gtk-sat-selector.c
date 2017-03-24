@@ -207,7 +207,7 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
     selector->flags = flags;
 
     /* create group selector combo box (needed by create_and_fill_models()) */
-    GTK_SAT_SELECTOR(widget)->groups = gtk_combo_box_new_text();
+    GTK_SAT_SELECTOR(widget)->groups = gtk_combo_box_text_new();
     gtk_widget_set_tooltip_text(GTK_SAT_SELECTOR(widget)->groups,
                                 _
                                 ("Select a satellite group or category to narrow your search."));
@@ -377,8 +377,8 @@ static void create_and_fill_models(GtkSatSelector * selector)
                                G_TYPE_BOOLEAN   // selected
         );
     selector->models = g_slist_append(selector->models, store);
-    gtk_combo_box_append_text(GTK_COMBO_BOX(selector->groups),
-                              _("All satellites"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(selector->groups),
+                                   _("All satellites"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(selector->groups), 0);
 
     dirname = get_satdata_dir();
@@ -498,7 +498,8 @@ static void load_cat_file(GtkSatSelector * selector, const gchar * fname)
             G_IO_STATUS_NORMAL)
         {
             g_strstrip(buff);   /* removes trailing newline */
-            gtk_combo_box_append_text(GTK_COMBO_BOX(selector->groups), buff);
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(selector->groups),
+                                           buff);
             g_free(buff);
 
             /* we can safely create the liststore for this category */
