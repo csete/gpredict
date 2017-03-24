@@ -801,7 +801,7 @@ static GtkWidget *create_loc_selector(GKeyFile * cfgdata)
     gchar          *qthname;
     gint            i, n;
 
-    combo = gtk_combo_box_new_text();
+    combo = gtk_combo_box_text_new();
 
     /* get qth file name from cfgdata; if cfg data has no QTH
        set defqth = "** DEFAULT **"
@@ -855,7 +855,7 @@ static GtkWidget *create_loc_selector(GKeyFile * cfgdata)
             qthname = g_slist_nth_data(qths, i);
             if (qthname)
             {
-                gtk_combo_box_append_text(GTK_COMBO_BOX(combo), qthname);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), qthname);
 
                 /* is this the QTH for this module? */
                 /* comparison uses short name full filename */
@@ -881,7 +881,8 @@ static GtkWidget *create_loc_selector(GKeyFile * cfgdata)
        clear the MOD_CFG_QTH_FILE_KEY module configuration
        key ensuring that the module will use the default QTH
      */
-    gtk_combo_box_append_text(GTK_COMBO_BOX(combo), _("** DEFAULT **"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo),
+                                   _("** DEFAULT **"));
 
     /* select the qth of this module;
        if idx == -1 we should select the "** DEFAULT **"
@@ -923,7 +924,7 @@ static void mod_cfg_apply(GKeyFile * cfgdata)
     GtkTreeIter     iter;
 
     /* store location */
-    buff = gtk_combo_box_get_active_text(GTK_COMBO_BOX(locw));
+    buff = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(locw));
 
     /* is buff == "** DEFAULT **" clear the configuration key
        otherwise store the filename
@@ -1062,7 +1063,7 @@ static void add_qth_cb(GtkWidget * button, gpointer data)
 
     if (response == GTK_RESPONSE_OK)
     {
-        gtk_combo_box_prepend_text(GTK_COMBO_BOX(locw), qth.name);
+        gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(locw), qth.name);
         gtk_combo_box_set_active(GTK_COMBO_BOX(locw), 0);
 
         /* clean up */
