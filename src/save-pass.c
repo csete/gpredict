@@ -165,11 +165,9 @@ void save_pass(GtkWidget * parent)
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
 
-    fmtchooser = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(fmtchooser),
-                              _("Plain text (*.txt)"));
-    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Hypertext (*.html)")); */
-    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Docbook (*.xml)")); */
+    fmtchooser = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(fmtchooser),
+                                   _("Plain text (*.txt)"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(fmtchooser),
                              sat_cfg_get_int(SAT_CFG_INT_PRED_SAVE_FORMAT));
     gtk_table_attach_defaults(GTK_TABLE(table), fmtchooser, 1, 2, 2, 3);
@@ -181,10 +179,13 @@ void save_pass(GtkWidget * parent)
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
-    contents = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(contents), _("Info+header+data"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(contents), _("Header + data"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(contents), _("Data only"));
+    contents = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents),
+                                   _("Info+header+data"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents),
+                                   _("Header + data"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents),
+                                   _("Data only"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(contents),
                              sat_cfg_get_int(SAT_CFG_INT_PRED_SAVE_CONTENTS));
     gtk_table_attach_defaults(GTK_TABLE(table), contents, 1, 2, 3, 4);
@@ -328,11 +329,9 @@ void save_passes(GtkWidget * parent)
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
 
-    fmtchooser = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(fmtchooser),
-                              _("Plain text (*.txt)"));
-    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Hypertext (*.html)")); */
-    /*     gtk_combo_box_append_text (GTK_COMBO_BOX (fmtchooser), _("Docbook (*.xml)")); */
+    fmtchooser = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(fmtchooser),
+                                   _("Plain text (*.txt)"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(fmtchooser),
                              sat_cfg_get_int(SAT_CFG_INT_PRED_SAVE_FORMAT));
     gtk_table_attach_defaults(GTK_TABLE(table), fmtchooser, 1, 2, 2, 3);
@@ -344,9 +343,10 @@ void save_passes(GtkWidget * parent)
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
-    contents = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(contents), _("Complete report"));
-    gtk_combo_box_append_text(GTK_COMBO_BOX(contents), _("Summary"));
+    contents = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents),
+                                   _("Complete report"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents), _("Summary"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(contents), 0);
     gtk_table_attach_defaults(GTK_TABLE(table), contents, 1, 2, 3, 4);
 
