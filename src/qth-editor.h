@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -32,7 +31,6 @@
 #include "gtk-sat-data.h"
 #include "qth-data.h"
 
-GtkResponseType qth_editor_run (qth_t *qth, GtkWindow *parent);
-
+GtkResponseType qth_editor_run(qth_t * qth, GtkWindow * parent);
 
 #endif
