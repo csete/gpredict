@@ -3250,7 +3250,7 @@ gpointer rigctl_run(gpointer data)
                     _("%s:%s: rigctl_run already running. Aborting."),
                     __FILE__, __func__);
 
-        return NULL;
+        goto exit_thread;
     }
 
     while (1)
@@ -3361,6 +3361,7 @@ gpointer rigctl_run(gpointer data)
         /*snap */
     }
 
+exit_thread:
     g_mutex_unlock(&rigctl_in_progress);
     return NULL;
 }
