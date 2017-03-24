@@ -226,15 +226,15 @@ static void create_layout_selector(GKeyFile * cfg, GtkTable * table)
                      GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
 
     /* layout selector */
-    selector = gtk_combo_box_new_text();
+    selector = gtk_combo_box_text_new();
     gtk_table_attach(GTK_TABLE(table), selector, 1, 3, 0, 1,
                      GTK_FILL, GTK_SHRINK, 0, 0);
 
     for (i = 0; i < PREDEF_NUM; i++)
     {
         /* append default layout string to combo box */
-        gtk_combo_box_append_text(GTK_COMBO_BOX(selector),
-                                  _(predef_layout[i][1]));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(selector),
+                                       _(predef_layout[i][1]));
 
         /* check if this layout corresponds to the settings */
         if (!g_ascii_strcasecmp(buffer, predef_layout[i][0]))
