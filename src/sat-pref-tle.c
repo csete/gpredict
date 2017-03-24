@@ -181,11 +181,11 @@ static void create_auto_update(GtkWidget * vbox)
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, TRUE, 0);
 
     /* frequency */
-    freq = gtk_combo_box_new_text();
+    freq = gtk_combo_box_text_new();
     for (i = 0; i < TLE_AUTO_UPDATE_NUM; i++)
     {
-        gtk_combo_box_append_text(GTK_COMBO_BOX(freq),
-                                  tle_update_freq_to_str(i));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(freq),
+                                       tle_update_freq_to_str(i));
     }
     gtk_combo_box_set_active(GTK_COMBO_BOX(freq),
                              sat_cfg_get_int(SAT_CFG_INT_TLE_AUTO_UPD_FREQ));
