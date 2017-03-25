@@ -542,16 +542,14 @@ void show_pass (const gchar *satname, qth_t *qth, pass_t *pass, GtkWidget *tople
 static void single_pass_response (GtkWidget *dialog, gint response, gpointer data)
 {
     (void) data; /* avoid unused parameter compiler warning */
+    pass_t *pass;
+    qth_t  *qth;
 
     switch (response) {
 
     case RESPONSE_PRINT:
-        sat_log_log (SAT_LOG_LEVEL_ERROR,
-                     _("%s: PRINT not implemented"),
-                     __func__);
-
-        pass_t    *pass = (pass_t *) g_object_get_data (G_OBJECT (dialog), "pass");
-        qth_t     *qth = (qth_t *) g_object_get_data (G_OBJECT (dialog), "qth");
+        pass = (pass_t *) g_object_get_data (G_OBJECT (dialog), "pass");
+        qth = (qth_t *) g_object_get_data (G_OBJECT (dialog), "qth");
 
         print_pass (pass, qth, GTK_WINDOW (dialog));
         break;
