@@ -818,7 +818,7 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 
     if (ctrl->engaged)
     {
-        setconfig(ctrl);
+	start_timer(ctrl);
     }
 }
 
