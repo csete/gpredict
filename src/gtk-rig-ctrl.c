@@ -148,7 +148,7 @@ static gint     rig_name_compare(const gchar * a, const gchar * b);
 
 
 /* DL4PD: add thread for hamlib communication */
-gpointer        rigctl_run( gpointer data );
+gpointer        rigctl_run(gpointer data);
 static void     rigctrl_open(GtkRigCtrl * data);
 static void     rigctrl_close(GtkRigCtrl * data);
 static void     setconfig(gpointer data);
@@ -1112,7 +1112,7 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 
     if (ctrl->engaged)
     {
-	start_timer(ctrl);
+        start_timer(ctrl);
     }
 }
 
@@ -1345,7 +1345,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[256/*128*/]; /* DL4PD: issues with receiving rigctld answer (assertion failed) */
+    gchar           buffback[256 /*128 */ ];    /* DL4PD: issues with receiving rigctld answer (assertion failed) */
     gboolean        retcode;
 
     /* select TX VFO */
@@ -2224,7 +2224,7 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
             pttstat = g_ascii_strtoull(vbuff[0], NULL, 0);      //FIXME base = 0 ok?
         g_strfreev(vbuff);
     }
-    
+
     g_free(buff);
 
     return (pttstat == 1) ? TRUE : FALSE;
@@ -2814,7 +2814,7 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
 
     /* Enter critical section! */
     g_mutex_lock(&ctrl->writelock);
-    
+
     /* added by Marcel Cimander; win32 newline -> \10\13 */
 #ifdef WIN32
     size = strlen(buff) - 1;
@@ -2866,7 +2866,7 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
 
     /* Leave critical section! */
     g_mutex_unlock(&ctrl->writelock);
-    
+
     return TRUE;
 }
 
@@ -3239,7 +3239,7 @@ gpointer rigctl_run(gpointer data)
     while (1)
     {
         t_ctrl = GTK_RIG_CTRL(g_async_queue_pop(ctrl->rigctlq));
-	ctrl = t_ctrl;
+        ctrl = t_ctrl;
         while (g_main_context_iteration(NULL, FALSE));
 
         if (t_ctrl == NULL)
@@ -3346,12 +3346,12 @@ gpointer rigctl_run(gpointer data)
     /* let's have a clean exit: */
     if (t_ctrl->sock > 0)
     {
-	rigctrl_close(t_ctrl);
+        rigctrl_close(t_ctrl);
     }
-    
+
     if (t_ctrl->timerid)
     {
-	remove_timer(t_ctrl);
+        remove_timer(t_ctrl);
     }
 
     return NULL;
