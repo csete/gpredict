@@ -154,14 +154,6 @@ static void     rigctrl_close(GtkRigCtrl * data);
 static void     setconfig(gpointer data);
 static void     remove_timer(GtkRigCtrl * data);
 static void     start_timer(GtkRigCtrl * data);
-static GThread *rigctl_thread = NULL;
-
-static GMutex   widgetsync;
-static GCond    widgetready;
-static GAsyncQueue *rigctlq;
-
-G_LOCK_DEFINE_STATIC(writelock);
-G_LOCK_DEFINE_STATIC(rig_ctrl_updatelock);
 
 
 
@@ -248,18 +240,18 @@ static void gtk_rig_ctrl_destroy(GtkObject * object)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(object);
 
-    if (rigctl_thread != NULL)
+    if (ctrl->rigctl_thread != NULL)
     {
 
-        g_mutex_lock(&widgetsync);
+        g_mutex_lock(&ctrl->widgetsync);
 
         ctrl->engaged = 0;
         setconfig(ctrl);
 
         /* synchronization */
-        g_cond_wait(&widgetready, &widgetsync);
-        g_mutex_unlock(&widgetsync);
-        rigctl_thread = NULL;
+        g_cond_wait(&ctrl->widgetready, &ctrl->widgetsync);
+        g_mutex_unlock(&ctrl->widgetsync);
+        ctrl->rigctl_thread = NULL;
     }
 
     /* free configuration */
@@ -373,7 +365,7 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
     gchar          *buff;
 
     /* Enter critical section! */
-    G_LOCK(rig_ctrl_updatelock);
+    g_mutex_lock(&ctrl->rig_ctrl_updatelock);
 
     if (ctrl->target)
     {
@@ -444,7 +436,7 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
         }
     }
     /* Leave critical section! */
-    G_UNLOCK(rig_ctrl_updatelock);
+    g_mutex_unlock(&ctrl->rig_ctrl_updatelock);
 }
 
 /** Select a satellite */
@@ -1325,7 +1317,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 
         /* DL4PD: stop worker thread... */
         setconfig(ctrl);
-        rigctl_thread = NULL;
+        ctrl->rigctl_thread = NULL;
     }
     else
     {
@@ -1334,8 +1326,8 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         ctrl->engaged = TRUE;
 
         /* DL4PD: start worker thread... */
-        rigctlq = g_async_queue_new();
-        rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
+        ctrl->rigctlq = g_async_queue_new();
+        ctrl->rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
         setconfig(ctrl);
     }
 }
@@ -2821,7 +2813,7 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     gint            size;
 
     /* Enter critical section! */
-    G_LOCK(writelock);
+    g_mutex_lock(&ctrl->writelock);
     
     /* added by Marcel Cimander; win32 newline -> \10\13 */
 #ifdef WIN32
@@ -2873,7 +2865,7 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     ctrl->wrops++;
 
     /* Leave critical section! */
-    G_UNLOCK(writelock);
+    g_mutex_unlock(&ctrl->writelock);
     
     return TRUE;
 }
@@ -3241,94 +3233,85 @@ static void rigctrl_open(GtkRigCtrl * data)
  */
 gpointer rigctl_run(gpointer data)
 {
-    static GMutex   rigctl_in_progress;
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-
-    if (g_mutex_trylock(&rigctl_in_progress) == FALSE)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: rigctl_run already running. Aborting."),
-                    __FILE__, __func__);
-
-        goto exit_thread;
-    }
+    GtkRigCtrl     *t_ctrl = GTK_RIG_CTRL(data);
 
     while (1)
     {
-        ctrl = GTK_RIG_CTRL(g_async_queue_pop(rigctlq));
+        t_ctrl = GTK_RIG_CTRL(g_async_queue_pop(ctrl->rigctlq));
+	ctrl = t_ctrl;
         while (g_main_context_iteration(NULL, FALSE));
 
-        if (ctrl == NULL)
+        if (t_ctrl == NULL)
         {
-            sat_log_log(SAT_LOG_LEVEL_DEBUG,
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%s: ERROR: NO VALID ctrl-struct"), __FILE__,
                         __func__);
             continue;
         }
 
-        if (ctrl->engaged)
+        if (t_ctrl->engaged)
         {
-            if (!ctrl->sock)
+            if (!t_ctrl->sock)
             {
-                rigctrl_open(ctrl);
+                rigctrl_open(t_ctrl);
             }
 
-            if (!ctrl->timerid)
+            if (!t_ctrl->timerid)
             {
-                start_timer(ctrl);
+                start_timer(t_ctrl);
             }
         }
         else
         {
-            g_mutex_lock(&widgetsync);
+            g_mutex_lock(&t_ctrl->widgetsync);
 
-            if (ctrl->sock > 0)
+            if (t_ctrl->sock > 0)
             {
-                rigctrl_close(ctrl);
+                rigctrl_close(t_ctrl);
             }
 
-            if (ctrl->timerid)
+            if (t_ctrl->timerid)
             {
-                remove_timer(ctrl);
+                remove_timer(t_ctrl);
             }
 
-            g_cond_signal(&widgetready);
-            g_mutex_unlock(&widgetsync);
+            g_cond_signal(&t_ctrl->widgetready);
+            g_mutex_unlock(&t_ctrl->widgetsync);
             break;
         }
 
-        /*snip */
-        check_aos_los(ctrl);
+        check_aos_los(t_ctrl);
 
-        if (ctrl->conf2 != NULL)
+        if (t_ctrl->conf2 != NULL)
         {
-            exec_dual_rig_cycle(ctrl);
+            exec_dual_rig_cycle(t_ctrl);
         }
         else
         {
             /* Execute controller cycle depending on primary radio type */
-            switch (ctrl->conf->type)
+            switch (t_ctrl->conf->type)
             {
 
             case RIG_TYPE_RX:
-                exec_rx_cycle(ctrl);
+                exec_rx_cycle(t_ctrl);
                 break;
 
             case RIG_TYPE_TX:
-                exec_tx_cycle(ctrl);
+                exec_tx_cycle(t_ctrl);
                 break;
 
             case RIG_TYPE_TRX:
-                exec_trx_cycle(ctrl);
+                exec_trx_cycle(t_ctrl);
                 break;
 
             case RIG_TYPE_DUPLEX:
-                exec_duplex_cycle(ctrl);
+                exec_duplex_cycle(t_ctrl);
                 break;
 
             case RIG_TYPE_TOGGLE_AUTO:
             case RIG_TYPE_TOGGLE_MAN:
-                exec_toggle_cycle(ctrl);
+                exec_toggle_cycle(t_ctrl);
                 break;
 
             default:
@@ -3336,19 +3319,19 @@ gpointer rigctl_run(gpointer data)
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s:%s: Invalid radio type %d. Setting type to "
                               "RIG_TYPE_RX"), __FILE__, __func__,
-                            ctrl->conf->type);
-                ctrl->conf->type = RIG_TYPE_RX;
+                            t_ctrl->conf->type);
+                t_ctrl->conf->type = RIG_TYPE_RX;
             }
         }
 
         /* perform error count checking */
-        if (ctrl->errcnt >= MAX_ERROR_COUNT)
+        if (t_ctrl->errcnt >= MAX_ERROR_COUNT)
         {
             /* disengage device */
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ctrl->LockBut),
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(t_ctrl->LockBut),
                                          FALSE);
-            ctrl->engaged = FALSE;
-            ctrl->errcnt = 0;
+            t_ctrl->engaged = FALSE;
+            t_ctrl->errcnt = 0;
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _
                         ("%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
@@ -3358,11 +3341,19 @@ gpointer rigctl_run(gpointer data)
         }
 
         //g_print ("       WROPS = %d\n", ctrl->wrops);
-        /*snap */
     }
 
-exit_thread:
-    g_mutex_unlock(&rigctl_in_progress);
+    /* let's have a clean exit: */
+    if (t_ctrl->sock > 0)
+    {
+	rigctrl_close(t_ctrl);
+    }
+    
+    if (t_ctrl->timerid)
+    {
+	remove_timer(t_ctrl);
+    }
+
     return NULL;
 }
 
@@ -3395,6 +3386,6 @@ void setconfig(gpointer data)
 
     if (ctrl != NULL)
     {
-        g_async_queue_push(rigctlq, ctrl);
+        g_async_queue_push(ctrl->rigctlq, ctrl);
     }
 }

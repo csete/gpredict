@@ -94,6 +94,22 @@ struct _gtk_rot_ctrl {
     /* debug related */
     guint           wrops;
     guint           rdops;
+
+    /* DL4PD */
+    /* threads related stuff */
+    /* add mutexes etc, to make threads reentrant! */
+    GMutex          writelock;           /*!< Mutex for blocking write operation */
+    GMutex          rot_ctrl_updatelock; /*!< Mutex wile updating widgets etc */
+    GMutex          setpos;
+    GMutex          getpos;
+    GMutex          widgetsync;          /*!< Mutex used while leaving (sync stuff) */
+    GCond           widgetready;         /*!< Condition when work is done (sync stuff) */
+    GAsyncQueue    *rotctlq;             /*!< Message queue to indicate something has changed */
+    GThread        *rotctl_thread;       /*!< Pointer to current rigctl-thread */
+    gdouble         rotaz;               /*!< current azimuth of rotor */
+    gdouble         rotel;               /*!< current elevation of rotor */
+    gdouble         setaz;               /*!< set azimuth */
+    gdouble         setel;               /*!< set elevation */
 };
 
 struct _GtkRotCtrlClass {
