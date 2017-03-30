@@ -146,6 +146,7 @@ static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rig_name_compare(const gchar * a, const gchar * b);
 
 
+<<<<<<< HEAD
 
 /* DL4PD: add thread for hamlib communication */
 gpointer        rigctl_run(gpointer data);
@@ -158,11 +159,24 @@ static void     start_timer(GtkRigCtrl * data);
 
 
 static GtkVBoxClass *parent_class = NULL;
+=======
+>>>>>>> 7c52fcf638ba14df5b628187cd791c77a9b2820d
 
-static GdkColor ColBlack = { 0, 0, 0, 0 };
-static GdkColor ColWhite = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
-static GdkColor ColRed = { 0, 0xFFFF, 0, 0 };
-static GdkColor ColGreen = { 0, 0, 0xFFFF, 0 };
+/* DL4PD: add thread for hamlib communication */
+gpointer        rigctl_run( gpointer data );
+static void     rigctrl_open(GtkRigCtrl * data);
+static void     rigctrl_close(GtkRigCtrl * data);
+static void     setconfig(gpointer data);
+static void     remove_timer(GtkRigCtrl * data);
+static void     start_timer(GtkRigCtrl * data);
+
+
+G_LOCK_DEFINE_STATIC(writelock);
+G_LOCK_DEFINE_STATIC(rig_ctrl_updatelock);
+
+
+
+static GtkVBoxClass *parent_class = NULL;
 
 
 GType gtk_rig_ctrl_get_type()
@@ -316,11 +330,6 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
             get_next_pass(GTK_RIG_CTRL(widget)->target,
                           GTK_RIG_CTRL(widget)->qth, 3.0);
     }
-    /* initialise custom colors */
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColBlack);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColWhite);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColRed);
-    gdk_rgb_find_color(gtk_widget_get_colormap(widget), &ColGreen);
 
     /* create contents */
     table = gtk_table_new(3, 2, FALSE);
@@ -1345,7 +1354,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[128];
+    gchar           buffback[256/*128*/]; /* DL4PD: issues with receiving rigctld answer (assertion failed) */
     gboolean        retcode;
 
     /* select TX VFO */
@@ -2224,7 +2233,11 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
             pttstat = g_ascii_strtoull(vbuff[0], NULL, 0);      //FIXME base = 0 ok?
         g_strfreev(vbuff);
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 7c52fcf638ba14df5b628187cd791c77a9b2820d
     g_free(buff);
 
     return (pttstat == 1) ? TRUE : FALSE;
@@ -3389,4 +3402,7 @@ void setconfig(gpointer data)
         g_async_queue_push(ctrl->rigctlq, ctrl);
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7c52fcf638ba14df5b628187cd791c77a9b2820d

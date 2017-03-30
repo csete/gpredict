@@ -34,8 +34,8 @@
 
 
 #ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+extern          "C" {
+#endif                          /* __cplusplus */
 
 
 
@@ -52,47 +52,45 @@ extern "C" {
 #define IS_GTK_ROT_KNOB(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_rot_knob_get_type ())
 
 
-typedef struct _gtk_rot_knob      GtkRotKnob;
-typedef struct _GtkRotKnobClass   GtkRotKnobClass;
+    typedef struct _gtk_rot_knob GtkRotKnob;
+    typedef struct _GtkRotKnobClass GtkRotKnobClass;
 
 
 
-struct _gtk_rot_knob
-{
-    GtkVBox vbox;
-    
-    GtkWidget *digits[7];   /*!< Labels for the digits */
-    GtkWidget *evtbox[7];   /*!< Event boxes to catch mouse events over the digits */
-    GtkWidget *buttons[10]; /*!< Buttons; 0..4 up; 5..9 down */
-     
-    gdouble min;
-    gdouble max;
-    gdouble value;
-};
+    struct _gtk_rot_knob {
+        GtkVBox         vbox;
 
-struct _GtkRotKnobClass
-{
-     GtkVBoxClass parent_class;
-};
+        GtkWidget      *digits[7];      /*!< Labels for the digits */
+        GtkWidget      *evtbox[7];      /*!< Event boxes to catch mouse events over the digits */
+        GtkWidget      *buttons[10];    /*!< Buttons; 0..4 up; 5..9 down */
+
+        gdouble         min;
+        gdouble         max;
+        gdouble         value;
+    };
+
+    struct _GtkRotKnobClass {
+        GtkVBoxClass    parent_class;
+    };
 
 
 
-GType      gtk_rot_knob_get_type  (void);
-GtkWidget* gtk_rot_knob_new       (gdouble min, gdouble max, gdouble val);
-void       gtk_rot_knob_set_value (GtkRotKnob *knob, gdouble val);
-gdouble    gtk_rot_knob_get_value (GtkRotKnob *knob);
-void       gtk_rot_knob_set_max   (GtkRotKnob *knob, gdouble max);
-gdouble    gtk_rot_knob_get_max   (GtkRotKnob *knob);
-gdouble    gtk_rot_knob_get_min   (GtkRotKnob *knob);
-void       gtk_rot_knob_set_min   (GtkRotKnob *knob, gdouble min);
-void       gtk_rot_knob_set_max   (GtkRotKnob *knob, gdouble max);
-void       gtk_rot_knob_set_range (GtkRotKnob *knob, gdouble min, gdouble max);
+    GType           gtk_rot_knob_get_type(void);
+    GtkWidget      *gtk_rot_knob_new(gdouble min, gdouble max, gdouble val);
+    void            gtk_rot_knob_set_value(GtkRotKnob * knob, gdouble val);
+    gdouble         gtk_rot_knob_get_value(GtkRotKnob * knob);
+    void            gtk_rot_knob_set_max(GtkRotKnob * knob, gdouble max);
+    gdouble         gtk_rot_knob_get_max(GtkRotKnob * knob);
+    gdouble         gtk_rot_knob_get_min(GtkRotKnob * knob);
+    void            gtk_rot_knob_set_min(GtkRotKnob * knob, gdouble min);
+    void            gtk_rot_knob_set_max(GtkRotKnob * knob, gdouble max);
+    void            gtk_rot_knob_set_range(GtkRotKnob * knob, gdouble min,
+                                           gdouble max);
 
 
 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
-
-#endif /* __GTK_ROT_knob_H__ */
+#endif                          /* __cplusplus */
+#endif                          /* __GTK_ROT_knob_H__ */
