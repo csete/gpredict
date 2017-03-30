@@ -112,19 +112,11 @@ struct _gtk_rig_ctrl {
     /* DL4PD */
     /* threads related stuff */
     /* add mutexes etc, to make threads reentrant! */
-<<<<<<< HEAD
     GMutex          writelock;          /*!< Mutex for blocking write operation */
     GMutex          rig_ctrl_updatelock;/*!< Mutex wile updating widgets etc */
     GMutex          widgetsync;         /*!< Mutex used while leaving (sync stuff) */
     GCond           widgetready;        /*!< Condition when work is done (sync stuff) */
     GAsyncQueue    *rigctlq;            /*!< Message queue to indicate something has changed */
-=======
-    GMutex          writelock;  /*!< Mutex for blocking write operation */
-    GMutex          rig_ctrl_updatelock;        /*!< Mutex wile updating widgets etc */
-    GMutex          widgetsync; /*!< Mutex used while leaving (sync stuff) */
-    GCond           widgetready;        /*!< Condition when work is done (sync stuff) */
-    GAsyncQueue    *rigctlq;    /*!< Message queue to indicate something has changed */
->>>>>>> 7c52fcf638ba14df5b628187cd791c77a9b2820d
     GThread        *rigctl_thread;      /*!< Pointer to current rigctl-thread */
 };
 
