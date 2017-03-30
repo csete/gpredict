@@ -1345,7 +1345,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[256 /*128 */ ];    /* DL4PD: issues with receiving rigctld answer (assertion failed) */
+    gchar           buffback[128];
     gboolean        retcode;
 
     /* select TX VFO */

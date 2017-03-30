@@ -1000,7 +1000,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
 static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
 {
     gchar          *buff, **vbuff;
-    gchar           buffback[256 /*128 */ ];
+    gchar           buffback[128];
     gboolean        retcode;
 
     /* Enter critical section! TODO! */
@@ -1069,7 +1069,7 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
 static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
 {
     gchar          *buff;
-    gchar           buffback[256 /*128 */ ];
+    gchar           buffback[128];
     gchar           azstr[8], elstr[8];
     gboolean        retcode;
     gint            retval;
@@ -1460,8 +1460,6 @@ gpointer rotctl_run(gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
     GtkRotCtrl     *t_ctrl = GTK_ROT_CTRL(data);
-
-//    gchar          *text;
     gboolean        error = FALSE;
     sat_t           sat_working, *sat;
 
@@ -1764,22 +1762,18 @@ gpointer rotctl_run(gpointer data)
             {
                 gtk_polar_plot_set_ctrl_pos(GTK_POLAR_PLOT(t_ctrl->plot),
                                             gtk_rot_knob_get_value(GTK_ROT_KNOB
-                                                                   (t_ctrl->
-                                                                    AzSet)) +
-                                            360.0,
+                                                                   (t_ctrl->AzSet))
+                                            + 360.0,
                                             gtk_rot_knob_get_value(GTK_ROT_KNOB
-                                                                   (t_ctrl->
-                                                                    ElSet)));
+                                                                   (t_ctrl->ElSet)));
             }
             else
             {
                 gtk_polar_plot_set_ctrl_pos(GTK_POLAR_PLOT(t_ctrl->plot),
                                             gtk_rot_knob_get_value(GTK_ROT_KNOB
-                                                                   (t_ctrl->
-                                                                    AzSet)),
+                                                                   (t_ctrl->AzSet)),
                                             gtk_rot_knob_get_value(GTK_ROT_KNOB
-                                                                   (t_ctrl->
-                                                                    ElSet)));
+                                                                   (t_ctrl->ElSet)));
             }
         }
     }
