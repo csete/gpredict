@@ -5,6 +5,7 @@
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
            Charles Suprin  <hamaa1vs@gmail.com>
+           Patrick Dohmen <dl4pd@darc.de>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -107,7 +108,6 @@ static inline void set_flipped_pass(GtkRotCtrl * ctrl);
 static GtkVBoxClass *parent_class = NULL;
 
 
-/* DL4PD: add thread for hamlib communication */
 gpointer        rotctl_run(gpointer data);
 static void     rotctrl_open(GtkRotCtrl * data);
 static void     rotctrl_close(GtkRotCtrl * data);
@@ -724,7 +724,7 @@ static void store_sats(gpointer key, gpointer value, gpointer user_data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(user_data);
     sat_t          *sat = SAT(value);
 
-    (void)key;                  /* avoid unused variable warning */
+    (void)key;
 
     ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
                                        (GCompareFunc) sat_name_compare);
@@ -901,7 +901,7 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
 
     if (!gtk_toggle_button_get_active(button))
     {
-        /* DL4PD: issue #51: stop moving rotor */
+        /* stop moving rotor */
         buff = g_strdup_printf("S\x0a");
         retcode = send_rotctld_command(ctrl, buff, buffback, 128);
         g_free(buff);
@@ -926,7 +926,7 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
         gtk_label_set_text(GTK_LABEL(ctrl->AzRead), "---");
         gtk_label_set_text(GTK_LABEL(ctrl->ElRead), "---");
 
-        /* DL4PD: stop worker thread... */
+        /* stop worker thread... */
         setconfig(ctrl);
         ctrl->rotctl_thread = NULL;
     }
@@ -944,7 +944,7 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
         gtk_widget_set_sensitive(ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
 
-        /* DL4PD: start worker thread... */
+        /* start worker thread... */
         ctrl->rotctlq = g_async_queue_new();
         ctrl->rotctl_thread = g_thread_new("rotctl_run", rotctl_run, ctrl);
         setconfig(ctrl);
@@ -1228,7 +1228,7 @@ static gboolean close_rotctld_socket(gint * sock)
 {
     gint            written;
 
-    /*shutdown the rigctld connect */
+    /* shut down the rigctld connect */
     written = send(*sock, "q\x0a", 2, 0);
     if (written != 2)
     {
@@ -1264,10 +1264,10 @@ gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff, gchar * buffout,
     /* Enter critical section! */
     g_mutex_lock(&ctrl->writelock);
 
-    /* added by Marcel Cimander; win32 newline -> \10\13 */
+    /* win32 newline -> \10\13 */
 #ifdef WIN32
     size = strlen(buff) - 1;
-    /* added by Marcel Cimander; unix newline -> \10 (apple -> \13) */
+    /* unix newline -> \10 (apple -> \13) */
 #else
     size = strlen(buff);
 #endif
@@ -1789,7 +1789,7 @@ void start_timer(GtkRotCtrl * data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
-    /* DL4PD: start timeout timer here ("Cycle")! */
+    /* start timeout timer here ("Cycle")! */
     if (ctrl->timerid > 0)
         g_source_remove(ctrl->timerid);
 
