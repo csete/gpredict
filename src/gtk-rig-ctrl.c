@@ -4,6 +4,7 @@
   Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Patrick Dohmen <dl4pd@darc.de>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -145,7 +146,7 @@ static inline gboolean check_get_response(gchar * buff, gboolean retcode,
 static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rig_name_compare(const gchar * a, const gchar * b);
 
-/* DL4PD: add thread for hamlib communication */
+/*  add thread for hamlib communication */
 gpointer        rigctl_run(gpointer data);
 static void     rigctrl_open(GtkRigCtrl * data);
 static void     rigctrl_close(GtkRigCtrl * data);
@@ -1300,7 +1301,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         gtk_widget_set_sensitive(ctrl->DevSel2, TRUE);
         ctrl->engaged = FALSE;
 
-        /* DL4PD: stop worker thread... */
+        /*  stop worker thread... */
         setconfig(ctrl);
         ctrl->rigctl_thread = NULL;
     }
@@ -1310,7 +1311,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         gtk_widget_set_sensitive(ctrl->DevSel2, FALSE);
         ctrl->engaged = TRUE;
 
-        /* DL4PD: start worker thread... */
+        /*  start worker thread... */
         ctrl->rigctlq = g_async_queue_new();
         ctrl->rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
         setconfig(ctrl);
@@ -1330,7 +1331,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[256 /*128 */ ];    /* DL4PD: issues with receiving rigctld answer (assertion failed) */
+    gchar           buffback[256 /*128 */ ];    /*  issues with receiving rigctld answer (assertion failed) */
     gboolean        retcode;
 
     /* select TX VFO */
@@ -3337,7 +3338,7 @@ void start_timer(GtkRigCtrl * data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
 
-    /* DL4PD: start timeout timer here ("Cycle")! */
+    /*  start timeout timer here ("Cycle")! */
     if (ctrl->timerid > 0)
         g_source_remove(ctrl->timerid);
 
