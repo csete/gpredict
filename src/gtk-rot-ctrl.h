@@ -36,9 +36,11 @@
 #include "rotor-conf.h"
 #include "sgpsdp/sgp4sdp4.h"
 
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+/* *INDENT-ON* */
 
 #define GTK_TYPE_ROT_CTRL          (gtk_rot_ctrl_get_type ())
 #define GTK_ROT_CTRL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj,\
@@ -98,18 +100,18 @@ struct _gtk_rot_ctrl {
     /* DL4PD */
     /* threads related stuff */
     /* add mutexes etc, to make threads reentrant! */
-    GMutex          writelock;           /*!< Mutex for blocking write operation */
-    GMutex          rot_ctrl_updatelock; /*!< Mutex wile updating widgets etc */
+    GMutex          writelock;  /*!< Mutex for blocking write operation */
+    GMutex          rot_ctrl_updatelock;        /*!< Mutex wile updating widgets etc */
     GMutex          setpos;
     GMutex          getpos;
-    GMutex          widgetsync;          /*!< Mutex used while leaving (sync stuff) */
-    GCond           widgetready;         /*!< Condition when work is done (sync stuff) */
-    GAsyncQueue    *rotctlq;             /*!< Message queue to indicate something has changed */
-    GThread        *rotctl_thread;       /*!< Pointer to current rigctl-thread */
-    gdouble         rotaz;               /*!< current azimuth of rotor */
-    gdouble         rotel;               /*!< current elevation of rotor */
-    gdouble         setaz;               /*!< set azimuth */
-    gdouble         setel;               /*!< set elevation */
+    GMutex          widgetsync; /*!< Mutex used while leaving (sync stuff) */
+    GCond           widgetready;        /*!< Condition when work is done (sync stuff) */
+    GAsyncQueue    *rotctlq;    /*!< Message queue to indicate something has changed */
+    GThread        *rotctl_thread;      /*!< Pointer to current rigctl-thread */
+    gdouble         rotaz;      /*!< current azimuth of rotor */
+    gdouble         rotel;      /*!< current elevation of rotor */
+    gdouble         setaz;      /*!< set azimuth */
+    gdouble         setel;      /*!< set elevation */
 };
 
 struct _GtkRotCtrlClass {
@@ -121,8 +123,10 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module);
 void            gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t);
 void            gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum);
 
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+/* *INDENT-ON* */
 
 #endif /* __GTK_ROT_CTRL_H__ */
