@@ -49,7 +49,7 @@ static void gtk_rot_knob_class_init (GtkRotKnobClass *class);
 static void gtk_rot_knob_init       (GtkRotKnob      *list);
 static void gtk_rot_knob_destroy    (GtkObject       *object);
 
-static void gtk_rot_knob_update     (GtkRotKnob *knob);
+static void *gtk_rot_knob_update     (GtkRotKnob *knob);
 
 static void button_clicked_cb (GtkWidget *button, gpointer data);
 static gboolean on_button_press  (GtkWidget *digit, GdkEventButton *event, gpointer data);
@@ -57,6 +57,7 @@ static gboolean on_button_scroll (GtkWidget *digit, GdkEventScroll *event, gpoin
 
 static GtkHBoxClass *parent_class = NULL;
 
+G_LOCK_DEFINE_STATIC(updatelock);
 
 /** \brief Convert digit index (in the digit array) to amount of change. */
 const gdouble INDEX_TO_DELTA[] = {0.0, 100.0, 10.0, 1.0, 0.0, 0.1, 0.01};
@@ -311,7 +312,7 @@ gtk_rot_knob_new (gdouble min, gdouble max, gdouble val)
     gtk_table_attach (GTK_TABLE (table), label, 7, 8, 1, 2,
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     
-    gtk_rot_knob_update (GTK_ROT_KNOB(widget));
+    g_idle_add((GSourceFunc) gtk_rot_knob_update, GTK_ROT_KNOB(widget));
     
     gtk_container_add (GTK_CONTAINER (widget), table);
     gtk_widget_show_all (widget);
@@ -337,7 +338,7 @@ gtk_rot_knob_set_value (GtkRotKnob *knob, gdouble val)
         knob->value = val;
     
     /* update the display */
-    gtk_rot_knob_update (knob);
+    g_idle_add((GSourceFunc) gtk_rot_knob_update, knob);
 }
 
 
@@ -391,7 +392,7 @@ gtk_rot_knob_set_min   (GtkRotKnob *knob, gdouble min)
         /* ensure that current value is within range */
         if (knob->value < knob->min) {
             knob->value = knob->min;
-            gtk_rot_knob_update (knob);
+            g_idle_add((GSourceFunc) gtk_rot_knob_update, knob);
         }
     }
 }
@@ -410,7 +411,7 @@ gtk_rot_knob_set_max (GtkRotKnob *knob, gdouble max)
         /* ensure that current value is within range */
         if (knob->value > knob->max) {
             knob->value = knob->max;
-            gtk_rot_knob_update (knob);
+            g_idle_add((GSourceFunc) gtk_rot_knob_update, knob);
         }
     }
 }
@@ -434,12 +435,15 @@ gtk_rot_knob_set_range (GtkRotKnob *knob, gdouble min, gdouble max)
  * 
  */
 static void
-gtk_rot_knob_update     (GtkRotKnob *knob)
+*gtk_rot_knob_update     (GtkRotKnob *knob)
 {
     gchar b[7];
     gchar *buff;
     guint i;
     
+    /* Enter critical section! */
+    G_LOCK(updatelock);
+
     g_ascii_formatd (b, 8, "%6.2f", fabs(knob->value)); 
     
     /* set label markups */
@@ -456,6 +460,11 @@ gtk_rot_knob_update     (GtkRotKnob *knob)
     
     gtk_label_set_markup (GTK_LABEL(knob->digits[0]), buff);
     g_free (buff);
+
+    /* Leave critical section! */
+    G_UNLOCK(updatelock);
+
+    return FALSE;
 }
 
 
@@ -485,7 +494,7 @@ button_clicked_cb (GtkWidget *button, gpointer data)
         //g_print("Val: %.2f %.2f %.10f\n",knob->value,delta,knob->value+delta);
      }
     
-    gtk_rot_knob_update (knob);
+    g_idle_add((GSourceFunc) gtk_rot_knob_update, knob);
     
     /*g_print ("VAL: %.2f\n", knob->value);*/
 }
