@@ -146,6 +146,17 @@ static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rig_name_compare(const gchar * a, const gchar * b);
 
 
+
+/* DL4PD: add thread for hamlib communication */
+gpointer        rigctl_run( gpointer data );
+static void     rigctrl_open(GtkRigCtrl * data);
+static void     rigctrl_close(GtkRigCtrl * data);
+static void     setconfig(gpointer data);
+static void     remove_timer(GtkRigCtrl * data);
+static void     start_timer(GtkRigCtrl * data);
+
+
+
 static GtkVBoxClass *parent_class = NULL;
 
 
@@ -224,9 +235,19 @@ static void gtk_rig_ctrl_destroy(GtkObject * object)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(object);
 
-    /* stop timer */
-    if (ctrl->timerid > 0)
-        g_source_remove(ctrl->timerid);
+    if (ctrl->rigctl_thread != NULL)
+    {
+
+        g_mutex_lock(&ctrl->widgetsync);
+
+        ctrl->engaged = 0;
+        setconfig(ctrl);
+
+        /* synchronization */
+        g_cond_wait(&ctrl->widgetready, &ctrl->widgetsync);
+        g_mutex_unlock(&ctrl->widgetsync);
+        ctrl->rigctl_thread = NULL;
+    }
 
     /* free configuration */
     if (ctrl->conf != NULL)
@@ -251,11 +272,6 @@ static void gtk_rig_ctrl_destroy(GtkObject * object)
         ctrl->trsplist = NULL;
     }
 
-    /* close sockets if they are open */
-    if (ctrl->sock)
-        close_rigctld_socket(&(ctrl->sock));
-    if (ctrl->sock2)
-        close_rigctld_socket(&(ctrl->sock2));
     (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
@@ -264,7 +280,7 @@ static void gtk_rig_ctrl_destroy(GtkObject * object)
  * \return A new rig control window.
  * 
  */
-GtkWidget *gtk_rig_ctrl_new(GtkSatModule * module)
+GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
 {
     GtkWidget      *widget;
     GtkWidget      *table;
@@ -319,10 +335,6 @@ GtkWidget *gtk_rig_ctrl_new(GtkSatModule * module)
 
     gtk_container_add(GTK_CONTAINER(widget), table);
 
-    GTK_RIG_CTRL(widget)->timerid = g_timeout_add(GTK_RIG_CTRL(widget)->delay,
-                                                  rig_ctrl_timeout_cb,
-                                                  GTK_RIG_CTRL(widget));
-
     if (module->target > 0)
         gtk_rig_ctrl_select_sat(GTK_RIG_CTRL(widget), module->target);
 
@@ -341,6 +353,9 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
 {
     gdouble         satfreq;
     gchar          *buff;
+
+    /* Enter critical section! */
+    g_mutex_lock(&ctrl->rig_ctrl_updatelock);
 
     if (ctrl->target)
     {
@@ -410,13 +425,15 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
             ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
         }
     }
+    /* Leave critical section! */
+    g_mutex_unlock(&ctrl->rig_ctrl_updatelock);
 }
 
 /** Select a satellite */
 void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
 {
-    sat_t      *sat;
-    int         i, n;
+    sat_t          *sat;
+    int             i, n;
 
     /* find index in satellite list */
     n = g_slist_length(ctrl->sats);
@@ -596,12 +613,14 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     {
         sat = SAT(g_slist_nth_data(ctrl->sats, i));
         if (sat)
-            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel), sat->nickname);
+            gtk_combo_box_append_text(GTK_COMBO_BOX(ctrl->SatSel),
+                                      sat->nickname);
     }
 
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
-    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
+                     ctrl);
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 3, 0, 1);
 
     /* tracking button */
@@ -1081,10 +1100,10 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 
     ctrl->delay = (guint) gtk_spin_button_get_value(spin);
 
-    if (ctrl->timerid > 0)
-        g_source_remove(ctrl->timerid);
-
-    ctrl->timerid = g_timeout_add(ctrl->delay, rig_ctrl_timeout_cb, ctrl);
+    if (ctrl->engaged)
+    {
+	start_timer(ctrl);
+    }
 }
 
 /**
@@ -1285,74 +1304,21 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
         gtk_widget_set_sensitive(ctrl->DevSel2, TRUE);
         ctrl->engaged = FALSE;
-        ctrl->lasttxf = 0.0;
-        ctrl->lastrxf = 0.0;
 
-        if ((ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO) ||
-            (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN))
-        {
-            unset_toggle(ctrl, ctrl->sock);
-        }
-
-        if (ctrl->conf2 != NULL)
-        {
-            close_rigctld_socket(&(ctrl->sock2));
-        }
-        close_rigctld_socket(&(ctrl->sock));
+        /* DL4PD: stop worker thread... */
+        setconfig(ctrl);
+        ctrl->rigctl_thread = NULL;
     }
     else
     {
         gtk_widget_set_sensitive(ctrl->DevSel, FALSE);
         gtk_widget_set_sensitive(ctrl->DevSel2, FALSE);
         ctrl->engaged = TRUE;
-        ctrl->wrops = 0;
 
-        open_rigctld_socket(ctrl->conf, &(ctrl->sock));
-
-        /* set initial frequency */
-        if (ctrl->conf2 != NULL)
-        {
-            open_rigctld_socket(ctrl->conf2, &(ctrl->sock2));
-            /* set initial dual mode */
-            exec_dual_rig_cycle(ctrl);
-        }
-        else
-        {
-            switch (ctrl->conf->type)
-            {
-
-            case RIG_TYPE_RX:
-                exec_rx_cycle(ctrl);
-                break;
-
-            case RIG_TYPE_TX:
-                exec_tx_cycle(ctrl);
-                break;
-
-            case RIG_TYPE_TRX:
-                exec_trx_cycle(ctrl);
-                break;
-
-            case RIG_TYPE_DUPLEX:
-                /* set rig into SAT mode (hamlib needs it even if rig already in SAT) */
-                setup_split(ctrl);
-                exec_duplex_cycle(ctrl);
-                break;
-
-            case RIG_TYPE_TOGGLE_AUTO:
-            case RIG_TYPE_TOGGLE_MAN:
-                set_toggle(ctrl, ctrl->sock);
-                ctrl->last_toggle_tx = -1;
-                exec_toggle_cycle(ctrl);
-                break;
-
-            default:
-                /* this is an error! */
-                ctrl->conf->type = RIG_TYPE_RX;
-                exec_rx_cycle(ctrl);
-                break;
-            }
-        }
+        /* DL4PD: start worker thread... */
+        ctrl->rigctlq = g_async_queue_new();
+        ctrl->rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
+        setconfig(ctrl);
     }
 }
 
@@ -1369,7 +1335,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[128];
+    gchar           buffback[256/*128*/]; /* DL4PD: issues with receiving rigctld answer (assertion failed) */
     gboolean        retcode;
 
     /* select TX VFO */
@@ -1460,7 +1426,7 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Controller does not have a valid configuration"),
                     __func__);
-        return (TRUE);
+        return FALSE;
 
     }
 
@@ -1471,63 +1437,8 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
         return TRUE;
     }
 
-    check_aos_los(ctrl);
-
-    if (ctrl->conf2 != NULL)
-    {
-        exec_dual_rig_cycle(ctrl);
-    }
-    else
-    {
-        /* Execute controller cycle depending on primary radio type */
-        switch (ctrl->conf->type)
-        {
-
-        case RIG_TYPE_RX:
-            exec_rx_cycle(ctrl);
-            break;
-
-        case RIG_TYPE_TX:
-            exec_tx_cycle(ctrl);
-            break;
-
-        case RIG_TYPE_TRX:
-            exec_trx_cycle(ctrl);
-            break;
-
-        case RIG_TYPE_DUPLEX:
-            exec_duplex_cycle(ctrl);
-            break;
-
-        case RIG_TYPE_TOGGLE_AUTO:
-        case RIG_TYPE_TOGGLE_MAN:
-            exec_toggle_cycle(ctrl);
-            break;
-
-        default:
-            /* invalid mode */
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: Invalid radio type %d. Setting type to "
-                          "RIG_TYPE_RX"), __func__, ctrl->conf->type);
-            ctrl->conf->type = RIG_TYPE_RX;
-        }
-    }
-
-    /* perform error count checking */
-    if (ctrl->errcnt >= MAX_ERROR_COUNT)
-    {
-        /* disengage device */
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ctrl->LockBut), FALSE);
-        ctrl->engaged = FALSE;
-        ctrl->errcnt = 0;
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                    __func__, MAX_ERROR_COUNT);
-
-        //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
-    }
-
-    //g_print ("       WROPS = %d\n", ctrl->wrops);
+    /* push event */
+    setconfig(ctrl);
 
     g_mutex_unlock(&(ctrl->busy));
 
@@ -2060,8 +1971,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
             {
                 satfreqd = readfreq + ctrl->conf->lo;
             }
-            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown),
-                                    satfreqd);
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), satfreqd);
 
             /* Update uplink if locked to downlink */
             if (ctrl->trsplock)
@@ -2303,6 +2213,7 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
             pttstat = g_ascii_strtoull(vbuff[0], NULL, 0);      //FIXME base = 0 ok?
         g_strfreev(vbuff);
     }
+    
     g_free(buff);
 
     return (pttstat == 1) ? TRUE : FALSE;
@@ -2328,8 +2239,8 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
         buff = g_strdup_printf("T 0\x0aq\x0a");
 
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
-
     g_free(buff);
+
     return (check_set_response(buffback, retcode, __func__));
 
 }
@@ -2513,6 +2424,7 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
+    //g_free(buff);
     return retval;
 }
 
@@ -2556,6 +2468,7 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
+    //g_free(buff);
     return retval;
 }
 
@@ -2887,6 +2800,9 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     gint            written;
     gint            size;
 
+    /* Enter critical section! */
+    g_mutex_lock(&ctrl->writelock);
+    
     /* added by Marcel Cimander; win32 newline -> \10\13 */
 #ifdef WIN32
     size = strlen(buff) - 1;
@@ -2934,6 +2850,9 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     }
     ctrl->wrops++;
 
+    /* Leave critical section! */
+    g_mutex_unlock(&ctrl->writelock);
+    
     return TRUE;
 }
 
@@ -3176,8 +3095,8 @@ static inline gboolean check_set_response(gchar * buffback, gboolean retcode,
         if (strncmp(buffback, "RPRT 0", 6) != 0)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: %s rigctld returned error (%s)"),
-                        __FILE__, function, buffback);
+                        _("%s:%s: %s rigctld returned error (%s)"),
+                        __FILE__, __func__, function, buffback);
 
             retcode = FALSE;
         }
@@ -3201,12 +3120,254 @@ static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
         if (strncmp(buffback, "RPRT", 4) == 0)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: %s rigctld returned error (%s)"),
-                        __FILE__, function, buffback);
+                        _("%s:%s: %s rigctld returned error (%s)"),
+                        __FILE__, __func__, function, buffback);
 
             retcode = FALSE;
         }
     }
 
     return retcode;
+}
+
+static void rigctrl_close(GtkRigCtrl * data)
+{
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
+    ctrl->lasttxf = 0.0;
+    ctrl->lastrxf = 0.0;
+
+    remove_timer(ctrl);
+
+    if ((ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO) ||
+        (ctrl->conf->type == RIG_TYPE_TOGGLE_MAN))
+    {
+        unset_toggle(ctrl, ctrl->sock);
+    }
+
+    if (ctrl->conf2 != NULL)
+    {
+        close_rigctld_socket(&(ctrl->sock2));
+    }
+    close_rigctld_socket(&(ctrl->sock));
+}
+
+static void rigctrl_open(GtkRigCtrl * data)
+{
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
+    ctrl->wrops = 0;
+
+    start_timer(ctrl);
+
+    open_rigctld_socket(ctrl->conf, &(ctrl->sock));
+
+    /* set initial frequency */
+    if (ctrl->conf2 != NULL)
+    {
+        open_rigctld_socket(ctrl->conf2, &(ctrl->sock2));
+        /* set initial dual mode */
+        exec_dual_rig_cycle(ctrl);
+    }
+    else
+    {
+        switch (ctrl->conf->type)
+        {
+
+        case RIG_TYPE_RX:
+            exec_rx_cycle(ctrl);
+            break;
+
+        case RIG_TYPE_TX:
+            exec_tx_cycle(ctrl);
+            break;
+
+        case RIG_TYPE_TRX:
+            exec_trx_cycle(ctrl);
+            break;
+
+        case RIG_TYPE_DUPLEX:
+            /* set rig into SAT mode (hamlib needs it even if rig already in SAT) */
+            setup_split(ctrl);
+            exec_duplex_cycle(ctrl);
+            break;
+
+        case RIG_TYPE_TOGGLE_AUTO:
+        case RIG_TYPE_TOGGLE_MAN:
+            set_toggle(ctrl, ctrl->sock);
+            ctrl->last_toggle_tx = -1;
+            exec_toggle_cycle(ctrl);
+            break;
+
+        default:
+            /* this is an error! */
+            ctrl->conf->type = RIG_TYPE_RX;
+            exec_rx_cycle(ctrl);
+            break;
+        }
+    }
+}
+
+/**
+ * \brief Communication thread for hamlib rigctld
+ * \param data
+ * \return NULL
+ */
+gpointer rigctl_run(gpointer data)
+{
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl     *t_ctrl = GTK_RIG_CTRL(data);
+
+    while (1)
+    {
+        t_ctrl = GTK_RIG_CTRL(g_async_queue_pop(ctrl->rigctlq));
+	ctrl = t_ctrl;
+        while (g_main_context_iteration(NULL, FALSE));
+
+        if (t_ctrl == NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s:%s: ERROR: NO VALID ctrl-struct"), __FILE__,
+                        __func__);
+            continue;
+        }
+
+        if (t_ctrl->engaged)
+        {
+            if (!t_ctrl->sock)
+            {
+                rigctrl_open(t_ctrl);
+            }
+
+            if (!t_ctrl->timerid)
+            {
+                start_timer(t_ctrl);
+            }
+        }
+        else
+        {
+            g_mutex_lock(&t_ctrl->widgetsync);
+
+            if (t_ctrl->sock > 0)
+            {
+                rigctrl_close(t_ctrl);
+            }
+
+            if (t_ctrl->timerid)
+            {
+                remove_timer(t_ctrl);
+            }
+
+            g_cond_signal(&t_ctrl->widgetready);
+            g_mutex_unlock(&t_ctrl->widgetsync);
+            break;
+        }
+
+        check_aos_los(t_ctrl);
+
+        if (t_ctrl->conf2 != NULL)
+        {
+            exec_dual_rig_cycle(t_ctrl);
+        }
+        else
+        {
+            /* Execute controller cycle depending on primary radio type */
+            switch (t_ctrl->conf->type)
+            {
+
+            case RIG_TYPE_RX:
+                exec_rx_cycle(t_ctrl);
+                break;
+
+            case RIG_TYPE_TX:
+                exec_tx_cycle(t_ctrl);
+                break;
+
+            case RIG_TYPE_TRX:
+                exec_trx_cycle(t_ctrl);
+                break;
+
+            case RIG_TYPE_DUPLEX:
+                exec_duplex_cycle(t_ctrl);
+                break;
+
+            case RIG_TYPE_TOGGLE_AUTO:
+            case RIG_TYPE_TOGGLE_MAN:
+                exec_toggle_cycle(t_ctrl);
+                break;
+
+            default:
+                /* invalid mode */
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _("%s:%s: Invalid radio type %d. Setting type to "
+                              "RIG_TYPE_RX"), __FILE__, __func__,
+                            t_ctrl->conf->type);
+                t_ctrl->conf->type = RIG_TYPE_RX;
+            }
+        }
+
+        /* perform error count checking */
+        if (t_ctrl->errcnt >= MAX_ERROR_COUNT)
+        {
+            /* disengage device */
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(t_ctrl->LockBut),
+                                         FALSE);
+            t_ctrl->engaged = FALSE;
+            t_ctrl->errcnt = 0;
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _
+                        ("%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                        __FILE__, __func__, MAX_ERROR_COUNT);
+
+            //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
+        }
+
+        //g_print ("       WROPS = %d\n", ctrl->wrops);
+    }
+
+    /* let's have a clean exit: */
+    if (t_ctrl->sock > 0)
+    {
+	rigctrl_close(t_ctrl);
+    }
+    
+    if (t_ctrl->timerid)
+    {
+	remove_timer(t_ctrl);
+    }
+
+    return NULL;
+}
+
+void start_timer(GtkRigCtrl * data)
+{
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
+    /* DL4PD: start timeout timer here ("Cycle")! */
+    if (ctrl->timerid > 0)
+        g_source_remove(ctrl->timerid);
+
+    ctrl->timerid =
+        gdk_threads_add_timeout(ctrl->delay, rig_ctrl_timeout_cb, ctrl);
+}
+
+void remove_timer(GtkRigCtrl * data)
+{
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
+    /* stop timer */
+    if (ctrl->timerid > 0)
+        g_source_remove(ctrl->timerid);
+    ctrl->timerid = 0;
+}
+
+void setconfig(gpointer data)
+{
+    /* something has changed... */
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
+    if (ctrl != NULL)
+    {
+        g_async_queue_push(ctrl->rigctlq, ctrl);
+    }
 }

@@ -47,11 +47,12 @@
 static void gtk_freq_knob_class_init (GtkFreqKnobClass *class);
 static void gtk_freq_knob_init       (GtkFreqKnob      *list);
 static void gtk_freq_knob_destroy    (GtkObject       *object);
-static void gtk_freq_knob_update     (GtkFreqKnob *knob);
+static void *gtk_freq_knob_update     (GtkFreqKnob *knob);
 static void button_clicked_cb        (GtkWidget *button, gpointer data);
 static gboolean on_button_press      (GtkWidget *digit, GdkEventButton *event, gpointer data);
 static gboolean on_button_scroll     (GtkWidget *digit, GdkEventScroll *event, gpointer data);
 
+G_LOCK_DEFINE_STATIC(updatelock);
 
 static GtkHBoxClass *parent_class = NULL;
 
@@ -253,7 +254,7 @@ gtk_freq_knob_new (gdouble val, gboolean buttons)
                       GTK_SHRINK, GTK_SHRINK, 0, 0);
     
     
-    gtk_freq_knob_update (GTK_FREQ_KNOB(widget));
+    g_idle_add((GSourceFunc) gtk_freq_knob_update, GTK_FREQ_KNOB(widget));
 
     gtk_container_add (GTK_CONTAINER (widget), table);
     gtk_widget_show_all (widget);
@@ -275,7 +276,7 @@ gtk_freq_knob_set_value (GtkFreqKnob *knob, gdouble val)
         knob->value = val;
     
         /* update the display */
-        gtk_freq_knob_update (knob);
+        g_idle_add((GSourceFunc) gtk_freq_knob_update, knob);
     }
 }
 
@@ -300,12 +301,15 @@ gtk_freq_knob_get_value (GtkFreqKnob *knob)
  * 
  */
 static void
-gtk_freq_knob_update     (GtkFreqKnob *knob)
+*gtk_freq_knob_update     (GtkFreqKnob *knob)
 {
     gchar b[11];
     gchar *buff;
     guint i;
     
+    /* Enter critical section! */
+    G_LOCK(updatelock);
+
     g_ascii_formatd (b, 11, "%10.0f", fabs(knob->value)); 
     
     /* set label markups */
@@ -315,6 +319,9 @@ gtk_freq_knob_update     (GtkFreqKnob *knob)
         g_free (buff);
     }
 
+    /* Leave critical section! */
+    G_UNLOCK(updatelock);
+    return FALSE;
 }
 
 
@@ -336,7 +343,7 @@ button_clicked_cb (GtkWidget *button, gpointer data)
         knob->value += delta;
     }
     
-    gtk_freq_knob_update (knob);
+    g_idle_add((GSourceFunc) gtk_freq_knob_update, knob);
     
     /* emit "freq_changed" signal */
     g_signal_emit (G_OBJECT (data), freq_changed_signal, 0);
