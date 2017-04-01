@@ -592,8 +592,8 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
             rotname = g_slist_nth_data(rots, i);
             if (rotname)
             {
-                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->DevSel),
-                                               rotname);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
+                                               (ctrl->DevSel), rotname);
                 g_free(rotname);
             }
         }
@@ -827,7 +827,8 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
     }
 
     /* load new configuration */
-    ctrl->conf->name = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
+    ctrl->conf->name =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
     if (rotor_conf_read(ctrl->conf))
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
@@ -877,24 +878,24 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
         /* DL4PD: issue #51: stop moving rotor */
         buff = g_strdup_printf("S\x0a");
 
-	retcode = send_rotctld_command(ctrl, buff, buffback, 128);
+        retcode = send_rotctld_command(ctrl, buff, buffback, 128);
 
-	g_free(buff);
+        g_free(buff);
 
-	if (retcode == TRUE)
-	{
-	    /* treat errors as soft errors */
-	    retval = (gint) g_strtod(buffback + 4, NULL);
-	    if (retval != 0)
-	    {
-		g_strstrip(buffback);
-		sat_log_log(SAT_LOG_LEVEL_ERROR,
-			    _
-			    ("%s:%d: rotctld returned error %d with stop-cmd (%s)"),
-			    __FILE__, __LINE__, retval, buffback);
-	    }
-	}
-	
+        if (retcode == TRUE)
+        {
+            /* treat errors as soft errors */
+            retval = (gint) g_strtod(buffback + 4, NULL);
+            if (retval != 0)
+            {
+                g_strstrip(buffback);
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _
+                            ("%s:%d: rotctld returned error %d with stop-cmd (%s)"),
+                            __FILE__, __LINE__, retval, buffback);
+            }
+        }
+
         gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
         ctrl->engaged = FALSE;
         close_rotctld_socket(&(ctrl->sock));
