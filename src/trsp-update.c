@@ -3,6 +3,7 @@
 
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
   Copyright (C)  2016       Baris DINC (TA7W)
+  Copyright (C)  2017       Mario Haustein (DM5AHA)
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -54,18 +55,6 @@ typedef enum {
     TRSP_AUTO_UPDATE_DAILY = 3,
     TRSP_AUTO_UPDATE_NUM
 } trsp_auto_upd_freq_t;
-
-/*
- * Frequency information is an json array, nxjson does not support json kbject
- * arrays this struct is used to manipulate the json object array
- */
-typedef enum {
-    START = 0,                  /* starting point */
-    OBBGN,                      /* new obbject starts here */
-    OBEND,                      /* objct end here, next char should be delimiter (comma) or next obect start, or array end */
-    NXDLM,                      /* we have the delimiter, next one will be new object */
-    FINISH                      /* array fineshes here */
-} m_state;
 
 /* Data structure to hold a TRSP set. */
 struct transponder {
@@ -147,10 +136,11 @@ void trsp_update_files(gchar * input_file)
 {
 
     FILE           *mfp;        /* transmitter information json file */
+    unsigned int    mfplen;     /* size of transmitter information json file */
+    int             result;
     FILE           *ffile;      /* transponder output file in gpredict format */
-    int             symbol;     /* characters to read from json file */
-    char            jsn_object[10000];  /* json array will be in this buffer before parsing */
-    m_state         jsn_state = START;  /* json parsing state */
+    char           *jsn_object; /* json array will be in this buffer before parsing */
+    unsigned int    idx;	/* object index in JSON-Array */
     new_mode_t     *nmode;
     new_trsp_t     *ntrsp;
     GHashTable     *modes_hash; /* hash table to store modes */
@@ -174,38 +164,35 @@ void trsp_update_files(gchar * input_file)
     trspfolder = g_strconcat(userconfdir, G_DIR_SEPARATOR_S, "trsp", NULL);
     modesfile = g_strconcat(trspfolder, "/modes.json", NULL);
 
-    sprintf(jsn_object, " ");   /* initialize buffer */
     mfp = fopen(modesfile, "r");
 
     if (mfp != NULL)
     {
-        while ((symbol = getc(mfp)) != EOF)
-        {
-            if (symbol == '[')
-                jsn_state = START;
-            if (((jsn_state == START) || (jsn_state == NXDLM)) &&
-                (symbol == '{'))
-                jsn_state = OBBGN;
-            if ((jsn_state == OBBGN) && (symbol == '}'))
-                jsn_state = OBEND;
-            if ((jsn_state == OBEND) && (symbol == ','))
-                jsn_state = NXDLM;
-            if ((jsn_state == OBEND) && (symbol == ']'))
-                jsn_state = FINISH;
-            if (jsn_state == OBBGN)
-                sprintf(jsn_object, "%s%c", jsn_object, symbol);
-            if (jsn_state == OBEND)
-            {
-                sprintf(jsn_object, "%s}", jsn_object);
-                const nx_json  *json = nx_json_parse(jsn_object, 0);
+        mfplen = 0;
+        fseek(mfp, 0, SEEK_END);
+        mfplen = ftell(mfp);
+        rewind(mfp);
+        jsn_object = g_malloc(mfplen);
+        result = fread(jsn_object, mfplen, 1, mfp);
 
-                if (json)
+        if (result == 1)
+        {
+            const nx_json  *json = nx_json_parse(jsn_object, 0);
+
+            if (json)
+            {
+                idx = 0;
+                while (1)
                 {
+                    const nx_json  *json_obj = nx_json_item(json, idx++);
                     struct modes    m_modes;
 
-                    m_modes.id = nx_json_get(json, "id")->int_value;
+                    if (json_obj->type == NX_JSON_NULL)
+                        break;
+
+                    m_modes.id = nx_json_get(json_obj, "id")->int_value;
                     strncpy(m_modes.name,
-                            nx_json_get(json, "name")->text_value, 79);
+                            nx_json_get(json_obj, "name")->text_value, 79);
                     m_modes.name[79] = 0;
 
                     /* add data to hash table */
@@ -227,77 +214,71 @@ void trsp_update_files(gchar * input_file)
 
                     sat_log_log(SAT_LOG_LEVEL_INFO, _("MODE %d %s"),
                                 m_modes.id, m_modes.name);
-                    nx_json_free(json);
-                }               // if(json)
-
-                sprintf(jsn_object, " ");       // empty the buffer
-            }                   //if(OBEND)
-        }                       //while(symbol)
+                }               // while(1)
+                nx_json_free(json);
+            }                   // if(json)
+        }                       // if(result == 1)
+        g_free(jsn_object);
         fclose(mfp);
-    }                           //if(mfp)
+    }                           // if(mfp)
 
 //    guint num = 0;
 //    printf("---------- PRINTING MODES LIST ------- \n");
 //    g_hash_table_foreach (modes_hash, check_and_print_mode, &num);
 
-    sprintf(jsn_object, " ");   // initialize buffer
     mfp = fopen(input_file, "r");
     if (mfp != NULL)
     {
-        while ((symbol = getc(mfp)) != EOF)
+        mfplen = 0;
+        fseek(mfp, 0, SEEK_END);
+        mfplen = ftell(mfp);
+        rewind(mfp);
+        jsn_object = g_malloc(mfplen);
+        result = fread(jsn_object, mfplen, 1, mfp);
+
+        if (result == 1)
         {
-            if (symbol == '[')
-                jsn_state = START;
-            if (((jsn_state == START) || (jsn_state == NXDLM)) &&
-                (symbol == '{'))
-                jsn_state = OBBGN;
-            if ((jsn_state == OBBGN) && (symbol == '}'))
-                jsn_state = OBEND;
-            if ((jsn_state == OBEND) && (symbol == ','))
-                jsn_state = NXDLM;
-            if ((jsn_state == OBEND) && (symbol == ']'))
-                jsn_state = FINISH;
+            const nx_json  *json = nx_json_parse(jsn_object, 0);
 
-            if (jsn_state == OBBGN)
-                sprintf(jsn_object, "%s%c", jsn_object, symbol);
-
-            if (jsn_state == OBEND)
+            if (json)
             {
-                sprintf(jsn_object, "%s}", jsn_object);
-                const nx_json  *json = nx_json_parse(jsn_object, 0);
-
-                if (json)
+                idx = 0;
+                while (1)
                 {
+                    const nx_json  *json_obj = nx_json_item(json, idx++);
                     struct transponder m_trsp;
 
+                    if (json_obj->type == NX_JSON_NULL)
+                        break;
+
                     strncpy(m_trsp.description,
-                            nx_json_get(json, "description")->text_value, 79);
+                            nx_json_get(json_obj, "description")->text_value, 79);
                     m_trsp.description[79] = 0;
                     m_trsp.catnum =
-                        nx_json_get(json, "norad_cat_id")->int_value;
+                        nx_json_get(json_obj, "norad_cat_id")->int_value;
                     m_trsp.uplink_low =
-                        nx_json_get(json, "uplink_low")->int_value;
+                        nx_json_get(json_obj, "uplink_low")->int_value;
                     m_trsp.uplink_high =
-                        nx_json_get(json, "uplink_high")->int_value;
+                        nx_json_get(json_obj, "uplink_high")->int_value;
                     m_trsp.downlink_low =
-                        nx_json_get(json, "downlink_low")->int_value;
+                        nx_json_get(json_obj, "downlink_low")->int_value;
                     m_trsp.downlink_high =
-                        nx_json_get(json, "downlink_high")->int_value;
+                        nx_json_get(json_obj, "downlink_high")->int_value;
 
                     key = g_try_new0(guint, 1);
-                    *key = nx_json_get(json, "mode_id")->int_value;
+                    *key = nx_json_get(json_obj, "mode_id")->int_value;
                     nmode = g_hash_table_lookup(modes_hash, key);
                     if (nmode != NULL)
                         sprintf(m_trsp.mode, "%s", nmode->modname);
                     else
                         sprintf(m_trsp.mode, "%lli",
-                                nx_json_get(json, "mode_id")->int_value);
+                                nx_json_get(json_obj, "mode_id")->int_value);
 
-                    m_trsp.invert = nx_json_get(json, "invert")->int_value;
-                    m_trsp.baud = nx_json_get(json, "baud")->dbl_value;
-                    m_trsp.alive = nx_json_get(json, "alive")->int_value;
+                    m_trsp.invert = nx_json_get(json_obj, "invert")->int_value;
+                    m_trsp.baud = nx_json_get(json_obj, "baud")->dbl_value;
+                    m_trsp.alive = nx_json_get(json_obj, "alive")->int_value;
 
-                    //strcpy(m_trsp.uuid,nx_json_get(json,              "uuid")->text_value);
+                    //strcpy(m_trsp.uuid,nx_json_get(json_obj,          "uuid")->text_value);
                     //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(">>> Preparing information for transponders of cat_id %d <<<"), m_trsp.catnum, __func__);
                     ////sat_log_log (SAT_LOG_LEVEL_INFO, _("         uuid : %s"), m_trsp.uuid, __func__);
                     //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  description : %s"), m_trsp.description, __func__);
@@ -377,11 +358,11 @@ void trsp_update_files(gchar * input_file)
                                     ("%s: Could not open trsp file for write"),
                                     __func__);
                     }
-                    nx_json_free(json);
-                }               // if(json)
-                sprintf(jsn_object, " ");       //empty the buffer
-            }                   // if(OBEND)
-        }                       // while(symbol)
+                }               // while(1)
+                nx_json_free(json);
+            }                   // if(json)
+        }                       // if(result == 1)
+        g_free(jsn_object);
         fclose(mfp);
     }                           // if(mfp)
 
