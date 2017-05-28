@@ -325,30 +325,27 @@ void trsp_update_files(gchar * input_file)
                     ffile = g_fopen(trspfile, "a");
                     if (ffile != NULL)
                     {
-                        char            fcontent[1000];
-
-                        sprintf(fcontent, "\n[%s]\n", m_trsp.description);
+                        fprintf(ffile, "\n[%s]\n", m_trsp.description);
                         if (m_trsp.uplink_low > 0)
-                            sprintf(fcontent, "%sUP_LOW=%lld\n", fcontent,
+                            fprintf(ffile, "UP_LOW=%lld\n",
                                     m_trsp.uplink_low);
                         if (m_trsp.uplink_high > 0)
-                            sprintf(fcontent, "%sUP_HIGH=%lld\n", fcontent,
+                            fprintf(ffile, "UP_HIGH=%lld\n",
                                     m_trsp.uplink_high);
                         if (m_trsp.downlink_low > 0)
-                            sprintf(fcontent, "%sDOWN_LOW=%lld\n", fcontent,
+                            fprintf(ffile, "DOWN_LOW=%lld\n",
                                     m_trsp.downlink_low);
                         if (m_trsp.downlink_high > 0)
-                            sprintf(fcontent, "%sDOWN_HIGH=%lld\n", fcontent,
+                            fprintf(ffile, "DOWN_HIGH=%lld\n",
                                     m_trsp.downlink_high);
-                        sprintf(fcontent, "%sMODE=%s\n", fcontent,
+                        fprintf(ffile, "MODE=%s\n",
                                 m_trsp.mode);
                         if (m_trsp.baud > 0.0)
-                            sprintf(fcontent, "%sBAUD=%.0f\n", fcontent,
+                            fprintf(ffile, "BAUD=%.0f\n",
                                     m_trsp.baud);
                         if (m_trsp.invert)
-                            sprintf(fcontent, "%sINVERT=%s\n", fcontent,
+                            fprintf(ffile, "INVERT=%s\n",
                                     "true");
-                        fputs(fcontent, ffile);
                         fclose(ffile);
                     }
                     else
