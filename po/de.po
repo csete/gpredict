@@ -5843,7 +5843,7 @@ msgstr "%s:%s: Ungültige Daten für %d"
 #: ../src/tle-update.c:1023
 #, c-format
 msgid "%s:%s: Two different statuses for %d (%s) at the same time."
-msgstr "%s:%s: Zwei unterschiedliche Statuse für %d (%s) zur selben Zeit."
+msgstr "%s:%s: Zwei unterschiedliche Status für %d (%s) zur selben Zeit."
 
 #: ../src/tle-update.c:1075
 #, c-format
