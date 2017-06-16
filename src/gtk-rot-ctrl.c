@@ -1452,7 +1452,7 @@ static gboolean close_rotctld_socket(gint * sock)
 {
     gint            written;
 
-    /*shutdown the rigctld connect */
+    /*shutdown the rotctld connect */
     written = send(*sock, "q\x0a", 2, 0);
     if (written != 2)
     {
@@ -1474,10 +1474,10 @@ static gboolean close_rotctld_socket(gint * sock)
 }
 
 /**
- * \brief  Send a command to rigctld
+ * \brief  Send a command to rotctld
  *
  * Inputs are a controller, a string command, and a buffer and length for
- * returning the output from rigctld.
+ * returning the output from rotctld.
  */
 gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff, gchar * buffout,
                               gint sizeout)
