@@ -1,7 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
            Charles Suprin  <hamaa1vs@gmail.com>
@@ -51,9 +51,11 @@
 #include <winsock2.h>
 #endif
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <string.h>             /* strerror() */
 
 #include "compat.h"
 #include "gpredict-utils.h"
@@ -91,11 +93,6 @@ static void     update_count_down(GtkRotCtrl * ctrl, gdouble t);
 static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el);
 static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el);
 
-static gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff,
-                                     gchar * buffout, gint sizeout);
-static gboolean open_rotctld_socket(GtkRotCtrl * ctrl);
-static gboolean close_rotctld_socket(gint * sock);
-
 static gboolean have_conf(void);
 static gint     sat_name_compare(sat_t * a, sat_t * b);
 static gint     rot_name_compare(const gchar * a, const gchar * b);
@@ -106,6 +103,185 @@ static inline void set_flipped_pass(GtkRotCtrl * ctrl);
 
 static GtkVBoxClass *parent_class = NULL;
 
+
+/* Open the rotcld socket. Returns file descriptor or -1 if an error occurs */
+static gint rotctld_socket_open(const gchar * host, gint port)
+{
+    struct sockaddr_in ServAddr;
+    struct hostent *h;
+    gint            sock;
+    gint            status;
+
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock == -1)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("Failed to create rotctl socket: %s"), strerror(errno));
+        return -1;
+    }
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                _("%s: Network socket created successfully"), __func__);
+
+    memset(&ServAddr, 0, sizeof(ServAddr));
+    ServAddr.sin_family = AF_INET;      /* Internet address family */
+    h = gethostbyname(host);
+    memcpy((char *)&ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
+    ServAddr.sin_port = htons(port);    /* Server port */
+
+    /* establish connection */
+    status = connect(sock, (struct sockaddr *)&ServAddr, sizeof(ServAddr));
+    if (status == -1)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("Connection to rotctld server at %s:%d failed: %s"),
+                    host, port);
+
+        return -1;
+    }
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Connection opened to %s:%d"),
+                __func__, host, port);
+
+    return sock;
+}
+
+/* Close a rotcld socket. First send a q command to cleanly shut down rotctld */
+static void rotctld_socket_close(gint * sock)
+{
+    gint            written;
+
+    /*shutdown the rotctld connect */
+    written = send(*sock, "q\x0a", 2, 0);
+    if (written != 2)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Sent 2 bytes but sent %d."),
+                    __FILE__, __func__, written);
+    }
+
+#ifndef WIN32
+    shutdown(*sock, SHUT_RDWR);
+    close(*sock);
+#else
+    shutdown(*sock, SD_BOTH);
+    closesocket(*sock);
+#endif
+
+    *sock = -1;
+}
+
+/**
+ * Send a command to rotctld and read the response.
+ *
+ * Inputs are the socket, a string command, and a buffer and length for
+ * returning the output from rotctld.
+ */
+static gboolean rotctld_socket_rw(gint sock, gchar * buff, gchar * buffout,
+                                  gint sizeout)
+{
+    gint            written;
+    gint            size;
+
+#ifdef WIN32
+    size = strlen(buff) - 1;
+#else
+    size = strlen(buff);
+#endif
+
+    /* send command */
+    written = send(sock, buff, size, 0);
+    if (written != size)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: SIZE ERROR %d / %d"), __func__, written, size);
+    }
+    if (written == -1)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: rotctld Socket Down"), __func__);
+        return FALSE;
+    }
+
+    /* try to read answer */
+    size = recv(sock, buffout, sizeout, 0);
+
+    if (size == -1)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: rotctld Socket Down"), __func__);
+        return FALSE;
+    }
+
+    buffout[size] = '\0';
+    if (size == 0)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Got 0 bytes from rotctld"), __FILE__, __func__);
+    }
+
+    return TRUE;
+}
+
+/* Rotctl client thread */
+static gpointer rotctld_client_thread(gpointer data)
+{
+    gdouble         azi = 0.0;
+    gdouble         ele = 0.0;
+    gboolean        new_trg = FALSE;
+    gboolean        io_error = FALSE;
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+    g_print("Starting rotctld client thread\n");
+
+    ctrl->client.socket = rotctld_socket_open(ctrl->conf->host,
+                                              ctrl->conf->port);
+    if (ctrl->client.socket == -1)
+        return GINT_TO_POINTER(-1);
+
+    ctrl->client.new_trg = FALSE;
+    ctrl->client.running = TRUE;
+
+    while (ctrl->client.running)
+    {
+        io_error = FALSE;
+
+        g_mutex_lock(&ctrl->client.mutex);
+        if (ctrl->client.new_trg)
+        {
+            azi = ctrl->client.azi_out;
+            ele = ctrl->client.ele_out;
+            new_trg = ctrl->client.new_trg;
+        }
+        g_mutex_unlock(&ctrl->client.mutex);
+
+        if (new_trg)
+        {
+            if (set_pos(ctrl, azi, ele))
+                new_trg = FALSE;
+            else
+                io_error = TRUE;
+        }
+
+        if (!get_pos(ctrl, &azi, &ele))
+            ctrl->client.io_error = TRUE;
+
+        g_mutex_lock(&ctrl->client.mutex);
+        ctrl->client.azi_in = azi;
+        ctrl->client.ele_in = ele;
+        ctrl->client.new_trg = new_trg;
+        ctrl->client.io_error = io_error;
+        g_mutex_unlock(&ctrl->client.mutex);
+
+        /** FIXME **/
+        g_usleep(439000);
+    }
+
+    g_print("Stopping rotctld client thread\n");
+    rotctld_socket_close(&ctrl->client.socket);
+
+    return GINT_TO_POINTER(0);
+}
 
 GType gtk_rot_ctrl_get_type()
 {
@@ -149,15 +325,18 @@ static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
     ctrl->pass = NULL;
     ctrl->qth = NULL;
     ctrl->plot = NULL;
-    ctrl->sock = 0;
 
     ctrl->tracking = FALSE;
-    g_mutex_init(&(ctrl->busy));
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
     ctrl->tolerance = 5.0;
     ctrl->errcnt = 0;
+
+    g_mutex_init(&ctrl->client.mutex);
+    ctrl->client.thread = NULL;
+    ctrl->client.socket = -1;
+    ctrl->client.running = FALSE;
 }
 
 static void gtk_rot_ctrl_destroy(GtkWidget * widget)
@@ -177,9 +356,14 @@ static void gtk_rot_ctrl_destroy(GtkWidget * widget)
         ctrl->conf = NULL;
     }
 
-    /*close the socket if it is still open */
-    if (ctrl->sock != 0)
-        close_rotctld_socket(&(ctrl->sock));
+    /* stop client thread */
+    if (ctrl->client.running)
+    {
+        ctrl->client.running = FALSE;
+        g_thread_join(ctrl->client.thread);
+    }
+
+    g_mutex_clear(&ctrl->client.mutex);
 
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
@@ -870,13 +1054,20 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
 
     if (!gtk_toggle_button_get_active(button))
     {
-        /* DL4PD: issue #51: stop moving rotor */
+        ctrl->engaged = FALSE;
+        gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
+        gtk_label_set_text(GTK_LABEL(ctrl->AzRead), "---");
+        gtk_label_set_text(GTK_LABEL(ctrl->ElRead), "---");
+
+        if (!ctrl->client.running)
+            /* client thread is not running; nothing to do */
+            return;
+
+        /* stop moving rotor */
+        /** FIXME: should use high level func */
         buff = g_strdup_printf("S\x0a");
-
-        retcode = send_rotctld_command(ctrl, buff, buffback, 128);
-
+        retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
         g_free(buff);
-
         if (retcode == TRUE)
         {
             /* treat errors as soft errors */
@@ -891,11 +1082,8 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
             }
         }
 
-        gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
-        ctrl->engaged = FALSE;
-        close_rotctld_socket(&(ctrl->sock));
-        gtk_label_set_text(GTK_LABEL(ctrl->AzRead), "---");
-        gtk_label_set_text(GTK_LABEL(ctrl->ElRead), "---");
+        ctrl->client.running = FALSE;
+        g_thread_join(ctrl->client.thread);
     }
     else
     {
@@ -908,11 +1096,12 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
                         __func__);
             return;
         }
+
+        ctrl->client.thread =
+            g_thread_new("gpredict_rotctl", rotctld_client_thread, ctrl);
+
         gtk_widget_set_sensitive(ctrl->DevSel, FALSE);
         ctrl->engaged = TRUE;
-        open_rotctld_socket(ctrl);
-        ctrl->wrops = 0;
-        ctrl->rdops = 0;
     }
 }
 
@@ -935,12 +1124,6 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
     gdouble         time_delta;
     gdouble         step_size;
 
-    if (g_mutex_trylock(&(ctrl->busy)) == FALSE)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s missed the deadline"),
-                    __func__);
-        return TRUE;
-    }
 
     /* If we are tracking and the target satellite is within
        range, set the rotor position controller knob values to
@@ -1005,36 +1188,42 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
 
     if ((ctrl->engaged) && (ctrl->conf != NULL))
     {
-        /* read back current value from device */
-        if (get_pos(ctrl, &rotaz, &rotel))
-        {
-            /* update display widgets */
-            text = g_strdup_printf("%.2f\302\260", rotaz);
-            gtk_label_set_text(GTK_LABEL(ctrl->AzRead), text);
-            g_free(text);
-            text = g_strdup_printf("%.2f\302\260", rotel);
-            gtk_label_set_text(GTK_LABEL(ctrl->ElRead), text);
-            g_free(text);
 
-            if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0))
+        if (g_mutex_trylock(&ctrl->client.mutex))
+        {
+            error = ctrl->client.io_error;
+            rotaz = ctrl->client.azi_in;
+            rotel = ctrl->client.ele_in;
+            g_mutex_unlock(&ctrl->client.mutex);
+
+            if (error)
             {
+                gtk_label_set_text(GTK_LABEL(ctrl->AzRead), _("ERROR"));
+                gtk_label_set_text(GTK_LABEL(ctrl->ElRead), _("ERROR"));
                 gtk_polar_plot_set_rotor_pos(GTK_POLAR_PLOT(ctrl->plot),
-                                             rotaz + 360.0, rotel);
+                                             -10.0, -10.0);
             }
             else
             {
-                gtk_polar_plot_set_rotor_pos(GTK_POLAR_PLOT(ctrl->plot), rotaz,
-                                             rotel);
-            }
-        }
-        else
-        {
-            gtk_label_set_text(GTK_LABEL(ctrl->AzRead), _("ERROR"));
-            gtk_label_set_text(GTK_LABEL(ctrl->ElRead), _("ERROR"));
-            error = TRUE;
+                /* update display widgets */
+                text = g_strdup_printf("%.2f\302\260", rotaz);
+                gtk_label_set_text(GTK_LABEL(ctrl->AzRead), text);
+                g_free(text);
+                text = g_strdup_printf("%.2f\302\260", rotel);
+                gtk_label_set_text(GTK_LABEL(ctrl->ElRead), text);
+                g_free(text);
 
-            gtk_polar_plot_set_rotor_pos(GTK_POLAR_PLOT(ctrl->plot), -10.0,
-                                         -10.0);
+                if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) && (rotaz < 0.0))
+                {
+                    gtk_polar_plot_set_rotor_pos(GTK_POLAR_PLOT(ctrl->plot),
+                                                 rotaz + 360.0, rotel);
+                }
+                else
+                {
+                    gtk_polar_plot_set_rotor_pos(GTK_POLAR_PLOT(ctrl->plot),
+                                                 rotaz, rotel);
+                }
+            }
         }
 
         /* if tolerance exceeded */
@@ -1125,15 +1314,16 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
 
             /* send controller values to rotator device */
             /* this is the newly computed value which should be ahead of the current position */
-            if (!set_pos(ctrl, setaz, setel))
+            gtk_rot_knob_set_value(GTK_ROT_KNOB(ctrl->AzSet), setaz);
+            gtk_rot_knob_set_value(GTK_ROT_KNOB(ctrl->ElSet), setel);
+            if (g_mutex_trylock(&ctrl->client.mutex))
             {
-                error = TRUE;
+                ctrl->client.azi_out = setaz;
+                ctrl->client.ele_out = setel;
+                ctrl->client.new_trg = TRUE;
+                g_mutex_unlock(&ctrl->client.mutex);
             }
-            else
-            {
-                gtk_rot_knob_set_value(GTK_ROT_KNOB(ctrl->AzSet), setaz);
-                gtk_rot_knob_set_value(GTK_ROT_KNOB(ctrl->ElSet), setel);
-            }
+
         }
 
         /* check error status */
@@ -1170,7 +1360,6 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         gtk_polar_plot_set_rotor_pos(GTK_POLAR_PLOT(ctrl->plot), -10.0, -10.0);
     }
 
-
     /* update target object on polar plot */
     if (ctrl->target != NULL)
     {
@@ -1200,7 +1389,6 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         }
         gtk_widget_queue_draw(ctrl->plot);
     }
-    g_mutex_unlock(&(ctrl->busy));
 
     return TRUE;
 }
@@ -1228,9 +1416,9 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
 
     /* send command */
     buff = g_strdup_printf("p\x0a");
-    retcode = send_rotctld_command(ctrl, buff, buffback, 128);
+    retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
 
-    /* try to read answer */
+    /* try to parse answer */
     if (retcode)
     {
         if (strncmp(buffback, "RPRT", 4) == 0)
@@ -1280,17 +1468,12 @@ static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
 {
     gchar          *buff;
     gchar           buffback[128];
-    gchar           azstr[8], elstr[8];
     gboolean        retcode;
     gint            retval;
 
     /* send command */
-    g_ascii_formatd(azstr, 8, "%7.2f", az);
-    g_ascii_formatd(elstr, 8, "%7.2f", el);
-    buff = g_strdup_printf("P %s %s\x0a", azstr, elstr);
-
-    retcode = send_rotctld_command(ctrl, buff, buffback, 128);
-
+    buff = g_strdup_printf("P %.2f %.2f\x0a", az, el);
+    retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
     g_free(buff);
 
     if (retcode == TRUE)
@@ -1393,147 +1576,6 @@ static gboolean have_conf()
     g_dir_close(dir);
 
     return (i > 0) ? TRUE : FALSE;
-}
-
-/** Open the rotcld socket. return true if successful false otherwise.*/
-static gboolean open_rotctld_socket(GtkRotCtrl * ctrl)
-{
-    struct sockaddr_in ServAddr;
-    struct hostent *h;
-    gint            status;
-
-    ctrl->sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (ctrl->sock < 0)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Failed to create socket"), __func__);
-        ctrl->sock = 0;
-        return FALSE;
-    }
-    else
-    {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s: Network socket created successfully"), __func__);
-    }
-
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;      /* Internet address family */
-    h = gethostbyname(ctrl->conf->host);
-    memcpy((char *)&ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(ctrl->conf->port);        /* Server port */
-
-    /* establish connection */
-    status =
-        connect(ctrl->sock, (struct sockaddr *)&ServAddr, sizeof(ServAddr));
-    if (status < 0)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Failed to connect to %s:%d"),
-                    __func__, ctrl->conf->host, ctrl->conf->port);
-        ctrl->sock = 0;
-        return FALSE;
-    }
-    else
-    {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s: Connection opened to %s:%d"),
-                    __func__, ctrl->conf->host, ctrl->conf->port);
-    }
-
-    return TRUE;
-}
-
-/** Close a rotcld socket. First send a q command to cleanly shut down rotctld */
-static gboolean close_rotctld_socket(gint * sock)
-{
-    gint            written;
-
-    /*shutdown the rotctld connect */
-    written = send(*sock, "q\x0a", 2, 0);
-    if (written != 2)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Sent 2 bytes but sent %d."),
-                    __FILE__, __func__, written);
-    }
-#ifndef WIN32
-    shutdown(*sock, SHUT_RDWR);
-    close(*sock);
-#else
-    shutdown(*sock, SD_BOTH);
-    closesocket(*sock);
-#endif
-
-    *sock = 0;
-
-    return TRUE;
-}
-
-/**
- * \brief  Send a command to rotctld
- *
- * Inputs are a controller, a string command, and a buffer and length for
- * returning the output from rotctld.
- */
-gboolean send_rotctld_command(GtkRotCtrl * ctrl, gchar * buff, gchar * buffout,
-                              gint sizeout)
-{
-    gint            written;
-    gint            size;
-
-    /* added by Marcel Cimander; win32 newline -> \10\13 */
-#ifdef WIN32
-    size = strlen(buff) - 1;
-    /* added by Marcel Cimander; unix newline -> \10 (apple -> \13) */
-#else
-    size = strlen(buff);
-#endif
-
-    //sat_log_log (SAT_LOG_LEVEL_DEBUG,
-    //             _("%s:%s: Sending %d bytes as %s."),
-    //             __FILE__, __func__, size, buff);
-
-    /* send command */
-    written = send(ctrl->sock, buff, size, 0);
-    if (written != size)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: SIZE ERROR %d / %d"), __func__, written, size);
-    }
-    if (written == -1)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: rotctld Socket Down"), __func__);
-        return FALSE;
-    }
-
-    /* try to read answer */
-    size = recv(ctrl->sock, buffout, sizeout, 0);
-
-    if (size == -1)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: rotctld Socket Down"), __func__);
-        return FALSE;
-    }
-
-    buffout[size] = '\0';
-    if (size == 0)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Got 0 bytes from rotctld"), __FILE__, __func__);
-    }
-    else
-    {
-        //sat_log_log (SAT_LOG_LEVEL_DEBUG,
-        //             _("%s:%s: Read %d bytes as %s from rotctld"),
-        //             __FILE__, __func__, size, buffout);
-
-    }
-
-    ctrl->wrops++;
-
-    return TRUE;
 }
 
 /**

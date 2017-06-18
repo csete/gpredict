@@ -1,7 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -85,15 +85,23 @@ struct _gtk_rot_ctrl {
     gdouble         tolerance;  /*!< Error tolerance */
 
     gboolean        tracking;   /*!< Flag set when we are tracking a target. */
-    GMutex          busy;       /*!< Flag set when control algorithm is busy. */
     gboolean        engaged;    /*!< Flag indicating that rotor device is engaged. */
 
     gint            errcnt;     /*!< Error counter. */
-    gint            sock;       /*!< socket for connecting to rotctld. */
 
-    /* debug related */
-    guint           wrops;
-    guint           rdops;
+    /* TCP client to rotctld */
+    struct {
+        GThread    *thread;
+        GMutex      mutex;
+        gint        socket;     /* network socket to rotctld */
+        gfloat      azi_in;     /* last AZI angle read from rotctld */
+        gfloat      ele_in;     /* last ELE angle read from rotctld */
+        gfloat      azi_out;    /* AZI target */
+        gfloat      ele_out;    /* ELE target */
+        gboolean    new_trg;    /* new target position set */
+        gboolean    running;
+        gboolean    io_error;
+    } client;
 };
 
 struct _GtkRotCtrlClass {
