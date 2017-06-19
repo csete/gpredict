@@ -92,6 +92,7 @@ struct _gtk_rot_ctrl {
     /* TCP client to rotctld */
     struct {
         GThread    *thread;
+        GTimer     *timer;
         GMutex      mutex;
         gint        socket;     /* network socket to rotctld */
         gfloat      azi_in;     /* last AZI angle read from rotctld */

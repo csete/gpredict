@@ -226,6 +226,7 @@ static gboolean rotctld_socket_rw(gint sock, gchar * buff, gchar * buffout,
 /* Rotctl client thread */
 static gpointer rotctld_client_thread(gpointer data)
 {
+    gdouble         elapsed_time;
     gdouble         azi = 0.0;
     gdouble         ele = 0.0;
     gboolean        new_trg = FALSE;
@@ -239,11 +240,14 @@ static gpointer rotctld_client_thread(gpointer data)
     if (ctrl->client.socket == -1)
         return GINT_TO_POINTER(-1);
 
+    ctrl->client.timer = g_timer_new();
+
     ctrl->client.new_trg = FALSE;
     ctrl->client.running = TRUE;
 
     while (ctrl->client.running)
     {
+        g_timer_start(ctrl->client.timer);
         io_error = FALSE;
 
         g_mutex_lock(&ctrl->client.mutex);
@@ -263,6 +267,8 @@ static gpointer rotctld_client_thread(gpointer data)
                 io_error = TRUE;
         }
 
+        /* wait 100 ms before sending new command */
+        g_usleep(100000);
         if (!get_pos(ctrl, &azi, &ele))
             ctrl->client.io_error = TRUE;
 
@@ -273,11 +279,13 @@ static gpointer rotctld_client_thread(gpointer data)
         ctrl->client.io_error = io_error;
         g_mutex_unlock(&ctrl->client.mutex);
 
-        /** FIXME **/
-        g_usleep(439000);
+        /* ensure rotctl duty cycle stays below 50%, but wait at least 700 ms (TBC) */
+        elapsed_time = MAX(g_timer_elapsed(ctrl->client.timer, NULL), 0.7);
+        g_usleep(elapsed_time * 1e6);
     }
 
     g_print("Stopping rotctld client thread\n");
+    g_timer_destroy(ctrl->client.timer);
     rotctld_socket_close(&ctrl->client.socket);
 
     return GINT_TO_POINTER(0);
