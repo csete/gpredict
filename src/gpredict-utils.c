@@ -56,7 +56,8 @@ GtkWidget      *gpredict_hpixmap_button(const gchar * file, const gchar * text,
     path = icon_file_name(file);
     image = gtk_image_new_from_file(path);
     g_free(path);
-    box = gtk_hbox_new(FALSE, 0);
+    box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(box), FALSE);
     gtk_box_pack_start(GTK_BOX(box), image, TRUE, TRUE, 0);
     if (text != NULL)
         gtk_box_pack_start(GTK_BOX(box), gtk_label_new(text), TRUE, TRUE, 0);
@@ -85,7 +86,8 @@ GtkWidget      *gpredict_vpixmap_button(const gchar * file, const gchar * text,
     path = icon_file_name(file);
     image = gtk_image_new_from_file(path);
     g_free(path);
-    box = gtk_vbox_new(FALSE, 0);
+    box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(box), FALSE);
     gtk_box_pack_start(GTK_BOX(box), image, TRUE, TRUE, 0);
     if (text != NULL)
         gtk_box_pack_start(GTK_BOX(box), gtk_label_new(text), TRUE, TRUE, 0);
@@ -111,8 +113,9 @@ GtkWidget      *gpredict_hstock_button(const gchar * stock_id,
     GtkWidget      *image;
     GtkWidget      *box;
 
-    image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
-    box = gtk_hbox_new(FALSE, 0);
+    image = gtk_image_new_from_icon_name(stock_id, GTK_ICON_SIZE_BUTTON);
+    box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(box), FALSE);
     gtk_box_pack_start(GTK_BOX(box), image, TRUE, TRUE, 0);
     if (text != NULL)
         gtk_box_pack_start(GTK_BOX(box), gtk_label_new(text), TRUE, TRUE, 0);

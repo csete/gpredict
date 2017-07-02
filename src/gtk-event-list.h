@@ -54,7 +54,7 @@ typedef struct _gtk_event_list GtkEventList;
 typedef struct _GtkEventListClass GtkEventListClass;
 
 struct _gtk_event_list {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     GtkWidget      *treeview;   /*!< the tree view itself */
     GtkWidget      *swin;       /*!< scrolled window */
@@ -75,7 +75,7 @@ struct _gtk_event_list {
 };
 
 struct _GtkEventListClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 /** Symbolic references to columns */

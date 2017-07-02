@@ -61,10 +61,9 @@
 
 #define MARKER_SIZE_HALF 2
 
-
 static void     gtk_polar_plot_class_init(GtkPolarPlotClass * class);
 static void     gtk_polar_plot_init(GtkPolarPlot * polview);
-static void     gtk_polar_plot_destroy(GtkObject * object);
+static void     gtk_polar_plot_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
 static void     create_track(GtkPolarPlot * pv);
@@ -73,7 +72,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
                                             gfloat x, gfloat y);
 static void     correct_pole_coor(GtkPolarPlot * polv, polar_plot_pole_t pole,
                                   gfloat * x, gfloat * y,
-                                  GtkAnchorType * anch);
+                                  GooCanvasAnchorType * anch);
 static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
                                  GdkEventMotion * event, gpointer data);
 static void     on_item_created(GooCanvas * canvas, GooCanvasItem * item,
@@ -85,7 +84,6 @@ static void     azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el,
                            gfloat * x, gfloat * y);
 static void     xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y, gfloat * az,
                            gfloat * el);
-
 
 static GtkVBoxClass *parent_class = NULL;
 
@@ -118,10 +116,9 @@ GType gtk_polar_plot_get_type()
 
 static void gtk_polar_plot_class_init(GtkPolarPlotClass * class)
 {
-    GtkObjectClass *object_class;
-    object_class = (GtkObjectClass *) class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
     parent_class = g_type_class_peek_parent(class);
-    object_class->destroy = gtk_polar_plot_destroy;
+    widget_class->destroy = gtk_polar_plot_destroy;
 }
 
 static void gtk_polar_plot_init(GtkPolarPlot * polview)
@@ -139,17 +136,16 @@ static void gtk_polar_plot_init(GtkPolarPlot * polview)
     polview->target = NULL;
 }
 
-static void gtk_polar_plot_destroy(GtkObject * object)
+static void gtk_polar_plot_destroy(GtkWidget * widget)
 {
-    if (GTK_POLAR_PLOT(object)->pass != NULL)
+    if (GTK_POLAR_PLOT(widget)->pass != NULL)
     {
-        free_pass(GTK_POLAR_PLOT(object)->pass);
-        GTK_POLAR_PLOT(object)->pass = NULL;
+        free_pass(GTK_POLAR_PLOT(widget)->pass);
+        GTK_POLAR_PLOT(widget)->pass = NULL;
     }
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
-
 
 /**
  * Create a new GtkPolarPlot widget.
@@ -559,7 +555,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
     GooCanvasItemModel *root;
     gfloat          x, y;
     guint32         col;
-    GtkAnchorType   anch = GTK_ANCHOR_CENTER;
+    GooCanvasAnchorType     anch = GOO_CANVAS_ANCHOR_CENTER;
 
     root = goo_canvas_group_model_new(NULL, NULL);
 
@@ -656,7 +652,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
                                            polv->cx - polv->r -
                                            2 * POLV_LINE_EXTRA,
                                            polv->cy + polv->r +
-                                           POLV_LINE_EXTRA, -1, GTK_ANCHOR_W,
+                                           POLV_LINE_EXTRA, -1, GOO_CANVAS_ANCHOR_W,
                                            "font", "Sans 8", "fill-color-rgba",
                                            col, NULL);
 
@@ -666,7 +662,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
                                              2 * POLV_LINE_EXTRA,
                                              polv->cy - polv->r -
                                              POLV_LINE_EXTRA, -1,
-                                             GTK_ANCHOR_SW, "font", "Sans 8",
+                                             GOO_CANVAS_ANCHOR_SW, "font", "Sans 8",
                                              "fill-color-rgba", col, NULL);
 
     return root;
@@ -681,7 +677,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
 static void
 correct_pole_coor(GtkPolarPlot * polv,
                   polar_plot_pole_t pole,
-                  gfloat * x, gfloat * y, GtkAnchorType * anch)
+                  gfloat * x, gfloat * y, GooCanvasAnchorType * anch)
 {
     switch (pole)
     {
@@ -690,12 +686,12 @@ correct_pole_coor(GtkPolarPlot * polv,
         {
             /* North and South are swapped */
             *y = *y + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_NORTH;
+            *anch = GOO_CANVAS_ANCHOR_NORTH;
         }
         else
         {
             *y = *y - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_SOUTH;
+            *anch = GOO_CANVAS_ANCHOR_SOUTH;
         }
         break;
 
@@ -704,12 +700,12 @@ correct_pole_coor(GtkPolarPlot * polv,
         {
             /* East and West are swapped */
             *x = *x - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_EAST;
+            *anch = GOO_CANVAS_ANCHOR_EAST;
         }
         else
         {
             *x = *x + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_WEST;
+            *anch = GOO_CANVAS_ANCHOR_WEST;
         }
         break;
 
@@ -718,12 +714,12 @@ correct_pole_coor(GtkPolarPlot * polv,
         {
             /* North and South are swapped */
             *y = *y - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_SOUTH;
+            *anch = GOO_CANVAS_ANCHOR_SOUTH;
         }
         else
         {
             *y = *y + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_NORTH;
+            *anch = GOO_CANVAS_ANCHOR_NORTH;
         }
         break;
 
@@ -732,12 +728,12 @@ correct_pole_coor(GtkPolarPlot * polv,
         {
             /* East and West are swapped */
             *x = *x + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_WEST;
+            *anch = GOO_CANVAS_ANCHOR_WEST;
         }
         else
         {
             *x = *x - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_EAST;
+            *anch = GOO_CANVAS_ANCHOR_EAST;
         }
         break;
 
@@ -762,7 +758,7 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
     GtkPolarPlot   *polv;
     GooCanvasPoints *prec;
     gfloat          x, y;
-    GtkAnchorType   anch = GTK_ANCHOR_CENTER;
+    GooCanvasAnchorType     anch = GOO_CANVAS_ANCHOR_CENTER;
 
     if (gtk_widget_get_realized(widget))
     {
@@ -935,7 +931,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
 {
     GooCanvasItemModel *item;
     gchar           buff[6];
-    GtkAnchorType   anchor;
+    GooCanvasAnchorType     anchor;
     GooCanvasItemModel *root;
     guint32         col;
 
@@ -947,12 +943,12 @@ static GooCanvasItemModel *create_time_tick(GtkPolarPlot * pv, gdouble time,
 
     if (x > pv->cx)
     {
-        anchor = GTK_ANCHOR_EAST;
+        anchor = GOO_CANVAS_ANCHOR_EAST;
         x -= 5;
     }
     else
     {
-        anchor = GTK_ANCHOR_WEST;
+        anchor = GOO_CANVAS_ANCHOR_WEST;
         x += 5;
     }
 

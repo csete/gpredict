@@ -52,7 +52,7 @@ typedef struct _gtk_freq_knob GtkFreqKnob;
 typedef struct _GtkFreqKnobClass GtkFreqKnobClass;
 
 struct _gtk_freq_knob {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     GtkWidget      *digits[10]; /*!< Labels for the digits */
     GtkWidget      *evtbox[10]; /*!< Event boxes to catch mouse events over the digits */
@@ -64,7 +64,7 @@ struct _gtk_freq_knob {
 };
 
 struct _GtkFreqKnobClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 GType           gtk_freq_knob_get_type(void);

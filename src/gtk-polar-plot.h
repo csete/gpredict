@@ -34,16 +34,14 @@
 #include "gtk-sat-data.h"
 #include "predict-tools.h"
 
-
 /* *INDENT-OFF* */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 /* *INDENT-ON* */
 
-    /** \brief Number of time ticks. */
+/** \brief Number of time ticks. */
 #define TRACK_TICK_NUM 5
-
 
 #define GTK_POLAR_PLOT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_polar_plot_get_type (), GtkPolarPlot)
 #define GTK_POLAR_PLOT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_polar_plot_get_type (), GtkPolarPlotClass)
@@ -54,9 +52,8 @@ extern "C" {
 typedef struct _GtkPolarPlot GtkPolarPlot;
 typedef struct _GtkPolarPlotClass GtkPolarPlotClass;
 
-
-    /* graph orientation; start at 12
-       o'clock and go clockwise */
+/* graph orientation; start at 12
+   o'clock and go clockwise */
 typedef enum {
     POLAR_PLOT_NESW = 0,        /*!< Normal / usual */
     POLAR_PLOT_NWSE = 1,
@@ -64,15 +61,13 @@ typedef enum {
     POLAR_PLOT_SWNE = 3
 } polar_plot_swap_t;
 
-
-    /* pole identifier */
+/* pole identifier */
 typedef enum {
     POLAR_PLOT_POLE_N = 0,
     POLAR_PLOT_POLE_E = 1,
     POLAR_PLOT_POLE_S = 2,
     POLAR_PLOT_POLE_W = 3
 } polar_plot_pole_t;
-
 
 struct _GtkPolarPlot {
     GtkVBox         vbox;
@@ -94,7 +89,6 @@ struct _GtkPolarPlot {
 
     qth_t          *qth;        /*!< Pointer to current location. */
 
-
     guint           cx;         /*!< center X */
     guint           cy;         /*!< center Y */
     guint           r;          /*!< radius */
@@ -112,12 +106,8 @@ struct _GtkPolarPlotClass {
     GtkVBoxClass    parent_class;
 };
 
-
-
 GType           gtk_polar_plot_get_type(void);
-
 GtkWidget      *gtk_polar_plot_new(qth_t * qth, pass_t * pass);
-
 void            gtk_polar_plot_set_pass(GtkPolarPlot * plot, pass_t * pass);
 void            gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az,
                                               gdouble el);

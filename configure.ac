@@ -44,11 +44,11 @@ else
 fi
 
 # check for goocanvas (depends on gtk and glib)
-if pkg-config --atleast-version=0.15 goocanvas; then
-    CFLAGS="$CFLAGS `pkg-config --cflags goocanvas`"
-    LIBS="$LIBS `pkg-config --libs goocanvas`"
+if pkg-config --atleast-version=2.0 goocanvas-2.0; then
+    CFLAGS="$CFLAGS `pkg-config --cflags goocanvas-2.0`"
+    LIBS="$LIBS `pkg-config --libs goocanvas-2.0`"
 else
-    AC_MSG_ERROR(Gpredict requires libgoocanvas-dev 0.15 or later)
+    AC_MSG_ERROR(Gpredict requires libgoocanvas-2.0-dev)
 fi
 
 # check for libgps (optional)
@@ -90,9 +90,9 @@ AM_CONDITIONAL(UPDATE_CACHES, test x"$enable_caches" = "xyes")
 GLIB_V=`pkg-config --modversion glib-2.0`
 GIO_V=`pkg-config --modversion gio-2.0`
 GTHR_V=`pkg-config --modversion gthread-2.0`
-GDK_V=`pkg-config --modversion gdk-2.0`
-GTK_V=`pkg-config --modversion gtk+-2.0`
-GOOC_V=`pkg-config --modversion goocanvas`
+GDK_V=`pkg-config --modversion gdk-3.0`
+GTK_V=`pkg-config --modversion gtk+-3.0`
+GOOC_V=`pkg-config --modversion goocanvas-2.0`
 CURL_V=`pkg-config --modversion libcurl`
 if test "$havelibgps" = true ; then
    GPS_V=`pkg-config --modversion libgps`

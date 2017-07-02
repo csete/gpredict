@@ -51,7 +51,7 @@
 
 static void     gtk_azel_plot_class_init(GtkAzelPlotClass * class);
 static void     gtk_azel_plot_init(GtkAzelPlot * polview);
-static void     gtk_azel_plot_destroy(GtkObject * object);
+static void     gtk_azel_plot_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
 static gboolean on_motion_notify(GooCanvasItem * item,
@@ -70,7 +70,7 @@ static void     az_to_xy(GtkAzelPlot * p, gdouble t, gdouble az, gdouble * x,
 static void     el_to_xy(GtkAzelPlot * p, gdouble t, gdouble el, gdouble * x,
                          gdouble * y);
 
-static GtkVBoxClass *parent_class = NULL;
+static GtkBoxClass  *parent_class = NULL;
 
 
 GType gtk_azel_plot_get_type()
@@ -92,7 +92,7 @@ GType gtk_azel_plot_get_type()
             NULL
         };
 
-        gtk_azel_plot_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_azel_plot_type = g_type_register_static(GTK_TYPE_BOX,
                                                     "GtkAzelPlot",
                                                     &gtk_azel_plot_info, 0);
     }
@@ -102,21 +102,10 @@ GType gtk_azel_plot_get_type()
 
 static void gtk_azel_plot_class_init(GtkAzelPlotClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
-
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+    widget_class->destroy = gtk_azel_plot_destroy;
     parent_class = g_type_class_peek_parent(class);
 
-    object_class->destroy = gtk_azel_plot_destroy;
-    //widget_class->size_allocate = gtk_azel_plot_size_allocate;
 }
 
 static void gtk_azel_plot_init(GtkAzelPlot * polview)
@@ -134,10 +123,9 @@ static void gtk_azel_plot_init(GtkAzelPlot * polview)
     polview->extratick = FALSE;
 }
 
-static void gtk_azel_plot_destroy(GtkObject * object)
+static void gtk_azel_plot_destroy(GtkWidget * widget)
 {
-
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
@@ -186,8 +174,10 @@ GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
     /* create the canvas */
     GTK_AZEL_PLOT(polv)->canvas = goo_canvas_new();
     get_canvas_bg_color(GTK_AZEL_PLOT(polv), &bg_color);
+
     gtk_widget_modify_base(GTK_AZEL_PLOT(polv)->canvas, GTK_STATE_NORMAL,
                            &bg_color);
+
     gtk_widget_set_size_request(GTK_AZEL_PLOT(polv)->canvas, POLV_DEFAULT_SIZE,
                                 POLV_DEFAULT_SIZE);
     goo_canvas_set_bounds(GOO_CANVAS(GTK_AZEL_PLOT(polv)->canvas), 0, 0,
@@ -293,7 +283,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                                (gfloat) (polv->x0 + (i + 1) * xstep),
                                (gfloat) (polv->y0 + 5),
                                -1,
-                               GTK_ANCHOR_N,
+                               GOO_CANVAS_ANCHOR_N,
                                "font", "Sans 8",
                                "fill-color-rgba", 0x000000FF, NULL);
 
@@ -325,8 +315,9 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                                                                          1));
         polv->azlab[i] =
             MKTEXT(root, txt, (gfloat) (polv->x0 - 5),
-                   (gfloat) (polv->y0 - (i + 1) * ystep), -1, GTK_ANCHOR_E,
-                   "font", "Sans 8", "fill-color-rgba", 0x0000BFFF, NULL);
+                   (gfloat) (polv->y0 - (i + 1) * ystep), -1,
+                   GOO_CANVAS_ANCHOR_E, "font", "Sans 8",
+                   "fill-color-rgba", 0x0000BFFF, NULL);
         g_free(txt);
 
         /* El tick labels */
@@ -335,7 +326,8 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                             90.0 / (AZEL_PLOT_NUM_TICKS + 1) * (i + 1));
         polv->ellab[i] =
             MKTEXT(root, txt, (gfloat) (polv->xmax + 5),
-                   (gfloat) (polv->y0 - (i + 1) * ystep), -1, GTK_ANCHOR_W,
+                   (gfloat) (polv->y0 - (i + 1) * ystep), -1,
+                   GOO_CANVAS_ANCHOR_W,
                    "font", "Sans 8", "fill-color-rgba", 0xBF0000FF, NULL);
         g_free(txt);
     }
@@ -347,7 +339,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                             (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
                             (gfloat) (polv->height - 5),
                             -1,
-                            GTK_ANCHOR_S,
+                            GOO_CANVAS_ANCHOR_S,
                             "font", "Sans 9",
                             "fill-color-rgba", 0x000000FF, NULL);
     }
@@ -357,7 +349,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                             (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
                             (gfloat) (polv->height - 5),
                             -1,
-                            GTK_ANCHOR_S,
+                            GOO_CANVAS_ANCHOR_S,
                             "font", "Sans 9",
                             "fill-color-rgba", 0x000000FF, NULL);
     }
@@ -367,7 +359,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                         (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
                         5.0,
                         -1,
-                        GTK_ANCHOR_N,
+                        GOO_CANVAS_ANCHOR_N,
                         "font", "Sans 8", "fill-color-rgba", 0x000000FF, NULL);
 
     /* Az legend */
@@ -375,7 +367,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                          (gfloat) (polv->x0 - 7),
                          (gfloat) polv->ymax,
                          -1,
-                         GTK_ANCHOR_NE,
+                         GOO_CANVAS_ANCHOR_NE,
                          "font", "Sans 9",
                          "fill-color-rgba", 0x0000BFFF, NULL);
 
@@ -384,7 +376,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
                          (gfloat) (polv->xmax + 7),
                          (gfloat) polv->ymax,
                          -1,
-                         GTK_ANCHOR_NW,
+                         GOO_CANVAS_ANCHOR_NW,
                          "font", "Sans 9",
                          "fill-color-rgba", 0xBF0000FF, NULL);
 

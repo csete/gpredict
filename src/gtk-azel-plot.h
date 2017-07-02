@@ -56,7 +56,7 @@ typedef struct _GtkAzelPlotClass GtkAzelPlotClass;
 
 
 struct _GtkAzelPlot {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     GtkWidget      *canvas;     /*!< The canvas widget */
 
@@ -93,7 +93,7 @@ struct _GtkAzelPlot {
 };
 
 struct _GtkAzelPlotClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 

@@ -57,14 +57,14 @@
 
 static void     gtk_polar_view_class_init(GtkPolarViewClass * class);
 static void     gtk_polar_view_init(GtkPolarView * polview);
-static void     gtk_polar_view_destroy(GtkObject * object);
+static void     gtk_polar_view_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
 static void     update_sat(gpointer key, gpointer value, gpointer data);
 static void     update_track(gpointer key, gpointer value, gpointer data);
 static void     correct_pole_coor(GtkPolarView * polv, polar_view_pole_t pole,
                                   gfloat * x, gfloat * y,
-                                  GtkAnchorType * anch);
+                                  GooCanvasAnchorType * anch);
 static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
                                  GdkEventMotion * event, gpointer data);
 static void     on_item_created(GooCanvas * canvas, GooCanvasItem * item,
@@ -121,21 +121,11 @@ GType gtk_polar_view_get_type()
 
 static void gtk_polar_view_class_init(GtkPolarViewClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
 
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
+    widget_class->destroy = gtk_polar_view_destroy;
 
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_polar_view_destroy;
-    //widget_class->size_allocate = gtk_polar_view_size_allocate;
 }
 
 static void gtk_polar_view_init(GtkPolarView * polview)
@@ -159,11 +149,11 @@ static void gtk_polar_view_init(GtkPolarView * polview)
     polview->resize = FALSE;
 }
 
-static void gtk_polar_view_destroy(GtkObject * object)
+static void gtk_polar_view_destroy(GtkWidget * widget)
 {
-    gtk_polar_view_store_showtracks(GTK_POLAR_VIEW(object));
+    gtk_polar_view_store_showtracks(GTK_POLAR_VIEW(widget));
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
@@ -280,7 +270,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
     GooCanvasItemModel *root;
     gfloat          x, y;
     guint32         col;
-    GtkAnchorType   anch = GTK_ANCHOR_CENTER;
+    GooCanvasAnchorType anch = GOO_CANVAS_ANCHOR_CENTER;
 
     root = goo_canvas_group_model_new(NULL, NULL);
 
@@ -385,9 +375,10 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                            polv->cx - polv->r -
                                            2 * POLV_LINE_EXTRA,
                                            polv->cy + polv->r +
-                                           POLV_LINE_EXTRA, -1, GTK_ANCHOR_W,
-                                           "font", "Sans 8", "fill-color-rgba",
-                                           col, NULL);
+                                           POLV_LINE_EXTRA, -1,
+                                           GOO_CANVAS_ANCHOR_W, "font",
+                                           "Sans 8", "fill-color-rgba", col,
+                                           NULL);
 
     /* location info */
     polv->locnam = goo_canvas_text_model_new(root, polv->qth->name,
@@ -395,17 +386,19 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                              2 * POLV_LINE_EXTRA,
                                              polv->cy - polv->r -
                                              POLV_LINE_EXTRA, -1,
-                                             GTK_ANCHOR_SW, "font", "Sans 8",
-                                             "fill-color-rgba", col, NULL);
+                                             GOO_CANVAS_ANCHOR_SW, "font",
+                                             "Sans 8", "fill-color-rgba", col,
+                                             NULL);
 
     /* next event */
     polv->next = goo_canvas_text_model_new(root, "",
                                            polv->cx + polv->r +
                                            2 * POLV_LINE_EXTRA,
                                            polv->cy - polv->r -
-                                           POLV_LINE_EXTRA, -1, GTK_ANCHOR_E,
-                                           "font", "Sans 8", "fill-color-rgba",
-                                           col, "alignment", PANGO_ALIGN_RIGHT,
+                                           POLV_LINE_EXTRA, -1,
+                                           GOO_CANVAS_ANCHOR_E, "font",
+                                           "Sans 8", "fill-color-rgba", col,
+                                           "alignment", PANGO_ALIGN_RIGHT,
                                            NULL);
 
     /* selected satellite text */
@@ -413,9 +406,10 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                           polv->cx + polv->r +
                                           2 * POLV_LINE_EXTRA,
                                           polv->cy + polv->r + POLV_LINE_EXTRA,
-                                          -1, GTK_ANCHOR_E, "font", "Sans 8",
-                                          "fill-color-rgba", col, "alignment",
-                                          PANGO_ALIGN_RIGHT, NULL);
+                                          -1, GOO_CANVAS_ANCHOR_E, "font",
+                                          "Sans 8", "fill-color-rgba", col,
+                                          "alignment", PANGO_ALIGN_RIGHT,
+                                          NULL);
 
     return root;
 }
@@ -429,7 +423,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
 static void
 correct_pole_coor(GtkPolarView * polv,
                   polar_view_pole_t pole,
-                  gfloat * x, gfloat * y, GtkAnchorType * anch)
+                  gfloat * x, gfloat * y, GooCanvasAnchorType * anch)
 {
 
     switch (pole)
@@ -439,12 +433,12 @@ correct_pole_coor(GtkPolarView * polv,
         {
             /* North and South are swapped */
             *y = *y + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_NORTH;
+            *anch = GOO_CANVAS_ANCHOR_NORTH;
         }
         else
         {
             *y = *y - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_SOUTH;
+            *anch = GOO_CANVAS_ANCHOR_SOUTH;
         }
 
         break;
@@ -454,12 +448,12 @@ correct_pole_coor(GtkPolarView * polv,
         {
             /* East and West are swapped */
             *x = *x - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_EAST;
+            *anch = GOO_CANVAS_ANCHOR_EAST;
         }
         else
         {
             *x = *x + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_WEST;
+            *anch = GOO_CANVAS_ANCHOR_WEST;
         }
         break;
 
@@ -468,12 +462,12 @@ correct_pole_coor(GtkPolarView * polv,
         {
             /* North and South are swapped */
             *y = *y - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_SOUTH;
+            *anch = GOO_CANVAS_ANCHOR_SOUTH;
         }
         else
         {
             *y = *y + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_NORTH;
+            *anch = GOO_CANVAS_ANCHOR_NORTH;
         }
         break;
 
@@ -482,12 +476,12 @@ correct_pole_coor(GtkPolarView * polv,
         {
             /* East and West are swapped */
             *x = *x + POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_WEST;
+            *anch = GOO_CANVAS_ANCHOR_WEST;
         }
         else
         {
             *x = *x - POLV_LINE_EXTRA;
-            *anch = GTK_ANCHOR_EAST;
+            *anch = GOO_CANVAS_ANCHOR_EAST;
         }
         break;
 
@@ -518,7 +512,7 @@ static void update_polv_size(GtkPolarView * polv)
     GtkAllocation   allocation;
     GooCanvasPoints *prec;
     gfloat          x, y;
-    GtkAnchorType   anch = GTK_ANCHOR_CENTER;
+    GooCanvasAnchorType anch = GOO_CANVAS_ANCHOR_CENTER;
 
 
     if (gtk_widget_get_realized(GTK_WIDGET(polv)))
@@ -896,8 +890,8 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                         {
                             idx =
                                 goo_canvas_item_model_find_child(root,
-                                                                 obj->
-                                                                 trtick[i]);
+                                                                 obj->trtick
+                                                                 [i]);
                             if (idx != -1)
                                 goo_canvas_item_model_remove_child(root, idx);
                         }
@@ -971,10 +965,10 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                                                         tooltip, NULL);
                 obj->label =
                     goo_canvas_text_model_new(root, sat->nickname, x, y + 2,
-                                              -1, GTK_ANCHOR_NORTH, "font",
-                                              "Sans 8", "fill-color-rgba",
-                                              colour, "tooltip", tooltip,
-                                              NULL);
+                                              -1, GOO_CANVAS_ANCHOR_NORTH,
+                                              "font", "Sans 8",
+                                              "fill-color-rgba", colour,
+                                              "tooltip", tooltip, NULL);
 
                 g_free(tooltip);
                 if (goo_canvas_item_model_find_child(root, obj->marker) != -1)
@@ -1103,7 +1097,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarView * pv, gdouble time,
 {
     GooCanvasItemModel *item;
     gchar           buff[6];
-    GtkAnchorType   anchor;
+    GooCanvasAnchorType anchor;
     GooCanvasItemModel *root;
     guint32         col;
 
@@ -1118,12 +1112,12 @@ static GooCanvasItemModel *create_time_tick(GtkPolarView * pv, gdouble time,
 
     if (x > pv->cx)
     {
-        anchor = GTK_ANCHOR_EAST;
+        anchor = GOO_CANVAS_ANCHOR_EAST;
         x -= 5;
     }
     else
     {
-        anchor = GTK_ANCHOR_WEST;
+        anchor = GOO_CANVAS_ANCHOR_WEST;
         x += 5;
     }
 

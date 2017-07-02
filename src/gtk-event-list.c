@@ -90,7 +90,7 @@ const gfloat    EVENT_LIST_HEAD_XALIGN[EVENT_LIST_COL_NUMBER] = {
 
 static void     gtk_event_list_class_init(GtkEventListClass * class);
 static void     gtk_event_list_init(GtkEventList * list);
-static void     gtk_event_list_destroy(GtkObject * object);
+static void     gtk_event_list_destroy(GtkWidget * widget);
 static GtkTreeModel *create_and_fill_model(GHashTable * sats);
 static void     event_list_add_satellites(gpointer key,
                                           gpointer value, gpointer user_data);
@@ -128,7 +128,7 @@ static void     row_activated_cb(GtkTreeView * tree_view,
                                  GtkTreePath * path,
                                  GtkTreeViewColumn * column, gpointer list);
 
-static GtkVBoxClass *parent_class = NULL;
+static GtkBoxClass *parent_class = NULL;
 
 GType gtk_event_list_get_type()
 {
@@ -149,7 +149,7 @@ GType gtk_event_list_get_type()
             NULL
         };
 
-        gtk_event_list_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_event_list_type = g_type_register_static(GTK_TYPE_BOX,
                                                      "GtkEventList",
                                                      &gtk_event_list_info, 0);
     }
@@ -159,20 +159,9 @@ GType gtk_event_list_get_type()
 
 static void gtk_event_list_class_init(GtkEventListClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
-
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
+    widget_class->destroy = gtk_event_list_destroy;
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_event_list_destroy;
 }
 
 static void gtk_event_list_init(GtkEventList * list)
@@ -180,9 +169,9 @@ static void gtk_event_list_init(GtkEventList * list)
     (void)list;
 }
 
-static void gtk_event_list_destroy(GtkObject * object)
+static void gtk_event_list_destroy(GtkWidget * widget)
 {
-    GtkEventList   *evlist = GTK_EVENT_LIST(object);
+    GtkEventList   *evlist = GTK_EVENT_LIST(widget);
 
     g_key_file_set_integer(evlist->cfgdata, MOD_CFG_EVENT_LIST_SECTION,
                            MOD_CFG_EVENT_LIST_SORT_COLUMN,
@@ -191,7 +180,7 @@ static void gtk_event_list_destroy(GtkObject * object)
     g_key_file_set_integer(evlist->cfgdata, MOD_CFG_EVENT_LIST_SECTION,
                            MOD_CFG_EVENT_LIST_SORT_ORDER, evlist->sort_order);
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
@@ -262,7 +251,6 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
     evlist->treeview = gtk_tree_view_new();
 
     /* visual appearance of table */
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(evlist->treeview), TRUE);
     gtk_tree_view_set_grid_lines(GTK_TREE_VIEW(evlist->treeview),
                                  GTK_TREE_VIEW_GRID_LINES_NONE);
 

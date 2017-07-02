@@ -113,9 +113,9 @@ static gint config_help(void)
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_OK", GTK_RESPONSE_OK,
+                                         NULL);
 
 #define HELP_TEXT "Please select a HTML browser to be used to view the help."
 
@@ -225,10 +225,9 @@ void gpredict_help_show_txt(const gchar * filename)
 
     /* create and show dialogue with textbuffer */
     dialog = gtk_dialog_new_with_buttons(_("Gpredict Info"),
-                                         NULL,
-                                         0,
-                                         GTK_STOCK_CLOSE,
-                                         GTK_RESPONSE_ACCEPT, NULL);
+                                         NULL, 0,
+                                         "_Close", GTK_RESPONSE_ACCEPT,
+                                         NULL);
     gtk_widget_set_size_request(dialog, -1, 450);
     buff = icon_file_name("gpredict-icon.png");
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), buff, NULL);
