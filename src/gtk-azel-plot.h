@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -36,11 +35,11 @@
 #include "predict-tools.h"
 #include <goocanvas.h>
 
-
+/* *INDENT-OFF* */
 #ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+extern          "C" {
+#endif
+/* *INDENT-ON* */
 
 /* number of ticks excluding end points */
 #define AZEL_PLOT_NUM_TICKS 5
@@ -52,65 +51,60 @@ extern "C" {
 #define GTK_TYPE_AZEL_PLOT          (gtk_azel_plot_get_type ())
 #define IS_GTK_AZEL_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_azel_plot_get_type ())
 
-typedef struct _GtkAzelPlot        GtkAzelPlot;
-typedef struct _GtkAzelPlotClass   GtkAzelPlotClass;
+typedef struct _GtkAzelPlot GtkAzelPlot;
+typedef struct _GtkAzelPlotClass GtkAzelPlotClass;
 
 
+struct _GtkAzelPlot {
+    GtkVBox         vbox;
 
-struct _GtkAzelPlot
-{
-     GtkVBox vbox;
+    GtkWidget      *canvas;     /*!< The canvas widget */
 
-     GtkWidget  *canvas;   /*!< The canvas widget */
+    GooCanvasItemModel *curs;   /*!< cusor info */
+    GooCanvasItemModel *frame;  /*!< frame */
+    GooCanvasItemModel *azg;    /*!< Az graph */
+    GooCanvasItemModel *elg;    /*!< El graph */
+    GooCanvasItemModel *xticksb[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks bottom */
+    GooCanvasItemModel *xtickst[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks top */
+    GooCanvasItemModel *xlabels[AZEL_PLOT_NUM_TICKS];   /*!< x tick labels */
+    GooCanvasItemModel *yticksl[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks left */
+    GooCanvasItemModel *yticksr[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks right */
+    GooCanvasItemModel *ylabelsl[AZEL_PLOT_NUM_TICKS];  /*!< left y tick labels */
+    GooCanvasItemModel *ylabelsr[AZEL_PLOT_NUM_TICKS];  /*!< right y tick labels */
 
-     GooCanvasItemModel *curs;    /*!< cusor info */
-     GooCanvasItemModel *frame;   /*!< frame */
-     GooCanvasItemModel *azg;     /*!< Az graph */
-     GooCanvasItemModel *elg;     /*!< El graph */
-     GooCanvasItemModel *xticksb[AZEL_PLOT_NUM_TICKS];     /*!< x tick marks bottom */
-     GooCanvasItemModel *xtickst[AZEL_PLOT_NUM_TICKS];     /*!< x tick marks top */
-     GooCanvasItemModel *xlabels[AZEL_PLOT_NUM_TICKS];     /*!< x tick labels */
-     GooCanvasItemModel *yticksl[AZEL_PLOT_NUM_TICKS];     /*!< x tick marks left */
-     GooCanvasItemModel *yticksr[AZEL_PLOT_NUM_TICKS];     /*!< x tick marks right */
-     GooCanvasItemModel *ylabelsl[AZEL_PLOT_NUM_TICKS];     /*!< left y tick labels */
-     GooCanvasItemModel *ylabelsr[AZEL_PLOT_NUM_TICKS];     /*!< right y tick labels */
+    GooCanvasItemModel *xlab[AZEL_PLOT_NUM_TICKS];      /*!< x tick labels */
+    GooCanvasItemModel *azlab[AZEL_PLOT_NUM_TICKS];     /*!< Az tick labels */
+    GooCanvasItemModel *ellab[AZEL_PLOT_NUM_TICKS];     /*!< El tick labels */
+    GooCanvasItemModel *azleg, *elleg, *xleg;   /*!< Az and El legend */
 
-     GooCanvasItemModel *xlab[AZEL_PLOT_NUM_TICKS];     /*!< x tick labels */
-     GooCanvasItemModel *azlab[AZEL_PLOT_NUM_TICKS];    /*!< Az tick labels */
-     GooCanvasItemModel *ellab[AZEL_PLOT_NUM_TICKS];    /*!< El tick labels */
-     GooCanvasItemModel *azleg,*elleg,*xleg;            /*!< Az and El legend */
+    qth_t          *qth;        /*!< Pointer to current location. */
+    pass_t         *pass;
 
-     qth_t      *qth;      /*!< Pointer to current location. */
-     pass_t     *pass;
+    guint           width;      /*!< width of the box  */
+    guint           height;     /*!< height of the box */
 
-     guint       width;     /*!< width of the box  */
-     guint       height;    /*!< height of the box */
+    guint           x0, y0, xmax, ymax;
 
-     guint       x0,y0,xmax,ymax;
+    gdouble         maxaz;      /*!< max Az 360 or 180 */
 
-     gdouble     maxaz;     /*!< max Az 360 or 180 */
-
-     gboolean    qthinfo;     /*!< Show the QTH info. */
-     gboolean    cursinfo;    /*!< Track the mouse cursor. */
-     gboolean    extratick;   /*!< Show extra ticks */
+    gboolean        qthinfo;    /*!< Show the QTH info. */
+    gboolean        cursinfo;   /*!< Track the mouse cursor. */
+    gboolean        extratick;  /*!< Show extra ticks */
 };
 
-struct _GtkAzelPlotClass
-{
-     GtkVBoxClass parent_class;
+struct _GtkAzelPlotClass {
+    GtkVBoxClass    parent_class;
 };
 
 
-
-GType        gtk_azel_plot_get_type   (void);
-
-GtkWidget*     gtk_azel_plot_new        (qth_t *qth, pass_t *pass);
+GType           gtk_azel_plot_get_type(void);
+GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass);
 
 
-
-
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif                          /* __cplusplus */
+/* *INDENT-ON* */
 
 #endif /* __GTK_AZEL_PLOT_H__ */
