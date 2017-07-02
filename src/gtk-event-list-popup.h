@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -34,9 +33,9 @@
 #include "gtk-event-list.h"
 
 
-void gtk_event_list_popup_exec (sat_t *sat, qth_t *qth,
-                                GdkEventButton *event,
-                                GtkEventList *list);
+void            gtk_event_list_popup_exec(sat_t * sat, qth_t * qth,
+                                          GdkEventButton * event,
+                                          GtkEventList * list);
 
 
 #endif
