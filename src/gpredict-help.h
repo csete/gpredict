@@ -28,15 +28,12 @@
 #ifndef GPREDICT_HELP_H
 #define GPREDICT_HELP_H 1
 
-
 typedef enum {
-     GPREDICT_HELP_GETTING_STARTED,
-     GPREDICT_HELP_USER_MANUAL
+    GPREDICT_HELP_GETTING_STARTED,
+    GPREDICT_HELP_USER_MANUAL
 } gpredict_help_type_t;
 
-
-void gpredict_help_launch (gpredict_help_type_t type);
-void gpredict_help_show_txt (const gchar *filename);
-
+void            gpredict_help_launch(gpredict_help_type_t type);
+void            gpredict_help_show_txt(const gchar * filename);
 
 #endif
