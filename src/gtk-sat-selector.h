@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -33,11 +32,11 @@
 /* *INDENT-OFF* */
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif
 /* *INDENT-ON* */
 
 
-/** @brief Column definitions in the tree. */
+/** Column definitions in the tree. */
 typedef enum {
     GTK_SAT_SELECTOR_COL_NAME = 0,      /*!< Satellite name. */
     GTK_SAT_SELECTOR_COL_CATNUM,        /*!< Catalogue Number. */
@@ -46,7 +45,7 @@ typedef enum {
     GTK_SAT_SELECTOR_COL_NUM    /*!< The number of columns. */
 } gtk_sat_selector_col_t;
 
-/** @brief Flags used to indicate which columns should be visible. */
+/** Flags used to indicate which columns should be visible. */
 typedef enum {
     GTK_SAT_SELECTOR_FLAG_NAME = 1 << GTK_SAT_SELECTOR_COL_NAME,        /*!< Satellite name. */
     GTK_SAT_SELECTOR_FLAG_CATNUM = 1 << GTK_SAT_SELECTOR_COL_CATNUM,    /*!< Catalogue Number. */
@@ -58,20 +57,18 @@ typedef enum {
 #define GTK_SAT_SELECTOR_DEFAULT_FLAGS (GTK_SAT_SELECTOR_FLAG_NAME | GTK_SAT_SELECTOR_FLAG_CATNUM)
 #define GTK_TYPE_SAT_SELECTOR  (gtk_sat_selector_get_type ())
 #define GTK_SAT_SELECTOR(obj)  G_TYPE_CHECK_INSTANCE_CAST (obj,\
-                                               gtk_sat_selector_get_type (),\
-                                               GtkSatSelector)
+                                   gtk_sat_selector_get_type (),\
+                                   GtkSatSelector)
 #define GTK_SAT_SELECTOR_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass,\
-                                                             gtk_sat_selector_get_type (),\
-                                                             GtkSatSelectorClass)
+                                           gtk_sat_selector_get_type (),\
+                                           GtkSatSelectorClass)
 #define IS_GTK_SAT_SELECTOR(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_selector_get_type ())
 
-
-/** @brief The GtkSatSelector structure */
+/** The GtkSatSelector structure */
 typedef struct _gtk_sat_selector GtkSatSelector;
 typedef struct _GtkSatSelectorClass GtkSatSelectorClass;
 
-
-/** @brief The GtkSatSelector Structure definition */
+/** The GtkSatSelector Structure definition */
 struct _gtk_sat_selector {
     GtkVBox         vbox;
 
@@ -90,7 +87,6 @@ struct _GtkSatSelectorClass {
     void            (*gtksatselector) (GtkSatSelector * sel);
 };
 
-
 GType           gtk_sat_selector_get_type(void);
 GtkWidget      *gtk_sat_selector_new(guint flags);
 guint32         gtk_sat_selector_get_flags(GtkSatSelector * selector);
@@ -106,7 +102,7 @@ void            gtk_sat_selector_mark_unselected(GtkSatSelector * selector,
 /* *INDENT-OFF* */
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 /* *INDENT-ON* */
 
 #endif

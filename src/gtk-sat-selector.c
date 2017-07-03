@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -26,51 +25,47 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief Satellite selector.
- *
- */
 
-/*needed _gnu_source to have strcasestr defined*/
+
+/* need _gnu_source to have strcasestr defined*/
 #define _GNU_SOURCE
 
-#include <string.h>
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
-#include "gtk-sat-data.h"
+
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+#include <string.h>
+
 #include "compat.h"
-#include "sat-cfg.h"
-#include "gtk-sat-selector.h"
 #include "gpredict-utils.h"
+#include "gtk-sat-data.h"
+#include "gtk-sat-selector.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
 
 static void     gtk_sat_selector_class_init(GtkSatSelectorClass * class);
 static void     gtk_sat_selector_init(GtkSatSelector * selector);
 static void     gtk_sat_selector_destroy(GtkObject * object);
-
 static void     create_and_fill_models(GtkSatSelector * selector);
 static void     load_cat_file(GtkSatSelector * selector, const gchar * fname);
 static void     group_selected_cb(GtkComboBox * combobox, gpointer data);
 static void     row_activated_cb(GtkTreeView * view,
                                  GtkTreePath * path,
                                  GtkTreeViewColumn * column, gpointer data);
-
 static gboolean cb_entry_changed(GtkEditable * entry, GtkTreeView * treeview);
 static gint     compare_func(GtkTreeModel * model,
                              GtkTreeIter * a,
                              GtkTreeIter * b, gpointer userdata);
 static gboolean sat_filter_func(GtkTreeModel * model,
                                 GtkTreeIter * iter, GtkEntry * entry);
-
 static void     epoch_cell_data_function(GtkTreeViewColumn * col,
                                          GtkCellRenderer * renderer,
                                          GtkTreeModel * model,
                                          GtkTreeIter * iter, gpointer column);
-
 static gint     cat_file_compare(const gchar * a, const gchar * b);
 static void     gtk_sat_selector_mark_engine(GtkSatSelector * selector,
                                              gint catnr, gboolean val);
@@ -78,13 +73,13 @@ static void     gtk_sat_selector_mark_engine(GtkSatSelector * selector,
 static GtkVBoxClass *parent_class = NULL;
 
 
-/** @brief GtkSatSelector signal IDs */
+/** GtkSatSelector signal IDs */
 enum {
     SAT_ACTIVATED_SIGNAL,       /*!< "sat-activated" signal */
     LAST_SIGNAL
 };
 
-/** @brief GtkSatSelector specific signals. */
+/** GtkSatSelector specific signals. */
 static guint    gtksatsel_signals[LAST_SIGNAL] = { 0 };
 
 gboolean gtk_sat_selector_search_equal_func(GtkTreeModel * model,
@@ -154,13 +149,13 @@ static void gtk_sat_selector_class_init(GtkSatSelectorClass * class)
                                                            1, G_TYPE_INT);      // catnum
 }
 
-/** @brief Initialise satellite selector widget */
+/** Initialise satellite selector widget */
 static void gtk_sat_selector_init(GtkSatSelector * selector)
 {
     selector->models = NULL;
 }
 
-/** @brief Clean up memory before destroying satellite selector widget */
+/** Clean up memory before destroying satellite selector widget */
 static void gtk_sat_selector_destroy(GtkObject * object)
 {
     GtkSatSelector *selector = GTK_SAT_SELECTOR(object);
@@ -182,10 +177,12 @@ static void gtk_sat_selector_destroy(GtkObject * object)
     (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
-/** @brief Create a new GtkSatSelector widget
- *  @param flags Flags indicating which columns should be visible
- *               (see gtk_sat_selector_flag_t)
- *  @return A GtkSatSelector widget.
+/**
+ * Create a new GtkSatSelector widget
+ *
+ * @param flags Flags indicating which columns should be visible
+ *              (see gtk_sat_selector_flag_t)
+ * @return A GtkSatSelector widget.
  */
 GtkWidget      *gtk_sat_selector_new(guint flags)
 {
@@ -339,21 +336,23 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
     return widget;
 }
 
-/** @brief Create and fill data store models.
-  * @param selector Pointer to the GtkSatSelector widget
-  *
-  * this fuinction scan for satellite data and stores them in tree models
-  * that can be displayed in a tree view. The scan is performed in two iterations:
-  *
-  * (1) First, all .sat files are scanned, read and added to a pseudo-group called
-  *     "all" satellites.
-  * (2) After the first scane, the function scans and reads .cat files and creates
-  *     the groups accordingly.
-  *
-  * For each group (including the "all" group) and entry is added to the
-  * selector->groups GtkComboBox, where the index of the entry corresponds to
-  * the index of the group model in selector->models.
-  */
+/**
+ * Create and fill data store models.
+ *
+ * @param selector Pointer to the GtkSatSelector widget
+ *
+ * this fuinction scan for satellite data and stores them in tree models
+ * that can be displayed in a tree view. The scan is performed in two iterations:
+ *
+ * (1) First, all .sat files are scanned, read and added to a pseudo-group called
+ *     "all" satellites.
+ * (2) After the first scane, the function scans and reads .cat files and creates
+ *     the groups accordingly.
+ *
+ * For each group (including the "all" group) and entry is added to the
+ * selector->groups GtkComboBox, where the index of the entry corresponds to
+ * the index of the group model in selector->models.
+ */
 static void create_and_fill_models(GtkSatSelector * selector)
 {
     GtkListStore   *store;      /* the list store data structure */
@@ -461,13 +460,15 @@ static void create_and_fill_models(GtkSatSelector * selector)
     g_free(dirname);
 }
 
-/** @brief Load satellites from a .cat file
-  * @param selector Pointer to the GtkSatSelector
-  * @param fname The name of the .cat file (name only, no path)
-  *
-  * This function is used to encapsulate reading the clear text name and the contents
-  * of a .cat file. It is used for building the satellite tree store models
-  */
+/**
+ * Load satellites from a .cat file
+ *
+ * @param selector Pointer to the GtkSatSelector
+ * @param fname The name of the .cat file (name only, no path)
+ *
+ * This function is used to encapsulate reading the clear text name and the contents
+ * of a .cat file. It is used for building the satellite tree store models
+ */
 static void load_cat_file(GtkSatSelector * selector, const gchar * fname)
 {
     GIOChannel     *catfile;
@@ -498,8 +499,8 @@ static void load_cat_file(GtkSatSelector * selector, const gchar * fname)
             G_IO_STATUS_NORMAL)
         {
             g_strstrip(buff);   /* removes trailing newline */
-            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(selector->groups),
-                                           buff);
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
+                                           (selector->groups), buff);
             g_free(buff);
 
             /* we can safely create the liststore for this category */
@@ -565,11 +566,13 @@ static void load_cat_file(GtkSatSelector * selector, const gchar * fname)
     g_io_channel_shutdown(catfile, TRUE, NULL);
 }
 
-/** @brief Compare two rows of the GtkSatSelector.
- *  @param model The tree model of the GtkSatSelector.
- *  @param a The first row.
- *  @param b The second row.
- *  @param userdata Not used.
+/**
+ * Compare two rows of the GtkSatSelector.
+ *
+ * @param model The tree model of the GtkSatSelector.
+ * @param a The first row.
+ * @param b The second row.
+ * @param userdata Not used.
  *
  * This function is used by the sorting algorithm to compare two rows of the
  * GtkSatSelector widget. The unctions works by comparing the character strings
@@ -582,7 +585,7 @@ static gint compare_func(GtkTreeModel * model,
     gint            catnr1, catnr2;
     gint            ret = 0;
 
-    (void)userdata;             /* avoid unused parameter compiler warning */
+    (void)userdata;
 
     gtk_tree_model_get(model, a, GTK_SAT_SELECTOR_COL_NAME, &sat1, -1);
     gtk_tree_model_get(model, b, GTK_SAT_SELECTOR_COL_NAME, &sat2, -1);
@@ -608,16 +611,18 @@ static gint compare_func(GtkTreeModel * model,
     return ret;
 }
 
-/** @brief Signal handler for managing satellite group selections.
-  * @param combobox The GtkcomboBox widget.
-  * @param data Pointer to the GtkSatSelector widget.
-  *
-  * This function is called when the user selects a new satellite group in the
-  * filter. The function is responsible for reloading the conctents of the satellite
-  * list according to the new selection. This task is very simple because the
-  * proper liststore has already been constructed and stored in selector->models[i]
-  * where i corresponds to the index of the newly selected group in the combo box.
-  */
+/**
+ * Signal handler for managing satellite group selections.
+ * 
+ * @param combobox The GtkcomboBox widget.
+ * @param data Pointer to the GtkSatSelector widget.
+ *
+ * This function is called when the user selects a new satellite group in the
+ * filter. The function is responsible for reloading the conctents of the satellite
+ * list according to the new selection. This task is very simple because the
+ * proper liststore has already been constructed and stored in selector->models[i]
+ * where i corresponds to the index of the newly selected group in the combo box.
+ */
 static void group_selected_cb(GtkComboBox * combobox, gpointer data)
 {
     GtkSatSelector *selector = GTK_SAT_SELECTOR(data);
@@ -662,7 +667,8 @@ static void group_selected_cb(GtkComboBox * combobox, gpointer data)
 }
 
 /**
- * @brief Signal handler for managing satellite selection.
+ * Signal handler for managing satellite selection.
+ *
  * @param view Pointer to the GtkTreeView object.
  * @param path The path of the row that was activated.
  * @param column The column where the activation occured.
@@ -703,7 +709,8 @@ static void row_activated_cb(GtkTreeView * view, GtkTreePath * path,
 }
 
 /**
- * @brief Get information about the selected satellite.
+ * Get information about the selected satellite.
+ *
  * @param selector Pointer to the GtkSatSelector widget.
  * @param catnum Location where catnum will be stored (may be NULL).
  * @param satname Location where the satellite name will be stored. May NOT be NULL. Must be g_freed after use.
@@ -783,7 +790,8 @@ static void epoch_cell_data_function(GtkTreeViewColumn * col,
 }
 
 /**
- * @brief Get the latest EPOCH of the satellites that are loaded into the GtkSatSelector.
+ * Get the latest EPOCH of the satellites that are loaded into the GtkSatSelector.
+ *
  * @param selector Pointer to the GtkSatSelector widget.
  * @return The latest EPOCH or 0.0 in case an error occurs.
  */
@@ -824,7 +832,8 @@ gdouble gtk_sat_selector_get_latest_epoch(GtkSatSelector * selector)
 }
 
 /**
- * @brief Load category name from a .cat file
+ * Load category name from a .cat file
+ *
  * @param fname The name of the .cat file (name only, no path)
  *
  *  This function is a stripped down version of load_cat_file.  It 
@@ -926,7 +935,6 @@ static gboolean sat_filter_func(GtkTreeModel * model,
 
     g_free(catnrstr);
     return (retval);
-
 }
 
 /**
@@ -935,7 +943,7 @@ static gboolean sat_filter_func(GtkTreeModel * model,
  * @param *selector is the selector that contains the models
  * @param catnr is the catalog numer of satellite.
  * @param val is true or false depending on whether that satellite is selected or not.
- **/
+ */
 static void gtk_sat_selector_mark_engine(GtkSatSelector * selector, gint catnr,
                                          gboolean val)
 {
@@ -967,21 +975,24 @@ static void gtk_sat_selector_mark_engine(GtkSatSelector * selector, gint catnr,
     }
 }
 
-/** Search the models for the satellite and set SELECTED to TRUE.
+/**
+ * Search the models for the satellite and set SELECTED to TRUE.
  *
  * @param *selector is the selector that contains the models
  * @param catnr is the catalog numer of satellite.
- **/
+ */
 void gtk_sat_selector_mark_selected(GtkSatSelector * selector, gint catnr)
 {
     gtk_sat_selector_mark_engine(selector, catnr, TRUE);
 }
 
-/** Searches the models for the satellite and sets SELECTED to FALSE.
+/**
+ * Searches the models for the satellite and sets SELECTED to FALSE.
  *
  * @param *selector is the selector that contains the models
  * @param catnr is the catalog numer of satellite.
- **/
+ *
+ */
 void gtk_sat_selector_mark_unselected(GtkSatSelector * selector, gint catnr)
 {
     gtk_sat_selector_mark_engine(selector, catnr, FALSE);
