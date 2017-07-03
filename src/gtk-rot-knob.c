@@ -38,7 +38,7 @@
 
 static void     gtk_rot_knob_class_init(GtkRotKnobClass * class);
 static void     gtk_rot_knob_init(GtkRotKnob * list);
-static void     gtk_rot_knob_destroy(GtkObject * object);
+static void     gtk_rot_knob_destroy(GtkWidget * widget);
 
 static void     gtk_rot_knob_update(GtkRotKnob * knob);
 
@@ -83,20 +83,11 @@ GType gtk_rot_knob_get_type()
 
 static void gtk_rot_knob_class_init(GtkRotKnobClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
 
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
+    widget_class->destroy = gtk_rot_knob_destroy;
 
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_rot_knob_destroy;
 }
 
 static void gtk_rot_knob_init(GtkRotKnob * knob)
@@ -104,9 +95,9 @@ static void gtk_rot_knob_init(GtkRotKnob * knob)
     (void)knob;
 }
 
-static void gtk_rot_knob_destroy(GtkObject * object)
+static void gtk_rot_knob_destroy(GtkWidget * widget)
 {
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
