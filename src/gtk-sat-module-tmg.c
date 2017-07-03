@@ -24,15 +24,16 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <sys/time.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-cfg.h"
-#include "sat-log.h"
+
+#include "compat.h"
 #include "gtk-sat-module.h"
 #include "gtk-sat-module-tmg.h"
-#include "compat.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sgpsdp/sgp4sdp4.h"
 
 
 static gint     tmg_delete(GtkWidget *, GdkEvent *, gpointer);
@@ -55,8 +56,9 @@ static void     tmg_cal_sub_one_day(GtkSatModule * mod);
 static gdouble  calculate_time(GtkSatModule * mod);
 
 /**
- * \brief Create and initialise time controller widgets.
- * \param module The parent GtkSatModule
+ * Create and initialise time controller widgets.
+ *
+ * @param module The parent GtkSatModule
  *
  */
 void tmg_create(GtkSatModule * mod)
@@ -66,7 +68,6 @@ void tmg_create(GtkSatModule * mod)
     GtkWidget      *label;
     gchar          *title;
     gchar          *buff;
-
 
     /* make sure controller is not already active */
     if (mod->tmgActive)
@@ -297,14 +298,15 @@ void tmg_create(GtkSatModule * mod)
 }
 
 /**
- * \brief Manage tmg window delete events
- * \return FALSE to indicate that window should be destroyed.
+ * Manage tmg window delete events
+ *
+ * @return FALSE to indicate that window should be destroyed.
  */
 static gint tmg_delete(GtkWidget * tmg, GdkEvent * event, gpointer data)
 {
-    (void)tmg;                  /* avoid unused parameter compiler warning */
-    (void)event;                /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)tmg;
+    (void)event;
+    (void)data;
 
     return FALSE;
 }
@@ -313,7 +315,7 @@ static void tmg_destroy(GtkWidget * tmg, gpointer data)
 {
     GtkSatModule   *mod = GTK_SAT_MODULE(data);
 
-    (void)tmg;                  /* avoid unused parameter compiler warning */
+    (void)tmg;
 
     /* reset time keeping variables */
     mod->throttle = 1;
@@ -325,13 +327,13 @@ static void tmg_destroy(GtkWidget * tmg, gpointer data)
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Time Controller for %s closed. Time reset."),
                 __func__, mod->name);
-
 }
 
 /**
- * \brief Manage STOP signals.
- * \param widget The GtkButton that received the signal.
- * \param data Pointer to the GtkSatModule widget.
+ * Manage STOP signals.
+ *
+ * @param widget The GtkButton that received the signal.
+ * @param data Pointer to the GtkSatModule widget.
  *
  * This function is called when the user clicks on the STOP button.
  * If the button state is active (pressed in) the function sets the
@@ -351,9 +353,10 @@ static void tmg_stop(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Manage FWD signals.
- * \param widget The GtkButton that received the signal.
- * \param data Pointer to the GtkSatModule widget.
+ * Manage FWD signals.
+ *
+ * @param widget The GtkButton that received the signal.
+ * @param data Pointer to the GtkSatModule widget.
  *
  * This function is called when the user clicks on the FWD button.
  * If the button state is active (pressed in) the function sets the
@@ -374,9 +377,10 @@ static void tmg_fwd(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Manage BWD signals.
- * \param widget The GtkButton that received the signal.
- * \param data Pointer to the GtkSatModule widget.
+ * Manage BWD signals.
+ *
+ * @param widget The GtkButton that received the signal.
+ * @param data Pointer to the GtkSatModule widget.
  *
  * This function is called when the user clicks on the BWD button.
  * If the button state is active (pressed in) the function sets the
@@ -398,9 +402,10 @@ static void tmg_bwd(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Manage Reset button clicks.
- * \param widget The button that received the "clicked" signal.
- * \param data Pointer to the GtkSatModule structure.
+ * Manage Reset button clicks.
+ *
+ * @param widget The button that received the "clicked" signal.
+ * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the user clicks on the Reset button.
  * It resets the current time by setting 
@@ -413,7 +418,7 @@ static void tmg_reset(GtkWidget * widget, gpointer data)
 {
     GtkSatModule   *mod = GTK_SAT_MODULE(data);
 
-    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)widget;
 
     /* set reset flag in order to block
        widget signals */
@@ -451,9 +456,10 @@ static void tmg_throttle(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Set new date and time callback.
- * \param widget The widget that was modified.
- * \param data Pointer to the GtkSatModule structure.
+ * Set new date and time callback.
+ *
+ * @param widget The widget that was modified.
+ * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the user changes the date or time in the time
  * controller. If we are in manual time control mode, the function reads the
@@ -467,7 +473,7 @@ static void tmg_time_set(GtkWidget * widget, gpointer data)
     gdouble         slider;
     gdouble         jd;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)widget;
 
     /* update time only if we are in manual time control */
     if (!mod->throttle && !mod->reset)
@@ -482,9 +488,10 @@ static void tmg_time_set(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Signal handler for slider "value-changed" signals
- * \param widget The widget that was modified.
- * \param data Pointer to the GtkSatModule structure.
+ * Signal handler for slider "value-changed" signals
+ *
+ * @param widget The widget that was modified.
+ * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the user moves the slider.
  * If we are in manual control mode, the function simpley calls
@@ -505,9 +512,10 @@ static void slider_moved(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Hour controller wrap
- * \param widget Pointer to the hour controller widget
- * \param data Pointer to the GtkSatModule structure.
+ * Hour controller wrap
+ *
+ * @param widget Pointer to the hour controller widget
+ * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the hour controller wraps around its
  * limits. The current day is incremented or decremented according to
@@ -518,7 +526,7 @@ static void tmg_hour_wrap(GtkWidget * widget, gpointer data)
     GtkSatModule   *mod = GTK_SAT_MODULE(data);
     gint            hour;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)widget;
 
     hour = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgHour));
 
@@ -535,9 +543,10 @@ static void tmg_hour_wrap(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Minute controller wrap
- * \param widget Pointer to the minute controller widget
- * \param data Pointer to the GtkSatModule structure.
+ * Minute controller wrap
+ *
+ * @param widget Pointer to the minute controller widget
+ * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the minute controller wraps around its
  * limits. The current hour is incremented or decremented according to
@@ -548,7 +557,7 @@ static void tmg_min_wrap(GtkWidget * widget, gpointer data)
     GtkSatModule   *mod = GTK_SAT_MODULE(data);
     gint            hr, min;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)widget;
 
     hr = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgHour));
     min = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgMin));
@@ -585,9 +594,10 @@ static void tmg_min_wrap(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Seconds controller wrap
- * \param widget Pointer to the seconds controller widget
- * \param data Pointer to the GtkSatModule structure.
+ * Seconds controller wrap
+ *
+ * @param widget Pointer to the seconds controller widget
+ * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the seconds controller wraps around its
  * limits. The current minute is incremented or decremented according to
@@ -598,7 +608,7 @@ static void tmg_sec_wrap(GtkWidget * widget, gpointer data)
     GtkSatModule   *mod = GTK_SAT_MODULE(data);
     gint            min, sec;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)widget;
 
     sec = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgSec));
     min = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgMin));
@@ -635,9 +645,10 @@ static void tmg_sec_wrap(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Millisecond controller wrap
- * \param widget Pointer to the millisecond controller widget
- * \param data Pointer to the GtkSatmodule structure.
+ * Millisecond controller wrap
+ *
+ * @param widget Pointer to the millisecond controller widget
+ * @param data Pointer to the GtkSatmodule structure.
  *
  * This function is called when the muillisecond controller wraps around its
  * limits. The current second is incremented or decremented according to
@@ -648,7 +659,7 @@ static void tmg_msec_wrap(GtkWidget * widget, gpointer data)
     GtkSatModule   *mod = GTK_SAT_MODULE(data);
     gint            msec, sec;
 
-    (void)widget;               /* avoid unused parameter compiler warning */
+    (void)widget;
 
     sec = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgSec));
     msec = gtk_spin_button_get_value(GTK_SPIN_BUTTON(mod->tmgMsec));
@@ -685,8 +696,9 @@ static void tmg_msec_wrap(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Update Time controller widgets
- * \param mod Pointer to the GtkSatModule widget
+ * Update Time controller widgets
+ *
+ * @param mod Pointer to the GtkSatModule widget
  */
 void tmg_update_widgets(GtkSatModule * mod)
 {
@@ -716,8 +728,9 @@ void tmg_update_widgets(GtkSatModule * mod)
 }
 
 /**
- * \brief Update state label.
- * \param mod Pointer to the GtkSatModule widget
+ * Update state label.
+ *
+ * @param mod Pointer to the GtkSatModule widget
  *
  * This function is used to update the state label showing
  * whether the time control is in RT, SRT, or MAN mode.
@@ -760,9 +773,10 @@ static void tmg_cal_sub_one_day(GtkSatModule * mod)
 
 
 /**
- * \brief Calculate the time as Julian day (and fraction) from the TMG widgets.
- * \param mod Pointer to the GtkSatModule this time manager belongs to.
- * \returns The current date and time in Julian days and fraction of days.
+ * Calculate the time as Julian day (and fraction) from the TMG widgets.
+ *
+ * @param mod Pointer to the GtkSatModule this time manager belongs to.
+ * @returns The current date and time in Julian days and fraction of days.
  */
 static gdouble calculate_time(GtkSatModule * mod)
 {

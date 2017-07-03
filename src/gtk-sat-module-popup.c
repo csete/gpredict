@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -25,25 +24,28 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
-#include "gpredict-utils.h"
-#include "mod-mgr.h"
-#include "compat.h"
-#include "gtk-sky-glance.h"
-#include "sat-cfg.h"
+
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
-#include "gtk-sat-module.h"
-#include "gtk-sat-module-tmg.h"
-#include "gtk-sat-module-popup.h"
+
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+
+#include "compat.h"
+#include "config-keys.h"
+#include "gpredict-utils.h"
 #include "gtk-rig-ctrl.h"
 #include "gtk-rot-ctrl.h"
-#include "config-keys.h"
+#include "gtk-sat-module.h"
+#include "gtk-sat-module-popup.h"
+#include "gtk-sat-module-tmg.h"
+#include "gtk-sky-glance.h"
+#include "mod-mgr.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sgpsdp/sgp4sdp4.h"
 
 
 extern GtkWidget *app;          /* in main.c */
@@ -70,8 +72,9 @@ static gint     sat_nickname_compare(const sat_t * a, const sat_t * b);
 
 
 /**
- * \brief Create and run GtkSatModule popup menu.
- * \param module The module that should have the popup menu attached to it.
+ * Create and run GtkSatModule popup menu.
+ *
+ * @param module The module that should have the popup menu attached to it.
  *
  * This function ctreates and executes a popup menu that is related to a
  * GtkSatModule widget. The module must be a valid GtkSatModule, since it makes
@@ -268,7 +271,7 @@ void gtk_sat_module_popup(GtkSatModule * module)
 }
 
 /**
- * \brief Configure module.
+ * Configure module.
  *
  * This function is called when the user selects the configure
  * menu item in the GtkSatModule popup menu. It is a simple
@@ -302,7 +305,7 @@ static void config_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief Clone module.
+ * Clone module.
  *
  * This function is called when the user selects the clone
  * menu item in the GtkSatModule popup menu. the function creates
@@ -327,7 +330,7 @@ static void clone_cb(GtkWidget * menuitem, gpointer data)
     gchar          *icon;       /* icon file name */
     gchar          *title;      /* window title */
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     dialog = gtk_dialog_new_with_buttons(_("Clone Module"),
                                          GTK_WINDOW(gtk_widget_get_toplevel
@@ -489,12 +492,10 @@ static void clone_cb(GtkWidget * menuitem, gpointer data)
     }
 
     gtk_widget_destroy(dialog);
-
 }
 
-
 /**
- * \brief Toggle dockig state.
+ * Toggle dockig state.
  *
  * This function is called when the user selects the (Un)Dock menu
  * item in the GtkSatModule popup menu. If the current module state
@@ -513,7 +514,7 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
     gchar          *icon;       /* icon file name */
     gchar          *title;      /* window title */
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     gtk_widget_get_allocation(module, &aloc);
 
@@ -600,7 +601,6 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
                                                    (module)->cfgdata,
                                                    MOD_CFG_GLOBAL_SECTION,
                                                    MOD_CFG_WIN_POS_Y, NULL));
-
         }
 
         /* add module to window */
@@ -675,7 +675,7 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief Toggle screen state.
+ * Toggle screen state.
  *
  * This function is intended to toggle between FULLSCREEN
  * and WINDOW state.
@@ -687,7 +687,7 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
     gchar          *icon;       /* icon file name */
     gchar          *title;      /* window title */
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     switch (GTK_SAT_MODULE(module)->state)
     {
@@ -818,8 +818,9 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief New satellite selected.
- * \param data Pointer to the GtkSatModule widget
+ * New satellite selected.
+ *
+ * @param data Pointer to the GtkSatModule widget
  * 
  * This menu item is activated when a new satellite is selected in the 
  * "Select satellite" submenu of the module pop-up. This will trigger a call
@@ -839,7 +840,7 @@ static void sat_selected_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief Invoke Sky-at-glance.
+ * Invoke Sky-at-glance.
  *
  * This function is a shortcut to the sky at glance function
  * in that it will make the predictions with the satellites
@@ -850,7 +851,7 @@ static void sky_at_glance_cb(GtkWidget * menuitem, gpointer data)
     GtkSatModule   *module = GTK_SAT_MODULE(data);
     gchar          *buff;
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     /* if module is busy wait until done then go on */
     g_mutex_lock(&module->busy);
@@ -905,22 +906,23 @@ static void tmgr_cb(GtkWidget * menuitem, gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     tmg_create(module);
 }
 
 /**
- * \brief Open Radio control window. 
- * \param menuitem The menuitem that was selected.
- * \param data Pointer the GtkSatModule.
+ * Open Radio control window.
+ *
+ * @param menuitem The menuitem that was selected.
+ * @param data Pointer the GtkSatModule.
  */
 static void rigctrl_cb(GtkWidget * menuitem, gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
     gchar          *buff;
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     if (module->rigctrlwin != NULL)
     {
@@ -968,13 +970,13 @@ static void rigctrl_cb(GtkWidget * menuitem, gpointer data)
     gtk_container_add(GTK_CONTAINER(module->rigctrlwin), module->rigctrl);
 
     gtk_widget_show_all(module->rigctrlwin);
-
 }
 
 /**
- * \brief Destroy radio control window.
- * \param window Pointer to the radio control window.
- * \param data Pointer to the GtkSatModule to which this controller is attached.
+ * Destroy radio control window.
+ *
+ * @param window Pointer to the radio control window.
+ * @param data Pointer to the GtkSatModule to which this controller is attached.
  * 
  * This function is called automatically when the window is destroyed.
  */
@@ -988,18 +990,18 @@ static void destroy_rigctrl(GtkWidget * window, gpointer data)
     module->rigctrl = NULL;
 }
 
-
 /**
- * \brief Open antenna rotator control window. 
- * \param menuitem The menuitem that was selected.
- * \param data Pointer the GtkSatModule.
+ * Open antenna rotator control window.
+ *
+ * @param menuitem The menuitem that was selected.
+ * @param data Pointer the GtkSatModule.
  */
 static void rotctrl_cb(GtkWidget * menuitem, gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
     gchar          *buff;
 
-    (void)menuitem;             /* avoid unused parameter compiler warning */
+    (void)menuitem;
 
     if (module->rotctrlwin != NULL)
     {
@@ -1051,9 +1053,10 @@ static void rotctrl_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief Destroy rotator control window.
- * \param window Pointer to the rotator control window.
- * \param data Pointer to the GtkSatModule to which this controller is attached.
+ * Destroy rotator control window.
+ *
+ * @param window Pointer to the rotator control window.
+ * @param data Pointer to the GtkSatModule to which this controller is attached.
  * 
  * This function is called automatically when the window is destroyed.
  */
@@ -1061,17 +1064,17 @@ static void destroy_rotctrl(GtkWidget * window, gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
 
-    (void)window;               /* avoid unused parameter compiler warning */
+    (void)window;
 
     module->rotctrlwin = NULL;
     module->rotctrl = NULL;
 }
 
-
 /**
- * \brief Destroy sky at glance window.
- * \param window Pointer to the sky at glance window.
- * \param data Pointer to the GtkSatModule to which this widget is attached.
+ * Destroy sky at glance window.
+ *
+ * @param window Pointer to the sky at glance window.
+ * @param data Pointer to the GtkSatModule to which this widget is attached.
  * 
  * This function is called automatically when the window is destroyed.
  */
@@ -1079,7 +1082,7 @@ static void destroy_skg(GtkWidget * window, gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
 
-    (void)window;               /* avoid unused parameter compiler warning */
+    (void)window;
 
     module->skgwin = NULL;
     module->skg = NULL;
@@ -1088,9 +1091,9 @@ static void destroy_skg(GtkWidget * window, gpointer data)
 /** Ensure that deleted top-level windows are destroyed */
 static gint window_delete(GtkWidget * widget, GdkEvent * event, gpointer data)
 {
-    (void)widget;               /* avoid unused parameter compiler warning */
-    (void)event;                /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)widget;
+    (void)event;
+    (void)data;
 
     return FALSE;
 }
@@ -1102,7 +1105,7 @@ static void autotrack_cb(GtkCheckMenuItem * menuitem, gpointer data)
 }
 
 /**
- * \brief Close module.
+ * Close module.
  *
  * This function is called when the user selects the close menu
  * item in the GtkSatModule popup menu. It is simply a wrapper
@@ -1114,7 +1117,7 @@ static void close_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief Close and permanently delete module.
+ * Close and permanently delete module.
  *
  * This function is called when the user selects the delete menu
  * item in the GtkSatModule popup menu. First it will close the module
@@ -1148,7 +1151,6 @@ static void delete_cb(GtkWidget * menuitem, gpointer data)
     switch (gtk_dialog_run(GTK_DIALOG(dialog)))
     {
     case GTK_RESPONSE_YES:
-
         if (g_remove(file))
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
@@ -1173,7 +1175,7 @@ static void delete_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * \brief Manage name changes.
+ * Manage name changes.
  *
  * This function is called when the contents of the name entry changes.
  * The primary purpose of this function is to check whether the char length
@@ -1228,19 +1230,20 @@ static void name_changed(GtkWidget * widget, gpointer data)
 }
 
 /**
- * \brief Snoop window position and size when main window receives configure event.
- * \param widget Pointer to the module window.
- * \param event  Pointer to the event structure.
- * \param data   Pointer to user data, in this case the module.
+ * Snoop window position and size when main window receives configure event.
+ *
+ * @param widget Pointer to the module window.
+ * @param event  Pointer to the event structure.
+ * @param data   Pointer to user data, in this case the module.
  *
  * This function is used to trap configure events in order to store the current
  * position and size of the module window.
  *
- * \note unfortunately GdkEventConfigure ignores the window gravity, while
+ * @note unfortunately GdkEventConfigure ignores the window gravity, while
  *       the only way we have of setting the position doesn't. We have to
  *       call get_position because it does pay attention to the gravity.
  *
- * \note The logic in the code has been borrowed from gaim/pidgin http://pidgin.im/
+ * @note The logic in the code has been borrowed from gaim/pidgin http://pidgin.im/
  *
  */
 gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
