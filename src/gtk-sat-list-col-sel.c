@@ -36,7 +36,7 @@ extern const gchar *SAT_LIST_COL_HINT[];
 
 static void     gtk_sat_list_col_sel_class_init(GtkSatListColSelClass * class);
 static void     gtk_sat_list_col_sel_init(GtkSatListColSel * sel);
-static void     gtk_sat_list_col_sel_destroy(GtkObject * object);
+static void     gtk_sat_list_col_sel_destroy(GtkWidget * widget);
 static GtkTreeModel *create_and_fill_model(guint32 flags);
 static void     column_toggled(GtkCellRendererToggle * cell,
                                gchar * path_str, gpointer data);
@@ -77,21 +77,11 @@ GType gtk_sat_list_col_sel_get_type()
 
 static void gtk_sat_list_col_sel_class_init(GtkSatListColSelClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class;
 
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sat_list_col_sel_destroy;
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_sat_list_col_sel_destroy;
-
 }
 
 static void gtk_sat_list_col_sel_init(GtkSatListColSel * list)
@@ -99,11 +89,9 @@ static void gtk_sat_list_col_sel_init(GtkSatListColSel * list)
     (void)list;                 /* avoid unusued parameter compiler warning */
 }
 
-static void gtk_sat_list_col_sel_destroy(GtkObject * object)
+static void gtk_sat_list_col_sel_destroy(GtkWidget * widget)
 {
-    //GtkSatListColSel *sel = GTK_SAT_LIST_COL_SEL (object);
-
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 GtkWidget      *gtk_sat_list_col_sel_new(guint32 flags)

@@ -110,7 +110,7 @@ const gchar *SINGLE_SAT_FIELD_HINT[SINGLE_SAT_FIELD_NUMBER] = {
 
 static void gtk_single_sat_class_init (GtkSingleSatClass *class);
 static void gtk_single_sat_init       (GtkSingleSat      *list);
-static void gtk_single_sat_destroy    (GtkObject       *object);
+static void gtk_single_sat_destroy    (GtkWidget         *widget);
 
 static void store_sats              (gpointer key, gpointer value, gpointer user_data);
 static void update_field            (GtkSingleSat *ssat, guint i);
@@ -155,20 +155,11 @@ gtk_single_sat_get_type ()
 static void
 gtk_single_sat_class_init (GtkSingleSatClass *class)
 {
-    /*GObjectClass      *gobject_class;*/
-    GtkObjectClass    *object_class;
-    /*GtkWidgetClass    *widget_class;*/
-    /*GtkContainerClass *container_class;*/
+    GtkWidgetClass      *widget_class;
 
-    /*gobject_class   = G_OBJECT_CLASS (class);*/
-    object_class    = (GtkObjectClass*) class;
-    /*widget_class    = (GtkWidgetClass*) class;*/
-    /*container_class = (GtkContainerClass*) class;*/
-
+    widget_class    = (GtkWidgetClass*) class;
+    widget_class->destroy = gtk_single_sat_destroy;
     parent_class = g_type_class_peek_parent (class);
-
-    object_class->destroy = gtk_single_sat_destroy;
- 
 }
 
 
@@ -196,14 +187,14 @@ gtk_single_sat_init (GtkSingleSat *list)
 }
 
 static void
-gtk_single_sat_destroy (GtkObject *object)
+gtk_single_sat_destroy (GtkWidget *widget)
 {
-    GtkSingleSat *ssat = GTK_SINGLE_SAT(object);
+    GtkSingleSat *ssat = GTK_SINGLE_SAT(widget);
     sat_t      *sat = SAT (g_slist_nth_data (ssat->sats, ssat->selected));
     if (sat !=NULL)
         g_key_file_set_integer (ssat->cfgdata,MOD_CFG_SINGLE_SAT_SECTION,MOD_CFG_SINGLE_SAT_SELECT,sat->tle.catnr);
 
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+    (* GTK_WIDGET_CLASS (parent_class)->destroy) (widget);
 }
 
 

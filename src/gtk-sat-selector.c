@@ -49,7 +49,7 @@
 
 static void     gtk_sat_selector_class_init(GtkSatSelectorClass * class);
 static void     gtk_sat_selector_init(GtkSatSelector * selector);
-static void     gtk_sat_selector_destroy(GtkObject * object);
+static void     gtk_sat_selector_destroy(GtkWidget * widget);
 static void     create_and_fill_models(GtkSatSelector * selector);
 static void     load_cat_file(GtkSatSelector * selector, const gchar * fname);
 static void     group_selected_cb(GtkComboBox * combobox, gpointer data);
@@ -139,14 +139,21 @@ GType gtk_sat_selector_get_type()
 
 static void gtk_sat_selector_class_init(GtkSatSelectorClass * class)
 {
-    GtkObjectClass *object_class;
+    GtkWidgetClass      *widget_class;
 
-    object_class = (GtkObjectClass *) class;
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sat_selector_destroy;
     parent_class = g_type_class_peek_parent(class);
-    object_class->destroy = gtk_sat_selector_destroy;
 
-    gtksatsel_signals[SAT_ACTIVATED_SIGNAL] = g_signal_new("sat-activated", G_TYPE_FROM_CLASS(class), G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION, G_STRUCT_OFFSET(GtkSatSelectorClass, gtksatselector), NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE,        // return type
-                                                           1, G_TYPE_INT);      // catnum
+    gtksatsel_signals[SAT_ACTIVATED_SIGNAL] =
+        g_signal_new("sat-activated", G_TYPE_FROM_CLASS(class),
+                     G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                     G_STRUCT_OFFSET(GtkSatSelectorClass, gtksatselector),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__INT,
+                     G_TYPE_NONE,       // return type
+                     1,
+                     G_TYPE_INT);       // catnum
 }
 
 /** Initialise satellite selector widget */
@@ -156,9 +163,9 @@ static void gtk_sat_selector_init(GtkSatSelector * selector)
 }
 
 /** Clean up memory before destroying satellite selector widget */
-static void gtk_sat_selector_destroy(GtkObject * object)
+static void gtk_sat_selector_destroy(GtkWidget * widget)
 {
-    GtkSatSelector *selector = GTK_SAT_SELECTOR(object);
+    GtkSatSelector *selector = GTK_SAT_SELECTOR(widget);
 
     /* clear list of selected satellites */
     /* crashes on 2. instance: g_slist_free (sat_tree->selection); */
@@ -174,7 +181,7 @@ static void gtk_sat_selector_destroy(GtkObject * object)
         selector->models = g_slist_remove(selector->models, data);
     }
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**

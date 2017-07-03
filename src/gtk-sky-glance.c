@@ -69,7 +69,7 @@
 
 static void     gtk_sky_glance_class_init(GtkSkyGlanceClass * class);
 static void     gtk_sky_glance_init(GtkSkyGlance * skg);
-static void     gtk_sky_glance_destroy(GtkObject * object);
+static void     gtk_sky_glance_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
 static gboolean on_motion_notify(GooCanvasItem * item,
@@ -129,21 +129,11 @@ GType gtk_sky_glance_get_type()
 
 static void gtk_sky_glance_class_init(GtkSkyGlanceClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class;
 
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sky_glance_destroy;
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_sky_glance_destroy;
-    //widget_class->size_allocate = gtk_sky_glance_size_allocate;
 }
 
 static void gtk_sky_glance_init(GtkSkyGlance * skg)
@@ -172,54 +162,54 @@ static void gtk_sky_glance_init(GtkSkyGlance * skg)
  * 
  * \bug For some reason, this function is called twice when parent is destroyed.
  */
-static void gtk_sky_glance_destroy(GtkObject * object)
+static void gtk_sky_glance_destroy(GtkWidget * widget)
 {
     sky_pass_t     *skypass;
     guint           i, n;
 
     /* free passes */
     /* FIXME: TBC whether this is enough */
-    if (GTK_SKY_GLANCE(object)->passes != NULL)
+    if (GTK_SKY_GLANCE(widget)->passes != NULL)
     {
-        n = g_slist_length(GTK_SKY_GLANCE(object)->passes);
+        n = g_slist_length(GTK_SKY_GLANCE(widget)->passes);
         for (i = 0; i < n; i++)
         {
             skypass =
-                (sky_pass_t *) g_slist_nth_data(GTK_SKY_GLANCE(object)->passes,
+                (sky_pass_t *) g_slist_nth_data(GTK_SKY_GLANCE(widget)->passes,
                                                 i);
             free_pass(skypass->pass);
             g_free(skypass);
         }
 
-        g_slist_free(GTK_SKY_GLANCE(object)->passes);
-        GTK_SKY_GLANCE(object)->passes = NULL;
+        g_slist_free(GTK_SKY_GLANCE(widget)->passes);
+        GTK_SKY_GLANCE(widget)->passes = NULL;
     }
 
     /* for the rest we only need to free the GSList because the
        canvas items will be freed when removed from canvas.
      */
-    if (GTK_SKY_GLANCE(object)->satlab != NULL)
+    if (GTK_SKY_GLANCE(widget)->satlab != NULL)
     {
-        g_slist_free(GTK_SKY_GLANCE(object)->satlab);
-        GTK_SKY_GLANCE(object)->satlab = NULL;
+        g_slist_free(GTK_SKY_GLANCE(widget)->satlab);
+        GTK_SKY_GLANCE(widget)->satlab = NULL;
     }
-    if (GTK_SKY_GLANCE(object)->majors != NULL)
+    if (GTK_SKY_GLANCE(widget)->majors != NULL)
     {
-        g_slist_free(GTK_SKY_GLANCE(object)->majors);
-        GTK_SKY_GLANCE(object)->majors = NULL;
+        g_slist_free(GTK_SKY_GLANCE(widget)->majors);
+        GTK_SKY_GLANCE(widget)->majors = NULL;
     }
-    if (GTK_SKY_GLANCE(object)->minors != NULL)
+    if (GTK_SKY_GLANCE(widget)->minors != NULL)
     {
-        g_slist_free(GTK_SKY_GLANCE(object)->minors);
-        GTK_SKY_GLANCE(object)->minors = NULL;
+        g_slist_free(GTK_SKY_GLANCE(widget)->minors);
+        GTK_SKY_GLANCE(widget)->minors = NULL;
     }
-    if (GTK_SKY_GLANCE(object)->labels != NULL)
+    if (GTK_SKY_GLANCE(widget)->labels != NULL)
     {
-        g_slist_free(GTK_SKY_GLANCE(object)->labels);
-        GTK_SKY_GLANCE(object)->labels = NULL;
+        g_slist_free(GTK_SKY_GLANCE(widget)->labels);
+        GTK_SKY_GLANCE(widget)->labels = NULL;
     }
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 
@@ -338,7 +328,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
 
     /* time label */
     skg->timel = goo_canvas_text_model_new(root, "--:--", skg->x0 + 5, skg->y0,
-                                           -1, GTK_ANCHOR_NW, "font", "Sans 8",
+                                           -1, GOO_CANVAS_ANCHOR_NW, "font", "Sans 8",
                                            "fill-color-rgba", 0x000000AF,
                                            NULL);
 
@@ -355,14 +345,14 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
         skg->axisl = goo_canvas_text_model_new(root, _("TIME"),
                                                skg->w / 2,
                                                skg->h + SKG_FOOTER - 5, -1,
-                                               GTK_ANCHOR_S, "font", "Sans 9",
+                                               GOO_CANVAS_ANCHOR_S, "font", "Sans 9",
                                                "fill-color-rgba", 0xFFFFFFFF,
                                                NULL);
     else
         skg->axisl = goo_canvas_text_model_new(root, _("UTC"),
                                                skg->w / 2,
                                                skg->h + SKG_FOOTER - 5, -1,
-                                               GTK_ANCHOR_S, "font", "Sans 9",
+                                               GOO_CANVAS_ANCHOR_S, "font", "Sans 9",
                                                "fill-color-rgba", 0xFFFFFFFF,
                                                NULL);
 
@@ -400,7 +390,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
         daynum_to_str(buff, 3, "%H", th);
 
         hrl = goo_canvas_text_model_new(root, buff, xh, skg->h + 12,
-                                        -1, GTK_ANCHOR_N,
+                                        -1, GOO_CANVAS_ANCHOR_N,
                                         "font", "Sans 8",
                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
 
@@ -562,10 +552,10 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
                 obj = g_slist_nth_data(skg->satlab, j);
                 if (x > (skg->x0 + 100))
                     g_object_set(obj, "x", x - 5, "y", y + h / 2.0,
-                                 "anchor", GTK_ANCHOR_E, NULL);
+                                 "anchor", GOO_CANVAS_ANCHOR_E, NULL);
                 else
                     g_object_set(obj, "x", x + w + 5, "y", y + h / 2.0,
-                                 "anchor", GTK_ANCHOR_W, NULL);
+                                 "anchor", GOO_CANVAS_ANCHOR_W, NULL);
             }
 
             g_object_set(skp->box,
@@ -988,7 +978,7 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
 
         /* add satellite label */
         lab = goo_canvas_text_model_new(root, sat->nickname,
-                                        5, 0, -1, GTK_ANCHOR_W,
+                                        5, 0, -1, GOO_CANVAS_ANCHOR_W,
                                         "font", "Sans 8",
                                         "fill-color-rgba", bcol, NULL);
         skg->satlab = g_slist_append(skg->satlab, lab);
