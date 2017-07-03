@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -29,14 +28,15 @@
 #define GTK_SAT_MAP_POPUP_H 1
 
 #include <gtk/gtk.h>
+
 #include "sgpsdp/sgp4sdp4.h"
 #include "gtk-sat-data.h"
 #include "gtk-sat-map.h"
 
 
-void gtk_sat_map_popup_exec (sat_t *sat, qth_t *qth,
-                                    GtkSatMap *satmap,
-                                    GdkEventButton *event,
-                                    GtkWidget *toplevel);
+void            gtk_sat_map_popup_exec(sat_t * sat, qth_t * qth,
+                                       GtkSatMap * satmap,
+                                       GdkEventButton * event,
+                                       GtkWidget * toplevel);
 
 #endif

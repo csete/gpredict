@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -30,21 +29,20 @@
 #ifndef __GTK_SAT_MAP_H__
 #define __GTK_SAT_MAP_H__ 1
 
+#include <gdk/gdk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gdk/gdk.h>
+#include <goocanvas.h>
 #include <gtk/gtk.h>
 #include "gtk-sat-data.h"
-#include <goocanvas.h>
 
-
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
-
+#endif
+/* *INDENT-ON* */
 
 #define SAT_MAP_RANGE_CIRCLE_POINTS    180  /*!< Number of points used to plot a satellite range half circle. */
-
 
 #define GTK_SAT_MAP(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_sat_map_get_type (), GtkSatMap)
 #define GTK_SAT_MAP_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_sat_map_get_type (), GtkSatMapClass)
@@ -52,26 +50,22 @@ extern "C" {
 #define GTK_TYPE_SAT_MAP          (gtk_sat_map_get_type ())
 #define IS_GTK_SAT_MAP(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_sat_map_get_type ())
 
-
-//typedef struct _GtkSatMap        GtkSatMap;
 typedef struct _GtkSatMapClass   GtkSatMapClass;
 
-
-/** \brief Structure that define a sub-satellite point. */
+/** Structure that define a sub-satellite point. */
 typedef struct {
     double lat;   /*!< Latitude in decimal degrees North. */
     double lon;   /*!< Longitude in decimal degrees West. */
 } ssp_t;
 
-
-/** \brief Data storage for ground tracks */
+/** Data storage for ground tracks */
 typedef struct {
     GSList    *latlon;   /*!< List of ssp_t */
     GSList    *lines;    /*!< List of GooCanvasPolyLine */
 } ground_track_t;
 
-
-/** \brief Satellite object.
+/**
+ * Satellite object.
  *
  * This data structure represents a satellite object on the map. It consists of a
  * small square representing the position, a label showinf the satellite name, and
@@ -81,7 +75,6 @@ typedef struct {
  *
  */
 typedef struct {
-        
     /* flags */
     gboolean        selected;     /*!< Is satellite selected? */
     gboolean        showtrack;    /*!< Show ground track */
@@ -104,12 +97,10 @@ typedef struct {
     long   track_orbit;  /*!< Orbit when the ground track has been updated. */
     
 } sat_map_obj_t;
-    
 
 #define SAT_MAP_OBJ(obj) ((sat_map_obj_t *)obj)
 
-
-/** \brief The satellite map data structure. */
+/** The satellite map data structure. */
 typedef struct {
     GtkVBox vbox;
 
@@ -170,12 +161,10 @@ typedef struct {
     
 } GtkSatMap;
     
-
 struct _GtkSatMapClass
 {
     GtkVBoxClass parent_class;
 };
-
 
 GType          gtk_sat_map_get_type (void);
 GtkWidget*     gtk_sat_map_new      (GKeyFile   *cfgdata,
@@ -183,7 +172,6 @@ GtkWidget*     gtk_sat_map_new      (GKeyFile   *cfgdata,
                                      qth_t      *qth);
 void           gtk_sat_map_update   (GtkWidget  *widget);
 void           gtk_sat_map_reconf   (GtkWidget  *widget, GKeyFile *cfgdat);
-
 void           gtk_sat_map_lonlat_to_xy (GtkSatMap *m,
                                          gdouble lon, gdouble lat,
                                          gdouble *x, gdouble *y);
@@ -191,8 +179,10 @@ void           gtk_sat_map_lonlat_to_xy (GtkSatMap *m,
 void gtk_sat_map_reload_sats (GtkWidget *satmap, GHashTable *sats);
 void gtk_sat_map_select_sat  (GtkWidget *satmap, gint catnum);
 
+/* *INDENT-OFF* */
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
+/* *INDENT-ON* */
 
-#endif /* __GTK_SAT_MAP_H__ */
+#endif
