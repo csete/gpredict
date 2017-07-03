@@ -76,7 +76,7 @@
 
 static void     gtk_rig_ctrl_class_init(GtkRigCtrlClass * class);
 static void     gtk_rig_ctrl_init(GtkRigCtrl * list);
-static void     gtk_rig_ctrl_destroy(GtkObject * object);
+static void     gtk_rig_ctrl_destroy(GtkWidget * widget);
 
 static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl);
 static GtkWidget *create_uplink_widgets(GtkRigCtrl * ctrl);
@@ -179,20 +179,11 @@ GType gtk_rig_ctrl_get_type()
 
 static void gtk_rig_ctrl_class_init(GtkRigCtrlClass * class)
 {
-    //GObjectClass      *gobject_class;
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
 
-    //GtkWidgetClass    *widget_class;
-    //GtkContainerClass *container_class;
-
-    //gobject_class   = G_OBJECT_CLASS (class);
-    object_class = (GtkObjectClass *) class;
-    //widget_class    = (GtkWidgetClass*) class;
-    //container_class = (GtkContainerClass*) class;
+    widget_class->destroy = gtk_rig_ctrl_destroy;
 
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_rig_ctrl_destroy;
 }
 
 static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl)
@@ -220,9 +211,9 @@ static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl)
     ctrl->last_toggle_tx = -1;
 }
 
-static void gtk_rig_ctrl_destroy(GtkObject * object)
+static void gtk_rig_ctrl_destroy(GtkWidget * widget)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(object);
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(widget);
 
     /* stop timer */
     if (ctrl->timerid > 0)
@@ -256,7 +247,7 @@ static void gtk_rig_ctrl_destroy(GtkObject * object)
         close_rigctld_socket(&(ctrl->sock));
     if (ctrl->sock2)
         close_rigctld_socket(&(ctrl->sock2));
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
@@ -2970,7 +2961,7 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
         switch (pKey->keyval)
         {
             /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
-        case GDK_space:
+        case GDK_KEY_space:
             sat_log_log(SAT_LOG_LEVEL_INFO,
                         _("%s: Detected SPACEBAR pressed event"), __func__);
 
