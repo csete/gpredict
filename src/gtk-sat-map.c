@@ -76,7 +76,7 @@
 
 static void     gtk_sat_map_class_init(GtkSatMapClass * class);
 static void     gtk_sat_map_init(GtkSatMap * polview);
-static void     gtk_sat_map_destroy(GtkObject * object);
+static void     gtk_sat_map_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
 static void     update_map_size(GtkSatMap * satmap);
@@ -164,21 +164,11 @@ GType gtk_sat_map_get_type()
 /** Initialize a GtkSatMapClass object. */
 static void gtk_sat_map_class_init(GtkSatMapClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
+    GtkWidgetClass    *widget_class;
 
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sat_map_destroy;
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_sat_map_destroy;
-    /* widget_class->size_allocate = gtk_sat_map_size_allocate; */
 }
 
 /** Initialize a newly created GtkSatMap widget. */
@@ -209,13 +199,13 @@ static void gtk_sat_map_init(GtkSatMap * satmap)
 }
 
 /** Destroy a GtkSatMap widget. */
-static void gtk_sat_map_destroy(GtkObject * object)
+static void gtk_sat_map_destroy(GtkWidget * widget)
 {
-    gtk_sat_map_store_showtracks(GTK_SAT_MAP(object));
+    gtk_sat_map_store_showtracks(GTK_SAT_MAP(widget));
 
-    gtk_sat_map_store_hidecovs(GTK_SAT_MAP(object));
+    gtk_sat_map_store_hidecovs(GTK_SAT_MAP(widget));
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
@@ -387,7 +377,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
 
     satmap->qthlabel = goo_canvas_text_model_new(root, satmap->qth->name,
                                                  x, y + 2, -1,
-                                                 GTK_ANCHOR_NORTH,
+                                                 GOO_CANVAS_ANCHOR_NORTH,
                                                  "font", "Sans 8",
                                                  "fill-color-rgba", col, NULL);
 
@@ -398,7 +388,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
 
     satmap->locnam = goo_canvas_text_model_new(root, "",
                                                satmap->x0 + 2, satmap->y0 + 1,
-                                               -1, GTK_ANCHOR_NORTH_WEST,
+                                               -1, GOO_CANVAS_ANCHOR_NORTH_WEST,
                                                "font", "Sans 8",
                                                "fill-color-rgba", col,
                                                "use-markup", TRUE, NULL);
@@ -425,7 +415,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
     satmap->next = goo_canvas_text_model_new(root, "",
                                              satmap->x0 + satmap->width - 2,
                                              satmap->y0 + 1, -1,
-                                             GTK_ANCHOR_NORTH_EAST,
+                                             GOO_CANVAS_ANCHOR_NORTH_EAST,
                                              "font", "Sans 8",
                                              "fill-color-rgba", col,
                                              "use-markup", TRUE, NULL);
@@ -444,7 +434,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
                                              satmap->x0 + 2,
                                              satmap->y0 + satmap->height - 1,
                                              -1,
-                                             GTK_ANCHOR_SOUTH_WEST,
+                                             GOO_CANVAS_ANCHOR_SOUTH_WEST,
                                              "font", "Sans 8",
                                              "fill-color-rgba", col,
                                              "use-markup", TRUE, NULL);
@@ -454,7 +444,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
                                             satmap->x0 + satmap->width - 2,
                                             satmap->y0 + satmap->height - 1,
                                             -1,
-                                            GTK_ANCHOR_SOUTH_EAST,
+                                            GOO_CANVAS_ANCHOR_SOUTH_EAST,
                                             "font", "Sans 8",
                                             "fill-color-rgba", col,
                                             "use-markup", TRUE, NULL);
@@ -1992,7 +1982,7 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
                                              x + 1,
                                              y + 3,
                                              -1,
-                                             GTK_ANCHOR_NORTH,
+                                             GOO_CANVAS_ANCHOR_NORTH,
                                              "font", "Sans 8",
                                              "fill-color-rgba", shadowcol,
                                              NULL);
@@ -2000,7 +1990,7 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
                                            x,
                                            y + 2,
                                            -1,
-                                           GTK_ANCHOR_NORTH,
+                                           GOO_CANVAS_ANCHOR_NORTH,
                                            "font", "Sans 8",
                                            "fill-color-rgba", col,
                                            "tooltip", tooltip, NULL);
@@ -2202,43 +2192,43 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
         {
             g_object_set(obj->label,
                          "x", (gdouble) (x + 3),
-                         "y", (gdouble) (y), "anchor", GTK_ANCHOR_WEST, NULL);
+                         "y", (gdouble) (y), "anchor", GOO_CANVAS_ANCHOR_WEST, NULL);
             g_object_set(obj->shadowl,
                          "x", (gdouble) (x + 3 + 1),
                          "y", (gdouble) (y + 1),
-                         "anchor", GTK_ANCHOR_WEST, NULL);
+                         "anchor", GOO_CANVAS_ANCHOR_WEST, NULL);
         }
         else if ((satmap->width - x) < 50)
         {
             g_object_set(obj->label,
                          "x", (gdouble) (x - 3),
-                         "y", (gdouble) (y), "anchor", GTK_ANCHOR_EAST, NULL);
+                         "y", (gdouble) (y), "anchor", GOO_CANVAS_ANCHOR_EAST, NULL);
             g_object_set(obj->shadowl,
                          "x", (gdouble) (x - 3 + 1),
                          "y", (gdouble) (y + 1),
-                         "anchor", GTK_ANCHOR_EAST, NULL);
+                         "anchor", GOO_CANVAS_ANCHOR_EAST, NULL);
         }
         else if ((satmap->height - y) < 25)
         {
             g_object_set(obj->label,
                          "x", (gdouble) (x),
                          "y", (gdouble) (y - 2),
-                         "anchor", GTK_ANCHOR_SOUTH, NULL);
+                         "anchor", GOO_CANVAS_ANCHOR_SOUTH, NULL);
             g_object_set(obj->shadowl,
                          "x", (gdouble) (x + 1),
                          "y", (gdouble) (y - 2 + 1),
-                         "anchor", GTK_ANCHOR_SOUTH, NULL);
+                         "anchor", GOO_CANVAS_ANCHOR_SOUTH, NULL);
         }
         else
         {
             g_object_set(obj->label,
                          "x", (gdouble) (x),
                          "y", (gdouble) (y + 2),
-                         "anchor", GTK_ANCHOR_NORTH, NULL);
+                         "anchor", GOO_CANVAS_ANCHOR_NORTH, NULL);
             g_object_set(obj->shadowl,
                          "x", (gdouble) (x + 1),
                          "y", (gdouble) (y + 2 + 1),
-                         "anchor", GTK_ANCHOR_NORTH, NULL);
+                         "anchor", GOO_CANVAS_ANCHOR_NORTH, NULL);
         }
 
         /* initialize points for footprint */
@@ -2519,7 +2509,7 @@ static void draw_grid_lines(GtkSatMap * satmap, GooCanvasItemModel * root)
                                                                    (i +
                                                                     1) *
                                                                    ystep), -1,
-                                                        GTK_ANCHOR_NORTH,
+                                                        GOO_CANVAS_ANCHOR_NORTH,
                                                         "font", "Sans 8",
                                                         "fill-color-rgba", col,
                                                         NULL);
@@ -2580,7 +2570,7 @@ static void draw_grid_lines(GtkSatMap * satmap, GooCanvasItemModel * root)
                                                         (gdouble) (satmap->y0 +
                                                                    satmap->
                                                                    height - 5),
-                                                        -1, GTK_ANCHOR_EAST,
+                                                        -1, GOO_CANVAS_ANCHOR_EAST,
                                                         "font", "Sans 8",
                                                         "fill-color-rgba", col,
                                                         NULL);
