@@ -2,7 +2,7 @@ sudo: required
 
 dist: trusty
 
-language: cpp
+language: c
 
 compiler:
   - gcc
@@ -11,7 +11,7 @@ compiler:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y libtool intltool autoconf automake libcurl4-openssl-dev
-  - sudo apt-get install -y pkg-config libglib2.0-dev libgtk2.0-dev libgoocanvas-dev
+  - sudo apt-get install -y pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
 
 script:
   - ./autogen.sh
