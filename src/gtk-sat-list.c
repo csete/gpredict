@@ -138,7 +138,7 @@ const gfloat    SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
 
 static void     gtk_sat_list_class_init(GtkSatListClass * class);
 static void     gtk_sat_list_init(GtkSatList * list);
-static void     gtk_sat_list_destroy(GtkObject * object);
+static void     gtk_sat_list_destroy(GtkWidget * widget);
 static GtkTreeModel *create_and_fill_model(GHashTable * sats);
 static void     sat_list_add_satellites(gpointer key, gpointer value,
                                         gpointer user_data);
@@ -236,46 +236,20 @@ GType gtk_sat_list_get_type()
 
 static void gtk_sat_list_class_init(GtkSatListClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
-
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sat_list_destroy;
 
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_sat_list_destroy;
 }
 
 static void gtk_sat_list_init(GtkSatList * list)
 {
-    (void)list;                 /* avoid unusued parameter compiler warning */
-    /*     GtkWidget *vbox,*hbox; */
-
-
-    /*     hbox = gtk_hbox_new (TRUE, 5); */
-    /*     gtk_box_pack_start_defaults (GTK_BOX (hbox), gtk_label_new ("POLAR")); */
-    /*     gtk_box_pack_start_defaults (GTK_BOX (hbox), gtk_label_new ("LIST")); */
-
-    /*     vbox = gtk_vbox_new (TRUE, 5); */
-    /*     gtk_box_pack_start_defaults (GTK_BOX (vbox), gtk_label_new ("MAP")); */
-    /*     gtk_box_pack_start_defaults (GTK_BOX (vbox), hbox); */
-
-    /*     gtk_container_add (GTK_CONTAINER (module), vbox); */
-    /*     gtk_widget_show_all (vbox); */
-
-    /* initialise data structures */
-
+    (void)list;
 }
 
-static void gtk_sat_list_destroy(GtkObject * object)
+static void gtk_sat_list_destroy(GtkWidget * widget)
 {
-    GtkSatList     *list = GTK_SAT_LIST(object);
+    GtkSatList     *list = GTK_SAT_LIST(widget);
 
     g_key_file_set_integer(list->cfgdata, MOD_CFG_LIST_SECTION,
                            MOD_CFG_LIST_SORT_COLUMN, list->sort_column);
@@ -283,7 +257,7 @@ static void gtk_sat_list_destroy(GtkObject * object)
     g_key_file_set_integer(list->cfgdata, MOD_CFG_LIST_SECTION,
                            MOD_CFG_LIST_SORT_ORDER, list->sort_order);
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
