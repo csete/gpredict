@@ -69,7 +69,7 @@
 
 static void     gtk_rot_ctrl_class_init(GtkRotCtrlClass * class);
 static void     gtk_rot_ctrl_init(GtkRotCtrl * list);
-static void     gtk_rot_ctrl_destroy(GtkObject * object);
+static void     gtk_rot_ctrl_destroy(GtkWidget * widget);
 
 static GtkWidget *create_az_widgets(GtkRotCtrl * ctrl);
 static GtkWidget *create_el_widgets(GtkRotCtrl * ctrl);
@@ -136,11 +136,10 @@ GType gtk_rot_ctrl_get_type()
 
 static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
 {
-    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
 
-    object_class = (GtkObjectClass *) class;
+    widget_class->destroy = gtk_rot_ctrl_destroy;
     parent_class = g_type_class_peek_parent(class);
-    object_class->destroy = gtk_rot_ctrl_destroy;
 }
 
 static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
@@ -161,9 +160,9 @@ static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
     ctrl->errcnt = 0;
 }
 
-static void gtk_rot_ctrl_destroy(GtkObject * object)
+static void gtk_rot_ctrl_destroy(GtkWidget * widget)
 {
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(object);
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(widget);
 
     /* stop timer */
     if (ctrl->timerid > 0)
@@ -182,7 +181,7 @@ static void gtk_rot_ctrl_destroy(GtkObject * object)
     if (ctrl->sock != 0)
         close_rotctld_socket(&(ctrl->sock));
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
