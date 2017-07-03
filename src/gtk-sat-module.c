@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -29,7 +28,7 @@
 */
 
 /**
- * \brief Main module container.
+ * Main module container.
  *
  * The GtkSatModule widget is the top level container that contains the
  * individual views. These views are of type GtkSatList, GtkSatMap, GtkSingleSat,
@@ -42,65 +41,58 @@
  * associated to it. These associations exist because theu share QTH and
  * satellite data.
  */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <sys/time.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
-#include "gpredict-utils.h"
-#include "config-keys.h"
-#include "sat-cfg.h"
-#include "mod-cfg.h"
-#include "mod-cfg-get-param.h"
-#include "mod-mgr.h"
+
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
-#include "time-tools.h"
-#include "orbit-tools.h"
-#include "predict-tools.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <sys/time.h>
+
+#include "compat.h"
+#include "config-keys.h"
+#include "gpredict-utils.h"
+#include "gtk-event-list.h"
+#include "gtk-polar-view.h"
+#include "gtk-rig-ctrl.h"
+#include "gtk-rot-ctrl.h"
+#include "gtk-sat-list.h"
+#include "gtk-sat-map.h"
 #include "gtk-sat-module.h"
 #include "gtk-sat-module-popup.h"
 #include "gtk-sat-module-tmg.h"
-#include "gtk-sat-list.h"
-#include "gtk-sat-map.h"
-#include "gtk-polar-view.h"
 #include "gtk-single-sat.h"
-#include "gtk-event-list.h"
-#include "gtk-rig-ctrl.h"
-#include "gtk-rot-ctrl.h"
 #include "gtk-sky-glance.h"
-#include "compat.h"
+#include "mod-cfg.h"
+#include "mod-cfg-get-param.h"
+#include "mod-mgr.h"
+#include "orbit-tools.h"
+#include "predict-tools.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
-
-//#ifdef G_OS_WIN32
-//#  include "libc_internal.h"
-//#  include "libc_interface.h"
-//#endif
 
 static void     gtk_sat_module_class_init(GtkSatModuleClass * class);
 static void     gtk_sat_module_init(GtkSatModule * module);
 static void     gtk_sat_module_destroy(GtkObject * object);
 static void     gtk_sat_module_read_cfg_data(GtkSatModule * module,
                                              const gchar * cfgfile);
-
 static void     gtk_sat_module_load_sats(GtkSatModule * module);
 static void     gtk_sat_module_free_sat(gpointer sat);
 static gboolean gtk_sat_module_timeout_cb(gpointer module);
 static void     gtk_sat_module_update_sat(gpointer key,
                                           gpointer val, gpointer data);
 static void     gtk_sat_module_popup_cb(GtkWidget * button, gpointer data);
-
 static void     update_header(GtkSatModule * module);
 static void     update_child(GtkWidget * child, gdouble tstamp);
 static void     create_module_layout(GtkSatModule * module);
 static void     get_grid_size(GtkSatModule * module, guint * rows,
                               guint * cols);
 static GtkWidget *create_view(GtkSatModule * module, guint num);
-
 static void     reload_sats_in_child(GtkWidget * widget,
                                      GtkSatModule * module);
-
 static void     update_skg(GtkSatModule * module);
 static void     update_autotrack(GtkSatModule * module);
 
@@ -199,7 +191,6 @@ static void gtk_sat_module_init(GtkSatModule * module)
     module->autotrack = FALSE;
 }
 
-
 static void gtk_sat_module_destroy(GtkObject * object)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(object);
@@ -259,12 +250,12 @@ static void gtk_sat_module_destroy(GtkObject * object)
     (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
-
 /**
- * \brief Create a new GtkSatModule widget.
- * \param cfgfile The name of the configuration file (.mod)
+ * Create a new GtkSatModule widget.
+ *
+ * @param cfgfile The name of the configuration file (.mod)
  * 
- * \bug Program goes into infinite loop when there is something
+ * @bug Program goes into infinite loop when there is something
  *      wrong with cfg file.
  */
 GtkWidget      *gtk_sat_module_new(const gchar * cfgfile)
@@ -386,7 +377,7 @@ GtkWidget      *gtk_sat_module_new(const gchar * cfgfile)
 }
 
 /**
- * \brief Create module layout and add views.
+ * Create module layout and add views.
  *
  * It is assumed that module->grid and module->nviews have
  * coherent values.
@@ -426,10 +417,11 @@ static void create_module_layout(GtkSatModule * module)
 }
 
 /**
- * \brief Create a new view.
- * \param module Pointer to the parent GtkSatModule widget
- * \param num The number ID of the view to create, see gtk_sat_mod_view_t
- * \return Pointer to a new GtkWidget of type corresponding to num. If num
+ * Create a new view.
+ *
+ * @param module Pointer to the parent GtkSatModule widget
+ * @param num The number ID of the view to create, see gtk_sat_mod_view_t
+ * @return Pointer to a new GtkWidget of type corresponding to num. If num
  *         is invalid, a GtkSatList is returned.
  */
 static GtkWidget *create_view(GtkSatModule * module, guint num)
@@ -477,13 +469,13 @@ static GtkWidget *create_view(GtkSatModule * module, guint num)
 }
 
 /**
- * \brief Read moule configuration data.
- * \ingroup satmodpriv
- * \param module The GtkSatModule to which the configuration will be applied.
- * \param cfgfile The configuration file.
+ * Read moule configuration data.
+ *
+ * @param module The GtkSatModule to which the configuration will be applied.
+ * @param cfgfile The configuration file.
  */
-static void
-gtk_sat_module_read_cfg_data(GtkSatModule * module, const gchar * cfgfile)
+static void gtk_sat_module_read_cfg_data(GtkSatModule * module,
+                                         const gchar * cfgfile)
 {
     gchar          *buffer = NULL;
     gchar          *qthfile;
@@ -621,7 +613,7 @@ gtk_sat_module_read_cfg_data(GtkSatModule * module, const gchar * cfgfile)
 }
 
 /**
- * \brief Read satellites into memory.
+ * Read satellites into memory.
  *
  * This function reads the list of satellites from the configfile and
  * and then adds each satellite to the hash table.
@@ -708,7 +700,7 @@ static void gtk_sat_module_load_sats(GtkSatModule * module)
 }
 
 /**
- * \brief Free satellite data
+ * Free satellite data
  * 
  * This function is called automatically for each satellite when
  * the hash table is destroyed.
@@ -854,8 +846,9 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
 
 /**
  * Update a child widget.
- * \param child Pointer to the child widget (views)
- * \param tstamp The current timestamp
+ *
+ * @param child Pointer to the child widget (views)
+ * @param tstamp The current timestamp
  * 
  * This function is called by the main loop of the GtkSatModule widget for
  * each view in the layout grid.
@@ -900,10 +893,11 @@ static void update_child(GtkWidget * child, gdouble tstamp)
 }
 
 /**
- * \brief Update a given satellite.
- * \param key The hash table key (catnum)
- * \param val The hash table value (sat_t structure)
- * \param data User data (the GtkSatModule widget).
+ * Update a given satellite.
+ *
+ * @param key The hash table key (catnum)
+ * @param val The hash table value (sat_t structure)
+ * @param data User data (the GtkSatModule widget).
  *
  * This function updates the tracking data for a given satelite. It is called by
  * the timeout handler for each element in the hash table.
@@ -916,7 +910,7 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val,
     gdouble         daynum;
     gdouble         maxdt;
 
-    (void)key;                  /* prevent unused parameter compiler warning */
+    (void)key;
 
     g_return_if_fail((val != NULL) && (data != NULL));
 
@@ -986,20 +980,21 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val,
 }
 
 /**
- * \brief Module options.
+ * Module options.
  *
  * Invoke module-wide popup menu
  */
 static void gtk_sat_module_popup_cb(GtkWidget * button, gpointer data)
 {
-    (void)button;               /* prevent unused parameter compiler warning */
+    (void)button;
     gtk_sat_module_popup(GTK_SAT_MODULE(data));
 }
 
 /**
- * \brief Close module.
- * \param button The button widget that received the signal.
- * \param data Pointer the GtkSatModule widget, which should be destroyed.
+ * Close module.
+ *
+ * @param button The button widget that received the signal.
+ * @param data Pointer the GtkSatModule widget, which should be destroyed.
  *
  * This function is called when the user clicks on the "close" minibutton.
  * The functions checks the state of the module. If the module is docked
@@ -1017,7 +1012,7 @@ void gtk_sat_module_close_cb(GtkWidget * button, gpointer data)
     gchar          *name;
     gint            retcode;
 
-    (void)button;               /* prevent unused parameter compiler warning */
+    (void)button;
 
     name = g_strdup(module->name);
 
@@ -1118,9 +1113,10 @@ void gtk_sat_module_close_cb(GtkWidget * button, gpointer data)
 }
 
 /**
- * \brief Configure module.
- * \param button The button widget that received the signal.
- * \param data Pointer the GtkSatModule widget, which should be reconfigured
+ * Configure module.
+ *
+ * @param button The button widget that received the signal.
+ * @param data Pointer the GtkSatModule widget, which should be reconfigured
  *
  * This function is called when the user clicks on the "configure" minibutton.
  * The function incokes the mod_cfg_edit funcion, which has the same look and feel
@@ -1140,7 +1136,7 @@ void gtk_sat_module_config_cb(GtkWidget * button, gpointer data)
     gtk_sat_mod_state_t laststate;
     gint            w, h;
 
-    (void)button;               /* prevent unused parameter compiler warning */
+    (void)button;
 
     if (module->win != NULL)
         toplevel = module->win;
@@ -1307,17 +1303,18 @@ static void update_header(GtkSatModule * module)
 
 static gboolean empty(gpointer key, gpointer val, gpointer data)
 {
-    (void)key;                  /* prevent unused parameter compiler warning */
-    (void)val;                  /* prevent unused parameter compiler warning */
-    (void)data;                 /* prevent unused parameter compiler warning */
+    (void)key;
+    (void)val;
+    (void)data;
 
     /* TRUE => sat removed from hash table */
     return TRUE;
 }
 
 /**
- * \brief Reload satellites.
- * \param module Pointer to a GtkSatModule widget.
+ * Reload satellites.
+ *
+ * @param module Pointer to a GtkSatModule widget.
  *
  * This function is used to reload the satellites in a module. This is can be
  * useful when:
@@ -1372,17 +1369,14 @@ static void reload_sats_in_child(GtkWidget * widget, GtkSatModule * module)
     {
         gtk_single_sat_reload_sats(widget, module->satellites);
     }
-
     else if (IS_GTK_POLAR_VIEW(widget))
     {
         gtk_polar_view_reload_sats(widget, module->satellites);
     }
-
     else if (IS_GTK_SAT_MAP(widget))
     {
         gtk_sat_map_reload_sats(widget, module->satellites);
     }
-
     else if (IS_GTK_SAT_LIST(widget))
     {
         /* NOP */
@@ -1391,7 +1385,6 @@ static void reload_sats_in_child(GtkWidget * widget, GtkSatModule * module)
     {
         /* NOP */
     }
-
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
@@ -1448,23 +1441,25 @@ void gtk_sat_module_select_sat(GtkSatModule * module, gint catnum)
 }
 
 /**
- * \brief Re-configure module.
- * \param module The module.
- * \param local Flag indicating whether reconfiguration is requested from 
+ * Re-configure module.
+ *
+ * @param module The module.
+ * @param local Flag indicating whether reconfiguration is requested from 
  *              local configuration dialog.
  *
  */
 void gtk_sat_module_reconf(GtkSatModule * module, gboolean local)
 {
-    (void)module;               /* prevent unused parameter compiler warning */
-    (void)local;                /* prevent unused parameter compiler warning */
+    (void)module;
+    (void)local;
 }
 
 /**
- * \brief Calculate the layout grid size.
- * \param module Pointer to the GtkSatModule widget.
- * \param rows Return value for number of rows
- * \param cols Return value for number of columns
+ * Calculate the layout grid size.
+ *
+ * @param module Pointer to the GtkSatModule widget.
+ * @param rows Return value for number of rows
+ * @param cols Return value for number of columns
  *
  * It is assumed that module->grid and module->nviews have chierent values.
  */
@@ -1485,8 +1480,9 @@ static void get_grid_size(GtkSatModule * module, guint * rows, guint * cols)
 }
 
 /**
- * \brief Update GtkSkyGlance view
- * \param module Pointer to the GtkSatModule widget
+ * Update GtkSkyGlance view
+ *
+ * @param module Pointer to the GtkSatModule widget
  * 
  * This function checks to see if the sky-at-a-glance display needs to be updated 
  * due to time or qth moving. It checks how long ago the GtkSkyGlance widget was 

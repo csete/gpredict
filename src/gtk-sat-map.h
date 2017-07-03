@@ -40,7 +40,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/* *INDENT-OFF* */
+/* *INDENT-ON* */
 
 #define SAT_MAP_RANGE_CIRCLE_POINTS    180  /*!< Number of points used to plot a satellite range half circle. */
 
