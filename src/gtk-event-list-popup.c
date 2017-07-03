@@ -61,8 +61,18 @@ void gtk_event_list_popup_exec(sat_t * sat, qth_t * qth,
     /* first menu item is the satellite name, centered */
     menuitem = gtk_menu_item_new();
     label = gtk_label_new(NULL);
+
+    /** FIXME **/
+    g_object_set(G_OBJECT(label),
+                 "halign", GTK_ALIGN_CENTER,
+                 "valign", GTK_ALIGN_CENTER,
+                 NULL);
+    //gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
+    /* only available since 3.16, so no Trusty support
     gtk_label_set_xalign(GTK_LABEL(label), 0.5);
     gtk_label_set_yalign(GTK_LABEL(label), 0.5);
+    */
+
     buff = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
     gtk_label_set_markup(GTK_LABEL(label), buff);
     g_free(buff);
