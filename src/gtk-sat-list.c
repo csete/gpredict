@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -25,33 +24,31 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief Satellite List Widget.
- *
- * More info...
- */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "gtk-sat-list.h"
-#include "sat-log.h"
-#include "config-keys.h"
-#include "sat-cfg.h"
-#include "mod-cfg-get-param.h"
-#include "gtk-sat-list-popup.h"
-#include "gtk-sat-data.h"
-#include "gpredict-utils.h"
-#include "locator.h"
-#include "sat-vis.h"
-#include "sat-info.h"
-#include "time-tools.h"
-#include "orbit-tools.h"
+
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
-/** \brief Column titles indexed with column symb. refs. */
-const gchar *SAT_LIST_COL_TITLE[SAT_LIST_COL_NUMBER] = {
+#include "config-keys.h"
+#include "gpredict-utils.h"
+#include "gtk-sat-data.h"
+#include "gtk-sat-list.h"
+#include "gtk-sat-list-popup.h"
+#include "locator.h"
+#include "mod-cfg-get-param.h"
+#include "orbit-tools.h"
+#include "sat-cfg.h"
+#include "sat-info.h"
+#include "sat-log.h"
+#include "sat-vis.h"
+#include "sgpsdp/sgp4sdp4.h"
+#include "time-tools.h"
+
+/** Column titles indexed with column symb. refs. */
+const gchar    *SAT_LIST_COL_TITLE[SAT_LIST_COL_NUMBER] = {
     N_("Satellite"),
     N_("Catnum"),
     N_("Az"),
@@ -78,12 +75,12 @@ const gchar *SAT_LIST_COL_TITLE[SAT_LIST_COL_NUMBER] = {
     N_("Orbit"),
     N_("Vis"),
     N_("Decay"),
-    N_("BOLD")                  /*should never be seen */
+    N_("BOLD")                  /* should never be seen */
 };
 
 
-/** \brief Column title hints indexed with column symb. refs. */
-const gchar *SAT_LIST_COL_HINT[SAT_LIST_COL_NUMBER] = {
+/** Column title hints indexed with column symb. refs. */
+const gchar    *SAT_LIST_COL_HINT[SAT_LIST_COL_NUMBER] = {
     N_("Satellite Name"),
     N_("Catalogue Number"),
     N_("Azimuth"),
@@ -111,7 +108,7 @@ const gchar *SAT_LIST_COL_HINT[SAT_LIST_COL_NUMBER] = {
     N_("Visibility")
 };
 
-const gfloat SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
+const gfloat    SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
     0.0,                        // name
     0.5,                        // catnum
     1.0,                        // az
@@ -139,66 +136,80 @@ const gfloat SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
     0.5,                        // visibility
 };
 
-static void gtk_sat_list_class_init(GtkSatListClass * class);
-static void gtk_sat_list_init(GtkSatList * list);
-static void gtk_sat_list_destroy(GtkObject * object);
+static void     gtk_sat_list_class_init(GtkSatListClass * class);
+static void     gtk_sat_list_init(GtkSatList * list);
+static void     gtk_sat_list_destroy(GtkObject * object);
 static GtkTreeModel *create_and_fill_model(GHashTable * sats);
-static void sat_list_add_satellites(gpointer key, gpointer value, gpointer user_data);
-static gboolean sat_list_update_sats(GtkTreeModel * model,
-                                     GtkTreePath * path, GtkTreeIter * iter, gpointer data);
+static void     sat_list_add_satellites(gpointer key, gpointer value,
+                                        gpointer user_data);
+static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
+                                     GtkTreeIter * iter, gpointer data);
 
 /* cell rendering related functions */
-static void check_and_set_cell_renderer(GtkTreeViewColumn * column,
-                                        GtkCellRenderer * renderer, gint i);
+static void     check_and_set_cell_renderer(GtkTreeViewColumn * column,
+                                            GtkCellRenderer * renderer,
+                                            gint i);
 
-static void latlon_cell_data_function(GtkTreeViewColumn * col,
-                                      GtkCellRenderer * renderer,
-                                      GtkTreeModel * model, GtkTreeIter * iter, gpointer column);
-
-static void degree_cell_data_function(GtkTreeViewColumn * col,
-                                      GtkCellRenderer * renderer,
-                                      GtkTreeModel * model, GtkTreeIter * iter, gpointer column);
-
-static void distance_cell_data_function(GtkTreeViewColumn * col,
-                                        GtkCellRenderer * renderer,
-                                        GtkTreeModel * model, GtkTreeIter * iter, gpointer column);
-
-static void range_rate_cell_data_function(GtkTreeViewColumn * col,
+static void     latlon_cell_data_function(GtkTreeViewColumn * col,
                                           GtkCellRenderer * renderer,
                                           GtkTreeModel * model,
                                           GtkTreeIter * iter, gpointer column);
 
-static void float_to_int_cell_data_function(GtkTreeViewColumn * col,
+static void     degree_cell_data_function(GtkTreeViewColumn * col,
+                                          GtkCellRenderer * renderer,
+                                          GtkTreeModel * model,
+                                          GtkTreeIter * iter, gpointer column);
+
+static void     distance_cell_data_function(GtkTreeViewColumn * col,
                                             GtkCellRenderer * renderer,
                                             GtkTreeModel * model,
-                                            GtkTreeIter * iter, gpointer column);
+                                            GtkTreeIter * iter,
+                                            gpointer column);
 
-static void two_dec_cell_data_function(GtkTreeViewColumn * col,
-                                       GtkCellRenderer * renderer,
-                                       GtkTreeModel * model, GtkTreeIter * iter, gpointer column);
+static void     range_rate_cell_data_function(GtkTreeViewColumn * col,
+                                              GtkCellRenderer * renderer,
+                                              GtkTreeModel * model,
+                                              GtkTreeIter * iter,
+                                              gpointer column);
 
-static void event_cell_data_function(GtkTreeViewColumn * col,
-                                     GtkCellRenderer * renderer,
-                                     GtkTreeModel * model, GtkTreeIter * iter, gpointer column);
+static void     float_to_int_cell_data_function(GtkTreeViewColumn * col,
+                                                GtkCellRenderer * renderer,
+                                                GtkTreeModel * model,
+                                                GtkTreeIter * iter,
+                                                gpointer column);
 
-static gint event_cell_compare_function(GtkTreeModel * model,
-                                        GtkTreeIter * a, GtkTreeIter * b, gpointer user_data);
+static void     two_dec_cell_data_function(GtkTreeViewColumn * col,
+                                           GtkCellRenderer * renderer,
+                                           GtkTreeModel * model,
+                                           GtkTreeIter * iter,
+                                           gpointer column);
+
+static void     event_cell_data_function(GtkTreeViewColumn * col,
+                                         GtkCellRenderer * renderer,
+                                         GtkTreeModel * model,
+                                         GtkTreeIter * iter, gpointer column);
+
+static gint     event_cell_compare_function(GtkTreeModel * model,
+                                            GtkTreeIter * a, GtkTreeIter * b,
+                                            gpointer user_data);
 
 static gboolean popup_menu_cb(GtkWidget * treeview, gpointer list);
-static gboolean button_press_cb(GtkWidget * treeview, GdkEventButton * event, gpointer list);
-static void row_activated_cb(GtkTreeView * tree_view,
-                             GtkTreePath * path, GtkTreeViewColumn * column, gpointer list);
+static gboolean button_press_cb(GtkWidget * treeview, GdkEventButton * event,
+                                gpointer list);
+static void     row_activated_cb(GtkTreeView * tree_view, GtkTreePath * path,
+                                 GtkTreeViewColumn * column, gpointer list);
 
-static void view_popup_menu(GtkWidget * treeview, GdkEventButton * event, gpointer list);
-static void Calculate_RADec(sat_t * sat, qth_t * qth, obs_astro_t * obs_set);
-
+static void     view_popup_menu(GtkWidget * treeview, GdkEventButton * event,
+                                gpointer list);
+static void     Calculate_RADec(sat_t * sat, qth_t * qth,
+                                obs_astro_t * obs_set);
 
 static GtkVBoxClass *parent_class = NULL;
 
 
 GType gtk_sat_list_get_type()
 {
-    static GType gtk_sat_list_type = 0;
+    static GType    gtk_sat_list_type = 0;
 
     if (!gtk_sat_list_type)
     {
@@ -216,12 +227,12 @@ GType gtk_sat_list_get_type()
         };
 
         gtk_sat_list_type = g_type_register_static(GTK_TYPE_VBOX,
-                                                   "GtkSatList", &gtk_sat_list_info, 0);
+                                                   "GtkSatList",
+                                                   &gtk_sat_list_info, 0);
     }
 
     return gtk_sat_list_type;
 }
-
 
 static void gtk_sat_list_class_init(GtkSatListClass * class)
 {
@@ -239,9 +250,7 @@ static void gtk_sat_list_class_init(GtkSatListClass * class)
     parent_class = g_type_class_peek_parent(class);
 
     object_class->destroy = gtk_sat_list_destroy;
-
 }
-
 
 static void gtk_sat_list_init(GtkSatList * list)
 {
@@ -266,7 +275,7 @@ static void gtk_sat_list_init(GtkSatList * list)
 
 static void gtk_sat_list_destroy(GtkObject * object)
 {
-    GtkSatList *list = GTK_SAT_LIST(object);
+    GtkSatList     *list = GTK_SAT_LIST(object);
 
     g_key_file_set_integer(list->cfgdata, MOD_CFG_LIST_SECTION,
                            MOD_CFG_LIST_SORT_COLUMN, list->sort_column);
@@ -277,12 +286,12 @@ static void gtk_sat_list_destroy(GtkObject * object)
     (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
-
-GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, guint32 columns)
+GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
+                                 qth_t * qth, guint32 columns)
 {
-    GtkWidget *widget;
-    GtkTreeModel *model, *filter, *sortable;
-    guint i;
+    GtkWidget      *widget;
+    GtkTreeModel   *model, *filter, *sortable;
+    guint           i;
 
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
@@ -301,23 +310,26 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
     if (g_key_file_has_key(GTK_SAT_LIST(widget)->cfgdata, MOD_CFG_LIST_SECTION,
                            MOD_CFG_LIST_SORT_COLUMN, NULL))
     {
-        GTK_SAT_LIST(widget)->sort_column = g_key_file_get_integer(GTK_SAT_LIST(widget)->cfgdata,
-                                                                   MOD_CFG_LIST_SECTION,
-                                                                   MOD_CFG_LIST_SORT_COLUMN, NULL);
-        if ((GTK_SAT_LIST(widget)->sort_column > SAT_LIST_COL_NUMBER)
-            || (GTK_SAT_LIST(widget)->sort_column < 0))
+        GTK_SAT_LIST(widget)->sort_column =
+            g_key_file_get_integer(GTK_SAT_LIST(widget)->cfgdata,
+                                   MOD_CFG_LIST_SECTION,
+                                   MOD_CFG_LIST_SORT_COLUMN, NULL);
+        if ((GTK_SAT_LIST(widget)->sort_column > SAT_LIST_COL_NUMBER) ||
+            (GTK_SAT_LIST(widget)->sort_column < 0))
         {
             GTK_SAT_LIST(widget)->sort_column = SAT_LIST_COL_NAME;
         }
     }
     if (g_key_file_has_key(GTK_SAT_LIST(widget)->cfgdata,
-                           MOD_CFG_EVENT_LIST_SECTION, MOD_CFG_EVENT_LIST_SORT_ORDER, NULL))
+                           MOD_CFG_EVENT_LIST_SECTION,
+                           MOD_CFG_EVENT_LIST_SORT_ORDER, NULL))
     {
-        GTK_SAT_LIST(widget)->sort_order = g_key_file_get_integer(GTK_SAT_LIST(widget)->cfgdata,
-                                                                  MOD_CFG_EVENT_LIST_SECTION,
-                                                                  MOD_CFG_EVENT_LIST_SORT_ORDER,
-                                                                  NULL);
-        if ((GTK_SAT_LIST(widget)->sort_order > 1) || (GTK_SAT_LIST(widget)->sort_order < 0))
+        GTK_SAT_LIST(widget)->sort_order =
+            g_key_file_get_integer(GTK_SAT_LIST(widget)->cfgdata,
+                                   MOD_CFG_EVENT_LIST_SECTION,
+                                   MOD_CFG_EVENT_LIST_SORT_ORDER, NULL);
+        if ((GTK_SAT_LIST(widget)->sort_order > 1) ||
+            (GTK_SAT_LIST(widget)->sort_order < 0))
         {
             GTK_SAT_LIST(widget)->sort_order = GTK_SORT_ASCENDING;
         }
@@ -338,7 +350,8 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
     /* get refresh rate and cycle counter */
     GTK_SAT_LIST(widget)->refresh = mod_cfg_get_int(cfgdata,
                                                     MOD_CFG_LIST_SECTION,
-                                                    MOD_CFG_LIST_REFRESH, SAT_CFG_INT_LIST_REFRESH);
+                                                    MOD_CFG_LIST_REFRESH,
+                                                    SAT_CFG_INT_LIST_REFRESH);
     GTK_SAT_LIST(widget)->counter = 1;
 
     /* create the tree view and add columns */
@@ -352,7 +365,8 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
     {
 
         renderer = gtk_cell_renderer_text_new();
-        g_object_set(G_OBJECT(renderer), "xalign", SAT_LIST_COL_XALIGN[i], NULL);
+        g_object_set(G_OBJECT(renderer), "xalign", SAT_LIST_COL_XALIGN[i],
+                     NULL);
 
         /* in win32 use special font for direction column because default font
            does not have arrow symbols.
@@ -362,11 +376,14 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
             g_object_set(G_OBJECT(renderer), "font", "courier 12", NULL);
 #endif
 
-        column = gtk_tree_view_column_new_with_attributes(_(SAT_LIST_COL_TITLE[i]),
-                                                          renderer,
-                                                          "text", i,
-                                                          "weight", SAT_LIST_COL_BOLD, NULL);
-        gtk_tree_view_insert_column(GTK_TREE_VIEW(GTK_SAT_LIST(widget)->treeview), column, -1);
+        column =
+            gtk_tree_view_column_new_with_attributes(_(SAT_LIST_COL_TITLE[i]),
+                                                     renderer, "text", i,
+                                                     "weight",
+                                                     SAT_LIST_COL_BOLD, NULL);
+        gtk_tree_view_insert_column(GTK_TREE_VIEW
+                                    (GTK_SAT_LIST(widget)->treeview), column,
+                                    -1);
 
         /* only aligns the headers */
         gtk_tree_view_column_set_alignment(column, 0.5);
@@ -389,16 +406,19 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
     filter = gtk_tree_model_filter_new(model, NULL);
     sortable = gtk_tree_model_sort_new_with_model(filter);
     GTK_SAT_LIST(widget)->sortable = sortable;
-    gtk_tree_model_filter_set_visible_column(GTK_TREE_MODEL_FILTER(filter), SAT_LIST_COL_DECAY);
-    gtk_tree_view_set_model(GTK_TREE_VIEW(GTK_SAT_LIST(widget)->treeview), sortable);
+    gtk_tree_model_filter_set_visible_column(GTK_TREE_MODEL_FILTER(filter),
+                                             SAT_LIST_COL_DECAY);
+    gtk_tree_view_set_model(GTK_TREE_VIEW(GTK_SAT_LIST(widget)->treeview),
+                            sortable);
 
     /* We need a special sort function for AOS/LOS events that works
        with all date and time formats (see bug #1861323)
      */
     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(model),
-                                    SAT_LIST_COL_AOS, event_cell_compare_function, widget, NULL);
-    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(model),
-                                    SAT_LIST_COL_LOS, event_cell_compare_function, widget, NULL);
+                                    SAT_LIST_COL_AOS,
+                                    event_cell_compare_function, widget, NULL);
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(model), SAT_LIST_COL_LOS,
+                                    event_cell_compare_function, widget, NULL);
 
     /* satellite name should be initial sorting criteria */
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(sortable),
@@ -417,10 +437,12 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
                      G_CALLBACK(row_activated_cb), widget);
 
     GTK_SAT_LIST(widget)->swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(GTK_SAT_LIST(widget)->swin),
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW
+                                   (GTK_SAT_LIST(widget)->swin),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-    gtk_container_add(GTK_CONTAINER(GTK_SAT_LIST(widget)->swin), GTK_SAT_LIST(widget)->treeview);
+    gtk_container_add(GTK_CONTAINER(GTK_SAT_LIST(widget)->swin),
+                      GTK_SAT_LIST(widget)->treeview);
 
     gtk_container_add(GTK_CONTAINER(widget), GTK_SAT_LIST(widget)->swin);
     gtk_widget_show_all(widget);
@@ -431,7 +453,7 @@ GtkWidget *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth, 
 
 static GtkTreeModel *create_and_fill_model(GHashTable * sats)
 {
-    GtkListStore *liststore;
+    GtkListStore   *liststore;
 
     liststore = gtk_list_store_new(SAT_LIST_COL_NUMBER, G_TYPE_STRING,  // name
                                    G_TYPE_INT,  // catnum
@@ -469,13 +491,14 @@ static GtkTreeModel *create_and_fill_model(GHashTable * sats)
 }
 
 
-static void sat_list_add_satellites(gpointer key, gpointer value, gpointer user_data)
+static void sat_list_add_satellites(gpointer key, gpointer value,
+                                    gpointer user_data)
 {
-    GtkListStore *store = GTK_LIST_STORE(user_data);
-    GtkTreeIter item;
-    sat_t *sat = SAT(value);
+    GtkListStore   *store = GTK_LIST_STORE(user_data);
+    GtkTreeIter     item;
+    sat_t          *sat = SAT(value);
 
-    (void)key;                  /* avoid unusued parameter compiler warning */
+    (void)key;
 
     gtk_list_store_append(store, &item);
     gtk_list_store_set(store, &item,
@@ -503,21 +526,22 @@ static void sat_list_add_satellites(gpointer key, gpointer value, gpointer user_
                        SAT_LIST_COL_DELAY, 0.0,
                        SAT_LIST_COL_MA, sat->ma,
                        SAT_LIST_COL_PHASE, sat->phase,
-                       SAT_LIST_COL_ORBIT, sat->orbit, SAT_LIST_COL_DECAY, !decayed(sat), -1);
+                       SAT_LIST_COL_ORBIT, sat->orbit, SAT_LIST_COL_DECAY,
+                       !decayed(sat), -1);
 }
 
-
-/** \brief Update satellites */
+/** Update satellites */
 void gtk_sat_list_update(GtkWidget * widget)
 {
-    GtkTreeModel *model;
-    GtkSatList *satlist = GTK_SAT_LIST(widget);
+    GtkTreeModel   *model;
+    GtkSatList     *satlist = GTK_SAT_LIST(widget);
 
     /* first, do some sanity checks */
     if ((satlist == NULL) || !IS_GTK_SAT_LIST(satlist))
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Invalid GtkSatList!"), __func__);
-		return;
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Invalid GtkSatList!"),
+                    __func__);
+        return;
     }
 
     /* check refresh rate */
@@ -535,11 +559,14 @@ void gtk_sat_list_update(GtkWidget * widget)
                                             (gtk_tree_model_sort_get_model
                                              (GTK_TREE_MODEL_SORT
                                               (gtk_tree_view_get_model
-                                               (GTK_TREE_VIEW(satlist->treeview))))));
+                                               (GTK_TREE_VIEW
+                                                (satlist->treeview))))));
 
         /*save the sort information */
-        gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(satlist->sortable),
-                                             &(satlist->sort_column), &(satlist->sort_order));
+        gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE
+                                             (satlist->sortable),
+                                             &(satlist->sort_column),
+                                             &(satlist->sort_order));
 
         /* optimisation: detach model from view while updating */
         /* No, we do not do it, because it makes selections and scrolling
@@ -556,25 +583,23 @@ void gtk_sat_list_update(GtkWidget * widget)
 
         /*         g_object_unref (model); */
     }
-
 }
 
-
-/** \brief Update data in each column in a given row */
+/** Update data in each column in a given row */
 static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
                                      GtkTreeIter * iter, gpointer data)
 {
-    GtkSatList *satlist = GTK_SAT_LIST(data);
-    guint *catnum;
-    sat_t *sat;
-    gchar *buff;
-    gdouble doppler;
-    gdouble delay;
-    gdouble loss;
-    gdouble oldrate;
-    gint retcode;
+    GtkSatList     *satlist = GTK_SAT_LIST(data);
+    guint          *catnum;
+    sat_t          *sat;
+    gchar          *buff;
+    gdouble         doppler;
+    gdouble         delay;
+    gdouble         loss;
+    gdouble         oldrate;
+    gint            retcode;
 
-    (void)path;                 /* avoid unusued parameter compiler warning */
+    (void)path;
 
     /* get the catalogue number for this row
        then look it up in the hash table
@@ -592,7 +617,8 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
         gtk_list_store_remove(GTK_LIST_STORE(model), iter);
 
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Satellite #%d removed from list."), __func__, *catnum);
+                    _("%s: Satellite #%d removed from list."), __func__,
+                    *catnum);
     }
     else
     {
@@ -612,27 +638,32 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
                            SAT_LIST_COL_ORBIT, sat->orbit,
                            SAT_LIST_COL_DECAY, !decayed(sat),
                            SAT_LIST_COL_BOLD,
-                           (sat->el > 0.0) ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL, -1);
+                           (sat->el >
+                            0.0) ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL,
+                           -1);
 
         /* doppler shift @ 100 MHz */
         if (satlist->flags & SAT_LIST_FLAG_DOPPLER)
         {
             doppler = -100.0e06 * (sat->range_rate / 299792.4580);      // Hz
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_DOPPLER, doppler, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter,
+                               SAT_LIST_COL_DOPPLER, doppler, -1);
         }
 
         /* delay */
         if (satlist->flags & SAT_LIST_FLAG_DELAY)
         {
             delay = sat->range / 299.7924580;   // msec 
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_DELAY, delay, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_DELAY,
+                               delay, -1);
         }
 
         /* path loss */
         if (satlist->flags & SAT_LIST_FLAG_LOSS)
         {
             loss = 72.4 + 20.0 * log10(sat->range);     // dB
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_LOSS, loss, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_LOSS,
+                               loss, -1);
         }
 
         /* calculate direction */
@@ -653,7 +684,8 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
             }
             else if ((sat->range_rate <= 0.001) && (sat->range_rate >= -0.001))
             {
-                gtk_tree_model_get(model, iter, SAT_LIST_COL_RANGE_RATE, &oldrate, -1);
+                gtk_tree_model_get(model, iter, SAT_LIST_COL_RANGE_RATE,
+                                   &oldrate, -1);
                 /* turning around; don't know which way ? */
                 if (sat->range_rate < oldrate)
                 {
@@ -676,7 +708,8 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
                 buff = g_strdup("-");
             }
 
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_DIR, buff, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_DIR,
+                               buff, -1);
 
             /* free memory */
             g_free(buff);
@@ -693,7 +726,8 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
             if (retcode == RIG_OK)
             {
                 buff[6] = '\0';
-                gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_SSP, buff, -1);
+                gtk_list_store_set(GTK_LIST_STORE(model), iter,
+                                   SAT_LIST_COL_SSP, buff, -1);
             }
             g_free(buff);
         }
@@ -701,7 +735,7 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
         /* Ra and Dec */
         if (satlist->flags & (SAT_LIST_FLAG_RA | SAT_LIST_FLAG_DEC))
         {
-            obs_astro_t astro;
+            obs_astro_t     astro;
 
             Calculate_RADec(sat, satlist->qth, &astro);
 
@@ -709,27 +743,30 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
             sat->dec = Degrees(astro.dec);
 
             gtk_list_store_set(GTK_LIST_STORE(model), iter,
-                               SAT_LIST_COL_RA, sat->ra, SAT_LIST_COL_DEC, sat->dec, -1);
+                               SAT_LIST_COL_RA, sat->ra, SAT_LIST_COL_DEC,
+                               sat->dec, -1);
         }
 
         /* upcoming events */
         /*** FIXME: not necessary to update every time */
         if (satlist->flags & SAT_LIST_FLAG_AOS)
         {
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_AOS, sat->aos, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_AOS,
+                               sat->aos, -1);
         }
         if (satlist->flags & SAT_LIST_FLAG_LOS)
         {
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_LOS, sat->los, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_LOS,
+                               sat->los, -1);
 
         }
         if (satlist->flags & SAT_LIST_FLAG_NEXT_EVENT)
         {
-            gdouble number;
-            gchar buff[TIME_FORMAT_MAX_LENGTH];
-            gchar *tfstr;
-            gchar *fmtstr;
-            gchar *alstr;
+            gdouble         number;
+            gchar           buff[TIME_FORMAT_MAX_LENGTH];
+            gchar          *tfstr;
+            gchar          *fmtstr;
+            gchar          *alstr;
 
 
             if (sat->aos > sat->los)
@@ -760,23 +797,24 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
 
                 daynum_to_str(buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
 
-                gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_NEXT_EVENT, buff, -1);
+                gtk_list_store_set(GTK_LIST_STORE(model), iter,
+                                   SAT_LIST_COL_NEXT_EVENT, buff, -1);
 
 
                 g_free(fmtstr);
             }
 
             g_free(alstr);
-
         }
 
         if (satlist->flags & SAT_LIST_FLAG_VISIBILITY)
         {
-            sat_vis_t vis;
+            sat_vis_t       vis;
 
             vis = get_sat_vis(sat, satlist->qth, sat->jul_utc);
             buff = g_strdup_printf("%c", vis_to_chr(vis));
-            gtk_list_store_set(GTK_LIST_STORE(model), iter, SAT_LIST_COL_VISIBILITY, buff, -1);
+            gtk_list_store_set(GTK_LIST_STORE(model), iter,
+                               SAT_LIST_COL_VISIBILITY, buff, -1);
             g_free(buff);
         }
     }
@@ -789,16 +827,12 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
     return FALSE;
 }
 
-
-/** \brief Set cell renderer function. */
+/** Set cell renderer function. */
 static void check_and_set_cell_renderer(GtkTreeViewColumn * column,
-                                        GtkCellRenderer * renderer,
-                                        gint i)
+                                        GtkCellRenderer * renderer, gint i)
 {
-
     switch (i)
     {
-
         /* general float with 2 dec. precision
            no extra format besides a degree char
          */
@@ -866,10 +900,8 @@ static void check_and_set_cell_renderer(GtkTreeViewColumn * column,
 
     default:
         break;
-
     }
 }
-
 
 /* Render column containg lat/lon
    by using this instead of the default data function, we can
@@ -880,17 +912,17 @@ static void check_and_set_cell_renderer(GtkTreeViewColumn * column,
    displayed (rendered), the tree_store will still contain the
    original flaoting point numbers. Very cool!
 */
-static void
-latlon_cell_data_function(GtkTreeViewColumn * col,
-                          GtkCellRenderer * renderer,
-                          GtkTreeModel * model, GtkTreeIter * iter, gpointer column)
+static void latlon_cell_data_function(GtkTreeViewColumn * col,
+                                      GtkCellRenderer * renderer,
+                                      GtkTreeModel * model, GtkTreeIter * iter,
+                                      gpointer column)
 {
-    gdouble number = 0.0;
-    gchar *buff;
-    guint coli = GPOINTER_TO_UINT(column);
-    gchar hmf = ' ';
+    gdouble         number = 0.0;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
+    gchar           hmf = ' ';
 
-    (void)col;                  /* avoid unusued parameter compiler warning */
+    (void)col;
 
     gtk_tree_model_get(model, iter, coli, &number, -1);
 
@@ -927,7 +959,8 @@ latlon_cell_data_function(GtkTreeViewColumn * col,
         else
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%d: Invalid column: %d"), __FILE__, __LINE__, coli);
+                        _("%s:%d: Invalid column: %d"), __FILE__, __LINE__,
+                        coli);
             hmf = '?';
         }
     }
@@ -938,17 +971,15 @@ latlon_cell_data_function(GtkTreeViewColumn * col,
     g_free(buff);
 }
 
-
 /* general floats with 2 digits + degree char */
 static void degree_cell_data_function(GtkTreeViewColumn * col,
                                       GtkCellRenderer * renderer,
                                       GtkTreeModel * model,
-                                      GtkTreeIter * iter,
-                                      gpointer column)
+                                      GtkTreeIter * iter, gpointer column)
 {
-    gdouble number;
-    gchar *buff;
-    guint coli = GPOINTER_TO_UINT(column);
+    gdouble         number;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
 
     (void)col;                  /* avoid unusued parameter compiler warning */
 
@@ -960,19 +991,17 @@ static void degree_cell_data_function(GtkTreeViewColumn * col,
     g_free(buff);
 }
 
-
 /* distance and velocity, 0 decimal digits */
 static void distance_cell_data_function(GtkTreeViewColumn * col,
                                         GtkCellRenderer * renderer,
                                         GtkTreeModel * model,
-                                        GtkTreeIter * iter,
-                                        gpointer column)
+                                        GtkTreeIter * iter, gpointer column)
 {
-    gdouble number;
-    gchar *buff;
-    guint coli = GPOINTER_TO_UINT(column);
+    gdouble         number;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
 
-    (void)col;                  /* avoid unusued parameter compiler warning */
+    (void)col;
 
     gtk_tree_model_get(model, iter, coli, &number, -1);
 
@@ -994,14 +1023,13 @@ static void distance_cell_data_function(GtkTreeViewColumn * col,
 static void range_rate_cell_data_function(GtkTreeViewColumn * col,
                                           GtkCellRenderer * renderer,
                                           GtkTreeModel * model,
-                                          GtkTreeIter * iter,
-                                          gpointer column)
+                                          GtkTreeIter * iter, gpointer column)
 {
-    gdouble number;
-    gchar *buff;
-    guint coli = GPOINTER_TO_UINT(column);
+    gdouble         number;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
 
-    (void)col;                  /* avoid unusued parameter compiler warning */
+    (void)col;
 
     gtk_tree_model_get(model, iter, coli, &number, -1);
 
@@ -1024,9 +1052,9 @@ static void float_to_int_cell_data_function(GtkTreeViewColumn * col,
                                             GtkTreeIter * iter,
                                             gpointer column)
 {
-    gdouble number;
-    gchar *buff;
-    guint coli = GPOINTER_TO_UINT(column);
+    gdouble         number;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
 
     (void)col;                  /* avoid unusued parameter compiler warning */
 
@@ -1042,14 +1070,13 @@ static void float_to_int_cell_data_function(GtkTreeViewColumn * col,
 static void two_dec_cell_data_function(GtkTreeViewColumn * col,
                                        GtkCellRenderer * renderer,
                                        GtkTreeModel * model,
-                                       GtkTreeIter * iter,
-                                       gpointer column)
+                                       GtkTreeIter * iter, gpointer column)
 {
-    gdouble number;
-    gchar *buff;
-    guint coli = GPOINTER_TO_UINT(column);
+    gdouble         number;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
 
-    (void)col;                  /* avoid unusued parameter compiler warning */
+    (void)col;
 
     gtk_tree_model_get(model, iter, coli, &number, -1);
 
@@ -1059,18 +1086,16 @@ static void two_dec_cell_data_function(GtkTreeViewColumn * col,
     g_free(buff);
 }
 
-
 /* AOS/LOS; convert julian date to string */
 static void event_cell_data_function(GtkTreeViewColumn * col,
                                      GtkCellRenderer * renderer,
                                      GtkTreeModel * model,
-                                     GtkTreeIter * iter,
-                                     gpointer column)
+                                     GtkTreeIter * iter, gpointer column)
 {
-    gdouble number;
-    gchar buff[TIME_FORMAT_MAX_LENGTH];
-    gchar *fmtstr;
-    guint coli = GPOINTER_TO_UINT(column);
+    gdouble         number;
+    gchar           buff[TIME_FORMAT_MAX_LENGTH];
+    gchar          *fmtstr;
+    guint           coli = GPOINTER_TO_UINT(column);
 
     (void)col;                  /* avoid unusued parameter compiler warning */
 
@@ -1094,31 +1119,31 @@ static void event_cell_data_function(GtkTreeViewColumn * col,
 
 }
 
-
-/** \brief Function to compare to Event cells.
-  * \param model Pointer to the GtkTreeModel.
-  * \param a Pointer to the first element.
-  * \param b Pointer to the second element.
-  * \param user_data Always NULL (TBC).
-  * \return See detailed description.
-  *
-  * This function is used by the SatList sort function to determine whether
-  * AOS/LOS cell a is greater than b or not. The cells a and b contain the
-  * time of the event in Julian days, thus the result can be computed by a
-  * simple comparison between the two numbers contained in the cells.
-  *
-  * The function returns -1 if a < b; +1 if a > b; 0 otherwise.
-  */
+/**
+ * Function to compare to Event cells.
+ *
+ * @param model Pointer to the GtkTreeModel.
+ * @param a Pointer to the first element.
+ * @param b Pointer to the second element.
+ * @param user_data Always NULL (TBC).
+ * 2return See detailed description.
+ *
+ * This function is used by the SatList sort function to determine whether
+ * AOS/LOS cell a is greater than b or not. The cells a and b contain the
+ * time of the event in Julian days, thus the result can be computed by a
+ * simple comparison between the two numbers contained in the cells.
+ *
+ * The function returns -1 if a < b; +1 if a > b; 0 otherwise.
+ */
 static gint event_cell_compare_function(GtkTreeModel * model,
                                         GtkTreeIter * a,
-                                        GtkTreeIter * b,
-                                        gpointer user_data)
+                                        GtkTreeIter * b, gpointer user_data)
 {
-    gint result;
-    gdouble ta, tb;
-    gint sort_col;
-    GtkSortType sort_type;
-    GtkSatList *satlist = GTK_SAT_LIST(user_data);
+    gint            result;
+    gdouble         ta, tb;
+    gint            sort_col;
+    GtkSortType     sort_type;
+    GtkSatList     *satlist = GTK_SAT_LIST(user_data);
 
     /* Since this function is used for both AOS and LOS columns,
        we need to get the sort column */
@@ -1145,20 +1170,19 @@ static gint event_cell_compare_function(GtkTreeModel * model,
     return result;
 }
 
-
-/** \brief Reload configuration */
+/** Reload configuration */
 void gtk_sat_list_reconf(GtkWidget * widget, GKeyFile * cfgdat)
 {
-    (void)widget;               /* avoid unusued parameter compiler warning */
-    (void)cfgdat;               /* avoid unusued parameter compiler warning */
+    (void)widget;
+    (void)cfgdat;
     sat_log_log(SAT_LOG_LEVEL_WARN, _("%s: FIXME I am not implemented"));
 }
 
-
-
-/** \brief Manage "popup-menu" events.
- *  \param treeview The tree view in the GtkSatList widget
- *  \param list Pointer to the GtkSatList widget.
+/**
+ * Manage "popup-menu" events.
+ *
+ * @param treeview The tree view in the GtkSatList widget
+ * @param list Pointer to the GtkSatList widget.
  *
  * This function is called when the "popup-menu" signal is emitted. This
  * usually happens if the user presses SHJIFT-F10? It is used as a wrapper
@@ -1172,16 +1196,17 @@ static gboolean popup_menu_cb(GtkWidget * treeview, gpointer list)
     return TRUE;                /* we handled this */
 }
 
-
-/** \brief Manage button press events.
- *  \param treeview The tree view in the GtkSatList widget.
- *  \param event The event received.
- *  \param list Pointer to the GtkSatList widget.
+/**
+ * Manage button press events.
+ *
+ * @param treeview The tree view in the GtkSatList widget.
+ * @param event The event received.
+ * @param list Pointer to the GtkSatList widget.
  *
  */
-static gboolean button_press_cb(GtkWidget * treeview, GdkEventButton * event, gpointer list)
+static gboolean button_press_cb(GtkWidget * treeview, GdkEventButton * event,
+                                gpointer list)
 {
-
     /* single click with the right mouse button? */
     if (event->type == GDK_BUTTON_PRESS && event->button == 3)
     {
@@ -1199,12 +1224,13 @@ static gboolean button_press_cb(GtkWidget * treeview, GdkEventButton * event, gp
              *   exist in gtk+-2.0, only in gtk+ >= v2.2 ! */
             if (gtk_tree_selection_count_selected_rows(selection) <= 1)
             {
-                GtkTreePath *path;
+                GtkTreePath    *path;
 
                 /* Get tree path for row that was clicked */
                 if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(treeview),
                                                   (gint) event->x,
-                                                  (gint) event->y, &path, NULL, NULL, NULL))
+                                                  (gint) event->y, &path, NULL,
+                                                  NULL, NULL))
                 {
                     gtk_tree_selection_unselect_all(selection);
                     gtk_tree_selection_select_path(selection, path);
@@ -1221,19 +1247,17 @@ static gboolean button_press_cb(GtkWidget * treeview, GdkEventButton * event, gp
     return FALSE;               /* we did not handle this */
 }
 
-
-/** \brief Manage row activated (double click) events. */
+/** Manage row activated (double click) events. */
 static void row_activated_cb(GtkTreeView * tree_view,
                              GtkTreePath * path,
-                             GtkTreeViewColumn * column,
-                             gpointer list)
+                             GtkTreeViewColumn * column, gpointer list)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    guint *catnum;
-    sat_t *sat;
+    GtkTreeModel   *model;
+    GtkTreeIter     iter;
+    guint          *catnum;
+    sat_t          *sat;
 
-    (void)column;               /* avoid compiler warning */
+    (void)column;
 
     catnum = g_new0(guint, 1);
 
@@ -1246,7 +1270,8 @@ static void row_activated_cb(GtkTreeView * tree_view,
     if (sat == NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s:%d Failed to get data for %d."), __FILE__, __LINE__, *catnum);
+                    _("%s:%d Failed to get data for %d."), __FILE__, __LINE__,
+                    *catnum);
     }
     else
     {
@@ -1256,13 +1281,14 @@ static void row_activated_cb(GtkTreeView * tree_view,
     g_free(catnum);
 }
 
-static void view_popup_menu(GtkWidget * treeview, GdkEventButton * event, gpointer list)
+static void view_popup_menu(GtkWidget * treeview, GdkEventButton * event,
+                            gpointer list)
 {
     GtkTreeSelection *selection;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    guint *catnum;
-    sat_t *sat;
+    GtkTreeModel   *model;
+    GtkTreeIter     iter;
+    guint          *catnum;
+    sat_t          *sat;
 
     catnum = g_new0(guint, 1);
 
@@ -1277,23 +1303,25 @@ static void view_popup_menu(GtkWidget * treeview, GdkEventButton * event, gpoint
         if (sat == NULL)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO,
-                        _("%s:%d Failed to get data for %d."), __FILE__, __LINE__, *catnum);
+                        _("%s:%d Failed to get data for %d."), __FILE__,
+                        __LINE__, *catnum);
 
         }
         else
         {
-            gtk_sat_list_popup_exec(sat, GTK_SAT_LIST(list)->qth, event, GTK_SAT_LIST(list));
+            gtk_sat_list_popup_exec(sat, GTK_SAT_LIST(list)->qth, event,
+                                    GTK_SAT_LIST(list));
         }
     }
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: There is no selection; skip popup."), __FILE__, __LINE__);
+                    _("%s:%d: There is no selection; skip popup."), __FILE__,
+                    __LINE__);
     }
 
     g_free(catnum);
 }
-
 
 /*** FIXME: formalise with other copies, only need az,el and jul_utc */
 static void Calculate_RADec(sat_t * sat, qth_t * qth, obs_astro_t * obs_set)
@@ -1301,10 +1329,10 @@ static void Calculate_RADec(sat_t * sat, qth_t * qth, obs_astro_t * obs_set)
     /* Reference:  Methods of Orbit Determination by  */
     /*                Pedro Ramon Escobal, pp. 401-402 */
 
-    double phi, theta, sin_theta, cos_theta, sin_phi, cos_phi,
+    double          phi, theta, sin_theta, cos_theta, sin_phi, cos_phi,
         az, el, Lxh, Lyh, Lzh, Sx, Ex, Zx, Sy, Ey, Zy, Sz, Ez, Zz,
         Lx, Ly, Lz, cos_delta, sin_alpha, cos_alpha;
-    geodetic_t geodetic;
+    geodetic_t      geodetic;
 
     geodetic.lon = qth->lon * de2ra;
     geodetic.lat = qth->lat * de2ra;
@@ -1342,22 +1370,21 @@ static void Calculate_RADec(sat_t * sat, qth_t * qth, obs_astro_t * obs_set)
     obs_set->ra = FMod2p(obs_set->ra);
 }
 
-
-/** \brief Reload reference to satellites (e.g. after TLE update). */
+/** Reload reference to satellites (e.g. after TLE update). */
 void gtk_sat_list_reload_sats(GtkWidget * satlist, GHashTable * sats)
 {
     GTK_SAT_LIST(satlist)->satellites = sats;
 }
 
-/** \brief Select a satellite */
+/** Select a satellite */
 void gtk_sat_list_select_sat(GtkWidget * satlist, gint catnum)
 {
-    GtkSatList *slist;
-    GtkTreeModel *model;
+    GtkSatList     *slist;
+    GtkTreeModel   *model;
     GtkTreeSelection *selection;
-    GtkTreeIter iter;
-    gint i, n;
-    gint sat;
+    GtkTreeIter     iter;
+    gint            i, n;
+    gint            sat;
 
 
     slist = GTK_SAT_LIST(satlist);
@@ -1381,7 +1408,8 @@ void gtk_sat_list_select_sat(GtkWidget * satlist, gint catnum)
         else
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: GtkSatList has not child with index %d"), __func__, i);
+                        _("%s: GtkSatList has not child with index %d"),
+                        __func__, i);
         }
     }
 }

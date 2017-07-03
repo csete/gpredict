@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
@@ -25,79 +24,74 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief Pop-up menu used by GtkSatList.
- */
+#ifdef HAVE_CONFIG_H
+#include <build-config.h>
+#endif
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
+
 #include "config-keys.h"
-#include "sat-cfg.h"
-#ifdef HAVE_CONFIG_H
-#  include <build-config.h>
-#endif
+#include "gtk-sat-list-popup.h"
+#include "gtk-sat-popup-common.h"
 #include "orbit-tools.h"
 #include "predict-tools.h"
-#include "sat-pass-dialogs.h"
-#include "gtk-sat-list-popup.h"
+#include "sat-cfg.h"
 #include "sat-info.h"
-#include "gtk-sat-popup-common.h"
+#include "sat-log.h"
+#include "sat-pass-dialogs.h"
+#include "sgpsdp/sgp4sdp4.h"
 
-/** \brief Show satellite popup menu.
- *  \param sat Pointer to the satellite data.
- *  \param qth The current location.
- *  \param event The mouse-click related event info.
- *  \param toplevel The top level window.
+/**
+ * Show satellite popup menu.
+ *
+ * @param sat Pointer to the satellite data.
+ * @param qth The current location.
+ * @param event The mouse-click related event info.
+ * @param toplevel The top level window.
  */
-void
-gtk_sat_list_popup_exec (sat_t *sat, qth_t *qth, GdkEventButton *event, GtkSatList *list)
+void gtk_sat_list_popup_exec(sat_t * sat, qth_t * qth, GdkEventButton * event,
+                             GtkSatList * list)
 {
-     GtkWidget        *menu;
-     GtkWidget        *menuitem;
-     GtkWidget        *label;
-     GtkWidget        *image;
-     gchar            *buff;
+    GtkWidget      *menu;
+    GtkWidget      *menuitem;
+    GtkWidget      *label;
+    GtkWidget      *image;
+    gchar          *buff;
 
+    menu = gtk_menu_new();
 
+    /* first menu item is the satellite name, centered */
+    menuitem = gtk_image_menu_item_new();
+    label = gtk_label_new(NULL);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
+    buff = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
+    gtk_label_set_markup(GTK_LABEL(label), buff);
+    g_free(buff);
+    gtk_container_add(GTK_CONTAINER(menuitem), label);
+    image = gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU);
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
 
-     menu = gtk_menu_new ();
+    /* attach data to menuitem and connect callback */
+    g_object_set_data(G_OBJECT(menuitem), "sat", sat);
+    g_object_set_data(G_OBJECT(menuitem), "qth", qth);
+    g_signal_connect(menuitem, "activate",
+                     G_CALLBACK(show_sat_info_menu_cb),
+                     gtk_widget_get_toplevel(GTK_WIDGET(list)));
 
-     /* first menu item is the satellite name, centered */
-     menuitem = gtk_image_menu_item_new ();
-     label = gtk_label_new (NULL);
-     gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-     buff = g_markup_printf_escaped ("<b>%s</b>", sat->nickname);
-     gtk_label_set_markup (GTK_LABEL (label), buff);
-     g_free (buff);
-     gtk_container_add (GTK_CONTAINER (menuitem), label);
-     image = gtk_image_new_from_stock (GTK_STOCK_INFO,
-                           GTK_ICON_SIZE_MENU);
-     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
-     /* attach data to menuitem and connect callback */
-     g_object_set_data (G_OBJECT (menuitem), "sat", sat);
-     g_object_set_data (G_OBJECT (menuitem), "qth", qth);
-     g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (show_sat_info_menu_cb),
-                      gtk_widget_get_toplevel (GTK_WIDGET (list)));
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
-     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    /* add the menu items for current,next, and future passes. */
+    add_pass_menu_items(menu, sat, qth, &list->tstamp, GTK_WIDGET(list));
 
-     /* separator */
-     menuitem = gtk_separator_menu_item_new ();
-     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    gtk_widget_show_all(menu);
 
-     /* add the menu items for current,next, and future passes. */
-     add_pass_menu_items(menu,sat,qth,&list->tstamp,GTK_WIDGET(list));
-
-     gtk_widget_show_all (menu);
-
-     /* Note: event can be NULL here when called from view_onPopupMenu;
-      *  gdk_event_get_time() accepts a NULL argument */
-     gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-               (event != NULL) ? event->button : 0,
-               gdk_event_get_time ((GdkEvent*) event));
-          
-
+    /* Note: event can be NULL here when called from view_onPopupMenu;
+     *  gdk_event_get_time() accepts a NULL argument */
+    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
+                   (event != NULL) ? event->button : 0,
+                   gdk_event_get_time((GdkEvent *) event));
 }
-
