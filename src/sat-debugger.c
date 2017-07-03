@@ -14,21 +14,18 @@ void
 sat_debugger_run (void)
 {
      GtkWidget *hbox;
-     GtkObject *adj1,*adj2;
-
+     GtkAdjustment *adj1,*adj2;
 
      if (active)
           return;
 
-     
-
      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
      adj1 = gtk_adjustment_new (0.0, -180.0, 180.0, 0.1, 1.0, 1);
-     lonsp = gtk_spin_button_new (GTK_ADJUSTMENT (adj1), 0.1, 1);
+     lonsp = gtk_spin_button_new (adj1, 0.1, 1);
 
      adj2 = gtk_adjustment_new (0.0, -90.0, 90.0, 0.1, 1.0, 1);
-     latsp = gtk_spin_button_new (GTK_ADJUSTMENT (adj2), 0.1, 1);
+     latsp = gtk_spin_button_new (adj2, 0.1, 1);
 
      hbox = gtk_hbox_new (TRUE,5);
      
