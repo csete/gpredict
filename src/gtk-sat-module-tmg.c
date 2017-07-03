@@ -141,8 +141,7 @@ void tmg_create(GtkSatModule * mod)
     mod->tmgCal = gtk_calendar_new();
     gtk_calendar_set_display_options(GTK_CALENDAR(mod->tmgCal),
                                      GTK_CALENDAR_SHOW_HEADING |
-                                     GTK_CALENDAR_SHOW_DAY_NAMES |
-                                     GTK_CALENDAR_WEEK_START_MONDAY);
+                                     GTK_CALENDAR_SHOW_DAY_NAMES);
     g_signal_connect(mod->tmgCal, "day-selected",
                      G_CALLBACK(tmg_time_set), mod);
     gtk_table_attach(GTK_TABLE(table), mod->tmgCal,

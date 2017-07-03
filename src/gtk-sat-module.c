@@ -76,7 +76,7 @@
 
 static void     gtk_sat_module_class_init(GtkSatModuleClass * class);
 static void     gtk_sat_module_init(GtkSatModule * module);
-static void     gtk_sat_module_destroy(GtkObject * object);
+static void     gtk_sat_module_destroy(GtkWidget * widget);
 static void     gtk_sat_module_read_cfg_data(GtkSatModule * module,
                                              const gchar * cfgfile);
 static void     gtk_sat_module_load_sats(GtkSatModule * module);
@@ -128,20 +128,11 @@ GType gtk_sat_module_get_type()
 
 static void gtk_sat_module_class_init(GtkSatModuleClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
+    GtkWidgetClass    *widget_class;
 
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
-
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sat_module_destroy;
     parent_class = g_type_class_peek_parent(class);
-
-    object_class->destroy = gtk_sat_module_destroy;
 }
 
 /** Initialise GtkSatModule widget */
@@ -191,9 +182,9 @@ static void gtk_sat_module_init(GtkSatModule * module)
     module->autotrack = FALSE;
 }
 
-static void gtk_sat_module_destroy(GtkObject * object)
+static void gtk_sat_module_destroy(GtkWidget * widget)
 {
-    GtkSatModule   *module = GTK_SAT_MODULE(object);
+    GtkSatModule   *module = GTK_SAT_MODULE(widget);
 
     /*save the configuration */
     mod_cfg_save(module->name, module->cfgdata);
@@ -247,7 +238,7 @@ static void gtk_sat_module_destroy(GtkObject * object)
 
     /* FIXME: free module->views? */
 
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
