@@ -192,7 +192,7 @@ GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
     root = create_canvas_model(azel);
     goo_canvas_set_root_item_model(GOO_CANVAS(azel->canvas), root);
     g_object_unref(root);
-    gtk_container_add(GTK_CONTAINER(azel), azel->canvas);
+    gtk_box_pack_start(GTK_BOX(azel), azel->canvas, TRUE, TRUE, 0);
 
     return GTK_WIDGET(azel);
 }
@@ -409,7 +409,6 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
 
     if (gtk_widget_get_realized(widget))
     {
-
         /* get graph dimensions */
         azel = GTK_AZEL_PLOT(data);
 
