@@ -70,7 +70,7 @@ typedef enum {
 } polar_plot_pole_t;
 
 struct _GtkPolarPlot {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     GtkWidget      *canvas;     /*!< The canvas widget */
 
@@ -103,7 +103,7 @@ struct _GtkPolarPlot {
 };
 
 struct _GtkPolarPlotClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 GType           gtk_polar_plot_get_type(void);

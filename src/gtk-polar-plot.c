@@ -106,7 +106,7 @@ GType gtk_polar_plot_get_type()
             NULL
         };
 
-        gtk_polar_plot_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_polar_plot_type = g_type_register_static(GTK_TYPE_BOX,
                                                      "GtkPolarPlot",
                                                      &gtk_polar_plot_info, 0);
     }
@@ -157,61 +157,53 @@ static void gtk_polar_plot_destroy(GtkWidget * widget)
  */
 GtkWidget *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
 {
-    GtkWidget      *polv;
+    GtkPolarPlot   *polv;
     GooCanvasItemModel *root;
     GdkColor        bg_color = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
 
-    polv = g_object_new(GTK_TYPE_POLAR_PLOT, NULL);
+    polv = GTK_POLAR_PLOT(g_object_new(GTK_TYPE_POLAR_PLOT, NULL));
 
-    GTK_POLAR_PLOT(polv)->qth = qth;
+    polv->qth = qth;
 
     if (pass != NULL)
-        GTK_POLAR_PLOT(polv)->pass = copy_pass(pass);
+        polv->pass = copy_pass(pass);
 
     /* get settings */
-    GTK_POLAR_PLOT(polv)->swap =
-        sat_cfg_get_int(SAT_CFG_INT_POLAR_ORIENTATION);
-    GTK_POLAR_PLOT(polv)->qthinfo =
-        sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
-    GTK_POLAR_PLOT(polv)->extratick =
-        sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
-    GTK_POLAR_PLOT(polv)->cursinfo = TRUE;
+    polv->swap = sat_cfg_get_int(SAT_CFG_INT_POLAR_ORIENTATION);
+    polv->qthinfo = sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
+    polv->extratick = sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
+    polv->cursinfo = TRUE;
 
     /* create the canvas */
-    GTK_POLAR_PLOT(polv)->canvas = goo_canvas_new();
-    get_canvas_bg_color(GTK_POLAR_PLOT(polv), &bg_color);
-    gtk_widget_modify_base(GTK_POLAR_PLOT(polv)->canvas, GTK_STATE_NORMAL,
-                           &bg_color);
-    gtk_widget_set_size_request(GTK_POLAR_PLOT(polv)->canvas,
+    polv->canvas = goo_canvas_new();
+    get_canvas_bg_color(polv, &bg_color);
+    gtk_widget_modify_base(polv->canvas, GTK_STATE_NORMAL, &bg_color);
+    gtk_widget_set_size_request(polv->canvas,
                                 POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
-    goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_PLOT(polv)->canvas), 0, 0,
+    goo_canvas_set_bounds(GOO_CANVAS(polv->canvas), 0, 0,
                           POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
 
     /* connect size-request signal */
-    g_signal_connect(GTK_POLAR_PLOT(polv)->canvas, "size-allocate",
+    g_signal_connect(polv->canvas, "size-allocate",
                      G_CALLBACK(size_allocate_cb), polv);
-    g_signal_connect(GTK_POLAR_PLOT(polv)->canvas, "item_created",
+    g_signal_connect(polv->canvas, "item_created",
                      (GCallback) on_item_created, polv);
-    g_signal_connect_after(GTK_POLAR_PLOT(polv)->canvas, "realize",
+    g_signal_connect_after(polv->canvas, "realize",
                            (GCallback) on_canvas_realized, polv);
 
-    gtk_widget_show(GTK_POLAR_PLOT(polv)->canvas);
+    gtk_widget_show(polv->canvas);
 
     /* Create the canvas model */
-    root = create_canvas_model(GTK_POLAR_PLOT(polv));
-    goo_canvas_set_root_item_model(GOO_CANVAS(GTK_POLAR_PLOT(polv)->canvas),
-                                   root);
-
+    root = create_canvas_model(polv);
+    goo_canvas_set_root_item_model(GOO_CANVAS(polv->canvas), root);
     g_object_unref(root);
 
-    if (GTK_POLAR_PLOT(polv)->pass != NULL)
-    {
-        create_track(GTK_POLAR_PLOT(polv));
-    }
+    if (polv->pass != NULL)
+        create_track(polv);
 
-    gtk_container_add(GTK_CONTAINER(polv), GTK_POLAR_PLOT(polv)->canvas);
+    gtk_box_pack_start(GTK_BOX(polv), polv->canvas, TRUE, TRUE, 0);
 
-    return polv;
+    return GTK_WIDGET(polv);
 }
 
 /**
