@@ -290,7 +290,6 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
 
     /* create list */
     list = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(list), TRUE);
 
     for (i = 0; i < SINGLE_PASS_COL_NUMBER; i++)
     {
@@ -433,11 +432,12 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
 
     gtk_container_add(GTK_CONTAINER(swin), list);
 
+
     /* create notebook and add pages */
     notebook = gtk_notebook_new();
-    image =
-        gtk_image_new_from_stock(GTK_STOCK_JUSTIFY_FILL, GTK_ICON_SIZE_MENU);
-    hbox = gtk_hbox_new(FALSE, 0);
+    image = gtk_image_new_from_icon_name("format-justify-fill",
+                                         GTK_ICON_SIZE_BUTTON);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_("Data")), FALSE, TRUE,
                        5);
@@ -449,7 +449,7 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
     buff = icon_file_name("gpredict-polar-small.png");
     image = gtk_image_new_from_file(buff);
     g_free(buff);
-    hbox = gtk_hbox_new(FALSE, 0);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_("Polar")), FALSE, TRUE,
                        5);
@@ -461,7 +461,7 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
     buff = icon_file_name("gpredict-azel-small.png");
     image = gtk_image_new_from_file(buff);
     g_free(buff);
-    hbox = gtk_hbox_new(FALSE, 0);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_("Az/El")), FALSE, TRUE,
                        5);
@@ -469,9 +469,8 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
     gtk_notebook_append_page(GTK_NOTEBOOK(notebook), azel, hbox);
 
     /* create dialog */
-    title =
-        g_strdup_printf(_("Pass details for %s (orbit %d)"), satname,
-                        pass->orbit);
+    title = g_strdup_printf(_("Pass details for %s (orbit %d)"),
+                            satname, pass->orbit);
 
     /* use NULL as parent to avoid conflict when using undocked windows
        as parents.
@@ -479,9 +478,9 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
     dialog = gtk_dialog_new_with_buttons(title,
                                          GTK_WINDOW(toplevel),
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_PRINT, RESPONSE_PRINT,
-                                         GTK_STOCK_SAVE, RESPONSE_SAVE,
-                                         GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+                                         "_Print", RESPONSE_PRINT,
+                                         "_Save", RESPONSE_SAVE,
+                                         "_Close", GTK_RESPONSE_CLOSE,
                                          NULL);
     g_free(title);
 
@@ -507,9 +506,8 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
     g_signal_connect(dialog, "delete_event",
                      G_CALLBACK(single_pass_dialog_delete), NULL);
 
-    gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                      notebook);
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       notebook, TRUE, TRUE, 0);
 
     gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 300);
     gtk_widget_show_all(dialog);
@@ -943,7 +941,6 @@ void show_passes(const gchar * satname, qth_t * qth, GSList * passes,
 
     /* create list */
     list = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(list), TRUE);
 
     for (i = 0; i < MULTI_PASS_COL_NUMBER; i++)
     {
@@ -1037,9 +1034,9 @@ void show_passes(const gchar * satname, qth_t * qth, GSList * passes,
     dialog = gtk_dialog_new_with_buttons(title,
                                          GTK_WINDOW(toplevel),
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_PRINT, RESPONSE_PRINT,
-                                         GTK_STOCK_SAVE, RESPONSE_SAVE,
-                                         GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+                                         "_Print", RESPONSE_PRINT,
+                                         "_Save", RESPONSE_SAVE,
+                                         "_Close", GTK_RESPONSE_CLOSE,
                                          NULL);
     g_free(title);
 
@@ -1065,8 +1062,9 @@ void show_passes(const gchar * satname, qth_t * qth, GSList * passes,
     g_signal_connect(dialog, "delete_event",
                      G_CALLBACK(multi_pass_dialog_delete), NULL);
 
-    gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       swin, TRUE, TRUE, 0);
+
     gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 300);
     gtk_widget_show_all(dialog);
 }
