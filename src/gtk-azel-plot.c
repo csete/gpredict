@@ -40,17 +40,17 @@
 #endif
 #include <goocanvas.h>
 
-#define POLV_DEFAULT_SIZE 300
-#define POLV_X_MARGIN 40
-#define POLV_Y_MARGIN 40
+#define AZEL_DEFAULT_SIZE 300
+#define AZEL_X_MARGIN 40
+#define AZEL_Y_MARGIN 40
 
 /* extra size for line outside 0 deg circle (inside margin) */
-#define POLV_LINE_EXTRA 5
+#define AZEL_LINE_EXTRA 5
 
 #define MARKER_SIZE 5
 
 static void     gtk_azel_plot_class_init(GtkAzelPlotClass * class);
-static void     gtk_azel_plot_init(GtkAzelPlot * polview);
+static void     gtk_azel_plot_init(GtkAzelPlot * azel);
 static void     gtk_azel_plot_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
@@ -61,8 +61,8 @@ static void     on_item_created(GooCanvas * canvas,
                                 GooCanvasItem * item,
                                 GooCanvasItemModel * model, gpointer data);
 static void     on_canvas_realized(GtkWidget * canvas, gpointer data);
-static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv);
-static void     get_canvas_bg_color(GtkAzelPlot * polv, GdkColor * color);
+static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * azel);
+static void     get_canvas_bg_color(GtkAzelPlot * azel, GdkColor * color);
 static void     xy_to_graph(GtkAzelPlot * p, gfloat x, gfloat y, gdouble * t,
                             gdouble * az, gdouble * el);
 static void     az_to_xy(GtkAzelPlot * p, gdouble t, gdouble az, gdouble * x,
@@ -108,19 +108,19 @@ static void gtk_azel_plot_class_init(GtkAzelPlotClass * class)
 
 }
 
-static void gtk_azel_plot_init(GtkAzelPlot * polview)
+static void gtk_azel_plot_init(GtkAzelPlot * azel)
 {
-    polview->qth = NULL;
-    polview->width = 0;
-    polview->height = 0;
-    polview->x0 = 0;
-    polview->y0 = 0;
-    polview->xmax = 0;
-    polview->ymax = 0;
-    polview->maxaz = 0.0;
-    polview->qthinfo = FALSE;
-    polview->cursinfo = FALSE;
-    polview->extratick = FALSE;
+    azel->qth = NULL;
+    azel->width = 0;
+    azel->height = 0;
+    azel->x0 = 0;
+    azel->y0 = 0;
+    azel->xmax = 0;
+    azel->ymax = 0;
+    azel->maxaz = 0.0;
+    azel->qthinfo = FALSE;
+    azel->cursinfo = FALSE;
+    azel->extratick = FALSE;
 }
 
 static void gtk_azel_plot_destroy(GtkWidget * widget)
@@ -136,23 +136,20 @@ static void gtk_azel_plot_destroy(GtkWidget * widget)
  */
 GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
 {
-    GtkWidget      *polv;
+    GtkAzelPlot    *azel;
     GooCanvasItemModel *root;
     GdkColor        bg_color = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
     guint           i, n;
     pass_detail_t  *detail;
 
-    polv = g_object_new(GTK_TYPE_AZEL_PLOT, NULL);
-
-    GTK_AZEL_PLOT(polv)->qth = qth;
-    GTK_AZEL_PLOT(polv)->pass = pass;
+    azel = GTK_AZEL_PLOT(g_object_new(GTK_TYPE_AZEL_PLOT, NULL));
+    azel->qth = qth;
+    azel->pass = pass;
 
     /* get settings */
-    GTK_AZEL_PLOT(polv)->qthinfo =
-        sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
-    GTK_AZEL_PLOT(polv)->extratick =
-        sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
-    GTK_AZEL_PLOT(polv)->cursinfo = TRUE;
+    azel->qthinfo = sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
+    azel->extratick = sat_cfg_get_bool(SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
+    azel->cursinfo = TRUE;
 
     /* check maximum Az */
     n = g_slist_length(pass->details);
@@ -160,52 +157,47 @@ GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
     {
         detail = PASS_DETAIL(g_slist_nth_data(pass->details, i));
 
-        if (detail->az > GTK_AZEL_PLOT(polv)->maxaz)
+        if (detail->az > azel->maxaz)
         {
-            GTK_AZEL_PLOT(polv)->maxaz = detail->az;
+            azel->maxaz = detail->az;
         }
     }
 
-    if (GTK_AZEL_PLOT(polv)->maxaz > 180.0)
-        GTK_AZEL_PLOT(polv)->maxaz = 360.0;
+    if (azel->maxaz > 180.0)
+        azel->maxaz = 360.0;
     else
-        GTK_AZEL_PLOT(polv)->maxaz = 180.0;
+        azel->maxaz = 180.0;
 
     /* create the canvas */
-    GTK_AZEL_PLOT(polv)->canvas = goo_canvas_new();
-    get_canvas_bg_color(GTK_AZEL_PLOT(polv), &bg_color);
+    azel->canvas = goo_canvas_new();
+    get_canvas_bg_color(azel, &bg_color);
 
-    gtk_widget_modify_base(GTK_AZEL_PLOT(polv)->canvas, GTK_STATE_NORMAL,
-                           &bg_color);
-
-    gtk_widget_set_size_request(GTK_AZEL_PLOT(polv)->canvas, POLV_DEFAULT_SIZE,
-                                POLV_DEFAULT_SIZE);
-    goo_canvas_set_bounds(GOO_CANVAS(GTK_AZEL_PLOT(polv)->canvas), 0, 0,
-                          POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    gtk_widget_modify_base(azel->canvas, GTK_STATE_NORMAL, &bg_color);
+    gtk_widget_set_size_request(azel->canvas, AZEL_DEFAULT_SIZE,
+                                AZEL_DEFAULT_SIZE);
+    goo_canvas_set_bounds(GOO_CANVAS(azel->canvas), 0, 0,
+                          AZEL_DEFAULT_SIZE, AZEL_DEFAULT_SIZE);
 
     /* connect size-request signal */
-    g_signal_connect(GTK_AZEL_PLOT(polv)->canvas, "size-allocate",
-                     G_CALLBACK(size_allocate_cb), polv);
-    g_signal_connect(GTK_AZEL_PLOT(polv)->canvas, "item_created",
-                     G_CALLBACK(on_item_created), polv);
-    g_signal_connect_after(GTK_AZEL_PLOT(polv)->canvas, "realize",
-                           G_CALLBACK(on_canvas_realized), polv);
+    g_signal_connect(azel->canvas, "size-allocate",
+                     G_CALLBACK(size_allocate_cb), azel);
+    g_signal_connect(azel->canvas, "item_created",
+                     G_CALLBACK(on_item_created), azel);
+    g_signal_connect_after(azel->canvas, "realize",
+                           G_CALLBACK(on_canvas_realized), azel);
 
-    gtk_widget_show(GTK_AZEL_PLOT(polv)->canvas);
+    gtk_widget_show(azel->canvas);
 
     /* Create the canvas model */
-    root = create_canvas_model(GTK_AZEL_PLOT(polv));
-    goo_canvas_set_root_item_model(GOO_CANVAS(GTK_AZEL_PLOT(polv)->canvas),
-                                   root);
-
+    root = create_canvas_model(azel);
+    goo_canvas_set_root_item_model(GOO_CANVAS(azel->canvas), root);
     g_object_unref(root);
+    gtk_container_add(GTK_CONTAINER(azel), azel->canvas);
 
-    gtk_container_add(GTK_CONTAINER(polv), GTK_AZEL_PLOT(polv)->canvas);
-
-    return polv;
+    return GTK_WIDGET(azel);
 }
 
-static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
+static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * azel)
 {
     GooCanvasItemModel *root;
     guint32         col;
@@ -218,31 +210,31 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
     root = goo_canvas_group_model_new(NULL, NULL);
 
     /* graph dimensions */
-    polv->width = POLV_DEFAULT_SIZE;
-    polv->height = POLV_DEFAULT_SIZE;
+    azel->width = AZEL_DEFAULT_SIZE;
+    azel->height = AZEL_DEFAULT_SIZE;
 
     /* update coordinate system */
-    polv->x0 = POLV_X_MARGIN;
-    polv->xmax = polv->width - POLV_X_MARGIN;
-    polv->y0 = polv->height - POLV_Y_MARGIN;
-    polv->ymax = POLV_Y_MARGIN;
+    azel->x0 = AZEL_X_MARGIN;
+    azel->xmax = azel->width - AZEL_X_MARGIN;
+    azel->y0 = azel->height - AZEL_Y_MARGIN;
+    azel->ymax = AZEL_Y_MARGIN;
 
     col = sat_cfg_get_int(SAT_CFG_INT_POLAR_AXIS_COL);
 
     /* frame */
-    polv->frame = goo_canvas_rect_model_new(root,
-                                            (gdouble) polv->x0,
-                                            (gdouble) polv->ymax,
-                                            (gdouble) (polv->xmax - polv->x0),
-                                            (gdouble) (polv->y0 -
-                                                       POLV_Y_MARGIN),
+    azel->frame = goo_canvas_rect_model_new(root,
+                                            (gdouble) azel->x0,
+                                            (gdouble) azel->ymax,
+                                            (gdouble) (azel->xmax - azel->x0),
+                                            (gdouble) (azel->y0 -
+                                                       AZEL_Y_MARGIN),
                                             "stroke-color-rgba", 0x000000FF,
                                             "line-cap", CAIRO_LINE_CAP_SQUARE,
                                             "line-join", CAIRO_LINE_JOIN_MITER,
                                             "line-width", 1.0, NULL);
 
-    xstep = (polv->xmax - polv->x0) / (AZEL_PLOT_NUM_TICKS + 1);
-    ystep = (polv->y0 - polv->ymax) / (AZEL_PLOT_NUM_TICKS + 1);
+    xstep = (azel->xmax - azel->x0) / (AZEL_PLOT_NUM_TICKS + 1);
+    ystep = (azel->y0 - azel->ymax) / (AZEL_PLOT_NUM_TICKS + 1);
 
 // We use these defines to shorten the function names (indent)
 #define MKLINE goo_canvas_polyline_model_new_line
@@ -252,22 +244,22 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
     for (i = 0; i < AZEL_PLOT_NUM_TICKS; i++)
     {
         /* bottom x tick marks */
-        polv->xticksb[i] = MKLINE(root,
-                                  (gdouble) (polv->x0 + (i + 1) * xstep),
-                                  (gdouble) polv->y0,
-                                  (gdouble) (polv->x0 + (i + 1) * xstep),
-                                  (gdouble) (polv->y0 - MARKER_SIZE),
+        azel->xticksb[i] = MKLINE(root,
+                                  (gdouble) (azel->x0 + (i + 1) * xstep),
+                                  (gdouble) azel->y0,
+                                  (gdouble) (azel->x0 + (i + 1) * xstep),
+                                  (gdouble) (azel->y0 - MARKER_SIZE),
                                   "fill-color-rgba", col,
                                   "line-cap", CAIRO_LINE_CAP_SQUARE,
                                   "line-join", CAIRO_LINE_JOIN_MITER,
                                   "line-width", 1.0, NULL);
 
         /* top x tick marks */
-        polv->xtickst[i] = MKLINE(root,
-                                  (gdouble) (polv->x0 + (i + 1) * xstep),
-                                  (gdouble) polv->ymax,
-                                  (gdouble) (polv->x0 + (i + 1) * xstep),
-                                  (gdouble) (polv->ymax + MARKER_SIZE),
+        azel->xtickst[i] = MKLINE(root,
+                                  (gdouble) (azel->x0 + (i + 1) * xstep),
+                                  (gdouble) azel->ymax,
+                                  (gdouble) (azel->x0 + (i + 1) * xstep),
+                                  (gdouble) (azel->ymax + MARKER_SIZE),
                                   "fill-color-rgba", col,
                                   "line-cap", CAIRO_LINE_CAP_SQUARE,
                                   "line-join", CAIRO_LINE_JOIN_MITER,
@@ -275,35 +267,35 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
 
         /* x tick labels */
         /* get time */
-        xy_to_graph(polv, polv->x0 + (i + 1) * xstep, 0.0, &t, &az, &el);
+        xy_to_graph(azel, azel->x0 + (i + 1) * xstep, 0.0, &t, &az, &el);
 
         daynum_to_str(buff, 7, "%H:%M", t);
 
-        polv->xlab[i] = MKTEXT(root, buff,
-                               (gfloat) (polv->x0 + (i + 1) * xstep),
-                               (gfloat) (polv->y0 + 5),
+        azel->xlab[i] = MKTEXT(root, buff,
+                               (gfloat) (azel->x0 + (i + 1) * xstep),
+                               (gfloat) (azel->y0 + 5),
                                -1,
                                GOO_CANVAS_ANCHOR_N,
                                "font", "Sans 8",
                                "fill-color-rgba", 0x000000FF, NULL);
 
         /* left y tick marks */
-        polv->yticksl[i] = MKLINE(root,
-                                  (gdouble) polv->x0,
-                                  (gdouble) (polv->y0 - (i + 1) * ystep),
-                                  (gdouble) (polv->x0 + MARKER_SIZE),
-                                  (gdouble) (polv->y0 - (i + 1) * ystep),
+        azel->yticksl[i] = MKLINE(root,
+                                  (gdouble) azel->x0,
+                                  (gdouble) (azel->y0 - (i + 1) * ystep),
+                                  (gdouble) (azel->x0 + MARKER_SIZE),
+                                  (gdouble) (azel->y0 - (i + 1) * ystep),
                                   "fill-color-rgba", col,
                                   "line-cap", CAIRO_LINE_CAP_SQUARE,
                                   "line-join", CAIRO_LINE_JOIN_MITER,
                                   "line-width", 1.0, NULL);
 
         /* right y tick marks */
-        polv->yticksr[i] = MKLINE(root,
-                                  (gdouble) polv->xmax,
-                                  (gdouble) (polv->y0 - (i + 1) * ystep),
-                                  (gdouble) (polv->xmax - MARKER_SIZE),
-                                  (gdouble) (polv->y0 - (i + 1) * ystep),
+        azel->yticksr[i] = MKLINE(root,
+                                  (gdouble) azel->xmax,
+                                  (gdouble) (azel->y0 - (i + 1) * ystep),
+                                  (gdouble) (azel->xmax - MARKER_SIZE),
+                                  (gdouble) (azel->y0 - (i + 1) * ystep),
                                   "fill-color-rgba", col,
                                   "line-cap", CAIRO_LINE_CAP_SQUARE,
                                   "line-join", CAIRO_LINE_JOIN_MITER,
@@ -311,11 +303,11 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
 
         /* Az tick labels */
         txt = g_strdup_printf("%.0f\302\260",
-                              polv->maxaz / (AZEL_PLOT_NUM_TICKS + 1) * (i +
+                              azel->maxaz / (AZEL_PLOT_NUM_TICKS + 1) * (i +
                                                                          1));
-        polv->azlab[i] =
-            MKTEXT(root, txt, (gfloat) (polv->x0 - 5),
-                   (gfloat) (polv->y0 - (i + 1) * ystep), -1,
+        azel->azlab[i] =
+            MKTEXT(root, txt, (gfloat) (azel->x0 - 5),
+                   (gfloat) (azel->y0 - (i + 1) * ystep), -1,
                    GOO_CANVAS_ANCHOR_E, "font", "Sans 8",
                    "fill-color-rgba", 0x0000BFFF, NULL);
         g_free(txt);
@@ -324,9 +316,9 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
         txt =
             g_strdup_printf("%.0f\302\260",
                             90.0 / (AZEL_PLOT_NUM_TICKS + 1) * (i + 1));
-        polv->ellab[i] =
-            MKTEXT(root, txt, (gfloat) (polv->xmax + 5),
-                   (gfloat) (polv->y0 - (i + 1) * ystep), -1,
+        azel->ellab[i] =
+            MKTEXT(root, txt, (gfloat) (azel->xmax + 5),
+                   (gfloat) (azel->y0 - (i + 1) * ystep), -1,
                    GOO_CANVAS_ANCHOR_W,
                    "font", "Sans 8", "fill-color-rgba", 0xBF0000FF, NULL);
         g_free(txt);
@@ -335,9 +327,9 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
     /* x legend */
     if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
     {
-        polv->xleg = MKTEXT(root, _("Local Time"),
-                            (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
-                            (gfloat) (polv->height - 5),
+        azel->xleg = MKTEXT(root, _("Local Time"),
+                            (gfloat) (azel->x0 + (azel->xmax - azel->x0) / 2),
+                            (gfloat) (azel->height - 5),
                             -1,
                             GOO_CANVAS_ANCHOR_S,
                             "font", "Sans 9",
@@ -345,9 +337,9 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
     }
     else
     {
-        polv->xleg = MKTEXT(root, _("UTC"),
-                            (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
-                            (gfloat) (polv->height - 5),
+        azel->xleg = MKTEXT(root, _("UTC"),
+                            (gfloat) (azel->x0 + (azel->xmax - azel->x0) / 2),
+                            (gfloat) (azel->height - 5),
                             -1,
                             GOO_CANVAS_ANCHOR_S,
                             "font", "Sans 9",
@@ -355,40 +347,40 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
     }
 
     /* cursor text in upper right corner */
-    polv->curs = MKTEXT(root, "",
-                        (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
+    azel->curs = MKTEXT(root, "",
+                        (gfloat) (azel->x0 + (azel->xmax - azel->x0) / 2),
                         5.0,
                         -1,
                         GOO_CANVAS_ANCHOR_N,
                         "font", "Sans 8", "fill-color-rgba", 0x000000FF, NULL);
 
     /* Az legend */
-    polv->azleg = MKTEXT(root, _("Az"),
-                         (gfloat) (polv->x0 - 7),
-                         (gfloat) polv->ymax,
+    azel->azleg = MKTEXT(root, _("Az"),
+                         (gfloat) (azel->x0 - 7),
+                         (gfloat) azel->ymax,
                          -1,
                          GOO_CANVAS_ANCHOR_NE,
                          "font", "Sans 9",
                          "fill-color-rgba", 0x0000BFFF, NULL);
 
     /* El legend */
-    polv->elleg = MKTEXT(root, _("El"),
-                         (gfloat) (polv->xmax + 7),
-                         (gfloat) polv->ymax,
+    azel->elleg = MKTEXT(root, _("El"),
+                         (gfloat) (azel->xmax + 7),
+                         (gfloat) azel->ymax,
                          -1,
                          GOO_CANVAS_ANCHOR_NW,
                          "font", "Sans 9",
                          "fill-color-rgba", 0xBF0000FF, NULL);
 
     /* Az graph */
-    polv->azg = MKLINE(root, 0, 0, 10, 10,
+    azel->azg = MKLINE(root, 0, 0, 10, 10,
                        "stroke-color-rgba", 0x0000BFFF,
                        "line-cap", CAIRO_LINE_CAP_SQUARE,
                        "line-join", CAIRO_LINE_JOIN_MITER,
                        "line-width", 1.0, NULL);
 
     /* El graph */
-    polv->elg = MKLINE(root, 30, 30, 40, 40,
+    azel->elg = MKLINE(root, 30, 30, 40, 40,
                        "stroke-color-rgba", 0xBF0000FF,
                        "fill-color-rgba", 0xBF00001A,
                        "line-cap", CAIRO_LINE_CAP_SQUARE,
@@ -408,7 +400,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * polv)
 static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
                              gpointer data)
 {
-    GtkAzelPlot    *polv;
+    GtkAzelPlot    *azel;
     GooCanvasPoints *pts;
     gdouble         dx, dy;
     gdouble         xstep, ystep;
@@ -419,29 +411,29 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
     {
 
         /* get graph dimensions */
-        polv = GTK_AZEL_PLOT(data);
+        azel = GTK_AZEL_PLOT(data);
 
-        polv->width = allocation->width;
-        polv->height = allocation->height;
+        azel->width = allocation->width;
+        azel->height = allocation->height;
 
-        goo_canvas_set_bounds(GOO_CANVAS(GTK_AZEL_PLOT(polv)->canvas), 0, 0,
-                              polv->width, polv->height);
+        goo_canvas_set_bounds(GOO_CANVAS(GTK_AZEL_PLOT(azel)->canvas), 0, 0,
+                              azel->width, azel->height);
 
         /* update coordinate system */
-        polv->x0 = POLV_X_MARGIN;
-        polv->xmax = polv->width - POLV_X_MARGIN;
-        polv->y0 = polv->height - POLV_Y_MARGIN;
-        polv->ymax = POLV_Y_MARGIN;
+        azel->x0 = AZEL_X_MARGIN;
+        azel->xmax = azel->width - AZEL_X_MARGIN;
+        azel->y0 = azel->height - AZEL_Y_MARGIN;
+        azel->ymax = AZEL_Y_MARGIN;
 
         /* frame */
-        g_object_set(polv->frame,
-                     "x", (gdouble) polv->x0,
-                     "y", (gdouble) polv->ymax,
-                     "width", (gdouble) (polv->xmax - polv->x0),
-                     "height", (gdouble) (polv->y0 - POLV_Y_MARGIN), NULL);
+        g_object_set(azel->frame,
+                     "x", (gdouble) azel->x0,
+                     "y", (gdouble) azel->ymax,
+                     "width", (gdouble) (azel->xmax - azel->x0),
+                     "height", (gdouble) (azel->y0 - AZEL_Y_MARGIN), NULL);
 
-        xstep = (polv->xmax - polv->x0) / (AZEL_PLOT_NUM_TICKS + 1);
-        ystep = (polv->y0 - polv->ymax) / (AZEL_PLOT_NUM_TICKS + 1);
+        xstep = (azel->xmax - azel->x0) / (AZEL_PLOT_NUM_TICKS + 1);
+        ystep = (azel->y0 - azel->ymax) / (AZEL_PLOT_NUM_TICKS + 1);
 
         /* tick marks */
         for (i = 0; i < AZEL_PLOT_NUM_TICKS; i++)
@@ -449,101 +441,101 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
             pts = goo_canvas_points_new(2);
 
             /* bottom x tick marks */
-            pts->coords[0] = (gdouble) (polv->x0 + (i + 1) * xstep);
-            pts->coords[1] = (gdouble) polv->y0;
-            pts->coords[2] = (gdouble) (polv->x0 + (i + 1) * xstep);
-            pts->coords[3] = (gdouble) (polv->y0 - MARKER_SIZE);
-            g_object_set(polv->xticksb[i], "points", pts, NULL);
+            pts->coords[0] = (gdouble) (azel->x0 + (i + 1) * xstep);
+            pts->coords[1] = (gdouble) azel->y0;
+            pts->coords[2] = (gdouble) (azel->x0 + (i + 1) * xstep);
+            pts->coords[3] = (gdouble) (azel->y0 - MARKER_SIZE);
+            g_object_set(azel->xticksb[i], "points", pts, NULL);
 
             /* top x tick marks */
-            pts->coords[0] = (gdouble) (polv->x0 + (i + 1) * xstep);
-            pts->coords[1] = (gdouble) polv->ymax;
-            pts->coords[2] = (gdouble) (polv->x0 + (i + 1) * xstep);
-            pts->coords[3] = (gdouble) (polv->ymax + MARKER_SIZE);
-            g_object_set(polv->xtickst[i], "points", pts, NULL);
+            pts->coords[0] = (gdouble) (azel->x0 + (i + 1) * xstep);
+            pts->coords[1] = (gdouble) azel->ymax;
+            pts->coords[2] = (gdouble) (azel->x0 + (i + 1) * xstep);
+            pts->coords[3] = (gdouble) (azel->ymax + MARKER_SIZE);
+            g_object_set(azel->xtickst[i], "points", pts, NULL);
 
             /* x tick labels */
-            g_object_set(polv->xlab[i],
-                         "x", (gfloat) (polv->x0 + (i + 1) * xstep),
-                         "y", (gfloat) (polv->y0 + 5.0), NULL);
+            g_object_set(azel->xlab[i],
+                         "x", (gfloat) (azel->x0 + (i + 1) * xstep),
+                         "y", (gfloat) (azel->y0 + 5.0), NULL);
 
             /* left y tick marks */
-            pts->coords[0] = (gdouble) (gdouble) polv->x0;
-            pts->coords[1] = (gdouble) (gdouble) (polv->y0 - (i + 1) * ystep);
-            pts->coords[2] = (gdouble) (gdouble) (polv->x0 + MARKER_SIZE);
-            pts->coords[3] = (gdouble) (gdouble) (polv->y0 - (i + 1) * ystep);
-            g_object_set(polv->yticksl[i], "points", pts, NULL);
+            pts->coords[0] = (gdouble) (gdouble) azel->x0;
+            pts->coords[1] = (gdouble) (gdouble) (azel->y0 - (i + 1) * ystep);
+            pts->coords[2] = (gdouble) (gdouble) (azel->x0 + MARKER_SIZE);
+            pts->coords[3] = (gdouble) (gdouble) (azel->y0 - (i + 1) * ystep);
+            g_object_set(azel->yticksl[i], "points", pts, NULL);
 
             /* right y tick marks */
-            pts->coords[0] = (gdouble) polv->xmax;
-            pts->coords[1] = (gdouble) (polv->y0 - (i + 1) * ystep);
-            pts->coords[2] = (gdouble) (polv->xmax - MARKER_SIZE);
-            pts->coords[3] = (gdouble) (polv->y0 - (i + 1) * ystep);
-            g_object_set(polv->yticksr[i], "points", pts, NULL);
+            pts->coords[0] = (gdouble) azel->xmax;
+            pts->coords[1] = (gdouble) (azel->y0 - (i + 1) * ystep);
+            pts->coords[2] = (gdouble) (azel->xmax - MARKER_SIZE);
+            pts->coords[3] = (gdouble) (azel->y0 - (i + 1) * ystep);
+            g_object_set(azel->yticksr[i], "points", pts, NULL);
 
             goo_canvas_points_unref(pts);
 
             /* Az tick labels */
-            g_object_set(polv->azlab[i],
-                         "x", (gfloat) (polv->x0 - 5),
-                         "y", (gfloat) (polv->y0 - (i + 1) * ystep), NULL);
+            g_object_set(azel->azlab[i],
+                         "x", (gfloat) (azel->x0 - 5),
+                         "y", (gfloat) (azel->y0 - (i + 1) * ystep), NULL);
 
             /* El tick labels */
-            g_object_set(polv->ellab[i],
-                         "x", (gfloat) (polv->xmax + 5),
-                         "y", (gfloat) (polv->y0 - (i + 1) * ystep), NULL);
+            g_object_set(azel->ellab[i],
+                         "x", (gfloat) (azel->xmax + 5),
+                         "y", (gfloat) (azel->y0 - (i + 1) * ystep), NULL);
         }
 
         /* Az legend */
-        g_object_set(polv->azleg,
-                     "x", (gfloat) (polv->x0 - 7),
-                     "y", (gfloat) (polv->ymax), NULL);
+        g_object_set(azel->azleg,
+                     "x", (gfloat) (azel->x0 - 7),
+                     "y", (gfloat) (azel->ymax), NULL);
 
         /* El legend */
-        g_object_set(polv->elleg,
-                     "x", (gfloat) (polv->xmax + 7),
-                     "y", (gfloat) (polv->ymax), NULL);
+        g_object_set(azel->elleg,
+                     "x", (gfloat) (azel->xmax + 7),
+                     "y", (gfloat) (azel->ymax), NULL);
 
         /* x legend */
-        g_object_set(polv->xleg,
-                     "x", (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
-                     "y", (gfloat) (polv->height - 5), NULL);
+        g_object_set(azel->xleg,
+                     "x", (gfloat) (azel->x0 + (azel->xmax - azel->x0) / 2),
+                     "y", (gfloat) (azel->height - 5), NULL);
 
         /* Az graph */
-        n = g_slist_length(polv->pass->details);
+        n = g_slist_length(azel->pass->details);
         pts = goo_canvas_points_new(n);
 
         for (i = 0; i < n; i++)
         {
-            detail = PASS_DETAIL(g_slist_nth_data(polv->pass->details, i));
-            az_to_xy(polv, detail->time, detail->az, &dx, &dy);
+            detail = PASS_DETAIL(g_slist_nth_data(azel->pass->details, i));
+            az_to_xy(azel, detail->time, detail->az, &dx, &dy);
             pts->coords[2 * i] = dx;
             pts->coords[2 * i + 1] = dy;
         }
-        pts->coords[0] = polv->x0;
-        pts->coords[2 * n - 2] = polv->xmax;
-        g_object_set(polv->azg, "points", pts, NULL);
+        pts->coords[0] = azel->x0;
+        pts->coords[2 * n - 2] = azel->xmax;
+        g_object_set(azel->azg, "points", pts, NULL);
         goo_canvas_points_unref(pts);
 
         /* El graph */
-        n = g_slist_length(polv->pass->details);
+        n = g_slist_length(azel->pass->details);
         pts = goo_canvas_points_new(n);
 
         for (i = 0; i < n; i++)
         {
-            detail = PASS_DETAIL(g_slist_nth_data(polv->pass->details, i));
-            el_to_xy(polv, detail->time, detail->el, &dx, &dy);
+            detail = PASS_DETAIL(g_slist_nth_data(azel->pass->details, i));
+            el_to_xy(azel, detail->time, detail->el, &dx, &dy);
             pts->coords[2 * i] = dx;
             pts->coords[2 * i + 1] = dy;
         }
-        pts->coords[1] = polv->y0;
-        pts->coords[2 * n - 1] = polv->y0;
-        g_object_set(polv->elg, "points", pts, NULL);
+        pts->coords[1] = azel->y0;
+        pts->coords[2 * n - 1] = azel->y0;
+        g_object_set(azel->elg, "points", pts, NULL);
         goo_canvas_points_unref(pts);
 
         /* cursor track */
-        g_object_set(polv->curs,
-                     "x", (gfloat) (polv->x0 + (polv->xmax - polv->x0) / 2),
+        g_object_set(azel->curs,
+                     "x", (gfloat) (azel->x0 + (azel->xmax - azel->x0) / 2),
                      "y", (gfloat) 5.0, NULL);
     }
 }
@@ -629,7 +621,7 @@ static gboolean on_motion_notify(GooCanvasItem * item,
                                  GooCanvasItem * target,
                                  GdkEventMotion * event, gpointer data)
 {
-    GtkAzelPlot    *polv = GTK_AZEL_PLOT(data);
+    GtkAzelPlot    *azel = GTK_AZEL_PLOT(data);
     gdouble         t, az, el;
     gfloat          x, y;
     gchar          *text;
@@ -638,7 +630,7 @@ static gboolean on_motion_notify(GooCanvasItem * item,
     (void)item;                 /* avoid unused warning compiler warning. */
     (void)target;               /* avoid unused warning compiler warning. */
 
-    if (polv->cursinfo)
+    if (azel->cursinfo)
     {
         /* get (x,y) */
         x = event->x;
@@ -649,11 +641,11 @@ static gboolean on_motion_notify(GooCanvasItem * item,
         /* show vertical line at that time */
 
         /* print (t,az,el) */
-        if ((x > polv->x0) && (x < polv->xmax) &&
-            (y > polv->ymax) && (y < polv->y0))
+        if ((x > azel->x0) && (x < azel->xmax) &&
+            (y > azel->ymax) && (y < azel->y0))
         {
 
-            xy_to_graph(polv, x, y, &t, &az, &el);
+            xy_to_graph(azel, x, y, &t, &az, &el);
 
             daynum_to_str(buff, 10, "%H:%M:%S", t);
 
@@ -661,12 +653,12 @@ static gboolean on_motion_notify(GooCanvasItem * item,
             text =
                 g_strdup_printf("T: %s, AZ: %.0f\302\260, EL: %.0f\302\260",
                                 buff, az, el);
-            g_object_set(polv->curs, "text", text, NULL);
+            g_object_set(azel->curs, "text", text, NULL);
             g_free(text);
         }
         else
         {
-            g_object_set(polv->curs, "text", "", NULL);
+            g_object_set(azel->curs, "text", "", NULL);
         }
     }
 
@@ -704,9 +696,9 @@ static void on_item_created(GooCanvas * canvas,
  * format and converts it to GdkColor style. Besides extractibg the RGB components
  * we also need to scale from [0;255] to [0;65535], i.e. multiply by 257.
  */
-static void get_canvas_bg_color(GtkAzelPlot * polv, GdkColor * color)
+static void get_canvas_bg_color(GtkAzelPlot * azel, GdkColor * color)
 {
-    (void)polv;
+    (void)azel;
 
     guint32         col, tmp;
     guint16         r, g, b;
