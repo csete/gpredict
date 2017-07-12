@@ -26,7 +26,7 @@
 */
 
 /**
- * \brief Sky at a glance Widget.
+ * Sky at a glance Widget.
  * 
  * The sky at a glance widget provides a convenient overview of the upcoming
  * satellite passes in a timeline format. The widget is tied to a specific
@@ -119,7 +119,7 @@ GType gtk_sky_glance_get_type()
             NULL
         };
 
-        gtk_sky_glance_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_sky_glance_type = g_type_register_static(GTK_TYPE_BOX,
                                                      "GtkSkyGlance",
                                                      &gtk_sky_glance_info, 0);
     }
@@ -154,13 +154,14 @@ static void gtk_sky_glance_init(GtkSkyGlance * skg)
 }
 
 /**
- * \brief Destroy the GtkSkyGlance widget
- * \param object Pointer to the GtkSkyGlance widget
+ * Destroy the GtkSkyGlance widget
+ *
+ * @param object Pointer to the GtkSkyGlance widget
  *
  * This function is called when the GtkSkyGlance widget is destroyed. It frees 
  * the memory that has been allocated when the widget was created.
  * 
- * \bug For some reason, this function is called twice when parent is destroyed.
+ * @bug For some reason, this function is called twice when parent is destroyed.
  */
 static void gtk_sky_glance_destroy(GtkWidget * widget)
 {
@@ -212,101 +213,79 @@ static void gtk_sky_glance_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-
-
 /**
- * \brief Create a new GtkSkyGlance widget.
- * \param sats Pointer to the hash table containing the asociated satellites.
- * \param qth Pointer to the ground station data.
- * \param ts The t0 for the timeline or 0 to use the current date and time.
+ * Create a new GtkSkyGlance widget.
+ *
+ * @param sats Pointer to the hash table containing the asociated satellites.
+ * @param qth Pointer to the ground station data.
+ * @param ts The t0 for the timeline or 0 to use the current date and time.
  */
 GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
 {
-    GtkWidget      *skg;
+    GtkSkyGlance       *skg;
     GooCanvasItemModel *root;
-    GdkColor        bg_color = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
     guint           number;
 
     /* check that we have at least one satellite */
     number = g_hash_table_size(sats);
     if (number == 0)
-    {
         /* no satellites */
-        skg = gtk_label_new(_("This module has no satellites!"));
+        return gtk_label_new(_("This module has no satellites!"));
 
-        return skg;
-    }
-
-    skg = g_object_new(GTK_TYPE_SKY_GLANCE, NULL);
+    skg = GTK_SKY_GLANCE(g_object_new(GTK_TYPE_SKY_GLANCE, NULL));
 
     /* FIXME? */
-    GTK_SKY_GLANCE(skg)->sats = sats;
-    GTK_SKY_GLANCE(skg)->qth = qth;
+    skg->sats = sats;
+    skg->qth = qth;
 
     /* get settings */
-    GTK_SKY_GLANCE(skg)->numsat = g_hash_table_size(sats);
+    skg->numsat = g_hash_table_size(sats);
 
     /* if ts = 0 use current time */
-    if (ts > 0.0)
-    {
-        GTK_SKY_GLANCE(skg)->ts = ts;
-    }
-    else
-    {
-        GTK_SKY_GLANCE(skg)->ts = get_current_daynum();
-    }
-
-    GTK_SKY_GLANCE(skg)->te = GTK_SKY_GLANCE(skg)->ts +
+    skg->ts = ts > 0.0 ? ts : get_current_daynum();
+    skg->te = skg->ts +
         sat_cfg_get_int(SAT_CFG_INT_SKYATGL_TIME) * (1.0 / 24.0);
 
     /* calculate preferred sizes */
-    GTK_SKY_GLANCE(skg)->w = SKG_DEFAULT_WIDTH;
-    GTK_SKY_GLANCE(skg)->h = GTK_SKY_GLANCE(skg)->numsat * SKG_PIX_PER_SAT +
-        (GTK_SKY_GLANCE(skg)->numsat + 1) * SKG_MARGIN;
-    GTK_SKY_GLANCE(skg)->pps = SKG_PIX_PER_SAT;
+    skg->w = SKG_DEFAULT_WIDTH;
+    skg->h = skg->numsat * SKG_PIX_PER_SAT + (skg->numsat + 1) * SKG_MARGIN;
+    skg->pps = SKG_PIX_PER_SAT;
 
     /* create the canvas */
-    GTK_SKY_GLANCE(skg)->canvas = goo_canvas_new();
-    g_object_set(G_OBJECT(GTK_SKY_GLANCE(skg)->canvas), "has-tooltip", TRUE,
-                 NULL);
-    gtk_widget_modify_base(GTK_SKY_GLANCE(skg)->canvas, GTK_STATE_NORMAL,
-                           &bg_color);
-    gtk_widget_set_size_request(GTK_SKY_GLANCE(skg)->canvas,
-                                GTK_SKY_GLANCE(skg)->w,
-                                GTK_SKY_GLANCE(skg)->h + SKG_FOOTER);
-    goo_canvas_set_bounds(GOO_CANVAS(GTK_SKY_GLANCE(skg)->canvas), 0, 0,
-                          GTK_SKY_GLANCE(skg)->w,
-                          GTK_SKY_GLANCE(skg)->h + SKG_FOOTER);
+    skg->canvas = goo_canvas_new();
+    g_object_set(G_OBJECT(skg->canvas), "has-tooltip", TRUE, NULL);
+    gtk_widget_set_size_request(skg->canvas, skg->w, skg->h + SKG_FOOTER);
+    goo_canvas_set_bounds(GOO_CANVAS(skg->canvas), 0, 0,
+                          skg->w, skg->h + SKG_FOOTER);
 
     /* connect size-request signal */
-    g_signal_connect(GTK_SKY_GLANCE(skg)->canvas, "size-allocate",
+    g_signal_connect(skg->canvas, "size-allocate",
                      G_CALLBACK(size_allocate_cb), skg);
-    g_signal_connect(GTK_SKY_GLANCE(skg)->canvas, "item_created",
+    g_signal_connect(skg->canvas, "item_created",
                      (GCallback) on_item_created, skg);
-    g_signal_connect_after(GTK_SKY_GLANCE(skg)->canvas, "realize",
+    g_signal_connect_after(skg->canvas, "realize",
                            (GCallback) on_canvas_realized, skg);
 
-    gtk_widget_show(GTK_SKY_GLANCE(skg)->canvas);
+    gtk_widget_show(skg->canvas);
 
     /* Create the canvas model */
-    root = create_canvas_model(GTK_SKY_GLANCE(skg));
-    goo_canvas_set_root_item_model(GOO_CANVAS(GTK_SKY_GLANCE(skg)->canvas),
-                                   root);
+    root = create_canvas_model(skg);
+    goo_canvas_set_root_item_model(GOO_CANVAS(skg->canvas), root);
 
     g_object_unref(root);
 
     /* add satellite passes */
-    g_hash_table_foreach(GTK_SKY_GLANCE(skg)->sats, create_sat, skg);
+    g_hash_table_foreach(skg->sats, create_sat, skg);
 
-    gtk_container_add(GTK_CONTAINER(skg), GTK_SKY_GLANCE(skg)->canvas);
+    gtk_container_add(GTK_CONTAINER(skg), skg->canvas);
 
-    return skg;
+    return GTK_WIDGET(skg);
 }
 
-
 /**
- * \brief Create the model for the GtkSkyGlance canvas
- * \param skg Pointer to the GtkSkyGlance widget
+ * Create the model for the GtkSkyGlance canvas
+ *
+ * @param skg Pointer to the GtkSkyGlance widget
  */
 static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
 {
@@ -321,16 +300,16 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
 
     /* cursor tracking line */
     skg->cursor = goo_canvas_polyline_model_new_line(root, skg->x0, skg->y0,
-                                                     skg->x0,  skg->h,
+                                                     skg->x0, skg->h,
                                                      "stroke-color-rgba",
                                                      0x000000AF, "line-width",
                                                      0.5, NULL);
 
     /* time label */
     skg->timel = goo_canvas_text_model_new(root, "--:--", skg->x0 + 5, skg->y0,
-                                           -1, GOO_CANVAS_ANCHOR_NW, "font", "Sans 8",
-                                           "fill-color-rgba", 0x000000AF,
-                                           NULL);
+                                           -1, GOO_CANVAS_ANCHOR_NW, "font",
+                                           "Sans 8", "fill-color-rgba",
+                                           0x000000AF, NULL);
 
     /* footer */
     skg->footer = goo_canvas_rect_model_new(root,
@@ -345,16 +324,17 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
         skg->axisl = goo_canvas_text_model_new(root, _("TIME"),
                                                skg->w / 2,
                                                skg->h + SKG_FOOTER - 5, -1,
-                                               GOO_CANVAS_ANCHOR_S, "font", "Sans 9",
-                                               "fill-color-rgba", 0xFFFFFFFF,
-                                               NULL);
+                                               GOO_CANVAS_ANCHOR_S, "font",
+                                               "Sans 9", "fill-color-rgba",
+                                               0xFFFFFFFF, NULL);
     else
         skg->axisl = goo_canvas_text_model_new(root, _("UTC"),
                                                skg->w / 2,
                                                skg->h + SKG_FOOTER - 5, -1,
-                                               GOO_CANVAS_ANCHOR_S, "font", "Sans 9",
-                                               "fill-color-rgba", 0xFFFFFFFF,
-                                               NULL);
+                                               GOO_CANVAS_ANCHOR_S, "font",
+                                               "Sans 9", "fill-color-rgba",
+                                               0xFFFFFFFF, NULL);
+
 
     /* get the first hour and first 30 min slot */
     th = ceil(skg->ts * 24.0) / 24.0;
@@ -414,7 +394,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
 }
 
 /**
- * \brief Manage new size allocation.
+ * Manage new size allocation.
  *
  * This function is called when the canvas receives a new size allocation,
  * e.g. when the container is re-sized. The function re-calculates the graph
@@ -564,9 +544,8 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
     }
 }
 
-
 /**
- * \brief Manage canvas realise signals.
+ * Manage canvas realise signals.
  *
  * This function is used to re-initialise the graph dimensions when
  * the graph is realized, i.e. displayed for the first time. This is
@@ -581,7 +560,6 @@ static void on_canvas_realized(GtkWidget * canvas, gpointer data)
     size_allocate_cb(canvas, &aloc, data);
 }
 
-
 /** Manage mouse motion events. */
 static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
                                  GdkEventMotion * event, gpointer data)
@@ -591,8 +569,8 @@ static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
     gdouble         t;
     gchar           buff[6];
 
-    (void)item;                 /* avoid unused parameter compiler warning */
-    (void)target;               /* avoid unused parameter compiler warning */
+    (void)item;
+    (void)target;
 
     /* update cursor tracking line and time label */
     pts = goo_canvas_points_new(2);
@@ -612,13 +590,13 @@ static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
     return TRUE;
 }
 
-
 /**
- * \brief Finish canvas item setup.
- * \param canvas Pointer to the GooCanvas object
- * \param item Pointer to the GooCanvasItem that received the signals
- * \param model Pointer to the model associated with the GooCanvasItem object
- * \param data Pointer to the GtkSkyGlance object.
+ * Finish canvas item setup.
+ *
+ * @param canvas Pointer to the GooCanvas object
+ * @param item Pointer to the GooCanvasItem that received the signals
+ * @param model Pointer to the model associated with the GooCanvasItem object
+ * @param data Pointer to the GtkSkyGlance object.
  *
  * This function is called when a canvas item is created. Its purpose is to connect
  * the corresponding signals to the created items.
@@ -627,6 +605,7 @@ static void on_item_created(GooCanvas * canvas, GooCanvasItem * item,
                             GooCanvasItemModel * model, gpointer data)
 {
     gboolean        can_focus;
+
     (void)canvas;
 
     if (!goo_canvas_item_model_get_parent(model))
@@ -638,6 +617,7 @@ static void on_item_created(GooCanvas * canvas, GooCanvasItem * item,
         return;
     }
 
+    /* "can-focus" property is set in create_sat() */
     g_object_get(G_OBJECT(item), "can-focus", &can_focus, NULL);
     if (can_focus)
     {
@@ -651,17 +631,16 @@ static void on_item_created(GooCanvas * canvas, GooCanvasItem * item,
 }
 
 /**
- * \brief Manage button release events.
- * \param item The GooCanvasItem object that received the button press event.
- * \param target The target of the event (what?).
- * \param event Event data, such as X and Y coordinates.
- * \param data User data; points to the GtkSkyAtGlance object.
- * \return Always TRUE to prevent further propagation of the event.
+ * Manage button release events.
+ *
+ * @param item The GooCanvasItem object that received the button press event.
+ * @param target The target of the event (what?).
+ * @param event Event data, such as X and Y coordinates.
+ * @param data User data; points to the GtkSkyAtGlance object.
+ * @return Always TRUE to prevent further propagation of the event.
  *
  * This function is called when the mouse button is released above
  * a satellite pass object.
- *
- * We do not currently use this for anything.
  */
 static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
                                   GdkEventButton * event, gpointer data)
@@ -671,7 +650,7 @@ static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
     pass_t         *pass;
     pass_t         *new_pass;
 
-    (void)target;               /* avoid unused parameter compiler warning */
+    (void)target;
 
     /* get pointer to pass_t structure */
     pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
@@ -709,14 +688,14 @@ static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
     return TRUE;
 }
 
-
 /**
- * \brief Manage mouse-enter events on canvas items (satellite pass boxes)
- * \param item The GooCanvasItem that received the signal
- * \param target_item The target if the even (have no idea what this is...)
- * \param event Info about the event
- * \param data Pointer to the GtkSkyAtGlance object
- * \return Always TRUE to prevent further propagation of the event.
+ * Manage mouse-enter events on canvas items (satellite pass boxes)
+ *
+ * @param item The GooCanvasItem that received the signal
+ * @param target_item The target if the even (have no idea what this is...)
+ * @param event Info about the event
+ * @param data Pointer to the GtkSkyAtGlance object
+ * @return Always TRUE to prevent further propagation of the event.
  *
  * This function is used to be notified when the mouse enters over a satellite
  * pass box. We could use it to highlihght the pass under the mouse.
@@ -728,9 +707,9 @@ static gboolean on_mouse_enter(GooCanvasItem * item,
     GooCanvasItemModel *item_model = goo_canvas_item_get_model(item);
     pass_t         *pass;
 
-    (void)target_item;          /* avoid unused parameter compiler warning */
-    (void)event;                /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)target_item;
+    (void)event;
+    (void)data;
 
     /* get pointer to pass_t structure */
     pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
@@ -746,12 +725,13 @@ static gboolean on_mouse_enter(GooCanvasItem * item,
 }
 
 /**
- * \brief Manage mouse-leave events on canvas items (satellite pass boxes)
- * \param item The GooCanvasItem that received the signal
- * \param target_item The target if the even (have no idea what this is...)
- * \param event Info about the event
- * \param data Pointer to the GtkSkyAtGlance object
- * \return Always TRUE to prevent further propagation of the event.
+ * Manage mouse-leave events on canvas items (satellite pass boxes)
+ *
+ * @param item The GooCanvasItem that received the signal
+ * @param target_item The target if the even (have no idea what this is...)
+ * @param event Info about the event
+ * @param data Pointer to the GtkSkyAtGlance object
+ * @return Always TRUE to prevent further propagation of the event.
  *
  * This function is used to be notified when the mouse leaves a satellite
  * pass box.
@@ -769,11 +749,12 @@ static gboolean on_mouse_leave(GooCanvasItem * item,
 }
 
 /**
- * \brief Convert time value to x position.
- * \param skg The GtkSkyGlance widget.
- * \param t Julian date user is presented with brief info about the
+ * Convert time value to x position.
+ *
+ * @param skg The GtkSkyGlance widget.
+ * @param t Julian date user is presented with brief info about the
  *          satellite pass and a suggestion to click on the box for more info.
- * \return X coordinate.
+ * @return X coordinate.
  *
  * No error checking is made to ensure that we are within visible range.
  */
@@ -787,13 +768,13 @@ static gdouble t2x(GtkSkyGlance * skg, gdouble t)
 }
 
 /**
- * \brief Convert x coordinate to Julian date.
- * \param skg The GtkSkyGlance widget.
- * \param x The X coordinate.
- * \return The Julian date corresponding to X.
+ * Convert x coordinate to Julian date.
+ *
+ * @param skg The GtkSkyGlance widget.
+ * @param x The X coordinate.
+ * @return The Julian date corresponding to X.
  *
  * No error checking is made to ensure that we are within visible range.
- *
  */
 static gdouble x2t(GtkSkyGlance * skg, gdouble x)
 {
@@ -870,10 +851,11 @@ static void get_colours(guint i, guint * bcol, guint * fcol)
 }
 
 /**
- * \brief Create canvas items for a satellite
- * \param key Pointer to the hash key (catnum of sat)
- * \param value Pointer to the current satellite.
- * \param data Pointer to the GtkSkyGlance object.
+ * Create canvas items for a satellite
+ *
+ * @param key Pointer to the hash key (catnum of sat)
+ * @param value Pointer to the current satellite.
+ * @param data Pointer to the GtkSkyGlance object.
  *
  * This function is called by g_hash_table_foreach with each satellite in
  * the satellite hash table. It gets the passes for the current satellite
@@ -888,11 +870,11 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
     guint           i, n;
     pass_t         *tmppass = NULL;
     sky_pass_t     *skypass;
-    guint           bcol, fcol; /* colours */
+    guint           bcol, fcol; /* colors */
     GooCanvasItemModel *root;
     GooCanvasItemModel *lab;
 
-    (void)key;                  /* avoid unused parameter compiler warning */
+    (void)key;
 
     /* tooltips vars */
     gchar          *tooltip;    /* the complete tooltips string */
@@ -961,8 +943,7 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
                                                      "antialias",
                                                      CAIRO_ANTIALIAS_NONE,
                                                      "tooltip", tooltip,
-                                                     "can-focus", TRUE,
-                                                     NULL);
+                                                     "can-focus", TRUE, NULL);
             g_free(tooltip);
 
             /* store this pass in list */
@@ -970,8 +951,7 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
 
             /* store a pointer to the pass data in the GooCanvasItem so that we
                can access it later during various events, e.g mouse click */
-            g_object_set_data(G_OBJECT(skypass->box), "pass",
-                              skypass->pass);
+            g_object_set_data(G_OBJECT(skypass->box), "pass", skypass->pass);
         }
 
         free_passes(passes);

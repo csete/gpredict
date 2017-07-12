@@ -39,7 +39,7 @@
 /* *INDENT-OFF* */
 #ifdef __cplusplus
 extern          "C" {
-#endif                          /* __cplusplus */
+#endif
 /* *INDENT-ON* */
 
 
@@ -53,60 +53,61 @@ typedef struct _GtkSkyGlance GtkSkyGlance;
 typedef struct _GtkSkyGlanceClass GtkSkyGlanceClass;
 
 
-/** \brief Satellite object on graph. */
+/** Satellite object on graph. */
 typedef struct {
-    guint           catnum;     /*!< Catalogue number of satellite */
-    pass_t         *pass;       /*!< Details of the corresponding pass. */
-    GooCanvasItemModel *box;    /*!< Canvas item showing the pass */
+    guint           catnum;     /* Catalog number of satellite */
+    pass_t         *pass;       /* Details of the corresponding pass. */
+    GooCanvasItemModel *box;    /* Canvas item showing the pass */
 } sky_pass_t;
 
 
 #define SKY_PASS_T(obj) ((sky_pass_t *)obj)
 
 
-/** \brief GtkSkyGlance widget */
+/** GtkSkyGlance widget */
 struct _GtkSkyGlance {
-    GtkVBox         vbox;
+    GtkBox          vbox;
 
-    GtkWidget      *canvas;     /*!< The canvas widget */
+    GtkWidget      *canvas;
 
-    GHashTable     *sats;       /*!< Copy of satellites. */
-    qth_t          *qth;        /*!< Pointer to current location. */
+    GHashTable     *sats;       /* Local copy of satellites. */
+    qth_t          *qth;        /* Pointer to current location. */
 
-    GSList         *passes;     /*!< Canvas items representing each pass.
-                                   Each element in the list is of type sky_pass_t.
+    GSList         *passes;     /* Canvas items representing each pass.
+                                 * Each element in the list is of type sky_pass_t.
                                  */
-    GSList         *satlab;     /*!< Canvas items showing satellite names. */
+    GSList         *satlab;     /* Canvas items showing satellite names. */
 
 
-    guint           x0;         /*!< X0 */
-    guint           y0;         /*!< Y0 */
-    guint           w;          /*!< width of the plot */
-    guint           h;          /*!< height of the plot */
-    guint           pps;        /*!< pixels per satellite */
+    guint           x0;
+    guint           y0;
+    guint           w;          /* width of the plot */
+    guint           h;          /* height of the plot */
+    guint           pps;        /* pixels per satellite */
 
-    guint           numsat;     /*!< Number of satellites */
-    guint           satcnt;     /*!< Counter to keep track of how many satellites we have
+    guint           numsat;     /* Number of satellites */
+    guint           satcnt;     /* Counter to keep track of how many satellites we have
                                    plotted so far when creating the boxes.
                                    This is needed to ensure that we do not plot more
                                    than 10 satellites and to know which colour to fetch
                                    from sat-cfg.
                                  */
-    gdouble         ts, te;     /*!< Start and end times (Julian date) */
+    gdouble         ts, te;     /* Start and end times (Julian date) */
 
-    GSList         *majors;     /*!< Major ticks for every hour */
-    GSList         *minors;     /*!< Minor ticks for every 30 min */
-    GSList         *labels;     /*!< Tick labels for every hour */
+    GSList         *majors;     /* Major ticks for every hour */
+    GSList         *minors;     /* Minor ticks for every 30 min */
+    GSList         *labels;     /* Tick labels for every hour */
 
-    GooCanvasItemModel *footer; /*!< Footer area with time ticks and labels */
-    GooCanvasItemModel *axisl;  /*!< Axis label */
-    GooCanvasItemModel *cursor; /*!< Vertical line tracking the cursor */
-    GooCanvasItemModel *timel;  /*!< Label showing time under cursor */
+    GooCanvasItemModel *bgd;    /* Canvas background */
+    GooCanvasItemModel *footer; /* Footer area with time ticks and labels */
+    GooCanvasItemModel *axisl;  /* Axis label */
+    GooCanvasItemModel *cursor; /* Vertical line tracking the cursor */
+    GooCanvasItemModel *timel;  /* Label showing time under cursor */
 
 };
 
 struct _GtkSkyGlanceClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 
@@ -116,7 +117,7 @@ GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts);
 /* *INDENT-OFF* */
 #ifdef __cplusplus
 }
-#endif                          /* __cplusplus */
+#endif
 /* *INDENT-ON* */
 
 #endif /* __GTK_SKY_GLANCE_H__ */
