@@ -84,13 +84,6 @@ static gboolean on_button_release(GooCanvasItem * item,
                                   GooCanvasItem * target,
                                   GdkEventButton * event, gpointer data);
 
-static gboolean on_mouse_enter(GooCanvasItem * item,
-                               GooCanvasItem * target_item,
-                               GdkEventCrossing * event, gpointer data);
-static gboolean on_mouse_leave(GooCanvasItem * item,
-                               GooCanvasItem * target_item,
-                               GdkEventCrossing * event, gpointer data);
-
 static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg);
 static void     create_sat(gpointer key, gpointer value, gpointer data);
 
@@ -623,10 +616,6 @@ static void on_item_created(GooCanvas * canvas, GooCanvasItem * item,
     {
         g_signal_connect(item, "button_release_event",
                          (GCallback) on_button_release, data);
-        g_signal_connect(item, "enter_notify_event",
-                         (GCallback) on_mouse_enter, data);
-        g_signal_connect(item, "leave_notify_event",
-                         (GCallback) on_mouse_leave, data);
     }
 }
 
@@ -684,66 +673,6 @@ static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
                     __FILE__, __func__, event->button);
         break;
     }
-
-    return TRUE;
-}
-
-/**
- * Manage mouse-enter events on canvas items (satellite pass boxes)
- *
- * @param item The GooCanvasItem that received the signal
- * @param target_item The target if the even (have no idea what this is...)
- * @param event Info about the event
- * @param data Pointer to the GtkSkyAtGlance object
- * @return Always TRUE to prevent further propagation of the event.
- *
- * This function is used to be notified when the mouse enters over a satellite
- * pass box. We could use it to highlihght the pass under the mouse.
- */
-static gboolean on_mouse_enter(GooCanvasItem * item,
-                               GooCanvasItem * target_item,
-                               GdkEventCrossing * event, gpointer data)
-{
-    GooCanvasItemModel *item_model = goo_canvas_item_get_model(item);
-    pass_t         *pass;
-
-    (void)target_item;
-    (void)event;
-    (void)data;
-
-    /* get pointer to pass_t structure */
-    pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
-    if (G_UNLIKELY(pass == NULL))
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s::%s: Could not retrieve pass_t object"),
-                    __FILE__, __func__);
-        return TRUE;
-    }
-
-    return TRUE;
-}
-
-/**
- * Manage mouse-leave events on canvas items (satellite pass boxes)
- *
- * @param item The GooCanvasItem that received the signal
- * @param target_item The target if the even (have no idea what this is...)
- * @param event Info about the event
- * @param data Pointer to the GtkSkyAtGlance object
- * @return Always TRUE to prevent further propagation of the event.
- *
- * This function is used to be notified when the mouse leaves a satellite
- * pass box.
- */
-static gboolean on_mouse_leave(GooCanvasItem * item,
-                               GooCanvasItem * target_item,
-                               GdkEventCrossing * event, gpointer data)
-{
-    (void)item;
-    (void)target_item;
-    (void)event;
-    (void)data;
 
     return TRUE;
 }
