@@ -75,16 +75,13 @@ static void     size_allocate_cb(GtkWidget * widget,
 static gboolean on_motion_notify(GooCanvasItem * item,
                                  GooCanvasItem * target,
                                  GdkEventMotion * event, gpointer data);
-static void     on_item_created(GooCanvas * canvas,
-                                GooCanvasItem * item,
-                                GooCanvasItemModel * model, gpointer data);
 static void     on_canvas_realized(GtkWidget * canvas, gpointer data);
 
 static gboolean on_button_release(GooCanvasItem * item,
                                   GooCanvasItem * target,
                                   GdkEventButton * event, gpointer data);
 
-static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg);
+static void     create_canvas_items(GtkSkyGlance * skg);
 static void     create_sat(gpointer key, gpointer value, gpointer data);
 
 static gdouble  t2x(GtkSkyGlance * skg, gdouble t);
@@ -215,8 +212,7 @@ static void gtk_sky_glance_destroy(GtkWidget * widget)
  */
 GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
 {
-    GtkSkyGlance       *skg;
-    GooCanvasItemModel *root;
+    GtkSkyGlance   *skg;
     guint           number;
 
     /* check that we have at least one satellite */
@@ -253,19 +249,14 @@ GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
 
     /* connect size-request signal */
     g_signal_connect(skg->canvas, "size-allocate",
-                     G_CALLBACK(size_allocate_cb), skg);
-    g_signal_connect(skg->canvas, "item_created",
-                     (GCallback) on_item_created, skg);
+                     (GCallback) size_allocate_cb, skg);
     g_signal_connect_after(skg->canvas, "realize",
                            (GCallback) on_canvas_realized, skg);
 
     gtk_widget_show(skg->canvas);
 
     /* Create the canvas model */
-    root = create_canvas_model(skg);
-    goo_canvas_set_root_item_model(GOO_CANVAS(skg->canvas), root);
-
-    g_object_unref(root);
+    create_canvas_items(skg);
 
     /* add satellite passes */
     g_hash_table_foreach(skg->sats, create_sat, skg);
@@ -280,53 +271,55 @@ GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
  *
  * @param skg Pointer to the GtkSkyGlance widget
  */
-static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
+static void create_canvas_items(GtkSkyGlance * skg)
 {
-    GooCanvasItemModel *root;
-    GooCanvasItemModel *hrt, *hrl, *hrm;
+    GooCanvasItem  *root;
+    GooCanvasItem  *hrt, *hrl, *hrm;
     guint           i, n;
     gdouble         th, tm;
     gdouble         xh, xm;
     gchar           buff[3];
 
-    root = goo_canvas_group_model_new(NULL, NULL);
+    root = goo_canvas_get_root_item(GOO_CANVAS(skg->canvas));
+    g_signal_connect(root, "motion_notify_event",
+                     (GCallback) on_motion_notify, skg);
 
     /* cursor tracking line */
-    skg->cursor = goo_canvas_polyline_model_new_line(root, skg->x0, skg->y0,
-                                                     skg->x0, skg->h,
-                                                     "stroke-color-rgba",
-                                                     0x000000AF, "line-width",
-                                                     0.5, NULL);
+    skg->cursor = goo_canvas_polyline_new_line(root,
+                                               skg->x0, skg->y0,
+                                               skg->x0, skg->h,
+                                               "stroke-color-rgba", 0x000000AF,
+                                               "line-width", 0.5, NULL);
 
     /* time label */
-    skg->timel = goo_canvas_text_model_new(root, "--:--", skg->x0 + 5, skg->y0,
-                                           -1, GOO_CANVAS_ANCHOR_NW, "font",
-                                           "Sans 8", "fill-color-rgba",
-                                           0x000000AF, NULL);
+    skg->timel = goo_canvas_text_new(root, "--:--",
+                                     skg->x0 + 5, skg->y0,
+                                     -1, GOO_CANVAS_ANCHOR_NW,
+                                     "font", "Sans 8",
+                                     "fill-color-rgba", 0x000000AF, NULL);
 
     /* footer */
-    skg->footer = goo_canvas_rect_model_new(root,
-                                            skg->x0, skg->h,
-                                            skg->w, SKG_FOOTER,
-                                            "fill-color-rgba", 0x00003FFF,
-                                            "stroke-color-rgba", 0xFFFFFFFF,
-                                            NULL);
+    skg->footer = goo_canvas_rect_new(root,
+                                      skg->x0, skg->h,
+                                      skg->w, SKG_FOOTER,
+                                      "fill-color-rgba", 0x00003FFF,
+                                      "stroke-color-rgba", 0xFFFFFFFF, NULL);
 
     /* time ticks and labels */
     if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
-        skg->axisl = goo_canvas_text_model_new(root, _("TIME"),
-                                               skg->w / 2,
-                                               skg->h + SKG_FOOTER - 5, -1,
-                                               GOO_CANVAS_ANCHOR_S, "font",
-                                               "Sans 9", "fill-color-rgba",
-                                               0xFFFFFFFF, NULL);
+        skg->axisl = goo_canvas_text_new(root, _("TIME"),
+                                         skg->w / 2,
+                                         skg->h + SKG_FOOTER - 5,
+                                         -1, GOO_CANVAS_ANCHOR_S,
+                                         "font", "Sans 9",
+                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
     else
-        skg->axisl = goo_canvas_text_model_new(root, _("UTC"),
-                                               skg->w / 2,
-                                               skg->h + SKG_FOOTER - 5, -1,
-                                               GOO_CANVAS_ANCHOR_S, "font",
-                                               "Sans 9", "fill-color-rgba",
-                                               0xFFFFFFFF, NULL);
+        skg->axisl = goo_canvas_text_new(root, _("UTC"),
+                                         skg->w / 2,
+                                         skg->h + SKG_FOOTER - 5,
+                                         -1, GOO_CANVAS_ANCHOR_S,
+                                         "font", "Sans 9",
+                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
 
 
     /* get the first hour and first 30 min slot */
@@ -354,25 +347,23 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
         /* hour tick */
         xh = t2x(skg, th);
         hrt =
-            goo_canvas_polyline_model_new_line(root, xh, skg->h, xh,
-                                               skg->h + 10,
-                                               "stroke-color-rgba", 0xFFFFFFFF,
-                                               NULL);
+            goo_canvas_polyline_new_line(root, xh, skg->h, xh, skg->h + 10,
+                                         "stroke-color-rgba", 0xFFFFFFFF,
+                                         NULL);
 
         /* hour tick label */
         daynum_to_str(buff, 3, "%H", th);
 
-        hrl = goo_canvas_text_model_new(root, buff, xh, skg->h + 12,
-                                        -1, GOO_CANVAS_ANCHOR_N,
-                                        "font", "Sans 8",
-                                        "fill-color-rgba", 0xFFFFFFFF, NULL);
+        hrl = goo_canvas_text_new(root, buff, xh, skg->h + 12,
+                                  -1, GOO_CANVAS_ANCHOR_N,
+                                  "font", "Sans 8",
+                                  "fill-color-rgba", 0xFFFFFFFF, NULL);
 
         /* 30 min tick */
         xm = t2x(skg, tm);
-        hrm =
-            goo_canvas_polyline_model_new_line(root, xm, skg->h, xm,
-                                               skg->h + 5, "stroke-color-rgba",
-                                               0xFFFFFFFF, NULL);
+        hrm = goo_canvas_polyline_new_line(root, xm, skg->h, xm, skg->h + 5,
+                                           "stroke-color-rgba", 0xFFFFFFFF,
+                                           NULL);
 
         /* store canvas items */
         skg->majors = g_slist_append(skg->majors, hrt);
@@ -382,8 +373,6 @@ static GooCanvasItemModel *create_canvas_model(GtkSkyGlance * skg)
         th += 0.0416667;
         tm += 0.0416667;
     }
-
-    return root;
 }
 
 /**
@@ -584,42 +573,6 @@ static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
 }
 
 /**
- * Finish canvas item setup.
- *
- * @param canvas Pointer to the GooCanvas object
- * @param item Pointer to the GooCanvasItem that received the signals
- * @param model Pointer to the model associated with the GooCanvasItem object
- * @param data Pointer to the GtkSkyGlance object.
- *
- * This function is called when a canvas item is created. Its purpose is to connect
- * the corresponding signals to the created items.
- */
-static void on_item_created(GooCanvas * canvas, GooCanvasItem * item,
-                            GooCanvasItemModel * model, gpointer data)
-{
-    gboolean        can_focus;
-
-    (void)canvas;
-
-    if (!goo_canvas_item_model_get_parent(model))
-    {
-        /* root item / canvas */
-        g_signal_connect(item, "motion_notify_event",
-                         (GCallback) on_motion_notify, data);
-
-        return;
-    }
-
-    /* "can-focus" property is set in create_sat() */
-    g_object_get(G_OBJECT(item), "can-focus", &can_focus, NULL);
-    if (can_focus)
-    {
-        g_signal_connect(item, "button_release_event",
-                         (GCallback) on_button_release, data);
-    }
-}
-
-/**
  * Manage button release events.
  *
  * @param item The GooCanvasItem object that received the button press event.
@@ -800,8 +753,8 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
     pass_t         *tmppass = NULL;
     sky_pass_t     *skypass;
     guint           bcol, fcol; /* colors */
-    GooCanvasItemModel *root;
-    GooCanvasItemModel *lab;
+    GooCanvasItem  *root;
+    GooCanvasItem  *label;
 
     (void)key;
 
@@ -812,7 +765,7 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
     gchar           tcastr[100];        /* TCA time string */
 
     /* get canvas root */
-    root = goo_canvas_get_root_item_model(GOO_CANVAS(skg->canvas));
+    root = goo_canvas_get_root_item(GOO_CANVAS(skg->canvas));
     get_colours(skg->satcnt++, &bcol, &fcol);
     maxdt = skg->te - skg->ts;
 
@@ -865,14 +818,14 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
                                       skypass->pass->max_el, losstr,
                                       skypass->pass->los_az);
 
-            skypass->box = goo_canvas_rect_model_new(root, 10, 10, 20, 20,
-                                                     "stroke-color-rgba", bcol,
-                                                     "fill-color-rgba", fcol,
-                                                     "line-width", 1.0,
-                                                     "antialias",
-                                                     CAIRO_ANTIALIAS_NONE,
-                                                     "tooltip", tooltip,
-                                                     "can-focus", TRUE, NULL);
+            skypass->box = goo_canvas_rect_new(root, 10, 10, 20, 20,
+                                               "stroke-color-rgba", bcol,
+                                               "fill-color-rgba", fcol,
+                                               "line-width", 1.0,
+                                               "antialias",
+                                               CAIRO_ANTIALIAS_NONE, "tooltip",
+                                               tooltip, "can-focus", TRUE,
+                                               NULL);
             g_free(tooltip);
 
             /* store this pass in list */
@@ -881,15 +834,18 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
             /* store a pointer to the pass data in the GooCanvasItem so that we
                can access it later during various events, e.g mouse click */
             g_object_set_data(G_OBJECT(skypass->box), "pass", skypass->pass);
+
+            g_signal_connect(skypass->box, "button_release_event",
+                             (GCallback) on_button_release, skg);
         }
 
         free_passes(passes);
 
         /* add satellite label */
-        lab = goo_canvas_text_model_new(root, sat->nickname,
-                                        5, 0, -1, GOO_CANVAS_ANCHOR_W,
-                                        "font", "Sans 8",
-                                        "fill-color-rgba", bcol, NULL);
-        skg->satlab = g_slist_append(skg->satlab, lab);
+        label = goo_canvas_text_new(root, sat->nickname,
+                                    5, 0, -1, GOO_CANVAS_ANCHOR_W,
+                                    "font", "Sans 8",
+                                    "fill-color-rgba", bcol, NULL);
+        skg->satlab = g_slist_append(skg->satlab, label);
     }
 }

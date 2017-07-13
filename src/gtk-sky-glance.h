@@ -57,7 +57,7 @@ typedef struct _GtkSkyGlanceClass GtkSkyGlanceClass;
 typedef struct {
     guint           catnum;     /* Catalog number of satellite */
     pass_t         *pass;       /* Details of the corresponding pass. */
-    GooCanvasItemModel *box;    /* Canvas item showing the pass */
+    GooCanvasItem  *box;        /* Canvas item showing the pass */
 } sky_pass_t;
 
 
@@ -98,11 +98,11 @@ struct _GtkSkyGlance {
     GSList         *minors;     /* Minor ticks for every 30 min */
     GSList         *labels;     /* Tick labels for every hour */
 
-    GooCanvasItemModel *bgd;    /* Canvas background */
-    GooCanvasItemModel *footer; /* Footer area with time ticks and labels */
-    GooCanvasItemModel *axisl;  /* Axis label */
-    GooCanvasItemModel *cursor; /* Vertical line tracking the cursor */
-    GooCanvasItemModel *timel;  /* Label showing time under cursor */
+    GooCanvasItem  *bgd;        /* Canvas background */
+    GooCanvasItem  *footer;     /* Footer area with time ticks and labels */
+    GooCanvasItem  *axisl;      /* Axis label */
+    GooCanvasItem  *cursor;     /* Vertical line tracking the cursor */
+    GooCanvasItem  *timel;      /* Label showing time under cursor */
 
 };
 
