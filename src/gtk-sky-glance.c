@@ -284,6 +284,11 @@ static void create_canvas_items(GtkSkyGlance * skg)
     g_signal_connect(root, "motion_notify_event",
                      (GCallback) on_motion_notify, skg);
 
+    /* background */
+    skg->bgd = goo_canvas_rect_new(root, skg->x0, skg->y0, skg->w, skg->h,
+                                   "fill-color-rgba", 0xFFFFFFFF,
+                                   "stroke-color-rgba", 0xFFFFFFFF, NULL);
+
     /* cursor tracking line */
     skg->cursor = goo_canvas_polyline_new_line(root,
                                                skg->x0, skg->y0,
@@ -409,6 +414,11 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
 
         goo_canvas_set_bounds(GOO_CANVAS(GTK_SKY_GLANCE(skg)->canvas), 0, 0,
                               allocation->width, allocation->height);
+
+        /* background */
+        g_object_set(skg->bgd, "x", (gdouble) skg->x0, "y", (gdouble) skg->y0,
+                     "width", (gdouble) skg->w, "height", (gdouble) skg->h,
+                     NULL);
 
         /* update cursor tracking line */
         pts = goo_canvas_points_new(2);
