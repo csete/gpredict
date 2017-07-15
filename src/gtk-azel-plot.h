@@ -29,11 +29,11 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gdk/gdk.h>
+#include <goocanvas.h>
 #include <gtk/gtk.h>
+
 #include "gtk-sat-data.h"
 #include "predict-tools.h"
-#include <goocanvas.h>
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus
@@ -44,7 +44,6 @@ extern          "C" {
 /* number of ticks excluding end points */
 #define AZEL_PLOT_NUM_TICKS 5
 
-
 #define GTK_AZEL_PLOT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_azel_plot_get_type (), GtkAzelPlot)
 #define GTK_AZEL_PLOT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gtk_azel_plot_get_type (), GtkAzelPlotClass)
 #define GTK_IS_AZEL_PLOT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_azel_plot_get_type ())
@@ -53,7 +52,6 @@ extern          "C" {
 
 typedef struct _GtkAzelPlot GtkAzelPlot;
 typedef struct _GtkAzelPlotClass GtkAzelPlotClass;
-
 
 struct _GtkAzelPlot {
     GtkBox          box;
@@ -96,15 +94,13 @@ struct _GtkAzelPlotClass {
     GtkBoxClass     parent_class;
 };
 
-
 GType           gtk_azel_plot_get_type(void);
 GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass);
-
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus
 }
-#endif                          /* __cplusplus */
+#endif
 /* *INDENT-ON* */
 
 #endif /* __GTK_AZEL_PLOT_H__ */
