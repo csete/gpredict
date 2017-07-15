@@ -48,75 +48,47 @@
 
 #define POLV_DEFAULT_SIZE 100
 #define POLV_DEFAULT_MARGIN 25
+#define MARKER_SIZE_HALF 2
 
 /* extra size for line outside 0 deg circle (inside margin) */
 #define POLV_LINE_EXTRA 5
 
-#define MARKER_SIZE_HALF 2
-
-
-static void     gtk_polar_view_class_init(GtkPolarViewClass * class);
-static void     gtk_polar_view_init(GtkPolarView * polview);
-static void     gtk_polar_view_destroy(GtkWidget * widget);
-static void     size_allocate_cb(GtkWidget * widget,
-                                 GtkAllocation * allocation, gpointer data);
 static void     update_sat(gpointer key, gpointer value, gpointer data);
 static void     update_track(gpointer key, gpointer value, gpointer data);
-static void     correct_pole_coor(GtkPolarView * polv, polar_view_pole_t pole,
-                                  gfloat * x, gfloat * y,
-                                  GooCanvasAnchorType * anch);
-static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
-                                 GdkEventMotion * event, gpointer data);
-static void     on_item_created(GooCanvas * canvas, GooCanvasItem * item,
-                                GooCanvasItemModel * model, gpointer data);
-static void     on_canvas_realized(GtkWidget * canvas, gpointer data);
-static gboolean on_button_press(GooCanvasItem * item,
-                                GooCanvasItem * target,
-                                GdkEventButton * event, gpointer data);
-static gboolean on_button_release(GooCanvasItem * item,
-                                  GooCanvasItem * target,
-                                  GdkEventButton * event, gpointer data);
-static void     clear_selection(gpointer key, gpointer val, gpointer data);
-static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv);
-static void     get_canvas_bg_color(GtkPolarView * polv, GdkColor * color);
-static gchar   *los_time_to_str(GtkPolarView * polv, sat_t * sat);
-static void     gtk_polar_view_store_showtracks(GtkPolarView * pv);
-static void     gtk_polar_view_load_showtracks(GtkPolarView * pv);
-static GooCanvasItemModel *create_time_tick(GtkPolarView * pv, gdouble time,
-                                            gfloat x, gfloat y);
-static void     azel_to_xy(GtkPolarView * p, gdouble az, gdouble el,
-                           gfloat * x, gfloat * y);
-static void     xy_to_azel(GtkPolarView * p, gfloat x, gfloat y, gfloat * az,
-                           gfloat * el);
-
 
 static GtkVBoxClass *parent_class = NULL;
 
-GType gtk_polar_view_get_type()
+static void gtk_polar_view_store_showtracks(GtkPolarView * pv)
 {
-    static GType    gtk_polar_view_type = 0;
+    mod_cfg_set_integer_list_boolean(pv->cfgdata,
+                                     pv->showtracks_on,
+                                     MOD_CFG_POLAR_SECTION,
+                                     MOD_CFG_POLAR_SHOWTRACKS);
+    mod_cfg_set_integer_list_boolean(pv->cfgdata,
+                                     pv->showtracks_off,
+                                     MOD_CFG_POLAR_SECTION,
+                                     MOD_CFG_POLAR_HIDETRACKS);
+}
 
-    if (!gtk_polar_view_type)
-    {
-        static const GTypeInfo gtk_polar_view_info = {
-            sizeof(GtkPolarViewClass),
-            NULL,               /* base init */
-            NULL,               /* base finalise */
-            (GClassInitFunc) gtk_polar_view_class_init,
-            NULL,               /* class finalise */
-            NULL,               /* class data */
-            sizeof(GtkPolarView),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_polar_view_init,
-            NULL
-        };
+/** Load the satellites that we should not highlight coverage */
+static void gtk_polar_view_load_showtracks(GtkPolarView * pv)
+{
+    mod_cfg_get_integer_list_boolean(pv->cfgdata,
+                                     MOD_CFG_POLAR_SECTION,
+                                     MOD_CFG_POLAR_HIDETRACKS,
+                                     pv->showtracks_off);
 
-        gtk_polar_view_type = g_type_register_static(GTK_TYPE_VBOX,
-                                                     "GtkPolarView",
-                                                     &gtk_polar_view_info, 0);
-    }
+    mod_cfg_get_integer_list_boolean(pv->cfgdata,
+                                     MOD_CFG_POLAR_SECTION,
+                                     MOD_CFG_POLAR_SHOWTRACKS,
+                                     pv->showtracks_on);
+}
 
-    return gtk_polar_view_type;
+static void gtk_polar_view_destroy(GtkWidget * widget)
+{
+    gtk_polar_view_store_showtracks(GTK_POLAR_VIEW(widget));
+
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 static void gtk_polar_view_class_init(GtkPolarViewClass * class)
@@ -149,116 +121,481 @@ static void gtk_polar_view_init(GtkPolarView * polview)
     polview->resize = FALSE;
 }
 
-static void gtk_polar_view_destroy(GtkWidget * widget)
+GType gtk_polar_view_get_type()
 {
-    gtk_polar_view_store_showtracks(GTK_POLAR_VIEW(widget));
+    static GType    gtk_polar_view_type = 0;
 
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    if (!gtk_polar_view_type)
+    {
+        static const GTypeInfo gtk_polar_view_info = {
+            sizeof(GtkPolarViewClass),
+            NULL,               /* base init */
+            NULL,               /* base finalise */
+            (GClassInitFunc) gtk_polar_view_class_init,
+            NULL,               /* class finalise */
+            NULL,               /* class data */
+            sizeof(GtkPolarView),
+            5,                  /* n_preallocs */
+            (GInstanceInitFunc) gtk_polar_view_init,
+            NULL
+        };
+
+        gtk_polar_view_type = g_type_register_static(GTK_TYPE_VBOX,
+                                                     "GtkPolarView",
+                                                     &gtk_polar_view_info, 0);
+    }
+
+    return gtk_polar_view_type;
 }
 
 /**
- * Create a new GtkPolarView widget.
+ * Manage new size allocation.
  *
- * @param cfgdata The configuration data of the parent module.
- * @param sats Pointer to the hash table containing the asociated satellites.
- * @param qth Pointer to the ground station data.
+ * This function is called when the canvas receives a new size allocation,
+ * e.g. when the container is re-sized. The function re-calculates the graph
+ * dimensions based on the new canvas size.
  */
-GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
-                                   qth_t * qth)
+static void
+size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
 {
-    GtkWidget      *polv;
-    GooCanvasItemModel *root;
-
-    polv = g_object_new(GTK_TYPE_POLAR_VIEW, NULL);
-
-    GTK_POLAR_VIEW(polv)->cfgdata = cfgdata;
-    GTK_POLAR_VIEW(polv)->sats = sats;
-    GTK_POLAR_VIEW(polv)->qth = qth;
+    (void)widget;
+    (void)allocation;
+    (void)data;
+    GTK_POLAR_VIEW(data)->resize = TRUE;
+}
 
 
-    GTK_POLAR_VIEW(polv)->obj = g_hash_table_new_full(g_int_hash,
-                                                      g_int_equal,
-                                                      g_free, NULL);
+/**
+ * Manage canvas realise signals.
+ *
+ * This function is used to re-initialise the graph dimensions when
+ * the graph is realized, i.e. displayed for the first time. This is
+ * necessary in order to compensate for missing "re-allocate" signals for
+ * graphs that have not yet been realised, e.g. when opening several module
+ */
+static void on_canvas_realized(GtkWidget * canvas, gpointer data)
+{
+    GtkAllocation   aloc;
 
-    GTK_POLAR_VIEW(polv)->showtracks_on = g_hash_table_new_full(g_int_hash,
-                                                                g_int_equal,
-                                                                g_free, NULL);
+    gtk_widget_get_allocation(canvas, &aloc);
+    size_allocate_cb(canvas, &aloc, data);
+}
 
-    GTK_POLAR_VIEW(polv)->showtracks_off = g_hash_table_new_full(g_int_hash,
-                                                                 g_int_equal,
-                                                                 g_free, NULL);
+/**
+ * Manage button press events
+ *
+ * This function is called when a mouse button is pressed on a satellite object.
+ * If the pressed button is #3 (right button) the satellite popup menu will be
+ * created and executed.
+ */
+static gboolean on_button_press(GooCanvasItem * item,
+                                GooCanvasItem * target,
+                                GdkEventButton * event, gpointer data)
+{
+    GooCanvasItemModel *model = goo_canvas_item_get_model(item);
+    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
+    gint            catnum =
+        GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), "catnum"));
+    gint           *catpoint = NULL;
+    sat_t          *sat = NULL;
 
-    /* get settings */
-    GTK_POLAR_VIEW(polv)->refresh = mod_cfg_get_int(cfgdata,
-                                                    MOD_CFG_POLAR_SECTION,
-                                                    MOD_CFG_POLAR_REFRESH,
-                                                    SAT_CFG_INT_POLAR_REFRESH);
+    (void)target;
 
-    GTK_POLAR_VIEW(polv)->showtrack = mod_cfg_get_bool(cfgdata,
-                                                       MOD_CFG_POLAR_SECTION,
-                                                       MOD_CFG_POLAR_SHOW_TRACK_AUTO,
-                                                       SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO);
+    switch (event->button)
+    {
+        /* double-left-click */
+    case 1:
+        if (event->type == GDK_2BUTTON_PRESS)
+        {
+            catpoint = g_try_new0(gint, 1);
+            *catpoint = catnum;
 
+            sat = SAT(g_hash_table_lookup(polv->sats, catpoint));
+            if (sat != NULL)
+            {
+                show_sat_info(sat, gtk_widget_get_toplevel(GTK_WIDGET(data)));
+            }
+            else
+            {
+                /* double-clicked on map */
+            }
+        }
 
-    GTK_POLAR_VIEW(polv)->counter = 1;
+        g_free(catpoint);
+        break;
+        /* pop-up menu */
+    case 3:
+        catpoint = g_try_new0(gint, 1);
+        *catpoint = catnum;
 
-    GTK_POLAR_VIEW(polv)->swap = mod_cfg_get_int(cfgdata,
-                                                 MOD_CFG_POLAR_SECTION,
-                                                 MOD_CFG_POLAR_ORIENTATION,
-                                                 SAT_CFG_INT_POLAR_ORIENTATION);
+        sat = SAT(g_hash_table_lookup(polv->sats, catpoint));
 
-    GTK_POLAR_VIEW(polv)->qthinfo = mod_cfg_get_bool(cfgdata,
-                                                     MOD_CFG_POLAR_SECTION,
-                                                     MOD_CFG_POLAR_SHOW_QTH_INFO,
-                                                     SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
+        if (sat != NULL)
+        {
+            gtk_polar_view_popup_exec(sat, polv->qth,
+                                      polv, event,
+                                      gtk_widget_get_toplevel(GTK_WIDGET
+                                                              (polv)));
+        }
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _
+                        ("%s:%d: Could not find satellite (%d) in hash table"),
+                        __FILE__, __LINE__, catnum);
+        }
+        g_free(catpoint);
+        break;
+    default:
+        break;
+    }
 
-    GTK_POLAR_VIEW(polv)->eventinfo = mod_cfg_get_bool(cfgdata,
-                                                       MOD_CFG_POLAR_SECTION,
-                                                       MOD_CFG_POLAR_SHOW_NEXT_EVENT,
-                                                       SAT_CFG_BOOL_POL_SHOW_NEXT_EV);
+    return TRUE;
+}
 
-    GTK_POLAR_VIEW(polv)->cursinfo = mod_cfg_get_bool(cfgdata,
-                                                      MOD_CFG_POLAR_SECTION,
-                                                      MOD_CFG_POLAR_SHOW_CURS_TRACK,
-                                                      SAT_CFG_BOOL_POL_SHOW_CURS_TRACK);
+/**
+ * Clear selection.
+ *
+ * This function is used to clear the old selection when a new satellite
+ * is selected.
+ */
+static void clear_selection(gpointer key, gpointer val, gpointer data)
+{
+    gint           *old = key;
+    gint           *new = data;
+    sat_obj_t      *obj = SAT_OBJ(val);
+    guint32         col;
 
-    GTK_POLAR_VIEW(polv)->extratick = mod_cfg_get_bool(cfgdata,
-                                                       MOD_CFG_POLAR_SECTION,
-                                                       MOD_CFG_POLAR_SHOW_EXTRA_AZ_TICKS,
-                                                       SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
-    gtk_polar_view_load_showtracks(GTK_POLAR_VIEW(polv));
+    if ((*old != *new) && (obj->selected))
+    {
+        obj->selected = FALSE;
 
-    /* create the canvas */
-    GTK_POLAR_VIEW(polv)->canvas = goo_canvas_new();
-    g_object_set(G_OBJECT(GTK_POLAR_VIEW(polv)->canvas), "has-tooltip", TRUE,
-                 NULL);
-    gtk_widget_set_size_request(GTK_POLAR_VIEW(polv)->canvas,
-                                POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
-    goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas), 0, 0,
-                          POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+        col = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
 
+        g_object_set(obj->marker,
+                     "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
+        g_object_set(obj->label,
+                     "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
+    }
+}
 
-    /* connect size-request signal */
-    g_signal_connect(GTK_POLAR_VIEW(polv)->canvas, "size-allocate",
-                     G_CALLBACK(size_allocate_cb), polv);
-    g_signal_connect(GTK_POLAR_VIEW(polv)->canvas, "item_created",
-                     (GCallback) on_item_created, polv);
-    g_signal_connect_after(GTK_POLAR_VIEW(polv)->canvas, "realize",
-                           (GCallback) on_canvas_realized, polv);
+/**
+ * Manage button release events.
+ *
+ * This function is called when the mouse button is released above
+ * a satellite object. It will act as a button click and if the released
+ * button is the left one, the click will correspond to selecting or
+ * deselecting a satellite
+ */
+static gboolean on_button_release(GooCanvasItem * item,
+                                  GooCanvasItem * target,
+                                  GdkEventButton * event, gpointer data)
+{
+    GooCanvasItemModel *model = goo_canvas_item_get_model(item);
+    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
+    gint            catnum =
+        GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), "catnum"));
+    gint           *catpoint = NULL;
+    sat_obj_t      *obj = NULL;
+    guint32         color;
 
-    gtk_widget_show(GTK_POLAR_VIEW(polv)->canvas);
+    (void)target;
 
-    /* Create the canvas model */
-    root = create_canvas_model(GTK_POLAR_VIEW(polv));
-    goo_canvas_set_root_item_model(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas),
-                                   root);
+    catpoint = g_try_new0(gint, 1);
+    *catpoint = catnum;
 
-    g_object_unref(root);
+    switch (event->button)
+    {
+        /* Select / de-select satellite */
+    case 1:
+        obj = SAT_OBJ(g_hash_table_lookup(polv->obj, catpoint));
+        if (obj == NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _
+                        ("%s:%d: Can not find clicked object (%d) in hash table"),
+                        __FILE__, __LINE__, catnum);
+        }
+        else
+        {
+            obj->selected = !obj->selected;
 
-    //gtk_box_pack_start (GTK_BOX (polv), GTK_POLAR_VIEW (polv)->swin, TRUE, TRUE, 0);
-    gtk_container_add(GTK_CONTAINER(polv), GTK_POLAR_VIEW(polv)->canvas);
+            if (obj->selected)
+            {
+                color = mod_cfg_get_int(polv->cfgdata,
+                                        MOD_CFG_POLAR_SECTION,
+                                        MOD_CFG_POLAR_SAT_SEL_COL,
+                                        SAT_CFG_INT_POLAR_SAT_SEL_COL);
+            }
+            else
+            {
+                color = mod_cfg_get_int(polv->cfgdata,
+                                        MOD_CFG_POLAR_SECTION,
+                                        MOD_CFG_POLAR_SAT_COL,
+                                        SAT_CFG_INT_POLAR_SAT_COL);
+                *catpoint = 0;
 
-    return polv;
+                g_object_set(polv->sel, "text", "", NULL);
+            }
+
+            g_object_set(obj->marker,
+                         "fill-color-rgba", color,
+                         "stroke-color-rgba", color, NULL);
+            g_object_set(obj->label,
+                         "fill-color-rgba", color,
+                         "stroke-color-rgba", color, NULL);
+
+            /* clear other selections */
+            g_hash_table_foreach(polv->obj, clear_selection, catpoint);
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    g_free(catpoint);
+
+    return TRUE;
+}
+
+/** Convert Az/El to canvas based XY coordinates. */
+static void azel_to_xy(GtkPolarView * p, gdouble az, gdouble el, gfloat * x,
+                       gfloat * y)
+{
+    gdouble         rel;
+
+    if (el < 0.0)
+    {
+        /* FIXME: generate bug report */
+
+        *x = 0.0;
+        *y = 0.0;
+
+        return;
+    }
+
+    /* convert angles to radians */
+    az = de2ra * az;
+    el = de2ra * el;
+
+    /* radius @ el */
+    rel = p->r - (2 * p->r * el) / M_PI;
+
+    switch (p->swap)
+    {
+
+    case POLAR_VIEW_NWSE:
+        az = 2 * M_PI - az;
+        break;
+
+    case POLAR_VIEW_SENW:
+        az = M_PI - az;
+        break;
+
+    case POLAR_VIEW_SWNE:
+        az = M_PI + az;
+        break;
+
+    default:
+        break;
+    }
+
+    *x = (gfloat) (p->cx + rel * sin(az));
+    *y = (gfloat) (p->cy - rel * cos(az));
+}
+
+/** Convert canvas based coordinates to Az/El. */
+static void xy_to_azel(GtkPolarView * p, gfloat x, gfloat y, gfloat * az,
+                       gfloat * el)
+{
+    gfloat          rel;
+
+    /* distance from center to cursor */
+    rel = p->r - sqrt((x - p->cx) * (x - p->cx) + (y - p->cy) * (y - p->cy));
+
+    /* scale according to p->r = 90 deg */
+    *el = 90.0 * rel / p->r;
+
+    if (x >= p->cx)
+    {
+        /* 1. and 2. quadrant */
+        *az = atan2(x - p->cx, p->cy - y) / de2ra;
+    }
+    else
+    {
+        /* 3 and 4. quadrant */
+        *az = 360 + atan2(x - p->cx, p->cy - y) / de2ra;
+    }
+
+    /* correct for orientation */
+    switch (p->swap)
+    {
+
+    case POLAR_VIEW_NWSE:
+        *az = 360.0 - *az;
+        break;
+
+    case POLAR_VIEW_SENW:
+        if (*az <= 180)
+            *az = 180.0 - *az;
+        else
+            *az = 540.0 - *az;
+        break;
+
+    case POLAR_VIEW_SWNE:
+        if (*az >= 180.0)
+            *az = *az - 180.0;
+        else
+            *az = 180.0 + *az;
+        break;
+
+    default:
+        break;
+    }
+}
+
+/** Manage mouse motion events. */
+static gboolean on_motion_notify(GooCanvasItem * item,
+                                 GooCanvasItem * target,
+                                 GdkEventMotion * event, gpointer data)
+{
+    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
+    gfloat          az, el;
+    gchar          *text;
+
+    (void)item;
+    (void)target;
+
+    if (polv->cursinfo)
+    {
+
+        xy_to_azel(polv, event->x, event->y, &az, &el);
+
+        if (el > 0.0)
+        {
+            /* cursor track */
+            text = g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
+            g_object_set(polv->curs, "text", text, NULL);
+            g_free(text);
+        }
+        else
+        {
+            g_object_set(polv->curs, "text", "", NULL);
+        }
+    }
+
+    return TRUE;
+}
+
+/**
+ * Finish canvas item setup.
+ *
+ * @param canvas 
+ * @param item
+ * @param model 
+ * @param data Pointer to the GtkPolarView object.
+ *
+ * This function is called when a canvas item is created. Its purpose is to connect
+ * the corresponding signals to the created items.
+ */
+static void on_item_created(GooCanvas * canvas,
+                            GooCanvasItem * item,
+                            GooCanvasItemModel * model, gpointer data)
+{
+    (void)canvas;
+
+    if (!goo_canvas_item_model_get_parent(model))
+    {
+        /* root item / canvas */
+        g_signal_connect(item, "motion_notify_event",
+                         (GCallback) on_motion_notify, data);
+    }
+
+    else if (!g_object_get_data(G_OBJECT(item), "skip-signal-connection"))
+    {
+        g_signal_connect(item, "button_press_event",
+                         (GCallback) on_button_press, data);
+        g_signal_connect(item, "button_release_event",
+                         (GCallback) on_button_release, data);
+    }
+}
+
+/**
+ * Transform pole coordinates.
+ *
+ * This function transforms the pols coordinates (x,y) taking into account
+ * the orientation of the polar plot.
+ */
+static void
+correct_pole_coor(GtkPolarView * polv,
+                  polar_view_pole_t pole,
+                  gfloat * x, gfloat * y, GooCanvasAnchorType * anch)
+{
+
+    switch (pole)
+    {
+    case POLAR_VIEW_POLE_N:
+        if ((polv->swap == POLAR_VIEW_SENW) || (polv->swap == POLAR_VIEW_SWNE))
+        {
+            /* North and South are swapped */
+            *y = *y + POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_NORTH;
+        }
+        else
+        {
+            *y = *y - POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_SOUTH;
+        }
+
+        break;
+
+    case POLAR_VIEW_POLE_E:
+        if ((polv->swap == POLAR_VIEW_NWSE) || (polv->swap == POLAR_VIEW_SWNE))
+        {
+            /* East and West are swapped */
+            *x = *x - POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_EAST;
+        }
+        else
+        {
+            *x = *x + POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_WEST;
+        }
+        break;
+
+    case POLAR_VIEW_POLE_S:
+        if ((polv->swap == POLAR_VIEW_SENW) || (polv->swap == POLAR_VIEW_SWNE))
+        {
+            /* North and South are swapped */
+            *y = *y - POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_SOUTH;
+        }
+        else
+        {
+            *y = *y + POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_NORTH;
+        }
+        break;
+
+    case POLAR_VIEW_POLE_W:
+        if ((polv->swap == POLAR_VIEW_NWSE) || (polv->swap == POLAR_VIEW_SWNE))
+        {
+            /* East and West are swapped */
+            *x = *x + POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_WEST;
+        }
+        else
+        {
+            *x = *x - POLV_LINE_EXTRA;
+            *anch = GOO_CANVAS_ANCHOR_EAST;
+        }
+        break;
+
+    default:
+        /* FIXME: bug */
+        break;
+    }
 }
 
 static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
@@ -416,96 +753,108 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
 }
 
 /**
- * Transform pole coordinates.
+ * Create a new GtkPolarView widget.
  *
- * This function transforms the pols coordinates (x,y) taking into account
- * the orientation of the polar plot.
+ * @param cfgdata The configuration data of the parent module.
+ * @param sats Pointer to the hash table containing the asociated satellites.
+ * @param qth Pointer to the ground station data.
  */
-static void
-correct_pole_coor(GtkPolarView * polv,
-                  polar_view_pole_t pole,
-                  gfloat * x, gfloat * y, GooCanvasAnchorType * anch)
+GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
+                                   qth_t * qth)
 {
+    GtkWidget      *polv;
+    GooCanvasItemModel *root;
 
-    switch (pole)
-    {
-    case POLAR_VIEW_POLE_N:
-        if ((polv->swap == POLAR_VIEW_SENW) || (polv->swap == POLAR_VIEW_SWNE))
-        {
-            /* North and South are swapped */
-            *y = *y + POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_NORTH;
-        }
-        else
-        {
-            *y = *y - POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_SOUTH;
-        }
+    polv = g_object_new(GTK_TYPE_POLAR_VIEW, NULL);
 
-        break;
+    GTK_POLAR_VIEW(polv)->cfgdata = cfgdata;
+    GTK_POLAR_VIEW(polv)->sats = sats;
+    GTK_POLAR_VIEW(polv)->qth = qth;
 
-    case POLAR_VIEW_POLE_E:
-        if ((polv->swap == POLAR_VIEW_NWSE) || (polv->swap == POLAR_VIEW_SWNE))
-        {
-            /* East and West are swapped */
-            *x = *x - POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_EAST;
-        }
-        else
-        {
-            *x = *x + POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_WEST;
-        }
-        break;
 
-    case POLAR_VIEW_POLE_S:
-        if ((polv->swap == POLAR_VIEW_SENW) || (polv->swap == POLAR_VIEW_SWNE))
-        {
-            /* North and South are swapped */
-            *y = *y - POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_SOUTH;
-        }
-        else
-        {
-            *y = *y + POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_NORTH;
-        }
-        break;
+    GTK_POLAR_VIEW(polv)->obj = g_hash_table_new_full(g_int_hash,
+                                                      g_int_equal,
+                                                      g_free, NULL);
 
-    case POLAR_VIEW_POLE_W:
-        if ((polv->swap == POLAR_VIEW_NWSE) || (polv->swap == POLAR_VIEW_SWNE))
-        {
-            /* East and West are swapped */
-            *x = *x + POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_WEST;
-        }
-        else
-        {
-            *x = *x - POLV_LINE_EXTRA;
-            *anch = GOO_CANVAS_ANCHOR_EAST;
-        }
-        break;
+    GTK_POLAR_VIEW(polv)->showtracks_on = g_hash_table_new_full(g_int_hash,
+                                                                g_int_equal,
+                                                                g_free, NULL);
 
-    default:
-        /* FIXME: bug */
-        break;
-    }
-}
+    GTK_POLAR_VIEW(polv)->showtracks_off = g_hash_table_new_full(g_int_hash,
+                                                                 g_int_equal,
+                                                                 g_free, NULL);
 
-/**
- * Manage new size allocation.
- *
- * This function is called when the canvas receives a new size allocation,
- * e.g. when the container is re-sized. The function re-calculates the graph
- * dimensions based on the new canvas size.
- */
-static void
-size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
-{
-    (void)widget;
-    (void)allocation;
-    (void)data;
-    GTK_POLAR_VIEW(data)->resize = TRUE;
+    /* get settings */
+    GTK_POLAR_VIEW(polv)->refresh = mod_cfg_get_int(cfgdata,
+                                                    MOD_CFG_POLAR_SECTION,
+                                                    MOD_CFG_POLAR_REFRESH,
+                                                    SAT_CFG_INT_POLAR_REFRESH);
+
+    GTK_POLAR_VIEW(polv)->showtrack = mod_cfg_get_bool(cfgdata,
+                                                       MOD_CFG_POLAR_SECTION,
+                                                       MOD_CFG_POLAR_SHOW_TRACK_AUTO,
+                                                       SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO);
+
+
+    GTK_POLAR_VIEW(polv)->counter = 1;
+
+    GTK_POLAR_VIEW(polv)->swap = mod_cfg_get_int(cfgdata,
+                                                 MOD_CFG_POLAR_SECTION,
+                                                 MOD_CFG_POLAR_ORIENTATION,
+                                                 SAT_CFG_INT_POLAR_ORIENTATION);
+
+    GTK_POLAR_VIEW(polv)->qthinfo = mod_cfg_get_bool(cfgdata,
+                                                     MOD_CFG_POLAR_SECTION,
+                                                     MOD_CFG_POLAR_SHOW_QTH_INFO,
+                                                     SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
+
+    GTK_POLAR_VIEW(polv)->eventinfo = mod_cfg_get_bool(cfgdata,
+                                                       MOD_CFG_POLAR_SECTION,
+                                                       MOD_CFG_POLAR_SHOW_NEXT_EVENT,
+                                                       SAT_CFG_BOOL_POL_SHOW_NEXT_EV);
+
+    GTK_POLAR_VIEW(polv)->cursinfo = mod_cfg_get_bool(cfgdata,
+                                                      MOD_CFG_POLAR_SECTION,
+                                                      MOD_CFG_POLAR_SHOW_CURS_TRACK,
+                                                      SAT_CFG_BOOL_POL_SHOW_CURS_TRACK);
+
+    GTK_POLAR_VIEW(polv)->extratick = mod_cfg_get_bool(cfgdata,
+                                                       MOD_CFG_POLAR_SECTION,
+                                                       MOD_CFG_POLAR_SHOW_EXTRA_AZ_TICKS,
+                                                       SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
+    gtk_polar_view_load_showtracks(GTK_POLAR_VIEW(polv));
+
+    /* create the canvas */
+    GTK_POLAR_VIEW(polv)->canvas = goo_canvas_new();
+    g_object_set(G_OBJECT(GTK_POLAR_VIEW(polv)->canvas), "has-tooltip", TRUE,
+                 NULL);
+    gtk_widget_set_size_request(GTK_POLAR_VIEW(polv)->canvas,
+                                POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas), 0, 0,
+                          POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+
+
+    /* connect size-request signal */
+    g_signal_connect(GTK_POLAR_VIEW(polv)->canvas, "size-allocate",
+                     G_CALLBACK(size_allocate_cb), polv);
+    g_signal_connect(GTK_POLAR_VIEW(polv)->canvas, "item_created",
+                     (GCallback) on_item_created, polv);
+    g_signal_connect_after(GTK_POLAR_VIEW(polv)->canvas, "realize",
+                           (GCallback) on_canvas_realized, polv);
+
+    gtk_widget_show(GTK_POLAR_VIEW(polv)->canvas);
+
+    /* Create the canvas model */
+    root = create_canvas_model(GTK_POLAR_VIEW(polv));
+    goo_canvas_set_root_item_model(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas),
+                                   root);
+
+    g_object_unref(root);
+
+    //gtk_box_pack_start (GTK_BOX (polv), GTK_POLAR_VIEW (polv)->swin, TRUE, TRUE, 0);
+    gtk_container_add(GTK_CONTAINER(polv), GTK_POLAR_VIEW(polv)->canvas);
+
+    return polv;
 }
 
 static void update_polv_size(GtkPolarView * polv)
@@ -616,22 +965,6 @@ static void update_polv_size(GtkPolarView * polv)
     }
 }
 
-/**
- * Manage canvas realise signals.
- *
- * This function is used to re-initialise the graph dimensions when
- * the graph is realized, i.e. displayed for the first time. This is
- * necessary in order to compensate for missing "re-allocate" signals for
- * graphs that have not yet been realised, e.g. when opening several module
- */
-static void on_canvas_realized(GtkWidget * canvas, gpointer data)
-{
-    GtkAllocation   aloc;
-
-    gtk_widget_get_allocation(canvas, &aloc);
-    size_allocate_cb(canvas, &aloc, data);
-}
-
 void gtk_polar_view_update(GtkWidget * widget)
 {
     GtkPolarView   *polv = GTK_POLAR_VIEW(widget);
@@ -723,6 +1056,39 @@ void gtk_polar_view_update(GtkWidget * widget)
             g_object_set(polv->next, "text", "", NULL);
         }
     }
+}
+
+/** Convert LOS timestamp to human readable countdown string */
+static gchar   *los_time_to_str(GtkPolarView * polv, sat_t * sat)
+{
+    guint           h, m, s;
+    gdouble         number, now;
+    gchar          *text = NULL;
+
+    now = polv->tstamp;         //get_current_daynum ();
+    number = sat->los - now;
+
+    /* convert julian date to seconds */
+    s = (guint) (number * 86400);
+
+    /* extract hours */
+    h = (guint) floor(s / 3600);
+    s -= 3600 * h;
+
+    /* extract minutes */
+    m = (guint) floor(s / 60);
+    s -= 60 * m;
+
+    if (h > 0)
+    {
+        text = g_strdup_printf(_("LOS in %02d:%02d:%02d"), h, m, s);
+    }
+    else
+    {
+        text = g_strdup_printf(_("LOS in %02d:%02d"), m, s);
+    }
+
+    return text;
 }
 
 static void update_sat(gpointer key, gpointer value, gpointer data)
@@ -1278,386 +1644,6 @@ void gtk_polar_view_delete_track(GtkPolarView * pv, sat_obj_t * obj,
     }
 }
 
-/** Convert Az/El to canvas based XY coordinates. */
-static void
-azel_to_xy(GtkPolarView * p, gdouble az, gdouble el, gfloat * x, gfloat * y)
-{
-    gdouble         rel;
-
-    if (el < 0.0)
-    {
-        /* FIXME: generate bug report */
-
-        *x = 0.0;
-        *y = 0.0;
-
-        return;
-    }
-
-    /* convert angles to radians */
-    az = de2ra * az;
-    el = de2ra * el;
-
-    /* radius @ el */
-    rel = p->r - (2 * p->r * el) / M_PI;
-
-    switch (p->swap)
-    {
-
-    case POLAR_VIEW_NWSE:
-        az = 2 * M_PI - az;
-        break;
-
-    case POLAR_VIEW_SENW:
-        az = M_PI - az;
-        break;
-
-    case POLAR_VIEW_SWNE:
-        az = M_PI + az;
-        break;
-
-    default:
-        break;
-    }
-
-    *x = (gfloat) (p->cx + rel * sin(az));
-    *y = (gfloat) (p->cy - rel * cos(az));
-}
-
-/** Convert canvas based coordinates to Az/El. */
-static void xy_to_azel(GtkPolarView * p, gfloat x, gfloat y, gfloat * az,
-                       gfloat * el)
-{
-    gfloat          rel;
-
-    /* distance from center to cursor */
-    rel = p->r - sqrt((x - p->cx) * (x - p->cx) + (y - p->cy) * (y - p->cy));
-
-    /* scale according to p->r = 90 deg */
-    *el = 90.0 * rel / p->r;
-
-    if (x >= p->cx)
-    {
-        /* 1. and 2. quadrant */
-        *az = atan2(x - p->cx, p->cy - y) / de2ra;
-    }
-    else
-    {
-        /* 3 and 4. quadrant */
-        *az = 360 + atan2(x - p->cx, p->cy - y) / de2ra;
-    }
-
-    /* correct for orientation */
-    switch (p->swap)
-    {
-
-    case POLAR_VIEW_NWSE:
-        *az = 360.0 - *az;
-        break;
-
-    case POLAR_VIEW_SENW:
-        if (*az <= 180)
-            *az = 180.0 - *az;
-        else
-            *az = 540.0 - *az;
-        break;
-
-    case POLAR_VIEW_SWNE:
-        if (*az >= 180.0)
-            *az = *az - 180.0;
-        else
-            *az = 180.0 + *az;
-        break;
-
-    default:
-        break;
-    }
-}
-
-/** Manage mouse motion events. */
-static gboolean on_motion_notify(GooCanvasItem * item,
-                                 GooCanvasItem * target,
-                                 GdkEventMotion * event, gpointer data)
-{
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    gfloat          az, el;
-    gchar          *text;
-
-    (void)item;
-    (void)target;
-
-    if (polv->cursinfo)
-    {
-
-        xy_to_azel(polv, event->x, event->y, &az, &el);
-
-        if (el > 0.0)
-        {
-            /* cursor track */
-            text = g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
-            g_object_set(polv->curs, "text", text, NULL);
-            g_free(text);
-        }
-        else
-        {
-            g_object_set(polv->curs, "text", "", NULL);
-        }
-    }
-
-    return TRUE;
-}
-
-/**
- * Finish canvas item setup.
- *
- * @param canvas 
- * @param item
- * @param model 
- * @param data Pointer to the GtkPolarView object.
- *
- * This function is called when a canvas item is created. Its purpose is to connect
- * the corresponding signals to the created items.
- */
-static void on_item_created(GooCanvas * canvas,
-                            GooCanvasItem * item,
-                            GooCanvasItemModel * model, gpointer data)
-{
-    (void)canvas;
-
-    if (!goo_canvas_item_model_get_parent(model))
-    {
-        /* root item / canvas */
-        g_signal_connect(item, "motion_notify_event",
-                         (GCallback) on_motion_notify, data);
-    }
-
-    else if (!g_object_get_data(G_OBJECT(item), "skip-signal-connection"))
-    {
-        g_signal_connect(item, "button_press_event",
-                         (GCallback) on_button_press, data);
-        g_signal_connect(item, "button_release_event",
-                         (GCallback) on_button_release, data);
-    }
-}
-
-/**
- * Manage button press events
- *
- * This function is called when a mouse button is pressed on a satellite object.
- * If the pressed button is #3 (right button) the satellite popup menu will be
- * created and executed.
- */
-static gboolean on_button_press(GooCanvasItem * item,
-                                GooCanvasItem * target,
-                                GdkEventButton * event, gpointer data)
-{
-    GooCanvasItemModel *model = goo_canvas_item_get_model(item);
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    gint            catnum =
-        GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), "catnum"));
-    gint           *catpoint = NULL;
-    sat_t          *sat = NULL;
-
-    (void)target;
-
-    switch (event->button)
-    {
-        /* double-left-click */
-    case 1:
-        if (event->type == GDK_2BUTTON_PRESS)
-        {
-            catpoint = g_try_new0(gint, 1);
-            *catpoint = catnum;
-
-            sat = SAT(g_hash_table_lookup(polv->sats, catpoint));
-            if (sat != NULL)
-            {
-                show_sat_info(sat, gtk_widget_get_toplevel(GTK_WIDGET(data)));
-            }
-            else
-            {
-                /* double-clicked on map */
-            }
-        }
-
-        g_free(catpoint);
-        break;
-        /* pop-up menu */
-    case 3:
-        catpoint = g_try_new0(gint, 1);
-        *catpoint = catnum;
-
-        sat = SAT(g_hash_table_lookup(polv->sats, catpoint));
-
-        if (sat != NULL)
-        {
-            gtk_polar_view_popup_exec(sat, polv->qth,
-                                      polv, event,
-                                      gtk_widget_get_toplevel(GTK_WIDGET
-                                                              (polv)));
-        }
-        else
-        {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _
-                        ("%s:%d: Could not find satellite (%d) in hash table"),
-                        __FILE__, __LINE__, catnum);
-        }
-        g_free(catpoint);
-        break;
-    default:
-        break;
-    }
-
-    return TRUE;
-}
-
-/**
- * Manage button release events.
- *
- * This function is called when the mouse button is released above
- * a satellite object. It will act as a button click and if the released
- * button is the left one, the click will correspond to selecting or
- * deselecting a satellite
- */
-static gboolean on_button_release(GooCanvasItem * item,
-                                  GooCanvasItem * target,
-                                  GdkEventButton * event, gpointer data)
-{
-    GooCanvasItemModel *model = goo_canvas_item_get_model(item);
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    gint            catnum =
-        GPOINTER_TO_INT(g_object_get_data(G_OBJECT(model), "catnum"));
-    gint           *catpoint = NULL;
-    sat_obj_t      *obj = NULL;
-    guint32         color;
-
-    (void)target;
-
-    catpoint = g_try_new0(gint, 1);
-    *catpoint = catnum;
-
-    switch (event->button)
-    {
-        /* Select / de-select satellite */
-    case 1:
-        obj = SAT_OBJ(g_hash_table_lookup(polv->obj, catpoint));
-        if (obj == NULL)
-        {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _
-                        ("%s:%d: Can not find clicked object (%d) in hash table"),
-                        __FILE__, __LINE__, catnum);
-        }
-        else
-        {
-            obj->selected = !obj->selected;
-
-            if (obj->selected)
-            {
-                color = mod_cfg_get_int(polv->cfgdata,
-                                        MOD_CFG_POLAR_SECTION,
-                                        MOD_CFG_POLAR_SAT_SEL_COL,
-                                        SAT_CFG_INT_POLAR_SAT_SEL_COL);
-            }
-            else
-            {
-                color = mod_cfg_get_int(polv->cfgdata,
-                                        MOD_CFG_POLAR_SECTION,
-                                        MOD_CFG_POLAR_SAT_COL,
-                                        SAT_CFG_INT_POLAR_SAT_COL);
-                *catpoint = 0;
-
-                g_object_set(polv->sel, "text", "", NULL);
-            }
-
-            g_object_set(obj->marker,
-                         "fill-color-rgba", color,
-                         "stroke-color-rgba", color, NULL);
-            g_object_set(obj->label,
-                         "fill-color-rgba", color,
-                         "stroke-color-rgba", color, NULL);
-
-            /* clear other selections */
-            g_hash_table_foreach(polv->obj, clear_selection, catpoint);
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    g_free(catpoint);
-
-    return TRUE;
-}
-
-/**
- * Clear selection.
- *
- * This function is used to clear the old selection when a new satellite
- * is selected.
- */
-static void clear_selection(gpointer key, gpointer val, gpointer data)
-{
-    gint           *old = key;
-    gint           *new = data;
-    sat_obj_t      *obj = SAT_OBJ(val);
-    guint32         col;
-
-    if ((*old != *new) && (obj->selected))
-    {
-        obj->selected = FALSE;
-
-        col = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
-
-        g_object_set(obj->marker,
-                     "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
-        g_object_set(obj->label,
-                     "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
-    }
-}
-
-void gtk_polar_view_reconf(GtkWidget * widget, GKeyFile * cfgdat)
-{
-    (void)cfgdat;
-    (void)widget;
-}
-
-/**
- * Retrieve background color.
- *
- * This function retrieves the canvas background color, which is in 0xRRGGBBAA
- * format and converts it to GdkColor style. Besides extractibg the RGB components
- * we also need to scale from [0;255] to [0;65535], i.e. multiply by 257.
- */
-static void get_canvas_bg_color(GtkPolarView * polv, GdkColor * color)
-{
-    guint32         col, tmp;
-    guint16         r, g, b;
-
-    col = mod_cfg_get_int(polv->cfgdata,
-                          MOD_CFG_POLAR_SECTION,
-                          MOD_CFG_POLAR_BGD_COL, SAT_CFG_INT_POLAR_BGD_COL);
-
-    /* red */
-    tmp = col & 0xFF000000;
-    r = (guint16) (tmp >> 24);
-
-    /* green */
-    tmp = col & 0x00FF0000;
-    g = (guint16) (tmp >> 16);
-
-    /* blue */
-    tmp = col & 0x0000FF00;
-    b = (guint16) (tmp >> 8);
-
-    /* store colours */
-    color->red = 257 * r;
-    color->green = 257 * g;
-    color->blue = 257 * b;
-}
-
 /** Reload reference to satellites (e.g. after TLE update). */
 void gtk_polar_view_reload_sats(GtkWidget * polv, GHashTable * sats)
 {
@@ -1707,63 +1693,4 @@ void gtk_polar_view_select_sat(GtkWidget * widget, gint catnum)
     g_hash_table_foreach(polv->obj, clear_selection, catpoint);
 
     g_free(catpoint);
-}
-
-/** Convert LOS timestamp to human readable countdown string */
-static gchar   *los_time_to_str(GtkPolarView * polv, sat_t * sat)
-{
-    guint           h, m, s;
-    gdouble         number, now;
-    gchar          *text = NULL;
-
-    now = polv->tstamp;         //get_current_daynum ();
-    number = sat->los - now;
-
-    /* convert julian date to seconds */
-    s = (guint) (number * 86400);
-
-    /* extract hours */
-    h = (guint) floor(s / 3600);
-    s -= 3600 * h;
-
-    /* extract minutes */
-    m = (guint) floor(s / 60);
-    s -= 60 * m;
-
-    if (h > 0)
-    {
-        text = g_strdup_printf(_("LOS in %02d:%02d:%02d"), h, m, s);
-    }
-    else
-    {
-        text = g_strdup_printf(_("LOS in %02d:%02d"), m, s);
-    }
-
-    return text;
-}
-
-static void gtk_polar_view_store_showtracks(GtkPolarView * pv)
-{
-    mod_cfg_set_integer_list_boolean(pv->cfgdata,
-                                     pv->showtracks_on,
-                                     MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_SHOWTRACKS);
-    mod_cfg_set_integer_list_boolean(pv->cfgdata,
-                                     pv->showtracks_off,
-                                     MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_HIDETRACKS);
-}
-
-/** Load the satellites that we should not highlight coverage */
-static void gtk_polar_view_load_showtracks(GtkPolarView * pv)
-{
-    mod_cfg_get_integer_list_boolean(pv->cfgdata,
-                                     MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_HIDETRACKS,
-                                     pv->showtracks_off);
-
-    mod_cfg_get_integer_list_boolean(pv->cfgdata,
-                                     MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_SHOWTRACKS,
-                                     pv->showtracks_on);
 }
