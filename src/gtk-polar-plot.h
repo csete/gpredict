@@ -81,6 +81,7 @@ struct _GtkPolarPlot {
     GooCanvasItemModel *curs;   /*!< cursor tracking text */
 
     pass_t         *pass;
+    GooCanvasItemModel *bgd;    /*!< Background */
     GooCanvasItemModel *track;  /*!< Sky track. */
     GooCanvasItemModel *target; /*!< Target object marker */
     GooCanvasItemModel *ctrl;   /*!< Position marker for the controller */

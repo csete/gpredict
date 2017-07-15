@@ -551,6 +551,12 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarPlot * polv)
 
     root = goo_canvas_group_model_new(NULL, NULL);
 
+    polv->bgd = goo_canvas_rect_model_new(root, 0.0, 0.0,
+                                          POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE,
+                                          "fill-color-rgba", 0xFFFFFFFF,
+                                          "stroke-color-rgba", 0xFFFFFFFF,
+                                          NULL);
+
     /* graph dimensions */
     polv->size = POLV_DEFAULT_SIZE;
     polv->r = (polv->size / 2) - POLV_DEFAULT_MARGIN;
@@ -764,6 +770,10 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
 
         goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_PLOT(polv)->canvas), 0, 0,
                               allocation->width, allocation->height);
+
+        /* background item */
+        g_object_set(polv->bgd, "width", (gdouble) allocation->width,
+                     "height", (gdouble) allocation->height, NULL);
 
         /* update coordinate system */
         g_object_set(polv->C00,
