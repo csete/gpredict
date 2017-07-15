@@ -65,7 +65,7 @@
 #define SKG_PIX_PER_SAT         10
 #define SKG_MARGIN              15
 #define SKG_FOOTER              50
-
+#define SKG_CURSOR_WIDTH        0.5
 
 static void     gtk_sky_glance_class_init(GtkSkyGlanceClass * class);
 static void     gtk_sky_glance_init(GtkSkyGlance * skg);
@@ -294,7 +294,8 @@ static void create_canvas_items(GtkSkyGlance * skg)
                                                skg->x0, skg->y0,
                                                skg->x0, skg->h,
                                                "stroke-color-rgba", 0x000000AF,
-                                               "line-width", 0.5, NULL);
+                                               "line-width", SKG_CURSOR_WIDTH,
+                                               NULL);
 
     /* time label */
     skg->timel = goo_canvas_text_new(root, "--:--",
@@ -404,14 +405,11 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
     {
         /* get graph dimensions */
         skg = GTK_SKY_GLANCE(data);
-
         skg->w = allocation->width;
         skg->h = allocation->height - SKG_FOOTER;
         skg->x0 = 0;
         skg->y0 = 0;
-
         skg->pps = (skg->h - SKG_MARGIN) / skg->numsat - SKG_MARGIN;
-
         goo_canvas_set_bounds(GOO_CANVAS(GTK_SKY_GLANCE(skg)->canvas), 0, 0,
                               allocation->width, allocation->height);
 
@@ -421,13 +419,8 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
                      NULL);
 
         /* update cursor tracking line */
-        pts = goo_canvas_points_new(2);
-        pts->coords[0] = skg->x0;
-        pts->coords[1] = skg->y0;
-        pts->coords[2] = skg->x0;
-        pts->coords[3] = skg->h;
-        g_object_set(skg->cursor, "points", pts, NULL);
-        goo_canvas_points_unref(pts);
+        g_object_set(skg->cursor, "x", (gdouble) skg->x0, "y", (gdouble) skg->y0,
+                     "width", SKG_CURSOR_WIDTH, "height", (gdouble) skg->h, NULL);
 
         /* time label */
         g_object_set(skg->timel, "x", (gdouble) skg->x0 + 5, NULL);
@@ -469,10 +462,8 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
             pts->coords[1] = skg->h;
             pts->coords[2] = xh;
             pts->coords[3] = skg->h + 10;
-
             obj = g_slist_nth_data(skg->majors, i);
             g_object_set(obj, "points", pts, NULL);
-
             goo_canvas_points_unref(pts);
 
             obj = g_slist_nth_data(skg->labels, i);
@@ -488,10 +479,8 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
             pts->coords[1] = skg->h;
             pts->coords[2] = xm;
             pts->coords[3] = skg->h + 5;
-
             obj = g_slist_nth_data(skg->minors, i);
             g_object_set(obj, "points", pts, NULL);
-
             goo_canvas_points_unref(pts);
 
             th += 0.04167;
@@ -559,7 +548,6 @@ static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
                                  GdkEventMotion * event, gpointer data)
 {
     GtkSkyGlance   *skg = GTK_SKY_GLANCE(data);
-    GooCanvasPoints *pts;
     gdouble         t;
     gchar           buff[6];
 
@@ -567,13 +555,8 @@ static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
     (void)target;
 
     /* update cursor tracking line and time label */
-    pts = goo_canvas_points_new(2);
-    pts->coords[0] = event->x;
-    pts->coords[1] = skg->y0;
-    pts->coords[2] = event->x;
-    pts->coords[3] = skg->h;
-    g_object_set(skg->cursor, "points", pts, NULL);
-    goo_canvas_points_unref(pts);
+    g_object_set(skg->cursor, "x", (gdouble) event->x, "y", (gdouble) skg->y0,
+                 "width", SKG_CURSOR_WIDTH, "height", (gdouble) skg->h, NULL);
 
     /* get time corresponding to x */
     t = x2t(skg, event->x);
