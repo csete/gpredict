@@ -168,7 +168,6 @@ GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
 {
     GtkWidget      *polv;
     GooCanvasItemModel *root;
-    GdkColor        bg_color = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
 
     polv = g_object_new(GTK_TYPE_POLAR_VIEW, NULL);
 
@@ -233,9 +232,6 @@ GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
     GTK_POLAR_VIEW(polv)->canvas = goo_canvas_new();
     g_object_set(G_OBJECT(GTK_POLAR_VIEW(polv)->canvas), "has-tooltip", TRUE,
                  NULL);
-    get_canvas_bg_color(GTK_POLAR_VIEW(polv), &bg_color);
-    gtk_widget_modify_base(GTK_POLAR_VIEW(polv)->canvas, GTK_STATE_NORMAL,
-                           &bg_color);
     gtk_widget_set_size_request(GTK_POLAR_VIEW(polv)->canvas,
                                 POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
     goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas), 0, 0,
@@ -284,6 +280,11 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                           MOD_CFG_POLAR_SECTION,
                           MOD_CFG_POLAR_AXIS_COL, SAT_CFG_INT_POLAR_AXIS_COL);
 
+    polv->bgd = goo_canvas_rect_model_new(root, 0.0, 0.0,
+                                          POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE,
+                                          "fill-color-rgba", 0xFFFFFFFF,
+                                          "stroke-color-rgba", 0xFFFFFFFF,
+                                          NULL);
 
     /* Add elevation circles at 0, 30 and 60 deg */
     polv->C00 = goo_canvas_ellipse_model_new(root,
@@ -529,6 +530,9 @@ static void update_polv_size(GtkPolarView * polv)
         goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas), 0, 0,
                               allocation.width, allocation.height);
 
+        /* background item */
+        g_object_set(polv->bgd, "width", (gdouble) allocation.width,
+                     "height", (gdouble) allocation.height, NULL);
 
         /* update coordinate system */
         g_object_set(polv->C00,

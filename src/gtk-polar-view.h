@@ -94,6 +94,7 @@ struct _GtkPolarView {
 
     GtkWidget      *canvas;     /*!< The canvas widget */
 
+    GooCanvasItemModel *bgd;
     GooCanvasItemModel *C00, *C30, *C60;        /*!< 0, 30 and 60 deg elevation circles */
     GooCanvasItemModel *hl, *vl;        /*!< horizontal and vertical lines */
     GooCanvasItemModel *N, *S, *E, *W;  /*!< North, South, East and West labels */
