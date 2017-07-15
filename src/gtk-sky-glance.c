@@ -67,64 +67,7 @@
 #define SKG_FOOTER              50
 #define SKG_CURSOR_WIDTH        0.5
 
-static void     gtk_sky_glance_class_init(GtkSkyGlanceClass * class);
-static void     gtk_sky_glance_init(GtkSkyGlance * skg);
-static void     gtk_sky_glance_destroy(GtkWidget * widget);
-static void     size_allocate_cb(GtkWidget * widget,
-                                 GtkAllocation * allocation, gpointer data);
-static gboolean on_motion_notify(GooCanvasItem * item,
-                                 GooCanvasItem * target,
-                                 GdkEventMotion * event, gpointer data);
-static void     on_canvas_realized(GtkWidget * canvas, gpointer data);
-
-static gboolean on_button_release(GooCanvasItem * item,
-                                  GooCanvasItem * target,
-                                  GdkEventButton * event, gpointer data);
-
-static void     create_canvas_items(GtkSkyGlance * skg);
-static void     create_sat(gpointer key, gpointer value, gpointer data);
-
-static gdouble  t2x(GtkSkyGlance * skg, gdouble t);
-static gdouble  x2t(GtkSkyGlance * skg, gdouble x);
-
 static GtkVBoxClass *parent_class = NULL;
-
-
-GType gtk_sky_glance_get_type()
-{
-    static GType    gtk_sky_glance_type = 0;
-
-    if (!gtk_sky_glance_type)
-    {
-        static const GTypeInfo gtk_sky_glance_info = {
-            sizeof(GtkSkyGlanceClass),
-            NULL,               /* base init */
-            NULL,               /* base finalise */
-            (GClassInitFunc) gtk_sky_glance_class_init,
-            NULL,               /* class finalise */
-            NULL,               /* class data */
-            sizeof(GtkSkyGlance),
-            1,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_sky_glance_init,
-            NULL
-        };
-
-        gtk_sky_glance_type = g_type_register_static(GTK_TYPE_BOX,
-                                                     "GtkSkyGlance",
-                                                     &gtk_sky_glance_info, 0);
-    }
-
-    return gtk_sky_glance_type;
-}
-
-static void gtk_sky_glance_class_init(GtkSkyGlanceClass * class)
-{
-    GtkWidgetClass *widget_class;
-
-    widget_class = (GtkWidgetClass *) class;
-    widget_class->destroy = gtk_sky_glance_destroy;
-    parent_class = g_type_class_peek_parent(class);
-}
 
 static void gtk_sky_glance_init(GtkSkyGlance * skg)
 {
@@ -203,182 +146,78 @@ static void gtk_sky_glance_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-/**
- * Create a new GtkSkyGlance widget.
- *
- * @param sats Pointer to the hash table containing the asociated satellites.
- * @param qth Pointer to the ground station data.
- * @param ts The t0 for the timeline or 0 to use the current date and time.
- */
-GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
+
+static void gtk_sky_glance_class_init(GtkSkyGlanceClass * class)
 {
-    GtkSkyGlance   *skg;
-    guint           number;
+    GtkWidgetClass *widget_class;
 
-    /* check that we have at least one satellite */
-    number = g_hash_table_size(sats);
-    if (number == 0)
-        /* no satellites */
-        return gtk_label_new(_("This module has no satellites!"));
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sky_glance_destroy;
+    parent_class = g_type_class_peek_parent(class);
+}
 
-    skg = GTK_SKY_GLANCE(g_object_new(GTK_TYPE_SKY_GLANCE, NULL));
+GType gtk_sky_glance_get_type()
+{
+    static GType    gtk_sky_glance_type = 0;
 
-    /* FIXME? */
-    skg->sats = sats;
-    skg->qth = qth;
+    if (!gtk_sky_glance_type)
+    {
+        static const GTypeInfo gtk_sky_glance_info = {
+            sizeof(GtkSkyGlanceClass),
+            NULL,               /* base init */
+            NULL,               /* base finalise */
+            (GClassInitFunc) gtk_sky_glance_class_init,
+            NULL,               /* class finalise */
+            NULL,               /* class data */
+            sizeof(GtkSkyGlance),
+            1,                  /* n_preallocs */
+            (GInstanceInitFunc) gtk_sky_glance_init,
+            NULL
+        };
 
-    /* get settings */
-    skg->numsat = g_hash_table_size(sats);
+        gtk_sky_glance_type = g_type_register_static(GTK_TYPE_BOX,
+                                                     "GtkSkyGlance",
+                                                     &gtk_sky_glance_info, 0);
+    }
 
-    /* if ts = 0 use current time */
-    skg->ts = ts > 0.0 ? ts : get_current_daynum();
-    skg->te = skg->ts +
-        sat_cfg_get_int(SAT_CFG_INT_SKYATGL_TIME) * (1.0 / 24.0);
-
-    /* calculate preferred sizes */
-    skg->w = SKG_DEFAULT_WIDTH;
-    skg->h = skg->numsat * SKG_PIX_PER_SAT + (skg->numsat + 1) * SKG_MARGIN;
-    skg->pps = SKG_PIX_PER_SAT;
-
-    /* create the canvas */
-    skg->canvas = goo_canvas_new();
-    g_object_set(G_OBJECT(skg->canvas), "has-tooltip", TRUE, NULL);
-    gtk_widget_set_size_request(skg->canvas, skg->w, skg->h + SKG_FOOTER);
-    goo_canvas_set_bounds(GOO_CANVAS(skg->canvas), 0, 0,
-                          skg->w, skg->h + SKG_FOOTER);
-
-    /* connect size-request signal */
-    g_signal_connect(skg->canvas, "size-allocate",
-                     (GCallback) size_allocate_cb, skg);
-    g_signal_connect_after(skg->canvas, "realize",
-                           (GCallback) on_canvas_realized, skg);
-
-    gtk_widget_show(skg->canvas);
-
-    /* Create the canvas model */
-    create_canvas_items(skg);
-
-    /* add satellite passes */
-    g_hash_table_foreach(skg->sats, create_sat, skg);
-
-    gtk_container_add(GTK_CONTAINER(skg), skg->canvas);
-
-    return GTK_WIDGET(skg);
+    return gtk_sky_glance_type;
 }
 
 /**
- * Create the model for the GtkSkyGlance canvas
+ * Convert time value to x position.
  *
- * @param skg Pointer to the GtkSkyGlance widget
+ * @param skg The GtkSkyGlance widget.
+ * @param t Julian date user is presented with brief info about the
+ *          satellite pass and a suggestion to click on the box for more info.
+ * @return X coordinate.
+ *
+ * No error checking is made to ensure that we are within visible range.
  */
-static void create_canvas_items(GtkSkyGlance * skg)
+static gdouble t2x(GtkSkyGlance * skg, gdouble t)
 {
-    GooCanvasItem  *root;
-    GooCanvasItem  *hrt, *hrl, *hrm;
-    guint           i, n;
-    gdouble         th, tm;
-    gdouble         xh, xm;
-    gchar           buff[3];
+    gdouble         frac;
 
-    root = goo_canvas_get_root_item(GOO_CANVAS(skg->canvas));
-    g_signal_connect(root, "motion_notify_event",
-                     (GCallback) on_motion_notify, skg);
+    frac = (t - skg->ts) / (skg->te - skg->ts);
 
-    /* background */
-    skg->bgd = goo_canvas_rect_new(root, skg->x0, skg->y0, skg->w, skg->h,
-                                   "fill-color-rgba", 0xFFFFFFFF,
-                                   "stroke-color-rgba", 0xFFFFFFFF, NULL);
+    return (skg->x0 + frac * skg->w);
+}
 
-    /* cursor tracking line */
-    skg->cursor = goo_canvas_polyline_new_line(root,
-                                               skg->x0, skg->y0,
-                                               skg->x0, skg->h,
-                                               "stroke-color-rgba", 0x000000AF,
-                                               "line-width", SKG_CURSOR_WIDTH,
-                                               NULL);
+/**
+ * Convert x coordinate to Julian date.
+ *
+ * @param skg The GtkSkyGlance widget.
+ * @param x The X coordinate.
+ * @return The Julian date corresponding to X.
+ *
+ * No error checking is made to ensure that we are within visible range.
+ */
+static gdouble x2t(GtkSkyGlance * skg, gdouble x)
+{
+    gdouble         frac;
 
-    /* time label */
-    skg->timel = goo_canvas_text_new(root, "--:--",
-                                     skg->x0 + 5, skg->y0,
-                                     -1, GOO_CANVAS_ANCHOR_NW,
-                                     "font", "Sans 8",
-                                     "fill-color-rgba", 0x000000AF, NULL);
+    frac = (x - skg->x0) / skg->w;
 
-    /* footer */
-    skg->footer = goo_canvas_rect_new(root,
-                                      skg->x0, skg->h,
-                                      skg->w, SKG_FOOTER,
-                                      "fill-color-rgba", 0x00003FFF,
-                                      "stroke-color-rgba", 0xFFFFFFFF, NULL);
-
-    /* time ticks and labels */
-    if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
-        skg->axisl = goo_canvas_text_new(root, _("TIME"),
-                                         skg->w / 2,
-                                         skg->h + SKG_FOOTER - 5,
-                                         -1, GOO_CANVAS_ANCHOR_S,
-                                         "font", "Sans 9",
-                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
-    else
-        skg->axisl = goo_canvas_text_new(root, _("UTC"),
-                                         skg->w / 2,
-                                         skg->h + SKG_FOOTER - 5,
-                                         -1, GOO_CANVAS_ANCHOR_S,
-                                         "font", "Sans 9",
-                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
-
-
-    /* get the first hour and first 30 min slot */
-    th = ceil(skg->ts * 24.0) / 24.0;
-
-    /* workaround for bug 1839140 (first hour incorrexct) */
-    th += 0.00069;
-
-    /* the first 30 min tick can be either before
-       or after the first hour tick
-     */
-    if ((th - skg->ts) > 0.0208333)
-    {
-        tm = th - 0.0208333;
-    }
-    else
-    {
-        tm = th + 0.0208333;
-    }
-
-    /* the number of steps equals the number of hours */
-    n = sat_cfg_get_int(SAT_CFG_INT_SKYATGL_TIME);
-    for (i = 0; i < n; i++)
-    {
-        /* hour tick */
-        xh = t2x(skg, th);
-        hrt =
-            goo_canvas_polyline_new_line(root, xh, skg->h, xh, skg->h + 10,
-                                         "stroke-color-rgba", 0xFFFFFFFF,
-                                         NULL);
-
-        /* hour tick label */
-        daynum_to_str(buff, 3, "%H", th);
-
-        hrl = goo_canvas_text_new(root, buff, xh, skg->h + 12,
-                                  -1, GOO_CANVAS_ANCHOR_N,
-                                  "font", "Sans 8",
-                                  "fill-color-rgba", 0xFFFFFFFF, NULL);
-
-        /* 30 min tick */
-        xm = t2x(skg, tm);
-        hrm = goo_canvas_polyline_new_line(root, xm, skg->h, xm, skg->h + 5,
-                                           "stroke-color-rgba", 0xFFFFFFFF,
-                                           NULL);
-
-        /* store canvas items */
-        skg->majors = g_slist_append(skg->majors, hrt);
-        skg->labels = g_slist_append(skg->labels, hrl);
-        skg->minors = g_slist_append(skg->minors, hrm);
-
-        th += 0.0416667;
-        tm += 0.0416667;
-    }
+    return (skg->ts + frac * (skg->te - skg->ts));
 }
 
 /**
@@ -388,8 +227,8 @@ static void create_canvas_items(GtkSkyGlance * skg)
  * e.g. when the container is re-sized. The function re-calculates the graph
  * dimensions based on the new canvas size.
  */
-static void
-size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
+static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
+                             gpointer data)
 {
     GtkSkyGlance   *skg;
     GooCanvasPoints *pts;
@@ -624,45 +463,124 @@ static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
     return TRUE;
 }
 
-/**
- * Convert time value to x position.
- *
- * @param skg The GtkSkyGlance widget.
- * @param t Julian date user is presented with brief info about the
- *          satellite pass and a suggestion to click on the box for more info.
- * @return X coordinate.
- *
- * No error checking is made to ensure that we are within visible range.
- */
-static gdouble t2x(GtkSkyGlance * skg, gdouble t)
-{
-    gdouble         frac;
-
-    frac = (t - skg->ts) / (skg->te - skg->ts);
-
-    return (skg->x0 + frac * skg->w);
-}
 
 /**
- * Convert x coordinate to Julian date.
+ * Create the model for the GtkSkyGlance canvas
  *
- * @param skg The GtkSkyGlance widget.
- * @param x The X coordinate.
- * @return The Julian date corresponding to X.
- *
- * No error checking is made to ensure that we are within visible range.
+ * @param skg Pointer to the GtkSkyGlance widget
  */
-static gdouble x2t(GtkSkyGlance * skg, gdouble x)
+static void create_canvas_items(GtkSkyGlance * skg)
 {
-    gdouble         frac;
+    GooCanvasItem  *root;
+    GooCanvasItem  *hrt, *hrl, *hrm;
+    guint           i, n;
+    gdouble         th, tm;
+    gdouble         xh, xm;
+    gchar           buff[3];
 
-    frac = (x - skg->x0) / skg->w;
+    root = goo_canvas_get_root_item(GOO_CANVAS(skg->canvas));
+    g_signal_connect(root, "motion_notify_event",
+                     (GCallback) on_motion_notify, skg);
 
-    return (skg->ts + frac * (skg->te - skg->ts));
+    /* background */
+    skg->bgd = goo_canvas_rect_new(root, skg->x0, skg->y0, skg->w, skg->h,
+                                   "fill-color-rgba", 0xFFFFFFFF,
+                                   "stroke-color-rgba", 0xFFFFFFFF, NULL);
+
+    /* cursor tracking line */
+    skg->cursor = goo_canvas_polyline_new_line(root,
+                                               skg->x0, skg->y0,
+                                               skg->x0, skg->h,
+                                               "stroke-color-rgba", 0x000000AF,
+                                               "line-width", SKG_CURSOR_WIDTH,
+                                               NULL);
+
+    /* time label */
+    skg->timel = goo_canvas_text_new(root, "--:--",
+                                     skg->x0 + 5, skg->y0,
+                                     -1, GOO_CANVAS_ANCHOR_NW,
+                                     "font", "Sans 8",
+                                     "fill-color-rgba", 0x000000AF, NULL);
+
+    /* footer */
+    skg->footer = goo_canvas_rect_new(root,
+                                      skg->x0, skg->h,
+                                      skg->w, SKG_FOOTER,
+                                      "fill-color-rgba", 0x00003FFF,
+                                      "stroke-color-rgba", 0xFFFFFFFF, NULL);
+
+    /* time ticks and labels */
+    if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
+        skg->axisl = goo_canvas_text_new(root, _("TIME"),
+                                         skg->w / 2,
+                                         skg->h + SKG_FOOTER - 5,
+                                         -1, GOO_CANVAS_ANCHOR_S,
+                                         "font", "Sans 9",
+                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
+    else
+        skg->axisl = goo_canvas_text_new(root, _("UTC"),
+                                         skg->w / 2,
+                                         skg->h + SKG_FOOTER - 5,
+                                         -1, GOO_CANVAS_ANCHOR_S,
+                                         "font", "Sans 9",
+                                         "fill-color-rgba", 0xFFFFFFFF, NULL);
+
+
+    /* get the first hour and first 30 min slot */
+    th = ceil(skg->ts * 24.0) / 24.0;
+
+    /* workaround for bug 1839140 (first hour incorrexct) */
+    th += 0.00069;
+
+    /* the first 30 min tick can be either before
+       or after the first hour tick
+     */
+    if ((th - skg->ts) > 0.0208333)
+    {
+        tm = th - 0.0208333;
+    }
+    else
+    {
+        tm = th + 0.0208333;
+    }
+
+    /* the number of steps equals the number of hours */
+    n = sat_cfg_get_int(SAT_CFG_INT_SKYATGL_TIME);
+    for (i = 0; i < n; i++)
+    {
+        /* hour tick */
+        xh = t2x(skg, th);
+        hrt =
+            goo_canvas_polyline_new_line(root, xh, skg->h, xh, skg->h + 10,
+                                         "stroke-color-rgba", 0xFFFFFFFF,
+                                         NULL);
+
+        /* hour tick label */
+        daynum_to_str(buff, 3, "%H", th);
+
+        hrl = goo_canvas_text_new(root, buff, xh, skg->h + 12,
+                                  -1, GOO_CANVAS_ANCHOR_N,
+                                  "font", "Sans 8",
+                                  "fill-color-rgba", 0xFFFFFFFF, NULL);
+
+        /* 30 min tick */
+        xm = t2x(skg, tm);
+        hrm = goo_canvas_polyline_new_line(root, xm, skg->h, xm, skg->h + 5,
+                                           "stroke-color-rgba", 0xFFFFFFFF,
+                                           NULL);
+
+        /* store canvas items */
+        skg->majors = g_slist_append(skg->majors, hrt);
+        skg->labels = g_slist_append(skg->labels, hrl);
+        skg->minors = g_slist_append(skg->minors, hrm);
+
+        th += 0.0416667;
+        tm += 0.0416667;
+    }
 }
 
 /** Fetch the basic colour and add alpha channel */
-static void get_colours(guint i, guint * bcol, guint * fcol)
+static void get_colors(guint i, guint * bcol, guint * fcol)
 {
     guint           tmp;
 
@@ -760,7 +678,7 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
 
     /* get canvas root */
     root = goo_canvas_get_root_item(GOO_CANVAS(skg->canvas));
-    get_colours(skg->satcnt++, &bcol, &fcol);
+    get_colors(skg->satcnt++, &bcol, &fcol);
     maxdt = skg->te - skg->ts;
 
     /* get passes for satellite */
@@ -842,4 +760,67 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
                                     "fill-color-rgba", bcol, NULL);
         skg->satlab = g_slist_append(skg->satlab, label);
     }
+}
+
+/**
+ * Create a new GtkSkyGlance widget.
+ *
+ * @param sats Pointer to the hash table containing the asociated satellites.
+ * @param qth Pointer to the ground station data.
+ * @param ts The t0 for the timeline or 0 to use the current date and time.
+ */
+GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
+{
+    GtkSkyGlance   *skg;
+    guint           number;
+
+    /* check that we have at least one satellite */
+    number = g_hash_table_size(sats);
+    if (number == 0)
+        /* no satellites */
+        return gtk_label_new(_("This module has no satellites!"));
+
+    skg = GTK_SKY_GLANCE(g_object_new(GTK_TYPE_SKY_GLANCE, NULL));
+
+    /* FIXME? */
+    skg->sats = sats;
+    skg->qth = qth;
+
+    /* get settings */
+    skg->numsat = g_hash_table_size(sats);
+
+    /* if ts = 0 use current time */
+    skg->ts = ts > 0.0 ? ts : get_current_daynum();
+    skg->te = skg->ts +
+        sat_cfg_get_int(SAT_CFG_INT_SKYATGL_TIME) * (1.0 / 24.0);
+
+    /* calculate preferred sizes */
+    skg->w = SKG_DEFAULT_WIDTH;
+    skg->h = skg->numsat * SKG_PIX_PER_SAT + (skg->numsat + 1) * SKG_MARGIN;
+    skg->pps = SKG_PIX_PER_SAT;
+
+    /* create the canvas */
+    skg->canvas = goo_canvas_new();
+    g_object_set(G_OBJECT(skg->canvas), "has-tooltip", TRUE, NULL);
+    gtk_widget_set_size_request(skg->canvas, skg->w, skg->h + SKG_FOOTER);
+    goo_canvas_set_bounds(GOO_CANVAS(skg->canvas), 0, 0,
+                          skg->w, skg->h + SKG_FOOTER);
+
+    /* connect size-request signal */
+    g_signal_connect(skg->canvas, "size-allocate",
+                     (GCallback) size_allocate_cb, skg);
+    g_signal_connect_after(skg->canvas, "realize",
+                           (GCallback) on_canvas_realized, skg);
+
+    gtk_widget_show(skg->canvas);
+
+    /* Create the canvas model */
+    create_canvas_items(skg);
+
+    /* add satellite passes */
+    g_hash_table_foreach(skg->sats, create_sat, skg);
+
+    gtk_container_add(GTK_CONTAINER(skg), skg->canvas);
+
+    return GTK_WIDGET(skg);
 }
