@@ -172,6 +172,10 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
         azel->y0 = azel->height - AZEL_Y_MARGIN;
         azel->ymax = AZEL_Y_MARGIN;
 
+        /* background item */
+        g_object_set(azel->bgd, "width", (gdouble) azel->width,
+                     "height", (gdouble) azel->height, NULL);
+
         /* frame */
         g_object_set(azel->frame,
                      "x", (gdouble) azel->x0,
@@ -400,40 +404,6 @@ static void on_canvas_realized(GtkWidget * canvas, gpointer data)
 
 }
 
-/**
- * Retrieve background color.
- *
- * This function retrieves the canvas background color, which is in 0xRRGGBBAA
- * format and converts it to GdkColor style. Besides extractibg the RGB components
- * we also need to scale from [0;255] to [0;65535], i.e. multiply by 257.
- */
-static void get_canvas_bg_color(GtkAzelPlot * azel, GdkColor * color)
-{
-    (void)azel;
-
-    guint32         col, tmp;
-    guint16         r, g, b;
-
-    col = sat_cfg_get_int(SAT_CFG_INT_POLAR_BGD_COL);
-
-    /* red */
-    tmp = col & 0xFF000000;
-    r = (guint16) (tmp >> 24);
-
-    /* green */
-    tmp = col & 0x00FF0000;
-    g = (guint16) (tmp >> 16);
-
-    /* blue */
-    tmp = col & 0x0000FF00;
-    b = (guint16) (tmp >> 8);
-
-    /* store colours */
-    color->red = 257 * r;
-    color->green = 257 * g;
-    color->blue = 257 * b;
-}
-
 static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * azel)
 {
     GooCanvasItemModel *root;
@@ -455,6 +425,12 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * azel)
     azel->xmax = azel->width - AZEL_X_MARGIN;
     azel->y0 = azel->height - AZEL_Y_MARGIN;
     azel->ymax = AZEL_Y_MARGIN;
+
+    /* background item */
+    azel->bgd = goo_canvas_rect_model_new(root, 0.0, 0.0, azel->width, azel->height,
+                                          "fill-color-rgba", 0xFFFFFFFF,
+                                          "stroke-color-rgba", 0xFFFFFFFF,
+                                          NULL);
 
     col = sat_cfg_get_int(SAT_CFG_INT_POLAR_AXIS_COL);
 
@@ -637,7 +613,6 @@ GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
 {
     GtkAzelPlot    *azel;
     GooCanvasItemModel *root;
-    GdkColor        bg_color = { 0, 0xFFFF, 0xFFFF, 0xFFFF };
     guint           i, n;
     pass_detail_t  *detail;
 
@@ -669,9 +644,6 @@ GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
 
     /* create the canvas */
     azel->canvas = goo_canvas_new();
-    get_canvas_bg_color(azel, &bg_color);
-
-    gtk_widget_modify_base(azel->canvas, GTK_STATE_NORMAL, &bg_color);
     gtk_widget_set_size_request(azel->canvas, AZEL_DEFAULT_SIZE,
                                 AZEL_DEFAULT_SIZE);
     goo_canvas_set_bounds(GOO_CANVAS(azel->canvas), 0, 0,

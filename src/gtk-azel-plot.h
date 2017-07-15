@@ -58,6 +58,7 @@ struct _GtkAzelPlot {
 
     GtkWidget      *canvas;     /*!< The canvas widget */
 
+    GooCanvasItemModel *bgd;    /*!< Rectangle used to paint background */ 
     GooCanvasItemModel *curs;   /*!< cusor info */
     GooCanvasItemModel *frame;  /*!< frame */
     GooCanvasItemModel *azg;    /*!< Az graph */
