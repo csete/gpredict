@@ -814,13 +814,11 @@ GtkWidget      *gtk_sky_glance_new(GHashTable * sats, qth_t * qth, gdouble ts)
 
     gtk_widget_show(skg->canvas);
 
-    /* Create the canvas model */
+    /* Create the canvas items */
     create_canvas_items(skg);
-
-    /* add satellite passes */
     g_hash_table_foreach(skg->sats, create_sat, skg);
 
-    gtk_container_add(GTK_CONTAINER(skg), skg->canvas);
+    gtk_box_pack_start(GTK_BOX(skg), skg->canvas, TRUE, TRUE, 0);
 
     return GTK_WIDGET(skg);
 }
