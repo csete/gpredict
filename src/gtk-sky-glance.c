@@ -532,6 +532,8 @@ size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
 
             g_object_set(skp->box,
                          "x", x, "y", y, "width", w, "height", h, NULL);
+            /* need to raise item, otherwise it will not receive new events */
+            goo_canvas_item_raise(skp->box, NULL);
         }
     }
 }
