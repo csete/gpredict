@@ -51,7 +51,7 @@
 #define MARKER_SIZE 5
 
 
-static GtkBoxClass  *parent_class = NULL;
+static GtkBoxClass *parent_class = NULL;
 
 static void gtk_azel_plot_destroy(GtkWidget * widget)
 {
@@ -60,7 +60,8 @@ static void gtk_azel_plot_destroy(GtkWidget * widget)
 
 static void gtk_azel_plot_class_init(GtkAzelPlotClass * class)
 {
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
+
     widget_class->destroy = gtk_azel_plot_destroy;
     parent_class = g_type_class_peek_parent(class);
 
@@ -427,7 +428,8 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * azel)
     azel->ymax = AZEL_Y_MARGIN;
 
     /* background item */
-    azel->bgd = goo_canvas_rect_model_new(root, 0.0, 0.0, azel->width, azel->height,
+    azel->bgd = goo_canvas_rect_model_new(root, 0.0, 0.0,
+                                          azel->width, azel->height,
                                           "fill-color-rgba", 0xFFFFFFFF,
                                           "stroke-color-rgba", 0xFFFFFFFF,
                                           NULL);
