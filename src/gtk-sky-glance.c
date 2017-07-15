@@ -582,7 +582,6 @@ static gboolean on_motion_notify(GooCanvasItem * item, GooCanvasItem * target,
 static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
                                   GdkEventButton * event, gpointer data)
 {
-    GooCanvasItemModel *item_model = goo_canvas_item_get_model(item);
     GtkSkyGlance   *skg = GTK_SKY_GLANCE(data);
     pass_t         *pass;
     pass_t         *new_pass;
@@ -590,7 +589,7 @@ static gboolean on_button_release(GooCanvasItem * item, GooCanvasItem * target,
     (void)target;
 
     /* get pointer to pass_t structure */
-    pass = (pass_t *) g_object_get_data(G_OBJECT(item_model), "pass");
+    pass = (pass_t *) g_object_get_data(G_OBJECT(item), "pass");
 
     if (G_UNLIKELY(pass == NULL))
     {
