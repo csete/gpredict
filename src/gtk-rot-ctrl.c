@@ -190,41 +190,38 @@ static void gtk_rot_ctrl_destroy(GtkWidget * widget)
  */
 GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
 {
-    GtkWidget      *widget;
+    GtkRotCtrl     *rot_ctrl;
     GtkWidget      *table;
 
     /* check that we have rot conf */
     if (!have_conf())
         return NULL;
 
-    widget = g_object_new(GTK_TYPE_ROT_CTRL, NULL);
+    rot_ctrl = GTK_ROT_CTRL(g_object_new(GTK_TYPE_ROT_CTRL, NULL));
 
     /* store satellites */
-    g_hash_table_foreach(module->satellites, store_sats, widget);
+    g_hash_table_foreach(module->satellites, store_sats, rot_ctrl);
 
-    GTK_ROT_CTRL(widget)->target =
-        SAT(g_slist_nth_data(GTK_ROT_CTRL(widget)->sats, 0));
+    rot_ctrl->target = SAT(g_slist_nth_data(rot_ctrl->sats, 0));
 
     /* store current time (don't know if real or simulated) */
-    GTK_ROT_CTRL(widget)->t = module->tmgCdnum;
+    rot_ctrl->t = module->tmgCdnum;
 
     /* store QTH */
-    GTK_ROT_CTRL(widget)->qth = module->qth;
+    rot_ctrl->qth = module->qth;
 
     /* get next pass for target satellite */
-    if (GTK_ROT_CTRL(widget)->target)
+    if (rot_ctrl->target)
     {
-        if (GTK_ROT_CTRL(widget)->target->el > 0.0)
+        if (rot_ctrl->target->el > 0.0)
         {
-            GTK_ROT_CTRL(widget)->pass =
-                get_current_pass(GTK_ROT_CTRL(widget)->target,
-                                 GTK_ROT_CTRL(widget)->qth, 0.0);
+            rot_ctrl->pass = get_current_pass(rot_ctrl->target,
+                                              rot_ctrl->qth, 0.0);
         }
         else
         {
-            GTK_ROT_CTRL(widget)->pass =
-                get_next_pass(GTK_ROT_CTRL(widget)->target,
-                              GTK_ROT_CTRL(widget)->qth, 3.0);
+            rot_ctrl->pass = get_next_pass(rot_ctrl->target,
+                                           rot_ctrl->qth, 3.0);
         }
     }
 
@@ -233,30 +230,30 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
     gtk_table_set_row_spacings(GTK_TABLE(table), 0);
     gtk_table_set_col_spacings(GTK_TABLE(table), 0);
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
-    gtk_table_attach(GTK_TABLE(table), create_az_widgets(GTK_ROT_CTRL(widget)),
+    gtk_table_attach(GTK_TABLE(table), create_az_widgets(rot_ctrl),
                      0, 1, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-    gtk_table_attach(GTK_TABLE(table), create_el_widgets(GTK_ROT_CTRL(widget)),
+    gtk_table_attach(GTK_TABLE(table), create_el_widgets(rot_ctrl),
                      1, 2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
-                     create_target_widgets(GTK_ROT_CTRL(widget)), 0, 1, 1, 2,
+                     create_target_widgets(rot_ctrl), 0, 1, 1, 2,
                      GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
-                     create_conf_widgets(GTK_ROT_CTRL(widget)), 1, 2, 1, 2,
+                     create_conf_widgets(rot_ctrl), 1, 2, 1, 2,
                      GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
-                     create_plot_widget(GTK_ROT_CTRL(widget)), 2, 3, 0, 2,
+                     create_plot_widget(rot_ctrl), 2, 3, 0, 2,
                      GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 
-    gtk_container_add(GTK_CONTAINER(widget), table);
+    gtk_container_add(GTK_CONTAINER(rot_ctrl), table);
 
-    GTK_ROT_CTRL(widget)->timerid = g_timeout_add(GTK_ROT_CTRL(widget)->delay,
-                                                  rot_ctrl_timeout_cb,
-                                                  GTK_ROT_CTRL(widget));
+    rot_ctrl->timerid = g_timeout_add(rot_ctrl->delay,
+                                      rot_ctrl_timeout_cb,
+                                      rot_ctrl);
 
     if (module->target > 0)
-        gtk_rot_ctrl_select_sat(GTK_ROT_CTRL(widget), module->target);
+        gtk_rot_ctrl_select_sat(rot_ctrl, module->target);
 
-    return widget;
+    return GTK_WIDGET(rot_ctrl);
 }
 
 /**
