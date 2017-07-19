@@ -55,7 +55,7 @@ typedef struct _gtk_rot_ctrl GtkRotCtrl;
 typedef struct _GtkRotCtrlClass GtkRotCtrlClass;
 
 struct _gtk_rot_ctrl {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     /* Azimuth widgets */
     GtkWidget      *AzSat, *AzSet, *AzRead, *AzDevSel;
@@ -97,7 +97,7 @@ struct _gtk_rot_ctrl {
 };
 
 struct _GtkRotCtrlClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 GType           gtk_rot_ctrl_get_type(void);

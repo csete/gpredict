@@ -126,7 +126,7 @@ GType gtk_rot_ctrl_get_type()
             NULL
         };
 
-        gtk_rot_ctrl_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_rot_ctrl_type = g_type_register_static(GTK_TYPE_BOX,
                                                    "GtkRotCtrl",
                                                    &gtk_rot_ctrl_info, 0);
     }
