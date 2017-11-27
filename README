@@ -71,9 +71,9 @@ adding --prefix=somedir to the ./configure step. For example
   
 will configure the build to install the files into /home/alexc/gpredict folder.
 
-If you are building from the git repository and there is no configure script,
-run ./autogen.sh instead. You can pass the same options to the autogen.sh
-script as you would to the configure script.
+If you are building from the git repository, run ./autogen.sh instead.
+You can pass the same options to the autogen.sh script as you would to the
+configure script.
 
 If the configure step fails with an error, examine the output. It will usually
 tell you which package or libraries you need in order to build gpredict. Please
