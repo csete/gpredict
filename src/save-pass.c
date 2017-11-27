@@ -1,7 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -24,14 +24,11 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief High level entry point for saving satellite passes.
- *  \ingroup predict
- *
- * This module contains the main entry points into saving satellite passes.
- * The function can be called directly from the button click callback handlers.
- *
- */
+#ifdef HAVE_CONFIG_H
+#include <build-config.h>
+#endif
 #include <gtk/gtk.h>
+
 #include "gtk-sat-data.h"
 #include "pass-to-txt.h"
 #include "predict-tools.h"
@@ -40,10 +37,6 @@
 #include "sat-pass-dialogs.h"
 #include "save-pass.h"
 #include "sgpsdp/sgp4sdp4.h"
-
-#ifdef HAVE_CONFIG_H
-#include <build-config.h>
-#endif
 
 static void     file_changed(GtkWidget * widget, gpointer data);
 static void     save_pass_exec(GtkWidget * parent,
