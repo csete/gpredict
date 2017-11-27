@@ -1,9 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -226,7 +224,7 @@ GType gtk_sat_list_get_type()
             NULL
         };
 
-        gtk_sat_list_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_sat_list_type = g_type_register_static(GTK_TYPE_BOX,
                                                    "GtkSatList",
                                                    &gtk_sat_list_info, 0);
     }
@@ -263,7 +261,8 @@ static void gtk_sat_list_destroy(GtkWidget * widget)
 GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
                                  qth_t * qth, guint32 columns)
 {
-    GtkWidget      *widget;
+//    GtkWidget      *widget;
+    GtkSatList     *satlist;
     GtkTreeModel   *model, *filter, *sortable;
     guint           i;
 
@@ -271,73 +270,64 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
     GtkTreeViewColumn *column;
 
 
-    widget = g_object_new(GTK_TYPE_SAT_LIST, NULL);
+//    widget = g_object_new(GTK_TYPE_SAT_LIST, NULL);
+    satlist = GTK_SAT_LIST(g_object_new(GTK_TYPE_SAT_LIST, NULL));
 
-    GTK_SAT_LIST(widget)->update = gtk_sat_list_update;
+    satlist->update = gtk_sat_list_update;
 
     /* Read configuration data. */
     /* ... */
-    GTK_SAT_LIST(widget)->cfgdata = cfgdata;
+    satlist->cfgdata = cfgdata;
     /* read initial sorting criteria */
-    GTK_SAT_LIST(widget)->sort_column = SAT_LIST_COL_NAME;
-    GTK_SAT_LIST(widget)->sort_order = GTK_SORT_ASCENDING;
-    if (g_key_file_has_key(GTK_SAT_LIST(widget)->cfgdata, MOD_CFG_LIST_SECTION,
+    satlist->sort_column = SAT_LIST_COL_NAME;
+    satlist->sort_order = GTK_SORT_ASCENDING;
+    if (g_key_file_has_key(satlist->cfgdata, MOD_CFG_LIST_SECTION,
                            MOD_CFG_LIST_SORT_COLUMN, NULL))
     {
-        GTK_SAT_LIST(widget)->sort_column =
-            g_key_file_get_integer(GTK_SAT_LIST(widget)->cfgdata,
+        satlist->sort_column =
+            g_key_file_get_integer(satlist->cfgdata,
                                    MOD_CFG_LIST_SECTION,
                                    MOD_CFG_LIST_SORT_COLUMN, NULL);
-        if ((GTK_SAT_LIST(widget)->sort_column > SAT_LIST_COL_NUMBER) ||
-            (GTK_SAT_LIST(widget)->sort_column < 0))
+        if ((satlist->sort_column > SAT_LIST_COL_NUMBER) ||
+            (satlist->sort_column < 0))
         {
-            GTK_SAT_LIST(widget)->sort_column = SAT_LIST_COL_NAME;
+            satlist->sort_column = SAT_LIST_COL_NAME;
         }
     }
-    if (g_key_file_has_key(GTK_SAT_LIST(widget)->cfgdata,
+    if (g_key_file_has_key(satlist->cfgdata,
                            MOD_CFG_EVENT_LIST_SECTION,
                            MOD_CFG_EVENT_LIST_SORT_ORDER, NULL))
     {
-        GTK_SAT_LIST(widget)->sort_order =
-            g_key_file_get_integer(GTK_SAT_LIST(widget)->cfgdata,
+        satlist->sort_order =
+            g_key_file_get_integer(satlist->cfgdata,
                                    MOD_CFG_EVENT_LIST_SECTION,
                                    MOD_CFG_EVENT_LIST_SORT_ORDER, NULL);
-        if ((GTK_SAT_LIST(widget)->sort_order > 1) ||
-            (GTK_SAT_LIST(widget)->sort_order < 0))
-        {
-            GTK_SAT_LIST(widget)->sort_order = GTK_SORT_ASCENDING;
-        }
+        if ((satlist->sort_order > 1) || (satlist->sort_order < 0))
+            satlist->sort_order = GTK_SORT_ASCENDING;
+
     }
 
-    GTK_SAT_LIST(widget)->satellites = sats;
-    GTK_SAT_LIST(widget)->qth = qth;
+    satlist->satellites = sats;
+    satlist->qth = qth;
 
     /* initialise column flags */
     if (columns > 0)
-        GTK_SAT_LIST(widget)->flags = columns;
+        satlist->flags = columns;
     else
-        GTK_SAT_LIST(widget)->flags = mod_cfg_get_int(cfgdata,
-                                                      MOD_CFG_LIST_SECTION,
-                                                      MOD_CFG_LIST_COLUMNS,
-                                                      SAT_CFG_INT_LIST_COLUMNS);
+        satlist->flags = mod_cfg_get_int(cfgdata, MOD_CFG_LIST_SECTION,
+                                         MOD_CFG_LIST_COLUMNS, SAT_CFG_INT_LIST_COLUMNS);
 
     /* get refresh rate and cycle counter */
-    GTK_SAT_LIST(widget)->refresh = mod_cfg_get_int(cfgdata,
-                                                    MOD_CFG_LIST_SECTION,
-                                                    MOD_CFG_LIST_REFRESH,
-                                                    SAT_CFG_INT_LIST_REFRESH);
-    GTK_SAT_LIST(widget)->counter = 1;
+    satlist->refresh = mod_cfg_get_int(cfgdata, MOD_CFG_LIST_SECTION,
+                                       MOD_CFG_LIST_REFRESH, SAT_CFG_INT_LIST_REFRESH);
+    satlist->counter = 1;
 
     /* create the tree view and add columns */
-    GTK_SAT_LIST(widget)->treeview = gtk_tree_view_new();
-
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(GTK_SAT_LIST(widget)->treeview),
-                                 sat_cfg_get_bool(SAT_CFG_BOOL_RULES_HINT));
+    satlist->treeview = gtk_tree_view_new();
 
     /* create treeview columns */
     for (i = 0; i < SAT_LIST_COL_NUMBER; i++)
     {
-
         renderer = gtk_cell_renderer_text_new();
         g_object_set(G_OBJECT(renderer), "xalign", SAT_LIST_COL_XALIGN[i],
                      NULL);
@@ -352,12 +342,11 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
 
         column =
             gtk_tree_view_column_new_with_attributes(_(SAT_LIST_COL_TITLE[i]),
-                                                     renderer, "text", i,
-                                                     "weight",
-                                                     SAT_LIST_COL_BOLD, NULL);
-        gtk_tree_view_insert_column(GTK_TREE_VIEW
-                                    (GTK_SAT_LIST(widget)->treeview), column,
-                                    -1);
+                                                     renderer,
+                                                     "text", i,
+                                                     "weight", SAT_LIST_COL_BOLD,
+                                                     NULL);
+        gtk_tree_view_insert_column(GTK_TREE_VIEW(satlist->treeview), column, -1);
 
         /* only aligns the headers */
         gtk_tree_view_column_set_alignment(column, 0.5);
@@ -369,61 +358,55 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
         check_and_set_cell_renderer(column, renderer, i);
 
         /* hide columns that have not been specified */
-        if (!(GTK_SAT_LIST(widget)->flags & (1 << i)))
-        {
+        if (!(satlist->flags & (1 << i)))
             gtk_tree_view_column_set_visible(column, FALSE);
-        }
     }
 
     /* create model and finalise treeview */
-    model = create_and_fill_model(GTK_SAT_LIST(widget)->satellites);
+    model = create_and_fill_model(satlist->satellites);
     filter = gtk_tree_model_filter_new(model, NULL);
     sortable = gtk_tree_model_sort_new_with_model(filter);
-    GTK_SAT_LIST(widget)->sortable = sortable;
+    satlist->sortable = sortable;
     gtk_tree_model_filter_set_visible_column(GTK_TREE_MODEL_FILTER(filter),
                                              SAT_LIST_COL_DECAY);
-    gtk_tree_view_set_model(GTK_TREE_VIEW(GTK_SAT_LIST(widget)->treeview),
-                            sortable);
+    gtk_tree_view_set_model(GTK_TREE_VIEW(satlist->treeview), sortable);
 
     /* We need a special sort function for AOS/LOS events that works
        with all date and time formats (see bug #1861323)
      */
-    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(model),
-                                    SAT_LIST_COL_AOS,
-                                    event_cell_compare_function, widget, NULL);
+    gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(model), SAT_LIST_COL_AOS,
+                                    event_cell_compare_function,
+                                    GTK_WIDGET(satlist), NULL);
     gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(model), SAT_LIST_COL_LOS,
-                                    event_cell_compare_function, widget, NULL);
+                                    event_cell_compare_function,
+                                    GTK_WIDGET(satlist), NULL);
 
     /* satellite name should be initial sorting criteria */
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(sortable),
-                                         GTK_SAT_LIST(widget)->sort_column,
-                                         GTK_SAT_LIST(widget)->sort_order);
+                                         satlist->sort_column,
+                                         satlist->sort_order);
 
     g_object_unref(model);
     g_object_unref(filter);
     g_object_unref(sortable);
 
-    g_signal_connect(GTK_SAT_LIST(widget)->treeview, "button-press-event",
-                     G_CALLBACK(button_press_cb), widget);
-    g_signal_connect(GTK_SAT_LIST(widget)->treeview, "popup-menu",
-                     G_CALLBACK(popup_menu_cb), widget);
-    g_signal_connect(GTK_SAT_LIST(widget)->treeview, "row-activated",
-                     G_CALLBACK(row_activated_cb), widget);
+    g_signal_connect(satlist->treeview, "button-press-event",
+                     G_CALLBACK(button_press_cb), satlist);
+    g_signal_connect(satlist->treeview, "popup-menu",
+                     G_CALLBACK(popup_menu_cb), satlist);
+    g_signal_connect(satlist->treeview, "row-activated",
+                     G_CALLBACK(row_activated_cb), satlist);
 
-    GTK_SAT_LIST(widget)->swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW
-                                   (GTK_SAT_LIST(widget)->swin),
+    satlist->swin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(satlist->swin),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-    gtk_container_add(GTK_CONTAINER(GTK_SAT_LIST(widget)->swin),
-                      GTK_SAT_LIST(widget)->treeview);
+    gtk_container_add(GTK_CONTAINER(satlist->swin), satlist->treeview);
+    gtk_box_pack_start(GTK_BOX(satlist), satlist->swin, TRUE, TRUE, 0);
+    gtk_widget_show_all(GTK_WIDGET(satlist));
 
-    gtk_container_add(GTK_CONTAINER(widget), GTK_SAT_LIST(widget)->swin);
-    gtk_widget_show_all(widget);
-
-    return widget;
+    return GTK_WIDGET(satlist);
 }
-
 
 static GtkTreeModel *create_and_fill_model(GHashTable * sats)
 {
