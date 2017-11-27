@@ -63,24 +63,14 @@ void gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth, GtkPolarView * pview,
 {
     GtkWidget      *menu;
     GtkWidget      *menuitem;
-    GtkWidget      *label;
-    GtkWidget      *image;
-    gchar          *buff;
     sat_obj_t      *obj = NULL;
     gint           *catnum;
 
     menu = gtk_menu_new();
 
     /* first menu item is the satellite name, centered */
-    menuitem = gtk_image_menu_item_new();
-    label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-    buff = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
-    gtk_label_set_markup(GTK_LABEL(label), buff);
-    g_free(buff);
-    gtk_container_add(GTK_CONTAINER(menuitem), label);
-    image = gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new();
+    gtk_menu_item_set_label(GTK_MENU_ITEM(menuitem), _("Satellite info"));
 
     /* attach data to menuitem and connect callback */
     g_object_set_data(G_OBJECT(menuitem), "sat", sat);
