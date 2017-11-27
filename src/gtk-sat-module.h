@@ -1,10 +1,8 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
-    Charles Suprin <hamaa1vs@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
+                              Charles Suprin, AA1VS.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -72,7 +70,7 @@ typedef struct _gtk_sat_module GtkSatModule;
 typedef struct _GtkSatModuleClass GtkSatModuleClass;
 
 struct _gtk_sat_module {
-    GtkVBox         vbox;
+    GtkBox          vbox;
 
     gchar          *name;       /*!< The module name */
 
@@ -148,13 +146,11 @@ struct _gtk_sat_module {
 };
 
 struct _GtkSatModuleClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
-
 
 GType           gtk_sat_module_get_type(void);
 GtkWidget      *gtk_sat_module_new(const gchar * cfgfile);
-
 
 void            gtk_sat_module_close_cb(GtkWidget * button, gpointer data);
 void            gtk_sat_module_config_cb(GtkWidget * button, gpointer data);

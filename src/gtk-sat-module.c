@@ -1,11 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Charles Suprin  <hamaa1vs@gmail.com>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
+                            Charles Suprin, AA1VS.
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -118,7 +115,7 @@ GType gtk_sat_module_get_type()
             NULL
         };
 
-        gtk_sat_module_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_sat_module_type = g_type_register_static(GTK_TYPE_BOX,
                                                      "GtkSatModule",
                                                      &gtk_sat_module_info, 0);
     }
@@ -144,10 +141,8 @@ static void gtk_sat_module_init(GtkSatModule * module)
     module->qth = g_try_new0(qth_t, 1);
     qth_init(module->qth);
 
-    module->satellites = g_hash_table_new_full(g_int_hash,
-                                               g_int_equal,
-                                               g_free,
-                                               gtk_sat_module_free_sat);
+    module->satellites = g_hash_table_new_full(g_int_hash, g_int_equal,
+                                               g_free, gtk_sat_module_free_sat);
 
     module->rotctrlwin = NULL;
     module->rotctrl = NULL;
@@ -249,9 +244,10 @@ static void gtk_sat_module_destroy(GtkWidget * widget)
  * @bug Program goes into infinite loop when there is something
  *      wrong with cfg file.
  */
-GtkWidget      *gtk_sat_module_new(const gchar * cfgfile)
+GtkWidget *gtk_sat_module_new(const gchar * cfgfile)
 {
     GtkWidget      *widget;
+    GtkSatModule   *module;
     GtkWidget      *butbox;
 
     /* Read configuration data.
@@ -269,15 +265,16 @@ GtkWidget      *gtk_sat_module_new(const gchar * cfgfile)
 
     /* create module widget */
     widget = g_object_new(GTK_TYPE_SAT_MODULE, NULL);
+    module = GTK_SAT_MODULE(widget);
 
 //    g_signal_connect (widget, "realize",
 //                      G_CALLBACK (fix_child_allocations), NULL);
 
     /* load configuration; note that this will also set the module name */
-    gtk_sat_module_read_cfg_data(GTK_SAT_MODULE(widget), cfgfile);
+    gtk_sat_module_read_cfg_data(module, cfgfile);
 
     /*check that we loaded some reasonable data */
-    if (GTK_SAT_MODULE(widget)->cfgdata == NULL)
+    if (module->cfgdata == NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Module %s has problems."), __func__, cfgfile);
@@ -285,86 +282,80 @@ GtkWidget      *gtk_sat_module_new(const gchar * cfgfile)
         return NULL;
     }
     /*initialize the qth engine and get position */
-    qth_data_update_init(GTK_SAT_MODULE(widget)->qth);
+    qth_data_update_init(module->qth);
 
     /* module state */
-    if ((g_key_file_has_key(GTK_SAT_MODULE(widget)->cfgdata,
+    if ((g_key_file_has_key(module->cfgdata,
                             MOD_CFG_GLOBAL_SECTION,
                             MOD_CFG_STATE, NULL)) &&
         sat_cfg_get_bool(SAT_CFG_BOOL_MOD_STATE))
     {
-        GTK_SAT_MODULE(widget)->state =
-            g_key_file_get_integer(GTK_SAT_MODULE(widget)->cfgdata,
-                                   MOD_CFG_GLOBAL_SECTION,
-                                   MOD_CFG_STATE, NULL);
+        module->state = g_key_file_get_integer(module->cfgdata,
+                                               MOD_CFG_GLOBAL_SECTION,
+                                               MOD_CFG_STATE, NULL);
     }
     else
     {
-        GTK_SAT_MODULE(widget)->state = GTK_SAT_MOD_STATE_DOCKED;
+        module->state = GTK_SAT_MOD_STATE_DOCKED;
     }
 
     /* initialise time keeping vars to current time */
-    GTK_SAT_MODULE(widget)->rtNow = get_current_daynum();
-    GTK_SAT_MODULE(widget)->rtPrev = get_current_daynum();
-    GTK_SAT_MODULE(widget)->tmgPdnum = get_current_daynum();
-    GTK_SAT_MODULE(widget)->tmgCdnum = get_current_daynum();
+    module->rtNow = get_current_daynum();
+    module->rtPrev = get_current_daynum();
+    module->tmgPdnum = get_current_daynum();
+    module->tmgCdnum = get_current_daynum();
 
     /* load satellites */
-    gtk_sat_module_load_sats(GTK_SAT_MODULE(widget));
+    gtk_sat_module_load_sats(module);
 
     /* create buttons */
-    GTK_SAT_MODULE(widget)->popup_button =
-        gpredict_mini_mod_button("gpredict-mod-popup.png",
-                                 _("Module options / shortcuts"));
-    g_signal_connect(GTK_SAT_MODULE(widget)->popup_button, "clicked",
-                     G_CALLBACK(gtk_sat_module_popup_cb), widget);
+    module->popup_button = gpredict_mini_mod_button("gpredict-mod-popup.png",
+                                _("Module options / shortcuts"));
+    g_signal_connect(module->popup_button, "clicked",
+                     G_CALLBACK(gtk_sat_module_popup_cb), module);
 
-    GTK_SAT_MODULE(widget)->close_button =
-        gpredict_mini_mod_button("gpredict-mod-close.png",
+    module->close_button = gpredict_mini_mod_button("gpredict-mod-close.png",
                                  _("Close this module."));
-    g_signal_connect(GTK_SAT_MODULE(widget)->close_button, "clicked",
-                     G_CALLBACK(gtk_sat_module_close_cb), widget);
+    g_signal_connect(module->close_button, "clicked",
+                     G_CALLBACK(gtk_sat_module_close_cb), module);
 
     /* create header; header should not be updated more than
        once pr. second.
      */
-    GTK_SAT_MODULE(widget)->header = gtk_label_new(NULL);
-    GTK_SAT_MODULE(widget)->head_count = 0;
-    GTK_SAT_MODULE(widget)->head_timeout =
-        (GTK_SAT_MODULE(widget)->timeout > 1000 ? 1 :
-         (guint) floor(1000 / GTK_SAT_MODULE(widget)->timeout));
+    module->header = gtk_label_new(NULL);
+    module->head_count = 0;
+    module->head_timeout = module->timeout > 1000 ? 1 :
+        (guint) floor(1000 / module->timeout);
 
     /* Event timeout
        Update every minute FIXME: user configurable
      */
-    GTK_SAT_MODULE(widget)->event_timeout =
-        (GTK_SAT_MODULE(widget)->timeout > 60000 ? 1 :
-         (guint) floor(60000 / GTK_SAT_MODULE(widget)->timeout));
+    module->event_timeout = module->timeout > 60000 ? 1 :
+         (guint) floor(60000 / module->timeout);
     /* force update the first time */
-    GTK_SAT_MODULE(widget)->event_count =
-        GTK_SAT_MODULE(widget)->event_timeout;
+    module->event_count = module->event_timeout;
 
-    butbox = gtk_hbox_new(FALSE, 0);
+    butbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(butbox),
-                       GTK_SAT_MODULE(widget)->header, FALSE, FALSE, 10);
+                       module->header, FALSE, FALSE, 10);
     gtk_box_pack_end(GTK_BOX(butbox),
-                     GTK_SAT_MODULE(widget)->close_button, FALSE, FALSE, 0);
+                     module->close_button, FALSE, FALSE, 0);
     gtk_box_pack_end(GTK_BOX(butbox),
-                     GTK_SAT_MODULE(widget)->popup_button, FALSE, FALSE, 0);
+                     module->popup_button, FALSE, FALSE, 0);
 
-    gtk_box_pack_start(GTK_BOX(widget), butbox, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(widget), gtk_hseparator_new(), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(module), butbox, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(module),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, FALSE, 0);
 
-    create_module_layout(GTK_SAT_MODULE(widget));
-
-    gtk_widget_show_all(widget);
+    create_module_layout(module);
+    gtk_widget_show_all(GTK_WIDGET(module));
 
     /* start timeout */
-    GTK_SAT_MODULE(widget)->timerid =
-        g_timeout_add(GTK_SAT_MODULE(widget)->timeout,
-                      gtk_sat_module_timeout_cb, widget);
+    module->timerid = g_timeout_add(module->timeout, gtk_sat_module_timeout_cb,
+                                    module);
 
-    return widget;
+    return GTK_WIDGET(module);
 }
 
 /**
