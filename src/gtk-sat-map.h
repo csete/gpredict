@@ -1,11 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-  William J Beksi <wjbeksi@users.sourceforge.net>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -34,6 +31,7 @@
 #include <glib/gi18n.h>
 #include <goocanvas.h>
 #include <gtk/gtk.h>
+
 #include "gtk-sat-data.h"
 
 /* *INDENT-OFF* */
@@ -102,7 +100,7 @@ typedef struct {
 
 /** The satellite map data structure. */
 typedef struct {
-    GtkVBox vbox;
+    GtkBox      vbox;
 
     GtkWidget  *canvas;                 /*!< The canvas widget. */
     
@@ -163,7 +161,7 @@ typedef struct {
     
 struct _GtkSatMapClass
 {
-    GtkVBoxClass parent_class;
+    GtkBoxClass parent_class;
 };
 
 GType          gtk_sat_map_get_type (void);

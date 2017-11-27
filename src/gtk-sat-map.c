@@ -1,13 +1,9 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
   Copyright (C)  2013       Charles Suprin,  AA1VS.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-  William J Beksi <wjbeksi@users.sourceforge.net>
-  Charles Suprin <hamaa1vs@gmail.com>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -152,7 +148,7 @@ GType gtk_sat_map_get_type()
             NULL
         };
 
-        gtk_sat_map_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_sat_map_type = g_type_register_static(GTK_TYPE_BOX,
                                                   "GtkSatMap",
                                                   &gtk_sat_map_info, 0);
     }
@@ -214,8 +210,7 @@ static void gtk_sat_map_destroy(GtkWidget * widget)
  * onto the canvas. Each satellite is then plotted on the map.
  *
  */
-GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
-                                qth_t * qth)
+GtkWidget *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth)
 {
     GtkSatMap      *satmap;
     GooCanvasItemModel *root;
@@ -316,8 +311,7 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
     /* plot each sat on the canvas */
     g_hash_table_foreach(satmap->sats, plot_sat, satmap);
 
-    /* gtk_box_pack_start (GTK_BOX (satmap), satmap->swin, TRUE, TRUE, 0); */
-    gtk_container_add(GTK_CONTAINER(satmap), satmap->canvas);
+    gtk_box_pack_start(GTK_BOX (satmap), satmap->canvas, TRUE, TRUE, 0);
 
     return GTK_WIDGET(satmap);
 }
