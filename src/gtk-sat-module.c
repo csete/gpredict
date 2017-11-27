@@ -246,7 +246,6 @@ static void gtk_sat_module_destroy(GtkWidget * widget)
  */
 GtkWidget *gtk_sat_module_new(const gchar * cfgfile)
 {
-    GtkWidget      *widget;
     GtkSatModule   *module;
     GtkWidget      *butbox;
 
@@ -264,11 +263,8 @@ GtkWidget *gtk_sat_module_new(const gchar * cfgfile)
     }
 
     /* create module widget */
-    widget = g_object_new(GTK_TYPE_SAT_MODULE, NULL);
-    module = GTK_SAT_MODULE(widget);
-
-//    g_signal_connect (widget, "realize",
-//                      G_CALLBACK (fix_child_allocations), NULL);
+    module = GTK_SAT_MODULE(g_object_new(GTK_TYPE_SAT_MODULE, NULL));
+    g_object_set(module, "orientation", GTK_ORIENTATION_VERTICAL, NULL);
 
     /* load configuration; note that this will also set the module name */
     gtk_sat_module_read_cfg_data(module, cfgfile);
@@ -395,7 +391,8 @@ static void create_module_layout(GtkSatModule * module)
                                   module->grid[5 * i + 4]);
     }
 
-    gtk_container_add(GTK_CONTAINER(module), table);
+//    gtk_container_add(GTK_CONTAINER(module), table);
+    gtk_box_pack_start(GTK_BOX(module), table, TRUE, TRUE, 0);
 }
 
 /**
