@@ -61,6 +61,7 @@ enum passes_content_e {
     PASSES_CONTENT_SUM,
 };
 
+#define SAVE_FORMAT_TXT     0
 
 /**
  * Save a satellite pass.
@@ -80,10 +81,9 @@ enum passes_content_e {
 void save_pass(GtkWidget * parent)
 {
     GtkWidget      *dialog;
-    GtkWidget      *table;
+    GtkWidget      *grid;
     GtkWidget      *dirchooser;
     GtkWidget      *filchooser;
-    GtkWidget      *fmtchooser;
     GtkWidget      *contents;
     GtkWidget      *label;
     gint            response;
@@ -91,7 +91,6 @@ void save_pass(GtkWidget * parent)
     qth_t          *qth;
     gchar          *savedir = NULL;
     gchar          *savefile;
-    gint            format;
     gint            cont;
 
 
@@ -104,20 +103,21 @@ void save_pass(GtkWidget * parent)
         gtk_dialog_new_with_buttons(_("Save Pass Details"), GTK_WINDOW(parent),
                                     GTK_DIALOG_MODAL |
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
-                                    GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+                                    "_Cancel", GTK_RESPONSE_REJECT,
+                                    "_Save", GTK_RESPONSE_ACCEPT, NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
     /* create the table */
-    table = gtk_table_new(4, 2, FALSE);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 10);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 10);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 10);
+    grid = gtk_grid_new();
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_container_set_border_width(GTK_CONTAINER(grid), 10);
 
     /* directory chooser */
     label = gtk_label_new(_("Save in folder:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_START,
+                 "valign", GTK_ALIGN_CENTER, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
 
     dirchooser = gtk_file_chooser_button_new(_("Select a folder"),
                                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
@@ -133,17 +133,18 @@ void save_pass(GtkWidget * parent)
         gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dirchooser),
                                             g_get_home_dir());
     }
-    gtk_table_attach_defaults(GTK_TABLE(table), dirchooser, 1, 2, 0, 1);
+    gtk_grid_attach(GTK_GRID(grid), dirchooser, 1, 0, 1, 1);
 
     /* file name */
     label = gtk_label_new(_("Save using file name:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_START,
+                 "valign", GTK_ALIGN_CENTER, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
 
     filchooser = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(filchooser), 100);
     g_signal_connect(filchooser, "changed", G_CALLBACK(file_changed), dialog);
-    gtk_table_attach_defaults(GTK_TABLE(table), filchooser, 1, 2, 1, 2);
+    gtk_grid_attach(GTK_GRID(grid), filchooser, 1, 1, 1, 1);
 
     /* use satellite name + orbit num as default; replace invalid characters
        with dash */
@@ -153,24 +154,11 @@ void save_pass(GtkWidget * parent)
     gtk_entry_set_text(GTK_ENTRY(filchooser), savefile);
     g_free(savefile);
 
-    /* file format */
-    label = gtk_label_new(_("Save as:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
-
-    fmtchooser = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(fmtchooser),
-                                   _("Plain text (*.txt)"));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(fmtchooser),
-                             sat_cfg_get_int(SAT_CFG_INT_PRED_SAVE_FORMAT));
-    gtk_table_attach_defaults(GTK_TABLE(table), fmtchooser, 1, 2, 2, 3);
-
-    gtk_widget_set_sensitive(fmtchooser, FALSE);
-
     /* file contents */
     label = gtk_label_new(_("File contents:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_START,
+                 "valign", GTK_ALIGN_CENTER, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
 
     contents = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents),
@@ -181,12 +169,11 @@ void save_pass(GtkWidget * parent)
                                    _("Data only"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(contents),
                              sat_cfg_get_int(SAT_CFG_INT_PRED_SAVE_CONTENTS));
-    gtk_table_attach_defaults(GTK_TABLE(table), contents, 1, 2, 3, 4);
+    gtk_grid_attach(GTK_GRID(grid), contents, 1, 2, 1, 1);
 
-    gtk_widget_show_all(table);
+    gtk_widget_show_all(grid);
     gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                      table);
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), grid);
 
     /* run the dialog */
     response = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -199,15 +186,14 @@ void save_pass(GtkWidget * parent)
         /* get file and directory */
         savedir = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dirchooser));
         savefile = g_strdup(gtk_entry_get_text(GTK_ENTRY(filchooser)));
-        format = gtk_combo_box_get_active(GTK_COMBO_BOX(fmtchooser));
         cont = gtk_combo_box_get_active(GTK_COMBO_BOX(contents));
 
         /* call saver */
-        save_pass_exec(dialog, pass, qth, savedir, savefile, format, cont);
+        save_pass_exec(dialog, pass, qth, savedir, savefile, SAVE_FORMAT_TXT,
+                       cont);
 
         /* store new settings */
         sat_cfg_set_str(SAT_CFG_STR_PRED_SAVE_DIR, savedir);
-        sat_cfg_set_int(SAT_CFG_INT_PRED_SAVE_FORMAT, format);
         sat_cfg_set_int(SAT_CFG_INT_PRED_SAVE_CONTENTS, cont);
 
         /* clean up */
@@ -242,10 +228,9 @@ void save_pass(GtkWidget * parent)
 void save_passes(GtkWidget * parent)
 {
     GtkWidget      *dialog;
-    GtkWidget      *table;
+    GtkWidget      *grid;
     GtkWidget      *dirchooser;
     GtkWidget      *filchooser;
-    GtkWidget      *fmtchooser;
     GtkWidget      *contents;
     GtkWidget      *label;
     gint            response;
@@ -254,7 +239,6 @@ void save_passes(GtkWidget * parent)
     qth_t          *qth;
     gchar          *savedir = NULL;
     gchar          *savefile;
-    gint            format;
     gint            cont;
 
     /* get data attached to parent */
@@ -266,22 +250,21 @@ void save_passes(GtkWidget * parent)
     dialog = gtk_dialog_new_with_buttons(_("Save Passes"), GTK_WINDOW(parent),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_SAVE,
-                                         GTK_RESPONSE_ACCEPT, NULL);
+                                         "_Cancel", GTK_RESPONSE_REJECT,
+                                         "_Save", GTK_RESPONSE_ACCEPT, NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
     /* create the table */
-    table = gtk_table_new(4, 2, FALSE);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 10);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 10);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 10);
+    grid = gtk_grid_new();
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_container_set_border_width(GTK_CONTAINER(grid), 10);
 
     /* directory chooser */
     label = gtk_label_new(_("Save in folder:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_START,
+                 "valign", GTK_ALIGN_CENTER, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 1, 1);
 
     dirchooser = gtk_file_chooser_button_new(_("Select a folder"),
                                              GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
@@ -297,17 +280,18 @@ void save_passes(GtkWidget * parent)
         gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dirchooser),
                                             g_get_home_dir());
     }
-    gtk_table_attach_defaults(GTK_TABLE(table), dirchooser, 1, 2, 0, 1);
+    gtk_grid_attach(GTK_GRID(grid), dirchooser, 1, 0, 1, 1);
 
     /* file name */
     label = gtk_label_new(_("Save using file name:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_START,
+                 "valign", GTK_ALIGN_CENTER, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
 
     filchooser = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(filchooser), 100);
     g_signal_connect(filchooser, "changed", G_CALLBACK(file_changed), dialog);
-    gtk_table_attach_defaults(GTK_TABLE(table), filchooser, 1, 2, 1, 2);
+    gtk_grid_attach(GTK_GRID(grid), filchooser, 1, 1, 1, 1);
 
     /* use satellite name + orbit num as default; replace invalid characters
        with dash */
@@ -317,36 +301,22 @@ void save_passes(GtkWidget * parent)
     gtk_entry_set_text(GTK_ENTRY(filchooser), savefile);
     g_free(savefile);
 
-    /* file format */
-    label = gtk_label_new(_("Save as:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
-
-    fmtchooser = gtk_combo_box_text_new();
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(fmtchooser),
-                                   _("Plain text (*.txt)"));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(fmtchooser),
-                             sat_cfg_get_int(SAT_CFG_INT_PRED_SAVE_FORMAT));
-    gtk_table_attach_defaults(GTK_TABLE(table), fmtchooser, 1, 2, 2, 3);
-
-    gtk_widget_set_sensitive(fmtchooser, FALSE);
-
     /* file contents */
     label = gtk_label_new(_("File contents:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_START,
+                 "valign", GTK_ALIGN_CENTER, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 2, 1, 1);
 
     contents = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents),
                                    _("Complete report"));
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(contents), _("Summary"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(contents), 0);
-    gtk_table_attach_defaults(GTK_TABLE(table), contents, 1, 2, 3, 4);
+    gtk_grid_attach(GTK_GRID(grid), contents, 1, 2, 1, 1);
 
-    gtk_widget_show_all(table);
+    gtk_widget_show_all(grid);
     gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                      table);
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), grid);
 
     /* run the dialog */
     response = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -359,15 +329,14 @@ void save_passes(GtkWidget * parent)
         /* get file and directory */
         savedir = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dirchooser));
         savefile = g_strdup(gtk_entry_get_text(GTK_ENTRY(filchooser)));
-        format = gtk_combo_box_get_active(GTK_COMBO_BOX(fmtchooser));
         cont = gtk_combo_box_get_active(GTK_COMBO_BOX(contents));
 
         /* call saver */
-        save_passes_exec(dialog, passes, qth, savedir, savefile, format, cont);
+        save_passes_exec(dialog, passes, qth, savedir, savefile,
+                         SAVE_FORMAT_TXT, cont);
 
         /* store new settings */
         sat_cfg_set_str(SAT_CFG_STR_PRED_SAVE_DIR, savedir);
-        sat_cfg_set_int(SAT_CFG_INT_PRED_SAVE_FORMAT, format);
 
         /* clean up */
         g_free(savedir);

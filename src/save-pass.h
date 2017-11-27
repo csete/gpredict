@@ -33,11 +33,6 @@
 #include "predict-tools.h"
 #include "sat-pass-dialogs.h"
 
-/** Save format */
-typedef enum {
-    SAVE_FORMAT_TXT = 0,        /*!< Save in plain text format (data only) */
-    //SAVE_FORMAT_HTML,      /*!< HTML format (data and graphics) */
-} save_format_t;
 
 void            save_pass(GtkWidget * parent);
 void            save_passes(GtkWidget * parent);
