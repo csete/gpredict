@@ -1,9 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -30,10 +28,11 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
+#include <goocanvas.h>
 #include <gtk/gtk.h>
+
 #include "gtk-sat-data.h"
 #include "predict-tools.h"
-#include <goocanvas.h>
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus
@@ -90,7 +89,7 @@ typedef enum {
 
 
 struct _GtkPolarView {
-    GtkVBox         vbox;
+    GtkBox          vbox;
 
     GtkWidget      *canvas;     /*!< The canvas widget */
 
@@ -136,7 +135,7 @@ struct _GtkPolarView {
 };
 
 struct _GtkPolarViewClass {
-    GtkVBoxClass    parent_class;
+    GtkBoxClass     parent_class;
 };
 
 

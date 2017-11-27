@@ -1,10 +1,10 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Charles Suprin <hamaa1vs@gmail.com>
+  Authors: Alexandru Csete
+           Charles Suprin
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -140,7 +140,7 @@ GType gtk_polar_view_get_type()
             NULL
         };
 
-        gtk_polar_view_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_polar_view_type = g_type_register_static(GTK_TYPE_BOX,
                                                      "GtkPolarView",
                                                      &gtk_polar_view_info, 0);
     }
@@ -155,15 +155,14 @@ GType gtk_polar_view_get_type()
  * e.g. when the container is re-sized. The function re-calculates the graph
  * dimensions based on the new canvas size.
  */
-static void
-size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation, gpointer data)
+static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
+                             gpointer data)
 {
     (void)widget;
     (void)allocation;
     (void)data;
     GTK_POLAR_VIEW(data)->resize = TRUE;
 }
-
 
 /**
  * Manage canvas realise signals.
@@ -762,99 +761,79 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
 GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
                                    qth_t * qth)
 {
-    GtkWidget      *polv;
+    GtkPolarView       *polv;
     GooCanvasItemModel *root;
 
-    polv = g_object_new(GTK_TYPE_POLAR_VIEW, NULL);
+    polv = GTK_POLAR_VIEW(g_object_new(GTK_TYPE_POLAR_VIEW, NULL));
 
-    GTK_POLAR_VIEW(polv)->cfgdata = cfgdata;
-    GTK_POLAR_VIEW(polv)->sats = sats;
-    GTK_POLAR_VIEW(polv)->qth = qth;
+    polv->cfgdata = cfgdata;
+    polv->sats = sats;
+    polv->qth = qth;
 
-
-    GTK_POLAR_VIEW(polv)->obj = g_hash_table_new_full(g_int_hash,
-                                                      g_int_equal,
-                                                      g_free, NULL);
-
-    GTK_POLAR_VIEW(polv)->showtracks_on = g_hash_table_new_full(g_int_hash,
-                                                                g_int_equal,
-                                                                g_free, NULL);
-
-    GTK_POLAR_VIEW(polv)->showtracks_off = g_hash_table_new_full(g_int_hash,
-                                                                 g_int_equal,
-                                                                 g_free, NULL);
+    polv->obj = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
+    polv->showtracks_on = g_hash_table_new_full(g_int_hash, g_int_equal,
+                                                g_free, NULL);
+    polv->showtracks_off = g_hash_table_new_full(g_int_hash, g_int_equal,
+                                                 g_free, NULL);
 
     /* get settings */
-    GTK_POLAR_VIEW(polv)->refresh = mod_cfg_get_int(cfgdata,
-                                                    MOD_CFG_POLAR_SECTION,
-                                                    MOD_CFG_POLAR_REFRESH,
-                                                    SAT_CFG_INT_POLAR_REFRESH);
+    polv->refresh = mod_cfg_get_int(cfgdata, MOD_CFG_POLAR_SECTION,
+                                    MOD_CFG_POLAR_REFRESH,
+                                    SAT_CFG_INT_POLAR_REFRESH);
 
-    GTK_POLAR_VIEW(polv)->showtrack = mod_cfg_get_bool(cfgdata,
-                                                       MOD_CFG_POLAR_SECTION,
-                                                       MOD_CFG_POLAR_SHOW_TRACK_AUTO,
-                                                       SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO);
+    polv->showtrack = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                       MOD_CFG_POLAR_SHOW_TRACK_AUTO,
+                                       SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO);
 
+    polv->counter = 1;
 
-    GTK_POLAR_VIEW(polv)->counter = 1;
+    polv->swap = mod_cfg_get_int(cfgdata, MOD_CFG_POLAR_SECTION,
+                                 MOD_CFG_POLAR_ORIENTATION,
+                                 SAT_CFG_INT_POLAR_ORIENTATION);
 
-    GTK_POLAR_VIEW(polv)->swap = mod_cfg_get_int(cfgdata,
-                                                 MOD_CFG_POLAR_SECTION,
-                                                 MOD_CFG_POLAR_ORIENTATION,
-                                                 SAT_CFG_INT_POLAR_ORIENTATION);
+    polv->qthinfo = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                     MOD_CFG_POLAR_SHOW_QTH_INFO,
+                                     SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
 
-    GTK_POLAR_VIEW(polv)->qthinfo = mod_cfg_get_bool(cfgdata,
-                                                     MOD_CFG_POLAR_SECTION,
-                                                     MOD_CFG_POLAR_SHOW_QTH_INFO,
-                                                     SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
+    polv->eventinfo = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                       MOD_CFG_POLAR_SHOW_NEXT_EVENT,
+                                       SAT_CFG_BOOL_POL_SHOW_NEXT_EV);
 
-    GTK_POLAR_VIEW(polv)->eventinfo = mod_cfg_get_bool(cfgdata,
-                                                       MOD_CFG_POLAR_SECTION,
-                                                       MOD_CFG_POLAR_SHOW_NEXT_EVENT,
-                                                       SAT_CFG_BOOL_POL_SHOW_NEXT_EV);
+    polv->cursinfo = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                      MOD_CFG_POLAR_SHOW_CURS_TRACK,
+                                      SAT_CFG_BOOL_POL_SHOW_CURS_TRACK);
 
-    GTK_POLAR_VIEW(polv)->cursinfo = mod_cfg_get_bool(cfgdata,
-                                                      MOD_CFG_POLAR_SECTION,
-                                                      MOD_CFG_POLAR_SHOW_CURS_TRACK,
-                                                      SAT_CFG_BOOL_POL_SHOW_CURS_TRACK);
-
-    GTK_POLAR_VIEW(polv)->extratick = mod_cfg_get_bool(cfgdata,
-                                                       MOD_CFG_POLAR_SECTION,
-                                                       MOD_CFG_POLAR_SHOW_EXTRA_AZ_TICKS,
-                                                       SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
-    gtk_polar_view_load_showtracks(GTK_POLAR_VIEW(polv));
+    polv->extratick = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                       MOD_CFG_POLAR_SHOW_EXTRA_AZ_TICKS,
+                                       SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS);
+    gtk_polar_view_load_showtracks(polv);
 
     /* create the canvas */
-    GTK_POLAR_VIEW(polv)->canvas = goo_canvas_new();
-    g_object_set(G_OBJECT(GTK_POLAR_VIEW(polv)->canvas), "has-tooltip", TRUE,
-                 NULL);
-    gtk_widget_set_size_request(GTK_POLAR_VIEW(polv)->canvas,
-                                POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
-    goo_canvas_set_bounds(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas), 0, 0,
+    polv->canvas = goo_canvas_new();
+    g_object_set(G_OBJECT(polv->canvas), "has-tooltip", TRUE, NULL);
+    gtk_widget_set_size_request(polv->canvas, POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    goo_canvas_set_bounds(GOO_CANVAS(polv->canvas), 0, 0,
                           POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
 
-
     /* connect size-request signal */
-    g_signal_connect(GTK_POLAR_VIEW(polv)->canvas, "size-allocate",
+    g_signal_connect(polv->canvas, "size-allocate",
                      G_CALLBACK(size_allocate_cb), polv);
-    g_signal_connect(GTK_POLAR_VIEW(polv)->canvas, "item_created",
+    g_signal_connect(polv->canvas, "item_created",
                      (GCallback) on_item_created, polv);
-    g_signal_connect_after(GTK_POLAR_VIEW(polv)->canvas, "realize",
+    g_signal_connect_after(polv->canvas, "realize",
                            (GCallback) on_canvas_realized, polv);
-
-    gtk_widget_show(GTK_POLAR_VIEW(polv)->canvas);
+    gtk_widget_show(polv->canvas);
 
     /* Create the canvas model */
-    root = create_canvas_model(GTK_POLAR_VIEW(polv));
-    goo_canvas_set_root_item_model(GOO_CANVAS(GTK_POLAR_VIEW(polv)->canvas),
-                                   root);
+    root = create_canvas_model(polv);
+    goo_canvas_set_root_item_model(GOO_CANVAS(polv->canvas), root);
 
     g_object_unref(root);
 
     //gtk_box_pack_start (GTK_BOX (polv), GTK_POLAR_VIEW (polv)->swin, TRUE, TRUE, 0);
-    gtk_container_add(GTK_CONTAINER(polv), GTK_POLAR_VIEW(polv)->canvas);
+    gtk_box_pack_start(GTK_BOX(polv), polv->canvas, TRUE, TRUE, 0);
 
-    return polv;
+    return GTK_WIDGET(polv);
 }
 
 static void update_polv_size(GtkPolarView * polv)
