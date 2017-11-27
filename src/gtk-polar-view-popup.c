@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -25,46 +22,44 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief Pop-up menu used by GtkSatList, GtkSatMap, etc.
- */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <goocanvas.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "sat-log.h"
-#include "config-keys.h"
-#include "sat-cfg.h"
-#include "mod-cfg-get-param.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+
+#include <glib/gi18n.h>
+#include <goocanvas.h>
+#include <gtk/gtk.h>
+
+#include "config-keys.h"
 #include "gtk-polar-view.h"
-#include "time-tools.h"
-#include "orbit-tools.h"
-#include "predict-tools.h"
-#include "sat-pass-dialogs.h"
-#include "sat-info.h"
 #include "gtk-polar-view-popup.h"
 #include "gtk-sat-popup-common.h"
+#include "mod-cfg-get-param.h"
+#include "orbit-tools.h"
+#include "predict-tools.h"
+#include "sat-cfg.h"
+#include "sat-info.h"
+#include "sat-log.h"
+#include "sat-pass-dialogs.h"
+#include "sgpsdp/sgp4sdp4.h"
+#include "time-tools.h"
+
 
 static void     track_toggled(GtkCheckMenuItem * item, gpointer data);
 
 /* static void target_toggled (GtkCheckMenuItem *item, gpointer data); */
 
-
-/** \brief Show satellite popup menu.
- *  \param sat Pointer to the satellite data.
- *  \param qth The current location.
- *  \param pview The GtkPolarView widget.
- *  \param event The mouse-click related event info
- *  \param toplevel The toplevel window or NULL.
+/**
+ * Show satellite popup menu.
  *
+ * @param sat Pointer to the satellite data.
+ * @param qth The current location.
+ * @param pview The GtkPolarView widget.
+ * @param event The mouse-click related event info
+ * @param toplevel The toplevel window or NULL.
  */
-void
-gtk_polar_view_popup_exec(sat_t * sat,
-                          qth_t * qth,
-                          GtkPolarView * pview,
-                          GdkEventButton * event, GtkWidget * toplevel)
+void gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth, GtkPolarView * pview,
+                               GdkEventButton * event, GtkWidget * toplevel)
 {
     GtkWidget      *menu;
     GtkWidget      *menuitem;
@@ -73,8 +68,6 @@ gtk_polar_view_popup_exec(sat_t * sat,
     gchar          *buff;
     sat_obj_t      *obj = NULL;
     gint           *catnum;
-
-
 
     menu = gtk_menu_new();
 
@@ -144,15 +137,13 @@ gtk_polar_view_popup_exec(sat_t * sat,
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
                    (event != NULL) ? event->button : 0,
                    gdk_event_get_time((GdkEvent *) event));
-
-
 }
 
-
-
-/** \brief Manage toggling of Ground Track.
- *  \param item The menu item that was toggled.
- *  \param data Pointer to the GtkPolarView structure.
+/**
+ * Manage toggling of Ground Track.
+ *
+ * @param item The menu item that was toggled.
+ * @param data Pointer to the GtkPolarView structure.
  *
  */
 static void track_toggled(GtkCheckMenuItem * item, gpointer data)
@@ -163,7 +154,6 @@ static void track_toggled(GtkCheckMenuItem * item, gpointer data)
 
     /* qth_t              *qth; Unused */
     gint           *catnum;
-
 
     /* get satellite object */
     obj = SAT_OBJ(g_object_get_data(G_OBJECT(item), "obj"));
@@ -206,21 +196,19 @@ static void track_toggled(GtkCheckMenuItem * item, gpointer data)
         /* delete sky track */
         gtk_polar_view_delete_track(pv, obj, sat);
     }
-
 }
 
-
 #if 0
-/** \brief Manage toggling of Set Target.
- *  \param item The menu item that was toggled.
- *  \param data Pointer to the GtkPolarView structure.
+/**
+ * Manage toggling of Set Target.
+ *
+ * @param item The menu item that was toggled.
+ * @param data Pointer to the GtkPolarView structure.
  *
  */
 static void target_toggled(GtkCheckMenuItem * item, gpointer data)
 {
     sat_obj_t      *obj = NULL;
-
-
 
     /* get satellite object */
     obj = SAT_OBJ(g_object_get_data(G_OBJECT(item), "obj"));

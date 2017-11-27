@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -29,9 +26,10 @@
 #define GTK_POLAR_VIEW_POPUP_H 1
 
 #include <gtk/gtk.h>
-#include "sgpsdp/sgp4sdp4.h"
+
 #include "gtk-sat-data.h"
 #include "gtk-polar-view.h"
+#include "sgpsdp/sgp4sdp4.h"
 
 
 void            gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth,
