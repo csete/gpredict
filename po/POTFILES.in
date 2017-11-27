@@ -45,7 +45,6 @@ src/qth-editor.c
 src/radio-conf.c
 src/rotor-conf.c
 src/sat-cfg.c
-src/sat-debugger.c
 src/sat-info.c
 src/sat-log-browser.c
 src/sat-log.c

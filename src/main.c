@@ -52,7 +52,6 @@
 #include "tle-update.h"
 #include "mod-mgr.h"
 #include "sat-cfg.h"
-#include "sat-debugger.h"
 #include "sat-log.h"
 
 

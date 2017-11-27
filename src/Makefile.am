@@ -119,10 +119,7 @@ gpredict_SOURCES = \
     time-tools.c time-tools.h \
     tle-tools.c tle-tools.h \
     tle-update.c tle-update.h \
-    sat-debugger.c sat-debugger.h \
     strnatcmp.c strnatcmp.h
-
-
 
 ##gpredict_LDADD = ./sgpsdp/libsgp4sdp4.a @PACKAGE_LIBS@
 gpredict_LDADD = @PACKAGE_LIBS@

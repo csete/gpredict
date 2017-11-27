@@ -63,7 +63,6 @@
 #include "orbit-tools.h"
 #include "predict-tools.h"
 #include "sat-cfg.h"
-#include "sat-debugger.h"
 #include "sat-info.h"
 #include "sat-log.h"
 #include "sgpsdp/sgp4sdp4.h"
