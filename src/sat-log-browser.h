@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -28,6 +25,6 @@
 #ifndef SAT_LOG_BROWSER_H
 #define SAT_LOG_BROWSER_H 1
 
-void sat_log_browser_open  (void);
+void            sat_log_browser_open(void);
 
 #endif

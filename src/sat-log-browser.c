@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -27,9 +24,10 @@
 */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+
+#include "compat.h"
 #include "sat-log.h"
 #include "sat-log-browser.h"
-#include "compat.h"
 
 
 /* columns in the message list */
@@ -68,8 +66,6 @@ const gchar    *DEBUG_STR[6] = {
 
 
 extern GtkWidget *app;
-
-
 static gboolean initialised = FALSE;    /* Is module initialised? */
 
 /* counters */
@@ -122,13 +118,11 @@ void sat_log_browser_open()
 
     if (!initialised)
     {
-
-        hbox = gtk_hbox_new(FALSE, 10);
+        hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
         gtk_box_pack_start(GTK_BOX(hbox), create_message_list(),
                            TRUE, TRUE, 0);
-
-        gtk_box_pack_start(GTK_BOX(hbox),
-                           create_message_summary(), FALSE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox), create_message_summary(),
+                           FALSE, TRUE, 0);
 
         /* create dialog window; we use "fake" stock responses to catch user
            button clicks (save_as and pause)
@@ -145,9 +139,9 @@ void sat_log_browser_open()
 
         gtk_window_set_default_size(GTK_WINDOW(window), 800, 300);
 
-        gtk_container_add(GTK_CONTAINER
-                          (gtk_dialog_get_content_area(GTK_DIALOG(window))),
-                          hbox);
+        gtk_box_pack_start(GTK_BOX
+                           (gtk_dialog_get_content_area(GTK_DIALOG(window))),
+                           hbox, TRUE, TRUE, 0);
 
         /* connect response signal */
         g_signal_connect(G_OBJECT(window), "response",
@@ -189,8 +183,7 @@ void sat_log_browser_open()
     }
 }
 
-
-/** \brief Add a message to message list */
+/* Add a message to message list */
 static void add_debug_message(const gchar * datetime,
                               sat_log_level_t debug_level, const char *message)
 {
@@ -204,35 +197,26 @@ static void add_debug_message(const gchar * datetime,
                        MSG_LIST_COL_LEVEL, _(DEBUG_STR[debug_level]),
                        MSG_LIST_COL_MSG, message, -1);
 
-    /* increment severity counter */
     switch (debug_level)
     {
-
-        /* runtime error */
     case SAT_LOG_LEVEL_ERROR:
         errors++;
         str = g_strdup_printf("%d", errors);
         gtk_label_set_text(GTK_LABEL(errorlabel), str);
         g_free(str);
         break;
-
-        /* warning */
     case SAT_LOG_LEVEL_WARN:
         warnings++;
         str = g_strdup_printf("%d", warnings);
         gtk_label_set_text(GTK_LABEL(warnlabel), str);
         g_free(str);
         break;
-
-        /* info */
     case SAT_LOG_LEVEL_INFO:
         infos++;
         str = g_strdup_printf("%d", infos);
         gtk_label_set_text(GTK_LABEL(infolabel), str);
         g_free(str);
         break;
-
-        /* debug */
     case SAT_LOG_LEVEL_DEBUG:
         debugs++;
         str = g_strdup_printf("%d", debugs);
@@ -249,10 +233,9 @@ static void add_debug_message(const gchar * datetime,
     str = g_strdup_printf("<b>%d</b>", total);
     gtk_label_set_markup(GTK_LABEL(sumlabel), str);
     g_free(str);
-
 }
 
-/*** FIXME: does not seem to be necessary */
+/* FIXME: does not seem to be necessary */
 static gint message_window_delete(GtkWidget * widget, GdkEvent * event,
                                   gpointer data)
 {
@@ -265,11 +248,9 @@ static gint message_window_delete(GtkWidget * widget, GdkEvent * event,
     return FALSE;
 }
 
-
 /* callback function called when the dialog window is destroyed */
 static void message_window_destroy(GtkWidget * widget, gpointer data)
 {
-
     (void)widget;
     (void)data;
 
@@ -279,26 +260,20 @@ static void message_window_destroy(GtkWidget * widget, gpointer data)
     initialised = FALSE;
 }
 
-
 /* callback function called when a dialog button is clicked */
-static void
-message_window_response(GtkWidget * widget, gint response, gpointer data)
+static void message_window_response(GtkWidget * widget, gint response,
+                                    gpointer data)
 {
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)data;
 
     switch (response)
     {
-        /* close button */
     case GTK_RESPONSE_CLOSE:
         gtk_widget_destroy(widget);
         break;
-
-        /* OPEN button */
     case GTK_RESPONSE_YES:
         load_debug_file(widget);
         break;
-
-        /* CLEAR button */
     case GTK_RESPONSE_NO:
         clear_message_list();
         break;
@@ -308,8 +283,8 @@ message_window_response(GtkWidget * widget, gint response, gpointer data)
     }
 }
 
-
-/** \brief Load debug file.
+/*
+ * Load debug file.
  *
  * This function creates the file chooser dialog, which can be used to select
  * a file containing debug messages. When the dialog returns, the selected
@@ -341,7 +316,6 @@ static void load_debug_file(GtkWidget * parent)
 
     if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
     {
-
         clear_message_list();
 
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -366,11 +340,9 @@ static void load_debug_file(GtkWidget * parent)
     }
 
     gtk_widget_destroy(dialog);
-
 }
 
-
-/** \brief Read contents of debug file. */
+/* Read contents of debug file. */
 static int read_debug_file(const gchar * filename)
 {
     GIOChannel     *logfile = NULL;     /* the log file */
@@ -384,7 +356,6 @@ static int read_debug_file(const gchar * filename)
     /* check file and read contents */
     if (g_file_test(filename, G_FILE_TEST_EXISTS))
     {
-
         /* open file */
         logfile = g_io_channel_new_file(filename, "r", &error);
 
@@ -396,11 +367,10 @@ static int read_debug_file(const gchar * filename)
                                           &length,
                                           NULL, NULL) != G_IO_STATUS_EOF)
             {
-
                 /* trim line and split it */
                 line = g_strdelimit(line, "\n", '\0');
 
-                buff = g_strsplit(line, SAT_LOG_MSG_SEPARATOR, MSG_LIST_COL_NUMBER + 1); // +1 because we used to have a msg source (pre 1.4)
+                buff = g_strsplit(line, SAT_LOG_MSG_SEPARATOR, MSG_LIST_COL_NUMBER + 1);        // +1 because we used to have a msg source (pre 1.4)
 
                 /* Gpredict 1.3 and earlier had 4 fields:
                  *   buff[0]: Date and time
@@ -464,7 +434,6 @@ static int read_debug_file(const gchar * filename)
                         __FILE__, __LINE__, error->message);
 
             g_clear_error(&error);
-
             errorcode = 1;
         }
     }
@@ -476,8 +445,8 @@ static int read_debug_file(const gchar * filename)
     return errorcode;
 }
 
-
-/** \brief Clear the message list
+/*
+ * Clear the message list
  *
  * Besides clearing the message list, the function also resets
  * the counters and set the text of the corresponding widgets
@@ -499,8 +468,6 @@ static void clear_message_list()
     gtk_label_set_text(GTK_LABEL(debuglabel), "0");
     gtk_label_set_markup(GTK_LABEL(sumlabel), "<b>0</b>");
 }
-
-
 
 /* Create list view */
 static GtkWidget *create_message_list()
@@ -543,7 +510,6 @@ static GtkWidget *create_message_list()
     return swin;
 }
 
-
 /* create tree view model; we actually create a GtkListStore because we are
    only interested in a flat list. A GtkListStore can be cast to a GtkTreeModel
    without any problems.
@@ -560,7 +526,6 @@ static GtkTreeModel *create_list_model()
     return GTK_TREE_MODEL(liststore);
 }
 
-
 /* create summary */
 static GtkWidget *create_message_summary()
 {
@@ -571,21 +536,21 @@ static GtkWidget *create_message_summary()
 
     /* create labels */
     errorlabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(errorlabel), 1.0, 0.5);
+    g_object_set(errorlabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     warnlabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(warnlabel), 1.0, 0.5);
+    g_object_set(warnlabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     infolabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(infolabel), 1.0, 0.5);
+    g_object_set(infolabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     debuglabel = gtk_label_new("0");
-    gtk_misc_set_alignment(GTK_MISC(debuglabel), 1.0, 0.5);
+    g_object_set(debuglabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     sumlabel = gtk_label_new(NULL);
     gtk_label_set_use_markup(GTK_LABEL(sumlabel), TRUE);
     gtk_label_set_markup(GTK_LABEL(sumlabel), "<b>0</b>");
-    gtk_misc_set_alignment(GTK_MISC(sumlabel), 1.0, 0.5);
+    g_object_set(sumlabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     /* create table and add widgets */
     table = gtk_table_new(6, 2, TRUE);
@@ -593,26 +558,26 @@ static GtkWidget *create_message_summary()
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
 
     label = gtk_label_new(_("Errors"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
 
     label = gtk_label_new(_("Warnings"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
 
     label = gtk_label_new(_("Info"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
 
     label = gtk_label_new(_("Debug"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
     gtk_table_attach_defaults(GTK_TABLE(table),
                               gtk_hseparator_new(), 0, 2, 4, 5);
 
     label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Total</b>"));
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
@@ -629,7 +594,7 @@ static GtkWidget *create_message_summary()
     gtk_container_add(GTK_CONTAINER(frame), table);
 
     /* pack frame into vbox so that it doesn't gets streched vertically */
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
     return vbox;
