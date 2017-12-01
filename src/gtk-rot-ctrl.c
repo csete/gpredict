@@ -226,10 +226,10 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
     }
 
     /* create contents */
-    table = gtk_table_new(2, 3, FALSE);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 0);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 0);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 10);
+    table = gtk_table_new(2, 2, TRUE);
+    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
+    gtk_container_set_border_width(GTK_CONTAINER(table), 0);
     gtk_table_attach(GTK_TABLE(table), create_az_widgets(rot_ctrl),
                      0, 1, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach(GTK_TABLE(table), create_el_widgets(rot_ctrl),
@@ -240,11 +240,10 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
     gtk_table_attach(GTK_TABLE(table),
                      create_conf_widgets(rot_ctrl), 1, 2, 1, 2,
                      GTK_FILL, GTK_SHRINK, 0, 0);
-    gtk_table_attach(GTK_TABLE(table),
-                     create_plot_widget(rot_ctrl), 2, 3, 0, 2,
-                     GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
 
-    gtk_container_add(GTK_CONTAINER(rot_ctrl), table);
+    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl), TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(rot_ctrl), table, FALSE, FALSE, 5);
+    gtk_container_set_border_width(GTK_CONTAINER(rot_ctrl), 5);
 
     rot_ctrl->timerid = g_timeout_add(rot_ctrl->delay,
                                       rot_ctrl_timeout_cb,
@@ -1199,6 +1198,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                                         gtk_rot_knob_get_value(GTK_ROT_KNOB
                                                                (ctrl->ElSet)));
         }
+        gtk_widget_queue_draw(ctrl->plot);
     }
     g_mutex_unlock(&(ctrl->busy));
 
