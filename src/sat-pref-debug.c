@@ -121,13 +121,11 @@ GtkWidget      *sat_pref_debug_create()
 
     /* info label */
     confdir = get_user_conf_dir();
-    msg = g_strdup_printf(_("Gpredict stores all run-time messages "
-                            "in the %s%slogs%s folder. The "
-                            "current log file is called gpredict.log and the "
-                            "file is always kept until the next execution so "
-                            "that you can examine it in case of a failure. "
-                            "If old log files are kept, they are called "
-                            "gpredict-XYZ.log where XYZ is a uniques timestamp."),
+    msg = g_strdup_printf(_("Gpredict stores all run-time messages in the %s%slogs%s\n"
+                            "directory. The current log file is called gpredict.log and the file is\n"
+                            "always kept until the next execution, so that you can examine it in case\n"
+                            "of a failure. If old log files are kept, they are called gpredict-XYZ.log\n"
+                            "where XYZ is a unique timestamp."),
                           confdir, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
     label = gtk_label_new(msg);
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
