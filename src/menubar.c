@@ -1,9 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -72,7 +70,6 @@ static void     create_module_window(GtkWidget * module);
 static gint     compare_func(GtkTreeModel * model, GtkTreeIter * a,
                              GtkTreeIter * b, gpointer userdata);
 
-/** Regular menu items. */
 static GtkActionEntry entries[] = {
     {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
     {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
@@ -115,8 +112,6 @@ static GtkActionEntry entries[] = {
      N_("Show about dialog"), G_CALLBACK(menubar_about_cb)},
 };
 
-
-/** Menubar UI description. */
 static const char *menu_desc =
     "<ui>"
     "   <menubar name='GpredictMenu'>"
@@ -150,14 +145,7 @@ static const char *menu_desc =
     "   </menubar>"
     "</ui>";
 
-/**
- * Create menubar.
- * @param window The main application window.
- * @return The menubar widget.
- *
- * This function creates and initializes the main menubar for gpredict.
- * It should be called from the main gui_create function.
- */
+
 GtkWidget      *menubar_create(GtkWidget * window)
 {
     GtkWidget      *menubar;
@@ -167,9 +155,8 @@ GtkWidget      *menubar_create(GtkWidget * window)
     GError         *error = NULL;
     guint           i;
 
-    /* create action group */
+
     actgrp = gtk_action_group_new("MenuActions");
-    /* i18n */
     for (i = 0; i < G_N_ELEMENTS(entries); i++)
     {
         if (entries[i].label)
@@ -180,15 +167,12 @@ GtkWidget      *menubar_create(GtkWidget * window)
 
     gtk_action_group_add_actions(actgrp, entries, G_N_ELEMENTS(entries), NULL);
 
-    /* create UI manager */
     uimgr = gtk_ui_manager_new();
     gtk_ui_manager_insert_action_group(uimgr, actgrp, 0);
 
-    /* accelerator group */
     accgrp = gtk_ui_manager_get_accel_group(uimgr);
     gtk_window_add_accel_group(GTK_WINDOW(window), accgrp);
 
-    /* try to create UI from XML */
     if (!gtk_ui_manager_add_ui_from_string(uimgr, menu_desc, -1, &error))
     {
         g_print(_("Failed to build menubar: %s"), error->message);
@@ -197,19 +181,12 @@ GtkWidget      *menubar_create(GtkWidget * window)
         return NULL;
     }
 
-    /* now, finally, get the menubar */
     menubar = gtk_ui_manager_get_widget(uimgr, "/GpredictMenu");
 
     return menubar;
 }
 
-/**
- * Create new module.
- *
- * This function first executes the mod-cfg editor. If the editor returns
- * the name of an existing .mod file it will create the corresponding module
- * and send it to the module manager.
- */
+/* Create new module */
 static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
 {
     gchar          *modnam = NULL;
@@ -365,23 +342,14 @@ static void menubar_pref_cb(GtkWidget * widget, gpointer data)
     sat_pref_run();
 }
 
-/**
- * Update Frequency information from Network
- * @param widget The menu item *unused)
- * @param data user data (unused)
- *
- * This function is all when the user selects
- * Edit -> Update frequency from network
- * in the menubar.
- * the function calls the trsp_update_from_network with silent flag FALSE
- */
+/* Update Frequency information from Network */
 static void menubar_trsp_net_cb(GtkWidget * widget, gpointer data)
 {
 
-    GtkWidget      *dialog;     /* dialog window  */
-    GtkWidget      *label;      /* misc labels */
-    GtkWidget      *progress;   /* progress indicator */
-    GtkWidget      *label1, *label2;    /* activitity and stats labels */
+    GtkWidget      *dialog;
+    GtkWidget      *label;
+    GtkWidget      *progress;
+    GtkWidget      *label1, *label2;
     GtkWidget      *box;
 
     (void)widget;
@@ -451,22 +419,13 @@ static void menubar_trsp_net_cb(GtkWidget * widget, gpointer data)
     mod_mgr_reload_sats();
 }
 
-/**
- * Update TLE from network.
- * @param widget The menu item (unused).
- * @param data User data (unused).
- *
- * This function is called when the user selects
- *      Edit -> Update TLE -> Update from network
- * in the menubar.
- * The function calls tle_update_from_network with silent flag FALSE.
- */
+/* Update TLE from network */
 static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
 {
-    GtkWidget      *dialog;     /* dialog window  */
-    GtkWidget      *label;      /* misc labels */
-    GtkWidget      *progress;   /* progress indicator */
-    GtkWidget      *label1, *label2;    /* activitity and stats labels */
+    GtkWidget      *dialog;
+    GtkWidget      *label;
+    GtkWidget      *progress;
+    GtkWidget      *label1, *label2;
     GtkWidget      *box;
 
     (void)widget;
@@ -538,24 +497,7 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
     mod_mgr_reload_sats();
 }
 
-/**
- * Update TLE from local files.
- * @param widget The menu item (unused).
- * @param data User data (unused).
- *
- * This function is called when the user selects
- *      Edit -> Update TLE -> From local files
- * in the menubar.
- *
- * First the function creates the GUI status indicator infrastructure
- * with the possibility to select a directory, then it calls the
- * tle_update_from_files with the corresponding parameters.
- *
- * Finally, the programs signals the module manager to reload the
- * satellites in each module.
- *
- * FIXME: fork as a thread?
- */
+/* Update TLE from local files */
 static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
 {
     gchar          *dir;        /* selected directory */
@@ -752,14 +694,6 @@ static void menubar_about_cb(GtkWidget * widget, gpointer data)
     about_dialog_create();
 }
 
-/**
- * Select an existing module.
- *
- * This function creates a dialog with a list of existing modules
- * from /homedir/.config/Gpredict/modules/ and lets the user select one
- * of them. The function will return the name of the selected module
- * without the .mod suffix.
- */
 static gchar   *select_module()
 {
     GtkWidget      *dialog;     /* the dialog window */
@@ -913,12 +847,8 @@ static gchar   *select_module()
     return dirname;
 }
 
-/**
+/*
  * Manage row activated (double click) event in the module selector window.
- * @param tree_view
- * @param path
- * @param column
- * @param data Pointer to the parent dialog.
  * 
  * This event handler is triggered when the user double clicks on a row in the
  * "Open module" dialog window. This function will simply emit GTK_RESPONSE_OK
@@ -934,7 +864,7 @@ static void select_module_row_activated_cb(GtkTreeView * tree_view,
     gtk_dialog_response(dialog, GTK_RESPONSE_OK);
 }
 
-/**
+/*
  * Create a module window.
  *
  * This function is used to create a module window when opening modules

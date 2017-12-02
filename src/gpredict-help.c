@@ -1,10 +1,7 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -31,117 +28,14 @@
 #include <build-config.h>
 #endif
 #include "compat.h"
-#include "sat-log.h"
-#include "sat-cfg.h"
-#include "sat-pref-help.h"
 #include "gpredict-help.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sat-pref-help.h"
 
 
 extern sat_help_t sat_help[];   /* in sat-pref-help.c */
 extern GtkWidget *app;
-
-static gint     config_help(void);
-
-/** Launch help system. */
-void gpredict_help_launch(gpredict_help_type_t type)
-{
-    browser_type_t  idx;
-    gint            resp;
-
-    (void)type;                 /* avoid unused parameter compiler warning */
-
-
-    idx = sat_cfg_get_int(SAT_CFG_INT_WEB_BROWSER_TYPE);
-
-    /* some sanity check before accessing the arrays ;-) */
-    if ((idx <= BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM))
-    {
-        idx = BROWSER_TYPE_NONE;
-    }
-
-    if (idx == BROWSER_TYPE_NONE)
-    {
-        sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s: Help browser is not set up yet."), __func__);
-
-        resp = config_help();
-
-        if (resp == GTK_RESPONSE_CANCEL)
-        {
-            sat_log_log(SAT_LOG_LEVEL_INFO,
-                        _("%s: Configure help browser cancelled."), __func__);
-
-            return;
-        }
-
-        /* else try again */
-        idx = sat_cfg_get_int(SAT_CFG_INT_WEB_BROWSER_TYPE);
-    }
-
-    if ((idx <= BROWSER_TYPE_NONE) || (idx >= BROWSER_TYPE_NUM))
-    {
-        return;
-    }
-
-    /* launch help browser */
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s: Launching help browser %s."),
-                __func__, sat_help[idx].type);
-
-    g_print("FIXME: FINSH IMPELMTATION\n");
-}
-
-/**
- * Configure help system.
- * @retval GTK_RESPONSE_OK if the help browser has been set up or
- * @retval GTK_RESPONSE_CANCEL if the user has cancelled the action.
- *
- * This function is called if the user wants to see the online
- * help but has not yet configured a help browser. The function
- * will create a dialog containing the same cfg widget as in sat-pref-help
- * and allow the user to configure the html browser.
- */
-static gint config_help(void)
-{
-    GtkWidget      *dialog;
-    GtkWidget      *label;
-    GtkBox         *vbox;
-    gint            resp;
-
-
-    dialog = gtk_dialog_new_with_buttons(_("Configure Help Browser"),
-                                         GTK_WINDOW(app),
-                                         GTK_DIALOG_MODAL |
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         "_Cancel", GTK_RESPONSE_CANCEL,
-                                         "_OK", GTK_RESPONSE_OK,
-                                         NULL);
-
-#define HELP_TEXT "Please select a HTML browser to be used to view the help."
-
-    label = gtk_label_new(_(HELP_TEXT));
-    vbox = GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog)));
-    gtk_box_pack_start(vbox, label, FALSE, TRUE, 0);
-    gtk_box_pack_start(vbox, sat_pref_help_create(), TRUE, FALSE, 0);
-    gtk_widget_show_all(GTK_WIDGET(vbox));
-
-    resp = gtk_dialog_run(GTK_DIALOG(dialog));
-
-    switch (resp)
-    {
-        /* save browser settings */
-    case GTK_RESPONSE_OK:
-        sat_pref_help_ok();
-        break;
-    default:
-        sat_pref_help_cancel();
-        break;
-    }
-
-    gtk_widget_destroy(dialog);
-
-    return resp;
-}
 
 /**
  * Show a text file in the gpredict system directory
@@ -162,7 +56,6 @@ void gpredict_help_show_txt(const gchar * filename)
     gchar          *fname;
     gchar          *buff;
     gsize           length;
-
 
     /* get system data directory */
 #ifdef G_OS_UNIX
@@ -226,8 +119,7 @@ void gpredict_help_show_txt(const gchar * filename)
     /* create and show dialogue with textbuffer */
     dialog = gtk_dialog_new_with_buttons(_("Gpredict Info"),
                                          NULL, 0,
-                                         "_Close", GTK_RESPONSE_ACCEPT,
-                                         NULL);
+                                         "_Close", GTK_RESPONSE_ACCEPT, NULL);
     gtk_widget_set_size_request(dialog, -1, 450);
     buff = icon_file_name("gpredict-icon.png");
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), buff, NULL);
@@ -236,7 +128,8 @@ void gpredict_help_show_txt(const gchar * filename)
     g_signal_connect_swapped(dialog, "response",
                              G_CALLBACK(gtk_widget_destroy), dialog);
 
-    gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
+    gtk_box_pack_start(GTK_BOX
+                       (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin,
+                       TRUE, TRUE, 0);
     gtk_widget_show_all(dialog);
 }
