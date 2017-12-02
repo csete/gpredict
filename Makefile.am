@@ -4,11 +4,9 @@ SUBDIRS = src doc pixmaps data po
 install-data-local:
 	@$(NORMAL_INSTALL)
 	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(top_srcdir)/ChangeLog $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(top_srcdir)/NEWS $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(top_srcdir)/README $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(top_srcdir)/TODO $(DESTDIR)$(pkgdatadir)
 
 EXTRA_DIST = \
 	autogen.sh            \
