@@ -1,9 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     Comments, questions and bugreports should be submitted via
     http://sourceforge.net/projects/gpredict/
@@ -33,7 +31,6 @@
 #include "sat-pref-debug.h"
 #include "sat-pref-formats.h"
 #include "sat-pref-general.h"
-#include "sat-pref-help.h"
 #include "sat-pref-qth.h"
 #include "sat-pref-tle.h"
 
@@ -62,9 +59,6 @@ GtkWidget      *sat_pref_general_create()
     gtk_notebook_append_page(GTK_NOTEBOOK(nbook),
                              sat_pref_debug_create(),
                              gtk_label_new(_("Message Logs")));
-/*      gtk_notebook_append_page (GTK_NOTEBOOK (nbook), */
-/*                       sat_pref_help_create (), */
-/*                       gtk_label_new (_("Help System"))); */
 
     return nbook;
 }
@@ -76,7 +70,6 @@ void sat_pref_general_cancel()
     sat_pref_qth_cancel();
     sat_pref_tle_cancel();
     sat_pref_debug_cancel();
-    //sat_pref_help_cancel ();
 }
 
 /** User pressed OK. Any changes should be stored in config. */
@@ -86,5 +79,4 @@ void sat_pref_general_ok()
     sat_pref_qth_ok();
     sat_pref_tle_ok();
     sat_pref_debug_ok();
-    //sat_pref_help_ok ();
 }

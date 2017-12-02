@@ -31,10 +31,8 @@
 #include "gpredict-help.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
-#include "sat-pref-help.h"
 
 
-extern sat_help_t sat_help[];   /* in sat-pref-help.c */
 extern GtkWidget *app;
 
 /**
