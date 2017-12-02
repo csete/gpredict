@@ -1,27 +1,46 @@
-Gpredict is designed and developed by Alexandru Csete OZ9AEC, with significant
-contributions from all over the world.
 
-Contributors:
-- William J Beksi, KC2EXL, Map view.
-- Charles Suprin, AA1VS, GPS support and many other improvements.
-- Alan Moffet KE7IJZ and Valentin Yakovenkov, Windows build.
-- David VK5DG, transponder data files
-- Dr. T.S. Kelso, the author original SGP4/SDP4 algorithms in FORTRAN and Pascal. 
-- Neoklis Kyriazis, 5B4AZ, conversion of the algorithms to C.
-- Damon Chaplin is the author of GooCanvas, which is used extensively in gpredict
-  see http://www.dachaplin.dsl.pipex.com/goocanvas/
-- Maidenhead locator functions are based on work done by Stephane Fillod,
-  Nate Bargmann, Dave Hines, Mirko Caserta, and S. R. Sampson.
-- Win32 networking in rig and rotor control fixed by Stephane Fillod,
-- Paul Schulz, VK5FPAW (various patches).
-- Martin Pool, for his natural string compare routines
-  see http://sourcefrog.net/projects/natsort/
-- Patrick Strasser, OE6PSE (natural sorting)
-- Marcel Cimander (autotracking)
-- Lloyd Brown (AZI end stops)
+Gpredict is designed and developed by Alexandru Csete OZ9AEC, with
+significant contributions from many individuals.
+
+Contributors (in alpahbetical order):
+
+- Alan Moffet KE7IJZ
+- Baris Dinc
+- Charles Suprin, AA1VS
+- Dale Mellor
+- Daniel Estevez
+- Dave Hines
+- David Cureton 
+- David VK5DG
+- Fabian P. Schmidt
+- Henry Hallam
+- Jan Simon
+- Libre Space Foundation
+- Lloyd Brown
+- LongnoseRob, JI1MNC
+- Marcel Cimander
+- Mario Haustein
+- Martin Pool
+- Michael Tatarinov
+- Mirko Caserta
+- Nate Bargmann
+- Neoklis Kyriazis, 5B4AZ
+- Patrick Dohmen 
+- Patrick Strasser, OE6PSE
+- Paul Schulz, VK5FPAW
+- S. R. Sampson
+- Stefan Lobas 
+- Stephane Fillod
+- Tom Jones
+- T.S. Kelso
+- Valentin Yakovenkov
+- William J Beksi, KC2EXL
+
 
 Imagery:
-Most of the maps originate from NASA Visible Earth, http://visibleearth.nasa.gov/
+Most of the maps originate from NASA Visible Earth
+http://visibleearth.nasa.gov/
 
-If you notice that your work has been used in in one way or other without giving
-you the proper credits, contact Alexandru Csete at csete at users.sourceforge.net
+If you notice that sopmebody's work has been used without giving proper
+credits, contact Alexandru Csete (callsign at gmail) or the project at
+https://github.com/csete/gpredict.
