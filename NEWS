@@ -1,34 +1,31 @@
-Changes in version 1.4 (TBD)
 
+Changes in version 2.0 (TBD)
+
+- Initial port to Gtk+ 3
 - Import transponder data from Satnogs database https://db.satnogs.org/
-- New menu item in the module menu for selecting a satellite in all views.
-- AOS and LOS signalling in rigctl interface.
-- Autotracking of satellites in a given module.
-- Support for user defined end stops on Azimuth axis.
-- Feature request 3141555: gpsd support.
-- Feature request 2130926: Change frequency using mouse wheel. Also for rotator controller.
-- Feature request 3322786: Show More Information in Edit Module Sat Selection.
-- Feature request 3314813: Resolves Requested TLE files from Celestrak.
-- Feature request 3169710: Highlight satellites within range in the list view.
-- Feature request 2946565: Map centered on the 180° meridian.
-- Applied and extended patch 3237220: natural sort for sat list in module config
-- Improve handling of decayed satellites.
-- Fixed bug 3250344: Win32 build not working with hamlib.
-- Fixed bug 3294829: Program name wrong in desktop files.
-- Fixed bug 3309110: 100% on manual time adjustment.
-- Fixed bug 3272993: Issue controlling Yaesu FT-847.
-- Fixed bug 3334657: Old log files not being saved.
-- Fixed bug 3271573: Track button in rotator controller has no effect.
-- Fixed bug 3400534: Operational Status.
-- Fixed bug 3309111: Wrong icon in time controller.
-- Fixed bug 3413571: UARS Ground Track not Updated on TLE update.
-- Fixed bug 3416451: No ground track for new satellites.
-- Fixed bug 3417553: Gpredict crashes
-- Fixed bug 3419879: gpredict doesn't change the satellite names on world map.
-- Fixed bug 3292729: Show next pass shows the current pass.
-- Fixed bug 3437555: Graphical Glitch Plotting Footprints near pole.
-- Fixed bug 3441490: Satellite Nickname Not escaped for PANGO.
-- Fixed bug 3451841: Typos.
+- New menu item in the module menu for selecting a satellite in all views
+- AOS and LOS signalling in rigctl interface
+- Autotracking of satellites in a given module
+- Support for user defined end stops on Azimuth axis
+- Experimental gpsd support
+- Change frequency using mouse wheel. Also for rotator controller
+- Show More Information in Edit Module Sat Selection
+- Highlight satellites within range in the list view
+- Map centered on the 180° meridian
+- Natural sort function for satellite list in module configuration
+- Improved handling of decayed satellites
+- Fixed application freezing while talking to radios and rotators
+- Fixed incorrect program name in desktop files
+- Fixed 100% CPU load on manual time adjustment
+- Fixed issue controlling Yaesu FT-847
+- Fixed old log files not being saved
+- Fixed track button in rotator controller having no effect
+- Fixed operational status of satellites
+- Fixed wrong icon in time controller
+- Fixed mising ground track for new satellites
+- Fixed show next pass shows the current pass
+- Fixed problems with plotting footprints near the poles
+- Fixed satellite nickname not escaped for Pango
 
 
 Changes in version 1.3 (1 Mar 2011)
@@ -41,20 +38,22 @@ Changes in version 1.3 (1 Mar 2011)
 - Fixed bug 2116691: Leave network connection open.
 - Fixed bug 3099314: Rotator Thrashing.
 - Fixed bug 2167508: problems in rotator controller.
-- Fixed bug from Ubuntu #706452: Update from local files won't work with files in UPPER case 
+- Update from local files won't work with files in UPPER case 
 - Fixed bug 3171615: Searching for satellites in the satellite selector
 - Fixed bug 3113190: .desktop file error
-- Address bug 2945538: Pass in polar display going outside the circle (Improve the graphical portion.)
+- Address bug 2945538: Pass in polar display going outside the circle
 
 
 Changes in version 1.2 (12 Oct 2010)
 
-- New layout engine that allows any combination of views to be created in a NxM grid.
-  Closes feature request 2821408.
-- Sky at a glance is now more interactive. Show pass summary when mouse hovers over pass and
-  click on pass shows the details.
-- Added satellite tooltips in polar view showing current Az, El and time to LOS.
-- Added satellite tooltips in map view showing current SSP Lat, Lon, Az, El and time to AOS/LOS.
+- New layout engine that allows any combination of views to be created
+  in a grid
+- Sky at a glance is now more interactive. Show pass summary when mouse
+  hovers over pass and click on pass shows the details
+- Added satellite tooltips in polar view showing current Az, El and time
+  to LOS
+- Added satellite tooltips in map view showing current SSP Lat, Lon, Az,
+  El and time to AOS/LOS.
 - Fixed bug 2877974: Incorrect uplink Doppler.
 - Fixed bug 2918672: Trailing whitespace and newline in satellite names.
 - Fixed bug 2914679: Unable to save Future passes.
@@ -64,36 +63,37 @@ Changes in version 1.2 (12 Oct 2010)
 - Fixed bugs 3057771 and 3058753: Crash if module file is empty.
 - Fixed bug 3074990: Crash if directory does not exist
 - Fixed bug 3080019: Corrupted hw file cause crash.
-- Applied patch 2876485: Fix a memory leak in the rotator controller (Thanks to Charles Suprin AA1VS).
-- Applied patch 2877878: Change Flag to Lock in tle-update (thanks to Charles Suprin AA1VS).
-- Applied patch 2877918: Fixes segfault in TLE updater (thanks to Charles Suprin AA1VS).
-- Applied patch 2881367: Updated Flags to Locks (thanks to Charles Suprin AA1VS).
-- Applied patch 2893617: Patches for fixing Windows build (thanks to Valentin Yakovenkov).
-- Applied patch 2916646: Minor fixes to documentation (thanks to Paul Schulz).
-- Applied patch 2929816: Fixes Bound Checking in gtk-rot-knob.c (Thanks to Charles Suprin AA1VS).
-- Applied patch 2930342: Improved robustness of pass prediction (Thanks to Charles Suprin AA1VS).
-- Applied patch 2933879: Check for AOS before burning computational resources (Thanks to Charles Suprin AA1VS).
-- Applied patch 2943018: Potential Double Free in qth-data.c (Thanks to Charles Suprin AA1VS).
-- Applied patch 2942658: Ground Tracks with Narrow Windows (Thanks to Charles Suprin AA1VS).
-- Applied patch 2943024: Eliminate Segfault in gtk-sat-map.c (Thanks to Charles Suprin AA1VS).
-- Applied patch 2943448: Remove Segfault from corrupted module (Thanks to Charles Suprin AA1VS).
-- Applied patch 2945525: Sort list of modules in open module dialog (Thanks to Charles Suprin AA1VS).
-- Applied patch 2947459: Make Module List Scrollable (Thanks to Charles Suprin AA1VS).
-- Applied patch 2951724: Allow TX Doppler correction for FT-817, 857 and 897 (Thanks to Charles Suprin AA1VS).
-- Applied patch 3002344: Remove Uninitialized Jump (Thanks to Charles Suprin AA1VS).
-- Applied patch 3002345: Free catfilename (Thanks to Charles Suprin AA1VS).
-- Applied patch 3002348: Option context never freed (Thanks to Charles Suprin AA1VS).
-- Applied patch 3005548: Cut and Paste Error In print_pass.h (Thanks to Charles Suprin AA1VS).
-- Applied patch 3009725: Delete Explicit Call to gtk_set_locale (Thanks to Charles Suprin AA1VS).
-- Applied patch 3009727: Free satellite hash references (Thanks to Charles Suprin AA1VS).
-- Applied patch 3050047: Improve sat search and prediction of upcoming passes (Thanks to Patrick Strasser OE6PSE)
-- Applied patch 3059022: Fix gpredict crashed with NULL pointer exception (Thanks to Charles Suprin AA1VS).
+- Patch 2876485: Fix a memory leak in the rotator controller (AA1VS).
+- Patch 2877878: Change Flag to Lock in tle-update (AA1VS).
+- Patch 2877918: Fixes segfault in TLE updater (AA1VS).
+- Patch 2881367: Updated Flags to Locks (AA1VS).
+- Patch 2893617: Patches for fixing Windows build (Valentin Yakovenkov).
+- Patch 2916646: Minor fixes to documentation (Paul Schulz).
+- Patch 2929816: Fixes Bound Checking in gtk-rot-knob.c (AA1VS).
+- Patch 2930342: Improved robustness of pass prediction (AA1VS).
+- Patch 2933879: Check for AOS before burning computational resources (AA1VS).
+- Patch 2943018: Potential Double Free in qth-data.c (AA1VS).
+- Patch 2942658: Ground Tracks with Narrow Windows (AA1VS).
+- Patch 2943024: Eliminate Segfault in gtk-sat-map.c (AA1VS).
+- Patch 2943448: Remove Segfault from corrupted module (AA1VS).
+- Patch 2945525: Sort list of modules in open module dialog (AA1VS).
+- Patch 2947459: Make Module List Scrollable (AA1VS).
+- Patch 2951724: Allow TX Doppler correction for FT-817, 857 and 897 (AA1VS).
+- Patch 3002344: Remove Uninitialized Jump (AA1VS).
+- Patch 3002345: Free catfilename (AA1VS).
+- Patch 3002348: Option context never freed (AA1VS).
+- Patch 3005548: Cut and Paste Error In print_pass.h (AA1VS).
+- Patch 3009725: Delete Explicit Call to gtk_set_locale (AA1VS).
+- Patch 3009727: Free satellite hash references (AA1VS).
+- Patch 3050047: Improve sat search and prediction of upcoming passes (OE6PSE)
+- Patch 3059022: Fix gpredict crashed with NULL pointer exception (AA1VS).
 - Slightly improved UI for the single-satellite view.
-- Command line options for cleaning user's TLE and transponder data, see --help for list.
-- Satellite Map: Added shadow to satellite marker and label to enhance visual appearance
-  over light background map regions.
+- Command line options for cleaning user's TLE and transponder data,
+  see --help.
+- Satellite Map: Added shadow to satellite marker and label to enhance
+  visual appearance over light background map regions.
 - Fixed incorrect uplink and downlink frequencies for HO-68, mode V/U packet.
-- Modules that are docked in the main window can be reordered by dragging the tabs.
+- Modules docked in the main window can be reordered by dragging the tabs.
 - Updated translations for CS, DE, EN_GB, EN_US, FI, FR, IT, LT, RU and TH
 
 
@@ -380,15 +380,14 @@ Changes in version 0.3.0 (13 Apr 2002):
 - Default prefix is no longer /usr/local/groundstation
 - User configuration files are stored in ~/.gpredict/
   (previously ~/.groundstation/)
-- Longitude is in the range of -180 to 180 negative
-  being East of Greenwich.
-- Get detailed information about any of the upcoming passes.
-  The plot showing a satellite pass can be saved as an image
-  or printed.
-- New earth map module with the possibility to save and print
-  the map as an image.
-- Anti aliased graphics giving much better quality. The user
-  can disable this feature if the performance is very poor.
+- Longitude is in the range of -180 to 180 negative being East of
+  Greenwich.
+- Get detailed information about any of the upcoming passes. The plot
+  showing a satellite pass can be saved as an image or printed.
+- New earth map module with the possibility to save and print the map
+  as an image.
+- Anti aliased graphics giving much better quality. The user can disable
+  this feature if the performance is very poor.
 - New shortcut bar.
 - Have as many modules open as your computer can handle.
 - Disabled the possibility to change the TLE file at runtime
@@ -398,14 +397,12 @@ Changes in version 0.3.0 (13 Apr 2002):
 Changes in version 0.2.2 (23 Oct 2001):
 
 - Program can read custom TLE files even at runtime.
-- New, very flexible functions to predict upcoming
-  passes.
-- Show/Save/Print/Plot detailed info about the upcoming
-  pass.
+- New, very flexible functions to predict upcoming passes.
+- Show/Save/Print/Plot detailed info about the upcoming pass.
 - Plot the upcoming pass in polar form (Az/El).
 - Show/Save/Print AOS/LOS times for upcoming passes.
-- Satellites in the satlist can have different colors
-  for practically any state a satellite can have.
+- Satellites in the satlist can have different colors for practically
+  any state a satellite can have.
 - More options in the preferences box.
 
 
@@ -417,14 +414,10 @@ Changes in version 0.2.1:
 
 Changes in version 0.2.0 (4 Aug 2001):
 
-- Abandoned client/server interface and included
-  tracking code from Predict directly into the
-  program
-- Can track a large number of satellites (current
-  limit is at 200, but can be chaged by editing
-  the 'defaults.h' file)
+- Abandoned client/server interface and included tracking code from Predict
+  directly into the program
+- Can track a large number of satellites (current limit is at 200, but can be
+  chaged by editing the 'defaults.h' file)
 - Predict AOS and LOS times for upcoming passes
-- The user can change the text colors in the
-  satellite list
-- The user can change the time between satellite
-  list updates
+- The user can change the text colors in the satellite list
+- The user can change the time between satellite list updates
