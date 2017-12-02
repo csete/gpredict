@@ -1,7 +1,0 @@
-[Mode V Telemetry]
-DOWN_LOW=145980000
-MODE=9k6 FSK
-
-[Mode U Telemetry]
-DOWN_LOW=437365000
-MODE=1k2 MSK CSP

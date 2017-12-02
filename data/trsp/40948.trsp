@@ -1,7 +1,0 @@
-[Mode U Telemetry]
-DOWN_LOW=437425000
-MODE=4k8 GMSK CSP (30 sec interval)
-
-[Mode U Beacon]
-DOWN_LOW=437425000
-MODE=CW 30wpm (3 min interval)

@@ -1,7 +1,0 @@
-[Mode V Telemetry]
-DOWN_LOW=145980000
-MODE=FM PSK
-
-[Mode U Beacon]
-DOWN_LOW=437305000
-MODE=CW

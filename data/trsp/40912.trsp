@@ -1,7 +1,0 @@
-[Mode U Telemetry]
-DOWN_LOW=437950000
-MODE=9k6 GMSK
-
-[Mode V Telemetry]
-DOWN_LOW=145475000
-MODE=9k6 GMSK
