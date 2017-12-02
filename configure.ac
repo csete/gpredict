@@ -117,7 +117,6 @@ pixmaps/icons/Makefile
 data/Makefile
 data/desktop/Makefile
 data/satdata/Makefile
-data/trsp/Makefile
 po/Makefile.in
 ])
 
