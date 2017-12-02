@@ -807,8 +807,8 @@ static gchar   *select_module()
     gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 200);
     gtk_container_add(GTK_CONTAINER(swin), modlist);
     gtk_widget_show(swin);
-    gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin);
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       swin, TRUE, TRUE, 0);
 
     /* double clicking in list will open clicked module */
     g_signal_connect(modlist, "row-activated",
