@@ -1,6 +1,4 @@
 #! /bin/sh
-
-# $Id: autogen.sh,v 1.2 2007/12/09 10:30:21 csete Exp $
 #
 # Copyright (c) 2002  Daniel Elstner  <daniel.elstner@gmx.net>,
 #               2003  Murray Cumming  <murrayc@usa.net>
