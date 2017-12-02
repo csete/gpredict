@@ -33,30 +33,43 @@
 
 
 const gchar *authors[] = {
-    "Alexandru Csete, OZ9AEC (design and development)",
+    "Alexandru Csete, OZ9AEC, with contributions from:",
     "",
-    "Contributors:",
-    "David VK5DG (Transponder data files)",
-    "Charles Suprin, AA1VS (GPS support and many other improvements)",
-    "Alan Moffet, KE7IJZ (windows build),",
-    "Valentin Yakovenkov (Windows build)",
-    "Damon Chaplin (GooCanvas)",
-    "Dr. T.S. Kelso (SGP4/SDP4 algorithms)",
-    "John A. Magliacane, KD2BD (prediction code)",
-    "Neoklis Kyriazis, 5B4AZ (SGP4/SDP4 in C)",
-    "William J Beksi, KC2EXL (GtkSatMap)",
-    "Stephane Fillod (Win32 network fixes, rig controller and locator.c)",
-    "Nate Bargmann (locator.c)",
-    "Dave Hines (locator.c)",
-    "Mirko Caserta (locator.c)",
-    "S. R. Sampson (locator.c)",
-    "Paul Schulz, VK5FPAW (various patches)",
-    "Patrick Strasser, OE6PSE (natural sorting)",
-    "Martin Pool (natural sorting)",
+    "Alan Moffet KE7IJZ",
+    "Baris Dinc",
+    "Charles Suprin, AA1VS",
+    "Dale Mellor",
+    "Daniel Estevez",
+    "Dave Hines",
+    "David Cureton",
+    "David VK5DG",
+    "Fabian P. Schmidt",
+    "Henry Hallam",
+    "Jan Simon",
+    "Libre Space Foundation",
+    "Lloyd Brown",
+    "LongnoseRob, JI1MNC",
+    "Marcel Cimander",
+    "Mario Haustein",
+    "Martin Pool",
+    "Michael Tatarinov",
+    "Mirko Caserta",
+    "Nate Bargmann",
+    "Neoklis Kyriazis, 5B4AZ",
+    "Patrick Dohmen",
+    "Patrick Strasser, OE6PSE",
+    "Paul Schulz, VK5FPAW",
+    "S. R. Sampson",
+    "Stefan Lobas",
+    "Stephane Fillod",
+    "Tom Jones",
+    "T.S. Kelso",
+    "Valentin Yakovenkov",
+    "William J Beksi, KC2EXL"
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",
-    "see http://visibleearth.nasa.gov/",
+    "see website http://visibleearth.nasa.gov/",
     NULL
 };
 
@@ -81,7 +94,6 @@ const gchar license[] = N_("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and c
                            "MA 02111-1307\n"
                            "USA.\n");
 
-/** Create and run the gpredict about dialog. */
 void about_dialog_create()
 {
     GtkWidget      *dialog;
@@ -89,11 +101,10 @@ void about_dialog_create()
     gchar          *iconfile;
 
     dialog = gtk_about_dialog_new();
-    gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("GPREDICT"));
+    gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("Gpredict"));
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
-                                   _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC\n\n"\
-                                     "Gpredict is available free of charge from:"));
+                                   _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"));
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
                                  "http://gpredict.oz9aec.net/");
     gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), _(license));
