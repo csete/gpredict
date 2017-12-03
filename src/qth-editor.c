@@ -361,9 +361,9 @@ static GtkWidget *create_editor_widgets(qth_t * qth)
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
     gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 8, 9);
 
-    type = gtk_combo_box_new_text();
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), "Static");
-    gtk_combo_box_append_text(GTK_COMBO_BOX(type), "GPSD");
+    type = gtk_combo_box_text_new();
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("Static"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("GPSD"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(type), 0);
     gtk_widget_set_tooltip_text(type,
                                 _
