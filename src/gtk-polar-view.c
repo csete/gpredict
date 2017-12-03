@@ -1476,8 +1476,6 @@ static GooCanvasItemModel *create_time_tick(GtkPolarView * pv, gdouble time,
                                      "font", "Sans 7",
                                      "fill-color-rgba", col, NULL);
 
-    goo_canvas_item_model_lower(item, NULL);
-
     return item;
 }
 
@@ -1593,9 +1591,6 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj,
                                                "line-join",
                                                CAIRO_LINE_JOIN_MITER, NULL);
     goo_canvas_points_unref(points);
-
-    /* put track on the bottom of the sack */
-    goo_canvas_item_model_lower(obj->track, NULL);
 }
 
 void gtk_polar_view_delete_track(GtkPolarView * pv, sat_obj_t * obj,
