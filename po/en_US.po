@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-03 01:21+0100\n"
+"POT-Creation-Date: 2017-12-03 13:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,7 +265,7 @@ msgstr ""
 msgid "%s:%d: Could not find satellite (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:315 ../src/gtk-sat-map.c:1004
+#: ../src/gtk-polar-view.c:315 ../src/gtk-sat-map.c:847
 #, c-format
 msgid "%s:%d: Can not find clicked object (%d) in hash table"
 msgstr ""
@@ -284,16 +284,16 @@ msgid ""
 "in %02d:%02d"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1023 ../src/gtk-sat-map.c:763
+#: ../src/gtk-polar-view.c:1023 ../src/gtk-sat-map.c:655
 #, c-format
 msgid "%s: Can not find NEXT satellite."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1025 ../src/gtk-sat-map.c:765
+#: ../src/gtk-polar-view.c:1025 ../src/gtk-sat-map.c:657
 msgid "Next: ERR"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1030 ../src/gtk-sat-map.c:770
+#: ../src/gtk-polar-view.c:1030 ../src/gtk-sat-map.c:662
 msgid "Next: N/A"
 msgstr ""
 
@@ -329,7 +329,7 @@ msgstr ""
 msgid "%s: label added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1358 ../src/gtk-sat-map.c:1883
+#: ../src/gtk-polar-view.c:1358 ../src/gtk-sat-map.c:1712
 #, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
 msgstr ""
@@ -1140,62 +1140,62 @@ msgstr ""
 msgid "Row"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:739
+#: ../src/gtk-sat-map.c:631
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d:%s%d%s%d </span>"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:747
+#: ../src/gtk-sat-map.c:639
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d%s%d </span>"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1099
+#: ../src/gtk-sat-map.c:935
 #, c-format
 msgid "%s: Can not find clicked object (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1185
+#: ../src/gtk-sat-map.c:1021
 #, c-format
 msgid "%s:%d: Loading map file %s"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1191
+#: ../src/gtk-sat-map.c:1027
 #, c-format
 msgid "%s:%d: Map file found"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1196
+#: ../src/gtk-sat-map.c:1032
 #, c-format
 msgid "%s:%d: Could not find map file %s"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1204
+#: ../src/gtk-sat-map.c:1040
 #, c-format
 msgid "%s:%d: Using default map: %s"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1214
+#: ../src/gtk-sat-map.c:1050
 #, c-format
 msgid "%s:%d: Error loading map file (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1281
+#: ../src/gtk-sat-map.c:1110
 #, c-format
 msgid "%s: Bad data measuring distance to North Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1301
+#: ../src/gtk-sat-map.c:1130
 #, c-format
 msgid "%s: Bad data measuring distance to South Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:2844
+#: ../src/gtk-sat-map.c:2651
 #, c-format
 msgid "LOS in %d minutes"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:2846
+#: ../src/gtk-sat-map.c:2653
 #, c-format
 msgid "AOS in %d minutes"
 msgstr ""
@@ -1721,6 +1721,45 @@ msgstr ""
 #: ../src/gtk-sat-module-tmg.c:803
 #, c-format
 msgid "%s: %d/%d/%d %d:%d:%d.%d"
+msgstr ""
+
+#: ../src/gtk-sat-popup-common.c:48
+msgid "Show current pass"
+msgstr ""
+
+#. the next pass menu item
+#: ../src/gtk-sat-popup-common.c:59
+msgid "Show next pass"
+msgstr ""
+
+#. finally the future pass menu item
+#: ../src/gtk-sat-popup-common.c:69
+msgid "Future passes"
+msgstr ""
+
+#: ../src/gtk-sat-popup-common.c:157 ../src/gtk-sat-popup-common.c:217
+#, c-format
+msgid ""
+"Satellite %s has no passes\n"
+"within the next %d days"
+msgstr ""
+
+#: ../src/gtk-sat-popup-common.c:173
+#, c-format
+msgid ""
+"Satellite %s has no passes for\n"
+"the current ground station!\n"
+"\n"
+"This can be because the satellite\n"
+"is geostationary, decayed or simply\n"
+"never comes above the horizon"
+msgstr ""
+
+#: ../src/gtk-sat-popup-common.c:236
+#, c-format
+msgid ""
+"Satellite %s has no passes for\n"
+"the current ground station!"
 msgstr ""
 
 #: ../src/gtk-sat-selector.c:217
