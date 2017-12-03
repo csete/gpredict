@@ -146,6 +146,7 @@ typedef struct {
     guint           refresh;    /*!< Refresh rate. */
     guint           counter;    /*!< Cycle counter. */
 
+    gboolean        show_terminator;    // show solar terminator
     gboolean        qthinfo;    /*!< Show the QTH info. */
     gboolean        eventinfo;  /*!< Show info about the next event. */
     gboolean        cursinfo;   /*!< Track the mouse cursor. */

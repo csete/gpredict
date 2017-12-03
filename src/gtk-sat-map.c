@@ -171,6 +171,7 @@ static void gtk_sat_map_init(GtkSatMap * satmap)
     satmap->height = 0;
     satmap->refresh = 0;
     satmap->counter = 0;
+    satmap->show_terminator = FALSE;
     satmap->qthinfo = FALSE;
     satmap->eventinfo = FALSE;
     satmap->cursinfo = FALSE;
@@ -306,7 +307,8 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
     goo_canvas_item_model_lower(satmap->map, NULL);
     draw_grid_lines(satmap, root);
 
-    draw_terminator(satmap, root);
+    if (satmap->show_terminator)
+        draw_terminator(satmap, root);
 
     /* QTH mark */
     col = mod_cfg_get_int(satmap->cfgdata,
@@ -469,7 +471,9 @@ static void update_map_size(GtkSatMap * satmap)
         g_object_unref(pbuf);
 
         redraw_grid_lines(satmap);
-        redraw_terminator(satmap);
+
+        if (satmap->show_terminator)
+            redraw_terminator(satmap);
 
         lonlat_to_xy(satmap, satmap->qth->lon, satmap->qth->lat, &x, &y);
         g_object_set(satmap->qthmark,
@@ -569,7 +573,8 @@ void gtk_sat_map_update(GtkWidget * widget)
         g_hash_table_foreach(satmap->sats, update_sat, satmap);
 
         /* Update the Solar Terminator if necessary */
-        if (fabs(satmap->tstamp - satmap->terminator_last_tstamp) >
+        if (satmap->show_terminator &&
+            fabs(satmap->tstamp - satmap->terminator_last_tstamp) >
             TERMINATOR_UPDATE_INTERVAL)
         {
             satmap->terminator_last_tstamp = satmap->tstamp;
