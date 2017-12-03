@@ -3,7 +3,6 @@ src/about.c
 src/compat.c
 src/first-time.c
 src/gpredict-help.c
-src/gpredict-url-hook.c
 src/gpredict-utils.c
 src/gtk-azel-plot.c
 src/gtk-freq-knob.c
@@ -55,7 +54,6 @@ src/sat-pref-conditions.c
 src/sat-pref-debug.c
 src/sat-pref-formats.c
 src/sat-pref-general.c
-src/sat-pref-help.c
 src/sat-pref-interfaces.c
 src/sat-pref-layout.c
 src/sat-pref-list-view.c
@@ -88,4 +86,3 @@ src/tle-tools.c
 src/tle-update.c
 src/trsp-conf.c
 src/trsp-update.c
-
