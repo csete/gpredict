@@ -1,1 +1,1 @@
-SUBDIRS = maps icons
+SUBDIRS = icons logos maps

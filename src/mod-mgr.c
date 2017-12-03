@@ -558,12 +558,12 @@ update_window_title ()
     num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (nbook));
 
     if (num == 0) {
-        gtk_window_set_title (GTK_WINDOW (app), _("GPREDICT: (none)"));
+        gtk_window_set_title (GTK_WINDOW (app), _("Gpredict: (none)"));
     }
     else {
         pgn = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbook));
         pg = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nbook), pgn);
-        title = g_strdup_printf (_("GPREDICT: %s"),
+        title = g_strdup_printf (_("Gpredict: %s"),
                                  gtk_notebook_get_tab_label_text (GTK_NOTEBOOK (nbook), pg));
         gtk_window_set_title (GTK_WINDOW (app), title);
         g_free (title);
@@ -583,7 +583,7 @@ static void switch_page_cb      (GtkNotebook     *notebook,
     (void) user_data; /* avoid unused parameter compiler warning */
 
     pg = gtk_notebook_get_nth_page (GTK_NOTEBOOK (nbook), page_num);
-    title = g_strdup_printf (_("GPREDICT: %s"),
+    title = g_strdup_printf (_("Gpredict: %s"),
                              gtk_notebook_get_tab_label_text (GTK_NOTEBOOK (nbook), pg));
     gtk_window_set_title (GTK_WINDOW (app), title);
     g_free (title);
@@ -681,7 +681,7 @@ create_module_window (GtkWidget *module)
 
     /* create window */
     GTK_SAT_MODULE (module)->win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    title = g_strconcat (_("GPREDICT: "),
+    title = g_strconcat (_("Gpredict: "),
                          GTK_SAT_MODULE (module)->name,
                          " (", GTK_SAT_MODULE (module)->qth->name, ")",
                          NULL);
@@ -692,7 +692,7 @@ create_module_window (GtkWidget *module)
                       G_CALLBACK (module_window_config_cb), module);
 
     /* window icon */
-    icon = icon_file_name ("gpredict-icon.png");
+    icon = logo_file_name("gpredict_icon_color.svg");
     if (g_file_test (icon, G_FILE_TEST_EXISTS)) {
         gtk_window_set_icon_from_file (GTK_WINDOW (GTK_SAT_MODULE (module)->win), icon, NULL);
     }

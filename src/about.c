@@ -109,8 +109,8 @@ void about_dialog_create()
                                  "http://gpredict.oz9aec.net/");
     gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), _(license));
     gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(dialog), TRUE);
-    iconfile = icon_file_name("gpredict-icon.png");
-    icon = gdk_pixbuf_new_from_file(iconfile, NULL);
+    iconfile = logo_file_name("gpredict_icon_color.svg");
+    icon = gdk_pixbuf_new_from_file_at_size(iconfile, 128, 128, NULL);
     gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), icon);
     g_free(iconfile);
     g_object_unref(icon);

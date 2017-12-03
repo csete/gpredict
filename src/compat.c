@@ -125,6 +125,35 @@ gchar          *map_file_name(const gchar * map)
 }
 
 /**
+ * Get logo directory.
+ *
+ * On linux it corresponds to the PACKAGE_DATA_DIR/pixmaps/logos
+ * The function returns a newly allocated gchar * which must be free when
+ * it is no longer needed.
+ */
+gchar          *get_logo_dir()
+{
+    gchar          *dir = NULL;
+
+#ifdef G_OS_UNIX
+    dir = g_strconcat(PACKAGE_PIXMAPS_DIR, G_DIR_SEPARATOR_S, "logos", NULL);
+#else
+#ifdef G_OS_WIN32
+    gchar          *buff =
+        g_win32_get_package_installation_directory_of_module(NULL);
+
+    dir = g_strconcat(buff, G_DIR_SEPARATOR_S,
+                      "share", G_DIR_SEPARATOR_S,
+                      "gpredict", G_DIR_SEPARATOR_S, "pixmaps",
+                      G_DIR_SEPARATOR_S, "logos", NULL);
+    g_free(buff);
+#endif
+#endif
+
+    return dir;
+}
+
+/**
  * Get icon directory.
  *
  * On linux it corresponds to the PACKAGE_DATA_DIR/pixmaps/icons
@@ -151,6 +180,25 @@ gchar          *get_icon_dir()
 #endif
 
     return dir;
+}
+
+/**
+ * Get absolute file name of a logo file.
+ *
+ * This function returns the absolute file name of a logo file. It is intended
+ * to be a one-line filename constructor.
+ * The returned gchar * should be freed when no longer needed.
+ */
+gchar          *logo_file_name(const gchar * logo)
+{
+    gchar          *filename = NULL;
+    gchar          *buff;
+
+    buff = get_logo_dir();
+    filename = g_strconcat(buff, G_DIR_SEPARATOR_S, logo, NULL);
+    g_free(buff);
+
+    return filename;
 }
 
 /**

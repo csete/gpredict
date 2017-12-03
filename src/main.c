@@ -244,8 +244,8 @@ static void gpredict_app_create()
     gchar          *icon;       /* icon file name */
 
     /* create window title and file name for window icon  */
-    title = g_strdup(_("GPREDICT"));
-    icon = icon_file_name("gpredict-icon.png");
+    title = g_strdup(_("Gpredict"));
+    icon = logo_file_name("gpredict_icon_color.svg");
 
     /* ceate window, add title and icon, restore size and position */
     app = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -291,7 +291,6 @@ static void gpredict_app_create()
     signal(SIGTERM, (void *)gpredict_sig_handler);
     signal(SIGINT, (void *)gpredict_sig_handler);
     signal(SIGABRT, (void *)gpredict_sig_handler);
-
 }
 
 

@@ -113,6 +113,7 @@ src/sgpsdp/Makefile
 src/sgpsdp/TR/Makefile
 pixmaps/Makefile
 pixmaps/maps/Makefile
+pixmaps/logos/Makefile
 pixmaps/icons/Makefile
 data/Makefile
 data/desktop/Makefile
