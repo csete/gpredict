@@ -1,9 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -24,24 +22,25 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include "sgpsdp/sgp4sdp4.h"
-#include "gtk-event-list.h"
-#include "gtk-event-list-popup.h"
-#include "sat-log.h"
-#include "config-keys.h"
-#include "sat-cfg.h"
-#include "mod-cfg-get-param.h"
-#include "gtk-sat-data.h"
-#include "gpredict-utils.h"
-#include "locator.h"
-#include "sat-vis.h"
-#include "sat-info.h"
-#include "orbit-tools.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
+#include "config-keys.h"
+#include "gpredict-utils.h"
+#include "gtk-event-list.h"
+#include "gtk-event-list-popup.h"
+#include "gtk-sat-data.h"
+#include "mod-cfg-get-param.h"
+#include "locator.h"
+#include "orbit-tools.h"
+#include "sat-cfg.h"
+#include "sat-log.h"
+#include "sat-vis.h"
+#include "sat-info.h"
+#include "sgpsdp/sgp4sdp4.h"
 
 
 #define EVENT_LIST_COL_DEF (EVENT_LIST_FLAG_NAME | EVENT_LIST_FLAG_AZ | EVENT_LIST_FLAG_EL | EVENT_LIST_FLAG_TIME)
@@ -200,7 +199,6 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
 
-    /* FIXME */
     (void)columns;
 
     widget = g_object_new(GTK_TYPE_EVENT_LIST, NULL);
@@ -208,10 +206,7 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
 
     evlist->update = gtk_event_list_update;
 
-    /* Read configuration data. */
-    /* ... */
     evlist->cfgdata = cfgdata;
-    /* read initial sorting criteria */
     evlist->sort_column = EVENT_LIST_COL_TIME;
     evlist->sort_order = GTK_SORT_ASCENDING;
     if (g_key_file_has_key(evlist->cfgdata, MOD_CFG_EVENT_LIST_SECTION,
@@ -244,13 +239,8 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
     evlist->satellites = sats;
     evlist->qth = qth;
 
-    /* initialise column flags */
     evlist->flags = EVENT_LIST_COL_DEF;
-
-    /* create the tree view and add columns */
     evlist->treeview = gtk_tree_view_new();
-
-    /* visual appearance of table */
     gtk_tree_view_set_grid_lines(GTK_TREE_VIEW(evlist->treeview),
                                  GTK_TREE_VIEW_GRID_LINES_NONE);
 
@@ -271,14 +261,8 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
 
         gtk_tree_view_insert_column(GTK_TREE_VIEW(evlist->treeview),
                                     column, -1);
-
-        /* only aligns the headers */
         gtk_tree_view_column_set_alignment(column, EVENT_LIST_HEAD_XALIGN[i]);
-
-        /* set sort id */
         gtk_tree_view_column_set_sort_column_id(column, i);
-
-        /* set cell data function; allows to format data before rendering */
         check_and_set_cell_renderer(column, renderer, i);
 
         /* hide columns that have not been specified */
@@ -302,7 +286,6 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
                                     EVENT_LIST_COL_TIME,
                                     event_cell_compare_function, NULL, NULL);
 
-    /* initial sorting criteria */
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(sortable),
                                          evlist->sort_column,
                                          evlist->sort_order);
@@ -324,7 +307,7 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
 
     gtk_container_add(GTK_CONTAINER(evlist->swin), evlist->treeview);
 
-    gtk_container_add(GTK_CONTAINER(widget), evlist->swin);
+    gtk_box_pack_start(GTK_BOX(widget), evlist->swin, TRUE, TRUE, 0);
     gtk_widget_show_all(widget);
 
     return widget;
@@ -344,7 +327,6 @@ static GtkTreeModel *create_and_fill_model(GHashTable * sats)
                                    G_TYPE_BOOLEAN,      // decayed 
                                    G_TYPE_INT); // bold for storing weight
 
-    /* add each satellite from hash table */
     g_hash_table_foreach(sats, event_list_add_satellites, liststore);
 
     return GTK_TREE_MODEL(liststore);
@@ -402,7 +384,7 @@ void gtk_event_list_update(GtkWidget * widget)
                                            (GTK_TREE_VIEW
                                             (evlist->treeview))))));
 
-    /*save the sort information */
+    /* save the sort information */
     gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(evlist->sortable),
                                          &(evlist->sort_column),
                                          &(evlist->sort_order));
