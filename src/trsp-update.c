@@ -29,7 +29,6 @@
  * Downloads Frequency list from SATNOGS db and exports json transponder
  * information into satellite files identified by catalog id
  */
-#include <curl/curl.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -39,12 +38,16 @@
 #include "compat.h"
 #include "trsp-update.h"
 #include "gpredict-utils.h"
-#include "nxjson/nxjson.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
+#include "nxjson/nxjson.h"
 
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
+#endif
+
+#ifdef HAVE_CURL
+#include <curl/curl.h>
 #endif
 
 /* TRSP auto update frequency. */
@@ -369,6 +372,7 @@ void trsp_update_files(gchar * input_file)
 /** Update MODES files from network. */
 void modes_update_from_network()
 {
+#ifdef HAVE_CURL
     gchar          *server;
     gchar          *proxy = NULL;
     gchar          *modes_file;
@@ -461,6 +465,7 @@ void modes_update_from_network()
                     _("%s: Could not fetch frequency files from network"),
                     __func__);
     }
+#endif
 }
 
 /**
@@ -475,6 +480,7 @@ void trsp_update_from_network(gboolean silent,
                               GtkWidget * progress,
                               GtkWidget * label1, GtkWidget * label2)
 {
+#ifdef HAVE_CURL
     static GMutex   trsp_in_progress;
 
     gchar          *server;
@@ -621,6 +627,7 @@ void trsp_update_from_network(gboolean silent,
     }
 
     g_mutex_unlock(&trsp_in_progress);
+#endif
 }
 
 /**

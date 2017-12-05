@@ -23,7 +23,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <curl/curl.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -31,6 +30,9 @@
 
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
+#endif
+#ifdef HAVE_CURL
+#include <curl/curl.h>
 #endif
 
 #include "compat.h"
@@ -464,6 +466,7 @@ void tle_update_from_network(gboolean silent,
                              GtkWidget * progress,
                              GtkWidget * label1, GtkWidget * label2)
 {
+#ifdef HAVE_CURL
     static GMutex   tle_in_progress;
 
     gchar          *proxy = NULL;
@@ -663,6 +666,7 @@ void tle_update_from_network(gboolean silent,
 
     g_free(cache);
     g_mutex_unlock(&tle_in_progress);
+#endif
 }
 
 /**

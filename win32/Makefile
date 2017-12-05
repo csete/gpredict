@@ -1,19 +1,20 @@
 # Makefile for cross-compiling gpredict for win32 on Linux,
 # using mingw compiler
 
+# configure pkg-config
 include config.mk
+
+# cross-compiler prefix
+MGW_PREFIX=i686-w64-mingw32-
 
 # directories
 topsrc = ..
-glibdir = c:/mingw/include/glib-2.0
-gcincdir = c:/mingw/include/goocanvas-1.0/
-gcsrcdir = $(topsrc)/goocanvas-0.15/src
-
 gpreddir = $(topsrc)/src
 sgpsdpdir = $(gpreddir)/sgpsdp
+nxjsondir = $(gpreddir)/nxjson
 
 # tools
-CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32 -Wl,-subsystem,windows 
+CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32 -m32
 AS = $(MGW_PREFIX)as
 DLLWRAP = $(MGW_PREFIX)dllwrap
 DLLWRAP_FLAGS = --as=$(AS) --export-all --driver-name $(CC) -s
@@ -22,23 +23,24 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC \
 	--define __GNUWIN32__
 
 # libraries
-GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-win32-2.0)
+GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-3.0)
 GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs glib-2.0 gthread-2.0)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) -lgoocanvas libsgpsdp.lib -lcurldll -lwinmm -lws2_32
+GOOLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs goocanvas)
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) libsgpsdp.lib -lwinmm -lws2_32
 LIBS = -lm
 
 # flags/defines
-CFLAGS = -DHAVE_CONFIG_H -DHAVE_LIBCURL -DPACKAGE_LOCALE_DIR=\"/\"  \
-	 -I. -I.. -I$(glibdir) -I$(gpreddir) -I$(gcincdir) -I$(gcsrcdir) -I$(CROSSDIR)/include
-GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags gtk+-win32-2.0)
+GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags gtk+-3.0)
+GOO_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags goocanvas)
+CFLAGS = -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
 
 # source paths
-vpath %.c $(gcsrcdir)
 vpath %.c $(sgpsdpdir)
 vpath %.c $(gpreddir)
 vpath %.h $(gpreddir)
 vpath %.h $(sgpsdpdir)
-vpath %.h $(gcsrcdir)
+vpath %.c $(nxjsondir)
+vpath %.h $(nxjsondir)
 vpath %.rc $(topsrc)/win32
 
 #### End of system configuration section. ####
@@ -53,6 +55,10 @@ SGPSDPSRC = \
 
 SGPSDPOBJ = $(SGPSDPSRC:.c=.o)
 
+NXJSONSRC = \
+	nxjson.c
+
+NXJSONOBJ = $(NXJSONSRC:.c=.o)
 
 GOOCANVSRC = \
         goocanvasatk.c             \
@@ -84,7 +90,6 @@ GPREDICTSRC = \
 	compat.c \
 	first-time.c \
 	gpredict-help.c \
-	gpredict-url-hook.c \
 	gpredict-utils.c \
 	gtk-azel-plot.c \
         gtk-event-list.c \
@@ -130,7 +135,6 @@ GPREDICTSRC = \
 	radio-conf.c \
 	rotor-conf.c \
 	sat-cfg.c \
-	sat-debugger.c \
 	sat-info.c \
 	sat-log.c \
 	sat-log-browser.c \
@@ -141,9 +145,9 @@ GPREDICTSRC = \
 	sat-pref-debug.c \
 	sat-pref-formats.c \
 	sat-pref-general.c \
-	sat-pref-help.c \
 	sat-pref-interfaces.c \
 	sat-pref-layout.c \
+	sat-pref-layout-utils.c \
 	sat-pref-list-view.c \
 	sat-pref-map-view.c \
 	sat-pref-modules.c \
@@ -168,10 +172,11 @@ GPREDICTSRC = \
 	tle-tools.c \
 	tle-update.c \
 	trsp-conf.c \
+	trsp-update.c
 
 GPREDICTOBJ = $(GPREDICTSRC:.c=.o)
 
-OBJS = $(SGPSDPOBJ) $(GPREDICTOBJ)
+OBJS = $(SGPSDPOBJ) $(NXJSONOBJ) $(GPREDICTOBJ)
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(GTK_CFLAGS) $<
