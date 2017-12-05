@@ -517,8 +517,6 @@ static GtkWidget *create_selected_sats_list(GKeyFile * cfgdata, gboolean new,
     GtkListStore   *store;
 
     satlist = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(satlist), TRUE);
-
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("Selected Satellites"),
                                                       renderer, "text",
@@ -616,52 +614,36 @@ static GtkWidget *mod_cfg_editor_create(const gchar * modname,
 {
     GtkWidget      *dialog;
     GtkWidget      *add;
-    GtkWidget      *table;
+    GtkWidget      *grid;
     GtkWidget      *label;
     GtkWidget      *swin;
     GtkWidget      *addbut, *delbut;
     GtkWidget      *vbox;
-    gchar          *icon;       /* window icon file name */
+    gchar          *strbuf;
     GtkWidget      *frame;
 
     gboolean        new = (modname != NULL) ? FALSE : TRUE;
 
     if (new)
-    {
-        dialog = gtk_dialog_new_with_buttons(_("Create New Module"),
-                                             GTK_WINDOW(toplevel),
-                                             GTK_DIALOG_MODAL |
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_STOCK_PROPERTIES,
-                                             GTK_RESPONSE_HELP,
-                                             GTK_STOCK_CANCEL,
-                                             GTK_RESPONSE_CANCEL,
-                                             GTK_STOCK_OK,
-                                             GTK_RESPONSE_OK, NULL);
-    }
+        strbuf = g_strdup(_("Create new module"));
     else
-    {
-        dialog = gtk_dialog_new_with_buttons(_("Edit Module"),
-                                             GTK_WINDOW(toplevel),
-                                             GTK_DIALOG_MODAL |
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_STOCK_PROPERTIES,
-                                             GTK_RESPONSE_HELP,
-                                             GTK_STOCK_CANCEL,
-                                             GTK_RESPONSE_CANCEL,
-                                             GTK_STOCK_OK,
-                                             GTK_RESPONSE_OK, NULL);
-    }
+        strbuf = g_strdup(_("Edit module"));
+
+    dialog = gtk_dialog_new_with_buttons(strbuf, GTK_WINDOW(toplevel),
+                                         GTK_DIALOG_MODAL |
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         "_Properties", GTK_RESPONSE_HELP,
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_OK", GTK_RESPONSE_OK, NULL);
+    g_free(strbuf);
 
     gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
 
     /* window icon */
-    icon = icon_file_name("gpredict-sat-pref.png");
-    if (g_file_test(icon, G_FILE_TEST_EXISTS))
-    {
-        gtk_window_set_icon_from_file(GTK_WINDOW(dialog), icon, NULL);
-    }
-    g_free(icon);
+    strbuf = icon_file_name("gpredict-sat-pref.png");
+    if (g_file_test(strbuf, G_FILE_TEST_EXISTS))
+        gtk_window_set_icon_from_file(GTK_WINDOW(dialog), strbuf, NULL);
+    g_free(strbuf);
 
     /* module name */
     namew = gtk_entry_new();
@@ -699,33 +681,36 @@ static GtkWidget *mod_cfg_editor_create(const gchar * modname,
     gtk_widget_set_tooltip_text(locw,
                                 _("Select a ground station for this module."));
 
-    table = gtk_table_new(2, 5, TRUE);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
+    grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), FALSE);
 
-    label = gtk_label_new(_("Module Name"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), namew, 1, 3, 0, 1);
-    label = gtk_label_new(_("Ground Station"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
-    gtk_table_attach_defaults(GTK_TABLE(table), locw, 1, 3, 1, 2);
+    label = gtk_label_new(_("Module name"));
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), namew, 2, 0, 4, 1);
+
+    label = gtk_label_new(_("Ground station"));
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), locw, 2, 1, 2, 1);
 
     /* add button */
-    add = gpredict_hstock_button(GTK_STOCK_ADD, NULL,
-                                 _("Add a new ground station"));
+    add = gtk_button_new_with_label(_("Add"));
+    gtk_widget_set_tooltip_text(add, _("Add a new ground station"));
     g_signal_connect(add, "clicked", G_CALLBACK(add_qth_cb), dialog);
-    gtk_table_attach(GTK_TABLE(table), add, 3, 4, 1, 2,
-                     GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(grid), add, 4, 1, 1, 1);
 
     vbox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-    gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 5);
+    gtk_box_pack_start(GTK_BOX(vbox), grid, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, FALSE, 10);
 
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Satellites</b>"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
 
     /* satellite selector */
@@ -743,38 +728,35 @@ static GtkWidget *mod_cfg_editor_create(const gchar * modname,
     gtk_container_add(GTK_CONTAINER(swin), satlist);
 
     /* Add and Delete buttons */
-    addbut = gpredict_hstock_button(GTK_STOCK_GO_FORWARD, NULL,
-                                    _
-                                    ("Add satellite to list of selected satellites."));
+    addbut = gtk_button_new_with_label(" --> ");
+    gtk_widget_set_tooltip_text(addbut, _("Add satellite to list"));
     g_signal_connect(addbut, "clicked", G_CALLBACK(addbut_clicked_cb),
                      selector);
-    delbut = gpredict_hstock_button(GTK_STOCK_GO_BACK, NULL,
-                                    _
-                                    ("Remove satellite from the list of selected satellites."));
+
+    delbut = gtk_button_new_with_label(" <-- ");
+    gtk_widget_set_tooltip_text(delbut, _("Delete satellite from list"));
     g_signal_connect(delbut, "clicked", G_CALLBACK(delbut_clicked_cb),
                      selector);
 
-    /* quick sat selecotr tutorial label */
-    label = gtk_label_new(NULL);
+    /* quick sat selector tutorial label */
+    label = gtk_label_new(_("Double click on a satellite "
+                            "to move it to the other box."));
     gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_label_set_markup(GTK_LABEL(label),
-                         _("<b>Hint: </b> Double click on any satellite\n"
-                           "to move it to the other box."));
+    g_object_set(label, "xalign", 0.0f, "yalign", 1.0f, NULL);
 
     frame = gtk_frame_new(NULL);
     gtk_container_add(GTK_CONTAINER(frame), swin);
 
-    table = gtk_table_new(7, 9, TRUE);
-    gtk_table_attach_defaults(GTK_TABLE(table), selector, 0, 4, 0, 7);
-    gtk_table_attach_defaults(GTK_TABLE(table), frame, 5, 9, 2, 7);
-    gtk_table_attach(GTK_TABLE(table), addbut, 4, 5, 4, 5, GTK_SHRINK,
-                     GTK_SHRINK, 2, 5);
-    gtk_table_attach(GTK_TABLE(table), delbut, 4, 5, 5, 6, GTK_SHRINK,
-                     GTK_SHRINK, 2, 5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 5, 9, 0, 2);
-
-    gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
+    grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_row_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_attach(GTK_GRID(grid), selector, 0, 0, 4, 8);
+    gtk_grid_attach(GTK_GRID(grid), addbut, 4, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), delbut, 4, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 5, 0, 3, 2);
+    gtk_grid_attach(GTK_GRID(grid), frame, 5, 2, 4, 6);
+    gtk_box_pack_start(GTK_BOX(vbox), grid, TRUE, TRUE, 10);
 
     gtk_widget_show_all(vbox);
 
@@ -870,14 +852,12 @@ static void edit_advanced_settings(GtkDialog * parent, GKeyFile * cfgdata)
     GtkWidget      *contents;
     gchar          *icon;       /* window icon file name */
 
-    dialog = gtk_dialog_new_with_buttons(_("Module Properties"),
+    dialog = gtk_dialog_new_with_buttons(_("Module properties"),
                                          GTK_WINDOW(parent),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_OK,
-                                         GTK_RESPONSE_ACCEPT, NULL);
+                                         "_Cancel", GTK_RESPONSE_REJECT,
+                                         "_OK", GTK_RESPONSE_ACCEPT, NULL);
 
     /* window icon */
     icon = icon_file_name("gpredict-sat-pref.png");
