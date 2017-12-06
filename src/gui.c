@@ -38,7 +38,7 @@ GtkWidget *gui_create(GtkWidget *window)
      GtkWidget *vbox;
 
      vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-     gtk_box_pack_start(GTK_BOX(vbox), menubar_create(window), FALSE, FALSE, 3);
+     gtk_box_pack_start(GTK_BOX(vbox), menubar_create(window), FALSE, FALSE, 1);
      gtk_box_pack_start(GTK_BOX(vbox), mod_mgr_create(), TRUE, TRUE, 0);
 
      return vbox;
