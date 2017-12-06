@@ -101,6 +101,9 @@ void gpredict_help_show_txt(const gchar * filename)
     view = gtk_text_view_new();
     gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
     gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(view), FALSE);
+    gtk_text_view_set_monospace(GTK_TEXT_VIEW(view), FALSE);
+    gtk_text_view_set_left_margin(GTK_TEXT_VIEW(view), 15);
+    gtk_text_view_set_right_margin(GTK_TEXT_VIEW(view), 15);
     txtbuf = gtk_text_view_get_buffer(GTK_TEXT_VIEW(view));
 
     gtk_text_buffer_set_text(txtbuf, buff, -1);
