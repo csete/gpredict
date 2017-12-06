@@ -7,19 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-03 13:56+0100\n"
-"PO-Revision-Date: 2015-09-16 10:22+0000\n"
+"POT-Creation-Date: 2017-12-06 01:10+0000\n"
+"PO-Revision-Date: 2017-12-04 02:00+0000\n"
 "Last-Translator: Jan Simon <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-07-31 05:41+0000\n"
-"X-Generator: Launchpad (build 18169)\n"
+"X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
+"X-Generator: Launchpad (build 18511)\n"
+"Language: de\n"
 
 #: ../src/about.c:76
-#, fuzzy
 msgid ""
 "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors.\n"
 "Contact: oz9aec at gmail.com\n"
@@ -45,43 +44,43 @@ msgid ""
 "MA 02111-1307\n"
 "USA.\n"
 msgstr ""
-"Copyright (C) 2001-2013 Alexandru Csete OZ9AEC und Mitwirkende.\n"
-"Kontakt: oz9aec at gmail.com\n"
+"Copyright (C) 2001-2017 Alexandru Csete OZ9AEC und Mitwirkende.\n"
+"Kontact: oz9aec at gmail.com\n"
 "\n"
-"Gpredict ist freie Software; Sie können es weitergeben und verändern unter "
-"den Bedingungen der GNU Public License, veröffentlicht durch die Free "
-"Software Foundation; entweder unter der zweiten oder jeder anderen, späteren "
-"Version  der Lizenz.\n"
+"Gpredict ist freie Software; du kannst sie weiterverteilen und sie unter den "
+"Bedingungen der GNU General Public Lizenz Version 2 oder jeglicher späteren "
+"Version, wie sie von der Free Software Foundation veröffentlicht wurde, "
+"modifizieren.\n"
 "\n"
-"Dieses Programm ist kostenlos in der Hoffnung veröffentlicht worden, dass es "
-"nützlich sein wird, aber OHNE JEGLICHE GARANTIE; selbst nicht unter der "
-"implizierten Garantie von MARKTFÄHIGKEIT oder der EIGNUNG FÜR EINEN "
-"BESTIMMTEN ZWECK. Schauen Sie in die GNU General Public License für weitere "
-"Details.\n"
+"Dieses Programm wird entgeltfrei verteilt mit der Hoffnung, dass es nützlich "
+"sein wird, JEDOCH OHNE JEGLICHE GARANTIE; sogar ohne die implizierte "
+"Zusicherung allgemeiner Gebrauchstauglichkeit oder der TAUGLICHKEIT FÜR EINE "
+"BESTIMMTE ABSICHT. Sieh dir die GNU Library General Public Lizenz für "
+"weitere Details an.\n"
 "\n"
-"Sie sollten eine Kopie der GNU General Public License zusammen mit diesem "
-"Programm erhalten haben (unter Hilfe->Lizenz). Wenn nicht, schauen sie auf "
-"der FSF Internetseite http://www.fsf.org/licensing/licenses/gpl.html oder "
-"schreiben Sie eine Nachricht  an die\n"
+"Zusammen mit diesem Programm (siehe Hilfe->Lizenz) solltest du eine Kopie "
+"der GNU General Public Lizenz erhalten haben. Andernfalls kannst eine Kopie "
+"auf der FSF Website http://www.fsf.org/licensing/licenses/gpl.html finden "
+"oder du kannst der\n"
 "\n"
 "Free Software Foundation, Inc.\n"
 "59 Temple Place - Suite 330\n"
 "Boston\n"
 "MA 02111-1307\n"
 "USA.\n"
+"\n"
+"schreiben.\n"
 
-#: ../src/about.c:104
-#, fuzzy
+#. window title
+#. icon file name
+#. create window title and file name for window icon
+#: ../src/about.c:104 ../src/main.c:247
 msgid "Gpredict"
-msgstr "Berechnung"
+msgstr "Gpredict"
 
 #: ../src/about.c:107
-#, fuzzy
 msgid "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"
-msgstr ""
-"Copyright (C) 2001-2013 Alexandru Csete OZ9AEC\n"
-"\n"
-"Gpredict ist kostenlos erhältlich auf:"
+msgstr "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC und Mitwirkende."
 
 #: ../src/about.c:120
 msgid "translator-credits"
@@ -89,6 +88,7 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  AA1VS https://launchpad.net/~hamaa1vs\n"
 "  Alexandru Csete https://launchpad.net/~alexc\n"
+"  Daniel S https://launchpad.net/~dadosch\n"
 "  Dennis Baudys https://launchpad.net/~thecondordb\n"
 "  Gpredict Team https://launchpad.net/~gpredict-team\n"
 "  Jan Simon https://launchpad.net/~jan-simon\n"
@@ -108,7 +108,7 @@ msgstr "%s: %s konnte nicht geöffnet werden."
 #: ../src/first-time.c:202
 #, c-format
 msgid "%s: Found at least one .qth file."
-msgstr "%s: Zumindest eine .qth-Datei gefunden."
+msgstr "%s: Mindestens eine .qth-Datei gefunden."
 
 #: ../src/first-time.c:253
 #, c-format
@@ -124,13 +124,13 @@ msgstr "%s: sample.qth wurde nach %s/ kopiert"
 #: ../src/first-time.c:723 ../src/first-time.c:797
 #, c-format
 msgid "%s: Check successful."
-msgstr "%s: Test erfolgreich."
+msgstr "%s: Überprüfung erfolgreich."
 
 #: ../src/first-time.c:303 ../src/first-time.c:410 ../src/first-time.c:681
 #: ../src/first-time.c:729 ../src/first-time.c:803
 #, c-format
 msgid "%s: Check failed. Creating %s"
-msgstr "%s: Test fehlgeschlagen. Erzeuge %s"
+msgstr "%s: Überprüfung fehlgeschlagen. Erzeuge %s"
 
 #: ../src/first-time.c:313 ../src/first-time.c:419 ../src/first-time.c:690
 #: ../src/first-time.c:738 ../src/first-time.c:811
@@ -155,9 +155,8 @@ msgid "%s: Copied amateur.mod to %s/"
 msgstr "%s: amateur.mod wurde nach %s/ kopiert"
 
 #: ../src/first-time.c:445
-#, fuzzy
 msgid "Copying satellite data to user config"
-msgstr "%s: %d neue Satelliten in die Benutzereinstellungen geschrieben"
+msgstr "Kopiere die Satellitendaten in die Benutzereinstellungen"
 
 #: ../src/first-time.c:458 ../src/gtk-sat-data.c:74
 #, c-format
@@ -180,9 +179,8 @@ msgid "%s: Written %d new satellite to user config"
 msgstr "%s: %d neue Satelliten in die Benutzereinstellungen geschrieben"
 
 #: ../src/first-time.c:557
-#, fuzzy
 msgid "Copying satellite categories to user config"
-msgstr "%s: %d neue Satelliten in die Benutzereinstellungen geschrieben"
+msgstr "Kopiere die Satellitenkategorien in die Benutzereinstellungen"
 
 #: ../src/first-time.c:568
 #, c-format
@@ -387,31 +385,30 @@ msgstr "%s: Hinzugefügte Beschriftung zur Polaransicht zeigt nicht %d."
 msgid "%s: Cannot allocate memory for satellite %d."
 msgstr "%s: Kann keinen Speicher zuordnen für Satellit %d."
 
-#: ../src/gtk-polar-view.c:1384 ../src/gtk-polar-view.c:1524
+#: ../src/gtk-polar-view.c:1384 ../src/gtk-polar-view.c:1522
 #, c-format
 msgid "%s:%d: Failed to get satellite pass."
 msgstr "%s:%d: Satellitenüberflug nicht gefunden."
 
-#: ../src/gtk-polar-view.c:1394 ../src/gtk-polar-view.c:1538
+#: ../src/gtk-polar-view.c:1394 ../src/gtk-polar-view.c:1536
 #, c-format
 msgid "%s:%d: Pass had no points in it."
 msgstr "%s:%d: Überflug enthielt keine Punkte."
 
-#: ../src/gtk-polar-view.c:1516 ../src/gtk-polar-view-popup.c:156
+#: ../src/gtk-polar-view.c:1514 ../src/gtk-polar-view-popup.c:156
 #: ../src/gtk-polar-view-popup.c:209 ../src/gtk-sat-map-popup.c:170
 #: ../src/gtk-sat-map-popup.c:234 ../src/gtk-sat-map-popup.c:281
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
 msgstr "%s:%d: Fehler beim Holen des Satellitenobjekts."
 
-#: ../src/gtk-polar-view.c:1650
+#: ../src/gtk-polar-view.c:1645
 #, c-format
 msgid "%s Requested satellite (%d) is not within range"
 msgstr "%s Ausgewählter Satellit (%d) ist nicht in Reichweite"
 
 #: ../src/gtk-polar-view-popup.c:73 ../src/gtk-sat-list-popup.c:61
 #: ../src/gtk-sat-map-popup.c:75
-#, fuzzy
 msgid "Satellite info"
 msgstr "Satelliteninformation"
 
@@ -632,7 +629,8 @@ msgstr "%s:%s: Ungültige Satellitenauswahl: %d"
 #: ../src/gtk-rig-ctrl.c:977
 #, c-format
 msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
-msgstr "%s: Unstimmigkeit in den internen Transponder-Daten gefunden. (%d,%d)"
+msgstr ""
+"%s: Unstimmigkeit in den internen Transponder-Daten gefunden. (%d,%d)"
 
 #: ../src/gtk-rig-ctrl.c:1101
 #, c-format
@@ -729,9 +727,9 @@ msgid "%s:%s: Satellite %d has %d transponder modes."
 msgstr "%s:%s: Satellit %d hat %d Transpondermodi."
 
 #: ../src/gtk-rig-ctrl.c:2725
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Read transponder '%s' for satellite %d"
-msgstr "%s:&s: Transponder '%s' für Satellit %d wird gelesen"
+msgstr "%s:%s: Lese Transponder '%s' für Satelliten %d"
 
 #: ../src/gtk-rig-ctrl.c:2869
 #, c-format
@@ -874,7 +872,8 @@ msgid "Engage the selected rotor device"
 msgstr "Startet die Steuerung des gewählten Geräts"
 
 #: ../src/gtk-rot-ctrl.c:629
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Dieser Parameter steuert die Pausen zwischen den Befehlen die an den Rotor "
 "gesendet werden."
@@ -917,9 +916,9 @@ msgid "%s:%d: Failed to load rotator configuration %s"
 msgstr "%s:%d: Laden der Rotorkonfiguration %s fehlgeschlagen"
 
 #: ../src/gtk-rot-ctrl.c:889
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%d: rotctld returned error %d with stop-cmd (%s)"
-msgstr "%s:%d: rotctld gab Fehler %d mit Az. %f El. %f zurück (%s)"
+msgstr "%s:%d: rotctld gab Fehler %d zurück mit stop-cmd (%s)"
 
 #: ../src/gtk-rot-ctrl.c:1032 ../src/gtk-rot-ctrl.c:1033
 #: ../src/gtk-sat-module-popup.c:949 ../src/gtk-sat-module-popup.c:1029
@@ -965,12 +964,12 @@ msgstr "%s: Satellit %d hat keinen NICKNAME"
 #: ../src/gtk-sat-data.c:111
 #, c-format
 msgid "%s: Error reading TLE line 1 from %s (%s)"
-msgstr "%s: Fehler beim Lesen von TLE Zeile 1 von %s (%s)"
+msgstr "%s: Fehler beim Lesen von TLE-Zeile 1 von %s (%s)"
 
 #: ../src/gtk-sat-data.c:119 ../src/tle-update.c:1168 ../src/tle-update.c:1177
 #, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
-msgstr "%s: Fehler beim Lesen von TLE Zeile 2 von %s (%s)"
+msgstr "%s: Fehler beim Lesen von TLE-Zeile 2 von %s (%s)"
 
 #: ../src/gtk-sat-data.c:129
 #, c-format
@@ -982,7 +981,7 @@ msgid "Satellite"
 msgstr "Satellit"
 
 #: ../src/gtk-sat-list.c:51 ../src/gtk-sat-selector.c:272
-#: ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:576
+#: ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:530
 msgid "Catnum"
 msgstr "Katalognummer"
 
@@ -1054,7 +1053,7 @@ msgstr "Dop."
 
 #: ../src/gtk-sat-list.c:69 ../src/sat-pass-dialogs.c:112
 msgid "Loss"
-msgstr "Verl."
+msgstr "Dämpfung"
 
 #: ../src/gtk-sat-list.c:70 ../src/sat-pass-dialogs.c:113
 msgid "Del"
@@ -1148,11 +1147,11 @@ msgstr "Geschwindigkeit"
 #: ../src/gtk-sat-list.c:100 ../src/gtk-single-sat.c:96
 #: ../src/sat-pass-dialogs.c:134
 msgid "Doppler Shift @ 100MHz"
-msgstr "Dopplerverschiebung @ 100MHz"
+msgstr "Dopplerverschiebung @ 100 MHz"
 
 #: ../src/gtk-sat-list.c:101 ../src/sat-pass-dialogs.c:135
 msgid "Signal Loss @ 100MHz"
-msgstr "Signalverlust @ 100MHz"
+msgstr "Signaldämpfung @ 100 MHz"
 
 #: ../src/gtk-sat-list.c:102 ../src/gtk-single-sat.c:98
 #: ../src/sat-pass-dialogs.c:136
@@ -1413,7 +1412,7 @@ msgstr "%s: GRID (%d): %s"
 msgid "%s: Unable to allocate memory for grid."
 msgstr "%s: Speicherzuordnung für das Gitter nicht möglich."
 
-#: ../src/gtk-sat-module.c:618 ../src/mod-cfg.c:627
+#: ../src/gtk-sat-module.c:618 ../src/mod-cfg.c:581
 #, c-format
 msgid "%s: Failed to get list of satellites (%s)"
 msgstr "%s: Liste der Satelliten konnte nicht geladen werden (%s)"
@@ -1621,7 +1620,7 @@ msgstr "Modul klonen"
 msgid "Name of new module:"
 msgstr "Name des neuen Moduls:"
 
-#: ../src/gtk-sat-module-popup.c:354 ../src/mod-cfg.c:445
+#: ../src/gtk-sat-module-popup.c:354 ../src/mod-cfg.c:662
 msgid ""
 "Enter a short name for this module.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
@@ -1656,7 +1655,7 @@ msgid "%s:%d: Successfully cloned %s."
 msgstr "%s:%d: Erfolgeich geklont. %s."
 
 #: ../src/gtk-sat-module-popup.c:441 ../src/gtk-sat-module-popup.c:562
-#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:907 ../src/mod-mgr.c:684
+#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:907
 msgid "GPREDICT: "
 msgstr "GPREDICT: "
 
@@ -1770,7 +1769,7 @@ msgstr "<b>Echtzeit</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:157
 msgid " Hour:"
@@ -1840,28 +1839,27 @@ msgid "%s: %d/%d/%d %d:%d:%d.%d"
 msgstr "%s: %d/%d/%d %d:%d:%d.%d"
 
 #: ../src/gtk-sat-popup-common.c:48
-#, fuzzy
 msgid "Show current pass"
-msgstr "Details anzeigen"
+msgstr "Derzeitigen Überflug anzeigen"
 
 #. the next pass menu item
 #: ../src/gtk-sat-popup-common.c:59
-#, fuzzy
 msgid "Show next pass"
-msgstr "Details anzeigen"
+msgstr "Nächsten Überflug anzeigen"
 
 #. finally the future pass menu item
 #: ../src/gtk-sat-popup-common.c:69
-#, fuzzy
 msgid "Future passes"
-msgstr "Mehrere Überflüge"
+msgstr "Zukünftige Überflüge"
 
 #: ../src/gtk-sat-popup-common.c:157 ../src/gtk-sat-popup-common.c:217
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Satellite %s has no passes\n"
 "within the next %d days"
-msgstr "%s:%d: %s hat %d Überflüge in %.4f Tagen\n"
+msgstr ""
+"Satellit %s hat keine Überflüge\n"
+"in den nächsten %d Tagen"
 
 #: ../src/gtk-sat-popup-common.c:173
 #, c-format
@@ -1873,6 +1871,12 @@ msgid ""
 "is geostationary, decayed or simply\n"
 "never comes above the horizon"
 msgstr ""
+"Satellit %s hat keine Überflüge\n"
+"für die derzeitige Bodenstation!\n"
+"\n"
+"Dies kann daran liegen, dass der\n"
+"Satellit geostationär, abgestürzt oder\n"
+"einfach niemals über den Horizont kommt"
 
 #: ../src/gtk-sat-popup-common.c:236
 #, c-format
@@ -1880,6 +1884,8 @@ msgid ""
 "Satellite %s has no passes for\n"
 "the current ground station!"
 msgstr ""
+"Satellit %s hat keine Überflüge\n"
+"für die derzeitige Bodenstation!"
 
 #: ../src/gtk-sat-selector.c:217
 msgid "Select a satellite group or category to narrow your search."
@@ -1932,7 +1938,7 @@ msgstr "%s:%s: %d Satelliten der MAIN Gruppe werden gelesen"
 msgid "%s:%s: Failed to open %s: %s"
 msgstr "%s:%s: Konnte nicht öffnen %s: %s"
 
-#: ../src/gtk-sat-selector.c:538 ../src/mod-cfg.c:710
+#: ../src/gtk-sat-selector.c:538 ../src/mod-cfg.c:135
 #, c-format
 msgid "%s:%s: Error reading satellite %d."
 msgstr "%s:%s: Fehler beim Lesen von Satellit %d."
@@ -1952,7 +1958,7 @@ msgstr "%s:%s: Fehler beim Lesen %s"
 msgid "%s: Error getting %dth satellite"
 msgstr "%s: Fehler beim Holen vom %dten Satellit."
 
-#: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:585
+#: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:539
 msgid "Epoch"
 msgstr "Epoche"
 
@@ -2049,7 +2055,7 @@ msgstr "Doppler@100MHz"
 
 #: ../src/gtk-single-sat.c:70
 msgid "Sig. Loss"
-msgstr "Signalverl."
+msgstr "Signaldämpfung"
 
 #: ../src/gtk-single-sat.c:71
 msgid "Sig. Delay"
@@ -2129,7 +2135,7 @@ msgstr "Tangentiale Geschwindigkeit des Satelliten"
 
 #: ../src/gtk-single-sat.c:97
 msgid "Signal loss @ 100MHz"
-msgstr "Signalverlust @ 100MHz"
+msgstr "Signaldämpfung @ 100 MHz"
 
 #: ../src/gtk-single-sat.c:102
 msgid "Visibility of the satellite"
@@ -2200,9 +2206,9 @@ msgid "%s:%d: %s has %d passes within %.4f days\n"
 msgstr "%s:%d: %s hat %d Überflüge in %.4f Tagen\n"
 
 #: ../src/gtk-sky-glance.c:701
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Could not allocate memory."
-msgstr "%s:%d: Speicherzuordnung fehlgeschlagen!\n"
+msgstr "%s:%s: Konnte keinen Speicher zuweisen."
 
 #. no satellites
 #: ../src/gtk-sky-glance.c:781
@@ -2298,40 +2304,33 @@ msgstr ""
 "Eine mögliche Lösung ist: Entfernen Sie das .config/Gpredict Verzeichnis\n"
 "in ihrem Homeverzeichnis."
 
-#. window title
-#. icon file name
-#. create window title and file name for window icon
-#: ../src/main.c:247
-msgid "GPREDICT"
-msgstr "GPREDICT"
-
-#: ../src/main.c:456
+#: ../src/main.c:455
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 "%s: Nicht-Null-Pointer wurde übergeben, was niemals passieren sollte.\n"
 
-#: ../src/main.c:500
+#: ../src/main.c:499
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr "%s: Zeitschwelle wurde überschritten."
 
-#: ../src/main.c:509
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr "%s: Beginne einen neuen Aktualisierungsvorgang."
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:512
+#: ../src/main.c:511
 msgid "gpredict_tle_update"
 msgstr "gpredict_tle_update"
 
-#: ../src/main.c:517
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr "%s: Erzeugen des TLE-Aktualisierungs-Threads fehlgeschlagen (%s)"
 
-#: ../src/main.c:529
+#: ../src/main.c:528
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2343,27 +2342,27 @@ msgstr ""
 "<b>Bearbeiten -> TLE-Daten aktualisieren</b>\n"
 "auswählen."
 
-#: ../src/main.c:559
+#: ../src/main.c:558
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr "%s: TLE-Überwachungs-Task konnte nicht gefunden werden  (ID = %d)"
 
-#: ../src/main.c:605
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
-msgstr "%s: Lösche TLE Daten in %s"
+msgstr "%s: Lösche TLE-Daten in %s"
 
-#: ../src/main.c:618 ../src/main.c:665
+#: ../src/main.c:617 ../src/main.c:664
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr "%s: Fehler beim löschen von %s"
 
-#: ../src/main.c:623 ../src/main.c:670
+#: ../src/main.c:622 ../src/main.c:669
 #, c-format
 msgid "%s: Removed %s"
 msgstr "%s: %s entfernt"
 
-#: ../src/main.c:651
+#: ../src/main.c:650
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr "%s: Lösche Transponderdaten in %s"
@@ -2391,14 +2390,12 @@ msgid "_Edit"
 msgstr "_Bearbeiten"
 
 #: ../src/menubar.c:76
-#, fuzzy
 msgid "_Update TLE data"
 msgstr "_TLE-Daten aktualisieren"
 
 #: ../src/menubar.c:77
-#, fuzzy
 msgid "_Update Transponder data"
-msgstr "_Transponder"
+msgstr "_Transponder-Daten aktualisieren"
 
 #: ../src/menubar.c:79
 msgid "_Help"
@@ -2447,9 +2444,8 @@ msgid "Update Keplerian elements from a network server"
 msgstr "Keplerelemente von einem Internetserver aktualisieren"
 
 #: ../src/menubar.c:96
-#, fuzzy
 msgid "Update transponders from a network server"
-msgstr "Keplerelemente von einem Internetserver aktualisieren"
+msgstr "Transponder von einem Netzwerkserver aktualisieren"
 
 #: ../src/menubar.c:98
 msgid "From l_ocal files"
@@ -2544,20 +2540,18 @@ msgstr "%s: Öffnen des Moduls abgebrochen."
 
 #. create new dialog with progress indicator
 #: ../src/menubar.c:359
-#, fuzzy
 msgid "Transponder Update"
-msgstr "Transponder"
+msgstr "Transponder-Update"
 
 #: ../src/menubar.c:375
-#, fuzzy
 msgid "<b>Updating transponder files from network</b>"
-msgstr "<b>TLE-Daten werden aus dem Internet aktualisiert</b>"
+msgstr "<b>Aktualisiere Transponder-Dateien aus dem Netzwerk</b>"
 
 #. statistics
 #. label2 = gtk_label_new(_("Transponders updated:\t 0\n"));
 #: ../src/menubar.c:389
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: ../src/menubar.c:412 ../src/menubar.c:490 ../src/menubar.c:631
 msgid "Finished"
@@ -2614,7 +2608,7 @@ msgid ""
 "Gpredict website:"
 msgstr ""
 "Ein umfangreiches PDF-Benutzerhandbuch und\n"
-"Videotutorials sind auf der Gpredict Internetseite\n"
+"Videotutorials sind auf der Gpredict-Internetseite\n"
 "verfügbar:"
 
 #: ../src/menubar.c:728
@@ -2654,12 +2648,13 @@ msgstr "%s:%s: Gewählte Modul ist: %s"
 msgid "%s:%s: No selection is list of modules."
 msgstr "%s:%s: Keine Auswahl ist die Modulliste."
 
-#: ../src/mod-cfg.c:128
+#: ../src/mod-cfg.c:62
 #, c-format
 msgid "%s: Already have module %s. Ask user to confirm..."
-msgstr "%s: Es gibt bereits ein Modul %s. Frage den Benutzer um Bestätigung …"
+msgstr ""
+"%s: Es gibt bereits ein Modul %s. Frage den Benutzer um Bestätigung …"
 
-#: ../src/mod-cfg.c:139
+#: ../src/mod-cfg.c:69
 #, c-format
 msgid ""
 "There is already a module called %s.\n"
@@ -2668,111 +2663,113 @@ msgstr ""
 "Es gibt bereits ein Modul mit dem Namen %s.\n"
 "Wollen Sie das Modul überschreiben?"
 
-#: ../src/mod-cfg.c:168
-#, c-format
-msgid "%s: Error while saving module data (%d)."
-msgstr "%s: Fehler beim Speichern der Moduldaten. (%d)."
-
-#: ../src/mod-cfg.c:178 ../src/mod-cfg.c:269
-#, c-format
-msgid "%s: User tried to create module with no sats."
-msgstr "%s: Benutzer hat versucht ein Modul ohne Satelliten zu erstellen."
-
-#: ../src/mod-cfg.c:191 ../src/mod-cfg.c:281
-msgid "Please select at least one satellite from the list."
-msgstr "Bitte mindestens einen Satelliten aus der Liste auswählen."
-
-#: ../src/mod-cfg.c:327
-#, c-format
-msgid "%s: Attempt to save data to empty file name."
-msgstr ""
-"%s: Es wurde versucht, Daten unter einem leeren Dateinamen zu speichern."
-
-#: ../src/mod-cfg.c:335
-#, c-format
-msgid "%s: Attempt to save NULL data."
-msgstr "%s: Es wurde versucht, NULL Daten zu schreiben."
-
-#: ../src/mod-cfg.c:396
-msgid "Create New Module"
-msgstr "Neues Modul erstellen"
-
-#: ../src/mod-cfg.c:409
-msgid "Edit Module"
-msgstr "Modul bearbeiten"
-
-#: ../src/mod-cfg.c:465
-msgid "Select a ground station for this module."
-msgstr "Bodenstation für dieses Modul wählen."
-
-#: ../src/mod-cfg.c:471
-msgid "Module Name"
-msgstr "Modulname"
-
-#: ../src/mod-cfg.c:475
-msgid "Ground Station"
-msgstr "Bodenstation"
-
-#: ../src/mod-cfg.c:482
-msgid "Add a new ground station"
-msgstr "Neue Bodenstation hinzufügen"
-
-#: ../src/mod-cfg.c:492
-msgid "<b>Satellites</b>"
-msgstr "<b>Satelliten</b>"
-
-#: ../src/mod-cfg.c:513
-msgid "Add satellite to list of selected satellites."
-msgstr "Satellit zur Liste der ausgewählten Satelliten hinzufügen."
-
-#: ../src/mod-cfg.c:517
-msgid "Remove satellite from the list of selected satellites."
-msgstr "Satellit von der Liste der ausgewählten Satelliten entfernen."
-
-#: ../src/mod-cfg.c:526
-msgid ""
-"<b>Hint: </b> Double click on any satellite\n"
-"to move it to the other box."
-msgstr ""
-"<b>Hinweis: </b> Auf einen Satelliten doppelklicken,\n"
-"um ihn in den anderen Kasten zu bewegen."
-
-#: ../src/mod-cfg.c:567
-msgid "Selected Satellites"
-msgstr "Ausgewählte Satelliten"
-
-#: ../src/mod-cfg.c:694 ../src/mod-cfg.c:975
+#: ../src/mod-cfg.c:119 ../src/mod-cfg.c:825
 #, c-format
 msgid "%s:%s: Could not fetch entry %d in satellite list"
 msgstr "%s:%s: Eintrag %d in der Satellitenliste konnte nicht geholt werden"
 
-#: ../src/mod-cfg.c:824
+#: ../src/mod-cfg.c:335
 #, c-format
 msgid "%s: Module has no QTH; use default."
 msgstr "%s: Modul hat kein QTH; Standard wird benutzt."
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
-#: ../src/mod-cfg.c:826 ../src/mod-cfg.c:885 ../src/mod-cfg.c:932
+#. 
+#: ../src/mod-cfg.c:337 ../src/mod-cfg.c:397 ../src/mod-cfg.c:782
 msgid "** DEFAULT **"
 msgstr "** DEFAULT **"
 
-#: ../src/mod-cfg.c:875
+#: ../src/mod-cfg.c:387
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir %s (%s)"
 msgstr ""
 "%s:%d: Öffnen des Benutzerkonfigurationsverzeichnisses fehlgeschlagen %s (%s)"
 
-#: ../src/mod-cfg.c:985
+#: ../src/mod-cfg.c:521
+msgid "Selected Satellites"
+msgstr "Ausgewählte Satelliten"
+
+#: ../src/mod-cfg.c:628
+msgid "Create new module"
+msgstr ""
+
+#: ../src/mod-cfg.c:630
+msgid "Edit module"
+msgstr ""
+
+#: ../src/mod-cfg.c:682
+msgid "Select a ground station for this module."
+msgstr "Bodenstation für dieses Modul wählen."
+
+#: ../src/mod-cfg.c:689
+msgid "Module name"
+msgstr ""
+
+#: ../src/mod-cfg.c:694
+msgid "Ground station"
+msgstr ""
+
+#. add button
+#: ../src/mod-cfg.c:700
+msgid "Add"
+msgstr ""
+
+#: ../src/mod-cfg.c:701
+msgid "Add a new ground station"
+msgstr "Neue Bodenstation hinzufügen"
+
+#: ../src/mod-cfg.c:712
+msgid "<b>Satellites</b>"
+msgstr "<b>Satelliten</b>"
+
+#: ../src/mod-cfg.c:732
+msgid "Add satellite to list"
+msgstr ""
+
+#: ../src/mod-cfg.c:737
+msgid "Delete satellite from list"
+msgstr ""
+
+#. quick sat selector tutorial label
+#: ../src/mod-cfg.c:742
+msgid "Double click on a satellite to move it to the other box."
+msgstr ""
+
+#: ../src/mod-cfg.c:835
 #, c-format
 msgid "%s: Applied changes to %s."
 msgstr "%s: Änderungen auf %s angewendet."
 
 #. window icon file name
-#: ../src/mod-cfg.c:1005
-msgid "Module Properties"
-msgstr "Moduleigenschaften"
+#: ../src/mod-cfg.c:855
+msgid "Module properties"
+msgstr ""
+
+#: ../src/mod-cfg.c:951
+#, c-format
+msgid "%s: Error while saving module data (%d)."
+msgstr "%s: Fehler beim Speichern der Moduldaten. (%d)."
+
+#: ../src/mod-cfg.c:961 ../src/mod-cfg.c:1052
+#, c-format
+msgid "%s: User tried to create module with no sats."
+msgstr "%s: Benutzer hat versucht ein Modul ohne Satelliten zu erstellen."
+
+#: ../src/mod-cfg.c:974 ../src/mod-cfg.c:1064
+msgid "Please select at least one satellite from the list."
+msgstr "Bitte mindestens einen Satelliten aus der Liste auswählen."
+
+#: ../src/mod-cfg.c:1100
+#, c-format
+msgid "%s: Attempt to save data to empty file name."
+msgstr ""
+"%s: Es wurde versucht, Daten unter einem leeren Dateinamen zu speichern."
+
+#: ../src/mod-cfg.c:1108
+#, c-format
+msgid "%s: Attempt to save NULL data."
+msgstr "%s: Es wurde versucht, NULL Daten zu schreiben."
 
 #: ../src/mod-cfg-get-param.c:76
 #, c-format
@@ -2822,7 +2819,8 @@ msgstr "%s: Modul %s scheint NULL zu sein"
 #: ../src/mod-mgr.c:276
 #, c-format
 msgid "%s: Could not find child in notebook. This may hurt..."
-msgstr "%s: Kind konnte im Notebook nicht gefunden werden. Das kann weh tun …"
+msgstr ""
+"%s: Kind konnte im Notebook nicht gefunden werden. Das kann weh tun …"
 
 #: ../src/mod-mgr.c:285
 #, c-format
@@ -2852,7 +2850,8 @@ msgstr "%s: Status von %d Modulen gesichert."
 #: ../src/mod-mgr.c:444 ../src/mod-mgr.c:510
 #, c-format
 msgid "%s: Module %s not found in list. Trying to recover."
-msgstr "%s: Modul %s nicht in der Liste gefunden. Versuche Wiederherstellung."
+msgstr ""
+"%s: Modul %s nicht in der Liste gefunden. Versuche Wiederherstellung."
 
 #: ../src/mod-mgr.c:452
 #, c-format
@@ -2875,13 +2874,13 @@ msgid "%s: Removed %s from notebook page %d."
 msgstr "%s: %s von der Notebook-Seite %d entfernt."
 
 #: ../src/mod-mgr.c:561
-msgid "GPREDICT: (none)"
-msgstr "GPREDICT: (kein)"
+msgid "Gpredict: (none)"
+msgstr "Gpredict: (kein)"
 
 #: ../src/mod-mgr.c:566 ../src/mod-mgr.c:586
 #, c-format
-msgid "GPREDICT: %s"
-msgstr "GPREDICT: %s"
+msgid "Gpredict: %s"
+msgstr "Gpredict: %s"
 
 #: ../src/mod-mgr.c:604
 #, c-format
@@ -2892,6 +2891,10 @@ msgstr "%s: Neu laden der Satelliten versucht, aber mod-mgr ist NULL?"
 #, c-format
 msgid "%s: No modules need to reload sats."
 msgstr "%s: Kein Modul muss Satelliten neu laden."
+
+#: ../src/mod-mgr.c:684
+msgid "Gpredict: "
+msgstr "Gpredict: "
 
 #. pass details
 #: ../src/pass-popup-menu.c:72
@@ -2959,7 +2962,7 @@ msgstr " Dop. "
 
 #: ../src/pass-to-txt.c:62
 msgid " Loss "
-msgstr " Verl. "
+msgstr " Dämpf. "
 
 #: ../src/pass-to-txt.c:63
 msgid " Del "
@@ -3278,13 +3281,21 @@ msgstr "Vorgegebene Wetterstation aus einer Liste auswählen."
 msgid "QTH Type"
 msgstr "QTH-Typ"
 
+#: ../src/qth-editor.c:365 ../src/sat-pref-qth-editor.c:355
+msgid "Static"
+msgstr "Statisch"
+
+#: ../src/qth-editor.c:366 ../src/sat-pref-qth-editor.c:356
+msgid "GPSD"
+msgstr "GPSD"
+
 #: ../src/qth-editor.c:370 ../src/sat-pref-qth-editor.c:359
 msgid ""
 "A qth can be static, ie. it does not change, or gpsd based for computers "
 "with gps attached."
 msgstr ""
-"Ein QTH kann ruhend sein, d.h. es verändert seinen Standort nicht, oder gpsd-"
-"basiert für Rechner mit einem angeschlossenen GPS-Gerät."
+"Ein QTH kann statisch sein, d.h. es verändert sich nicht, oder gpsd-basiert "
+"für Rechner mit einem angeschlossenen GPS-Gerät."
 
 #. GPSD Server
 #: ../src/qth-editor.c:373 ../src/sat-pref-qth-editor.c:364
@@ -3386,9 +3397,9 @@ msgid "%s: MaxEl not defined for %s. Assuming 90°."
 msgstr "%s: MaxEl ist nicht definiert für %s. Benutze 90°."
 
 #: ../src/rotor-conf.c:168
-#, fuzzy, c-format
+#, c-format
 msgid "%s: AzStopPos not defined for %s. Assuming at minaz (%f°)."
-msgstr "%s: MinAz ist nicht definiert für %s. Benutze 0°."
+msgstr "%s: AzStopPos nicht definiert für %s. Nehme an bei minaz (%f°)."
 
 #: ../src/sat-cfg.c:281
 #, c-format
@@ -3593,7 +3604,7 @@ msgstr "Mode: %s"
 #: ../src/sat-info.c:509
 #, c-format
 msgid "Baudrate: %9.2f"
-msgstr ""
+msgstr "Baudrate: %9.2f"
 
 #: ../src/sat-log-browser.c:50 ../src/sat-pass-dialogs.c:98
 #: ../src/sat-pass-dialogs.c:121
@@ -3626,7 +3637,7 @@ msgstr "DEBUG"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:130 ../src/sat-log-browser.c:176
@@ -3699,9 +3710,9 @@ msgid "ERROR: Could not create %s\n"
 msgstr "ERROR: %s konnte nicht erstellt werden\n"
 
 #: ../src/sat-log.c:115 ../src/sat-log.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Failed to delete old log file %s\n"
-msgstr "%s: Fehler beim löschen von %s"
+msgstr "%s: Löschen der alten Logfiles %s fehlgeschlagen\n"
 
 #: ../src/sat-log.c:123
 #, c-format
@@ -3729,9 +3740,9 @@ msgid "%s: Session ended"
 msgstr "%s: Sitzung beendet"
 
 #: ../src/sat-log.c:281
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Failed to rename %s to %s\n"
-msgstr "%s: %s wiederherstellen fehlgeschlagen"
+msgstr "%s: Umbenennen von %s in %s fehlgeschlagen\n"
 
 #: ../src/sat-pass-dialogs.c:57 ../src/sat-pref-rig-editor.c:338
 msgid "AOS"
@@ -4043,7 +4054,7 @@ msgid "Select how often gpredict should delete old log files."
 msgstr "Auswahl, wie häufig Gpredict alte Log-Dateien löschen soll."
 
 #: ../src/sat-pref-debug.c:124
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Gpredict stores all run-time messages in the %s%slogs%s\n"
 "directory. The current log file is called gpredict.log and the file is\n"
@@ -4051,10 +4062,10 @@ msgid ""
 "of a failure. If old log files are kept, they are called gpredict-XYZ.log\n"
 "where XYZ is a unique timestamp."
 msgstr ""
-"Gpredict speichert alle Mitteilungen während des Betriebs im %s%slogs%s "
-"Verzeichnis. Die aktuelle Log-Datei heisst gpredict.log und wird bis zum "
-"nächsten Programmstart behalten, damit Sie sie im Falle eines Fehlers "
-"auswerten können. Falls alte Log-Dateien behalten werden, werden sie "
+"Gpredict speichert alle Mitteilungen während des Betriebs im %s%slogs%s\n"
+"Verzeichnis. Die aktuelle Log-Datei heißt gpredict.log und wird bis zum\n"
+"nächsten Programmstart behalten, damit Sie sie im Falle eines Fehlers\n"
+"auswerten können. Falls alte Log-Dateien behalten werden, werden sie\n"
 "gpredict-XYZ.log benannt, wobei XYZ ein unverwechselbarer Zeitstempel ist."
 
 #: ../src/sat-pref-formats.c:40
@@ -4834,9 +4845,8 @@ msgid "Alt (m)"
 msgstr "Höhe (m)"
 
 #: ../src/sat-pref-qth-editor.c:226
-#, fuzzy
 msgid "Optional location of the ground station, e.g. Copenhagen, Denmark."
-msgstr "Optionaler Ort der Bodenstation, z.B. Kopenhagen, Dänemark."
+msgstr "Optionaler Ort der Bodenstation, z.B. Copenhagen, Denmark."
 
 #: ../src/sat-pref-qth-editor.c:479
 #, c-format
@@ -5231,7 +5241,8 @@ msgid "MHz"
 msgstr "MHz"
 
 #: ../src/sat-pref-rig-editor.c:325
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 "Frequenz des Lokaloszillators des Upconverters eingeben, falls vorhanden."
 
@@ -5308,12 +5319,11 @@ msgid "Edit rotator configuration"
 msgstr "Rotor-Konfiguration bearbeiten"
 
 #: ../src/sat-pref-rot-editor.c:148
-#, fuzzy
 msgid ""
 "Enter a short name for this configuration,  e.g. ROTOR-1.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 msgstr ""
-"Kurznamen für diese konfiguration eingeben, z.B. ROTOR-1.\n"
+"Gib einen Kurznamen für diese Konfiguration ein, z.B. ROTOR-1.\n"
 "Erlaubte Zeichen: 0..9, a..z, A..Z, - und _"
 
 #: ../src/sat-pref-rot-editor.c:167
@@ -5365,7 +5375,7 @@ msgstr " Max. El."
 
 #: ../src/sat-pref-rot-editor.c:248
 msgid " Azimuth end stop position"
-msgstr ""
+msgstr " Azimuth-Endanschlagsposition"
 
 #: ../src/sat-pref-rot-editor.c:256
 msgid ""
@@ -5373,6 +5383,9 @@ msgid ""
 "is south, etc. The default for a 0° → 180° → 360° rotor is 0°, and the "
 "default for a -180° → 0° → +180° rotor is -180°."
 msgstr ""
+"Setze hier die Azimuth-Endanschlagsposition, wobei 0° Norden ist, -180° "
+"Süden, usw. Die Voreinstellung für einen 0° → 180° → 360° Rotor ist 0° und "
+"die Voreinstellung für einen -180° → 0° → +180° Rotor ist -180°."
 
 #: ../src/sat-pref-rot-editor.c:435
 #, c-format
@@ -5492,9 +5505,9 @@ msgid "Select colour 10"
 msgstr "Farbe 10 auswählen"
 
 #: ../src/sat-pref-tle.c:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Error fetching entry %d in URL list"
-msgstr "%s:%s: Eintrag %d in der Satellitenliste konnte nicht geholt werden"
+msgstr "%s:%s: Fehler beim Holen des Eintrages %d in der URL-Liste"
 
 #: ../src/sat-pref-tle.c:179
 msgid "<b>Auto-Update:</b>"
@@ -5526,24 +5539,28 @@ msgid ""
 "\n"
 "If you want to modify the TLE source, click twice on the row to edit it."
 msgstr ""
+"Kann TLE-Quelle nicht löschen!\n"
+"\n"
+"Du solltest mindestens eine TLE-Quelle konfiguriert haben, ansonsten kann "
+"Gpredict nicht richtig funktionieren.\n"
+"\n"
+"Wenn du die TLE-Quelle bearbeiten willst, klicke doppelt auf den Eintrag."
 
 #: ../src/sat-pref-tle.c:305
 msgid "Add TLE source"
-msgstr ""
+msgstr "TLE-Quelle hinzufügen"
 
 #: ../src/sat-pref-tle.c:307
-#, fuzzy
 msgid "Add a new TLE source to the list"
-msgstr "Neuen Rotor zur Liste hinzufügen"
+msgstr "Eine neue TLE-Quelle zur Liste hinzufügen"
 
 #: ../src/sat-pref-tle.c:310
 msgid "Delete TLE source"
-msgstr ""
+msgstr "TLE-Quelle löschen"
 
 #: ../src/sat-pref-tle.c:311
-#, fuzzy
 msgid "Delete the selected TLE source"
-msgstr "Ausgewählten Rotor löschen"
+msgstr "Die ausgewählte TLE-Quelle löschen"
 
 #: ../src/sat-pref-tle.c:362
 msgid "<b>Update from the Internet:</b>"
@@ -5564,13 +5581,15 @@ msgstr ""
 #. URLs
 #: ../src/sat-pref-tle.c:390
 msgid "TLE sources:"
-msgstr ""
+msgstr "TLE-Quellen:"
 
 #: ../src/sat-pref-tle.c:399
 msgid ""
 "List of files with TLE data to retrieve from the Internet\n"
 "Click twice on a row to edit"
 msgstr ""
+"Liste der Dateien mit TLE-Daten, die vom Internet abgerufen werden\n"
+"Klicke doppelt auf einen Eintrag, um diesen zu bearbeiten"
 
 #: ../src/sat-pref-tle.c:436
 msgid "Add new satellites to local database"
@@ -5581,6 +5600,8 @@ msgid ""
 "Note that selecting this option may cause previously deleted satellites to "
 "be re-added to the database."
 msgstr ""
+"Beachte, dass das Auswählen dieser Option ein erneutes Hinzufügen zuvor "
+"gelöschter Satelliten zur Datenbank verursachen kann."
 
 #: ../src/sat-vis.c:42
 msgid "Daylight"
@@ -5763,9 +5784,9 @@ msgid "%s: TLE elements updated."
 msgstr "%s: TLE-Daten aktualisiert."
 
 #: ../src/tle-update.c:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s: TLE update is already running. Aborting."
-msgstr "%s: Ein TLE-Aktualisierungsvorgang läuft bereits. Abbruch."
+msgstr "%s: TLE-Daten werden bereits aktualisiert. Abbruch."
 
 #: ../src/tle-update.c:506
 #, c-format
@@ -5802,11 +5823,9 @@ msgid "%s: Fetched %d files from network; updating..."
 msgstr "%s: %d Dateien aus dem Internet geholt; aktualisiere …"
 
 #: ../src/tle-update.c:625
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Could not fetch TLE files from network. Aborting."
-msgstr ""
-"%s: Es konnten keine neuen TLE-Dateien aus dem Internet geholt werden; "
-"Abbruch …"
+msgstr "%s Konnte TLE-Dateien nicht aus dem Internet abrufen. Abbruch."
 
 #: ../src/tle-update.c:645
 #, c-format
@@ -5914,7 +5933,7 @@ msgid "Daily"
 msgstr "Täglich"
 
 #: ../src/trsp-conf.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Could not read %s from %s:'%s'. Using default."
 msgstr "%s: Konnte %s aus %s:'%s' nicht lesen. Benutze Standard."
 
@@ -5929,240 +5948,94 @@ msgid "%s: %s contains 0 transponders"
 msgstr "%s: %s enthält 0 Transponder"
 
 #: ../src/trsp-conf.c:120
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Failed to allocate memory for trsp data"
-msgstr "%s: Speicherzuweisung für Transponder-Daten fehlgeschlagen"
+msgstr "%s: Speicherzuordung für TRSP-Daten fehlgeschlagen"
 
 #: ../src/trsp-conf.c:234
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Skipping transponder at index %d (no name)"
-msgstr "%s: Lösche Transponderdaten in %s"
+msgstr "%s: Überspringe Transponder bei Index %d (kein Name)"
 
 #: ../src/trsp-conf.c:262
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Error writing transponder data to %s"
-msgstr "%s: Lösche Transponderdaten in %s"
+msgstr "%s: Fehler beim Schreiben der Transponder-Daten nach %s"
 
 #: ../src/trsp-conf.c:268
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote %d transmponders to %s"
-msgstr "TLE-Daten aus Dateien aktualisieren"
+msgstr "%d Transponder nach %s geschrieben"
 
 #: ../src/trsp-update.c:215
 #, c-format
 msgid "MODE %d %s"
-msgstr ""
+msgstr "MODUS %d %s"
 
 #: ../src/trsp-update.c:355
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Could not open trsp file for write"
-msgstr ""
-"%s:%s: .cat-Datei konnte nicht erneut geöffnet werden währned des Lesens der "
-"TLE aus %s"
+msgstr "%s: Konnte TRSP-Datei nicht zum Schreiben öffnen"
 
 #: ../src/trsp-update.c:400
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Ready to fetch modes list from %s"
-msgstr "TLE-Daten aus Dateien aktualisieren"
+msgstr "%s: Bereit um die Modi-Liste von %s abzurufen"
 
 #: ../src/trsp-update.c:407 ../src/trsp-update.c:549
-#, fuzzy, c-format
+#, c-format
 msgid "%s: File to open %s "
-msgstr "%s:%s: %s konnte nicht geöffnet werden"
+msgstr "%s: Datei, um %s zu öffnen "
 
 #: ../src/trsp-update.c:461 ../src/trsp-update.c:619
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Could not fetch frequency files from network"
-msgstr ""
-"%s: Es konnten keine neuen TLE-Dateien aus dem Internet geholt werden; "
-"Abbruch …"
+msgstr "%s: Konnte Frequenzdateien nicht aus dem Netzwerk abrufen"
 
 #: ../src/trsp-update.c:499
-#, fuzzy, c-format
+#, c-format
 msgid "%s: A frequency update process is already running"
-msgstr "%s: Ein TLE-Aktualisierungsvorgang läuft bereits. Abbruch."
+msgstr "%s: Frequenzaktualisierung läuft bereits"
 
 #: ../src/trsp-update.c:526
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Ready to fetch transponder list from %s"
-msgstr "TLE-Daten aus Dateien aktualisieren"
+msgstr "%s: Bereit um die Transponderliste von %s abzurufen"
 
-#~ msgid "%s: Help browser is not set up yet."
-#~ msgstr "%s: Hilfe-Browser ist noch nicht eingerichtet."
+#~ msgid "GPREDICT"
+#~ msgstr "GPREDICT"
 
-#~ msgid "%s: Configure help browser cancelled."
-#~ msgstr "%s: Das Einrichten des Hilfe-Browsers wurde abgebrochen."
+#~ msgid "Module Name"
+#~ msgstr "Modulname"
 
-#~ msgid "%s: Launching help browser %s."
-#~ msgstr "%s: Starte Hilfe-Browser %s"
+#~ msgid "Create New Module"
+#~ msgstr "Neues Modul erstellen"
 
-#~ msgid "Configure Help Browser"
-#~ msgstr "Hilfe-Browser konfigurieren"
+#~ msgid "Ground Station"
+#~ msgstr "Bodenstation"
 
-#~ msgid "Please select a HTML browser to be used to view the help."
-#~ msgstr ""
-#~ "Bitte wählen Sie einen HTML-Browser der genutzt werden soll, um die Hilfe "
-#~ "anzuzeigen."
+#~ msgid "Module Properties"
+#~ msgstr "Moduleigenschaften"
 
-#~ msgid "<b>Html Browser:</b>"
-#~ msgstr "<b>HTML-Browser:</b>"
+#~ msgid "Add satellite to list of selected satellites."
+#~ msgstr "Satellit zur Liste der ausgewählten Satelliten hinzufügen."
 
-#~ msgid "Browser type:"
-#~ msgstr "Browser-Typ:"
+#~ msgid "Remove satellite from the list of selected satellites."
+#~ msgstr "Satellit von der Liste der ausgewählten Satelliten entfernen."
 
-#~ msgid "Command string:"
-#~ msgstr "Befehlszeichenkette:"
+#~ msgid "Edit Module"
+#~ msgstr "Modul bearbeiten"
 
-#~ msgid "Remote server:"
-#~ msgstr "Daten-Server:"
-
-#~ msgid ""
-#~ "Enter URL for remote server including directory, i.e.\n"
-#~ "protocol://servername/directory\n"
-#~ "Protocol can be both http and ftp."
-#~ msgstr ""
-#~ "URL für den Daten-Server mit Verzeichnis eingeben, z.B.\n"
-#~ "protokoll://servername/verzeichnis\n"
-#~ "Protokoll kann http oder ftp sein."
-
-#~ msgid "Files to fetch:"
-#~ msgstr "Herunterzuladene Dateien:"
+#, c-format
+#~ msgid "GPREDICT: %s"
+#~ msgstr "GPREDICT: %s"
 
 #~ msgid ""
-#~ "Enter list of files to fetch from remote server.\n"
-#~ "The files should be separated with ; (semicolon)"
+#~ "<b>Hint: </b> Double click on any satellite\n"
+#~ "to move it to the other box."
 #~ msgstr ""
-#~ "Liste der Dateien eingeben, die vom Datenserver geholt werden.\n"
-#~ "Die Dateien müssen mit einem «;» (Semikolon) getrennt werden."
+#~ "<b>Hinweis: </b> Auf einen Satelliten doppelklicken,\n"
+#~ "um ihn in den anderen Kasten zu bewegen."
 
-#~ msgid "Note that new satellites will be added to a group called Other"
-#~ msgstr ""
-#~ "Beachten Sie, dass neue Satelliten zu einer »Other« genannten Gruppe "
-#~ "hinzugefügt werden"
-
-#~ msgid "<b>Update from Local Files:</b>"
-#~ msgstr "<b>Aktualisierung aus lokalen Dateien:</b>"
-
-#~ msgid "Save as:"
-#~ msgstr "Speichern unter:"
-
-#~ msgid "Plain text (*.txt)"
-#~ msgstr "Nur-Text (*.txt)"
-
-#~ msgid "%s: Could not open category file file %s (%s)."
-#~ msgstr "%s: Kategoriendatei %s konnte nicht geöffnet werden (%s)."
-
-#~ msgid "%s: Error adding %d to %s (%s)."
-#~ msgstr "%s: Fehler beim Hinzufügen von %d zu %s (%s)."
-
-#~ msgid "%s: Added satellite %d to %s."
-#~ msgstr "%s: Satellite %d zu %s hinzugefügt."
-
-#, fuzzy
-#~ msgid "%s: Writing to file : %s "
-#~ msgstr "%s:%d: Kartendatei %s wird geladen"
-
-#~ msgid "_Tools"
-#~ msgstr "_Werkzeuge"
-
-#, fuzzy
-#~ msgid "Update transponders from local files"
-#~ msgstr "Keplerelemente aus lokalen Dateien aktualisieren"
-
-#~ msgid "Using TLE _editor"
-#~ msgstr "TLE-_Editor benutzen"
-
-#~ msgid "Add or update Keplerian elements using the TLE editor"
-#~ msgstr ""
-#~ "Keplerelemente mit Hilfe des TLE-Editors hinzufügen oder aktualisieren"
-
-#~ msgid "_Transponders"
-#~ msgstr "_Transponder"
-
-#~ msgid "Edit satellite transponder frequencies"
-#~ msgstr "Satellitentransponderfrequenzen bearbeiten"
-
-#~ msgid "Satellite Editor"
-#~ msgstr "Satelliteneditor"
-
-#~ msgid ""
-#~ "Open the satellite editor where you can manually edit orbital elements "
-#~ "and other data"
-#~ msgstr ""
-#~ "Satelliteneditor öffnen, mit dem Sie die Umlaufbahnendaten und andere "
-#~ "Daten selber bearbeiten können"
-
-#~ msgid "Comm Window"
-#~ msgstr "Komm. Fenster"
-
-#~ msgid "Predict windows between two observers"
-#~ msgstr "Berechne Fenster zwischen zwei Beobachtern"
-
-#~ msgid "Advanced Predict"
-#~ msgstr "Erweiterte Berechnungen"
-
-#~ msgid "Open advanced pass predictor"
-#~ msgstr "Erweiterten Überflugsberechner öffnen"
-
-#~ msgid "Getting Started"
-#~ msgstr "Erste Schritte"
-
-#~ msgid "Show online user manual, Getting Started Section"
-#~ msgstr "Erste-Schritte-Kapitel des Benutzerhandbuchs online anzeigen"
-
-#, fuzzy
-#~ msgid "Select transponder directory:"
-#~ msgstr "Einen Transponder auswählen"
-
-#, fuzzy
-#~ msgid "%s: Running transponder update from %s"
-#~ msgstr "%s: TLE-Datenaktualisierung von %s läuft"
-
-#, fuzzy
-#~ msgid "<b>Updating transponders files from files</b>"
-#~ msgstr "<b>TLE-Daten werden aus Dateien aktualisiert</b>"
-
-#~ msgid "This function is still under development."
-#~ msgstr "Diese Funktion ist noch in der Entwicklung."
-
-#~ msgid "%s: Not implemented!"
-#~ msgstr "%s: Nicht implementiert!"
-
-#~ msgid "%s: %s does not appear to be in user conf dir; adding."
-#~ msgstr ""
-#~ "%s: %s scheint nicht im Benutzerkonfigurationsverzeichnis zu existieren; "
-#~ "füge hinzu."
-
-#~ msgid "%s: %s already in user conf dir."
-#~ msgstr "%s: %s ist bereits im Benutzerkonfigurationsverzeichnis."
-
-#~ msgid "%s: %s directory does not exist. Incomplete installation."
-#~ msgstr "%s: %s Verzeichnis existiert nicht. Installation nicht vollständig."
-
-#, fuzzy
-#~ msgid "%s:%d: Could not allocate memory for pass object"
-#~ msgstr "%s:%s: Konnte keinen Speicher zuweisen."
-
-#, fuzzy
-#~ msgid "%s: Error reading QTH name (%s)."
-#~ msgstr "%s: Fehler beim Lesen des QTH-Typs (%s)."
-
-#, fuzzy
-#~ msgid "%s: QTH data had bogus alt %f"
-#~ msgstr "%s: QTH-Daten hatten ungültigen Breitengrad %f"
-
-#, fuzzy
-#~ msgid "LO Down:"
-#~ msgstr "LO Down"
-
-#, fuzzy
-#~ msgid "LO Up:"
-#~ msgstr "LO Up"
-
-#, fuzzy
-#~ msgid "%s: Error reading %s:%s from %s. Assume non-inverting."
-#~ msgstr "%s: Fehler beim Lesen von NAME von %s (%s)"
-
-#, fuzzy
-#~ msgid "%s: Error reading %s:%s from %s"
-#~ msgstr "%s: Fehler beim lesen von %s: %s"
+#~ msgid "GPREDICT: (none)"
+#~ msgstr "GPREDICT: (kein)"
