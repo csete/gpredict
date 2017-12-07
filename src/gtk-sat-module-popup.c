@@ -893,7 +893,7 @@ static void sky_at_glance_cb(GtkWidget * menuitem, gpointer data)
     /* store time at which GtkSkyGlance has been created */
     module->lastSkgUpd = module->tmgCdnum;
 
-    gtk_container_set_border_width(GTK_CONTAINER(module->skgwin), 10);
+    gtk_container_set_border_width(GTK_CONTAINER(module->skgwin), 4);
     gtk_container_add(GTK_CONTAINER(module->skgwin), module->skg);
 
     gtk_widget_show_all(module->skgwin);
