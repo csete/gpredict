@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-06 01:10+0000\n"
+"POT-Creation-Date: 2017-12-07 23:03+0100\n"
 "PO-Revision-Date: 2017-12-04 01:49+0000\n"
 "Last-Translator: Michael Stephenson <mickstephenson@gmail.com>\n"
 "Language-Team: British English\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
 "X-Generator: Launchpad (build 18511)\n"
-"Language: \n"
 
 #: ../src/about.c:76
 msgid ""
@@ -176,7 +176,7 @@ msgid "%s: Error reading %s (%s)"
 msgstr "%s: Error reading %s (%s)"
 
 #. create and show dialogue with textbuffer
-#: ../src/gpredict-help.c:118
+#: ../src/gpredict-help.c:123
 msgid "Gpredict Info"
 msgstr "Gpredict Info"
 
@@ -829,8 +829,7 @@ msgid "Engage the selected rotor device"
 msgstr "Engage the selected rotor device"
 
 #: ../src/gtk-rot-ctrl.c:629
-msgid ""
-"This parameter controls the delay between commands sent to the rotator."
+msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "This parameter controls the delay between commands sent to the rotator."
 
@@ -1718,7 +1717,7 @@ msgstr "<b>Real-Time</b>"
 #. Note that the controllers for hours, minutes, and seconds have ranges;
 #. however, they can wrap around their limits in order to ensure a smooth
 #. and continuous control of the time
-#. 
+#.
 #. hour
 #: ../src/gtk-sat-module-tmg.c:157
 msgid " Hour:"
@@ -2606,7 +2605,7 @@ msgstr "%s: Module has no QTH; use default."
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#. 
+#.
 #: ../src/mod-cfg.c:337 ../src/mod-cfg.c:397 ../src/mod-cfg.c:782
 msgid "** DEFAULT **"
 msgstr "** DEFAULT **"
@@ -2720,106 +2719,106 @@ msgstr "%s: Failed to read string (%s)"
 msgid "%s: Failed to get integer list: %s"
 msgstr "%s: Failed to get integer list: %s"
 
-#: ../src/mod-mgr.c:150
+#: ../src/mod-mgr.c:137
 #, c-format
 msgid "%s: Failed to restore %s"
 msgstr "%s: Failed to restore %s"
 
-#: ../src/mod-mgr.c:179
+#: ../src/mod-mgr.c:167
 #, c-format
 msgid "%s: No modules have to be restored."
 msgstr "%s: No modules have to be restored."
 
-#: ../src/mod-mgr.c:222
+#: ../src/mod-mgr.c:205
 #, c-format
 msgid "%s: Added %s to module manager (page %d)."
 msgstr "%s: Added %s to module manager (page %d)."
 
-#: ../src/mod-mgr.c:228
+#: ../src/mod-mgr.c:212
 #, c-format
 msgid "%s: Added %s to module manager (NOT DOCKED)."
 msgstr "%s: Added %s to module manager (NOT DOCKED)."
 
-#: ../src/mod-mgr.c:235
+#: ../src/mod-mgr.c:220
 #, c-format
 msgid "%s: Module %s seems to be NULL"
 msgstr "%s: Module %s seems to be NULL"
 
-#: ../src/mod-mgr.c:276
+#: ../src/mod-mgr.c:256
 #, c-format
 msgid "%s: Could not find child in notebook. This may hurt..."
 msgstr "%s: Could not find child in notebook. This may hurt..."
 
-#: ../src/mod-mgr.c:285
+#: ../src/mod-mgr.c:266
 #, c-format
 msgid "%s: Removed child from notebook page %d."
 msgstr "%s: Removed child from notebook page %d."
 
-#: ../src/mod-mgr.c:337
+#: ../src/mod-mgr.c:316
 #, c-format
 msgid "%s: Attempt to save state but mod-mgr is NULL?"
 msgstr "%s: Attempt to save state but mod-mgr is NULL?"
 
-#: ../src/mod-mgr.c:346
+#: ../src/mod-mgr.c:325
 #, c-format
 msgid "%s: No modules need to save state."
 msgstr "%s: No modules need to save state."
 
-#: ../src/mod-mgr.c:371
+#: ../src/mod-mgr.c:352
 #, c-format
 msgid "%s: Stored %s"
 msgstr "%s: Stored %s"
 
-#: ../src/mod-mgr.c:379
+#: ../src/mod-mgr.c:359
 #, c-format
 msgid "%s: Saved states for %d modules."
 msgstr "%s: Saved states for %d modules."
 
-#: ../src/mod-mgr.c:444 ../src/mod-mgr.c:510
+#: ../src/mod-mgr.c:417 ../src/mod-mgr.c:486
 #, c-format
 msgid "%s: Module %s not found in list. Trying to recover."
 msgstr "%s: Module %s not found in list. Trying to recover."
 
-#: ../src/mod-mgr.c:452
+#: ../src/mod-mgr.c:426
 #, c-format
 msgid "%s: Module %s already in notebook!"
 msgstr "%s: Module %s already in notebook!"
 
-#: ../src/mod-mgr.c:463
+#: ../src/mod-mgr.c:439
 #, c-format
 msgid "%s: Docked %s into notebook (page %d)"
 msgstr "%s: Docked %s into notebook (page %d)"
 
-#: ../src/mod-mgr.c:518
+#: ../src/mod-mgr.c:495
 #, c-format
 msgid "%s: Module %s does not seem to be docked!"
 msgstr "%s: Module %s does not seem to be docked!"
 
-#: ../src/mod-mgr.c:527
+#: ../src/mod-mgr.c:505
 #, c-format
 msgid "%s: Removed %s from notebook page %d."
 msgstr "%s: Removed %s from notebook page %d."
 
-#: ../src/mod-mgr.c:561
+#: ../src/mod-mgr.c:538
 msgid "Gpredict: (none)"
 msgstr ""
 
-#: ../src/mod-mgr.c:566 ../src/mod-mgr.c:586
+#: ../src/mod-mgr.c:544 ../src/mod-mgr.c:563
 #, c-format
 msgid "Gpredict: %s"
 msgstr ""
 
-#: ../src/mod-mgr.c:604
+#: ../src/mod-mgr.c:579
 #, c-format
 msgid "%s: Attempt to reload sats but mod-mgr is NULL?"
 msgstr "%s: Attempt to reload sats but mod-mgr is NULL?"
 
-#: ../src/mod-mgr.c:613
+#: ../src/mod-mgr.c:588
 #, c-format
 msgid "%s: No modules need to reload sats."
 msgstr "%s: No modules need to reload sats."
 
-#: ../src/mod-mgr.c:684
+#: ../src/mod-mgr.c:644
 msgid "Gpredict: "
 msgstr ""
 
@@ -3564,7 +3563,7 @@ msgstr "DEBUG"
 
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#. 
+#.
 #. Remove filename if file not read
 #. clear filename from title if unable to read file
 #: ../src/sat-log-browser.c:130 ../src/sat-log-browser.c:176
@@ -3636,7 +3635,7 @@ msgstr " INFO"
 msgid "ERROR: Could not create %s\n"
 msgstr "ERROR: Could not create %s\n"
 
-#: ../src/sat-log.c:115 ../src/sat-log.c:332
+#: ../src/sat-log.c:115 ../src/sat-log.c:330
 #, c-format
 msgid "%s: Failed to delete old log file %s\n"
 msgstr ""
@@ -3666,7 +3665,7 @@ msgstr "%s: Session started"
 msgid "%s: Session ended"
 msgstr "%s: Session ended"
 
-#: ../src/sat-log.c:281
+#: ../src/sat-log.c:279
 #, c-format
 msgid "%s: Failed to rename %s to %s\n"
 msgstr ""
@@ -5125,8 +5124,7 @@ msgid "MHz"
 msgstr "MHz"
 
 #: ../src/sat-pref-rig-editor.c:325
-msgid ""
-"Enter the frequency of the local oscillator of the upconverter, if any."
+msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 "Enter the frequency of the local oscillator of the upconverter, if any."
 
@@ -5884,7 +5882,6 @@ msgstr ""
 #~ msgid "GPREDICT: (none)"
 #~ msgstr "GPREDICT: (none)"
 
-#, c-format
 #~ msgid "GPREDICT: %s"
 #~ msgstr "GPREDICT: %s"
 
