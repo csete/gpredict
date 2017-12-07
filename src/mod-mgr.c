@@ -95,7 +95,6 @@ GtkWidget      *mod_mgr_create(void)
     nbook = gtk_notebook_new();
     gtk_notebook_set_scrollable(GTK_NOTEBOOK(nbook), TRUE);
     gtk_notebook_popup_enable(GTK_NOTEBOOK(nbook));
-    g_object_set(G_OBJECT(nbook), "homogeneous", TRUE, NULL);
     g_signal_connect(G_OBJECT(nbook), "switch-page",
                      G_CALLBACK(switch_page_cb), NULL);
 
