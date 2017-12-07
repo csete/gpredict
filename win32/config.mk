@@ -13,3 +13,13 @@
 # are in this folder, and will need unpack paths inserting.
 
 PKG_CONFIG_PATH = $(abspath ../../goocanvas-2.0.2/lib/pkgconfig):$(abspath ../../gtk+-3.10.4/lib/pkgconfig)
+
+# Autoversioning from nearest git tag, assumes v<x>.<y> tag format.
+
+GITVER := $(shell git describe)
+GITSEP := $(subst -, ,$(GITVER))
+GITTAG := $(word 1,$(GITSEP))
+GITBLD := $(word 2,$(GITSEP))
+GITCOM := $(word 3,$(GITSEP))
+GITMAJ := $(subst v,,$(word 1,$(subst ., ,$(GITTAG))))
+GITMIN := $(word 2,$(subst ., ,$(GITTAG)))

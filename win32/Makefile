@@ -1,8 +1,12 @@
 # Makefile for cross-compiling gpredict for win32 on Linux,
 # using mingw compiler
 
-# configure pkg-config
+# configure pkg-config, version from git
 include config.mk
+
+# version string in C code
+VERSION_SHORT = $(GITMAJ).$(GITMIN).$(GITBLD)
+VERSION_LONG = $(GITMAJ).$(GITMIN).0.$(GITBLD)
 
 # cross-compiler prefix
 MGW_PREFIX=i686-w64-mingw32-
@@ -19,8 +23,9 @@ AS = $(MGW_PREFIX)as
 DLLWRAP = $(MGW_PREFIX)dllwrap
 DLLWRAP_FLAGS = --as=$(AS) --export-all --driver-name $(CC) -s
 RC = $(MGW_PREFIX)windres
-RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC \
-	--define __GNUWIN32__
+# NB: .rc file create various version formats from the numbers
+RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN32__ \
+	--define VERMAJ=$(GITMAJ) --define VERMIN=$(GITMIN) --define VERBLD=$(GITBLD)
 
 # libraries
 GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-3.0)
@@ -32,7 +37,7 @@ LIBS = -lm
 # flags/defines
 GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags gtk+-3.0)
 GOO_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags goocanvas)
-CFLAGS = -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
+CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
 
 # source paths
 vpath %.c $(sgpsdpdir)
@@ -193,8 +198,11 @@ all: libsgpsdp.dll gpredict.exe
 gpredict.exe: $(OBJS) gpredict_res.o
 	$(CC) -mconsole -mthreads -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
 
-gpredict_res.o: gpredict.rc 
-	$(RC) $(RCFLAGS) $< $@
+gpredict_res.o: gpredict.rc gpredict.exp.manifest
+	$(RC) $(RCFLAGS) gpredict.rc $@
+
+gpredict.exp.manifest: gpredict.exe.manifest
+	sed -e 's/VERSION_STRL/$(VERSION_LONG)/' < $< > $@
 
 libgoocanvas.dll: $(GOOCANVOBJ)
 	$(CC) -shared $(CFLAGS) $(GTK_CFLAGS) $(GOOCANVOBJ) $(GTKLIBS) -lm -lmingwex \
@@ -205,7 +213,7 @@ libsgpsdp.dll:  $(SGPSDPOBJ)
 	-Wl,--enable-auto-image-base -Wl,--out-implib,libsgpsdp.lib -o libsgpsdp.dll
 
 clean:
-	rm -f *.o *.d *.def *.a *.lib *.dll *.exe
+	rm -f *.o *.d *.def *.a *.lib *.dll *.exe *.exp.manifest
 
 
 

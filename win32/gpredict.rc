@@ -3,12 +3,27 @@
 #include <richedit.h>
 #include "resource.h"
 
+#if defined(VERMAJ) && defined(VERMIN) && defined(VERBLD)
+// awesome, we have version info
+#else
+// fake it!
+#define VERMAJ	1
+#define VERMIN	9
+#define VERBLD	0
+#endif
+
+#define stringify_(x) #x
+#define str_(x) stringify_(x)
+#define VERSION_RSRC VERMAJ,VERMIN,0,VERBLD
+#define VERSION_STRS str_(VERMAJ) "." str_(VERMIN) "." str_(VERBLD)
+#define VERSION_STRL str_(VERMAJ) "." str_(VERMIN) ".0." str_(VERBLD)
+
 A ICON             "icons/gpredict-icon.ico"
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 1 VERSIONINFO
-    FILEVERSION     2,0,0,0
-    PRODUCTVERSION  2,0,0,0
+    FILEVERSION     VERSION_RSRC
+    PRODUCTVERSION  VERSION_RSRC
     FILEOS          VOS__WINDOWS32
     FILETYPE        VFT_APP
     FILESUBTYPE     VFT2_UNKNOWN
@@ -21,11 +36,11 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
         {
             VALUE "CompanyName", "Alexandru Csete, OZ9AEC"
             VALUE "FileDescription", "Gpredict: Real-time satellite tracking and orbit prediction program"
-            VALUE "FileVersion", "2.0.0.0"
+            VALUE "FileVersion", VERSION_STRL
             VALUE "InternalName", "GPredict"
-            VALUE "LegalCopyright", "Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC"
+            VALUE "LegalCopyright", "Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC"
             VALUE "ProductName", "GPredict"
-            VALUE "ProductVersion", "2.0.0"
+            VALUE "ProductVersion", VERSION_STRS
         }
     }
     BLOCK "VarFileInfo"
@@ -35,4 +50,4 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 }
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-2 RT_MANIFEST    "gpredict.exe.manifest"
+2 RT_MANIFEST    "gpredict.exp.manifest"

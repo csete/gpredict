@@ -86,7 +86,13 @@
 #undef STDC_HEADERS
 
 /* Version number of package */
-#define VERSION "2.0.0"
+#ifdef VERSION_SHORT
+#define stringify_(x) #x
+#define str_(x) stringify_(x)
+#define VERSION str_(VERSION_SHORT)
+#else
+#define VERSION "1.9.xx"
+#endif
 
 #define GETTEXT_PACKAGE "gpredict"
 
