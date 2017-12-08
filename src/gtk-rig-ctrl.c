@@ -2212,7 +2212,7 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
-    //g_free(buff);
+    g_free(buff);
     return retval;
 }
 
@@ -2254,7 +2254,7 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         retval = FALSE;
     }
 
-    //g_free(buff);
+    g_free(buff);
     return retval;
 }
 
