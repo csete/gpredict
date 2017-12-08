@@ -1,10 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Patrick Dohmen <dl4pd@darc.de>
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+  Copyright (C)       2017  Patrick Dohmen, DL4PD
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -25,23 +23,14 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/** \brief FREQ control.
- *
- * More info...
- * 
- *      1 222.333 444 MHz
- * 
- * \bug This should be a generic widget, not just frequency specific
- * 
- */
-#include <gtk/gtk.h>
-#include <glib/gi18n.h>
-#include <math.h>
-#include "gtk-freq-knob.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <math.h>
+#include "gtk-freq-knob.h"
 
 static void     gtk_freq_knob_class_init(GtkFreqKnobClass * class);
 static void     gtk_freq_knob_init(GtkFreqKnob * list);
@@ -82,7 +71,6 @@ GType gtk_freq_knob_get_type()
 
     if (!gtk_freq_knob_type)
     {
-
         static const GTypeInfo gtk_freq_knob_info = {
             sizeof(GtkFreqKnobClass),
             NULL,               /* base_init */
@@ -106,11 +94,10 @@ GType gtk_freq_knob_get_type()
 
 static void gtk_freq_knob_class_init(GtkFreqKnobClass * class)
 {
-    GtkWidgetClass    *widget_class;
-    widget_class    = (GtkWidgetClass*) class;
+    GtkWidgetClass *widget_class;
 
+    widget_class = (GtkWidgetClass *) class;
     parent_class = g_type_class_peek_parent(class);
-
     widget_class->destroy = gtk_freq_knob_destroy;
 
     /* create freq changed signal */
@@ -136,13 +123,6 @@ static void gtk_freq_knob_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-/**
- * \brief Create a new Frequency control widget.
- * \param[in] val The initial value of the control.
- * \param[in] buttons Flag indicating whether buttons should be shown
- * \return A new frequency control widget.
- * 
- */
 GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
 {
     GtkWidget      *widget;
@@ -259,51 +239,27 @@ GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
     return widget;
 }
 
-/**
- * \brief Set the value of the frequency control widget.
- * \param[in] knob The frequency control widget.
- * \param[in] val The new value.
- * 
- */
 void gtk_freq_knob_set_value(GtkFreqKnob * knob, gdouble val)
 {
     if ((val >= knob->min) && (val <= knob->max))
     {
-        /* set the new value */
         knob->value = val;
-
-        /* update the display */
         g_idle_add((GSourceFunc) gtk_freq_knob_update, knob);
     }
 }
 
-/**
- * \brief Get the current value of the frequency control widget.
- *  \param[in] knob The frequency control widget.
- *  \return The current value.
- * 
- * Hint: For reading the value you can also access knob->value.
- * 
- */
 gdouble gtk_freq_knob_get_value(GtkFreqKnob * knob)
 {
     return knob->value;
 }
 
-/**
- * \brief Update frequency display widget.
- * \param[in] knob The frequency control widget.
- * 
- */
-static void *gtk_freq_knob_update(GtkFreqKnob * knob)
+static void    *gtk_freq_knob_update(GtkFreqKnob * knob)
 {
     gchar           b[11];
     gchar          *buff;
     guint           i;
 
-    /* Enter critical section! */
     G_LOCK(updatelock);
-
     g_ascii_formatd(b, 11, "%10.0f", fabs(knob->value));
 
     /* set label markups */
@@ -314,17 +270,11 @@ static void *gtk_freq_knob_update(GtkFreqKnob * knob)
         g_free(buff);
     }
 
-    /* Leave critical section! */
     G_UNLOCK(updatelock);
+
     return FALSE;
 }
 
-/**
- * \brief Button clicked event.
- * \param button The button that was clicked.
- * \param data Pointer to the GtkFreqKnob widget.
- * 
- */
 static void button_clicked_cb(GtkWidget * button, gpointer data)
 {
     GtkFreqKnob    *knob = GTK_FREQ_KNOB(data);
@@ -346,12 +296,14 @@ static void button_clicked_cb(GtkWidget * button, gpointer data)
     g_signal_emit(G_OBJECT(data), freq_changed_signal, 0);
 }
 
-/**
- * \brief Manage button press events
- * \param digit Pointer to the event box that received the event
- * \param event Pointer to the GdkEventButton that contains details for te event
- * \param data Pointer to the GtkFreqKnob widget (we need it to update the value)
- * \return Always TRUE to prevent further propagation of the event
+/*
+ * Manage button press events
+ *
+ * @param digit Pointer to the event box that received the event
+ * @param event Pointer to the GdkEventButton that contains details for te event
+ * @param data Pointer to the GtkFreqKnob widget (we need it to update the value)
+ *
+ * Always returns TRUE to prevent further propagation of the event
  *
  * This function is called when a mouse button is pressed on a digit. This is used
  * to increment or decrement the value:
@@ -380,17 +332,11 @@ static gboolean on_button_press(GtkWidget * evtbox,
     gdouble         value;
 
 
-    if (delta < 1.0)
-    {
-        /* no change */
+    if (delta < 1.0)    // no change
         return TRUE;
-    }
 
     if (event->type != GDK_BUTTON_PRESS)
-    {
-        /* wrong event (not possible?) */
         return TRUE;
-    }
 
     switch (event->button)
     {
@@ -419,12 +365,14 @@ static gboolean on_button_press(GtkWidget * evtbox,
     return TRUE;
 }
 
-/**
- * \brief Manage scroll wheel events
- * \param digit Pointer to the event box that received the event
- * \param event Pointer to the GdkEventScroll that contains details for te event
- * \param data Pointer to the GtkFreqKnob widget (we need it to update the value)
- * \return Always TRUE to prevent further propagation of the event
+/*
+ * Manage scroll wheel events
+ *
+ * @param digit Pointer to the event box that received the event
+ * @param event Pointer to the GdkEventScroll that contains details for te event
+ * @param data Pointer to the GtkFreqKnob widget (we need it to update the value)
+ *
+ * Always returns TRUE to prevent further propagation of the event
  *
  * This function is called when the mouse wheel is moved up or down. This is used
  * to increment or decrement the value.
