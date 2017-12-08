@@ -45,7 +45,7 @@
 
 static void     gtk_freq_knob_class_init(GtkFreqKnobClass * class);
 static void     gtk_freq_knob_init(GtkFreqKnob * list);
-static void     gtk_freq_knob_destroy(GtkObject * object);
+static void     gtk_freq_knob_destroy(GtkWidget * widget);
 static void    *gtk_freq_knob_update(GtkFreqKnob * knob);
 static void     button_clicked_cb(GtkWidget * button, gpointer data);
 static gboolean on_button_press(GtkWidget * digit, GdkEventButton * event,
@@ -106,23 +106,18 @@ GType gtk_freq_knob_get_type()
 
 static void gtk_freq_knob_class_init(GtkFreqKnobClass * class)
 {
-    /*GObjectClass      *gobject_class; */
-    GtkObjectClass *object_class;
-
-    /*GtkWidgetClass    *widget_class; */
-    /*GtkContainerClass *container_class; */
-
-    /*gobject_class   = G_OBJECT_CLASS (class); */
-    object_class = (GtkObjectClass *) class;
-    /*widget_class    = (GtkWidgetClass*) class; */
-    /*container_class = (GtkContainerClass*) class; */
+    GtkWidgetClass    *widget_class;
+    widget_class    = (GtkWidgetClass*) class;
 
     parent_class = g_type_class_peek_parent(class);
 
-    object_class->destroy = gtk_freq_knob_destroy;
+    widget_class->destroy = gtk_freq_knob_destroy;
 
     /* create freq changed signal */
-    freq_changed_signal = g_signal_new("freq-changed", G_TYPE_FROM_CLASS(class), G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION, 0,       //G_STRUCT_OFFSET (GtkFreqKnobClass, tictactoe),
+    freq_changed_signal = g_signal_new("freq-changed",
+                                       G_TYPE_FROM_CLASS(class),
+                                       G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                       0,
                                        NULL,
                                        NULL,
                                        g_cclosure_marshal_VOID__VOID,
@@ -136,9 +131,9 @@ static void gtk_freq_knob_init(GtkFreqKnob * knob)
 
 }
 
-static void gtk_freq_knob_destroy(GtkObject * object)
+static void gtk_freq_knob_destroy(GtkWidget * widget)
 {
-    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 /**
