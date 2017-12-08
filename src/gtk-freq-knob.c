@@ -4,6 +4,7 @@
   Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
+           Patrick Dohmen <dl4pd@darc.de>
 
   Comments, questions and bugreports should be submitted via
   http://sourceforge.net/projects/gpredict/
@@ -24,6 +25,15 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
+/** \brief FREQ control.
+ *
+ * More info...
+ * 
+ *      1 222.333 444 MHz
+ * 
+ * \bug This should be a generic widget, not just frequency specific
+ * 
+ */
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <math.h>
@@ -35,15 +45,17 @@
 
 static void     gtk_freq_knob_class_init(GtkFreqKnobClass * class);
 static void     gtk_freq_knob_init(GtkFreqKnob * list);
-static void     gtk_freq_knob_destroy(GtkWidget * widget);
-static void     gtk_freq_knob_update(GtkFreqKnob * knob);
+static void     gtk_freq_knob_destroy(GtkObject * object);
+static void    *gtk_freq_knob_update(GtkFreqKnob * knob);
 static void     button_clicked_cb(GtkWidget * button, gpointer data);
 static gboolean on_button_press(GtkWidget * digit, GdkEventButton * event,
                                 gpointer data);
 static gboolean on_button_scroll(GtkWidget * digit, GdkEventScroll * event,
                                  gpointer data);
 
-static GtkBoxClass *parent_class = NULL;
+G_LOCK_DEFINE_STATIC(updatelock);
+
+static GtkHBoxClass *parent_class = NULL;
 
 #define FMTSTR "<span size='xx-large'>%c</span>"
 
@@ -63,12 +75,14 @@ static const guint idx[] = {
 
 static guint    freq_changed_signal = 0;
 
+
 GType gtk_freq_knob_get_type()
 {
     static GType    gtk_freq_knob_type = 0;
 
     if (!gtk_freq_knob_type)
     {
+
         static const GTypeInfo gtk_freq_knob_info = {
             sizeof(GtkFreqKnobClass),
             NULL,               /* base_init */
@@ -81,7 +95,8 @@ GType gtk_freq_knob_get_type()
             (GInstanceInitFunc) gtk_freq_knob_init,
             NULL,
         };
-        gtk_freq_knob_type = g_type_register_static(GTK_TYPE_BOX,
+
+        gtk_freq_knob_type = g_type_register_static(GTK_TYPE_VBOX,
                                                     "GtkFreqKnob",
                                                     &gtk_freq_knob_info, 0);
     }
@@ -91,16 +106,23 @@ GType gtk_freq_knob_get_type()
 
 static void gtk_freq_knob_class_init(GtkFreqKnobClass * class)
 {
-    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
-    widget_class->destroy = gtk_freq_knob_destroy;
+    /*GObjectClass      *gobject_class; */
+    GtkObjectClass *object_class;
+
+    /*GtkWidgetClass    *widget_class; */
+    /*GtkContainerClass *container_class; */
+
+    /*gobject_class   = G_OBJECT_CLASS (class); */
+    object_class = (GtkObjectClass *) class;
+    /*widget_class    = (GtkWidgetClass*) class; */
+    /*container_class = (GtkContainerClass*) class; */
 
     parent_class = g_type_class_peek_parent(class);
 
+    object_class->destroy = gtk_freq_knob_destroy;
+
     /* create freq changed signal */
-    freq_changed_signal = g_signal_new("freq-changed",
-                                       G_TYPE_FROM_CLASS(class),
-                                       G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                       0,
+    freq_changed_signal = g_signal_new("freq-changed", G_TYPE_FROM_CLASS(class), G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION, 0,       //G_STRUCT_OFFSET (GtkFreqKnobClass, tictactoe),
                                        NULL,
                                        NULL,
                                        g_cclosure_marshal_VOID__VOID,
@@ -114,17 +136,16 @@ static void gtk_freq_knob_init(GtkFreqKnob * knob)
 
 }
 
-static void gtk_freq_knob_destroy(GtkWidget * widget)
+static void gtk_freq_knob_destroy(GtkObject * object)
 {
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    (*GTK_OBJECT_CLASS(parent_class)->destroy) (object);
 }
 
 /**
- * Create a new Frequency control widget.
- *
- * @param val The initial value of the control.
- * @param buttons Flag indicating whether buttons should be shown
- * @return A new frequency control widget.
+ * \brief Create a new Frequency control widget.
+ * \param[in] val The initial value of the control.
+ * \param[in] buttons Flag indicating whether buttons should be shown
+ * \return A new frequency control widget.
  * 
  */
 GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
@@ -134,6 +155,7 @@ GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
     GtkWidget      *label;
     guint           i;
     gint            delta;
+
 
     widget = g_object_new(GTK_TYPE_FREQ_KNOB, NULL);
 
@@ -158,6 +180,7 @@ GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
         else
         {
             /* active widget that allows changing the value */
+
             gtk_widget_set_tooltip_text(GTK_FREQ_KNOB(widget)->digits[i],
                                         _
                                         ("Use mouse buttons and wheel to change value"));
@@ -172,11 +195,13 @@ GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
                              GTK_FREQ_KNOB(widget)->evtbox[i], idx[i],
                              idx[i] + 1, 1, 2, GTK_SHRINK,
                              GTK_FILL | GTK_EXPAND, 0, 0);
+
             g_signal_connect(GTK_FREQ_KNOB(widget)->evtbox[i],
                              "button_press_event", (GCallback) on_button_press,
                              widget);
             g_signal_connect(GTK_FREQ_KNOB(widget)->evtbox[i], "scroll_event",
                              (GCallback) on_button_scroll, widget);
+
 
             /* UP buttons */
             GTK_FREQ_KNOB(widget)->buttons[i] = gtk_button_new();
@@ -230,7 +255,8 @@ GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
     gtk_table_attach(GTK_TABLE(table), label, 13, 14, 1, 2,
                      GTK_SHRINK, GTK_SHRINK, 0, 0);
 
-    gtk_freq_knob_update(GTK_FREQ_KNOB(widget));
+
+    g_idle_add((GSourceFunc) gtk_freq_knob_update, GTK_FREQ_KNOB(widget));
 
     gtk_container_add(GTK_CONTAINER(widget), table);
     gtk_widget_show_all(widget);
@@ -239,10 +265,9 @@ GtkWidget      *gtk_freq_knob_new(gdouble val, gboolean buttons)
 }
 
 /**
- * Set the value of the frequency control widget.
- *
- * @param knob The frequency control widget.
- * @param val The new value.
+ * \brief Set the value of the frequency control widget.
+ * \param[in] knob The frequency control widget.
+ * \param[in] val The new value.
  * 
  */
 void gtk_freq_knob_set_value(GtkFreqKnob * knob, gdouble val)
@@ -253,15 +278,14 @@ void gtk_freq_knob_set_value(GtkFreqKnob * knob, gdouble val)
         knob->value = val;
 
         /* update the display */
-        gtk_freq_knob_update(knob);
+        g_idle_add((GSourceFunc) gtk_freq_knob_update, knob);
     }
 }
 
 /**
- * Get the current value of the frequency control widget.
- *
- * @param knob The frequency control widget.
- * @return The current value.
+ * \brief Get the current value of the frequency control widget.
+ *  \param[in] knob The frequency control widget.
+ *  \return The current value.
  * 
  * Hint: For reading the value you can also access knob->value.
  * 
@@ -272,16 +296,18 @@ gdouble gtk_freq_knob_get_value(GtkFreqKnob * knob)
 }
 
 /**
- * Update frequency display widget.
- *
- * @param knob The frequency control widget.
+ * \brief Update frequency display widget.
+ * \param[in] knob The frequency control widget.
  * 
  */
-static void gtk_freq_knob_update(GtkFreqKnob * knob)
+static void *gtk_freq_knob_update(GtkFreqKnob * knob)
 {
     gchar           b[11];
     gchar          *buff;
     guint           i;
+
+    /* Enter critical section! */
+    G_LOCK(updatelock);
 
     g_ascii_formatd(b, 11, "%10.0f", fabs(knob->value));
 
@@ -292,13 +318,16 @@ static void gtk_freq_knob_update(GtkFreqKnob * knob)
         gtk_label_set_markup(GTK_LABEL(knob->digits[i]), buff);
         g_free(buff);
     }
+
+    /* Leave critical section! */
+    G_UNLOCK(updatelock);
+    return FALSE;
 }
 
 /**
- * Button clicked event.
- *
- * @param button The button that was clicked.
- * @param data Pointer to the GtkFreqKnob widget.
+ * \brief Button clicked event.
+ * \param button The button that was clicked.
+ * \param data Pointer to the GtkFreqKnob widget.
  * 
  */
 static void button_clicked_cb(GtkWidget * button, gpointer data)
@@ -316,19 +345,18 @@ static void button_clicked_cb(GtkWidget * button, gpointer data)
         knob->value += delta;
     }
 
-    gtk_freq_knob_update(knob);
+    g_idle_add((GSourceFunc) gtk_freq_knob_update, knob);
 
     /* emit "freq_changed" signal */
     g_signal_emit(G_OBJECT(data), freq_changed_signal, 0);
 }
 
 /**
- * Manage button press events
- *
- * @param digit Pointer to the event box that received the event
- * @param event Pointer to the GdkEventButton that contains details for te event
- * @param data Pointer to the GtkFreqKnob widget (we need it to update the value)
- * @return Always TRUE to prevent further propagation of the event
+ * \brief Manage button press events
+ * \param digit Pointer to the event box that received the event
+ * \param event Pointer to the GdkEventButton that contains details for te event
+ * \param data Pointer to the GtkFreqKnob widget (we need it to update the value)
+ * \return Always TRUE to prevent further propagation of the event
  *
  * This function is called when a mouse button is pressed on a digit. This is used
  * to increment or decrement the value:
@@ -336,13 +364,16 @@ static void button_clicked_cb(GtkWidget * button, gpointer data)
  * - Right button: down
  * - Middle button: set digit to 0 (TBC)
  * 
- * Wheel up/down are managed in a separate callback since these are treated as scroll events
- * rather than button press events (they used to be button press events though)
+ * Wheel up/down are managed in a separate callback since these are treated as
+ * scroll events rather than button press events (they used to be button press
+ * events though)
  * 
- * The digit labels are stored in an array. To get the amount of change corresponding to the
- * clicked label we can convert the index (attached to the evtbox): delta = 10^(9-index)
+ * The digit labels are stored in an array. To get the amount of change corresponding
+ * to the clicked label we can convert the index (attached to the evtbox):
+ * delta = 10^(9-index)
  *
- * Whether the delta is positive or negative depends on which mouse button triggered the event.
+ * Whether the delta is positive or negative depends on which mouse button triggered
+ * the event.
  */
 static gboolean on_button_press(GtkWidget * evtbox,
                                 GdkEventButton * event, gpointer data)
@@ -394,21 +425,21 @@ static gboolean on_button_press(GtkWidget * evtbox,
 }
 
 /**
- * Manage scroll wheel events
+ * \brief Manage scroll wheel events
+ * \param digit Pointer to the event box that received the event
+ * \param event Pointer to the GdkEventScroll that contains details for te event
+ * \param data Pointer to the GtkFreqKnob widget (we need it to update the value)
+ * \return Always TRUE to prevent further propagation of the event
  *
- * @param digit Pointer to the event box that received the event
- * @param event Pointer to the GdkEventScroll that contains details for te event
- * @param data Pointer to the GtkFreqKnob widget (we need it to update the value)
- * @return Always TRUE to prevent further propagation of the event
- *
- * This function is called when the mouse wheel is moved up or down. This is used to increment
- * or decrement the value.
+ * This function is called when the mouse wheel is moved up or down. This is used
+ * to increment or decrement the value.
  * 
- * Button presses are managed in a separate callback since these are treated as different
- * events.
+ * Button presses are managed in a separate callback since these are treated as
+ * different events.
  * 
- * The digit labels are stored in an array. To get the amount of change corresponding to the
- * clicked label we can convert the index (attached to the evtbox): delta = 10^(9-index)
+ * The digit labels are stored in an array. To get the amount of change corresponding
+ * to the clicked label we can convert the index (attached to the evtbox):
+ * delta = 10^(9-index)
  *
  * Whether the delta is positive or negative depends on the scroll direction.
  */
@@ -420,6 +451,7 @@ static gboolean on_button_scroll(GtkWidget * evtbox,
         GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(evtbox), "index"));
     gdouble         delta = pow(10, 9 - idx);
     gdouble         value;
+
 
     if (delta < 0.01)
     {
@@ -435,6 +467,7 @@ static gboolean on_button_scroll(GtkWidget * evtbox,
 
     switch (event->direction)
     {
+
         /* decrease value by delta */
     case GDK_SCROLL_DOWN:
     case GDK_SCROLL_LEFT:

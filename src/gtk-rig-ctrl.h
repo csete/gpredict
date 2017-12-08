@@ -108,6 +108,16 @@ struct _gtk_rig_ctrl {
     /* debug related */
     guint           wrops;
     guint           rdops;
+
+    /* DL4PD */
+    /* threads related stuff */
+    /* add mutexes etc, to make threads reentrant! */
+    GMutex          writelock;  /*!< Mutex for blocking write operation */
+    GMutex          rig_ctrl_updatelock;        /*!< Mutex wile updating widgets etc */
+    GMutex          widgetsync; /*!< Mutex used while leaving (sync stuff) */
+    GCond           widgetready;        /*!< Condition when work is done (sync stuff) */
+    GAsyncQueue    *rigctlq;    /*!< Message queue to indicate something has changed */
+    GThread        *rigctl_thread;      /*!< Pointer to current rigctl-thread */
 };
 
 struct _GtkRigCtrlClass {
