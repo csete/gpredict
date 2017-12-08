@@ -121,9 +121,6 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
 static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock);
 static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt);
 
-#if 0
-static gboolean set_vfo(GtkRigCtrl * ctrl, vfo_t vfo);
-#endif
 static gboolean setup_split(GtkRigCtrl * ctrl);
 static void     update_count_down(GtkRigCtrl * ctrl, gdouble t);
 static gboolean open_rigctld_socket(radio_conf_t * conf, gint * sock);
@@ -187,11 +184,10 @@ GType gtk_rig_ctrl_get_type()
 
 static void gtk_rig_ctrl_class_init(GtkRigCtrlClass * class)
 {
-    GtkWidgetClass    *widget_class;
-    widget_class    = (GtkWidgetClass*) class;
+    GtkWidgetClass *widget_class;
 
+    widget_class = (GtkWidgetClass *) class;
     parent_class = g_type_class_peek_parent(class);
-
     widget_class->destroy = gtk_rig_ctrl_destroy;
 }
 
@@ -226,7 +222,6 @@ static void gtk_rig_ctrl_destroy(GtkWidget * widget)
 
     if (ctrl->rigctl_thread != NULL)
     {
-
         g_mutex_lock(&ctrl->widgetsync);
 
         ctrl->engaged = 0;
@@ -238,7 +233,6 @@ static void gtk_rig_ctrl_destroy(GtkWidget * widget)
         ctrl->rigctl_thread = NULL;
     }
 
-    /* free configuration */
     if (ctrl->conf != NULL)
     {
         g_free(ctrl->conf->name);
@@ -254,43 +248,32 @@ static void gtk_rig_ctrl_destroy(GtkWidget * widget)
         ctrl->conf2 = NULL;
     }
 
-    /* free transponder */
     if (ctrl->trsplist != NULL)
     {
         free_transponders(ctrl->trsplist);
         ctrl->trsplist = NULL;
     }
 
-    (*GTK_WIDGET_CLASS(parent_class)->destroy)(widget);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-/**
- * \brief Create a new rig control widget.
- * \return A new rig control window.
- * 
- */
 GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
 {
     GtkWidget      *widget;
     GtkWidget      *table;
 
-    /* check that we have rig conf */
     if (!have_conf())
         return NULL;
 
     widget = g_object_new(GTK_TYPE_RIG_CTRL, NULL);
 
-    /* connect calback to catch key press events */
     g_signal_connect(widget, "key-press-event", G_CALLBACK(key_press_cb),
                      NULL);
 
-    /* store satellites */
     g_hash_table_foreach(module->satellites, store_sats, widget);
-
     GTK_RIG_CTRL(widget)->target =
         SAT(g_slist_nth_data(GTK_RIG_CTRL(widget)->sats, 0));
 
-    /* store QTH */
     GTK_RIG_CTRL(widget)->qth = module->qth;
 
     if (GTK_RIG_CTRL(widget)->target != NULL)
@@ -330,9 +313,8 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     return widget;
 }
 
-/**
- * \brief Update rig control state.
- * \param ctrl Pointer to the GtkRigCtrl.
+/*
+ * Update rig control state.
  * 
  * This function is called by the parent, i.e. GtkSatModule, indicating that
  * the satellite data has been updated. The function updates the internal state
@@ -343,12 +325,10 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
     gdouble         satfreq;
     gchar          *buff;
 
-    /* Enter critical section! */
     g_mutex_lock(&ctrl->rig_ctrl_updatelock);
 
     if (ctrl->target)
     {
-        /* update Az/El */
         buff = g_strdup_printf(AZEL_FMTSTR, ctrl->target->az);
         gtk_label_set_text(GTK_LABEL(ctrl->SatAz), buff);
         g_free(buff);
@@ -358,7 +338,6 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
 
         update_count_down(ctrl, t);
 
-        /* update range */
         if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
         {
             buff = g_strdup_printf("%.0f mi", KM_TO_MI(ctrl->target->range));
@@ -370,12 +349,10 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
         gtk_label_set_text(GTK_LABEL(ctrl->SatRng), buff);
         g_free(buff);
 
-        /* update range rate */
         if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
         {
-            buff =
-                g_strdup_printf("%.3f mi/s",
-                                KM_TO_MI(ctrl->target->range_rate));
+            buff = g_strdup_printf("%.3f mi/s",
+                                   KM_TO_MI(ctrl->target->range_rate));
         }
         else
         {
@@ -403,7 +380,6 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
         {
             if (ctrl->target->aos > ctrl->pass->aos)
             {
-                /* update pass */
                 free_pass(ctrl->pass);
                 ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
             }
@@ -414,11 +390,10 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
             ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
         }
     }
-    /* Leave critical section! */
+
     g_mutex_unlock(&ctrl->rig_ctrl_updatelock);
 }
 
-/** Select a satellite */
 void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
 {
     sat_t          *sat;
@@ -441,9 +416,8 @@ void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
     }
 }
 
-/**
- * \brief Create freq control widgets for downlink.
- * \param ctrl Pointer to the GtkRigCtrl widget.
+/*
+ * Create freq control widgets for downlink.
  * 
  * This function creates and initialises the widgets for controlling the
  * downlink frequency. It consists of a controller widget showing the
@@ -510,9 +484,8 @@ static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl)
     return frame;
 }
 
-/**
- * \brief Create uplink frequency display widgets.
- * \param ctrl Pointer to the GtkRigCtrl widget.
+/*
+ * Create uplink frequency display widgets.
  * 
  * This function creates and initialises the widgets for displaying the
  * uplink frequency of the satellite and the radio.
@@ -576,10 +549,6 @@ static GtkWidget *create_uplink_widgets(GtkRigCtrl * ctrl)
     return frame;
 }
 
-/**
- * \brief Create target widgets.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- */
 static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
 {
     GtkWidget      *frame, *table, *label, *track;
@@ -904,26 +873,19 @@ static GtkWidget *create_count_down_widgets(GtkRigCtrl * ctrl)
     return frame;
 }
 
-/** Copy satellite from hash table to singly linked list. */
+/* Copy satellite from hash table to singly linked list. */
 static void store_sats(gpointer key, gpointer value, gpointer user_data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(user_data);
     sat_t          *sat = SAT(value);
 
-    (void)key;                  /* avoid unused parameter compiler warning */
-    //ctrl->sats = g_slist_append (ctrl->sats, sat);
-    ctrl->sats =
-        g_slist_insert_sorted(ctrl->sats, sat,
-                              (GCompareFunc) sat_name_compare);
+    (void)key;
+
+    ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
+                                      (GCompareFunc) sat_name_compare);
 }
 
-/**
- * \brief Manage satellite selections
- * \param satsel Pointer to the GtkComboBox.
- * \param data Pointer to the GtkRigCtrl widget.
- * 
- * This function is called when the user selects a new satellite.
- */
+/* Called when the user selects a new satellite. */
 static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -959,12 +921,8 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
     }
 }
 
-/**
- * \brief Manage transponder selections.
- * \param box Pointer to the transponder selector widget.
- * \param data Pointer to the GtkRigCtrl structure
- *
- * This function is called when a new transponder is selected.
+/*
+ * Called when a new transponder is selected.
  * It updates ctrl->trsp with the new selection and issues a "tune" event.
  */
 static void trsp_selected_cb(GtkComboBox * box, gpointer data)
@@ -993,10 +951,11 @@ static void trsp_selected_cb(GtkComboBox * box, gpointer data)
     }
 }
 
-/**
- * \brief Manage "Tune" events
- * \param button Pointer to the GtkButton that received the signal.
- * \param data Pointer to the GtkRigCtrl structure.
+/*
+ * Manage "Tune" events
+ *
+ * @param button Pointer to the GtkButton that received the signal.
+ * @param data Pointer to the GtkRigCtrl structure.
  *
  * This function is called when the user clicks on the Tune button next to the
  * transponder selector. When clicked, the radio controller will set the RX and TX
@@ -1010,7 +969,7 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
     gdouble         freq;
 
-    (void)button;               /* avoid unused parameter compiler warning */
+    (void)button;
 
     if (ctrl->trsp == NULL)
         return;
@@ -1038,10 +997,11 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     }
 }
 
-/**
- * \brief Manage lock transponder signals.
- * \param button Pointer to the GtkToggleButton that received the signal.
- * \param data Pointer to the GtkRigCtrl structure.
+/*
+ * Manage lock transponder signals.
+ *
+ * @param button Pointer to the GtkToggleButton that received the signal.
+ * @param data Pointer to the GtkRigCtrl structure.
  *
  * This function is called when the user toggles the "Lock Transponder" button.
  * When ON, the uplink and downlink are locked according to the current transponder
@@ -1059,11 +1019,6 @@ static void trsp_lock_cb(GtkToggleButton * button, gpointer data)
         track_downlink(ctrl);
 }
 
-/**
- * \brief Manage toggle signals (tracking)
- * \param button Pointer to the GtkToggle button.
- * \param data Pointer to the GtkRigCtrl widget.
- */
 static void track_toggle_cb(GtkToggleButton * button, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -1075,14 +1030,7 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
     ctrl->lasttxf = 0.0;
 }
 
-/**
- * \brief Manage cycle delay changes.
- * \param spin Pointer to the spin button.
- * \param data Pointer to the GtkRigCtrl widget.
- * 
- * This function is called when the user changes the value of the
- * cycle delay.
- */
+/* Called when the user changes the value of the cycle delay */
 static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -1090,32 +1038,18 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
     ctrl->delay = (guint) gtk_spin_button_get_value(spin);
 
     if (ctrl->engaged)
-    {
         start_timer(ctrl);
-    }
 }
 
-/**
- * \brief New primary rig device selected.
- * \param box Pointer to the rigor selector combo box.
- * \param data Pointer to the GtkRigCtrl widget.
- * 
- * This function is called when the user selects a new rigor controller
- * device.
- *
- * \bug Doesn't prevent user to select same radio as in the secondary conf.
- */
 static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
     gchar          *buff;
 
-
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s:%s: Primary device selected: %d"),
                 __FILE__, __func__, gtk_combo_box_get_active(box));
 
-    /* free previous configuration */
     if (ctrl->conf != NULL)
     {
         g_free(ctrl->conf->name);
@@ -1132,7 +1066,6 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
         return;
     }
 
-    /* load new configuration */
     ctrl->conf->name =
         gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
     if (radio_conf_read(ctrl->conf))
@@ -1164,17 +1097,8 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
         g_free(ctrl->conf);
         ctrl->conf = NULL;
     }
-
 }
 
-/**
- * \brief New secondary rig device selected.
- * \param box Pointer to the rigor selector combo box.
- * \param data Pointer to the GtkRigCtrl widget.
- * 
- * This function is called when the user selects a new rig controller
- * device for the secondary radio. This radio is used for uplink only.
- */
 static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -1186,7 +1110,6 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
                 _("%s:%s: Secondary device selected: %d"),
                 __FILE__, __func__, gtk_combo_box_get_active(box));
 
-    /* free previous configuration */
     if (ctrl->conf2 != NULL)
     {
         g_free(ctrl->conf2->name);
@@ -1252,7 +1175,7 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
         sat_log_log(SAT_LOG_LEVEL_INFO,
                     _("%s:%s: Loaded new radio configuration %s"),
                     __FILE__, __func__, ctrl->conf2->name);
-        /* update LO widgets */
+
         buff = g_strdup_printf(_("%.0f MHz"), ctrl->conf2->loup / 1.0e6);
         gtk_label_set_text(GTK_LABEL(ctrl->LoUp), buff);
         g_free(buff);
@@ -1271,13 +1194,6 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
     }
 }
 
-/**
- * \brief Manage Engage button signals.
- * \param button Pointer to the "Engage" button.
- * \param data Pointer to the GtkRigCtrl widget.
- * 
- * This function is called when the user toggles the "Engage" button.
- */
 static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -1316,22 +1232,13 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
 }
 
 
-/**
- * \brief Setup VFOs for split operation (simplex or duplex)
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \return TRUE if the operation was succesful, FALSE if an error occurred.
- * 
- * This function is used to setup the VFOs for split operation. For full
- * duplex radios this will enable the SAT mode (True for FT847 but TBC for others).
- * See bug #3272993
- */
+/* Setup VFOs for split operation (simplex or duplex) */
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
-    gchar           buffback[256 /*128 */ ];    /*  issues with receiving rigctld answer (assertion failed) */
+    gchar           buffback[256];
     gboolean        retcode;
 
-    /* select TX VFO */
     switch (ctrl->conf->vfoUp)
     {
     case VFO_A:
@@ -1358,58 +1265,30 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
     }
 
     retcode = send_rigctld_command(ctrl, ctrl->sock, buff, buffback, 128);
-
     g_free(buff);
 
     return (check_set_response(buffback, retcode, __func__));
 }
 
-
-/**
- * \brief Manage downlink frequency change callbacks.
- * \param knob Pointer to the GtkFreqKnob widget that received the signal.
- * \param data Pointer to the GtkRigCtrl structure.
- *
- * This function is called when the user changes the downlink frequency in the controller.
- * The function checks if the the transponder is locked, if yes it calls track_downlink().
- */
 static void downlink_changed_cb(GtkFreqKnob * knob, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-
-    (void)knob;                 /* avoid unused parameter compiler warning */
+    (void)knob;
 
     if (ctrl->trsplock)
-    {
         track_downlink(ctrl);
-    }
 }
 
-/**
- * \brief Manage uplink frequency change callbacks.
- * \param knob Pointer to the GtkFreqKnob widget that received the signal.
- * \param data Pointer to the GtkRigCtrl structure.
- *
- * This function is called when the user changes the uplink frequency in the controller.
- * The function checks if the the transponder is locked, if yes it calls track_uplink().
- */
 static void uplink_changed_cb(GtkFreqKnob * knob, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
 
-    (void)knob;                 /* avoid unused parameter compiler warning */
+    (void)knob;
 
     if (ctrl->trsplock)
-    {
         track_uplink(ctrl);
-    }
 }
 
-/**
- * \brief Rigator controller timeout function
- * \param data Pointer to the GtkRigCtrl widget.
- * \return Always TRUE to let the timer continue.
- */
 static gboolean rig_ctrl_timeout_cb(gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -1420,7 +1299,6 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
                     _("%s: Controller does not have a valid configuration"),
                     __func__);
         return FALSE;
-
     }
 
     if (g_mutex_trylock(&(ctrl->busy)) == FALSE)
@@ -1430,21 +1308,12 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
         return TRUE;
     }
 
-    /* push event */
     setconfig(ctrl);
-
     g_mutex_unlock(&(ctrl->busy));
 
     return TRUE;
 }
 
-/**
- * \brief Execute RX mode cycle.
- *  \param ctrl Pointer to the GtkRigCtrl widget.
- *
- * This function executes a controller cycle when the device is of RIG_TYPE_RX.
- * This function is not used dual-rig mode.
- */
 static void exec_rx_cycle(GtkRigCtrl * ctrl)
 {
     gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
@@ -1565,13 +1434,6 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
     }
 }
 
-/**
- * \brief Execute TX mode cycle.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- *
- * This function executes a controller cycle when the primary device is of RIG_TYPE_TX.
- * This function is not used in dual-rig mode.
- */
 static void exec_tx_cycle(GtkRigCtrl * ctrl)
 {
     gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
@@ -1692,27 +1554,12 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
     }
 }
 
-/**
- * \brief Execute simplex mode cycle.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- *
- * This function executes a controller cycle when the device is of RIG_TYPE_TRX (simplex).
- * Technically, the function simply checks the PTT status and executes either exec_tx_cycle()
- * or exec_rx_cycle().
- */
 static void exec_trx_cycle(GtkRigCtrl * ctrl)
 {
     exec_rx_cycle(ctrl);
     exec_tx_cycle(ctrl);
 }
 
-/**
- * \brief Execute toggle mode cycle.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- *
- * This function executes a controller cycle when the device is of RIG_TYPE_TOGGLE_AUTO
- * and RIG_TYPE_TOGGLE_MAN.
- */
 static void exec_toggle_cycle(GtkRigCtrl * ctrl)
 {
     exec_rx_cycle(ctrl);
@@ -1740,9 +1587,8 @@ static void exec_toggle_cycle(GtkRigCtrl * ctrl)
     }
 }
 
-/**
- * \brief Execute TX mode cycle.
- * \param ctrl Pointer to the GtkRigCtrl widget.
+/*
+ * Execute TX mode cycle.
  *
  * This function executes a transmit cycle when the primary device is of
  * RIG_TYPE_TOGGLE_AUTO. This applies to radios that support split operation
@@ -1796,14 +1642,6 @@ static void exec_toggle_tx_cycle(GtkRigCtrl * ctrl)
 
 }
 
-/**
- * \brief Execute TX cycle for full duplex radios.
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * 
- * This is basically the same as exec_tx_cycle() except that there is no
- * check for PTT since for full duplex radios we can always control the
- * uplink frequency.
- */
 static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
 {
     gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
@@ -1909,26 +1747,12 @@ static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
     }
 }
 
-/**
- * \brief Execute duplex mode cycle.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- *
- * This function executes a controller cycle when the device is of
- * RIG_TYPE_DUPLEX. The RIG should already be in SAT mode.
- */
 static void exec_duplex_cycle(GtkRigCtrl * ctrl)
 {
     exec_rx_cycle(ctrl);
     exec_duplex_tx_cycle(ctrl);
 }
 
-/**
- * \brief Execute dual-rig cycle.
- * \param ctrl Pointer to the GtkRigCtrl widget.
- *
- * This function executes a controller cycle when we use a primary device for
- * downlink and a secondary device for uplink.
- */
 static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
 {
     gdouble         tmpfreq, readfreq, satfreqd, satfrequ;
@@ -1963,7 +1787,8 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
             {
                 satfreqd = readfreq + ctrl->conf->lo;
             }
-            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), satfreqd);
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown),
+                                    satfreqd);
 
             /* Update uplink if locked to downlink */
             if (ctrl->trsplock)
@@ -2173,12 +1998,6 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
     }                           /* else dialchange on downlink */
 }
 
-
-/**
- * \brief Get PTT status
- * \param ctrl Pointer to the GtkRigVtrl widget.
- * \return TRUE if PTT is ON, FALSE if PTT is OFF or an error occurred.
- */
 static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
 {
     gchar          *buff, **vbuff;
@@ -2211,13 +2030,6 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     return (pttstat == 1) ? TRUE : FALSE;
 }
 
-/**
- * \brief Set PTT status
- * \param ctrl Pointer to the GtkRigCtrl data
- * \param conf Pointer to the radio conf data
- * \param ptt The new PTT value (TRUE=ON, FALSE=OFF)
- * \return TRUE if the operation was successful, FALSE if an error has occurred
- */
 static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
 {
     gchar          *buff;
@@ -2237,10 +2049,11 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
 
 }
 
-/**
- * \brief Check for AOS and LOS and send signal if enabled for rig.
- * \param ctrl Pointer to the GtkRigCtrl handle.
- * \return TRUE if the operation was successful, FALSE if a connection error
+/*
+ * Check for AOS and LOS and send signal if enabled for rig.
+ *
+ * @param ctrl Pointer to the GtkRigCtrl handle.
+ * @return TRUE if the operation was successful, FALSE if a connection error
  *         occurred.
  *
  * This function checks whether AOS or LOS just happened and sends the
@@ -2294,16 +2107,10 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
     return retcode;
 }
 
-/**
- * \brief Set frequency in simplex mode
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \param freq The new frequency.
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
- * 
- * \note freq is not strictly necessary for normal use since we could have
- *       gotten the current frequency from the ctrl; however, the param
- *       might become useful in the future.
+/*
+ * Set frequency in simplex mode
+ *
+ * Returns TRUE if the operation was successful, FALSE otherwise
  */
 static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
 {
@@ -2319,16 +2126,10 @@ static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
 }
 
 
-/**
- * \brief Set frequency in toggle mode
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \param freq The new frequency.
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
- * 
- * \note freq is not strictly necessary for normal use since we could have
- *       gotten the current frequency from the ctrl; however, the param
- *       might become useful in the future.
+/*
+ * Set frequency in toggle mode
+ *
+ * Returns TRUE if the operation was successful, FALSE otherwise
  */
 static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
 {
@@ -2345,12 +2146,10 @@ static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
 
 }
 
-/**
- * \brief Turn on the radios toggle mode
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
- * 
+/*
+ * Turn on the radios toggle mode
+ *
+ * Returns TRUE if the operation was successful
  */
 static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
 {
@@ -2365,11 +2164,10 @@ static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
     return (check_set_response(buffback, retcode, __func__));
 }
 
-/**
- * \brief Turn off the radios toggle mode
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
+/*
+ * Turn off the radios toggle mode
+ *
+ * Returns TRUE if the operation was successful
  */
 static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
 {
@@ -2385,12 +2183,10 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
     return (check_set_response(buffback, retcode, __func__));
 }
 
-/**
- * \brief Get frequency
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \param freq The current frequency of the radio.
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
+/*
+ * Get frequency
+ *
+ * Returns TRUE if the operation was successful, FALSE otherwise
  */
 static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
 {
@@ -2420,12 +2216,10 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
     return retval;
 }
 
-/**
- * \brief Get frequency when the radio is working toggle
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \param freq The current frequency of the radio.
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
+/*
+ * Get frequency when the radio is working toggle
+ *
+ * Returns TRUE if the operation was successful, FALSE otherwise
  */
 static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
 {
@@ -2464,60 +2258,6 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
     return retval;
 }
 
-#if 0
-/**
- * \brief Select target VFO
- * \param ctrl Pointer to the GtkRigCtrl structure.
- * \param vfo The VFO to select
- * \return TRUE if the operation was successful, FALSE if a connection error
- *         occurred.
- */
-static gboolean set_vfo(GtkRigCtrl * ctrl, vfo_t vfo)
-{
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
-
-    switch (vfo)
-    {
-    case VFO_A:
-        buff = g_strdup_printf("V VFOA\x0a");
-        break;
-
-    case VFO_B:
-        buff = g_strdup_printf("V VFOB\x0a");
-        break;
-
-    case VFO_MAIN:
-        buff = g_strdup_printf("V Main\x0a");
-        break;
-
-    case VFO_SUB:
-        buff = g_strdup_printf("V Sub\x0a");
-        break;
-
-    default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Invalid VFO argument. Using VFOA."), __func__);
-        buff = g_strdup_printf("V VFOA\x0a");
-        break;
-    }
-
-    retcode = send_rigctld_command(ctrl, ctrl->sock, buff, buffback, 128);
-    g_free(buff);
-
-    return (check_set_response(buffback, retcode, __func__));
-}
-#endif
-
-/**
- * \brief Update count down label.
- * \param[in] ctrl Pointer to the RigCtrl widget.
- * \param[in] t The current time.
- * 
- * This function calculates the new time to AOS/LOS of the currently
- * selected target and updates the ctrl->SatCnt label widget.
- */
 static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
 {
     gdouble         targettime;
@@ -2567,18 +2307,6 @@ static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
     g_free(aoslos);
 }
 
-
-/**
- * \brief Load the transponder list for the target satellite.
- * \param ctrl Pointer to the GtkRigCtrl structure.
- *
- * This function loads the transponder list for the currently selected
- * satellite. The transponder list is loaded into ctrl->trsplist and the
- * transponder names are added to the ctrl->TrspSel combo box. If any of
- * these already contain data, it is cleared. The combo box is also cleared
- * if there are no transponders for the current target, or if there is no
- * target.
- */
 static void load_trsp_list(GtkRigCtrl * ctrl)
 {
     trsp_t         *trsp = NULL;
@@ -2586,22 +2314,16 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
 
     if (ctrl->trsplist != NULL)
     {
-        /* clear combo box */
         n = g_slist_length(ctrl->trsplist);
         for (i = 0; i < n; i++)
-        {
             gtk_combo_box_text_remove(GTK_COMBO_BOX_TEXT(ctrl->TrspSel), 0);
-        }
 
-        /* clear transponder list */
         free_transponders(ctrl->trsplist);
-
         ctrl->trsp = NULL;
     }
 
     /* check if there is a target satellite */
-    if G_UNLIKELY
-        (ctrl->target == NULL)
+    if (ctrl->target == NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
                     _("%s:%s: GtkSatModule has no target satellite."),
@@ -2611,10 +2333,7 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
 
     /* read transponders for new target */
     ctrl->trsplist = read_transponders(ctrl->target->tle.catnr);
-
-    /* append transponder names to combo box */
     n = g_slist_length(ctrl->trsplist);
-
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s:%s: Satellite %d has %d transponder modes."),
                 __FILE__, __func__, ctrl->target->tle.catnr, n);
@@ -2633,12 +2352,10 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
                     __FILE__, __func__, trsp->name, ctrl->target->tle.catnr);
     }
 
-    /* make an initial selection */
     ctrl->trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, 0);
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->TrspSel), 0);
 }
 
-/** \brief Check that we have at least one .rig file */
 static gboolean have_conf()
 {
     GDir           *dir = NULL; /* directory handle */
@@ -2647,13 +2364,10 @@ static gboolean have_conf()
     const gchar    *filename;   /* file name */
     gint            i = 0;
 
-    /* open configuration directory */
     dirname = get_hwconf_dir();
-
     dir = g_dir_open(dirname, 0, &error);
     if (dir)
     {
-        /* read each .rig file */
         while ((filename = g_dir_read_name(dir)))
         {
             if (g_str_has_suffix(filename, ".rig"))
@@ -2677,11 +2391,8 @@ static gboolean have_conf()
     return (i > 0) ? TRUE : FALSE;
 }
 
-/**
- * \brief Track the downlink frequency.
- * \param ctrl Pointer to the GtkRigCtrl structure.
- *
- * This function tracks the downlink frequency by setting the uplink frequency
+/*
+ * Track the downlink frequency by setting the uplink frequency
  * according to the lower limit of the downlink passband.
  */
 static void track_downlink(GtkRigCtrl * ctrl)
@@ -2698,24 +2409,16 @@ static void track_downlink(GtkRigCtrl * ctrl)
         delta = down - ctrl->trsp->downlow;
 
         if (ctrl->trsp->invert)
-        {
             up = ctrl->trsp->uphigh - delta;
-        }
         else
-        {
             up = ctrl->trsp->uplow + delta;
-        }
 
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp), up);
     }
 }
 
-
-/**
- * \brief Track the uplink frequency.
- * \param ctrl Pointer to the GtkRigCtrl structure.
- *
- * This function tracks the uplink frequency by setting the downlink frequency
+/*
+ * Track the uplink frequency by setting the downlink frequency
  * according to the offset from the lower limit on the uplink passband.
  */
 static void track_uplink(GtkRigCtrl * ctrl)
@@ -2732,24 +2435,14 @@ static void track_uplink(GtkRigCtrl * ctrl)
         delta = up - ctrl->trsp->uplow;
 
         if (ctrl->trsp->invert)
-        {
             down = ctrl->trsp->downhigh - delta;
-        }
         else
-        {
             down = ctrl->trsp->downlow + delta;
-        }
 
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), down);
     }
 }
 
-
-/**
- * \brief Check whether a radio configuration is TX capable.
- * \param confname The name of the configuration to check.
- * \return TRUE if the radio is TX capable, FALSE otherwise.
- */
 static gboolean is_rig_tx_capable(const gchar * confname)
 {
     radio_conf_t   *conf = NULL;
@@ -2849,15 +2542,8 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     return TRUE;
 }
 
-
-/**
- * \brief Manage key press event on the controller widget
- * \param widget Pointer to the GtkRigCtrl widget that received the event
- * \param pKey Pointer to the event that has happened
- * \param data User data (always NULL)
- * \return TRUE if the event is known and managed by this callback, FALSE otherwise
- *
- * This function is used to catch events when the user presses the SPACE key on the keyboard.
+/*
+ * Catch events when the user presses the SPACE key on the keyboard.
  * This is used to toggle betweer RX/TX when using FT817/857/897 in manual mode.
  */
 static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
@@ -2866,9 +2552,8 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(widget);
     gboolean        event_managed = FALSE;
 
-    (void)data;                 /* avoid unused parameter compiler warning */
+    (void)data;
 
-    /* filter GDK_KEY_PRESS events */
     if (pKey->type == GDK_KEY_PRESS)
     {
         switch (pKey->keyval)
@@ -2898,11 +2583,7 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
     return event_managed;
 }
 
-
-/**
- * \brief Manage PTT events.
- * \param ctrl Pointer to the radio controller data.
- * 
+/*
  * This function is used to manage PTT events, e.g. the user presses
  * the spacebar. It is only useful for RIG_TYPE_TOGGLE_MAN and possibly for 
  * RIG_TYPE_TOGGLE_AUTO.
@@ -2913,8 +2594,8 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
  * TRUE (on). If PTT status is TRUE (on) it will simply set the PTT to FALSE
  * (off).
  * 
- * \warning This function assumes that the radio supprot set/get PTT,
- *          otherwise it makes no sense to use it!
+ * This function assumes that the radio supprot set/get PTT, otherwise it makes
+ * no sense to use it!
  */
 static void manage_ptt_event(GtkRigCtrl * ctrl)
 {
@@ -2972,7 +2653,6 @@ static void manage_ptt_event(GtkRigCtrl * ctrl)
             }
         }
 
-        /* release controller lock */
         g_mutex_unlock(&(ctrl->busy));
     }
     else
@@ -3034,7 +2714,6 @@ static gboolean close_rigctld_socket(gint * sock)
 {
     gint            written;
 
-    /*shutdown the rigctld connect */
     written = send(*sock, "q\x0a", 2, 0);
     if (written != 2)
     {
@@ -3055,31 +2734,18 @@ static gboolean close_rigctld_socket(gint * sock)
     return TRUE;
 }
 
-/**
- * \brief Simple function to sort the list of satellites in the combo box.
- * \return TBC
- */
+/* Sort the list of satellites in the combo box. */
 static gint sat_name_compare(sat_t * a, sat_t * b)
 {
     return (gpredict_strcmp(a->nickname, b->nickname));
 }
 
-/**
- * \brief Simple function to sort the list of rigs in the combo box.
- * \return TBC
- */
+/* Sort the list of rigs in the combo box */
 static gint rig_name_compare(const gchar * a, const gchar * b)
 {
     return (gpredict_strcmp(a, b));
 }
 
-/**
- * \brief Check hamlib rigctld response
- * \param buffback
- * \param retcode
- * \param function
- * \return TRUE if the check was successful?
- */
 static inline gboolean check_set_response(gchar * buffback, gboolean retcode,
                                           const gchar * function)
 {
@@ -3098,13 +2764,6 @@ static inline gboolean check_set_response(gchar * buffback, gboolean retcode,
     return retcode;
 }
 
-/**
- * \brief Check hamlib rigctld response
- * \param buffback
- * \param retcode
- * \param function
- * \return TRUE if the check was successful?
- */
 static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
                                           const gchar * function)
 {
@@ -3201,11 +2860,7 @@ static void rigctrl_open(GtkRigCtrl * data)
     }
 }
 
-/**
- * \brief Communication thread for hamlib rigctld
- * \param data
- * \return NULL
- */
+/* Communication thread for hamlib rigctld */
 gpointer rigctl_run(gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
@@ -3228,28 +2883,20 @@ gpointer rigctl_run(gpointer data)
         if (t_ctrl->engaged)
         {
             if (!t_ctrl->sock)
-            {
                 rigctrl_open(t_ctrl);
-            }
 
             if (!t_ctrl->timerid)
-            {
                 start_timer(t_ctrl);
-            }
         }
         else
         {
             g_mutex_lock(&t_ctrl->widgetsync);
 
             if (t_ctrl->sock > 0)
-            {
                 rigctrl_close(t_ctrl);
-            }
 
             if (t_ctrl->timerid)
-            {
                 remove_timer(t_ctrl);
-            }
 
             g_cond_signal(&t_ctrl->widgetready);
             g_mutex_unlock(&t_ctrl->widgetsync);
@@ -3318,16 +2965,11 @@ gpointer rigctl_run(gpointer data)
         //g_print ("       WROPS = %d\n", ctrl->wrops);
     }
 
-    /* let's have a clean exit: */
     if (t_ctrl->sock > 0)
-    {
         rigctrl_close(t_ctrl);
-    }
 
     if (t_ctrl->timerid)
-    {
         remove_timer(t_ctrl);
-    }
 
     return NULL;
 }
