@@ -98,7 +98,8 @@ GtkWidget      *sat_pref_list_view_create(GKeyFile * cfg)
     gtk_table_attach(GTK_TABLE(table), label, 0, 2, 0, 1,
                      GTK_FILL, GTK_SHRINK, 0, 0);
 
-    for (i = 0; i < SAT_LIST_COL_NUMBER; i++)
+    /* add fields except the last one (bold) */
+    for (i = 0; i < SAT_LIST_COL_NUMBER - 1; i++)
     {
         check[i] = gtk_check_button_new_with_label(_(SAT_LIST_COL_TITLE[i]));
         gtk_widget_set_tooltip_text(check[i], _(SAT_LIST_COL_HINT[i]));

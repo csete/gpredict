@@ -72,7 +72,7 @@ const gchar    *SAT_LIST_COL_TITLE[SAT_LIST_COL_NUMBER] = {
     N_("Phase"),
     N_("Orbit"),
     N_("Vis"),
-    N_("Decay"),
+    N_("Decayed"),
     N_("BOLD")                  /* should never be seen */
 };
 
@@ -103,7 +103,9 @@ const gchar    *SAT_LIST_COL_HINT[SAT_LIST_COL_NUMBER] = {
     N_("Mean Anomaly"),
     N_("Orbit Phase"),
     N_("Orbit Number"),
-    N_("Visibility")
+    N_("Visibility"),
+    N_("Decayed"),
+    N_("---")
 };
 
 const gfloat    SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
