@@ -27,7 +27,6 @@ groups = {
     "molniya" : "Molniya",
     "noaa" : "NOAA",
     "science" : "Space & Earth Science",
-    "tle-new" : "Latest Launches",
     "visual" : "Brightest",
     "weather" : "Weather Satellites"
 }
@@ -85,7 +84,9 @@ nicknames = {
     "28941" : "CO-56",
     "35870" : "SO-67",
     "36122" : "HO-68",
-    "39444" : "AO-73"
+    "39444" : "AO-73",
+    "40967" : "AO-85",
+    "43017" : "AO-91"
 }
 
 urlprefix = "http://celestrak.com/NORAD/elements/"
