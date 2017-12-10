@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-09 23:24+0100\n"
+"POT-Creation-Date: 2017-12-10 20:35+0100\n"
 "PO-Revision-Date: 2017-12-04 02:00+0000\n"
 "Last-Translator: Jan Simon <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -18,71 +18,18 @@ msgstr ""
 "X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
 "X-Generator: Launchpad (build 18511)\n"
 
-#: ../src/about.c:78
-msgid ""
-"Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors.\n"
-"Contact: oz9aec at gmail.com\n"
-"\n"
-"Gpredict is free software; you can redistribute it and modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version.\n"
-"\n"
-"This program is distributed free of charge in the hope that it will be "
-"useful, but WITHOUT ANY WARRANTY; without even the implied warranty of "
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library "
-"General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License along with "
-"this program (see Help->License). Otherwise you can find a copy on the FSF "
-"website http://www.fsf.org/licensing/licenses/gpl.html or you can write to "
-"the\n"
-"\n"
-"Free Software Foundation, Inc.\n"
-"59 Temple Place - Suite 330\n"
-"Boston\n"
-"MA 02111-1307\n"
-"USA.\n"
-msgstr ""
-"Copyright (C) 2001-2017 Alexandru Csete OZ9AEC und Mitwirkende.\n"
-"Kontact: oz9aec at gmail.com\n"
-"\n"
-"Gpredict ist freie Software; du kannst sie weiterverteilen und sie unter den "
-"Bedingungen der GNU General Public Lizenz Version 2 oder jeglicher späteren "
-"Version, wie sie von der Free Software Foundation veröffentlicht wurde, "
-"modifizieren.\n"
-"\n"
-"Dieses Programm wird entgeltfrei verteilt mit der Hoffnung, dass es nützlich "
-"sein wird, JEDOCH OHNE JEGLICHE GARANTIE; sogar ohne die implizierte "
-"Zusicherung allgemeiner Gebrauchstauglichkeit oder der TAUGLICHKEIT FÜR EINE "
-"BESTIMMTE ABSICHT. Sieh dir die GNU Library General Public Lizenz für "
-"weitere Details an.\n"
-"\n"
-"Zusammen mit diesem Programm (siehe Hilfe->Lizenz) solltest du eine Kopie "
-"der GNU General Public Lizenz erhalten haben. Andernfalls kannst eine Kopie "
-"auf der FSF Website http://www.fsf.org/licensing/licenses/gpl.html finden "
-"oder du kannst der\n"
-"\n"
-"Free Software Foundation, Inc.\n"
-"59 Temple Place - Suite 330\n"
-"Boston\n"
-"MA 02111-1307\n"
-"USA.\n"
-"\n"
-"schreiben.\n"
-
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:106 ../src/main.c:247
+#: ../src/about.c:85 ../src/main.c:247
 msgid "Gpredict"
 msgstr "Gpredict"
 
-#: ../src/about.c:109
+#: ../src/about.c:88
 msgid "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"
 msgstr "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC und Mitwirkende."
 
-#: ../src/about.c:122
+#: ../src/about.c:101
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -268,16 +215,126 @@ msgid "UTC"
 msgstr "UTC"
 
 #. Az legend
-#: ../src/gtk-azel-plot.c:573 ../src/gtk-sat-list.c:52
-#: ../src/sat-pass-dialogs.c:99
+#: ../src/gtk-azel-plot.c:573 ../src/gtk-event-list.c:52
+#: ../src/gtk-sat-list.c:52 ../src/sat-pass-dialogs.c:99
 msgid "Az"
 msgstr "Az."
 
 #. El legend
-#: ../src/gtk-azel-plot.c:582 ../src/gtk-sat-list.c:53
-#: ../src/sat-pass-dialogs.c:100
+#: ../src/gtk-azel-plot.c:582 ../src/gtk-event-list.c:53
+#: ../src/gtk-sat-list.c:53 ../src/sat-pass-dialogs.c:100
 msgid "El"
 msgstr "El."
+
+#: ../src/gtk-event-list.c:50 ../src/gtk-sat-list.c:50
+#: ../src/gtk-sat-tree.c:177
+msgid "Satellite"
+msgstr "Satellit"
+
+#: ../src/gtk-event-list.c:51 ../src/gtk-sat-list.c:51
+#: ../src/gtk-sat-selector.c:272 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:530
+msgid "Catnum"
+msgstr "Katalognummer"
+
+#: ../src/gtk-event-list.c:54
+#, fuzzy
+msgid "Event"
+msgstr "Nächstes Ereignis"
+
+#: ../src/gtk-event-list.c:55
+msgid "AOS/LOS"
+msgstr ""
+
+#: ../src/gtk-event-list.c:56 ../src/gtk-sat-list.c:75
+#: ../src/gtk-sat-list.c:107
+#, fuzzy
+msgid "Decayed"
+msgstr "Decay"
+
+#. should never be seen
+#: ../src/gtk-event-list.c:57 ../src/gtk-sat-list.c:76
+msgid "BOLD"
+msgstr "FETT"
+
+#: ../src/gtk-event-list.c:62 ../src/gtk-sat-list.c:82
+msgid "Satellite Name"
+msgstr "Satellitenname"
+
+#: ../src/gtk-event-list.c:63 ../src/gtk-sat-list.c:83
+msgid "Catalogue Number"
+msgstr "Katalognummer"
+
+#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:593
+#: ../src/gtk-sat-list.c:84 ../src/gtk-single-sat.c:53
+#: ../src/sat-pass-dialogs.c:122
+msgid "Azimuth"
+msgstr "Azimut"
+
+#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:630
+#: ../src/gtk-sat-list.c:85 ../src/gtk-single-sat.c:54
+#: ../src/sat-pass-dialogs.c:123
+msgid "Elevation"
+msgstr "Elevation"
+
+#: ../src/gtk-event-list.c:66
+msgid "Next event type (A: AOS, L: LOS)"
+msgstr ""
+
+#: ../src/gtk-event-list.c:67
+msgid "Countdown until next event"
+msgstr ""
+
+#: ../src/gtk-event-list.c:374
+#, fuzzy, c-format
+msgid "%s: Invalid GtkEventList!"
+msgstr "%s: Ungültige GtkSatList!"
+
+#: ../src/gtk-event-list.c:440 ../src/gtk-sat-list.c:574
+#, c-format
+msgid "%s: Failed to get data for #%d."
+msgstr "%s: Abruf der Daten für #%d fehlgeschlagen."
+
+#: ../src/gtk-event-list.c:445 ../src/gtk-sat-list.c:579
+#, c-format
+msgid "%s: Satellite #%d removed from list."
+msgstr "%s: Satellit #%d wurde von der Liste entfernt."
+
+#: ../src/gtk-event-list.c:555 ../src/sat-pass-dialogs.c:59
+#: ../src/sat-pref-rig-editor.c:343
+msgid "LOS"
+msgstr "LOS"
+
+#: ../src/gtk-event-list.c:559 ../src/sat-pass-dialogs.c:57
+#: ../src/sat-pref-rig-editor.c:338
+msgid "AOS"
+msgstr "AOS"
+
+#: ../src/gtk-event-list.c:587 ../src/tle-update.c:1315
+#: ../src/trsp-update.c:646
+msgid "Never"
+msgstr "Nie"
+
+#: ../src/gtk-event-list.c:693 ../src/gtk-sat-list.c:1137
+#, c-format
+msgid "%s: FIXME I am not implemented"
+msgstr "%s: FIXME Ich bin nicht implementiert"
+
+#: ../src/gtk-event-list.c:782 ../src/gtk-event-list.c:816
+#: ../src/gtk-sat-list.c:1232 ../src/gtk-sat-list.c:1265
+#, c-format
+msgid "%s:%d Failed to get data for %d."
+msgstr "%s:%d: Abruf der Daten für %d fehlgeschlagen."
+
+#: ../src/gtk-event-list.c:828 ../src/gtk-sat-list.c:1278
+#: ../src/sat-pass-dialogs.c:1308 ../src/sat-pass-dialogs.c:1358
+#, c-format
+msgid "%s:%d: There is no selection; skip popup."
+msgstr "%s:%d: Keine Auswahl vorhanden; Popup wird übersprungen."
+
+#: ../src/gtk-event-list.c:872
+#, fuzzy, c-format
+msgid "%s: GtkEventList has not child with index %d"
+msgstr "%s: GtkSatList hat kein Kind mit Index %d"
 
 #: ../src/gtk-freq-knob.c:161 ../src/gtk-rot-knob.c:266
 msgid "Use mouse buttons and wheel to change value"
@@ -851,19 +908,9 @@ msgstr "%s: rotctld-Socket aus"
 msgid "%s:%s: Got 0 bytes from rotctld"
 msgstr "%s:%s: 0 Bytes von rotctld empfangen"
 
-#: ../src/gtk-rot-ctrl.c:593 ../src/gtk-sat-list.c:84
-#: ../src/gtk-single-sat.c:53 ../src/sat-pass-dialogs.c:122
-msgid "Azimuth"
-msgstr "Azimut"
-
 #: ../src/gtk-rot-ctrl.c:605
 msgid "Read:"
 msgstr "Lesen:"
-
-#: ../src/gtk-rot-ctrl.c:630 ../src/gtk-sat-list.c:85
-#: ../src/gtk-single-sat.c:54 ../src/sat-pass-dialogs.c:123
-msgid "Elevation"
-msgstr "Elevation"
 
 #: ../src/gtk-rot-ctrl.c:642
 msgid "Read: "
@@ -989,15 +1036,6 @@ msgstr "%s: Fehler beim Lesen von TLE-Zeile 2 von %s (%s)"
 msgid "%s: TLE data for %d appears to be bad"
 msgstr "%s: TLE-Daten für %d scheinen beschädigt zu sein"
 
-#: ../src/gtk-sat-list.c:50 ../src/gtk-sat-tree.c:177
-msgid "Satellite"
-msgstr "Satellit"
-
-#: ../src/gtk-sat-list.c:51 ../src/gtk-sat-selector.c:272
-#: ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:530
-msgid "Catnum"
-msgstr "Katalognummer"
-
 #: ../src/gtk-sat-list.c:54
 msgid "Dir"
 msgstr "Rich."
@@ -1089,23 +1127,6 @@ msgstr "Orbit"
 #: ../src/sat-pass-dialogs.c:66 ../src/sat-pass-dialogs.c:116
 msgid "Vis"
 msgstr "Sicht."
-
-#: ../src/gtk-sat-list.c:75 ../src/gtk-sat-list.c:107
-#, fuzzy
-msgid "Decayed"
-msgstr "Decay"
-
-#: ../src/gtk-sat-list.c:76
-msgid "BOLD"
-msgstr "FETT"
-
-#: ../src/gtk-sat-list.c:82
-msgid "Satellite Name"
-msgstr "Satellitenname"
-
-#: ../src/gtk-sat-list.c:83
-msgid "Catalogue Number"
-msgstr "Katalognummer"
 
 #: ../src/gtk-sat-list.c:86 ../src/gtk-single-sat.c:55
 msgid "Direction"
@@ -1201,37 +1222,11 @@ msgstr " --- "
 msgid "%s: Invalid GtkSatList!"
 msgstr "%s: Ungültige GtkSatList!"
 
-#: ../src/gtk-sat-list.c:574
-#, c-format
-msgid "%s: Failed to get data for #%d."
-msgstr "%s: Abruf der Daten für #%d fehlgeschlagen."
-
-#: ../src/gtk-sat-list.c:579
-#, c-format
-msgid "%s: Satellite #%d removed from list."
-msgstr "%s: Satellit #%d wurde von der Liste entfernt."
-
 #: ../src/gtk-sat-list.c:921 ../src/sat-pass-dialogs.c:682
 #: ../src/sat-pref-qth.c:807
 #, c-format
 msgid "%s:%d: Invalid column: %d"
 msgstr "%s:%d: Ungültige Spalte: %d"
-
-#: ../src/gtk-sat-list.c:1137
-#, c-format
-msgid "%s: FIXME I am not implemented"
-msgstr "%s: FIXME Ich bin nicht implementiert"
-
-#: ../src/gtk-sat-list.c:1232 ../src/gtk-sat-list.c:1265
-#, c-format
-msgid "%s:%d Failed to get data for %d."
-msgstr "%s:%d: Abruf der Daten für %d fehlgeschlagen."
-
-#: ../src/gtk-sat-list.c:1278 ../src/sat-pass-dialogs.c:1308
-#: ../src/sat-pass-dialogs.c:1358
-#, c-format
-msgid "%s:%d: There is no selection; skip popup."
-msgstr "%s:%d: Keine Auswahl vorhanden; Popup wird übersprungen."
 
 #: ../src/gtk-sat-list.c:1370
 #, c-format
@@ -3071,6 +3066,20 @@ msgstr "%s: Überflug für %s ausgegeben, der nach der gegeben Zeit beginnt."
 msgid "%s: Returning a pass for %s that ends before the seeded time."
 msgstr "%s: Überflug für %s ausgegeben, der vor der gegeben Zeit endet."
 
+#. FIXME
+#. page header
+#. create dialog
+#: ../src/print-pass.c:123 ../src/sat-pass-dialogs.c:472
+#, c-format
+msgid "Pass details for %s (orbit %d)"
+msgstr "Überflugdetails für %s (Orbit %d)"
+
+#. avoid unused parameter compiler warning
+#: ../src/print-pass.c:180
+#, fuzzy, c-format
+msgid "%s: Not implemented!"
+msgstr "%s: PRINT nicht implementiert"
+
 #: ../src/qth-data.c:78
 #, c-format
 msgid "%s: Could not load data from %s (%s)"
@@ -3760,17 +3769,9 @@ msgstr "%s: Sitzung beendet"
 msgid "%s: Failed to rename %s to %s\n"
 msgstr "%s: Umbenennen von %s in %s fehlgeschlagen\n"
 
-#: ../src/sat-pass-dialogs.c:57 ../src/sat-pref-rig-editor.c:338
-msgid "AOS"
-msgstr "AOS"
-
 #: ../src/sat-pass-dialogs.c:58
 msgid "TCA"
 msgstr "TCA"
-
-#: ../src/sat-pass-dialogs.c:59 ../src/sat-pref-rig-editor.c:343
-msgid "LOS"
-msgstr "LOS"
 
 #: ../src/sat-pass-dialogs.c:71
 msgid "Acquisition of signal (AOS)"
@@ -3823,12 +3824,6 @@ msgstr "Polar"
 #: ../src/sat-pass-dialogs.c:466
 msgid "Az/El"
 msgstr "Az./El."
-
-#. create dialog
-#: ../src/sat-pass-dialogs.c:472
-#, c-format
-msgid "Pass details for %s (orbit %d)"
-msgstr "Überflugdetails für %s (Orbit %d)"
 
 #. create dialog
 #: ../src/sat-pass-dialogs.c:1030
@@ -4287,6 +4282,11 @@ msgstr ""
 #: ../src/sat-pref-refresh.c:392 ../src/sat-pref-single-sat.c:223
 msgid "Reset module settings to the global values."
 msgstr "Moduleinstellungen auf globale Werte zurücksetzen."
+
+#: ../src/sat-pref-layout-utils.c:106
+#, fuzzy
+msgid "<b>Invalid</b>"
+msgstr "<b>Gesamt</b>"
 
 #: ../src/sat-pref-list-view.c:94 ../src/sat-pref-single-sat.c:86
 msgid "<b>Visible Fields:</b>"
@@ -5917,10 +5917,6 @@ msgstr "%s: TLE in Daten für %d aktualisiert."
 msgid "%s: Data for  %d updated for operational status."
 msgstr "%s: Betriebsstatus in Daten für %d aktualisiert."
 
-#: ../src/tle-update.c:1315 ../src/trsp-update.c:646
-msgid "Never"
-msgstr "Nie"
-
 #: ../src/tle-update.c:1316 ../src/trsp-update.c:647
 msgid "Monthly"
 msgstr "Monatlich"
@@ -6002,6 +5998,58 @@ msgstr "%s: Frequenzaktualisierung läuft bereits"
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr "%s: Bereit um die Transponderliste von %s abzurufen"
+
+#~ msgid ""
+#~ "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors.\n"
+#~ "Contact: oz9aec at gmail.com\n"
+#~ "\n"
+#~ "Gpredict is free software; you can redistribute it and modify it under "
+#~ "the terms of the GNU General Public License as published by the Free "
+#~ "Software Foundation; either version 2 of the License, or (at your option) "
+#~ "any later version.\n"
+#~ "\n"
+#~ "This program is distributed free of charge in the hope that it will be "
+#~ "useful, but WITHOUT ANY WARRANTY; without even the implied warranty of "
+#~ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library "
+#~ "General Public License for more details.\n"
+#~ "\n"
+#~ "You should have received a copy of the GNU General Public License along "
+#~ "with this program (see Help->License). Otherwise you can find a copy on "
+#~ "the FSF website http://www.fsf.org/licensing/licenses/gpl.html or you can "
+#~ "write to the\n"
+#~ "\n"
+#~ "Free Software Foundation, Inc.\n"
+#~ "59 Temple Place - Suite 330\n"
+#~ "Boston\n"
+#~ "MA 02111-1307\n"
+#~ "USA.\n"
+#~ msgstr ""
+#~ "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC und Mitwirkende.\n"
+#~ "Kontact: oz9aec at gmail.com\n"
+#~ "\n"
+#~ "Gpredict ist freie Software; du kannst sie weiterverteilen und sie unter "
+#~ "den Bedingungen der GNU General Public Lizenz Version 2 oder jeglicher "
+#~ "späteren Version, wie sie von der Free Software Foundation veröffentlicht "
+#~ "wurde, modifizieren.\n"
+#~ "\n"
+#~ "Dieses Programm wird entgeltfrei verteilt mit der Hoffnung, dass es "
+#~ "nützlich sein wird, JEDOCH OHNE JEGLICHE GARANTIE; sogar ohne die "
+#~ "implizierte Zusicherung allgemeiner Gebrauchstauglichkeit oder der "
+#~ "TAUGLICHKEIT FÜR EINE BESTIMMTE ABSICHT. Sieh dir die GNU Library General "
+#~ "Public Lizenz für weitere Details an.\n"
+#~ "\n"
+#~ "Zusammen mit diesem Programm (siehe Hilfe->Lizenz) solltest du eine Kopie "
+#~ "der GNU General Public Lizenz erhalten haben. Andernfalls kannst eine "
+#~ "Kopie auf der FSF Website http://www.fsf.org/licensing/licenses/gpl.html "
+#~ "finden oder du kannst der\n"
+#~ "\n"
+#~ "Free Software Foundation, Inc.\n"
+#~ "59 Temple Place - Suite 330\n"
+#~ "Boston\n"
+#~ "MA 02111-1307\n"
+#~ "USA.\n"
+#~ "\n"
+#~ "schreiben.\n"
 
 #~ msgid "%s: Invalid VFO argument. Using VFOA."
 #~ msgstr "%s: Ungültiges VFO-Argument. VFOA wird verwendet."
