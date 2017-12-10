@@ -6,7 +6,6 @@ install-data-local:
 	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(top_srcdir)/NEWS $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(top_srcdir)/README $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DESTDIR)$(pkgdatadir)
 
 EXTRA_DIST = \
 	autogen.sh            \

@@ -75,27 +75,6 @@ const gchar *authors[] = {
     NULL
 };
 
-const gchar license[] = N_("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors.\n"\
-                           "Contact: oz9aec at gmail.com\n\n"\
-                           "Gpredict is free software; you can redistribute it and "\
-                           "modify it under the terms of the GNU General Public License "\
-                           "as published by the Free Software Foundation; either version 2 "\
-                           "of the License, or (at your option) any later version.\n\n"\
-                           "This program is distributed free of charge in the hope that it will "\
-                           "be useful, but WITHOUT ANY WARRANTY; without even the implied "\
-                           "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. "\
-                           "See the GNU Library General Public License for more details.\n\n"\
-                           "You should have received a copy of the GNU General Public License "\
-                           "along with this program (see Help->License). Otherwise you can find "\
-                           "a copy on the FSF "\
-                           "website http://www.fsf.org/licensing/licenses/gpl.html or you can "\
-                           "write to the\n\n"
-                           "Free Software Foundation, Inc.\n"\
-                           "59 Temple Place - Suite 330\n"
-                           "Boston\n"\
-                           "MA 02111-1307\n"
-                           "USA.\n");
-
 void about_dialog_create()
 {
     GtkWidget      *dialog;
@@ -109,8 +88,8 @@ void about_dialog_create()
                                    _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"));
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
                                  "http://gpredict.oz9aec.net/");
-    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), _(license));
-    gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(dialog), TRUE);
+    gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(dialog),
+                                      GTK_LICENSE_GPL_2_0);
     iconfile = logo_file_name("gpredict_icon_color.svg");
     icon = gdk_pixbuf_new_from_file_at_size(iconfile, 128, 128, NULL);
     gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), icon);
