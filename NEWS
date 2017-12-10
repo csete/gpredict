@@ -1,10 +1,11 @@
 
-Changes in version 2.0 (8 Dec 2017)
+Changes in version 2.0 (10 Dec 2017)
 
 - New logo
 - Initial port to Gtk+ 3
 - Import transponder data from Satnogs database https://db.satnogs.org/
 - Support for multiple TLE sources
+- Improved radio and antenna rotator controllers (no application freeze)
 - Map can be centered around arbitrary longitude
 - Natural sort function for satellite list in module configuration
 - Select a satellite in all views

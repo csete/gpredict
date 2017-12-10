@@ -1261,7 +1261,7 @@ gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
 #ifdef G_OS_WIN32
     /* Workaround for GTK+ bug # 169811 - "configure_event" is fired
        when the window is being maximized */
-    if (gdk_window_get_state(widget->window) & GDK_WINDOW_STATE_MAXIMIZED)
+    if (gdk_window_get_state(gtk_widget_get_window(widget)) & GDK_WINDOW_STATE_MAXIMIZED)
     {
         return FALSE;
     }

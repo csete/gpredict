@@ -46,17 +46,14 @@
 static GtkWidget *check[SAT_LIST_COL_NUMBER];
 extern const gchar *SAT_LIST_COL_TITLE[];
 extern const gchar *SAT_LIST_COL_HINT[];
-static GtkWidget *ruleshint;
 static gboolean dirty = FALSE;
 static gboolean reset = FALSE;
 static guint    startflags;
 static guint    flags;
-static gboolean rh_flag;
 
 static void     create_reset_button(GKeyFile * cfg, GtkBox * vbox);
 static void     reset_cb(GtkWidget * button, gpointer cfg);
 static void     toggle_cb(GtkToggleButton * toggle, gpointer data);
-static void     toggle_rh_cb(GtkToggleButton * toggle, gpointer data);
 
 /**
  * Create and initialise widgets for the list view preferences tab.
@@ -98,7 +95,8 @@ GtkWidget      *sat_pref_list_view_create(GKeyFile * cfg)
     gtk_table_attach(GTK_TABLE(table), label, 0, 2, 0, 1,
                      GTK_FILL, GTK_SHRINK, 0, 0);
 
-    for (i = 0; i < SAT_LIST_COL_NUMBER; i++)
+    /* add fields except the last one (bold) */
+    for (i = 0; i < SAT_LIST_COL_NUMBER - 1; i++)
     {
         check[i] = gtk_check_button_new_with_label(_(SAT_LIST_COL_TITLE[i]));
         gtk_widget_set_tooltip_text(check[i], _(SAT_LIST_COL_HINT[i]));
@@ -129,39 +127,10 @@ GtkWidget      *sat_pref_list_view_create(GKeyFile * cfg)
     gtk_widget_show_all(hbox);
 #endif
 
-    /* vertical box */
     vbox = gtk_vbox_new(FALSE, 10);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
     gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
-
-    /* rules hint; only in global mode */
-    if (cfg == NULL)
-    {
-        ruleshint =
-            gtk_check_button_new_with_label(_
-                                            ("Enable rules hint in the list views"));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ruleshint),
-                                     sat_cfg_get_bool
-                                     (SAT_CFG_BOOL_RULES_HINT));
-
-        /* store original value */
-        rh_flag = sat_cfg_get_bool(SAT_CFG_BOOL_RULES_HINT);
-
-        /* connect toggle signal */
-        g_signal_connect(G_OBJECT(ruleshint), "toggled",
-                         G_CALLBACK(toggle_rh_cb), NULL);
-        gtk_widget_set_tooltip_text(ruleshint,
-                                    _("Enabling rules hint may make reading "
-                                      "across many columns easier. By default the satlist will be rendered "
-                                      "with alternating colours, but the exact behaviour is "
-                                      "up to the theme engine."));
-        gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE,
-                           0);
-        gtk_box_pack_start(GTK_BOX(vbox), ruleshint, FALSE, FALSE, 0);
-    }
     gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 0);
-
-    /* create RESET button */
     create_reset_button(cfg, GTK_BOX(vbox));
 
     startflags = flags;
@@ -191,9 +160,6 @@ void sat_pref_list_view_ok(GKeyFile * cfg)
         else
         {
             sat_cfg_set_int(SAT_CFG_INT_LIST_COLUMNS, flags);
-            sat_cfg_set_bool(SAT_CFG_BOOL_RULES_HINT,
-                             gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON
-                                                          (ruleshint)));
         }
     }
     else if (reset)
@@ -207,7 +173,6 @@ void sat_pref_list_view_ok(GKeyFile * cfg)
         else
         {
             sat_cfg_reset_int(SAT_CFG_INT_LIST_COLUMNS);
-            sat_cfg_reset_bool(SAT_CFG_BOOL_RULES_HINT);
         }
     }
 
@@ -272,9 +237,6 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
     {
         /* global mode, get defaults */
         flags = sat_cfg_get_int_def(SAT_CFG_INT_LIST_COLUMNS);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ruleshint),
-                                     sat_cfg_get_bool_def
-                                     (SAT_CFG_BOOL_RULES_HINT));
     }
     else
     {
@@ -306,13 +268,4 @@ static void toggle_cb(GtkToggleButton * toggle, gpointer data)
 
     /* clear dirty flag if we are back where we started */
     dirty = (flags != startflags);
-}
-
-static void toggle_rh_cb(GtkToggleButton * toggle, gpointer data)
-{
-    (void)toggle;
-    (void)data;
-
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ruleshint)) != rh_flag)
-        dirty = TRUE;
 }
