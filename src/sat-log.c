@@ -53,7 +53,7 @@
 static gboolean initialised = FALSE;
 static GIOChannel *logfile = NULL;
 static sat_log_level_t loglevel = SAT_LOG_LEVEL_DEBUG;
-static gboolean debug_to_stderr = TRUE; // whether to also send debug msg to stderr
+static gboolean debug_to_stderr = FALSE; // whether to also send debug msg to stderr
 
 /** String representation of debug levels. */
 const gchar    *debug_level_str[] = {
@@ -224,8 +224,7 @@ static void manage_debug_message(sat_log_level_t debug_level,
         msg_time[49] = '\0';
 
     /* send debug messages to stderr */
-    if G_LIKELY
-        (debug_to_stderr)
+    if G_UNLIKELY(debug_to_stderr)
             g_fprintf(stderr, "%s  %s  %s\n", msg_time,
                       debug_level_str[debug_level], message);
 
@@ -233,8 +232,7 @@ static void manage_debug_message(sat_log_level_t debug_level,
                           debug_level, SAT_LOG_MSG_SEPARATOR, message);
 
     /* print debug message */
-    if G_LIKELY
-        (initialised)
+    if G_LIKELY(initialised)
     {
         /* save to file */
         g_io_channel_write_chars(logfile, msg, -1, &written, &error);

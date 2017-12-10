@@ -117,7 +117,7 @@ sat_cfg_bool_t  sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
     {"GLOBAL", "MAIN_WIN_POS", FALSE},
     {"GLOBAL", "MOD_WIN_POS", FALSE},
     {"GLOBAL", "MOD_STATE", FALSE},
-    {"MODULES", "RULES_HINT", TRUE},
+    {"MODULES", "RULES_HINT", FALSE},
     {"MODULES", "MAP_QTH_INFO", TRUE},
     {"MODULES", "MAP_NEXT_EVENT", TRUE},
     {"MODULES", "MAP_CURSOR_TRACK", FALSE},
