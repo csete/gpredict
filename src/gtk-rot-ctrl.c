@@ -87,6 +87,7 @@ static void     delay_changed_cb(GtkSpinButton * spin, gpointer data);
 static void     toler_changed_cb(GtkSpinButton * spin, gpointer data);
 static void     rot_selected_cb(GtkComboBox * box, gpointer data);
 static void     rot_locked_cb(GtkToggleButton * button, gpointer data);
+static void     rot_monitor_cb(GtkCheckButton * button, gpointer data);
 static gboolean rot_ctrl_timeout_cb(gpointer data);
 static void     update_count_down(GtkRotCtrl * ctrl, gdouble t);
 
@@ -259,7 +260,7 @@ static gpointer rotctld_client_thread(gpointer data)
         }
         g_mutex_unlock(&ctrl->client.mutex);
 
-        if (new_trg)
+        if (new_trg && !ctrl->monitor)
         {
             if (set_pos(ctrl, azi, ele))
                 new_trg = FALSE;
@@ -810,6 +811,14 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
                      ctrl);
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->LockBut, 2, 3, 0, 1);
 
+    /* Monitor checkbox */
+    ctrl->MonitorCheckBox = gtk_check_button_new_with_label(_("Monitor"));
+    gtk_widget_set_tooltip_text(ctrl->MonitorCheckBox,
+								_("Monitor mode, no position commands issued"));
+    g_signal_connect(ctrl->MonitorCheckBox, "toggled", G_CALLBACK(rot_monitor_cb),
+					 ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox, 3, 4, 0, 1);
+
     /* Timeout */
     label = gtk_label_new(_("Cycle:"));
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -1046,6 +1055,15 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
 }
 
 /**
+ * Monitor mode
+ * Inhibits command transmission
+ */
+static void rot_monitor_cb(GtkCheckButton * button, gpointer data) {
+	GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+	ctrl->monitor = gtk_toggle_button_get_active(button);
+}
+
+/**
  * \brief Rotor locked.
  * \param button Pointer to the "Engage" button.
  * \param data Pointer to the GtkRotCtrl widget.
@@ -1060,6 +1078,7 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
     gboolean        retcode;
     gint            retval;
 
+    gtk_widget_set_sensitive(ctrl->MonitorCheckBox, !gtk_toggle_button_get_active(button));
     if (!gtk_toggle_button_get_active(button))
     {
         ctrl->engaged = FALSE;
