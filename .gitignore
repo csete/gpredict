@@ -1,4 +1,3 @@
-.version
 Makefile
 Makefile.in
 build-config.h
