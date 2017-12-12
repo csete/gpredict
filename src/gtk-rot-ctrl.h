@@ -70,6 +70,7 @@ struct _gtk_rot_ctrl {
     GtkWidget      *plot;       /*!< Polar plot widget */
     GtkWidget      *LockBut;
     GtkWidget      *MonitorCheckBox;
+    GtkWidget      *track;
 
     rotor_conf_t   *conf;
     gdouble         t;          /*!< Time when sat data last has been updated. */
