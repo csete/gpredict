@@ -688,12 +688,12 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 2, 0, 1);
 
     /* tracking button */
-    track = gtk_toggle_button_new_with_label(_("Track"));
-    gtk_widget_set_tooltip_text(track,
+    ctrl->track = gtk_toggle_button_new_with_label(_("Track"));
+    gtk_widget_set_tooltip_text(ctrl->track,
                                 _
                                 ("Track the satellite when it is within range"));
-    gtk_table_attach_defaults(GTK_TABLE(table), track, 2, 3, 0, 1);
-    g_signal_connect(track, "toggled", G_CALLBACK(track_toggle_cb), ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->track, 2, 3, 0, 1);
+    g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb), ctrl);
 
     /* Azimuth */
     label = gtk_label_new(_("Az:"));
@@ -956,6 +956,9 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
     ctrl->tracking = gtk_toggle_button_get_active(button);
+    gtk_widget_set_sensitive(ctrl->MonitorCheckBox, !(ctrl->tracking || gtk_toggle_button_get_active(ctrl->LockBut)));
+	gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->tracking);
+	gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->tracking);
 }
 
 /**
@@ -1060,7 +1063,12 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
  */
 static void rot_monitor_cb(GtkCheckButton * button, gpointer data) {
 	GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+
 	ctrl->monitor = gtk_toggle_button_get_active(button);
+	gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->monitor);
+	gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->monitor);
+	gtk_widget_set_sensitive(ctrl->track, !ctrl->monitor);
 }
 
 /**
@@ -1078,7 +1086,7 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
     gboolean        retcode;
     gint            retval;
 
-    gtk_widget_set_sensitive(ctrl->MonitorCheckBox, !gtk_toggle_button_get_active(button));
+    gtk_widget_set_sensitive(ctrl->MonitorCheckBox, !(ctrl->tracking || gtk_toggle_button_get_active(button)));
     if (!gtk_toggle_button_get_active(button))
     {
         ctrl->engaged = FALSE;
