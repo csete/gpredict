@@ -15,6 +15,7 @@ install-data-local:
 
 EXTRA_DIST = \
 	autogen.sh            \
+	git-version-gen       \
 	intltool-extract.in   \
 	intltool-merge.in     \
 	intltool-update.in    \
