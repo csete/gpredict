@@ -151,7 +151,7 @@ void save_pass(GtkWidget * parent)
        with dash */
     savefile = g_strdup_printf("%s-%d", pass->satname, pass->orbit);
     savefile = g_strdelimit(savefile, " ", '-');
-    savefile = g_strdelimit(savefile, "!?/\()*&%$#@[]{}=+<>,.|:;", '_');
+    savefile = g_strdelimit(savefile, "!?/\\()*&%$#@[]{}=+<>,.|:;", '_');
     gtk_entry_set_text(GTK_ENTRY(filchooser), savefile);
     g_free(savefile);
 
@@ -298,7 +298,7 @@ void save_passes(GtkWidget * parent)
        with dash */
     savefile = g_strdup_printf("%s-passes", sat);
     savefile = g_strdelimit(savefile, " ", '-');
-    savefile = g_strdelimit(savefile, "!?/\()*&%$#@[]{}=+<>,.|:;", '_');
+    savefile = g_strdelimit(savefile, "!?/\\()*&%$#@[]{}=+<>,.|:;", '_');
     gtk_entry_set_text(GTK_ENTRY(filchooser), savefile);
     g_free(savefile);
 
