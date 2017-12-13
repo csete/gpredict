@@ -584,15 +584,8 @@ gboolean gpredict_save_key_file(GKeyFile * cfgdata, const char *filename)
  */
 gboolean gpredict_legal_char (int ch)
 {
-  if (g_ascii_isalnum(ch))
+  if (g_ascii_isalnum(ch) || ch == '-' || ch == '_')
      return (TRUE);
-
-  if (ch == '-')
-     return (TRUE);
-
-  if (ch == '_')
-     return (TRUE);
-
   return (FALSE);
 }
 
