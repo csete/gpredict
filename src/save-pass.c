@@ -35,6 +35,7 @@
 #include "sat-cfg.h"
 #include "sat-log.h"
 #include "sat-pass-dialogs.h"
+#include "gpredict-utils.h"
 #include "save-pass.h"
 #include "sgpsdp/sgp4sdp4.h"
 
@@ -377,19 +378,11 @@ static void file_changed(GtkWidget * widget, gpointer data)
         end = entry + g_utf8_strlen(entry, -1);
         for (j = entry; j < end; ++j)
         {
-            switch (*j)
+            if (!gpredict_legal_char(*j))
             {
-            case '0' ... '9':
-            case 'a' ... 'z':
-            case 'A' ... 'Z':
-            case '-':
-            case '_':
-                break;
-            default:
                 gdk_beep();
                 pos = gtk_editable_get_position(GTK_EDITABLE(widget));
                 gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
-                break;
             }
         }
     }
