@@ -429,7 +429,7 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
                      1, 2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
                      create_target_widgets(rot_ctrl), 0, 1, 1, 2,
-                     GTK_FILL, GTK_SHRINK, 0, 0);
+                     GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
                      create_conf_widgets(rot_ctrl), 1, 2, 1, 2,
                      GTK_FILL, GTK_SHRINK, 0, 0);
@@ -739,7 +739,7 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     const gchar    *filename;   /* file name */
     gchar          *rotname;
 
-    table = gtk_table_new(3, 3, FALSE);
+    table = gtk_table_new(4, 3, FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table), 5);
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
@@ -814,15 +814,15 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     /* Monitor checkbox */
     ctrl->MonitorCheckBox = gtk_check_button_new_with_label(_("Monitor"));
     gtk_widget_set_tooltip_text(ctrl->MonitorCheckBox,
-								_("Monitor mode, no position commands issued"));
+                                _("Monitor rotator but do not send any position commands"));
     g_signal_connect(ctrl->MonitorCheckBox, "toggled", G_CALLBACK(rot_monitor_cb),
 					 ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox, 3, 4, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox, 1, 2, 1, 2);
 
     /* Timeout */
     label = gtk_label_new(_("Cycle:"));
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
 
     timer = gtk_spin_button_new_with_range(1000, 10000, 10);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
@@ -832,17 +832,17 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(timer), ctrl->delay);
     g_signal_connect(timer, "value-changed", G_CALLBACK(delay_changed_cb),
                      ctrl);
-    gtk_table_attach(GTK_TABLE(table), timer, 1, 2, 1, 2, GTK_FILL, GTK_FILL,
+    gtk_table_attach(GTK_TABLE(table), timer, 1, 2, 2, 3, GTK_FILL, GTK_FILL,
                      0, 0);
 
     label = gtk_label_new(_("msec"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 1, 2);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 2, 3);
 
     /* Tolerance */
     label = gtk_label_new(_("Tolerance:"));
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
     toler = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(toler), 2);
@@ -855,12 +855,12 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->tolerance);
     g_signal_connect(toler, "value-changed", G_CALLBACK(toler_changed_cb),
                      ctrl);
-    gtk_table_attach(GTK_TABLE(table), toler, 1, 2, 2, 3, GTK_FILL, GTK_FILL,
+    gtk_table_attach(GTK_TABLE(table), toler, 1, 2, 3, 4, GTK_FILL, GTK_FILL,
                      0, 0);
 
     label = gtk_label_new(_("deg"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 2, 3);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 3, 4);
 
     /* load initial rotator configuration */
     rot_selected_cb(GTK_COMBO_BOX(ctrl->DevSel), ctrl);
@@ -1086,7 +1086,6 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
     gboolean        retcode;
     gint            retval;
 
-    gtk_widget_set_sensitive(ctrl->MonitorCheckBox, !(ctrl->tracking || gtk_toggle_button_get_active(button)));
     if (!gtk_toggle_button_get_active(button))
     {
         ctrl->engaged = FALSE;
