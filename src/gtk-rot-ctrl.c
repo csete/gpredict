@@ -434,13 +434,13 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
                      create_conf_widgets(rot_ctrl), 1, 2, 1, 2,
                      GTK_FILL, GTK_SHRINK, 0, 0);
 
-    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl), TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl),
+                       TRUE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(rot_ctrl), table, FALSE, FALSE, 5);
     gtk_container_set_border_width(GTK_CONTAINER(rot_ctrl), 5);
 
     rot_ctrl->timerid = g_timeout_add(rot_ctrl->delay,
-                                      rot_ctrl_timeout_cb,
-                                      rot_ctrl);
+                                      rot_ctrl_timeout_cb, rot_ctrl);
 
     if (module->target > 0)
         gtk_rot_ctrl_select_sat(rot_ctrl, module->target);
@@ -693,7 +693,8 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
                                 _
                                 ("Track the satellite when it is within range"));
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->track, 2, 3, 0, 1);
-    g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb), ctrl);
+    g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb),
+                     ctrl);
 
     /* Azimuth */
     label = gtk_label_new(_("Az:"));
@@ -814,10 +815,12 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     /* Monitor checkbox */
     ctrl->MonitorCheckBox = gtk_check_button_new_with_label(_("Monitor"));
     gtk_widget_set_tooltip_text(ctrl->MonitorCheckBox,
-                                _("Monitor rotator but do not send any position commands"));
-    g_signal_connect(ctrl->MonitorCheckBox, "toggled", G_CALLBACK(rot_monitor_cb),
-					 ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox, 1, 2, 1, 2);
+                                _
+                                ("Monitor rotator but do not send any position commands"));
+    g_signal_connect(ctrl->MonitorCheckBox, "toggled",
+                     G_CALLBACK(rot_monitor_cb), ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox,
+                              1, 2, 1, 2);
 
     /* Timeout */
     label = gtk_label_new(_("Cycle:"));
@@ -956,9 +959,11 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
     ctrl->tracking = gtk_toggle_button_get_active(button);
-    gtk_widget_set_sensitive(ctrl->MonitorCheckBox, !(ctrl->tracking || gtk_toggle_button_get_active(ctrl->LockBut)));
-	gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->tracking);
-	gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->tracking);
+    gtk_widget_set_sensitive(ctrl->MonitorCheckBox,
+                             !(ctrl->tracking ||
+                               gtk_toggle_button_get_active(ctrl->LockBut)));
+    gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->tracking);
+    gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->tracking);
 }
 
 /**
@@ -1061,14 +1066,14 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
  * Monitor mode
  * Inhibits command transmission
  */
-static void rot_monitor_cb(GtkCheckButton * button, gpointer data) {
-	GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+static void rot_monitor_cb(GtkCheckButton * button, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
-
-	ctrl->monitor = gtk_toggle_button_get_active(button);
-	gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->monitor);
-	gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->monitor);
-	gtk_widget_set_sensitive(ctrl->track, !ctrl->monitor);
+    ctrl->monitor = gtk_toggle_button_get_active(button);
+    gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->monitor);
+    gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->monitor);
+    gtk_widget_set_sensitive(ctrl->track, !ctrl->monitor);
 }
 
 /**
