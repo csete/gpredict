@@ -368,7 +368,9 @@ static void create_module_layout(GtkSatModule * module)
                 _("%s: Layout has %d columns and %d rows."),
                 __func__, cols, rows);
 
-    table = gtk_table_new(rows, cols, TRUE);
+    table = gtk_grid_new();
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), TRUE);
 
     for (i = 0; i < module->nviews; i++)
     {
@@ -379,11 +381,11 @@ static void create_module_layout(GtkSatModule * module)
         module->views = g_slist_append(module->views, view);
 
         /* add view to the grid */
-        gtk_table_attach_defaults(GTK_TABLE(table), view,
-                                  module->grid[5 * i + 1],
-                                  module->grid[5 * i + 2],
-                                  module->grid[5 * i + 3],
-                                  module->grid[5 * i + 4]);
+        gtk_grid_attach(GTK_GRID(table), view,
+                        module->grid[5 * i + 1],                            // left
+                        module->grid[5 * i + 3],                            // top
+                        module->grid[5 * i + 2] - module->grid[5 * i + 1],  // width
+                        module->grid[5 * i + 4] - module->grid[5 * i + 3]); // height
     }
 
     gtk_box_pack_start(GTK_BOX(module), table, TRUE, TRUE, 0);
