@@ -1,15 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,9 +16,7 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/**
- * @defgroup pref Preferences dialog
- */
+
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
@@ -138,7 +128,7 @@ void sat_pref_run()
     g_signal_connect(G_OBJECT(predbut), "clicked",
                      G_CALLBACK(button_press_cb), nbook);
 
-    butbox = gtk_vbutton_box_new();
+    butbox = gtk_button_box_new(GTK_ORIENTATION_VERTICAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(butbox), GTK_BUTTONBOX_START);
     gtk_container_add(GTK_CONTAINER(butbox), genbut);
     gtk_container_add(GTK_CONTAINER(butbox), modbut);
@@ -148,7 +138,8 @@ void sat_pref_run()
     /* create horizontal box which will contain the icon list on the left side
        and the notebook on the right side.
      */
-    hbox = gtk_hbox_new(FALSE, 5);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous(GTK_BOX(hbox), FALSE);
     gtk_box_pack_start(GTK_BOX(hbox), butbox, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), nbook, TRUE, TRUE, 0);
     gtk_widget_show_all(hbox);
@@ -158,10 +149,9 @@ void sat_pref_run()
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_OK,
-                                         GTK_RESPONSE_ACCEPT, NULL);
+                                         "_Cancel", GTK_RESPONSE_REJECT,
+                                         "_OK", GTK_RESPONSE_ACCEPT,
+                                         NULL);
     iconfile = icon_file_name("gpredict-sat-pref.png");
     gtk_window_set_icon_from_file(GTK_WINDOW(window), iconfile, NULL);
     g_free(iconfile);
