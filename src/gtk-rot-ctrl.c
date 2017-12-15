@@ -87,6 +87,7 @@ static void     delay_changed_cb(GtkSpinButton * spin, gpointer data);
 static void     toler_changed_cb(GtkSpinButton * spin, gpointer data);
 static void     rot_selected_cb(GtkComboBox * box, gpointer data);
 static void     rot_locked_cb(GtkToggleButton * button, gpointer data);
+static void     rot_monitor_cb(GtkCheckButton * button, gpointer data);
 static gboolean rot_ctrl_timeout_cb(gpointer data);
 static void     update_count_down(GtkRotCtrl * ctrl, gdouble t);
 
@@ -259,7 +260,7 @@ static gpointer rotctld_client_thread(gpointer data)
         }
         g_mutex_unlock(&ctrl->client.mutex);
 
-        if (new_trg)
+        if (new_trg && !ctrl->monitor)
         {
             if (set_pos(ctrl, azi, ele))
                 new_trg = FALSE;
@@ -428,18 +429,18 @@ GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
                      1, 2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
                      create_target_widgets(rot_ctrl), 0, 1, 1, 2,
-                     GTK_FILL, GTK_SHRINK, 0, 0);
+                     GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(table),
                      create_conf_widgets(rot_ctrl), 1, 2, 1, 2,
                      GTK_FILL, GTK_SHRINK, 0, 0);
 
-    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl), TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl),
+                       TRUE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(rot_ctrl), table, FALSE, FALSE, 5);
     gtk_container_set_border_width(GTK_CONTAINER(rot_ctrl), 5);
 
     rot_ctrl->timerid = g_timeout_add(rot_ctrl->delay,
-                                      rot_ctrl_timeout_cb,
-                                      rot_ctrl);
+                                      rot_ctrl_timeout_cb, rot_ctrl);
 
     if (module->target > 0)
         gtk_rot_ctrl_select_sat(rot_ctrl, module->target);
@@ -687,12 +688,13 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 2, 0, 1);
 
     /* tracking button */
-    track = gtk_toggle_button_new_with_label(_("Track"));
-    gtk_widget_set_tooltip_text(track,
+    ctrl->track = gtk_toggle_button_new_with_label(_("Track"));
+    gtk_widget_set_tooltip_text(ctrl->track,
                                 _
                                 ("Track the satellite when it is within range"));
-    gtk_table_attach_defaults(GTK_TABLE(table), track, 2, 3, 0, 1);
-    g_signal_connect(track, "toggled", G_CALLBACK(track_toggle_cb), ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->track, 2, 3, 0, 1);
+    g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb),
+                     ctrl);
 
     /* Azimuth */
     label = gtk_label_new(_("Az:"));
@@ -738,7 +740,7 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     const gchar    *filename;   /* file name */
     gchar          *rotname;
 
-    table = gtk_table_new(3, 3, FALSE);
+    table = gtk_table_new(4, 3, FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table), 5);
     gtk_table_set_row_spacings(GTK_TABLE(table), 5);
@@ -810,10 +812,20 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
                      ctrl);
     gtk_table_attach_defaults(GTK_TABLE(table), ctrl->LockBut, 2, 3, 0, 1);
 
+    /* Monitor checkbox */
+    ctrl->MonitorCheckBox = gtk_check_button_new_with_label(_("Monitor"));
+    gtk_widget_set_tooltip_text(ctrl->MonitorCheckBox,
+                                _
+                                ("Monitor rotator but do not send any position commands"));
+    g_signal_connect(ctrl->MonitorCheckBox, "toggled",
+                     G_CALLBACK(rot_monitor_cb), ctrl);
+    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox,
+                              1, 2, 1, 2);
+
     /* Timeout */
     label = gtk_label_new(_("Cycle:"));
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
 
     timer = gtk_spin_button_new_with_range(1000, 10000, 10);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
@@ -823,17 +835,17 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(timer), ctrl->delay);
     g_signal_connect(timer, "value-changed", G_CALLBACK(delay_changed_cb),
                      ctrl);
-    gtk_table_attach(GTK_TABLE(table), timer, 1, 2, 1, 2, GTK_FILL, GTK_FILL,
+    gtk_table_attach(GTK_TABLE(table), timer, 1, 2, 2, 3, GTK_FILL, GTK_FILL,
                      0, 0);
 
     label = gtk_label_new(_("msec"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 1, 2);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 2, 3);
 
     /* Tolerance */
     label = gtk_label_new(_("Tolerance:"));
     gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
 
     toler = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(toler), 2);
@@ -846,12 +858,12 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->tolerance);
     g_signal_connect(toler, "value-changed", G_CALLBACK(toler_changed_cb),
                      ctrl);
-    gtk_table_attach(GTK_TABLE(table), toler, 1, 2, 2, 3, GTK_FILL, GTK_FILL,
+    gtk_table_attach(GTK_TABLE(table), toler, 1, 2, 3, 4, GTK_FILL, GTK_FILL,
                      0, 0);
 
     label = gtk_label_new(_("deg"));
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 2, 3);
+    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 3, 4);
 
     /* load initial rotator configuration */
     rot_selected_cb(GTK_COMBO_BOX(ctrl->DevSel), ctrl);
@@ -947,6 +959,11 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
     ctrl->tracking = gtk_toggle_button_get_active(button);
+    gtk_widget_set_sensitive(ctrl->MonitorCheckBox,
+                             !(ctrl->tracking ||
+                               gtk_toggle_button_get_active(ctrl->LockBut)));
+    gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->tracking);
+    gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->tracking);
 }
 
 /**
@@ -1043,6 +1060,20 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
         g_free(ctrl->conf);
         ctrl->conf = NULL;
     }
+}
+
+/**
+ * Monitor mode
+ * Inhibits command transmission
+ */
+static void rot_monitor_cb(GtkCheckButton * button, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+    ctrl->monitor = gtk_toggle_button_get_active(button);
+    gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->monitor);
+    gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->monitor);
+    gtk_widget_set_sensitive(ctrl->track, !ctrl->monitor);
 }
 
 /**

@@ -35,6 +35,7 @@
 const gchar *authors[] = {
     "Alexandru Csete, OZ9AEC, with contributions from:",
     "",
+    "A. Maitland Bottoms, AA4HS",
     "Alan Moffet, KE7IJZ",
     "Baris Dinc, TA7W",
     "Charles Suprin, AA1VS",
@@ -46,6 +47,7 @@ const gchar *authors[] = {
     "Fabian P. Schmidt",
     "Gisle Vanem",
     "Henry Hallam",
+    "Ilias Daradimos",
     "Jan Simon, DL2ZXA",
     "Libre Space Foundation",
     "Lloyd Brown",
@@ -67,7 +69,7 @@ const gchar *authors[] = {
     "Tom Jones",
     "T.S. Kelso",
     "Valentin Yakovenkov",
-    "William J Beksi, KC2EXL"
+    "William J Beksi, KC2EXL",
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",
