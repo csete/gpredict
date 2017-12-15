@@ -83,7 +83,8 @@ static GtkWidget *create_preview_widget(const gchar * selection)
     label = gtk_label_new(NULL);
     img = gtk_image_new();
 
-    vbox = gtk_vbox_new(FALSE, 5);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
     g_object_set_data(G_OBJECT(vbox), "image", img);
     g_object_set_data(G_OBJECT(vbox), "label", label);
     gtk_box_pack_start(GTK_BOX(vbox), img, FALSE, FALSE, 0);
@@ -131,9 +132,8 @@ static GtkWidget *create_preview_widget(const gchar * selection)
     }
     else
     {
-        gtk_image_set_from_stock(GTK_IMAGE(img),
-                                 GTK_STOCK_MISSING_IMAGE,
-                                 GTK_ICON_SIZE_LARGE_TOOLBAR);
+        gtk_image_set_from_icon_name(GTK_IMAGE(img), "image-missing",
+                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
     }
 
     return vbox;
@@ -203,10 +203,8 @@ static void update_preview_widget(GtkFileChooser * chooser, gpointer data)
         else
         {
             gtk_image_clear(img);
-            gtk_image_set_from_stock(GTK_IMAGE(img),
-                                     GTK_STOCK_MISSING_IMAGE,
-                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
-
+            gtk_image_set_from_icon_name(GTK_IMAGE(img), "image-missing",
+                                         GTK_ICON_SIZE_LARGE_TOOLBAR);
             /* report failure */
             gtk_file_chooser_set_preview_widget_active(chooser, FALSE);
         }
@@ -245,9 +243,9 @@ gchar          *select_map(const gchar * curmap)
     chooser = gtk_file_chooser_dialog_new(_("Select Map"),
                                           NULL,
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
-                                          GTK_STOCK_CANCEL,
-                                          GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN,
-                                          GTK_RESPONSE_ACCEPT, NULL);
+                                          "_Cancel", GTK_RESPONSE_CANCEL,
+                                          "_Open", GTK_RESPONSE_ACCEPT,
+                                          NULL);
 
     /* single selection only */
     gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(chooser), FALSE);
