@@ -54,12 +54,12 @@ static gchar   *get_map_humanize_size(gint64 size, gchar * buffer,
         buflen = 32;
     }
 
-    if (size > 1024ul * 1024ul * 1024ul)
+    if (size > 1024l * 1024l * 1024l)
         g_snprintf(buffer, buflen, "%0.1f GB",
                    size / (1024.f * 1024.f * 1024.f));
-    else if (size > 1024ul * 1024ul)
+    else if (size > 1024l * 1024l)
         g_snprintf(buffer, buflen, "%0.1f MB", size / (1024.f * 1024.f));
-    else if (size > 1024ul)
+    else if (size > 1024)
         g_snprintf(buffer, buflen, "%0.1f kB", size / 1024.f);
     else
         g_snprintf(buffer, buflen, "%lu B", (gulong) size);
