@@ -69,7 +69,7 @@ const gchar *authors[] = {
     "Tom Jones",
     "T.S. Kelso",
     "Valentin Yakovenkov",
-    "William J Beksi, KC2EXL"
+    "William J Beksi, KC2EXL",
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",
