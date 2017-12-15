@@ -1,6 +1,7 @@
 
-Changes in version 2.1 (TBC)
+Changes in version 2.2 (TBC)
 
+- New Monitor mode for antenna controller
 - Avoid using gcc-specific language extensions
 - Fixed missing version number in Debian packages
 
