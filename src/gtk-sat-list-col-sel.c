@@ -1,16 +1,8 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-    Authors: Alexandru Csete <oz9aec@gmail.com>
-
-    Comments, questions and bugreports should be submitted via
-    http://sourceforge.net/projects/gpredict/
-    More details can be found at the project home page:
-
-            http://gpredict.oz9aec.net/
- 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -24,7 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "gtk-sat-list.h"
@@ -34,18 +25,27 @@
 /* defined in gtk-sat-list.c; we use them for labels */
 extern const gchar *SAT_LIST_COL_HINT[];
 
-static void     gtk_sat_list_col_sel_class_init(GtkSatListColSelClass * class);
-static void     gtk_sat_list_col_sel_init(GtkSatListColSel * sel);
-static void     gtk_sat_list_col_sel_destroy(GtkWidget * widget);
-static GtkTreeModel *create_and_fill_model(guint32 flags);
-static void     column_toggled(GtkCellRendererToggle * cell,
-                               gchar * path_str, gpointer data);
-
-static gboolean set_col(GtkTreeModel * model,
-                        GtkTreePath * path, GtkTreeIter * iter, gpointer data);
-
-
 static GtkVBoxClass *parent_class = NULL;
+
+
+static void gtk_sat_list_col_sel_destroy(GtkWidget * widget)
+{
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+}
+
+static void gtk_sat_list_col_sel_class_init(GtkSatListColSelClass * class)
+{
+    GtkWidgetClass *widget_class;
+
+    widget_class = (GtkWidgetClass *) class;
+    widget_class->destroy = gtk_sat_list_col_sel_destroy;
+    parent_class = g_type_class_peek_parent(class);
+}
+
+static void gtk_sat_list_col_sel_init(GtkSatListColSel * list)
+{
+    (void)list;                 /* avoid unusued parameter compiler warning */
+}
 
 GType gtk_sat_list_col_sel_get_type()
 {
@@ -75,23 +75,81 @@ GType gtk_sat_list_col_sel_get_type()
     return gtk_sat_list_col_sel_type;
 }
 
-static void gtk_sat_list_col_sel_class_init(GtkSatListColSelClass * class)
+static GtkTreeModel *create_and_fill_model(guint32 flags)
 {
-    GtkWidgetClass *widget_class;
+    GtkListStore   *liststore;  /* the list store data structure */
+    GtkTreeIter     item;       /* new item added to the list store */
+    guint           i;
+    gboolean        checked;
 
-    widget_class = (GtkWidgetClass *) class;
-    widget_class->destroy = gtk_sat_list_col_sel_destroy;
-    parent_class = g_type_class_peek_parent(class);
+    /* create a new list store */
+    liststore = gtk_list_store_new(3, G_TYPE_STRING,    // column label
+                                   G_TYPE_BOOLEAN,      // visible checkbox
+                                   G_TYPE_INT   // row number
+        );
+
+
+    for (i = 0; i < SAT_LIST_COL_NUMBER; i++)
+    {
+
+        checked = (flags & (1 << i)) ? TRUE : FALSE;
+
+        gtk_list_store_append(liststore, &item);
+        gtk_list_store_set(liststore, &item,
+                           0, SAT_LIST_COL_HINT[i], 1, checked, 2, i, -1);
+    }
+
+    return GTK_TREE_MODEL(liststore);
 }
 
-static void gtk_sat_list_col_sel_init(GtkSatListColSel * list)
+/**
+ * Manage toggle signals.
+ *
+ * @param cell cell.
+ * @param path_str Path string.
+ * @param data Pointer to the GtkSatListColSel widget.
+ *
+ * This function is called when the user toggles the visibility for a column.
+ */
+static void column_toggled(GtkCellRendererToggle * cell,
+                           gchar * path_str, gpointer data)
 {
-    (void)list;                 /* avoid unusued parameter compiler warning */
-}
+    GtkSatListColSel *sel = GTK_SAT_LIST_COL_SEL(data);
+    GtkTreeModel   *model;
+    GtkTreeIter     iter;
+    GtkTreePath    *path = gtk_tree_path_new_from_string(path_str);
+    gboolean        checked;
+    gint            row;
 
-static void gtk_sat_list_col_sel_destroy(GtkWidget * widget)
-{
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    /* block toggle signals while we mess with the check boxes */
+    g_signal_handler_block(cell, sel->handler_id);
+
+    /* get toggled iter */
+    model = gtk_tree_view_get_model(GTK_TREE_VIEW(sel->list));
+    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_model_get(model, &iter, 1, &checked, 2, &row, -1);
+
+    /* reverse status */
+    checked = !checked;
+
+    gtk_list_store_set(GTK_LIST_STORE(model), &iter, 1, checked, -1);
+
+    if (checked)
+    {
+        /* turn bit ON */
+        sel->flags |= (1 << row);
+    }
+    else
+    {
+        /* turn bit OFF */
+        sel->flags &= ~(1 << row);
+    }
+
+    /* clean up */
+    gtk_tree_path_free(path);
+
+    /* unblock toggle signals */
+    g_signal_handler_unblock(cell, sel->handler_id);
 }
 
 GtkWidget      *gtk_sat_list_col_sel_new(guint32 flags)
@@ -159,49 +217,11 @@ GtkWidget      *gtk_sat_list_col_sel_new(guint32 flags)
     return widget;
 }
 
-static GtkTreeModel *create_and_fill_model(guint32 flags)
-{
-    GtkListStore   *liststore;  /* the list store data structure */
-    GtkTreeIter     item;       /* new item added to the list store */
-    guint           i;
-    gboolean        checked;
-
-    /* create a new list store */
-    liststore = gtk_list_store_new(3, G_TYPE_STRING,    // column label
-                                   G_TYPE_BOOLEAN,      // visible checkbox
-                                   G_TYPE_INT   // row number
-        );
-
-
-    for (i = 0; i < SAT_LIST_COL_NUMBER; i++)
-    {
-
-        checked = (flags & (1 << i)) ? TRUE : FALSE;
-
-        gtk_list_store_append(liststore, &item);
-        gtk_list_store_set(liststore, &item,
-                           0, SAT_LIST_COL_HINT[i], 1, checked, 2, i, -1);
-    }
-
-    return GTK_TREE_MODEL(liststore);
-}
-
 guint32 gtk_sat_list_col_sel_get_flags(GtkSatListColSel * sel)
 {
     g_return_val_if_fail((sel != NULL) || !IS_GTK_SAT_LIST_COL_SEL(sel), 0);
 
     return sel->flags;
-}
-
-void gtk_sat_list_col_sel_set_flags(GtkSatListColSel * sel, guint32 flags)
-{
-    GtkTreeModel   *liststore;  /* the list store data structure */
-
-    g_return_if_fail((sel != NULL) || !IS_GTK_SAT_LIST_COL_SEL(sel));
-
-    sel->flags = flags;
-    liststore = gtk_tree_view_get_model(GTK_TREE_VIEW(sel->list));
-    gtk_tree_model_foreach(liststore, set_col, sel);
 }
 
 static gboolean set_col(GtkTreeModel * model, GtkTreePath * path,
@@ -224,52 +244,13 @@ static gboolean set_col(GtkTreeModel * model, GtkTreePath * path,
     return FALSE;
 }
 
-/**
- * Manage toggle signals.
- *
- * @param cell cell.
- * @param path_str Path string.
- * @param data Pointer to the GtkSatListColSel widget.
- *
- * This function is called when the user toggles the visibility for a column.
- */
-static void column_toggled(GtkCellRendererToggle * cell,
-                           gchar * path_str, gpointer data)
+void gtk_sat_list_col_sel_set_flags(GtkSatListColSel * sel, guint32 flags)
 {
-    GtkSatListColSel *sel = GTK_SAT_LIST_COL_SEL(data);
-    GtkTreeModel   *model;
-    GtkTreeIter     iter;
-    GtkTreePath    *path = gtk_tree_path_new_from_string(path_str);
-    gboolean        checked;
-    gint            row;
+    GtkTreeModel   *liststore;  /* the list store data structure */
 
-    /* block toggle signals while we mess with the check boxes */
-    g_signal_handler_block(cell, sel->handler_id);
+    g_return_if_fail((sel != NULL) || !IS_GTK_SAT_LIST_COL_SEL(sel));
 
-    /* get toggled iter */
-    model = gtk_tree_view_get_model(GTK_TREE_VIEW(sel->list));
-    gtk_tree_model_get_iter(model, &iter, path);
-    gtk_tree_model_get(model, &iter, 1, &checked, 2, &row, -1);
-
-    /* reverse status */
-    checked = !checked;
-
-    gtk_list_store_set(GTK_LIST_STORE(model), &iter, 1, checked, -1);
-
-    if (checked)
-    {
-        /* turn bit ON */
-        sel->flags |= (1 << row);
-    }
-    else
-    {
-        /* turn bit OFF */
-        sel->flags &= ~(1 << row);
-    }
-
-    /* clean up */
-    gtk_tree_path_free(path);
-
-    /* unblock toggle signals */
-    g_signal_handler_unblock(cell, sel->handler_id);
+    sel->flags = flags;
+    liststore = gtk_tree_view_get_model(GTK_TREE_VIEW(sel->list));
+    gtk_tree_model_foreach(liststore, set_col, sel);
 }
