@@ -127,6 +127,14 @@ static gint rotctld_socket_open(const gchar * host, gint port)
     memset(&ServAddr, 0, sizeof(ServAddr));
     ServAddr.sin_family = AF_INET;      /* Internet address family */
     h = gethostbyname(host);
+    if (h == NULL) {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("Name resolution of rotctld server %s failed."),
+                    host);
+
+        return -1;
+    }
+
     memcpy((char *)&ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
     ServAddr.sin_port = htons(port);    /* Server port */
 
