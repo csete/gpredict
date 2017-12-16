@@ -24,7 +24,6 @@
 
 /* defined in gtk-sat-list.c; we use them for labels */
 extern const gchar *SAT_LIST_COL_HINT[];
-
 static GtkVBoxClass *parent_class = NULL;
 
 
@@ -66,7 +65,7 @@ GType gtk_sat_list_col_sel_get_type()
             NULL
         };
 
-        gtk_sat_list_col_sel_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_sat_list_col_sel_type = g_type_register_static(GTK_TYPE_BOX,
                                                            "GtkSatListColSel",
                                                            &gtk_sat_list_col_sel_info,
                                                            0);
@@ -197,9 +196,6 @@ GtkWidget      *gtk_sat_list_col_sel_new(guint32 flags)
 
     gtk_tree_view_append_column(GTK_TREE_VIEW(sel->list), column);
     gtk_tree_view_column_set_visible(column, FALSE);
-
-    /* this is discouraged but looks cool in this case */
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(sel->list), TRUE);
 
     /* scrolled window */
     GTK_SAT_LIST_COL_SEL(widget)->swin = gtk_scrolled_window_new(NULL, NULL);

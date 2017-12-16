@@ -25,7 +25,7 @@ typedef struct _gtk_sat_list_col_sel GtkSatListColSel;
 typedef struct _GtkSatListColSelClass GtkSatListColSelClass;
 
 struct _gtk_sat_list_col_sel {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     GtkWidget      *list;       /*!< the list containing the toggles */
     GtkWidget      *swin;
