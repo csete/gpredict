@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-10 20:35+0100\n"
+"POT-Creation-Date: 2017-12-16 11:21+0100\n"
 "PO-Revision-Date: 2017-12-04 01:57+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:85 ../src/main.c:247
+#: ../src/about.c:87 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
-#: ../src/about.c:88
+#: ../src/about.c:90
 msgid "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
-#: ../src/about.c:101
+#: ../src/about.c:103
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -225,7 +225,7 @@ msgid "Satellite"
 msgstr "Satelit"
 
 #: ../src/gtk-event-list.c:51 ../src/gtk-sat-list.c:51
-#: ../src/gtk-sat-selector.c:272 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:530
+#: ../src/gtk-sat-selector.c:272 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:522
 msgid "Catnum"
 msgstr "Katčíslo"
 
@@ -257,13 +257,13 @@ msgstr "Název satelitu"
 msgid "Catalogue Number"
 msgstr "Katalogové číslo"
 
-#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:593
+#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:594
 #: ../src/gtk-sat-list.c:84 ../src/gtk-single-sat.c:53
 #: ../src/sat-pass-dialogs.c:122
 msgid "Azimuth"
 msgstr "Azimut"
 
-#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:630
+#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:631
 #: ../src/gtk-sat-list.c:85 ../src/gtk-single-sat.c:54
 #: ../src/sat-pass-dialogs.c:123
 msgid "Elevation"
@@ -492,12 +492,12 @@ msgstr "LO:"
 msgid "<b> Uplink </b>"
 msgstr "<b> Vzestupná trasa </b>"
 
-#: ../src/gtk-rig-ctrl.c:579 ../src/gtk-rot-ctrl.c:684
+#: ../src/gtk-rig-ctrl.c:579 ../src/gtk-rot-ctrl.c:685
 msgid "Select target object"
 msgstr "Vybrrte cílový objekt"
 
 #. tracking button
-#: ../src/gtk-rig-ctrl.c:585 ../src/gtk-rot-ctrl.c:690
+#: ../src/gtk-rig-ctrl.c:585 ../src/gtk-rot-ctrl.c:691
 msgid "Track"
 msgstr "Sledovat"
 
@@ -552,12 +552,12 @@ msgstr ""
 "vzestupné trasy."
 
 #. Azimuth
-#: ../src/gtk-rig-ctrl.c:635 ../src/gtk-rot-ctrl.c:698
+#: ../src/gtk-rig-ctrl.c:635 ../src/gtk-rot-ctrl.c:700
 msgid "Az:"
 msgstr "Az:"
 
 #. Elevation
-#: ../src/gtk-rig-ctrl.c:643 ../src/gtk-rot-ctrl.c:707
+#: ../src/gtk-rig-ctrl.c:643 ../src/gtk-rot-ctrl.c:709
 msgid "El:"
 msgstr "Výš:"
 
@@ -580,7 +580,7 @@ msgid ""
 "The rate of change for the distance between the satellite and the observer."
 msgstr "Rychlost změny vzdálenosti mezi satelitem a pozorovatelem."
 
-#: ../src/gtk-rig-ctrl.c:680 ../src/gtk-rot-ctrl.c:723
+#: ../src/gtk-rig-ctrl.c:680 ../src/gtk-rot-ctrl.c:725
 msgid "Target"
 msgstr "Cíl"
 
@@ -598,8 +598,8 @@ msgstr ""
 "sestupnou trasu, pokud nezvolíte druhé zařízení pro vzestupnou."
 
 #: ../src/gtk-rig-ctrl.c:753 ../src/gtk-rig-ctrl.c:803
-#: ../src/gtk-rig-ctrl.c:2383 ../src/gtk-rot-ctrl.c:792
-#: ../src/gtk-rot-ctrl.c:1578 ../src/sat-pref-rig.c:321
+#: ../src/gtk-rig-ctrl.c:2383 ../src/gtk-rot-ctrl.c:794
+#: ../src/gtk-rot-ctrl.c:1609 ../src/sat-pref-rig.c:321
 #: ../src/sat-pref-rot.c:270
 #, c-format
 msgid "%s:%d: Failed to open hwconf dir (%s)"
@@ -625,7 +625,7 @@ msgid "None"
 msgstr "Žádné"
 
 #. Engage button
-#: ../src/gtk-rig-ctrl.c:817 ../src/gtk-rot-ctrl.c:806
+#: ../src/gtk-rig-ctrl.c:817 ../src/gtk-rot-ctrl.c:808
 msgid "Engage"
 msgstr "Zapojit"
 
@@ -634,7 +634,7 @@ msgid "Engage the selected radio device"
 msgstr "Zapojit zvolené radiové zařízení"
 
 #. Timeout
-#: ../src/gtk-rig-ctrl.c:828 ../src/gtk-rot-ctrl.c:814
+#: ../src/gtk-rig-ctrl.c:828 ../src/gtk-rot-ctrl.c:826
 msgid "Cycle:"
 msgstr "Cyklus:"
 
@@ -642,11 +642,11 @@ msgstr "Cyklus:"
 msgid "This parameter controls the delay between commands sent to the rig."
 msgstr "Tento parametr kontroluje zpoždění mezi příkazy odesílané soupravě."
 
-#: ../src/gtk-rig-ctrl.c:843 ../src/gtk-rot-ctrl.c:829
+#: ../src/gtk-rig-ctrl.c:843 ../src/gtk-rot-ctrl.c:841
 msgid "msec"
 msgstr "msek"
 
-#: ../src/gtk-rig-ctrl.c:847 ../src/gtk-rot-ctrl.c:859
+#: ../src/gtk-rig-ctrl.c:847 ../src/gtk-rot-ctrl.c:871
 msgid "Settings"
 msgstr "Nastavení"
 
@@ -662,7 +662,7 @@ msgstr ""
 "Zbývající čas mezi další události AOS nebo LOS, v závislosti na tom, která "
 "přijde první."
 
-#: ../src/gtk-rig-ctrl.c:912 ../src/gtk-rot-ctrl.c:924
+#: ../src/gtk-rig-ctrl.c:912 ../src/gtk-rot-ctrl.c:936
 #, c-format
 msgid "%s:%s: Invalid satellite selection: %d"
 msgstr "%s:%s: Neplatný výběr satelitu: %d"
@@ -711,7 +711,7 @@ msgid "%s:%s: Failed to allocate memory for radio config"
 msgstr "%s:%s: Nelze přidělit paměť pro nastavení rádia"
 
 #: ../src/gtk-rig-ctrl.c:1205 ../src/gtk-rig-ctrl.c:1299
-#: ../src/gtk-rot-ctrl.c:1103
+#: ../src/gtk-rot-ctrl.c:1134
 #, c-format
 msgid "%s: Controller does not have a valid configuration"
 msgstr "%s: Ovladač nemá platné nastavení"
@@ -726,7 +726,7 @@ msgstr "%s zavoláno ale TX VFO je %d"
 msgid "%s missed the deadline"
 msgstr "%s nestihl termín"
 
-#: ../src/gtk-rig-ctrl.c:2234 ../src/gtk-rot-ctrl.c:1421
+#: ../src/gtk-rig-ctrl.c:2234 ../src/gtk-rot-ctrl.c:1452
 #, c-format
 msgid "%s:%d: NULL storage."
 msgstr "%s:%d: Nulové úložiště."
@@ -766,7 +766,7 @@ msgstr "%s:%d: Chyba čtení nastavení rádia %s"
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr "%s:%s: odesílání %d bajtů do rigctld jako \"%s\""
 
-#: ../src/gtk-rig-ctrl.c:2508 ../src/gtk-rot-ctrl.c:197
+#: ../src/gtk-rig-ctrl.c:2508 ../src/gtk-rot-ctrl.c:198
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr "%s: Chyba velikosti %d / %d"
@@ -830,7 +830,7 @@ msgstr "%s: Nelze získat zámek ovladače; událost PTT není obsloužena"
 msgid "%s: Failed to create socket"
 msgstr "%s: Nelze vytvořit soket"
 
-#: ../src/gtk-rig-ctrl.c:2684 ../src/gtk-rot-ctrl.c:124
+#: ../src/gtk-rig-ctrl.c:2684 ../src/gtk-rot-ctrl.c:125
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr "%s: Soket sítě úspěšně vytvořen"
@@ -840,12 +840,12 @@ msgstr "%s: Soket sítě úspěšně vytvořen"
 msgid "%s: Failed to connect to %s:%d"
 msgstr "%s: Nelze se připojit k %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:2706 ../src/gtk-rot-ctrl.c:143
+#: ../src/gtk-rig-ctrl.c:2706 ../src/gtk-rot-ctrl.c:144
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr "%s: Otevřeno spojení s %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:2721 ../src/gtk-rot-ctrl.c:159
+#: ../src/gtk-rig-ctrl.c:2721 ../src/gtk-rot-ctrl.c:160
 #, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr "%s:%s: Odeslány 2 bajty ale odesláno %d."
@@ -870,65 +870,74 @@ msgstr "%s: Neplatný typ rádia %d. Nastavování na typ RIG_TYPE_RX"
 msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr "%s: Dosaženo maximálního počtu chyb (%d). Odpojování zařízení!"
 
-#: ../src/gtk-rot-ctrl.c:119
+#: ../src/gtk-rot-ctrl.c:120
 #, fuzzy, c-format
 msgid "Failed to create rotctl socket: %s"
 msgstr "%s: Nelze vytvořit soket"
 
-#: ../src/gtk-rot-ctrl.c:137
+#: ../src/gtk-rot-ctrl.c:138
 #, c-format
 msgid "Connection to rotctld server at %s:%d failed: %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:202 ../src/gtk-rot-ctrl.c:212
+#: ../src/gtk-rot-ctrl.c:203 ../src/gtk-rot-ctrl.c:213
 #, c-format
 msgid "%s: rotctld Socket Down"
 msgstr "%s: rotctld  soket je nefunkční"
 
-#: ../src/gtk-rot-ctrl.c:220
+#: ../src/gtk-rot-ctrl.c:221
 #, c-format
 msgid "%s:%s: Got 0 bytes from rotctld"
 msgstr "%s:%s: Obdrženo 0 bajtů od rotctld"
 
-#: ../src/gtk-rot-ctrl.c:605
+#: ../src/gtk-rot-ctrl.c:606
 msgid "Read:"
 msgstr "Čtení:"
 
-#: ../src/gtk-rot-ctrl.c:642
+#: ../src/gtk-rot-ctrl.c:643
 msgid "Read: "
 msgstr "Čtení: "
 
-#: ../src/gtk-rot-ctrl.c:693
+#: ../src/gtk-rot-ctrl.c:694
 msgid "Track the satellite when it is within range"
 msgstr "Sledovat satelit, když je v dosahu"
 
 #. count down
-#: ../src/gtk-rot-ctrl.c:716
+#: ../src/gtk-rot-ctrl.c:718
 msgid "ΔT:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:746
+#: ../src/gtk-rot-ctrl.c:748
 msgid "Device:"
 msgstr "Zařízení:"
 
-#: ../src/gtk-rot-ctrl.c:752
+#: ../src/gtk-rot-ctrl.c:754
 msgid "Select antenna rotator device"
 msgstr "Vyberte zařízení k otáčení antény"
 
-#: ../src/gtk-rot-ctrl.c:808
+#: ../src/gtk-rot-ctrl.c:810
 msgid "Engage the selected rotor device"
 msgstr "Zapojit zvolené zařízení rotoru"
 
-#: ../src/gtk-rot-ctrl.c:821
+#. Monitor checkbox
+#: ../src/gtk-rot-ctrl.c:816
+msgid "Monitor"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:819
+msgid "Monitor rotator but do not send any position commands"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:833
 msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr "Tento parametr kontroluje zpoždění příkazů odesílaných k rotoru."
 
 #. Tolerance
-#: ../src/gtk-rot-ctrl.c:834
+#: ../src/gtk-rot-ctrl.c:846
 msgid "Tolerance:"
 msgstr "Tolerance:"
 
-#: ../src/gtk-rot-ctrl.c:842
+#: ../src/gtk-rot-ctrl.c:854
 msgid ""
 "This parameter controls the tolerance between the target and rotator values "
 "for the rotator.\n"
@@ -939,52 +948,52 @@ msgstr ""
 "Pokud je rozdíl mezi hodnotami cíle a rotoru menší než tolerance, nejsou "
 "posílány žádné nové příkazy"
 
-#: ../src/gtk-rot-ctrl.c:852
+#: ../src/gtk-rot-ctrl.c:864
 msgid "deg"
 msgstr "stup"
 
-#: ../src/gtk-rot-ctrl.c:1011
+#: ../src/gtk-rot-ctrl.c:1028
 #, c-format
 msgid "%s:%d: Failed to allocate memory for rotator config"
 msgstr "%s:%d: Nelze přidělit paměť pro nastavení rotoru"
 
-#: ../src/gtk-rot-ctrl.c:1022
+#: ../src/gtk-rot-ctrl.c:1039
 #, c-format
 msgid "Loaded new rotator configuration %s"
 msgstr "Načteno nové nastavení rotoru %s"
 
-#: ../src/gtk-rot-ctrl.c:1037
+#: ../src/gtk-rot-ctrl.c:1054
 #, c-format
 msgid "%s:%d: Failed to load rotator configuration %s"
 msgstr "%s:%d Nelze načíst nastavení rotoru %s"
 
-#: ../src/gtk-rot-ctrl.c:1088
+#: ../src/gtk-rot-ctrl.c:1119
 #, c-format
 msgid "%s:%d: rotctld returned error %d with stop-cmd (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1209 ../src/gtk-rot-ctrl.c:1210
-#: ../src/gtk-sat-module-popup.c:949 ../src/gtk-sat-module-popup.c:1029
+#: ../src/gtk-rot-ctrl.c:1240 ../src/gtk-rot-ctrl.c:1241
+#: ../src/gtk-sat-module-popup.c:900 ../src/gtk-sat-module-popup.c:980
 #: ../src/sat-log-browser.c:61 ../src/sat-log.c:61 ../src/sat-pref-rig.c:777
 msgid "ERROR"
 msgstr "CHYBA"
 
-#: ../src/gtk-rot-ctrl.c:1353
+#: ../src/gtk-rot-ctrl.c:1384
 #, c-format
 msgid "%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr "%s: Dosaženo maximálního počtu chyb (%d). Odpojování zařízení!"
 
-#: ../src/gtk-rot-ctrl.c:1436
+#: ../src/gtk-rot-ctrl.c:1467
 #, c-format
 msgid "%s:%d: rotctld returned error (%s)"
 msgstr "%s:%d: rotctld navrátil chybu (%s)"
 
-#: ../src/gtk-rot-ctrl.c:1451
+#: ../src/gtk-rot-ctrl.c:1482
 #, c-format
 msgid "%s:%d: rotctld returned bad response (%s)"
 msgstr "%s:%d: rotctld vrátil špatnou odpověď (%s)"
 
-#: ../src/gtk-rot-ctrl.c:1496
+#: ../src/gtk-rot-ctrl.c:1527
 #, c-format
 msgid "%s:%d: rotctld returned error %d with az %f el %f(%s)"
 msgstr "%s:%d: rotctld vrátil chybu %d az %f výš %f(%s)"
@@ -1049,13 +1058,13 @@ msgstr "Další AOS"
 msgid "Next LOS"
 msgstr "Další LOS"
 
-#: ../src/gtk-sat-list.c:62 ../src/loc-tree.c:134 ../src/sat-pass-dialogs.c:105
-#: ../src/sat-pref-qth.c:178
+#: ../src/gtk-sat-list.c:62 ../src/loc-tree.c:127 ../src/sat-pass-dialogs.c:105
+#: ../src/sat-pref-qth.c:173
 msgid "Lat"
 msgstr "ZŠíř"
 
-#: ../src/gtk-sat-list.c:63 ../src/loc-tree.c:152 ../src/sat-pass-dialogs.c:106
-#: ../src/sat-pref-qth.c:191
+#: ../src/gtk-sat-list.c:63 ../src/loc-tree.c:145 ../src/sat-pass-dialogs.c:106
+#: ../src/sat-pref-qth.c:186
 msgid "Lon"
 msgstr "ZVýš"
 
@@ -1068,7 +1077,7 @@ msgstr "SSP"
 msgid "Footp"
 msgstr "Stop"
 
-#: ../src/gtk-sat-list.c:66 ../src/loc-tree.c:170 ../src/sat-pass-dialogs.c:109
+#: ../src/gtk-sat-list.c:66 ../src/loc-tree.c:163 ../src/sat-pass-dialogs.c:109
 msgid "Alt"
 msgstr "Výš"
 
@@ -1201,7 +1210,7 @@ msgid "%s: Invalid GtkSatList!"
 msgstr "%s: Neplatný GtkSatList!"
 
 #: ../src/gtk-sat-list.c:921 ../src/sat-pass-dialogs.c:682
-#: ../src/sat-pref-qth.c:807
+#: ../src/sat-pref-qth.c:799
 #, c-format
 msgid "%s:%d: Invalid column: %d"
 msgstr "%s:%d Neplatný sloupec: %d"
@@ -1210,18 +1219,6 @@ msgstr "%s:%d Neplatný sloupec: %d"
 #, c-format
 msgid "%s: GtkSatList has not child with index %d"
 msgstr "%s: GtkSatList nemá podřazenou s indexem %d"
-
-#: ../src/gtk-sat-list-col-sel.c:121
-msgid "Column Name"
-msgstr "Název sloupce"
-
-#: ../src/gtk-sat-list-col-sel.c:130 ../src/sat-vis.c:41
-msgid "Visible"
-msgstr "Viditelný"
-
-#: ../src/gtk-sat-list-col-sel.c:137
-msgid "Row"
-msgstr "Řádek"
 
 #: ../src/gtk-sat-map.c:631
 #, c-format
@@ -1343,112 +1340,122 @@ msgstr "Pozemní dráha"
 msgid "Set Target"
 msgstr "Nastavit cíl"
 
-#: ../src/gtk-sat-module.c:260
+#: ../src/gtk-sat-module.c:127
 #, c-format
-msgid "%s: Module %s is not valid."
-msgstr "%s: Modul %s není platný"
+msgid "Autotrack: Changing target satellite %d -> %d"
+msgstr ""
 
-#: ../src/gtk-sat-module.c:276
-#, c-format
-msgid "%s: Module %s has problems."
-msgstr "%s: Modul %s má problémy"
-
-#: ../src/gtk-sat-module.c:309
-msgid "Module options / shortcuts"
-msgstr "Volby / Zkratky modulu"
-
-#: ../src/gtk-sat-module.c:314
-msgid "Close this module."
-msgstr "Zavřít tento modul"
-
-#: ../src/gtk-sat-module.c:373
-#, c-format
-msgid "%s: Layout has %d columns and %d rows."
-msgstr "%s: Rozvržení má %d sloupců a %d řádků."
-
-#: ../src/gtk-sat-module.c:439
+#: ../src/gtk-sat-module.c:316
 #, c-format
 msgid "%s:%d: Invalid child type (%d). Using GtkSatList."
 msgstr "%s:%d: Neplatný typ podřazené (%d). Používání GtkSatList."
 
-#: ../src/gtk-sat-module.c:476
+#: ../src/gtk-sat-module.c:368
+#, c-format
+msgid "%s: Layout has %d columns and %d rows."
+msgstr "%s: Rozvržení má %d sloupců a %d řádků."
+
+#: ../src/gtk-sat-module.c:419 ../src/mod-cfg.c:573
+#, c-format
+msgid "%s: Failed to get list of satellites (%s)"
+msgstr "%s: Nelze získat seznam satelitů (%s)"
+
+#: ../src/gtk-sat-module.c:442
+#, c-format
+msgid "%s: Error reading data for #%d"
+msgstr "%s: Chyba při čtení dat pro #%d"
+
+#: ../src/gtk-sat-module.c:461
+#, c-format
+msgid "%s: Read data for #%d"
+msgstr "%s: Čtení dat pro #%d"
+
+#: ../src/gtk-sat-module.c:466
+#, c-format
+msgid "%s: Sat #%d already in list"
+msgstr "%s: Sat #%d již je v seznamu"
+
+#: ../src/gtk-sat-module.c:477
+#, c-format
+msgid "%s: Read %d out of %d satellites"
+msgstr "%s: Čtení %d z %d satelitů"
+
+#: ../src/gtk-sat-module.c:511
+#, c-format
+msgid "%s: Updating GtkSkyGlance for %s"
+msgstr "%s: Aktualizace GtkSkyGlance pro %s"
+
+#: ../src/gtk-sat-module.c:597 ../src/gtk-sat-module.c:1415
+#, c-format
+msgid "%s:%d: Unknown child type"
+msgstr "%s:%d: Neznámý typ podřazené"
+
+#: ../src/gtk-sat-module.c:727
+#, c-format
+msgid "%s: Previous cycle missed it's deadline."
+msgstr "%s: Předchozí cyklus propásl termín."
+
+#: ../src/gtk-sat-module.c:859
 #, c-format
 msgid "%s: Could not load config data from %s (%s)."
 msgstr "%s: Nelze načíst data nastavení z %s (%s)."
 
-#: ../src/gtk-sat-module.c:486
+#: ../src/gtk-sat-module.c:869
 #, c-format
 msgid "%s: Reading configuration from %s"
 msgstr "%s: Čtení nastavení z %s."
 
-#: ../src/gtk-sat-module.c:526
+#: ../src/gtk-sat-module.c:909
 #, c-format
 msgid "%s: Can not load default QTH file %s; using built-in defaults"
 msgstr ""
 "%s: Nelze načíst výchozí soubor QTH %s; jsou použity zabudované výchozí"
 
-#: ../src/gtk-sat-module.c:556
+#: ../src/gtk-sat-module.c:939
 #, c-format
 msgid "%s: Module layout is invalid: %s. Using default."
 msgstr "%s: Rozvržení modulu je neplatné: %s. Použito výchozí."
 
-#: ../src/gtk-sat-module.c:568
+#: ../src/gtk-sat-module.c:951
 #, c-format
 msgid "%s: GRID(%d): %s"
 msgstr "%s: SÍŤ(%d): %s"
 
-#: ../src/gtk-sat-module.c:589
+#: ../src/gtk-sat-module.c:972
 #, c-format
 msgid "%s: Unable to allocate memory for grid."
 msgstr "%s: Nelze přidělit paměť pro síť."
 
-#: ../src/gtk-sat-module.c:618 ../src/mod-cfg.c:581
+#: ../src/gtk-sat-module.c:998
 #, c-format
-msgid "%s: Failed to get list of satellites (%s)"
-msgstr "%s: Nelze získat seznam satelitů (%s)"
+msgid "%s: Module %s is not valid."
+msgstr "%s: Modul %s není platný"
 
-#: ../src/gtk-sat-module.c:641
+#: ../src/gtk-sat-module.c:1014
 #, c-format
-msgid "%s: Error reading data for #%d"
-msgstr "%s: Chyba při čtení dat pro #%d"
+msgid "%s: Module %s has problems."
+msgstr "%s: Modul %s má problémy"
 
-#: ../src/gtk-sat-module.c:660
-#, c-format
-msgid "%s: Read data for #%d"
-msgstr "%s: Čtení dat pro #%d"
+#: ../src/gtk-sat-module.c:1047
+msgid "Module options / shortcuts"
+msgstr "Volby / Zkratky modulu"
 
-#: ../src/gtk-sat-module.c:665
-#, c-format
-msgid "%s: Sat #%d already in list"
-msgstr "%s: Sat #%d již je v seznamu"
+#: ../src/gtk-sat-module.c:1052
+msgid "Close this module."
+msgstr "Zavřít tento modul"
 
-#: ../src/gtk-sat-module.c:676
-#, c-format
-msgid "%s: Read %d out of %d satellites"
-msgstr "%s: Čtení %d z %d satelitů"
-
-#: ../src/gtk-sat-module.c:731
-#, c-format
-msgid "%s: Previous cycle missed it's deadline."
-msgstr "%s: Předchozí cyklus propásl termín."
-
-#: ../src/gtk-sat-module.c:870 ../src/gtk-sat-module.c:1370
-#, c-format
-msgid "%s:%d: Unknown child type"
-msgstr "%s:%d: Neznámý typ podřazené"
-
-#: ../src/gtk-sat-module.c:999
+#: ../src/gtk-sat-module.c:1122
 #, c-format
 msgid "%s: Module %s received CLOSE signal."
 msgstr "%s: Modul %s obdržel signál CLOSE."
 
-#: ../src/gtk-sat-module.c:1008
+#: ../src/gtk-sat-module.c:1131
 #, c-format
 msgid "%s: Module %s is in DOCKED state."
 msgstr "%s: Modul %s je ve stavu DOCKED."
 
-#: ../src/gtk-sat-module.c:1014 ../src/gtk-sat-module.c:1030
-#: ../src/gtk-sat-module.c:1059
+#: ../src/gtk-sat-module.c:1137 ../src/gtk-sat-module.c:1153
+#: ../src/gtk-sat-module.c:1182
 #, c-format
 msgid ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
@@ -1457,32 +1464,32 @@ msgstr ""
 "%s: Modul %s nebyl nalezen v mod-mgr (%d)\n"
 "Vnitřní stav je poškozen?"
 
-#: ../src/gtk-sat-module.c:1023
+#: ../src/gtk-sat-module.c:1146
 #, c-format
 msgid "%s: Module %s is in WINDOW state."
 msgstr "%s: Modul %s je ve stavu WINDOW."
 
-#: ../src/gtk-sat-module.c:1051
+#: ../src/gtk-sat-module.c:1174
 #, c-format
 msgid "%s: Module %s is in FULLSCREEN state."
 msgstr "%s: Modul %s je ve stavu FULLSCREEN."
 
-#: ../src/gtk-sat-module.c:1081 ../src/gtk-sat-module.c:1237
+#: ../src/gtk-sat-module.c:1204 ../src/gtk-sat-module.c:1360
 #, c-format
 msgid "%s: Module %s has unknown state: %d"
 msgstr "%s: Modul %s má neznámý stav: %d"
 
-#: ../src/gtk-sat-module.c:1089
+#: ../src/gtk-sat-module.c:1212
 #, c-format
 msgid "%s: Module %s closed."
 msgstr "%s: Modul %s uzavřen."
 
-#: ../src/gtk-sat-module.c:1128
+#: ../src/gtk-sat-module.c:1251
 #, c-format
 msgid "%s: Module %s received CONFIG signal."
 msgstr "%s: Modul %s obdržel signál CONFIG."
 
-#: ../src/gtk-sat-module.c:1137
+#: ../src/gtk-sat-module.c:1260
 #, c-format
 msgid ""
 "%s: Could not stop timeout callback\n"
@@ -1491,104 +1498,95 @@ msgstr ""
 "%s: Nelze zastavit časový limit zpětného volání\n"
 "%s: Zdrojové ID %d se zdá být neplatné."
 
-#: ../src/gtk-sat-module.c:1154
+#: ../src/gtk-sat-module.c:1277
 #, c-format
 msgid "%s: Module configuration failed for some reason."
 msgstr "%s: Nastavení modulu z nějakého důvodu selhalo."
 
-#: ../src/gtk-sat-module.c:1319
+#: ../src/gtk-sat-module.c:1445
 #, c-format
 msgid "%s: Reloading satellites for module %s"
 msgstr "%s: Znovu načítání satelitů pro modul %s"
 
-#: ../src/gtk-sat-module.c:1409
+#: ../src/gtk-sat-module.c:1505
 #, c-format
 msgid "%s: Unknown child type"
 msgstr "%s: Neznámý typ podřazené"
 
-#: ../src/gtk-sat-module.c:1490
-#, c-format
-msgid "%s: Updating GtkSkyGlance for %s"
-msgstr "%s: Aktualizace GtkSkyGlance pro %s"
-
-#: ../src/gtk-sat-module.c:1557
-#, c-format
-msgid "Autotrack: Changing target satellite %d -> %d"
-msgstr ""
-
-#: ../src/gtk-sat-module-popup.c:102
+#: ../src/gtk-sat-module-popup.c:90
 #, c-format
 msgid "%s:%d: %s called with NULL parameter!"
 msgstr "%s:%d: %s zavoláno s nulovým parametrem!"
 
-#: ../src/gtk-sat-module-popup.c:111
+#: ../src/gtk-sat-module-popup.c:99
 msgid "Detach module"
 msgstr "Odpojit modul"
 
-#: ../src/gtk-sat-module-popup.c:122
+#: ../src/gtk-sat-module-popup.c:106
 msgid "Attach module"
 msgstr "Připojit modul"
 
-#: ../src/gtk-sat-module-popup.c:134
+#: ../src/gtk-sat-module-popup.c:114
 msgid "Exit full screen"
 msgstr "Ukončit režim celé obrazovky"
 
-#: ../src/gtk-sat-module-popup.c:144
+#: ../src/gtk-sat-module-popup.c:121
 msgid "Full screen"
 msgstr "Celá obrazovka"
 
 #. autotrack
-#: ../src/gtk-sat-module-popup.c:158
+#: ../src/gtk-sat-module-popup.c:132
 msgid "Autotrack"
 msgstr ""
 
 #. select satellite submenu
-#: ../src/gtk-sat-module-popup.c:165
+#: ../src/gtk-sat-module-popup.c:139
 msgid "Select satellite"
 msgstr "Vybrat satelit"
 
 #. sky at a glance
-#: ../src/gtk-sat-module-popup.c:191
+#: ../src/gtk-sat-module-popup.c:165
 msgid "Sky at a glance"
 msgstr "Nebe v kostce"
 
 #. time manager
-#: ../src/gtk-sat-module-popup.c:201 ../src/gtk-sat-module-tmg.c:274
+#: ../src/gtk-sat-module-popup.c:171 ../src/gtk-sat-module-tmg.c:274
 msgid "Time Controller"
 msgstr "Ovladač času"
 
 #. Radio Control
-#: ../src/gtk-sat-module-popup.c:214
+#: ../src/gtk-sat-module-popup.c:180
 msgid "Radio Control"
 msgstr "Ovladač rádia"
 
 #. Antenna Control
-#: ../src/gtk-sat-module-popup.c:223
+#: ../src/gtk-sat-module-popup.c:185
 msgid "Antenna Control"
 msgstr "Ovladač antény"
 
 #. configure
-#: ../src/gtk-sat-module-popup.c:236
+#: ../src/gtk-sat-module-popup.c:194
 msgid "Configure"
 msgstr "Nastavení"
 
 #. clone
-#: ../src/gtk-sat-module-popup.c:243
+#: ../src/gtk-sat-module-popup.c:199
 msgid "Clone..."
 msgstr "Kopírovat..."
 
 #. delete module
-#: ../src/gtk-sat-module-popup.c:254 ../src/sat-pref-qth.c:518
+#. delete button; don't forget to delete file....
+#: ../src/gtk-sat-module-popup.c:208 ../src/sat-pref-qth.c:510
 #: ../src/sat-pref-rig.c:359 ../src/sat-pref-rot.c:308
 msgid "Delete"
 msgstr "Smazat"
 
 #. close
-#: ../src/gtk-sat-module-popup.c:261
+#: ../src/gtk-sat-module-popup.c:213
 msgid "Close"
 msgstr "Zavřít"
 
-#: ../src/gtk-sat-module-popup.c:294
+#: ../src/gtk-sat-module-popup.c:244
 msgid ""
 "A module can not be configured while the radio or rotator controller is "
 "active.\n"
@@ -1599,16 +1597,16 @@ msgstr ""
 "\n"
 "Prosím zavřete ovladače rádia a rotoru a zkuste to znovu."
 
-#: ../src/gtk-sat-module-popup.c:335
+#: ../src/gtk-sat-module-popup.c:285
 msgid "Clone Module"
 msgstr "Kopírovat modul"
 
 #. label
-#: ../src/gtk-sat-module-popup.c:345
+#: ../src/gtk-sat-module-popup.c:296
 msgid "Name of new module:"
 msgstr "Název nového modulu:"
 
-#: ../src/gtk-sat-module-popup.c:354 ../src/mod-cfg.c:662
+#: ../src/gtk-sat-module-popup.c:305 ../src/mod-cfg.c:654
 msgid ""
 "Enter a short name for this module.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
@@ -1617,55 +1615,55 @@ msgstr ""
 "Povolené znaky: : 0..9, a..z, A..Z, - a _"
 
 #. check button
-#: ../src/gtk-sat-module-popup.c:373
+#: ../src/gtk-sat-module-popup.c:324
 msgid "Open module when created"
 msgstr "Otevřít modul, když je vytvořen"
 
-#: ../src/gtk-sat-module-popup.c:376
+#: ../src/gtk-sat-module-popup.c:327
 msgid "If checked, the new module will be opened after it has been created"
 msgstr "Pokud je zaškrtnuto, nový modul bude otevřen poté, co je vytvořen."
 
-#: ../src/gtk-sat-module-popup.c:391
+#: ../src/gtk-sat-module-popup.c:342
 #, c-format
 msgid "%s:%d: Cloning %s => %s"
 msgstr "%s:%d: Kopírování %s => %s"
 
-#: ../src/gtk-sat-module-popup.c:409
+#: ../src/gtk-sat-module-popup.c:360
 #, c-format
 msgid "%s:%d: Failed to clone %s."
 msgstr "%s:%d: Nelze kopírovat %s."
 
-#: ../src/gtk-sat-module-popup.c:415
+#: ../src/gtk-sat-module-popup.c:366
 #, c-format
 msgid "%s:%d: Successfully cloned %s."
 msgstr "%s:%d: Úspěšně zkopírováno %s."
 
-#: ../src/gtk-sat-module-popup.c:441 ../src/gtk-sat-module-popup.c:562
-#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:907
+#: ../src/gtk-sat-module-popup.c:392 ../src/gtk-sat-module-popup.c:513
+#: ../src/gtk-sat-module-popup.c:655 ../src/menubar.c:907
 msgid "GPREDICT: "
 msgstr "GPREDICT: "
 
-#: ../src/gtk-sat-module-popup.c:484
+#: ../src/gtk-sat-module-popup.c:435
 #, c-format
 msgid "%s:%d: Cloning cancelled by user."
 msgstr "%s:%d: Kopírování zrušeno uživatelem."
 
-#: ../src/gtk-sat-module-popup.c:490
+#: ../src/gtk-sat-module-popup.c:441
 #, c-format
 msgid "%s:%d: Cloning interrupted."
 msgstr "%s:%d: Kopírování přerušeno."
 
-#: ../src/gtk-sat-module-popup.c:671 ../src/gtk-sat-module-popup.c:814
+#: ../src/gtk-sat-module-popup.c:622 ../src/gtk-sat-module-popup.c:765
 #, c-format
 msgid "%s:%d: Unknown module state: %d"
 msgstr "%s:%d: Neznámý stav modulu: %d"
 
-#: ../src/gtk-sat-module-popup.c:869
+#: ../src/gtk-sat-module-popup.c:820
 #, c-format
 msgid "The sky at a glance (%s)"
 msgstr "Nebe v kostce (%s)"
 
-#: ../src/gtk-sat-module-popup.c:945
+#: ../src/gtk-sat-module-popup.c:896
 msgid ""
 "You have no radio configuration!\n"
 "Please configure a radio first."
@@ -1673,12 +1671,12 @@ msgstr ""
 "Nemáte žádné nastavení rádia!\n"
 "Prosím nejdříve ho nastavte."
 
-#: ../src/gtk-sat-module-popup.c:957
+#: ../src/gtk-sat-module-popup.c:908
 #, c-format
 msgid "Gpredict Radio Control: %s"
 msgstr "Gpredict ovládání rádia: %s"
 
-#: ../src/gtk-sat-module-popup.c:1025
+#: ../src/gtk-sat-module-popup.c:976
 msgid ""
 "You have no rotator configuration!\n"
 "Please configure an antenna rotator first."
@@ -1686,12 +1684,12 @@ msgstr ""
 "Nemáte žádné nastavení rotoru!\n"
 "Prosím nejdříve ho nastavte."
 
-#: ../src/gtk-sat-module-popup.c:1037
+#: ../src/gtk-sat-module-popup.c:988
 #, c-format
 msgid "Gpredict Rotator Control: %s"
 msgstr "Gpredict ovládání rotoru: %s"
 
-#: ../src/gtk-sat-module-popup.c:1147
+#: ../src/gtk-sat-module-popup.c:1098
 #, c-format
 msgid ""
 "This operation will permanently delete\n"
@@ -1704,12 +1702,12 @@ msgstr ""
 "z disku.\n"
 "Chcete pokračovat?"
 
-#: ../src/gtk-sat-module-popup.c:1157
+#: ../src/gtk-sat-module-popup.c:1108
 #, c-format
 msgid "%s:%d: Failed to delete %s."
 msgstr "%s:%d: Nelze smazat %s."
 
-#: ../src/gtk-sat-module-popup.c:1163
+#: ../src/gtk-sat-module-popup.c:1114
 #, c-format
 msgid "%s:%d: %s deleted permanently."
 msgstr "%s:%d: %s trvalo smazán."
@@ -1734,7 +1732,7 @@ msgstr "Přehrávat dozadu"
 #. reset time
 #. reset button
 #: ../src/gtk-sat-module-tmg.c:125 ../src/sat-pref-conditions.c:349
-#: ../src/sat-pref-debug.c:136 ../src/sat-pref-formats.c:106
+#: ../src/sat-pref-debug.c:136 ../src/sat-pref-formats.c:98
 #: ../src/sat-pref-layout.c:428 ../src/sat-pref-list-view.c:196
 #: ../src/sat-pref-map-view.c:782 ../src/sat-pref-multi-pass.c:169
 #: ../src/sat-pref-polar-view.c:594 ../src/sat-pref-refresh.c:379
@@ -1824,28 +1822,28 @@ msgstr "<b>Ruční ovládání</b>"
 msgid "%s: %d/%d/%d %d:%d:%d.%d"
 msgstr "%s: %d/%d/%d %d:%d:%d.%d"
 
-#: ../src/gtk-sat-popup-common.c:48
+#: ../src/gtk-sat-popup-common.c:38
 msgid "Show current pass"
 msgstr ""
 
 #. the next pass menu item
-#: ../src/gtk-sat-popup-common.c:59
+#: ../src/gtk-sat-popup-common.c:48
 msgid "Show next pass"
 msgstr ""
 
 #. finally the future pass menu item
-#: ../src/gtk-sat-popup-common.c:69
+#: ../src/gtk-sat-popup-common.c:57
 msgid "Future passes"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:157 ../src/gtk-sat-popup-common.c:217
+#: ../src/gtk-sat-popup-common.c:149 ../src/gtk-sat-popup-common.c:220
 #, c-format
 msgid ""
 "Satellite %s has no passes\n"
 "within the next %d days"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:173
+#: ../src/gtk-sat-popup-common.c:167
 #, c-format
 msgid ""
 "Satellite %s has no passes for\n"
@@ -1856,7 +1854,7 @@ msgid ""
 "never comes above the horizon"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:236
+#: ../src/gtk-sat-popup-common.c:241
 #, c-format
 msgid ""
 "Satellite %s has no passes for\n"
@@ -1930,7 +1928,7 @@ msgstr "%s:%s: Nelze přečíst %s"
 msgid "%s: Error getting %dth satellite"
 msgstr "%s: CHyba při získávání %d. satelitu"
 
-#: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:539
+#: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:531
 msgid "Epoch"
 msgstr "Epocha"
 
@@ -2189,60 +2187,60 @@ msgid "This module has no satellites!"
 msgstr "Tento modul nemá žádné satelity!"
 
 #. location
-#: ../src/loc-tree.c:122 ../src/qth-editor.c:234 ../src/sat-pref-qth.c:170
+#: ../src/loc-tree.c:115 ../src/qth-editor.c:234 ../src/sat-pref-qth.c:165
 #: ../src/sat-pref-qth-editor.c:219
 msgid "Location"
 msgstr "Umístění"
 
-#: ../src/loc-tree.c:188
+#: ../src/loc-tree.c:181
 msgid "WX"
 msgstr "WX"
 
-#: ../src/loc-tree.c:203
+#: ../src/loc-tree.c:196
 msgid "X"
 msgstr "X"
 
 #. dialog window
-#: ../src/loc-tree.c:235
+#: ../src/loc-tree.c:228
 msgid "Select Location"
 msgstr "Vybrat umístění"
 
-#: ../src/loc-tree.c:265
+#: ../src/loc-tree.c:257
 #, c-format
 msgid "%s: Selected %s"
 msgstr "%s: Vybráno %s"
 
-#: ../src/loc-tree.c:270
+#: ../src/loc-tree.c:262
 #, c-format
 msgid "%s: No location selected"
 msgstr "%s: Nevybráno žádné umístění"
 
-#: ../src/loc-tree.c:309
+#: ../src/loc-tree.c:301
 #, c-format
 msgid "%s: %s does not exist!"
 msgstr "%s: %s neexistuje!"
 
-#: ../src/loc-tree.c:398
+#: ../src/loc-tree.c:390
 #, c-format
 msgid "%s: Read %d cities."
 msgstr "%s: Přečteno %d měst."
 
-#: ../src/loc-tree.c:416
+#: ../src/loc-tree.c:408
 #, c-format
 msgid "%s: Failed to open locfile (%s)"
 msgstr "%s: Nelze otevřít locfile (%s)"
 
-#: ../src/loc-tree.c:479
+#: ../src/loc-tree.c:471
 #, c-format
 msgid "%s: Invalid column: %d"
 msgstr "%s: Neplatý sloupec: %d"
 
-#: ../src/loc-tree.c:602
+#: ../src/loc-tree.c:594
 #, c-format
 msgid "%s: Failed to get parent for %s."
 msgstr "%snelze získt nadřazené %s."
 
-#: ../src/loc-tree.c:614
+#: ../src/loc-tree.c:606
 #, c-format
 msgid "%s: No selection found!"
 msgstr "%s: Výběr nenalezen!"
@@ -2339,19 +2337,19 @@ msgstr "%s: Odstraněno %s"
 msgid "%s: Cleaning transponder data in %s"
 msgstr "%s: Čištění dat transpondéru v %s"
 
-#. create a new file chooser dialogue in "open file" mode
-#: ../src/map-selector.c:76
-msgid "Select Map"
-msgstr "Vyberte mapu"
-
-#: ../src/map-selector.c:92
-msgid "Image files"
-msgstr "Obrázkové soubory"
-
-#: ../src/map-selector.c:187 ../src/map-selector.c:245
+#: ../src/map-selector.c:108 ../src/map-selector.c:165
 #, c-format
 msgid "%s:%d: Could not stat %s"
 msgstr "%s:%d_ Nelze stat %s"
+
+#. create a new file chooser dialogue in "open file" mode
+#: ../src/map-selector.c:243
+msgid "Select Map"
+msgstr "Vyberte mapu"
+
+#: ../src/map-selector.c:259
+msgid "Image files"
+msgstr "Obrázkové soubory"
 
 #: ../src/menubar.c:74
 msgid "_File"
@@ -2633,12 +2631,12 @@ msgstr ""
 "Již existuje modul s názvem %s.\n"
 "Chcete tento modul přepsat?"
 
-#: ../src/mod-cfg.c:119 ../src/mod-cfg.c:825
+#: ../src/mod-cfg.c:119 ../src/mod-cfg.c:817
 #, c-format
 msgid "%s:%s: Could not fetch entry %d in satellite list"
 msgstr "%s:%s: Nelze získat záznam %d v seznamu satelitů"
 
-#: ../src/mod-cfg.c:335
+#: ../src/mod-cfg.c:327
 #, c-format
 msgid "%s: Module has no QTH; use default."
 msgstr "%s: Modul nemá žádné QTH; použít výchozí."
@@ -2646,95 +2644,95 @@ msgstr "%s: Modul nemá žádné QTH; použít výchozí."
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
 #.
-#: ../src/mod-cfg.c:337 ../src/mod-cfg.c:397 ../src/mod-cfg.c:782
+#: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr "** VÝcHOZÍ **"
 
-#: ../src/mod-cfg.c:387
+#: ../src/mod-cfg.c:379
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir %s (%s)"
 msgstr "%s:%d: Nelze otevřít adresář nastavení uživatele %s (%s)"
 
-#: ../src/mod-cfg.c:521
+#: ../src/mod-cfg.c:513
 msgid "Selected Satellites"
 msgstr "Vybrané satelity"
 
-#: ../src/mod-cfg.c:628
+#: ../src/mod-cfg.c:620
 msgid "Create new module"
 msgstr ""
 
-#: ../src/mod-cfg.c:630
+#: ../src/mod-cfg.c:622
 msgid "Edit module"
 msgstr ""
 
-#: ../src/mod-cfg.c:682
+#: ../src/mod-cfg.c:674
 msgid "Select a ground station for this module."
 msgstr "Vyberte pozemní stanici pro tento modul."
 
-#: ../src/mod-cfg.c:689
+#: ../src/mod-cfg.c:681
 msgid "Module name"
 msgstr ""
 
-#: ../src/mod-cfg.c:694
+#: ../src/mod-cfg.c:686
 msgid "Ground station"
 msgstr ""
 
 #. add button
-#: ../src/mod-cfg.c:700
+#: ../src/mod-cfg.c:692
 msgid "Add"
 msgstr ""
 
-#: ../src/mod-cfg.c:701
+#: ../src/mod-cfg.c:693
 msgid "Add a new ground station"
 msgstr "Přidat novou pozemní stanici"
 
-#: ../src/mod-cfg.c:712
+#: ../src/mod-cfg.c:704
 msgid "<b>Satellites</b>"
 msgstr "<b>Satelity</b>"
 
-#: ../src/mod-cfg.c:732
+#: ../src/mod-cfg.c:724
 msgid "Add satellite to list"
 msgstr ""
 
-#: ../src/mod-cfg.c:737
+#: ../src/mod-cfg.c:729
 msgid "Delete satellite from list"
 msgstr ""
 
 #. quick sat selector tutorial label
-#: ../src/mod-cfg.c:742
+#: ../src/mod-cfg.c:734
 msgid "Double click on a satellite to move it to the other box."
 msgstr ""
 
-#: ../src/mod-cfg.c:835
+#: ../src/mod-cfg.c:827
 #, c-format
 msgid "%s: Applied changes to %s."
 msgstr "%s: Použity změny do %s"
 
 #. window icon file name
-#: ../src/mod-cfg.c:855
+#: ../src/mod-cfg.c:847
 msgid "Module properties"
 msgstr ""
 
-#: ../src/mod-cfg.c:951
+#: ../src/mod-cfg.c:943
 #, c-format
 msgid "%s: Error while saving module data (%d)."
 msgstr "%s: Chyba při ukládání dat modulu (%d)."
 
-#: ../src/mod-cfg.c:961 ../src/mod-cfg.c:1052
+#: ../src/mod-cfg.c:953 ../src/mod-cfg.c:1044
 #, c-format
 msgid "%s: User tried to create module with no sats."
 msgstr "%s: Uživatel se pokusil vytvořit modul bez satelitů."
 
-#: ../src/mod-cfg.c:974 ../src/mod-cfg.c:1064
+#: ../src/mod-cfg.c:966 ../src/mod-cfg.c:1056
 msgid "Please select at least one satellite from the list."
 msgstr "Vyberte prosím alespoň jeden satelit ze seznamu."
 
-#: ../src/mod-cfg.c:1100
+#: ../src/mod-cfg.c:1092
 #, c-format
 msgid "%s: Attempt to save data to empty file name."
 msgstr "%s: Pokus o uložení dat do prázdného názvu souboru."
 
-#: ../src/mod-cfg.c:1108
+#: ../src/mod-cfg.c:1100
 #, c-format
 msgid "%s: Attempt to save NULL data."
 msgstr "%s: Pokus o uložení nulových dat."
@@ -3149,7 +3147,7 @@ msgstr ""
 
 #. QTH name
 #. Config name
-#: ../src/qth-editor.c:194 ../src/sat-pref-qth.c:162
+#: ../src/qth-editor.c:194 ../src/sat-pref-qth.c:157
 #: ../src/sat-pref-qth-editor.c:178 ../src/sat-pref-rig-editor.c:147
 #: ../src/sat-pref-rot-editor.c:141
 msgid "Name"
@@ -3305,22 +3303,22 @@ msgstr ""
 "%s:%d: Načteno %s pro úpravy:\n"
 "LAT:%.2f LON:%.2f ALT:%d"
 
-#: ../src/qth-editor.c:723 ../src/sat-pref-qth-editor.c:802
+#: ../src/qth-editor.c:715 ../src/sat-pref-qth-editor.c:794
 #, c-format
 msgid "%s:%s: %.2f %.2f => %s"
 msgstr "%s:%s: %.2f %.2f => %s"
 
-#: ../src/qth-editor.c:738 ../src/sat-pref-qth-editor.c:817
+#: ../src/qth-editor.c:730 ../src/sat-pref-qth-editor.c:809
 #, c-format
 msgid "%s:%d: Error converting lon/lat to locator"
 msgstr "%s:%d: Chyba při převodu lon/lat do lokátoru"
 
-#: ../src/qth-editor.c:769 ../src/sat-pref-qth-editor.c:850
+#: ../src/qth-editor.c:761 ../src/sat-pref-qth-editor.c:842
 #, c-format
 msgid "%s:%s: %s => %.2f %.2f"
 msgstr "%s:%s: %s => %.2f %.2f"
 
-#: ../src/qth-editor.c:811 ../src/sat-pref-qth-editor.c:892
+#: ../src/qth-editor.c:803 ../src/sat-pref-qth-editor.c:884
 #, c-format
 msgid "%s:%d: Invalid locator: %s"
 msgstr "%s:%d Neplatný lokátor: %s"
@@ -3792,40 +3790,40 @@ msgstr "Nadcházející průchodu %s"
 msgid "%s: PRINT not implemented"
 msgstr "%s: PRINT není zaveden"
 
-#: ../src/sat-pref.c:54
+#: ../src/sat-pref.c:44
 msgid "GPREDICT Preferences :: General"
 msgstr "Nastavení GPREDICT :: Obecné"
 
-#: ../src/sat-pref.c:55
+#: ../src/sat-pref.c:45
 msgid "GPREDICT Preferences :: Modules"
 msgstr "Nastavení GPREDICT :: Moduly"
 
-#: ../src/sat-pref.c:56
+#: ../src/sat-pref.c:46
 msgid "GPREDICT Preferences :: Interfaces"
 msgstr "Nastavení GPREDICT :: Rozhraní"
 
-#: ../src/sat-pref.c:57
+#: ../src/sat-pref.c:47
 msgid "GPREDICT Preferences :: Predict"
 msgstr "Nastavení GPREDICT :: Předpověď"
 
-#: ../src/sat-pref.c:94 ../src/sat-pref.c:110
+#: ../src/sat-pref.c:84 ../src/sat-pref.c:100
 msgid "General"
 msgstr "Obecné"
 
-#: ../src/sat-pref.c:97 ../src/sat-pref.c:118
+#: ../src/sat-pref.c:87 ../src/sat-pref.c:108
 msgid "Modules"
 msgstr "Moduly"
 
-#: ../src/sat-pref.c:100 ../src/sat-pref.c:126
+#: ../src/sat-pref.c:90 ../src/sat-pref.c:116
 msgid "Interfaces"
 msgstr "Rozhraní"
 
-#: ../src/sat-pref.c:103 ../src/sat-pref.c:134
+#: ../src/sat-pref.c:93 ../src/sat-pref.c:124
 msgid "Predict"
 msgstr "Předpověď"
 
 #. create and display preferences window
-#: ../src/sat-pref.c:157
+#: ../src/sat-pref.c:148
 msgid "Gpredict Preferences :: General"
 msgstr "Nastavení Gpredict :: Obecné"
 
@@ -4021,7 +4019,7 @@ msgid ""
 "where XYZ is a unique timestamp."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:40
+#: ../src/sat-pref-formats.c:32
 msgid ""
 "Display local time instead of UTC. Note: The local time is that of your "
 "operating system and not the local time at the location, which you select as "
@@ -4030,7 +4028,7 @@ msgstr ""
 "Zobrazit místní čas místo UTC. Poznámka: místní čas je čas vašeho operačního "
 "systému a ne umístění, které volíte jako odkaz pro sledování."
 
-#: ../src/sat-pref-formats.c:45
+#: ../src/sat-pref-formats.c:37
 msgid ""
 "Enter a format string using the following codes:\n"
 "\n"
@@ -4056,13 +4054,13 @@ msgstr ""
 "\n"
 "Pro další kódy a příklady si prohlédněte uživatelskou příručku."
 
-#: ../src/sat-pref-formats.c:53
+#: ../src/sat-pref-formats.c:45
 msgid ""
 "Checking this box will cause geographical coordinates to be displayed using "
 "a suffix instead of sign (eg. 23.43°W instead of -23.43°)."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:59
+#: ../src/sat-pref-formats.c:51
 msgid ""
 "Display distances using Imperial units, for example miles instead of "
 "kilometres."
@@ -4070,23 +4068,23 @@ msgstr ""
 "Zobrazit vzdálenosti pomocí imperiálních jednotek, například míle místo "
 "kilometrů."
 
-#: ../src/sat-pref-formats.c:85
+#: ../src/sat-pref-formats.c:77
 msgid "Show local time instead of UTC."
 msgstr "Zobrazit místní čas místo UTC."
 
-#: ../src/sat-pref-formats.c:108
+#: ../src/sat-pref-formats.c:100
 msgid "Reset to default value"
 msgstr "Obnovit výchozí hodnotu"
 
-#: ../src/sat-pref-formats.c:111
+#: ../src/sat-pref-formats.c:104
 msgid "Time format:"
 msgstr "Formát času:"
 
-#: ../src/sat-pref-formats.c:120
+#: ../src/sat-pref-formats.c:113
 msgid "Use N/S/E/W for geographical coordinates."
 msgstr "Použít N/S/E/W pro zeměpisné souřadnice."
 
-#: ../src/sat-pref-formats.c:129
+#: ../src/sat-pref-formats.c:122
 msgid "Use Imperial units instead of Metric."
 msgstr "Pouít imperiální jednotky místo metrických"
 
@@ -4604,7 +4602,7 @@ msgstr "Jeden průchod"
 msgid "Sky at a Glance"
 msgstr "Nebe v kostce"
 
-#: ../src/sat-pref-qth.c:206
+#: ../src/sat-pref-qth.c:201
 msgid ""
 "Alt\n"
 "(ft)"
@@ -4612,7 +4610,7 @@ msgstr ""
 "Alt\n"
 "(ft)"
 
-#: ../src/sat-pref-qth.c:215
+#: ../src/sat-pref-qth.c:210
 msgid ""
 "Alt\n"
 "(m)"
@@ -4620,15 +4618,15 @@ msgstr ""
 "Alt\n"
 "(m)"
 
-#: ../src/sat-pref-qth.c:224
+#: ../src/sat-pref-qth.c:219
 msgid "QRA"
 msgstr "QRA"
 
-#: ../src/sat-pref-qth.c:243
+#: ../src/sat-pref-qth.c:238
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../src/sat-pref-qth.c:257
+#: ../src/sat-pref-qth.c:252
 msgid ""
 "GPSD\n"
 "Server"
@@ -4636,7 +4634,7 @@ msgstr ""
 "Server\n"
 "GPSD"
 
-#: ../src/sat-pref-qth.c:266
+#: ../src/sat-pref-qth.c:261
 msgid ""
 "GPSD\n"
 "Port"
@@ -4644,7 +4642,7 @@ msgstr ""
 "Port\n"
 "GPSD"
 
-#: ../src/sat-pref-qth.c:274
+#: ../src/sat-pref-qth.c:269
 msgid ""
 "QTH\n"
 "Type"
@@ -4652,64 +4650,68 @@ msgstr ""
 "Typ\n"
 "QTH"
 
-#: ../src/sat-pref-qth.c:339
+#: ../src/sat-pref-qth.c:334
 #, c-format
 msgid "%s:%d: Read QTH data from %s."
 msgstr "%s:%d Přečíst data QTH z %s."
 
-#: ../src/sat-pref-qth.c:346
+#: ../src/sat-pref-qth.c:341
 #, c-format
 msgid "%s:%d: Error reading %s (see prev msg)"
 msgstr "%s:%d Chyba při čtení %s (viz předchozí zpráva)"
 
-#: ../src/sat-pref-qth.c:356 ../src/sat-pref-qth.c:930
+#: ../src/sat-pref-qth.c:351 ../src/sat-pref-qth.c:922
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir (%s)"
 msgstr "%s:%d: Nelze otevřít složku nastavení uživatele (%s)"
 
-#: ../src/sat-pref-qth.c:397
+#: ../src/sat-pref-qth.c:392
 #, c-format
 msgid "%s:%d: Failed to allocate memory!\n"
 msgstr "%s:%d Nelze přidělit paměť!\n"
 
-#: ../src/sat-pref-qth.c:419
+#: ../src/sat-pref-qth.c:414
 #, c-format
 msgid "%s:%d: Could not convert (%.2f,%.2f) to QRA."
 msgstr "%s:%d: Nelze převést (%.2f,%.2f) na QRA."
 
-#: ../src/sat-pref-qth.c:427
+#: ../src/sat-pref-qth.c:422
 #, c-format
 msgid "%s:%d: QRA locator is %s"
 msgstr "%s:%d: Lokátor QRA je %s"
 
-#: ../src/sat-pref-qth.c:439
+#: ../src/sat-pref-qth.c:434
 #, c-format
 msgid "%s:%d: This appears to be the default QTH."
 msgstr "%s:%d: Toto se zdá být výchozím QTH."
 
-#: ../src/sat-pref-qth.c:504 ../src/sat-pref-rig.c:346
-#: ../src/sat-pref-rot.c:295
-msgid "Add New"
+#. add button
+#: ../src/sat-pref-qth.c:498
+#, fuzzy
+msgid "Add new"
 msgstr "Přidat nový"
 
-#: ../src/sat-pref-qth.c:506
+#: ../src/sat-pref-qth.c:500
 msgid "Add a new ground station to the list"
 msgstr "Přidat novou pozemní stanici do seznamu"
 
-#: ../src/sat-pref-qth.c:511 ../src/sat-pref-rig.c:352
+#. edit button
+#: ../src/sat-pref-qth.c:504 ../src/sat-pref-rig.c:352
 #: ../src/sat-pref-rot.c:301
 msgid "Edit"
 msgstr "Upravit"
 
-#: ../src/sat-pref-qth.c:513
-msgid "Edit the currently selected ground station"
-msgstr "Upravit nyní zvolenou pozemní stanici"
-
-#: ../src/sat-pref-qth.c:520
-msgid "Delete the selected ground station"
+#: ../src/sat-pref-qth.c:506
+#, fuzzy
+msgid "Edit the selected ground station"
 msgstr "Smazat nyní zvolenou pozemní stanici"
 
-#: ../src/sat-pref-qth.c:599
+#: ../src/sat-pref-qth.c:512
+#, fuzzy
+msgid "Delete selected ground station"
+msgstr "Smazat nyní zvolenou pozemní stanici"
+
+#: ../src/sat-pref-qth.c:591
 msgid ""
 "Can not delete ground station!\n"
 "\n"
@@ -4722,48 +4724,48 @@ msgstr ""
 "Musíte mít nastavenu alespoň jednu\n"
 "jinak gpredict nemusí pracovat správně."
 
-#: ../src/sat-pref-qth.c:644
+#: ../src/sat-pref-qth.c:636
 #, c-format
 msgid "%s:%d: Empty ground station list!"
 msgstr "%s:%d: Prázdný seznam pozemních stanic!"
 
-#: ../src/sat-pref-qth.c:685
+#: ../src/sat-pref-qth.c:677
 #, c-format
 msgid ""
 "%s:%d: Default QTH can not be cleared! Select another QTH to change default."
 msgstr ""
 "%s:%d: Výchozí QTH nemůže být smazáno! Vyberte jiné QTH pro jeho změnu."
 
-#: ../src/sat-pref-qth.c:699
+#: ../src/sat-pref-qth.c:691
 #, c-format
 msgid "%s:%d: New default QTH is %s.qth."
 msgstr "%s:%d: Nové výchozí QTH je %s.qth."
 
-#: ../src/sat-pref-qth.c:743
+#: ../src/sat-pref-qth.c:735
 #, c-format
 msgid "%s:%d: Clearing default flag for %s."
 msgstr "%s:%d: Čištění výchozího příznaku pro %s."
 
-#: ../src/sat-pref-qth.c:863
+#: ../src/sat-pref-qth.c:855
 #, c-format
 msgid "%s:%d: %s appears to be default QTH"
 msgstr "%s:%d: %s se zdá být výchozím QTH"
 
-#: ../src/sat-pref-qth.c:913
+#: ../src/sat-pref-qth.c:905
 #, c-format
 msgid "%s:%d: Failed to remove %s"
 msgstr "%s:%d nelze odstranit %s"
 
-#: ../src/sat-pref-qth.c:919
+#: ../src/sat-pref-qth.c:911
 #, c-format
 msgid "%s:%d: Removed %s"
 msgstr "%s:%d: %s odstraněno"
 
-#: ../src/sat-pref-qth.c:981
+#: ../src/sat-pref-qth.c:973
 msgid "Alt (ft)"
 msgstr "Výška (ft)"
 
-#: ../src/sat-pref-qth.c:987
+#: ../src/sat-pref-qth.c:979
 msgid "Alt (m)"
 msgstr "Výška (m)"
 
@@ -4886,6 +4888,10 @@ msgstr "%s:%d: Čtení %s"
 #, c-format
 msgid "%s:%d: Failed to read %s"
 msgstr "%s:%d: Nelze přečíst %s"
+
+#: ../src/sat-pref-rig.c:346 ../src/sat-pref-rot.c:295
+msgid "Add New"
+msgstr "Přidat nový"
 
 #: ../src/sat-pref-rig.c:347
 msgid "Add a new radio to the list"
@@ -5291,7 +5297,7 @@ msgid ""
 "default for a -180° → 0° → +180° rotor is -180°."
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:435
+#: ../src/sat-pref-rot-editor.c:427
 #, c-format
 msgid "%s:%s: Invalid AZ rotator type."
 msgstr "%s:%s: Neplatný typ rotoru AZ."
@@ -5496,6 +5502,10 @@ msgid ""
 "be re-added to the database."
 msgstr ""
 
+#: ../src/sat-vis.c:41
+msgid "Visible"
+msgstr "Viditelný"
+
 #: ../src/sat-vis.c:42
 msgid "Daylight"
 msgstr "Denní světlo"
@@ -5504,65 +5514,65 @@ msgstr "Denní světlo"
 msgid "Eclipsed"
 msgstr "V zatmění"
 
-#: ../src/save-pass.c:103
+#: ../src/save-pass.c:104
 msgid "Save Pass Details"
 msgstr "Uložit podrobnosti průchodu"
 
 #. directory chooser
-#: ../src/save-pass.c:117 ../src/save-pass.c:264
+#: ../src/save-pass.c:118 ../src/save-pass.c:265
 msgid "Save in folder:"
 msgstr "Uložit do složky:"
 
-#: ../src/save-pass.c:122 ../src/save-pass.c:269
+#: ../src/save-pass.c:123 ../src/save-pass.c:270
 msgid "Select a folder"
 msgstr "Vyberte složku"
 
 #. file name
-#: ../src/save-pass.c:139 ../src/save-pass.c:286
+#: ../src/save-pass.c:140 ../src/save-pass.c:287
 msgid "Save using file name:"
 msgstr "Uložit pomocí názvu souboru:"
 
 #. file contents
-#: ../src/save-pass.c:158 ../src/save-pass.c:305
+#: ../src/save-pass.c:159 ../src/save-pass.c:306
 msgid "File contents:"
 msgstr "Obsah souboru:"
 
-#: ../src/save-pass.c:165
+#: ../src/save-pass.c:166
 msgid "Info+header+data"
 msgstr "Info+hlavička+data"
 
-#: ../src/save-pass.c:167
+#: ../src/save-pass.c:168
 msgid "Header + data"
 msgstr "Hlavička + data"
 
-#: ../src/save-pass.c:169
+#: ../src/save-pass.c:170
 msgid "Data only"
 msgstr "Pouze data"
 
 #. create the dialog
-#: ../src/save-pass.c:250
+#: ../src/save-pass.c:251
 msgid "Save Passes"
 msgstr "Uložit průchody"
 
-#: ../src/save-pass.c:312
+#: ../src/save-pass.c:313
 msgid "Complete report"
 msgstr "Kompletní záznam"
 
-#: ../src/save-pass.c:313
+#: ../src/save-pass.c:314
 msgid "Summary"
 msgstr "Souhrn"
 
-#: ../src/save-pass.c:498 ../src/save-pass.c:601
+#: ../src/save-pass.c:491 ../src/save-pass.c:594
 #, c-format
 msgid "%s: Invalid file format: %d"
 msgstr "%s: Neplatný název souboru: %d"
 
-#: ../src/save-pass.c:619
+#: ../src/save-pass.c:612
 #, c-format
 msgid "%s: Could not create file %s (%s)"
 msgstr "%s: Nelze vytvořit soubor %s (%s)"
 
-#: ../src/save-pass.c:628
+#: ../src/save-pass.c:621
 #, c-format
 msgid ""
 "Could not create file %s\n"
@@ -5573,12 +5583,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/save-pass.c:644
+#: ../src/save-pass.c:637
 #, c-format
 msgid "%s: An error occurred while saving data to %s (%s)"
 msgstr "%s: Při ukládání dat do %s se objevila chyba (%s)"
 
-#: ../src/save-pass.c:653
+#: ../src/save-pass.c:646
 #, c-format
 msgid ""
 "An error occurred while saving data to %s\n"
@@ -5589,7 +5599,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/save-pass.c:662
+#: ../src/save-pass.c:655
 #, c-format
 msgid "%s: Written %d characters to %s"
 msgstr "%s: Zapsáno %d znaků do %s"
@@ -5886,6 +5896,15 @@ msgstr ""
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
+
+#~ msgid "Column Name"
+#~ msgstr "Název sloupce"
+
+#~ msgid "Row"
+#~ msgstr "Řádek"
+
+#~ msgid "Edit the currently selected ground station"
+#~ msgstr "Upravit nyní zvolenou pozemní stanici"
 
 #~ msgid "%s: Invalid VFO argument. Using VFOA."
 #~ msgstr "%s: Neplatný argument VFO. Použito VFOA."

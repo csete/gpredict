@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-10 20:35+0100\n"
+"POT-Creation-Date: 2017-12-16 11:21+0100\n"
 "PO-Revision-Date: 2017-05-14 21:08+0000\n"
 "Last-Translator: Dimitrios Ntoulas <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:85 ../src/main.c:247
+#: ../src/about.c:87 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
-#: ../src/about.c:88
+#: ../src/about.c:90
 msgid "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
-#: ../src/about.c:101
+#: ../src/about.c:103
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -221,7 +221,7 @@ msgid "Satellite"
 msgstr "Δορυφόρος"
 
 #: ../src/gtk-event-list.c:51 ../src/gtk-sat-list.c:51
-#: ../src/gtk-sat-selector.c:272 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:530
+#: ../src/gtk-sat-selector.c:272 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:522
 msgid "Catnum"
 msgstr "Αρ. καταλόγου"
 
@@ -252,13 +252,13 @@ msgstr "Όνομα Δορυφόρου"
 msgid "Catalogue Number"
 msgstr "Αριθμός καταλόγου"
 
-#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:593
+#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:594
 #: ../src/gtk-sat-list.c:84 ../src/gtk-single-sat.c:53
 #: ../src/sat-pass-dialogs.c:122
 msgid "Azimuth"
 msgstr "Αζιμούθιο"
 
-#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:630
+#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:631
 #: ../src/gtk-sat-list.c:85 ../src/gtk-single-sat.c:54
 #: ../src/sat-pass-dialogs.c:123
 msgid "Elevation"
@@ -483,12 +483,12 @@ msgstr ""
 msgid "<b> Uplink </b>"
 msgstr "<b> Εκπομπή </b>"
 
-#: ../src/gtk-rig-ctrl.c:579 ../src/gtk-rot-ctrl.c:684
+#: ../src/gtk-rig-ctrl.c:579 ../src/gtk-rot-ctrl.c:685
 msgid "Select target object"
 msgstr ""
 
 #. tracking button
-#: ../src/gtk-rig-ctrl.c:585 ../src/gtk-rot-ctrl.c:690
+#: ../src/gtk-rig-ctrl.c:585 ../src/gtk-rot-ctrl.c:691
 msgid "Track"
 msgstr "Κλείδωμα"
 
@@ -538,12 +538,12 @@ msgid ""
 msgstr ""
 
 #. Azimuth
-#: ../src/gtk-rig-ctrl.c:635 ../src/gtk-rot-ctrl.c:698
+#: ../src/gtk-rig-ctrl.c:635 ../src/gtk-rot-ctrl.c:700
 msgid "Az:"
 msgstr ""
 
 #. Elevation
-#: ../src/gtk-rig-ctrl.c:643 ../src/gtk-rot-ctrl.c:707
+#: ../src/gtk-rig-ctrl.c:643 ../src/gtk-rot-ctrl.c:709
 msgid "El:"
 msgstr ""
 
@@ -568,7 +568,7 @@ msgid ""
 msgstr ""
 "Ο ρυθμός μεταβολής της απόστασης μεταξύ του δορυφόρου και του παρατηρητή."
 
-#: ../src/gtk-rig-ctrl.c:680 ../src/gtk-rot-ctrl.c:723
+#: ../src/gtk-rig-ctrl.c:680 ../src/gtk-rot-ctrl.c:725
 msgid "Target"
 msgstr "Δορυφόρος"
 
@@ -586,8 +586,8 @@ msgstr ""
 "εκπομπή και για λήψη εκτός και αν οριστεί δευτερεύουσα συσκευή για εκπομπή."
 
 #: ../src/gtk-rig-ctrl.c:753 ../src/gtk-rig-ctrl.c:803
-#: ../src/gtk-rig-ctrl.c:2383 ../src/gtk-rot-ctrl.c:792
-#: ../src/gtk-rot-ctrl.c:1578 ../src/sat-pref-rig.c:321
+#: ../src/gtk-rig-ctrl.c:2383 ../src/gtk-rot-ctrl.c:794
+#: ../src/gtk-rot-ctrl.c:1609 ../src/sat-pref-rig.c:321
 #: ../src/sat-pref-rot.c:270
 #, c-format
 msgid "%s:%d: Failed to open hwconf dir (%s)"
@@ -613,7 +613,7 @@ msgid "None"
 msgstr ""
 
 #. Engage button
-#: ../src/gtk-rig-ctrl.c:817 ../src/gtk-rot-ctrl.c:806
+#: ../src/gtk-rig-ctrl.c:817 ../src/gtk-rot-ctrl.c:808
 msgid "Engage"
 msgstr "Σύνδεση"
 
@@ -622,7 +622,7 @@ msgid "Engage the selected radio device"
 msgstr "Σύνδεση στην επιλεγμένη ραδιοσυσκευή"
 
 #. Timeout
-#: ../src/gtk-rig-ctrl.c:828 ../src/gtk-rot-ctrl.c:814
+#: ../src/gtk-rig-ctrl.c:828 ../src/gtk-rot-ctrl.c:826
 msgid "Cycle:"
 msgstr "Σύνδεση:"
 
@@ -631,11 +631,11 @@ msgid "This parameter controls the delay between commands sent to the rig."
 msgstr ""
 "Η παράμετρος αυτή ορίζει κάθε πότε θα στέλνονται δεδομένα στην ραδιοσυσκευή."
 
-#: ../src/gtk-rig-ctrl.c:843 ../src/gtk-rot-ctrl.c:829
+#: ../src/gtk-rig-ctrl.c:843 ../src/gtk-rot-ctrl.c:841
 msgid "msec"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:847 ../src/gtk-rot-ctrl.c:859
+#: ../src/gtk-rig-ctrl.c:847 ../src/gtk-rot-ctrl.c:871
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
@@ -649,7 +649,7 @@ msgid ""
 "comes first."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:912 ../src/gtk-rot-ctrl.c:924
+#: ../src/gtk-rig-ctrl.c:912 ../src/gtk-rot-ctrl.c:936
 #, c-format
 msgid "%s:%s: Invalid satellite selection: %d"
 msgstr ""
@@ -698,7 +698,7 @@ msgid "%s:%s: Failed to allocate memory for radio config"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1205 ../src/gtk-rig-ctrl.c:1299
-#: ../src/gtk-rot-ctrl.c:1103
+#: ../src/gtk-rot-ctrl.c:1134
 #, c-format
 msgid "%s: Controller does not have a valid configuration"
 msgstr ""
@@ -713,7 +713,7 @@ msgstr ""
 msgid "%s missed the deadline"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2234 ../src/gtk-rot-ctrl.c:1421
+#: ../src/gtk-rig-ctrl.c:2234 ../src/gtk-rot-ctrl.c:1452
 #, c-format
 msgid "%s:%d: NULL storage."
 msgstr ""
@@ -753,7 +753,7 @@ msgstr ""
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2508 ../src/gtk-rot-ctrl.c:197
+#: ../src/gtk-rig-ctrl.c:2508 ../src/gtk-rot-ctrl.c:198
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr ""
@@ -815,7 +815,7 @@ msgstr ""
 msgid "%s: Failed to create socket"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2684 ../src/gtk-rot-ctrl.c:124
+#: ../src/gtk-rig-ctrl.c:2684 ../src/gtk-rot-ctrl.c:125
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr ""
@@ -825,12 +825,12 @@ msgstr ""
 msgid "%s: Failed to connect to %s:%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2706 ../src/gtk-rot-ctrl.c:143
+#: ../src/gtk-rig-ctrl.c:2706 ../src/gtk-rot-ctrl.c:144
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2721 ../src/gtk-rot-ctrl.c:159
+#: ../src/gtk-rig-ctrl.c:2721 ../src/gtk-rot-ctrl.c:160
 #, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr ""
@@ -855,65 +855,74 @@ msgstr ""
 msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:119
+#: ../src/gtk-rot-ctrl.c:120
 #, c-format
 msgid "Failed to create rotctl socket: %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:137
+#: ../src/gtk-rot-ctrl.c:138
 #, c-format
 msgid "Connection to rotctld server at %s:%d failed: %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:202 ../src/gtk-rot-ctrl.c:212
+#: ../src/gtk-rot-ctrl.c:203 ../src/gtk-rot-ctrl.c:213
 #, c-format
 msgid "%s: rotctld Socket Down"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:220
+#: ../src/gtk-rot-ctrl.c:221
 #, c-format
 msgid "%s:%s: Got 0 bytes from rotctld"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:605
+#: ../src/gtk-rot-ctrl.c:606
 msgid "Read:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:642
+#: ../src/gtk-rot-ctrl.c:643
 msgid "Read: "
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:693
+#: ../src/gtk-rot-ctrl.c:694
 msgid "Track the satellite when it is within range"
 msgstr ""
 
 #. count down
-#: ../src/gtk-rot-ctrl.c:716
+#: ../src/gtk-rot-ctrl.c:718
 msgid "ΔT:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:746
+#: ../src/gtk-rot-ctrl.c:748
 msgid "Device:"
 msgstr "Συσκευή:"
 
-#: ../src/gtk-rot-ctrl.c:752
+#: ../src/gtk-rot-ctrl.c:754
 msgid "Select antenna rotator device"
 msgstr "Επιλογή ρότορα κεραίας"
 
-#: ../src/gtk-rot-ctrl.c:808
+#: ../src/gtk-rot-ctrl.c:810
 msgid "Engage the selected rotor device"
 msgstr "Ενεργοποίηση του επιλεγμένου ρότορα"
 
-#: ../src/gtk-rot-ctrl.c:821
+#. Monitor checkbox
+#: ../src/gtk-rot-ctrl.c:816
+msgid "Monitor"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:819
+msgid "Monitor rotator but do not send any position commands"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:833
 msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 
 #. Tolerance
-#: ../src/gtk-rot-ctrl.c:834
+#: ../src/gtk-rot-ctrl.c:846
 msgid "Tolerance:"
 msgstr "Ανοχή:"
 
-#: ../src/gtk-rot-ctrl.c:842
+#: ../src/gtk-rot-ctrl.c:854
 msgid ""
 "This parameter controls the tolerance between the target and rotator values "
 "for the rotator.\n"
@@ -921,52 +930,52 @@ msgid ""
 "tolerance, no new commands are sent"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:852
+#: ../src/gtk-rot-ctrl.c:864
 msgid "deg"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1011
+#: ../src/gtk-rot-ctrl.c:1028
 #, c-format
 msgid "%s:%d: Failed to allocate memory for rotator config"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1022
+#: ../src/gtk-rot-ctrl.c:1039
 #, c-format
 msgid "Loaded new rotator configuration %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1037
+#: ../src/gtk-rot-ctrl.c:1054
 #, c-format
 msgid "%s:%d: Failed to load rotator configuration %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1088
+#: ../src/gtk-rot-ctrl.c:1119
 #, c-format
 msgid "%s:%d: rotctld returned error %d with stop-cmd (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1209 ../src/gtk-rot-ctrl.c:1210
-#: ../src/gtk-sat-module-popup.c:949 ../src/gtk-sat-module-popup.c:1029
+#: ../src/gtk-rot-ctrl.c:1240 ../src/gtk-rot-ctrl.c:1241
+#: ../src/gtk-sat-module-popup.c:900 ../src/gtk-sat-module-popup.c:980
 #: ../src/sat-log-browser.c:61 ../src/sat-log.c:61 ../src/sat-pref-rig.c:777
 msgid "ERROR"
 msgstr "ΣΦΑΛΜΑ"
 
-#: ../src/gtk-rot-ctrl.c:1353
+#: ../src/gtk-rot-ctrl.c:1384
 #, c-format
 msgid "%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1436
+#: ../src/gtk-rot-ctrl.c:1467
 #, c-format
 msgid "%s:%d: rotctld returned error (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1451
+#: ../src/gtk-rot-ctrl.c:1482
 #, c-format
 msgid "%s:%d: rotctld returned bad response (%s)"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:1496
+#: ../src/gtk-rot-ctrl.c:1527
 #, c-format
 msgid "%s:%d: rotctld returned error %d with az %f el %f(%s)"
 msgstr ""
@@ -1031,13 +1040,13 @@ msgstr ""
 msgid "Next LOS"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:62 ../src/loc-tree.c:134 ../src/sat-pass-dialogs.c:105
-#: ../src/sat-pref-qth.c:178
+#: ../src/gtk-sat-list.c:62 ../src/loc-tree.c:127 ../src/sat-pass-dialogs.c:105
+#: ../src/sat-pref-qth.c:173
 msgid "Lat"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:63 ../src/loc-tree.c:152 ../src/sat-pass-dialogs.c:106
-#: ../src/sat-pref-qth.c:191
+#: ../src/gtk-sat-list.c:63 ../src/loc-tree.c:145 ../src/sat-pass-dialogs.c:106
+#: ../src/sat-pref-qth.c:186
 msgid "Lon"
 msgstr ""
 
@@ -1050,7 +1059,7 @@ msgstr ""
 msgid "Footp"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:66 ../src/loc-tree.c:170 ../src/sat-pass-dialogs.c:109
+#: ../src/gtk-sat-list.c:66 ../src/loc-tree.c:163 ../src/sat-pass-dialogs.c:109
 msgid "Alt"
 msgstr "Υψόμετρο"
 
@@ -1182,7 +1191,7 @@ msgid "%s: Invalid GtkSatList!"
 msgstr ""
 
 #: ../src/gtk-sat-list.c:921 ../src/sat-pass-dialogs.c:682
-#: ../src/sat-pref-qth.c:807
+#: ../src/sat-pref-qth.c:799
 #, c-format
 msgid "%s:%d: Invalid column: %d"
 msgstr ""
@@ -1190,18 +1199,6 @@ msgstr ""
 #: ../src/gtk-sat-list.c:1370
 #, c-format
 msgid "%s: GtkSatList has not child with index %d"
-msgstr ""
-
-#: ../src/gtk-sat-list-col-sel.c:121
-msgid "Column Name"
-msgstr "Όνομα Στήλης"
-
-#: ../src/gtk-sat-list-col-sel.c:130 ../src/sat-vis.c:41
-msgid "Visible"
-msgstr ""
-
-#: ../src/gtk-sat-list-col-sel.c:137
-msgid "Row"
 msgstr ""
 
 #: ../src/gtk-sat-map.c:631
@@ -1324,247 +1321,248 @@ msgstr "Ίχνος Τροχιάς"
 msgid "Set Target"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:260
+#: ../src/gtk-sat-module.c:127
 #, c-format
-msgid "%s: Module %s is not valid."
+msgid "Autotrack: Changing target satellite %d -> %d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:276
-#, c-format
-msgid "%s: Module %s has problems."
-msgstr ""
-
-#: ../src/gtk-sat-module.c:309
-msgid "Module options / shortcuts"
-msgstr ""
-
-#: ../src/gtk-sat-module.c:314
-msgid "Close this module."
-msgstr ""
-
-#: ../src/gtk-sat-module.c:373
-#, c-format
-msgid "%s: Layout has %d columns and %d rows."
-msgstr ""
-
-#: ../src/gtk-sat-module.c:439
+#: ../src/gtk-sat-module.c:316
 #, c-format
 msgid "%s:%d: Invalid child type (%d). Using GtkSatList."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:476
+#: ../src/gtk-sat-module.c:368
 #, c-format
-msgid "%s: Could not load config data from %s (%s)."
+msgid "%s: Layout has %d columns and %d rows."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:486
-#, c-format
-msgid "%s: Reading configuration from %s"
-msgstr ""
-
-#: ../src/gtk-sat-module.c:526
-#, c-format
-msgid "%s: Can not load default QTH file %s; using built-in defaults"
-msgstr ""
-
-#: ../src/gtk-sat-module.c:556
-#, c-format
-msgid "%s: Module layout is invalid: %s. Using default."
-msgstr ""
-
-#: ../src/gtk-sat-module.c:568
-#, c-format
-msgid "%s: GRID(%d): %s"
-msgstr ""
-
-#: ../src/gtk-sat-module.c:589
-#, c-format
-msgid "%s: Unable to allocate memory for grid."
-msgstr ""
-
-#: ../src/gtk-sat-module.c:618 ../src/mod-cfg.c:581
+#: ../src/gtk-sat-module.c:419 ../src/mod-cfg.c:573
 #, c-format
 msgid "%s: Failed to get list of satellites (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:641
+#: ../src/gtk-sat-module.c:442
 #, c-format
 msgid "%s: Error reading data for #%d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:660
+#: ../src/gtk-sat-module.c:461
 #, c-format
 msgid "%s: Read data for #%d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:665
+#: ../src/gtk-sat-module.c:466
 #, c-format
 msgid "%s: Sat #%d already in list"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:676
+#: ../src/gtk-sat-module.c:477
 #, c-format
 msgid "%s: Read %d out of %d satellites"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:731
+#: ../src/gtk-sat-module.c:511
 #, c-format
-msgid "%s: Previous cycle missed it's deadline."
+msgid "%s: Updating GtkSkyGlance for %s"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:870 ../src/gtk-sat-module.c:1370
+#: ../src/gtk-sat-module.c:597 ../src/gtk-sat-module.c:1415
 #, c-format
 msgid "%s:%d: Unknown child type"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:999
+#: ../src/gtk-sat-module.c:727
+#, c-format
+msgid "%s: Previous cycle missed it's deadline."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:859
+#, c-format
+msgid "%s: Could not load config data from %s (%s)."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:869
+#, c-format
+msgid "%s: Reading configuration from %s"
+msgstr ""
+
+#: ../src/gtk-sat-module.c:909
+#, c-format
+msgid "%s: Can not load default QTH file %s; using built-in defaults"
+msgstr ""
+
+#: ../src/gtk-sat-module.c:939
+#, c-format
+msgid "%s: Module layout is invalid: %s. Using default."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:951
+#, c-format
+msgid "%s: GRID(%d): %s"
+msgstr ""
+
+#: ../src/gtk-sat-module.c:972
+#, c-format
+msgid "%s: Unable to allocate memory for grid."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:998
+#, c-format
+msgid "%s: Module %s is not valid."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:1014
+#, c-format
+msgid "%s: Module %s has problems."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:1047
+msgid "Module options / shortcuts"
+msgstr ""
+
+#: ../src/gtk-sat-module.c:1052
+msgid "Close this module."
+msgstr ""
+
+#: ../src/gtk-sat-module.c:1122
 #, c-format
 msgid "%s: Module %s received CLOSE signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1008
+#: ../src/gtk-sat-module.c:1131
 #, c-format
 msgid "%s: Module %s is in DOCKED state."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1014 ../src/gtk-sat-module.c:1030
-#: ../src/gtk-sat-module.c:1059
+#: ../src/gtk-sat-module.c:1137 ../src/gtk-sat-module.c:1153
+#: ../src/gtk-sat-module.c:1182
 #, c-format
 msgid ""
 "%s: Module %s was not found in mod-mgr (%d)\n"
 "Internal state is corrupt?"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1023
+#: ../src/gtk-sat-module.c:1146
 #, c-format
 msgid "%s: Module %s is in WINDOW state."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1051
+#: ../src/gtk-sat-module.c:1174
 #, c-format
 msgid "%s: Module %s is in FULLSCREEN state."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1081 ../src/gtk-sat-module.c:1237
+#: ../src/gtk-sat-module.c:1204 ../src/gtk-sat-module.c:1360
 #, c-format
 msgid "%s: Module %s has unknown state: %d"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1089
+#: ../src/gtk-sat-module.c:1212
 #, c-format
 msgid "%s: Module %s closed."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1128
+#: ../src/gtk-sat-module.c:1251
 #, c-format
 msgid "%s: Module %s received CONFIG signal."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1137
+#: ../src/gtk-sat-module.c:1260
 #, c-format
 msgid ""
 "%s: Could not stop timeout callback\n"
 "%s: Source ID %d seems invalid."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1154
+#: ../src/gtk-sat-module.c:1277
 #, c-format
 msgid "%s: Module configuration failed for some reason."
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1319
+#: ../src/gtk-sat-module.c:1445
 #, c-format
 msgid "%s: Reloading satellites for module %s"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1409
+#: ../src/gtk-sat-module.c:1505
 #, c-format
 msgid "%s: Unknown child type"
 msgstr ""
 
-#: ../src/gtk-sat-module.c:1490
-#, c-format
-msgid "%s: Updating GtkSkyGlance for %s"
-msgstr ""
-
-#: ../src/gtk-sat-module.c:1557
-#, c-format
-msgid "Autotrack: Changing target satellite %d -> %d"
-msgstr ""
-
-#: ../src/gtk-sat-module-popup.c:102
+#: ../src/gtk-sat-module-popup.c:90
 #, c-format
 msgid "%s:%d: %s called with NULL parameter!"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:111
+#: ../src/gtk-sat-module-popup.c:99
 msgid "Detach module"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:122
+#: ../src/gtk-sat-module-popup.c:106
 msgid "Attach module"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:134
+#: ../src/gtk-sat-module-popup.c:114
 msgid "Exit full screen"
 msgstr "Έξοδος από πλήρη οθόνη"
 
-#: ../src/gtk-sat-module-popup.c:144
+#: ../src/gtk-sat-module-popup.c:121
 msgid "Full screen"
 msgstr "Πλήρης οθόνη"
 
 #. autotrack
-#: ../src/gtk-sat-module-popup.c:158
+#: ../src/gtk-sat-module-popup.c:132
 msgid "Autotrack"
 msgstr ""
 
 #. select satellite submenu
-#: ../src/gtk-sat-module-popup.c:165
+#: ../src/gtk-sat-module-popup.c:139
 msgid "Select satellite"
 msgstr "Επιλογή δορυφόρου"
 
 #. sky at a glance
-#: ../src/gtk-sat-module-popup.c:191
+#: ../src/gtk-sat-module-popup.c:165
 msgid "Sky at a glance"
 msgstr ""
 
 #. time manager
-#: ../src/gtk-sat-module-popup.c:201 ../src/gtk-sat-module-tmg.c:274
+#: ../src/gtk-sat-module-popup.c:171 ../src/gtk-sat-module-tmg.c:274
 msgid "Time Controller"
 msgstr "Έλεγχος Χρόνου"
 
 #. Radio Control
-#: ../src/gtk-sat-module-popup.c:214
+#: ../src/gtk-sat-module-popup.c:180
 msgid "Radio Control"
 msgstr "Έλεγχος ασυρμάτου"
 
 #. Antenna Control
-#: ../src/gtk-sat-module-popup.c:223
+#: ../src/gtk-sat-module-popup.c:185
 msgid "Antenna Control"
 msgstr "Έλεγχος κεραίας"
 
 #. configure
-#: ../src/gtk-sat-module-popup.c:236
+#: ../src/gtk-sat-module-popup.c:194
 msgid "Configure"
 msgstr "Ρυθμίσεις"
 
 #. clone
-#: ../src/gtk-sat-module-popup.c:243
+#: ../src/gtk-sat-module-popup.c:199
 msgid "Clone..."
 msgstr ""
 
 #. delete module
-#: ../src/gtk-sat-module-popup.c:254 ../src/sat-pref-qth.c:518
+#. delete button; don't forget to delete file....
+#: ../src/gtk-sat-module-popup.c:208 ../src/sat-pref-qth.c:510
 #: ../src/sat-pref-rig.c:359 ../src/sat-pref-rot.c:308
 msgid "Delete"
 msgstr "Διαγραφή"
 
 #. close
-#: ../src/gtk-sat-module-popup.c:261
+#: ../src/gtk-sat-module-popup.c:213
 msgid "Close"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:294
+#: ../src/gtk-sat-module-popup.c:244
 msgid ""
 "A module can not be configured while the radio or rotator controller is "
 "active.\n"
@@ -1572,71 +1570,71 @@ msgid ""
 "Please close the radio and rotator controllers and try again."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:335
+#: ../src/gtk-sat-module-popup.c:285
 msgid "Clone Module"
 msgstr ""
 
 #. label
-#: ../src/gtk-sat-module-popup.c:345
+#: ../src/gtk-sat-module-popup.c:296
 msgid "Name of new module:"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:354 ../src/mod-cfg.c:662
+#: ../src/gtk-sat-module-popup.c:305 ../src/mod-cfg.c:654
 msgid ""
 "Enter a short name for this module.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 msgstr ""
 
 #. check button
-#: ../src/gtk-sat-module-popup.c:373
+#: ../src/gtk-sat-module-popup.c:324
 msgid "Open module when created"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:376
+#: ../src/gtk-sat-module-popup.c:327
 msgid "If checked, the new module will be opened after it has been created"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:391
+#: ../src/gtk-sat-module-popup.c:342
 #, c-format
 msgid "%s:%d: Cloning %s => %s"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:409
+#: ../src/gtk-sat-module-popup.c:360
 #, c-format
 msgid "%s:%d: Failed to clone %s."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:415
+#: ../src/gtk-sat-module-popup.c:366
 #, c-format
 msgid "%s:%d: Successfully cloned %s."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:441 ../src/gtk-sat-module-popup.c:562
-#: ../src/gtk-sat-module-popup.c:704 ../src/menubar.c:907
+#: ../src/gtk-sat-module-popup.c:392 ../src/gtk-sat-module-popup.c:513
+#: ../src/gtk-sat-module-popup.c:655 ../src/menubar.c:907
 msgid "GPREDICT: "
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:484
+#: ../src/gtk-sat-module-popup.c:435
 #, c-format
 msgid "%s:%d: Cloning cancelled by user."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:490
+#: ../src/gtk-sat-module-popup.c:441
 #, c-format
 msgid "%s:%d: Cloning interrupted."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:671 ../src/gtk-sat-module-popup.c:814
+#: ../src/gtk-sat-module-popup.c:622 ../src/gtk-sat-module-popup.c:765
 #, c-format
 msgid "%s:%d: Unknown module state: %d"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:869
+#: ../src/gtk-sat-module-popup.c:820
 #, c-format
 msgid "The sky at a glance (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:945
+#: ../src/gtk-sat-module-popup.c:896
 msgid ""
 "You have no radio configuration!\n"
 "Please configure a radio first."
@@ -1644,12 +1642,12 @@ msgstr ""
 "Δεν έχεις ρυθμίσει κάποιον ασύρματο!\n"
 "Παρακαλώ ρύθμισε έναν ασύρματο πρώτα."
 
-#: ../src/gtk-sat-module-popup.c:957
+#: ../src/gtk-sat-module-popup.c:908
 #, c-format
 msgid "Gpredict Radio Control: %s"
 msgstr "Gpredict Έλεγχος Ασυρμάτου: %s"
 
-#: ../src/gtk-sat-module-popup.c:1025
+#: ../src/gtk-sat-module-popup.c:976
 msgid ""
 "You have no rotator configuration!\n"
 "Please configure an antenna rotator first."
@@ -1657,12 +1655,12 @@ msgstr ""
 "Δεν έχεις ρυθμίσει κάποιον ρότορα!\n"
 "Παρακαλώ ρύθμισε έναν ρότορα πρώτα."
 
-#: ../src/gtk-sat-module-popup.c:1037
+#: ../src/gtk-sat-module-popup.c:988
 #, c-format
 msgid "Gpredict Rotator Control: %s"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:1147
+#: ../src/gtk-sat-module-popup.c:1098
 #, c-format
 msgid ""
 "This operation will permanently delete\n"
@@ -1671,12 +1669,12 @@ msgid ""
 "Do you you want to proceed?"
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:1157
+#: ../src/gtk-sat-module-popup.c:1108
 #, c-format
 msgid "%s:%d: Failed to delete %s."
 msgstr ""
 
-#: ../src/gtk-sat-module-popup.c:1163
+#: ../src/gtk-sat-module-popup.c:1114
 #, c-format
 msgid "%s:%d: %s deleted permanently."
 msgstr ""
@@ -1701,7 +1699,7 @@ msgstr ""
 #. reset time
 #. reset button
 #: ../src/gtk-sat-module-tmg.c:125 ../src/sat-pref-conditions.c:349
-#: ../src/sat-pref-debug.c:136 ../src/sat-pref-formats.c:106
+#: ../src/sat-pref-debug.c:136 ../src/sat-pref-formats.c:98
 #: ../src/sat-pref-layout.c:428 ../src/sat-pref-list-view.c:196
 #: ../src/sat-pref-map-view.c:782 ../src/sat-pref-multi-pass.c:169
 #: ../src/sat-pref-polar-view.c:594 ../src/sat-pref-refresh.c:379
@@ -1791,28 +1789,28 @@ msgstr ""
 msgid "%s: %d/%d/%d %d:%d:%d.%d"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:48
+#: ../src/gtk-sat-popup-common.c:38
 msgid "Show current pass"
 msgstr ""
 
 #. the next pass menu item
-#: ../src/gtk-sat-popup-common.c:59
+#: ../src/gtk-sat-popup-common.c:48
 msgid "Show next pass"
 msgstr ""
 
 #. finally the future pass menu item
-#: ../src/gtk-sat-popup-common.c:69
+#: ../src/gtk-sat-popup-common.c:57
 msgid "Future passes"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:157 ../src/gtk-sat-popup-common.c:217
+#: ../src/gtk-sat-popup-common.c:149 ../src/gtk-sat-popup-common.c:220
 #, c-format
 msgid ""
 "Satellite %s has no passes\n"
 "within the next %d days"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:173
+#: ../src/gtk-sat-popup-common.c:167
 #, c-format
 msgid ""
 "Satellite %s has no passes for\n"
@@ -1823,7 +1821,7 @@ msgid ""
 "never comes above the horizon"
 msgstr ""
 
-#: ../src/gtk-sat-popup-common.c:236
+#: ../src/gtk-sat-popup-common.c:241
 #, c-format
 msgid ""
 "Satellite %s has no passes for\n"
@@ -1897,7 +1895,7 @@ msgstr ""
 msgid "%s: Error getting %dth satellite"
 msgstr ""
 
-#: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:539
+#: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:531
 msgid "Epoch"
 msgstr ""
 
@@ -2154,60 +2152,60 @@ msgid "This module has no satellites!"
 msgstr ""
 
 #. location
-#: ../src/loc-tree.c:122 ../src/qth-editor.c:234 ../src/sat-pref-qth.c:170
+#: ../src/loc-tree.c:115 ../src/qth-editor.c:234 ../src/sat-pref-qth.c:165
 #: ../src/sat-pref-qth-editor.c:219
 msgid "Location"
 msgstr "Τοποθεσία"
 
-#: ../src/loc-tree.c:188
+#: ../src/loc-tree.c:181
 msgid "WX"
 msgstr ""
 
-#: ../src/loc-tree.c:203
+#: ../src/loc-tree.c:196
 msgid "X"
 msgstr ""
 
 #. dialog window
-#: ../src/loc-tree.c:235
+#: ../src/loc-tree.c:228
 msgid "Select Location"
 msgstr "Επιλογή Τοποθεσίας"
 
-#: ../src/loc-tree.c:265
+#: ../src/loc-tree.c:257
 #, c-format
 msgid "%s: Selected %s"
 msgstr ""
 
-#: ../src/loc-tree.c:270
+#: ../src/loc-tree.c:262
 #, c-format
 msgid "%s: No location selected"
 msgstr ""
 
-#: ../src/loc-tree.c:309
+#: ../src/loc-tree.c:301
 #, c-format
 msgid "%s: %s does not exist!"
 msgstr ""
 
-#: ../src/loc-tree.c:398
+#: ../src/loc-tree.c:390
 #, c-format
 msgid "%s: Read %d cities."
 msgstr ""
 
-#: ../src/loc-tree.c:416
+#: ../src/loc-tree.c:408
 #, c-format
 msgid "%s: Failed to open locfile (%s)"
 msgstr ""
 
-#: ../src/loc-tree.c:479
+#: ../src/loc-tree.c:471
 #, c-format
 msgid "%s: Invalid column: %d"
 msgstr ""
 
-#: ../src/loc-tree.c:602
+#: ../src/loc-tree.c:594
 #, c-format
 msgid "%s: Failed to get parent for %s."
 msgstr ""
 
-#: ../src/loc-tree.c:614
+#: ../src/loc-tree.c:606
 #, c-format
 msgid "%s: No selection found!"
 msgstr ""
@@ -2294,19 +2292,19 @@ msgstr ""
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
 
-#. create a new file chooser dialogue in "open file" mode
-#: ../src/map-selector.c:76
-msgid "Select Map"
-msgstr ""
-
-#: ../src/map-selector.c:92
-msgid "Image files"
-msgstr "Αρχεία εικόνων"
-
-#: ../src/map-selector.c:187 ../src/map-selector.c:245
+#: ../src/map-selector.c:108 ../src/map-selector.c:165
 #, c-format
 msgid "%s:%d: Could not stat %s"
 msgstr ""
+
+#. create a new file chooser dialogue in "open file" mode
+#: ../src/map-selector.c:243
+msgid "Select Map"
+msgstr ""
+
+#: ../src/map-selector.c:259
+msgid "Image files"
+msgstr "Αρχεία εικόνων"
 
 #: ../src/menubar.c:74
 msgid "_File"
@@ -2577,12 +2575,12 @@ msgid ""
 "Do you want to overwrite this module?"
 msgstr ""
 
-#: ../src/mod-cfg.c:119 ../src/mod-cfg.c:825
+#: ../src/mod-cfg.c:119 ../src/mod-cfg.c:817
 #, c-format
 msgid "%s:%s: Could not fetch entry %d in satellite list"
 msgstr ""
 
-#: ../src/mod-cfg.c:335
+#: ../src/mod-cfg.c:327
 #, c-format
 msgid "%s: Module has no QTH; use default."
 msgstr ""
@@ -2590,95 +2588,95 @@ msgstr ""
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
 #.
-#: ../src/mod-cfg.c:337 ../src/mod-cfg.c:397 ../src/mod-cfg.c:782
+#: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr ""
 
-#: ../src/mod-cfg.c:387
+#: ../src/mod-cfg.c:379
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir %s (%s)"
 msgstr ""
 
-#: ../src/mod-cfg.c:521
+#: ../src/mod-cfg.c:513
 msgid "Selected Satellites"
 msgstr "Επιλεγμένοι Δορυφόροι"
 
-#: ../src/mod-cfg.c:628
+#: ../src/mod-cfg.c:620
 msgid "Create new module"
 msgstr ""
 
-#: ../src/mod-cfg.c:630
+#: ../src/mod-cfg.c:622
 msgid "Edit module"
 msgstr ""
 
-#: ../src/mod-cfg.c:682
+#: ../src/mod-cfg.c:674
 msgid "Select a ground station for this module."
 msgstr ""
 
-#: ../src/mod-cfg.c:689
+#: ../src/mod-cfg.c:681
 msgid "Module name"
 msgstr ""
 
-#: ../src/mod-cfg.c:694
+#: ../src/mod-cfg.c:686
 msgid "Ground station"
 msgstr ""
 
 #. add button
-#: ../src/mod-cfg.c:700
+#: ../src/mod-cfg.c:692
 msgid "Add"
 msgstr ""
 
-#: ../src/mod-cfg.c:701
+#: ../src/mod-cfg.c:693
 msgid "Add a new ground station"
 msgstr ""
 
-#: ../src/mod-cfg.c:712
+#: ../src/mod-cfg.c:704
 msgid "<b>Satellites</b>"
 msgstr "<b>Δορυφόροι</b>"
 
-#: ../src/mod-cfg.c:732
+#: ../src/mod-cfg.c:724
 msgid "Add satellite to list"
 msgstr ""
 
-#: ../src/mod-cfg.c:737
+#: ../src/mod-cfg.c:729
 msgid "Delete satellite from list"
 msgstr ""
 
 #. quick sat selector tutorial label
-#: ../src/mod-cfg.c:742
+#: ../src/mod-cfg.c:734
 msgid "Double click on a satellite to move it to the other box."
 msgstr ""
 
-#: ../src/mod-cfg.c:835
+#: ../src/mod-cfg.c:827
 #, c-format
 msgid "%s: Applied changes to %s."
 msgstr ""
 
 #. window icon file name
-#: ../src/mod-cfg.c:855
+#: ../src/mod-cfg.c:847
 msgid "Module properties"
 msgstr ""
 
-#: ../src/mod-cfg.c:951
+#: ../src/mod-cfg.c:943
 #, c-format
 msgid "%s: Error while saving module data (%d)."
 msgstr ""
 
-#: ../src/mod-cfg.c:961 ../src/mod-cfg.c:1052
+#: ../src/mod-cfg.c:953 ../src/mod-cfg.c:1044
 #, c-format
 msgid "%s: User tried to create module with no sats."
 msgstr ""
 
-#: ../src/mod-cfg.c:974 ../src/mod-cfg.c:1064
+#: ../src/mod-cfg.c:966 ../src/mod-cfg.c:1056
 msgid "Please select at least one satellite from the list."
 msgstr ""
 
-#: ../src/mod-cfg.c:1100
+#: ../src/mod-cfg.c:1092
 #, c-format
 msgid "%s: Attempt to save data to empty file name."
 msgstr ""
 
-#: ../src/mod-cfg.c:1108
+#: ../src/mod-cfg.c:1100
 #, c-format
 msgid "%s: Attempt to save NULL data."
 msgstr ""
@@ -3081,7 +3079,7 @@ msgstr ""
 
 #. QTH name
 #. Config name
-#: ../src/qth-editor.c:194 ../src/sat-pref-qth.c:162
+#: ../src/qth-editor.c:194 ../src/sat-pref-qth.c:157
 #: ../src/sat-pref-qth-editor.c:178 ../src/sat-pref-rig-editor.c:147
 #: ../src/sat-pref-rot-editor.c:141
 msgid "Name"
@@ -3229,22 +3227,22 @@ msgid ""
 "LAT:%.2f LON:%.2f ALT:%d"
 msgstr ""
 
-#: ../src/qth-editor.c:723 ../src/sat-pref-qth-editor.c:802
+#: ../src/qth-editor.c:715 ../src/sat-pref-qth-editor.c:794
 #, c-format
 msgid "%s:%s: %.2f %.2f => %s"
 msgstr ""
 
-#: ../src/qth-editor.c:738 ../src/sat-pref-qth-editor.c:817
+#: ../src/qth-editor.c:730 ../src/sat-pref-qth-editor.c:809
 #, c-format
 msgid "%s:%d: Error converting lon/lat to locator"
 msgstr ""
 
-#: ../src/qth-editor.c:769 ../src/sat-pref-qth-editor.c:850
+#: ../src/qth-editor.c:761 ../src/sat-pref-qth-editor.c:842
 #, c-format
 msgid "%s:%s: %s => %.2f %.2f"
 msgstr ""
 
-#: ../src/qth-editor.c:811 ../src/sat-pref-qth-editor.c:892
+#: ../src/qth-editor.c:803 ../src/sat-pref-qth-editor.c:884
 #, c-format
 msgid "%s:%d: Invalid locator: %s"
 msgstr ""
@@ -3711,40 +3709,40 @@ msgstr ""
 msgid "%s: PRINT not implemented"
 msgstr ""
 
-#: ../src/sat-pref.c:54
+#: ../src/sat-pref.c:44
 msgid "GPREDICT Preferences :: General"
 msgstr ""
 
-#: ../src/sat-pref.c:55
+#: ../src/sat-pref.c:45
 msgid "GPREDICT Preferences :: Modules"
 msgstr ""
 
-#: ../src/sat-pref.c:56
+#: ../src/sat-pref.c:46
 msgid "GPREDICT Preferences :: Interfaces"
 msgstr ""
 
-#: ../src/sat-pref.c:57
+#: ../src/sat-pref.c:47
 msgid "GPREDICT Preferences :: Predict"
 msgstr ""
 
-#: ../src/sat-pref.c:94 ../src/sat-pref.c:110
+#: ../src/sat-pref.c:84 ../src/sat-pref.c:100
 msgid "General"
 msgstr "Γενικά"
 
-#: ../src/sat-pref.c:97 ../src/sat-pref.c:118
+#: ../src/sat-pref.c:87 ../src/sat-pref.c:108
 msgid "Modules"
 msgstr "Αρθρώματα"
 
-#: ../src/sat-pref.c:100 ../src/sat-pref.c:126
+#: ../src/sat-pref.c:90 ../src/sat-pref.c:116
 msgid "Interfaces"
 msgstr "Διασυνδέσεις"
 
-#: ../src/sat-pref.c:103 ../src/sat-pref.c:134
+#: ../src/sat-pref.c:93 ../src/sat-pref.c:124
 msgid "Predict"
 msgstr "Πρόβλεψη"
 
 #. create and display preferences window
-#: ../src/sat-pref.c:157
+#: ../src/sat-pref.c:148
 msgid "Gpredict Preferences :: General"
 msgstr ""
 
@@ -3927,14 +3925,14 @@ msgid ""
 "where XYZ is a unique timestamp."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:40
+#: ../src/sat-pref-formats.c:32
 msgid ""
 "Display local time instead of UTC. Note: The local time is that of your "
 "operating system and not the local time at the location, which you select as "
 "tracking reference."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:45
+#: ../src/sat-pref-formats.c:37
 msgid ""
 "Enter a format string using the following codes:\n"
 "\n"
@@ -3949,35 +3947,35 @@ msgid ""
 "See the user manual for more codes and examples."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:53
+#: ../src/sat-pref-formats.c:45
 msgid ""
 "Checking this box will cause geographical coordinates to be displayed using "
 "a suffix instead of sign (eg. 23.43°W instead of -23.43°)."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:59
+#: ../src/sat-pref-formats.c:51
 msgid ""
 "Display distances using Imperial units, for example miles instead of "
 "kilometres."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:85
+#: ../src/sat-pref-formats.c:77
 msgid "Show local time instead of UTC."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:108
+#: ../src/sat-pref-formats.c:100
 msgid "Reset to default value"
 msgstr "Επαναφορά στην προκαθορισμένη τιμή"
 
-#: ../src/sat-pref-formats.c:111
+#: ../src/sat-pref-formats.c:104
 msgid "Time format:"
 msgstr "Μορφή ώρας:"
 
-#: ../src/sat-pref-formats.c:120
+#: ../src/sat-pref-formats.c:113
 msgid "Use N/S/E/W for geographical coordinates."
 msgstr ""
 
-#: ../src/sat-pref-formats.c:129
+#: ../src/sat-pref-formats.c:122
 msgid "Use Imperial units instead of Metric."
 msgstr ""
 
@@ -4478,102 +4476,104 @@ msgstr "Μοναδική Διέλευση"
 msgid "Sky at a Glance"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:206
+#: ../src/sat-pref-qth.c:201
 msgid ""
 "Alt\n"
 "(ft)"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:215
+#: ../src/sat-pref-qth.c:210
 msgid ""
 "Alt\n"
 "(m)"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:224
+#: ../src/sat-pref-qth.c:219
 msgid "QRA"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:243
+#: ../src/sat-pref-qth.c:238
 msgid "Default"
 msgstr "Προεπιλεγμένο"
 
-#: ../src/sat-pref-qth.c:257
+#: ../src/sat-pref-qth.c:252
 msgid ""
 "GPSD\n"
 "Server"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:266
+#: ../src/sat-pref-qth.c:261
 msgid ""
 "GPSD\n"
 "Port"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:274
+#: ../src/sat-pref-qth.c:269
 msgid ""
 "QTH\n"
 "Type"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:339
+#: ../src/sat-pref-qth.c:334
 #, c-format
 msgid "%s:%d: Read QTH data from %s."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:346
+#: ../src/sat-pref-qth.c:341
 #, c-format
 msgid "%s:%d: Error reading %s (see prev msg)"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:356 ../src/sat-pref-qth.c:930
+#: ../src/sat-pref-qth.c:351 ../src/sat-pref-qth.c:922
 #, c-format
 msgid "%s:%d: Failed to open user cfg dir (%s)"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:397
+#: ../src/sat-pref-qth.c:392
 #, c-format
 msgid "%s:%d: Failed to allocate memory!\n"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:419
+#: ../src/sat-pref-qth.c:414
 #, c-format
 msgid "%s:%d: Could not convert (%.2f,%.2f) to QRA."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:427
+#: ../src/sat-pref-qth.c:422
 #, c-format
 msgid "%s:%d: QRA locator is %s"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:439
+#: ../src/sat-pref-qth.c:434
 #, c-format
 msgid "%s:%d: This appears to be the default QTH."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:504 ../src/sat-pref-rig.c:346
-#: ../src/sat-pref-rot.c:295
-msgid "Add New"
+#. add button
+#: ../src/sat-pref-qth.c:498
+#, fuzzy
+msgid "Add new"
 msgstr "Προσθήκη Νέου"
 
-#: ../src/sat-pref-qth.c:506
+#: ../src/sat-pref-qth.c:500
 msgid "Add a new ground station to the list"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:511 ../src/sat-pref-rig.c:352
+#. edit button
+#: ../src/sat-pref-qth.c:504 ../src/sat-pref-rig.c:352
 #: ../src/sat-pref-rot.c:301
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: ../src/sat-pref-qth.c:513
-msgid "Edit the currently selected ground station"
+#: ../src/sat-pref-qth.c:506
+msgid "Edit the selected ground station"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:520
-msgid "Delete the selected ground station"
+#: ../src/sat-pref-qth.c:512
+msgid "Delete selected ground station"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:599
+#: ../src/sat-pref-qth.c:591
 msgid ""
 "Can not delete ground station!\n"
 "\n"
@@ -4582,47 +4582,47 @@ msgid ""
 "not work properly."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:644
+#: ../src/sat-pref-qth.c:636
 #, c-format
 msgid "%s:%d: Empty ground station list!"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:685
+#: ../src/sat-pref-qth.c:677
 #, c-format
 msgid ""
 "%s:%d: Default QTH can not be cleared! Select another QTH to change default."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:699
+#: ../src/sat-pref-qth.c:691
 #, c-format
 msgid "%s:%d: New default QTH is %s.qth."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:743
+#: ../src/sat-pref-qth.c:735
 #, c-format
 msgid "%s:%d: Clearing default flag for %s."
 msgstr ""
 
-#: ../src/sat-pref-qth.c:863
+#: ../src/sat-pref-qth.c:855
 #, c-format
 msgid "%s:%d: %s appears to be default QTH"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:913
+#: ../src/sat-pref-qth.c:905
 #, c-format
 msgid "%s:%d: Failed to remove %s"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:919
+#: ../src/sat-pref-qth.c:911
 #, c-format
 msgid "%s:%d: Removed %s"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:981
+#: ../src/sat-pref-qth.c:973
 msgid "Alt (ft)"
 msgstr ""
 
-#: ../src/sat-pref-qth.c:987
+#: ../src/sat-pref-qth.c:979
 msgid "Alt (m)"
 msgstr ""
 
@@ -4742,6 +4742,10 @@ msgstr ""
 #, c-format
 msgid "%s:%d: Failed to read %s"
 msgstr ""
+
+#: ../src/sat-pref-rig.c:346 ../src/sat-pref-rot.c:295
+msgid "Add New"
+msgstr "Προσθήκη Νέου"
 
 #: ../src/sat-pref-rig.c:347
 msgid "Add a new radio to the list"
@@ -5086,7 +5090,7 @@ msgid ""
 "default for a -180° → 0° → +180° rotor is -180°."
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:435
+#: ../src/sat-pref-rot-editor.c:427
 #, c-format
 msgid "%s:%s: Invalid AZ rotator type."
 msgstr ""
@@ -5287,6 +5291,10 @@ msgid ""
 "be re-added to the database."
 msgstr ""
 
+#: ../src/sat-vis.c:41
+msgid "Visible"
+msgstr ""
+
 #: ../src/sat-vis.c:42
 msgid "Daylight"
 msgstr ""
@@ -5295,65 +5303,65 @@ msgstr ""
 msgid "Eclipsed"
 msgstr ""
 
-#: ../src/save-pass.c:103
+#: ../src/save-pass.c:104
 msgid "Save Pass Details"
 msgstr "Αποθήκευση Πληροφοριών Διέλευσης"
 
 #. directory chooser
-#: ../src/save-pass.c:117 ../src/save-pass.c:264
+#: ../src/save-pass.c:118 ../src/save-pass.c:265
 msgid "Save in folder:"
 msgstr ""
 
-#: ../src/save-pass.c:122 ../src/save-pass.c:269
+#: ../src/save-pass.c:123 ../src/save-pass.c:270
 msgid "Select a folder"
 msgstr ""
 
 #. file name
-#: ../src/save-pass.c:139 ../src/save-pass.c:286
+#: ../src/save-pass.c:140 ../src/save-pass.c:287
 msgid "Save using file name:"
 msgstr ""
 
 #. file contents
-#: ../src/save-pass.c:158 ../src/save-pass.c:305
+#: ../src/save-pass.c:159 ../src/save-pass.c:306
 msgid "File contents:"
 msgstr ""
 
-#: ../src/save-pass.c:165
+#: ../src/save-pass.c:166
 msgid "Info+header+data"
 msgstr ""
 
-#: ../src/save-pass.c:167
+#: ../src/save-pass.c:168
 msgid "Header + data"
 msgstr ""
 
-#: ../src/save-pass.c:169
+#: ../src/save-pass.c:170
 msgid "Data only"
 msgstr ""
 
 #. create the dialog
-#: ../src/save-pass.c:250
+#: ../src/save-pass.c:251
 msgid "Save Passes"
 msgstr "Αποθήκευση Διέλευσης"
 
-#: ../src/save-pass.c:312
+#: ../src/save-pass.c:313
 msgid "Complete report"
 msgstr ""
 
-#: ../src/save-pass.c:313
+#: ../src/save-pass.c:314
 msgid "Summary"
 msgstr ""
 
-#: ../src/save-pass.c:498 ../src/save-pass.c:601
+#: ../src/save-pass.c:491 ../src/save-pass.c:594
 #, c-format
 msgid "%s: Invalid file format: %d"
 msgstr ""
 
-#: ../src/save-pass.c:619
+#: ../src/save-pass.c:612
 #, c-format
 msgid "%s: Could not create file %s (%s)"
 msgstr ""
 
-#: ../src/save-pass.c:628
+#: ../src/save-pass.c:621
 #, c-format
 msgid ""
 "Could not create file %s\n"
@@ -5361,12 +5369,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/save-pass.c:644
+#: ../src/save-pass.c:637
 #, c-format
 msgid "%s: An error occurred while saving data to %s (%s)"
 msgstr ""
 
-#: ../src/save-pass.c:653
+#: ../src/save-pass.c:646
 #, c-format
 msgid ""
 "An error occurred while saving data to %s\n"
@@ -5374,7 +5382,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/save-pass.c:662
+#: ../src/save-pass.c:655
 #, c-format
 msgid "%s: Written %d characters to %s"
 msgstr ""
@@ -5662,6 +5670,9 @@ msgstr ""
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
+
+#~ msgid "Column Name"
+#~ msgstr "Όνομα Στήλης"
 
 #~ msgid "GPREDICT"
 #~ msgstr "GPREDICT"
