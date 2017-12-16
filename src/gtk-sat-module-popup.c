@@ -1,15 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
-
-    Comments, questions and bugreports should be submitted via
-    http://sourceforge.net/projects/gpredict/
-    More details can be found at the project home page:
-
-            http://gpredict.oz9aec.net/
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -87,12 +79,8 @@ void gtk_sat_module_popup(GtkSatModule * module)
     GtkWidget      *menu;       /* The pop-up menu */
     GtkWidget      *satsubmenu; /* Satellite selection submenu */
     GtkWidget      *menuitem;   /* Widget used to create the menu items */
-    GtkWidget      *image;      /* Widget used to create menu item icons */
-
-    /* misc variables */
     GList          *sats;
     sat_t          *sat;
-    gchar          *buff;
     guint           i, n;
 
 
@@ -108,22 +96,14 @@ void gtk_sat_module_popup(GtkSatModule * module)
 
     if (module->state == GTK_SAT_MOD_STATE_DOCKED)
     {
-        menuitem = gtk_image_menu_item_new_with_label(_("Detach module"));
-        buff = icon_file_name("gpredict-notebook.png");
-        image = gtk_image_new_from_file(buff);
-        g_free(buff);
-        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+        menuitem = gtk_menu_item_new_with_label(_("Detach module"));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
         g_signal_connect(menuitem, "activate",
                          G_CALLBACK(docking_state_cb), module);
     }
     else
     {
-        menuitem = gtk_image_menu_item_new_with_label(_("Attach module"));
-        buff = icon_file_name("gpredict-notebook.png");
-        image = gtk_image_new_from_file(buff);
-        g_free(buff);
-        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+        menuitem = gtk_menu_item_new_with_label(_("Attach module"));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
         g_signal_connect(menuitem, "activate",
                          G_CALLBACK(docking_state_cb), module);
@@ -131,20 +111,14 @@ void gtk_sat_module_popup(GtkSatModule * module)
 
     if (module->state == GTK_SAT_MOD_STATE_FULLSCREEN)
     {
-        menuitem = gtk_image_menu_item_new_with_label(_("Exit full screen"));
-        image = gtk_image_new_from_stock(GTK_STOCK_LEAVE_FULLSCREEN,
-                                         GTK_ICON_SIZE_MENU);
-        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+        menuitem = gtk_menu_item_new_with_label(_("Exit full screen"));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
         g_signal_connect(menuitem, "activate",
                          G_CALLBACK(screen_state_cb), module);
     }
     else
     {
-        menuitem = gtk_image_menu_item_new_with_label(_("Full screen"));
-        image = gtk_image_new_from_stock(GTK_STOCK_FULLSCREEN,
-                                         GTK_ICON_SIZE_MENU);
-        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+        menuitem = gtk_menu_item_new_with_label(_("Full screen"));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
         g_signal_connect(menuitem, "activate",
                          G_CALLBACK(screen_state_cb), module);
@@ -188,21 +162,13 @@ void gtk_sat_module_popup(GtkSatModule * module)
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     /* sky at a glance */
-    menuitem = gtk_image_menu_item_new_with_label(_("Sky at a glance"));
-    buff = icon_file_name("gpredict-planner-small.png");
-    image = gtk_image_new_from_file(buff);
-    g_free(buff);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Sky at a glance"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate",
                      G_CALLBACK(sky_at_glance_cb), module);
 
     /* time manager */
-    menuitem = gtk_image_menu_item_new_with_label(_("Time Controller"));
-    buff = icon_file_name("gpredict-clock-small.png");
-    image = gtk_image_new_from_file(buff);
-    g_free(buff);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Time Controller"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(tmgr_cb), module);
 
@@ -211,20 +177,12 @@ void gtk_sat_module_popup(GtkSatModule * module)
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     /* Radio Control */
-    menuitem = gtk_image_menu_item_new_with_label(_("Radio Control"));
-    buff = icon_file_name("gpredict-oscilloscope-small.png");
-    image = gtk_image_new_from_file(buff);
-    g_free(buff);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Radio Control"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(rigctrl_cb), module);
 
     /* Antenna Control */
-    menuitem = gtk_image_menu_item_new_with_label(_("Antenna Control"));
-    buff = icon_file_name("gpredict-antenna-small.png");
-    image = gtk_image_new_from_file(buff);
-    g_free(buff);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Antenna Control"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(rotctrl_cb), module);
 
@@ -233,16 +191,12 @@ void gtk_sat_module_popup(GtkSatModule * module)
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     /* configure */
-    menuitem = gtk_image_menu_item_new_with_label(_("Configure"));
-    image = gtk_image_new_from_stock(GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Configure"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(config_cb), module);
 
     /* clone */
-    menuitem = gtk_image_menu_item_new_with_label(_("Clone..."));
-    image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Clone..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(clone_cb), module);
 
@@ -251,16 +205,12 @@ void gtk_sat_module_popup(GtkSatModule * module)
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     /* delete module */
-    menuitem = gtk_image_menu_item_new_with_label(_("Delete"));
-    image = gtk_image_new_from_stock(GTK_STOCK_DELETE, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Delete"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(delete_cb), module);
 
     /* close */
-    menuitem = gtk_image_menu_item_new_with_label(_("Close"));
-    image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Close"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     g_signal_connect(menuitem, "activate", G_CALLBACK(close_cb), module);
 
@@ -337,8 +287,9 @@ static void clone_cb(GtkWidget * menuitem, gpointer data)
                                                     (GTK_WIDGET(module))),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_OK", GTK_RESPONSE_OK,
+                                         NULL);
     gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
 
     /* label */
