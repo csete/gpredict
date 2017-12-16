@@ -15,7 +15,6 @@ src/gtk-rot-ctrl.c
 src/gtk-rot-knob.c
 src/gtk-sat-data.c
 src/gtk-sat-list.c
-src/gtk-sat-list-col-sel.c
 src/gtk-sat-list-popup.c
 src/gtk-sat-map.c
 src/gtk-sat-map-ground-track.c
