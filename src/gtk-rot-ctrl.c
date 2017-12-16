@@ -118,7 +118,7 @@ static gint rotctld_socket_open(const gchar * host, gint port)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("Failed to create rotctl socket: %s"), strerror(errno));
-        return -1;
+        return sock;
     }
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
@@ -138,6 +138,7 @@ static gint rotctld_socket_open(const gchar * host, gint port)
                     _("Connection to rotctld server at %s:%d failed: %s"),
                     host, port);
 
+        close(sock);
         return -1;
     }
 
