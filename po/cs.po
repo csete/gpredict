@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 11:21+0100\n"
+"POT-Creation-Date: 2017-12-17 11:52+0100\n"
 "PO-Revision-Date: 2017-12-04 01:57+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -225,7 +225,7 @@ msgid "Satellite"
 msgstr "Satelit"
 
 #: ../src/gtk-event-list.c:51 ../src/gtk-sat-list.c:51
-#: ../src/gtk-sat-selector.c:272 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:522
+#: ../src/gtk-sat-selector.c:459 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:522
 msgid "Catnum"
 msgstr "Katčíslo"
 
@@ -1639,7 +1639,7 @@ msgid "%s:%d: Successfully cloned %s."
 msgstr "%s:%d: Úspěšně zkopírováno %s."
 
 #: ../src/gtk-sat-module-popup.c:392 ../src/gtk-sat-module-popup.c:513
-#: ../src/gtk-sat-module-popup.c:655 ../src/menubar.c:907
+#: ../src/gtk-sat-module-popup.c:655 ../src/menubar.c:273
 msgid "GPREDICT: "
 msgstr "GPREDICT: "
 
@@ -1861,69 +1861,62 @@ msgid ""
 "the current ground station!"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:217
-msgid "Select a satellite group or category to narrow your search."
-msgstr "Vyberte skupinu satelitů nebo kategorie k zúžení Vašeho hledání."
+#: ../src/gtk-sat-selector.c:392
+#, fuzzy
+msgid "Satellite group / category"
+msgstr "Možnosti satelitu / zkratky"
 
-#: ../src/gtk-sat-selector.c:262
+#: ../src/gtk-sat-selector.c:400
+msgid "Search for a satellite by name or catalog number"
+msgstr ""
+
+#: ../src/gtk-sat-selector.c:407
+msgid "Clear the search field"
+msgstr ""
+
+#: ../src/gtk-sat-selector.c:449
 msgid "Available Satellites"
 msgstr "Dostupné satelity"
 
-#: ../src/gtk-sat-selector.c:282
+#: ../src/gtk-sat-selector.c:469
 msgid "Updated"
 msgstr "Aktualizováno"
 
-#. Search
-#. Finish setting up the search entry
-#: ../src/gtk-sat-selector.c:317
-msgid "Search"
-msgstr "Hledat"
-
-#: ../src/gtk-sat-selector.c:321
-msgid ""
-"Start typing in this field to search for a satellite in the selected group."
-msgstr "Začněte psát do tohoto pole k vyhledání satelitu ve zvolené skupině."
-
-#. Group selector
-#: ../src/gtk-sat-selector.c:328
-msgid "Group"
-msgstr "Skupina"
-
-#: ../src/gtk-sat-selector.c:387
-msgid "All satellites"
-msgstr "Všechny satelity"
-
-#: ../src/gtk-sat-selector.c:395
-#, c-format
-msgid "%s:%s: Failed to open satdata directory %s."
-msgstr "%s:%s: Nelze otevřít adresář dat satelitu %s."
-
-#: ../src/gtk-sat-selector.c:438
-#, c-format
-msgid "%s:%s: Read %d satellites into MAIN group."
-msgstr "%s:%s Přečteno %d satelitů ve skupině MAIN."
-
-#: ../src/gtk-sat-selector.c:498 ../src/gtk-sat-selector.c:867
+#: ../src/gtk-sat-selector.c:541 ../src/gtk-sat-selector.c:645
 #, c-format
 msgid "%s:%s: Failed to open %s: %s"
 msgstr "%s:%s: Nelze otevřít %s: %s"
 
-#: ../src/gtk-sat-selector.c:538 ../src/mod-cfg.c:135
+#: ../src/gtk-sat-selector.c:581 ../src/mod-cfg.c:135
 #, c-format
 msgid "%s:%s: Error reading satellite %d."
 msgstr "%s:%s: Chyba při čtení satelitu %d."
 
-#: ../src/gtk-sat-selector.c:560
+#: ../src/gtk-sat-selector.c:603
 #, c-format
 msgid "%s:%s: Read %d satellites from %s"
 msgstr "%s:%s Přečteno %d satelitů z %s"
 
-#: ../src/gtk-sat-selector.c:566
+#: ../src/gtk-sat-selector.c:609
 #, c-format
 msgid "%s:%s: Failed to read %s"
 msgstr "%s:%s: Nelze přečíst %s"
 
-#: ../src/gtk-sat-selector.c:834
+#: ../src/gtk-sat-selector.c:723
+msgid "All satellites"
+msgstr "Všechny satelity"
+
+#: ../src/gtk-sat-selector.c:731
+#, c-format
+msgid "%s:%s: Failed to open satdata directory %s."
+msgstr "%s:%s: Nelze otevřít adresář dat satelitu %s."
+
+#: ../src/gtk-sat-selector.c:774
+#, c-format
+msgid "%s:%s: Read %d satellites into MAIN group."
+msgstr "%s:%s Přečteno %d satelitů ve skupině MAIN."
+
+#: ../src/gtk-sat-selector.c:891
 #, c-format
 msgid "%s: Error getting %dth satellite"
 msgstr "%s: CHyba při získávání %d. satelitu"
@@ -2351,192 +2344,230 @@ msgstr "Vyberte mapu"
 msgid "Image files"
 msgstr "Obrázkové soubory"
 
-#: ../src/menubar.c:74
+#: ../src/menubar.c:60
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../src/menubar.c:75
+#: ../src/menubar.c:61
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/menubar.c:76
+#: ../src/menubar.c:62
 msgid "_Update TLE data"
 msgstr ""
 
-#: ../src/menubar.c:77
+#: ../src/menubar.c:63
 msgid "_Update Transponder data"
 msgstr ""
 
-#: ../src/menubar.c:79
+#: ../src/menubar.c:65
 msgid "_Help"
 msgstr "_Nápověda"
 
 #. File menu
-#: ../src/menubar.c:82
+#: ../src/menubar.c:68
 msgid "_New module"
 msgstr "Nový _modul"
 
-#: ../src/menubar.c:83
+#: ../src/menubar.c:69
 msgid "Create a new module"
 msgstr "Vytvořit nový modul"
 
-#: ../src/menubar.c:84
+#: ../src/menubar.c:70
 msgid "_Open module"
 msgstr "_Otevřít modul"
 
-#: ../src/menubar.c:85
+#: ../src/menubar.c:71
 msgid "Open an existing module"
 msgstr "Otevřít existující modul"
 
-#: ../src/menubar.c:86
+#: ../src/menubar.c:72
 msgid "_Log browser"
 msgstr "_Prohlížeč záznamu"
 
-#: ../src/menubar.c:87
+#: ../src/menubar.c:73
 msgid "Open the message log browser"
 msgstr "Otevřít prohlížeč zpráv záznamu"
 
-#: ../src/menubar.c:88
+#: ../src/menubar.c:74
 msgid "E_xit"
 msgstr "_Ukončit"
 
-#: ../src/menubar.c:89
+#: ../src/menubar.c:75
 msgid "Exit the program"
 msgstr "Ukončit program"
 
 #. Edit menu
-#: ../src/menubar.c:92 ../src/menubar.c:95
+#: ../src/menubar.c:78 ../src/menubar.c:80
 msgid "From _network"
 msgstr "_Ze sítě"
 
-#: ../src/menubar.c:93
-msgid "Update Keplerian elements from a network server"
+#: ../src/menubar.c:79
+#, fuzzy
+msgid "Update TLE from a network server"
 msgstr "Aktualizovat Keplerovské prvky ze síťového serveru"
 
-#: ../src/menubar.c:96
+#: ../src/menubar.c:81
 msgid "Update transponders from a network server"
 msgstr ""
 
-#: ../src/menubar.c:98
+#: ../src/menubar.c:83
 msgid "From l_ocal files"
 msgstr "Z místních _souborů"
 
-#: ../src/menubar.c:99
-msgid "Update Keplerian elements from local files"
-msgstr "Aktualizovat Keplerovské prvky z místních souborů"
+#: ../src/menubar.c:84
+#, fuzzy
+msgid "Update TLE from local files"
+msgstr "Aktualizovat TLE ze souborů"
 
-#: ../src/menubar.c:101
+#: ../src/menubar.c:85
 msgid "_Preferences"
 msgstr "_Nastaveni"
 
-#: ../src/menubar.c:102
+#: ../src/menubar.c:86
 msgid "Edit user preferences"
 msgstr "Upravit nastavení uživatele"
 
 #. Help menu
-#: ../src/menubar.c:105
+#: ../src/menubar.c:89
 msgid "Online help"
 msgstr "Nápověda online"
 
-#: ../src/menubar.c:106
+#: ../src/menubar.c:90
 msgid "Show online user manual"
 msgstr "Zobrazit uživatelskou příručku onlnie"
 
-#: ../src/menubar.c:107
+#: ../src/menubar.c:91
 msgid "_License"
 msgstr "_Licence"
 
-#: ../src/menubar.c:108
+#: ../src/menubar.c:92
 msgid "Show the Gpredict license"
 msgstr "Zobrazit licenci Gpredict"
 
-#: ../src/menubar.c:109
+#: ../src/menubar.c:93
 msgid "_News"
 msgstr "_Novinky"
 
-#: ../src/menubar.c:110
+#: ../src/menubar.c:94
 msgid "Show what's new in this release"
 msgstr "Zobrazit co je nového v této verzi"
 
-#: ../src/menubar.c:111
+#: ../src/menubar.c:95
 msgid "_About Gpredict"
 msgstr "_O Gpredict"
 
-#: ../src/menubar.c:112
+#: ../src/menubar.c:96
 msgid "Show about dialog"
 msgstr "Zobrazí dialogové okno o programu"
 
-#: ../src/menubar.c:178
+#: ../src/menubar.c:162
 #, c-format
 msgid "Failed to build menubar: %s"
 msgstr "Nelze sestavit lištu nabídky: %s"
 
-#: ../src/menubar.c:201
+#: ../src/menubar.c:185
 #, c-format
 msgid "%s: Starting new module configurator..."
 msgstr "%s: Spouštění konfigurátora nového modulu"
 
-#: ../src/menubar.c:207
+#: ../src/menubar.c:191
 #, c-format
 msgid "%s: New module name is %s."
 msgstr "%s: Název nového modulu je %s."
 
-#: ../src/menubar.c:227 ../src/menubar.c:287
+#: ../src/menubar.c:211 ../src/menubar.c:556
 #, c-format
 msgid "Could not open %s. Please examine the log messages for details."
 msgstr ""
 "Nelze otevřít %s. Pro podrobnosti si prosím prohlédněte zprávy záznamu."
 
-#: ../src/menubar.c:244
+#: ../src/menubar.c:228
 #, c-format
 msgid "%s: New module config cancelled."
 msgstr "%s: Nastavení nového modulu zrušeno."
 
-#: ../src/menubar.c:259
+#: ../src/menubar.c:396
+#, c-format
+msgid "%s:%s: Scanning directory %s for modules."
+msgstr "%s:%s Hledání modulů v adresáři %s."
+
+#: ../src/menubar.c:418
+#, c-format
+msgid "%s:%d: Failed to open module dir %s (%s)"
+msgstr "%s:%d: Nelze otevřít adresář modulu %s (%s)"
+
+#: ../src/menubar.c:434
+msgid ""
+"You do not have any modules set up yet. Please use File->New in order to "
+"create a module."
+msgstr ""
+"Zatím nemáte nastaveny žádné moduly. Prosím použijte Soubor->Nový pro "
+"vytvoření modulu."
+
+#: ../src/menubar.c:461
+msgid "Module"
+msgstr "Modul"
+
+#. create dialog
+#: ../src/menubar.c:467
+msgid "Select a module"
+msgstr "Vybrat modul"
+
+#: ../src/menubar.c:495
+#, c-format
+msgid "%s:%s: Selected module is: %s"
+msgstr "%s:%s: VYbraný modul je: %s"
+
+#: ../src/menubar.c:501
+#, c-format
+msgid "%s:%s: No selection is list of modules."
+msgstr "%s:%s: Žádný výběr v seznamu modulů."
+
+#: ../src/menubar.c:528
 #, c-format
 msgid "%s: Open existing module..."
 msgstr "%s: Otevřít existující modul..."
 
-#: ../src/menubar.c:266
+#: ../src/menubar.c:535
 #, c-format
 msgid "%s: Open module %s."
 msgstr "%s: Otevřít modul %s."
 
-#: ../src/menubar.c:316
+#: ../src/menubar.c:585
 #, c-format
 msgid "%s: Open module cancelled."
 msgstr "%s: Otevření modulu zrušeno."
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:359
+#: ../src/menubar.c:628
 msgid "Transponder Update"
 msgstr ""
 
-#: ../src/menubar.c:375
+#: ../src/menubar.c:645
 msgid "<b>Updating transponder files from network</b>"
 msgstr ""
 
 #. statistics
-#. label2 = gtk_label_new(_("Transponders updated:\t 0\n"));
-#: ../src/menubar.c:389
+#: ../src/menubar.c:658
 msgid "\n"
 msgstr ""
 
-#: ../src/menubar.c:412 ../src/menubar.c:490 ../src/menubar.c:631
+#: ../src/menubar.c:681 ../src/menubar.c:760 ../src/menubar.c:902
 msgid "Finished"
 msgstr "Hotovo"
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:435 ../src/menubar.c:575 ../src/sat-pref-general.c:58
+#: ../src/menubar.c:704 ../src/menubar.c:845 ../src/sat-pref-general.c:58
 msgid "TLE Update"
 msgstr "Aktualizace TLE"
 
-#: ../src/menubar.c:452
+#: ../src/menubar.c:722
 msgid "<b>Updating TLE files from network</b>"
 msgstr "<b>Aktualizace souborů TLE ze sítě</b>"
 
 #. statistics
-#: ../src/menubar.c:465 ../src/menubar.c:605
+#: ../src/menubar.c:735 ../src/menubar.c:876
 msgid ""
 "Satellites updated:\t 0\n"
 "Satellites skipped:\t 0\n"
@@ -2547,30 +2578,30 @@ msgstr ""
 "Chybějících satelitů:\t 0\n"
 
 #. create file chooser
-#: ../src/menubar.c:526
+#: ../src/menubar.c:796
 msgid "Select directory"
 msgstr "Vyberte adresář"
 
 #. create label
-#: ../src/menubar.c:532
+#: ../src/menubar.c:802
 msgid "Select TLE directory:"
 msgstr "Vyberte adresář TLE:"
 
 #. create the dalog
-#: ../src/menubar.c:541
+#: ../src/menubar.c:812
 msgid "Update TLE from files"
 msgstr "Aktualizovat TLE ze souborů"
 
-#: ../src/menubar.c:568
+#: ../src/menubar.c:838
 #, c-format
 msgid "%s: Running TLE update from %s"
 msgstr "%s: Spouštění aktualizace TLE z %s"
 
-#: ../src/menubar.c:592
+#: ../src/menubar.c:863
 msgid "<b>Updating TLE files from files</b>"
 msgstr "<b>Aktualizace souborů TLE ze souborů</b>"
 
-#: ../src/menubar.c:658
+#: ../src/menubar.c:929
 msgid ""
 "A comprehensive PDF user manual and \n"
 "video tutorials are available from the \n"
@@ -2579,43 +2610,6 @@ msgstr ""
 "Přehledný uživatelský manuál v PDF a \n"
 "video výuku můžete najít na \n"
 "stránce Gpredict:"
-
-#: ../src/menubar.c:728
-#, c-format
-msgid "%s:%s: Scanning directory %s for modules."
-msgstr "%s:%s Hledání modulů v adresáři %s."
-
-#: ../src/menubar.c:750
-#, c-format
-msgid "%s:%d: Failed to open module dir %s (%s)"
-msgstr "%s:%d: Nelze otevřít adresář modulu %s (%s)"
-
-#: ../src/menubar.c:766
-msgid ""
-"You do not have any modules set up yet. Please use File->New in order to "
-"create a module."
-msgstr ""
-"Zatím nemáte nastaveny žádné moduly. Prosím použijte Soubor->Nový pro "
-"vytvoření modulu."
-
-#: ../src/menubar.c:793
-msgid "Module"
-msgstr "Modul"
-
-#. create dialog
-#: ../src/menubar.c:799
-msgid "Select a module"
-msgstr "Vybrat modul"
-
-#: ../src/menubar.c:827
-#, c-format
-msgid "%s:%s: Selected module is: %s"
-msgstr "%s:%s: VYbraný modul je: %s"
-
-#: ../src/menubar.c:833
-#, c-format
-msgid "%s:%s: No selection is list of modules."
-msgstr "%s:%s: Žádný výběr v seznamu modulů."
 
 #: ../src/mod-cfg.c:62
 #, c-format
@@ -2861,17 +2855,17 @@ msgid "Gpredict: "
 msgstr ""
 
 #. pass details
-#: ../src/pass-popup-menu.c:72
+#: ../src/pass-popup-menu.c:84
 msgid "Show details"
 msgstr "Zobrazit podrobnosti"
 
 #. Polar plot pass
-#: ../src/pass-popup-menu.c:89
+#: ../src/pass-popup-menu.c:96
 msgid "Polar plot"
 msgstr "Polaární souřadnice"
 
 #. Az/El plot pass
-#: ../src/pass-popup-menu.c:103
+#: ../src/pass-popup-menu.c:105
 msgid "Az/El plot"
 msgstr "Az/Výš souřadnice"
 
@@ -5896,6 +5890,24 @@ msgstr ""
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
+
+#~ msgid "Select a satellite group or category to narrow your search."
+#~ msgstr "Vyberte skupinu satelitů nebo kategorie k zúžení Vašeho hledání."
+
+#~ msgid "Search"
+#~ msgstr "Hledat"
+
+#~ msgid ""
+#~ "Start typing in this field to search for a satellite in the selected "
+#~ "group."
+#~ msgstr ""
+#~ "Začněte psát do tohoto pole k vyhledání satelitu ve zvolené skupině."
+
+#~ msgid "Group"
+#~ msgstr "Skupina"
+
+#~ msgid "Update Keplerian elements from local files"
+#~ msgstr "Aktualizovat Keplerovské prvky z místních souborů"
 
 #~ msgid "Column Name"
 #~ msgstr "Název sloupce"
