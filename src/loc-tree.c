@@ -3,12 +3,6 @@
 
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
- 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -107,7 +101,6 @@ gboolean loc_tree_create(const gchar * fname,
         ffname = g_strdup(fname);
 
     view = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(view), TRUE);
 
     /* Create columns.
        Note that there are several ways to create and add the individual
@@ -235,10 +228,9 @@ gboolean loc_tree_create(const gchar * fname,
     dialog = gtk_dialog_new_with_buttons(_("Select Location"),
                                          NULL,
                                          GTK_DIALOG_MODAL,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_OK,
-                                         GTK_RESPONSE_ACCEPT, NULL);
+                                         "_Cancel", GTK_RESPONSE_REJECT,
+                                         "_OK", GTK_RESPONSE_ACCEPT,
+                                         NULL);
 
     gtk_window_set_default_size(GTK_WINDOW(dialog), 450, 400);
 

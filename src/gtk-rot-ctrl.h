@@ -69,6 +69,8 @@ struct _gtk_rot_ctrl {
     GtkWidget      *DevSel;
     GtkWidget      *plot;       /*!< Polar plot widget */
     GtkWidget      *LockBut;
+    GtkWidget      *MonitorCheckBox;
+    GtkWidget      *track;
 
     rotor_conf_t   *conf;
     gdouble         t;          /*!< Time when sat data last has been updated. */
@@ -85,6 +87,7 @@ struct _gtk_rot_ctrl {
     gdouble         tolerance;  /*!< Error tolerance */
 
     gboolean        tracking;   /*!< Flag set when we are tracking a target. */
+    gboolean        monitor;    /*!< Flag indicating that rig is in monitor mode. */
     gboolean        engaged;    /*!< Flag indicating that rotor device is engaged. */
 
     gint            errcnt;     /*!< Error counter. */

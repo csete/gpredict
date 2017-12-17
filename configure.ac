@@ -6,8 +6,8 @@ AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(build-config.h)
 AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.6])
 
-AM_MAINTAINER_MODE
-AC_PROG_INTLTOOL([0.21])
+# ensure Makefiles are updated when Makefile.am is modified
+AM_MAINTAINER_MODE([enable])
 
 # kernel style compile messages
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -16,12 +16,13 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PROG_CC
 AC_ISC_POSIX
 AC_HEADER_STDC
+AC_PROG_INTLTOOL([0.21])
 AM_PROG_LIBTOOL
 
 AC_CHECK_HEADERS([sys/time.h unistd.h getopt.h])
 
 if test "${ac_cv_c_compiler_gnu}" = "yes"; then
-  CFLAGS="${CFLAGS} -Wall"
+  CFLAGS="${CFLAGS} -Wall -Wextra"
 fi
 
 # check for libm

@@ -1,4 +1,13 @@
 
+Changes in version 2.2 (TBC)
+
+- New Monitor mode for antenna controller
+- Avoid using gcc-specific language extensions
+- Fixed crash when connecting to rotctld server that isn't running
+- Fixed missing version number in Debian packages
+- Improved satellite search field in module editor
+
+
 Changes in version 2.0 (10 Dec 2017)
 
 - New logo

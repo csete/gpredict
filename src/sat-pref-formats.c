@@ -1,16 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
- 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -107,7 +99,8 @@ GtkWidget      *sat_pref_formats_create()
     g_signal_connect(tfreset, "clicked", G_CALLBACK(reset_cb), NULL);
     gtk_widget_set_tooltip_text(tfreset, _("Reset to default value"));
 
-    tfbox = gtk_hbox_new(FALSE, 5);
+    tfbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+    gtk_box_set_homogeneous(GTK_BOX(tfbox), FALSE);
     gtk_box_pack_start(GTK_BOX(tfbox), gtk_label_new(_("Time format:")),
                        FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(tfbox), tfentry, TRUE, TRUE, 0);
@@ -132,13 +125,18 @@ GtkWidget      *sat_pref_formats_create()
     /* connect sat-pref-qth hook */
     g_signal_connect(impcheck, "toggled", G_CALLBACK(systog_cb), NULL);
 
-    vbox = gtk_vbox_new(FALSE, 10);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 20);
     gtk_box_pack_start(GTK_BOX(vbox), tzcheck, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), tfbox, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), nsewcheck, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), impcheck, FALSE, FALSE, 0);
 
     return vbox;

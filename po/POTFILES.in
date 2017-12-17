@@ -5,6 +5,7 @@ src/first-time.c
 src/gpredict-help.c
 src/gpredict-utils.c
 src/gtk-azel-plot.c
+src/gtk-event-list.c
 src/gtk-freq-knob.c
 src/gtk-polar-plot.c
 src/gtk-polar-view.c
@@ -14,7 +15,6 @@ src/gtk-rot-ctrl.c
 src/gtk-rot-knob.c
 src/gtk-sat-data.c
 src/gtk-sat-list.c
-src/gtk-sat-list-col-sel.c
 src/gtk-sat-list-popup.c
 src/gtk-sat-map.c
 src/gtk-sat-map-ground-track.c
@@ -40,6 +40,7 @@ src/orbit-tools.c
 src/pass-popup-menu.c
 src/pass-to-txt.c
 src/predict-tools.c
+src/print-pass.c
 src/qth-data.c
 src/qth-editor.c
 src/radio-conf.c
@@ -57,6 +58,7 @@ src/sat-pref-formats.c
 src/sat-pref-general.c
 src/sat-pref-interfaces.c
 src/sat-pref-layout.c
+src/sat-pref-layout-utils.c
 src/sat-pref-list-view.c
 src/sat-pref-map-view.c
 src/sat-pref-modules.c

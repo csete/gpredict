@@ -573,3 +573,19 @@ gboolean gpredict_save_key_file(GKeyFile * cfgdata, const char *filename)
 
     return err;
 }
+
+
+/**
+ * Check if \c ch is an alpha-num; in range \c "[0-9a-zA-F]".
+ * Or \c "ch == '-'" or \c "ch == '_'".
+ *
+ * @param ch the character code to check.
+ * @return TRUE if okay.
+ */
+gboolean gpredict_legal_char (int ch)
+{
+  if (g_ascii_isalnum(ch) || ch == '-' || ch == '_')
+     return (TRUE);
+  return (FALSE);
+}
+
