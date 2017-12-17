@@ -175,6 +175,20 @@ static void gtk_sat_selector_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
+/* user clicked on "clear icon" in search field */
+static void search_icon_clicked(GtkEntry *entry, GtkEntryIconPosition icon_pos,
+                                GdkEvent *event, gpointer user_data)
+{
+    (void) event;
+    (void) user_data;
+
+    if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+    {
+        GtkEntryBuffer *buffer = gtk_entry_get_buffer(entry);
+        gtk_entry_buffer_delete_text(buffer, 0, -1);
+    }
+}
+
 /**
  * Create a new GtkSatSelector widget
  *
@@ -211,10 +225,21 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
 
     /* create search widget early so it can be used for callback */
     GTK_SAT_SELECTOR(widget)->search = gtk_entry_new();
-    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
-                                      GTK_ENTRY_ICON_PRIMARY, "edit-find");
     gtk_widget_set_tooltip_text(GTK_SAT_SELECTOR(widget)->search,
                                 _("Search for a satellite by name or catalog number"));
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                      GTK_ENTRY_ICON_PRIMARY, "edit-find");
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                      GTK_ENTRY_ICON_SECONDARY, "edit-clear");
+    gtk_entry_set_icon_tooltip_text(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                      GTK_ENTRY_ICON_SECONDARY,
+                                      _("Clear the search field"));
+    gtk_entry_set_icon_activatable(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                   GTK_ENTRY_ICON_PRIMARY, FALSE);
+    gtk_entry_set_icon_activatable(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                   GTK_ENTRY_ICON_SECONDARY, TRUE);
+    g_signal_connect(G_OBJECT(GTK_SAT_SELECTOR(widget)->search), "icon-release",
+                     G_CALLBACK(search_icon_clicked), NULL);
 
     /* create list and model */
     create_and_fill_models(selector);
