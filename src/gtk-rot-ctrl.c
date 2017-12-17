@@ -144,7 +144,7 @@ static gint rotctld_socket_open(const gchar * host, gint port)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("Connection to rotctld server at %s:%d failed: %s"),
-                    host, port);
+                    host, port, strerror(errno));
 
         close(sock);
         return -1;
