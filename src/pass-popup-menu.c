@@ -77,16 +77,11 @@ void pass_popup_menu_exec(qth_t * qth, pass_t * pass, GdkEventButton * event,
 {
     GtkWidget      *menu;
     GtkWidget      *menuitem;
-    GtkWidget      *image;
-    gchar          *buff;
 
     menu = gtk_menu_new();
 
     /* pass details */
-    menuitem = gtk_image_menu_item_new_with_label(_("Show details"));
-    image = gtk_image_new_from_stock(GTK_STOCK_JUSTIFY_FILL,
-                                     GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Show details"));
     g_object_set_data(G_OBJECT(menuitem), "pass", pass);
     g_object_set_data(G_OBJECT(menuitem), "qth", qth);
     g_signal_connect(menuitem, "activate",
@@ -97,13 +92,8 @@ void pass_popup_menu_exec(qth_t * qth, pass_t * pass, GdkEventButton * event,
     menuitem = gtk_separator_menu_item_new();
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
-
     /* Polar plot pass */
-    menuitem = gtk_image_menu_item_new_with_label(_("Polar plot"));
-    buff = icon_file_name("gpredict-polar-small.png");
-    image = gtk_image_new_from_file(buff);
-    g_free(buff);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Polar plot"));
     g_object_set_data(G_OBJECT(menuitem), "pass", pass);
     g_object_set_data(G_OBJECT(menuitem), "qth", qth);
     g_signal_connect(menuitem, "activate",
@@ -112,11 +102,7 @@ void pass_popup_menu_exec(qth_t * qth, pass_t * pass, GdkEventButton * event,
     gtk_widget_set_sensitive(menuitem, FALSE);
 
     /* Az/El plot pass */
-    menuitem = gtk_image_menu_item_new_with_label(_("Az/El plot"));
-    buff = icon_file_name("gpredict-azel-small.png");
-    image = gtk_image_new_from_file(buff);
-    g_free(buff);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
+    menuitem = gtk_menu_item_new_with_label(_("Az/El plot"));
     g_object_set_data(G_OBJECT(menuitem), "pass", pass);
     g_object_set_data(G_OBJECT(menuitem), "qth", qth);
     g_signal_connect(menuitem, "activate",
