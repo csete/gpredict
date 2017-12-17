@@ -1,16 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Charles Suprin <hamaa1vs@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+                      2011  Charles Suprin, AA1VS
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -26,8 +18,7 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 
-
-/* need _gnu_source to have strcasestr defined*/
+/* need _gnu_source to have strcasestr defined */
 #define _GNU_SOURCE
 
 #ifdef HAVE_CONFIG_H
@@ -128,7 +119,7 @@ GType gtk_sat_selector_get_type()
             NULL
         };
 
-        gtk_sat_selector_type = g_type_register_static(GTK_TYPE_VBOX,
+        gtk_sat_selector_type = g_type_register_static(GTK_TYPE_BOX,
                                                        "GtkSatSelector",
                                                        &gtk_sat_selector_info,
                                                        0);
@@ -198,7 +189,7 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
     GtkTreeModel   *model;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-    GtkWidget      *table;
+    GtkWidget      *vbox;
     GtkWidget      *frame;
     GtkTreeModel   *filter;
 
@@ -213,14 +204,17 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
     /* create group selector combo box (needed by create_and_fill_models()) */
     GTK_SAT_SELECTOR(widget)->groups = gtk_combo_box_text_new();
     gtk_widget_set_tooltip_text(GTK_SAT_SELECTOR(widget)->groups,
-                                _
-                                ("Select a satellite group or category to narrow your search."));
+                                _("Satellite group / category"));
 
     /* combo box signal handler will be connected at the end after it has
        been populated to avoid false triggering */
 
     /* create search widget early so it can be used for callback */
     GTK_SAT_SELECTOR(widget)->search = gtk_entry_new();
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                      GTK_ENTRY_ICON_PRIMARY, "edit-find");
+    gtk_widget_set_tooltip_text(GTK_SAT_SELECTOR(widget)->search,
+                                _("Search for a satellite by name or catalog number"));
 
     /* create list and model */
     create_and_fill_models(selector);
@@ -243,12 +237,9 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
                                            NULL);
 
     selector->tree = gtk_tree_view_new_with_model(filter);
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(selector->tree), TRUE);
-
     g_signal_connect(G_OBJECT(GTK_SAT_SELECTOR(widget)->search), "changed",
                      G_CALLBACK(cb_entry_changed),
                      GTK_TREE_VIEW(selector->tree));
-
     g_object_unref(model);
 
     /* we can now connect combobox signal handler */
@@ -293,7 +284,7 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
         gtk_tree_view_column_set_visible(column, FALSE);
 
     /* "row-activated" signal is used to catch double click events, which means
-       a satellite has been selected. This propagates to the TBD GtkSatSelector signal */
+       a satellite has been selected. */
     g_signal_connect(selector->tree, "row-activated",
                      G_CALLBACK(row_activated_cb), selector);
 
@@ -306,37 +297,17 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
     gtk_container_add(GTK_CONTAINER(GTK_SAT_SELECTOR(widget)->swin),
                       GTK_SAT_SELECTOR(widget)->tree);
 
-    /* create a frame around the SWIN */
+    /* frame around the scrolled window */
     frame = gtk_frame_new(NULL);
     gtk_container_add(GTK_CONTAINER(frame), GTK_SAT_SELECTOR(widget)->swin);
 
-    table = gtk_table_new(7, 4, TRUE);
-
-    /* Search */
-    /* Finish setting up the search entry */
-    gtk_table_attach(GTK_TABLE(table), gtk_label_new(_("Search")), 0, 1, 0, 1,
-                     GTK_SHRINK, GTK_SHRINK, 0, 0);
-    gtk_widget_set_tooltip_text(GTK_SAT_SELECTOR(widget)->search,
-                                _
-                                ("Start typing in this field to search for a satellite"
-                                 " in the selected group."));
-
-    gtk_table_attach(GTK_TABLE(table), GTK_SAT_SELECTOR(widget)->search, 1, 4,
-                     0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-
-    /* Group selector */
-    gtk_table_attach(GTK_TABLE(table), gtk_label_new(_("Group")), 0, 1, 1, 2,
-                     GTK_SHRINK, GTK_SHRINK, 0, 0);
-    gtk_table_attach(GTK_TABLE(table), GTK_SAT_SELECTOR(widget)->groups, 1, 4,
-                     1, 2, GTK_FILL, GTK_SHRINK, 0, 0);
-
-
-    /* satellite list */
-    gtk_table_attach(GTK_TABLE(table), frame, 0, 4, 2, 7,
-                     GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 0, 0);
-
-    /* Add tabel to main container */
-    gtk_box_pack_start(GTK_BOX(widget), table, TRUE, TRUE, 0);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_pack_start(GTK_BOX(vbox), GTK_SAT_SELECTOR(widget)->search,
+                       FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), GTK_SAT_SELECTOR(widget)->groups,
+                       FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(widget), vbox, TRUE, TRUE, 0);
 
     gtk_widget_show_all(widget);
 
