@@ -65,7 +65,8 @@ static GtkWidget *create_transponder_table(guint catnum)
     }
     else
     {
-        vbox = gtk_vbox_new(FALSE, 0);
+        vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
+        gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
         gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
 
         /* Add each transponder to vbox */
@@ -80,11 +81,12 @@ static GtkWidget *create_transponder_table(guint catnum)
             /* transponder name */
             text = g_strdup_printf("<b>%s</b>", trsp->name);
             label = gtk_label_new(NULL);
-            gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+            g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
             gtk_label_set_markup(GTK_LABEL(label), text);
             g_free(text);
             gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-            gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(),
+            gtk_box_pack_start(GTK_BOX(vbox),
+                               gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
                                FALSE, FALSE, 0);
 
             /* uplink */
@@ -106,7 +108,7 @@ static GtkWidget *create_transponder_table(guint catnum)
                                         trsp->uplow / 1.0e6);
                 }
                 label = gtk_label_new(text);
-                gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+                g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
                 gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
                 g_free(text);
             }
@@ -130,7 +132,7 @@ static GtkWidget *create_transponder_table(guint catnum)
                                         trsp->downlow / 1.0e6);
                 }
                 label = gtk_label_new(text);
-                gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+                g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
                 gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
                 g_free(text);
             }
@@ -143,7 +145,7 @@ static GtkWidget *create_transponder_table(guint catnum)
                     g_strdup_printf(_("Inverting: %s"),
                                     trsp->invert ? "YES" : "NO");
                 label = gtk_label_new(text);
-                gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+                g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
                 g_free(text);
                 gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
             }
@@ -153,7 +155,7 @@ static GtkWidget *create_transponder_table(guint catnum)
             {
                 text = g_strdup_printf(_("Mode: %s"), trsp->mode);
                 label = gtk_label_new(text);
-                gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+                g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
                 g_free(text);
                 gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
             }
@@ -161,7 +163,7 @@ static GtkWidget *create_transponder_table(guint catnum)
             {
                 text = g_strdup_printf(_("Baudrate: %9.2f"), trsp->baud);
                 label = gtk_label_new(text);
-                gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+                g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
                 g_free(text);
                 gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
             }
@@ -172,8 +174,7 @@ static GtkWidget *create_transponder_table(guint catnum)
         swin = gtk_scrolled_window_new(NULL, NULL);
         gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
                                        GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-        //gtk_container_add (GTK_CONTAINER (swin), vbox);
-        gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), vbox);
+        gtk_container_add (GTK_CONTAINER (swin), vbox);
     }
 
     return swin;
@@ -272,30 +273,28 @@ void show_sat_info(sat_t * sat, gpointer data)
         toplevel = GTK_WINDOW(data);
 
     /* create table */
-    table = gtk_table_new(20, 4, FALSE);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    table = gtk_grid_new();
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
-
-    /* create table contents and add them to table */
 
     /* satellite name */
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Satellite name:</b>"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
 
     label = gtk_label_new(NULL);
     str = g_markup_printf_escaped(_("<b>%s</b>"), sat->nickname);
     gtk_label_set_markup(GTK_LABEL(label), str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 0, 1);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 0, 1, 1);
     g_free(str);
 
     /* operational status */
     label = gtk_label_new(_("Operational Status:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     switch (sat->tle.status)
     {
@@ -330,182 +329,179 @@ void show_sat_info(sat_t * sat, gpointer data)
 
     }
 
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 1, 2);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 1, 1, 1);
 
     /* Catnum */
     label = gtk_label_new(_("Catalogue number:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
     str = g_strdup_printf("%d", sat->tle.catnr);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 2, 3);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 2, 1, 1);
     g_free(str);
 
     /* international designator */
     label = gtk_label_new(_("International designator:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
     label = gtk_label_new(sat->tle.idesg);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 3, 4);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 3, 1, 1);
 
     /* elset number */
     label = gtk_label_new(_("Element set number:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 4, 5);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
 
     str = g_strdup_printf("%d", sat->tle.elset);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 4, 5);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 4, 1, 1);
     g_free(str);
 
     /* elset epoch */
     label = gtk_label_new(_("Epoch time:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 5, 1, 1);
 
     str = epoch_to_str(sat);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 5, 6);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 5, 1, 1);
     g_free(str);
 
     /* Revolution Number @ Epoch */
     label = gtk_label_new(_("Orbit number @ epoch:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 6, 7);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 6, 1, 1);
 
     str = g_strdup_printf("%d", sat->tle.revnum);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 6, 7);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 6, 1, 1);
     g_free(str);
 
     /* ephermis type left out, since it is always 0 */
 
     /* separator */
-    gtk_table_attach_defaults(GTK_TABLE(table),
-                              gtk_hseparator_new(), 0, 4, 7, 8);
+    gtk_grid_attach(GTK_GRID(table),
+                    gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                    0, 7, 2, 1); 
 
     /* Orbit inclination */
     label = gtk_label_new(_("Inclination:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 8, 9);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 8, 1, 1);
 
     str = g_strdup_printf("%.4f\302\260", sat->tle.xincl / de2ra);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 8, 9);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 8, 1, 1);
     g_free(str);
 
     /* RAAN */
     label = gtk_label_new(_("RAAN:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 9, 10);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 9, 1, 1);
 
     str = g_strdup_printf("%.4f\302\260", sat->tle.xnodeo / de2ra);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 9, 10);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 9, 1, 1);
     g_free(str);
 
     /* Eccentricity */
     label = gtk_label_new(_("Eccentricity:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 10, 11);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 10, 1, 1);
 
     str = g_strdup_printf("%.7f", sat->tle.eo);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 10, 11);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 10, 1, 1);
     g_free(str);
 
     /* Argument of perigee */
     label = gtk_label_new(_("Arg. of perigee:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 11, 12);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 11, 1, 1);
 
     str = g_strdup_printf("%.4f\302\260", sat->tle.omegao / de2ra);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 11, 12);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 11, 1, 1);
     g_free(str);
 
     /* Mean Anomaly */
     label = gtk_label_new(_("Mean anomaly:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 12, 13);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 12, 1, 1);
 
     str = g_strdup_printf("%.4f\302\260", sat->tle.xmo / de2ra);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 12, 13);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 12, 1, 1);
     g_free(str);
 
     /* Mean Motion */
     label = gtk_label_new(_("Mean motion:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 13, 14);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 13, 1, 1);
 
-    //str = g_strdup_printf ("%.4f [rev/day]", sat->tle.xno/(xmnpda*(twopi/xmnpda/xmnpda)));
     str = g_strdup_printf("%.8f [rev/day]", sat->meanmo);
     label = gtk_label_new(str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 13, 14);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 13, 1, 1);
     g_free(str);
 
     /* one half of the first time derivative of mean motion */
     label = gtk_label_new(_("\302\275 d/dt (mean motion):"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 14, 15);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 14, 1, 1);
 
     str = g_strdup_printf("%.5e [rev/day<sup>2</sup>]",
                           sat->tle.xndt2o / (twopi / xmnpda / xmnpda));
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 14, 15);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 14, 1, 1);
     g_free(str);
 
     /* one sixth of the second time derivative of mean motion */
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label),
                          _("1/6 d<sup>2</sup>/dt<sup>2</sup> (mean motion):"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 15, 16);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 15, 1, 1);
 
     str = g_strdup_printf("%.5e [rev/day<sup>3</sup>]",
-                          sat->tle.xndd6o * xmnpda / (twopi / xmnpda /
-                                                      xmnpda));
+                          sat->tle.xndd6o * xmnpda / (twopi / xmnpda / xmnpda));
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 15, 16);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 15, 1, 1);
     g_free(str);
 
     /* B* drag term */
     label = gtk_label_new(_("B* drag term:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 16, 17);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 16, 1, 1);
 
-    str =
-        g_strdup_printf("%.5e [R<sub>E</sub><sup>-1</sup>]",
-                        sat->tle.bstar * ae);
+    str = g_strdup_printf("%.5e [R<sub>E</sub><sup>-1</sup>]",
+                          sat->tle.bstar * ae);
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), str);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 2, 16, 17);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 16, 1, 1);
     g_free(str);
 
     /* Orbit type */
 
     /* Next Event */
-
 
     gtk_widget_show_all(table);
 
@@ -520,7 +516,7 @@ void show_sat_info(sat_t * sat, gpointer data)
     dialog = gtk_dialog_new_with_buttons(_("Satellite Info"),
                                          toplevel,
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_OK,
+                                         "_OK",
                                          GTK_RESPONSE_ACCEPT, NULL);
 
     /* allow interaction with other windows */
