@@ -131,7 +131,7 @@ static gint rotctld_socket_open(const gchar * host, gint port)
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("Name resolution of rotctld server %s failed."),
                     host);
-
+        close(sock);
         return -1;
     }
 
