@@ -109,7 +109,6 @@ GPREDICTSRC = \
 	gtk-sat-data.c \
 	gtk-sat-list.c \
 	gtk-sat-list-popup.c \
-	gtk-sat-list-col-sel.c \
 	gtk-sat-map.c \
 	gtk-sat-map-ground-track.c \
 	gtk-sat-map-popup.c \
