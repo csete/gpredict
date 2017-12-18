@@ -504,6 +504,8 @@ void trsp_update_from_network(gboolean silent,
 
     guint           success = 0;        /* no. of successfull downloads */
 
+    (void)label2;
+
     /* bail out if we are already in an update process */
     if (g_mutex_trylock(&trsp_in_progress) == FALSE)
     {
