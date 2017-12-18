@@ -130,14 +130,12 @@ void sat_log_browser_open()
         window = gtk_dialog_new_with_buttons(_("Log Browser"),
                                              GTK_WINDOW(app),
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_STOCK_OPEN,
-                                             GTK_RESPONSE_YES,
-                                             GTK_STOCK_CLEAR,
-                                             GTK_RESPONSE_NO,
-                                             GTK_STOCK_CLOSE,
-                                             GTK_RESPONSE_CLOSE, NULL);
+                                             "_Open", GTK_RESPONSE_YES,
+                                             "Clear", GTK_RESPONSE_NO,
+                                             "_Close", GTK_RESPONSE_CLOSE,
+                                             NULL);
 
-        gtk_window_set_default_size(GTK_WINDOW(window), 800, 300);
+        gtk_window_set_default_size(GTK_WINDOW(window), 600, 300);
 
         gtk_box_pack_start(GTK_BOX
                            (gtk_dialog_get_content_area(GTK_DIALOG(window))),
@@ -304,8 +302,8 @@ static void load_debug_file(GtkWidget * parent)
     dialog = gtk_file_chooser_dialog_new(_("Select Log File"),
                                          GTK_WINDOW(parent),
                                          GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_Open", GTK_RESPONSE_ACCEPT,
                                          NULL);
 
     confdir = get_user_conf_dir();
