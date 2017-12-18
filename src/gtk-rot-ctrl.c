@@ -131,7 +131,11 @@ static gint rotctld_socket_open(const gchar * host, gint port)
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("Name resolution of rotctld server %s failed."),
                     host);
+#ifdef WIN32
+        closesocket(sock);
+#else
         close(sock);
+#endif
         return -1;
     }
 
@@ -146,7 +150,11 @@ static gint rotctld_socket_open(const gchar * host, gint port)
                     _("Connection to rotctld server at %s:%d failed: %s"),
                     host, port, strerror(errno));
 
+#ifdef WIN32
+        closesocket(sock);
+#else
         close(sock);
+#endif
         return -1;
     }
 
