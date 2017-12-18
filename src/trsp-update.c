@@ -140,7 +140,7 @@ void trsp_update_files(gchar * input_file)
     int             result;
     FILE           *ffile;      /* transponder output file in gpredict format */
     char           *jsn_object; /* json array will be in this buffer before parsing */
-    unsigned int    idx;	/* object index in JSON-Array */
+    unsigned int    idx;        /* object index in JSON-Array */
     new_mode_t     *nmode;
     new_trsp_t     *ntrsp;
     GHashTable     *modes_hash; /* hash table to store modes */
@@ -252,7 +252,8 @@ void trsp_update_files(gchar * input_file)
                         break;
 
                     strncpy(m_trsp.description,
-                            nx_json_get(json_obj, "description")->text_value, 79);
+                            nx_json_get(json_obj, "description")->text_value,
+                            79);
                     m_trsp.description[79] = 0;
                     m_trsp.catnum =
                         nx_json_get(json_obj, "norad_cat_id")->int_value;
@@ -327,8 +328,7 @@ void trsp_update_files(gchar * input_file)
                     {
                         fprintf(ffile, "\n[%s]\n", m_trsp.description);
                         if (m_trsp.uplink_low > 0)
-                            fprintf(ffile, "UP_LOW=%lld\n",
-                                    m_trsp.uplink_low);
+                            fprintf(ffile, "UP_LOW=%lld\n", m_trsp.uplink_low);
                         if (m_trsp.uplink_high > 0)
                             fprintf(ffile, "UP_HIGH=%lld\n",
                                     m_trsp.uplink_high);
@@ -338,14 +338,11 @@ void trsp_update_files(gchar * input_file)
                         if (m_trsp.downlink_high > 0)
                             fprintf(ffile, "DOWN_HIGH=%lld\n",
                                     m_trsp.downlink_high);
-                        fprintf(ffile, "MODE=%s\n",
-                                m_trsp.mode);
+                        fprintf(ffile, "MODE=%s\n", m_trsp.mode);
                         if (m_trsp.baud > 0.0)
-                            fprintf(ffile, "BAUD=%.0f\n",
-                                    m_trsp.baud);
+                            fprintf(ffile, "BAUD=%.0f\n", m_trsp.baud);
                         if (m_trsp.invert)
-                            fprintf(ffile, "INVERT=%s\n",
-                                    "true");
+                            fprintf(ffile, "INVERT=%s\n", "true");
                         fclose(ffile);
                     }
                     else
