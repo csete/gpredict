@@ -478,7 +478,6 @@ static GtkWidget *create_message_list()
     guint           i;
 
     treeview = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(treeview), TRUE);
 
     for (i = 0; i < MSG_LIST_COL_NUMBER; i++)
     {
@@ -551,40 +550,42 @@ static GtkWidget *create_message_summary()
     g_object_set(sumlabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     /* create table and add widgets */
-    table = gtk_table_new(6, 2, TRUE);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
+    table = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
 
     label = gtk_label_new(_("Errors"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
 
     label = gtk_label_new(_("Warnings"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     label = gtk_label_new(_("Info"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
     label = gtk_label_new(_("Debug"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
-    gtk_table_attach_defaults(GTK_TABLE(table),
-                              gtk_hseparator_new(), 0, 2, 4, 5);
+    gtk_grid_attach(GTK_GRID(table),
+                    gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                    0, 4, 2, 1);
 
     label = gtk_label_new(NULL);
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Total</b>"));
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 5, 1, 1);
 
-    gtk_table_attach_defaults(GTK_TABLE(table), errorlabel, 1, 2, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), warnlabel, 1, 2, 1, 2);
-    gtk_table_attach_defaults(GTK_TABLE(table), infolabel, 1, 2, 2, 3);
-    gtk_table_attach_defaults(GTK_TABLE(table), debuglabel, 1, 2, 3, 4);
-    gtk_table_attach_defaults(GTK_TABLE(table), sumlabel, 1, 2, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), errorlabel, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), warnlabel, 1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), infolabel, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), debuglabel, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), sumlabel, 1, 5, 1, 1);
 
     /* frame around the table */
     frame = gtk_frame_new(_(" Summary "));
