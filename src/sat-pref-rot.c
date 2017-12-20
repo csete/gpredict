@@ -1,15 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2010  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
-
-    Comments, questions and bugreports should be submitted via
-    http://sourceforge.net/projects/gpredict/
-    More details can be found at the project home page:
-
-            http://gpredict.oz9aec.net/
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
  
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,151 +34,210 @@
 
 
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
-
-/* private function declarations */
-static void     create_rot_list(void);
-static GtkTreeModel *create_and_fill_model(void);
-static GtkWidget *create_buttons(void);
-
-static void     add_cb(GtkWidget * button, gpointer data);
-static void     edit_cb(GtkWidget * button, gpointer data);
-static void     delete_cb(GtkWidget * button, gpointer data);
-static void     row_activated_cb(GtkTreeView * tree_view,
-                                 GtkTreePath * path,
-                                 GtkTreeViewColumn * column,
-                                 gpointer user_data);
-
-static void     render_angle(GtkTreeViewColumn * col,
-                             GtkCellRenderer * renderer,
-                             GtkTreeModel * model,
-                             GtkTreeIter * iter, gpointer column);
-
-static void     render_aztype(GtkTreeViewColumn * col,
-                              GtkCellRenderer * renderer,
-                              GtkTreeModel * model,
-                              GtkTreeIter * iter, gpointer column);
-
-/* global objects */
 static GtkWidget *addbutton;
 static GtkWidget *editbutton;
 static GtkWidget *delbutton;
 static GtkWidget *rotlist;
 
 
-/** Create and initialise widgets for the radios tab. */
-GtkWidget      *sat_pref_rot_create()
+static void add_cb(GtkWidget * button, gpointer data)
 {
-    GtkWidget      *vbox;       /* vbox containing the list part and the details part */
-    GtkWidget      *swin;
+    GtkTreeIter     item;       /* new item added to the list store */
+    GtkListStore   *liststore;
 
-    vbox = gtk_vbox_new(FALSE, 10);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
+    (void)button;
+    (void)data;
 
-    /* create rot list and pack into scrolled window */
-    create_rot_list();
-    swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_container_add(GTK_CONTAINER(swin), rotlist);
+    rotor_conf_t    conf = {
+        .name = NULL,
+        .host = NULL,
+        .port = 4533,
+        .minaz = 0,
+        .maxaz = 360,
+        .minel = 0,
+        .maxel = 90,
+        .aztype = ROT_AZ_TYPE_360,
+        .azstoppos = 0,
+    };
 
-    gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), create_buttons(), FALSE, FALSE, 0);
+    /* run rot conf editor */
+    sat_pref_rot_editor_run(&conf);
 
-    return vbox;
+    /* add new rot to the list */
+    if (conf.name != NULL)
+    {
+        liststore =
+            GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(rotlist)));
+        gtk_list_store_append(liststore, &item);
+        gtk_list_store_set(liststore, &item,
+                           ROT_LIST_COL_NAME, conf.name,
+                           ROT_LIST_COL_HOST, conf.host,
+                           ROT_LIST_COL_PORT, conf.port,
+                           ROT_LIST_COL_MINAZ, conf.minaz,
+                           ROT_LIST_COL_MAXAZ, conf.maxaz,
+                           ROT_LIST_COL_MINEL, conf.minel,
+                           ROT_LIST_COL_MAXEL, conf.maxel,
+                           ROT_LIST_COL_AZTYPE, conf.aztype,
+                           ROT_LIST_COL_AZSTOPPOS, conf.azstoppos, -1);
+
+        g_free(conf.name);
+
+        if (conf.host != NULL)
+            g_free(conf.host);
+    }
 }
 
-/** Create Radio configuration list widget. */
-static void create_rot_list()
+static void edit_cb(GtkWidget * button, gpointer data)
 {
-    GtkTreeModel   *model;
-    GtkCellRenderer *renderer;
-    GtkTreeViewColumn *column;
+    GtkTreeModel   *model = gtk_tree_view_get_model(GTK_TREE_VIEW(rotlist));
+    GtkTreeModel   *selmod;
+    GtkTreeSelection *selection;
+    GtkTreeIter     iter;
 
-    rotlist = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(rotlist), TRUE);
+    (void)button;               /* avoid unused parameter compiler warning */
+    (void)data;                 /* avoid unused parameter compiler warning */
 
-    model = create_and_fill_model();
-    gtk_tree_view_set_model(GTK_TREE_VIEW(rotlist), model);
-    g_object_unref(model);
+    rotor_conf_t    conf = {
+        .name = NULL,
+        .host = NULL,
+        .port = 4533,
+        .minaz = 0,
+        .maxaz = 360,
+        .minel = 0,
+        .maxel = 90,
+        .aztype = ROT_AZ_TYPE_360,
+        .azstoppos = 0,         //used in the "new rotator" dialog
+    };
 
-    /* Conf name */
-    renderer = gtk_cell_renderer_text_new();
-    column =
-        gtk_tree_view_column_new_with_attributes(_("Config Name"), renderer,
-                                                 "text", ROT_LIST_COL_NAME,
-                                                 NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+    /* If there are no entries, we have a bug since the button should 
+       have been disabled. */
+    if (gtk_tree_model_iter_n_children(model, NULL) < 1)
+    {
 
-    /* Host */
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Host"), renderer,
-                                                      "text",
-                                                      ROT_LIST_COL_HOST, NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Edit button should have been disabled."),
+                    __FILE__, __func__);
+        //gtk_widget_set_sensitive (button, FALSE);
 
-    /* port */
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Port"), renderer,
-                                                      "text",
-                                                      ROT_LIST_COL_PORT, NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+        return;
+    }
 
-    /* Az and el limits */
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Min Az"), renderer,
-                                                      "text",
-                                                      ROT_LIST_COL_MINAZ,
-                                                      NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
-                                            GUINT_TO_POINTER
-                                            (ROT_LIST_COL_MINAZ), NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+    /* get selected row
+       FIXME: do we really need to work with two models?
+     */
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(rotlist));
+    if (gtk_tree_selection_get_selected(selection, &selmod, &iter))
+    {
+        gtk_tree_model_get(model, &iter,
+                           ROT_LIST_COL_NAME, &conf.name,
+                           ROT_LIST_COL_HOST, &conf.host,
+                           ROT_LIST_COL_PORT, &conf.port,
+                           ROT_LIST_COL_MINAZ, &conf.minaz,
+                           ROT_LIST_COL_MAXAZ, &conf.maxaz,
+                           ROT_LIST_COL_MINEL, &conf.minel,
+                           ROT_LIST_COL_MAXEL, &conf.maxel,
+                           ROT_LIST_COL_AZTYPE, &conf.aztype,
+                           ROT_LIST_COL_AZSTOPPOS, &conf.azstoppos, -1);
+    }
+    else
+    {
+        GtkWidget      *dialog;
 
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Max Az"), renderer,
-                                                      "text",
-                                                      ROT_LIST_COL_MAXAZ,
-                                                      NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
-                                            GUINT_TO_POINTER
-                                            (ROT_LIST_COL_MAXAZ), NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+        dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                                        GTK_DIALOG_MODAL |
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_OK,
+                                        _
+                                        ("Select the rotator you want to edit\n"
+                                         "and try again!"));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
 
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Min El"), renderer,
-                                                      "text",
-                                                      ROT_LIST_COL_MINEL,
-                                                      NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
-                                            GUINT_TO_POINTER
-                                            (ROT_LIST_COL_MINEL), NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+        return;
+    }
 
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(_("Max El"), renderer,
-                                                      "text",
-                                                      ROT_LIST_COL_MAXEL,
-                                                      NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
-                                            GUINT_TO_POINTER
-                                            (ROT_LIST_COL_MAXEL), NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+    /* run radio configuration editor */
+    sat_pref_rot_editor_run(&conf);
 
-    /* Az type */
-    renderer = gtk_cell_renderer_text_new();
-    column =
-        gtk_tree_view_column_new_with_attributes(_("Azimuth Type"), renderer,
-                                                 "text", ROT_LIST_COL_AZTYPE,
-                                                 NULL);
-    gtk_tree_view_column_set_cell_data_func(column, renderer, render_aztype,
-                                            GUINT_TO_POINTER
-                                            (ROT_LIST_COL_AZTYPE), NULL);
-    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+    /* apply changes */
+    if (conf.name != NULL)
+    {
+        gtk_list_store_set(GTK_LIST_STORE(model), &iter,
+                           ROT_LIST_COL_NAME, conf.name,
+                           ROT_LIST_COL_HOST, conf.host,
+                           ROT_LIST_COL_PORT, conf.port,
+                           ROT_LIST_COL_MINAZ, conf.minaz,
+                           ROT_LIST_COL_MAXAZ, conf.maxaz,
+                           ROT_LIST_COL_MINEL, conf.minel,
+                           ROT_LIST_COL_MAXEL, conf.maxel,
+                           ROT_LIST_COL_AZTYPE, conf.aztype,
+                           ROT_LIST_COL_AZSTOPPOS, conf.azstoppos, -1);
+    }
 
-    g_signal_connect(rotlist, "row-activated", G_CALLBACK(row_activated_cb),
-                     NULL);
+    /* clean up memory */
+    if (conf.name)
+        g_free(conf.name);
 
+    if (conf.host != NULL)
+        g_free(conf.host);
 }
 
-/** Create data storage for rotator configuration list. */
+static void delete_cb(GtkWidget * button, gpointer data)
+{
+    GtkTreeModel   *model = gtk_tree_view_get_model(GTK_TREE_VIEW(rotlist));
+    GtkTreeSelection *selection;
+    GtkTreeIter     iter;
+
+    (void)button;
+    (void)data;
+
+    /* If there are no entries, we have a bug since the button should 
+       have been disabled. */
+    if (gtk_tree_model_iter_n_children(model, NULL) < 1)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Delete button should have been disabled."),
+                    __FILE__, __func__);
+        //gtk_widget_set_sensitive (button, FALSE);
+
+        return;
+    }
+
+    /* get selected row */
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(rotlist));
+    if (gtk_tree_selection_get_selected(selection, NULL, &iter))
+    {
+        gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+    }
+    else
+    {
+        GtkWidget      *dialog;
+
+        dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                                        GTK_DIALOG_MODAL |
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_OK,
+                                        _
+                                        ("Select the rotator you want to delete\n"
+                                         "and try again!"));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+    }
+}
+
+static void row_activated_cb(GtkTreeView * tree_view,
+                             GtkTreePath * path,
+                             GtkTreeViewColumn * column, gpointer user_data)
+{
+    (void)tree_view;
+    (void)path;
+    (void)column;
+    (void)user_data;
+
+    edit_cb(editbutton, NULL);
+}
 static GtkTreeModel *create_and_fill_model()
 {
     GtkListStore   *liststore;  /* the list store data structure */
@@ -321,6 +372,187 @@ static GtkWidget *create_buttons(void)
     return box;
 }
 
+/**
+ * Render an angle.
+ *
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
+ */
+static void render_angle(GtkTreeViewColumn * col,
+                         GtkCellRenderer * renderer,
+                         GtkTreeModel * model,
+                         GtkTreeIter * iter, gpointer column)
+{
+    gdouble         number;
+    guint           coli = GPOINTER_TO_UINT(column);
+    gchar          *text;
+
+    (void)col;
+
+    gtk_tree_model_get(model, iter, coli, &number, -1);
+
+    text = g_strdup_printf("%.0f\302\260", number);
+    g_object_set(renderer, "text", text, NULL);
+    g_free(text);
+}
+
+/**
+ * Render the azimuth type.
+ *
+ * @param col Pointer to the tree view column.
+ * @param renderer Pointer to the renderer.
+ * @param model Pointer to the tree model.
+ * @param iter Pointer to the tree iterator.
+ * @param column The column number in the model.
+ */
+static void render_aztype(GtkTreeViewColumn * col,
+                          GtkCellRenderer * renderer,
+                          GtkTreeModel * model,
+                          GtkTreeIter * iter, gpointer column)
+{
+    gint            number;
+    guint           coli = GPOINTER_TO_UINT(column);
+    gchar          *text;
+
+    (void)col;
+
+    gtk_tree_model_get(model, iter, coli, &number, -1);
+
+    switch (number)
+    {
+    case ROT_AZ_TYPE_360:
+        text = g_strdup_printf
+            ("0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
+        break;
+
+    case ROT_AZ_TYPE_180:
+        text = g_strdup_printf
+            ("-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
+        break;
+
+    default:
+        text = g_strdup_printf(_("Unknown (%d)"), number);
+        break;
+    }
+
+    g_object_set(renderer, "text", text, NULL);
+    g_free(text);
+}
+
+static void create_rot_list()
+{
+    GtkTreeModel   *model;
+    GtkCellRenderer *renderer;
+    GtkTreeViewColumn *column;
+
+    rotlist = gtk_tree_view_new();
+    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(rotlist), TRUE);
+
+    model = create_and_fill_model();
+    gtk_tree_view_set_model(GTK_TREE_VIEW(rotlist), model);
+    g_object_unref(model);
+
+    /* Conf name */
+    renderer = gtk_cell_renderer_text_new();
+    column =
+        gtk_tree_view_column_new_with_attributes(_("Config Name"), renderer,
+                                                 "text", ROT_LIST_COL_NAME,
+                                                 NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    /* Host */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Host"), renderer,
+                                                      "text",
+                                                      ROT_LIST_COL_HOST, NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    /* port */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Port"), renderer,
+                                                      "text",
+                                                      ROT_LIST_COL_PORT, NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    /* Az and el limits */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Min Az"), renderer,
+                                                      "text",
+                                                      ROT_LIST_COL_MINAZ,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
+                                            GUINT_TO_POINTER
+                                            (ROT_LIST_COL_MINAZ), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Max Az"), renderer,
+                                                      "text",
+                                                      ROT_LIST_COL_MAXAZ,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
+                                            GUINT_TO_POINTER
+                                            (ROT_LIST_COL_MAXAZ), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Min El"), renderer,
+                                                      "text",
+                                                      ROT_LIST_COL_MINEL,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
+                                            GUINT_TO_POINTER
+                                            (ROT_LIST_COL_MINEL), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Max El"), renderer,
+                                                      "text",
+                                                      ROT_LIST_COL_MAXEL,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
+                                            GUINT_TO_POINTER
+                                            (ROT_LIST_COL_MAXEL), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    /* Az type */
+    renderer = gtk_cell_renderer_text_new();
+    column =
+        gtk_tree_view_column_new_with_attributes(_("Azimuth Type"), renderer,
+                                                 "text", ROT_LIST_COL_AZTYPE,
+                                                 NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_aztype,
+                                            GUINT_TO_POINTER
+                                            (ROT_LIST_COL_AZTYPE), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(rotlist), column, -1);
+
+    g_signal_connect(rotlist, "row-activated", G_CALLBACK(row_activated_cb),
+                     NULL);
+
+}
+
+GtkWidget      *sat_pref_rot_create()
+{
+    GtkWidget      *vbox;       /* vbox containing the list part and the details part */
+    GtkWidget      *swin;
+
+    vbox = gtk_vbox_new(FALSE, 10);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
+
+    /* create rot list and pack into scrolled window */
+    create_rot_list();
+    swin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_container_add(GTK_CONTAINER(swin), rotlist);
+
+    gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), create_buttons(), FALSE, FALSE, 0);
+
+    return vbox;
+}
+
 /** User pressed cancel. Any changes to config must be cancelled. */
 void sat_pref_rot_cancel()
 {
@@ -413,293 +645,4 @@ void sat_pref_rot_ok()
                         _("%s: Failed to get ROT %s"), __func__, i);
         }
     }
-}
-
-/**
- * Add a new rotor configuration
- * @param button Pointer to the Add button.
- * @param data User data (null).
- * 
- * This function executes the rotor configuration editor.
- */
-static void add_cb(GtkWidget * button, gpointer data)
-{
-    GtkTreeIter     item;       /* new item added to the list store */
-    GtkListStore   *liststore;
-
-    (void)button;
-    (void)data;
-
-    rotor_conf_t    conf = {
-        .name = NULL,
-        .host = NULL,
-        .port = 4533,
-        .minaz = 0,
-        .maxaz = 360,
-        .minel = 0,
-        .maxel = 90,
-        .aztype = ROT_AZ_TYPE_360,
-        .azstoppos = 0,
-    };
-
-    /* run rot conf editor */
-    sat_pref_rot_editor_run(&conf);
-
-    /* add new rot to the list */
-    if (conf.name != NULL)
-    {
-        liststore =
-            GTK_LIST_STORE(gtk_tree_view_get_model(GTK_TREE_VIEW(rotlist)));
-        gtk_list_store_append(liststore, &item);
-        gtk_list_store_set(liststore, &item,
-                           ROT_LIST_COL_NAME, conf.name,
-                           ROT_LIST_COL_HOST, conf.host,
-                           ROT_LIST_COL_PORT, conf.port,
-                           ROT_LIST_COL_MINAZ, conf.minaz,
-                           ROT_LIST_COL_MAXAZ, conf.maxaz,
-                           ROT_LIST_COL_MINEL, conf.minel,
-                           ROT_LIST_COL_MAXEL, conf.maxel,
-                           ROT_LIST_COL_AZTYPE, conf.aztype,
-                           ROT_LIST_COL_AZSTOPPOS, conf.azstoppos, -1);
-
-        g_free(conf.name);
-
-        if (conf.host != NULL)
-            g_free(conf.host);
-    }
-}
-
-/**
- * Add a new rotor configuration
- * @param button Pointer to the Add button.
- * @param data User data (null).
- * 
- * This function executes the rotor configuration editor.
- */
-static void edit_cb(GtkWidget * button, gpointer data)
-{
-    GtkTreeModel   *model = gtk_tree_view_get_model(GTK_TREE_VIEW(rotlist));
-    GtkTreeModel   *selmod;
-    GtkTreeSelection *selection;
-    GtkTreeIter     iter;
-
-    (void)button;               /* avoid unused parameter compiler warning */
-    (void)data;                 /* avoid unused parameter compiler warning */
-
-    rotor_conf_t    conf = {
-        .name = NULL,
-        .host = NULL,
-        .port = 4533,
-        .minaz = 0,
-        .maxaz = 360,
-        .minel = 0,
-        .maxel = 90,
-        .aztype = ROT_AZ_TYPE_360,
-        .azstoppos = 0,         //used in the "new rotator" dialog
-    };
-
-    /* If there are no entries, we have a bug since the button should 
-       have been disabled. */
-    if (gtk_tree_model_iter_n_children(model, NULL) < 1)
-    {
-
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Edit button should have been disabled."),
-                    __FILE__, __func__);
-        //gtk_widget_set_sensitive (button, FALSE);
-
-        return;
-    }
-
-    /* get selected row
-       FIXME: do we really need to work with two models?
-     */
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(rotlist));
-    if (gtk_tree_selection_get_selected(selection, &selmod, &iter))
-    {
-        gtk_tree_model_get(model, &iter,
-                           ROT_LIST_COL_NAME, &conf.name,
-                           ROT_LIST_COL_HOST, &conf.host,
-                           ROT_LIST_COL_PORT, &conf.port,
-                           ROT_LIST_COL_MINAZ, &conf.minaz,
-                           ROT_LIST_COL_MAXAZ, &conf.maxaz,
-                           ROT_LIST_COL_MINEL, &conf.minel,
-                           ROT_LIST_COL_MAXEL, &conf.maxel,
-                           ROT_LIST_COL_AZTYPE, &conf.aztype,
-                           ROT_LIST_COL_AZSTOPPOS, &conf.azstoppos, -1);
-    }
-    else
-    {
-        GtkWidget      *dialog;
-
-        dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-                                        GTK_DIALOG_MODAL |
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_OK,
-                                        _
-                                        ("Select the rotator you want to edit\n"
-                                         "and try again!"));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-
-        return;
-    }
-
-    /* run radio configuration editor */
-    sat_pref_rot_editor_run(&conf);
-
-    /* apply changes */
-    if (conf.name != NULL)
-    {
-        gtk_list_store_set(GTK_LIST_STORE(model), &iter,
-                           ROT_LIST_COL_NAME, conf.name,
-                           ROT_LIST_COL_HOST, conf.host,
-                           ROT_LIST_COL_PORT, conf.port,
-                           ROT_LIST_COL_MINAZ, conf.minaz,
-                           ROT_LIST_COL_MAXAZ, conf.maxaz,
-                           ROT_LIST_COL_MINEL, conf.minel,
-                           ROT_LIST_COL_MAXEL, conf.maxel,
-                           ROT_LIST_COL_AZTYPE, conf.aztype,
-                           ROT_LIST_COL_AZSTOPPOS, conf.azstoppos, -1);
-    }
-
-    /* clean up memory */
-    if (conf.name)
-        g_free(conf.name);
-
-    if (conf.host != NULL)
-        g_free(conf.host);
-}
-
-/**
- * Delete selected rotator configuration
- *
- * This function is called when the user clicks the Delete button.
- * 
- */
-static void delete_cb(GtkWidget * button, gpointer data)
-{
-    GtkTreeModel   *model = gtk_tree_view_get_model(GTK_TREE_VIEW(rotlist));
-    GtkTreeSelection *selection;
-    GtkTreeIter     iter;
-
-    (void)button;
-    (void)data;
-
-    /* If there are no entries, we have a bug since the button should 
-       have been disabled. */
-    if (gtk_tree_model_iter_n_children(model, NULL) < 1)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Delete button should have been disabled."),
-                    __FILE__, __func__);
-        //gtk_widget_set_sensitive (button, FALSE);
-
-        return;
-    }
-
-    /* get selected row */
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(rotlist));
-    if (gtk_tree_selection_get_selected(selection, NULL, &iter))
-    {
-        gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
-    }
-    else
-    {
-        GtkWidget      *dialog;
-
-        dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-                                        GTK_DIALOG_MODAL |
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_OK,
-                                        _
-                                        ("Select the rotator you want to delete\n"
-                                         "and try again!"));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
-    }
-}
-
-static void row_activated_cb(GtkTreeView * tree_view,
-                             GtkTreePath * path,
-                             GtkTreeViewColumn * column, gpointer user_data)
-{
-    (void)tree_view;
-    (void)path;
-    (void)column;
-    (void)user_data;
-
-    edit_cb(editbutton, NULL);
-}
-
-/**
- * Render an angle.
- * @param col Pointer to the tree view column.
- * @param renderer Pointer to the renderer.
- * @param model Pointer to the tree model.
- * @param iter Pointer to the tree iterator.
- * @param column The column number in the model.
- * 
- */
-static void render_angle(GtkTreeViewColumn * col,
-                         GtkCellRenderer * renderer,
-                         GtkTreeModel * model,
-                         GtkTreeIter * iter, gpointer column)
-{
-    gdouble         number;
-    guint           coli = GPOINTER_TO_UINT(column);
-    gchar          *text;
-
-    (void)col;
-
-    gtk_tree_model_get(model, iter, coli, &number, -1);
-
-    text = g_strdup_printf("%.0f\302\260", number);
-    g_object_set(renderer, "text", text, NULL);
-    g_free(text);
-}
-
-/**
- * Render the azimuth type.
- * @param col Pointer to the tree view column.
- * @param renderer Pointer to the renderer.
- * @param model Pointer to the tree model.
- * @param iter Pointer to the tree iterator.
- * @param column The column number in the model.
- * 
- */
-static void render_aztype(GtkTreeViewColumn * col,
-                          GtkCellRenderer * renderer,
-                          GtkTreeModel * model,
-                          GtkTreeIter * iter, gpointer column)
-{
-    gint            number;
-    guint           coli = GPOINTER_TO_UINT(column);
-    gchar          *text;
-
-    (void)col;
-
-    gtk_tree_model_get(model, iter, coli, &number, -1);
-
-    switch (number)
-    {
-    case ROT_AZ_TYPE_360:
-        text = g_strdup_printf
-            ("0\302\260 \342\206\222 180\302\260 \342\206\222 360\302\260");
-        break;
-
-    case ROT_AZ_TYPE_180:
-        text = g_strdup_printf
-            ("-180\302\260 \342\206\222 0\302\260 \342\206\222 +180\302\260");
-        break;
-
-    default:
-        text = g_strdup_printf(_("Unknown (%d)"), number);
-        break;
-    }
-
-    g_object_set(renderer, "text", text, NULL);
-    g_free(text);
 }
