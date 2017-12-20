@@ -341,33 +341,24 @@ static GtkWidget *create_buttons(void)
 {
     GtkWidget      *box;
 
-    /* add button */
-    addbutton = gpredict_hstock_button(GTK_STOCK_ADD,
-                                       _("Add New"),
-                                       _("Add a new rotator to the list"));
+    addbutton = gtk_button_new_with_label(_("Add New"));
+    gtk_widget_set_tooltip_text(addbutton, _("Add a new rotator"));
     g_signal_connect(addbutton, "clicked", G_CALLBACK(add_cb), NULL);
 
-    /* edit button */
-    editbutton = gpredict_hstock_button(GTK_STOCK_EDIT,
-                                        _("Edit"),
-                                        _
-                                        ("Edit the currently selected rotator"));
+    editbutton = gtk_button_new_with_label(_("Edit"));
+    gtk_widget_set_tooltip_text(editbutton, _("Edit selected rotator"));
     g_signal_connect(editbutton, "clicked", G_CALLBACK(edit_cb), NULL);
 
-    /* delete button; don't forget to delete file.... */
-    delbutton = gpredict_hstock_button(GTK_STOCK_DELETE,
-                                       _("Delete"),
-                                       _("Delete the selected rotator"));
+    delbutton = gtk_button_new_with_label(_("Delete"));
+    gtk_widget_set_tooltip_text(delbutton, _("Delete selected rotator"));
     g_signal_connect(delbutton, "clicked", G_CALLBACK(delete_cb), NULL);
 
-    /* vertical button box */
-    box = gtk_hbutton_box_new();
+    box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(box), GTK_BUTTONBOX_START);
 
     gtk_container_add(GTK_CONTAINER(box), addbutton);
     gtk_container_add(GTK_CONTAINER(box), editbutton);
     gtk_container_add(GTK_CONTAINER(box), delbutton);
-
 
     return box;
 }
@@ -449,7 +440,6 @@ static void create_rot_list()
     GtkTreeViewColumn *column;
 
     rotlist = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(rotlist), TRUE);
 
     model = create_and_fill_model();
     gtk_tree_view_set_model(GTK_TREE_VIEW(rotlist), model);
@@ -539,7 +529,8 @@ GtkWidget      *sat_pref_rot_create()
     GtkWidget      *vbox;       /* vbox containing the list part and the details part */
     GtkWidget      *swin;
 
-    vbox = gtk_vbox_new(FALSE, 10);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
 
     /* create rot list and pack into scrolled window */
