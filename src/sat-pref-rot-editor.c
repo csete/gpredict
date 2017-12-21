@@ -162,15 +162,15 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
     GtkWidget      *table;
     GtkWidget      *label;
 
-    table = gtk_table_new(7, 4, FALSE);
+    table = gtk_grid_new();
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
 
     /* Config name */
     label = gtk_label_new(_("Name"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
 
     name = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(name), 25);
@@ -178,7 +178,7 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
                                 _("Enter a short name for this configuration, "
                                   " e.g. ROTOR-1.\n"
                                   "Allowed characters: 0..9, a..z, A..Z, - and _"));
-    gtk_table_attach_defaults(GTK_TABLE(table), name, 1, 4, 0, 1);
+    gtk_grid_attach(GTK_GRID(table), name, 1, 0, 3, 1);
 
     /* attach changed signal so that we can enable OK button when
        a proper name has been entered
@@ -187,8 +187,8 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
 
     /* Host */
     label = gtk_label_new(_("Host"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     host = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(host), 50);
@@ -199,12 +199,12 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
                                   "e.g. 192.168.1.100\n\n"
                                   "If gpredict and rotctld are running on the "
                                   "same computer, use localhost"));
-    gtk_table_attach_defaults(GTK_TABLE(table), host, 1, 4, 1, 2);
+    gtk_grid_attach(GTK_GRID(table), host, 1, 1, 3, 1); 
 
     /* port */
     label = gtk_label_new(_("Port"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
     port = gtk_spin_button_new_with_range(1024, 65535, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4533);
@@ -212,15 +212,16 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
     gtk_widget_set_tooltip_text(port,
                                 _("Enter the port number where rotctld is "
                                   "listening. Default is 4533."));
-    gtk_table_attach_defaults(GTK_TABLE(table), port, 1, 2, 2, 3);
+    gtk_grid_attach(GTK_GRID(table), port, 1, 2, 1, 1); 
 
-    gtk_table_attach_defaults(GTK_TABLE(table), gtk_hseparator_new(), 0, 4, 3,
-                              4);
+    gtk_grid_attach(GTK_GRID(table),
+                    gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                    0, 3, 4, 1);
 
     /* Az-type */
     label = gtk_label_new(_("Az type"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 4, 5);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
 
     aztype = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(aztype),
@@ -232,52 +233,50 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
                                 _("Select your azimuth range here. Note that "
                                   "gpredict assumes that 0\302\260 is at North "
                                   "and + direction is clockwise for both types"));
-    gtk_table_attach_defaults(GTK_TABLE(table), aztype, 1, 3, 4, 5);
+    gtk_grid_attach(GTK_GRID(table), aztype, 1, 4, 2, 1);
     g_signal_connect(G_OBJECT(aztype), "changed",
                      G_CALLBACK(aztype_changed_cb), NULL);
 
     /* Az and El limits */
     label = gtk_label_new(_(" Min Az"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 5, 1, 1);
     minaz = gtk_spin_button_new_with_range(-200, 100, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), 0);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(minaz), TRUE);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(minaz), FALSE);
-    gtk_table_attach_defaults(GTK_TABLE(table), minaz, 1, 2, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), minaz, 1, 5, 1, 1);
 
     label = gtk_label_new(_(" Max Az"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 5, 6);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 5, 1, 1);
     maxaz = gtk_spin_button_new_with_range(0, 450, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), 360);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(maxaz), TRUE);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(maxaz), FALSE);
-    gtk_table_attach_defaults(GTK_TABLE(table), maxaz, 3, 4, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), maxaz, 3, 5, 1, 1);
 
     label = gtk_label_new(_(" Min El"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 6, 7);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 6, 1, 1);
     minel = gtk_spin_button_new_with_range(-10, 180, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(minel), 0);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(minel), TRUE);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(minel), FALSE);
-    gtk_table_attach_defaults(GTK_TABLE(table), minel, 1, 2, 6, 7);
+    gtk_grid_attach(GTK_GRID(table), minel, 1, 6, 1, 1);
 
     label = gtk_label_new(_(" Max El"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 6, 7);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 6, 1, 1);
     maxel = gtk_spin_button_new_with_range(-10, 180, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxel), 90);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(maxel), TRUE);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(maxel), FALSE);
-    gtk_table_attach_defaults(GTK_TABLE(table), maxel, 3, 4, 6, 7);
-
-
+    gtk_grid_attach(GTK_GRID(table), maxel, 3, 6, 1, 1);
 
     label = gtk_label_new(_(" Azimuth end stop position"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 1, 3, 7, 8);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 7, 2, 1);
     azstoppos = gtk_spin_button_new_with_range(-180, 360, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), 0);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(azstoppos), TRUE);
@@ -291,7 +290,7 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
                                   "is 0\302\260, and the default for a "
                                   "-180\302\260 \342\206\222 0\302\260 "
                                   "\342\206\222 +180\302\260 rotor is -180\302\260."));
-    gtk_table_attach_defaults(GTK_TABLE(table), azstoppos, 3, 4, 7, 8);
+    gtk_grid_attach(GTK_GRID(table), azstoppos, 3, 7, 1, 1);
 
     if (conf->name != NULL)
         update_widgets(conf);
@@ -351,11 +350,10 @@ void sat_pref_rot_editor_run(rotor_conf_t * conf)
                                          GTK_WINDOW(window),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CLEAR,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+                                         "_Clear", GTK_RESPONSE_REJECT,
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_Ok", GTK_RESPONSE_OK,
+                                         NULL);
 
     /* disable OK button to begin with */
     gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
