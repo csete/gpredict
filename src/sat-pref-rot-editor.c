@@ -1,16 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
- 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -24,8 +16,6 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-
-/** Edit rotator configuration. */
 
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
@@ -43,8 +33,6 @@
 
 
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
-
-/* private widgets */
 static GtkWidget *dialog;       /* dialog window */
 static GtkWidget *name;         /* Configuration name */
 static GtkWidget *host;         /* host name or IP */
@@ -56,77 +44,119 @@ static GtkWidget *minel;
 static GtkWidget *maxel;
 static GtkWidget *azstoppos;
 
-static GtkWidget *create_editor_widgets(rotor_conf_t * conf);
-static void     update_widgets(rotor_conf_t * conf);
-static void     clear_widgets(void);
-static gboolean apply_changes(rotor_conf_t * conf);
-static void     name_changed(GtkWidget * widget, gpointer data);
-static void     aztype_changed_cb(GtkComboBox * box, gpointer data);
-
-
-/**
- * Add or edit a rotor configuration.
- * @param conf Pointer to a rotator configuration.
- *
- * If conf->name is not NULL the widgets will be populated with the data.
- */
-void sat_pref_rot_editor_run(rotor_conf_t * conf)
+/* Update widgets from the currently selected row in the treeview */
+static void update_widgets(rotor_conf_t * conf)
 {
-    gint            response;
-    gboolean        finished = FALSE;
+    /* configuration name */
+    gtk_entry_set_text(GTK_ENTRY(name), conf->name);
 
-    /* crate dialog and add contents */
-    dialog = gtk_dialog_new_with_buttons(_("Edit rotator configuration"),
-                                         GTK_WINDOW(window),
-                                         GTK_DIALOG_MODAL |
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CLEAR,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+    /* host */
+    if (conf->host)
+        gtk_entry_set_text(GTK_ENTRY(host), conf->host);
 
-    /* disable OK button to begin with */
-    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                      GTK_RESPONSE_OK, FALSE);
+    /* port */
+    if (conf->port > 1023)
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), conf->port);
+    else
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4533); /* hamlib default? */
 
-    gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                      create_editor_widgets(conf));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(aztype), conf->aztype);
 
-    /* this hacky-thing is to keep the dialog running in case the
-       CLEAR button is plressed. OK and CANCEL will exit the loop
+    /* az and el limits */
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), conf->minaz);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), conf->maxaz);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minel), conf->minel);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxel), conf->maxel);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), conf->azstoppos);
+}
+
+/* called when the user clicks on the CLEAR button */
+static void clear_widgets()
+{
+    gtk_entry_set_text(GTK_ENTRY(name), "");
+    gtk_entry_set_text(GTK_ENTRY(host), "localhost");
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4533);     /* hamlib default? */
+    gtk_combo_box_set_active(GTK_COMBO_BOX(aztype), ROT_AZ_TYPE_360);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), 0);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), 360);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minel), 0);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxel), 90);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), 0);
+}
+
+/*
+ * This function is called when the contents of the name entry changes.
+ * The primary purpose of this function is to check whether the char length
+ * of the name is greater than zero, if yes enable the OK button of the dialog.
+ */
+static void name_changed(GtkWidget * widget, gpointer data)
+{
+    const gchar    *text;
+    gchar          *entry, *end, *j;
+    gint            len, pos;
+
+    (void)data;
+
+    /* step 1: ensure that only valid characters are entered
+       (stolen from xlog, tnx pg4i)
      */
-    while (!finished)
+    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
+    if ((len = g_utf8_strlen(entry, -1)) > 0)
     {
-
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-
-        switch (response)
+        end = entry + g_utf8_strlen(entry, -1);
+        for (j = entry; j < end; ++j)
         {
-        case GTK_RESPONSE_OK:
-            if (apply_changes(conf))
-                finished = TRUE;
-            else
-                finished = FALSE;
-            break;
-
-        case GTK_RESPONSE_REJECT:
-            /* CLEAR */
-            clear_widgets();
-            break;
-
-        default:
-            /* Everything else is considered CANCEL */
-            finished = TRUE;
-            break;
+            if (!gpredict_legal_char(*j))
+            {
+                gdk_beep();
+                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
+                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
+            }
         }
     }
 
-    gtk_widget_destroy(dialog);
+    /* step 2: if name seems all right, enable OK button */
+    text = gtk_entry_get_text(GTK_ENTRY(widget));
+
+    if (g_utf8_strlen(text, -1) > 0)
+    {
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, TRUE);
+    }
+    else
+    {
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, FALSE);
+    }
 }
 
-/** Create and initialise widgets */
+static void aztype_changed_cb(GtkComboBox * box, gpointer data)
+{
+    gint            type = gtk_combo_box_get_active(box);
+
+    (void)data;
+
+    switch (type)
+    {
+    case ROT_AZ_TYPE_360:
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), 0.0);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), 360.0);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), 0.0);
+        break;
+
+    case ROT_AZ_TYPE_180:
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), -180.0);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), +180.0);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), -180.0);
+        break;
+
+    default:
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Invalid AZ rotator type."), __FILE__, __func__);
+        break;
+    }
+}
+
 static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
 {
     GtkWidget      *table;
@@ -271,57 +301,7 @@ static GtkWidget *create_editor_widgets(rotor_conf_t * conf)
     return table;
 }
 
-/** Update widgets from the currently selected row in the treeview */
-static void update_widgets(rotor_conf_t * conf)
-{
-    /* configuration name */
-    gtk_entry_set_text(GTK_ENTRY(name), conf->name);
-
-    /* host */
-    if (conf->host)
-        gtk_entry_set_text(GTK_ENTRY(host), conf->host);
-
-    /* port */
-    if (conf->port > 1023)
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), conf->port);
-    else
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4533); /* hamlib default? */
-
-    gtk_combo_box_set_active(GTK_COMBO_BOX(aztype), conf->aztype);
-
-    /* az and el limits */
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), conf->minaz);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), conf->maxaz);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minel), conf->minel);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxel), conf->maxel);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), conf->azstoppos);
-}
-
-/**
- * Clear the contents of all widgets.
- *
- * This function is usually called when the user clicks on the CLEAR button
- *
- */
-static void clear_widgets()
-{
-    gtk_entry_set_text(GTK_ENTRY(name), "");
-    gtk_entry_set_text(GTK_ENTRY(host), "localhost");
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4533);     /* hamlib default? */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(aztype), ROT_AZ_TYPE_360);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), 0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), 360);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(minel), 0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxel), 90);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), 0);
-}
-
-/**
- * Apply changes.
- * @return TRUE if things are ok, FALSE otherwise.
- *
- * This function is usually called when the user clicks the OK button.
- */
+/* Called when the user clicks the OK button */
 static gboolean apply_changes(rotor_conf_t * conf)
 {
     /* name */
@@ -355,76 +335,63 @@ static gboolean apply_changes(rotor_conf_t * conf)
 }
 
 /**
- * Manage name changes.
+ * Add or edit a rotor configuration.
  *
- * This function is called when the contents of the name entry changes.
- * The primary purpose of this function is to check whether the char length
- * of the name is greater than zero, if yes enable the OK button of the dialog.
+ * @param conf Pointer to a rotator configuration.
+ *
+ * If conf->name is not NULL the widgets will be populated with the data.
  */
-static void name_changed(GtkWidget * widget, gpointer data)
+void sat_pref_rot_editor_run(rotor_conf_t * conf)
 {
-    const gchar    *text;
-    gchar          *entry, *end, *j;
-    gint            len, pos;
+    gint            response;
+    gboolean        finished = FALSE;
 
-    (void)data;
+    /* crate dialog and add contents */
+    dialog = gtk_dialog_new_with_buttons(_("Edit rotator configuration"),
+                                         GTK_WINDOW(window),
+                                         GTK_DIALOG_MODAL |
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_STOCK_CLEAR,
+                                         GTK_RESPONSE_REJECT,
+                                         GTK_STOCK_CANCEL,
+                                         GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 
-    /* step 1: ensure that only valid characters are entered
-       (stolen from xlog, tnx pg4i)
+    /* disable OK button to begin with */
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                      GTK_RESPONSE_OK, FALSE);
+
+    gtk_container_add(GTK_CONTAINER
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                      create_editor_widgets(conf));
+
+    /* this hacky-thing is to keep the dialog running in case the
+       CLEAR button is plressed. OK and CANCEL will exit the loop
      */
-    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
-    if ((len = g_utf8_strlen(entry, -1)) > 0)
+    while (!finished)
     {
-        end = entry + g_utf8_strlen(entry, -1);
-        for (j = entry; j < end; ++j)
+        response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+        switch (response)
         {
-            if (!gpredict_legal_char(*j))
-            {
-                gdk_beep();
-                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
-                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
-            }
+        case GTK_RESPONSE_OK:
+            if (apply_changes(conf))
+                finished = TRUE;
+            else
+                finished = FALSE;
+            break;
+
+        case GTK_RESPONSE_REJECT:
+            /* CLEAR */
+            clear_widgets();
+            break;
+
+        default:
+            /* Everything else is considered CANCEL */
+            finished = TRUE;
+            break;
         }
     }
 
-    /* step 2: if name seems all right, enable OK button */
-    text = gtk_entry_get_text(GTK_ENTRY(widget));
-
-    if (g_utf8_strlen(text, -1) > 0)
-    {
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                          GTK_RESPONSE_OK, TRUE);
-    }
-    else
-    {
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                          GTK_RESPONSE_OK, FALSE);
-    }
-}
-
-static void aztype_changed_cb(GtkComboBox * box, gpointer data)
-{
-    gint            type = gtk_combo_box_get_active(box);
-
-    (void)data;
-
-    switch (type)
-    {
-    case ROT_AZ_TYPE_360:
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), 0.0);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), 360.0);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), 0.0);
-        break;
-
-    case ROT_AZ_TYPE_180:
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(minaz), -180.0);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(maxaz), +180.0);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(azstoppos), -180.0);
-        break;
-
-    default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Invalid AZ rotator type."), __FILE__, __func__);
-        break;
-    }
+    gtk_widget_destroy(dialog);
 }
