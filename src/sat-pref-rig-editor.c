@@ -230,34 +230,32 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     GtkWidget      *table;
     GtkWidget      *label;
 
-    table = gtk_table_new(9, 4, FALSE);
+    table = gtk_grid_new();
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
 
     /* Config name */
     label = gtk_label_new(_("Name"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
 
     name = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(name), 25);
+    g_signal_connect(name, "changed", G_CALLBACK(name_changed), NULL);
     gtk_widget_set_tooltip_text(name,
                                 _("Enter a short name for this configuration, "
                                   "e.g. IC910-1.\n"
                                   "Allowed characters: "
                                   "0..9, a..z, A..Z, - and _"));
-    gtk_table_attach_defaults(GTK_TABLE(table), name, 1, 4, 0, 1);
-
-    /* attach changed signal so that we can enable OK button when
-       a proper name has been entered
-     */
-    g_signal_connect(name, "changed", G_CALLBACK(name_changed), NULL);
+    gtk_grid_attach(GTK_GRID(table), name, 1, 0, 3, 1);
 
     /* Host */
     label = gtk_label_new(_("Host"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     host = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(host), 50);
@@ -268,12 +266,12 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                   "e.g. 192.168.1.100\n\n"
                                   "If gpredict and rigctld are running on the "
                                   "same computer use localhost"));
-    gtk_table_attach_defaults(GTK_TABLE(table), host, 1, 4, 1, 2);
+    gtk_grid_attach(GTK_GRID(table), host, 1, 1, 3, 1);
 
     /* port */
     label = gtk_label_new(_("Port"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
     port = gtk_spin_button_new_with_range(1024, 65535, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4532);
@@ -281,12 +279,13 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_widget_set_tooltip_text(port,
                                 _("Enter the port number where rigctld is "
                                   "listening"));
-    gtk_table_attach_defaults(GTK_TABLE(table), port, 1, 3, 2, 3);
+    gtk_grid_attach(GTK_GRID(table), port, 1, 2, 1, 1);
 
     /* radio type */
     label = gtk_label_new(_("Radio type"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    //gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
     type = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("RX only"));
@@ -335,12 +334,12 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                     " SPACE key on the keyboard. Gpredict will "
                                     "then update the TX Doppler before actually"
                                     " switching to TX."));
-    gtk_table_attach_defaults(GTK_TABLE(table), type, 1, 3, 3, 4);
+    gtk_grid_attach(GTK_GRID(table), type, 1, 3, 2, 1);
 
     /* ptt */
     label = gtk_label_new(_("PTT status"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 4, 5);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
 
     ptt = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ptt), _("None"));
@@ -357,12 +356,12 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                     "This can be used if your radio does not support the read_ptt "
                                     "CAT command and you have a special interface that can "
                                     "read squelch status and send it via CTS."));
-    gtk_table_attach_defaults(GTK_TABLE(table), ptt, 1, 3, 4, 5);
+    gtk_grid_attach(GTK_GRID(table), ptt, 1, 4, 2, 1);
 
     /* VFO Up/Down */
     label = gtk_label_new(_("VFO Up/Down"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 5, 1, 1);
 
     vfo = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(vfo), _("Not applicable"));
@@ -384,12 +383,12 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                    "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"
                                    "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"
                                    "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
-    gtk_table_attach_defaults(GTK_TABLE(table), vfo, 1, 3, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), vfo, 1, 5, 2, 1);
 
     /* Downconverter LO frequency */
     label = gtk_label_new(_("LO Down"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 6, 7);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 6, 1, 1);
 
     lo = gtk_spin_button_new_with_range(-10000, 10000, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), 0);
@@ -398,16 +397,16 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                 _
                                 ("Enter the frequency of the local oscillator "
                                  " of the downconverter, if any."));
-    gtk_table_attach_defaults(GTK_TABLE(table), lo, 1, 3, 6, 7);
+    gtk_grid_attach(GTK_GRID(table), lo, 1, 6, 2, 1);
 
     label = gtk_label_new(_("MHz"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 3, 4, 6, 7);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 3, 6, 1, 1);
 
     /* Upconverter LO frequency */
     label = gtk_label_new(_("LO Up"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 7, 8);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 7, 1, 1);
 
     loup = gtk_spin_button_new_with_range(-10000, 10000, 1);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), 0);
@@ -416,24 +415,24 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                 _
                                 ("Enter the frequency of the local oscillator "
                                  "of the upconverter, if any."));
-    gtk_table_attach_defaults(GTK_TABLE(table), loup, 1, 3, 7, 8);
+    gtk_grid_attach(GTK_GRID(table), loup, 1, 7, 2, 1);
 
     label = gtk_label_new(_("MHz"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 3, 4, 7, 8);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 3, 7, 1, 1);
 
     /* AOS / LOS signalling */
     label = gtk_label_new(_("Signalling"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 8, 9);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 8, 1, 1);
 
     sigaos = gtk_check_button_new_with_label(_("AOS"));
-    gtk_table_attach_defaults(GTK_TABLE(table), sigaos, 1, 2, 8, 9);
+    gtk_grid_attach(GTK_GRID(table), sigaos, 1, 8, 1, 1);
     gtk_widget_set_tooltip_text(sigaos,
                                 _("Enable AOS signalling for this radio."));
 
     siglos = gtk_check_button_new_with_label(_("LOS"));
-    gtk_table_attach_defaults(GTK_TABLE(table), siglos, 2, 3, 8, 9);
+    gtk_grid_attach(GTK_GRID(table), siglos, 2, 8, 1, 1);
     gtk_widget_set_tooltip_text(siglos,
                                 _("Enable LOS signalling for this radio."));
 
@@ -526,11 +525,10 @@ void sat_pref_rig_editor_run(radio_conf_t * conf)
                                          GTK_WINDOW(window),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CLEAR,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+                                         "_Clear", GTK_RESPONSE_REJECT,
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_Ok", GTK_RESPONSE_OK,
+                                         NULL);
 
     /* disable OK button to begin with */
     gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
