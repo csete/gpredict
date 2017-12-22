@@ -1,15 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2015  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,9 +16,6 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-
-/** Edit radio configuration */
-
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
@@ -43,8 +32,6 @@
 
 
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
-
-/* private widgets */
 static GtkWidget *dialog;       /* dialog window */
 static GtkWidget *name;         /* config name */
 static GtkWidget *host;         /* host */
@@ -57,82 +44,187 @@ static GtkWidget *loup;         /* local oscillator of upconverter */
 static GtkWidget *sigaos;       /* AOS signalling */
 static GtkWidget *siglos;       /* LOS signalling */
 
-static GtkWidget *create_editor_widgets(radio_conf_t * conf);
-static void     update_widgets(radio_conf_t * conf);
-static void     clear_widgets(void);
-static gboolean apply_changes(radio_conf_t * conf);
-static void     name_changed(GtkWidget * widget, gpointer data);
-static void     type_changed(GtkWidget * widget, gpointer data);
-static void     ptt_changed(GtkWidget * widget, gpointer data);
-static void     vfo_changed(GtkWidget * widget, gpointer data);
 
-/**
- * Add or edit a radio configuration.
- * @param conf Pointer to a radio configuration.
- *
- * Of conf->name is not NULL the widgets will be populated with the data.
- */
-void sat_pref_rig_editor_run(radio_conf_t * conf)
+static void clear_widgets()
 {
-    gint            response;
-    gboolean        finished = FALSE;
+    gtk_entry_set_text(GTK_ENTRY(name), "");
+    gtk_entry_set_text(GTK_ENTRY(host), "localhost");
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4532);     /* hamlib default? */
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), 0);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), 0);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(type), RIG_TYPE_RX);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_NONE);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 0);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ptt), FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sigaos), FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(siglos), FALSE);
+}
 
-    /* crate dialog and add contents */
-    dialog = gtk_dialog_new_with_buttons(_("Edit radio configuration"),
-                                         GTK_WINDOW(window),
-                                         GTK_DIALOG_MODAL |
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_STOCK_CLEAR,
-                                         GTK_RESPONSE_REJECT,
-                                         GTK_STOCK_CANCEL,
-                                         GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+static void update_widgets(radio_conf_t * conf)
+{
+    /* configuration name */
+    gtk_entry_set_text(GTK_ENTRY(name), conf->name);
 
-    /* disable OK button to begin with */
-    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                      GTK_RESPONSE_OK, FALSE);
+    /* host name */
+    if (conf->host)
+        gtk_entry_set_text(GTK_ENTRY(host), conf->host);
 
-    gtk_container_add(GTK_CONTAINER
-                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                      create_editor_widgets(conf));
+    /* port */
+    if (conf->port > 1023)
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), conf->port);
+    else
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4532); /* hamlib default? */
 
-    /* this hacky-thing is to keep the dialog running in case the
-       CLEAR button is plressed. OK and CANCEL will exit the loop
-     */
-    while (!finished)
+    /* radio type */
+    gtk_combo_box_set_active(GTK_COMBO_BOX(type), conf->type);
+
+    /* ptt */
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), conf->ptt);
+
+    /* vfo up/down */
+    if (conf->type == RIG_TYPE_DUPLEX)
     {
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+        if (conf->vfoUp == VFO_MAIN)
+            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
+        else if (conf->vfoUp == VFO_SUB)
+            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 2);
+        else if (conf->vfoUp == VFO_A)
+            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 3);
+        else
+            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 4);
+    }
 
-        switch (response)
+    /* lo down in MHz */
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), conf->lo / 1000000.0);
+
+    /* lo up in MHz */
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), conf->loup / 1000000.0);
+
+    /* AOS / LOS signalling */
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sigaos), conf->signal_aos);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(siglos), conf->signal_los);
+}
+
+/*
+ * Manage VFO changed signals.
+ * Widget is the GtkComboBox that received the signal.
+ *  
+ * This function is called when the user selects a new VFO up/down combination.
+ */
+static void vfo_changed(GtkWidget * widget, gpointer data)
+{
+    (void)data;
+
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == 0 &&
+        gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_DUPLEX)
+    {
+        /* not good, we need to have proper VFO combi for this type */
+        gtk_combo_box_set_active(GTK_COMBO_BOX(widget), 1);
+    }
+}
+
+/*
+ * Manage ptt type changed signals.
+ * Widget is the GtkComboBox that received the signal.
+ *  
+ * This function is called when the user selects a new ptt type.
+ */
+static void ptt_changed(GtkWidget * widget, gpointer data)
+{
+    (void)data;
+
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == PTT_TYPE_NONE &&
+        gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_TRX)
+    {
+        /* not good, we need to have PTT for this type */
+        gtk_combo_box_set_active(GTK_COMBO_BOX(widget), PTT_TYPE_CAT);
+    }
+}
+
+/*
+ * Manage name changes.
+ *
+ * This function is called when the contents of the name entry changes.
+ * The primary purpose of this function is to check whether the char length
+ * of the name is greater than zero, if yes enable the OK button of the dialog.
+ */
+static void name_changed(GtkWidget * widget, gpointer data)
+{
+    const gchar    *text;
+    gchar          *entry, *end, *j;
+    gint            len, pos;
+
+    (void)data;
+
+    /* step 1: ensure that only valid characters are entered
+       (stolen from xlog, tnx pg4i)
+     */
+    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
+    if ((len = g_utf8_strlen(entry, -1)) > 0)
+    {
+        end = entry + g_utf8_strlen(entry, -1);
+        for (j = entry; j < end; ++j)
         {
-            /* OK */
-        case GTK_RESPONSE_OK:
-            if (apply_changes(conf))
+            if (!gpredict_legal_char(*j))
             {
-                finished = TRUE;
+                gdk_beep();
+                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
+                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
             }
-            else
-            {
-                finished = FALSE;
-            }
-            break;
-
-            /* CLEAR */
-        case GTK_RESPONSE_REJECT:
-            clear_widgets();
-            break;
-
-            /* Everything else is considered CANCEL */
-        default:
-            finished = TRUE;
-            break;
         }
     }
 
-    gtk_widget_destroy(dialog);
+    /* step 2: if name seems all right, enable OK button */
+    text = gtk_entry_get_text(GTK_ENTRY(widget));
+
+    if (g_utf8_strlen(text, -1) > 0)
+    {
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, TRUE);
+    }
+    else
+    {
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, FALSE);
+    }
 }
 
-/** Create and initialise widgets */
+/*
+ * Manage rig type changed signals.
+ * widget os the GtkComboBox that received the signal.
+ *  
+ * This function is called when the user selects a new radio type.
+ */
+static void type_changed(GtkWidget * widget, gpointer data)
+{
+    (void)data;
+
+    /* PTT consistency */
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == RIG_TYPE_TRX)
+    {
+        if (gtk_combo_box_get_active(GTK_COMBO_BOX(ptt)) == PTT_TYPE_NONE)
+        {
+            gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_CAT);
+        }
+    }
+
+    if ((gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) ==
+         RIG_TYPE_TOGGLE_AUTO) ||
+        (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) ==
+         RIG_TYPE_TOGGLE_MAN))
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_CAT);
+    }
+
+
+    /* VFO consistency */
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == RIG_TYPE_DUPLEX &&
+        gtk_combo_box_get_active(GTK_COMBO_BOX(vfo)) == 0)
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
+    }
+}
+
 static GtkWidget *create_editor_widgets(radio_conf_t * conf)
 {
     GtkWidget      *table;
@@ -345,7 +437,6 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_widget_set_tooltip_text(siglos,
                                 _("Enable LOS signalling for this radio."));
 
-
     if (conf->name != NULL)
         update_widgets(conf);
 
@@ -354,79 +445,7 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     return table;
 }
 
-/** Update widgets from the currently selected row in the treeview */
-static void update_widgets(radio_conf_t * conf)
-{
-    /* configuration name */
-    gtk_entry_set_text(GTK_ENTRY(name), conf->name);
-
-    /* host name */
-    if (conf->host)
-        gtk_entry_set_text(GTK_ENTRY(host), conf->host);
-
-    /* port */
-    if (conf->port > 1023)
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), conf->port);
-    else
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4532); /* hamlib default? */
-
-    /* radio type */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(type), conf->type);
-
-    /* ptt */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), conf->ptt);
-
-    /* vfo up/down */
-    if (conf->type == RIG_TYPE_DUPLEX)
-    {
-        if (conf->vfoUp == VFO_MAIN)
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
-        else if (conf->vfoUp == VFO_SUB)
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 2);
-        else if (conf->vfoUp == VFO_A)
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 3);
-        else
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 4);
-    }
-
-    /* lo down in MHz */
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), conf->lo / 1000000.0);
-
-    /* lo up in MHz */
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), conf->loup / 1000000.0);
-
-    /* AOS / LOS signalling */
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sigaos), conf->signal_aos);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(siglos), conf->signal_los);
-}
-
-/**
- * Clear the contents of all widgets.
- *
- * This function is usually called when the user clicks on the CLEAR button
- *
- */
-static void clear_widgets()
-{
-    gtk_entry_set_text(GTK_ENTRY(name), "");
-    gtk_entry_set_text(GTK_ENTRY(host), "localhost");
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4532);     /* hamlib default? */
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), 0);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), 0);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(type), RIG_TYPE_RX);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_NONE);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 0);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ptt), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sigaos), FALSE);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(siglos), FALSE);
-}
-
-/**
- * Apply changes.
- * @return TRUE if things are ok, FALSE otherwise.
- *
- * This function is usually called when the user clicks the OK button.
- */
+/* Apply changes. Returns TRUE if things are ok, FALSE otherwise */
 static gboolean apply_changes(radio_conf_t * conf)
 {
     /* name */
@@ -496,133 +515,59 @@ static gboolean apply_changes(radio_conf_t * conf)
     return TRUE;
 }
 
-/**
- * Manage name changes.
- *
- * This function is called when the contents of the name entry changes.
- * The primary purpose of this function is to check whether the char length
- * of the name is greater than zero, if yes enable the OK button of the dialog.
- */
-static void name_changed(GtkWidget * widget, gpointer data)
+/* Add or edit a radio configuration */
+void sat_pref_rig_editor_run(radio_conf_t * conf)
 {
-    const gchar    *text;
-    gchar          *entry, *end, *j;
-    gint            len, pos;
+    gint            response;
+    gboolean        finished = FALSE;
 
-    (void)data;                 /* avoid unused parameter compiler warning */
+    /* crate dialog and add contents */
+    dialog = gtk_dialog_new_with_buttons(_("Edit radio configuration"),
+                                         GTK_WINDOW(window),
+                                         GTK_DIALOG_MODAL |
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_STOCK_CLEAR,
+                                         GTK_RESPONSE_REJECT,
+                                         GTK_STOCK_CANCEL,
+                                         GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
 
-    /* step 1: ensure that only valid characters are entered
-       (stolen from xlog, tnx pg4i)
+    /* disable OK button to begin with */
+    gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                      GTK_RESPONSE_OK, FALSE);
+
+    gtk_container_add(GTK_CONTAINER
+                      (gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                      create_editor_widgets(conf));
+
+    /* keep the dialog running when CLEAR button is plressed
+     * OK and CANCEL will exit the loop
      */
-    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
-    if ((len = g_utf8_strlen(entry, -1)) > 0)
+    while (!finished)
     {
-        end = entry + g_utf8_strlen(entry, -1);
-        for (j = entry; j < end; ++j)
+        response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+        switch (response)
         {
-            if (!gpredict_legal_char(*j))
-            {
-                gdk_beep();
-                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
-                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
-            }
+            /* OK */
+        case GTK_RESPONSE_OK:
+            if (apply_changes(conf))
+                finished = TRUE;
+            else
+                finished = FALSE;
+            break;
+
+            /* CLEAR */
+        case GTK_RESPONSE_REJECT:
+            clear_widgets();
+            break;
+
+            /* Everything else is considered CANCEL */
+        default:
+            finished = TRUE;
+            break;
         }
     }
 
-    /* step 2: if name seems all right, enable OK button */
-    text = gtk_entry_get_text(GTK_ENTRY(widget));
-
-    if (g_utf8_strlen(text, -1) > 0)
-    {
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                          GTK_RESPONSE_OK, TRUE);
-    }
-    else
-    {
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                          GTK_RESPONSE_OK, FALSE);
-    }
-}
-
-/**
- * Manage rig type changed signals.
- * @param widget The GtkComboBox that received the signal.
- * @param data User data (always NULL).
- *  
- * This function is called when the user selects a new radio type.
- */
-static void type_changed(GtkWidget * widget, gpointer data)
-{
-
-    (void)data;
-
-    /* PTT consistency */
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == RIG_TYPE_TRX)
-    {
-        if (gtk_combo_box_get_active(GTK_COMBO_BOX(ptt)) == PTT_TYPE_NONE)
-        {
-            gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_CAT);
-        }
-    }
-
-    if ((gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) ==
-         RIG_TYPE_TOGGLE_AUTO) ||
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) ==
-         RIG_TYPE_TOGGLE_MAN))
-    {
-        gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_CAT);
-    }
-
-
-    /* VFO consistency */
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == RIG_TYPE_DUPLEX)
-    {
-        if (gtk_combo_box_get_active(GTK_COMBO_BOX(vfo)) == 0)
-        {
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
-        }
-    }
-
-}
-
-/**
- * Manage ptt type changed signals.
- * @param widget The GtkComboBox that received the signal.
- * @param data User data (always NULL).
- *  
- * This function is called when the user selects a new ptt type.
- */
-static void ptt_changed(GtkWidget * widget, gpointer data)
-{
-    (void)data;
-
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == PTT_TYPE_NONE)
-    {
-        if (gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_TRX)
-        {
-            /* not good, we need to have PTT for this type */
-            gtk_combo_box_set_active(GTK_COMBO_BOX(widget), PTT_TYPE_CAT);
-        }
-    }
-}
-
-/**
- * Manage VFO changed signals.
- * @param widget The GtkComboBox that received the signal.
- * @param data User data (always NULL).
- *  
- * This function is called when the user selects a new VFO up/down combination.
- */
-static void vfo_changed(GtkWidget * widget, gpointer data)
-{
-    (void)data;
-
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == 0)
-    {
-        if (gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_DUPLEX)
-        {
-            /* not good, we need to have proper VFO combi for this type */
-            gtk_combo_box_set_active(GTK_COMBO_BOX(widget), 1);
-        }
-    }
+    gtk_widget_destroy(dialog);
 }
