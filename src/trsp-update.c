@@ -142,11 +142,12 @@ void trsp_update_files(gchar * input_file)
 {
 
     FILE           *mfp;        /* transmitter information json file */
-    unsigned int    mfplen;     /* size of transmitter information json file */
+    size_t          mfplen;     /* size of transmitter information json file */
+    long            flen;       /* holds the file size returned by ftell or -1 on error */
     int             result;
     FILE           *ffile;      /* transponder output file in gpredict format */
     char           *jsn_object; /* json array will be in this buffer before parsing */
-    unsigned int    idx;	/* object index in JSON-Array */
+    unsigned int    idx;        /* object index in JSON-Array */
     new_mode_t     *nmode;
     new_trsp_t     *ntrsp;
     GHashTable     *modes_hash; /* hash table to store modes */
@@ -176,55 +177,60 @@ void trsp_update_files(gchar * input_file)
     {
         mfplen = 0;
         fseek(mfp, 0, SEEK_END);
-        mfplen = ftell(mfp);
-        rewind(mfp);
-        jsn_object = g_malloc(mfplen);
-        result = fread(jsn_object, mfplen, 1, mfp);
+        flen = ftell(mfp);
 
-        if (result == 1)
+        if (flen > 1)
         {
-            const nx_json  *json = nx_json_parse(jsn_object, 0);
+            mfplen = flen;
+            rewind(mfp);
+            jsn_object = g_malloc(mfplen);
+            result = fread(jsn_object, mfplen, 1, mfp);
 
-            if (json)
+            if (result == 1)
             {
-                idx = 0;
-                while (1)
+                const nx_json  *json = nx_json_parse(jsn_object, 0);
+
+                if (json)
                 {
-                    const nx_json  *json_obj = nx_json_item(json, idx++);
-                    struct modes    m_modes;
-
-                    if (json_obj->type == NX_JSON_NULL)
-                        break;
-
-                    m_modes.id = nx_json_get(json_obj, "id")->int_value;
-                    strncpy(m_modes.name,
-                            nx_json_get(json_obj, "name")->text_value, 79);
-                    m_modes.name[79] = 0;
-
-                    /* add data to hash table */
-                    key = g_try_new0(guint, 1);
-                    *key = m_modes.id;
-
-                    nmode = g_hash_table_lookup(modes_hash, key);
-
-                    if (nmode == NULL)
+                    idx = 0;
+                    while (1)
                     {
-                        /* create new_mode structure */
-                        nmode = g_try_new(new_mode_t, 1);
-                        nmode->modnum = m_modes.id;
-                        nmode->modname = g_strdup(m_modes.name);
+                        const nx_json  *json_obj = nx_json_item(json, idx++);
+                        struct modes    m_modes;
 
-                        g_hash_table_insert(modes_hash, key, nmode);
+                        if (json_obj->type == NX_JSON_NULL)
+                            break;
 
-                    }
+                        m_modes.id = nx_json_get(json_obj, "id")->int_value;
+                        strncpy(m_modes.name,
+                                nx_json_get(json_obj, "name")->text_value, 79);
+                        m_modes.name[79] = 0;
 
-                    sat_log_log(SAT_LOG_LEVEL_INFO, _("MODE %d %s"),
-                                m_modes.id, m_modes.name);
-                }               // while(1)
-                nx_json_free(json);
-            }                   // if(json)
-        }                       // if(result == 1)
-        g_free(jsn_object);
+                        /* add data to hash table */
+                        key = g_try_new0(guint, 1);
+                        *key = m_modes.id;
+
+                        nmode = g_hash_table_lookup(modes_hash, key);
+
+                        if (nmode == NULL)
+                        {
+                            /* create new_mode structure */
+                            nmode = g_try_new(new_mode_t, 1);
+                            nmode->modnum = m_modes.id;
+                            nmode->modname = g_strdup(m_modes.name);
+
+                            g_hash_table_insert(modes_hash, key, nmode);
+
+                        }
+
+                        sat_log_log(SAT_LOG_LEVEL_INFO, _("MODE %d %s"),
+                                    m_modes.id, m_modes.name);
+                    }           // while(1)
+                    nx_json_free(json);
+                }               // if(json)
+            }                   // if(result == 1)
+            g_free(jsn_object);
+        }                       // if(flen > 1)
         fclose(mfp);
     }                           // if(mfp)
 
@@ -237,135 +243,141 @@ void trsp_update_files(gchar * input_file)
     {
         mfplen = 0;
         fseek(mfp, 0, SEEK_END);
-        mfplen = ftell(mfp);
-        rewind(mfp);
-        jsn_object = g_malloc(mfplen);
-        result = fread(jsn_object, mfplen, 1, mfp);
+        flen = ftell(mfp);
 
-        if (result == 1)
+        if (flen > 1)
         {
-            const nx_json  *json = nx_json_parse(jsn_object, 0);
+            mfplen = flen;
+            rewind(mfp);
+            jsn_object = g_malloc(mfplen);
+            result = fread(jsn_object, mfplen, 1, mfp);
 
-            if (json)
+            if (result == 1)
             {
-                idx = 0;
-                while (1)
+                const nx_json  *json = nx_json_parse(jsn_object, 0);
+
+                if (json)
                 {
-                    const nx_json  *json_obj = nx_json_item(json, idx++);
-                    struct transponder m_trsp;
-
-                    if (json_obj->type == NX_JSON_NULL)
-                        break;
-
-                    strncpy(m_trsp.description,
-                            nx_json_get(json_obj, "description")->text_value, 79);
-                    m_trsp.description[79] = 0;
-                    m_trsp.catnum =
-                        nx_json_get(json_obj, "norad_cat_id")->int_value;
-                    m_trsp.uplink_low =
-                        nx_json_get(json_obj, "uplink_low")->int_value;
-                    m_trsp.uplink_high =
-                        nx_json_get(json_obj, "uplink_high")->int_value;
-                    m_trsp.downlink_low =
-                        nx_json_get(json_obj, "downlink_low")->int_value;
-                    m_trsp.downlink_high =
-                        nx_json_get(json_obj, "downlink_high")->int_value;
-
-                    key = g_try_new0(guint, 1);
-                    *key = nx_json_get(json_obj, "mode_id")->int_value;
-                    nmode = g_hash_table_lookup(modes_hash, key);
-                    if (nmode != NULL)
-                        sprintf(m_trsp.mode, "%s", nmode->modname);
-                    else
-                        sprintf(m_trsp.mode, "%lli",
-                                nx_json_get(json_obj, "mode_id")->int_value);
-
-                    m_trsp.invert = nx_json_get(json_obj, "invert")->int_value;
-                    m_trsp.baud = nx_json_get(json_obj, "baud")->dbl_value;
-                    m_trsp.alive = nx_json_get(json_obj, "alive")->int_value;
-
-                    //strcpy(m_trsp.uuid,nx_json_get(json_obj,          "uuid")->text_value);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(">>> Preparing information for transponders of cat_id %d <<<"), m_trsp.catnum, __func__);
-                    ////sat_log_log (SAT_LOG_LEVEL_INFO, _("         uuid : %s"), m_trsp.uuid, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  description : %s"), m_trsp.description, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("        alive : %s"), m_trsp.alive ? "true" : "false", __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("   uplink_low : %Ld"),m_trsp.uplink_low, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  uplink_high : %Ld"),m_trsp.uplink_high, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" downink_low  : %Ld"),m_trsp.downlink_low, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("downlink_high : %Ld"),m_trsp.downlink_high, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Mode : %s"), m_trsp.mode, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("       Invert : %s"), m_trsp.invert ? "true" : "false", __func__);
-                    // sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Baud : %lf"),m_trsp.baud, __func__);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" norad_cat_id : %Ld"),m_trsp.catnum, __func__);
-                    char            m_catnum[20];
-
-                    sprintf(m_catnum, "%d", m_trsp.catnum);
-                    trspfile = g_strconcat(trspfolder, G_DIR_SEPARATOR_S,
-                                           m_catnum, ".trsp", NULL);
-                    //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Writing to file : %s "), __func__, trspfile);
-
-                    //first lets delete the file we already have, to make space for the new version
-                    /* check existence and add data to hash table for future check */
-                    key = g_try_new0(guint, 1);
-                    *key = m_trsp.catnum;
-                    ntrsp = g_hash_table_lookup(trsp_hash, key);
-
-                    if (ntrsp == NULL)
+                    idx = 0;
+                    while (1)
                     {
-                        /* create new_trsp structure */
-                        ntrsp = g_try_new(new_trsp_t, 1);
-                        ntrsp->catnum = m_trsp.catnum;
-                        ntrsp->numtrsp = 1;     //our first insertion of transponder to this file
-                        g_hash_table_insert(trsp_hash, key, ntrsp);
-                        g_remove(trspfile);
+                        const nx_json  *json_obj = nx_json_item(json, idx++);
+                        struct transponder m_trsp;
 
-                    }
-                    else
-                    {
-                        //TODO: increase number of transponders here
-                        //ntrsp->numtrsp += 1; //number of transponder info in this file
-                        //g_hash_table_replace(trsp_hash, key, ntrsp);
-                    }
+                        if (json_obj->type == NX_JSON_NULL)
+                            break;
 
-                    //now lets write the new version
-                    ffile = g_fopen(trspfile, "a");
-                    if (ffile != NULL)
-                    {
-                        fprintf(ffile, "\n[%s]\n", m_trsp.description);
-                        if (m_trsp.uplink_low > 0)
-                            fprintf(ffile, "UP_LOW=%lld\n",
-                                    m_trsp.uplink_low);
-                        if (m_trsp.uplink_high > 0)
-                            fprintf(ffile, "UP_HIGH=%lld\n",
-                                    m_trsp.uplink_high);
-                        if (m_trsp.downlink_low > 0)
-                            fprintf(ffile, "DOWN_LOW=%lld\n",
-                                    m_trsp.downlink_low);
-                        if (m_trsp.downlink_high > 0)
-                            fprintf(ffile, "DOWN_HIGH=%lld\n",
-                                    m_trsp.downlink_high);
-                        fprintf(ffile, "MODE=%s\n",
-                                m_trsp.mode);
-                        if (m_trsp.baud > 0.0)
-                            fprintf(ffile, "BAUD=%.0f\n",
-                                    m_trsp.baud);
-                        if (m_trsp.invert)
-                            fprintf(ffile, "INVERT=%s\n",
-                                    "true");
-                        fclose(ffile);
-                    }
-                    else
-                    {
-                        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                                    _
-                                    ("%s: Could not open trsp file for write"),
-                                    __func__);
-                    }
-                }               // while(1)
-                nx_json_free(json);
-            }                   // if(json)
-        }                       // if(result == 1)
-        g_free(jsn_object);
+                        strncpy(m_trsp.description,
+                                nx_json_get(json_obj,
+                                            "description")->text_value, 79);
+                        m_trsp.description[79] = 0;
+                        m_trsp.catnum =
+                            nx_json_get(json_obj, "norad_cat_id")->int_value;
+                        m_trsp.uplink_low =
+                            nx_json_get(json_obj, "uplink_low")->int_value;
+                        m_trsp.uplink_high =
+                            nx_json_get(json_obj, "uplink_high")->int_value;
+                        m_trsp.downlink_low =
+                            nx_json_get(json_obj, "downlink_low")->int_value;
+                        m_trsp.downlink_high =
+                            nx_json_get(json_obj, "downlink_high")->int_value;
+
+                        key = g_try_new0(guint, 1);
+                        *key = nx_json_get(json_obj, "mode_id")->int_value;
+                        nmode = g_hash_table_lookup(modes_hash, key);
+                        if (nmode != NULL)
+                            sprintf(m_trsp.mode, "%s", nmode->modname);
+                        else
+                            sprintf(m_trsp.mode, "%lli",
+                                    nx_json_get(json_obj,
+                                                "mode_id")->int_value);
+
+                        m_trsp.invert =
+                            nx_json_get(json_obj, "invert")->int_value;
+                        m_trsp.baud = nx_json_get(json_obj, "baud")->dbl_value;
+                        m_trsp.alive =
+                            nx_json_get(json_obj, "alive")->int_value;
+
+                        //strcpy(m_trsp.uuid,nx_json_get(json_obj,          "uuid")->text_value);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(">>> Preparing information for transponders of cat_id %d <<<"), m_trsp.catnum, __func__);
+                        ////sat_log_log (SAT_LOG_LEVEL_INFO, _("         uuid : %s"), m_trsp.uuid, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  description : %s"), m_trsp.description, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("        alive : %s"), m_trsp.alive ? "true" : "false", __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("   uplink_low : %Ld"),m_trsp.uplink_low, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("  uplink_high : %Ld"),m_trsp.uplink_high, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" downink_low  : %Ld"),m_trsp.downlink_low, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("downlink_high : %Ld"),m_trsp.downlink_high, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Mode : %s"), m_trsp.mode, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("       Invert : %s"), m_trsp.invert ? "true" : "false", __func__);
+                        // sat_log_log(SAT_LOG_LEVEL_DEBUG, _("         Baud : %lf"),m_trsp.baud, __func__);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _(" norad_cat_id : %Ld"),m_trsp.catnum, __func__);
+                        char            m_catnum[20];
+
+                        sprintf(m_catnum, "%d", m_trsp.catnum);
+                        trspfile = g_strconcat(trspfolder, G_DIR_SEPARATOR_S,
+                                               m_catnum, ".trsp", NULL);
+                        //sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Writing to file : %s "), __func__, trspfile);
+
+                        //first lets delete the file we already have, to make space for the new version
+                        /* check existence and add data to hash table for future check */
+                        key = g_try_new0(guint, 1);
+                        *key = m_trsp.catnum;
+                        ntrsp = g_hash_table_lookup(trsp_hash, key);
+
+                        if (ntrsp == NULL)
+                        {
+                            /* create new_trsp structure */
+                            ntrsp = g_try_new(new_trsp_t, 1);
+                            ntrsp->catnum = m_trsp.catnum;
+                            ntrsp->numtrsp = 1; //our first insertion of transponder to this file
+                            g_hash_table_insert(trsp_hash, key, ntrsp);
+                            g_remove(trspfile);
+
+                        }
+                        else
+                        {
+                            //TODO: increase number of transponders here
+                            //ntrsp->numtrsp += 1; //number of transponder info in this file
+                            //g_hash_table_replace(trsp_hash, key, ntrsp);
+                        }
+
+                        //now lets write the new version
+                        ffile = g_fopen(trspfile, "a");
+                        if (ffile != NULL)
+                        {
+                            fprintf(ffile, "\n[%s]\n", m_trsp.description);
+                            if (m_trsp.uplink_low > 0)
+                                fprintf(ffile, "UP_LOW=%lld\n",
+                                        m_trsp.uplink_low);
+                            if (m_trsp.uplink_high > 0)
+                                fprintf(ffile, "UP_HIGH=%lld\n",
+                                        m_trsp.uplink_high);
+                            if (m_trsp.downlink_low > 0)
+                                fprintf(ffile, "DOWN_LOW=%lld\n",
+                                        m_trsp.downlink_low);
+                            if (m_trsp.downlink_high > 0)
+                                fprintf(ffile, "DOWN_HIGH=%lld\n",
+                                        m_trsp.downlink_high);
+                            fprintf(ffile, "MODE=%s\n", m_trsp.mode);
+                            if (m_trsp.baud > 0.0)
+                                fprintf(ffile, "BAUD=%.0f\n", m_trsp.baud);
+                            if (m_trsp.invert)
+                                fprintf(ffile, "INVERT=%s\n", "true");
+                            fclose(ffile);
+                        }
+                        else
+                        {
+                            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                        _
+                                        ("%s: Could not open trsp file for write"),
+                                        __func__);
+                        }
+                    }           // while(1)
+                    nx_json_free(json);
+                }               // if(json)
+            }                   // if(result == 1)
+            g_free(jsn_object);
+        }                       // if(flen > 1)
         fclose(mfp);
     }                           // if(mfp)
 
@@ -529,6 +541,8 @@ void trsp_update_from_network(gboolean silent,
     gchar          *text;
 
     guint           success = 0;        /* no. of successfull downloads */
+
+    (void)label2;
 
     /* bail out if we are already in an update process */
     if (g_mutex_trylock(&trsp_in_progress) == FALSE)

@@ -16,12 +16,12 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
@@ -37,7 +37,7 @@
  *
  * TODO Duplex TRX
  * TODO Transponder passband display somewhere, below Sat freq?
- * 
+ *
  */
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
@@ -315,7 +315,7 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
 
 /*
  * Update rig control state.
- * 
+ *
  * This function is called by the parent, i.e. GtkSatModule, indicating that
  * the satellite data has been updated. The function updates the internal state
  * of the controller and the rigator.
@@ -418,11 +418,11 @@ void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
 
 /*
  * Create freq control widgets for downlink.
- * 
+ *
  * This function creates and initialises the widgets for controlling the
  * downlink frequency. It consists of a controller widget showing the
  * satellite frequency with the radio frequency below it.
- * 
+ *
  */
 static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl)
 {
@@ -486,7 +486,7 @@ static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl)
 
 /*
  * Create uplink frequency display widgets.
- * 
+ *
  * This function creates and initialises the widgets for displaying the
  * uplink frequency of the satellite and the radio.
  */
@@ -1565,7 +1565,7 @@ static void exec_toggle_cycle(GtkRigCtrl * ctrl)
     exec_rx_cycle(ctrl);
 
     /* TX cycle is executed only if user selected RIG_TYPE_TOGGLE_AUTO
-     * In manual mode the TX freq update is performed only when TX is activated. 
+     * In manual mode the TX freq update is performed only when TX is activated.
      * Even in auto mode, the toggling is performed only once every 10 seconds.
      */
     if (ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO)
@@ -1594,13 +1594,13 @@ static void exec_toggle_cycle(GtkRigCtrl * ctrl)
  * RIG_TYPE_TOGGLE_AUTO. This applies to radios that support split operation
  * (e.g. TX on VHF, RX on UHF) where the frequency can not be set via CAT while
  * PTT is active.
- * 
+ *
  * If PTT=TRUE we are in TX mode and hence there is nothing to do since the
  * frequency is kept constant.
- * 
+ *
  * If PTT=FALSE we are in RX mode and we should update the TX frequency by
  * using set_freq_toggle()
- * 
+ *
  * For these kind of radios there is no dial-feedback for the TX frequency.
  */
 
@@ -2480,14 +2480,11 @@ static gboolean is_rig_tx_capable(const gchar * confname)
     return cantx;
 }
 
-gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
-                              gchar * buffout, gint sizeout)
+static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
+                                      gchar * buffout, gint sizeout)
 {
     gint            written;
     gint            size;
-
-    /* Enter critical section! */
-    g_mutex_lock(&ctrl->writelock);
 
     /* added by Marcel Cimander; win32 newline -> \10\13 */
 #ifdef WIN32
@@ -2536,11 +2533,24 @@ gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
     }
     ctrl->wrops++;
 
-    /* Leave critical section! */
-    g_mutex_unlock(&ctrl->writelock);
-
     return TRUE;
 }
+
+static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
+                                      gchar * buffout, gint sizeout)
+{
+    gboolean retval;
+
+    /* Enter critical section! */
+    g_mutex_lock(&ctrl->writelock);
+
+    retval = _send_rigctld_command(ctrl, sock, buff, buffout, sizeout);
+
+    /* Leave critical section! */
+    g_mutex_unlock(&ctrl->writelock);
+    return (retval);
+}
+
 
 /*
  * Catch events when the user presses the SPACE key on the keyboard.
@@ -2585,15 +2595,15 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
 
 /*
  * This function is used to manage PTT events, e.g. the user presses
- * the spacebar. It is only useful for RIG_TYPE_TOGGLE_MAN and possibly for 
+ * the spacebar. It is only useful for RIG_TYPE_TOGGLE_MAN and possibly for
  * RIG_TYPE_TOGGLE_AUTO.
- * 
+ *
  * First, the function will try to lock the controller. If the lock is
  * acquired the function checks the current PTT status.
  * If PTT status is FALSE (off), it will set the TX frequency and set PTT to
  * TRUE (on). If PTT status is TRUE (on) it will simply set the PTT to FALSE
  * (off).
- * 
+ *
  * This function assumes that the radio supprot set/get PTT, otherwise it makes
  * no sense to use it!
  */
