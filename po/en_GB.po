@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-21 00:16+0100\n"
+"POT-Creation-Date: 2017-12-23 10:15+0100\n"
 "PO-Revision-Date: 2017-12-04 01:49+0000\n"
 "Last-Translator: Michael Stephenson <mickstephenson@gmail.com>\n"
 "Language-Team: British English\n"
@@ -294,12 +294,12 @@ msgid "%s: Satellite #%d removed from list."
 msgstr "%s: Satellite #%d removed from list."
 
 #: ../src/gtk-event-list.c:555 ../src/sat-pass-dialogs.c:59
-#: ../src/sat-pref-rig-editor.c:343
+#: ../src/sat-pref-rig-editor.c:434
 msgid "LOS"
 msgstr "LOS"
 
 #: ../src/gtk-event-list.c:559 ../src/sat-pass-dialogs.c:57
-#: ../src/sat-pref-rig-editor.c:338
+#: ../src/sat-pref-rig-editor.c:429
 msgid "AOS"
 msgstr "AOS"
 
@@ -622,7 +622,7 @@ msgstr ""
 "This device will be used for uplink"
 
 #: ../src/gtk-rig-ctrl.c:778 ../src/sat-pref-rig.c:254
-#: ../src/sat-pref-rig.c:263 ../src/sat-pref-rig-editor.c:254
+#: ../src/sat-pref-rig.c:263 ../src/sat-pref-rig-editor.c:345
 msgid "None"
 msgstr "None"
 
@@ -983,7 +983,7 @@ msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1257 ../src/gtk-rot-ctrl.c:1258
 #: ../src/gtk-sat-module-popup.c:900 ../src/gtk-sat-module-popup.c:980
-#: ../src/sat-log-browser.c:61 ../src/sat-log.c:61 ../src/sat-pref-rig.c:222
+#: ../src/sat-log-browser.c:55 ../src/sat-log.c:61 ../src/sat-pref-rig.c:222
 msgid "ERROR"
 msgstr "ERROR"
 
@@ -1740,7 +1740,7 @@ msgstr "Play backwards"
 
 #. reset time
 #. reset button
-#: ../src/gtk-sat-module-tmg.c:125 ../src/sat-pref-conditions.c:349
+#: ../src/gtk-sat-module-tmg.c:125 ../src/sat-pref-conditions.c:133
 #: ../src/sat-pref-debug.c:136 ../src/sat-pref-formats.c:98
 #: ../src/sat-pref-layout.c:428 ../src/sat-pref-list-view.c:196
 #: ../src/sat-pref-map-view.c:782 ../src/sat-pref-multi-pass.c:169
@@ -2179,6 +2179,17 @@ msgstr "%s:%d: %s has %d passes within %.4f days\n"
 #: ../src/gtk-sky-glance.c:701
 #, c-format
 msgid "%s:%s: Could not allocate memory."
+msgstr ""
+
+#. box tooltip will contain pass summary
+#: ../src/gtk-sky-glance.c:722
+#, c-format
+msgid ""
+"<b>%s</b>\n"
+"AOS: %s  Az:%.0f°\n"
+"TCA: %s  Az:%.0f°  El:%.1f°\n"
+"LOS: %s  Az:%.0f°\n"
+"<i>Click for details</i>"
 msgstr ""
 
 #. no satellites
@@ -3147,8 +3158,8 @@ msgstr ""
 #. QTH name
 #. Config name
 #: ../src/qth-editor.c:194 ../src/sat-pref-qth.c:157
-#: ../src/sat-pref-qth-editor.c:178 ../src/sat-pref-rig-editor.c:147
-#: ../src/sat-pref-rot-editor.c:141
+#: ../src/sat-pref-qth-editor.c:178 ../src/sat-pref-rig-editor.c:241
+#: ../src/sat-pref-rot-editor.c:171
 msgid "Name"
 msgstr "Name"
 
@@ -3582,88 +3593,88 @@ msgstr "Transponders"
 msgid "Satellite Info"
 msgstr "Satellite Info"
 
-#: ../src/sat-log-browser.c:50 ../src/sat-pass-dialogs.c:98
+#: ../src/sat-log-browser.c:44 ../src/sat-pass-dialogs.c:98
 #: ../src/sat-pass-dialogs.c:121
 msgid "Time"
 msgstr "Time"
 
-#: ../src/sat-log-browser.c:51
+#: ../src/sat-log-browser.c:45
 msgid "Level"
 msgstr "Level"
 
-#: ../src/sat-log-browser.c:52
+#: ../src/sat-log-browser.c:46
 msgid "Message"
 msgstr "Message"
 
-#: ../src/sat-log-browser.c:60
+#: ../src/sat-log-browser.c:54
 msgid "NONE"
 msgstr "NONE"
 
-#: ../src/sat-log-browser.c:62
+#: ../src/sat-log-browser.c:56
 msgid "WARNING"
 msgstr "WARNING"
 
-#: ../src/sat-log-browser.c:63
+#: ../src/sat-log-browser.c:57
 msgid "INFO"
 msgstr "INFO"
 
-#: ../src/sat-log-browser.c:64 ../src/sat-log.c:64
+#: ../src/sat-log-browser.c:58 ../src/sat-log.c:64
 msgid "DEBUG"
 msgstr "DEBUG"
 
-#. create dialog window; we use "fake" stock responses to catch user
-#. button clicks (save_as and pause)
-#.
-#. Remove filename if file not read
-#. clear filename from title if unable to read file
-#: ../src/sat-log-browser.c:130 ../src/sat-log-browser.c:174
-#: ../src/sat-log-browser.c:334
-msgid "Log Browser"
-msgstr "Log Browser"
-
-#. update window title if file read cleanly
-#. Update title with filename
-#: ../src/sat-log-browser.c:166 ../src/sat-log-browser.c:327
-#, c-format
-msgid "Log Browser: %s"
-msgstr "Log Browser: %s"
-
-#. create file chooser dialog
-#: ../src/sat-log-browser.c:302
-msgid "Select Log File"
-msgstr "Select Log File"
-
-#: ../src/sat-log-browser.c:408
+#: ../src/sat-log-browser.c:179
 msgid "Log file is corrupt"
 msgstr "Log file is corrupt"
 
-#: ../src/sat-log-browser.c:431
+#: ../src/sat-log-browser.c:202
 #, c-format
 msgid "%s:%d: Error open debug log (%s)"
 msgstr "%s:%d: Error open debug log (%s)"
 
-#: ../src/sat-log-browser.c:558
+#. create file chooser dialog
+#: ../src/sat-log-browser.c:235
+msgid "Select Log File"
+msgstr "Select Log File"
+
+#. Update title with filename
+#. update window title if file read cleanly
+#: ../src/sat-log-browser.c:259 ../src/sat-log-browser.c:514
+#, c-format
+msgid "Log Browser: %s"
+msgstr "Log Browser: %s"
+
+#. clear filename from title if unable to read file
+#. create dialog window; we use "fake" stock responses to catch user
+#. button clicks (save_as and pause)
+#.
+#. Remove filename if file not read
+#: ../src/sat-log-browser.c:266 ../src/sat-log-browser.c:478
+#: ../src/sat-log-browser.c:522
+msgid "Log Browser"
+msgstr "Log Browser"
+
+#: ../src/sat-log-browser.c:330
 msgid "Errors"
 msgstr "Errors"
 
-#: ../src/sat-log-browser.c:562
+#: ../src/sat-log-browser.c:334
 msgid "Warnings"
 msgstr "Warnings"
 
-#: ../src/sat-log-browser.c:566
+#: ../src/sat-log-browser.c:338
 msgid "Info"
 msgstr "Info"
 
-#: ../src/sat-log-browser.c:570
+#: ../src/sat-log-browser.c:342
 msgid "Debug"
 msgstr "Debug"
 
-#: ../src/sat-log-browser.c:580
+#: ../src/sat-log-browser.c:352
 msgid "<b>Total</b>"
 msgstr "<b>Total</b>"
 
 #. frame around the table
-#: ../src/sat-log-browser.c:590
+#: ../src/sat-log-browser.c:362
 msgid " Summary "
 msgstr " Summary "
 
@@ -3824,12 +3835,21 @@ msgstr "Predict"
 msgid "Gpredict Preferences :: General"
 msgstr "Gpredict Preferences :: General"
 
+#: ../src/sat-pref-conditions.c:136 ../src/sat-pref-debug.c:138
+#: ../src/sat-pref-layout.c:435 ../src/sat-pref-list-view.c:203
+#: ../src/sat-pref-map-view.c:789 ../src/sat-pref-multi-pass.c:173
+#: ../src/sat-pref-polar-view.c:601 ../src/sat-pref-refresh.c:386
+#: ../src/sat-pref-single-pass.c:177 ../src/sat-pref-single-sat.c:217
+#: ../src/sat-pref-sky-at-glance.c:401 ../src/sat-pref-tle.c:465
+msgid "Reset settings to the default values."
+msgstr "Reset settings to the default values."
+
 #. minimum elevation
-#: ../src/sat-pref-conditions.c:74
+#: ../src/sat-pref-conditions.c:161
 msgid "Minimum elevation"
 msgstr "Minimum elevation"
 
-#: ../src/sat-pref-conditions.c:80
+#: ../src/sat-pref-conditions.c:166
 msgid ""
 "Elevation threshold for passes.\n"
 "Passes with maximum elevation below this limit will be omitted"
@@ -3837,49 +3857,49 @@ msgstr ""
 "Elevation threshold for passes.\n"
 "Passes with maximum elevation below this limit will be omitted"
 
-#: ../src/sat-pref-conditions.c:92 ../src/sat-pref-conditions.c:238
+#: ../src/sat-pref-conditions.c:177 ../src/sat-pref-conditions.c:305
 #: ../src/sat-pref-map-view.c:766
 msgid "[deg]"
 msgstr "[deg]"
 
-#: ../src/sat-pref-conditions.c:103
+#: ../src/sat-pref-conditions.c:186
 msgid "<b>Multiple Passes:</b>"
 msgstr "<b>Multiple Passes:</b>"
 
 #. number of passes
-#: ../src/sat-pref-conditions.c:109
+#: ../src/sat-pref-conditions.c:191
 msgid "Number of passes to predict"
 msgstr "Number of passes to predict"
 
-#: ../src/sat-pref-conditions.c:115
+#: ../src/sat-pref-conditions.c:196
 msgid "The maximum number of passes to predict."
 msgstr "The maximum number of passes to predict."
 
 #. lookahead
-#: ../src/sat-pref-conditions.c:127
+#: ../src/sat-pref-conditions.c:207
 msgid "Passes should occur within"
 msgstr "Passes should occur within"
 
-#: ../src/sat-pref-conditions.c:133
+#: ../src/sat-pref-conditions.c:212
 msgid ""
 "Only passes that occur within the specified number of days will be shown."
 msgstr ""
 "Only passes that occur within the specified number of days will be shown."
 
-#: ../src/sat-pref-conditions.c:145
+#: ../src/sat-pref-conditions.c:224
 msgid "[days]"
 msgstr "[days]"
 
-#: ../src/sat-pref-conditions.c:156
+#: ../src/sat-pref-conditions.c:233
 msgid "<b>Pass Details:</b>"
 msgstr "<b>Pass Details:</b>"
 
 #. time resolution
-#: ../src/sat-pref-conditions.c:162
+#: ../src/sat-pref-conditions.c:238
 msgid "Time resolution"
 msgstr "Time resolution"
 
-#: ../src/sat-pref-conditions.c:168
+#: ../src/sat-pref-conditions.c:243
 msgid ""
 "Gpredict will try to show the pass details with the specified time "
 "resolution."
@@ -3887,16 +3907,16 @@ msgstr ""
 "Gpredict will try to show the pass details with the specified time "
 "resolution."
 
-#: ../src/sat-pref-conditions.c:179
+#: ../src/sat-pref-conditions.c:253
 msgid "[sec]"
 msgstr "[sec]"
 
 #. number of entries
-#: ../src/sat-pref-conditions.c:185
+#: ../src/sat-pref-conditions.c:258
 msgid "Number of entries"
 msgstr "Number of entries"
 
-#: ../src/sat-pref-conditions.c:191
+#: ../src/sat-pref-conditions.c:263
 msgid ""
 "Gpredict will try to keep the number of rows in the detailed prediction "
 "within this limit."
@@ -3904,16 +3924,16 @@ msgstr ""
 "Gpredict will try to keep the number of rows in the detailed prediction "
 "within this limit."
 
-#: ../src/sat-pref-conditions.c:211
+#: ../src/sat-pref-conditions.c:281
 msgid "<b>Satellite Visibility:</b>"
 msgstr "<b>Satellite Visibility:</b>"
 
 #. twilight threshold
-#: ../src/sat-pref-conditions.c:217
+#: ../src/sat-pref-conditions.c:286
 msgid "Twilight threshold"
 msgstr "Twilight threshold"
 
-#: ../src/sat-pref-conditions.c:223
+#: ../src/sat-pref-conditions.c:291
 msgid ""
 "Satellites are only considered visible if the elevation of the Sun is below "
 "the specified threshold.\n"
@@ -3923,11 +3943,11 @@ msgid ""
 msgstr ""
 
 #. T0 for predictions
-#: ../src/sat-pref-conditions.c:249
+#: ../src/sat-pref-conditions.c:314
 msgid "Always use real time for pass predictions"
 msgstr "Always use real time for pass predictions"
 
-#: ../src/sat-pref-conditions.c:252
+#: ../src/sat-pref-conditions.c:317
 msgid ""
 "Check this box if you want Gpredict to always use the current (real) time as "
 "starting time when predicting future satellite passes.\n"
@@ -3942,15 +3962,6 @@ msgstr ""
 "If you leave the box unchecked and the time controller is active, Gpredict "
 "will use the time from the time controller as starting time for predicting "
 "satellite passes."
-
-#: ../src/sat-pref-conditions.c:352 ../src/sat-pref-debug.c:138
-#: ../src/sat-pref-layout.c:435 ../src/sat-pref-list-view.c:203
-#: ../src/sat-pref-map-view.c:789 ../src/sat-pref-multi-pass.c:173
-#: ../src/sat-pref-polar-view.c:601 ../src/sat-pref-refresh.c:386
-#: ../src/sat-pref-single-pass.c:177 ../src/sat-pref-single-sat.c:217
-#: ../src/sat-pref-sky-at-glance.c:401 ../src/sat-pref-tle.c:465
-msgid "Reset settings to the default values."
-msgstr "Reset settings to the default values."
 
 #: ../src/sat-pref-debug.c:71
 msgid "Debug level:"
@@ -4841,11 +4852,11 @@ msgstr "%s:%d: Read %s"
 msgid "%s:%d: Failed to read %s"
 msgstr "%s:%d: Failed to read %s"
 
-#: ../src/sat-pref-rig.c:198 ../src/sat-pref-rig-editor.c:200
+#: ../src/sat-pref-rig.c:198 ../src/sat-pref-rig-editor.c:291
 msgid "RX only"
 msgstr "RX only"
 
-#: ../src/sat-pref-rig.c:202 ../src/sat-pref-rig-editor.c:201
+#: ../src/sat-pref-rig.c:202 ../src/sat-pref-rig-editor.c:292
 msgid "TX only"
 msgstr "TX only"
 
@@ -4857,7 +4868,7 @@ msgstr "RX + TX"
 msgid "Duplex"
 msgstr "Duplex"
 
-#: ../src/sat-pref-rig.c:214 ../src/sat-pref-rig-editor.c:205
+#: ../src/sat-pref-rig.c:214 ../src/sat-pref-rig-editor.c:296
 msgid "FT817/857/897 (auto)"
 msgstr "FT817/857/897 (auto)"
 
@@ -4891,14 +4902,14 @@ msgid "Config Name"
 msgstr "Config Name"
 
 #. Host
-#: ../src/sat-pref-rig.c:514 ../src/sat-pref-rig-editor.c:166
-#: ../src/sat-pref-rot.c:458 ../src/sat-pref-rot-editor.c:159
+#: ../src/sat-pref-rig.c:514 ../src/sat-pref-rig-editor.c:256
+#: ../src/sat-pref-rot.c:458 ../src/sat-pref-rot-editor.c:189
 msgid "Host"
 msgstr "Host"
 
 #. port
-#: ../src/sat-pref-rig.c:521 ../src/sat-pref-rig-editor.c:182
-#: ../src/sat-pref-rot.c:465 ../src/sat-pref-rot-editor.c:175
+#: ../src/sat-pref-rig.c:521 ../src/sat-pref-rig-editor.c:272
+#: ../src/sat-pref-rot.c:465 ../src/sat-pref-rot-editor.c:205
 msgid "Port"
 msgstr "Port"
 
@@ -4919,12 +4930,12 @@ msgid "VFO Down"
 msgstr "VFO Down"
 
 #. Downconverter LO frequency
-#: ../src/sat-pref-rig.c:571 ../src/sat-pref-rig-editor.c:298
+#: ../src/sat-pref-rig.c:571 ../src/sat-pref-rig-editor.c:389
 msgid "LO Down"
 msgstr "LO Down"
 
 #. Upconverter LO frequency
-#: ../src/sat-pref-rig.c:582 ../src/sat-pref-rig-editor.c:316
+#: ../src/sat-pref-rig.c:582 ../src/sat-pref-rig-editor.c:407
 msgid "LO Up"
 msgstr "LO Up"
 
@@ -4968,12 +4979,7 @@ msgstr "Delete the selected radio"
 msgid "%s: Failed to get RIG %s"
 msgstr "%s: Failed to get RIG %s"
 
-#. crate dialog and add contents
-#: ../src/sat-pref-rig-editor.c:81
-msgid "Edit radio configuration"
-msgstr "Edit radio configuration"
-
-#: ../src/sat-pref-rig-editor.c:154
+#: ../src/sat-pref-rig-editor.c:249
 msgid ""
 "Enter a short name for this configuration, e.g. IC910-1.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
@@ -4981,7 +4987,7 @@ msgstr ""
 "Enter a short name for this configuration, e.g. IC910-1.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 
-#: ../src/sat-pref-rig-editor.c:174
+#: ../src/sat-pref-rig-editor.c:264
 msgid ""
 "Enter the host where rigctld is running. You can use both host name and IP "
 "address, e.g. 192.168.1.100\n"
@@ -4993,28 +4999,28 @@ msgstr ""
 "\n"
 "If gpredict and rigctld are running on the same computer use localhost"
 
-#: ../src/sat-pref-rig-editor.c:190
+#: ../src/sat-pref-rig-editor.c:280
 msgid "Enter the port number where rigctld is listening"
 msgstr "Enter the port number where rigctld is listening"
 
 #. radio type
-#: ../src/sat-pref-rig-editor.c:195
+#: ../src/sat-pref-rig-editor.c:285
 msgid "Radio type"
 msgstr "Radio type"
 
-#: ../src/sat-pref-rig-editor.c:202
+#: ../src/sat-pref-rig-editor.c:293
 msgid "Simplex TRX"
 msgstr "Simplex TRX"
 
-#: ../src/sat-pref-rig-editor.c:203
+#: ../src/sat-pref-rig-editor.c:294
 msgid "Duplex TRX"
 msgstr "Duplex TRX"
 
-#: ../src/sat-pref-rig-editor.c:207
+#: ../src/sat-pref-rig-editor.c:298
 msgid "FT817/857/897 (manual)"
 msgstr "FT817/857/897 (manual)"
 
-#: ../src/sat-pref-rig-editor.c:211
+#: ../src/sat-pref-rig-editor.c:302
 msgid ""
 "<b>RX only:</b>  The radio shall only be used as receiver. If <i>Monitor PTT "
 "status</i> is checked the doppler tuning will be suspended while PTT is ON "
@@ -5069,19 +5075,19 @@ msgstr ""
 "Gpredict will then update the TX Doppler before actually switching to TX."
 
 #. ptt
-#: ../src/sat-pref-rig-editor.c:249
+#: ../src/sat-pref-rig-editor.c:340
 msgid "PTT status"
 msgstr "PTT status"
 
-#: ../src/sat-pref-rig-editor.c:255
+#: ../src/sat-pref-rig-editor.c:346
 msgid "Read PTT"
 msgstr "Read PTT"
 
-#: ../src/sat-pref-rig-editor.c:256
+#: ../src/sat-pref-rig-editor.c:347
 msgid "Read DCD"
 msgstr "Read DCD"
 
-#: ../src/sat-pref-rig-editor.c:260
+#: ../src/sat-pref-rig-editor.c:351
 msgid ""
 "Select PTT type.\n"
 "\n"
@@ -5112,31 +5118,31 @@ msgstr ""
 "can read squelch status and send it via CTS."
 
 #. VFO Up/Down
-#: ../src/sat-pref-rig-editor.c:271
+#: ../src/sat-pref-rig-editor.c:362
 msgid "VFO Up/Down"
 msgstr "VFO Up/Down"
 
-#: ../src/sat-pref-rig-editor.c:276
+#: ../src/sat-pref-rig-editor.c:367
 msgid "Not applicable"
 msgstr "Not applicable"
 
-#: ../src/sat-pref-rig-editor.c:278
+#: ../src/sat-pref-rig-editor.c:369
 msgid "MAIN ↑ / SUB ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:280
+#: ../src/sat-pref-rig-editor.c:371
 msgid "SUB ↑ / MAIN ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:282
+#: ../src/sat-pref-rig-editor.c:373
 msgid "A ↑ / B ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:284
+#: ../src/sat-pref-rig-editor.c:375
 msgid "B ↑ / A ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:289
+#: ../src/sat-pref-rig-editor.c:380
 msgid ""
 "Select which VFO to use for uplink and downlink. This setting is used for "
 "full-duplex radios only, such as the IC-910H, FT-847 and the TS-2000.\n"
@@ -5146,33 +5152,38 @@ msgid ""
 "<b>TS-2000:</b> B↑ / A↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:307
+#: ../src/sat-pref-rig-editor.c:398
 msgid ""
 "Enter the frequency of the local oscillator  of the downconverter, if any."
 msgstr ""
 "Enter the frequency of the local oscillator  of the downconverter, if any."
 
-#: ../src/sat-pref-rig-editor.c:311 ../src/sat-pref-rig-editor.c:329
+#: ../src/sat-pref-rig-editor.c:402 ../src/sat-pref-rig-editor.c:420
 msgid "MHz"
 msgstr "MHz"
 
-#: ../src/sat-pref-rig-editor.c:325
+#: ../src/sat-pref-rig-editor.c:416
 msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 "Enter the frequency of the local oscillator of the upconverter, if any."
 
 #. AOS / LOS signalling
-#: ../src/sat-pref-rig-editor.c:334
+#: ../src/sat-pref-rig-editor.c:425
 msgid "Signalling"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:341
+#: ../src/sat-pref-rig-editor.c:432
 msgid "Enable AOS signalling for this radio."
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:346
+#: ../src/sat-pref-rig-editor.c:437
 msgid "Enable LOS signalling for this radio."
 msgstr ""
+
+#. crate dialog and add contents
+#: ../src/sat-pref-rig-editor.c:524
+msgid "Edit radio configuration"
+msgstr "Edit radio configuration"
 
 #: ../src/sat-pref-rot.c:152
 msgid ""
@@ -5235,18 +5246,18 @@ msgstr "Azimuth Type"
 msgid "%s: Failed to get ROT %s"
 msgstr "%s: Failed to get ROT %s"
 
-#. crate dialog and add contents
-#: ../src/sat-pref-rot-editor.c:79
-msgid "Edit rotator configuration"
-msgstr "Edit rotator configuration"
+#: ../src/sat-pref-rot-editor.c:155
+#, c-format
+msgid "%s:%s: Invalid AZ rotator type."
+msgstr "%s:%s: Invalid AZ rotator type."
 
-#: ../src/sat-pref-rot-editor.c:148
+#: ../src/sat-pref-rot-editor.c:178
 msgid ""
 "Enter a short name for this configuration,  e.g. ROTOR-1.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:167
+#: ../src/sat-pref-rot-editor.c:197
 msgid ""
 "Enter the host where rotctld is running. You can use both host name and IP "
 "address, e.g. 192.168.1.100\n"
@@ -5258,53 +5269,53 @@ msgstr ""
 "\n"
 "If gpredict and rotctld are running on the same computer, use localhost"
 
-#: ../src/sat-pref-rot-editor.c:183
+#: ../src/sat-pref-rot-editor.c:213
 msgid "Enter the port number where rotctld is listening. Default is 4533."
 msgstr "Enter the port number where rotctld is listening. Default is 4533."
 
 #. Az-type
-#: ../src/sat-pref-rot-editor.c:191
+#: ../src/sat-pref-rot-editor.c:222
 msgid "Az type"
 msgstr "Az type"
 
-#: ../src/sat-pref-rot-editor.c:202
+#: ../src/sat-pref-rot-editor.c:233
 msgid ""
 "Select your azimuth range here. Note that gpredict assumes that 0° is at "
 "North and + direction is clockwise for both types"
 msgstr ""
 
 #. Az and El limits
-#: ../src/sat-pref-rot-editor.c:210
+#: ../src/sat-pref-rot-editor.c:241
 msgid " Min Az"
 msgstr " Min Az"
 
-#: ../src/sat-pref-rot-editor.c:219
+#: ../src/sat-pref-rot-editor.c:250
 msgid " Max Az"
 msgstr " Max Az"
 
-#: ../src/sat-pref-rot-editor.c:228
+#: ../src/sat-pref-rot-editor.c:259
 msgid " Min El"
 msgstr " Min El"
 
-#: ../src/sat-pref-rot-editor.c:237
+#: ../src/sat-pref-rot-editor.c:268
 msgid " Max El"
 msgstr " Max El"
 
-#: ../src/sat-pref-rot-editor.c:248
+#: ../src/sat-pref-rot-editor.c:277
 msgid " Azimuth end stop position"
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:256
+#: ../src/sat-pref-rot-editor.c:285
 msgid ""
 "Set the position of the azimuth end stop here, where 0° is at North, -180° "
 "is south, etc. The default for a 0° → 180° → 360° rotor is 0°, and the "
 "default for a -180° → 0° → +180° rotor is -180°."
 msgstr ""
 
-#: ../src/sat-pref-rot-editor.c:427
-#, c-format
-msgid "%s:%s: Invalid AZ rotator type."
-msgstr "%s:%s: Invalid AZ rotator type."
+#. crate dialog and add contents
+#: ../src/sat-pref-rot-editor.c:349
+msgid "Edit rotator configuration"
+msgstr "Edit rotator configuration"
 
 #: ../src/sat-pref-sky-at-glance.c:75
 msgid "<b>Time:</b>"
