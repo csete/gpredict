@@ -31,13 +31,13 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN3
 GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs gtk+-3.0)
 GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs glib-2.0 gthread-2.0)
 GOOLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --libs goocanvas)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) libsgpsdp.lib -lwinmm -lws2_32
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) libsgpsdp.lib -lwinmm -lwininet -lws2_32
 LIBS = -lm
 
 # flags/defines
 GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags gtk+-3.0)
 GOO_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --cflags goocanvas)
-CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
+CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DUSE_WIN32_FETCH -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
 
 # source paths
 vpath %.c $(sgpsdpdir)
@@ -47,6 +47,7 @@ vpath %.h $(sgpsdpdir)
 vpath %.c $(nxjsondir)
 vpath %.h $(nxjsondir)
 vpath %.rc $(topsrc)/win32
+vpath %.c .
 
 #### End of system configuration section. ####
 
@@ -97,8 +98,8 @@ GPREDICTSRC = \
 	gpredict-help.c \
 	gpredict-utils.c \
 	gtk-azel-plot.c \
-        gtk-event-list.c \
-        gtk-event-list-popup.c \
+    gtk-event-list.c \
+    gtk-event-list-popup.c \
 	gtk-freq-knob.c \
 	gtk-polar-plot.c \
 	gtk-polar-view.c \
@@ -176,7 +177,8 @@ GPREDICTSRC = \
 	tle-tools.c \
 	tle-update.c \
 	trsp-conf.c \
-	trsp-update.c
+	trsp-update.c \
+	win32-fetch.c
 
 GPREDICTOBJ = $(GPREDICTSRC:.c=.o)
 
@@ -189,13 +191,15 @@ OBJS = $(SGPSDPOBJ) $(NXJSONOBJ) $(GPREDICTOBJ)
 
 # targets begin
 
-all: libsgpsdp.dll gpredict.exe
-
+all: libsgpsdp.dll gpredict.exe gpredict-con.exe
 
 # Use -mconsole to always open a console window when gpredicxt is started
-# Use -mwindows for no copnsole
-gpredict.exe: $(OBJS) gpredict_res.o
-	$(CC) -mconsole -mthreads -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
+# Use -mwindows for no console
+gpredict.exe: TARGET:=-mwindows
+gpredict-con.exe: TARGET:=-mconsole
+
+gpredict.exe gpredict-con.exe: $(OBJS) gpredict_res.o
+	$(CC) $(TARGET) -mthreads -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
 
 gpredict_res.o: gpredict.rc gpredict.exp.manifest
 	$(RC) $(RCFLAGS) gpredict.rc $@

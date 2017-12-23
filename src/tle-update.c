@@ -34,6 +34,9 @@
 #ifdef HAVE_CURL
 #include <curl/curl.h>
 #endif
+#ifdef USE_WIN32_FETCH
+#include "win32-fetch.h"
+#endif
 
 #include "compat.h"
 #include "gpredict-utils.h"
@@ -44,8 +47,10 @@
 
 
 /* private function prototypes */
+#ifdef HAVE_CURL
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
+#endif
 static gint     read_fresh_tle(const gchar * dir, const gchar * fnam,
                                GHashTable * data);
 static gboolean is_tle_file(const gchar * dir, const gchar * fnam);
@@ -466,7 +471,6 @@ void tle_update_from_network(gboolean silent,
                              GtkWidget * progress,
                              GtkWidget * label1, GtkWidget * label2)
 {
-#ifdef HAVE_CURL
     static GMutex   tle_in_progress;
 
     gchar          *proxy = NULL;
@@ -476,8 +480,13 @@ void tle_update_from_network(gboolean silent,
     gchar          *curfile;
     gchar          *locfile;
     gchar          *userconfdir;
+#ifdef HAVE_CURL
     CURL           *curl;
     CURLcode        res;
+#endif
+#ifdef USE_WIN32_FETCH
+    int            res;
+#endif
     gdouble         fraction, start = 0;
     FILE           *outfile;
     GDir           *dir;
@@ -521,6 +530,7 @@ void tle_update_from_network(gboolean silent,
         if (!silent && (progress != NULL))
             start = gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progress));
 
+#ifdef HAVE_CURL
         /* initialise curl */
         curl = curl_easy_init();
         if (proxy != NULL)
@@ -528,13 +538,16 @@ void tle_update_from_network(gboolean silent,
 
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "gpredict/curl");
         curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
+#endif
 
         /* get files */
         for (i = 0; i < numfiles; i++)
         {
             /* set URL */
             curfile = g_strdup(files[i]);
+#ifdef HAVE_CURL
             curl_easy_setopt(curl, CURLOPT_URL, curfile);
+#endif
 
             /* set activity message */
             if (!silent && (label1 != NULL))
@@ -559,6 +572,7 @@ void tle_update_from_network(gboolean silent,
             outfile = g_fopen(locfile, "wb");
             if (outfile != NULL)
             {
+#ifdef HAVE_CURL
                 curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
                 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
 
@@ -578,6 +592,23 @@ void tle_update_from_network(gboolean silent,
                                 __func__, curfile);
                     success++;
                 }
+#endif
+#ifdef USE_WIN32_FETCH
+                res = win32_fetch(curfile, outfile, proxy, "gpredict/win32");
+                if (res != 0)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Error fetching %s (%x)"),
+                                __func__, curfile, res);
+                }
+                else
+                {
+                    sat_log_log(SAT_LOG_LEVEL_INFO,
+                                _("%s: Successfully fetched %s"),
+                                __func__, curfile);
+                    success++;
+                }
+#endif
                 fclose(outfile);
             }
             else
@@ -607,7 +638,9 @@ void tle_update_from_network(gboolean silent,
             g_free(locfile);
         }
 
+#ifdef HAVE_CURL
         curl_easy_cleanup(curl);
+#endif
 
         /* continue update if we have fetched at least one file */
         if (success > 0)
@@ -666,9 +699,9 @@ void tle_update_from_network(gboolean silent,
 
     g_free(cache);
     g_mutex_unlock(&tle_in_progress);
-#endif
 }
 
+#ifdef HAVE_CURL
 /**
  * Write TLE data block to file.
  *
@@ -687,6 +720,7 @@ static size_t my_write_func(void *ptr, size_t size, size_t nmemb,
     /*** FIXME: TBC whether this works in wintendo */
     return fwrite(ptr, size, nmemb, stream);
 }
+#endif
 
 /**
  * Check whether file is TLE file.
