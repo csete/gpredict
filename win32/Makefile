@@ -193,6 +193,17 @@ OBJS = $(SGPSDPOBJ) $(NXJSONOBJ) $(GPREDICTOBJ)
 
 all: libsgpsdp.dll gpredict.exe gpredict-con.exe
 
+dist: gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip
+
+gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
+	mkdir -p gpredict/share/gpredict
+	cp -p libsgpsdp.dll gpredict.exe gpredict-con.exe $(BINDEPS) gpredict
+	cp -rp ../data gpredict/share/gpredict
+	cp -rp ../pixmaps gpredict/share/gpredict
+	cp -rp ../po gpredict/share/gpredict
+	zip -r $@ gpredict
+	rm -rf gpredict
+
 # Use -mconsole to always open a console window when gpredicxt is started
 # Use -mwindows for no console
 gpredict.exe: TARGET:=-mwindows
@@ -216,7 +227,6 @@ libsgpsdp.dll:  $(SGPSDPOBJ)
 	-Wl,--enable-auto-image-base -Wl,--out-implib,libsgpsdp.lib -o libsgpsdp.dll
 
 clean:
-	rm -f *.o *.d *.def *.a *.lib *.dll *.exe *.exp.manifest
-
-
+	rm -f *.o *.d *.def *.a *.lib *.dll *.exe *.exp.manifest *.zip
+	rm -rf gpredict
 

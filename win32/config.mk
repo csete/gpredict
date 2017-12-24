@@ -1,4 +1,4 @@
-# Configuration variables governing the build of grig for win32
+# Configuration variables governing the build of gpredict for win32
 
 # pkgconfig path, assumes goocanvas-2.0.2 and gtk+-3.10.4 win32 packages
 # unpacked and paths adjusted (pkg-config files) at the same folder level
@@ -13,6 +13,9 @@
 # are in this folder, and will need unpack paths inserting.
 
 PKG_CONFIG_PATH = $(abspath ../../goocanvas-2.0.2/lib/pkgconfig):$(abspath ../../gtk+-3.10.4/lib/pkgconfig)
+
+# binary dependencies to be deployed with gpredict.exe
+BINDEPS = $(wildcard ../../goocanvas-2.0.2/bin/*.dll) $(wildcard ../../gtk+-3.10.4/bin/*.dll)
 
 # Autoversioning from nearest git tag, assumes v<x>.<y> tag format.
 
