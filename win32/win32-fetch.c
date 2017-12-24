@@ -33,10 +33,12 @@
 #include <stdio.h>
 #include "win32-fetch.h"
 
+#define BUFLEN 8192
+
 int win32_fetch(char *url, FILE *file, char *proxy, char *ua)
 {
     HINTERNET hInt, hUrl;
-    char buf[8192];
+    char buf[BUFLEN];
     DWORD nRead;
 
     if (proxy != NULL)
@@ -53,7 +55,7 @@ int win32_fetch(char *url, FILE *file, char *proxy, char *ua)
         return 0x40000000 | (int)GetLastError();
     }
 
-    while (InternetReadFile(hUrl, buf, 8192, &nRead))
+    while (InternetReadFile(hUrl, buf, BUFLEN, &nRead))
     {
         if (nRead > 0)
             fwrite(buf, nRead, 1, file);

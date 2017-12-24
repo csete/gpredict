@@ -46,11 +46,10 @@
 #include <build-config.h>
 #endif
 
-#ifdef HAVE_CURL
-#include <curl/curl.h>
-#endif
-#ifdef USE_WIN32_FETCH
+#ifdef WIN32
 #include "win32-fetch.h"
+#else
+#include <curl/curl.h>
 #endif
 
 /* TRSP auto update frequency. */
@@ -393,12 +392,11 @@ void modes_update_from_network()
     gchar          *file_url;
     gchar          *locfile;
     gchar          *userconfdir;
-#ifdef HAVE_CURL
+#ifdef WIN32
+    int             res;
+#else
     CURL           *curl;
     CURLcode        res;
-#endif
-#ifdef USE_WIN32_FETCH
-    int             res;
 #endif
     FILE           *outfile;
     guint           success = 0;        /* no. of successfull downloads */
@@ -407,7 +405,7 @@ void modes_update_from_network()
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
     modes_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_MODE_FILE);
 
-#ifdef HAVE_CURL
+#ifndef WIN32
     /* initialise curl */
     curl = curl_easy_init();
     if (proxy != NULL)
@@ -420,7 +418,7 @@ void modes_update_from_network()
     /* get files */
     /* set URL */
     file_url = g_strconcat(server, modes_file, NULL);
-#ifdef HAVE_CURL
+#ifndef WIN32
     curl_easy_setopt(curl, CURLOPT_URL, file_url);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Ready to fetch modes list from %s"),
@@ -437,7 +435,20 @@ void modes_update_from_network()
     outfile = g_fopen(locfile, "wb");
     if (outfile != NULL)
     {
-#ifdef HAVE_CURL
+#ifdef WIN32
+        res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
+        if (res != 0)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%x)"),
+                        __func__, file_url, res);
+        }
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
+                        __func__, file_url);
+            success++;
+        }
+#else
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
 
@@ -448,20 +459,6 @@ void modes_update_from_network()
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%s)"),
                         __func__, file_url, curl_easy_strerror(res));
-        }
-        else
-        {
-            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
-                        __func__, file_url);
-            success++;
-        }
-#endif
-#ifdef USE_WIN32_FETCH
-        res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
-        if (res != 0)
-        {
-            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%x)"),
-                        __func__, file_url, res);
         }
         else
         {
@@ -486,7 +483,7 @@ void modes_update_from_network()
     g_free(proxy);
     g_free(modes_file);
 
-#ifdef HAVE_CURL
+#ifndef WIN32
     curl_easy_cleanup(curl);
 #endif
 
@@ -528,12 +525,11 @@ void trsp_update_from_network(gboolean silent,
     gchar          *file_url;
     gchar          *locfile_trsp;
     gchar          *userconfdir;
-#ifdef HAVE_CURL
+#ifdef WIN32
+    int             res;
+#else
     CURL           *curl;
     CURLcode        res;
-#endif
-#ifdef USE_WIN32_FETCH
-    int             res;
 #endif
     gdouble         fraction;
     FILE           *outfile;
@@ -562,7 +558,7 @@ void trsp_update_from_network(gboolean silent,
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
     freq_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_FREQ_FILE);
 
-#ifdef HAVE_CURL
+#ifndef WIN32
     /* initialise curl */
     curl = curl_easy_init();
     if (proxy != NULL)
@@ -575,7 +571,7 @@ void trsp_update_from_network(gboolean silent,
     /* get files */
     /* set URL */
     file_url = g_strconcat(server, freq_file, NULL);
-#ifdef HAVE_CURL
+#ifndef WIN32
     curl_easy_setopt(curl, CURLOPT_URL, file_url);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Ready to fetch transponder list from %s"),
@@ -608,7 +604,20 @@ void trsp_update_from_network(gboolean silent,
     outfile = g_fopen(locfile_trsp, "wb");
     if (outfile != NULL)
     {
-#ifdef HAVE_CURL
+#ifdef WIN32
+        res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
+        if (res != 0)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%x)"),
+                        __func__, file_url, res);
+        }
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
+                        __func__, file_url);
+            success++;
+        }
+#else
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
 
@@ -619,20 +628,6 @@ void trsp_update_from_network(gboolean silent,
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%s)"),
                         __func__, file_url, curl_easy_strerror(res));
-        }
-        else
-        {
-            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
-                        __func__, file_url);
-            success++;
-        }
-#endif
-#ifdef USE_WIN32_FETCH
-        res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
-        if (res != 0)
-        {
-            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%x)"),
-                        __func__, file_url, res);
         }
         else
         {
@@ -672,7 +667,7 @@ void trsp_update_from_network(gboolean silent,
     g_free(freq_file);
     g_free(proxy);
 
-#ifdef HAVE_CURL
+#ifndef WIN32
     curl_easy_cleanup(curl);
 #endif
 

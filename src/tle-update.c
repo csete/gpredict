@@ -31,11 +31,10 @@
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
-#ifdef HAVE_CURL
-#include <curl/curl.h>
-#endif
-#ifdef USE_WIN32_FETCH
+#ifdef WIN32
 #include "win32-fetch.h"
+#else
+#include <curl/curl.h>
 #endif
 
 #include "compat.h"
@@ -480,12 +479,11 @@ void tle_update_from_network(gboolean silent,
     gchar          *curfile;
     gchar          *locfile;
     gchar          *userconfdir;
-#ifdef HAVE_CURL
+#ifdef WIN32
+    int             res;
+#else
     CURL           *curl;
     CURLcode        res;
-#endif
-#ifdef USE_WIN32_FETCH
-    int            res;
 #endif
     gdouble         fraction, start = 0;
     FILE           *outfile;
@@ -572,7 +570,22 @@ void tle_update_from_network(gboolean silent,
             outfile = g_fopen(locfile, "wb");
             if (outfile != NULL)
             {
-#ifdef HAVE_CURL
+#ifdef WIN32
+                res = win32_fetch(curfile, outfile, proxy, "gpredict/win32");
+                if (res != 0)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Error fetching %s (%x)"),
+                                __func__, curfile, res);
+                }
+                else
+                {
+                    sat_log_log(SAT_LOG_LEVEL_INFO,
+                                _("%s: Successfully fetched %s"),
+                                __func__, curfile);
+                    success++;
+                }
+#else
                 curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
                 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
 
@@ -584,22 +597,6 @@ void tle_update_from_network(gboolean silent,
                     sat_log_log(SAT_LOG_LEVEL_ERROR,
                                 _("%s: Error fetching %s (%s)"),
                                 __func__, curfile, curl_easy_strerror(res));
-                }
-                else
-                {
-                    sat_log_log(SAT_LOG_LEVEL_INFO,
-                                _("%s: Successfully fetched %s"),
-                                __func__, curfile);
-                    success++;
-                }
-#endif
-#ifdef USE_WIN32_FETCH
-                res = win32_fetch(curfile, outfile, proxy, "gpredict/win32");
-                if (res != 0)
-                {
-                    sat_log_log(SAT_LOG_LEVEL_ERROR,
-                                _("%s: Error fetching %s (%x)"),
-                                __func__, curfile, res);
                 }
                 else
                 {
