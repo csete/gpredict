@@ -313,7 +313,7 @@ guint sat_cfg_load()
         gchar          *tle_srv = sat_cfg_get_str(SAT_CFG_STR_TLE_SERVER);
         gchar          *tle_fstr = sat_cfg_get_str(SAT_CFG_STR_TLE_FILES);
         gchar         **tle_fvec = g_strsplit(tle_fstr, ";", 0);
-        int             i;
+        unsigned int    i;
 
         for (i = 0; i < g_strv_length(tle_fvec); i++)
         {
