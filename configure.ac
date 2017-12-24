@@ -132,7 +132,7 @@ echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
-echo Libcurl version..... : $CURL_V
+echo Libcurl version.... : $CURL_V
 if test "$havelibgps" = true ; then
    echo Libgps version..... : $GPS_V
 fi
