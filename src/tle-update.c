@@ -46,7 +46,7 @@
 
 
 /* private function prototypes */
-#ifdef HAVE_CURL
+#ifndef WIN32
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
 #endif
@@ -528,7 +528,7 @@ void tle_update_from_network(gboolean silent,
         if (!silent && (progress != NULL))
             start = gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progress));
 
-#ifdef HAVE_CURL
+#ifndef WIN32
         /* initialise curl */
         curl = curl_easy_init();
         if (proxy != NULL)
@@ -543,7 +543,7 @@ void tle_update_from_network(gboolean silent,
         {
             /* set URL */
             curfile = g_strdup(files[i]);
-#ifdef HAVE_CURL
+#ifndef WIN32
             curl_easy_setopt(curl, CURLOPT_URL, curfile);
 #endif
 
@@ -635,7 +635,7 @@ void tle_update_from_network(gboolean silent,
             g_free(locfile);
         }
 
-#ifdef HAVE_CURL
+#ifndef WIN32
         curl_easy_cleanup(curl);
 #endif
 
@@ -698,7 +698,7 @@ void tle_update_from_network(gboolean silent,
     g_mutex_unlock(&tle_in_progress);
 }
 
-#ifdef HAVE_CURL
+#ifndef WIN32
 /**
  * Write TLE data block to file.
  *

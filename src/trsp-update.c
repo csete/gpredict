@@ -94,9 +94,11 @@ typedef struct {
     guint           numtrsp;    /* Number of transponders. */
 } new_trsp_t;
 
+#ifndef WIN32
 /* private function prototypes */
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
+#endif
 
 //int getMODElist_intoHashMap();
 
@@ -692,6 +694,7 @@ void trsp_update_from_network(gboolean silent,
     g_mutex_unlock(&trsp_in_progress);
 }
 
+#ifndef WIN32
 /**
  * Write TRSP data block to file.
  * 
@@ -710,6 +713,7 @@ static size_t my_write_func(void *ptr, size_t size, size_t nmemb,
     /*** FIXME: TBC whether this works in wintendo */
     return fwrite(ptr, size, nmemb, stream);
 }
+#endif
 
 const gchar    *freq_to_str2[TRSP_AUTO_UPDATE_NUM] = {
     N_("Never"),
