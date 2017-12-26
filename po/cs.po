@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-26 20:58+0100\n"
+"POT-Creation-Date: 2017-12-27 00:45+0100\n"
 "PO-Revision-Date: 2017-12-04 01:57+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -152,51 +152,57 @@ msgstr "%s: Chyba při čtení %s (%s)"
 msgid "Gpredict Info"
 msgstr "Informace Gpredict"
 
-#: ../src/gpredict-utils.c:252 ../src/gpredict-utils.c:291
-#: ../src/gpredict-utils.c:339 ../src/gpredict-utils.c:382
+#: ../src/gpredict-utils.c:245 ../src/gpredict-utils.c:284
+#: ../src/gpredict-utils.c:332 ../src/gpredict-utils.c:375
 #, c-format
 msgid "%s:%s: %s called with color = NULL"
 msgstr "%s:%s: %s voláno s color = NULL"
 
-#: ../src/gpredict-utils.c:298
+#: ../src/gpredict-utils.c:291
 #, c-format
 msgid "%s:%s: %s called with alpha = NULL"
 msgstr "%s:%s: %s voláno s alpha = NULL"
 
-#: ../src/gpredict-utils.c:346
+#: ../src/gpredict-utils.c:339
 #, c-format
 msgid "%s:%s: %s called with rgb = NULL"
 msgstr "%s:%s: %s voláno s rgb = NULL"
 
-#: ../src/gpredict-utils.c:389
+#: ../src/gpredict-utils.c:382
 #, c-format
 msgid "%s:%s: %s called with rgba = NULL"
 msgstr "%s:%s: %s voláno s rgba = NULL"
 
-#: ../src/gpredict-utils.c:515
+#: ../src/gpredict-utils.c:508
 #, c-format
 msgid "%s: Could not create config data (%s)."
 msgstr "%s: Nelze vytvořit data nastavení (%s)."
 
-#: ../src/gpredict-utils.c:529
+#: ../src/gpredict-utils.c:522
 #, c-format
 msgid "%s: Could not create config file (%s)."
 msgstr "%s: Nelze vytvořit data nastavení (%s)."
 
-#: ../src/gpredict-utils.c:547
+#: ../src/gpredict-utils.c:540
 #, c-format
 msgid "%s: Error writing config data (%s)."
 msgstr "%s: Chyba při zápisu dat nastavení (%s)."
 
-#: ../src/gpredict-utils.c:557
+#: ../src/gpredict-utils.c:550
 #, c-format
 msgid "%s: Wrote only %d out of %d chars."
 msgstr "%s: Zapsáno pouze %d z %d znaků."
 
-#: ../src/gpredict-utils.c:565
+#: ../src/gpredict-utils.c:558
 #, c-format
 msgid "%s: Configuration saved for %s."
 msgstr "%s: Nastavení uloženo pro %s."
+
+#: ../src/gpredict-utils.c:592 ../src/gpredict-utils.c:610
+#: ../src/gpredict-utils.c:628 ../src/gpredict-utils.c:646
+#, fuzzy, c-format
+msgid "%s called with gdk_rgba = NULL"
+msgstr "%s:%s: %s voláno s rgba = NULL"
 
 #: ../src/gtk-azel-plot.c:545
 msgid "Local Time"
@@ -1051,7 +1057,7 @@ msgstr "Míra"
 
 #. Next Event
 #: ../src/gtk-sat-list.c:59 ../src/gtk-sat-list.c:91 ../src/gtk-single-sat.c:60
-#: ../src/sat-pref-map-view.c:245 ../src/sat-pref-polar-view.c:255
+#: ../src/sat-pref-map-view.c:245 ../src/sat-pref-polar-view.c:424
 msgid "Next Event"
 msgstr "Další údálost"
 
@@ -1740,9 +1746,9 @@ msgstr "Přehrávat dozadu"
 #: ../src/sat-pref-debug.c:241 ../src/sat-pref-formats.c:98
 #: ../src/sat-pref-layout.c:449 ../src/sat-pref-list-view.c:131
 #: ../src/sat-pref-map-view.c:782 ../src/sat-pref-multi-pass.c:102
-#: ../src/sat-pref-polar-view.c:594 ../src/sat-pref-refresh.c:211
+#: ../src/sat-pref-polar-view.c:744 ../src/sat-pref-refresh.c:211
 #: ../src/sat-pref-single-pass.c:105 ../src/sat-pref-single-sat.c:134
-#: ../src/sat-pref-sky-at-glance.c:397 ../src/sat-pref-tle.c:406
+#: ../src/sat-pref-sky-at-glance.c:226 ../src/sat-pref-tle.c:406
 msgid "Reset"
 msgstr "Resetovat"
 
@@ -3842,9 +3848,9 @@ msgstr "Nastavení Gpredict :: Obecné"
 #: ../src/sat-pref-conditions.c:136 ../src/sat-pref-debug.c:243
 #: ../src/sat-pref-layout.c:456 ../src/sat-pref-list-view.c:138
 #: ../src/sat-pref-map-view.c:789 ../src/sat-pref-multi-pass.c:106
-#: ../src/sat-pref-polar-view.c:601 ../src/sat-pref-refresh.c:218
+#: ../src/sat-pref-polar-view.c:751 ../src/sat-pref-refresh.c:218
 #: ../src/sat-pref-single-pass.c:109 ../src/sat-pref-single-sat.c:141
-#: ../src/sat-pref-sky-at-glance.c:401 ../src/sat-pref-tle.c:410
+#: ../src/sat-pref-sky-at-glance.c:230 ../src/sat-pref-tle.c:410
 msgid "Reset settings to the default values."
 msgstr "Resetovat nastavení na výchozí hodnoty"
 
@@ -4224,7 +4230,7 @@ msgstr ""
 "použití."
 
 #: ../src/sat-pref-layout.c:462 ../src/sat-pref-list-view.c:144
-#: ../src/sat-pref-map-view.c:795 ../src/sat-pref-polar-view.c:608
+#: ../src/sat-pref-map-view.c:795 ../src/sat-pref-polar-view.c:758
 #: ../src/sat-pref-refresh.c:224 ../src/sat-pref-single-sat.c:147
 msgid "Reset module settings to the global values."
 msgstr "Resetovat nastavení modulů na globální nastavení."
@@ -4251,12 +4257,12 @@ msgstr "Vyberte mapu"
 msgid "Click to select a map"
 msgstr "KLikněte pro výběr mapy"
 
-#: ../src/sat-pref-map-view.c:216 ../src/sat-pref-polar-view.c:225
+#: ../src/sat-pref-map-view.c:216 ../src/sat-pref-polar-view.c:393
 msgid "<b>Extra Contents:</b>"
 msgstr "<b>Dodatečný obsah:</b>"
 
 #. QTH info
-#: ../src/sat-pref-map-view.c:224 ../src/sat-pref-polar-view.c:233
+#: ../src/sat-pref-map-view.c:224 ../src/sat-pref-polar-view.c:402
 msgid "QTH Info"
 msgstr "Informace QTH"
 
@@ -4269,7 +4275,7 @@ msgid "Show which satellite comes up next and at what time"
 msgstr "Zobrazit který satelit je na řadě a kdy"
 
 #. Cursor position
-#: ../src/sat-pref-map-view.c:267 ../src/sat-pref-polar-view.c:277
+#: ../src/sat-pref-map-view.c:267 ../src/sat-pref-polar-view.c:446
 msgid "Cursor Position"
 msgstr "Umístění kurzoru"
 
@@ -4286,8 +4292,8 @@ msgstr "Čáry mřížky"
 msgid "Show horizontal and vertical grid lines"
 msgstr "Zobrazit vodorovné a příčně linky mřížky"
 
-#: ../src/sat-pref-map-view.c:330 ../src/sat-pref-polar-view.c:340
-#: ../src/sat-pref-sky-at-glance.c:112
+#: ../src/sat-pref-map-view.c:330 ../src/sat-pref-polar-view.c:509
+#: ../src/sat-pref-sky-at-glance.c:297
 msgid "<b>Colours:</b>"
 msgstr "<b>Barvy:</b>"
 
@@ -4296,12 +4302,12 @@ msgstr "<b>Barvy:</b>"
 msgid "Ground Station:"
 msgstr "Pozemní stanice:"
 
-#: ../src/sat-pref-map-view.c:348 ../src/sat-pref-sky-at-glance.c:127
-#: ../src/sat-pref-sky-at-glance.c:144 ../src/sat-pref-sky-at-glance.c:161
-#: ../src/sat-pref-sky-at-glance.c:178 ../src/sat-pref-sky-at-glance.c:195
-#: ../src/sat-pref-sky-at-glance.c:212 ../src/sat-pref-sky-at-glance.c:229
-#: ../src/sat-pref-sky-at-glance.c:246 ../src/sat-pref-sky-at-glance.c:263
-#: ../src/sat-pref-sky-at-glance.c:280
+#: ../src/sat-pref-map-view.c:348 ../src/sat-pref-sky-at-glance.c:309
+#: ../src/sat-pref-sky-at-glance.c:323 ../src/sat-pref-sky-at-glance.c:337
+#: ../src/sat-pref-sky-at-glance.c:351 ../src/sat-pref-sky-at-glance.c:365
+#: ../src/sat-pref-sky-at-glance.c:379 ../src/sat-pref-sky-at-glance.c:393
+#: ../src/sat-pref-sky-at-glance.c:407 ../src/sat-pref-sky-at-glance.c:421
+#: ../src/sat-pref-sky-at-glance.c:435
 msgid "Click to select a colour"
 msgstr "Klikněte pro výběr barvy"
 
@@ -4315,29 +4321,29 @@ msgid "Click to select the grid colour"
 msgstr "Klikněte pro vývěr barvy mřížky"
 
 #. tick labels
-#: ../src/sat-pref-map-view.c:390 ../src/sat-pref-polar-view.c:402
+#: ../src/sat-pref-map-view.c:390 ../src/sat-pref-polar-view.c:566
 msgid "Tick Labels:"
 msgstr "Zaškrtnout štítky:"
 
-#: ../src/sat-pref-map-view.c:400 ../src/sat-pref-polar-view.c:412
+#: ../src/sat-pref-map-view.c:400 ../src/sat-pref-polar-view.c:574
 msgid "Click to select the colour for tick labels"
 msgstr "Klikněte pro výběr barvy štítku pro zaškrtnutí"
 
 #. satellite
-#: ../src/sat-pref-map-view.c:417 ../src/sat-pref-polar-view.c:430
+#: ../src/sat-pref-map-view.c:417 ../src/sat-pref-polar-view.c:591
 msgid "Satellite:"
 msgstr "Satelit:"
 
-#: ../src/sat-pref-map-view.c:425 ../src/sat-pref-polar-view.c:438
+#: ../src/sat-pref-map-view.c:425 ../src/sat-pref-polar-view.c:597
 msgid "Click to select satellite colour"
 msgstr "Klikněte pro výběr barvy satelitu"
 
 #. selected satellite
-#: ../src/sat-pref-map-view.c:442 ../src/sat-pref-polar-view.c:456
+#: ../src/sat-pref-map-view.c:442 ../src/sat-pref-polar-view.c:614
 msgid "Selected Sat.:"
 msgstr "Vybraný sat.:"
 
-#: ../src/sat-pref-map-view.c:452 ../src/sat-pref-polar-view.c:466
+#: ../src/sat-pref-map-view.c:452 ../src/sat-pref-polar-view.c:622
 msgid "Click to select colour for selected satellites"
 msgstr "Klikněte pro výběr barvy zvolených satelitů"
 
@@ -4465,134 +4471,134 @@ msgstr "Zobrazení jednotlivého satelitu"
 msgid "<b>Visible Columns:</b>"
 msgstr "<b>Viditelné sloupce:</b>"
 
-#: ../src/sat-pref-polar-view.c:120
+#: ../src/sat-pref-polar-view.c:257
+#, c-format
+msgid "%s:%s: Invalid chart orientation %d (using N/E/S/W)"
+msgstr "%s:%s: Neplatná orientace grafu %d (používá se N/E/S/W)"
+
+#: ../src/sat-pref-polar-view.c:287
 msgid "<b>Orientation:</b>"
 msgstr "<b>Orientace:</b>"
 
 #. N/E/S/W
-#: ../src/sat-pref-polar-view.c:128
+#: ../src/sat-pref-polar-view.c:296
 msgid "N/E/S/W"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:130
+#: ../src/sat-pref-polar-view.c:298
 msgid ""
 "\tN\n"
 "W\t\tE\n"
 "\tS"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:135
+#: ../src/sat-pref-polar-view.c:303
 msgid "N/W/S/E"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:137
+#: ../src/sat-pref-polar-view.c:305
 msgid ""
 "\tN\n"
 "E\t\tW\n"
 "\tS"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:141
+#: ../src/sat-pref-polar-view.c:309
 msgid "S/E/N/W"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:143
+#: ../src/sat-pref-polar-view.c:311
 msgid ""
 "\tS\n"
 "W\t\tE\n"
 "\tN"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:148
+#: ../src/sat-pref-polar-view.c:316
 msgid "S/W/N/E"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:150
+#: ../src/sat-pref-polar-view.c:318
 msgid ""
 "\tS\n"
 "E\t\tW\n"
 "\tN"
 msgstr ""
 
-#: ../src/sat-pref-polar-view.c:186
+#: ../src/sat-pref-polar-view.c:354
 #, c-format
 msgid "%f:%d: Invalid PolarView orientation (%d)"
 msgstr "%f:%d: Neplatná orientace zobrazení pólů (%d)"
 
-#: ../src/sat-pref-polar-view.c:236
+#: ../src/sat-pref-polar-view.c:405
 msgid "Show location information on the polar plot"
 msgstr "Zobrazit informace o umístění na pólovém grafu"
 
-#: ../src/sat-pref-polar-view.c:258
+#: ../src/sat-pref-polar-view.c:427
 msgid "Show which satellites comes up next and at what time"
 msgstr "Zobrazit které satelity jsou na řadě a kdy"
 
-#: ../src/sat-pref-polar-view.c:280
+#: ../src/sat-pref-polar-view.c:449
 msgid "Show the azimuth and elevation of the mouse pointer"
 msgstr "Zobrazit azimut a výšku ukazatele myši"
 
 #. Extra tick marks
-#: ../src/sat-pref-polar-view.c:299
+#: ../src/sat-pref-polar-view.c:468
 msgid "Extra Az Ticks"
 msgstr "Dodatečné zaškrtnutí AZ"
 
-#: ../src/sat-pref-polar-view.c:302
+#: ../src/sat-pref-polar-view.c:471
 msgid "Show extra tick marks for every 30°"
 msgstr ""
 
 #. background
-#: ../src/sat-pref-polar-view.c:350
+#: ../src/sat-pref-polar-view.c:520
 msgid "Background:"
 msgstr "Pozadí:"
 
-#: ../src/sat-pref-polar-view.c:358 ../src/sat-pref-polar-view.c:518
+#: ../src/sat-pref-polar-view.c:526 ../src/sat-pref-polar-view.c:668
 msgid "Click to select background colour"
 msgstr "Klikněte pro výběr pozadí"
 
 #. Axis
-#: ../src/sat-pref-polar-view.c:376
+#: ../src/sat-pref-polar-view.c:543
 msgid "Axes/Circles:"
 msgstr "Osy/Kruhy:"
 
-#: ../src/sat-pref-polar-view.c:384
+#: ../src/sat-pref-polar-view.c:549
 msgid "Click to select the axis colour"
 msgstr "Klikněte pro výběr barvy osy"
 
 #. track
-#: ../src/sat-pref-polar-view.c:484
+#: ../src/sat-pref-polar-view.c:639
 msgid "Sky Track:"
 msgstr "Nebeská dráha:"
 
-#: ../src/sat-pref-polar-view.c:492
+#: ../src/sat-pref-polar-view.c:645
 msgid "Click to select track colour"
 msgstr "Klikněte pro výběr barvy dráhy"
 
 #. Info
-#: ../src/sat-pref-polar-view.c:510
+#: ../src/sat-pref-polar-view.c:662
 msgid "Info Text:"
 msgstr "Text info:"
 
-#: ../src/sat-pref-polar-view.c:550
+#: ../src/sat-pref-polar-view.c:699
 msgid "<b>Miscellaneous:</b>"
 msgstr "<b>Ostatní:</b>"
 
 #. show sky tracks
-#: ../src/sat-pref-polar-view.c:558
+#: ../src/sat-pref-polar-view.c:708
 msgid "Show the sky tracks automatically"
 msgstr "Autmaoticky zobrazovat nebeské dráhy"
 
-#: ../src/sat-pref-polar-view.c:561
+#: ../src/sat-pref-polar-view.c:711
 msgid ""
 "Automatically show the sky track of a satellite when it comes in range. You "
 "can always turn the sky track OFF for each individual object"
 msgstr ""
 "Automaticky zobrazit nebeskou dráhu satelitu, když je v dosahu. Vždy můžete "
 "nebeskou dráhu pro jednotlivé objekty vypnout"
-
-#: ../src/sat-pref-polar-view.c:835
-#, c-format
-msgid "%s:%s: Invalid chart orientation %d (using N/E/S/W)"
-msgstr "%s:%s: Neplatná orientace grafu %d (používá se N/E/S/W)"
 
 #: ../src/sat-pref-predict.c:56
 msgid "Pass Conditions"
@@ -5323,16 +5329,16 @@ msgstr ""
 msgid "Edit rotator configuration"
 msgstr "Upravit nastavení rotoru"
 
-#: ../src/sat-pref-sky-at-glance.c:75
+#: ../src/sat-pref-sky-at-glance.c:265
 msgid "<b>Time:</b>"
 msgstr "<b>Čas:</b>"
 
 #. number of hours
-#: ../src/sat-pref-sky-at-glance.c:81
+#: ../src/sat-pref-sky-at-glance.c:270
 msgid "Find and show passes that occur within"
 msgstr "Najít a zobrazit průcohdy, které nastanou během"
 
-#: ../src/sat-pref-sky-at-glance.c:88
+#: ../src/sat-pref-sky-at-glance.c:276
 msgid ""
 "The passes shown on the Sky at a Glance chart\n"
 "will begin within this number of hours."
@@ -5340,97 +5346,107 @@ msgstr ""
 "Průběhy zobrazené v grafu Nebe v kostce\n"
 "budou mít počátek v tomto počtu hodin."
 
-#: ../src/sat-pref-sky-at-glance.c:99
+#: ../src/sat-pref-sky-at-glance.c:286
 msgid "hours"
 msgstr "hodin"
 
 #. colour 1
-#: ../src/sat-pref-sky-at-glance.c:118
-msgid "Colour for satellite 1: "
-msgstr "Barva pro satelit 1: "
+#: ../src/sat-pref-sky-at-glance.c:302
+#, fuzzy
+msgid "Satellite 1: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:124
+#: ../src/sat-pref-sky-at-glance.c:307
 msgid "Select colour 1"
 msgstr "Vyberte barvu 1"
 
 #. colour 2
-#: ../src/sat-pref-sky-at-glance.c:135
-msgid "Colour for satellite 2: "
-msgstr "Barva pro satelit 2: "
+#: ../src/sat-pref-sky-at-glance.c:316
+#, fuzzy
+msgid "Satellite 2: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:141
+#: ../src/sat-pref-sky-at-glance.c:321
 msgid "Select colour 2"
 msgstr "Vyberte barvu 2"
 
 #. colour 3
-#: ../src/sat-pref-sky-at-glance.c:152
-msgid "Colour for satellite 3: "
-msgstr "Barva pro satelit 3: "
+#: ../src/sat-pref-sky-at-glance.c:330
+#, fuzzy
+msgid "Satellite 3: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:158
+#: ../src/sat-pref-sky-at-glance.c:335
 msgid "Select colour 3"
 msgstr "Vyberte barvu 3"
 
 #. colour 4
-#: ../src/sat-pref-sky-at-glance.c:169
-msgid "Colour for satellite 4: "
-msgstr "Barva pro satelit 4: "
+#: ../src/sat-pref-sky-at-glance.c:344
+#, fuzzy
+msgid "Satellite 4: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:175
+#: ../src/sat-pref-sky-at-glance.c:349
 msgid "Select colour 4"
 msgstr "Vyberte barvu 4"
 
 #. colour 5
-#: ../src/sat-pref-sky-at-glance.c:186
-msgid "Colour for satellite 5: "
-msgstr "Barva pro satelit 5: "
+#: ../src/sat-pref-sky-at-glance.c:358
+#, fuzzy
+msgid "Satellite 5: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:192
+#: ../src/sat-pref-sky-at-glance.c:363
 msgid "Select colour 5"
 msgstr "Vyberte barvu 5"
 
 #. colour 6
-#: ../src/sat-pref-sky-at-glance.c:203
-msgid "Colour for satellite 6: "
-msgstr "Barva pro satelit 6: "
+#: ../src/sat-pref-sky-at-glance.c:372
+#, fuzzy
+msgid "Satellite 6: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:209
+#: ../src/sat-pref-sky-at-glance.c:377
 msgid "Select colour 6"
 msgstr "Vyberte barvu 6"
 
 #. colour 7
-#: ../src/sat-pref-sky-at-glance.c:220
-msgid "Colour for satellite 7: "
-msgstr "Barva pro satelit 7: "
+#: ../src/sat-pref-sky-at-glance.c:386
+#, fuzzy
+msgid "Satellite 7: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:226
+#: ../src/sat-pref-sky-at-glance.c:391
 msgid "Select colour 7"
 msgstr "Vyberte barvu 7"
 
 #. colour 8
-#: ../src/sat-pref-sky-at-glance.c:237
-msgid "Colour for satellite 8: "
-msgstr "Barva pro satelit 8: "
+#: ../src/sat-pref-sky-at-glance.c:400
+#, fuzzy
+msgid "Satellite 8: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:243
+#: ../src/sat-pref-sky-at-glance.c:405
 msgid "Select colour 8"
 msgstr "Vyberte barvu 8"
 
 #. colour 9
-#: ../src/sat-pref-sky-at-glance.c:254
-msgid "Colour for satellite 9: "
-msgstr "Barva pro satelit 9: "
+#: ../src/sat-pref-sky-at-glance.c:414
+#, fuzzy
+msgid "Satellite 9: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:260
+#: ../src/sat-pref-sky-at-glance.c:419
 msgid "Select colour 9"
 msgstr "Vyberte barvu 9"
 
 #. colour 10
-#: ../src/sat-pref-sky-at-glance.c:271
-msgid "Colour for satellite 10: "
-msgstr "Barva pro satelit 10: "
+#: ../src/sat-pref-sky-at-glance.c:428
+#, fuzzy
+msgid "Satellite 10: "
+msgstr "Satelit:"
 
-#: ../src/sat-pref-sky-at-glance.c:277
+#: ../src/sat-pref-sky-at-glance.c:433
 msgid "Select colour 10"
 msgstr "Vyberte barvu 10"
 
@@ -5917,6 +5933,36 @@ msgstr ""
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
+
+#~ msgid "Colour for satellite 1: "
+#~ msgstr "Barva pro satelit 1: "
+
+#~ msgid "Colour for satellite 2: "
+#~ msgstr "Barva pro satelit 2: "
+
+#~ msgid "Colour for satellite 3: "
+#~ msgstr "Barva pro satelit 3: "
+
+#~ msgid "Colour for satellite 4: "
+#~ msgstr "Barva pro satelit 4: "
+
+#~ msgid "Colour for satellite 5: "
+#~ msgstr "Barva pro satelit 5: "
+
+#~ msgid "Colour for satellite 6: "
+#~ msgstr "Barva pro satelit 6: "
+
+#~ msgid "Colour for satellite 7: "
+#~ msgstr "Barva pro satelit 7: "
+
+#~ msgid "Colour for satellite 8: "
+#~ msgstr "Barva pro satelit 8: "
+
+#~ msgid "Colour for satellite 9: "
+#~ msgstr "Barva pro satelit 9: "
+
+#~ msgid "Colour for satellite 10: "
+#~ msgstr "Barva pro satelit 10: "
 
 #~ msgid "ft above sea level"
 #~ msgstr "nadmořská výška ve stp."
