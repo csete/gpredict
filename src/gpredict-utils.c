@@ -589,3 +589,39 @@ gboolean gpredict_legal_char (int ch)
   return (FALSE);
 }
 
+
+/* Convert a 0xRRGGBBAA encoded config integer to a GdkRGBA structure */
+void rgba_from_cfg(guint cfg_rgba, GdkRGBA * gdk_rgba)
+{
+    if (gdk_rgba == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s called with gdk_rgba = NULL"), __func__);
+        return;
+    }
+
+    gdk_rgba->red   = ((cfg_rgba >> 24) & 0xFF) / 255.0;
+    gdk_rgba->green = ((cfg_rgba >> 16) & 0xFF) / 255.0;
+    gdk_rgba->blue  = ((cfg_rgba >>  8) & 0xFF) / 255.0;
+    gdk_rgba->alpha = (cfg_rgba & 0xFF) / 255.0;
+}
+
+/* convert GdkRGBA struct to 0xRRGGBBAA formatted config integer */
+guint rgba_to_cfg(const GdkRGBA * gdk_rgba)
+{
+    guint   cfg_int = 0;
+
+    if (gdk_rgba == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s called with gdk_rgba = NULL"), __func__);
+        return 0;
+    }
+
+    cfg_int  = ((guint)(gdk_rgba->red * 255.0)) << 24;
+    cfg_int += ((guint)(gdk_rgba->green * 255.0)) << 16;
+    cfg_int += ((guint)(gdk_rgba->blue * 255.0)) << 8;
+    cfg_int += (guint)(gdk_rgba->alpha * 255.0);
+
+    return cfg_int;
+}
