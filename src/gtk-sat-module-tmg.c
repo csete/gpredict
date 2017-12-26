@@ -781,7 +781,15 @@ static gdouble calculate_time(GtkSatModule * mod)
     if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
     {
         /* convert local time to UTC */
+
+        /* tm_mon -1 / +1 is a temporary workaround for
+         * https://github.com/csete/gpredict/issues/90
+         * Also see
+         * https://github.com/csete/gpredict/issues/106
+         */
+        tim.tm_mon -= 1;
         Time_to_UTC(&tim, &utim);
+        utim.tm_mon += 1;
 
         /* Convert to JD */
         jd = Julian_Date(&utim);
