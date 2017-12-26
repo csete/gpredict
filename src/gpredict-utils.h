@@ -30,6 +30,8 @@ gint            gpredict_file_copy(const gchar * in, const gchar * out);
 
 void            rgba_from_cfg(guint cfg_rgba, GdkRGBA * gdk_rgba);
 guint           rgba_to_cfg(const GdkRGBA * gdk_rgba);
+void            rgb_from_cfg(guint cfg_rgb, GdkRGBA * gdk_rgba);
+guint           rgb_to_cfg(const GdkRGBA * gdk_rgba);
 
 void            rgb2gdk(guint rgb, GdkColor * color);
 void            rgba2gdk(guint rgba, GdkColor * color, guint16 * alpha);

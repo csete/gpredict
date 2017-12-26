@@ -618,3 +618,38 @@ guint rgba_to_cfg(const GdkRGBA * gdk_rgba)
 
     return cfg_int;
 }
+
+/* Convert a 0xRRGGBB encoded config integer to a GdkRGBA structure (no alpha channel) */
+void rgb_from_cfg(guint cfg_rgb, GdkRGBA * gdk_rgba)
+{
+    if (gdk_rgba == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s called with gdk_rgba = NULL"), __func__);
+        return;
+    }
+
+    gdk_rgba->red = ((cfg_rgb >> 16) & 0xFF) / 255.0;
+    gdk_rgba->green = ((cfg_rgb >> 8) & 0xFF) / 255.0;
+    gdk_rgba->blue = (cfg_rgb & 0xFF) / 255.0;
+    gdk_rgba->alpha = 1.0;
+}
+
+/* convert GdkRGBA struct to 0xRRGGBB formatted config integer, ignoring the alpha channel */
+guint rgb_to_cfg(const GdkRGBA * gdk_rgba)
+{
+    guint           cfg_int = 0;
+
+    if (gdk_rgba == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s called with gdk_rgba = NULL"), __func__);
+        return 0;
+    }
+
+    cfg_int = ((guint) (gdk_rgba->red * 255.0)) << 16;
+    cfg_int += ((guint) (gdk_rgba->green * 255.0)) << 8;
+    cfg_int += (guint) (gdk_rgba->blue * 255.0);
+
+    return cfg_int;
+}
