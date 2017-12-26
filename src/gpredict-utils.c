@@ -1,13 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -37,7 +31,6 @@
 #include "strnatcmp.h"
 
 
-static void     set_combo_tooltip(GtkWidget * combo, gpointer text);
 
 /**
  * Create a horizontal pixmap button.
@@ -130,6 +123,22 @@ GtkWidget      *gpredict_hstock_button(const gchar * stock_id,
 /**
  * Create and set tooltips for GtkComboBox.
  *
+ * @param text  Pointer to the desired tooltip text.
+ *
+ * This function creates and sets the tooltips for the specified widget.
+ * This function is called by the \a grig_set_combo_tooltips function which
+ * is must be used as callback for the "realize" signal of the GtkComboBox.
+ */
+static void set_combo_tooltip(GtkWidget * combo, gpointer text)
+{
+    /* if current child is a button we have BINGO! */
+    if (GTK_IS_BUTTON(combo))
+        gtk_widget_set_tooltip_text(combo, text);
+}
+
+/**
+ * Create and set tooltips for GtkComboBox.
+ *
  * @param combo The GtkComboBox widget.
  * @param text  Pointer to the desired tooltip text.
  *
@@ -154,22 +163,6 @@ void gpredict_set_combo_tooltips(GtkWidget * combo, gpointer text)
      */
     gtk_container_forall(GTK_CONTAINER(combo), set_combo_tooltip, text);
 
-}
-
-/**
- * Create and set tooltips for GtkComboBox.
- *
- * @param text  Pointer to the desired tooltip text.
- *
- * This function creates and sets the tooltips for the specified widget.
- * This function is called by the \a grig_set_combo_tooltips function which
- * is must be used as callback for the "realize" signal of the GtkComboBox.
- */
-static void set_combo_tooltip(GtkWidget * combo, gpointer text)
-{
-    /* if current child is a button we have BINGO! */
-    if (GTK_IS_BUTTON(combo))
-        gtk_widget_set_tooltip_text(combo, text);
 }
 
 gint gpredict_file_copy(const gchar * in, const gchar * out)
@@ -582,11 +575,11 @@ gboolean gpredict_save_key_file(GKeyFile * cfgdata, const char *filename)
  * @param ch the character code to check.
  * @return TRUE if okay.
  */
-gboolean gpredict_legal_char (int ch)
+gboolean gpredict_legal_char(int ch)
 {
-  if (g_ascii_isalnum(ch) || ch == '-' || ch == '_')
-     return (TRUE);
-  return (FALSE);
+    if (g_ascii_isalnum(ch) || ch == '-' || ch == '_')
+        return (TRUE);
+    return (FALSE);
 }
 
 
@@ -600,16 +593,16 @@ void rgba_from_cfg(guint cfg_rgba, GdkRGBA * gdk_rgba)
         return;
     }
 
-    gdk_rgba->red   = ((cfg_rgba >> 24) & 0xFF) / 255.0;
+    gdk_rgba->red = ((cfg_rgba >> 24) & 0xFF) / 255.0;
     gdk_rgba->green = ((cfg_rgba >> 16) & 0xFF) / 255.0;
-    gdk_rgba->blue  = ((cfg_rgba >>  8) & 0xFF) / 255.0;
+    gdk_rgba->blue = ((cfg_rgba >> 8) & 0xFF) / 255.0;
     gdk_rgba->alpha = (cfg_rgba & 0xFF) / 255.0;
 }
 
 /* convert GdkRGBA struct to 0xRRGGBBAA formatted config integer */
 guint rgba_to_cfg(const GdkRGBA * gdk_rgba)
 {
-    guint   cfg_int = 0;
+    guint           cfg_int = 0;
 
     if (gdk_rgba == NULL)
     {
@@ -618,10 +611,10 @@ guint rgba_to_cfg(const GdkRGBA * gdk_rgba)
         return 0;
     }
 
-    cfg_int  = ((guint)(gdk_rgba->red * 255.0)) << 24;
-    cfg_int += ((guint)(gdk_rgba->green * 255.0)) << 16;
-    cfg_int += ((guint)(gdk_rgba->blue * 255.0)) << 8;
-    cfg_int += (guint)(gdk_rgba->alpha * 255.0);
+    cfg_int = ((guint) (gdk_rgba->red * 255.0)) << 24;
+    cfg_int += ((guint) (gdk_rgba->green * 255.0)) << 16;
+    cfg_int += ((guint) (gdk_rgba->blue * 255.0)) << 8;
+    cfg_int += (guint) (gdk_rgba->alpha * 255.0);
 
     return cfg_int;
 }
