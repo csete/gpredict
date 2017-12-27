@@ -4,12 +4,6 @@
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
   Copyright (C)  2013       Charles Suprin,  AA1VS.
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
