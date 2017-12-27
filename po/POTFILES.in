@@ -58,7 +58,6 @@ src/sat-pref-formats.c
 src/sat-pref-general.c
 src/sat-pref-interfaces.c
 src/sat-pref-layout.c
-src/sat-pref-layout-utils.c
 src/sat-pref-list-view.c
 src/sat-pref-map-view.c
 src/sat-pref-modules.c
