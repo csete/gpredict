@@ -1,15 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,49 +28,16 @@
 
 #define FMTSTR "<span size='xx-large'>%c</span>"
 
-static void     gtk_rot_knob_class_init(GtkRotKnobClass * class);
-static void     gtk_rot_knob_init(GtkRotKnob * list);
-static void     gtk_rot_knob_destroy(GtkWidget * widget);
-
-static void     gtk_rot_knob_update(GtkRotKnob * knob);
-
-static void     button_clicked_cb(GtkWidget * button, gpointer data);
-static gboolean on_button_press(GtkWidget * digit, GdkEventButton * event,
-                                gpointer data);
-static gboolean on_button_scroll(GtkWidget * digit, GdkEventScroll * event,
-                                 gpointer data);
 
 static GtkHBoxClass *parent_class = NULL;
 
-/** Convert digit index (in the digit array) to amount of change. */
+/* Convert digit index (in the digit array) to amount of change. */
 const gdouble   INDEX_TO_DELTA[] = { 0.0, 100.0, 10.0, 1.0, 0.0, 0.1, 0.01 };
 
 
-GType gtk_rot_knob_get_type()
+static void gtk_rot_knob_destroy(GtkWidget * widget)
 {
-    static GType    gtk_rot_knob_type = 0;
-
-    if (!gtk_rot_knob_type)
-    {
-        static const GTypeInfo gtk_rot_knob_info = {
-            sizeof(GtkRotKnobClass),
-            NULL,               /* base_init */
-            NULL,               /* base_finalize */
-            (GClassInitFunc) gtk_rot_knob_class_init,
-            NULL,               /* class_finalize */
-            NULL,               /* class_data */
-            sizeof(GtkRotKnob),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_rot_knob_init,
-            NULL
-        };
-
-        gtk_rot_knob_type = g_type_register_static(GTK_TYPE_VBOX,
-                                                   "GtkRotKnob",
-                                                   &gtk_rot_knob_info, 0);
-    }
-
-    return gtk_rot_knob_type;
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 static void gtk_rot_knob_class_init(GtkRotKnobClass * class)
@@ -95,322 +54,7 @@ static void gtk_rot_knob_init(GtkRotKnob * knob)
     (void)knob;
 }
 
-static void gtk_rot_knob_destroy(GtkWidget * widget)
-{
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
-}
-
-/**
- * Create a new rotor control widget.
- *
- * @param min The lower limit in decimal degrees.
- * @param max The upper limit in decimal degrees.
- * @param val The initial value of the control.
- * @return A new rotor control widget.
- * 
- */
-GtkWidget      *gtk_rot_knob_new(gdouble min, gdouble max, gdouble val)
-{
-    GtkWidget      *widget;
-    GtkWidget      *table;
-    GtkWidget      *label;
-    guint           i;
-
-    widget = g_object_new(GTK_TYPE_ROT_KNOB, NULL);
-
-    GTK_ROT_KNOB(widget)->min = min;
-    GTK_ROT_KNOB(widget)->max = max;
-    GTK_ROT_KNOB(widget)->value = val;
-
-    /* create table */
-    table = gtk_table_new(3, 8, FALSE);
-
-    /* create buttons */
-    /* +100 deg */
-    GTK_ROT_KNOB(widget)->buttons[0] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[0]),
-                      gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[0]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[0]),
-                      "delta", GINT_TO_POINTER(10000));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[0],
-                     1, 2, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[0], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* +10 deg */
-    GTK_ROT_KNOB(widget)->buttons[1] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[1]),
-                      gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[1]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[1]),
-                      "delta", GINT_TO_POINTER(1000));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[1],
-                     2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[1], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* +1 deg */
-    GTK_ROT_KNOB(widget)->buttons[2] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[2]),
-                      gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[2]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[2]),
-                      "delta", GINT_TO_POINTER(100));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[2],
-                     3, 4, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[2], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* +0.1 deg */
-    GTK_ROT_KNOB(widget)->buttons[3] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[3]),
-                      gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[3]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[3]),
-                      "delta", GINT_TO_POINTER(10));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[3],
-                     5, 6, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[3], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* +0.01 deg */
-    GTK_ROT_KNOB(widget)->buttons[4] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[4]),
-                      gtk_arrow_new(GTK_ARROW_UP, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[4]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[4]),
-                      "delta", GINT_TO_POINTER(1));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[4],
-                     6, 7, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[4], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* -100 deg */
-    GTK_ROT_KNOB(widget)->buttons[5] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[5]),
-                      gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[5]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[5]),
-                      "delta", GINT_TO_POINTER(-10000));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[5],
-                     1, 2, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[5], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* -10 deg */
-    GTK_ROT_KNOB(widget)->buttons[6] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[6]),
-                      gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[6]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[6]),
-                      "delta", GINT_TO_POINTER(-1000));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[6],
-                     2, 3, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[6], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* -1 deg */
-    GTK_ROT_KNOB(widget)->buttons[7] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[7]),
-                      gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[7]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[7]),
-                      "delta", GINT_TO_POINTER(-100));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[7],
-                     3, 4, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[7], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* -0.1 deg */
-    GTK_ROT_KNOB(widget)->buttons[8] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[8]),
-                      gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[8]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[8]),
-                      "delta", GINT_TO_POINTER(-10));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[8],
-                     5, 6, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[8], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* -0.01 deg */
-    GTK_ROT_KNOB(widget)->buttons[9] = gtk_button_new();
-    gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->buttons[9]),
-                      gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_NONE));
-    gtk_button_set_relief(GTK_BUTTON(GTK_ROT_KNOB(widget)->buttons[9]),
-                          GTK_RELIEF_NONE);
-    g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->buttons[9]),
-                      "delta", GINT_TO_POINTER(-1));
-    gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->buttons[9],
-                     6, 7, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
-    g_signal_connect(GTK_ROT_KNOB(widget)->buttons[9], "clicked",
-                     G_CALLBACK(button_clicked_cb), widget);
-
-    /* create labels */
-    for (i = 0; i < 7; i++)
-    {
-        /* labels showing the digits */
-        GTK_ROT_KNOB(widget)->digits[i] = gtk_label_new(NULL);
-        gtk_widget_set_tooltip_text(GTK_ROT_KNOB(widget)->digits[i],
-                                    _
-                                    ("Use mouse buttons and wheel to change value"));
-
-        /* Event boxes for catching mouse evetns */
-        GTK_ROT_KNOB(widget)->evtbox[i] = gtk_event_box_new();
-        g_object_set_data(G_OBJECT(GTK_ROT_KNOB(widget)->evtbox[i]), "index",
-                          GUINT_TO_POINTER(i));
-        gtk_container_add(GTK_CONTAINER(GTK_ROT_KNOB(widget)->evtbox[i]),
-                          GTK_ROT_KNOB(widget)->digits[i]);
-        gtk_table_attach(GTK_TABLE(table), GTK_ROT_KNOB(widget)->evtbox[i], i,
-                         i + 1, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
-
-        g_signal_connect(GTK_ROT_KNOB(widget)->evtbox[i], "button_press_event",
-                         (GCallback) on_button_press, widget);
-        g_signal_connect(GTK_ROT_KNOB(widget)->evtbox[i], "scroll_event",
-                         (GCallback) on_button_scroll, widget);
-
-    }
-
-    /* degree sign */
-    label = gtk_label_new(NULL);
-    gtk_label_set_markup(GTK_LABEL(label),
-                         "<span size='xx-large'>\302\260</span>");
-    gtk_table_attach(GTK_TABLE(table), label, 7, 8, 1, 2, GTK_SHRINK,
-                     GTK_SHRINK, 0, 0);
-
-    gtk_rot_knob_update(GTK_ROT_KNOB(widget));
-
-    gtk_container_add(GTK_CONTAINER(widget), table);
-    gtk_widget_show_all(widget);
-
-    return widget;
-}
-
-/**
- * Set the value of the rotor control widget.
- *
- * @param knob The rotor control widget.
- * @param val The new value.
- * 
- */
-void gtk_rot_knob_set_value(GtkRotKnob * knob, gdouble val)
-{
-    /* set the new value */
-    if (val <= knob->min)
-        knob->value = knob->min;
-    else if (val >= knob->max)
-        knob->value = knob->max;
-    else
-        knob->value = val;
-
-    /* update the display */
-    gtk_rot_knob_update(knob);
-}
-
-/**
- * Get the current value of the rotor control widget.
- *
- * @param knob The rotor control widget.
- * @return The current value.
- * 
- * Hint: For reading the value you can also access knob->value.
- * 
- */
-gdouble gtk_rot_knob_get_value(GtkRotKnob * knob)
-{
-    return knob->value;
-}
-
-/**
- * Get the upper limit of the control widget
- *
- * @param knob The rotor control widget.
- * @return The upper limit of the control widget.
- */
-gdouble gtk_rot_knob_get_max(GtkRotKnob * knob)
-{
-    return knob->max;
-}
-
-/**
- * Get the lower limit of the control widget
- *
- * @param knob The rotor control widget.
- * @return The lower limit of the control widget.
- */
-gdouble gtk_rot_knob_get_min(GtkRotKnob * knob)
-{
-    return knob->min;
-}
-
-/**
- * Set the lower limit of the control widget
- *
- * @param knob The rotor control widget.
- * @param min The new lower limit of the control widget.
- */
-void gtk_rot_knob_set_min(GtkRotKnob * knob, gdouble min)
-{
-    /* just som sanity check we have only 3 digits */
-    if (min < 1000)
-    {
-        knob->min = min;
-
-        /* ensure that current value is within range */
-        if (knob->value < knob->min)
-        {
-            knob->value = knob->min;
-            gtk_rot_knob_update(knob);
-        }
-    }
-}
-
-/**
- * Set the upper limit of the control widget
- *
- * @param knob The rotor control widget.
- * @param min The new upper limit of the control widget.
- */
-void gtk_rot_knob_set_max(GtkRotKnob * knob, gdouble max)
-{
-    /* just som sanity check we have only 3 digits */
-    if (max < 1000)
-    {
-        knob->max = max;
-
-        /* ensure that current value is within range */
-        if (knob->value > knob->max)
-        {
-            knob->value = knob->max;
-            gtk_rot_knob_update(knob);
-        }
-    }
-}
-
-/**
- * Set the range of the control widget
- *
- * @param knob The rotor control widget.
- * @param min The new lower limit of the control widget.
- * @param max The new upper limit of the control widget.
- */
-void gtk_rot_knob_set_range(GtkRotKnob * knob, gdouble min, gdouble max)
-{
-    gtk_rot_knob_set_min(knob, min);
-    gtk_rot_knob_set_max(knob, max);
-}
-
-/**
+/*
  * Update rotor display widget.
  *
  * @param knob The rotor control widget.
@@ -441,7 +85,7 @@ static void gtk_rot_knob_update(GtkRotKnob * knob)
     g_free(buff);
 }
 
-/**
+/*
  * Button clicked event.
  *
  * @param button The button that was clicked.
@@ -474,7 +118,7 @@ static void button_clicked_cb(GtkWidget * button, gpointer data)
     gtk_rot_knob_update(knob);
 }
 
-/**
+/*
  * Manage button press events
  *
  * @param digit Pointer to the event box that received the event
@@ -542,7 +186,7 @@ static gboolean on_button_press(GtkWidget * evtbox,
     return TRUE;
 }
 
-/**
+/*
  * Manage scroll wheel events
  *
  * @param digit Pointer to the event box that received the event
@@ -603,4 +247,295 @@ static gboolean on_button_scroll(GtkWidget * evtbox,
     }
 
     return TRUE;
+}
+
+GType gtk_rot_knob_get_type()
+{
+    static GType    gtk_rot_knob_type = 0;
+
+    if (!gtk_rot_knob_type)
+    {
+        static const GTypeInfo gtk_rot_knob_info = {
+            sizeof(GtkRotKnobClass),
+            NULL,               /* base_init */
+            NULL,               /* base_finalize */
+            (GClassInitFunc) gtk_rot_knob_class_init,
+            NULL,               /* class_finalize */
+            NULL,               /* class_data */
+            sizeof(GtkRotKnob),
+            5,                  /* n_preallocs */
+            (GInstanceInitFunc) gtk_rot_knob_init,
+            NULL
+        };
+
+        gtk_rot_knob_type = g_type_register_static(GTK_TYPE_BOX,
+                                                   "GtkRotKnob",
+                                                   &gtk_rot_knob_info, 0);
+    }
+
+    return gtk_rot_knob_type;
+}
+
+/*
+ * Set the range of the control widget
+ *
+ * @param knob The rotor control widget.
+ * @param min The new lower limit of the control widget.
+ * @param max The new upper limit of the control widget.
+ */
+void gtk_rot_knob_set_range(GtkRotKnob * knob, gdouble min, gdouble max)
+{
+    gtk_rot_knob_set_min(knob, min);
+    gtk_rot_knob_set_max(knob, max);
+}
+
+/*
+ * Set the value of the rotor control widget.
+ *
+ * @param knob The rotor control widget.
+ * @param val The new value.
+ * 
+ */
+void gtk_rot_knob_set_value(GtkRotKnob * knob, gdouble val)
+{
+    /* set the new value */
+    if (val <= knob->min)
+        knob->value = knob->min;
+    else if (val >= knob->max)
+        knob->value = knob->max;
+    else
+        knob->value = val;
+
+    /* update the display */
+    gtk_rot_knob_update(knob);
+}
+
+/*
+ * Get the current value of the rotor control widget.
+ *
+ * @param knob The rotor control widget.
+ * @return The current value.
+ * 
+ * Hint: For reading the value you can also access knob->value.
+ * 
+ */
+gdouble gtk_rot_knob_get_value(GtkRotKnob * knob)
+{
+    return knob->value;
+}
+
+/*
+ * Get the upper limit of the control widget
+ *
+ * @param knob The rotor control widget.
+ * @return The upper limit of the control widget.
+ */
+gdouble gtk_rot_knob_get_max(GtkRotKnob * knob)
+{
+    return knob->max;
+}
+
+/*
+ * Get the lower limit of the control widget
+ *
+ * @param knob The rotor control widget.
+ * @return The lower limit of the control widget.
+ */
+gdouble gtk_rot_knob_get_min(GtkRotKnob * knob)
+{
+    return knob->min;
+}
+
+/*
+ * Set the lower limit of the control widget
+ *
+ * @param knob The rotor control widget.
+ * @param min The new lower limit of the control widget.
+ */
+void gtk_rot_knob_set_min(GtkRotKnob * knob, gdouble min)
+{
+    /* just som sanity check we have only 3 digits */
+    if (min < 1000)
+    {
+        knob->min = min;
+
+        /* ensure that current value is within range */
+        if (knob->value < knob->min)
+        {
+            knob->value = knob->min;
+            gtk_rot_knob_update(knob);
+        }
+    }
+}
+
+/*
+ * Set the upper limit of the control widget
+ *
+ * @param knob The rotor control widget.
+ * @param min The new upper limit of the control widget.
+ */
+void gtk_rot_knob_set_max(GtkRotKnob * knob, gdouble max)
+{
+    /* just som sanity check we have only 3 digits */
+    if (max < 1000)
+    {
+        knob->max = max;
+
+        /* ensure that current value is within range */
+        if (knob->value > knob->max)
+        {
+            knob->value = knob->max;
+            gtk_rot_knob_update(knob);
+        }
+    }
+}
+
+/*
+ * Create a new rotor control widget.
+ *
+ * @param min The lower limit in decimal degrees.
+ * @param max The upper limit in decimal degrees.
+ * @param val The initial value of the control.
+ * @return A new rotor control widget.
+ * 
+ */
+GtkWidget      *gtk_rot_knob_new(gdouble min, gdouble max, gdouble val)
+{
+    GtkRotKnob     *knob;
+    GtkWidget      *widget;
+    GtkWidget      *table;
+    GtkWidget      *label;
+    guint           i;
+
+    widget = g_object_new(GTK_TYPE_ROT_KNOB, NULL);
+    knob = GTK_ROT_KNOB(widget);
+
+    knob->min = min;
+    knob->max = max;
+    knob->value = val;
+
+    table = gtk_grid_new();
+
+    /* +100 deg */
+    knob->buttons[0] = gtk_button_new_with_label("\342\226\264");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[0]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[0]),
+                      "delta", GINT_TO_POINTER(10000));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[0], 1, 0, 1, 1);
+    g_signal_connect(knob->buttons[0], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* +10 deg */
+    knob->buttons[1] = gtk_button_new_with_label("\342\226\264");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[1]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[1]),
+                      "delta", GINT_TO_POINTER(1000));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[1], 2, 0, 1, 1);
+    g_signal_connect(knob->buttons[1], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* +1 deg */
+    knob->buttons[2] = gtk_button_new_with_label("\342\226\264");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[2]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[2]),
+                      "delta", GINT_TO_POINTER(100));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[2], 3, 0, 1, 1);
+    g_signal_connect(knob->buttons[2], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* +0.1 deg */
+    knob->buttons[3] = gtk_button_new_with_label("\342\226\264");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[3]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[3]),
+                      "delta", GINT_TO_POINTER(10));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[3], 5, 0, 1, 1);
+    g_signal_connect(knob->buttons[3], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* +0.01 deg */
+    knob->buttons[4] = gtk_button_new_with_label("\342\226\264");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[4]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[4]), "delta", GINT_TO_POINTER(1));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[4], 6, 0, 1, 1);
+    g_signal_connect(knob->buttons[4], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* -100 deg */
+    knob->buttons[5] = gtk_button_new_with_label("\342\226\276");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[5]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[5]),
+                      "delta", GINT_TO_POINTER(-10000));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[5], 1, 2, 1, 1);
+    g_signal_connect(knob->buttons[5], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* -10 deg */
+    knob->buttons[6] = gtk_button_new_with_label("\342\226\276");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[6]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[6]),
+                      "delta", GINT_TO_POINTER(-1000));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[6], 2, 2, 1, 1);
+    g_signal_connect(knob->buttons[6], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* -1 deg */
+    knob->buttons[7] = gtk_button_new_with_label("\342\226\276");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[7]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[7]),
+                      "delta", GINT_TO_POINTER(-100));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[7], 3, 2, 1, 1);
+    g_signal_connect(knob->buttons[7], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* -0.1 deg */
+    knob->buttons[8] = gtk_button_new_with_label("\342\226\276");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[8]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[8]),
+                      "delta", GINT_TO_POINTER(-10));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[8], 5, 2, 1, 1);
+    g_signal_connect(knob->buttons[8], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* -0.01 deg */
+    knob->buttons[9] = gtk_button_new_with_label("\342\226\276");
+    gtk_button_set_relief(GTK_BUTTON(knob->buttons[9]), GTK_RELIEF_NONE);
+    g_object_set_data(G_OBJECT(knob->buttons[9]),
+                      "delta", GINT_TO_POINTER(-1));
+    gtk_grid_attach(GTK_GRID(table), knob->buttons[9], 6, 2, 1, 1);
+    g_signal_connect(knob->buttons[9], "clicked",
+                     G_CALLBACK(button_clicked_cb), widget);
+
+    /* create labels */
+    for (i = 0; i < 7; i++)
+    {
+        /* labels showing the digits */
+        knob->digits[i] = gtk_label_new(NULL);
+        gtk_widget_set_tooltip_text(knob->digits[i],
+                                    _
+                                    ("Use mouse buttons and wheel to change value"));
+
+        /* Event boxes for catching mouse evetns */
+        knob->evtbox[i] = gtk_event_box_new();
+        g_object_set_data(G_OBJECT(knob->evtbox[i]), "index",
+                          GUINT_TO_POINTER(i));
+        gtk_container_add(GTK_CONTAINER(knob->evtbox[i]), knob->digits[i]);
+        gtk_grid_attach(GTK_GRID(table), knob->evtbox[i], i, 1, 1, 1);
+
+        g_signal_connect(knob->evtbox[i], "button_press_event",
+                         (GCallback) on_button_press, widget);
+        g_signal_connect(knob->evtbox[i], "scroll_event",
+                         (GCallback) on_button_scroll, widget);
+
+    }
+
+    /* degree sign */
+    label = gtk_label_new(NULL);
+    gtk_label_set_markup(GTK_LABEL(label),
+                         "<span size='xx-large'>\302\260</span>");
+    gtk_grid_attach(GTK_GRID(table), label, 7, 1, 1, 1);
+    gtk_rot_knob_update(knob);
+    gtk_container_add(GTK_CONTAINER(widget), table);
+    gtk_widget_show_all(widget);
+
+    return widget;
 }
