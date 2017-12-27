@@ -1,16 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Charles Suprin  <hamaa1vs@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+  Copyright (C)       2011  Charles Suprin, AA1VS
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,9 +17,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/**
- * \brief Antenna rotator control window.
- * \ingroup widgets
+/*
+ * Antenna rotator control window.
  *
  * The master rotator control UI is implemented as a Gtk+ Widget in order
  * to allow multiple instances. The widget is created from the module
@@ -69,39 +60,6 @@
 #define FMTSTR "%7.2f\302\260"
 #define MAX_ERROR_COUNT 5
 
-static void     gtk_rot_ctrl_class_init(GtkRotCtrlClass * class);
-static void     gtk_rot_ctrl_init(GtkRotCtrl * list);
-static void     gtk_rot_ctrl_destroy(GtkWidget * widget);
-
-static GtkWidget *create_az_widgets(GtkRotCtrl * ctrl);
-static GtkWidget *create_el_widgets(GtkRotCtrl * ctrl);
-static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl);
-static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl);
-static GtkWidget *create_plot_widget(GtkRotCtrl * ctrl);
-
-static void     store_sats(gpointer key, gpointer value, gpointer user_data);
-
-static void     sat_selected_cb(GtkComboBox * satsel, gpointer data);
-static void     track_toggle_cb(GtkToggleButton * button, gpointer data);
-static void     delay_changed_cb(GtkSpinButton * spin, gpointer data);
-static void     toler_changed_cb(GtkSpinButton * spin, gpointer data);
-static void     rot_selected_cb(GtkComboBox * box, gpointer data);
-static void     rot_locked_cb(GtkToggleButton * button, gpointer data);
-static void     rot_monitor_cb(GtkCheckButton * button, gpointer data);
-static gboolean rot_ctrl_timeout_cb(gpointer data);
-static void     update_count_down(GtkRotCtrl * ctrl, gdouble t);
-
-static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el);
-static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el);
-
-static gboolean have_conf(void);
-static gint     sat_name_compare(sat_t * a, sat_t * b);
-static gint     rot_name_compare(const gchar * a, const gchar * b);
-
-static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
-                                gdouble azstoppos);
-static inline void set_flipped_pass(GtkRotCtrl * ctrl);
-
 static GtkVBoxClass *parent_class = NULL;
 
 
@@ -127,10 +85,10 @@ static gint rotctld_socket_open(const gchar * host, gint port)
     memset(&ServAddr, 0, sizeof(ServAddr));
     ServAddr.sin_family = AF_INET;      /* Internet address family */
     h = gethostbyname(host);
-    if (h == NULL) {
+    if (h == NULL)
+    {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("Name resolution of rotctld server %s failed."),
-                    host);
+                    _("Name resolution of rotctld server %s failed."), host);
 #ifdef WIN32
         closesocket(sock);
 #else
@@ -189,7 +147,7 @@ static void rotctld_socket_close(gint * sock)
     *sock = -1;
 }
 
-/**
+/*
  * Send a command to rotctld and read the response.
  *
  * Inputs are the socket, a string command, and a buffer and length for
@@ -239,6 +197,197 @@ static gboolean rotctld_socket_rw(gint sock, gchar * buff, gchar * buffout,
     }
 
     return TRUE;
+}
+
+static gint sat_name_compare(sat_t * a, sat_t * b)
+{
+    return (gpredict_strcmp(a->nickname, b->nickname));
+}
+
+static gint rot_name_compare(const gchar * a, const gchar * b)
+{
+    return (gpredict_strcmp(a, b));
+}
+
+static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
+                                gdouble azstoppos)
+{
+    gdouble         max_az = 0, min_az = 0, offset = 0;
+    gdouble         caz, last_az = pass->aos_az;
+    guint           num, i;
+    pass_detail_t  *detail;
+    gboolean        retval = FALSE;
+
+    num = g_slist_length(pass->details);
+    if (type == ROT_AZ_TYPE_360)
+    {
+        min_az = 0;
+        max_az = 360;
+    }
+    else if (type == ROT_AZ_TYPE_180)
+    {
+        min_az = -180;
+        max_az = 180;
+    }
+
+    /* Offset by (azstoppos-min_az) to handle
+     * rotators with non-default positions.
+     * Note that the default positions of the rotator stops
+     * (eg. -180 for ROT_AZ_TYPE_180, and 0 for 
+     * ROT_AZ_TYPE_360) will create an offset of 0, which
+     * seems like a pretty sane default. */
+    offset = azstoppos - min_az;
+    min_az += offset;
+    max_az += offset;
+
+    /* Assume that min_az and max_az are atleat 360 degrees apart
+       get the azimuth that is in a settable range */
+    while (last_az > max_az)
+        last_az -= 360;
+
+    while (last_az < min_az)
+        last_az += 360;
+
+    if (num > 1)
+    {
+        for (i = 1; i < num - 1; i++)
+        {
+            detail = PASS_DETAIL(g_slist_nth_data(pass->details, i));
+            caz = detail->az;
+
+            while (caz > max_az)
+                caz -= 360;
+
+            while (caz < min_az)
+                caz += 360;
+
+
+            if (fabs(caz - last_az) > 180)
+                retval = TRUE;
+
+            last_az = caz;
+        }
+    }
+    caz = pass->los_az;
+    while (caz > max_az)
+        caz -= 360;
+
+    while (caz < min_az)
+        caz += 360;
+
+    if (fabs(caz - last_az) > 180)
+        retval = TRUE;
+
+    return retval;
+}
+
+static inline void set_flipped_pass(GtkRotCtrl * ctrl)
+{
+    if (ctrl->conf && ctrl->pass)
+        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype,
+                                        ctrl->conf->azstoppos);
+}
+
+/**
+ * Read rotator position from device.
+ *
+ * \param ctrl Pointer to the GtkRotCtrl widget.
+ * \param az The current Az as read from the device
+ * \param el The current El as read from the device
+ * \return TRUE if the position was successfully retrieved, FALSE if an
+ *         error occurred.
+ */
+static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
+{
+    gchar          *buff, **vbuff;
+    gchar           buffback[128];
+    gboolean        retcode;
+
+    if ((az == NULL) || (el == NULL))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: NULL storage."), __FILE__, __LINE__);
+        return FALSE;
+    }
+
+    /* send command */
+    buff = g_strdup_printf("p\x0a");
+    retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
+
+    /* try to parse answer */
+    if (retcode)
+    {
+        if (strncmp(buffback, "RPRT", 4) == 0)
+        {
+            g_strstrip(buffback);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s:%d: rotctld returned error (%s)"),
+                        __FILE__, __LINE__, buffback);
+        }
+        else
+        {
+            vbuff = g_strsplit(buffback, "\n", 3);
+            if ((vbuff[0] != NULL) && (vbuff[1] != NULL))
+            {
+                *az = g_strtod(vbuff[0], NULL);
+                *el = g_strtod(vbuff[1], NULL);
+            }
+            else
+            {
+                g_strstrip(buffback);
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _("%s:%d: rotctld returned bad response (%s)"),
+                            __FILE__, __LINE__, buffback);
+            }
+
+            g_strfreev(vbuff);
+        }
+    }
+
+    g_free(buff);
+
+    return retcode;
+}
+
+/**
+ * Send new position to rotator device
+ *
+ * \param ctrl Pointer to the GtkRotCtrl widget
+ * \param az The new Azimuth
+ * \param el The new Elevation
+ * \return TRUE if the new position has been sent successfully
+ *         FALSE if an error occurred
+ * 
+ * \note The function does not perform any range check since the GtkRotKnob
+ * should always keep its value within range.
+ */
+static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
+{
+    gchar          *buff;
+    gchar           buffback[128];
+    gboolean        retcode;
+    gint            retval;
+
+    /* send command */
+    buff = g_strdup_printf("P %.2f %.2f\x0a", az, el);
+    retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
+    g_free(buff);
+
+    if (retcode == TRUE)
+    {
+        /* treat errors as soft errors */
+        retval = (gint) g_strtod(buffback + 4, NULL);
+        if (retval != 0)
+        {
+            g_strstrip(buffback);
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _
+                        ("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
+                        __FILE__, __LINE__, retval, az, el, buffback);
+        }
+    }
+
+    return (retcode);
 }
 
 /* Rotctl client thread */
@@ -309,165 +458,53 @@ static gpointer rotctld_client_thread(gpointer data)
     return GINT_TO_POINTER(0);
 }
 
-GType gtk_rot_ctrl_get_type()
-{
-    static GType    gtk_rot_ctrl_type = 0;
-
-    if (!gtk_rot_ctrl_type)
-    {
-        static const GTypeInfo gtk_rot_ctrl_info = {
-            sizeof(GtkRotCtrlClass),
-            NULL,               /* base_init */
-            NULL,               /* base_finalize */
-            (GClassInitFunc) gtk_rot_ctrl_class_init,
-            NULL,               /* class_finalize */
-            NULL,               /* class_data */
-            sizeof(GtkRotCtrl),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_rot_ctrl_init,
-            NULL
-        };
-
-        gtk_rot_ctrl_type = g_type_register_static(GTK_TYPE_BOX,
-                                                   "GtkRotCtrl",
-                                                   &gtk_rot_ctrl_info, 0);
-    }
-
-    return gtk_rot_ctrl_type;
-}
-
-static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
-{
-    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
-
-    widget_class->destroy = gtk_rot_ctrl_destroy;
-    parent_class = g_type_class_peek_parent(class);
-}
-
-static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
-{
-    ctrl->sats = NULL;
-    ctrl->target = NULL;
-    ctrl->pass = NULL;
-    ctrl->qth = NULL;
-    ctrl->plot = NULL;
-
-    ctrl->tracking = FALSE;
-    ctrl->engaged = FALSE;
-    ctrl->delay = 1000;
-    ctrl->timerid = 0;
-    ctrl->tolerance = 5.0;
-    ctrl->errcnt = 0;
-
-    g_mutex_init(&ctrl->client.mutex);
-    ctrl->client.thread = NULL;
-    ctrl->client.socket = -1;
-    ctrl->client.running = FALSE;
-}
-
-static void gtk_rot_ctrl_destroy(GtkWidget * widget)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(widget);
-
-    /* stop timer */
-    if (ctrl->timerid > 0)
-        g_source_remove(ctrl->timerid);
-
-    /* free configuration */
-    if (ctrl->conf != NULL)
-    {
-        g_free(ctrl->conf->name);
-        g_free(ctrl->conf->host);
-        g_free(ctrl->conf);
-        ctrl->conf = NULL;
-    }
-
-    /* stop client thread */
-    if (ctrl->client.running)
-    {
-        ctrl->client.running = FALSE;
-        g_thread_join(ctrl->client.thread);
-    }
-
-    g_mutex_clear(&ctrl->client.mutex);
-
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
-}
-
 /**
- * \brief Create a new rotor control widget.
- * \return A new rotor control window.
+ * Update count down label.
+ *
+ * \param ctrl Pointer to the RotCtrl widget.
+ * \param t The current time.
+ * 
+ * This function calculates the new time to AOS/LOS of the currently
+ * selected target and updates the ctrl->SatCnt label widget.
  */
-GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
+static void update_count_down(GtkRotCtrl * ctrl, gdouble t)
 {
-    GtkRotCtrl     *rot_ctrl;
-    GtkWidget      *table;
+    gdouble         targettime;
+    gdouble         delta;
+    gchar          *buff;
+    guint           h, m, s;
 
-    /* check that we have rot conf */
-    if (!have_conf())
-        return NULL;
+    /* select AOS or LOS time depending on target elevation */
+    if (ctrl->target->el < 0.0)
+        targettime = ctrl->target->aos;
+    else
+        targettime = ctrl->target->los;
 
-    rot_ctrl = GTK_ROT_CTRL(g_object_new(GTK_TYPE_ROT_CTRL, NULL));
+    delta = targettime - t;
 
-    /* store satellites */
-    g_hash_table_foreach(module->satellites, store_sats, rot_ctrl);
+    /* convert julian date to seconds */
+    s = (guint) (delta * 86400);
 
-    rot_ctrl->target = SAT(g_slist_nth_data(rot_ctrl->sats, 0));
+    /* extract hours */
+    h = (guint) floor(s / 3600);
+    s -= 3600 * h;
 
-    /* store current time (don't know if real or simulated) */
-    rot_ctrl->t = module->tmgCdnum;
+    /* extract minutes */
+    m = (guint) floor(s / 60);
+    s -= 60 * m;
 
-    /* store QTH */
-    rot_ctrl->qth = module->qth;
+    if (h > 0)
+        buff = g_strdup_printf("%02d:%02d:%02d", h, m, s);
+    else
+        buff = g_strdup_printf("%02d:%02d", m, s);
 
-    /* get next pass for target satellite */
-    if (rot_ctrl->target)
-    {
-        if (rot_ctrl->target->el > 0.0)
-        {
-            rot_ctrl->pass = get_current_pass(rot_ctrl->target,
-                                              rot_ctrl->qth, 0.0);
-        }
-        else
-        {
-            rot_ctrl->pass = get_next_pass(rot_ctrl->target,
-                                           rot_ctrl->qth, 3.0);
-        }
-    }
+    gtk_label_set_text(GTK_LABEL(ctrl->SatCnt), buff);
 
-    /* create contents */
-    table = gtk_table_new(2, 2, TRUE);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 0);
-    gtk_table_attach(GTK_TABLE(table), create_az_widgets(rot_ctrl),
-                     0, 1, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-    gtk_table_attach(GTK_TABLE(table), create_el_widgets(rot_ctrl),
-                     1, 2, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-    gtk_table_attach(GTK_TABLE(table),
-                     create_target_widgets(rot_ctrl), 0, 1, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
-    gtk_table_attach(GTK_TABLE(table),
-                     create_conf_widgets(rot_ctrl), 1, 2, 1, 2,
-                     GTK_FILL, GTK_SHRINK, 0, 0);
-
-    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl),
-                       TRUE, TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(rot_ctrl), table, FALSE, FALSE, 5);
-    gtk_container_set_border_width(GTK_CONTAINER(rot_ctrl), 5);
-
-    rot_ctrl->timerid = g_timeout_add(rot_ctrl->delay,
-                                      rot_ctrl_timeout_cb, rot_ctrl);
-
-    if (module->target > 0)
-        gtk_rot_ctrl_select_sat(rot_ctrl, module->target);
-
-    return GTK_WIDGET(rot_ctrl);
+    g_free(buff);
 }
 
-/**
- * \brief Update rotator control state.
- * \param ctrl Pointer to the GtkRotCtrl.
+/*
+ * Update rotator control state.
  * 
  * This function is called by the parent, i.e. GtkSatModule, indicating that
  * the satellite data has been updated. The function updates the internal state
@@ -575,7 +612,7 @@ void gtk_rot_ctrl_update(GtkRotCtrl * ctrl, gdouble t)
     }
 }
 
-/** Select a satellite. */
+/* Select a satellite. */
 void gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum)
 {
     sat_t          *sat;
@@ -595,9 +632,8 @@ void gtk_rot_ctrl_select_sat(GtkRotCtrl * ctrl, gint catnum)
     }
 }
 
-/**
- * \brief Create azimuth control widgets.
- * \param ctrl Pointer to the GtkRotCtrl widget.
+/*
+ * Create azimuth control widgets.
  * 
  * This function creates and initialises the widgets for controlling the
  * azimuth of the the rotator.
@@ -610,31 +646,29 @@ static GtkWidget *create_az_widgets(GtkRotCtrl * ctrl)
 
     frame = gtk_frame_new(_("Azimuth"));
 
-    table = gtk_table_new(2, 2, FALSE);
+    table = gtk_grid_new();
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
     gtk_container_add(GTK_CONTAINER(frame), table);
 
     ctrl->AzSet = gtk_rot_knob_new(0.0, 360.0, 180.0);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->AzSet, 0, 2, 0, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->AzSet, 0, 0, 3, 1);
 
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("Read:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-                     GTK_SHRINK, GTK_SHRINK, 10, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     ctrl->AzRead = gtk_label_new(" --- ");
-    gtk_misc_set_alignment(GTK_MISC(ctrl->AzRead), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->AzRead, 1, 2, 1, 2);
+    g_object_set(ctrl->AzRead, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->AzRead, 1, 1, 1, 1);
 
     return frame;
 }
 
-/**
- * \brief Create elevation control widgets.
- * \param ctrl Pointer to the GtkRotCtrl widget.
+/*
+ * Create elevation control widgets.
  * 
  * This function creates and initialises the widgets for controlling the
  * elevation of the the rotator.
@@ -647,523 +681,50 @@ static GtkWidget *create_el_widgets(GtkRotCtrl * ctrl)
 
     frame = gtk_frame_new(_("Elevation"));
 
-    table = gtk_table_new(2, 2, FALSE);
+    table = gtk_grid_new();
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
     gtk_container_add(GTK_CONTAINER(frame), table);
 
     ctrl->ElSet = gtk_rot_knob_new(0.0, 90.0, 45.0);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->ElSet, 0, 2, 0, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->ElSet, 0, 0, 3, 1);
 
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("Read: "));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-                     GTK_SHRINK, GTK_SHRINK, 10, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     ctrl->ElRead = gtk_label_new(" --- ");
-    gtk_misc_set_alignment(GTK_MISC(ctrl->ElRead), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->ElRead, 1, 2, 1, 2);
+    g_object_set(ctrl->ElRead, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->ElRead, 1, 1, 1, 1);
 
     return frame;
 }
 
 /**
- * \brief Create target widgets.
- * \param ctrl Pointer to the GtkRotCtrl widget.
- */
-static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
-{
-    GtkWidget      *frame, *table, *label, *track;
-    gchar          *buff;
-    guint           i, n;
-    sat_t          *sat = NULL;
-
-    buff = g_strdup_printf(FMTSTR, 0.0);
-
-    table = gtk_table_new(4, 3, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-
-    /* sat selector */
-    ctrl->SatSel = gtk_combo_box_text_new();
-    n = g_slist_length(ctrl->sats);
-
-    for (i = 0; i < n; i++)
-    {
-        sat = SAT(g_slist_nth_data(ctrl->sats, i));
-        if (sat)
-            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
-                                           sat->nickname);
-    }
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
-    gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
-    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
-                     ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatSel, 0, 2, 0, 1);
-
-    /* tracking button */
-    ctrl->track = gtk_toggle_button_new_with_label(_("Track"));
-    gtk_widget_set_tooltip_text(ctrl->track,
-                                _
-                                ("Track the satellite when it is within range"));
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->track, 2, 3, 0, 1);
-    g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb),
-                     ctrl);
-
-    /* Azimuth */
-    label = gtk_label_new(_("Az:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
-
-    ctrl->AzSat = gtk_label_new(buff);
-    gtk_misc_set_alignment(GTK_MISC(ctrl->AzSat), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->AzSat, 1, 2, 1, 2);
-
-    /* Elevation */
-    label = gtk_label_new(_("El:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
-
-    ctrl->ElSat = gtk_label_new(buff);
-    gtk_misc_set_alignment(GTK_MISC(ctrl->ElSat), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->ElSat, 1, 2, 2, 3);
-
-    /* count down */
-    label = gtk_label_new(_("\316\224T:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
-    ctrl->SatCnt = gtk_label_new("00:00:00");
-    gtk_misc_set_alignment(GTK_MISC(ctrl->SatCnt), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->SatCnt, 1, 2, 3, 4);
-
-    frame = gtk_frame_new(_("Target"));
-    gtk_container_add(GTK_CONTAINER(frame), table);
-
-    g_free(buff);
-
-    return frame;
-}
-
-static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
-{
-    GtkWidget      *frame, *table, *label, *timer, *toler;
-    GDir           *dir = NULL; /* directory handle */
-    GError         *error = NULL;       /* error flag and info */
-    gchar          *dirname;    /* directory name */
-    gchar         **vbuff;
-    const gchar    *filename;   /* file name */
-    gchar          *rotname;
-
-    table = gtk_table_new(4, 3, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-
-    label = gtk_label_new(_("Device:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
-
-    ctrl->DevSel = gtk_combo_box_text_new();
-    gtk_widget_set_tooltip_text(ctrl->DevSel,
-                                _("Select antenna rotator device"));
-
-    /* open configuration directory */
-    dirname = get_hwconf_dir();
-
-    dir = g_dir_open(dirname, 0, &error);
-    if (dir)
-    {
-        /* read each .rot file */
-        GSList         *rots = NULL;
-        gint            i;
-        gint            n;
-
-        while ((filename = g_dir_read_name(dir)))
-        {
-            if (g_str_has_suffix(filename, ".rot"))
-            {
-                vbuff = g_strsplit(filename, ".rot", 0);
-                rots =
-                    g_slist_insert_sorted(rots, g_strdup(vbuff[0]),
-                                          (GCompareFunc) rot_name_compare);
-                g_strfreev(vbuff);
-            }
-        }
-        n = g_slist_length(rots);
-        for (i = 0; i < n; i++)
-        {
-            rotname = g_slist_nth_data(rots, i);
-            if (rotname)
-            {
-                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
-                                               (ctrl->DevSel), rotname);
-                g_free(rotname);
-            }
-        }
-        g_slist_free(rots);
-    }
-    else
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to open hwconf dir (%s)"),
-                    __FILE__, __LINE__, error->message);
-        g_clear_error(&error);
-    }
-
-    g_free(dirname);
-    g_dir_close(dir);
-
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->DevSel), 0);
-    g_signal_connect(ctrl->DevSel, "changed", G_CALLBACK(rot_selected_cb),
-                     ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->DevSel, 1, 2, 0, 1);
-
-    /* Engage button */
-    ctrl->LockBut = gtk_toggle_button_new_with_label(_("Engage"));
-    gtk_widget_set_tooltip_text(ctrl->LockBut,
-                                _("Engage the selected rotor device"));
-    g_signal_connect(ctrl->LockBut, "toggled", G_CALLBACK(rot_locked_cb),
-                     ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->LockBut, 2, 3, 0, 1);
-
-    /* Monitor checkbox */
-    ctrl->MonitorCheckBox = gtk_check_button_new_with_label(_("Monitor"));
-    gtk_widget_set_tooltip_text(ctrl->MonitorCheckBox,
-                                _
-                                ("Monitor rotator but do not send any position commands"));
-    g_signal_connect(ctrl->MonitorCheckBox, "toggled",
-                     G_CALLBACK(rot_monitor_cb), ctrl);
-    gtk_table_attach_defaults(GTK_TABLE(table), ctrl->MonitorCheckBox,
-                              1, 2, 1, 2);
-
-    /* Timeout */
-    label = gtk_label_new(_("Cycle:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
-
-    timer = gtk_spin_button_new_with_range(1000, 10000, 10);
-    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
-    gtk_widget_set_tooltip_text(timer,
-                                _("This parameter controls the delay between "
-                                  "commands sent to the rotator."));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(timer), ctrl->delay);
-    g_signal_connect(timer, "value-changed", G_CALLBACK(delay_changed_cb),
-                     ctrl);
-    gtk_table_attach(GTK_TABLE(table), timer, 1, 2, 2, 3, GTK_FILL, GTK_FILL,
-                     0, 0);
-
-    label = gtk_label_new(_("msec"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 2, 3);
-
-    /* Tolerance */
-    label = gtk_label_new(_("Tolerance:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
-
-    toler = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
-    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(toler), 2);
-    gtk_widget_set_tooltip_text(toler,
-                                _
-                                ("This parameter controls the tolerance between "
-                                 "the target and rotator values for the rotator.\n"
-                                 "If the difference between the target and rotator values "
-                                 "is smaller than the tolerance, no new commands are sent"));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->tolerance);
-    g_signal_connect(toler, "value-changed", G_CALLBACK(toler_changed_cb),
-                     ctrl);
-    gtk_table_attach(GTK_TABLE(table), toler, 1, 2, 3, 4, GTK_FILL, GTK_FILL,
-                     0, 0);
-
-    label = gtk_label_new(_("deg"));
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 2, 3, 3, 4);
-
-    /* load initial rotator configuration */
-    rot_selected_cb(GTK_COMBO_BOX(ctrl->DevSel), ctrl);
-
-    frame = gtk_frame_new(_("Settings"));
-    gtk_container_add(GTK_CONTAINER(frame), table);
-
-    return frame;
-}
-
-/**
- * \brief Create target widgets.
- * \param ctrl Pointer to the GtkRotCtrl widget.
- */
-static GtkWidget *create_plot_widget(GtkRotCtrl * ctrl)
-{
-    GtkWidget      *frame;
-
-    ctrl->plot = gtk_polar_plot_new(ctrl->qth, ctrl->pass);
-
-    frame = gtk_frame_new(NULL);
-    gtk_container_add(GTK_CONTAINER(frame), ctrl->plot);
-
-    return frame;
-}
-
-/** Copy satellite from hash table to singly linked list. */
-static void store_sats(gpointer key, gpointer value, gpointer user_data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(user_data);
-    sat_t          *sat = SAT(value);
-
-    (void)key;                  /* avoid unused variable warning */
-
-    ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
-                                       (GCompareFunc) sat_name_compare);
-}
-
-/**
- ' \brief Manage satellite selections
- * \param satsel Pointer to the GtkComboBox.
- * \param data Pointer to the GtkRotCtrl widget.
- * 
- * This function is called when the user selects a new satellite.
- */
-static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-    gint            i;
-
-    i = gtk_combo_box_get_active(satsel);
-    if (i >= 0)
-    {
-        ctrl->target = SAT(g_slist_nth_data(ctrl->sats, i));
-
-        /* update next pass */
-        if (ctrl->pass != NULL)
-            free_pass(ctrl->pass);
-
-        if (ctrl->target->el > 0.0)
-            ctrl->pass = get_current_pass(ctrl->target, ctrl->qth, ctrl->t);
-        else
-            ctrl->pass = get_pass(ctrl->target, ctrl->qth, ctrl->t, 3.0);
-
-        set_flipped_pass(ctrl);
-    }
-    else
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Invalid satellite selection: %d"),
-                    __FILE__, __func__, i);
-
-        /* clear pass just in case... */
-        if (ctrl->pass != NULL)
-        {
-            free_pass(ctrl->pass);
-            ctrl->pass = NULL;
-        }
-    }
-
-    /* in either case, we set the new pass (even if NULL) on the polar plot */
-    if (ctrl->plot != NULL)
-        gtk_polar_plot_set_pass(GTK_POLAR_PLOT(ctrl->plot), ctrl->pass);
-}
-
-/**
- * \brief Manage toggle signals (tracking)
+ * Manage toggle signals (tracking)
+ *
  * \param button Pointer to the GtkToggle button.
  * \param data Pointer to the GtkRotCtrl widget.
  */
 static void track_toggle_cb(GtkToggleButton * button, gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+    gboolean        locked;
 
+    locked = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ctrl->LockBut));
     ctrl->tracking = gtk_toggle_button_get_active(button);
     gtk_widget_set_sensitive(ctrl->MonitorCheckBox,
-                             !(ctrl->tracking ||
-                               gtk_toggle_button_get_active(ctrl->LockBut)));
+                             !(ctrl->tracking || locked));
     gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->tracking);
     gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->tracking);
 }
 
-/**
- * \brief Manage cycle delay changes.
- * \param spin Pointer to the spin button.
- * \param data Pointer to the GtkRotCtrl widget.
- * 
- * This function is called when the user changes the value of the
- * cycle delay.
- */
-static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-
-    ctrl->delay = (guint) gtk_spin_button_get_value(spin);
-
-    if (ctrl->timerid > 0)
-        g_source_remove(ctrl->timerid);
-
-    ctrl->timerid = g_timeout_add(ctrl->delay, rot_ctrl_timeout_cb, ctrl);
-}
 
 /**
- * \brief Manage tolerance changes.
- * \param spin Pointer to the spin button.
- * \param data Pointer to the GtkRotCtrl widget.
- * 
- * This function is called when the user changes the value of the
- * tolerance.
- */
-static void toler_changed_cb(GtkSpinButton * spin, gpointer data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-
-    ctrl->tolerance = gtk_spin_button_get_value(spin);
-}
-
-/**
- * \brief New rotor device selected.
- * \param box Pointer to the rotor selector combo box.
- * \param data Pointer to the GtkRotCtrl widget.
- * 
- * This function is called when the user selects a new rotor controller
- * device.
- */
-static void rot_selected_cb(GtkComboBox * box, gpointer data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-
-    /* free previous configuration */
-    if (ctrl->conf != NULL)
-    {
-        g_free(ctrl->conf->name);
-        g_free(ctrl->conf->host);
-        g_free(ctrl->conf);
-    }
-
-    ctrl->conf = g_try_new(rotor_conf_t, 1);
-    if (ctrl->conf == NULL)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to allocate memory for rotator config"),
-                    __FILE__, __LINE__);
-        return;
-    }
-
-    /* load new configuration */
-    ctrl->conf->name =
-        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
-    if (rotor_conf_read(ctrl->conf))
-    {
-        sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("Loaded new rotator configuration %s"),
-                    ctrl->conf->name);
-
-        /* update new ranges of the Az and El controller widgets */
-        gtk_rot_knob_set_range(GTK_ROT_KNOB(ctrl->AzSet), ctrl->conf->minaz,
-                               ctrl->conf->maxaz);
-        gtk_rot_knob_set_range(GTK_ROT_KNOB(ctrl->ElSet), ctrl->conf->minel,
-                               ctrl->conf->maxel);
-
-        /* Update flipped when changing rotor if there is a plot */
-        set_flipped_pass(ctrl);
-    }
-    else
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to load rotator configuration %s"),
-                    __FILE__, __LINE__, ctrl->conf->name);
-
-        g_free(ctrl->conf->name);
-        if (ctrl->conf->host)
-            g_free(ctrl->conf->host);
-        g_free(ctrl->conf);
-        ctrl->conf = NULL;
-    }
-}
-
-/**
- * Monitor mode
- * Inhibits command transmission
- */
-static void rot_monitor_cb(GtkCheckButton * button, gpointer data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-
-    ctrl->monitor = gtk_toggle_button_get_active(button);
-    gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->monitor);
-    gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->monitor);
-    gtk_widget_set_sensitive(ctrl->track, !ctrl->monitor);
-}
-
-/**
- * \brief Rotor locked.
- * \param button Pointer to the "Engage" button.
- * \param data Pointer to the GtkRotCtrl widget.
- * 
- * This function is called when the user toggles the "Engage" button.
- */
-static void rot_locked_cb(GtkToggleButton * button, gpointer data)
-{
-    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
-    gint            retval;
-
-    if (!gtk_toggle_button_get_active(button))
-    {
-        ctrl->engaged = FALSE;
-        gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
-        gtk_label_set_text(GTK_LABEL(ctrl->AzRead), "---");
-        gtk_label_set_text(GTK_LABEL(ctrl->ElRead), "---");
-
-        if (!ctrl->client.running)
-            /* client thread is not running; nothing to do */
-            return;
-
-        /* stop moving rotor */
-        /** FIXME: should use high level func */
-        buff = g_strdup_printf("S\x0a");
-        retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
-        g_free(buff);
-        if (retcode == TRUE)
-        {
-            /* treat errors as soft errors */
-            retval = (gint) g_strtod(buffback + 4, NULL);
-            if (retval != 0)
-            {
-                g_strstrip(buffback);
-                sat_log_log(SAT_LOG_LEVEL_ERROR,
-                            _
-                            ("%s:%d: rotctld returned error %d with stop-cmd (%s)"),
-                            __FILE__, __LINE__, retval, buffback);
-            }
-        }
-
-        ctrl->client.running = FALSE;
-        g_thread_join(ctrl->client.thread);
-    }
-    else
-    {
-        if (ctrl->conf == NULL)
-        {
-            /* we don't have a working configuration */
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _
-                        ("%s: Controller does not have a valid configuration"),
-                        __func__);
-            return;
-        }
-
-        ctrl->client.thread =
-            g_thread_new("gpredict_rotctl", rotctld_client_thread, ctrl);
-
-        gtk_widget_set_sensitive(ctrl->DevSel, FALSE);
-        ctrl->engaged = TRUE;
-    }
-}
-
-
-/**
- * \brief Rotator controller timeout function
+ * Rotator controller timeout function
+ *
  * \param data Pointer to the GtkRotCtrl widget.
  * \return Always TRUE to let the timer continue.
  */
@@ -1450,148 +1011,478 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
 }
 
 /**
- * \brief Read rotator position from device.
- * \param ctrl Pointer to the GtkRotCtrl widget.
- * \param az The current Az as read from the device
- * \param el The current El as read from the device
- * \return TRUE if the position was successfully retrieved, FALSE if an
- *         error occurred.
+ * Manage cycle delay changes.
+ *
+ * \param spin Pointer to the spin button.
+ * \param data Pointer to the GtkRotCtrl widget.
+ * 
+ * This function is called when the user changes the value of the
+ * cycle delay.
  */
-static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
+static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 {
-    gchar          *buff, **vbuff;
-    gchar           buffback[128];
-    gboolean        retcode;
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
-    if ((az == NULL) || (el == NULL))
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: NULL storage."), __FILE__, __LINE__);
-        return FALSE;
-    }
+    ctrl->delay = (guint) gtk_spin_button_get_value(spin);
 
-    /* send command */
-    buff = g_strdup_printf("p\x0a");
-    retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
+    if (ctrl->timerid > 0)
+        g_source_remove(ctrl->timerid);
 
-    /* try to parse answer */
-    if (retcode)
-    {
-        if (strncmp(buffback, "RPRT", 4) == 0)
-        {
-            g_strstrip(buffback);
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%d: rotctld returned error (%s)"),
-                        __FILE__, __LINE__, buffback);
-        }
-        else
-        {
-            vbuff = g_strsplit(buffback, "\n", 3);
-            if ((vbuff[0] != NULL) && (vbuff[1] != NULL))
-            {
-                *az = g_strtod(vbuff[0], NULL);
-                *el = g_strtod(vbuff[1], NULL);
-            }
-            else
-            {
-                g_strstrip(buffback);
-                sat_log_log(SAT_LOG_LEVEL_ERROR,
-                            _("%s:%d: rotctld returned bad response (%s)"),
-                            __FILE__, __LINE__, buffback);
-            }
-
-            g_strfreev(vbuff);
-        }
-    }
-
-    g_free(buff);
-
-    return retcode;
+    ctrl->timerid = g_timeout_add(ctrl->delay, rot_ctrl_timeout_cb, ctrl);
 }
 
 /**
- * \brief Send new position to rotator device
- * \param ctrl Pointer to the GtkRotCtrl widget
- * \param az The new Azimuth
- * \param el The new Elevation
- * \return TRUE if the new position has been sent successfully
- *         FALSE if an error occurred
+ * Manage tolerance changes.
+ *
+ * \param spin Pointer to the spin button.
+ * \param data Pointer to the GtkRotCtrl widget.
  * 
- * \note The function does not perform any range check since the GtkRotKnob
- * should always keep its value within range.
+ * This function is called when the user changes the value of the
+ * tolerance.
  */
-static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
+static void toler_changed_cb(GtkSpinButton * spin, gpointer data)
 {
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+    ctrl->tolerance = gtk_spin_button_get_value(spin);
+}
+
+/**
+ * New rotor device selected.
+ *
+ * \param box Pointer to the rotor selector combo box.
+ * \param data Pointer to the GtkRotCtrl widget.
+ * 
+ * This function is called when the user selects a new rotor controller
+ * device.
+ */
+static void rot_selected_cb(GtkComboBox * box, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+    /* free previous configuration */
+    if (ctrl->conf != NULL)
+    {
+        g_free(ctrl->conf->name);
+        g_free(ctrl->conf->host);
+        g_free(ctrl->conf);
+    }
+
+    ctrl->conf = g_try_new(rotor_conf_t, 1);
+    if (ctrl->conf == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to allocate memory for rotator config"),
+                    __FILE__, __LINE__);
+        return;
+    }
+
+    /* load new configuration */
+    ctrl->conf->name =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(box));
+    if (rotor_conf_read(ctrl->conf))
+    {
+        sat_log_log(SAT_LOG_LEVEL_INFO,
+                    _("Loaded new rotator configuration %s"),
+                    ctrl->conf->name);
+
+        /* update new ranges of the Az and El controller widgets */
+        gtk_rot_knob_set_range(GTK_ROT_KNOB(ctrl->AzSet), ctrl->conf->minaz,
+                               ctrl->conf->maxaz);
+        gtk_rot_knob_set_range(GTK_ROT_KNOB(ctrl->ElSet), ctrl->conf->minel,
+                               ctrl->conf->maxel);
+
+        /* Update flipped when changing rotor if there is a plot */
+        set_flipped_pass(ctrl);
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to load rotator configuration %s"),
+                    __FILE__, __LINE__, ctrl->conf->name);
+
+        g_free(ctrl->conf->name);
+        if (ctrl->conf->host)
+            g_free(ctrl->conf->host);
+        g_free(ctrl->conf);
+        ctrl->conf = NULL;
+    }
+}
+
+/**
+ * Monitor mode
+ *
+ * Inhibits command transmission
+ */
+static void rot_monitor_cb(GtkCheckButton * button, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+    ctrl->monitor = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
+    gtk_widget_set_sensitive(ctrl->AzSet, !ctrl->monitor);
+    gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->monitor);
+    gtk_widget_set_sensitive(ctrl->track, !ctrl->monitor);
+}
+
+/**
+ * Rotor locked.
+ *
+ * \param button Pointer to the "Engage" button.
+ * \param data Pointer to the GtkRotCtrl widget.
+ * 
+ * This function is called when the user toggles the "Engage" button.
+ */
+static void rot_locked_cb(GtkToggleButton * button, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
     gchar          *buff;
     gchar           buffback[128];
     gboolean        retcode;
     gint            retval;
 
-    /* send command */
-    buff = g_strdup_printf("P %.2f %.2f\x0a", az, el);
-    retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
-    g_free(buff);
-
-    if (retcode == TRUE)
+    if (!gtk_toggle_button_get_active(button))
     {
-        /* treat errors as soft errors */
-        retval = (gint) g_strtod(buffback + 4, NULL);
-        if (retval != 0)
+        ctrl->engaged = FALSE;
+        gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
+        gtk_label_set_text(GTK_LABEL(ctrl->AzRead), "---");
+        gtk_label_set_text(GTK_LABEL(ctrl->ElRead), "---");
+
+        if (!ctrl->client.running)
+            /* client thread is not running; nothing to do */
+            return;
+
+        /* stop moving rotor */
+        /** FIXME: should use high level func */
+        buff = g_strdup_printf("S\x0a");
+        retcode = rotctld_socket_rw(ctrl->client.socket, buff, buffback, 128);
+        g_free(buff);
+        if (retcode == TRUE)
         {
-            g_strstrip(buffback);
+            /* treat errors as soft errors */
+            retval = (gint) g_strtod(buffback + 4, NULL);
+            if (retval != 0)
+            {
+                g_strstrip(buffback);
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _
+                            ("%s:%d: rotctld returned error %d with stop-cmd (%s)"),
+                            __FILE__, __LINE__, retval, buffback);
+            }
+        }
+
+        ctrl->client.running = FALSE;
+        g_thread_join(ctrl->client.thread);
+    }
+    else
+    {
+        if (ctrl->conf == NULL)
+        {
+            /* we don't have a working configuration */
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _
-                        ("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
-                        __FILE__, __LINE__, retval, az, el, buffback);
+                        ("%s: Controller does not have a valid configuration"),
+                        __func__);
+            return;
+        }
+
+        ctrl->client.thread =
+            g_thread_new("gpredict_rotctl", rotctld_client_thread, ctrl);
+
+        gtk_widget_set_sensitive(ctrl->DevSel, FALSE);
+        ctrl->engaged = TRUE;
+    }
+}
+
+
+/**
+ * Manage satellite selections
+ *
+ * \param satsel Pointer to the GtkComboBox.
+ * \param data Pointer to the GtkRotCtrl widget.
+ * 
+ * This function is called when the user selects a new satellite.
+ */
+static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+    gint            i;
+
+    i = gtk_combo_box_get_active(satsel);
+    if (i >= 0)
+    {
+        ctrl->target = SAT(g_slist_nth_data(ctrl->sats, i));
+
+        /* update next pass */
+        if (ctrl->pass != NULL)
+            free_pass(ctrl->pass);
+
+        if (ctrl->target->el > 0.0)
+            ctrl->pass = get_current_pass(ctrl->target, ctrl->qth, ctrl->t);
+        else
+            ctrl->pass = get_pass(ctrl->target, ctrl->qth, ctrl->t, 3.0);
+
+        set_flipped_pass(ctrl);
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Invalid satellite selection: %d"),
+                    __FILE__, __func__, i);
+
+        /* clear pass just in case... */
+        if (ctrl->pass != NULL)
+        {
+            free_pass(ctrl->pass);
+            ctrl->pass = NULL;
         }
     }
 
-    return (retcode);
+    /* in either case, we set the new pass (even if NULL) on the polar plot */
+    if (ctrl->plot != NULL)
+        gtk_polar_plot_set_pass(GTK_POLAR_PLOT(ctrl->plot), ctrl->pass);
 }
 
-/**
- * \brief Update count down label.
- * \param[in] ctrl Pointer to the RotCtrl widget.
- * \param[in] t The current time.
- * 
- * This function calculates the new time to AOS/LOS of the currently
- * selected target and updates the ctrl->SatCnt label widget.
- */
-static void update_count_down(GtkRotCtrl * ctrl, gdouble t)
+/* Create target widgets */
+static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
 {
-    gdouble         targettime;
-    gdouble         delta;
+    GtkWidget      *frame, *table, *label;
     gchar          *buff;
-    guint           h, m, s;
+    guint           i, n;
+    sat_t          *sat = NULL;
 
-    /* select AOS or LOS time depending on target elevation */
-    if (ctrl->target->el < 0.0)
-        targettime = ctrl->target->aos;
-    else
-        targettime = ctrl->target->los;
+    buff = g_strdup_printf(FMTSTR, 0.0);
 
-    delta = targettime - t;
+    table = gtk_grid_new();
+    gtk_container_set_border_width(GTK_CONTAINER(table), 5);
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
 
-    /* convert julian date to seconds */
-    s = (guint) (delta * 86400);
+    /* sat selector */
+    ctrl->SatSel = gtk_combo_box_text_new();
+    n = g_slist_length(ctrl->sats);
 
-    /* extract hours */
-    h = (guint) floor(s / 3600);
-    s -= 3600 * h;
+    for (i = 0; i < n; i++)
+    {
+        sat = SAT(g_slist_nth_data(ctrl->sats, i));
+        if (sat)
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                           sat->nickname);
+    }
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
+    gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
+                     ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 0, 2, 1);
 
-    /* extract minutes */
-    m = (guint) floor(s / 60);
-    s -= 60 * m;
+    /* tracking button */
+    ctrl->track = gtk_toggle_button_new_with_label(_("Track"));
+    gtk_widget_set_tooltip_text(ctrl->track,
+                                _
+                                ("Track the satellite when it is within range"));
+    gtk_grid_attach(GTK_GRID(table), ctrl->track, 2, 0, 1, 1);
+    g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb),
+                     ctrl);
 
-    if (h > 0)
-        buff = g_strdup_printf("%02d:%02d:%02d", h, m, s);
-    else
-        buff = g_strdup_printf("%02d:%02d", m, s);
+    /* Azimuth */
+    label = gtk_label_new(_("Az:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
-    gtk_label_set_text(GTK_LABEL(ctrl->SatCnt), buff);
+    ctrl->AzSat = gtk_label_new(buff);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->AzSat, 1, 1, 1, 1);
+
+    /* Elevation */
+    label = gtk_label_new(_("El:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
+
+    ctrl->ElSat = gtk_label_new(buff);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->ElSat, 1, 2, 1, 1);
+
+    /* count down */
+    label = gtk_label_new(_("\316\224T:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
+    ctrl->SatCnt = gtk_label_new("00:00:00");
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatCnt, 1, 3, 1, 1);
+
+    frame = gtk_frame_new(_("Target"));
+    gtk_container_add(GTK_CONTAINER(frame), table);
 
     g_free(buff);
 
+    return frame;
+}
+
+static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
+{
+    GtkWidget      *frame, *table, *label, *timer, *toler;
+    GDir           *dir = NULL; /* directory handle */
+    GError         *error = NULL;       /* error flag and info */
+    gchar          *dirname;    /* directory name */
+    gchar         **vbuff;
+    const gchar    *filename;   /* file name */
+    gchar          *rotname;
+
+    table = gtk_grid_new();
+    gtk_container_set_border_width(GTK_CONTAINER(table), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
+
+    label = gtk_label_new(_("Device:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
+
+    ctrl->DevSel = gtk_combo_box_text_new();
+    gtk_widget_set_tooltip_text(ctrl->DevSel,
+                                _("Select antenna rotator device"));
+
+    /* open configuration directory */
+    dirname = get_hwconf_dir();
+
+    dir = g_dir_open(dirname, 0, &error);
+    if (dir)
+    {
+        /* read each .rot file */
+        GSList         *rots = NULL;
+        gint            i;
+        gint            n;
+
+        while ((filename = g_dir_read_name(dir)))
+        {
+            if (g_str_has_suffix(filename, ".rot"))
+            {
+                vbuff = g_strsplit(filename, ".rot", 0);
+                rots =
+                    g_slist_insert_sorted(rots, g_strdup(vbuff[0]),
+                                          (GCompareFunc) rot_name_compare);
+                g_strfreev(vbuff);
+            }
+        }
+        n = g_slist_length(rots);
+        for (i = 0; i < n; i++)
+        {
+            rotname = g_slist_nth_data(rots, i);
+            if (rotname)
+            {
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
+                                               (ctrl->DevSel), rotname);
+                g_free(rotname);
+            }
+        }
+        g_slist_free(rots);
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to open hwconf dir (%s)"),
+                    __FILE__, __LINE__, error->message);
+        g_clear_error(&error);
+    }
+
+    g_free(dirname);
+    g_dir_close(dir);
+
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->DevSel), 0);
+    g_signal_connect(ctrl->DevSel, "changed", G_CALLBACK(rot_selected_cb),
+                     ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->DevSel, 1, 0, 1, 1);
+
+    /* Engage button */
+    ctrl->LockBut = gtk_toggle_button_new_with_label(_("Engage"));
+    gtk_widget_set_tooltip_text(ctrl->LockBut,
+                                _("Engage the selected rotor device"));
+    g_signal_connect(ctrl->LockBut, "toggled", G_CALLBACK(rot_locked_cb),
+                     ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->LockBut, 2, 0, 1, 1);
+
+    /* Monitor checkbox */
+    ctrl->MonitorCheckBox = gtk_check_button_new_with_label(_("Monitor"));
+    gtk_widget_set_tooltip_text(ctrl->MonitorCheckBox,
+                                _("Monitor rotator but do not send any "
+                                  "position commands"));
+    g_signal_connect(ctrl->MonitorCheckBox, "toggled",
+                     G_CALLBACK(rot_monitor_cb), ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->MonitorCheckBox, 1, 1, 1, 1);
+
+    /* Timeout */
+    label = gtk_label_new(_("Cycle:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
+
+    timer = gtk_spin_button_new_with_range(1000, 10000, 10);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
+    gtk_widget_set_tooltip_text(timer,
+                                _("This parameter controls the delay between "
+                                  "commands sent to the rotator."));
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(timer), ctrl->delay);
+    g_signal_connect(timer, "value-changed", G_CALLBACK(delay_changed_cb),
+                     ctrl);
+    gtk_grid_attach(GTK_GRID(table), timer, 1, 2, 1, 1);
+
+    label = gtk_label_new(_("msec"));
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 2, 1, 1);
+
+    /* Tolerance */
+    label = gtk_label_new(_("Tolerance:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
+
+    toler = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(toler), 2);
+    gtk_widget_set_tooltip_text(toler,
+                                _("This parameter controls the tolerance "
+                                  "between the target and rotator values for "
+                                  "the rotator.\n"
+                                  "If the difference between the target and "
+                                  "rotator values is smaller than the "
+                                  "tolerance, no new commands are sent"));
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->tolerance);
+    g_signal_connect(toler, "value-changed", G_CALLBACK(toler_changed_cb),
+                     ctrl);
+    gtk_grid_attach(GTK_GRID(table), toler, 1, 3, 1, 1);
+
+    label = gtk_label_new(_("deg"));
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 3, 1, 1);
+
+    /* load initial rotator configuration */
+    rot_selected_cb(GTK_COMBO_BOX(ctrl->DevSel), ctrl);
+
+    frame = gtk_frame_new(_("Settings"));
+    gtk_container_add(GTK_CONTAINER(frame), table);
+
+    return frame;
+}
+
+/* Create target widgets */
+static GtkWidget *create_plot_widget(GtkRotCtrl * ctrl)
+{
+    GtkWidget      *frame;
+
+    ctrl->plot = gtk_polar_plot_new(ctrl->qth, ctrl->pass);
+
+    frame = gtk_frame_new(NULL);
+    gtk_container_add(GTK_CONTAINER(frame), ctrl->plot);
+
+    return frame;
+}
+
+/** Copy satellite from hash table to singly linked list. */
+static void store_sats(gpointer key, gpointer value, gpointer user_data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(user_data);
+    sat_t          *sat = SAT(value);
+
+    (void)key;                  /* avoid unused variable warning */
+
+    ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
+                                       (GCompareFunc) sat_name_compare);
 }
 
 /** Check that we have at least one .rot file */
@@ -1634,104 +1525,152 @@ static gboolean have_conf()
     return (i > 0) ? TRUE : FALSE;
 }
 
-/**
- * \brief Compare Satellite Names.
- *
- * Simple function to sort the list of satellites in the combo box.
- */
-static gint sat_name_compare(sat_t * a, sat_t * b)
+static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
 {
-    return (gpredict_strcmp(a->nickname, b->nickname));
+    ctrl->sats = NULL;
+    ctrl->target = NULL;
+    ctrl->pass = NULL;
+    ctrl->qth = NULL;
+    ctrl->plot = NULL;
+
+    ctrl->tracking = FALSE;
+    ctrl->engaged = FALSE;
+    ctrl->delay = 1000;
+    ctrl->timerid = 0;
+    ctrl->tolerance = 5.0;
+    ctrl->errcnt = 0;
+
+    g_mutex_init(&ctrl->client.mutex);
+    ctrl->client.thread = NULL;
+    ctrl->client.socket = -1;
+    ctrl->client.running = FALSE;
 }
 
-/**
- * \brief  Compare Rotator Names.
- */
-static gint rot_name_compare(const gchar * a, const gchar * b)
+static void gtk_rot_ctrl_destroy(GtkWidget * widget)
 {
-    return (gpredict_strcmp(a, b));
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(widget);
+
+    /* stop timer */
+    if (ctrl->timerid > 0)
+        g_source_remove(ctrl->timerid);
+
+    /* free configuration */
+    if (ctrl->conf != NULL)
+    {
+        g_free(ctrl->conf->name);
+        g_free(ctrl->conf->host);
+        g_free(ctrl->conf);
+        ctrl->conf = NULL;
+    }
+
+    /* stop client thread */
+    if (ctrl->client.running)
+    {
+        ctrl->client.running = FALSE;
+        g_thread_join(ctrl->client.thread);
+    }
+
+    g_mutex_clear(&ctrl->client.mutex);
+
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-/**
- * \brief  Compute if a pass is flipped or not.
- *
- * This is a function of the rotator and the particular pass. 
- */
-static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
-                                gdouble azstoppos)
+static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
 {
-    gdouble         max_az = 0, min_az = 0, offset = 0;
-    gdouble         caz, last_az = pass->aos_az;
-    guint           num, i;
-    pass_detail_t  *detail;
-    gboolean        retval = FALSE;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
 
-    num = g_slist_length(pass->details);
-    if (type == ROT_AZ_TYPE_360)
+    widget_class->destroy = gtk_rot_ctrl_destroy;
+    parent_class = g_type_class_peek_parent(class);
+}
+
+GType gtk_rot_ctrl_get_type()
+{
+    static GType    gtk_rot_ctrl_type = 0;
+
+    if (!gtk_rot_ctrl_type)
     {
-        min_az = 0;
-        max_az = 360;
+        static const GTypeInfo gtk_rot_ctrl_info = {
+            sizeof(GtkRotCtrlClass),
+            NULL,               /* base_init */
+            NULL,               /* base_finalize */
+            (GClassInitFunc) gtk_rot_ctrl_class_init,
+            NULL,               /* class_finalize */
+            NULL,               /* class_data */
+            sizeof(GtkRotCtrl),
+            5,                  /* n_preallocs */
+            (GInstanceInitFunc) gtk_rot_ctrl_init,
+            NULL
+        };
+
+        gtk_rot_ctrl_type = g_type_register_static(GTK_TYPE_BOX,
+                                                   "GtkRotCtrl",
+                                                   &gtk_rot_ctrl_info, 0);
     }
-    else if (type == ROT_AZ_TYPE_180)
+
+    return gtk_rot_ctrl_type;
+}
+
+GtkWidget      *gtk_rot_ctrl_new(GtkSatModule * module)
+{
+    GtkRotCtrl     *rot_ctrl;
+    GtkWidget      *table;
+
+    /* check that we have rot conf */
+    if (!have_conf())
+        return NULL;
+
+    rot_ctrl = GTK_ROT_CTRL(g_object_new(GTK_TYPE_ROT_CTRL, NULL));
+
+    /* store satellites */
+    g_hash_table_foreach(module->satellites, store_sats, rot_ctrl);
+
+    rot_ctrl->target = SAT(g_slist_nth_data(rot_ctrl->sats, 0));
+
+    /* store current time (don't know if real or simulated) */
+    rot_ctrl->t = module->tmgCdnum;
+
+    /* store QTH */
+    rot_ctrl->qth = module->qth;
+
+    /* get next pass for target satellite */
+    if (rot_ctrl->target)
     {
-        min_az = -180;
-        max_az = 180;
-    }
-
-    /* Offset by (azstoppos-min_az) to handle
-     * rotators with non-default positions.
-     * Note that the default positions of the rotator stops
-     * (eg. -180 for ROT_AZ_TYPE_180, and 0 for 
-     * ROT_AZ_TYPE_360) will create an offset of 0, which
-     * seems like a pretty sane default. */
-    offset = azstoppos - min_az;
-    min_az += offset;
-    max_az += offset;
-
-    /* Assume that min_az and max_az are atleat 360 degrees apart
-       get the azimuth that is in a settable range */
-    while (last_az > max_az)
-        last_az -= 360;
-
-    while (last_az < min_az)
-        last_az += 360;
-
-    if (num > 1)
-    {
-        for (i = 1; i < num - 1; i++)
+        if (rot_ctrl->target->el > 0.0)
         {
-            detail = PASS_DETAIL(g_slist_nth_data(pass->details, i));
-            caz = detail->az;
-
-            while (caz > max_az)
-                caz -= 360;
-
-            while (caz < min_az)
-                caz += 360;
-
-
-            if (fabs(caz - last_az) > 180)
-                retval = TRUE;
-
-            last_az = caz;
+            rot_ctrl->pass = get_current_pass(rot_ctrl->target,
+                                              rot_ctrl->qth, 0.0);
+        }
+        else
+        {
+            rot_ctrl->pass = get_next_pass(rot_ctrl->target,
+                                           rot_ctrl->qth, 3.0);
         }
     }
-    caz = pass->los_az;
-    while (caz > max_az)
-        caz -= 360;
 
-    while (caz < min_az)
-        caz += 360;
+    /* create contents */
+    table = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
+    gtk_container_set_border_width(GTK_CONTAINER(table), 0);
+    gtk_grid_attach(GTK_GRID(table), create_az_widgets(rot_ctrl), 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), create_el_widgets(rot_ctrl), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), create_target_widgets(rot_ctrl),
+                    0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), create_conf_widgets(rot_ctrl),
+                    1, 1, 1, 1);
 
-    if (fabs(caz - last_az) > 180)
-        retval = TRUE;
+    gtk_box_pack_start(GTK_BOX(rot_ctrl), create_plot_widget(rot_ctrl),
+                       TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(rot_ctrl), table, FALSE, FALSE, 5);
+    gtk_container_set_border_width(GTK_CONTAINER(rot_ctrl), 5);
 
-    return retval;
-}
+    rot_ctrl->timerid = g_timeout_add(rot_ctrl->delay,
+                                      rot_ctrl_timeout_cb, rot_ctrl);
 
-static inline void set_flipped_pass(GtkRotCtrl * ctrl)
-{
-    if (ctrl->conf && ctrl->pass)
-        ctrl->flipped = is_flipped_pass(ctrl->pass, ctrl->conf->aztype,
-                                        ctrl->conf->azstoppos);
+    if (module->target > 0)
+        gtk_rot_ctrl_select_sat(rot_ctrl, module->target);
+
+    return GTK_WIDGET(rot_ctrl);
 }
