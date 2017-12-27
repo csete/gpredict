@@ -2615,6 +2615,8 @@ static void reset_ground_track(gpointer key, gpointer value,
                                gpointer user_data)
 {
     sat_map_obj_t  *obj = (sat_map_obj_t *) value;
+    (void) key;
+    (void) user_data;
 
     obj->track_orbit = 0;
 }
