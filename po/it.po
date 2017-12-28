@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 14:28+0100\n"
+"POT-Creation-Date: 2017-12-28 21:40+0100\n"
 "PO-Revision-Date: 2017-12-04 01:48+0000\n"
 "Last-Translator: AA1VS <hamaa1vs@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -18,10 +18,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
 "X-Generator: Launchpad (build 18511)\n"
 
-#. window title
-#. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:93 ../src/main.c:247
+#: ../src/about.c:93 ../src/main.c:223
 msgid "Gpredict"
 msgstr ""
 
@@ -337,24 +335,24 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:393
+#: ../src/gtk-polar-plot.c:392
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
+#: ../src/gtk-polar-plot.c:462 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr "N"
 
-#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
+#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr "S"
 
-#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
+#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr "E"
 
-#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
+#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr "O"
 
@@ -2219,56 +2217,56 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:76
+#: ../src/main.c:60
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:126
+#: ../src/main.c:108
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
 "Gpredict does not require any command line options for nominal operation."
 msgstr ""
 
-#: ../src/main.c:132
+#: ../src/main.c:114
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:156
+#: ../src/main.c:131
 #, c-format
 msgid ""
-"%s: User config check failed (code %d). This is fatal.\n"
-"A possible solution would be to remove the .config/Gpredict data dir\n"
-"in your home directory"
+"User config check failed (code %d). This is fatal.\n"
+"A possible solution would be to remove the .config/Gpredict data dir in your "
+"home directory"
 msgstr ""
 
-#: ../src/main.c:455
+#: ../src/main.c:418
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:499
+#: ../src/main.c:461
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:508
+#: ../src/main.c:470
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:511
+#: ../src/main.c:473
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:516
+#: ../src/main.c:478
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:528
+#: ../src/main.c:490
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2280,27 +2278,27 @@ msgstr ""
 "<b>Modifica -> Aggiorna TLE</b>\n"
 "nella barra dei menu."
 
-#: ../src/main.c:558
+#: ../src/main.c:519
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:604
+#: ../src/main.c:561
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:617 ../src/main.c:664
+#: ../src/main.c:573 ../src/main.c:617
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:622 ../src/main.c:669
+#: ../src/main.c:578 ../src/main.c:622
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:650
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
