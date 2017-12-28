@@ -2563,7 +2563,7 @@ msgstr "Modul _öffnen"
 
 #: ../src/menubar.c:866
 #, fuzzy
-msgid "_Log browaer"
+msgid "_Log browser"
 msgstr "_Log-Browser"
 
 #: ../src/menubar.c:876

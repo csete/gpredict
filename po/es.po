@@ -2549,7 +2549,7 @@ msgstr "Abrir Módulo"
 
 #: ../src/menubar.c:866
 #, fuzzy
-msgid "_Log browaer"
+msgid "_Log browser"
 msgstr "Visor de Logs"
 
 #: ../src/menubar.c:876

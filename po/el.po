@@ -2465,7 +2465,7 @@ msgstr ""
 
 #: ../src/menubar.c:866
 #, fuzzy
-msgid "_Log browaer"
+msgid "_Log browser"
 msgstr "_Καταγραφή"
 
 #: ../src/menubar.c:876

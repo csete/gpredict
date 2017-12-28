@@ -863,7 +863,7 @@ static void create_file_menu_items(GtkMenuShell * menu,
     menu_item = gtk_separator_menu_item_new();
     gtk_menu_shell_append(menu, menu_item);
 
-    menu_item = gtk_menu_item_new_with_mnemonic(_("_Log browaer"));
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_Log browser"));
     g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_message_log),
                      NULL);
     gtk_widget_add_accelerator(menu_item, "activate", accel_group, GDK_KEY_l,
