@@ -8,6 +8,10 @@
 #define KM_TO_MI(x) (x/1.609344)
 #define MI_TO_KM(x) (1.609344*x)
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846264338327
+#endif
+
 
 GtkWidget      *gpredict_hpixmap_button(const gchar * file,
                                         const gchar * text,

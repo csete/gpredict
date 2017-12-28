@@ -22,7 +22,7 @@ AM_PROG_LIBTOOL
 AC_CHECK_HEADERS([sys/time.h unistd.h getopt.h])
 
 if test "${ac_cv_c_compiler_gnu}" = "yes"; then
-  CFLAGS="${CFLAGS} -Wall -Wextra"
+  CFLAGS="${CFLAGS} -Wall -Wextra -std=c11 -pedantic"
 fi
 
 # check for libm
