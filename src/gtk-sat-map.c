@@ -1239,13 +1239,8 @@ static guint calculate_footprint(GtkSatMap * satmap, sat_t * sat)
 
         if (azi == 0 && north_pole_is_covered(sat))
             rangelon = ssplon + pi;
-
-        else if (azi == 180 && south_pole_is_covered(sat))
-            rangelon = ssplon + pi;
-
         else if (fabs(num / dem) > 1.0)
             rangelon = ssplon;
-
         else
         {
             if ((180.0 - azi) >= 0)
