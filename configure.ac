@@ -4,7 +4,7 @@ AC_INIT([gpredict],
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(build-config.h)
-AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.6])
+AM_INIT_AUTOMAKE([subdir-objects dist-bzip2 no-dist-gzip 1.6])
 
 # ensure Makefiles are updated when Makefile.am is modified
 AM_MAINTAINER_MODE([enable])
@@ -132,7 +132,7 @@ echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
-echo Libcurl version..... : $CURL_V
+echo Libcurl version.... : $CURL_V
 if test "$havelibgps" = true ; then
    echo Libgps version..... : $GPS_V
 fi

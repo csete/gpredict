@@ -1,17 +1,9 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+  Copyright (C)       2011  Charles Suprin, AA1 VS
 
-  Authors: Alexandru Csete
-           Charles Suprin
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
- 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -1598,6 +1590,8 @@ void gtk_polar_view_delete_track(GtkPolarView * pv, sat_obj_t * obj,
 {
     gint            idx, i;
     GooCanvasItemModel *root;
+
+    (void)sat;
 
     root = goo_canvas_get_root_item_model(GOO_CANVAS(pv->canvas));
     idx = goo_canvas_item_model_find_child(root, obj->track);

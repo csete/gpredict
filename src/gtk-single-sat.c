@@ -1,16 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Charles Suprin <hamaa1vs@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+                      2011  Charles Suprin, AA1VS
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -48,7 +40,7 @@
 #include "sat-pass-dialogs.h"
 #include "time-tools.h"
 
-/** Column titles indexed with column symb. refs. */
+/* Column titles indexed with column symb. refs. */
 const gchar    *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Azimuth"),
     N_("Elevation"),
@@ -75,7 +67,7 @@ const gchar    *SINGLE_SAT_FIELD_TITLE[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Visibility")
 };
 
-/** Column title hints indexed with column symb. refs. */
+/* Column title hints indexed with column symb. refs. */
 const gchar    *SINGLE_SAT_FIELD_HINT[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Azimuth of the satellite"),
     N_("Elevation of the satellite"),
@@ -102,44 +94,19 @@ const gchar    *SINGLE_SAT_FIELD_HINT[SINGLE_SAT_FIELD_NUMBER] = {
     N_("Visibility of the satellite")
 };
 
-static void     gtk_single_sat_class_init(GtkSingleSatClass * class);
-static void     gtk_single_sat_init(GtkSingleSat * list);
-static void     gtk_single_sat_destroy(GtkWidget * widget);
-static void     store_sats(gpointer key, gpointer value, gpointer user_data);
-static void     update_field(GtkSingleSat * ssat, guint i);
-static void     Calculate_RADec(sat_t * sat, qth_t * qth,
-                                obs_astro_t * obs_set);
-static void     gtk_single_sat_popup_cb(GtkWidget * button, gpointer data);
-static void     select_satellite(GtkWidget * menuitem, gpointer data);
-static gint     sat_name_compare(sat_t * a, sat_t * b);
+static GtkBoxClass *parent_class = NULL;
 
-static GtkVBoxClass *parent_class = NULL;
 
-GType gtk_single_sat_get_type()
+static void gtk_single_sat_destroy(GtkWidget * widget)
 {
-    static GType    gtk_single_sat_type = 0;
+    GtkSingleSat   *ssat = GTK_SINGLE_SAT(widget);
+    sat_t          *sat = SAT(g_slist_nth_data(ssat->sats, ssat->selected));
 
-    if (!gtk_single_sat_type)
-    {
-        static const GTypeInfo gtk_single_sat_info = {
-            sizeof(GtkSingleSatClass),
-            NULL,               /* base_init */
-            NULL,               /* base_finalize */
-            (GClassInitFunc) gtk_single_sat_class_init,
-            NULL,               /* class_finalize */
-            NULL,               /* class_data */
-            sizeof(GtkSingleSat),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_single_sat_init,
-            NULL
-        };
+    if (sat != NULL)
+        g_key_file_set_integer(ssat->cfgdata, MOD_CFG_SINGLE_SAT_SECTION,
+                               MOD_CFG_SINGLE_SAT_SELECT, sat->tle.catnr);
 
-        gtk_single_sat_type = g_type_register_static(GTK_TYPE_VBOX,
-                                                     "GtkSingleSat",
-                                                     &gtk_single_sat_info, 0);
-    }
-
-    return gtk_single_sat_type;
+    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
 static void gtk_single_sat_class_init(GtkSingleSatClass * class)
@@ -156,237 +123,7 @@ static void gtk_single_sat_init(GtkSingleSat * list)
     (void)list;
 }
 
-static void gtk_single_sat_destroy(GtkWidget * widget)
-{
-    GtkSingleSat   *ssat = GTK_SINGLE_SAT(widget);
-    sat_t          *sat = SAT(g_slist_nth_data(ssat->sats, ssat->selected));
-
-    if (sat != NULL)
-        g_key_file_set_integer(ssat->cfgdata, MOD_CFG_SINGLE_SAT_SECTION,
-                               MOD_CFG_SINGLE_SAT_SELECT, sat->tle.catnr);
-
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
-}
-
-GtkWidget      *gtk_single_sat_new(GKeyFile * cfgdata, GHashTable * sats,
-                                   qth_t * qth, guint32 fields)
-{
-    GtkWidget      *widget;
-    GtkWidget      *hbox;       /* horizontal box for header */
-    GtkWidget      *label1;
-    GtkWidget      *label2;
-    sat_t          *sat;
-    gchar          *title;
-    guint           i;
-    gint            selectedcatnum;
-
-    widget = g_object_new(GTK_TYPE_SINGLE_SAT, NULL);
-
-    GTK_SINGLE_SAT(widget)->update = gtk_single_sat_update;
-
-    /* Read configuration data. */
-    /* ... */
-
-    g_hash_table_foreach(sats, store_sats, widget);
-    GTK_SINGLE_SAT(widget)->selected = 0;
-    GTK_SINGLE_SAT(widget)->qth = qth;
-    GTK_SINGLE_SAT(widget)->cfgdata = cfgdata;
-
-    /* initialise column flags */
-    if (fields > 0)
-        GTK_SINGLE_SAT(widget)->flags = fields;
-    else
-        GTK_SINGLE_SAT(widget)->flags = mod_cfg_get_int(cfgdata,
-                                                        MOD_CFG_SINGLE_SAT_SECTION,
-                                                        MOD_CFG_SINGLE_SAT_FIELDS,
-                                                        SAT_CFG_INT_SINGLE_SAT_FIELDS);
-
-
-    /* get refresh rate and cycle counter */
-    GTK_SINGLE_SAT(widget)->refresh = mod_cfg_get_int(cfgdata,
-                                                      MOD_CFG_SINGLE_SAT_SECTION,
-                                                      MOD_CFG_SINGLE_SAT_REFRESH,
-                                                      SAT_CFG_INT_SINGLE_SAT_REFRESH);
-    GTK_SINGLE_SAT(widget)->counter = 1;
-
-    /* get selected catnum if available */
-    selectedcatnum = mod_cfg_get_int(cfgdata,
-                                     MOD_CFG_SINGLE_SAT_SECTION,
-                                     MOD_CFG_SINGLE_SAT_SELECT,
-                                     SAT_CFG_INT_SINGLE_SAT_SELECT);
-    /* popup button */
-    GTK_SINGLE_SAT(widget)->popup_button =
-        gpredict_mini_mod_button("gpredict-mod-popup.png",
-                                 _("Satellite options / shortcuts"));
-    g_signal_connect(GTK_SINGLE_SAT(widget)->popup_button, "clicked",
-                     G_CALLBACK(gtk_single_sat_popup_cb), widget);
-
-    hbox = gtk_hbox_new(FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_SINGLE_SAT(widget)->popup_button,
-                       FALSE, FALSE, 0);
-
-
-    /* create header */
-    sat = SAT(g_slist_nth_data(GTK_SINGLE_SAT(widget)->sats, 0));
-    title =
-        g_markup_printf_escaped("<b>%s</b>", sat ? sat->nickname : "noname");
-    GTK_SINGLE_SAT(widget)->header = gtk_label_new(NULL);
-    gtk_label_set_markup(GTK_LABEL(GTK_SINGLE_SAT(widget)->header), title);
-    g_free(title);
-    gtk_misc_set_alignment(GTK_MISC(GTK_SINGLE_SAT(widget)->header), 0.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_SINGLE_SAT(widget)->header, TRUE,
-                       TRUE, 10);
-
-
-    gtk_box_pack_start(GTK_BOX(widget), hbox, FALSE, FALSE, 0);
-
-    /* create and initialise table  */
-    GTK_SINGLE_SAT(widget)->table =
-        gtk_table_new(SINGLE_SAT_FIELD_NUMBER, 3, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER
-                                   (GTK_SINGLE_SAT(widget)->table), 5);
-    gtk_table_set_row_spacings(GTK_TABLE(GTK_SINGLE_SAT(widget)->table), 0);
-    gtk_table_set_col_spacings(GTK_TABLE(GTK_SINGLE_SAT(widget)->table), 5);
-
-    /* create and add label widgets */
-    for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++)
-    {
-        if (GTK_SINGLE_SAT(widget)->flags & (1 << i))
-        {
-            label1 = gtk_label_new(_(SINGLE_SAT_FIELD_TITLE[i]));
-            gtk_misc_set_alignment(GTK_MISC(label1), 1.0, 0.5);
-            gtk_table_attach(GTK_TABLE(GTK_SINGLE_SAT(widget)->table), label1,
-                             0, 1, i, i + 1, GTK_FILL, GTK_SHRINK, 0, 0);
-
-
-            label2 = gtk_label_new("-");
-            gtk_misc_set_alignment(GTK_MISC(label2), 0.0, 0.5);
-            gtk_table_attach(GTK_TABLE(GTK_SINGLE_SAT(widget)->table), label2,
-                             2, 3, i, i + 1, GTK_FILL, GTK_SHRINK, 0, 0);
-
-            /* add tooltips */
-            gtk_widget_set_tooltip_text(label1, _(SINGLE_SAT_FIELD_HINT[i]));
-            gtk_widget_set_tooltip_text(label2, _(SINGLE_SAT_FIELD_HINT[i]));
-
-            label1 = gtk_label_new(":");
-            gtk_table_attach(GTK_TABLE(GTK_SINGLE_SAT(widget)->table), label1,
-                             1, 2, i, i + 1, GTK_FILL, GTK_SHRINK, 0, 0);
-
-            /* store reference */
-            GTK_SINGLE_SAT(widget)->labels[i] = label2;
-        }
-        else
-            GTK_SINGLE_SAT(widget)->labels[i] = NULL;
-    }
-
-    /* create and initialise scrolled window */
-    GTK_SINGLE_SAT(widget)->swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW
-                                   (GTK_SINGLE_SAT(widget)->swin),
-                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW
-                                          (GTK_SINGLE_SAT(widget)->swin),
-                                          GTK_SINGLE_SAT(widget)->table);
-    gtk_box_pack_end(GTK_BOX(widget), GTK_SINGLE_SAT(widget)->swin, TRUE, TRUE,
-                     0);
-    gtk_widget_show_all(widget);
-
-    if (selectedcatnum)
-    {
-        gtk_single_sat_select_sat(widget, selectedcatnum);
-    }
-    return widget;
-}
-
-/** Select new satellite */
-void gtk_single_sat_select_sat(GtkWidget * single_sat, gint catnum)
-{
-    GtkSingleSat   *ssat = GTK_SINGLE_SAT(single_sat);
-    sat_t          *sat = NULL;
-    gchar          *title;
-    gboolean        foundsat = FALSE;
-    gint            i, n;
-
-    /* find satellite with catnum */
-    n = g_slist_length(ssat->sats);
-    for (i = 0; i < n; i++)
-    {
-        sat = SAT(g_slist_nth_data(ssat->sats, i));
-
-        if (sat->tle.catnr == catnum)
-        {
-            /* found satellite */
-            ssat->selected = i;
-            foundsat = TRUE;
-
-            /* exit loop */
-            i = n;
-        }
-    }
-
-    if (!foundsat)
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Could not find satellite with catalog number %d"),
-                    __func__, catnum);
-        return;
-    }
-    title = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
-    gtk_label_set_markup(GTK_LABEL(ssat->header), title);
-    g_free(title);
-}
-
-/** Update satellites */
-void gtk_single_sat_update(GtkWidget * widget)
-{
-    GtkSingleSat   *ssat = GTK_SINGLE_SAT(widget);
-    guint           i;
-
-    /* first, do some sanity checks */
-    if ((ssat == NULL) || !IS_GTK_SINGLE_SAT(ssat))
-    {
-
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Invalid GtkSingleSat!"), __func__);
-        return;
-    }
-
-
-    /* check refresh rate */
-    if (ssat->counter < ssat->refresh)
-    {
-        ssat->counter++;
-    }
-    else
-    {
-        /* we calculate here to avoid double calc */
-        if ((ssat->flags & SINGLE_SAT_FLAG_RA) ||
-            (ssat->flags & SINGLE_SAT_FLAG_DEC))
-        {
-
-            sat_t          *sat =
-                SAT(g_slist_nth_data(ssat->sats, ssat->selected));
-            obs_astro_t     astro;
-
-
-            Calculate_RADec(sat, ssat->qth, &astro);
-            sat->ra = Degrees(astro.ra);
-            sat->dec = Degrees(astro.dec);
-        }
-
-        /* update visible fields one by one */
-        for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++)
-        {
-
-            if (ssat->flags & (1 << i))
-                update_field(ssat, i);
-
-        }
-        ssat->counter = 1;
-    }
-}
-
-/** Update a field in the GtkSingleSat view. */
+/* Update a field in the GtkSingleSat view. */
 static void update_field(GtkSingleSat * ssat, guint i)
 {
     sat_t          *sat;
@@ -405,15 +142,12 @@ static void update_field(GtkSingleSat * ssat, guint i)
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Can not update invisible field (I:%d F:%d)"),
                     __FILE__, __LINE__, i, ssat->flags);
-
         return;
     }
 
     /* get selected satellite */
     sat = SAT(g_slist_nth_data(ssat->sats, ssat->selected));
-
-    if G_UNLIKELY
-        (!sat)
+    if (!sat)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s:%d: Can not update non-existing sat"),
@@ -462,23 +196,15 @@ static void update_field(GtkSingleSat * ssat, guint i)
         break;
     case SINGLE_SAT_FIELD_RANGE:
         if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
-        {
             buff = g_strdup_printf("%.0f mi", KM_TO_MI(sat->range));
-        }
         else
-        {
             buff = g_strdup_printf("%.0f km", sat->range);
-        }
         break;
     case SINGLE_SAT_FIELD_RANGE_RATE:
         if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
-        {
             buff = g_strdup_printf("%.3f mi/sec", KM_TO_MI(sat->range_rate));
-        }
         else
-        {
             buff = g_strdup_printf("%.3f km/sec", sat->range_rate);
-        }
         break;
     case SINGLE_SAT_FIELD_NEXT_EVENT:
         if (sat->aos > sat->los)
@@ -516,11 +242,8 @@ static void update_field(GtkSingleSat * ssat, guint i)
         {
             /* format the number */
             fmtstr = sat_cfg_get_str(SAT_CFG_STR_TIME_FORMAT);
-
             daynum_to_str(tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->aos);
-
             g_free(fmtstr);
-
             buff = g_strdup(tbuf);
         }
         else
@@ -531,13 +254,9 @@ static void update_field(GtkSingleSat * ssat, guint i)
     case SINGLE_SAT_FIELD_LOS:
         if (sat->los > 0.0)
         {
-
             fmtstr = sat_cfg_get_str(SAT_CFG_STR_TIME_FORMAT);
-
             daynum_to_str(tbuf, TIME_FORMAT_MAX_LENGTH, fmtstr, sat->los);
-
             g_free(fmtstr);
-
             buff = g_strdup(tbuf);
         }
         else
@@ -580,7 +299,6 @@ static void update_field(GtkSingleSat * ssat, guint i)
     case SINGLE_SAT_FIELD_SSP:
         /* SSP locator */
         buff = g_try_malloc(7);
-
         retcode = longlat2locator(sat->ssplon, sat->ssplat, buff, 3);
         if (retcode == RIG_OK)
         {
@@ -605,23 +323,15 @@ static void update_field(GtkSingleSat * ssat, guint i)
         break;
     case SINGLE_SAT_FIELD_ALT:
         if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
-        {
             buff = g_strdup_printf("%.0f mi", KM_TO_MI(sat->alt));
-        }
         else
-        {
             buff = g_strdup_printf("%.0f km", sat->alt);
-        }
         break;
     case SINGLE_SAT_FIELD_VEL:
         if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
-        {
             buff = g_strdup_printf("%.3f mi/sec", KM_TO_MI(sat->velo));
-        }
         else
-        {
             buff = g_strdup_printf("%.3f km/sec", sat->velo);
-        }
         break;
     case SINGLE_SAT_FIELD_DOPPLER:
         number = -100.0e06 * (sat->range_rate / 299792.4580);   // Hz
@@ -662,7 +372,12 @@ static void update_field(GtkSingleSat * ssat, guint i)
     }
 }
 
-/** Copy satellite from hash table to singly linked list. */
+static gint sat_name_compare(sat_t * a, sat_t * b)
+{
+    return gpredict_strcmp(a->nickname, b->nickname);
+}
+
+/* Copy satellite from hash table to singly linked list. */
 static void store_sats(gpointer key, gpointer value, gpointer user_data)
 {
     GtkSingleSat   *single_sat = GTK_SINGLE_SAT(user_data);
@@ -670,9 +385,8 @@ static void store_sats(gpointer key, gpointer value, gpointer user_data)
 
     (void)key;
 
-    single_sat->sats =
-        g_slist_insert_sorted(single_sat->sats, sat,
-                              (GCompareFunc) sat_name_compare);
+    single_sat->sats = g_slist_insert_sorted(single_sat->sats, sat,
+                                             (GCompareFunc) sat_name_compare);
 }
 
 static void Calculate_RADec(sat_t * sat, qth_t * qth, obs_astro_t * obs_set)
@@ -721,108 +435,6 @@ static void Calculate_RADec(sat_t * sat, qth_t * qth, obs_astro_t * obs_set)
     obs_set->ra = FMod2p(obs_set->ra);
 }
 
-/** Single sat options menu */
-static void gtk_single_sat_popup_cb(GtkWidget * button, gpointer data)
-{
-    GtkSingleSat   *single_sat = GTK_SINGLE_SAT(data);
-    GtkWidget      *menu;
-    GtkWidget      *menuitem;
-    GtkWidget      *image;
-    GtkWidget      *label;
-    GSList         *group = NULL;
-    gchar          *buff;
-    sat_t          *sat;
-    sat_t          *sati;       /* used to create list of satellites */
-    guint           i, n;
-
-    sat = SAT(g_slist_nth_data(single_sat->sats, single_sat->selected));
-    if (sat == NULL)
-    {
-        return;
-    }
-    n = g_slist_length(single_sat->sats);
-
-    menu = gtk_menu_new();
-
-    /* satellite name/info */
-    menuitem = gtk_image_menu_item_new();
-    label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
-    buff = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
-    gtk_label_set_markup(GTK_LABEL(label), buff);
-    g_free(buff);
-    gtk_container_add(GTK_CONTAINER(menuitem), label);
-    image = gtk_image_new_from_stock(GTK_STOCK_INFO, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem), image);
-
-    /* attach data to menuitem and connect callback */
-    g_object_set_data(G_OBJECT(menuitem), "sat", sat);
-    g_object_set_data(G_OBJECT(menuitem), "qth", single_sat->qth);
-    g_signal_connect(menuitem, "activate",
-                     G_CALLBACK(show_sat_info_menu_cb),
-                     gtk_widget_get_toplevel(button));
-
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* add the menu items for current,next, and future passes. */
-    add_pass_menu_items(menu, sat, single_sat->qth, &single_sat->tstamp, data);
-
-    /* separator */
-//     menuitem = gtk_separator_menu_item_new ();
-//     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
-    /* Alarm */
-//     menuitem = gtk_check_menu_item_new_with_label (_("Alarm"));
-//     gtk_widget_set_sensitive (menuitem, FALSE);
-//     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
-    /* Announce */
-//     menuitem = gtk_check_menu_item_new_with_label (_("Announce"));
-//     gtk_widget_set_sensitive (menuitem, FALSE);
-//     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* select sat */
-    for (i = 0; i < n; i++)
-    {
-        sati = SAT(g_slist_nth_data(single_sat->sats, i));
-
-        menuitem = gtk_radio_menu_item_new_with_label(group, sati->nickname);
-        group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menuitem));
-
-        if (i == single_sat->selected)
-        {
-            gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
-                                           TRUE);
-        }
-
-        /* store item index so that it is available in the callback */
-        g_object_set_data(G_OBJECT(menuitem), "index", GUINT_TO_POINTER(i));
-
-        /* connect signal */
-        g_signal_connect_after(menuitem, "activate",
-                               G_CALLBACK(select_satellite), single_sat);
-
-        //gtk_menu_shell_append (GTK_MENU_SHELL (select_menu), menuitem);
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-        //gtk_widget_show (menuitem);
-    }
-
-    gtk_widget_show_all(menu);
-
-    /* Note: event can be NULL here when called from view_onPopupMenu;
-     *  gdk_event_get_time() accepts a NULL argument */
-    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
-                   0, gdk_event_get_time((GdkEvent *) NULL));
-}
-
 static void select_satellite(GtkWidget * menuitem, gpointer data)
 {
     GtkSingleSat   *ssat = GTK_SINGLE_SAT(data);
@@ -846,10 +458,86 @@ static void select_satellite(GtkWidget * menuitem, gpointer data)
     }
 }
 
-/** Refresh internal references to the satellites. */
+/* Single sat options menu */
+static void gtk_single_sat_popup_cb(GtkWidget * button, gpointer data)
+{
+    GtkSingleSat   *single_sat = GTK_SINGLE_SAT(data);
+    GtkWidget      *menu;
+    GtkWidget      *menuitem;
+    GtkWidget      *label;
+    GSList         *group = NULL;
+    gchar          *buff;
+    sat_t          *sat;
+    sat_t          *sati;       /* used to create list of satellites */
+    guint           i, n;
+
+    sat = SAT(g_slist_nth_data(single_sat->sats, single_sat->selected));
+    if (sat == NULL)
+        return;
+
+    n = g_slist_length(single_sat->sats);
+
+    menu = gtk_menu_new();
+
+    /* satellite name/info */
+    menuitem = gtk_menu_item_new();
+    label = gtk_label_new(NULL);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    buff = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
+    gtk_label_set_markup(GTK_LABEL(label), buff);
+    g_free(buff);
+    gtk_container_add(GTK_CONTAINER(menuitem), label);
+
+    /* attach data to menuitem and connect callback */
+    g_object_set_data(G_OBJECT(menuitem), "sat", sat);
+    g_object_set_data(G_OBJECT(menuitem), "qth", single_sat->qth);
+    g_signal_connect(menuitem, "activate",
+                     G_CALLBACK(show_sat_info_menu_cb),
+                     gtk_widget_get_toplevel(button));
+
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* add the menu items for current,next, and future passes. */
+    add_pass_menu_items(menu, sat, single_sat->qth, &single_sat->tstamp, data);
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* select sat */
+    for (i = 0; i < n; i++)
+    {
+        sati = SAT(g_slist_nth_data(single_sat->sats, i));
+
+        menuitem = gtk_radio_menu_item_new_with_label(group, sati->nickname);
+        group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(menuitem));
+
+        if (i == single_sat->selected)
+            gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
+                                           TRUE);
+
+        /* store item index so that it is available in the callback */
+        g_object_set_data(G_OBJECT(menuitem), "index", GUINT_TO_POINTER(i));
+        g_signal_connect_after(menuitem, "activate",
+                               G_CALLBACK(select_satellite), single_sat);
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    }
+
+    gtk_widget_show_all(menu);
+
+    /* Note: event can be NULL here when called from view_onPopupMenu;
+     *  gdk_event_get_time() accepts a NULL argument */
+    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
+                   0, gdk_event_get_time((GdkEvent *) NULL));
+}
+
+/* Refresh internal references to the satellites. */
 void gtk_single_sat_reload_sats(GtkWidget * single_sat, GHashTable * sats)
 {
-
     /* free GSlists */
     g_slist_free(GTK_SINGLE_SAT(single_sat)->sats);
     GTK_SINGLE_SAT(single_sat)->sats = NULL;
@@ -858,7 +546,7 @@ void gtk_single_sat_reload_sats(GtkWidget * single_sat, GHashTable * sats)
     g_hash_table_foreach(sats, store_sats, single_sat);
 }
 
-/**
+/*
  * Reload configuration.
  * 
  * @param widget The GtkSingleSat widget.
@@ -883,16 +571,11 @@ void gtk_single_sat_reconf(GtkWidget * widget,
                              SAT_CFG_INT_SINGLE_SAT_FIELDS);
 
     if (fields != GTK_SINGLE_SAT(widget)->flags)
-    {
         GTK_SINGLE_SAT(widget)->flags = fields;
-        /* */
-    }
 
     /* if this is a local reconfiguration sats may have changed */
     if (local)
-    {
         gtk_single_sat_reload_sats(widget, sats);
-    }
 
     /* QTH may have changed too since we have a default QTH */
     GTK_SINGLE_SAT(widget)->qth = qth;
@@ -905,7 +588,235 @@ void gtk_single_sat_reconf(GtkWidget * widget,
     GTK_SINGLE_SAT(widget)->counter = 1;
 }
 
-static gint sat_name_compare(sat_t * a, sat_t * b)
+/* Select new satellite */
+void gtk_single_sat_select_sat(GtkWidget * single_sat, gint catnum)
 {
-    return gpredict_strcmp(a->nickname, b->nickname);
+    GtkSingleSat   *ssat = GTK_SINGLE_SAT(single_sat);
+    sat_t          *sat = NULL;
+    gchar          *title;
+    gboolean        foundsat = FALSE;
+    gint            i, n;
+
+    /* find satellite with catnum */
+    n = g_slist_length(ssat->sats);
+    for (i = 0; i < n; i++)
+    {
+        sat = SAT(g_slist_nth_data(ssat->sats, i));
+        if (sat->tle.catnr == catnum)
+        {
+            /* found satellite */
+            ssat->selected = i;
+            foundsat = TRUE;
+
+            /* exit loop */
+            i = n;
+        }
+    }
+
+    if (!foundsat)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not find satellite with catalog number %d"),
+                    __func__, catnum);
+        return;
+    }
+    title = g_markup_printf_escaped("<b>%s</b>", sat->nickname);
+    gtk_label_set_markup(GTK_LABEL(ssat->header), title);
+    g_free(title);
+}
+
+/* Update satellites */
+void gtk_single_sat_update(GtkWidget * widget)
+{
+    GtkSingleSat   *ssat = GTK_SINGLE_SAT(widget);
+    guint           i;
+
+    /* first, do some sanity checks */
+    if ((ssat == NULL) || !IS_GTK_SINGLE_SAT(ssat))
+    {
+
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Invalid GtkSingleSat!"), __func__);
+        return;
+    }
+
+
+    /* check refresh rate */
+    if (ssat->counter < ssat->refresh)
+    {
+        ssat->counter++;
+    }
+    else
+    {
+        /* we calculate here to avoid double calc */
+        if ((ssat->flags & SINGLE_SAT_FLAG_RA) ||
+            (ssat->flags & SINGLE_SAT_FLAG_DEC))
+        {
+            obs_astro_t     astro;
+            sat_t          *sat =
+                SAT(g_slist_nth_data(ssat->sats, ssat->selected));
+
+            Calculate_RADec(sat, ssat->qth, &astro);
+            sat->ra = Degrees(astro.ra);
+            sat->dec = Degrees(astro.dec);
+        }
+
+        /* update visible fields one by one */
+        for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++)
+        {
+            if (ssat->flags & (1 << i))
+                update_field(ssat, i);
+
+        }
+        ssat->counter = 1;
+    }
+}
+
+GType gtk_single_sat_get_type()
+{
+    static GType    gtk_single_sat_type = 0;
+
+    if (!gtk_single_sat_type)
+    {
+        static const GTypeInfo gtk_single_sat_info = {
+            sizeof(GtkSingleSatClass),
+            NULL,               /* base_init */
+            NULL,               /* base_finalize */
+            (GClassInitFunc) gtk_single_sat_class_init,
+            NULL,               /* class_finalize */
+            NULL,               /* class_data */
+            sizeof(GtkSingleSat),
+            5,                  /* n_preallocs */
+            (GInstanceInitFunc) gtk_single_sat_init,
+            NULL
+        };
+
+        gtk_single_sat_type = g_type_register_static(GTK_TYPE_BOX,
+                                                     "GtkSingleSat",
+                                                     &gtk_single_sat_info, 0);
+    }
+
+    return gtk_single_sat_type;
+}
+
+GtkWidget      *gtk_single_sat_new(GKeyFile * cfgdata, GHashTable * sats,
+                                   qth_t * qth, guint32 fields)
+{
+    GtkWidget      *widget;
+    GtkSingleSat   *single_sat;
+    GtkWidget      *hbox;       /* horizontal box for header */
+    GtkWidget      *label1;
+    GtkWidget      *label2;
+    sat_t          *sat;
+    gchar          *title;
+    guint           i;
+    gint            selectedcatnum;
+
+    widget = g_object_new(GTK_TYPE_SINGLE_SAT, NULL);
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(widget),
+                                   GTK_ORIENTATION_VERTICAL);
+    single_sat = GTK_SINGLE_SAT(widget);
+
+    single_sat->update = gtk_single_sat_update;
+
+    /* Read configuration data. */
+    /* ... */
+
+    g_hash_table_foreach(sats, store_sats, widget);
+    single_sat->selected = 0;
+    single_sat->qth = qth;
+    single_sat->cfgdata = cfgdata;
+
+    /* initialise column flags */
+    if (fields > 0)
+        single_sat->flags = fields;
+    else
+        single_sat->flags = mod_cfg_get_int(cfgdata,
+                                            MOD_CFG_SINGLE_SAT_SECTION,
+                                            MOD_CFG_SINGLE_SAT_FIELDS,
+                                            SAT_CFG_INT_SINGLE_SAT_FIELDS);
+
+
+    /* get refresh rate and cycle counter */
+    single_sat->refresh = mod_cfg_get_int(cfgdata,
+                                          MOD_CFG_SINGLE_SAT_SECTION,
+                                          MOD_CFG_SINGLE_SAT_REFRESH,
+                                          SAT_CFG_INT_SINGLE_SAT_REFRESH);
+    single_sat->counter = 1;
+
+    /* get selected catnum if available */
+    selectedcatnum = mod_cfg_get_int(cfgdata,
+                                     MOD_CFG_SINGLE_SAT_SECTION,
+                                     MOD_CFG_SINGLE_SAT_SELECT,
+                                     SAT_CFG_INT_SINGLE_SAT_SELECT);
+    /* popup button */
+    single_sat->popup_button =
+        gpredict_mini_mod_button("gpredict-mod-popup.png",
+                                 _("Satellite options / shortcuts"));
+    g_signal_connect(single_sat->popup_button, "clicked",
+                     G_CALLBACK(gtk_single_sat_popup_cb), widget);
+
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(hbox), single_sat->popup_button,
+                       FALSE, FALSE, 0);
+
+
+    /* create header */
+    sat = SAT(g_slist_nth_data(single_sat->sats, 0));
+    title = g_markup_printf_escaped("<b>%s</b>",
+                                    sat ? sat->nickname : "noname");
+    single_sat->header = gtk_label_new(NULL);
+    gtk_label_set_markup(GTK_LABEL(single_sat->header), title);
+    g_free(title);
+    g_object_set(single_sat->header, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), single_sat->header, TRUE, TRUE, 10);
+
+    gtk_box_pack_start(GTK_BOX(widget), hbox, FALSE, FALSE, 0);
+
+    /* create and initialise table  */
+//    single_sat->table = gtk_table_new(SINGLE_SAT_FIELD_NUMBER, 3, FALSE);
+    single_sat->table = gtk_grid_new();
+    gtk_container_set_border_width(GTK_CONTAINER(single_sat->table), 5);
+    gtk_grid_set_row_spacing(GTK_GRID(single_sat->table), 0);
+    gtk_grid_set_column_spacing(GTK_GRID(single_sat->table), 5);
+
+    /* create and add label widgets */
+    for (i = 0; i < SINGLE_SAT_FIELD_NUMBER; i++)
+    {
+        if (single_sat->flags & (1 << i))
+        {
+            label1 = gtk_label_new(_(SINGLE_SAT_FIELD_TITLE[i]));
+            g_object_set(label1, "xalign", 1.0f, "yalign", 0.5f, NULL);
+            gtk_grid_attach(GTK_GRID(single_sat->table), label1, 0, i, 1, 1);
+
+            label2 = gtk_label_new("-");
+            g_object_set(label2, "xalign", 0.0f, "yalign", 0.5f, NULL);
+            gtk_grid_attach(GTK_GRID(single_sat->table), label2, 2, i, 1, 1);
+            single_sat->labels[i] = label2;
+
+            /* add tooltips */
+            gtk_widget_set_tooltip_text(label1, _(SINGLE_SAT_FIELD_HINT[i]));
+            gtk_widget_set_tooltip_text(label2, _(SINGLE_SAT_FIELD_HINT[i]));
+
+            label1 = gtk_label_new(":");
+            gtk_grid_attach(GTK_GRID(single_sat->table), label1, 1, i, 1, 1);
+        }
+        else
+        {
+            single_sat->labels[i] = NULL;
+        }
+    }
+
+    /* create and initialise scrolled window */
+    single_sat->swin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(single_sat->swin),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_container_add(GTK_CONTAINER(single_sat->swin), single_sat->table);
+    gtk_box_pack_end(GTK_BOX(widget), single_sat->swin, TRUE, TRUE, 0);
+    gtk_widget_show_all(widget);
+
+    if (selectedcatnum)
+        gtk_single_sat_select_sat(widget, selectedcatnum);
+
+    return widget;
 }

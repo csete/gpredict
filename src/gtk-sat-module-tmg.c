@@ -1,15 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -55,12 +47,6 @@ static void     tmg_cal_sub_one_day(GtkSatModule * mod);
 
 static gdouble  calculate_time(GtkSatModule * mod);
 
-/**
- * Create and initialise time controller widgets.
- *
- * @param module The parent GtkSatModule
- *
- */
 void tmg_create(GtkSatModule * mod)
 {
     GtkWidget      *vbox, *hbox, *table;
@@ -86,14 +72,15 @@ void tmg_create(GtkSatModule * mod)
     /* create hbox containing the controls
        the controls are implemented as radiobuttons in order
        to inherit the mutual exclusion behaviour */
-    hbox = gtk_hbox_new(FALSE, 0);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(hbox), FALSE);
 
     /* FWD */
     mod->tmgFwd = gtk_radio_button_new(NULL);
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(mod->tmgFwd), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mod->tmgFwd), TRUE);
-    image = gtk_image_new_from_stock(GTK_STOCK_MEDIA_FORWARD,
-                                     GTK_ICON_SIZE_BUTTON);
+    image = gtk_image_new_from_icon_name("media-seek-forward",
+                                         GTK_ICON_SIZE_BUTTON);
     gtk_container_add(GTK_CONTAINER(mod->tmgFwd), image);
     gtk_widget_set_tooltip_text(mod->tmgFwd, _("Play forward"));
     g_signal_connect(mod->tmgFwd, "toggled", G_CALLBACK(tmg_fwd), mod);
@@ -103,8 +90,8 @@ void tmg_create(GtkSatModule * mod)
     mod->tmgStop =
         gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(mod->tmgFwd));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(mod->tmgStop), FALSE);
-    image = gtk_image_new_from_stock(GTK_STOCK_MEDIA_PAUSE,
-                                     GTK_ICON_SIZE_BUTTON);
+    image = gtk_image_new_from_icon_name("media-playback-pause",
+                                         GTK_ICON_SIZE_BUTTON);
     gtk_container_add(GTK_CONTAINER(mod->tmgStop), image);
     gtk_widget_set_tooltip_text(mod->tmgStop, _("Stop"));
     g_signal_connect(mod->tmgStop, "toggled", G_CALLBACK(tmg_stop), mod);
@@ -114,8 +101,8 @@ void tmg_create(GtkSatModule * mod)
     mod->tmgBwd =
         gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(mod->tmgFwd));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(mod->tmgBwd), FALSE);
-    image = gtk_image_new_from_stock(GTK_STOCK_MEDIA_REWIND,
-                                     GTK_ICON_SIZE_BUTTON);
+    image = gtk_image_new_from_icon_name("media-seek-backward",
+                                         GTK_ICON_SIZE_BUTTON);
     gtk_container_add(GTK_CONTAINER(mod->tmgBwd), image);
     gtk_widget_set_tooltip_text(mod->tmgBwd, _("Play backwards"));
     g_signal_connect(mod->tmgBwd, "toggled", G_CALLBACK(tmg_bwd), mod);
@@ -130,13 +117,14 @@ void tmg_create(GtkSatModule * mod)
 
     /* status label */
     mod->tmgState = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(mod->tmgState), 0.0, 0.5);
+    g_object_set(mod->tmgState, "xalign", 0.0, "yalign", 0.5, NULL);
     gtk_label_set_markup(GTK_LABEL(mod->tmgState), _("<b>Real-Time</b>"));
     gtk_box_pack_start(GTK_BOX(hbox), mod->tmgState, TRUE, TRUE, 10);
 
     /* create table containing the date and time widgets */
-    table = gtk_table_new(5, 3, FALSE);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 0);
+    table = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(table), 0);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
 
     mod->tmgCal = gtk_calendar_new();
     gtk_calendar_set_display_options(GTK_CALENDAR(mod->tmgCal),
@@ -144,100 +132,86 @@ void tmg_create(GtkSatModule * mod)
                                      GTK_CALENDAR_SHOW_DAY_NAMES);
     g_signal_connect(mod->tmgCal, "day-selected",
                      G_CALLBACK(tmg_time_set), mod);
-    gtk_table_attach(GTK_TABLE(table), mod->tmgCal,
-                     0, 1, 0, 5, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(table), mod->tmgCal, 0, 0, 1, 5);
 
     /* Time controllers.
-       Note that the controllers for hours, minutes, and seconds have ranges;
-       however, they can wrap around their limits in order to ensure a smooth
-       and continuous control of the time
+     * Note that the controllers for hours, minutes, and seconds have ranges;
+     * however, they can wrap around their limits in order to ensure a smooth
+     * and continuous control of the time
      */
 
     /* hour */
-    label = gtk_label_new(_(" Hour:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label,
-                     1, 2, 0, 1, GTK_SHRINK, GTK_SHRINK, 5, 0);
+    label = gtk_label_new(_("Hour:"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 0, 1, 1);
     mod->tmgHour = gtk_spin_button_new_with_range(0, 23, 1);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(mod->tmgHour), TRUE);
     gtk_spin_button_set_update_policy(GTK_SPIN_BUTTON(mod->tmgHour),
                                       GTK_UPDATE_IF_VALID);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(mod->tmgHour), 0);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(mod->tmgHour), TRUE);
-    //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgHour), 2);
     gtk_widget_set_tooltip_text(mod->tmgHour,
                                 _("Use this control to set the hour"));
     g_signal_connect(mod->tmgHour, "value-changed",
                      G_CALLBACK(tmg_time_set), mod);
     g_signal_connect(mod->tmgHour, "wrapped", G_CALLBACK(tmg_hour_wrap), mod);
-    gtk_table_attach(GTK_TABLE(table), mod->tmgHour,
-                     2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(table), mod->tmgHour, 2, 0, 1, 1);
 
     /* minutes */
-    label = gtk_label_new(_(" Min:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label,
-                     1, 2, 1, 2, GTK_SHRINK, GTK_SHRINK, 5, 0);
+    label = gtk_label_new(_("Min:"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 1, 1, 1);
     mod->tmgMin = gtk_spin_button_new_with_range(0, 59, 1);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(mod->tmgMin), TRUE);
     gtk_spin_button_set_update_policy(GTK_SPIN_BUTTON(mod->tmgMin),
                                       GTK_UPDATE_IF_VALID);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(mod->tmgMin), 0);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(mod->tmgMin), TRUE);
-    //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgMin), 2);
     gtk_widget_set_tooltip_text(mod->tmgMin,
                                 _("Use this control to set the minutes"));
     g_signal_connect(mod->tmgMin, "value-changed",
                      G_CALLBACK(tmg_time_set), mod);
     g_signal_connect(mod->tmgMin, "wrapped", G_CALLBACK(tmg_min_wrap), mod);
-    gtk_table_attach(GTK_TABLE(table), mod->tmgMin,
-                     2, 3, 1, 2, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(table), mod->tmgMin, 2, 1, 1, 1);
 
     /* seconds */
-    label = gtk_label_new(_(" Sec:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label,
-                     1, 2, 2, 3, GTK_SHRINK, GTK_SHRINK, 5, 0);
+    label = gtk_label_new(_("Sec:"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 2, 1, 1);
     mod->tmgSec = gtk_spin_button_new_with_range(0, 59, 1);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(mod->tmgSec), TRUE);
     gtk_spin_button_set_update_policy(GTK_SPIN_BUTTON(mod->tmgSec),
                                       GTK_UPDATE_IF_VALID);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(mod->tmgSec), 0);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(mod->tmgSec), TRUE);
-    //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgSec), 2);
     gtk_widget_set_tooltip_text(mod->tmgSec,
                                 _("Use this control to set the seconds"));
     g_signal_connect(mod->tmgSec, "value-changed",
                      G_CALLBACK(tmg_time_set), mod);
     g_signal_connect(mod->tmgSec, "wrapped", G_CALLBACK(tmg_sec_wrap), mod);
-    gtk_table_attach(GTK_TABLE(table), mod->tmgSec,
-                     2, 3, 2, 3, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(table), mod->tmgSec, 2, 2, 1, 1);
 
     /* milliseconds */
-    label = gtk_label_new(_(" Msec:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label,
-                     1, 2, 3, 4, GTK_SHRINK, GTK_SHRINK, 5, 0);
+    label = gtk_label_new(_("Msec:"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 3, 1, 1);
     mod->tmgMsec = gtk_spin_button_new_with_range(0, 999, 1);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(mod->tmgMsec), TRUE);
     gtk_spin_button_set_update_policy(GTK_SPIN_BUTTON(mod->tmgMsec),
                                       GTK_UPDATE_IF_VALID);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(mod->tmgMsec), 0);
     gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(mod->tmgMsec), TRUE);
-    //FIXME gtk_spin_button_set_value (GTK_SPIN_BUTTON (mod->tmgMsec), 2);
     gtk_widget_set_tooltip_text(mod->tmgMsec,
                                 _("Use this control to set the milliseconds"));
     g_signal_connect(mod->tmgMsec, "value-changed",
                      G_CALLBACK(tmg_time_set), mod);
     g_signal_connect(mod->tmgMsec, "wrapped", G_CALLBACK(tmg_msec_wrap), mod);
-    gtk_table_attach(GTK_TABLE(table), mod->tmgMsec,
-                     2, 3, 3, 4, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(table), mod->tmgMsec, 2, 3, 1, 1);
 
     /* time throttle */
     label = gtk_label_new(_("Throttle:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label,
-                     1, 2, 4, 5, GTK_SHRINK, GTK_SHRINK, 5, 0);
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 1, 4, 1, 1);
     mod->tmgFactor = gtk_spin_button_new_with_range(1, 100, 1);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(mod->tmgFactor), TRUE);
     gtk_spin_button_set_update_policy(GTK_SPIN_BUTTON(mod->tmgFactor),
@@ -248,11 +222,11 @@ void tmg_create(GtkSatModule * mod)
                                 _("Time throttle / compression factor"));
     g_signal_connect(mod->tmgFactor, "value-changed",
                      G_CALLBACK(tmg_throttle), mod);
-    gtk_table_attach(GTK_TABLE(table), mod->tmgFactor,
-                     2, 3, 4, 5, GTK_SHRINK, GTK_SHRINK, 0, 0);
+    gtk_grid_attach(GTK_GRID(table), mod->tmgFactor, 2, 4, 1, 1);
 
     /* add slider */
-    mod->tmgSlider = gtk_hscale_new_with_range(-0.1, +0.1, 0.0001);     // +/- 2.5 hr
+    mod->tmgSlider = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL,
+                                              -0.1, +0.1, 0.0001);
     /*gtk_widget_set_tooltip_text (mod->tmgSlider,
        _("Drag the slider to change the time up to +/- 2.5 hours.\n"\
        "Resolution is ~ 8 seconds.")); */
@@ -262,11 +236,14 @@ void tmg_create(GtkSatModule * mod)
                      G_CALLBACK(slider_moved), mod);
 
     /* create the vertical box */
-    vbox = gtk_vbox_new(FALSE, 0);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
 
     gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), mod->tmgSlider, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
     /* create main window */
@@ -296,10 +273,10 @@ void tmg_create(GtkSatModule * mod)
                 _("%s: Time Controller for %s launched"), __func__, mod->name);
 }
 
-/**
+/*
  * Manage tmg window delete events
  *
- * @return FALSE to indicate that window should be destroyed.
+ * Returns FALSE to indicate that window should be destroyed.
  */
 static gint tmg_delete(GtkWidget * tmg, GdkEvent * event, gpointer data)
 {
@@ -328,7 +305,7 @@ static void tmg_destroy(GtkWidget * tmg, gpointer data)
                 __func__, mod->name);
 }
 
-/**
+/*
  * Manage STOP signals.
  *
  * @param widget The GtkButton that received the signal.
@@ -345,13 +322,11 @@ static void tmg_stop(GtkWidget * widget, gpointer data)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
     {
         sat_log_log(SAT_LOG_LEVEL_DEBUG, __func__);
-
-        /* set throttle to 0 */
         mod->throttle = 0;
     }
 }
 
-/**
+/*
  * Manage FWD signals.
  *
  * @param widget The GtkButton that received the signal.
@@ -368,15 +343,13 @@ static void tmg_fwd(GtkWidget * widget, gpointer data)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
     {
         sat_log_log(SAT_LOG_LEVEL_DEBUG, __func__);
-
-        /* set throttle */
         mod->throttle =
             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(mod->tmgFactor));
     }
 }
 
-/**
- * Manage BWD signals.
+/*
+ * Manage back signals.
  *
  * @param widget The GtkButton that received the signal.
  * @param data Pointer to the GtkSatModule widget.
@@ -395,8 +368,7 @@ static void tmg_bwd(GtkWidget * widget, gpointer data)
 
         /* set throttle to -1 */
         mod->throttle =
-            -gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON
-                                              (mod->tmgFactor));;
+            -gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(mod->tmgFactor));
     }
 }
 
@@ -809,7 +781,15 @@ static gdouble calculate_time(GtkSatModule * mod)
     if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
     {
         /* convert local time to UTC */
+
+        /* tm_mon -1 / +1 is a temporary workaround for
+         * https://github.com/csete/gpredict/issues/90
+         * Also see
+         * https://github.com/csete/gpredict/issues/106
+         */
+        tim.tm_mon -= 1;
         Time_to_UTC(&tim, &utim);
+        utim.tm_mon += 1;
 
         /* Convert to JD */
         jd = Julian_Date(&utim);

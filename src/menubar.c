@@ -43,133 +43,6 @@
 
 extern GtkWidget *app;
 
-static void     menubar_new_mod_cb(GtkWidget * widget, gpointer data);
-static void     menubar_open_mod_cb(GtkWidget * widget, gpointer data);
-static void     menubar_message_log(GtkWidget * widget, gpointer data);
-static void     menubar_app_exit_cb(GtkWidget * widget, gpointer data);
-static void     menubar_pref_cb(GtkWidget * widget, gpointer data);
-static void     menubar_tle_net_cb(GtkWidget * widget, gpointer data);
-static void     menubar_trsp_net_cb(GtkWidget * widget, gpointer data);
-static void     menubar_tle_local_cb(GtkWidget * widget, gpointer data);
-static void     menubar_help_cb(GtkWidget * widget, gpointer data);
-static void     menubar_license_cb(GtkWidget * widget, gpointer data);
-static void     menubar_news_cb(GtkWidget * widget, gpointer data);
-static void     menubar_about_cb(GtkWidget * widget, gpointer data);
-
-static GtkActionEntry entries[] = {
-    {"FileMenu", NULL, N_("_File"), NULL, NULL, NULL},
-    {"EditMenu", NULL, N_("_Edit"), NULL, NULL, NULL},
-    {"TleMenu", NULL, N_("_Update TLE data"), NULL, NULL, NULL},
-    {"FrqMenu", NULL, N_("_Update Transponder data"), NULL, NULL,
-     NULL},
-    {"HelpMenu", NULL, N_("_Help"), NULL, NULL, NULL},
-
-    /* File menu */
-    {"New", "document-new", N_("_New module"), "<control>N",
-     N_("Create a new module"), G_CALLBACK(menubar_new_mod_cb)},
-    {"Open", "document-open", N_("_Open module"), "<control>O",
-     N_("Open an existing module"), G_CALLBACK(menubar_open_mod_cb)},
-    {"Log", NULL, N_("_Log browser"), "<control>L",
-     N_("Open the message log browser"), G_CALLBACK(menubar_message_log)},
-    {"Exit", NULL, N_("E_xit"), "<control>Q",
-     N_("Exit the program"), G_CALLBACK(menubar_app_exit_cb)},
-
-    /* Edit menu */
-    {"Net", NULL, N_("From _network"), NULL,
-     N_("Update TLE from a network server"), G_CALLBACK(menubar_tle_net_cb)},
-    {"FNet", NULL, N_("From _network"), NULL,
-     N_("Update transponders from a network server"),
-     G_CALLBACK(menubar_trsp_net_cb)},
-    {"Local", NULL, N_("From l_ocal files"), NULL,
-     N_("Update TLE from local files"), G_CALLBACK(menubar_tle_local_cb)},
-    {"Pref",  "preferences-system", N_("_Preferences"), NULL,
-     N_("Edit user preferences"), G_CALLBACK(menubar_pref_cb)},
-
-    /* Help menu */
-    {"Help",  "help-browser", N_("Online help"), "F1",
-     N_("Show online user manual"), G_CALLBACK(menubar_help_cb)},
-    {"License", NULL, N_("_License"), NULL,
-     N_("Show the Gpredict license"), G_CALLBACK(menubar_license_cb)},
-    {"News", NULL, N_("_News"), NULL,
-     N_("Show what's new in this release"), G_CALLBACK(menubar_news_cb)},
-    {"About", "help-about", N_("_About Gpredict"), NULL,
-     N_("Show about dialog"), G_CALLBACK(menubar_about_cb)},
-};
-
-static const char *menu_desc =
-    "<ui>"
-    "   <menubar name='GpredictMenu'>"
-    "      <menu action='FileMenu'>"
-    "         <menuitem action='New'/>"
-    "         <menuitem action='Open'/>"
-    "         <separator/>"
-    "         <menuitem action='Log'/>"
-    "         <separator/>"
-    "         <menuitem action='Exit'/>"
-    "      </menu>"
-    "      <menu action='EditMenu'>"
-    "         <menu action='TleMenu'>"
-    "            <menuitem action='Net'/>"
-    "            <menuitem action='Local'/>"
-    "         </menu>"
-    "         <menu action='FrqMenu'>"
-    "            <menuitem action='FNet'/>"
-    "         </menu>"
-    "         <separator/>"
-    "         <menuitem action='Pref'/>"
-    "      </menu>"
-    "      <menu action='HelpMenu'>"
-    "         <menuitem action='Help'/>"
-    "         <separator/>"
-    "         <menuitem action='License'/>"
-    "         <menuitem action='News'/>"
-    "         <separator/>"
-    "         <menuitem action='About'/>"
-    "      </menu>"
-    "   </menubar>"
-    "</ui>";
-
-
-GtkWidget      *menubar_create(GtkWidget * window)
-{
-    GtkWidget      *menubar;
-    GtkActionGroup *actgrp;
-    GtkUIManager   *uimgr;
-    GtkAccelGroup  *accgrp;
-    GError         *error = NULL;
-    guint           i;
-
-
-    actgrp = gtk_action_group_new("MenuActions");
-    for (i = 0; i < G_N_ELEMENTS(entries); i++)
-    {
-        if (entries[i].label)
-            entries[i].label = _(entries[i].label);
-        if (entries[i].tooltip)
-            entries[i].tooltip = _(entries[i].tooltip);
-    }
-
-    gtk_action_group_add_actions(actgrp, entries, G_N_ELEMENTS(entries), NULL);
-
-    uimgr = gtk_ui_manager_new();
-    gtk_ui_manager_insert_action_group(uimgr, actgrp, 0);
-
-    accgrp = gtk_ui_manager_get_accel_group(uimgr);
-    gtk_window_add_accel_group(GTK_WINDOW(window), accgrp);
-
-    if (!gtk_ui_manager_add_ui_from_string(uimgr, menu_desc, -1, &error))
-    {
-        g_print(_("Failed to build menubar: %s"), error->message);
-        g_error_free(error);
-
-        return NULL;
-    }
-
-    menubar = gtk_ui_manager_get_widget(uimgr, "/GpredictMenu");
-
-    return menubar;
-}
-
 /* Create new module */
 static void menubar_new_mod_cb(GtkWidget * widget, gpointer data)
 {
@@ -336,9 +209,10 @@ static void select_module_row_activated_cb(GtkTreeView * tree_view,
                                            gpointer data)
 {
     GtkDialog      *dialog = GTK_DIALOG(data);
-    (void) tree_view;
-    (void) path;
-    (void) column;
+
+    (void)tree_view;
+    (void)path;
+    (void)column;
 
     gtk_dialog_response(dialog, GTK_RESPONSE_OK);
 }
@@ -469,14 +343,14 @@ static gchar   *select_module()
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          "_Cancel", GTK_RESPONSE_CANCEL,
-                                         "_OK", GTK_RESPONSE_OK,
-                                         NULL);
+                                         "_OK", GTK_RESPONSE_OK, NULL);
 
     gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 200);
     gtk_container_add(GTK_CONTAINER(swin), modlist);
     gtk_widget_show(swin);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                       swin, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX
+                       (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), swin,
+                       TRUE, TRUE, 0);
 
     /* double clicking in list will open clicked module */
     g_signal_connect(modlist, "row-activated",
@@ -629,8 +503,7 @@ static void menubar_trsp_net_cb(GtkWidget * widget, gpointer data)
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         "_Close", GTK_RESPONSE_ACCEPT,
-                                         NULL);
+                                         "_Close", GTK_RESPONSE_ACCEPT, NULL);
     gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT,
                                       FALSE);
     /* create a vbox */
@@ -705,8 +578,7 @@ static void menubar_tle_net_cb(GtkWidget * widget, gpointer data)
                                          GTK_WINDOW(app),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         "_Close", GTK_RESPONSE_ACCEPT,
-                                         NULL);
+                                         "_Close", GTK_RESPONSE_ACCEPT, NULL);
     gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT,
                                       FALSE);
 
@@ -814,8 +686,7 @@ static void menubar_tle_local_cb(GtkWidget * widget, gpointer data)
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          "_Cancel", GTK_RESPONSE_REJECT,
-                                         "_OK", GTK_RESPONSE_ACCEPT,
-                                         NULL);
+                                         "_OK", GTK_RESPONSE_ACCEPT, NULL);
     gtk_box_pack_start(GTK_BOX
                        (gtk_dialog_get_content_area(GTK_DIALOG(dialog))), box,
                        TRUE, TRUE, 30);
@@ -963,4 +834,148 @@ static void menubar_about_cb(GtkWidget * widget, gpointer data)
     (void)data;
 
     about_dialog_create();
+}
+
+#define ACCEL_PATH_QUIT g_intern_static_string("<Gpredict>/File/Quit")
+
+static void create_file_menu_items(GtkMenuShell * menu,
+                                   GtkAccelGroup * accel_group)
+{
+    GtkWidget      *menu_item;
+
+    if (menu == NULL)
+        return;
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_New module"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_new_mod_cb),
+                     NULL);
+    gtk_widget_add_accelerator(menu_item, "activate", accel_group, GDK_KEY_n,
+                               GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_Open module"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_open_mod_cb),
+                     NULL);
+    gtk_widget_add_accelerator(menu_item, "activate", accel_group, GDK_KEY_o,
+                               GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_Log browser"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_message_log),
+                     NULL);
+    gtk_widget_add_accelerator(menu_item, "activate", accel_group, GDK_KEY_l,
+                               GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_Quit"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_app_exit_cb),
+                     NULL);
+    gtk_widget_add_accelerator(menu_item, "activate", accel_group, GDK_KEY_q,
+                               GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_menu_shell_append(menu, menu_item);
+}
+
+static void create_edit_menu_items(GtkMenuShell * menu)
+{
+    GtkWidget      *menu_item;
+
+    if (menu == NULL)
+        return;
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("Update TLE from _net"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_tle_net_cb),
+                     NULL);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("Update TLE from _files"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_tle_local_cb),
+                     NULL);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("Update _frequencies"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_trsp_net_cb),
+                     NULL);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_Preferences"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_pref_cb), NULL);
+    gtk_menu_shell_append(menu, menu_item);
+}
+
+static void create_help_menu_items(GtkMenuShell * menu,
+                                   GtkAccelGroup * accel_group)
+{
+    GtkWidget      *menu_item;
+
+    if (menu == NULL)
+        return;
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_Online help"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_help_cb), NULL);
+    gtk_widget_add_accelerator(menu_item, "activate", accel_group,
+                               GDK_KEY_F1, 0, GTK_ACCEL_VISIBLE);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_License"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_license_cb),
+                     NULL);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_News"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_news_cb), NULL);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("_About Gpredict"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_about_cb),
+                     NULL);
+    gtk_menu_shell_append(menu, menu_item);
+}
+
+GtkWidget      *menubar_create(GtkWidget * window)
+{
+    GtkWidget      *menubar;
+    GtkWidget      *submenu;
+    GtkWidget      *submenu_item;
+    GtkAccelGroup  *accel_group;
+
+    (void)window;
+
+    menubar = gtk_menu_bar_new();
+    accel_group = gtk_accel_group_new();
+    gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
+
+    submenu = gtk_menu_new();
+    submenu_item = gtk_menu_item_new_with_mnemonic(_("_File"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), submenu_item);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu_item), submenu);
+    create_file_menu_items(GTK_MENU_SHELL(submenu), accel_group);
+
+    submenu = gtk_menu_new();
+    submenu_item = gtk_menu_item_new_with_mnemonic(_("_Edit"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), submenu_item);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu_item), submenu);
+    create_edit_menu_items(GTK_MENU_SHELL(submenu));
+
+    submenu = gtk_menu_new();
+    submenu_item = gtk_menu_item_new_with_mnemonic(_("_Help"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menubar), submenu_item);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu_item), submenu);
+    create_help_menu_items(GTK_MENU_SHELL(submenu), accel_group);
+
+    return menubar;
 }

@@ -49,6 +49,7 @@ const gchar *authors[] = {
     "Henry Hallam",
     "Ilias Daradimos",
     "Jan Simon, DL2ZXA",
+    "John Magliacane, KD2BD",
     "Libre Space Foundation",
     "Lloyd Brown",
     "LongnoseRob, JI1MNC",
@@ -70,12 +71,16 @@ const gchar *authors[] = {
     "T.S. Kelso",
     "Valentin Yakovenkov",
     "William J Beksi, KC2EXL",
+    "Xavier Crehueras, EB3CZS",
+    "Yaroslav Stavnichiy",
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",
     "see website http://visibleearth.nasa.gov/",
     NULL
 };
+
+extern GtkWidget *app;
 
 void about_dialog_create()
 {
@@ -84,6 +89,7 @@ void about_dialog_create()
     gchar          *iconfile;
 
     dialog = gtk_about_dialog_new();
+    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app));
     gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("Gpredict"));
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),

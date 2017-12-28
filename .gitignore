@@ -1,4 +1,5 @@
 .version
+.dirstamp
 Makefile
 Makefile.in
 build-config.h

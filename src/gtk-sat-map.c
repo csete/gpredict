@@ -4,12 +4,6 @@
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
   Copyright (C)  2006-2007  William J Beksi, KC2EXL.
   Copyright (C)  2013       Charles Suprin,  AA1VS.
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -1245,13 +1239,8 @@ static guint calculate_footprint(GtkSatMap * satmap, sat_t * sat)
 
         if (azi == 0 && north_pole_is_covered(sat))
             rangelon = ssplon + pi;
-
-        else if (azi == 180 && south_pole_is_covered(sat))
-            rangelon = ssplon + pi;
-
         else if (fabs(num / dem) > 1.0)
             rangelon = ssplon;
-
         else
         {
             if ((180.0 - azi) >= 0)
@@ -2615,6 +2604,8 @@ static void reset_ground_track(gpointer key, gpointer value,
                                gpointer user_data)
 {
     sat_map_obj_t  *obj = (sat_map_obj_t *) value;
+    (void) key;
+    (void) user_data;
 
     obj->track_orbit = 0;
 }

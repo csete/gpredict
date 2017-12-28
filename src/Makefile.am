@@ -96,7 +96,6 @@ gpredict_SOURCES = \
     sat-pref-debug.c sat-pref-debug.h \
     sat-pref-modules.c sat-pref-modules.h \
     sat-pref-layout.c sat-pref-layout.h \
-    sat-pref-layout-utils.c sat-pref-layout-utils.h \
     sat-pref-refresh.c sat-pref-refresh.h \
     sat-pref-map-view.c sat-pref-map-view.h \
     sat-pref-list-view.c sat-pref-list-view.h \
