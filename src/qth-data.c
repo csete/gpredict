@@ -387,15 +387,16 @@ void qth_data_free(qth_t * qth)
  */
 gboolean qth_data_update(qth_t * qth, gdouble t)
 {
+#ifndef HAS_LIBGPS
+    (void)qth;
+    (void)t;
+    return FALSE;
+#else
     gboolean        retval = FALSE;
-
-#ifdef HAS_LIBGPS
     guint           num_loops = 0;
-#endif
 
     if (qth->type != QTH_GPSD_TYPE)
-        return FALSE; // FIXME: retval OK? */
-
+        return FALSE;
 
     if (((t - qth->gpsd_update) > 30.0 / 86400.0) &&
         (t - qth->gpsd_connected > 30.0 / 86400.0))
@@ -408,10 +409,6 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
 
     if (qth->gps_data != NULL)
     {
-
-    /** FIXME: refactor */
-
-#ifdef HAS_LIBGPS
         switch (GPSD_API_MAJOR_VERSION)
         {
         case 4:
@@ -528,7 +525,6 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
         default:
             break;
         }
-#endif
         if (retval == TRUE)
         {
             qth->gpsd_update = t;
@@ -548,6 +544,7 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
     }
 
     return retval;
+#endif  // HAS_LIBGPS
 }
 
 /**
