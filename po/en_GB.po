@@ -2525,7 +2525,7 @@ msgstr "_Open module"
 
 #: ../src/menubar.c:866
 #, fuzzy
-msgid "_Log browaer"
+msgid "_Log browser"
 msgstr "_Log browser"
 
 #: ../src/menubar.c:876

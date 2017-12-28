@@ -2467,7 +2467,7 @@ msgid "_Open module"
 msgstr "_Apri modulo"
 
 #: ../src/menubar.c:866
-msgid "_Log browaer"
+msgid "_Log browser"
 msgstr ""
 
 #: ../src/menubar.c:876

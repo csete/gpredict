@@ -2497,7 +2497,7 @@ msgstr "_Открыть модуль"
 
 #: ../src/menubar.c:866
 #, fuzzy
-msgid "_Log browaer"
+msgid "_Log browser"
 msgstr "_Просмотр журнала"
 
 #: ../src/menubar.c:876
