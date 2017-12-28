@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-27 00:45+0100\n"
+"POT-Creation-Date: 2017-12-28 02:13+0100\n"
 "PO-Revision-Date: 2017-12-04 01:54+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Danish <da@li.org>\n"
@@ -257,14 +257,14 @@ msgstr "Satellitnavn"
 msgid "Catalogue Number"
 msgstr ""
 
-#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:611
-#: ../src/gtk-sat-list.c:84 ../src/gtk-single-sat.c:53
+#: ../src/gtk-event-list.c:64 ../src/gtk-rot-ctrl.c:647
+#: ../src/gtk-sat-list.c:84 ../src/gtk-single-sat.c:45
 #: ../src/sat-pass-dialogs.c:122
 msgid "Azimuth"
 msgstr "Azimut"
 
-#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:648
-#: ../src/gtk-sat-list.c:85 ../src/gtk-single-sat.c:54
+#: ../src/gtk-event-list.c:65 ../src/gtk-rot-ctrl.c:682
+#: ../src/gtk-sat-list.c:85 ../src/gtk-single-sat.c:46
 #: ../src/sat-pass-dialogs.c:123
 msgid "Elevation"
 msgstr "Elevation"
@@ -329,7 +329,7 @@ msgstr "%s:%d: Der er ingen valg; skip popup."
 msgid "%s: GtkEventList has not child with index %d"
 msgstr ""
 
-#: ../src/gtk-freq-knob.c:161 ../src/gtk-rot-knob.c:266
+#: ../src/gtk-freq-knob.c:338 ../src/gtk-rot-knob.c:515
 msgid "Use mouse buttons and wheel to change value"
 msgstr "Brug museknapper og hjul til at ændre værdien"
 
@@ -338,33 +338,33 @@ msgstr "Brug museknapper og hjul til at ændre værdien"
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr "%s:%d: Ukorrektorientering af den polære graf."
 
-#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:669
+#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr "N"
 
-#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:679
+#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr "S"
 
-#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:689
+#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr "Ø"
 
-#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:699
+#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr "V"
 
-#: ../src/gtk-polar-view.c:243
+#: ../src/gtk-polar-view.c:235
 #, c-format
 msgid "%s:%d: Could not find satellite (%d) in hash table"
 msgstr "%s:%d: Kunne ikke finde satellit (%d) in hashtabel"
 
-#: ../src/gtk-polar-view.c:315 ../src/gtk-sat-map.c:847
+#: ../src/gtk-polar-view.c:307 ../src/gtk-sat-map.c:841
 #, c-format
 msgid "%s:%d: Can not find clicked object (%d) in hash table"
 msgstr "%s:%d: Kan ikke finde det valgte objekt (%d) i hashtabel"
 
-#: ../src/gtk-polar-view.c:1009
+#: ../src/gtk-polar-view.c:1001
 #, c-format
 msgid ""
 "Next: %s\n"
@@ -373,7 +373,7 @@ msgstr ""
 "Næste: %s\n"
 "om %02d:%02d:%02d"
 
-#: ../src/gtk-polar-view.c:1012
+#: ../src/gtk-polar-view.c:1004
 #, c-format
 msgid ""
 "Next: %s\n"
@@ -382,30 +382,30 @@ msgstr ""
 "Næste: %s\n"
 "om %02d:%02d"
 
-#: ../src/gtk-polar-view.c:1023 ../src/gtk-sat-map.c:655
+#: ../src/gtk-polar-view.c:1015 ../src/gtk-sat-map.c:649
 #, c-format
 msgid "%s: Can not find NEXT satellite."
 msgstr "%s: Kan ikke finde næste satellit."
 
-#: ../src/gtk-polar-view.c:1025 ../src/gtk-sat-map.c:657
+#: ../src/gtk-polar-view.c:1017 ../src/gtk-sat-map.c:651
 msgid "Next: ERR"
 msgstr "Næste: FEJL"
 
-#: ../src/gtk-polar-view.c:1030 ../src/gtk-sat-map.c:662
+#: ../src/gtk-polar-view.c:1022 ../src/gtk-sat-map.c:656
 msgid "Next: N/A"
 msgstr "Næste: N/A"
 
-#: ../src/gtk-polar-view.c:1063
+#: ../src/gtk-polar-view.c:1055
 #, c-format
 msgid "LOS in %02d:%02d:%02d"
 msgstr "LOS om %02d:%02d:%02d"
 
-#: ../src/gtk-polar-view.c:1067
+#: ../src/gtk-polar-view.c:1059
 #, c-format
 msgid "LOS in %02d:%02d"
 msgstr "LOS om %02d:%02d"
 
-#: ../src/gtk-polar-view.c:1175
+#: ../src/gtk-polar-view.c:1167
 #, c-format
 msgid ""
 "%s\n"
@@ -414,44 +414,44 @@ msgstr ""
 "%s\n"
 "Altid indenfor rækkevidde"
 
-#: ../src/gtk-polar-view.c:1222
+#: ../src/gtk-polar-view.c:1214
 #, c-format
 msgid "%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1328
+#: ../src/gtk-polar-view.c:1320
 #, c-format
 msgid "%s: marker added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1336
+#: ../src/gtk-polar-view.c:1328
 #, c-format
 msgid "%s: label added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1358 ../src/gtk-sat-map.c:1712
+#: ../src/gtk-polar-view.c:1350 ../src/gtk-sat-map.c:1706
 #, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
 msgstr "%s: Kan ikke allokere hukommelse til ny satellit %d."
 
-#: ../src/gtk-polar-view.c:1384 ../src/gtk-polar-view.c:1522
+#: ../src/gtk-polar-view.c:1376 ../src/gtk-polar-view.c:1514
 #, c-format
 msgid "%s:%d: Failed to get satellite pass."
 msgstr "%s:%d: Kunne ikke finde satellitpassage."
 
-#: ../src/gtk-polar-view.c:1394 ../src/gtk-polar-view.c:1536
+#: ../src/gtk-polar-view.c:1386 ../src/gtk-polar-view.c:1528
 #, c-format
 msgid "%s:%d: Pass had no points in it."
 msgstr "%s:%d: Passagen hadve ingen punkter."
 
-#: ../src/gtk-polar-view.c:1514 ../src/gtk-polar-view-popup.c:156
+#: ../src/gtk-polar-view.c:1506 ../src/gtk-polar-view-popup.c:156
 #: ../src/gtk-polar-view-popup.c:209 ../src/gtk-sat-map-popup.c:170
 #: ../src/gtk-sat-map-popup.c:234 ../src/gtk-sat-map-popup.c:281
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
 msgstr "%s:%d: Kunne ikke finde satellit."
 
-#: ../src/gtk-polar-view.c:1645
+#: ../src/gtk-polar-view.c:1639
 #, c-format
 msgid "%s Requested satellite (%d) is not within range"
 msgstr "%s Den efterspurgte satellit (%d) er udenfor rækkevidde."
@@ -466,17 +466,27 @@ msgstr ""
 msgid "Sky track"
 msgstr "Sky track"
 
-#: ../src/gtk-rig-ctrl.c:435
+#: ../src/gtk-rig-ctrl.c:214
+#, c-format
+msgid "AOS in"
+msgstr "AOS om"
+
+#: ../src/gtk-rig-ctrl.c:219
+#, c-format
+msgid "LOS in"
+msgstr "LOS om"
+
+#: ../src/gtk-rig-ctrl.c:442
 msgid "<b> Downlink </b>"
 msgstr "<b> Downlink </b>"
 
 #. Downlink doppler
 #. Uplink doppler
-#: ../src/gtk-rig-ctrl.c:451 ../src/gtk-rig-ctrl.c:517
+#: ../src/gtk-rig-ctrl.c:459 ../src/gtk-rig-ctrl.c:526
 msgid "Doppler:"
 msgstr "Doppler:"
 
-#: ../src/gtk-rig-ctrl.c:454 ../src/gtk-rig-ctrl.c:519
+#: ../src/gtk-rig-ctrl.c:461 ../src/gtk-rig-ctrl.c:528
 msgid ""
 "The Doppler shift according to the range rate and the currently selected "
 "downlink frequency"
@@ -484,40 +494,117 @@ msgstr ""
 "Doppler skift i henhold til satellittens hastighed og den aktuelle dowlink "
 "frekvens"
 
-#: ../src/gtk-rig-ctrl.c:466 ../src/gtk-rig-ctrl.c:532
+#: ../src/gtk-rig-ctrl.c:474 ../src/gtk-rig-ctrl.c:541
 msgid "LO:"
 msgstr "LO:"
 
-#: ../src/gtk-rig-ctrl.c:501
+#: ../src/gtk-rig-ctrl.c:509
 msgid "<b> Uplink </b>"
 msgstr "<b> Uplink </b>"
 
-#: ../src/gtk-rig-ctrl.c:579 ../src/gtk-rot-ctrl.c:702
+#: ../src/gtk-rig-ctrl.c:581
+#, c-format
+msgid "%s:%s: GtkSatModule has no target satellite."
+msgstr "%s:%s: GtkSatModule har ingen satelliter i sigte."
+
+#: ../src/gtk-rig-ctrl.c:590
+#, c-format
+msgid "%s:%s: Satellite %d has %d transponder modes."
+msgstr "%s:%s: Satellitten %d har %d transponder modes."
+
+#: ../src/gtk-rig-ctrl.c:603
+#, c-format
+msgid "%s:%s: Read transponder '%s' for satellite %d"
+msgstr ""
+
+#: ../src/gtk-rig-ctrl.c:635 ../src/gtk-rig-ctrl.c:1240
+#: ../src/gtk-rig-ctrl.c:1290 ../src/gtk-rot-ctrl.c:1382
+#: ../src/gtk-rot-ctrl.c:1517 ../src/sat-pref-rig.c:128
+#: ../src/sat-pref-rot.c:321
+#, c-format
+msgid "%s:%d: Failed to open hwconf dir (%s)"
+msgstr "%s:%d: Kunne ikke åbne hwconf folder (%s)"
+
+#: ../src/gtk-rig-ctrl.c:670 ../src/gtk-rot-ctrl.c:1229
+#, c-format
+msgid "%s:%s: Invalid satellite selection: %d"
+msgstr "%s:%s: Ugyldig satellit: %d"
+
+#: ../src/gtk-rig-ctrl.c:753
+#, c-format
+msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
+msgstr "%s: Inkonsistens i den interne transponder data (%d,%d)"
+
+#: ../src/gtk-rig-ctrl.c:808
+#, c-format
+msgid "%s:%s: Primary device selected: %d"
+msgstr "%s:%s: Primær enhed valgt: %d"
+
+#: ../src/gtk-rig-ctrl.c:822 ../src/gtk-rig-ctrl.c:1135
+#, c-format
+msgid "%s:%d: Failed to allocate memory for radio config"
+msgstr "%s:%d: Kunne ikke allokere hukommelse til radiokonfiguration"
+
+#: ../src/gtk-rig-ctrl.c:832 ../src/gtk-rig-ctrl.c:934
+#, c-format
+msgid "%s:%s: Loaded new radio configuration %s"
+msgstr "%s:%s: Ny radio konfiguration indlæst %s"
+
+#. update LO widgets
+#: ../src/gtk-rig-ctrl.c:835 ../src/gtk-rig-ctrl.c:841
+#: ../src/gtk-rig-ctrl.c:886 ../src/gtk-rig-ctrl.c:906
+#: ../src/gtk-rig-ctrl.c:937
+#, c-format
+msgid "%.0f MHz"
+msgstr "%.0f MHz"
+
+#: ../src/gtk-rig-ctrl.c:849 ../src/gtk-rig-ctrl.c:944
+#, c-format
+msgid "%s:%s: Failed to load radio configuration %s"
+msgstr "%s:%s: Kunne ikke indlæse radio konfiguration %s"
+
+#: ../src/gtk-rig-ctrl.c:868
+#, c-format
+msgid "%s:%s: Secondary device selected: %d"
+msgstr "%s:%s: Sekundær enhed valgt: %d"
+
+#: ../src/gtk-rig-ctrl.c:923
+#, c-format
+msgid "%s:%s: Failed to allocate memory for radio config"
+msgstr "%s:%s: Kunne ikke allokere hukommelse til radio konfiguration"
+
+#: ../src/gtk-rig-ctrl.c:963 ../src/gtk-rig-ctrl.c:1526
+#: ../src/gtk-rot-ctrl.c:1183
+#, c-format
+msgid "%s: Controller does not have a valid configuration"
+msgstr "%s: Kontrolleren har ikke nogen gyldig konfiguration"
+
+#: ../src/gtk-rig-ctrl.c:1019 ../src/gtk-rot-ctrl.c:1273
 msgid "Select target object"
 msgstr "Vælg objekt"
 
 #. tracking button
-#: ../src/gtk-rig-ctrl.c:585 ../src/gtk-rot-ctrl.c:708
+#: ../src/gtk-rig-ctrl.c:1025 ../src/gtk-rot-ctrl.c:1279
 msgid "Track"
 msgstr "Følg"
 
-#: ../src/gtk-rig-ctrl.c:587
+#: ../src/gtk-rig-ctrl.c:1027
 msgid ""
 "Track the satellite transponder.\n"
 "Enabling this button will apply Doppler correction to the frequency of the "
 "radio."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:595
+#: ../src/gtk-rig-ctrl.c:1035
 msgid "Select a transponder"
 msgstr "Vælg transponder"
 
 #. buttons
-#: ../src/gtk-rig-ctrl.c:603
+#: ../src/gtk-rig-ctrl.c:1042
 msgid "T"
 msgstr "T"
 
-#: ../src/gtk-rig-ctrl.c:605
+#: ../src/gtk-rig-ctrl.c:1044
 msgid ""
 "Tune the radio to this transponder. The uplink and downlink will be set to "
 "the center of the transponder passband. In case of beacons, only the "
@@ -527,11 +614,11 @@ msgstr ""
 "transponderens center. I tilfælde af beacons vil kun downlink frekvens blive "
 "indstillet til beaconfrekvensen."
 
-#: ../src/gtk-rig-ctrl.c:612
+#: ../src/gtk-rig-ctrl.c:1051
 msgid "L"
 msgstr "L"
 
-#: ../src/gtk-rig-ctrl.c:614
+#: ../src/gtk-rig-ctrl.c:1053
 msgid ""
 "Lock the uplink and the downlink to each other. Whenever you change the "
 "downlink (in the controller or on the dial, the uplink will track it "
@@ -551,44 +638,49 @@ msgstr ""
 "algoritmen tage udgangspunkt i downlinkfrekvensen."
 
 #. Azimuth
-#: ../src/gtk-rig-ctrl.c:635 ../src/gtk-rot-ctrl.c:717
+#: ../src/gtk-rig-ctrl.c:1074 ../src/gtk-rot-ctrl.c:1288
 msgid "Az:"
 msgstr "Az:"
 
 #. Elevation
-#: ../src/gtk-rig-ctrl.c:643 ../src/gtk-rot-ctrl.c:726
+#: ../src/gtk-rig-ctrl.c:1082 ../src/gtk-rot-ctrl.c:1297
 msgid "El:"
 msgstr "El:"
 
 #. Range
-#: ../src/gtk-rig-ctrl.c:651
+#: ../src/gtk-rig-ctrl.c:1090
 msgid " Range:"
 msgstr " Afstand:"
 
-#: ../src/gtk-rig-ctrl.c:659 ../src/gtk-rig-ctrl.c:662
+#: ../src/gtk-rig-ctrl.c:1098 ../src/gtk-rig-ctrl.c:1101
 msgid "This is the current distance between the satellite and the observer."
 msgstr "Den aktuelle afstand imellem satellit og observatør."
 
 #. Range rate
-#: ../src/gtk-rig-ctrl.c:666
+#: ../src/gtk-rig-ctrl.c:1105
 msgid " Rate:"
 msgstr " Hastighed:"
 
-#: ../src/gtk-rig-ctrl.c:674 ../src/gtk-rig-ctrl.c:677
+#: ../src/gtk-rig-ctrl.c:1113 ../src/gtk-rig-ctrl.c:1116
 msgid ""
 "The rate of change for the distance between the satellite and the observer."
 msgstr "Hastighed hvormed afstanden imellem satellit og observatør ændres."
 
-#: ../src/gtk-rig-ctrl.c:680 ../src/gtk-rot-ctrl.c:742
+#: ../src/gtk-rig-ctrl.c:1119 ../src/gtk-rot-ctrl.c:1313
 msgid "Target"
 msgstr "Destination"
 
+#: ../src/gtk-rig-ctrl.c:1149
+#, c-format
+msgid "%s:%d: Error reading radio configuration %s"
+msgstr "%s:%d: Fejl under indlæsning af radio konfiguration %s"
+
 #. Primary device
-#: ../src/gtk-rig-ctrl.c:704
+#: ../src/gtk-rig-ctrl.c:1192
 msgid "1. Device:"
 msgstr "1. Enhed:"
 
-#: ../src/gtk-rig-ctrl.c:710
+#: ../src/gtk-rig-ctrl.c:1198
 msgid ""
 "Select primary radio device.This device will be used for downlink and uplink "
 "unless you select a secondary device for uplink"
@@ -596,21 +688,13 @@ msgstr ""
 "Vælg den primære radio. Denne enhed vil blive brugt til både downlink og "
 "uplink med mindre du vælger en sekundær enhed til uplink."
 
-#: ../src/gtk-rig-ctrl.c:753 ../src/gtk-rig-ctrl.c:803
-#: ../src/gtk-rig-ctrl.c:2383 ../src/gtk-rot-ctrl.c:811
-#: ../src/gtk-rot-ctrl.c:1626 ../src/sat-pref-rig.c:128
-#: ../src/sat-pref-rot.c:321
-#, c-format
-msgid "%s:%d: Failed to open hwconf dir (%s)"
-msgstr "%s:%d: Kunne ikke åbne hwconf folder (%s)"
-
 #. config will be force-loaded after LO spin is created
 #. Secondary device
-#: ../src/gtk-rig-ctrl.c:767
+#: ../src/gtk-rig-ctrl.c:1254
 msgid "2. Device:"
 msgstr "2. Enhed:"
 
-#: ../src/gtk-rig-ctrl.c:773
+#: ../src/gtk-rig-ctrl.c:1260
 msgid ""
 "Select secondary radio device\n"
 "This device will be used for uplink"
@@ -618,329 +702,290 @@ msgstr ""
 "Vælg den dekundære radio.\n"
 "Denne enhed vil blive brugt til uplink."
 
-#: ../src/gtk-rig-ctrl.c:778 ../src/sat-pref-rig.c:254
+#: ../src/gtk-rig-ctrl.c:1265 ../src/sat-pref-rig.c:254
 #: ../src/sat-pref-rig.c:263 ../src/sat-pref-rig-editor.c:345
 msgid "None"
 msgstr "Ingen"
 
 #. Engage button
-#: ../src/gtk-rig-ctrl.c:817 ../src/gtk-rot-ctrl.c:825
+#: ../src/gtk-rig-ctrl.c:1303 ../src/gtk-rot-ctrl.c:1396
 msgid "Engage"
 msgstr "Aktiver"
 
-#: ../src/gtk-rig-ctrl.c:819
+#: ../src/gtk-rig-ctrl.c:1305
 msgid "Engage the selected radio device"
 msgstr "Aktiver forbindelse til den valgte radio enhed."
 
 #. Timeout
-#: ../src/gtk-rig-ctrl.c:828 ../src/gtk-rot-ctrl.c:843
+#: ../src/gtk-rig-ctrl.c:1314 ../src/gtk-rot-ctrl.c:1413
 msgid "Cycle:"
 msgstr "Cyklus:"
 
-#: ../src/gtk-rig-ctrl.c:835
+#: ../src/gtk-rig-ctrl.c:1321
 msgid "This parameter controls the delay between commands sent to the rig."
 msgstr ""
 "Denne parameter bestemmer forsinkelsen imellem kommandoer sendt til radioen."
 
-#: ../src/gtk-rig-ctrl.c:843 ../src/gtk-rot-ctrl.c:858
+#: ../src/gtk-rig-ctrl.c:1328 ../src/gtk-rot-ctrl.c:1427
 msgid "msec"
 msgstr "msek"
 
-#: ../src/gtk-rig-ctrl.c:847 ../src/gtk-rot-ctrl.c:888
+#: ../src/gtk-rig-ctrl.c:1332 ../src/gtk-rot-ctrl.c:1457
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: ../src/gtk-rig-ctrl.c:863
+#: ../src/gtk-rig-ctrl.c:1347
 msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:866
-msgid ""
-"The time remaining until the next AOS or LOS event, depending on which one "
-"comes first."
+#: ../src/gtk-rig-ctrl.c:1350
+#, fuzzy
+msgid "The time remaining until the next AOS or LOS event"
 msgstr "Tid til den næste AOS eller LOS afhængigt af hvad der kommer først."
 
-#: ../src/gtk-rig-ctrl.c:912 ../src/gtk-rot-ctrl.c:953
-#, c-format
-msgid "%s:%s: Invalid satellite selection: %d"
-msgstr "%s:%s: Ugyldig satellit: %d"
-
-#: ../src/gtk-rig-ctrl.c:949
-#, c-format
-msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
-msgstr "%s: Inkonsistens i den interne transponder data (%d,%d)"
-
-#: ../src/gtk-rig-ctrl.c:1050
-#, c-format
-msgid "%s:%s: Primary device selected: %d"
-msgstr "%s:%s: Primær enhed valgt: %d"
-
-#: ../src/gtk-rig-ctrl.c:1064 ../src/gtk-rig-ctrl.c:2455
-#, c-format
-msgid "%s:%d: Failed to allocate memory for radio config"
-msgstr "%s:%d: Kunne ikke allokere hukommelse til radiokonfiguration"
-
-#: ../src/gtk-rig-ctrl.c:1074 ../src/gtk-rig-ctrl.c:1176
-#, c-format
-msgid "%s:%s: Loaded new radio configuration %s"
-msgstr "%s:%s: Ny radio konfiguration indlæst %s"
-
-#. update LO widgets
-#: ../src/gtk-rig-ctrl.c:1077 ../src/gtk-rig-ctrl.c:1083
-#: ../src/gtk-rig-ctrl.c:1128 ../src/gtk-rig-ctrl.c:1148
-#: ../src/gtk-rig-ctrl.c:1179
-#, c-format
-msgid "%.0f MHz"
-msgstr "%.0f MHz"
-
-#: ../src/gtk-rig-ctrl.c:1091 ../src/gtk-rig-ctrl.c:1186
-#, c-format
-msgid "%s:%s: Failed to load radio configuration %s"
-msgstr "%s:%s: Kunne ikke indlæse radio konfiguration %s"
-
-#: ../src/gtk-rig-ctrl.c:1110
-#, c-format
-msgid "%s:%s: Secondary device selected: %d"
-msgstr "%s:%s: Sekundær enhed valgt: %d"
-
-#: ../src/gtk-rig-ctrl.c:1165
-#, c-format
-msgid "%s:%s: Failed to allocate memory for radio config"
-msgstr "%s:%s: Kunne ikke allokere hukommelse til radio konfiguration"
-
-#: ../src/gtk-rig-ctrl.c:1205 ../src/gtk-rig-ctrl.c:1299
-#: ../src/gtk-rot-ctrl.c:1151
-#, c-format
-msgid "%s: Controller does not have a valid configuration"
-msgstr "%s: Kontrolleren har ikke nogen gyldig konfiguration"
-
-#: ../src/gtk-rig-ctrl.c:1262
-#, c-format
-msgid "%s called but TX VFO is %d."
-msgstr "%s blev kaldt men TX VFO er %d."
-
-#: ../src/gtk-rig-ctrl.c:1306
-#, c-format
-msgid "%s missed the deadline"
-msgstr "%s missede deadline"
-
-#: ../src/gtk-rig-ctrl.c:2234 ../src/gtk-rot-ctrl.c:1469
-#, c-format
-msgid "%s:%d: NULL storage."
-msgstr "%s:%d: NULL lager."
-
-#: ../src/gtk-rig-ctrl.c:2273
-#, c-format
-msgid "AOS in"
-msgstr "AOS om"
-
-#: ../src/gtk-rig-ctrl.c:2278
-#, c-format
-msgid "LOS in"
-msgstr "LOS om"
-
-#: ../src/gtk-rig-ctrl.c:2329
-#, c-format
-msgid "%s:%s: GtkSatModule has no target satellite."
-msgstr "%s:%s: GtkSatModule har ingen satelliter i sigte."
-
-#: ../src/gtk-rig-ctrl.c:2338
-#, c-format
-msgid "%s:%s: Satellite %d has %d transponder modes."
-msgstr "%s:%s: Satellitten %d har %d transponder modes."
-
-#: ../src/gtk-rig-ctrl.c:2351
-#, c-format
-msgid "%s:%s: Read transponder '%s' for satellite %d"
-msgstr ""
-
-#: ../src/gtk-rig-ctrl.c:2469
-#, c-format
-msgid "%s:%d: Error reading radio configuration %s"
-msgstr "%s:%d: Fejl under indlæsning af radio konfiguration %s"
-
-#: ../src/gtk-rig-ctrl.c:2498
+#: ../src/gtk-rig-ctrl.c:1389
 #, c-format
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr "%s:%s: sender %d bytes til rigctld som \"%s\""
 
-#: ../src/gtk-rig-ctrl.c:2505 ../src/gtk-rot-ctrl.c:215
+#: ../src/gtk-rig-ctrl.c:1396 ../src/gtk-rot-ctrl.c:173
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr "%s: SIZE ERROR %d / %d"
 
-#: ../src/gtk-rig-ctrl.c:2510 ../src/gtk-rig-ctrl.c:2518
+#: ../src/gtk-rig-ctrl.c:1401 ../src/gtk-rig-ctrl.c:1409
 #, c-format
 msgid "%s: rigctld port closed"
 msgstr "%s: rigctld port lukket"
 
-#: ../src/gtk-rig-ctrl.c:2526
+#: ../src/gtk-rig-ctrl.c:1417
 #, c-format
 msgid "%s:%s: Got 0 bytes from rigctld"
 msgstr "%s:%s: Fik 0 bytes fra rigctld"
 
-#: ../src/gtk-rig-ctrl.c:2531
+#: ../src/gtk-rig-ctrl.c:1422
 #, c-format
 msgid "%s:%s: Read %d bytes from rigctld"
 msgstr "%s:%s: Fik %d bytes fra rigctld"
 
-#: ../src/gtk-rig-ctrl.c:2574
-#, c-format
-msgid "%s: Detected SPACEBAR pressed event"
-msgstr "%s: Detected SPACEBAR pressed event"
+#: ../src/gtk-rig-ctrl.c:1453 ../src/gtk-rig-ctrl.c:1471
+#, fuzzy, c-format
+msgid "%s:%s: %s rigctld returned error (%s)"
+msgstr "%s: %s rigctld returnerede en fejl (%s)"
 
-#: ../src/gtk-rig-ctrl.c:2587
+#: ../src/gtk-rig-ctrl.c:1508
 #, c-format
-msgid "%s:%s: Keypress value %i not managed by this function"
-msgstr "%s:%s: Keypress value %i not managed by this function"
+msgid "%s called but TX VFO is %d."
+msgstr "%s blev kaldt men TX VFO er %d."
 
-#: ../src/gtk-rig-ctrl.c:2634
+#: ../src/gtk-rig-ctrl.c:1533
+#, c-format
+msgid "%s missed the deadline"
+msgstr "%s missede deadline"
+
+#: ../src/gtk-rig-ctrl.c:2461 ../src/gtk-rot-ctrl.c:309
+#, c-format
+msgid "%s:%d: NULL storage."
+msgstr "%s:%d: NULL lager."
+
+#: ../src/gtk-rig-ctrl.c:2526
 #, c-format
 msgid "%s: Acquired controller lock"
 msgstr "%s: Acquired controller lock"
 
-#: ../src/gtk-rig-ctrl.c:2639
+#: ../src/gtk-rig-ctrl.c:2531
 #, c-format
 msgid ""
 "%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage "
 "button)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2650
+#: ../src/gtk-rig-ctrl.c:2542
 #, c-format
 msgid "%s: PTT is OFF => Set TX freq and PTT=ON"
 msgstr "%s: PTT is OFF => Set TX freq and PTT=ON"
 
-#: ../src/gtk-rig-ctrl.c:2660
+#: ../src/gtk-rig-ctrl.c:2552
 #, c-format
 msgid "%s: PTT is ON = Set PTT=OFF"
 msgstr "%s: PTT is ON = Set PTT=OFF"
 
-#: ../src/gtk-rig-ctrl.c:2671
+#: ../src/gtk-rig-ctrl.c:2563
 #, c-format
 msgid "%s: Failed to acquire controller lock; PTT event not handled"
 msgstr "%s: Kunne ikke få kontroller lås; PTT begivenhed ikke behandlet"
 
-#: ../src/gtk-rig-ctrl.c:2687
+#: ../src/gtk-rig-ctrl.c:2589
+#, c-format
+msgid "%s: Detected SPACEBAR pressed event"
+msgstr "%s: Detected SPACEBAR pressed event"
+
+#: ../src/gtk-rig-ctrl.c:2602
+#, c-format
+msgid "%s:%s: Keypress value %i not managed by this function"
+msgstr "%s:%s: Keypress value %i not managed by this function"
+
+#: ../src/gtk-rig-ctrl.c:2621
 #, c-format
 msgid "%s: Failed to create socket"
 msgstr "%s: Kunne ikke oprette forbindelse"
 
-#: ../src/gtk-rig-ctrl.c:2694 ../src/gtk-rot-ctrl.c:125
+#: ../src/gtk-rig-ctrl.c:2628 ../src/gtk-rot-ctrl.c:83
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr "%s: Netværksforbindelse oprettet"
 
-#: ../src/gtk-rig-ctrl.c:2708
+#: ../src/gtk-rig-ctrl.c:2642
 #, c-format
 msgid "%s: Failed to connect to %s:%d"
 msgstr "%s: Kunne ikke opette forbindelse til %s:%d"
 
-#: ../src/gtk-rig-ctrl.c:2716 ../src/gtk-rot-ctrl.c:161
+#: ../src/gtk-rig-ctrl.c:2650 ../src/gtk-rot-ctrl.c:119
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr "%s: Forbindelse til %s:%d er åbnet"
 
-#: ../src/gtk-rig-ctrl.c:2731 ../src/gtk-rot-ctrl.c:177
+#: ../src/gtk-rig-ctrl.c:2665 ../src/gtk-rot-ctrl.c:135
 #, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2767 ../src/gtk-rig-ctrl.c:2785
-#, fuzzy, c-format
-msgid "%s:%s: %s rigctld returned error (%s)"
-msgstr "%s: %s rigctld returnerede en fejl (%s)"
-
-#: ../src/gtk-rig-ctrl.c:2888
+#: ../src/gtk-rig-ctrl.c:2774
 #, c-format
 msgid "%s:%s: ERROR: NO VALID ctrl-struct"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2952
+#: ../src/gtk-rig-ctrl.c:2838
 #, fuzzy, c-format
 msgid "%s:%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
 msgstr "%s: Ugyldig radio type %d. Anvender RIG_TYPE_RX istedet"
 
-#: ../src/gtk-rig-ctrl.c:2969
+#: ../src/gtk-rig-ctrl.c:2855
 #, fuzzy, c-format
 msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr "%s: MAX_ERROR_COUNT (%d) er nået. Afbryder forbindelse!"
 
-#: ../src/gtk-rot-ctrl.c:120
+#: ../src/gtk-rot-ctrl.c:78
 #, fuzzy, c-format
 msgid "Failed to create rotctl socket: %s"
 msgstr "%s: Kunne ikke oprette forbindelse"
 
-#: ../src/gtk-rot-ctrl.c:132
+#: ../src/gtk-rot-ctrl.c:91
 #, c-format
 msgid "Name resolution of rotctld server %s failed."
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:150
+#: ../src/gtk-rot-ctrl.c:108
 #, c-format
 msgid "Connection to rotctld server at %s:%d failed: %s"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:220 ../src/gtk-rot-ctrl.c:230
+#: ../src/gtk-rot-ctrl.c:178 ../src/gtk-rot-ctrl.c:188
 #, c-format
 msgid "%s: rotctld Socket Down"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:238
+#: ../src/gtk-rot-ctrl.c:196
 #, c-format
 msgid "%s:%s: Got 0 bytes from rotctld"
 msgstr "%s:%s: Fik 0 bytes fra rotctld"
 
-#: ../src/gtk-rot-ctrl.c:623
+#: ../src/gtk-rot-ctrl.c:324
+#, c-format
+msgid "%s:%d: rotctld returned error (%s)"
+msgstr "%s:%d: rotctld har returneret en fejl (%s)"
+
+#: ../src/gtk-rot-ctrl.c:339
+#, c-format
+msgid "%s:%d: rotctld returned bad response (%s)"
+msgstr "%s:%d: rotctld har returneret en ugyldig respons (%s)"
+
+#: ../src/gtk-rot-ctrl.c:385
+#, c-format
+msgid "%s:%d: rotctld returned error %d with az %f el %f(%s)"
+msgstr "%s:%d: rotctld har returneret fejl %d med az %f el %f (%s)"
+
+#: ../src/gtk-rot-ctrl.c:659
 msgid "Read:"
 msgstr "Læs:"
 
-#: ../src/gtk-rot-ctrl.c:660
+#: ../src/gtk-rot-ctrl.c:694
 msgid "Read: "
 msgstr "Læs: "
 
-#: ../src/gtk-rot-ctrl.c:711
+#: ../src/gtk-rot-ctrl.c:818 ../src/gtk-rot-ctrl.c:819
+#: ../src/gtk-sat-module-popup.c:900 ../src/gtk-sat-module-popup.c:980
+#: ../src/sat-log-browser.c:55 ../src/sat-log.c:61 ../src/sat-pref-rig.c:222
+msgid "ERROR"
+msgstr "FEJL"
+
+#: ../src/gtk-rot-ctrl.c:962
+#, c-format
+msgid "%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
+msgstr "%s: MAX_ERROR_COUNT (%d) er nået. Afbryder forbindelse!"
+
+#: ../src/gtk-rot-ctrl.c:1075
+#, c-format
+msgid "%s:%d: Failed to allocate memory for rotator config"
+msgstr "%s:%d: Kunne ikke allokere hukommelse til rotor konfiguration"
+
+#: ../src/gtk-rot-ctrl.c:1086
+#, c-format
+msgid "Loaded new rotator configuration %s"
+msgstr "Ny rotor konfiguration %s indlæst"
+
+#: ../src/gtk-rot-ctrl.c:1101
+#, c-format
+msgid "%s:%d: Failed to load rotator configuration %s"
+msgstr "%s:%d: Fejl under indlæsning af rotor konfiguration %s"
+
+#: ../src/gtk-rot-ctrl.c:1168
+#, c-format
+msgid "%s:%d: rotctld returned error %d with stop-cmd (%s)"
+msgstr ""
+
+#: ../src/gtk-rot-ctrl.c:1282
 msgid "Track the satellite when it is within range"
 msgstr "Track satellitten når den er indenfor rækkevidde"
 
 #. count down
-#: ../src/gtk-rot-ctrl.c:735
+#: ../src/gtk-rot-ctrl.c:1306
 msgid "ΔT:"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:765
+#: ../src/gtk-rot-ctrl.c:1336
 msgid "Device:"
 msgstr "Enhed:"
 
-#: ../src/gtk-rot-ctrl.c:771
+#: ../src/gtk-rot-ctrl.c:1342
 msgid "Select antenna rotator device"
 msgstr "Vælg antennerotor enhed"
 
-#: ../src/gtk-rot-ctrl.c:827
+#: ../src/gtk-rot-ctrl.c:1398
 msgid "Engage the selected rotor device"
 msgstr ""
 
 #. Monitor checkbox
-#: ../src/gtk-rot-ctrl.c:833
+#: ../src/gtk-rot-ctrl.c:1404
 msgid "Monitor"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:836
+#: ../src/gtk-rot-ctrl.c:1406
 msgid "Monitor rotator but do not send any position commands"
 msgstr ""
 
-#: ../src/gtk-rot-ctrl.c:850
+#: ../src/gtk-rot-ctrl.c:1420
 msgid "This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Denne parameter bestemmer forsinkelsen imellem kommandoer der bliver sendt "
 "til rotoren"
 
 #. Tolerance
-#: ../src/gtk-rot-ctrl.c:863
+#: ../src/gtk-rot-ctrl.c:1432
 msgid "Tolerance:"
 msgstr "Tolerance:"
 
-#: ../src/gtk-rot-ctrl.c:871
+#: ../src/gtk-rot-ctrl.c:1439
 msgid ""
 "This parameter controls the tolerance between the target and rotator values "
 "for the rotator.\n"
@@ -952,55 +997,9 @@ msgstr ""
 "Hvis forskellen er mindre end tolerancen vil controlelren ikke sende nye "
 "kommandoer ."
 
-#: ../src/gtk-rot-ctrl.c:881
+#: ../src/gtk-rot-ctrl.c:1450
 msgid "deg"
 msgstr "grader"
-
-#: ../src/gtk-rot-ctrl.c:1045
-#, c-format
-msgid "%s:%d: Failed to allocate memory for rotator config"
-msgstr "%s:%d: Kunne ikke allokere hukommelse til rotor konfiguration"
-
-#: ../src/gtk-rot-ctrl.c:1056
-#, c-format
-msgid "Loaded new rotator configuration %s"
-msgstr "Ny rotor konfiguration %s indlæst"
-
-#: ../src/gtk-rot-ctrl.c:1071
-#, c-format
-msgid "%s:%d: Failed to load rotator configuration %s"
-msgstr "%s:%d: Fejl under indlæsning af rotor konfiguration %s"
-
-#: ../src/gtk-rot-ctrl.c:1136
-#, c-format
-msgid "%s:%d: rotctld returned error %d with stop-cmd (%s)"
-msgstr ""
-
-#: ../src/gtk-rot-ctrl.c:1257 ../src/gtk-rot-ctrl.c:1258
-#: ../src/gtk-sat-module-popup.c:900 ../src/gtk-sat-module-popup.c:980
-#: ../src/sat-log-browser.c:55 ../src/sat-log.c:61 ../src/sat-pref-rig.c:222
-msgid "ERROR"
-msgstr "FEJL"
-
-#: ../src/gtk-rot-ctrl.c:1401
-#, c-format
-msgid "%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
-msgstr "%s: MAX_ERROR_COUNT (%d) er nået. Afbryder forbindelse!"
-
-#: ../src/gtk-rot-ctrl.c:1484
-#, c-format
-msgid "%s:%d: rotctld returned error (%s)"
-msgstr "%s:%d: rotctld har returneret en fejl (%s)"
-
-#: ../src/gtk-rot-ctrl.c:1499
-#, c-format
-msgid "%s:%d: rotctld returned bad response (%s)"
-msgstr "%s:%d: rotctld har returneret en ugyldig respons (%s)"
-
-#: ../src/gtk-rot-ctrl.c:1544
-#, c-format
-msgid "%s:%d: rotctld returned error %d with az %f el %f(%s)"
-msgstr "%s:%d: rotctld har returneret fejl %d med az %f el %f (%s)"
 
 #: ../src/gtk-sat-data.c:88
 #, c-format
@@ -1049,16 +1048,16 @@ msgid "Rate"
 msgstr "Rate"
 
 #. Next Event
-#: ../src/gtk-sat-list.c:59 ../src/gtk-sat-list.c:91 ../src/gtk-single-sat.c:60
-#: ../src/sat-pref-map-view.c:245 ../src/sat-pref-polar-view.c:424
+#: ../src/gtk-sat-list.c:59 ../src/gtk-sat-list.c:91 ../src/gtk-single-sat.c:52
+#: ../src/sat-pref-map-view.c:806 ../src/sat-pref-polar-view.c:424
 msgid "Next Event"
 msgstr "Næste"
 
-#: ../src/gtk-sat-list.c:60 ../src/gtk-sat-list.c:92 ../src/gtk-single-sat.c:61
+#: ../src/gtk-sat-list.c:60 ../src/gtk-sat-list.c:92 ../src/gtk-single-sat.c:53
 msgid "Next AOS"
 msgstr "Næste AOS"
 
-#: ../src/gtk-sat-list.c:61 ../src/gtk-sat-list.c:93 ../src/gtk-single-sat.c:62
+#: ../src/gtk-sat-list.c:61 ../src/gtk-sat-list.c:93 ../src/gtk-single-sat.c:54
 msgid "Next LOS"
 msgstr "Næste LOS"
 
@@ -1119,7 +1118,7 @@ msgstr "Omløb"
 msgid "Vis"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:86 ../src/gtk-single-sat.c:55
+#: ../src/gtk-sat-list.c:86 ../src/gtk-single-sat.c:47
 msgid "Direction"
 msgstr "Retning"
 
@@ -1127,17 +1126,17 @@ msgstr "Retning"
 msgid "Right Ascension"
 msgstr "Rektascension"
 
-#: ../src/gtk-sat-list.c:88 ../src/gtk-single-sat.c:57
+#: ../src/gtk-sat-list.c:88 ../src/gtk-single-sat.c:49
 #: ../src/sat-pass-dialogs.c:125
 msgid "Declination"
 msgstr "Deklination"
 
-#: ../src/gtk-sat-list.c:89 ../src/gtk-single-sat.c:58
+#: ../src/gtk-sat-list.c:89 ../src/gtk-single-sat.c:50
 #: ../src/sat-pass-dialogs.c:126
 msgid "Slant Range"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:90 ../src/gtk-single-sat.c:59
+#: ../src/gtk-sat-list.c:90 ../src/gtk-single-sat.c:51
 #: ../src/sat-pass-dialogs.c:127
 msgid "Range Rate"
 msgstr ""
@@ -1154,23 +1153,23 @@ msgstr "Længdegrad"
 msgid "Sub-Satellite Point"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:97 ../src/gtk-single-sat.c:66
+#: ../src/gtk-sat-list.c:97 ../src/gtk-single-sat.c:58
 #: ../src/sat-pass-dialogs.c:131
 msgid "Footprint"
 msgstr "Fodspor"
 
 #. altitude
-#: ../src/gtk-sat-list.c:98 ../src/gtk-single-sat.c:67 ../src/qth-editor.c:591
+#: ../src/gtk-sat-list.c:98 ../src/gtk-single-sat.c:59 ../src/qth-editor.c:591
 #: ../src/sat-pass-dialogs.c:132 ../src/sat-pref-qth-editor.c:704
 msgid "Altitude"
 msgstr "Højde"
 
-#: ../src/gtk-sat-list.c:99 ../src/gtk-single-sat.c:68
+#: ../src/gtk-sat-list.c:99 ../src/gtk-single-sat.c:60
 #: ../src/sat-pass-dialogs.c:133
 msgid "Velocity"
 msgstr "Hastighed"
 
-#: ../src/gtk-sat-list.c:100 ../src/gtk-single-sat.c:96
+#: ../src/gtk-sat-list.c:100 ../src/gtk-single-sat.c:88
 #: ../src/sat-pass-dialogs.c:134
 msgid "Doppler Shift @ 100MHz"
 msgstr ""
@@ -1179,26 +1178,26 @@ msgstr ""
 msgid "Signal Loss @ 100MHz"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:102 ../src/gtk-single-sat.c:98
+#: ../src/gtk-sat-list.c:102 ../src/gtk-single-sat.c:90
 #: ../src/sat-pass-dialogs.c:136
 msgid "Signal Delay"
 msgstr "Signalforsinkelse"
 
-#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:99
+#: ../src/gtk-sat-list.c:103 ../src/gtk-single-sat.c:91
 #: ../src/sat-pass-dialogs.c:137
 msgid "Mean Anomaly"
 msgstr ""
 
-#: ../src/gtk-sat-list.c:104 ../src/gtk-single-sat.c:73
-#: ../src/gtk-single-sat.c:100 ../src/sat-pass-dialogs.c:138
+#: ../src/gtk-sat-list.c:104 ../src/gtk-single-sat.c:65
+#: ../src/gtk-single-sat.c:92 ../src/sat-pass-dialogs.c:138
 msgid "Orbit Phase"
 msgstr "Omløbsfase"
 
-#: ../src/gtk-sat-list.c:105 ../src/gtk-single-sat.c:101
+#: ../src/gtk-sat-list.c:105 ../src/gtk-single-sat.c:93
 msgid "Orbit Number"
 msgstr "Omløbsnummer"
 
-#: ../src/gtk-sat-list.c:106 ../src/gtk-single-sat.c:75
+#: ../src/gtk-sat-list.c:106 ../src/gtk-single-sat.c:67
 #: ../src/sat-pass-dialogs.c:139
 msgid "Visibility"
 msgstr "Synlighed"
@@ -1223,62 +1222,62 @@ msgstr "%s:%d: Ugyldig søjle: %d"
 msgid "%s: GtkSatList has not child with index %d"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:631
+#: ../src/gtk-sat-map.c:625
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d:%s%d%s%d </span>"
 msgstr "<span background=\"#%s\"> Næste: %s om %s%d:%s%d%s%d </span>"
 
-#: ../src/gtk-sat-map.c:639
+#: ../src/gtk-sat-map.c:633
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d%s%d </span>"
 msgstr "<span background=\"#%s\"> Næste: %s om %s%d%s%d </span>"
 
-#: ../src/gtk-sat-map.c:935
+#: ../src/gtk-sat-map.c:929
 #, c-format
 msgid "%s: Can not find clicked object (%d) in hash table"
 msgstr "%s: Kunne ikke finde valgte objekt (%d) i hashtabel"
 
-#: ../src/gtk-sat-map.c:1021
+#: ../src/gtk-sat-map.c:1015
 #, c-format
 msgid "%s:%d: Loading map file %s"
 msgstr "%s:%d: Indlæser kort fil %s"
 
-#: ../src/gtk-sat-map.c:1027
+#: ../src/gtk-sat-map.c:1021
 #, c-format
 msgid "%s:%d: Map file found"
 msgstr "%s:%d: Kort fil ikke fundet"
 
-#: ../src/gtk-sat-map.c:1032
+#: ../src/gtk-sat-map.c:1026
 #, c-format
 msgid "%s:%d: Could not find map file %s"
 msgstr "%s:%d: Kunne ikke finde kort fil %s"
 
-#: ../src/gtk-sat-map.c:1040
+#: ../src/gtk-sat-map.c:1034
 #, c-format
 msgid "%s:%d: Using default map: %s"
 msgstr "%s:%d: Andvender standard kort: %s"
 
-#: ../src/gtk-sat-map.c:1050
+#: ../src/gtk-sat-map.c:1044
 #, c-format
 msgid "%s:%d: Error loading map file (%s)"
 msgstr "%s:%d: Fejl ved indlæsning af kort fil (%s)"
 
-#: ../src/gtk-sat-map.c:1110
+#: ../src/gtk-sat-map.c:1104
 #, c-format
 msgid "%s: Bad data measuring distance to North Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1130
+#: ../src/gtk-sat-map.c:1124
 #, c-format
 msgid "%s: Bad data measuring distance to South Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:2651
+#: ../src/gtk-sat-map.c:2647
 #, c-format
 msgid "LOS in %d minutes"
 msgstr "LOS om %d minutter"
 
-#: ../src/gtk-sat-map.c:2653
+#: ../src/gtk-sat-map.c:2649
 #, c-format
 msgid "AOS in %d minutes"
 msgstr "AOS om %d minutter"
@@ -1731,7 +1730,7 @@ msgstr "Tilbage"
 #: ../src/gtk-sat-module-tmg.c:112 ../src/sat-pref-conditions.c:133
 #: ../src/sat-pref-debug.c:241 ../src/sat-pref-formats.c:98
 #: ../src/sat-pref-layout.c:449 ../src/sat-pref-list-view.c:131
-#: ../src/sat-pref-map-view.c:782 ../src/sat-pref-multi-pass.c:102
+#: ../src/sat-pref-map-view.c:1307 ../src/sat-pref-multi-pass.c:102
 #: ../src/sat-pref-polar-view.c:744 ../src/sat-pref-refresh.c:211
 #: ../src/sat-pref-single-pass.c:105 ../src/sat-pref-single-sat.c:134
 #: ../src/sat-pref-sky-at-glance.c:226 ../src/sat-pref-tle.c:406
@@ -1997,146 +1996,146 @@ msgstr ""
 msgid "%s: There are no satellites selected => NULL."
 msgstr "%s: Ingen satellitter valgt => NULL."
 
-#: ../src/gtk-single-sat.c:56
+#: ../src/gtk-single-sat.c:48
 msgid "Right Asc."
 msgstr ""
 
-#: ../src/gtk-single-sat.c:63
+#: ../src/gtk-single-sat.c:55
 msgid "SSP Lat."
 msgstr ""
 
-#: ../src/gtk-single-sat.c:64
+#: ../src/gtk-single-sat.c:56
 msgid "SSP Lon."
 msgstr ""
 
-#: ../src/gtk-single-sat.c:65
+#: ../src/gtk-single-sat.c:57
 msgid "SSP Loc."
 msgstr ""
 
-#: ../src/gtk-single-sat.c:69
+#: ../src/gtk-single-sat.c:61
 msgid "Doppler@100M"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:70
+#: ../src/gtk-single-sat.c:62
 msgid "Sig. Loss"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:71
+#: ../src/gtk-single-sat.c:63
 msgid "Sig. Delay"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:72
+#: ../src/gtk-single-sat.c:64
 msgid "Mean Anom."
 msgstr ""
 
-#: ../src/gtk-single-sat.c:74
+#: ../src/gtk-single-sat.c:66
 msgid "Orbit Num."
 msgstr ""
 
-#: ../src/gtk-single-sat.c:80
+#: ../src/gtk-single-sat.c:72
 msgid "Azimuth of the satellite"
 msgstr "Satelittens azimut"
 
-#: ../src/gtk-single-sat.c:81
+#: ../src/gtk-single-sat.c:73
 msgid "Elevation of the satellite"
 msgstr "Satellittens elevation"
 
-#: ../src/gtk-single-sat.c:82
+#: ../src/gtk-single-sat.c:74
 msgid "Direction of the satellite"
 msgstr "Satellittens retning"
 
-#: ../src/gtk-single-sat.c:83
+#: ../src/gtk-single-sat.c:75
 msgid "Right Ascension of the satellite"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:84
+#: ../src/gtk-single-sat.c:76
 msgid "Declination of the satellite"
 msgstr "Satellittens deklination"
 
-#: ../src/gtk-single-sat.c:85
+#: ../src/gtk-single-sat.c:77
 msgid "The range between satellite and observer"
 msgstr "Afstand imellem satellit og observatør"
 
-#: ../src/gtk-single-sat.c:86
+#: ../src/gtk-single-sat.c:78
 msgid "The rate at which the Slant Range changes"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:87
+#: ../src/gtk-single-sat.c:79
 msgid "The time of next AOS or LOS"
 msgstr "Tidspunkt for den næste AOS eller LOS"
 
-#: ../src/gtk-single-sat.c:88
+#: ../src/gtk-single-sat.c:80
 msgid "The time of next AOS"
 msgstr "Tidspunkt for den næste AOS"
 
-#: ../src/gtk-single-sat.c:89
+#: ../src/gtk-single-sat.c:81
 msgid "The time of next LOS"
 msgstr "Tidspunkt for den næste LOS"
 
-#: ../src/gtk-single-sat.c:90
+#: ../src/gtk-single-sat.c:82
 msgid "Latitude of the sub-satellite point"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:91
+#: ../src/gtk-single-sat.c:83
 msgid "Longitude of the sub-satellite point"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:92
+#: ../src/gtk-single-sat.c:84
 msgid "Sub-Satellite Point as Maidenhead grid square"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:93
+#: ../src/gtk-single-sat.c:85
 msgid "Diameter of the satellite footprint"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:94
+#: ../src/gtk-single-sat.c:86
 msgid "Altitude of the satellite"
 msgstr "Satellittens højde over jorden"
 
-#: ../src/gtk-single-sat.c:95
+#: ../src/gtk-single-sat.c:87
 msgid "Tangential velocity of the satellite"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:97
+#: ../src/gtk-single-sat.c:89
 msgid "Signal loss @ 100MHz"
 msgstr "Signaltab ved 100 MHz"
 
-#: ../src/gtk-single-sat.c:102
+#: ../src/gtk-single-sat.c:94
 msgid "Visibility of the satellite"
 msgstr "Satellittens synlighed"
 
-#: ../src/gtk-single-sat.c:220
-msgid "Satellite options / shortcuts"
-msgstr ""
-
-#: ../src/gtk-single-sat.c:330
-#, c-format
-msgid "%s: Could not find satellite with catalog number %d"
-msgstr ""
-
-#: ../src/gtk-single-sat.c:350
-#, c-format
-msgid "%s: Invalid GtkSingleSat!"
-msgstr "%s: Ugyldig GtkSignleSat!"
-
-#: ../src/gtk-single-sat.c:406
+#: ../src/gtk-single-sat.c:143
 #, c-format
 msgid "%s:%d: Can not update invisible field (I:%d F:%d)"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:419
+#: ../src/gtk-single-sat.c:153
 #, c-format
 msgid "%s:%d: Can not update non-existing sat"
 msgstr ""
 
-#: ../src/gtk-single-sat.c:510 ../src/gtk-single-sat.c:528
-#: ../src/gtk-single-sat.c:545
+#: ../src/gtk-single-sat.c:236 ../src/gtk-single-sat.c:251
+#: ../src/gtk-single-sat.c:264
 msgid "N/A"
 msgstr "N/A"
 
-#: ../src/gtk-single-sat.c:653
+#: ../src/gtk-single-sat.c:363
 #, c-format
 msgid "%s:%d: Invalid field number (%d)"
+msgstr ""
+
+#: ../src/gtk-single-sat.c:619
+#, c-format
+msgid "%s: Could not find satellite with catalog number %d"
+msgstr ""
+
+#: ../src/gtk-single-sat.c:639
+#, c-format
+msgid "%s: Invalid GtkSingleSat!"
+msgstr "%s: Ugyldig GtkSignleSat!"
+
+#: ../src/gtk-single-sat.c:755
+msgid "Satellite options / shortcuts"
 msgstr ""
 
 #: ../src/gtk-sky-glance.c:436
@@ -3783,10 +3782,10 @@ msgstr ""
 
 #: ../src/sat-pref-conditions.c:136 ../src/sat-pref-debug.c:243
 #: ../src/sat-pref-layout.c:456 ../src/sat-pref-list-view.c:138
-#: ../src/sat-pref-map-view.c:789 ../src/sat-pref-multi-pass.c:106
-#: ../src/sat-pref-polar-view.c:751 ../src/sat-pref-refresh.c:218
-#: ../src/sat-pref-single-pass.c:109 ../src/sat-pref-single-sat.c:141
-#: ../src/sat-pref-sky-at-glance.c:230 ../src/sat-pref-tle.c:410
+#: ../src/sat-pref-multi-pass.c:106 ../src/sat-pref-polar-view.c:751
+#: ../src/sat-pref-refresh.c:218 ../src/sat-pref-single-pass.c:109
+#: ../src/sat-pref-single-sat.c:141 ../src/sat-pref-sky-at-glance.c:230
+#: ../src/sat-pref-tle.c:410
 msgid "Reset settings to the default values."
 msgstr ""
 
@@ -3802,7 +3801,7 @@ msgid ""
 msgstr ""
 
 #: ../src/sat-pref-conditions.c:177 ../src/sat-pref-conditions.c:305
-#: ../src/sat-pref-map-view.c:766
+#: ../src/sat-pref-map-view.c:1290
 msgid "[deg]"
 msgstr ""
 
@@ -4127,213 +4126,216 @@ msgid ""
 msgstr ""
 
 #: ../src/sat-pref-layout.c:462 ../src/sat-pref-list-view.c:144
-#: ../src/sat-pref-map-view.c:795 ../src/sat-pref-polar-view.c:758
-#: ../src/sat-pref-refresh.c:224 ../src/sat-pref-single-sat.c:147
+#: ../src/sat-pref-polar-view.c:758 ../src/sat-pref-refresh.c:224
+#: ../src/sat-pref-single-sat.c:147
 msgid "Reset module settings to the global values."
 msgstr ""
-
-#: ../src/sat-pref-layout-utils.c:106
-#, fuzzy
-msgid "<b>Invalid</b>"
-msgstr "<b>Realtid</b>"
 
 #: ../src/sat-pref-list-view.c:180 ../src/sat-pref-single-sat.c:171
 msgid "<b>Visible Fields:</b>"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:137
+#: ../src/sat-pref-map-view.c:695
 msgid "<b>Background Map:</b>"
 msgstr ""
 
 #. select button
-#: ../src/sat-pref-map-view.c:191
+#: ../src/sat-pref-map-view.c:751
 msgid "Select map"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:192
+#: ../src/sat-pref-map-view.c:752
 msgid "Click to select a map"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:216 ../src/sat-pref-polar-view.c:393
+#: ../src/sat-pref-map-view.c:776 ../src/sat-pref-polar-view.c:393
 msgid "<b>Extra Contents:</b>"
 msgstr ""
 
 #. QTH info
-#: ../src/sat-pref-map-view.c:224 ../src/sat-pref-polar-view.c:402
+#: ../src/sat-pref-map-view.c:785 ../src/sat-pref-polar-view.c:402
 msgid "QTH Info"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:226
+#: ../src/sat-pref-map-view.c:787
 msgid "Show location information on the map"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:247
+#: ../src/sat-pref-map-view.c:808
 msgid "Show which satellite comes up next and at what time"
 msgstr ""
 
 #. Cursor position
-#: ../src/sat-pref-map-view.c:267 ../src/sat-pref-polar-view.c:446
+#: ../src/sat-pref-map-view.c:828 ../src/sat-pref-polar-view.c:446
 msgid "Cursor Position"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:269
+#: ../src/sat-pref-map-view.c:830
 msgid "Show the latitude and longitude of the mouse pointer"
 msgstr ""
 
 #. Grid
-#: ../src/sat-pref-map-view.c:290
+#: ../src/sat-pref-map-view.c:851
 msgid "Grid Lines"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:292
+#: ../src/sat-pref-map-view.c:853
 msgid "Show horizontal and vertical grid lines"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:330 ../src/sat-pref-polar-view.c:509
+#: ../src/sat-pref-map-view.c:891 ../src/sat-pref-polar-view.c:509
 #: ../src/sat-pref-sky-at-glance.c:297
 msgid "<b>Colours:</b>"
 msgstr ""
 
 #. background
-#: ../src/sat-pref-map-view.c:340
+#: ../src/sat-pref-map-view.c:903
 msgid "Ground Station:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:348 ../src/sat-pref-sky-at-glance.c:309
-#: ../src/sat-pref-sky-at-glance.c:323 ../src/sat-pref-sky-at-glance.c:337
-#: ../src/sat-pref-sky-at-glance.c:351 ../src/sat-pref-sky-at-glance.c:365
-#: ../src/sat-pref-sky-at-glance.c:379 ../src/sat-pref-sky-at-glance.c:393
-#: ../src/sat-pref-sky-at-glance.c:407 ../src/sat-pref-sky-at-glance.c:421
-#: ../src/sat-pref-sky-at-glance.c:435
-msgid "Click to select a colour"
-msgstr ""
+#: ../src/sat-pref-map-view.c:909
+#, fuzzy
+msgid "Select the ground station colour"
+msgstr "Vælg transponder"
 
 #. Grid in case it is enabled
-#: ../src/sat-pref-map-view.c:365
+#: ../src/sat-pref-map-view.c:925
 msgid "Grid:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:373
-msgid "Click to select the grid colour"
+#: ../src/sat-pref-map-view.c:931
+msgid "Select the grid colour"
 msgstr ""
 
 #. tick labels
-#: ../src/sat-pref-map-view.c:390 ../src/sat-pref-polar-view.c:566
+#: ../src/sat-pref-map-view.c:947 ../src/sat-pref-polar-view.c:566
 msgid "Tick Labels:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:400 ../src/sat-pref-polar-view.c:574
-msgid "Click to select the colour for tick labels"
+#: ../src/sat-pref-map-view.c:953
+msgid "Select a colour for tick labels"
 msgstr ""
 
 #. satellite
-#: ../src/sat-pref-map-view.c:417 ../src/sat-pref-polar-view.c:591
+#: ../src/sat-pref-map-view.c:969 ../src/sat-pref-polar-view.c:591
 msgid "Satellite:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:425 ../src/sat-pref-polar-view.c:597
-msgid "Click to select satellite colour"
-msgstr ""
+#: ../src/sat-pref-map-view.c:975
+#, fuzzy
+msgid "Select the satellite colour"
+msgstr "Vælg satellit"
 
 #. selected satellite
-#: ../src/sat-pref-map-view.c:442 ../src/sat-pref-polar-view.c:614
+#: ../src/sat-pref-map-view.c:991 ../src/sat-pref-polar-view.c:614
 msgid "Selected Sat.:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:452 ../src/sat-pref-polar-view.c:622
-msgid "Click to select colour for selected satellites"
-msgstr ""
+#: ../src/sat-pref-map-view.c:998
+#, fuzzy
+msgid "Select colour for selected satellites"
+msgstr "Vælg satellit"
 
 #. tack
-#: ../src/sat-pref-map-view.c:470
+#: ../src/sat-pref-map-view.c:1015
 msgid "Ground Track:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:479
-msgid "Click to select ground track colour"
+#: ../src/sat-pref-map-view.c:1021
+msgid "Select ground track colour"
 msgstr ""
 
 #. coverage
-#: ../src/sat-pref-map-view.c:497
+#: ../src/sat-pref-map-view.c:1038
 msgid "Area Coverage:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:507
-msgid "Colour for coverage Area (make it transparent)"
+#: ../src/sat-pref-map-view.c:1045
+msgid ""
+"Select colour for coverage area.\n"
+"Hint: Make it transparent"
 msgstr ""
 
 #. Info foreground
-#: ../src/sat-pref-map-view.c:525
+#: ../src/sat-pref-map-view.c:1063
 msgid "Info Text FG:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:535
-msgid "Click to select info text foreground colour"
+#: ../src/sat-pref-map-view.c:1070
+msgid "Select info text foreground colour"
 msgstr ""
 
 #. Info background
-#: ../src/sat-pref-map-view.c:553
+#: ../src/sat-pref-map-view.c:1087
 msgid "Info Text BG:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:563
-msgid "Click to select info text background colour"
+#: ../src/sat-pref-map-view.c:1094
+msgid "Select info text background colour"
 msgstr ""
 
 #. Solar terminator
-#: ../src/sat-pref-map-view.c:581
+#: ../src/sat-pref-map-view.c:1111
 msgid "Solar terminator:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:590
-msgid "Click to select terminator colour"
+#: ../src/sat-pref-map-view.c:1118
+msgid "Select solar terminator colour"
 msgstr ""
 
 #. Earth shadow
-#: ../src/sat-pref-map-view.c:609
+#: ../src/sat-pref-map-view.c:1136
 msgid "Global shadow:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:618
-msgid "Click to select Earth shadow colour"
+#: ../src/sat-pref-map-view.c:1142
+msgid "Select Earth shadow colour"
 msgstr ""
 
 #. Shadow
-#: ../src/sat-pref-map-view.c:637
+#: ../src/sat-pref-map-view.c:1160
 msgid "Shadow:"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:642
-msgid "<i>Transparent</i>"
+#: ../src/sat-pref-map-view.c:1164
+msgid "<i>Transp.</i>"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:647
-msgid "<i>Strong</i>"
+#: ../src/sat-pref-map-view.c:1168
+msgid "<i>Opaque</i>"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:666
+#: ../src/sat-pref-map-view.c:1186
 msgid ""
-"Specifies how strong the shadow under the satellite marker should be. The "
-"shadow improves the visibility of the satellites where the colour of the "
-"background is light, e.g. the South Pole.\n"
+"Shadow transparency under the satellite marker.\n"
 "\n"
-"Transparent corresponds to no shadow."
+"The shadow improves the visibility of the satellites where the colour of the "
+"background is light, e.g. the South Pole. Fully transparent is the same as "
+"no shadow."
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:695
+#: ../src/sat-pref-map-view.c:1217
 msgid "Display ground track for"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:719
+#: ../src/sat-pref-map-view.c:1241
 msgid "orbit(s)"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:741
+#: ../src/sat-pref-map-view.c:1265
 msgid "Center map at longitude"
 msgstr ""
 
-#: ../src/sat-pref-map-view.c:746
+#: ../src/sat-pref-map-view.c:1270
 msgid "Select longitude. West is negative."
+msgstr ""
+
+#: ../src/sat-pref-map-view.c:1313
+msgid "Reset settings to default values"
+msgstr ""
+
+#: ../src/sat-pref-map-view.c:1318
+msgid "Reset module to global settings"
 msgstr ""
 
 #: ../src/sat-pref-modules.c:65
@@ -4460,6 +4462,18 @@ msgstr ""
 
 #: ../src/sat-pref-polar-view.c:549
 msgid "Click to select the axis colour"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:574
+msgid "Click to select the colour for tick labels"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:597
+msgid "Click to select satellite colour"
+msgstr ""
+
+#: ../src/sat-pref-polar-view.c:622
+msgid "Click to select colour for selected satellites"
 msgstr ""
 
 #. track
@@ -5162,6 +5176,14 @@ msgstr "Satellit"
 msgid "Select colour 1"
 msgstr ""
 
+#: ../src/sat-pref-sky-at-glance.c:309 ../src/sat-pref-sky-at-glance.c:323
+#: ../src/sat-pref-sky-at-glance.c:337 ../src/sat-pref-sky-at-glance.c:351
+#: ../src/sat-pref-sky-at-glance.c:365 ../src/sat-pref-sky-at-glance.c:379
+#: ../src/sat-pref-sky-at-glance.c:393 ../src/sat-pref-sky-at-glance.c:407
+#: ../src/sat-pref-sky-at-glance.c:421 ../src/sat-pref-sky-at-glance.c:435
+msgid "Click to select a colour"
+msgstr ""
+
 #. colour 2
 #: ../src/sat-pref-sky-at-glance.c:316
 #, fuzzy
@@ -5718,6 +5740,10 @@ msgstr ""
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
+
+#, fuzzy
+#~ msgid "<b>Invalid</b>"
+#~ msgstr "<b>Realtid</b>"
 
 #~ msgid "Search"
 #~ msgstr "Søg:"
