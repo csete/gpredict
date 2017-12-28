@@ -1,15 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,14 +16,6 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-
-/**
- * \file    main.c
- * \ingroup main
- * \brief    Main program file.
- *
- */
-
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
@@ -39,8 +23,8 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <stdlib.h>
 #include <signal.h>
+#include <stdlib.h>
 #ifdef WIN32
 #include <winsock2.h>
 #endif
@@ -55,16 +39,16 @@
 #include "sat-log.h"
 
 
-/** Main application widget. */
+/* Main application widget. */
 GtkWidget      *app;
 
-/** Command line flag for cleaning TLE data. */
+/* Command line flag for cleaning TLE data. */
 static gboolean cleantle = FALSE;
 
-/** Command line flag for cleaning TRSP data */
+/* Command line flag for cleaning TRSP data */
 static gboolean cleantrsp = FALSE;
 
-/** \brief Command line options. */
+/* Command line options. */
 static GOptionEntry entries[] = {
     {"clean-tle", 0, 0, G_OPTION_ARG_NONE, &cleantle,
      "Clean the TLE data in user's configuration directory", NULL},
@@ -111,7 +95,6 @@ int main(int argc, char *argv[])
     guint           error = 0;
 
 
-
 #ifdef ENABLE_NLS
     bindtextdomain(PACKAGE, PACKAGE_LOCALE_DIR);
     bind_textdomain_codeset(PACKAGE, "UTF-8");
@@ -122,24 +105,18 @@ int main(int argc, char *argv[])
     context = g_option_context_new("");
     g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
     g_option_context_set_summary(context,
-                                 _
-                                 ("Gpredict is a graphical real-time satellite tracking "
-                                  "and orbit prediction program.\n"
-                                  "Gpredict does not require any command line options for "
-                                  "nominal operation."));
+                                 _("Gpredict is a graphical real-time satellite "
+                                   "tracking and orbit prediction program.\n"
+                                   "Gpredict does not require any command line "
+                                   "options for nominal operation."));
     g_option_context_add_group(context, gtk_get_option_group(TRUE));
     if (!g_option_context_parse(context, &argc, &argv, &err))
         g_print(_("Option parsing failed: %s\n"), err->message);
 
-    /* start logger first, so that we can catch error messages if any */
     sat_log_init();
-
     sat_cfg_load();
-
-    /* get logging level */
     sat_log_set_level(sat_cfg_get_int(SAT_CFG_INT_LOG_LEVEL));
 
-    /* check command line options */
     if (cleantle)
         clean_tle();
 
@@ -148,14 +125,13 @@ int main(int argc, char *argv[])
 
     /* check that user settings are ok */
     error = first_time_check_run();
-
     if (error)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _
-                    ("%s: User config check failed (code %d). This is fatal.\n"
-                     "A possible solution would be to remove the .config/Gpredict data dir\n"
-                     "in your home directory"), __func__, error);
+                    _("User config check failed (code %d). This is fatal.\n"
+                      "A possible solution would be to remove the "
+                      ".config/Gpredict data dir in your home directory"),
+                     error);
 
         return 1;
     }
@@ -228,10 +204,10 @@ static void CloseWinSock2(void)
 }
 #endif
 
-
-
-/** \brief Create main application window.
- *  \return A new top level window as as GtkWidget.
+/**
+ * Create main application window.
+ *
+ * @return A new top level window as as GtkWidget.
  *
  * This function creates and initialises the main application window.
  * This function does not create any contents; that part is done in the
@@ -240,8 +216,8 @@ static void CloseWinSock2(void)
  */
 static void gpredict_app_create()
 {
-    gchar          *title;      /* window title */
-    gchar          *icon;       /* icon file name */
+    gchar          *title;
+    gchar          *icon;
 
     /* create window title and file name for window icon  */
     title = g_strdup(_("Gpredict"));
@@ -268,11 +244,8 @@ static void gpredict_app_create()
     }
 
     gtk_container_add(GTK_CONTAINER(app), gui_create(app));
-
     if (g_file_test(icon, G_FILE_TEST_EXISTS))
-    {
         gtk_window_set_icon_from_file(GTK_WINDOW(app), icon, NULL);
-    }
 
     g_free(title);
     g_free(icon);
@@ -285,18 +258,15 @@ static void gpredict_app_create()
     g_signal_connect(G_OBJECT(app), "destroy",
                      G_CALLBACK(gpredict_app_destroy), NULL);
 
-    /* register UNIX signals as well so that we
-       have a chance to clean up external resources.
-     */
-    signal(SIGTERM, (void *)gpredict_sig_handler);
-    signal(SIGINT, (void *)gpredict_sig_handler);
-    signal(SIGABRT, (void *)gpredict_sig_handler);
+    signal(SIGTERM, gpredict_sig_handler);
+    signal(SIGINT, gpredict_sig_handler);
+    signal(SIGABRT, gpredict_sig_handler);
 }
 
-
-
-/** \brief Handle terminate signals.
- *  \param sig The signal that has been received.
+/**
+ * Handle terminate signals.
+ *
+ * @param sig The signal that has been received.
  *
  * This function is used to handle termination signals received by the program.
  * The currently caught signals are SIGTERM, SIGINT and SIGABRT. When one of these
@@ -305,18 +275,17 @@ static void gpredict_app_create()
  */
 static void gpredict_sig_handler(int sig)
 {
-    /*      satlog_log (SAT_LOG_ERROR, "Received signal: %d\n", sig); */
-    /*      satlog_log (SAT_LOG_ERROR, "Trying clean exit...\n"); */
-    (void)sig;                  /* prevent unused parameter compiler warning */
+    g_print("Received signal: %d\n", sig);
     gtk_widget_destroy(app);
 }
 
-
-/** \brief Handle delete events.
- *  \param widget The widget which received the delete event signal.
- *  \param event  Data structure describing the event.
- *  \param data   User data (NULL).
- *  \param return Always FALSE to indicate that the app should be destroyed.
+/**
+ * Handle delete events.
+ *
+ * @param widget The widget which received the delete event signal.
+ * @param event  Data structure describing the event.
+ * @param data   User data (NULL).
+ * @param return Always FALSE to indicate that the app should be destroyed.
  *
  * This function handles the delete event received by the main application
  * window (eg. when the window is closed by the WM). This function simply
@@ -324,39 +293,34 @@ static void gpredict_sig_handler(int sig)
  * destroyed by emiting the destroy signal.
  *
  */
-static          gint
-gpredict_app_delete(GtkWidget * widget, GdkEvent * event, gpointer data)
+static gint gpredict_app_delete(GtkWidget * widget, GdkEvent * event,
+                                gpointer data)
 {
-    (void)widget;               /* prevent unused parameter compiler warning */
-    (void)event;                /* prevent unused parameter compiler warning */
-    (void)data;                 /* prevent unused parameter compiler warning */
+    (void)widget;
+    (void)event;
+    (void)data;
     return FALSE;
 }
 
-
-
-/** \brief Handle destroy signals.
- *  \param widget The widget which received the signal.
- *  \param data   User data (NULL).
+/**
+ * Handle destroy signals.
+ *
+ * @param widget The widget which received the signal.
+ * @param data   User data (NULL).
  *
  * This function is called when the main application window receives the
  * destroy signal, ie. it is destroyed. This function signals all daemons
  * and other threads to stop and exits the Gtk+ main loop.
- *
  */
 static void gpredict_app_destroy(GtkWidget * widget, gpointer data)
 {
-    (void)widget;               /* prevent unused parameter compiler warning */
-    (void)data;                 /* prevent unused parameter compiler warning */
+    (void)widget;
+    (void)data;
 
     /* stop TLE monitoring task */
     tle_mon_stop();
 
     /* GUI timers are stopped automatically */
-
-    /* stop timeouts */
-
-    /* configuration data */
     mod_mgr_save_state();
 
     /* not good, have to use configure event instead (see API doc) */
@@ -365,40 +329,39 @@ static void gpredict_app_destroy(GtkWidget * widget, gpointer data)
        sat_cfg_set_int (SAT_CFG_INT_WINDOW_HEIGHT, h);
      */
 
-    /* exit Gtk+ */
     gtk_main_quit();
 }
 
-
-
-/** \brief Snoop window position and size when main window receives configure event.
- *  \param widget Pointer to the gpredict main window.
- *  \param event  Pointer to the even structure.
- *  \param data   Pointer to user data (always NULL).
+/**
+ * Snoop window position and size when main window receives configure event.
+ *
+ * @param widget Pointer to the gpredict main window.
+ * @param event  Pointer to the even structure.
+ * @param data   Pointer to user data (always NULL).
  *
  * This function is used to trap configure events in order to store the current
  * position and size of the main window.
  *
- * \note unfortunately GdkEventConfigure ignores the window gravity, while
+ * @note unfortunately GdkEventConfigure ignores the window gravity, while
  *       the only way we have of setting the position doesn't. We have to
  *       call get_position because it does pay attention to the gravity.
  *
- * \note The logic in the code has been borrowed from gaim/pidgin http://pidgin.im/
+ * @note The logic in the code has been borrowed from gaim/pidgin http://pidgin.im/
  *
  */
-static          gboolean
-gpredict_app_config(GtkWidget * widget, GdkEventConfigure * event,
-                    gpointer data)
+static gboolean gpredict_app_config(GtkWidget * widget,
+                                    GdkEventConfigure * event,
+                                    gpointer data)
 {
     gint            x, y;
 
-    (void)data;                 /* prevent unused parameter compiler warning */
+    (void)data;
 
     /* data is only useful when window is visible */
     if (gtk_widget_get_visible(widget))
         gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
     else
-        return FALSE;           /* carry on normally */
+        return FALSE;
 
 #ifdef G_OS_WIN32
     /* Workaround for GTK+ bug # 169811 - "configure_event" is fired
@@ -427,8 +390,8 @@ gpredict_app_config(GtkWidget * widget, GdkEventConfigure * event,
     return FALSE;
 }
 
-
-/** \brief Monitor TLE age.
+/**
+ * Monitor TLE age.
  *
  * This function is called periodically in order to check
  * whether it is time to update the TLE elements.
@@ -466,7 +429,6 @@ static gboolean tle_mon_task(gpointer data)
     /* threshold */
     switch (sat_cfg_get_int(SAT_CFG_INT_TLE_AUTO_UPD_FREQ))
     {
-
     case TLE_AUTO_UPDATE_MONTHLY:
         thrld = 2592000;
         break;
@@ -543,8 +505,7 @@ static gboolean tle_mon_task(gpointer data)
     return TRUE;
 }
 
-
-/** \brief Stop TLE monitoring and any pending updates. */
+/* Stop TLE monitoring and any pending updates. */
 static void tle_mon_stop()
 {
     gboolean        retcode;
@@ -567,34 +528,30 @@ static void tle_mon_stop()
     }
 }
 
-
-
-/** \brief Thread function which invokes TLE update */
+/* Thread function which invokes TLE update */
 static          gpointer update_tle_thread(gpointer data)
 {
-    (void)data;                 /* prevent unused parameter compiler warning */
+    (void)data;
+
     tle_upd_running = TRUE;
-
     tle_update_from_network(TRUE, NULL, NULL, NULL);
-
     tle_upd_running = FALSE;
 
     return NULL;
 }
 
-
-/** \brief Clean TLE data.
-  *
-  * This function removes all .sat files from the user's configuration directory.
-  * The function is called when gpreidict is executed with the --clean-tle
-  * command line option.
-  */
+/*
+ * Clean TLE data.
+ *
+ * This function removes all .sat files from the user's configuration directory.
+ * The function is called when gpreidict is executed with the --clean-tle
+ * command line option.
+ */
 static void clean_tle(void)
 {
     GDir           *targetdir;
     gchar          *targetdirname, *path;
     const gchar    *filename;
-
 
     /* Get trsp directory */
     targetdirname = get_satdata_dir();
@@ -602,7 +559,6 @@ static void clean_tle(void)
 
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Cleaning TLE data in %s"), __func__, targetdirname);
-
 
     while ((filename = g_dir_read_name(targetdir)))
     {
@@ -625,22 +581,20 @@ static void clean_tle(void)
         }
     }
     g_free(targetdirname);
-
 }
 
-
-/** \brief Clean transponder data.
-  *
-  * This function removes all .trsp files from the user's configuration directory.
-  * The function is called when gpredict is executed with the --clean-trsp
-  * command line option.
-  */
+/*
+ * Clean transponder data.
+ *
+ * This function removes all .trsp files from the user's configuration directory.
+ * The function is called when gpredict is executed with the --clean-trsp
+ * command line option.
+ */
 static void clean_trsp(void)
 {
     GDir           *targetdir;
     gchar          *targetdirname, *path;
     const gchar    *filename;
-
 
     /* Get trsp directory */
     targetdirname = get_trsp_dir();
@@ -649,7 +603,6 @@ static void clean_trsp(void)
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Cleaning transponder data in %s"), __func__,
                 targetdirname);
-
 
     while ((filename = g_dir_read_name(targetdir)))
     {
@@ -672,5 +625,4 @@ static void clean_trsp(void)
         }
     }
     g_free(targetdirname);
-
 }
