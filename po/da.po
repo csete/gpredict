@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 02:13+0100\n"
+"POT-Creation-Date: 2017-12-28 14:28+0100\n"
 "PO-Revision-Date: 2017-12-04 01:54+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Danish <da@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 #. window title
 #. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:87 ../src/main.c:247
+#: ../src/about.c:93 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
-#: ../src/about.c:90
+#: ../src/about.c:96
 msgid "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
-#: ../src/about.c:103
+#: ../src/about.c:109
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -429,7 +429,7 @@ msgstr ""
 msgid "%s: label added to polarview not showing %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1350 ../src/gtk-sat-map.c:1706
+#: ../src/gtk-polar-view.c:1350 ../src/gtk-sat-map.c:1701
 #, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
 msgstr "%s: Kan ikke allokere hukommelse til ny satellit %d."
@@ -1272,12 +1272,12 @@ msgstr ""
 msgid "%s: Bad data measuring distance to South Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:2647
+#: ../src/gtk-sat-map.c:2642
 #, c-format
 msgid "LOS in %d minutes"
 msgstr "LOS om %d minutter"
 
-#: ../src/gtk-sat-map.c:2649
+#: ../src/gtk-sat-map.c:2644
 #, c-format
 msgid "AOS in %d minutes"
 msgstr "AOS om %d minutter"
@@ -1639,7 +1639,7 @@ msgid "%s:%d: Successfully cloned %s."
 msgstr ""
 
 #: ../src/gtk-sat-module-popup.c:392 ../src/gtk-sat-module-popup.c:513
-#: ../src/gtk-sat-module-popup.c:655 ../src/menubar.c:273
+#: ../src/gtk-sat-module-popup.c:655 ../src/menubar.c:146
 msgid "GPREDICT: "
 msgstr "GPREDICT: "
 
@@ -2343,225 +2343,105 @@ msgstr ""
 msgid "Image files"
 msgstr ""
 
-#: ../src/menubar.c:60
-msgid "_File"
-msgstr ""
-
-#: ../src/menubar.c:61
-msgid "_Edit"
-msgstr ""
-
-#: ../src/menubar.c:62
-msgid "_Update TLE data"
-msgstr ""
-
-#: ../src/menubar.c:63
-msgid "_Update Transponder data"
-msgstr ""
-
-#: ../src/menubar.c:65
-msgid "_Help"
-msgstr ""
-
-#. File menu
-#: ../src/menubar.c:68
-msgid "_New module"
-msgstr ""
-
-#: ../src/menubar.c:69
-msgid "Create a new module"
-msgstr ""
-
-#: ../src/menubar.c:70
-msgid "_Open module"
-msgstr ""
-
-#: ../src/menubar.c:71
-msgid "Open an existing module"
-msgstr ""
-
-#: ../src/menubar.c:72
-msgid "_Log browser"
-msgstr ""
-
-#: ../src/menubar.c:73
-msgid "Open the message log browser"
-msgstr ""
-
-#: ../src/menubar.c:74
-msgid "E_xit"
-msgstr ""
-
-#: ../src/menubar.c:75
-msgid "Exit the program"
-msgstr ""
-
-#. Edit menu
-#: ../src/menubar.c:78 ../src/menubar.c:80
-msgid "From _network"
-msgstr ""
-
-#: ../src/menubar.c:79
-msgid "Update TLE from a network server"
-msgstr ""
-
-#: ../src/menubar.c:81
-msgid "Update transponders from a network server"
-msgstr ""
-
-#: ../src/menubar.c:83
-msgid "From l_ocal files"
-msgstr ""
-
-#: ../src/menubar.c:84
-msgid "Update TLE from local files"
-msgstr ""
-
-#: ../src/menubar.c:85
-msgid "_Preferences"
-msgstr ""
-
-#: ../src/menubar.c:86
-msgid "Edit user preferences"
-msgstr ""
-
-#. Help menu
-#: ../src/menubar.c:89
-msgid "Online help"
-msgstr ""
-
-#: ../src/menubar.c:90
-msgid "Show online user manual"
-msgstr ""
-
-#: ../src/menubar.c:91
-msgid "_License"
-msgstr ""
-
-#: ../src/menubar.c:92
-msgid "Show the Gpredict license"
-msgstr ""
-
-#: ../src/menubar.c:93
-msgid "_News"
-msgstr ""
-
-#: ../src/menubar.c:94
-msgid "Show what's new in this release"
-msgstr ""
-
-#: ../src/menubar.c:95
-msgid "_About Gpredict"
-msgstr ""
-
-#: ../src/menubar.c:96
-msgid "Show about dialog"
-msgstr ""
-
-#: ../src/menubar.c:162
-#, c-format
-msgid "Failed to build menubar: %s"
-msgstr ""
-
-#: ../src/menubar.c:185
+#: ../src/menubar.c:58
 #, c-format
 msgid "%s: Starting new module configurator..."
 msgstr ""
 
-#: ../src/menubar.c:191
+#: ../src/menubar.c:64
 #, c-format
 msgid "%s: New module name is %s."
 msgstr ""
 
-#: ../src/menubar.c:211 ../src/menubar.c:556
+#: ../src/menubar.c:84 ../src/menubar.c:430
 #, c-format
 msgid "Could not open %s. Please examine the log messages for details."
 msgstr ""
 
-#: ../src/menubar.c:228
+#: ../src/menubar.c:101
 #, c-format
 msgid "%s: New module config cancelled."
 msgstr ""
 
-#: ../src/menubar.c:396
+#: ../src/menubar.c:270
 #, c-format
 msgid "%s:%s: Scanning directory %s for modules."
 msgstr ""
 
-#: ../src/menubar.c:418
+#: ../src/menubar.c:292
 #, c-format
 msgid "%s:%d: Failed to open module dir %s (%s)"
 msgstr ""
 
-#: ../src/menubar.c:434
+#: ../src/menubar.c:308
 msgid ""
 "You do not have any modules set up yet. Please use File->New in order to "
 "create a module."
 msgstr ""
 
-#: ../src/menubar.c:461
+#: ../src/menubar.c:335
 msgid "Module"
 msgstr ""
 
 #. create dialog
-#: ../src/menubar.c:467
+#: ../src/menubar.c:341
 msgid "Select a module"
 msgstr ""
 
-#: ../src/menubar.c:495
+#: ../src/menubar.c:369
 #, c-format
 msgid "%s:%s: Selected module is: %s"
 msgstr ""
 
-#: ../src/menubar.c:501
+#: ../src/menubar.c:375
 #, c-format
 msgid "%s:%s: No selection is list of modules."
 msgstr ""
 
-#: ../src/menubar.c:528
+#: ../src/menubar.c:402
 #, c-format
 msgid "%s: Open existing module..."
 msgstr ""
 
-#: ../src/menubar.c:535
+#: ../src/menubar.c:409
 #, c-format
 msgid "%s: Open module %s."
 msgstr ""
 
-#: ../src/menubar.c:585
+#: ../src/menubar.c:459
 #, c-format
 msgid "%s: Open module cancelled."
 msgstr ""
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:628
+#: ../src/menubar.c:502
 msgid "Transponder Update"
 msgstr ""
 
-#: ../src/menubar.c:645
+#: ../src/menubar.c:518
 msgid "<b>Updating transponder files from network</b>"
 msgstr ""
 
 #. statistics
-#: ../src/menubar.c:658
+#: ../src/menubar.c:531
 msgid "\n"
 msgstr ""
 
-#: ../src/menubar.c:681 ../src/menubar.c:760 ../src/menubar.c:902
+#: ../src/menubar.c:554 ../src/menubar.c:632 ../src/menubar.c:773
 msgid "Finished"
 msgstr ""
 
 #. create new dialog with progress indicator
-#: ../src/menubar.c:704 ../src/menubar.c:845 ../src/sat-pref-general.c:58
+#: ../src/menubar.c:577 ../src/menubar.c:716 ../src/sat-pref-general.c:58
 msgid "TLE Update"
 msgstr ""
 
-#: ../src/menubar.c:722
+#: ../src/menubar.c:594
 msgid "<b>Updating TLE files from network</b>"
 msgstr ""
 
 #. statistics
-#: ../src/menubar.c:735 ../src/menubar.c:876
+#: ../src/menubar.c:607 ../src/menubar.c:747
 msgid ""
 "Satellites updated:\t 0\n"
 "Satellites skipped:\t 0\n"
@@ -2569,34 +2449,94 @@ msgid ""
 msgstr ""
 
 #. create file chooser
-#: ../src/menubar.c:796
+#: ../src/menubar.c:668
 msgid "Select directory"
 msgstr ""
 
 #. create label
-#: ../src/menubar.c:802
+#: ../src/menubar.c:674
 msgid "Select TLE directory:"
 msgstr ""
 
 #. create the dalog
-#: ../src/menubar.c:812
+#: ../src/menubar.c:684
 msgid "Update TLE from files"
 msgstr ""
 
-#: ../src/menubar.c:838
+#: ../src/menubar.c:709
 #, c-format
 msgid "%s: Running TLE update from %s"
 msgstr ""
 
-#: ../src/menubar.c:863
+#: ../src/menubar.c:734
 msgid "<b>Updating TLE files from files</b>"
 msgstr ""
 
-#: ../src/menubar.c:929
+#: ../src/menubar.c:800
 msgid ""
 "A comprehensive PDF user manual and \n"
 "video tutorials are available from the \n"
 "Gpredict website:"
+msgstr ""
+
+#: ../src/menubar.c:849
+msgid "_New module"
+msgstr ""
+
+#: ../src/menubar.c:856
+msgid "_Open module"
+msgstr ""
+
+#: ../src/menubar.c:866
+msgid "_Log browaer"
+msgstr ""
+
+#: ../src/menubar.c:876
+msgid "_Quit"
+msgstr ""
+
+#: ../src/menubar.c:891
+msgid "Update TLE from _net"
+msgstr ""
+
+#: ../src/menubar.c:896
+msgid "Update TLE from _files"
+msgstr ""
+
+#: ../src/menubar.c:901
+msgid "Update _frequencies"
+msgstr ""
+
+#: ../src/menubar.c:909
+msgid "_Preferences"
+msgstr ""
+
+#: ../src/menubar.c:922
+msgid "_Online help"
+msgstr ""
+
+#: ../src/menubar.c:931
+msgid "_License"
+msgstr ""
+
+#: ../src/menubar.c:936
+msgid "_News"
+msgstr ""
+
+#: ../src/menubar.c:943
+msgid "_About Gpredict"
+msgstr ""
+
+#: ../src/menubar.c:963
+msgid "_File"
+msgstr ""
+
+#: ../src/menubar.c:969
+msgid "_Edit"
+msgstr ""
+
+#: ../src/menubar.c:975
+msgid "_Help"
 msgstr ""
 
 #: ../src/mod-cfg.c:62
