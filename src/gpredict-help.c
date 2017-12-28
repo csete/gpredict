@@ -121,7 +121,7 @@ void gpredict_help_show_txt(const gchar * filename)
 
     /* create and show dialogue with textbuffer */
     dialog = gtk_dialog_new_with_buttons(_("Gpredict Info"),
-                                         NULL, 0,
+                                         GTK_WINDOW(app), 0,
                                          "_Close", GTK_RESPONSE_ACCEPT, NULL);
     gtk_widget_set_size_request(dialog, -1, 450);
     buff = icon_file_name("gpredict-icon.png");

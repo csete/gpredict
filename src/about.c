@@ -80,6 +80,8 @@ const gchar *authors[] = {
     NULL
 };
 
+extern GtkWidget *app;
+
 void about_dialog_create()
 {
     GtkWidget      *dialog;
@@ -87,6 +89,7 @@ void about_dialog_create()
     gchar          *iconfile;
 
     dialog = gtk_about_dialog_new();
+    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app));
     gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("Gpredict"));
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
