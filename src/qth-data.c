@@ -1,16 +1,8 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-           Charles Suprin <hamaa1vs@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+  Copyright (C)  2011-2012  Charles Suprin, AA1VS
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -51,11 +43,12 @@ void            qth_validate(qth_t * qth);
 
 /**
  * Read QTH data from file.
+ *
  * \param filename The file to read from.
  * \param qth Pointer to a qth_t data structure where the data will be stored.
  * \return FALSE if an error occurred, TRUE otherwise.
  *
- *  \note The function uses the new key=value file parser from glib.
+ * \note The function uses the new key=value file parser from glib.
  */
 gint qth_data_read(const gchar * filename, qth_t * qth)
 {
@@ -254,7 +247,8 @@ gint qth_data_read(const gchar * filename, qth_t * qth)
 
 
 /**
- * \brief Save the QTH data to a file.
+ * Save the QTH data to a file.
+ *
  * \param filename The file to save to.
  * \param qth Pointer to a qth_t data structure from which the data will be read.
  */
@@ -331,11 +325,6 @@ gint qth_data_save(const gchar * filename, qth_t * qth)
     return ok;
 }
 
-
-/**
- * \brief Free QTH resources.
- * \param qth The qth data structure to free.
- */
 void qth_data_free(qth_t * qth)
 {
     /* stop any updating */
@@ -381,7 +370,8 @@ void qth_data_free(qth_t * qth)
 }
 
 /**
- * \brief Update the qth data by whatever method is appropriate.
+ * Update the qth data by whatever method is appropriate.
+ *
  * \param qth the qth data structure to update
  * \param qth the time at which the qth is to be computed. this may be ignored by gps updates.
  */
@@ -531,11 +521,7 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
         }
     }
 
-
-    /* check that data is valid */
     qth_validate(qth);
-
-    /* update qra */
     if (longlat2locator(qth->lon, qth->lat, qth->qra, 2) != RIG_OK)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
@@ -548,7 +534,8 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
 }
 
 /**
- * \brief Initialize whatever structures inside the qth_t stucture for later updates.
+ * Initialize whatever structures inside the qth_t stucture for later updates.
+ *
  * \param qth the qth data structure to update
  * 
  * Initial intention of this is to open sockets and ports to gpsd 
@@ -634,6 +621,7 @@ gboolean qth_data_update_init(qth_t * qth)
 
 /**
  * Shutdown and free structures inside the qth_t stucture were used for updates.
+ *
  * \param qth the qth data structure to update
  * 
  * Initial intention of this is to open sockets and ports to gpsd 
@@ -666,6 +654,7 @@ void qth_data_update_stop(qth_t * qth)
 
 /**
  * Load initial values into the qth_t data structure
+ *
  * \param qth the qth data structure to update
  */
 void qth_init(qth_t * qth)
@@ -685,10 +674,13 @@ void qth_init(qth_t * qth)
 }
 
 /**
- * \brief Load safe values into the qth_t data structure
+ * Load safe values into the qth_t data structure
+ *
  * \param qth the qth data structure to update
  *
- * This can be used if some operation is suspected of corrupting the structure or entering invalid data.  Originally it is based on code that reset values if a load/read of a .qth failed.
+ * This can be used if some operation is suspected of corrupting the structure
+ * or entering invalid data.  Originally it is based on code that reset values
+ * if a load/read of a .qth failed.
  */
 void qth_safe(qth_t * qth)
 {
@@ -702,11 +694,13 @@ void qth_safe(qth_t * qth)
 }
 
 /**
- * \brief Copy values from qth structure to qth_small structure
+ * Copy values from qth structure to qth_small structure
+ *
  * \param qth the qth data structure to backup
  * \param qth_small the data structure to store values
  *
- * This is intended for copying only the minimal qth data to a structure for tagging and later comparison.
+ * This is intended for copying only the minimal qth data to a structure for
+ * tagging and later comparison.
  */
 void qth_small_save(qth_t * qth, qth_small_t * qth_small)
 {
@@ -716,7 +710,8 @@ void qth_small_save(qth_t * qth, qth_small_t * qth_small)
 }
 
 /**
- * \brief Validate the contents of a qth structure and correct if neccessary
+ * Validate the contents of a qth structure and correct if neccessary
+ *
  * \param qth the qth data structure to cleanup
  */
 void qth_validate(qth_t * qth)
@@ -796,8 +791,6 @@ double qth_small_dist(qth_t * qth, qth_small_t qth_small)
 {
     double          distance, azimuth;
 
-    /* FIXME Is this the right coordinate system to use? */
-    /* a 3d coordinate system might make more sense long term */
     qrb(qth->lon, qth->lat, qth_small.lon, qth_small.lat, &distance, &azimuth);
 
     return (distance);
