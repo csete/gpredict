@@ -591,7 +591,9 @@ void sat_pref_rot_ok()
             {
 
                 buff = g_strconcat(dirname, G_DIR_SEPARATOR_S, filename, NULL);
-                g_remove(buff);
+                if (g_remove(buff))
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Failed to remove %s"), __func__, buff);
                 g_free(buff);
             }
         }

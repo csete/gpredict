@@ -325,8 +325,10 @@ void trsp_update_files(gchar * input_file)
                             ntrsp->catnum = m_trsp.catnum;
                             ntrsp->numtrsp = 1; //our first insertion of transponder to this file
                             g_hash_table_insert(trsp_hash, key, ntrsp);
-                            g_remove(trspfile);
-
+                            if (g_remove(trspfile))
+                                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                            _("%s: Failed to remove %s"),
+                                            __func__, trspfile);
                         }
                         else
                         {

@@ -653,8 +653,9 @@ void tle_update_from_network(gboolean silent,
         {
 
             locfile = g_strconcat(cache, G_DIR_SEPARATOR_S, fname, NULL);
-
-            g_remove(locfile);
+            if (g_remove(locfile))
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Failed to remove %s"), __func__, locfile);
             g_free(locfile);
         }
         /* close cache */
