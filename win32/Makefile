@@ -152,7 +152,6 @@ GPREDICTSRC = \
 	sat-pref-general.c \
 	sat-pref-interfaces.c \
 	sat-pref-layout.c \
-	sat-pref-layout-utils.c \
 	sat-pref-list-view.c \
 	sat-pref-map-view.c \
 	sat-pref-modules.c \
