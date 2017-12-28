@@ -344,13 +344,14 @@ gchar          *pass_to_txt_tblcontents(pass_t * pass, qth_t * qth,
         if (fields & SINGLE_PASS_FLAG_SSP)
         {
             ssp = g_try_malloc(7);
-            longlat2locator(detail->lon, detail->lat, ssp, 3);
-            buff = g_strdup_printf("%s %s", line, ssp);
-            g_free(line);
-            line = g_strdup(buff);
-            g_free(buff);
+            if (longlat2locator(detail->lon, detail->lat, ssp, 3) == RIG_OK)
+            {
+                buff = g_strdup_printf("%s %s", line, ssp);
+                g_free(line);
+                line = g_strdup(buff);
+                g_free(buff);
+            }
             g_free(ssp);
-
         }
 
         /* Footprint */
