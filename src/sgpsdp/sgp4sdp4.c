@@ -539,7 +539,7 @@ Deep (int ientry, sat_t *sat)
 		sinq,sinzf,sis,sl,sll,sls,stem,temp,temp1,x1,x2,
 		x2li,x2omi,x3,x4,x5,x6,x7,x8,xl,xldot,xmao,xnddt,
 		xndot,xno2,xnodce,xnoi,xomi,xpidot,z1,z11,z12,z13,
-		z2,z21,z22,z23,z3,z31,z32,z33,ze,zf,zm,zmo,zn,
+		z2,z21,z22,z23,z3,z31,z32,z33,ze,zf,zm,zn,
 		zsing,zsinh,zsini,zcosg,zcosh,zcosi,delt=0,ft=0;
 
 	switch (ientry) {
@@ -591,7 +591,6 @@ Deep (int ientry, sat_t *sat)
 		cc = c1ss;
 		zn = zns;
 		ze = zes;
-		zmo = sat->dps.zmos;
 		xnoi = 1.0 / sat->dps.xnq;
 
 		/* Loop breaks when Solar terms are done a second */
@@ -690,7 +689,6 @@ Deep (int ientry, sat_t *sat)
 			zn = znl;
 			cc = c1l;
 			ze = zel;
-			zmo = sat->dps.zmol;
 			sat->flags |= LUNAR_TERMS_DONE_FLAG;
 		} /* End of for(;;) */
 
