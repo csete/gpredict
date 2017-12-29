@@ -29,7 +29,6 @@
  * Downloads Frequency list from SATNOGS db and exports json transponder
  * information into satellite files identified by catalog id
  */
-#include <curl/curl.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -39,12 +38,18 @@
 #include "compat.h"
 #include "trsp-update.h"
 #include "gpredict-utils.h"
-#include "nxjson/nxjson.h"
 #include "sat-cfg.h"
 #include "sat-log.h"
+#include "nxjson/nxjson.h"
 
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
+#endif
+
+#ifdef WIN32
+#include "win32-fetch.h"
+#else
+#include <curl/curl.h>
 #endif
 
 /* TRSP auto update frequency. */
@@ -89,9 +94,11 @@ typedef struct {
     guint           numtrsp;    /* Number of transponders. */
 } new_trsp_t;
 
+#ifndef WIN32
 /* private function prototypes */
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
+#endif
 
 //int getMODElist_intoHashMap();
 
@@ -389,8 +396,12 @@ void modes_update_from_network()
     gchar          *file_url;
     gchar          *locfile;
     gchar          *userconfdir;
+#ifdef WIN32
+    int             res;
+#else
     CURL           *curl;
     CURLcode        res;
+#endif
     FILE           *outfile;
     guint           success = 0;        /* no. of successfull downloads */
 
@@ -398,6 +409,7 @@ void modes_update_from_network()
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
     modes_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_MODE_FILE);
 
+#ifndef WIN32
     /* initialise curl */
     curl = curl_easy_init();
     if (proxy != NULL)
@@ -405,14 +417,17 @@ void modes_update_from_network()
 
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "gpredict/curl");
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
+#endif
 
     /* get files */
     /* set URL */
     file_url = g_strconcat(server, modes_file, NULL);
+#ifndef WIN32
     curl_easy_setopt(curl, CURLOPT_URL, file_url);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Ready to fetch modes list from %s"),
                 __func__, file_url);
+#endif
 
     /* create local cache file */
     userconfdir = get_user_conf_dir();
@@ -424,6 +439,20 @@ void modes_update_from_network()
     outfile = g_fopen(locfile, "wb");
     if (outfile != NULL)
     {
+#ifdef WIN32
+        res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
+        if (res != 0)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%x)"),
+                        __func__, file_url, res);
+        }
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
+                        __func__, file_url);
+            success++;
+        }
+#else
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
 
@@ -441,6 +470,7 @@ void modes_update_from_network()
                         __func__, file_url);
             success++;
         }
+#endif
         fclose(outfile);
 
     }
@@ -457,7 +487,9 @@ void modes_update_from_network()
     g_free(proxy);
     g_free(modes_file);
 
+#ifndef WIN32
     curl_easy_cleanup(curl);
+#endif
 
     /* continue update if we have fetched at least one file */
     if (success > 0)
@@ -497,8 +529,12 @@ void trsp_update_from_network(gboolean silent,
     gchar          *file_url;
     gchar          *locfile_trsp;
     gchar          *userconfdir;
+#ifdef WIN32
+    int             res;
+#else
     CURL           *curl;
     CURLcode        res;
+#endif
     gdouble         fraction;
     FILE           *outfile;
     gchar          *cache;
@@ -526,6 +562,7 @@ void trsp_update_from_network(gboolean silent,
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
     freq_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_FREQ_FILE);
 
+#ifndef WIN32
     /* initialise curl */
     curl = curl_easy_init();
     if (proxy != NULL)
@@ -533,14 +570,17 @@ void trsp_update_from_network(gboolean silent,
 
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "gpredict/curl");
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10);
+#endif
 
     /* get files */
     /* set URL */
     file_url = g_strconcat(server, freq_file, NULL);
+#ifndef WIN32
     curl_easy_setopt(curl, CURLOPT_URL, file_url);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Ready to fetch transponder list from %s"),
                 __func__, file_url);
+#endif
 
     /* set activity message */
     if (!silent && (label1 != NULL))
@@ -568,6 +608,20 @@ void trsp_update_from_network(gboolean silent,
     outfile = g_fopen(locfile_trsp, "wb");
     if (outfile != NULL)
     {
+#ifdef WIN32
+        res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
+        if (res != 0)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Error fetching %s (%x)"),
+                        __func__, file_url, res);
+        }
+        else
+        {
+            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s: Successfully fetched %s"),
+                        __func__, file_url);
+            success++;
+        }
+#else
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
 
@@ -585,6 +639,7 @@ void trsp_update_from_network(gboolean silent,
                         __func__, file_url);
             success++;
         }
+#endif
         fclose(outfile);
 
     }
@@ -616,7 +671,9 @@ void trsp_update_from_network(gboolean silent,
     g_free(freq_file);
     g_free(proxy);
 
+#ifndef WIN32
     curl_easy_cleanup(curl);
+#endif
 
     /* continue update if we have fetched at least one file */
     if (success > 0)
@@ -639,6 +696,7 @@ void trsp_update_from_network(gboolean silent,
     g_mutex_unlock(&trsp_in_progress);
 }
 
+#ifndef WIN32
 /**
  * Write TRSP data block to file.
  * 
@@ -657,6 +715,7 @@ static size_t my_write_func(void *ptr, size_t size, size_t nmemb,
     /*** FIXME: TBC whether this works in wintendo */
     return fwrite(ptr, size, nmemb, stream);
 }
+#endif
 
 const gchar    *freq_to_str2[TRSP_AUTO_UPDATE_NUM] = {
     N_("Never"),
