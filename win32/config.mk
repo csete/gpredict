@@ -15,7 +15,17 @@
 PKG_CONFIG_PATH = $(abspath ../../goocanvas-2.0.2/lib/pkgconfig):$(abspath ../../gtk+-3.10.4/lib/pkgconfig)
 
 # binary dependencies to be deployed with gpredict.exe
-BINDEPS = $(wildcard ../../goocanvas-2.0.2/bin/*.dll) $(wildcard ../../gtk+-3.10.4/bin/*.dll)
+BINDEPS = \
+	$(wildcard ../../goocanvas-2.0.2/bin/*.dll) \
+	$(wildcard ../../gtk+-3.10.4/bin/*.dll) \
+	../../gtk+-3.10.4/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll
+
+# where to put the loaders.cache file
+LOADERS = lib/gdk-pixbuf-2.0/2.10.0
+
+# other miscellaneous folders to deploy with the binary
+GTKETC  = ../../gtk+-3.10.4/etc
+SCHEMAS = ../../gtk+-3.10.4/share/glib-2.0/schemas
 
 # Autoversioning from nearest git tag, assumes v<x>.<y> tag format.
 

@@ -200,6 +200,11 @@ gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
 	cp -rp ../data gpredict/share/gpredict
 	cp -rp ../pixmaps gpredict/share/gpredict
 	cp -rp ../po gpredict/share/gpredict
+	mkdir -p gpredict/$(LOADERS)
+	cp -p loaders.cache gpredict/$(LOADERS)
+	cp -rp $(GTKETC) gpredict
+	mkdir -p gpredict/share/glib-2.0
+	cp -rp $(SCHEMAS) gpredict/share/glib-2.0
 	zip -r $@ gpredict
 	rm -rf gpredict
 
