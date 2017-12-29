@@ -64,6 +64,7 @@ const gchar *authors[] = {
     "Patrick Dohmen, DL4PD",
     "Patrick Strasser, OE6PSE",
     "Paul Schulz, VK5FPAW",
+    "Phil Ashby, 2E0IPX",
     "S. R. Sampson",
     "Stefan Lobas",
     "Stephane Fillod",

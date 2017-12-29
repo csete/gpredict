@@ -11,6 +11,8 @@ Changes in version 2.2 (TBC)
 - Fixed some automake warnings
 - Fixed "GtkDialog mapped without a transient parent..." messages
 - Various internal bugfixes and improvements
+- Updated windows build files
+
 
 Changes in version 2.0 (10 Dec 2017)
 
