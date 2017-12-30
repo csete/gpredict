@@ -12,7 +12,7 @@
 # (thanks GNOME for missing crucial bits out of builds). My versions
 # are in this folder, and will need unpack paths inserting.
 
-PKG_CONFIG_PATH = $(abspath ../../goocanvas-2.0.2/lib/pkgconfig):$(abspath ../../gtk+-3.10.4/lib/pkgconfig)
+PKG_CONFIG_PATH = $(abspath ../../mingw32/lib/pkgconfig)
 
 # binary dependencies to be deployed with gpredict.exe
 BINDEPS = \
@@ -24,8 +24,8 @@ BINDEPS = \
 LOADERS = lib/gdk-pixbuf-2.0/2.10.0
 
 # other miscellaneous folders to deploy with the binary
-GTKETC  = ../../gtk+-3.10.4/etc
-SCHEMAS = ../../gtk+-3.10.4/share/glib-2.0/schemas
+GTKETC  = ../../mingw32/etc
+SCHEMAS = ../../mingw32/share/glib-2.0/schemas
 
 # Autoversioning from nearest git tag, assumes v<x>.<y> tag format.
 
