@@ -398,10 +398,17 @@ GtkWidget      *gtk_sat_selector_new(guint flags)
     GTK_SAT_SELECTOR(widget)->search = gtk_entry_new();
     gtk_widget_set_tooltip_text(GTK_SAT_SELECTOR(widget)->search,
                                 _("Search for a satellite by name or catalog number"));
+#ifdef G_OS_WIN32
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                      GTK_ENTRY_ICON_PRIMARY, "edit-find-symbolic");
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
+                                      GTK_ENTRY_ICON_SECONDARY, "edit-clear-symbolic");
+#else
     gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
                                       GTK_ENTRY_ICON_PRIMARY, "edit-find");
     gtk_entry_set_icon_from_icon_name(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
                                       GTK_ENTRY_ICON_SECONDARY, "edit-clear");
+#endif
     gtk_entry_set_icon_tooltip_text(GTK_ENTRY(GTK_SAT_SELECTOR(widget)->search),
                                       GTK_ENTRY_ICON_SECONDARY,
                                       _("Clear the search field"));
