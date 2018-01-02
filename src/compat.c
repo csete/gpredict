@@ -239,7 +239,7 @@ gchar          *get_old_conf_dir(void)
  * Get user configuration directory.
  *
  * Linux: $HOME/.config/Gpredict
- * Windows: C:\Documents and Settings\username\Gpredict
+ * Windows: C:\Users\username\Gpredict
  * Mac OS X: /home/username/Library/Application Support/Gpredict
  *
  * The function returns a newly allocated gchar * which must be free when
