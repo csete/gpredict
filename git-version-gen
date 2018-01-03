@@ -1,6 +1,6 @@
 #!/bin/sh
 # Print a version string.
-scriptversion=2010-01-28.01
+scriptversion=2017-12-12.21
 
 # Copyright (C) 2007-2010 Free Software Foundation, Inc.
 #
@@ -87,6 +87,15 @@ then
     esac
     test -z "$v" \
 	&& echo "$0: WARNING: $tarball_version_file seems to be damaged" 1>&2
+fi
+
+# Second, see if there is a debian/changelog file.
+# then use the package version.
+if test -f debian/changelog
+then
+    v=`dpkg-parsechangelog -ldebian/changelog | sed -rne 's,^Version: (.*),\1,p'` || exit 1
+    test -z "$v" \
+	&& echo "$0: WARNING: Cannot parse Debian version" 1>&2
 fi
 
 if test -n "$v"

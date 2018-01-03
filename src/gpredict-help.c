@@ -58,13 +58,12 @@ void gpredict_help_show_txt(const gchar * filename)
     /* get system data directory */
 #ifdef G_OS_UNIX
     fname = g_strconcat(PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, filename, NULL);
-#else
+#endif
 #ifdef G_OS_WIN32
     buff = g_win32_get_package_installation_directory_of_module(NULL);
-    fname = g_strconcat(buff, G_DIR_SEPARATOR_S,
-                        "doc", G_DIR_SEPARATOR_S, filename, ".txt", NULL);
+    fname = g_strconcat(buff, G_DIR_SEPARATOR_S, "doc",
+                        G_DIR_SEPARATOR_S, filename, ".txt", NULL);
     g_free(buff);
-#endif
 #endif
 
     /* load file into buffer */
@@ -121,7 +120,7 @@ void gpredict_help_show_txt(const gchar * filename)
 
     /* create and show dialogue with textbuffer */
     dialog = gtk_dialog_new_with_buttons(_("Gpredict Info"),
-                                         NULL, 0,
+                                         GTK_WINDOW(app), 0,
                                          "_Close", GTK_RESPONSE_ACCEPT, NULL);
     gtk_widget_set_size_request(dialog, -1, 450);
     buff = icon_file_name("gpredict-icon.png");

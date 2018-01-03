@@ -52,7 +52,6 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
 
-
 #define POLV_DEFAULT_SIZE 200
 #define POLV_DEFAULT_MARGIN 20
 

@@ -1,0 +1,16 @@
+### Win32 build notes ###
+
+# Phil Ashby, Dec 2017
+
+Check config.mk for dependant packages. I recommend use of inline sed
+to fix up pkg-config file prefix settings once unpacked, then fix up and
+copy in gtk+-3.0.pc and gdk.pc if required.
+
+Compile tested on Debian 9 (stretch) using standard mingw-w64 toolchain.
+
+To build a deployable ZIP archive, use 'make dist', which packages all
+binary DLLs from dependant packages along with gpredict[-con].exe into
+a versioned ZIP.
+
+Good luck!
+Phlash.

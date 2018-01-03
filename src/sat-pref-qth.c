@@ -1,17 +1,11 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2013  Alexandru Csete, OZ9AEC.
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   Authors: Alexandru Csete <oz9aec@gmail.com>
            Charles Suprin  <hamaa1vs@gmail.com>
 
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
- 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -114,7 +108,8 @@ GtkWidget      *sat_pref_qth_create()
     GtkWidget      *vbox;       /* vbox containing the list part and the details part */
     GtkWidget      *swin;
 
-    vbox = gtk_vbox_new(FALSE, 10);
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 10);
 
     /* create qth list and pack into scrolled window */
@@ -500,28 +495,25 @@ static GtkWidget *create_buttons(GtkTreeView * qthlist)
     GtkWidget      *box;
 
     /* add button */
-    addbutton = gpredict_hstock_button(GTK_STOCK_ADD,
-                                       _("Add New"),
-                                       _
-                                       ("Add a new ground station to the list"));
+    addbutton = gtk_button_new_with_label(_("Add new"));
+    gtk_widget_set_tooltip_text(addbutton,
+                                _("Add a new ground station to the list"));
     g_signal_connect(addbutton, "clicked", G_CALLBACK(add_cb), qthlist);
 
     /* edit button */
-    editbutton = gpredict_hstock_button(GTK_STOCK_EDIT,
-                                        _("Edit"),
-                                        _
-                                        ("Edit the currently selected ground station"));
+    editbutton = gtk_button_new_with_label(_("Edit"));
+    gtk_widget_set_tooltip_text(editbutton,
+                                _("Edit the selected ground station"));
     g_signal_connect(editbutton, "clicked", G_CALLBACK(edit_cb), qthlist);
 
     /* delete button; don't forget to delete file.... */
-    delbutton = gpredict_hstock_button(GTK_STOCK_DELETE,
-                                       _("Delete"),
-                                       _
-                                       ("Delete the selected ground station"));
+    delbutton = gtk_button_new_with_label(_("Delete"));
+    gtk_widget_set_tooltip_text(delbutton,
+                                _("Delete selected ground station"));
     g_signal_connect(delbutton, "clicked", G_CALLBACK(delete_cb), qthlist);
 
     /* vertical button box */
-    box = gtk_hbutton_box_new();
+    box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(box), GTK_BUTTONBOX_START);
 
     gtk_container_add(GTK_CONTAINER(box), addbutton);

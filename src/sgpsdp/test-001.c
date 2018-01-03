@@ -70,7 +70,7 @@ const dataset_t expected[TEST_STEPS] = {
 char            tle_str[3][80];
 sat_t           sat;
 
-int main(int argc, char **argv)
+int main(void)
 {
     FILE           *fp;
     int             i;

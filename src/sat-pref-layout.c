@@ -1,26 +1,18 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-  Authors: Alexandru Csete <oz9aec@gmail.com>
-
-  Comments, questions and bugreports should be submitted via
-  http://sourceforge.net/projects/gpredict/
-  More details can be found at the project home page:
-
-  http://gpredict.oz9aec.net/
+  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
@@ -54,20 +46,11 @@ static GtkWidget *selector;
 /* layout thumbnail */
 static GtkWidget *thumb;
 
-/* private functions */
-static void     create_layout_selector(GKeyFile * cfg, GtkTable * table);
-static void     layout_selected_cb(GtkComboBox * combo, gpointer data);
-static void     create_window_placement(GtkBox * vbox);
-static void     create_reset_button(GKeyFile * cfg, GtkBox * vbox);
-static void     reset_cb(GtkWidget * button, gpointer cfg);
-static void     window_pos_toggle_cb(GtkWidget * toggle, gpointer data);
-static void     layout_code_changed(GtkWidget * widget, gpointer data);
-static gchar   *thumb_file_from_sel(guint sel);
 
-/** the number of predefined layouts (+1 for custom). */
+/* the number of predefined layouts (+1 for custom). */
 #define PREDEF_NUM 10
 
-/** Predefined layouts. */
+/* Predefined layouts. */
 gchar          *predef_layout[PREDEF_NUM][3] = {
     {"1;0;2;0;1;2;0;1;1;2;3;1;2;1;2", N_("World map, polar and single sat"),
      "gpredict-layout-00.png"},
@@ -88,53 +71,8 @@ gchar          *predef_layout[PREDEF_NUM][3] = {
     {"", N_("Custom"), "gpredict-layout-99.png"}
 };
 
-/**
- * Create and initialise widgets for the layout view preferences tab.
- *
- * The widgets must be preloaded with values from config. If a config value
- * is NULL, sensible default values, eg. those from defaults.h should
- * be laoded.
- */
-GtkWidget      *sat_pref_layout_create(GKeyFile * cfg)
-{
-    GtkWidget      *table;
-    GtkWidget      *vbox;
 
-    /* create the table */
-    table = gtk_table_new(8, 5, FALSE);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 10);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
-
-    /* layout selector */
-    create_layout_selector(cfg, GTK_TABLE(table));
-
-    /* separator */
-    gtk_table_attach(GTK_TABLE(table),
-                     gtk_hseparator_new(),
-                     0, 5, 3, 4, GTK_FILL | GTK_EXPAND, GTK_SHRINK, 0, 0);
-
-    /* create vertical box */
-    vbox = gtk_vbox_new(FALSE, 5);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 20);
-    gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, TRUE, 0);
-
-    /* window placement */
-    if (cfg == NULL)
-    {
-        create_window_placement(GTK_BOX(vbox));
-    }
-
-    /* create RESET button */
-    create_reset_button(cfg, GTK_BOX(vbox));
-
-    /* reset flags */
-    dirty = FALSE;
-    reset = FALSE;
-
-    return vbox;;
-}
-
-/** User pressed cancel. Any changes to config must be cancelled. */
+/* User pressed cancel. Any changes to config must be cancelled. */
 void sat_pref_layout_cancel(GKeyFile * cfg)
 {
     gchar          *str;
@@ -148,7 +86,7 @@ void sat_pref_layout_cancel(GKeyFile * cfg)
     dirty = FALSE;
 }
 
-/** User pressed OK. Any changes should be stored in config. */
+/* User pressed OK. Any changes should be stored in config. */
 void sat_pref_layout_ok(GKeyFile * cfg)
 {
     if (dirty)
@@ -199,95 +137,9 @@ void sat_pref_layout_ok(GKeyFile * cfg)
     reset = FALSE;
 }
 
-/** Create layout selector. */
-static void create_layout_selector(GKeyFile * cfg, GtkTable * table)
-{
-    GtkWidget      *label;
-    gchar          *buffer;
-    gchar          *thumbfile;
-    guint           i, sel = PREDEF_NUM - 1;
-
-    /* get the current settings */
-    if (cfg != NULL)
-    {
-        buffer = mod_cfg_get_str(cfg,
-                                 MOD_CFG_GLOBAL_SECTION,
-                                 MOD_CFG_GRID, SAT_CFG_STR_MODULE_GRID);
-    }
-    else
-    {
-        buffer = sat_cfg_get_str(SAT_CFG_STR_MODULE_GRID);
-    }
-
-    /* create header */
-    label = gtk_label_new(_("Select layout:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-                     GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
-
-    /* layout selector */
-    selector = gtk_combo_box_text_new();
-    gtk_table_attach(GTK_TABLE(table), selector, 1, 3, 0, 1,
-                     GTK_FILL, GTK_SHRINK, 0, 0);
-
-    for (i = 0; i < PREDEF_NUM; i++)
-    {
-        /* append default layout string to combo box */
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(selector),
-                                       _(predef_layout[i][1]));
-
-        /* check if this layout corresponds to the settings */
-        if (!g_ascii_strcasecmp(buffer, predef_layout[i][0]))
-        {
-            sel = i;
-        }
-    }
-
-    /* select settings */
-    gtk_combo_box_set_active(GTK_COMBO_BOX(selector), sel);
-
-    /* connect signal handler */
-    g_signal_connect(selector, "changed", G_CALLBACK(layout_selected_cb),
-                     NULL);
-
-    /* layout preview thumbnail */
-    thumbfile = thumb_file_from_sel(sel);
-    thumb = gtk_image_new_from_file(thumbfile);
-    g_free(thumbfile);
-    gtk_table_attach(GTK_TABLE(table), thumb, 1, 3, 1, 2,
-                     GTK_EXPAND, GTK_EXPAND, 0, 5);
-
-    /* layout string */
-    label = gtk_label_new(_("Layout code:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-                     GTK_SHRINK | GTK_FILL, GTK_EXPAND | GTK_FILL, 5, 0);
-
-    gridstr = gtk_entry_new();
-    gtk_entry_set_text(GTK_ENTRY(gridstr), buffer);
-    g_free(buffer);
-    gtk_widget_set_tooltip_text(gridstr,
-                                _("This entry holds the layout code for the "
-                                  "module.\n"
-                                  "Consult the user manual for how to create "
-                                  "custom layouts using layout codes."));
-
-    /* disable if it is a predefined layout */
-    if (sel < PREDEF_NUM - 1)
-    {
-        gtk_widget_set_sensitive(gridstr, FALSE);
-    }
-
-    /* connect changed signal handler */
-    gridstr_sigid =
-        g_signal_connect(gridstr, "changed", G_CALLBACK(layout_code_changed),
-                         NULL);
-
-    gtk_table_attach_defaults(GTK_TABLE(table), gridstr, 1, 4, 2, 3);
-}
-
 /**
  * Get thumbnail icon filename from selection ID.
+ *
  * @param sel The ID of the predefined layout or PREDEF_NUM-1 for custom.
  * @return A newly allocated string containing the full path of the icon.
  *
@@ -304,24 +156,53 @@ static gchar   *thumb_file_from_sel(guint sel)
     gchar          *fname;
 
     if (sel < PREDEF_NUM)
-    {
         fname = icon_file_name(predef_layout[sel][2]);
-    }
     else
-    {
         fname = icon_file_name(predef_layout[PREDEF_NUM - 1][2]);
-    }
 
     return fname;
 }
 
-/**
- * Callback to manage layout selection via combo box.
- *
- * This function is called when the user selects a new layout using the
- * layout selector combo box. The function updates the thumbnail and the
- * layout code text entry.
- */
+static void layout_code_changed(GtkWidget * widget, gpointer data)
+{
+    gchar          *entry, *end, *j;
+    gint            len, pos;
+
+    (void)data;
+
+    /* step 1: ensure that only valid characters are entered
+       (stolen from xlog, tnx pg4i)
+     */
+    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
+    if ((len = g_utf8_strlen(entry, -1)) > 0)
+    {
+        end = entry + g_utf8_strlen(entry, -1);
+        for (j = entry; j < end; ++j)
+        {
+            int             c = *j;
+
+            if (g_ascii_isdigit(c) || c == ';')
+            {
+                dirty = TRUE;
+                /* ensure combo box is set to custom */
+                if (gtk_combo_box_get_active(GTK_COMBO_BOX(selector)) !=
+                    PREDEF_NUM - 1)
+                {
+                    gtk_combo_box_set_active(GTK_COMBO_BOX(selector),
+                                             PREDEF_NUM - 1);
+                }
+            }
+            else
+            {
+                gdk_beep();
+                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
+                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
+            }
+        }
+    }
+}
+
+/* Callback to manage layout selection via combo box */
 static void layout_selected_cb(GtkComboBox * combo, gpointer data)
 {
     gint            idx;
@@ -354,17 +235,102 @@ static void layout_selected_cb(GtkComboBox * combo, gpointer data)
     }
 }
 
-/**
- * Create window placement widgets.
- * @param vbox The GtkVBox into which the widgets should be packed.
- */
+/* Create layout selector. */
+static void create_layout_selector(GKeyFile * cfg, GtkGrid * table)
+{
+    GtkWidget      *label;
+    gchar          *buffer;
+    gchar          *thumbfile;
+    guint           i, sel = PREDEF_NUM - 1;
+
+    /* get the current settings */
+    if (cfg != NULL)
+    {
+        buffer = mod_cfg_get_str(cfg,
+                                 MOD_CFG_GLOBAL_SECTION,
+                                 MOD_CFG_GRID, SAT_CFG_STR_MODULE_GRID);
+    }
+    else
+    {
+        buffer = sat_cfg_get_str(SAT_CFG_STR_MODULE_GRID);
+    }
+
+    /* create header */
+    label = gtk_label_new(_("Select layout:"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(table, label, 0, 0, 1, 1);
+
+    /* layout selector */
+    selector = gtk_combo_box_text_new();
+    gtk_grid_attach(table, selector, 1, 0, 2, 1);
+
+    for (i = 0; i < PREDEF_NUM; i++)
+    {
+        /* append default layout string to combo box */
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(selector),
+                                       _(predef_layout[i][1]));
+
+        /* check if this layout corresponds to the settings */
+        if (!g_ascii_strcasecmp(buffer, predef_layout[i][0]))
+        {
+            sel = i;
+        }
+    }
+
+    gtk_combo_box_set_active(GTK_COMBO_BOX(selector), sel);
+    g_signal_connect(selector, "changed", G_CALLBACK(layout_selected_cb),
+                     NULL);
+
+    /* layout preview thumbnail */
+    thumbfile = thumb_file_from_sel(sel);
+    thumb = gtk_image_new_from_file(thumbfile);
+    g_free(thumbfile);
+    gtk_grid_attach(table, thumb, 1, 1, 2, 1);
+
+    /* layout string */
+    label = gtk_label_new(_("Layout code:"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(table, label, 0, 2, 1, 1);
+
+    gridstr = gtk_entry_new();
+    gtk_entry_set_text(GTK_ENTRY(gridstr), buffer);
+    g_free(buffer);
+    gtk_widget_set_tooltip_text(gridstr,
+                                _("This entry holds the layout code for the "
+                                  "module.\n"
+                                  "Consult the user manual for how to create "
+                                  "custom layouts using layout codes."));
+
+    /* disable if it is a predefined layout */
+    if (sel < PREDEF_NUM - 1)
+    {
+        gtk_widget_set_sensitive(gridstr, FALSE);
+    }
+
+    /* connect changed signal handler */
+    gridstr_sigid =
+        g_signal_connect(gridstr, "changed", G_CALLBACK(layout_code_changed),
+                         NULL);
+
+    gtk_grid_attach(table, gridstr, 1, 2, 3, 1);
+}
+
+/* Toggle window positioning settings. */
+static void window_pos_toggle_cb(GtkWidget * toggle, gpointer data)
+{
+    (void)toggle;
+    (void)data;
+    dirty = TRUE;
+}
+
+/* window placement widgets */
 static void create_window_placement(GtkBox * vbox)
 {
     GtkWidget      *label;
 
     /* create header */
     label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Window Placements:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, FALSE, 0);
 
@@ -384,9 +350,8 @@ static void create_window_placement(GtkBox * vbox)
     gtk_box_pack_start(vbox, mwin, FALSE, FALSE, 0);
 
     /* module window setting */
-    mod =
-        gtk_check_button_new_with_label(_
-                                        ("Restore position of module windows"));
+    mod = gtk_check_button_new_with_label(_
+                                          ("Restore position of module windows"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mod),
                                  sat_cfg_get_bool(SAT_CFG_BOOL_MOD_WIN_POS));
     gtk_widget_set_tooltip_text(mod,
@@ -413,43 +378,9 @@ static void create_window_placement(GtkBox * vbox)
     gtk_box_pack_start(vbox, state, FALSE, FALSE, 0);
 }
 
-/**
- * Create RESET button.
- * @param cfg Config data or NULL in global mode.
- * @param vbox The container.
- *
- * This function creates and sets up the RESET button.
- */
-static void create_reset_button(GKeyFile * cfg, GtkBox * vbox)
-{
-    GtkWidget      *button;
-    GtkWidget      *butbox;
-
-    button = gtk_button_new_with_label(_("Reset"));
-    g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(reset_cb), cfg);
-
-    if (cfg == NULL)
-    {
-        gtk_widget_set_tooltip_text(button,
-                                    _
-                                    ("Reset settings to the default values."));
-    }
-    else
-    {
-        gtk_widget_set_tooltip_text(button,
-                                    _
-                                    ("Reset module settings to the global values."));
-    }
-
-    butbox = gtk_hbutton_box_new();
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(butbox), GTK_BUTTONBOX_END);
-    gtk_box_pack_end(GTK_BOX(butbox), button, FALSE, TRUE, 10);
-    gtk_box_pack_end(vbox, butbox, FALSE, TRUE, 0);
-
-}
-
-/**
+/*
  * Reset settings.
+ *
  * @param button The RESET button.
  * @param cfg Pointer to the module config or NULL in global mode.
  *
@@ -510,56 +441,67 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
     dirty = FALSE;
 }
 
-/** Toggle window positioning settings. */
-static void window_pos_toggle_cb(GtkWidget * toggle, gpointer data)
+static void create_reset_button(GKeyFile * cfg, GtkBox * vbox)
 {
-    (void)toggle;
-    (void)data;
-    dirty = TRUE;
+    GtkWidget      *button;
+    GtkWidget      *butbox;
+
+    button = gtk_button_new_with_label(_("Reset"));
+    g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(reset_cb), cfg);
+
+    if (cfg == NULL)
+    {
+        gtk_widget_set_tooltip_text(button,
+                                    _
+                                    ("Reset settings to the default values."));
+    }
+    else
+    {
+        gtk_widget_set_tooltip_text(button,
+                                    _
+                                    ("Reset module settings to the global values."));
+    }
+
+    butbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+    gtk_button_box_set_layout(GTK_BUTTON_BOX(butbox), GTK_BUTTONBOX_END);
+    gtk_box_pack_end(GTK_BOX(butbox), button, FALSE, TRUE, 10);
+    gtk_box_pack_end(vbox, butbox, FALSE, TRUE, 0);
+
 }
 
-/**
- * Manage layout code changes.
- *
- * This function is called when the contents of the lyout code changes.
- * The purpose of this function is to check whether entered character is valid
- * and to make the configuration "dirty".
- */
-static void layout_code_changed(GtkWidget * widget, gpointer data)
+GtkWidget      *sat_pref_layout_create(GKeyFile * cfg)
 {
-    gchar          *entry, *end, *j;
-    gint            len, pos;
+    GtkWidget      *table;
+    GtkWidget      *vbox;
 
-    (void)data;
+    /* create the table */
+    table = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(table), 10);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 5);
 
-    /* step 1: ensure that only valid characters are entered
-       (stolen from xlog, tnx pg4i)
-     */
-    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
-    if ((len = g_utf8_strlen(entry, -1)) > 0)
-    {
-        end = entry + g_utf8_strlen(entry, -1);
-        for (j = entry; j < end; ++j)
-        {
-            switch (*j)
-            {
-            case '0' ... '9':
-            case ';':
-                dirty = TRUE;
-                /* ensure combo box is set to custom */
-                if (gtk_combo_box_get_active(GTK_COMBO_BOX(selector)) !=
-                    PREDEF_NUM - 1)
-                {
-                    gtk_combo_box_set_active(GTK_COMBO_BOX(selector),
-                                             PREDEF_NUM - 1);
-                }
-                break;
-            default:
-                gdk_beep();
-                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
-                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
-                break;
-            }
-        }
-    }
+    /* layout selector */
+    create_layout_selector(cfg, GTK_GRID(table));
+
+    /* separator */
+    gtk_grid_attach(GTK_GRID(table),
+                    gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), 0, 3, 5, 1);
+
+    /* create vertical box */
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 20);
+    gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, TRUE, 0);
+
+    /* window placement */
+    if (cfg == NULL)
+        create_window_placement(GTK_BOX(vbox));
+
+    /* create RESET button */
+    create_reset_button(cfg, GTK_BOX(vbox));
+
+    /* reset flags */
+    dirty = FALSE;
+    reset = FALSE;
+
+    return vbox;;
 }

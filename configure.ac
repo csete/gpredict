@@ -4,10 +4,10 @@ AC_INIT([gpredict],
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR(src/main.c)
 AM_CONFIG_HEADER(build-config.h)
-AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip 1.6])
+AM_INIT_AUTOMAKE([subdir-objects dist-bzip2 no-dist-gzip 1.6])
 
-AM_MAINTAINER_MODE
-AC_PROG_INTLTOOL([0.21])
+# ensure Makefiles are updated when Makefile.am is modified
+AM_MAINTAINER_MODE([enable])
 
 # kernel style compile messages
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -16,12 +16,13 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_PROG_CC
 AC_ISC_POSIX
 AC_HEADER_STDC
+AC_PROG_INTLTOOL([0.21])
 AM_PROG_LIBTOOL
 
 AC_CHECK_HEADERS([sys/time.h unistd.h getopt.h])
 
 if test "${ac_cv_c_compiler_gnu}" = "yes"; then
-  CFLAGS="${CFLAGS} -Wall"
+  CFLAGS="${CFLAGS} -Wall -Wextra -std=c11 -pedantic"
 fi
 
 # check for libm
@@ -131,7 +132,7 @@ echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
-echo Libcurl version..... : $CURL_V
+echo Libcurl version.... : $CURL_V
 if test "$havelibgps" = true ; then
    echo Libgps version..... : $GPS_V
 fi

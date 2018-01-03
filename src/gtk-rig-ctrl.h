@@ -27,7 +27,7 @@ typedef struct _gtk_rig_ctrl GtkRigCtrl;
 typedef struct _GtkRigCtrlClass GtkRigCtrlClass;
 
 struct _gtk_rig_ctrl {
-    GtkVBox         vbox;
+    GtkBox          box;
 
     GtkWidget      *SatFreqDown;
     GtkWidget      *RigFreqDown;

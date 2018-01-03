@@ -3,12 +3,6 @@
 
     Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC.
 
-    Comments, questions and bugreports should be submitted via
-    http://sourceforge.net/projects/gpredict/
-    More details can be found at the project home page:
-
-            http://gpredict.oz9aec.net/
-
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -84,262 +78,37 @@ static GtkWidget *window;
 GtkTreeModel   *model;
 
 
-static gint     message_window_delete(GtkWidget *, GdkEvent *, gpointer);
-static void     message_window_destroy(GtkWidget *, gpointer);
-static void     message_window_response(GtkWidget *, gint, gpointer);
-
-/* message list and tree widget functions */
-static GtkWidget *create_message_list(void);
-static GtkTreeModel *create_list_model(void);
-static GtkWidget *create_message_summary(void);
-
 /* load debug file related */
-static void     load_debug_file(GtkWidget * parent);
-static int      read_debug_file(const gchar * filename);
-static void     clear_message_list(void);
+//static void     load_debug_file(GtkWidget * parent);
+//static int      read_debug_file(const gchar * filename);
+//static void     clear_message_list(void);
 
 static void     add_debug_message(const gchar * datetime,
                                   sat_log_level_t debug_level,
                                   const char *message);
 
-/* Initialise message window.
- *
- * This function creates the message window and allocates all the internal
- * data structures. The function should be called when the main program
- * is initialised.
- */
-void sat_log_browser_open()
-{
-    GtkWidget      *hbox;
-    gchar          *fname;
-    gchar          *confdir;
-    gchar          *title;
-    gint            error;      /* error code returned by by read_debug_file */
-
-    if (!initialised)
-    {
-        hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
-        gtk_box_pack_start(GTK_BOX(hbox), create_message_list(),
-                           TRUE, TRUE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox), create_message_summary(),
-                           FALSE, TRUE, 0);
-
-        /* create dialog window; we use "fake" stock responses to catch user
-           button clicks (save_as and pause)
-         */
-        window = gtk_dialog_new_with_buttons(_("Log Browser"),
-                                             GTK_WINDOW(app),
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_STOCK_OPEN,
-                                             GTK_RESPONSE_YES,
-                                             GTK_STOCK_CLEAR,
-                                             GTK_RESPONSE_NO,
-                                             GTK_STOCK_CLOSE,
-                                             GTK_RESPONSE_CLOSE, NULL);
-
-        gtk_window_set_default_size(GTK_WINDOW(window), 800, 300);
-
-        gtk_box_pack_start(GTK_BOX
-                           (gtk_dialog_get_content_area(GTK_DIALOG(window))),
-                           hbox, TRUE, TRUE, 0);
-
-        /* connect response signal */
-        g_signal_connect(G_OBJECT(window), "response",
-                         G_CALLBACK(message_window_response), NULL);
-
-        /* connect delete and destroy signals */
-        g_signal_connect(G_OBJECT(window), "delete_event",
-                         G_CALLBACK(message_window_delete), NULL);
-        g_signal_connect(G_OBJECT(window), "destroy",
-                         G_CALLBACK(message_window_destroy), NULL);
-
-        gtk_widget_show_all(window);
-
-        /* read gpredict.log by default */
-        confdir = get_user_conf_dir();
-        fname = g_strconcat(confdir, G_DIR_SEPARATOR_S,
-                            "logs", G_DIR_SEPARATOR_S, "gpredict.log", NULL);
-
-        error = read_debug_file(fname);
-
-        if (error == 0)
-        {
-            /* update window title if file read cleanly */
-            title = g_strdup_printf(_("Log Browser: %s"), fname);
-            gtk_window_set_title(GTK_WINDOW(window), title);
-
-            g_free(title);
-        }
-        else
-        {
-            /* Remove filename if file not read */
-            gtk_window_set_title(GTK_WINDOW(window), _("Log Browser"));
-        }
-
-        g_free(fname);
-        g_free(confdir);
-
-        initialised = TRUE;
-    }
-}
-
-/* Add a message to message list */
-static void add_debug_message(const gchar * datetime,
-                              sat_log_level_t debug_level, const char *message)
-{
-    guint           total;      /* totalt number of messages */
-    gchar          *str;        /* string to show message count */
-    GtkTreeIter     item;       /* new item added to the list store */
-
-    gtk_list_store_append(GTK_LIST_STORE(model), &item);
-    gtk_list_store_set(GTK_LIST_STORE(model), &item,
-                       MSG_LIST_COL_TIME, datetime,
-                       MSG_LIST_COL_LEVEL, _(DEBUG_STR[debug_level]),
-                       MSG_LIST_COL_MSG, message, -1);
-
-    switch (debug_level)
-    {
-    case SAT_LOG_LEVEL_ERROR:
-        errors++;
-        str = g_strdup_printf("%d", errors);
-        gtk_label_set_text(GTK_LABEL(errorlabel), str);
-        g_free(str);
-        break;
-    case SAT_LOG_LEVEL_WARN:
-        warnings++;
-        str = g_strdup_printf("%d", warnings);
-        gtk_label_set_text(GTK_LABEL(warnlabel), str);
-        g_free(str);
-        break;
-    case SAT_LOG_LEVEL_INFO:
-        infos++;
-        str = g_strdup_printf("%d", infos);
-        gtk_label_set_text(GTK_LABEL(infolabel), str);
-        g_free(str);
-        break;
-    case SAT_LOG_LEVEL_DEBUG:
-        debugs++;
-        str = g_strdup_printf("%d", debugs);
-        gtk_label_set_text(GTK_LABEL(debuglabel), str);
-        g_free(str);
-        break;
-
-    default:
-        break;
-    }
-
-    /* the sum does not have to be updated for each line */
-    total = errors + warnings + infos + debugs;
-    str = g_strdup_printf("<b>%d</b>", total);
-    gtk_label_set_markup(GTK_LABEL(sumlabel), str);
-    g_free(str);
-}
-
-/* FIXME: does not seem to be necessary */
-static gint message_window_delete(GtkWidget * widget, GdkEvent * event,
-                                  gpointer data)
-{
-    (void)widget;
-    (void)event;
-    (void)data;
-
-    /* return FALSE to indicate that message window
-       should be destroyed */
-    return FALSE;
-}
-
-/* callback function called when the dialog window is destroyed */
-static void message_window_destroy(GtkWidget * widget, gpointer data)
-{
-    (void)widget;
-    (void)data;
-
-    /* clean up memory */
-    /* GSList, ... */
-
-    initialised = FALSE;
-}
-
-/* callback function called when a dialog button is clicked */
-static void message_window_response(GtkWidget * widget, gint response,
-                                    gpointer data)
-{
-    (void)data;
-
-    switch (response)
-    {
-    case GTK_RESPONSE_CLOSE:
-        gtk_widget_destroy(widget);
-        break;
-    case GTK_RESPONSE_YES:
-        load_debug_file(widget);
-        break;
-    case GTK_RESPONSE_NO:
-        clear_message_list();
-        break;
-
-    default:
-        break;
-    }
-}
-
 /*
- * Load debug file.
+ * Clear the message list
  *
- * This function creates the file chooser dialog, which can be used to select
- * a file containing debug messages. When the dialog returns, the selected
- * file is checked and, if the file exists, is read line by line.
+ * Besides clearing the message list, the function also resets
+ * the counters and set the text of the corresponding widgets
+ * to zero.
  */
-static void load_debug_file(GtkWidget * parent)
+static void clear_message_list()
 {
-    gchar          *confdir;
-    gchar          *filename;
-    gchar          *title;
-    gint            error;      /* error code returned by by read_debug_file */
+    /* clear the meaase list */
+    gtk_list_store_clear(GTK_LIST_STORE(model));
 
+    /* reset the counters and text widgets */
+    errors = 0;
+    warnings = 0;
+    debugs = 0;
 
-    GtkWidget      *dialog;
-
-    /* create file chooser dialog */
-    dialog = gtk_file_chooser_dialog_new(_("Select Log File"),
-                                         GTK_WINDOW(parent),
-                                         GTK_FILE_CHOOSER_ACTION_OPEN,
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                                         NULL);
-
-    confdir = get_user_conf_dir();
-    filename = g_strconcat(confdir, G_DIR_SEPARATOR_S, "logs", NULL);
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), filename);
-    g_free(filename);
-    g_free(confdir);
-
-    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-    {
-        clear_message_list();
-
-        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-
-        /* sanity check of filename will be performed
-           in read_debug_file */
-        error = read_debug_file(filename);
-        if (error == 0)
-        {
-            /* Update title with filename */
-            title = g_strdup_printf(_("Log Browser: %s"), filename);
-            gtk_window_set_title(GTK_WINDOW(window), title);
-            g_free(title);
-        }
-        else
-        {
-            /* clear filename from title if unable to read file */
-            gtk_window_set_title(GTK_WINDOW(window), _("Log Browser"));
-        }
-
-        g_free(filename);
-    }
-
-    gtk_widget_destroy(dialog);
+    gtk_label_set_text(GTK_LABEL(errorlabel), "0");
+    gtk_label_set_text(GTK_LABEL(warnlabel), "0");
+    gtk_label_set_text(GTK_LABEL(infolabel), "0");
+    gtk_label_set_text(GTK_LABEL(debuglabel), "0");
+    gtk_label_set_markup(GTK_LABEL(sumlabel), "<b>0</b>");
 }
 
 /* Read contents of debug file. */
@@ -446,84 +215,84 @@ static int read_debug_file(const gchar * filename)
 }
 
 /*
- * Clear the message list
+ * Load debug file.
  *
- * Besides clearing the message list, the function also resets
- * the counters and set the text of the corresponding widgets
- * to zero.
+ * This function creates the file chooser dialog, which can be used to select
+ * a file containing debug messages. When the dialog returns, the selected
+ * file is checked and, if the file exists, is read line by line.
  */
-static void clear_message_list()
+static void load_debug_file(GtkWidget * parent)
 {
-    /* clear the meaase list */
-    gtk_list_store_clear(GTK_LIST_STORE(model));
+    gchar          *confdir;
+    gchar          *filename;
+    gchar          *title;
+    gint            error;      /* error code returned by by read_debug_file */
 
-    /* reset the counters and text widgets */
-    errors = 0;
-    warnings = 0;
-    debugs = 0;
 
-    gtk_label_set_text(GTK_LABEL(errorlabel), "0");
-    gtk_label_set_text(GTK_LABEL(warnlabel), "0");
-    gtk_label_set_text(GTK_LABEL(infolabel), "0");
-    gtk_label_set_text(GTK_LABEL(debuglabel), "0");
-    gtk_label_set_markup(GTK_LABEL(sumlabel), "<b>0</b>");
-}
+    GtkWidget      *dialog;
 
-/* Create list view */
-static GtkWidget *create_message_list()
-{
-    GtkWidget      *treeview;   /* high level treev iew widget */
-    GtkWidget      *swin;       /* scrolled window containing the tree view */
-    GtkCellRenderer *renderer;  /* cell renderer used to create a column */
-    GtkTreeViewColumn *column;  /* place holder for a tree view column */
+    /* create file chooser dialog */
+    dialog = gtk_file_chooser_dialog_new(_("Select Log File"),
+                                         GTK_WINDOW(parent),
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_Open", GTK_RESPONSE_ACCEPT, NULL);
 
-    guint           i;
+    confdir = get_user_conf_dir();
+    filename = g_strconcat(confdir, G_DIR_SEPARATOR_S, "logs", NULL);
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), filename);
+    g_free(filename);
+    g_free(confdir);
 
-    treeview = gtk_tree_view_new();
-    gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(treeview), TRUE);
-
-    for (i = 0; i < MSG_LIST_COL_NUMBER; i++)
+    if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
     {
-        renderer = gtk_cell_renderer_text_new();
-        column =
-            gtk_tree_view_column_new_with_attributes(_(MSG_LIST_COL_TITLE[i]),
-                                                     renderer, "text", i,
-                                                     NULL);
-        gtk_tree_view_insert_column(GTK_TREE_VIEW(treeview), column, -1);
+        clear_message_list();
 
-        /* only aligns the headers? */
-        gtk_tree_view_column_set_alignment(column,
-                                           MSG_LIST_COL_TITLE_ALIGN[i]);
+        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+        /* sanity check of filename will be performed
+           in read_debug_file */
+        error = read_debug_file(filename);
+        if (error == 0)
+        {
+            /* Update title with filename */
+            title = g_strdup_printf(_("Log Browser: %s"), filename);
+            gtk_window_set_title(GTK_WINDOW(window), title);
+            g_free(title);
+        }
+        else
+        {
+            /* clear filename from title if unable to read file */
+            gtk_window_set_title(GTK_WINDOW(window), _("Log Browser"));
+        }
+
+        g_free(filename);
     }
 
-    /* create tree view model and finalise tree view */
-    model = create_list_model();
-    gtk_tree_view_set_model(GTK_TREE_VIEW(treeview), model);
-    g_object_unref(model);
-
-    /* treeview is packed into a scroleld window */
-    swin = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
-                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(swin), treeview);
-
-    return swin;
+    gtk_widget_destroy(dialog);
 }
 
-/* create tree view model; we actually create a GtkListStore because we are
-   only interested in a flat list. A GtkListStore can be cast to a GtkTreeModel
-   without any problems.
-*/
-static GtkTreeModel *create_list_model()
+/* callback function called when a dialog button is clicked */
+static void message_window_response(GtkWidget * widget, gint response,
+                                    gpointer data)
 {
-    GtkListStore   *liststore;
+    (void)data;
 
-    liststore = gtk_list_store_new(MSG_LIST_COL_NUMBER, G_TYPE_STRING,
-                                   G_TYPE_STRING, G_TYPE_STRING);
+    switch (response)
+    {
+    case GTK_RESPONSE_CLOSE:
+        gtk_widget_destroy(widget);
+        break;
+    case GTK_RESPONSE_YES:
+        load_debug_file(widget);
+        break;
+    case GTK_RESPONSE_NO:
+        clear_message_list();
+        break;
 
-    /*** Fill existing data into the list here ***/
-
-    return GTK_TREE_MODEL(liststore);
+    default:
+        break;
+    }
 }
 
 /* create summary */
@@ -553,40 +322,41 @@ static GtkWidget *create_message_summary()
     g_object_set(sumlabel, "xalign", 1.0f, "yalign", 0.5f, NULL);
 
     /* create table and add widgets */
-    table = gtk_table_new(6, 2, TRUE);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 5);
+    table = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
 
     label = gtk_label_new(_("Errors"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 0, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
 
     label = gtk_label_new(_("Warnings"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 1, 2);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
 
     label = gtk_label_new(_("Info"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 2, 3);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
     label = gtk_label_new(_("Debug"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 3, 4);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
-    gtk_table_attach_defaults(GTK_TABLE(table),
-                              gtk_hseparator_new(), 0, 2, 4, 5);
+    gtk_grid_attach(GTK_GRID(table),
+                    gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), 0, 4, 2, 1);
 
     label = gtk_label_new(NULL);
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Total</b>"));
-    gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 5, 1, 1);
 
-    gtk_table_attach_defaults(GTK_TABLE(table), errorlabel, 1, 2, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(table), warnlabel, 1, 2, 1, 2);
-    gtk_table_attach_defaults(GTK_TABLE(table), infolabel, 1, 2, 2, 3);
-    gtk_table_attach_defaults(GTK_TABLE(table), debuglabel, 1, 2, 3, 4);
-    gtk_table_attach_defaults(GTK_TABLE(table), sumlabel, 1, 2, 5, 6);
+    gtk_grid_attach(GTK_GRID(table), errorlabel, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), warnlabel, 1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), infolabel, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), debuglabel, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), sumlabel, 1, 5, 1, 1);
 
     /* frame around the table */
     frame = gtk_frame_new(_(" Summary "));
@@ -598,4 +368,215 @@ static GtkWidget *create_message_summary()
     gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 
     return vbox;
+}
+
+/* create tree view model; we actually create a GtkListStore because we are
+   only interested in a flat list. A GtkListStore can be cast to a GtkTreeModel
+   without any problems.
+*/
+static GtkTreeModel *create_list_model()
+{
+    GtkListStore   *liststore;
+
+    liststore = gtk_list_store_new(MSG_LIST_COL_NUMBER, G_TYPE_STRING,
+                                   G_TYPE_STRING, G_TYPE_STRING);
+
+    /*** Fill existing data into the list here ***/
+
+    return GTK_TREE_MODEL(liststore);
+}
+
+static gint message_window_delete(GtkWidget * widget, GdkEvent * event,
+                                  gpointer data)
+{
+    (void)widget;
+    (void)event;
+    (void)data;
+
+    /* return FALSE to indicate that message window
+       should be destroyed */
+    return FALSE;
+}
+
+/* callback function called when the dialog window is destroyed */
+static void message_window_destroy(GtkWidget * widget, gpointer data)
+{
+    (void)widget;
+    (void)data;
+
+    /* clean up memory */
+    /* GSList, ... */
+
+    initialised = FALSE;
+}
+
+/* Create list view */
+static GtkWidget *create_message_list()
+{
+    GtkWidget      *treeview;   /* high level treev iew widget */
+    GtkWidget      *swin;       /* scrolled window containing the tree view */
+    GtkCellRenderer *renderer;  /* cell renderer used to create a column */
+    GtkTreeViewColumn *column;  /* place holder for a tree view column */
+
+    guint           i;
+
+    treeview = gtk_tree_view_new();
+
+    for (i = 0; i < MSG_LIST_COL_NUMBER; i++)
+    {
+        renderer = gtk_cell_renderer_text_new();
+        column =
+            gtk_tree_view_column_new_with_attributes(_(MSG_LIST_COL_TITLE[i]),
+                                                     renderer, "text", i,
+                                                     NULL);
+        gtk_tree_view_insert_column(GTK_TREE_VIEW(treeview), column, -1);
+
+        /* only aligns the headers? */
+        gtk_tree_view_column_set_alignment(column,
+                                           MSG_LIST_COL_TITLE_ALIGN[i]);
+    }
+
+    /* create tree view model and finalise tree view */
+    model = create_list_model();
+    gtk_tree_view_set_model(GTK_TREE_VIEW(treeview), model);
+    g_object_unref(model);
+
+    /* treeview is packed into a scroleld window */
+    swin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    gtk_container_add(GTK_CONTAINER(swin), treeview);
+
+    return swin;
+}
+
+/* Initialise message window.
+ *
+ * This function creates the message window and allocates all the internal
+ * data structures. The function should be called when the main program
+ * is initialised.
+ */
+void sat_log_browser_open()
+{
+    GtkWidget      *hbox;
+    gchar          *fname;
+    gchar          *confdir;
+    gchar          *title;
+    gint            error;      /* error code returned by by read_debug_file */
+
+    if (!initialised)
+    {
+        hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+        gtk_box_pack_start(GTK_BOX(hbox), create_message_list(),
+                           TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(hbox), create_message_summary(),
+                           FALSE, TRUE, 0);
+
+        /* create dialog window; we use "fake" stock responses to catch user
+           button clicks (save_as and pause)
+         */
+        window = gtk_dialog_new_with_buttons(_("Log Browser"),
+                                             GTK_WINDOW(app),
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             "_Open", GTK_RESPONSE_YES,
+                                             "Clear", GTK_RESPONSE_NO,
+                                             "_Close", GTK_RESPONSE_CLOSE,
+                                             NULL);
+
+        gtk_window_set_default_size(GTK_WINDOW(window), 600, 300);
+
+        gtk_box_pack_start(GTK_BOX
+                           (gtk_dialog_get_content_area(GTK_DIALOG(window))),
+                           hbox, TRUE, TRUE, 0);
+
+        /* connect response signal */
+        g_signal_connect(G_OBJECT(window), "response",
+                         G_CALLBACK(message_window_response), NULL);
+
+        /* connect delete and destroy signals */
+        g_signal_connect(G_OBJECT(window), "delete_event",
+                         G_CALLBACK(message_window_delete), NULL);
+        g_signal_connect(G_OBJECT(window), "destroy",
+                         G_CALLBACK(message_window_destroy), NULL);
+
+        gtk_widget_show_all(window);
+
+        /* read gpredict.log by default */
+        confdir = get_user_conf_dir();
+        fname = g_strconcat(confdir, G_DIR_SEPARATOR_S,
+                            "logs", G_DIR_SEPARATOR_S, "gpredict.log", NULL);
+
+        error = read_debug_file(fname);
+
+        if (error == 0)
+        {
+            /* update window title if file read cleanly */
+            title = g_strdup_printf(_("Log Browser: %s"), fname);
+            gtk_window_set_title(GTK_WINDOW(window), title);
+
+            g_free(title);
+        }
+        else
+        {
+            /* Remove filename if file not read */
+            gtk_window_set_title(GTK_WINDOW(window), _("Log Browser"));
+        }
+
+        g_free(fname);
+        g_free(confdir);
+
+        initialised = TRUE;
+    }
+}
+
+/* Add a message to message list */
+static void add_debug_message(const gchar * datetime,
+                              sat_log_level_t debug_level, const char *message)
+{
+    guint           total;      /* totalt number of messages */
+    gchar          *str;        /* string to show message count */
+    GtkTreeIter     item;       /* new item added to the list store */
+
+    gtk_list_store_append(GTK_LIST_STORE(model), &item);
+    gtk_list_store_set(GTK_LIST_STORE(model), &item,
+                       MSG_LIST_COL_TIME, datetime,
+                       MSG_LIST_COL_LEVEL, _(DEBUG_STR[debug_level]),
+                       MSG_LIST_COL_MSG, message, -1);
+
+    switch (debug_level)
+    {
+    case SAT_LOG_LEVEL_ERROR:
+        errors++;
+        str = g_strdup_printf("%d", errors);
+        gtk_label_set_text(GTK_LABEL(errorlabel), str);
+        g_free(str);
+        break;
+    case SAT_LOG_LEVEL_WARN:
+        warnings++;
+        str = g_strdup_printf("%d", warnings);
+        gtk_label_set_text(GTK_LABEL(warnlabel), str);
+        g_free(str);
+        break;
+    case SAT_LOG_LEVEL_INFO:
+        infos++;
+        str = g_strdup_printf("%d", infos);
+        gtk_label_set_text(GTK_LABEL(infolabel), str);
+        g_free(str);
+        break;
+    case SAT_LOG_LEVEL_DEBUG:
+        debugs++;
+        str = g_strdup_printf("%d", debugs);
+        gtk_label_set_text(GTK_LABEL(debuglabel), str);
+        g_free(str);
+        break;
+
+    default:
+        break;
+    }
+
+    /* the sum does not have to be updated for each line */
+    total = errors + warnings + infos + debugs;
+    str = g_strdup_printf("<b>%d</b>", total);
+    gtk_label_set_markup(GTK_LABEL(sumlabel), str);
+    g_free(str);
 }

@@ -35,6 +35,7 @@
 const gchar *authors[] = {
     "Alexandru Csete, OZ9AEC, with contributions from:",
     "",
+    "A. Maitland Bottoms, AA4HS",
     "Alan Moffet, KE7IJZ",
     "Baris Dinc, TA7W",
     "Charles Suprin, AA1VS",
@@ -46,28 +47,33 @@ const gchar *authors[] = {
     "Fabian P. Schmidt",
     "Gisle Vanem",
     "Henry Hallam",
+    "Ilias Daradimos",
     "Jan Simon, DL2ZXA",
+    "John Magliacane, KD2BD",
     "Libre Space Foundation",
     "Lloyd Brown",
     "LongnoseRob, JI1MNC",
     "Marcel Cimander",
     "Mario Haustein",
     "Martin Pool",
+    "Matthew Alberti, KM4EXS",
     "Michael Tatarinov",
     "Mirko Caserta",
-    "mistermatt2u",
     "Nate Bargmann, N0NB",
     "Neoklis Kyriazis, 5B4AZ",
     "Patrick Dohmen, DL4PD",
     "Patrick Strasser, OE6PSE",
     "Paul Schulz, VK5FPAW",
+    "Phil Ashby, 2E0IPX",
     "S. R. Sampson",
     "Stefan Lobas",
     "Stephane Fillod",
     "Tom Jones",
     "T.S. Kelso",
     "Valentin Yakovenkov",
-    "William J Beksi, KC2EXL"
+    "William J Beksi, KC2EXL",
+    "Xavier Crehueras, EB3CZS",
+    "Yaroslav Stavnichiy",
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",
@@ -75,26 +81,7 @@ const gchar *authors[] = {
     NULL
 };
 
-const gchar license[] = N_("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors.\n"\
-                           "Contact: oz9aec at gmail.com\n\n"\
-                           "Gpredict is free software; you can redistribute it and "\
-                           "modify it under the terms of the GNU General Public License "\
-                           "as published by the Free Software Foundation; either version 2 "\
-                           "of the License, or (at your option) any later version.\n\n"\
-                           "This program is distributed free of charge in the hope that it will "\
-                           "be useful, but WITHOUT ANY WARRANTY; without even the implied "\
-                           "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. "\
-                           "See the GNU Library General Public License for more details.\n\n"\
-                           "You should have received a copy of the GNU General Public License "\
-                           "along with this program (see Help->License). Otherwise you can find "\
-                           "a copy on the FSF "\
-                           "website http://www.fsf.org/licensing/licenses/gpl.html or you can "\
-                           "write to the\n\n"
-                           "Free Software Foundation, Inc.\n"\
-                           "59 Temple Place - Suite 330\n"
-                           "Boston\n"\
-                           "MA 02111-1307\n"
-                           "USA.\n");
+extern GtkWidget *app;
 
 void about_dialog_create()
 {
@@ -103,14 +90,15 @@ void about_dialog_create()
     gchar          *iconfile;
 
     dialog = gtk_about_dialog_new();
+    gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app));
     gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("Gpredict"));
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
     gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
                                    _("Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"));
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
                                  "http://gpredict.oz9aec.net/");
-    gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), _(license));
-    gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(dialog), TRUE);
+    gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(dialog),
+                                      GTK_LICENSE_GPL_2_0);
     iconfile = logo_file_name("gpredict_icon_color.svg");
     icon = gdk_pixbuf_new_from_file_at_size(iconfile, 128, 128, NULL);
     gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), icon);

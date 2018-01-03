@@ -19,7 +19,7 @@ Some core features of Gpredict include:
 - Doppler tuning of radios via Hamlib rigctld
 - Antenna rotator control via Hamlib rotctld
 
-Visit the gpredict homepage at http://gpredcit.oz9aec.net/ for more info.
+Visit the gpredict homepage at http://gpredict.oz9aec.net/ for more info.
 
 
 Requirements

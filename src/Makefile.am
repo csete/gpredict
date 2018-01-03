@@ -49,7 +49,6 @@ gpredict_SOURCES = \
     gtk-rot-knob.c gtk-rot-knob.h \
     gtk-sat-data.c gtk-sat-data.h \
     gtk-sat-list.c gtk-sat-list.h \
-    gtk-sat-list-col-sel.c gtk-sat-list-col-sel.h \
     gtk-sat-list-popup.c gtk-sat-list-popup.h \
     gtk-sat-map.c gtk-sat-map.h \
     gtk-sat-map-popup.c gtk-sat-map-popup.h \
@@ -97,7 +96,6 @@ gpredict_SOURCES = \
     sat-pref-debug.c sat-pref-debug.h \
     sat-pref-modules.c sat-pref-modules.h \
     sat-pref-layout.c sat-pref-layout.h \
-    sat-pref-layout-utils.c sat-pref-layout-utils.h \
     sat-pref-refresh.c sat-pref-refresh.h \
     sat-pref-map-view.c sat-pref-map-view.h \
     sat-pref-list-view.c sat-pref-list-view.h \

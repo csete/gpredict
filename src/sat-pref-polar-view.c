@@ -1,15 +1,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete, OZ9AEC.
-
-    Authors: Alexandru Csete <oz9aec@gmail.com>
-
-    Comments, questions and bugreports should be submitted via
-    http://sourceforge.net/projects/gpredict/
-    More details can be found at the project home page:
-
-            http://gpredict.oz9aec.net/
+    Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,54 +47,229 @@ static gint     orient = POLAR_VIEW_NESW;
 static gboolean dirty = FALSE;
 static gboolean reset = FALSE;
 
-/* private functions:create widgets */
-static void     create_orient_selector(GKeyFile * cfg, GtkBox * vbox);
-static void     create_bool_selectors(GKeyFile * cfg, GtkBox * vbox);
-static void     create_colour_selectors(GKeyFile * cfg, GtkBox * vbox);
-static void     create_misc_selectors(GKeyFile * cfg, GtkBox * vbox);
-static void     create_reset_button(GKeyFile * cfg, GtkBox * vbox);
-
-/* private function: callbacks */
-static void     orient_chganged(GtkToggleButton * but, gpointer data);
-static void     content_changed(GtkToggleButton * but, gpointer data);
-static void     colour_changed(GtkWidget * but, gpointer data);
-static void     reset_cb(GtkWidget * button, gpointer cfg);
-
 
 /**
- * Create and initialise widgets for the polar view preferences tab.
+ * Manage orientation changes.
  *
- * The widgets must be preloaded with values from config. If a config value
- * is NULL, sensible default values, eg. those from defaults.h should
- * be laoded.
+ * @param but the button that received the signal
+ * @param data User data (always NULL).
+ *
+ * Note that this function is called also for the button that is unchecked,
+ *
  */
-GtkWidget      *sat_pref_polar_view_create(GKeyFile * cfg)
+static void orient_chganged(GtkToggleButton * but, gpointer data)
 {
-    GtkWidget      *vbox;
-
-    /* create vertical box */
-    vbox = gtk_vbox_new(FALSE, 5);      // !!!
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 20);
-
-    /* create the components */
-    create_orient_selector(cfg, GTK_BOX(vbox));
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, TRUE, 10);
-    create_bool_selectors(cfg, GTK_BOX(vbox));
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, TRUE, 10);
-    create_colour_selectors(cfg, GTK_BOX(vbox));
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, TRUE, 10);
-    create_misc_selectors(cfg, GTK_BOX(vbox));
-    gtk_box_pack_start(GTK_BOX(vbox), gtk_hseparator_new(), FALSE, TRUE, 10);
-    create_reset_button(cfg, GTK_BOX(vbox));
-
-    reset = FALSE;
-    dirty = FALSE;
-
-    return vbox;
+    if (gtk_toggle_button_get_active(but))
+    {
+        orient = GPOINTER_TO_INT(data);
+        dirty = TRUE;
+    }
 }
 
 /**
+ * Manage check-box actions.
+ *
+ * @param but The check-button that has been toggled.
+ * @param daya User data (always NULL).
+ *
+ * We don't need to do anything but set the dirty flag since the values can
+ * always be obtained from the global widgets.
+ */
+static void content_changed(GtkToggleButton * but, gpointer data)
+{
+    (void)but;
+    (void)data;
+
+    dirty = TRUE;
+}
+
+/**
+ * Manage color and font changes.
+ *
+ * @param but The color/font picker button that received the signal.
+ * @param data User data (always NULL).
+ *
+ * We don't need to do anything but set the dirty flag since the values can
+ * always be obtained from the global widgets.
+ */
+static void colour_changed(GtkWidget * but, gpointer data)
+{
+    (void)but;
+    (void)data;
+
+    dirty = TRUE;
+}
+
+/**
+ * Manage RESET button signals.
+ *
+ * @param button The RESET button.
+ * @param cfg Pointer to the module configuration or NULL in global mode.
+ *
+ * This function is called when the user clicks on the RESET button. In global mode
+ * (when cfg = NULL) the function will reset the settings to the efault values, while
+ * in "local" mode (when cfg != NULL) the function will reset the module settings to
+ * the global settings. This is done by removing the corresponding key from the GKeyFile.
+ */
+static void reset_cb(GtkWidget * button, gpointer cfg)
+{
+    guint           cfg_rgba;   /* 0xRRGGBBAA encoded color */
+    GdkRGBA         gdk_rgba;
+
+    (void)button;
+
+    if (cfg == NULL)
+    {
+        /* global mode, get defaults */
+
+        /* extra contents */
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(qth),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_POL_SHOW_QTH_INFO));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(next),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_POL_SHOW_NEXT_EV));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(curs),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_POL_SHOW_CURS_TRACK));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(xtick),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS));
+
+        /* colours */
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_BGD_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(bgd), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_AXIS_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(axis), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_TICK_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(tick), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_SAT_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(sat), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_SAT_SEL_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(ssat), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_TRACK_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(track), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_INFO_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(info), &gdk_rgba);
+
+        /* misc */
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(showtrack),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO));
+    }
+    else
+    {
+        /* local mode, get global value */
+
+        /* extra contents */
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(qth),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_POL_SHOW_QTH_INFO));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(next),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_POL_SHOW_NEXT_EV));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(curs),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_POL_SHOW_CURS_TRACK));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(xtick),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS));
+
+        /* colours */
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_BGD_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(bgd), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_AXIS_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(axis), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TICK_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(tick), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(sat), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_SEL_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(ssat), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TRACK_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(track), &gdk_rgba);
+
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_INFO_COL);
+        rgba_from_cfg(cfg_rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(info), &gdk_rgba);
+
+        /* misc */
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(showtrack),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO));
+    }
+
+    /* orientation needs some special attention */
+    if (cfg == NULL)
+    {
+        orient = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_ORIENTATION);
+    }
+    else
+    {
+        orient = sat_cfg_get_int(SAT_CFG_INT_POLAR_ORIENTATION);
+    }
+
+    switch (orient)
+    {
+
+    case POLAR_VIEW_NESW:
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(nesw), TRUE);
+        break;
+
+    case POLAR_VIEW_NWSE:
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(nwse), TRUE);
+        break;
+
+    case POLAR_VIEW_SENW:
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(senw), TRUE);
+        break;
+
+    case POLAR_VIEW_SWNE:
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(swne), TRUE);
+        break;
+
+    default:
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%s: Invalid chart orientation %d (using N/E/S/W)"),
+                    __FILE__, __func__, orient);
+        orient = POLAR_VIEW_NESW;
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(nesw), TRUE);
+        break;
+    }
+
+    /* reset flags */
+    reset = TRUE;
+    dirty = FALSE;
+}
+
+
+/**
  * Create orientation chooser.
+ *
  * @param cfg The module configuration or NULL in global mode.
  * @param vbox The container box in which the widgets should be packed into.
  *
@@ -116,12 +283,13 @@ static void create_orient_selector(GKeyFile * cfg, GtkBox * vbox)
 
     /* create header */
     label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Orientation:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, TRUE, 0);
 
     /* horizontal box to contain the radio buttons */
-    hbox = gtk_hbox_new(TRUE, 10);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
     gtk_box_pack_start(vbox, hbox, FALSE, TRUE, 0);
 
     /* N/E/S/W */
@@ -221,12 +389,13 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
 
     /* create header */
     label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Extra Contents:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, TRUE, 0);
 
     /* horizontal box to contain the radio buttons */
-    hbox = gtk_hbox_new(TRUE, 10);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
     gtk_box_pack_start(vbox, hbox, FALSE, TRUE, 0);
 
     /* QTH info */
@@ -320,6 +489,7 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
 
 /**
  * Create color selector widgets.
+ *
  * @param cfg The module configuration or NULL in global mode.
  * @param vbox The container box in which the widgets should be packed into.
  *
@@ -330,206 +500,185 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
 {
     GtkWidget      *label;
     GtkWidget      *table;
-    guint           rgba;       /* RRGGBBAA encoded colour */
-    guint16         alpha;      /* alpha channel 16 bits */
-    GdkColor        col;        /* GdkColor colour representation */
+    guint           cfg_rgba;   /* 0xRRGGBBAA encoded color */
+    GdkRGBA         gdk_rgba;
 
     /* create header */
     label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Colours:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, TRUE, 0);
 
-    /* horizontal box to contain the radio buttons */
-    table = gtk_table_new(3, 6, TRUE);
-    gtk_table_set_col_spacings(GTK_TABLE(table), 10);
-    gtk_table_set_row_spacings(GTK_TABLE(table), 3);
+    table = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 10);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 3);
     gtk_box_pack_start(vbox, table, FALSE, TRUE, 0);
 
     /* background */
     label = gtk_label_new(_("Background:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
     bgd = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(bgd), TRUE);
-    gtk_table_attach(GTK_TABLE(table), bgd, 1, 2, 0, 1,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(bgd), TRUE);
+    gtk_grid_attach(GTK_GRID(table), bgd, 1, 0, 1, 1);
     gtk_widget_set_tooltip_text(bgd, _("Click to select background colour"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_BGD_COL,
-                               SAT_CFG_INT_POLAR_BGD_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_BGD_COL,
+                                   SAT_CFG_INT_POLAR_BGD_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_BGD_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_BGD_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(bgd), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(bgd), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(bgd), &gdk_rgba);
     g_signal_connect(bgd, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* Axis */
     label = gtk_label_new(_("Axes/Circles:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 0, 1, 1);
     axis = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(axis), TRUE);
-    gtk_table_attach(GTK_TABLE(table), axis, 3, 4, 0, 1,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(axis), TRUE);
+    gtk_grid_attach(GTK_GRID(table), axis, 3, 0, 1, 1);
     gtk_widget_set_tooltip_text(axis, _("Click to select the axis colour"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_AXIS_COL,
-                               SAT_CFG_INT_POLAR_AXIS_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_AXIS_COL,
+                                   SAT_CFG_INT_POLAR_AXIS_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_AXIS_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_AXIS_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(axis), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(axis), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(axis), &gdk_rgba);
     g_signal_connect(axis, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* tick labels */
     label = gtk_label_new(_("Tick Labels:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 4, 5, 0, 1,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 4, 0, 1, 1);
     tick = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(tick), TRUE);
-    gtk_table_attach(GTK_TABLE(table), tick, 5, 6, 0, 1,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(tick), TRUE);
+    gtk_grid_attach(GTK_GRID(table), tick, 5, 0, 1, 1);
     gtk_widget_set_tooltip_text(tick,
                                 _
                                 ("Click to select the colour for tick labels"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_TICK_COL,
-                               SAT_CFG_INT_POLAR_TICK_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_TICK_COL,
+                                   SAT_CFG_INT_POLAR_TICK_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TICK_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TICK_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(tick), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(tick), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(tick), &gdk_rgba);
     g_signal_connect(tick, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* satellite */
     label = gtk_label_new(_("Satellite:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
     sat = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(sat), TRUE);
-    gtk_table_attach(GTK_TABLE(table), sat, 1, 2, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(sat), TRUE);
+    gtk_grid_attach(GTK_GRID(table), sat, 1, 1, 1, 1);
     gtk_widget_set_tooltip_text(sat, _("Click to select satellite colour"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_SAT_COL,
-                               SAT_CFG_INT_POLAR_SAT_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_SAT_COL,
+                                   SAT_CFG_INT_POLAR_SAT_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(sat), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(sat), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(sat), &gdk_rgba);
     g_signal_connect(sat, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* selected satellite */
     label = gtk_label_new(_("Selected Sat.:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 2, 3, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 1, 1, 1);
     ssat = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(ssat), TRUE);
-    gtk_table_attach(GTK_TABLE(table), ssat, 3, 4, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(ssat), TRUE);
+    gtk_grid_attach(GTK_GRID(table), ssat, 3, 1, 1, 1);
     gtk_widget_set_tooltip_text(ssat,
                                 _
                                 ("Click to select colour for selected satellites"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_SAT_SEL_COL,
-                               SAT_CFG_INT_POLAR_SAT_SEL_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_SAT_SEL_COL,
+                                   SAT_CFG_INT_POLAR_SAT_SEL_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_SEL_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_SEL_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(ssat), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(ssat), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(ssat), &gdk_rgba);
     g_signal_connect(ssat, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* track */
     label = gtk_label_new(_("Sky Track:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 4, 5, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 4, 1, 1, 1);
     track = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(track), TRUE);
-    gtk_table_attach(GTK_TABLE(table), track, 5, 6, 1, 2,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(track), TRUE);
+    gtk_grid_attach(GTK_GRID(table), track, 5, 1, 1, 1);
     gtk_widget_set_tooltip_text(track, _("Click to select track colour"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_TRACK_COL,
-                               SAT_CFG_INT_POLAR_TRACK_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_TRACK_COL,
+                                   SAT_CFG_INT_POLAR_TRACK_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TRACK_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TRACK_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(track), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(track), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(track), &gdk_rgba);
     g_signal_connect(track, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* Info */
     label = gtk_label_new(_("Info Text:"));
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
     info = gtk_color_button_new();
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(info), TRUE);
-    gtk_table_attach(GTK_TABLE(table), info, 1, 2, 2, 3,
-                     GTK_FILL, GTK_FILL, 0, 0);
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(info), TRUE);
+    gtk_grid_attach(GTK_GRID(table), info, 1, 2, 1, 1);
     gtk_widget_set_tooltip_text(info, _("Click to select background colour"));
     if (cfg != NULL)
     {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_POLAR_SECTION,
-                               MOD_CFG_POLAR_INFO_COL,
-                               SAT_CFG_INT_POLAR_INFO_COL);
+        cfg_rgba = mod_cfg_get_int(cfg,
+                                   MOD_CFG_POLAR_SECTION,
+                                   MOD_CFG_POLAR_INFO_COL,
+                                   SAT_CFG_INT_POLAR_INFO_COL);
     }
     else
     {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_INFO_COL);
+        cfg_rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_INFO_COL);
     }
-    rgba2gdk(rgba, &col, &alpha);
-    gtk_color_button_set_color(GTK_COLOR_BUTTON(info), &col);
-    gtk_color_button_set_alpha(GTK_COLOR_BUTTON(info), alpha);
+    rgba_from_cfg(cfg_rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(info), &gdk_rgba);
     g_signal_connect(info, "color-set", G_CALLBACK(colour_changed), NULL);
 }
 
@@ -546,12 +695,13 @@ static void create_misc_selectors(GKeyFile * cfg, GtkBox * vbox)
 
     /* create header */
     label = gtk_label_new(NULL);
-    gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b>Miscellaneous:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, TRUE, 0);
 
     /* horizontal box to contain the radio buttons */
-    hbox = gtk_hbox_new(TRUE, 10);
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
     gtk_box_pack_start(vbox, hbox, FALSE, TRUE, 0);
 
     /* show sky tracks */
@@ -608,243 +758,14 @@ static void create_reset_button(GKeyFile * cfg, GtkBox * vbox)
                                     ("Reset module settings to the global values."));
     }
 
-    butbox = gtk_hbutton_box_new();
+    butbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(butbox), GTK_BUTTONBOX_END);
     gtk_box_pack_end(GTK_BOX(butbox), button, FALSE, TRUE, 10);
 
     gtk_box_pack_end(vbox, butbox, FALSE, TRUE, 0);
 }
 
-/**
- * Manage orientation changes.
- * @param but the button that received the signal
- * @param data User data (always NULL).
- *
- * Note that this function is called also for the button that is unchecked,
- *
- */
-static void orient_chganged(GtkToggleButton * but, gpointer data)
-{
-    if (gtk_toggle_button_get_active(but))
-    {
-        orient = GPOINTER_TO_INT(data);
-        dirty = TRUE;
-    }
-}
-
-/**
- * Manage check-box actions.
- * @param but The check-button that has been toggled.
- * @param daya User data (always NULL).
- *
- * We don't need to do anything but set the dirty flag since the values can
- * always be obtained from the global widgets.
- */
-static void content_changed(GtkToggleButton * but, gpointer data)
-{
-    (void)but;
-    (void)data;
-
-    dirty = TRUE;
-}
-
-/**
- * Manage color and font changes.
- * @param but The color/font picker button that received the signal.
- * @param data User data (always NULL).
- *
- * We don't need to do anything but set the dirty flag since the values can
- * always be obtained from the global widgets.
- */
-static void colour_changed(GtkWidget * but, gpointer data)
-{
-    (void)but;
-    (void)data;
-
-    dirty = TRUE;
-}
-
-/**
- * Manage RESET button signals.
- * @param button The RESET button.
- * @param cfg Pointer to the module configuration or NULL in global mode.
- *
- * This function is called when the user clicks on the RESET button. In global mode
- * (when cfg = NULL) the function will reset the settings to the efault values, while
- * in "local" mode (when cfg != NULL) the function will reset the module settings to
- * the global settings. This is done by removing the corresponding key from the GKeyFile.
- */
-static void reset_cb(GtkWidget * button, gpointer cfg)
-{
-    GdkColor        col;
-    guint16         alpha;
-    guint           rgba;
-
-    (void)button;
-
-    if (cfg == NULL)
-    {
-        /* global mode, get defaults */
-
-        /* extra contents */
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(qth),
-                                     sat_cfg_get_bool_def
-                                     (SAT_CFG_BOOL_POL_SHOW_QTH_INFO));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(next),
-                                     sat_cfg_get_bool_def
-                                     (SAT_CFG_BOOL_POL_SHOW_NEXT_EV));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(curs),
-                                     sat_cfg_get_bool_def
-                                     (SAT_CFG_BOOL_POL_SHOW_CURS_TRACK));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(xtick),
-                                     sat_cfg_get_bool_def
-                                     (SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS));
-
-        /* colours */
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_BGD_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(bgd), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(bgd), alpha);
-
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_AXIS_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(axis), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(axis), alpha);
-
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_TICK_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(tick), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(tick), alpha);
-
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_SAT_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(sat), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(sat), alpha);
-
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_SAT_SEL_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(ssat), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(ssat), alpha);
-
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_TRACK_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(track), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(track), alpha);
-
-        rgba = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_INFO_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(info), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(info), alpha);
-
-        /* misc */
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(showtrack),
-                                     sat_cfg_get_bool_def
-                                     (SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO));
-    }
-    else
-    {
-        /* local mode, get global value */
-
-        /* extra contents */
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(qth),
-                                     sat_cfg_get_bool
-                                     (SAT_CFG_BOOL_POL_SHOW_QTH_INFO));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(next),
-                                     sat_cfg_get_bool
-                                     (SAT_CFG_BOOL_POL_SHOW_NEXT_EV));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(curs),
-                                     sat_cfg_get_bool
-                                     (SAT_CFG_BOOL_POL_SHOW_CURS_TRACK));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(xtick),
-                                     sat_cfg_get_bool
-                                     (SAT_CFG_BOOL_POL_SHOW_EXTRA_AZ_TICKS));
-
-        /* colours */
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_BGD_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(bgd), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(bgd), alpha);
-
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_AXIS_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(axis), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(axis), alpha);
-
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TICK_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(tick), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(tick), alpha);
-
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(sat), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(sat), alpha);
-
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_SAT_SEL_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(ssat), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(ssat), alpha);
-
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_TRACK_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(track), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(track), alpha);
-
-        rgba = sat_cfg_get_int(SAT_CFG_INT_POLAR_INFO_COL);
-        rgba2gdk(rgba, &col, &alpha);
-        gtk_color_button_set_color(GTK_COLOR_BUTTON(info), &col);
-        gtk_color_button_set_alpha(GTK_COLOR_BUTTON(info), alpha);
-
-        /* misc */
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(showtrack),
-                                     sat_cfg_get_bool
-                                     (SAT_CFG_BOOL_POL_SHOW_TRACK_AUTO));
-    }
-
-    /* orientation needs some special attention */
-    if (cfg == NULL)
-    {
-        orient = sat_cfg_get_int_def(SAT_CFG_INT_POLAR_ORIENTATION);
-    }
-    else
-    {
-        orient = sat_cfg_get_int(SAT_CFG_INT_POLAR_ORIENTATION);
-    }
-
-    switch (orient)
-    {
-
-    case POLAR_VIEW_NESW:
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(nesw), TRUE);
-        break;
-
-    case POLAR_VIEW_NWSE:
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(nwse), TRUE);
-        break;
-
-    case POLAR_VIEW_SENW:
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(senw), TRUE);
-        break;
-
-    case POLAR_VIEW_SWNE:
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(swne), TRUE);
-        break;
-
-    default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Invalid chart orientation %d (using N/E/S/W)"),
-                    __FILE__, __func__, orient);
-        orient = POLAR_VIEW_NESW;
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(nesw), TRUE);
-        break;
-    }
-
-    /* reset flags */
-    reset = TRUE;
-    dirty = FALSE;
-}
-
-/** User pressed cancel. Any changes to config must be cancelled. */
+/* User pressed cancel. Any changes to config must be cancelled. */
 void sat_pref_polar_view_cancel(GKeyFile * cfg)
 {
     (void)cfg;
@@ -852,12 +773,11 @@ void sat_pref_polar_view_cancel(GKeyFile * cfg)
     dirty = FALSE;
 }
 
-/** User pressed OK. Any changes should be stored in config. */
+/* User pressed OK. Any changes should be stored in config. */
 void sat_pref_polar_view_ok(GKeyFile * cfg)
 {
+    GdkRGBA         gdk_rgba;
     guint           rgba;
-    guint16         alpha;
-    GdkColor        col;
 
     if (dirty)
     {
@@ -889,45 +809,38 @@ void sat_pref_polar_view_ok(GKeyFile * cfg)
                                    (GTK_TOGGLE_BUTTON(xtick)));
 
             /* colours */
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(bgd), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(bgd));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(bgd), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_BGD_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(axis), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(axis));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(axis), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_AXIS_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(tick), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(tick));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(tick), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_TICK_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(sat), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(sat));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(sat), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_SAT_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(ssat), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(ssat));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(ssat), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_SAT_SEL_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(info), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(info));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(info), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_INFO_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(track), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(track));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(track), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_POLAR_SECTION,
                                    MOD_CFG_POLAR_TRACK_COL, rgba);
 
@@ -961,39 +874,32 @@ void sat_pref_polar_view_ok(GKeyFile * cfg)
                                                           (xtick)));
 
             /* colours */
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(bgd), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(bgd));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(bgd), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_BGD_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(axis), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(axis));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(axis), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_AXIS_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(tick), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(tick));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(tick), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_TICK_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(sat), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(sat));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(sat), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_SAT_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(ssat), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(ssat));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(ssat), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_SAT_SEL_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(info), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(info));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(info), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_INFO_COL, rgba);
 
-            gtk_color_button_get_color(GTK_COLOR_BUTTON(track), &col);
-            alpha = gtk_color_button_get_alpha(GTK_COLOR_BUTTON(track));
-            gdk2rgba(&col, alpha, &rgba);
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(track), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
             sat_cfg_set_int(SAT_CFG_INT_POLAR_TRACK_COL, rgba);
 
             /* misc */
@@ -1075,4 +981,45 @@ void sat_pref_polar_view_ok(GKeyFile * cfg)
         }
         reset = FALSE;
     }
+}
+
+/*
+ * Create and initialise widgets for the polar view preferences tab.
+ *
+ * The widgets must be preloaded with values from config. If a config value
+ * is NULL, sensible default values, eg. those from defaults.h should
+ * be laoded.
+ */
+GtkWidget      *sat_pref_polar_view_create(GKeyFile * cfg)
+{
+    GtkWidget      *vbox;
+
+    /* create vertical box */
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 20);
+
+    /* create the components */
+    create_orient_selector(cfg, GTK_BOX(vbox));
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, TRUE, 10);
+    create_bool_selectors(cfg, GTK_BOX(vbox));
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, TRUE, 10);
+    create_colour_selectors(cfg, GTK_BOX(vbox));
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, TRUE, 10);
+    create_misc_selectors(cfg, GTK_BOX(vbox));
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, TRUE, 10);
+    create_reset_button(cfg, GTK_BOX(vbox));
+
+    reset = FALSE;
+    dirty = FALSE;
+
+    return vbox;
 }

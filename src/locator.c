@@ -60,7 +60,7 @@
 #include <ctype.h>
 #include <math.h>
 
-
+#include "gpredict-utils.h"
 #include "locator.h"
 
 

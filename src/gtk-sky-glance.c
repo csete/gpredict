@@ -719,11 +719,11 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
                           skypass->pass->tca);
 
             /* box tooltip will contain pass summary */
-            tooltip = g_strdup_printf("<b>%s</b>\n"
+            tooltip = g_strdup_printf(_("<b>%s</b>\n"
                                       "AOS: %s  Az:%.0f\302\260\n"
                                       "TCA: %s  Az:%.0f\302\260  El:%.1f\302\260\n"
                                       "LOS: %s  Az:%.0f\302\260\n"
-                                      "<i>Click for details</i>",
+                                      "<i>Click for details</i>"),
                                       skypass->pass->satname,
                                       aosstr, skypass->pass->aos_az,
                                       tcastr, skypass->pass->maxel_az,
