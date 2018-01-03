@@ -888,17 +888,17 @@ static void create_edit_menu_items(GtkMenuShell * menu)
     if (menu == NULL)
         return;
 
-    menu_item = gtk_menu_item_new_with_mnemonic(_("Update TLE from the _net"));
+    menu_item = gtk_menu_item_new_with_mnemonic(_("Update TLE data from _network"));
     g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_tle_net_cb),
                      NULL);
     gtk_menu_shell_append(menu, menu_item);
 
-    menu_item = gtk_menu_item_new_with_mnemonic(_("Update TLE from local _files"));
+    menu_item = gtk_menu_item_new_with_mnemonic(_("Update TLE data from local _files"));
     g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_tle_local_cb),
                      NULL);
     gtk_menu_shell_append(menu, menu_item);
 
-    menu_item = gtk_menu_item_new_with_mnemonic(_("Update _frequencies"));
+    menu_item = gtk_menu_item_new_with_mnemonic(_("Update transponder data"));
     g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_trsp_net_cb),
                      NULL);
     gtk_menu_shell_append(menu, menu_item);
