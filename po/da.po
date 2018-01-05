@@ -7,27 +7,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-03 22:50+0100\n"
+"POT-Creation-Date: 2017-12-28 14:28+0100\n"
 "PO-Revision-Date: 2017-12-04 01:54+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Danish <da@li.org>\n"
-"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
-"X-Generator: Launchpad (build 18511)\n"
+"X-Launchpad-Export-Date: 2018-01-05 22:12+0000\n"
+"X-Generator: Launchpad (build 18521)\n"
+"Language: da\n"
 
+#. window title
+#. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:94 ../src/main.c:223
+#: ../src/about.c:93 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
-#: ../src/about.c:97
+#: ../src/about.c:96
 msgid "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
-#: ../src/about.c:110
+#: ../src/about.c:109
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -130,18 +132,18 @@ msgstr "%s: Kunne ikke kopiere %s"
 msgid "%s: Successfully copied %s"
 msgstr "%s: Successfuld kopiering af %s"
 
-#: ../src/gpredict-help.c:74
+#: ../src/gpredict-help.c:75
 #, c-format
 msgid "%s: Failed to load %s (%s)"
 msgstr "%s: Kunne ikke indlæse %s (%s)"
 
-#: ../src/gpredict-help.c:86
+#: ../src/gpredict-help.c:87
 #, c-format
 msgid "%s: Error reading %s (%s)"
 msgstr "%s: Fejl under indlæsning af %s (%s)"
 
 #. create and show dialogue with textbuffer
-#: ../src/gpredict-help.c:122
+#: ../src/gpredict-help.c:123
 msgid "Gpredict Info"
 msgstr "Gpredict Info"
 
@@ -193,16 +195,16 @@ msgstr "%s: Konfiguration gemt for %s."
 
 #: ../src/gpredict-utils.c:592 ../src/gpredict-utils.c:610
 #: ../src/gpredict-utils.c:628 ../src/gpredict-utils.c:646
-#, fuzzy, c-format
+#, c-format
 msgid "%s called with gdk_rgba = NULL"
-msgstr "%s:%s: %skaldt med rgba = NULL"
+msgstr ""
 
 #: ../src/gtk-azel-plot.c:545
 msgid "Local Time"
 msgstr "Lokaltid"
 
 #: ../src/gtk-azel-plot.c:555 ../src/gtk-sky-glance.c:521
-#: ../src/pass-to-txt.c:155
+#: ../src/pass-to-txt.c:160
 msgid "UTC"
 msgstr "UTC"
 
@@ -224,14 +226,13 @@ msgid "Satellite"
 msgstr "Satellit"
 
 #: ../src/gtk-event-list.c:51 ../src/gtk-sat-list.c:51
-#: ../src/gtk-sat-selector.c:466 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:522
+#: ../src/gtk-sat-selector.c:459 ../src/gtk-sat-tree.c:187 ../src/mod-cfg.c:522
 msgid "Catnum"
 msgstr "Catnum"
 
 #: ../src/gtk-event-list.c:54
-#, fuzzy
 msgid "Event"
-msgstr "Næste"
+msgstr ""
 
 #: ../src/gtk-event-list.c:55
 msgid "AOS/LOS"
@@ -276,9 +277,9 @@ msgid "Countdown until next event"
 msgstr ""
 
 #: ../src/gtk-event-list.c:374
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Invalid GtkEventList!"
-msgstr "%s: Ugyldig GtkSatList!"
+msgstr ""
 
 #: ../src/gtk-event-list.c:440 ../src/gtk-sat-list.c:574
 #, c-format
@@ -300,8 +301,8 @@ msgstr ""
 msgid "AOS"
 msgstr ""
 
-#: ../src/gtk-event-list.c:587 ../src/tle-update.c:1351
-#: ../src/trsp-update.c:721
+#: ../src/gtk-event-list.c:587 ../src/tle-update.c:1315
+#: ../src/trsp-update.c:660
 msgid "Never"
 msgstr ""
 
@@ -317,7 +318,7 @@ msgid "%s:%d Failed to get data for %d."
 msgstr "%s:%d Kunne ikke hente data for %d."
 
 #: ../src/gtk-event-list.c:828 ../src/gtk-sat-list.c:1278
-#: ../src/sat-pass-dialogs.c:1313 ../src/sat-pass-dialogs.c:1363
+#: ../src/sat-pass-dialogs.c:1308 ../src/sat-pass-dialogs.c:1358
 #, c-format
 msgid "%s:%d: There is no selection; skip popup."
 msgstr "%s:%d: Der er ingen valg; skip popup."
@@ -331,24 +332,24 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr "Brug museknapper og hjul til at ændre værdien"
 
-#: ../src/gtk-polar-plot.c:392
+#: ../src/gtk-polar-plot.c:393
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr "%s:%d: Ukorrektorientering af den polære graf."
 
-#: ../src/gtk-polar-plot.c:462 ../src/gtk-polar-view.c:661
+#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr "N"
 
-#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:671
+#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr "S"
 
-#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:681
+#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr "Ø"
 
-#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:691
+#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr "V"
 
@@ -737,9 +738,8 @@ msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1350
-#, fuzzy
 msgid "The time remaining until the next AOS or LOS event"
-msgstr "Tid til den næste AOS eller LOS afhængigt af hvad der kommer først."
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1389
 #, c-format
@@ -767,9 +767,9 @@ msgid "%s:%s: Read %d bytes from rigctld"
 msgstr "%s:%s: Fik %d bytes fra rigctld"
 
 #: ../src/gtk-rig-ctrl.c:1453 ../src/gtk-rig-ctrl.c:1471
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: %s rigctld returned error (%s)"
-msgstr "%s: %s rigctld returnerede en fejl (%s)"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1508
 #, c-format
@@ -854,19 +854,19 @@ msgid "%s:%s: ERROR: NO VALID ctrl-struct"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2838
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
-msgstr "%s: Ugyldig radio type %d. Anvender RIG_TYPE_RX istedet"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2855
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
-msgstr "%s: MAX_ERROR_COUNT (%d) er nået. Afbryder forbindelse!"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create rotctl socket: %s"
-msgstr "%s: Kunne ikke oprette forbindelse"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:91
 #, c-format
@@ -973,7 +973,8 @@ msgid "Monitor rotator but do not send any position commands"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1420
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Denne parameter bestemmer forsinkelsen imellem kommandoer der bliver sendt "
 "til rotoren"
@@ -1014,7 +1015,7 @@ msgstr ""
 msgid "%s: Error reading TLE line 1 from %s (%s)"
 msgstr "%s: Fejl ved indlæsning af TLE linje 1, fra %s (%s)"
 
-#: ../src/gtk-sat-data.c:119 ../src/tle-update.c:1204 ../src/tle-update.c:1213
+#: ../src/gtk-sat-data.c:119 ../src/tle-update.c:1168 ../src/tle-update.c:1177
 #, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
 msgstr "%s: Fejl ved indlæsning af TLE linje 2, fra %s (%s)"
@@ -1036,7 +1037,7 @@ msgstr "Ra"
 msgid "Dec"
 msgstr "Dekl"
 
-#: ../src/gtk-sat-list.c:57 ../src/pass-to-txt.c:45
+#: ../src/gtk-sat-list.c:57 ../src/pass-to-txt.c:53
 #: ../src/sat-pass-dialogs.c:103
 msgid "Range"
 msgstr "Afstand"
@@ -1073,7 +1074,7 @@ msgstr "Lon"
 msgid "SSP"
 msgstr "SSP"
 
-#: ../src/gtk-sat-list.c:65 ../src/pass-to-txt.c:50
+#: ../src/gtk-sat-list.c:65 ../src/pass-to-txt.c:58
 #: ../src/sat-pass-dialogs.c:108
 msgid "Footp"
 msgstr "Footp"
@@ -1106,12 +1107,12 @@ msgstr "MA"
 msgid "Phase"
 msgstr "Fase"
 
-#: ../src/gtk-sat-list.c:73 ../src/pass-to-txt.c:94
+#: ../src/gtk-sat-list.c:73 ../src/pass-to-txt.c:102
 #: ../src/sat-pass-dialogs.c:65
 msgid "Orbit"
 msgstr "Omløb"
 
-#: ../src/gtk-sat-list.c:74 ../src/pass-to-txt.c:58 ../src/pass-to-txt.c:95
+#: ../src/gtk-sat-list.c:74 ../src/pass-to-txt.c:66 ../src/pass-to-txt.c:103
 #: ../src/sat-pass-dialogs.c:66 ../src/sat-pass-dialogs.c:116
 msgid "Vis"
 msgstr ""
@@ -1209,7 +1210,7 @@ msgstr ""
 msgid "%s: Invalid GtkSatList!"
 msgstr "%s: Ugyldig GtkSatList!"
 
-#: ../src/gtk-sat-list.c:921 ../src/sat-pass-dialogs.c:687
+#: ../src/gtk-sat-list.c:921 ../src/sat-pass-dialogs.c:682
 #: ../src/sat-pref-qth.c:799
 #, c-format
 msgid "%s:%d: Invalid column: %d"
@@ -1747,12 +1748,11 @@ msgstr "<b>Realtid</b>"
 #. * Note that the controllers for hours, minutes, and seconds have ranges;
 #. * however, they can wrap around their limits in order to ensure a smooth
 #. * and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:144
-#, fuzzy
 msgid "Hour:"
-msgstr " Time:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:154
 msgid "Use this control to set the hour"
@@ -1760,9 +1760,8 @@ msgstr "Brug denne til at styre timerne"
 
 #. minutes
 #: ../src/gtk-sat-module-tmg.c:161
-#, fuzzy
 msgid "Min:"
-msgstr " Minut:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:171
 msgid "Use this control to set the minutes"
@@ -1770,9 +1769,8 @@ msgstr "Brug denne til at styre minutterne"
 
 #. seconds
 #: ../src/gtk-sat-module-tmg.c:178
-#, fuzzy
 msgid "Sec:"
-msgstr " Sekund:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:188
 msgid "Use this control to set the seconds"
@@ -1780,9 +1778,8 @@ msgstr "Brug denne til at styre sekunderne"
 
 #. milliseconds
 #: ../src/gtk-sat-module-tmg.c:195
-#, fuzzy
 msgid "Msec:"
-msgstr " Msek:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:205
 msgid "Use this control to set the milliseconds"
@@ -1860,61 +1857,60 @@ msgid ""
 msgstr ""
 
 #: ../src/gtk-sat-selector.c:392
-#, fuzzy
 msgid "Satellite group / category"
-msgstr "Satellitnavn"
+msgstr ""
 
 #: ../src/gtk-sat-selector.c:400
 msgid "Search for a satellite by name or catalog number"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:414
+#: ../src/gtk-sat-selector.c:407
 msgid "Clear the search field"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:456
+#: ../src/gtk-sat-selector.c:449
 msgid "Available Satellites"
 msgstr "Tilgengængelige satellitter"
 
-#: ../src/gtk-sat-selector.c:476
+#: ../src/gtk-sat-selector.c:469
 msgid "Updated"
 msgstr "Opdateret"
 
-#: ../src/gtk-sat-selector.c:548 ../src/gtk-sat-selector.c:652
+#: ../src/gtk-sat-selector.c:541 ../src/gtk-sat-selector.c:645
 #, c-format
 msgid "%s:%s: Failed to open %s: %s"
 msgstr "%s:%s: Kunne ikke åbne %s: %s"
 
-#: ../src/gtk-sat-selector.c:588 ../src/mod-cfg.c:135
+#: ../src/gtk-sat-selector.c:581 ../src/mod-cfg.c:135
 #, c-format
 msgid "%s:%s: Error reading satellite %d."
 msgstr "%s:%s: Fejl ved indlæsning af satellit %d."
 
-#: ../src/gtk-sat-selector.c:610
+#: ../src/gtk-sat-selector.c:603
 #, c-format
 msgid "%s:%s: Read %d satellites from %s"
 msgstr "%s:%s: %d satellitter indlæst fra %s"
 
-#: ../src/gtk-sat-selector.c:616
+#: ../src/gtk-sat-selector.c:609
 #, c-format
 msgid "%s:%s: Failed to read %s"
 msgstr "%s:%s: Kunne ikke læse %s"
 
-#: ../src/gtk-sat-selector.c:730
+#: ../src/gtk-sat-selector.c:723
 msgid "All satellites"
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:738
+#: ../src/gtk-sat-selector.c:731
 #, c-format
 msgid "%s:%s: Failed to open satdata directory %s."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:781
+#: ../src/gtk-sat-selector.c:774
 #, c-format
 msgid "%s:%s: Read %d satellites into MAIN group."
 msgstr ""
 
-#: ../src/gtk-sat-selector.c:898
+#: ../src/gtk-sat-selector.c:891
 #, c-format
 msgid "%s: Error getting %dth satellite"
 msgstr ""
@@ -2245,56 +2241,56 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:60
+#: ../src/main.c:76
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:108
+#: ../src/main.c:126
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
 "Gpredict does not require any command line options for nominal operation."
 msgstr ""
 
-#: ../src/main.c:114
+#: ../src/main.c:132
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:131
+#: ../src/main.c:156
 #, c-format
 msgid ""
-"User config check failed (code %d). This is fatal.\n"
-"A possible solution would be to remove the .config/Gpredict data dir in your "
-"home directory"
+"%s: User config check failed (code %d). This is fatal.\n"
+"A possible solution would be to remove the .config/Gpredict data dir\n"
+"in your home directory"
 msgstr ""
 
-#: ../src/main.c:418
+#: ../src/main.c:455
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:461
+#: ../src/main.c:499
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:470
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:473
+#: ../src/main.c:511
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:478
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:490
+#: ../src/main.c:528
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2302,27 +2298,27 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:519
+#: ../src/main.c:558
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:561
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:573 ../src/main.c:617
+#: ../src/main.c:617 ../src/main.c:664
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:578 ../src/main.c:622
+#: ../src/main.c:622 ../src/main.c:669
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:604
+#: ../src/main.c:650
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
@@ -2494,17 +2490,16 @@ msgid "_Quit"
 msgstr ""
 
 #: ../src/menubar.c:891
-msgid "Update TLE data from _network"
+msgid "Update TLE from _net"
 msgstr ""
 
 #: ../src/menubar.c:896
-msgid "Update TLE data from local _files"
+msgid "Update TLE from _files"
 msgstr ""
 
 #: ../src/menubar.c:901
-#, fuzzy
-msgid "Update transponder data"
-msgstr "Vælg transponder"
+msgid "Update _frequencies"
+msgstr ""
 
 #: ../src/menubar.c:909
 msgid "_Preferences"
@@ -2562,7 +2557,7 @@ msgstr ""
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr ""
@@ -2794,110 +2789,110 @@ msgstr ""
 msgid "Az/El plot"
 msgstr ""
 
-#: ../src/pass-to-txt.c:40
+#: ../src/pass-to-txt.c:48
 msgid " Time"
 msgstr ""
 
-#: ../src/pass-to-txt.c:41
+#: ../src/pass-to-txt.c:49
 msgid "  Az  "
 msgstr ""
 
 #. 6
-#: ../src/pass-to-txt.c:42
+#: ../src/pass-to-txt.c:50
 msgid "   El "
 msgstr ""
 
-#: ../src/pass-to-txt.c:43
+#: ../src/pass-to-txt.c:51
 msgid "  Ra  "
 msgstr ""
 
-#: ../src/pass-to-txt.c:44
+#: ../src/pass-to-txt.c:52
 msgid "  Dec "
 msgstr ""
 
-#: ../src/pass-to-txt.c:46
+#: ../src/pass-to-txt.c:54
 msgid " Rate "
 msgstr ""
 
-#: ../src/pass-to-txt.c:47
+#: ../src/pass-to-txt.c:55
 msgid "  Lat "
 msgstr ""
 
-#: ../src/pass-to-txt.c:48
+#: ../src/pass-to-txt.c:56
 msgid "  Lon  "
 msgstr ""
 
-#: ../src/pass-to-txt.c:49
+#: ../src/pass-to-txt.c:57
 msgid " SSP  "
 msgstr ""
 
-#: ../src/pass-to-txt.c:51
+#: ../src/pass-to-txt.c:59
 msgid " Alt "
 msgstr ""
 
-#: ../src/pass-to-txt.c:52
+#: ../src/pass-to-txt.c:60
 msgid " Vel "
 msgstr ""
 
-#: ../src/pass-to-txt.c:53
+#: ../src/pass-to-txt.c:61
 msgid " Dop "
 msgstr ""
 
-#: ../src/pass-to-txt.c:54
+#: ../src/pass-to-txt.c:62
 msgid " Loss "
 msgstr ""
 
-#: ../src/pass-to-txt.c:55
+#: ../src/pass-to-txt.c:63
 msgid " Del "
 msgstr ""
 
-#: ../src/pass-to-txt.c:56
+#: ../src/pass-to-txt.c:64
 msgid "  MA  "
 msgstr ""
 
-#: ../src/pass-to-txt.c:57
+#: ../src/pass-to-txt.c:65
 msgid " Pha  "
 msgstr ""
 
-#: ../src/pass-to-txt.c:86
+#: ../src/pass-to-txt.c:94
 msgid " AOS"
 msgstr ""
 
-#: ../src/pass-to-txt.c:87
+#: ../src/pass-to-txt.c:95
 msgid "  TCA"
 msgstr ""
 
 #. 6
-#: ../src/pass-to-txt.c:88
+#: ../src/pass-to-txt.c:96
 msgid "  LOS"
 msgstr ""
 
-#: ../src/pass-to-txt.c:89 ../src/sat-pass-dialogs.c:60
+#: ../src/pass-to-txt.c:97 ../src/sat-pass-dialogs.c:60
 msgid "Duration"
 msgstr ""
 
-#: ../src/pass-to-txt.c:90 ../src/sat-pass-dialogs.c:61
+#: ../src/pass-to-txt.c:98 ../src/sat-pass-dialogs.c:61
 #: ../src/sat-pref-rot.c:502
 msgid "Max El"
 msgstr ""
 
-#: ../src/pass-to-txt.c:91 ../src/sat-pass-dialogs.c:62
+#: ../src/pass-to-txt.c:99 ../src/sat-pass-dialogs.c:62
 msgid "AOS Az"
 msgstr ""
 
-#: ../src/pass-to-txt.c:92 ../src/sat-pass-dialogs.c:63
+#: ../src/pass-to-txt.c:100 ../src/sat-pass-dialogs.c:63
 msgid "Max El Az"
 msgstr ""
 
-#: ../src/pass-to-txt.c:93 ../src/sat-pass-dialogs.c:64
+#: ../src/pass-to-txt.c:101 ../src/sat-pass-dialogs.c:64
 msgid "LOS Az"
 msgstr ""
 
-#: ../src/pass-to-txt.c:136
+#: ../src/pass-to-txt.c:144
 msgid "Local"
 msgstr ""
 
-#: ../src/pass-to-txt.c:170
+#: ../src/pass-to-txt.c:175
 #, c-format
 msgid ""
 "Pass details for %s (orbit %d)\n"
@@ -2907,7 +2902,7 @@ msgid ""
 "LOS: %s %s\n"
 msgstr ""
 
-#: ../src/pass-to-txt.c:471
+#: ../src/pass-to-txt.c:461
 #, c-format
 msgid ""
 "Upcoming passes for %s\n"
@@ -2933,108 +2928,108 @@ msgstr ""
 #. FIXME
 #. page header
 #. create dialog
-#: ../src/print-pass.c:123 ../src/sat-pass-dialogs.c:477
+#: ../src/print-pass.c:123 ../src/sat-pass-dialogs.c:472
 #, c-format
 msgid "Pass details for %s (orbit %d)"
 msgstr ""
 
 #. avoid unused parameter compiler warning
 #: ../src/print-pass.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Not implemented!"
-msgstr "%s: FIXME Ikke implementeret"
+msgstr ""
 
-#: ../src/qth-data.c:71
+#: ../src/qth-data.c:78
 #, c-format
 msgid "%s: Could not load data from %s (%s)"
 msgstr ""
 
 #. send a debug message, then read data
-#: ../src/qth-data.c:78
+#: ../src/qth-data.c:85
 #, c-format
 msgid "%s: QTH data: %s"
 msgstr ""
 
-#: ../src/qth-data.c:96
+#: ../src/qth-data.c:103
 #, c-format
 msgid "%s: QTH has no location (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:108
+#: ../src/qth-data.c:115
 #, c-format
 msgid "%s: QTH has no description."
 msgstr ""
 
-#: ../src/qth-data.c:120
+#: ../src/qth-data.c:127
 #, c-format
 msgid "%s: QTH has no weather station."
 msgstr ""
 
-#: ../src/qth-data.c:133
+#: ../src/qth-data.c:140
 #, c-format
 msgid "%s: Error reading QTH latitude (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:155
+#: ../src/qth-data.c:162
 #, c-format
 msgid "%s: Error reading QTH longitude (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:177
+#: ../src/qth-data.c:184
 #, c-format
 msgid "%s: Error reading QTH altitude (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:194
+#: ../src/qth-data.c:201
 #, c-format
 msgid "%s: Error reading QTH type (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:209
+#: ../src/qth-data.c:216
 #, c-format
 msgid "%s: Error reading GPSD port (%s)."
 msgstr ""
 
-#: ../src/qth-data.c:222
+#: ../src/qth-data.c:229
 #, c-format
 msgid "%s: QTH has no GPSD Server."
 msgstr ""
 
-#: ../src/qth-data.c:234 ../src/qth-data.c:528
+#: ../src/qth-data.c:241 ../src/qth-data.c:546
 #, c-format
 msgid "%s: Could not set QRA for %s at %f, %f."
 msgstr ""
 
-#: ../src/qth-data.c:242
+#: ../src/qth-data.c:249
 #, c-format
 msgid "%s: QTH data: %s, %.4f, %.4f, %d"
 msgstr ""
 
-#: ../src/qth-data.c:571 ../src/qth-data.c:594
+#: ../src/qth-data.c:587 ../src/qth-data.c:610
 #, c-format
 msgid "%s: Could not open gpsd at  %s:%d"
 msgstr ""
 
-#: ../src/qth-data.c:608
+#: ../src/qth-data.c:624
 #, c-format
 msgid "%s: Unsupported gpsd api major version (%d)"
 msgstr ""
 
-#: ../src/qth-data.c:687 ../src/qth-data.c:688
+#: ../src/qth-data.c:698 ../src/qth-data.c:699
 msgid "Error"
 msgstr ""
 
-#: ../src/qth-data.c:724
+#: ../src/qth-data.c:732
 #, c-format
 msgid "%s: QTH data had bogus lat %f"
 msgstr ""
 
-#: ../src/qth-data.c:731
+#: ../src/qth-data.c:739
 #, c-format
 msgid "%s: QTH data had bogus lon %f"
 msgstr ""
 
-#: ../src/qth-data.c:741
+#: ../src/qth-data.c:749
 #, c-format
 msgid "%s: File contained bogus QTH data. Correcting: %s, %.4f, %.4f, %d"
 msgstr ""
@@ -3168,9 +3163,8 @@ msgid "Four letter code for weather station"
 msgstr ""
 
 #: ../src/qth-editor.c:622 ../src/sat-pref-qth-editor.c:736
-#, fuzzy
 msgid "Select a weather station"
-msgstr "Vælg transponder"
+msgstr ""
 
 #. GPSD enabled
 #: ../src/qth-editor.c:629 ../src/sat-pref-qth-editor.c:743
@@ -3535,7 +3529,7 @@ msgstr ""
 #. clear filename from title if unable to read file
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #: ../src/sat-log-browser.c:266 ../src/sat-log-browser.c:478
 #: ../src/sat-log-browser.c:522
@@ -3659,25 +3653,25 @@ msgstr ""
 msgid "Visibility during pass"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:447
+#: ../src/sat-pass-dialogs.c:442
 msgid "Data"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:459
+#: ../src/sat-pass-dialogs.c:454
 msgid "Polar"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:471
+#: ../src/sat-pass-dialogs.c:466
 msgid "Az/El"
 msgstr ""
 
 #. create dialog
-#: ../src/sat-pass-dialogs.c:1035
+#: ../src/sat-pass-dialogs.c:1030
 #, c-format
 msgid "Upcoming passes for %s"
 msgstr ""
 
-#: ../src/sat-pass-dialogs.c:1095
+#: ../src/sat-pass-dialogs.c:1090
 #, c-format
 msgid "%s: PRINT not implemented"
 msgstr ""
@@ -4133,9 +4127,8 @@ msgid "Ground Station:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:909
-#, fuzzy
 msgid "Select the ground station colour"
-msgstr "Vælg transponder"
+msgstr ""
 
 #. Grid in case it is enabled
 #: ../src/sat-pref-map-view.c:925
@@ -4161,9 +4154,8 @@ msgid "Satellite:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:975
-#, fuzzy
 msgid "Select the satellite colour"
-msgstr "Vælg satellit"
+msgstr ""
 
 #. selected satellite
 #: ../src/sat-pref-map-view.c:991 ../src/sat-pref-polar-view.c:614
@@ -4171,9 +4163,8 @@ msgid "Selected Sat.:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:998
-#, fuzzy
 msgid "Select colour for selected satellites"
-msgstr "Vælg satellit"
+msgstr ""
 
 #. tack
 #: ../src/sat-pref-map-view.c:1015
@@ -4791,22 +4782,14 @@ msgid "Add a new radio to the list"
 msgstr ""
 
 #: ../src/sat-pref-rig.c:744
-#, fuzzy
 msgid "Edit selected radio"
-msgstr "Aktiver forbindelse til den valgte radio enhed."
+msgstr ""
 
 #: ../src/sat-pref-rig.c:749
-#, fuzzy
 msgid "Delete selected radio"
-msgstr "Aktiver forbindelse til den valgte radio enhed."
+msgstr ""
 
-#: ../src/sat-pref-rig.c:833 ../src/sat-pref-rot.c:596 ../src/tle-update.c:691
-#: ../src/trsp-update.c:337
-#, fuzzy, c-format
-msgid "%s: Failed to remove %s"
-msgstr "%s: Kunne ikke oprette %s"
-
-#: ../src/sat-pref-rig.c:875
+#: ../src/sat-pref-rig.c:873
 #, c-format
 msgid "%s: Failed to get RIG %s"
 msgstr ""
@@ -4950,7 +4933,8 @@ msgid "MHz"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:416
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #. AOS / LOS signalling
@@ -5020,7 +5004,7 @@ msgstr ""
 msgid "Azimuth Type"
 msgstr ""
 
-#: ../src/sat-pref-rot.c:638
+#: ../src/sat-pref-rot.c:636
 #, c-format
 msgid "%s: Failed to get ROT %s"
 msgstr ""
@@ -5113,9 +5097,8 @@ msgstr ""
 
 #. colour 1
 #: ../src/sat-pref-sky-at-glance.c:302
-#, fuzzy
 msgid "Satellite 1: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:307
 msgid "Select colour 1"
@@ -5131,9 +5114,8 @@ msgstr ""
 
 #. colour 2
 #: ../src/sat-pref-sky-at-glance.c:316
-#, fuzzy
 msgid "Satellite 2: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:321
 msgid "Select colour 2"
@@ -5141,9 +5123,8 @@ msgstr ""
 
 #. colour 3
 #: ../src/sat-pref-sky-at-glance.c:330
-#, fuzzy
 msgid "Satellite 3: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:335
 msgid "Select colour 3"
@@ -5151,9 +5132,8 @@ msgstr ""
 
 #. colour 4
 #: ../src/sat-pref-sky-at-glance.c:344
-#, fuzzy
 msgid "Satellite 4: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:349
 msgid "Select colour 4"
@@ -5161,9 +5141,8 @@ msgstr ""
 
 #. colour 5
 #: ../src/sat-pref-sky-at-glance.c:358
-#, fuzzy
 msgid "Satellite 5: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:363
 msgid "Select colour 5"
@@ -5171,9 +5150,8 @@ msgstr ""
 
 #. colour 6
 #: ../src/sat-pref-sky-at-glance.c:372
-#, fuzzy
 msgid "Satellite 6: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:377
 msgid "Select colour 6"
@@ -5181,9 +5159,8 @@ msgstr ""
 
 #. colour 7
 #: ../src/sat-pref-sky-at-glance.c:386
-#, fuzzy
 msgid "Satellite 7: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:391
 msgid "Select colour 7"
@@ -5191,9 +5168,8 @@ msgstr ""
 
 #. colour 8
 #: ../src/sat-pref-sky-at-glance.c:400
-#, fuzzy
 msgid "Satellite 8: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:405
 msgid "Select colour 8"
@@ -5201,9 +5177,8 @@ msgstr ""
 
 #. colour 9
 #: ../src/sat-pref-sky-at-glance.c:414
-#, fuzzy
 msgid "Satellite 9: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:419
 msgid "Select colour 9"
@@ -5211,9 +5186,8 @@ msgstr ""
 
 #. colour 10
 #: ../src/sat-pref-sky-at-glance.c:428
-#, fuzzy
 msgid "Satellite 10: "
-msgstr "Satellit"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:433
 msgid "Select colour 10"
@@ -5412,43 +5386,43 @@ msgstr ""
 msgid "%s: NULL output storage!"
 msgstr ""
 
-#: ../src/tle-update.c:127
+#: ../src/tle-update.c:121
 #, c-format
 msgid "%s: A TLE update process is already running. Aborting."
 msgstr ""
 
-#: ../src/tle-update.c:143 ../src/tle-update.c:221
+#: ../src/tle-update.c:137 ../src/tle-update.c:215
 #, c-format
 msgid "%s: Error opening directory %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:149 ../src/tle-update.c:228
+#: ../src/tle-update.c:143 ../src/tle-update.c:222
 #, c-format
 msgid ""
 "<b>ERROR</b> opening directory %s\n"
 "%s"
 msgstr ""
 
-#: ../src/tle-update.c:170
+#: ../src/tle-update.c:164
 #, c-format
 msgid "Reading data from %s"
 msgstr ""
 
-#: ../src/tle-update.c:195
+#: ../src/tle-update.c:189
 #, c-format
 msgid "%s: No valid TLE data found in %s"
 msgstr ""
 
-#: ../src/tle-update.c:201
+#: ../src/tle-update.c:195
 #, c-format
 msgid "%s: Read %d sats from %s into memory"
 msgstr ""
 
-#: ../src/tle-update.c:292
+#: ../src/tle-update.c:286
 msgid "Updating data..."
 msgstr ""
 
-#: ../src/tle-update.c:299
+#: ../src/tle-update.c:293
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5456,7 +5430,7 @@ msgid ""
 "Missing Satellites:\t %d\n"
 msgstr ""
 
-#: ../src/tle-update.c:381
+#: ../src/tle-update.c:375
 #, c-format
 msgid ""
 "Satellites updated:\t %d\n"
@@ -5465,160 +5439,154 @@ msgid ""
 "New Satellites:\t\t %d"
 msgstr ""
 
-#: ../src/tle-update.c:391
+#: ../src/tle-update.c:385
 #, c-format
 msgid "%s: Added %d new satellites to local database"
 msgstr ""
 
-#: ../src/tle-update.c:407
+#: ../src/tle-update.c:401
 #, c-format
 msgid "%s: TLE elements updated."
 msgstr ""
 
-#: ../src/tle-update.c:501
+#: ../src/tle-update.c:491
 #, c-format
 msgid "%s: TLE update is already running. Aborting."
 msgstr ""
 
-#: ../src/tle-update.c:516
+#: ../src/tle-update.c:506
 #, c-format
 msgid "%s: No files to fetch from network."
 msgstr ""
 
-#: ../src/tle-update.c:522
+#: ../src/tle-update.c:512
 msgid "No files to fetch from network"
 msgstr ""
 
-#: ../src/tle-update.c:554 ../src/trsp-update.c:589
+#: ../src/tle-update.c:540 ../src/trsp-update.c:547
 #, c-format
 msgid "Fetching %s"
 msgstr ""
 
-#: ../src/tle-update.c:578 ../src/trsp-update.c:446 ../src/trsp-update.c:615
-#, fuzzy, c-format
-msgid "%s: Error fetching %s (%x)"
-msgstr "%s: Fejl under indlæsning af %s (%s)"
-
-#: ../src/tle-update.c:584 ../src/tle-update.c:604 ../src/trsp-update.c:451
-#: ../src/trsp-update.c:469 ../src/trsp-update.c:620 ../src/trsp-update.c:638
-#, c-format
-msgid "%s: Successfully fetched %s"
-msgstr ""
-
-#: ../src/tle-update.c:598 ../src/trsp-update.c:464 ../src/trsp-update.c:633
+#: ../src/tle-update.c:568 ../src/trsp-update.c:433 ../src/trsp-update.c:577
 #, c-format
 msgid "%s: Error fetching %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:614 ../src/trsp-update.c:480 ../src/trsp-update.c:649
+#: ../src/tle-update.c:574 ../src/trsp-update.c:438 ../src/trsp-update.c:582
+#, c-format
+msgid "%s: Successfully fetched %s"
+msgstr ""
+
+#: ../src/tle-update.c:583 ../src/trsp-update.c:448 ../src/trsp-update.c:592
 #, c-format
 msgid "%s: Failed to open %s preventing update"
 msgstr ""
 
-#: ../src/tle-update.c:646 ../src/trsp-update.c:498 ../src/trsp-update.c:682
+#: ../src/tle-update.c:613 ../src/trsp-update.c:464 ../src/trsp-update.c:623
 #, c-format
 msgid "%s: Fetched %d files from network; updating..."
 msgstr ""
 
-#: ../src/tle-update.c:658
+#: ../src/tle-update.c:625
 #, c-format
 msgid "%s: Could not fetch TLE files from network. Aborting."
 msgstr ""
 
-#: ../src/tle-update.c:678
+#: ../src/tle-update.c:645
 #, c-format
 msgid "%s: Error opening %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:820
+#: ../src/tle-update.c:784
 #, c-format
 msgid "%s:%s: There is no category in %s"
 msgstr ""
 
-#: ../src/tle-update.c:830
+#: ../src/tle-update.c:794
 #, c-format
 msgid "%s:%s: There is no category called %s"
 msgstr ""
 
-#: ../src/tle-update.c:847
+#: ../src/tle-update.c:811
 #, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
 msgstr ""
 
-#: ../src/tle-update.c:905
+#: ../src/tle-update.c:869
 #, c-format
 msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 
-#: ../src/tle-update.c:932
+#: ../src/tle-update.c:896
 #, c-format
 msgid "%s:%s: Processing a three line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:950
+#: ../src/tle-update.c:914
 #, c-format
 msgid "%s:%s: Processing a bare two line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:1003
+#: ../src/tle-update.c:967
 #, c-format
 msgid "%s:%s: Invalid data for %d"
 msgstr ""
 
-#: ../src/tle-update.c:1054
+#: ../src/tle-update.c:1018
 #, c-format
 msgid "%s:%s: Two different statuses for %d (%s) at the same time."
 msgstr ""
 
-#: ../src/tle-update.c:1108
+#: ../src/tle-update.c:1072
 #, c-format
 msgid "%s:%s: Failed to open %s"
 msgstr ""
 
-#: ../src/tle-update.c:1175
+#: ../src/tle-update.c:1139
 #, c-format
 msgid "%s: No new TLE data found for %d. Satellite might be obsolete."
 msgstr ""
 
-#: ../src/tle-update.c:1187
+#: ../src/tle-update.c:1151
 #, c-format
 msgid "%s: Error loading %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:1241
+#: ../src/tle-update.c:1205
 #, c-format
 msgid "%s: Current TLE data for %d appears to be bad"
 msgstr ""
 
-#: ../src/tle-update.c:1266
+#: ../src/tle-update.c:1230
 #, c-format
 msgid "%s: Data for  %d updated for name."
 msgstr ""
 
-#: ../src/tle-update.c:1281
+#: ../src/tle-update.c:1245
 #, c-format
 msgid "%s: Data for  %d updated for nickname."
 msgstr ""
 
-#: ../src/tle-update.c:1298
+#: ../src/tle-update.c:1262
 #, c-format
 msgid "%s: Data for  %d updated for tle."
 msgstr ""
 
-#: ../src/tle-update.c:1316
+#: ../src/tle-update.c:1280
 #, c-format
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
-#: ../src/tle-update.c:1352 ../src/trsp-update.c:722
+#: ../src/tle-update.c:1316 ../src/trsp-update.c:661
 msgid "Monthly"
 msgstr ""
 
-#: ../src/tle-update.c:1353 ../src/trsp-update.c:723
+#: ../src/tle-update.c:1317 ../src/trsp-update.c:662
 msgid "Weekly"
 msgstr ""
 
-#: ../src/tle-update.c:1354 ../src/trsp-update.c:724
+#: ../src/tle-update.c:1318 ../src/trsp-update.c:663
 msgid "Daily"
 msgstr ""
 
@@ -5657,59 +5625,81 @@ msgstr ""
 msgid "Wrote %d transmponders to %s"
 msgstr ""
 
-#: ../src/trsp-update.c:227
+#: ../src/trsp-update.c:220
 #, c-format
 msgid "MODE %d %s"
 msgstr ""
 
-#: ../src/trsp-update.c:375
+#: ../src/trsp-update.c:366
 #, c-format
 msgid "%s: Could not open trsp file for write"
 msgstr ""
 
-#: ../src/trsp-update.c:428
+#: ../src/trsp-update.c:412
 #, c-format
 msgid "%s: Ready to fetch modes list from %s"
 msgstr ""
 
-#: ../src/trsp-update.c:436 ../src/trsp-update.c:605
+#: ../src/trsp-update.c:419 ../src/trsp-update.c:563
 #, c-format
 msgid "%s: File to open %s "
 msgstr ""
 
-#: ../src/trsp-update.c:507 ../src/trsp-update.c:692
+#: ../src/trsp-update.c:473 ../src/trsp-update.c:633
 #, c-format
 msgid "%s: Could not fetch frequency files from network"
 msgstr ""
 
-#: ../src/trsp-update.c:551
+#: ../src/trsp-update.c:513
 #, c-format
 msgid "%s: A frequency update process is already running"
 msgstr ""
 
-#: ../src/trsp-update.c:581
+#: ../src/trsp-update.c:540
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
 
-#, fuzzy
-#~ msgid "<b>Invalid</b>"
-#~ msgstr "<b>Realtid</b>"
+#~ msgid "GPREDICT"
+#~ msgstr "GPREDICT"
 
-#~ msgid "Search"
-#~ msgstr "Søg:"
+#~ msgid ""
+#~ "The time remaining until the next AOS or LOS event, depending on which one "
+#~ "comes first."
+#~ msgstr "Tid til den næste AOS eller LOS afhængigt af hvad der kommer først."
 
-#~ msgid "Group"
-#~ msgstr "Gruppe"
+#, c-format
+#~ msgid "%s: Invalid VFO argument. Using VFOA."
+#~ msgstr "%s: Ugyldig VFO parameter. Vælger VFOA."
 
-#~ msgid "Column Name"
-#~ msgstr "Søjlenavn"
+#, c-format
+#~ msgid "%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
+#~ msgstr "%s: Ugyldig radio type %d. Anvender RIG_TYPE_RX istedet"
+
+#, c-format
+#~ msgid "%s: %s rigctld returned error (%s)"
+#~ msgstr "%s: %s rigctld returnerede en fejl (%s)"
 
 #~ msgid "Row"
 #~ msgstr "Række"
 
-#~ msgid "%s: Invalid VFO argument. Using VFOA."
-#~ msgstr "%s: Ugyldig VFO parameter. Vælger VFOA."
+#~ msgid "Column Name"
+#~ msgstr "Søjlenavn"
 
-#~ msgid "GPREDICT"
-#~ msgstr "GPREDICT"
+#~ msgid " Hour:"
+#~ msgstr " Time:"
+
+#~ msgid " Sec:"
+#~ msgstr " Sekund:"
+
+#~ msgid " Min:"
+#~ msgstr " Minut:"
+
+#~ msgid " Msec:"
+#~ msgstr " Msek:"
+
+#~ msgid "Group"
+#~ msgstr "Gruppe"
+
+#~ msgid "Search"
+#~ msgstr "Søg:"
