@@ -1,5 +1,11 @@
 
-Changes in version 2.2 (5 Dec 2018)
+Changes in version 2.2.1 (20 Jan 2018)
+
+- Fixed bug that could prevent TLE update to work on Windows
+- Increased size of TLE source widget in preferences dialog
+
+
+Changes in version 2.2 (5 Jan 2018)
 
 - New Monitor mode for antenna controller
 - Improved satellite search field in module editor
