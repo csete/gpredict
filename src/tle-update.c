@@ -509,7 +509,7 @@ void tle_update_from_network(gboolean silent,
     proxy = sat_cfg_get_str(SAT_CFG_STR_TLE_PROXY);
 
     /* avoid empty proxy string (bug in <2.2) */
-    if (strlen(proxy) == 0)
+    if (proxy != NULL && strlen(proxy) == 0)
     {
         sat_cfg_reset_str(SAT_CFG_STR_TLE_PROXY);
         g_free(proxy);
