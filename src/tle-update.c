@@ -27,6 +27,7 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
@@ -506,6 +507,15 @@ void tle_update_from_network(gboolean silent,
 
     /* get server, proxy, and list of files */
     proxy = sat_cfg_get_str(SAT_CFG_STR_TLE_PROXY);
+
+    /* avoid empty proxy string (bug in <2.2) */
+    if (strlen(proxy) == 0)
+    {
+        sat_cfg_reset_str(SAT_CFG_STR_TLE_PROXY);
+        g_free(proxy);
+        proxy = NULL;
+    }
+
     files_tmp = sat_cfg_get_str(SAT_CFG_STR_TLE_URLS);
     files = g_strsplit(files_tmp, ";", 0);
     numfiles = g_strv_length(files);
