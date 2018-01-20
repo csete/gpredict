@@ -443,8 +443,11 @@ void sat_pref_tle_ok()
                             TLE_AUTO_UPDATE_NOTIFY);
 
         /* proxy */
-        sat_cfg_set_str(SAT_CFG_STR_TLE_PROXY,
-                        gtk_entry_get_text(GTK_ENTRY(proxy)));
+        if (gtk_entry_get_text_length(GTK_ENTRY(proxy)) > 0)
+            sat_cfg_set_str(SAT_CFG_STR_TLE_PROXY,
+                            gtk_entry_get_text(GTK_ENTRY(proxy)));
+        else
+            sat_cfg_reset_str(SAT_CFG_STR_TLE_PROXY);
 
         /* URLS */
         gsize           num;
