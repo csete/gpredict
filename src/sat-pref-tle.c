@@ -264,6 +264,7 @@ static void create_network(GtkWidget * vbox)
 
     table = gtk_grid_new();
     gtk_grid_set_column_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
     gtk_grid_set_row_spacing(GTK_GRID(table), 5);
     gtk_grid_set_column_spacing(GTK_GRID(table), 5);
 
@@ -314,9 +315,9 @@ static void create_network(GtkWidget * vbox)
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_container_add(GTK_CONTAINER(swin), tle_url_view);
-    gtk_grid_attach(GTK_GRID(table), swin, 1, 1, 5, 2);
+    gtk_grid_attach(GTK_GRID(table), swin, 1, 1, 5, 3);
     gtk_grid_attach(GTK_GRID(table), create_tle_buttons(tle_store),
-                    1, 3, 4, 1);
+                    1, 4, 4, 1);
 
     gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 }
