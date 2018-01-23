@@ -7,19 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 21:40+0100\n"
+"POT-Creation-Date: 2017-12-28 14:28+0100\n"
 "PO-Revision-Date: 2012-04-12 19:29+0000\n"
 "Last-Translator: Горобец Виктор (VikTHOR) <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
-"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
-"X-Generator: Launchpad (build 18511)\n"
+"X-Launchpad-Export-Date: 2018-01-05 22:12+0000\n"
+"X-Generator: Launchpad (build 18521)\n"
+"Language: uk\n"
 
+#. window title
+#. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:93 ../src/main.c:223
+#: ../src/about.c:93 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
@@ -331,24 +333,24 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:392
+#: ../src/gtk-polar-plot.c:393
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:462 ../src/gtk-polar-view.c:661
+#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:671
+#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:681
+#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:691
+#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr ""
 
@@ -840,9 +842,9 @@ msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create rotctl socket: %s"
-msgstr "%s: Провалено створення %s"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:91
 #, c-format
@@ -949,7 +951,8 @@ msgid "Monitor rotator but do not send any position commands"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1420
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 
 #. Tolerance
@@ -1705,7 +1708,7 @@ msgstr ""
 #. * Note that the controllers for hours, minutes, and seconds have ranges;
 #. * however, they can wrap around their limits in order to ensure a smooth
 #. * and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:144
 msgid "Hour:"
@@ -2198,56 +2201,56 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:60
+#: ../src/main.c:76
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:108
+#: ../src/main.c:126
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
 "Gpredict does not require any command line options for nominal operation."
 msgstr ""
 
-#: ../src/main.c:114
+#: ../src/main.c:132
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:131
+#: ../src/main.c:156
 #, c-format
 msgid ""
-"User config check failed (code %d). This is fatal.\n"
-"A possible solution would be to remove the .config/Gpredict data dir in your "
-"home directory"
+"%s: User config check failed (code %d). This is fatal.\n"
+"A possible solution would be to remove the .config/Gpredict data dir\n"
+"in your home directory"
 msgstr ""
 
-#: ../src/main.c:418
+#: ../src/main.c:455
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:461
+#: ../src/main.c:499
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:470
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:473
+#: ../src/main.c:511
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:478
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:490
+#: ../src/main.c:528
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2255,27 +2258,27 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:519
+#: ../src/main.c:558
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:561
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:573 ../src/main.c:617
+#: ../src/main.c:617 ../src/main.c:664
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:578 ../src/main.c:622
+#: ../src/main.c:622 ../src/main.c:669
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:604
+#: ../src/main.c:650
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
@@ -2514,7 +2517,7 @@ msgstr ""
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr ""
@@ -3486,7 +3489,7 @@ msgstr ""
 #. clear filename from title if unable to read file
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #: ../src/sat-log-browser.c:266 ../src/sat-log-browser.c:478
 #: ../src/sat-log-browser.c:522
@@ -4890,7 +4893,8 @@ msgid "MHz"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:416
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #. AOS / LOS signalling

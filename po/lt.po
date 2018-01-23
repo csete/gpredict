@@ -7,19 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 21:40+0100\n"
+"POT-Creation-Date: 2017-12-28 14:28+0100\n"
 "PO-Revision-Date: 2017-12-04 01:56+0000\n"
 "Last-Translator: AA1VS <hamaa1vs@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
-"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
-"X-Generator: Launchpad (build 18511)\n"
+"X-Launchpad-Export-Date: 2018-01-05 22:12+0000\n"
+"X-Generator: Launchpad (build 18521)\n"
+"Language: lt\n"
 
+#. window title
+#. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:93 ../src/main.c:223
+#: ../src/about.c:93 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
@@ -194,9 +196,9 @@ msgstr ""
 
 #: ../src/gpredict-utils.c:592 ../src/gpredict-utils.c:610
 #: ../src/gpredict-utils.c:628 ../src/gpredict-utils.c:646
-#, fuzzy, c-format
+#, c-format
 msgid "%s called with gdk_rgba = NULL"
-msgstr "%s:%s: %s iššauktas su rgba = NULL"
+msgstr ""
 
 #: ../src/gtk-azel-plot.c:545
 msgid "Local Time"
@@ -276,9 +278,9 @@ msgid "Countdown until next event"
 msgstr ""
 
 #: ../src/gtk-event-list.c:374
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Invalid GtkEventList!"
-msgstr "%s: neteisingas GtkSatList!"
+msgstr ""
 
 #: ../src/gtk-event-list.c:440 ../src/gtk-sat-list.c:574
 #, c-format
@@ -331,24 +333,24 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:392
+#: ../src/gtk-polar-plot.c:393
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:462 ../src/gtk-polar-view.c:661
+#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr "Š"
 
-#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:671
+#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr "P"
 
-#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:681
+#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr "R"
 
-#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:691
+#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr "V"
 
@@ -731,11 +733,8 @@ msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1350
-#, fuzzy
 msgid "The time remaining until the next AOS or LOS event"
 msgstr ""
-"Laikas iki sekančio AOS ar LOS įvykio, priklausomai nuo to kuris bus "
-"anksčiau."
 
 #: ../src/gtk-rig-ctrl.c:1389
 #, c-format
@@ -852,19 +851,19 @@ msgid "%s:%s: ERROR: NO VALID ctrl-struct"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2838
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
-msgstr "%s: Neteisingas radijo įrenginio tipas %d. Nustatoma į RIG_TYPE_RX"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2855
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
-msgstr "%s: MAX_ERROR_COUNT (%d) pasiektas. Atsijungiama nuo įrenginio!"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create rotctl socket: %s"
-msgstr "%s: Nepavyko sukurti socket"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:91
 #, c-format
@@ -971,7 +970,8 @@ msgid "Monitor rotator but do not send any position commands"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1420
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr "Vėlinimas tarp komandų siunčiamų sukimo įrenginiui."
 
 #. Tolerance
@@ -1742,12 +1742,11 @@ msgstr "<b>Realus-Laikas</b>"
 #. * Note that the controllers for hours, minutes, and seconds have ranges;
 #. * however, they can wrap around their limits in order to ensure a smooth
 #. * and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:144
-#, fuzzy
 msgid "Hour:"
-msgstr " Val:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:154
 msgid "Use this control to set the hour"
@@ -1755,9 +1754,8 @@ msgstr "Nustatykite valandą"
 
 #. minutes
 #: ../src/gtk-sat-module-tmg.c:161
-#, fuzzy
 msgid "Min:"
-msgstr " Min:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:171
 msgid "Use this control to set the minutes"
@@ -1765,9 +1763,8 @@ msgstr "Nustatykite minutes"
 
 #. seconds
 #: ../src/gtk-sat-module-tmg.c:178
-#, fuzzy
 msgid "Sec:"
-msgstr " Sek:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:188
 msgid "Use this control to set the seconds"
@@ -1775,9 +1772,8 @@ msgstr "Nustatykite sekundes"
 
 #. milliseconds
 #: ../src/gtk-sat-module-tmg.c:195
-#, fuzzy
 msgid "Msec:"
-msgstr " msek:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:205
 msgid "Use this control to set the milliseconds"
@@ -2239,11 +2235,11 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:60
+#: ../src/main.c:76
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:108
+#: ../src/main.c:126
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
@@ -2253,45 +2249,45 @@ msgstr ""
 "programa.\n"
 "Kasdieniam darbui Gpredict nereikalauja jokių komandinės eilutės nuostatų."
 
-#: ../src/main.c:114
+#: ../src/main.c:132
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:131
+#: ../src/main.c:156
 #, c-format
 msgid ""
-"User config check failed (code %d). This is fatal.\n"
-"A possible solution would be to remove the .config/Gpredict data dir in your "
-"home directory"
+"%s: User config check failed (code %d). This is fatal.\n"
+"A possible solution would be to remove the .config/Gpredict data dir\n"
+"in your home directory"
 msgstr ""
 
-#: ../src/main.c:418
+#: ../src/main.c:455
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:461
+#: ../src/main.c:499
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:470
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:473
+#: ../src/main.c:511
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:478
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:490
+#: ../src/main.c:528
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2299,27 +2295,27 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:519
+#: ../src/main.c:558
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:561
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:573 ../src/main.c:617
+#: ../src/main.c:617 ../src/main.c:664
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:578 ../src/main.c:622
+#: ../src/main.c:622 ../src/main.c:669
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:604
+#: ../src/main.c:650
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
@@ -2499,28 +2495,24 @@ msgid "_Quit"
 msgstr ""
 
 #: ../src/menubar.c:891
-#, fuzzy
 msgid "Update TLE from _net"
-msgstr "Atnaujinti TLE iš bylų"
+msgstr ""
 
 #: ../src/menubar.c:896
-#, fuzzy
 msgid "Update TLE from _files"
-msgstr "Atnaujinti TLE iš bylų"
+msgstr ""
 
 #: ../src/menubar.c:901
-#, fuzzy
 msgid "Update _frequencies"
-msgstr "Atnaujinti TLE iš bylų"
+msgstr ""
 
 #: ../src/menubar.c:909
 msgid "_Preferences"
 msgstr "_Nustatymai"
 
 #: ../src/menubar.c:922
-#, fuzzy
 msgid "_Online help"
-msgstr "Pagalba"
+msgstr ""
 
 #: ../src/menubar.c:931
 msgid "_License"
@@ -2572,7 +2564,7 @@ msgstr ""
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr "** NUMATYTOJI **"
@@ -2950,9 +2942,9 @@ msgstr ""
 
 #. avoid unused parameter compiler warning
 #: ../src/print-pass.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Not implemented!"
-msgstr "%s: FIXME Aš dar nerealizuotas"
+msgstr ""
 
 #: ../src/qth-data.c:78
 #, c-format
@@ -3112,9 +3104,8 @@ msgid "Select"
 msgstr "Rinktis"
 
 #: ../src/qth-editor.c:521 ../src/sat-pref-qth-editor.c:633
-#, fuzzy
 msgid "Select a location from a list"
-msgstr "Rinktis vietovę iš sąrašo."
+msgstr ""
 
 #. latitude
 #: ../src/qth-editor.c:527 ../src/sat-pref-qth-editor.c:640
@@ -3160,9 +3151,8 @@ msgid "Maidenhead locator grid."
 msgstr ""
 
 #: ../src/qth-editor.c:600
-#, fuzzy
 msgid "Select the altitude of the ground station"
-msgstr "Nustatykite antžeminės stoties platumą dešimtainiais laipsniais."
+msgstr ""
 
 #: ../src/qth-editor.c:604 ../src/sat-pref-qth-editor.c:718
 msgid "ft ASL"
@@ -3182,9 +3172,8 @@ msgid "Four letter code for weather station"
 msgstr "Keturraidis oro stotelės kodas"
 
 #: ../src/qth-editor.c:622 ../src/sat-pref-qth-editor.c:736
-#, fuzzy
 msgid "Select a weather station"
-msgstr "Pasirinkite oro stotelę iš sąrašo."
+msgstr ""
 
 #. GPSD enabled
 #: ../src/qth-editor.c:629 ../src/sat-pref-qth-editor.c:743
@@ -3552,7 +3541,7 @@ msgstr ""
 #. clear filename from title if unable to read file
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #: ../src/sat-log-browser.c:266 ../src/sat-log-browser.c:478
 #: ../src/sat-log-browser.c:522
@@ -4176,9 +4165,8 @@ msgid "Ground Station:"
 msgstr "Antžeminė Stotis:"
 
 #: ../src/sat-pref-map-view.c:909
-#, fuzzy
 msgid "Select the ground station colour"
-msgstr "Pasirinkite antžeminę stotį šiam moduliui."
+msgstr ""
 
 #. Grid in case it is enabled
 #: ../src/sat-pref-map-view.c:925
@@ -4186,9 +4174,8 @@ msgid "Grid:"
 msgstr "Tinklelis:"
 
 #: ../src/sat-pref-map-view.c:931
-#, fuzzy
 msgid "Select the grid colour"
-msgstr "Tinklelio spalva"
+msgstr ""
 
 #. tick labels
 #: ../src/sat-pref-map-view.c:947 ../src/sat-pref-polar-view.c:566
@@ -4196,9 +4183,8 @@ msgid "Tick Labels:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:953
-#, fuzzy
 msgid "Select a colour for tick labels"
-msgstr "Rinktis vietovę iš sąrašo."
+msgstr ""
 
 #. satellite
 #: ../src/sat-pref-map-view.c:969 ../src/sat-pref-polar-view.c:591
@@ -4206,9 +4192,8 @@ msgid "Satellite:"
 msgstr "Palydovas:"
 
 #: ../src/sat-pref-map-view.c:975
-#, fuzzy
 msgid "Select the satellite colour"
-msgstr "Palydovo spalva"
+msgstr ""
 
 #. selected satellite
 #: ../src/sat-pref-map-view.c:991 ../src/sat-pref-polar-view.c:614
@@ -4216,9 +4201,8 @@ msgid "Selected Sat.:"
 msgstr "Pažymėt. palyd."
 
 #: ../src/sat-pref-map-view.c:998
-#, fuzzy
 msgid "Select colour for selected satellites"
-msgstr "Pažymėto palydovo spalva"
+msgstr ""
 
 #. tack
 #: ../src/sat-pref-map-view.c:1015
@@ -4226,9 +4210,8 @@ msgid "Ground Track:"
 msgstr "Pėdsakas:"
 
 #: ../src/sat-pref-map-view.c:1021
-#, fuzzy
 msgid "Select ground track colour"
-msgstr "Pėdsako spalva"
+msgstr ""
 
 #. coverage
 #: ../src/sat-pref-map-view.c:1038
@@ -4247,9 +4230,8 @@ msgid "Info Text FG:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:1070
-#, fuzzy
 msgid "Select info text foreground colour"
-msgstr "Pėdsako spalva"
+msgstr ""
 
 #. Info background
 #: ../src/sat-pref-map-view.c:1087
@@ -4257,9 +4239,8 @@ msgid "Info Text BG:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:1094
-#, fuzzy
 msgid "Select info text background colour"
-msgstr "Pėdsako spalva"
+msgstr ""
 
 #. Solar terminator
 #: ../src/sat-pref-map-view.c:1111
@@ -4267,9 +4248,8 @@ msgid "Solar terminator:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:1118
-#, fuzzy
 msgid "Select solar terminator colour"
-msgstr "Palydovo spalva"
+msgstr ""
 
 #. Earth shadow
 #: ../src/sat-pref-map-view.c:1136
@@ -4319,14 +4299,12 @@ msgid "Select longitude. West is negative."
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:1313
-#, fuzzy
 msgid "Reset settings to default values"
-msgstr "Gražinti nustatymams numatytasias reikšmes."
+msgstr ""
 
 #: ../src/sat-pref-map-view.c:1318
-#, fuzzy
 msgid "Reset module to global settings"
-msgstr "Gražinti moduliams globalias numatytas reikšmes."
+msgstr ""
 
 #: ../src/sat-pref-modules.c:65
 msgid "Layout"
@@ -4600,14 +4578,12 @@ msgid "Edit"
 msgstr ""
 
 #: ../src/sat-pref-qth.c:506
-#, fuzzy
 msgid "Edit the selected ground station"
-msgstr "Antžeminės stoties duomenys"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:512
-#, fuzzy
 msgid "Delete selected ground station"
-msgstr "Sukurti naują antžeminę stotį"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:591
 msgid ""
@@ -4844,14 +4820,12 @@ msgid "Add a new radio to the list"
 msgstr ""
 
 #: ../src/sat-pref-rig.c:744
-#, fuzzy
 msgid "Edit selected radio"
-msgstr "Antžeminės stoties duomenys"
+msgstr ""
 
 #: ../src/sat-pref-rig.c:749
-#, fuzzy
 msgid "Delete selected radio"
-msgstr "Sukurti naują antžeminę stotį"
+msgstr ""
 
 #: ../src/sat-pref-rig.c:873
 #, c-format
@@ -4997,7 +4971,8 @@ msgid "MHz"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:416
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #. AOS / LOS signalling
@@ -5035,19 +5010,16 @@ msgid "Add New"
 msgstr ""
 
 #: ../src/sat-pref-rot.c:345
-#, fuzzy
 msgid "Add a new rotator"
-msgstr "Sukurti naują antžeminę stotį"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:349
-#, fuzzy
 msgid "Edit selected rotator"
-msgstr "Antžeminės stoties duomenys"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:353
-#, fuzzy
 msgid "Delete selected rotator"
-msgstr "Sukurti naują antžeminę stotį"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:428
 #, c-format
@@ -5163,9 +5135,8 @@ msgstr ""
 
 #. colour 1
 #: ../src/sat-pref-sky-at-glance.c:302
-#, fuzzy
 msgid "Satellite 1: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:307
 msgid "Select colour 1"
@@ -5181,9 +5152,8 @@ msgstr "Spauskite norėdami pasirinkti spalvą"
 
 #. colour 2
 #: ../src/sat-pref-sky-at-glance.c:316
-#, fuzzy
 msgid "Satellite 2: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:321
 msgid "Select colour 2"
@@ -5191,9 +5161,8 @@ msgstr ""
 
 #. colour 3
 #: ../src/sat-pref-sky-at-glance.c:330
-#, fuzzy
 msgid "Satellite 3: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:335
 msgid "Select colour 3"
@@ -5201,9 +5170,8 @@ msgstr ""
 
 #. colour 4
 #: ../src/sat-pref-sky-at-glance.c:344
-#, fuzzy
 msgid "Satellite 4: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:349
 msgid "Select colour 4"
@@ -5211,9 +5179,8 @@ msgstr ""
 
 #. colour 5
 #: ../src/sat-pref-sky-at-glance.c:358
-#, fuzzy
 msgid "Satellite 5: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:363
 msgid "Select colour 5"
@@ -5221,9 +5188,8 @@ msgstr ""
 
 #. colour 6
 #: ../src/sat-pref-sky-at-glance.c:372
-#, fuzzy
 msgid "Satellite 6: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:377
 msgid "Select colour 6"
@@ -5231,9 +5197,8 @@ msgstr ""
 
 #. colour 7
 #: ../src/sat-pref-sky-at-glance.c:386
-#, fuzzy
 msgid "Satellite 7: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:391
 msgid "Select colour 7"
@@ -5241,9 +5206,8 @@ msgstr ""
 
 #. colour 8
 #: ../src/sat-pref-sky-at-glance.c:400
-#, fuzzy
 msgid "Satellite 8: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:405
 msgid "Select colour 8"
@@ -5251,9 +5215,8 @@ msgstr ""
 
 #. colour 9
 #: ../src/sat-pref-sky-at-glance.c:414
-#, fuzzy
 msgid "Satellite 9: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:419
 msgid "Select colour 9"
@@ -5261,9 +5224,8 @@ msgstr ""
 
 #. colour 10
 #: ../src/sat-pref-sky-at-glance.c:428
-#, fuzzy
 msgid "Satellite 10: "
-msgstr "Palydovas:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:433
 msgid "Select colour 10"
@@ -5743,17 +5705,54 @@ msgstr ""
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
 
+#~ msgid ""
+#~ "The time remaining until the next AOS or LOS event, depending on which one "
+#~ "comes first."
+#~ msgstr ""
+#~ "Laikas iki sekančio AOS ar LOS įvykio, priklausomai nuo to kuris bus "
+#~ "anksčiau."
+
+#, c-format
+#~ msgid "%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
+#~ msgstr "%s: Neteisingas radijo įrenginio tipas %d. Nustatoma į RIG_TYPE_RX"
+
+#~ msgid "GPREDICT"
+#~ msgstr "GPREDICT"
+
+#, c-format
+#~ msgid "%s: Invalid VFO argument. Using VFOA."
+#~ msgstr "%s: Neteisingas  VFO argumentas. Bus naudojamas VFOA."
+
+#~ msgid " Hour:"
+#~ msgstr " Val:"
+
+#~ msgid " Min:"
+#~ msgstr " Min:"
+
+#~ msgid " Sec:"
+#~ msgstr " Sek:"
+
+#~ msgid " Msec:"
+#~ msgstr " msek:"
+
+#~ msgid "Group"
+#~ msgstr "Grupė"
+
+#~ msgid ""
+#~ "Start typing in this field to search for a satellite in the selected group."
+#~ msgstr "Pradėkite rinkti palydovo pavadinima paieškai pasirinktoje grupėje."
+
+#~ msgid "Search"
+#~ msgstr "Paieška"
+
+#~ msgid "Select a satellite group or category to narrow your search."
+#~ msgstr "Pasirinkite palydovų grupę arba kategoriją paieškos susiaurinimui"
+
 #~ msgid "Create a new module"
 #~ msgstr "Sukurti naują modulį"
 
-#~ msgid "Open an existing module"
-#~ msgstr "Atidaryti modulį"
-
-#~ msgid "Open the message log browser"
-#~ msgstr "Atidaryti pranešimų žurnalo naršyklę"
-
-#~ msgid "E_xit"
-#~ msgstr "Iš_eiti"
+#~ msgid "Update Keplerian elements from local files"
+#~ msgstr "Atnaujinti Keplerio elementus iš vietinių bylų"
 
 #~ msgid "Exit the program"
 #~ msgstr "Išeiti iš programos"
@@ -5761,67 +5760,38 @@ msgstr ""
 #~ msgid "From _network"
 #~ msgstr "Iš _tinklo"
 
-#, fuzzy
-#~ msgid "Update TLE from a network server"
+#~ msgid "Open the message log browser"
+#~ msgstr "Atidaryti pranešimų žurnalo naršyklę"
+
+#~ msgid "E_xit"
+#~ msgstr "Iš_eiti"
+
+#~ msgid "Open an existing module"
+#~ msgstr "Atidaryti modulį"
+
+#~ msgid "Update Keplerian elements from a network server"
 #~ msgstr "Atnaujinti Keplerio elementus iš serverio tinkle"
 
 #~ msgid "From l_ocal files"
 #~ msgstr "Iš _bylų"
 
-#, fuzzy
-#~ msgid "Update TLE from local files"
-#~ msgstr "Atnaujinti TLE iš bylų"
-
 #~ msgid "Edit user preferences"
 #~ msgstr "Keisti vartotojo nustatymus"
-
-#~ msgid "Show online user manual"
-#~ msgstr "Rodyti vartotojo instrukciją"
-
-#~ msgid "Show the Gpredict license"
-#~ msgstr "Rodyti Gpredict licenciją"
-
-#~ msgid "Show what's new in this release"
-#~ msgstr "Rodyti kas nauja šiame leidime"
 
 #~ msgid "Show about dialog"
 #~ msgstr "Rodyti langą apie programą"
 
-#, fuzzy
-#~ msgid "<b>Invalid</b>"
-#~ msgstr "<b>Realus-Laikas</b>"
+#~ msgid "Show online user manual"
+#~ msgstr "Rodyti vartotojo instrukciją"
 
-#~ msgid "Visible Columns"
-#~ msgstr "Matomi stulpeliai"
+#~ msgid "Show what's new in this release"
+#~ msgstr "Rodyti kas nauja šiame leidime"
 
-#~ msgid "Select a satellite group or category to narrow your search."
-#~ msgstr "Pasirinkite palydovų grupę arba kategoriją paieškos susiaurinimui"
+#~ msgid "Online help"
+#~ msgstr "Pagalba"
 
-#~ msgid "Search"
-#~ msgstr "Paieška"
-
-#~ msgid ""
-#~ "Start typing in this field to search for a satellite in the selected "
-#~ "group."
-#~ msgstr "Pradėkite rinkti palydovo pavadinima paieškai pasirinktoje grupėje."
-
-#~ msgid "Group"
-#~ msgstr "Grupė"
-
-#~ msgid "Update Keplerian elements from local files"
-#~ msgstr "Atnaujinti Keplerio elementus iš vietinių bylų"
-
-#~ msgid "Column Name"
-#~ msgstr "Stulpelio vardas"
-
-#~ msgid "Row"
-#~ msgstr "Eilė"
-
-#~ msgid "%s: Invalid VFO argument. Using VFOA."
-#~ msgstr "%s: Neteisingas  VFO argumentas. Bus naudojamas VFOA."
-
-#~ msgid "GPREDICT"
-#~ msgstr "GPREDICT"
+#~ msgid "Show the Gpredict license"
+#~ msgstr "Rodyti Gpredict licenciją"
 
 #~ msgid "Create New Module"
 #~ msgstr "Sukurti naują modulį"
@@ -5851,8 +5821,30 @@ msgstr ""
 #~ msgid "Module Properties"
 #~ msgstr "Modulio nustatymai"
 
+#, c-format
 #~ msgid "GPREDICT: %s"
 #~ msgstr "GPREDICT: %s"
 
 #~ msgid "GPREDICT: (none)"
 #~ msgstr "GPREDICT: (nieko)"
+
+#~ msgid "Row"
+#~ msgstr "Eilė"
+
+#~ msgid "Column Name"
+#~ msgstr "Stulpelio vardas"
+
+#~ msgid "Select a predefined location from a list."
+#~ msgstr "Rinktis vietovę iš sąrašo."
+
+#~ msgid "Select a predefined weather station from a list."
+#~ msgstr "Pasirinkite oro stotelę iš sąrašo."
+
+#~ msgid "Visible Columns"
+#~ msgstr "Matomi stulpeliai"
+
+#~ msgid "Click to select the grid colour"
+#~ msgstr "Tinklelio spalva"
+
+#~ msgid "Click to select ground track colour"
+#~ msgstr "Pėdsako spalva"

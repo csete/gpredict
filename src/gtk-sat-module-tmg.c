@@ -79,8 +79,13 @@ void tmg_create(GtkSatModule * mod)
     mod->tmgFwd = gtk_radio_button_new(NULL);
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(mod->tmgFwd), FALSE);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(mod->tmgFwd), TRUE);
+#ifdef G_OS_WIN32
+    image = gtk_image_new_from_icon_name("media-seek-forward-symbolic",
+                                         GTK_ICON_SIZE_BUTTON);
+#else
     image = gtk_image_new_from_icon_name("media-seek-forward",
                                          GTK_ICON_SIZE_BUTTON);
+#endif
     gtk_container_add(GTK_CONTAINER(mod->tmgFwd), image);
     gtk_widget_set_tooltip_text(mod->tmgFwd, _("Play forward"));
     g_signal_connect(mod->tmgFwd, "toggled", G_CALLBACK(tmg_fwd), mod);
@@ -90,8 +95,13 @@ void tmg_create(GtkSatModule * mod)
     mod->tmgStop =
         gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(mod->tmgFwd));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(mod->tmgStop), FALSE);
+#ifdef G_OS_WIN32
+    image = gtk_image_new_from_icon_name("media-playback-pause-symbolic",
+                                         GTK_ICON_SIZE_BUTTON);
+#else
     image = gtk_image_new_from_icon_name("media-playback-pause",
                                          GTK_ICON_SIZE_BUTTON);
+#endif
     gtk_container_add(GTK_CONTAINER(mod->tmgStop), image);
     gtk_widget_set_tooltip_text(mod->tmgStop, _("Stop"));
     g_signal_connect(mod->tmgStop, "toggled", G_CALLBACK(tmg_stop), mod);
@@ -101,8 +111,13 @@ void tmg_create(GtkSatModule * mod)
     mod->tmgBwd =
         gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(mod->tmgFwd));
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(mod->tmgBwd), FALSE);
+#ifdef G_OS_WIN32
+    image = gtk_image_new_from_icon_name("media-seek-backward-symbolic",
+                                         GTK_ICON_SIZE_BUTTON);
+#else
     image = gtk_image_new_from_icon_name("media-seek-backward",
                                          GTK_ICON_SIZE_BUTTON);
+#endif
     gtk_container_add(GTK_CONTAINER(mod->tmgBwd), image);
     gtk_widget_set_tooltip_text(mod->tmgBwd, _("Play backwards"));
     g_signal_connect(mod->tmgBwd, "toggled", G_CALLBACK(tmg_bwd), mod);

@@ -7,19 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 21:40+0100\n"
-"PO-Revision-Date: 2017-12-04 01:57+0000\n"
+"POT-Creation-Date: 2017-12-28 14:28+0100\n"
+"PO-Revision-Date: 2017-12-07 02:24+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
-"X-Generator: Launchpad (build 18511)\n"
+"X-Launchpad-Export-Date: 2018-01-05 22:12+0000\n"
+"X-Generator: Launchpad (build 18521)\n"
+"Language: ru\n"
 
+#. window title
+#. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:93 ../src/main.c:223
+#: ../src/about.c:93 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
@@ -197,9 +199,9 @@ msgstr "%s: Конфигурация сохранена для %s."
 
 #: ../src/gpredict-utils.c:592 ../src/gpredict-utils.c:610
 #: ../src/gpredict-utils.c:628 ../src/gpredict-utils.c:646
-#, fuzzy, c-format
+#, c-format
 msgid "%s called with gdk_rgba = NULL"
-msgstr "%s:%s: %s вызвано с rgba = NULL"
+msgstr ""
 
 #: ../src/gtk-azel-plot.c:545
 msgid "Local Time"
@@ -233,9 +235,8 @@ msgid "Catnum"
 msgstr "№ кат."
 
 #: ../src/gtk-event-list.c:54
-#, fuzzy
 msgid "Event"
-msgstr "След. событие"
+msgstr ""
 
 #: ../src/gtk-event-list.c:55
 msgid "AOS/LOS"
@@ -335,24 +336,24 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr "Используйте кнопки и колёсико мыши для изменения значения"
 
-#: ../src/gtk-polar-plot.c:392
+#: ../src/gtk-polar-plot.c:393
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr "%s:%d: Неправильное направление графика в полярных координатах."
 
-#: ../src/gtk-polar-plot.c:462 ../src/gtk-polar-view.c:661
+#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr "С"
 
-#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:671
+#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr "Ю"
 
-#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:681
+#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr "В"
 
-#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:691
+#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr "З"
 
@@ -725,11 +726,8 @@ msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1350
-#, fuzzy
 msgid "The time remaining until the next AOS or LOS event"
 msgstr ""
-"Время, остающееся до следующего AOS или LOS, в зависимости от того, какое из "
-"событий произойдёт первым."
 
 #: ../src/gtk-rig-ctrl.c:1389
 #, c-format
@@ -757,9 +755,9 @@ msgid "%s:%s: Read %d bytes from rigctld"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1453 ../src/gtk-rig-ctrl.c:1471
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: %s rigctld returned error (%s)"
-msgstr "%s: %s rigctld вернул ошибку (%s)"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:1508
 #, c-format
@@ -844,9 +842,9 @@ msgid "%s:%s: ERROR: NO VALID ctrl-struct"
 msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2838
-#, fuzzy, c-format
+#, c-format
 msgid "%s:%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
-msgstr "%s: Неверный тип радио %d. Будет назначен тип RIG_TYPE_RX"
+msgstr ""
 
 #: ../src/gtk-rig-ctrl.c:2855
 #, c-format
@@ -854,9 +852,9 @@ msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create rotctl socket: %s"
-msgstr "%s: Не удалось создать сокет"
+msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:91
 #, c-format
@@ -963,7 +961,8 @@ msgid "Monitor rotator but do not send any position commands"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1420
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 "Этот параметр управляет задержкой между командами, отправляемыми на "
 "поворотное устройство."
@@ -1187,9 +1186,8 @@ msgid "Visibility"
 msgstr "Видимость"
 
 #: ../src/gtk-sat-list.c:108
-#, fuzzy
 msgid "---"
-msgstr " --- "
+msgstr ""
 
 #: ../src/gtk-sat-list.c:501
 #, c-format
@@ -1604,7 +1602,8 @@ msgstr "Открыть модуль после создания"
 
 #: ../src/gtk-sat-module-popup.c:327
 msgid "If checked, the new module will be opened after it has been created"
-msgstr "Если включено, новый модуль будет открыт после того, как будет создан"
+msgstr ""
+"Если включено, новый модуль будет открыт после того, как будет создан"
 
 #: ../src/gtk-sat-module-popup.c:342
 #, c-format
@@ -1736,12 +1735,11 @@ msgstr "<b>Реальное время</b>"
 #. * Note that the controllers for hours, minutes, and seconds have ranges;
 #. * however, they can wrap around their limits in order to ensure a smooth
 #. * and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:144
-#, fuzzy
 msgid "Hour:"
-msgstr " Часы:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:154
 msgid "Use this control to set the hour"
@@ -1749,9 +1747,8 @@ msgstr "Используйте эти стрелки для настройки �
 
 #. minutes
 #: ../src/gtk-sat-module-tmg.c:161
-#, fuzzy
 msgid "Min:"
-msgstr " Мин.:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:171
 msgid "Use this control to set the minutes"
@@ -1759,9 +1756,8 @@ msgstr "Используйте эти стрелки для настройки �
 
 #. seconds
 #: ../src/gtk-sat-module-tmg.c:178
-#, fuzzy
 msgid "Sec:"
-msgstr " Сек.:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:188
 msgid "Use this control to set the seconds"
@@ -1769,9 +1765,8 @@ msgstr "Используйте эти стрелки для настройки �
 
 #. milliseconds
 #: ../src/gtk-sat-module-tmg.c:195
-#, fuzzy
 msgid "Msec:"
-msgstr " мс:"
+msgstr ""
 
 #: ../src/gtk-sat-module-tmg.c:205
 msgid "Use this control to set the milliseconds"
@@ -1849,9 +1844,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gtk-sat-selector.c:392
-#, fuzzy
 msgid "Satellite group / category"
-msgstr "Параметры спутника / действия"
+msgstr ""
 
 #: ../src/gtk-sat-selector.c:400
 msgid "Search for a satellite by name or catalog number"
@@ -2234,11 +2228,11 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:60
+#: ../src/main.c:76
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:108
+#: ../src/main.c:126
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
@@ -2248,49 +2242,49 @@ msgstr ""
 "времени и предсказания орбит.\n"
 "Gpredict не требует никаких параметров командной строки для обычной работы."
 
-#: ../src/main.c:114
+#: ../src/main.c:132
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr "Не удалось разобрать параметр: %s\n"
 
-#: ../src/main.c:131
-#, fuzzy, c-format
+#: ../src/main.c:156
+#, c-format
 msgid ""
-"User config check failed (code %d). This is fatal.\n"
-"A possible solution would be to remove the .config/Gpredict data dir in your "
-"home directory"
+"%s: User config check failed (code %d). This is fatal.\n"
+"A possible solution would be to remove the .config/Gpredict data dir\n"
+"in your home directory"
 msgstr ""
 "%s: Ошибка при проверке пользовательской конфигурации (код %d). Это "
 "фатальная ошибка.\n"
 "Возможное решение: удалить каталог данных .config/Gpredict\n"
 "в вашем каталоге пользователя"
 
-#: ../src/main.c:418
+#: ../src/main.c:455
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:461
+#: ../src/main.c:499
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:470
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:473
+#: ../src/main.c:511
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:478
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:490
+#: ../src/main.c:528
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2302,27 +2296,27 @@ msgstr ""
 "<b>Правка -> Обновить TLE</b>\n"
 "в строке меню."
 
-#: ../src/main.c:519
+#: ../src/main.c:558
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:561
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr "%s: Очистка данных TLE в %s"
 
-#: ../src/main.c:573 ../src/main.c:617
+#: ../src/main.c:617 ../src/main.c:664
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr "%s: Не удалось удалить %s"
 
-#: ../src/main.c:578 ../src/main.c:622
+#: ../src/main.c:622 ../src/main.c:669
 #, c-format
 msgid "%s: Removed %s"
 msgstr "%s: Удалено %s"
 
-#: ../src/main.c:604
+#: ../src/main.c:650
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
@@ -2494,7 +2488,6 @@ msgid "_Open module"
 msgstr "_Открыть модуль"
 
 #: ../src/menubar.c:866
-#, fuzzy
 msgid "_Log browser"
 msgstr "_Просмотр журнала"
 
@@ -2503,28 +2496,24 @@ msgid "_Quit"
 msgstr ""
 
 #: ../src/menubar.c:891
-#, fuzzy
 msgid "Update TLE from _net"
-msgstr "Обновление TLE из файлов"
+msgstr ""
 
 #: ../src/menubar.c:896
-#, fuzzy
 msgid "Update TLE from _files"
-msgstr "Обновление TLE из файлов"
+msgstr ""
 
 #: ../src/menubar.c:901
-#, fuzzy
 msgid "Update _frequencies"
-msgstr "Обновление TLE из файлов"
+msgstr ""
 
 #: ../src/menubar.c:909
 msgid "_Preferences"
 msgstr "_Параметры"
 
 #: ../src/menubar.c:922
-#, fuzzy
 msgid "_Online help"
-msgstr "Справка в Интернете"
+msgstr ""
 
 #: ../src/menubar.c:931
 msgid "_License"
@@ -2576,7 +2565,7 @@ msgstr ""
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr "** ПО УМОЛЧАНИЮ **"
@@ -2963,9 +2952,9 @@ msgstr "Детали прохода для %s (орбита %d)"
 
 #. avoid unused parameter compiler warning
 #: ../src/print-pass.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "%s: Not implemented!"
-msgstr "%s: ПЕЧАТЬ не реализована"
+msgstr ""
 
 #: ../src/qth-data.c:78
 #, c-format
@@ -3126,9 +3115,8 @@ msgid "Select"
 msgstr "Выбрать"
 
 #: ../src/qth-editor.c:521 ../src/sat-pref-qth-editor.c:633
-#, fuzzy
 msgid "Select a location from a list"
-msgstr "Выбрать готовое местоположение из списка."
+msgstr ""
 
 #. latitude
 #: ../src/qth-editor.c:527 ../src/sat-pref-qth-editor.c:640
@@ -3174,9 +3162,8 @@ msgid "Maidenhead locator grid."
 msgstr "Код местоположения в системе Maidenhead Locator System"
 
 #: ../src/qth-editor.c:600
-#, fuzzy
 msgid "Select the altitude of the ground station"
-msgstr "Выберите широту наземной станции в градусах."
+msgstr ""
 
 #: ../src/qth-editor.c:604 ../src/sat-pref-qth-editor.c:718
 msgid "ft ASL"
@@ -3196,9 +3183,8 @@ msgid "Four letter code for weather station"
 msgstr "Четырёхбуквенный код для метеостанции"
 
 #: ../src/qth-editor.c:622 ../src/sat-pref-qth-editor.c:736
-#, fuzzy
 msgid "Select a weather station"
-msgstr "Выбрать метеостанцию из списка."
+msgstr ""
 
 #. GPSD enabled
 #: ../src/qth-editor.c:629 ../src/sat-pref-qth-editor.c:743
@@ -3566,7 +3552,7 @@ msgstr "Обозреватель журнала: %s"
 #. clear filename from title if unable to read file
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #: ../src/sat-log-browser.c:266 ../src/sat-log-browser.c:478
 #: ../src/sat-log-browser.c:522
@@ -4209,9 +4195,8 @@ msgid "Ground Station:"
 msgstr "Наземная станция:"
 
 #: ../src/sat-pref-map-view.c:909
-#, fuzzy
 msgid "Select the ground station colour"
-msgstr "Выберите наземную станцию для этого модуля."
+msgstr ""
 
 #. Grid in case it is enabled
 #: ../src/sat-pref-map-view.c:925
@@ -4219,9 +4204,8 @@ msgid "Grid:"
 msgstr "Сетка:"
 
 #: ../src/sat-pref-map-view.c:931
-#, fuzzy
 msgid "Select the grid colour"
-msgstr "Щёлкните, чтобы выбрать цвет сетки"
+msgstr ""
 
 #. tick labels
 #: ../src/sat-pref-map-view.c:947 ../src/sat-pref-polar-view.c:566
@@ -4229,9 +4213,8 @@ msgid "Tick Labels:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:953
-#, fuzzy
 msgid "Select a colour for tick labels"
-msgstr "Выберите цвет 1"
+msgstr ""
 
 #. satellite
 #: ../src/sat-pref-map-view.c:969 ../src/sat-pref-polar-view.c:591
@@ -4239,9 +4222,8 @@ msgid "Satellite:"
 msgstr "Спутник:"
 
 #: ../src/sat-pref-map-view.c:975
-#, fuzzy
 msgid "Select the satellite colour"
-msgstr "Щёлкните, чтобы выбрать цвет спутника"
+msgstr ""
 
 #. selected satellite
 #: ../src/sat-pref-map-view.c:991 ../src/sat-pref-polar-view.c:614
@@ -4249,9 +4231,8 @@ msgid "Selected Sat.:"
 msgstr "Выдел. спутник:"
 
 #: ../src/sat-pref-map-view.c:998
-#, fuzzy
 msgid "Select colour for selected satellites"
-msgstr "Щёлкните, чтобы выбрать цвет выделенных спутников"
+msgstr ""
 
 #. tack
 #: ../src/sat-pref-map-view.c:1015
@@ -4259,9 +4240,8 @@ msgid "Ground Track:"
 msgstr "Наземн. траект.:"
 
 #: ../src/sat-pref-map-view.c:1021
-#, fuzzy
 msgid "Select ground track colour"
-msgstr "Щёлкните, чтобы выбрать цвет наземной траектории"
+msgstr ""
 
 #. coverage
 #: ../src/sat-pref-map-view.c:1038
@@ -4269,11 +4249,10 @@ msgid "Area Coverage:"
 msgstr "Зона покрытия:"
 
 #: ../src/sat-pref-map-view.c:1045
-#, fuzzy
 msgid ""
 "Select colour for coverage area.\n"
 "Hint: Make it transparent"
-msgstr "Цвет зоны покрытия спутника (сделайте её прозрачной)"
+msgstr ""
 
 #. Info foreground
 #: ../src/sat-pref-map-view.c:1063
@@ -4281,9 +4260,8 @@ msgid "Info Text FG:"
 msgstr "Инф. текст:"
 
 #: ../src/sat-pref-map-view.c:1070
-#, fuzzy
 msgid "Select info text foreground colour"
-msgstr "Щёлкните, чтобы выбрать цвет информационного текста"
+msgstr ""
 
 #. Info background
 #: ../src/sat-pref-map-view.c:1087
@@ -4291,9 +4269,8 @@ msgid "Info Text BG:"
 msgstr "Фон текста:"
 
 #: ../src/sat-pref-map-view.c:1094
-#, fuzzy
 msgid "Select info text background colour"
-msgstr "Щёлкните, чтобы выбрать цвет фона информационного текста"
+msgstr ""
 
 #. Solar terminator
 #: ../src/sat-pref-map-view.c:1111
@@ -4301,9 +4278,8 @@ msgid "Solar terminator:"
 msgstr "Солн. терминатор:"
 
 #: ../src/sat-pref-map-view.c:1118
-#, fuzzy
 msgid "Select solar terminator colour"
-msgstr "Щёлкните, чтобы выбрать цвет солнечного терминатора"
+msgstr ""
 
 #. Earth shadow
 #: ../src/sat-pref-map-view.c:1136
@@ -4311,9 +4287,8 @@ msgid "Global shadow:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:1142
-#, fuzzy
 msgid "Select Earth shadow colour"
-msgstr "Выберите цвет 1"
+msgstr ""
 
 #. Shadow
 #: ../src/sat-pref-map-view.c:1160
@@ -4321,17 +4296,14 @@ msgid "Shadow:"
 msgstr "Тень:"
 
 #: ../src/sat-pref-map-view.c:1164
-#, fuzzy
 msgid "<i>Transp.</i>"
-msgstr "<i>Прозрачная</i>"
+msgstr ""
 
 #: ../src/sat-pref-map-view.c:1168
-#, fuzzy
 msgid "<i>Opaque</i>"
-msgstr "<i>Прозрачная</i>"
+msgstr ""
 
 #: ../src/sat-pref-map-view.c:1186
-#, fuzzy
 msgid ""
 "Shadow transparency under the satellite marker.\n"
 "\n"
@@ -4339,10 +4311,6 @@ msgid ""
 "background is light, e.g. the South Pole. Fully transparent is the same as "
 "no shadow."
 msgstr ""
-"Определяет прозрачность тени под маркером спутника. Тень улучшает видимость "
-"спутников на участках светлого фона, например, на южном полюсе.\n"
-"\n"
-"Максимальная прозрачность соответствует отсутствию тени."
 
 #: ../src/sat-pref-map-view.c:1217
 msgid "Display ground track for"
@@ -4361,9 +4329,8 @@ msgid "Select longitude. West is negative."
 msgstr "Выберите долготу. Западная — отрицательная."
 
 #: ../src/sat-pref-map-view.c:1313
-#, fuzzy
 msgid "Reset settings to default values"
-msgstr "Сбросить настройки к значениям по умолчанию."
+msgstr ""
 
 #: ../src/sat-pref-map-view.c:1318
 msgid "Reset module to global settings"
@@ -4646,9 +4613,8 @@ msgstr ""
 
 #. add button
 #: ../src/sat-pref-qth.c:498 ../src/sat-pref-rig.c:738
-#, fuzzy
 msgid "Add new"
-msgstr "Добавить"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:500
 msgid "Add a new ground station to the list"
@@ -4661,14 +4627,12 @@ msgid "Edit"
 msgstr "Изменить"
 
 #: ../src/sat-pref-qth.c:506
-#, fuzzy
 msgid "Edit the selected ground station"
-msgstr "Удалить выделенную наземную станцию"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:512
-#, fuzzy
 msgid "Delete selected ground station"
-msgstr "Удалить выделенную наземную станцию"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:591
 msgid ""
@@ -4912,14 +4876,12 @@ msgid "Add a new radio to the list"
 msgstr ""
 
 #: ../src/sat-pref-rig.c:744
-#, fuzzy
 msgid "Edit selected radio"
-msgstr "Удалить выделенную наземную станцию"
+msgstr ""
 
 #: ../src/sat-pref-rig.c:749
-#, fuzzy
 msgid "Delete selected radio"
-msgstr "Удалить выбранное поворотное устройство"
+msgstr ""
 
 #: ../src/sat-pref-rig.c:873
 #, c-format
@@ -5067,7 +5029,8 @@ msgid "MHz"
 msgstr "МГц"
 
 #: ../src/sat-pref-rig-editor.c:416
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #. AOS / LOS signalling
@@ -5109,19 +5072,16 @@ msgid "Add New"
 msgstr "Добавить"
 
 #: ../src/sat-pref-rot.c:345
-#, fuzzy
 msgid "Add a new rotator"
-msgstr "Добавить новую наземную станцию"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:349
-#, fuzzy
 msgid "Edit selected rotator"
-msgstr "Удалить выделенную наземную станцию"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:353
-#, fuzzy
 msgid "Delete selected rotator"
-msgstr "Удалить выбранное поворотное устройство"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:428
 #, c-format
@@ -5243,9 +5203,8 @@ msgstr "часов"
 
 #. colour 1
 #: ../src/sat-pref-sky-at-glance.c:302
-#, fuzzy
 msgid "Satellite 1: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:307
 msgid "Select colour 1"
@@ -5261,9 +5220,8 @@ msgstr "Щёлкните для выбора цвета"
 
 #. colour 2
 #: ../src/sat-pref-sky-at-glance.c:316
-#, fuzzy
 msgid "Satellite 2: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:321
 msgid "Select colour 2"
@@ -5271,9 +5229,8 @@ msgstr "Выберите цвет 2"
 
 #. colour 3
 #: ../src/sat-pref-sky-at-glance.c:330
-#, fuzzy
 msgid "Satellite 3: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:335
 msgid "Select colour 3"
@@ -5281,9 +5238,8 @@ msgstr "Выберите цвет 3"
 
 #. colour 4
 #: ../src/sat-pref-sky-at-glance.c:344
-#, fuzzy
 msgid "Satellite 4: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:349
 msgid "Select colour 4"
@@ -5291,9 +5247,8 @@ msgstr "Выберите цвет 4"
 
 #. colour 5
 #: ../src/sat-pref-sky-at-glance.c:358
-#, fuzzy
 msgid "Satellite 5: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:363
 msgid "Select colour 5"
@@ -5301,9 +5256,8 @@ msgstr "Выберите цвет 5"
 
 #. colour 6
 #: ../src/sat-pref-sky-at-glance.c:372
-#, fuzzy
 msgid "Satellite 6: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:377
 msgid "Select colour 6"
@@ -5311,9 +5265,8 @@ msgstr "Выберите цвет 6"
 
 #. colour 7
 #: ../src/sat-pref-sky-at-glance.c:386
-#, fuzzy
 msgid "Satellite 7: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:391
 msgid "Select colour 7"
@@ -5321,9 +5274,8 @@ msgstr "Выберите цвет 7"
 
 #. colour 8
 #: ../src/sat-pref-sky-at-glance.c:400
-#, fuzzy
 msgid "Satellite 8: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:405
 msgid "Select colour 8"
@@ -5331,9 +5283,8 @@ msgstr "Выберите цвет 8"
 
 #. colour 9
 #: ../src/sat-pref-sky-at-glance.c:414
-#, fuzzy
 msgid "Satellite 9: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:419
 msgid "Select colour 9"
@@ -5341,9 +5292,8 @@ msgstr "Выберите цвет 9"
 
 #. colour 10
 #: ../src/sat-pref-sky-at-glance.c:428
-#, fuzzy
 msgid "Satellite 10: "
-msgstr "Спутник:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:433
 msgid "Select colour 10"
@@ -5833,17 +5783,44 @@ msgstr ""
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
 
+#~ msgid "GPREDICT"
+#~ msgstr "GPREDICT"
+
 #~ msgid "Create a new module"
 #~ msgstr "Создать новый модуль"
 
 #~ msgid "Open an existing module"
 #~ msgstr "Открыть существующий модуль"
 
-#~ msgid "Open the message log browser"
-#~ msgstr "Открыть обозреватель журнала сообщений"
+#, c-format
+#~ msgid "%s: %s rigctld returned error (%s)"
+#~ msgstr "%s: %s rigctld вернул ошибку (%s)"
 
-#~ msgid "E_xit"
-#~ msgstr "В_ыйти"
+#~ msgid " Hour:"
+#~ msgstr " Часы:"
+
+#~ msgid " Min:"
+#~ msgstr " Мин.:"
+
+#~ msgid " Sec:"
+#~ msgstr " Сек.:"
+
+#~ msgid " Msec:"
+#~ msgstr " мс:"
+
+#~ msgid "Select a satellite group or category to narrow your search."
+#~ msgstr "Выберите группу спутников или категорию для сужения поиска."
+
+#~ msgid "Group"
+#~ msgstr "Группа"
+
+#~ msgid ""
+#~ "Start typing in this field to search for a satellite in the selected group."
+#~ msgstr ""
+#~ "Начните набирать в этом поле, чтобы найти спутник в выбранной группе."
+
+#~ msgid "Search"
+#~ msgstr "Поиск"
 
 #~ msgid "Exit the program"
 #~ msgstr "Выйти из программы"
@@ -5851,19 +5828,23 @@ msgstr ""
 #~ msgid "From _network"
 #~ msgstr "Из _сети"
 
-#, fuzzy
-#~ msgid "Update TLE from a network server"
-#~ msgstr "Обновить Кеплеровы элементы орбит с сетевого сервера"
+#~ msgid "Open the message log browser"
+#~ msgstr "Открыть обозреватель журнала сообщений"
+
+#~ msgid "E_xit"
+#~ msgstr "В_ыйти"
 
 #~ msgid "From l_ocal files"
 #~ msgstr "Из _локальных файлов"
 
-#, fuzzy
-#~ msgid "Update TLE from local files"
-#~ msgstr "Обновление TLE из файлов"
-
 #~ msgid "Edit user preferences"
 #~ msgstr "Редактировать настройки пользователя"
+
+#~ msgid "Show what's new in this release"
+#~ msgstr "Показать, что нового в этом выпуске"
+
+#~ msgid "Online help"
+#~ msgstr "Справка в Интернете"
 
 #~ msgid "Show online user manual"
 #~ msgstr "Показать онлайн-справку"
@@ -5871,93 +5852,12 @@ msgstr ""
 #~ msgid "Show the Gpredict license"
 #~ msgstr "Показать лицензию Gpredict"
 
-#~ msgid "Show what's new in this release"
-#~ msgstr "Показать, что нового в этом выпуске"
-
-#~ msgid "Show about dialog"
-#~ msgstr "Показать информацию об этом приложении"
-
+#, c-format
 #~ msgid "Failed to build menubar: %s"
 #~ msgstr "Не удалось создать строку меню: %s"
 
-#, fuzzy
-#~ msgid "<b>Invalid</b>"
-#~ msgstr "<b>Всего</b>"
-
-#~ msgid "<i>Strong</i>"
-#~ msgstr "<i>Сплошная</i>"
-
-#~ msgid "Colour for satellite 1: "
-#~ msgstr "Цвет для спутника 1: "
-
-#~ msgid "Colour for satellite 2: "
-#~ msgstr "Цвет для спутника 2: "
-
-#~ msgid "Colour for satellite 3: "
-#~ msgstr "Цвет для спутника 3: "
-
-#~ msgid "Colour for satellite 4: "
-#~ msgstr "Цвет для спутника 4: "
-
-#~ msgid "Colour for satellite 5: "
-#~ msgstr "Цвет для спутника 5: "
-
-#~ msgid "Colour for satellite 6: "
-#~ msgstr "Цвет для спутника 6: "
-
-#~ msgid "Colour for satellite 7: "
-#~ msgstr "Цвет для спутника 7: "
-
-#~ msgid "Colour for satellite 8: "
-#~ msgstr "Цвет для спутника 8: "
-
-#~ msgid "Colour for satellite 9: "
-#~ msgstr "Цвет для спутника 9: "
-
-#~ msgid "Colour for satellite 10: "
-#~ msgstr "Цвет для спутника 10: "
-
-#~ msgid "ft above sea level"
-#~ msgstr "футов над уровнем моря"
-
-#~ msgid "m above sea level"
-#~ msgstr "м над уровнем моря"
-
-#~ msgid "Visible Columns"
-#~ msgstr "Видимые столбцы"
-
-#~ msgid "Add a new rotator to the list"
-#~ msgstr "Добавить новое поворотное устройство в список"
-
-#~ msgid "Edit the currently selected rotator"
-#~ msgstr "Изменить текущее поворотное устройство"
-
-#~ msgid "Select a satellite group or category to narrow your search."
-#~ msgstr "Выберите группу спутников или категорию для сужения поиска."
-
-#~ msgid "Search"
-#~ msgstr "Поиск"
-
-#~ msgid ""
-#~ "Start typing in this field to search for a satellite in the selected "
-#~ "group."
-#~ msgstr ""
-#~ "Начните набирать в этом поле, чтобы найти спутник в выбранной группе."
-
-#~ msgid "Group"
-#~ msgstr "Группа"
-
-#~ msgid "Update Keplerian elements from local files"
-#~ msgstr "Обновить Кеплеровы элементы орбит из локальных файлов"
-
-#~ msgid "Column Name"
-#~ msgstr "Имя столбца"
-
-#~ msgid "Edit the currently selected ground station"
-#~ msgstr "Редактировать выделенную наземную станцию"
-
-#~ msgid "GPREDICT"
-#~ msgstr "GPREDICT"
+#~ msgid "Show about dialog"
+#~ msgstr "Показать информацию об этом приложении"
 
 #~ msgid "Ground Station"
 #~ msgstr "Наземная станция"
@@ -5984,8 +5884,125 @@ msgstr ""
 #~ msgid "Module Properties"
 #~ msgstr "Свойства модуля"
 
+#, c-format
 #~ msgid "GPREDICT: %s"
 #~ msgstr "GPREDICT: %s"
 
+#~ msgid "Colour for satellite 7: "
+#~ msgstr "Цвет для спутника 7: "
+
+#~ msgid "Colour for satellite 8: "
+#~ msgstr "Цвет для спутника 8: "
+
+#~ msgid "Colour for satellite 9: "
+#~ msgstr "Цвет для спутника 9: "
+
+#~ msgid "Colour for satellite 10: "
+#~ msgstr "Цвет для спутника 10: "
+
+#~ msgid "Colour for satellite 6: "
+#~ msgstr "Цвет для спутника 6: "
+
+#~ msgid "Colour for satellite 2: "
+#~ msgstr "Цвет для спутника 2: "
+
+#~ msgid "Colour for satellite 3: "
+#~ msgstr "Цвет для спутника 3: "
+
+#~ msgid "Colour for satellite 4: "
+#~ msgstr "Цвет для спутника 4: "
+
+#~ msgid "Colour for satellite 5: "
+#~ msgstr "Цвет для спутника 5: "
+
+#~ msgid "Colour for satellite 1: "
+#~ msgstr "Цвет для спутника 1: "
+
+#~ msgid "Add a new rotator to the list"
+#~ msgstr "Добавить новое поворотное устройство в список"
+
+#~ msgid "Edit the currently selected rotator"
+#~ msgstr "Изменить текущее поворотное устройство"
+
+#~ msgid "Delete the selected rotator"
+#~ msgstr "Удалить выбранное поворотное устройство"
+
+#~ msgid "Delete the selected ground station"
+#~ msgstr "Удалить выделенную наземную станцию"
+
+#~ msgid "Edit the currently selected ground station"
+#~ msgstr "Редактировать выделенную наземную станцию"
+
+#~ msgid "Update Keplerian elements from local files"
+#~ msgstr "Обновить Кеплеровы элементы орбит из локальных файлов"
+
+#~ msgid "Update Keplerian elements from a network server"
+#~ msgstr "Обновить Кеплеровы элементы орбит с сетевого сервера"
+
 #~ msgid "Edit Module"
 #~ msgstr "Редактировать модуль"
+
+#~ msgid "Select a predefined location from a list."
+#~ msgstr "Выбрать готовое местоположение из списка."
+
+#~ msgid "m above sea level"
+#~ msgstr "м над уровнем моря"
+
+#~ msgid "ft above sea level"
+#~ msgstr "футов над уровнем моря"
+
+#~ msgid "Select a predefined weather station from a list."
+#~ msgstr "Выбрать метеостанцию из списка."
+
+#~ msgid ""
+#~ "The time remaining until the next AOS or LOS event, depending on which one "
+#~ "comes first."
+#~ msgstr ""
+#~ "Время, остающееся до следующего AOS или LOS, в зависимости от того, какое из "
+#~ "событий произойдёт первым."
+
+#, c-format
+#~ msgid "%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
+#~ msgstr "%s: Неверный тип радио %d. Будет назначен тип RIG_TYPE_RX"
+
+#~ msgid "Column Name"
+#~ msgstr "Имя столбца"
+
+#~ msgid "Visible Columns"
+#~ msgstr "Видимые столбцы"
+
+#~ msgid "Click to select the grid colour"
+#~ msgstr "Щёлкните, чтобы выбрать цвет сетки"
+
+#~ msgid "Click to select ground track colour"
+#~ msgstr "Щёлкните, чтобы выбрать цвет наземной траектории"
+
+#~ msgid "Colour for coverage Area (make it transparent)"
+#~ msgstr "Цвет зоны покрытия спутника (сделайте её прозрачной)"
+
+#~ msgid "Click to select info text background colour"
+#~ msgstr "Щёлкните, чтобы выбрать цвет фона информационного текста"
+
+#~ msgid "Click to select terminator colour"
+#~ msgstr "Щёлкните, чтобы выбрать цвет солнечного терминатора"
+
+#~ msgid "Click to select info text foreground colour"
+#~ msgstr "Щёлкните, чтобы выбрать цвет информационного текста"
+
+#~ msgid "<i>Transparent</i>"
+#~ msgstr "<i>Прозрачная</i>"
+
+#~ msgid "<i>Strong</i>"
+#~ msgstr "<i>Сплошная</i>"
+
+#~ msgid ""
+#~ "Specifies how strong the shadow under the satellite marker should be. The "
+#~ "shadow improves the visibility of the satellites where the colour of the "
+#~ "background is light, e.g. the South Pole.\n"
+#~ "\n"
+#~ "Transparent corresponds to no shadow."
+#~ msgstr ""
+#~ "Определяет прозрачность тени под маркером спутника. Тень улучшает видимость "
+#~ "спутников на участках светлого фона, например, на южном полюсе.\n"
+#~ "\n"
+#~ "Максимальная прозрачность соответствует отсутствию тени."

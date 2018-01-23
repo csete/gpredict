@@ -1,5 +1,10 @@
 
-Changes in version 2.2 (TBC)
+Changes in version 2.4 (TBD)
+
+- Fixed bug that could prevent TLE update to work on Windows.
+
+
+Changes in version 2.2 (5 Jan 2018)
 
 - New Monitor mode for antenna controller
 - Improved satellite search field in module editor
@@ -11,6 +16,8 @@ Changes in version 2.2 (TBC)
 - Fixed some automake warnings
 - Fixed "GtkDialog mapped without a transient parent..." messages
 - Various internal bugfixes and improvements
+- Updated translations
+- Updated satellite data
 - Updated windows build files
 
 

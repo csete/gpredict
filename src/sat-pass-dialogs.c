@@ -435,8 +435,13 @@ void show_pass(const gchar * satname, qth_t * qth, pass_t * pass,
 
     /* create notebook and add pages */
     notebook = gtk_notebook_new();
+#ifdef G_OS_WIN32
+    image = gtk_image_new_from_icon_name("format-justify-fill-symbolic",
+                                         GTK_ICON_SIZE_BUTTON);
+#else
     image = gtk_image_new_from_icon_name("format-justify-fill",
                                          GTK_ICON_SIZE_BUTTON);
+#endif
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), gtk_label_new(_("Data")), FALSE, TRUE,

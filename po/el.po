@@ -7,19 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-28 21:40+0100\n"
-"PO-Revision-Date: 2017-05-14 21:08+0000\n"
-"Last-Translator: Dimitrios Ntoulas <Unknown>\n"
+"POT-Creation-Date: 2017-12-28 14:28+0100\n"
+"PO-Revision-Date: 2017-12-07 02:24+0000\n"
+"Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Greek <el@li.org>\n"
-"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-12-06 21:00+0000\n"
-"X-Generator: Launchpad (build 18511)\n"
+"X-Launchpad-Export-Date: 2018-01-05 22:12+0000\n"
+"X-Generator: Launchpad (build 18521)\n"
+"Language: el\n"
 
+#. window title
+#. icon file name
 #. create window title and file name for window icon
-#: ../src/about.c:93 ../src/main.c:223
+#: ../src/about.c:93 ../src/main.c:247
 msgid "Gpredict"
 msgstr ""
 
@@ -230,9 +232,8 @@ msgid "Catnum"
 msgstr "Αρ. καταλόγου"
 
 #: ../src/gtk-event-list.c:54
-#, fuzzy
 msgid "Event"
-msgstr "Επόμενο Συμβάν"
+msgstr ""
 
 #: ../src/gtk-event-list.c:55
 msgid "AOS/LOS"
@@ -332,24 +333,24 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:392
+#: ../src/gtk-polar-plot.c:393
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:462 ../src/gtk-polar-view.c:661
+#: ../src/gtk-polar-plot.c:463 ../src/gtk-polar-view.c:661
 msgid "N"
 msgstr "Β"
 
-#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:671
+#: ../src/gtk-polar-plot.c:473 ../src/gtk-polar-view.c:671
 msgid "S"
 msgstr "Ν"
 
-#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:681
+#: ../src/gtk-polar-plot.c:483 ../src/gtk-polar-view.c:681
 msgid "E"
 msgstr "Α"
 
-#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:691
+#: ../src/gtk-polar-plot.c:493 ../src/gtk-polar-view.c:691
 msgid "W"
 msgstr "Δ"
 
@@ -967,7 +968,8 @@ msgid "Monitor rotator but do not send any position commands"
 msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:1420
-msgid "This parameter controls the delay between commands sent to the rotator."
+msgid ""
+"This parameter controls the delay between commands sent to the rotator."
 msgstr ""
 
 #. Tolerance
@@ -1727,7 +1729,7 @@ msgstr ""
 #. * Note that the controllers for hours, minutes, and seconds have ranges;
 #. * however, they can wrap around their limits in order to ensure a smooth
 #. * and continuous control of the time
-#.
+#. 
 #. hour
 #: ../src/gtk-sat-module-tmg.c:144
 msgid "Hour:"
@@ -1836,9 +1838,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gtk-sat-selector.c:392
-#, fuzzy
 msgid "Satellite group / category"
-msgstr "Όνομα Δορυφόρου"
+msgstr ""
 
 #: ../src/gtk-sat-selector.c:400
 msgid "Search for a satellite by name or catalog number"
@@ -2221,56 +2222,56 @@ msgstr ""
 msgid "%s: No selection found!"
 msgstr ""
 
-#: ../src/main.c:60
+#: ../src/main.c:76
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:108
+#: ../src/main.c:126
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
 "Gpredict does not require any command line options for nominal operation."
 msgstr ""
 
-#: ../src/main.c:114
+#: ../src/main.c:132
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:131
+#: ../src/main.c:156
 #, c-format
 msgid ""
-"User config check failed (code %d). This is fatal.\n"
-"A possible solution would be to remove the .config/Gpredict data dir in your "
-"home directory"
+"%s: User config check failed (code %d). This is fatal.\n"
+"A possible solution would be to remove the .config/Gpredict data dir\n"
+"in your home directory"
 msgstr ""
 
-#: ../src/main.c:418
+#: ../src/main.c:455
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:461
+#: ../src/main.c:499
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:470
+#: ../src/main.c:508
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:473
+#: ../src/main.c:511
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:478
+#: ../src/main.c:516
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:490
+#: ../src/main.c:528
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2278,27 +2279,27 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:519
+#: ../src/main.c:558
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:561
+#: ../src/main.c:604
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:573 ../src/main.c:617
+#: ../src/main.c:617 ../src/main.c:664
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:578 ../src/main.c:622
+#: ../src/main.c:622 ../src/main.c:669
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:604
+#: ../src/main.c:650
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
@@ -2462,7 +2463,6 @@ msgid "_Open module"
 msgstr ""
 
 #: ../src/menubar.c:866
-#, fuzzy
 msgid "_Log browser"
 msgstr "_Καταγραφή"
 
@@ -2471,28 +2471,24 @@ msgid "_Quit"
 msgstr ""
 
 #: ../src/menubar.c:891
-#, fuzzy
 msgid "Update TLE from _net"
-msgstr "Ενημέρωση των TLE από αρχεία"
+msgstr ""
 
 #: ../src/menubar.c:896
-#, fuzzy
 msgid "Update TLE from _files"
-msgstr "Ενημέρωση των TLE από αρχεία"
+msgstr ""
 
 #: ../src/menubar.c:901
-#, fuzzy
 msgid "Update _frequencies"
-msgstr "Ενημέρωση των TLE από αρχεία"
+msgstr ""
 
 #: ../src/menubar.c:909
 msgid "_Preferences"
 msgstr "_Ρυθμίσεις"
 
 #: ../src/menubar.c:922
-#, fuzzy
 msgid "_Online help"
-msgstr "Βοήθεια στο ίντερνετ"
+msgstr ""
 
 #: ../src/menubar.c:931
 msgid "_License"
@@ -2542,7 +2538,7 @@ msgstr ""
 
 #. is buff == "** DEFAULT **" clear the configuration key
 #. otherwise store the filename
-#.
+#. 
 #: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
 msgstr ""
@@ -3080,9 +3076,8 @@ msgid "Select"
 msgstr ""
 
 #: ../src/qth-editor.c:521 ../src/sat-pref-qth-editor.c:633
-#, fuzzy
 msgid "Select a location from a list"
-msgstr "Επιλογή Τοποθεσίας"
+msgstr ""
 
 #. latitude
 #: ../src/qth-editor.c:527 ../src/sat-pref-qth-editor.c:640
@@ -3149,9 +3144,8 @@ msgid "Four letter code for weather station"
 msgstr ""
 
 #: ../src/qth-editor.c:622 ../src/sat-pref-qth-editor.c:736
-#, fuzzy
 msgid "Select a weather station"
-msgstr "Επέλεξε μεταδότη"
+msgstr ""
 
 #. GPSD enabled
 #: ../src/qth-editor.c:629 ../src/sat-pref-qth-editor.c:743
@@ -3516,7 +3510,7 @@ msgstr ""
 #. clear filename from title if unable to read file
 #. create dialog window; we use "fake" stock responses to catch user
 #. button clicks (save_as and pause)
-#.
+#. 
 #. Remove filename if file not read
 #: ../src/sat-log-browser.c:266 ../src/sat-log-browser.c:478
 #: ../src/sat-log-browser.c:522
@@ -4114,9 +4108,8 @@ msgid "Ground Station:"
 msgstr "Σταθμός Εδάφους:"
 
 #: ../src/sat-pref-map-view.c:909
-#, fuzzy
 msgid "Select the ground station colour"
-msgstr "Επέλεξε μεταδότη"
+msgstr ""
 
 #. Grid in case it is enabled
 #: ../src/sat-pref-map-view.c:925
@@ -4133,9 +4126,8 @@ msgid "Tick Labels:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:953
-#, fuzzy
 msgid "Select a colour for tick labels"
-msgstr "Επιλογή Τοποθεσίας"
+msgstr ""
 
 #. satellite
 #: ../src/sat-pref-map-view.c:969 ../src/sat-pref-polar-view.c:591
@@ -4143,9 +4135,8 @@ msgid "Satellite:"
 msgstr "Δορυφόρος:"
 
 #: ../src/sat-pref-map-view.c:975
-#, fuzzy
 msgid "Select the satellite colour"
-msgstr "Επιλογή δορυφόρου"
+msgstr ""
 
 #. selected satellite
 #: ../src/sat-pref-map-view.c:991 ../src/sat-pref-polar-view.c:614
@@ -4153,9 +4144,8 @@ msgid "Selected Sat.:"
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:998
-#, fuzzy
 msgid "Select colour for selected satellites"
-msgstr "Επιλεγμένοι Δορυφόροι"
+msgstr ""
 
 #. tack
 #: ../src/sat-pref-map-view.c:1015
@@ -4252,14 +4242,12 @@ msgid "Select longitude. West is negative."
 msgstr ""
 
 #: ../src/sat-pref-map-view.c:1313
-#, fuzzy
 msgid "Reset settings to default values"
-msgstr "Επαναφορά στις προκαθορισμένες τιμές."
+msgstr ""
 
 #: ../src/sat-pref-map-view.c:1318
-#, fuzzy
 msgid "Reset module to global settings"
-msgstr "Επαναφορά αρθρώματος στις γενικές τιμές."
+msgstr ""
 
 #: ../src/sat-pref-modules.c:65
 msgid "Layout"
@@ -4519,9 +4507,8 @@ msgstr ""
 
 #. add button
 #: ../src/sat-pref-qth.c:498 ../src/sat-pref-rig.c:738
-#, fuzzy
 msgid "Add new"
-msgstr "Προσθήκη Νέου"
+msgstr ""
 
 #: ../src/sat-pref-qth.c:500
 msgid "Add a new ground station to the list"
@@ -4776,14 +4763,12 @@ msgid "Add a new radio to the list"
 msgstr ""
 
 #: ../src/sat-pref-rig.c:744
-#, fuzzy
 msgid "Edit selected radio"
-msgstr "Σύνδεση στην επιλεγμένη ραδιοσυσκευή"
+msgstr ""
 
 #: ../src/sat-pref-rig.c:749
-#, fuzzy
 msgid "Delete selected radio"
-msgstr "Σύνδεση στην επιλεγμένη ραδιοσυσκευή"
+msgstr ""
 
 #: ../src/sat-pref-rig.c:873
 #, c-format
@@ -4929,7 +4914,8 @@ msgid "MHz"
 msgstr ""
 
 #: ../src/sat-pref-rig-editor.c:416
-msgid "Enter the frequency of the local oscillator of the upconverter, if any."
+msgid ""
+"Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
 #. AOS / LOS signalling
@@ -4971,14 +4957,12 @@ msgid "Add a new rotator"
 msgstr ""
 
 #: ../src/sat-pref-rot.c:349
-#, fuzzy
 msgid "Edit selected rotator"
-msgstr "Ενεργοποίηση του επιλεγμένου ρότορα"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:353
-#, fuzzy
 msgid "Delete selected rotator"
-msgstr "Ενεργοποίηση του επιλεγμένου ρότορα"
+msgstr ""
 
 #: ../src/sat-pref-rot.c:428
 #, c-format
@@ -5094,9 +5078,8 @@ msgstr ""
 
 #. colour 1
 #: ../src/sat-pref-sky-at-glance.c:302
-#, fuzzy
 msgid "Satellite 1: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:307
 msgid "Select colour 1"
@@ -5112,9 +5095,8 @@ msgstr ""
 
 #. colour 2
 #: ../src/sat-pref-sky-at-glance.c:316
-#, fuzzy
 msgid "Satellite 2: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:321
 msgid "Select colour 2"
@@ -5122,9 +5104,8 @@ msgstr ""
 
 #. colour 3
 #: ../src/sat-pref-sky-at-glance.c:330
-#, fuzzy
 msgid "Satellite 3: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:335
 msgid "Select colour 3"
@@ -5132,9 +5113,8 @@ msgstr ""
 
 #. colour 4
 #: ../src/sat-pref-sky-at-glance.c:344
-#, fuzzy
 msgid "Satellite 4: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:349
 msgid "Select colour 4"
@@ -5142,9 +5122,8 @@ msgstr ""
 
 #. colour 5
 #: ../src/sat-pref-sky-at-glance.c:358
-#, fuzzy
 msgid "Satellite 5: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:363
 msgid "Select colour 5"
@@ -5152,9 +5131,8 @@ msgstr ""
 
 #. colour 6
 #: ../src/sat-pref-sky-at-glance.c:372
-#, fuzzy
 msgid "Satellite 6: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:377
 msgid "Select colour 6"
@@ -5162,9 +5140,8 @@ msgstr ""
 
 #. colour 7
 #: ../src/sat-pref-sky-at-glance.c:386
-#, fuzzy
 msgid "Satellite 7: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:391
 msgid "Select colour 7"
@@ -5172,9 +5149,8 @@ msgstr ""
 
 #. colour 8
 #: ../src/sat-pref-sky-at-glance.c:400
-#, fuzzy
 msgid "Satellite 8: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:405
 msgid "Select colour 8"
@@ -5182,9 +5158,8 @@ msgstr ""
 
 #. colour 9
 #: ../src/sat-pref-sky-at-glance.c:414
-#, fuzzy
 msgid "Satellite 9: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:419
 msgid "Select colour 9"
@@ -5192,9 +5167,8 @@ msgstr ""
 
 #. colour 10
 #: ../src/sat-pref-sky-at-glance.c:428
-#, fuzzy
 msgid "Satellite 10: "
-msgstr "Δορυφόρος:"
+msgstr ""
 
 #: ../src/sat-pref-sky-at-glance.c:433
 msgid "Select colour 10"
@@ -5667,56 +5641,47 @@ msgstr ""
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
 
-#~ msgid "_Update TLE data"
-#~ msgstr "Ενημέρωση δεδομένων _Δορυφόρων"
-
-#~ msgid "_Update Transponder data"
-#~ msgstr "Ενημέρωση δεδομένων _Αναμεταδοτών"
-
-#~ msgid "E_xit"
-#~ msgstr "Έ_ξοδος"
+#~ msgid "GPREDICT"
+#~ msgstr "GPREDICT"
 
 #~ msgid "Exit the program"
 #~ msgstr "Έξοδος από το πρόγραμμα"
 
+#~ msgid "Edit user preferences"
+#~ msgstr "Επεξεργασία προτιμήσεων χρήστη"
+
+#~ msgid "Online help"
+#~ msgstr "Βοήθεια στο ίντερνετ"
+
+#~ msgid "_Update Transponder data"
+#~ msgstr "Ενημέρωση δεδομένων _Αναμεταδοτών"
+
+#~ msgid "_Update TLE data"
+#~ msgstr "Ενημέρωση δεδομένων _Δορυφόρων"
+
 #~ msgid "From _network"
 #~ msgstr "Από το _δίκτυο"
-
-#, fuzzy
-#~ msgid "Update TLE from a network server"
-#~ msgstr "Ενημέρωση των TLE από αρχεία"
 
 #~ msgid "From l_ocal files"
 #~ msgstr "Από τοπικό _αρχείο"
 
-#, fuzzy
-#~ msgid "Update TLE from local files"
-#~ msgstr "Ενημέρωση των TLE από αρχεία"
+#~ msgid "Ground Station"
+#~ msgstr "Σταθμός Εδάφους"
 
-#~ msgid "Edit user preferences"
-#~ msgstr "Επεξεργασία προτιμήσεων χρήστη"
+#~ msgid "E_xit"
+#~ msgstr "Έ_ξοδος"
 
-#, fuzzy
-#~ msgid "<b>Invalid</b>"
-#~ msgstr "<b> Λήψη </b>"
+#~ msgid "Module Name"
+#~ msgstr "Όνομα Αρθρώματος"
+
+#~ msgid "Column Name"
+#~ msgstr "Όνομα Στήλης"
 
 #~ msgid "Search"
 #~ msgstr "Αναζήτηση"
 
 #~ msgid "Group"
 #~ msgstr "Ομάδα"
-
-#~ msgid "Column Name"
-#~ msgstr "Όνομα Στήλης"
-
-#~ msgid "GPREDICT"
-#~ msgstr "GPREDICT"
-
-#~ msgid "Ground Station"
-#~ msgstr "Σταθμός Εδάφους"
-
-#~ msgid "Module Name"
-#~ msgstr "Όνομα Αρθρώματος"
 
 #~ msgid ""
 #~ "<b>Hint: </b> Double click on any satellite\n"
