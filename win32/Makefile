@@ -216,11 +216,8 @@ gpredict-con.exe: TARGET:=-mconsole
 gpredict.exe gpredict-con.exe: $(OBJS) gpredict_res.o
 	$(CC) $(TARGET) -mthreads -o $@ $^ $(CFLAGS) $(GTK_CFLAGS) $(LIBS) $(GUI_LIBS) -lmingwex -s
 
-gpredict_res.o: gpredict.rc gpredict.exp.manifest
+gpredict_res.o: gpredict.rc
 	$(RC) $(RCFLAGS) gpredict.rc $@
-
-gpredict.exp.manifest: gpredict.exe.manifest
-	sed -e 's/VERSION_STRL/$(VERSION_LONG)/' < $< > $@
 
 libgoocanvas.dll: $(GOOCANVOBJ)
 	$(CC) -shared $(CFLAGS) $(GTK_CFLAGS) $(GOOCANVOBJ) $(GTKLIBS) -lm -lmingwex \
@@ -231,6 +228,6 @@ libsgpsdp.dll:  $(SGPSDPOBJ)
 	-Wl,--enable-auto-image-base -Wl,--out-implib,libsgpsdp.lib -o libsgpsdp.dll
 
 clean:
-	rm -f *.o *.d *.def *.a *.lib *.dll *.exe *.exp.manifest *.zip
+	rm -f *.o *.d *.def *.a *.lib *.dll *.exe *.zip
 	rm -rf gpredict
 
