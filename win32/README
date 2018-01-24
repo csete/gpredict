@@ -1,12 +1,23 @@
 ### Win32 build notes ###
 
-# Phil Ashby, Dec 2017
+# Phil Ashby, Dec 2017 - Jan 2018
 
-Check config.mk for dependant packages. I recommend use of inline sed
-to fix up pkg-config file prefix settings once unpacked, then fix up and
-copy in gtk+-3.0.pc and gdk.pc if required.
+At present, MSYS2 on a Windows system is required to gather dependencies
+before building a Win32 version of gpredict using this build system.
 
-Compile tested on Debian 9 (stretch) using standard mingw-w64 toolchain.
+Install MSYS2, open a shell and install the Gtk3 and Goocanvas2 packages,
+following the instructions from GTK team:
+https://www.gtk.org/download/windows.php
+
+Once your MSYS2 output folder (/mingw32 or simlar) is accessible from
+this system, adjust the MINGW_ROOT parameter in config.mk to suit.
+
+You should now be able to cross-compile the Win32 version of GPredict
+using the 'make' command.
+
+Experimental Win32 build testing is being tracked in this ticket:
+https://github.com/csete/gpredict/issues/110
+
 
 To build a deployable ZIP archive, use 'make dist', which packages all
 binary DLLs from dependant packages along with gpredict[-con].exe into
