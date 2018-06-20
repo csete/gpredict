@@ -81,12 +81,13 @@ static void update_autotrack(GtkSatModule * module)
     guint           i, n;
     double          next_aos;
     gint            next_sat;
+    int             min_ele = sat_cfg_get_int(SAT_CFG_INT_PRED_MIN_EL);
 
     if (module->target > 0)
         sat = g_hash_table_lookup(module->satellites, &module->target);
 
     /* do nothing if current target is still above horizon */
-    if (sat != NULL && sat->el > 0.0)
+    if (sat != NULL && sat->el > min_ele)
         return;
 
     /* set target to satellite with next AOS */
@@ -105,7 +106,7 @@ static void update_autotrack(GtkSatModule * module)
         sat = (sat_t *) iter->data;
 
         /* if sat is above horizon, select it and we are done */
-        if (sat->el > 0.0)
+        if (sat->el > min_ele)
         {
             next_sat = sat->tle.catnr;
             break;
