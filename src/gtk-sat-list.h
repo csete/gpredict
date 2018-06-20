@@ -103,6 +103,7 @@ typedef enum {
     SAT_LIST_COL_ORBIT,         /*!< Orbit Number. */
     SAT_LIST_COL_VISIBILITY,    /*!< Visibility. */
     SAT_LIST_COL_DECAY,         /*!< Whether the satellite is decayed or not. */
+    SAT_LIST_COL_STAT_OPERATIONAL, /*!< Operational Status . */
     SAT_LIST_COL_BOLD,          /*!< Used to render the satellites above the horizon bold. */
     SAT_LIST_COL_NUMBER
 } sat_list_col_t;
@@ -134,7 +135,8 @@ typedef enum {
     SAT_LIST_FLAG_PHASE = 1 << SAT_LIST_COL_PHASE,      /*!< Phase. */
     SAT_LIST_FLAG_ORBIT = 1 << SAT_LIST_COL_ORBIT,      /*!< Orbit Number. */
     SAT_LIST_FLAG_VISIBILITY = 1 << SAT_LIST_COL_VISIBILITY,    /*!< Visibility. */
-    SAT_LIST_FLAG_DECAY = 1 << SAT_LIST_COL_DECAY       /*!< Decayed. */
+    SAT_LIST_FLAG_STAT_OPERATIONAL = 1 << SAT_LIST_COL_STAT_OPERATIONAL, /*!< Operational Status . */
+    SAT_LIST_FLAG_DECAY = 1 << SAT_LIST_COL_DECAY      /*!< Decayed. */
 } sat_list_flag_t;
 
 GType           gtk_sat_list_get_type(void);
