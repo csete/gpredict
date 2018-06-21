@@ -898,39 +898,35 @@ static void     operational_status_cell_data_function(GtkTreeViewColumn * col,
 
     gtk_tree_model_get(model, iter, coli, &number, -1);
 
-
-    //g_object_set(renderer, "text", "test", NULL);
-    //g_free(buff);
-
     switch (number)
     {
 
     case OP_STAT_OPERATIONAL:
-        g_object_set(renderer, "text", "Operational");
+        g_object_set(renderer, "text", "Operational", NULL);
         break;
 
     case OP_STAT_NONOP:
-        g_object_set(renderer, "text", "Non-operational");
+        g_object_set(renderer, "text", "Non-operational", NULL);
         break;
 
     case OP_STAT_PARTIAL:
-        g_object_set(renderer, "text", "Partially operational");
+        g_object_set(renderer, "text", "Partially operational", NULL);
         break;
 
     case OP_STAT_STDBY:
-        g_object_set(renderer, "text", "Backup/Standby");
+        g_object_set(renderer, "text", "Backup/Standby", NULL);
         break;
 
     case OP_STAT_SPARE:
-        g_object_set(renderer, "text", "Spare");
+        g_object_set(renderer, "text", "Spare", NULL);
         break;
 
     case OP_STAT_EXTENDED:
-        g_object_set(renderer, "text", "Extended Mission");
+        g_object_set(renderer, "text", "Extended Mission", NULL);
         break;
 
     default:
-        g_object_set(renderer, "text", "Unknown");
+        g_object_set(renderer, "text", "Unknown", NULL);
         break;
 
     }
