@@ -76,7 +76,10 @@ typedef enum {
     SAT_CFG_INT_MAP_QTH_COL,    /*!< QTH mark colour on map. */
     SAT_CFG_INT_MAP_SAT_COL,    /*!< Satellite colour on maps */
     SAT_CFG_INT_MAP_SAT_SEL_COL,        /*!< Selected satellite colour */
-    SAT_CFG_INT_MAP_SAT_COV_COL,        /*!< Map coverage area colour */
+    SAT_CFG_INT_MAP_SAT_COV_COL,        /*!< Map coverage area colour (default)*/
+    SAT_CFG_INT_MAP_SAT_COV_COL_FO,     /*!< Map coverage area colour (fully oper) */
+    SAT_CFG_INT_MAP_SAT_COV_COL_PO,     /*!< Map coverage area colour (part oper) */
+    SAT_CFG_INT_MAP_SAT_COV_COL_NO,     /*!< Map coverage area colour (non oper) */
     SAT_CFG_INT_MAP_GRID_COL,   /*!< Grid colour. */
     SAT_CFG_INT_MAP_TERMINATOR_COL,     /*!< Solar terminator colour. */
     SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL,  /*!< Earth shadow colour. */
