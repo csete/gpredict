@@ -746,13 +746,13 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
             {
                 /* next event is LOS */
                 number = sat->los;
-                alstr = g_strdup("LOS: ");
+                alstr = g_strdup(" (LOS)");
             }
             else
             {
                 /* next event is AOS */
                 number = sat->aos;
-                alstr = g_strdup("AOS: ");
+                alstr = g_strdup(" (AOS)");
             }
 
             if (number == 0.0)
@@ -765,7 +765,7 @@ static gboolean sat_list_update_sats(GtkTreeModel * model, GtkTreePath * path,
 
                 /* format the number */
                 tfstr = sat_cfg_get_str(SAT_CFG_STR_TIME_FORMAT);
-                fmtstr = g_strconcat(alstr, tfstr, NULL);
+                fmtstr = g_strconcat(tfstr, alstr, NULL);
                 g_free(tfstr);
 
                 daynum_to_str(buff, TIME_FORMAT_MAX_LENGTH, fmtstr, number);
