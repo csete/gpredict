@@ -2103,10 +2103,10 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                                             MOD_CFG_MAP_SAT_COV_COL_NO,
                                             SAT_CFG_INT_MAP_SAT_COV_COL_NO);
                                             break;
-                        case OP_STAT_UNKNOWN: __attribute__ ((fallthrough));
-                        case OP_STAT_STDBY: __attribute__ ((fallthrough));
-                        case OP_STAT_SPARE: __attribute__ ((fallthrough));
-                        case OP_STAT_EXTENDED: __attribute__ ((fallthrough));
+                        case OP_STAT_UNKNOWN:
+                        case OP_STAT_STDBY:
+                        case OP_STAT_SPARE:
+                        case OP_STAT_EXTENDED:
                         default:
                             covcol = mod_cfg_get_int(satmap->cfgdata,
                                             MOD_CFG_MAP_SECTION,
