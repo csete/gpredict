@@ -3,6 +3,7 @@
 
   Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
   Copyright (C)       2017  Patrick Dohmen, DL4PD
+  Copyright (C)       2018  Mario Haustein, DM5AHA
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -165,6 +166,8 @@ static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl)
     ctrl->delay = 1000;
     ctrl->timerid = 0;
     ctrl->errcnt = 0;
+    ctrl->lastrxptt = FALSE;
+    ctrl->lasttxptt = TRUE;
     ctrl->lastrxf = 0.0;
     ctrl->lasttxf = 0.0;
     ctrl->last_toggle_tx = -1;
@@ -1539,7 +1542,6 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
 {
     gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
     gboolean        ptt = FALSE;
-    gboolean        dialchanged = FALSE;
 
     /* get PTT status */
     if (ctrl->engaged && ctrl->conf->ptt)
@@ -1553,26 +1555,17 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
        Note: If ctrl->lastrxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
        and no need to execute the dial feedback.
      */
-    if ((ctrl->engaged) && (ctrl->lastrxf > 0.0))
+    if ((ctrl->engaged) &&
+        (ctrl->lastrxf > 0.0) &&
+        (ptt == FALSE))
     {
-        if (ptt == FALSE)
+        if (!get_freq_simplex(ctrl, ctrl->sock, &readfreq))
         {
-            if (!get_freq_simplex(ctrl, ctrl->sock, &readfreq))
-            {
-                /* error => use a passive value */
-                readfreq = ctrl->lastrxf;
-                ctrl->errcnt++;
-            }
+            /* error => use a passive value */
+            ctrl->errcnt++;
         }
-        else
+        else if (fabs(readfreq - ctrl->lastrxf) >= 1.0)
         {
-            readfreq = ctrl->lastrxf;
-        }
-
-        if (fabs(readfreq - ctrl->lastrxf) >= 1.0)
-        {
-            dialchanged = TRUE;
-
             /* user might have altered radio frequency => update transponder knob */
             gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqDown),
                                     readfreq);
@@ -1595,15 +1588,13 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
             {
                 track_downlink(ctrl);
             }
+
+            /* no need to forward track */
+            return;
         }
     }
 
     /* now, forward tracking */
-    if (dialchanged)
-    {
-        /* no need to forward track */
-        return;
-    }
 
     /* If we are tracking, calculate the radio freq by applying both dopper shift
        and tranverter LO frequency. If we are not tracking, apply only LO frequency.
@@ -1647,19 +1638,35 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
                frequency from the rig. */
             get_freq_simplex(ctrl, ctrl->sock, &tmpfreq);
             ctrl->lastrxf = tmpfreq;
+
+            /* This is only effective in RIG_TYPE_TRX mode.
+               Invalidate ctrl->lasttxf for two reasons.
+
+               1. Prevent dial feedback from changing the uplink frequency.
+                  In the first TX cycle get_freq_simplex() returns the downlink
+                  frequency instead of uplink. The mismatch would thus trigger
+                  an uplink update as long as the VFO has not been updated.
+               2. Force updating the VFO in the first TX cycle.
+             */
+            if (ctrl->lastrxptt != ptt)
+                ctrl->lasttxf = 0.0;
         }
         else
         {
             ctrl->errcnt++;
         }
     }
+
+    /* Remember PTT state, to avoid misinterpreting VFO changes as dial
+       feedback during TX to RX transitions.
+     */
+    ctrl->lastrxptt = ptt;
 }
 
 static void exec_tx_cycle(GtkRigCtrl * ctrl)
 {
     gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
     gboolean        ptt = TRUE;
-    gboolean        dialchanged = FALSE;
 
     /* get PTT status */
     if (ctrl->engaged && ctrl->conf->ptt)
@@ -1675,26 +1682,17 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
        Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
        and no need to execute the dial feedback.
      */
-    if ((ctrl->engaged) && (ctrl->lasttxf > 0.0))
+    if ((ctrl->engaged) &&
+        (ctrl->lasttxf > 0.0) &&
+        (ptt == TRUE))
     {
-        if (ptt == TRUE)
+        if (!get_freq_simplex(ctrl, ctrl->sock, &readfreq))
         {
-            if (!get_freq_simplex(ctrl, ctrl->sock, &readfreq))
-            {
-                /* error => use a passive value */
-                readfreq = ctrl->lasttxf;
-                ctrl->errcnt++;
-            }
+            /* error => use a passive value */
+            ctrl->errcnt++;
         }
-        else
+        else if (fabs(readfreq - ctrl->lasttxf) >= 1.0)
         {
-            readfreq = ctrl->lasttxf;
-        }
-
-        if (fabs(readfreq - ctrl->lasttxf) >= 1.0)
-        {
-            dialchanged = TRUE;
-
             /* user might have altered radio frequency => update transponder knob */
             gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqUp), readfreq);
             ctrl->lasttxf = readfreq;
@@ -1715,15 +1713,13 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
             {
                 track_uplink(ctrl);
             }
+
+            /* no need to forward track */
+            return;
         }
     }
 
     /* now, forward tracking */
-    if (dialchanged)
-    {
-        /* no need to forward track */
-        return;
-    }
 
     /* If we are tracking, calculate the radio freq by applying both dopper shift
        and tranverter LO frequency. If we are not tracking, apply only LO frequency.
@@ -1767,12 +1763,30 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
                frequency from the rig. */
             get_freq_simplex(ctrl, ctrl->sock, &tmpfreq);
             ctrl->lasttxf = tmpfreq;
+
+            /* This is only effective in RIG_TYPE_TRX mode.
+               Invalidate ctrl->lastrxf for two reasons.
+
+               1. Prevent dial feedback from changing the downlink frequency.
+                  In the first RX cycle get_freq_simplex() returns the uplink
+                  frequency instead of downlink. The mismatch would thus
+                  trigger a downlink update as long as the VFO has not been
+                  updated.
+               2. Force updating the VFO in the first RX cycle.
+             */
+            if (ctrl->lasttxptt != ptt)
+                ctrl->lastrxf = 0.0;
         }
         else
         {
             ctrl->errcnt++;
         }
     }
+
+    /* Remember PTT state, to avoid misinterpreting VFO changes as dial
+       feedback during RX to TX transitions.
+     */
+    ctrl->lasttxptt = ptt;
 }
 
 static void exec_trx_cycle(GtkRigCtrl * ctrl)
@@ -2676,6 +2690,8 @@ static void rigctrl_close(GtkRigCtrl * data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
 
+    ctrl->lastrxptt = FALSE;
+    ctrl->lasttxptt = TRUE;
     ctrl->lasttxf = 0.0;
     ctrl->lastrxf = 0.0;
 
