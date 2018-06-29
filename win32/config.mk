@@ -15,7 +15,7 @@
 MINGW_ROOT=../../mingw32
 #MINGW_ROOT=../../../tmp/mingw32
 
-PKG_CONFIG_PATH = $(abspath $(MINGW_ROOT)/lib/pkgconfig)
+PKG_CONFIG_PATH = "$(abspath $(MINGW_ROOT)/lib/pkgconfig)"
 
 # binary dependencies to be deployed with gpredict.exe
 BINDEPS = \
