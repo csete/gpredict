@@ -1377,13 +1377,7 @@ static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff
     gint            written;
     gint            size;
 
-    /* added by Marcel Cimander; win32 newline -> \10\13 */
-#ifdef WIN32
-    size = strlen(buff) - 1;
-    /* added by Marcel Cimander; unix newline -> \10 (apple -> \13) */
-#else
     size = strlen(buff);
-#endif
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s:%s: sending %d bytes to rigctld as \"%s\""),
