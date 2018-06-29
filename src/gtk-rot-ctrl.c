@@ -159,11 +159,7 @@ static gboolean rotctld_socket_rw(gint sock, gchar * buff, gchar * buffout,
     gint            written;
     gint            size;
 
-#ifdef WIN32
-    size = strlen(buff) - 1;
-#else
     size = strlen(buff);
-#endif
 
     /* send command */
     written = send(sock, buff, size, 0);
