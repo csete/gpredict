@@ -1,7 +1,9 @@
 
 Changes in version 2.4 (TBD)
 
-- Fixed bug that could prevent TLE update to work on Windows.
+- Fixed bug that could prevent TLE update to work on Windows
+- Fixed rotoator error handling to prevent fake feedback
+- Fixed rotator controller on Windows
 
 
 Changes in version 2.2 (5 Jan 2018)
