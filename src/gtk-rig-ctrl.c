@@ -410,6 +410,7 @@ void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
 static void downlink_changed_cb(GtkFreqKnob * knob, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
     (void)knob;
 
     if (ctrl->trsplock)
@@ -1371,11 +1372,12 @@ static void store_sats(gpointer key, gpointer value, gpointer user_data)
     (void)key;
 
     ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
-                                      (GCompareFunc) sat_name_compare);
+                                       (GCompareFunc) sat_name_compare);
 }
 
-static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
-                                      gchar * buffout, gint sizeout)
+static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
+                                      gchar * buff, gchar * buffout,
+                                      gint sizeout)
 {
     gint            written;
     gint            size;
@@ -1424,10 +1426,11 @@ static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff
     return TRUE;
 }
 
-static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock, gchar * buff,
-                                      gchar * buffout, gint sizeout)
+static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
+                                     gchar * buff, gchar * buffout,
+                                     gint sizeout)
 {
-    gboolean retval;
+    gboolean        retval;
 
     /* Enter critical section! */
     g_mutex_lock(&ctrl->writelock);
@@ -1555,9 +1558,7 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
        Note: If ctrl->lastrxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
        and no need to execute the dial feedback.
      */
-    if ((ctrl->engaged) &&
-        (ctrl->lastrxf > 0.0) &&
-        (ptt == FALSE))
+    if ((ctrl->engaged) && (ctrl->lastrxf > 0.0) && (ptt == FALSE))
     {
         if (!get_freq_simplex(ctrl, ctrl->sock, &readfreq))
         {
@@ -1643,9 +1644,9 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
                Invalidate ctrl->lasttxf for two reasons.
 
                1. Prevent dial feedback from changing the uplink frequency.
-                  In the first TX cycle get_freq_simplex() returns the downlink
-                  frequency instead of uplink. The mismatch would thus trigger
-                  an uplink update as long as the VFO has not been updated.
+               In the first TX cycle get_freq_simplex() returns the downlink
+               frequency instead of uplink. The mismatch would thus trigger
+               an uplink update as long as the VFO has not been updated.
                2. Force updating the VFO in the first TX cycle.
              */
             if (ctrl->lastrxptt != ptt)
@@ -1682,9 +1683,7 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
        Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
        and no need to execute the dial feedback.
      */
-    if ((ctrl->engaged) &&
-        (ctrl->lasttxf > 0.0) &&
-        (ptt == TRUE))
+    if ((ctrl->engaged) && (ctrl->lasttxf > 0.0) && (ptt == TRUE))
     {
         if (!get_freq_simplex(ctrl, ctrl->sock, &readfreq))
         {
@@ -1768,10 +1767,10 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
                Invalidate ctrl->lastrxf for two reasons.
 
                1. Prevent dial feedback from changing the downlink frequency.
-                  In the first RX cycle get_freq_simplex() returns the uplink
-                  frequency instead of downlink. The mismatch would thus
-                  trigger a downlink update as long as the VFO has not been
-                  updated.
+               In the first RX cycle get_freq_simplex() returns the uplink
+               frequency instead of downlink. The mismatch would thus
+               trigger a downlink update as long as the VFO has not been
+               updated.
                2. Force updating the VFO in the first RX cycle.
              */
             if (ctrl->lasttxptt != ptt)
@@ -2952,8 +2951,7 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
                     1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(table), create_target_widgets(rigctrl),
                     0, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), create_conf_widgets(rigctrl),
-                    1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), create_conf_widgets(rigctrl), 1, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(table), create_count_down_widgets(rigctrl),
                     0, 2, 2, 1);
 
