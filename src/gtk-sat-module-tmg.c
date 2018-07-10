@@ -771,6 +771,12 @@ static gdouble calculate_time(GtkSatModule * mod)
     struct tm       tim, utim;
     gdouble         jd = 0.0;
 
+    /* update edited values in spin button's text entry */
+    gtk_spin_button_update(GTK_SPIN_BUTTON(mod->tmgHour));
+    gtk_spin_button_update(GTK_SPIN_BUTTON(mod->tmgMin));
+    gtk_spin_button_update(GTK_SPIN_BUTTON(mod->tmgSec));
+    gtk_spin_button_update(GTK_SPIN_BUTTON(mod->tmgMsec));
+
     /* get date and time from widgets */
     gtk_calendar_get_date(GTK_CALENDAR(mod->tmgCal), &year, &month, &day);
     hr = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(mod->tmgHour));
