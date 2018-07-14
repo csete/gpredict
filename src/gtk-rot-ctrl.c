@@ -205,6 +205,19 @@ static gint rot_name_compare(const gchar * a, const gchar * b)
     return (gpredict_strcmp(a, b));
 }
 
+static gdouble central_angle(gdouble az0, gdouble el0, gdouble az1, gdouble el1)
+{
+    gdouble angle;
+    az0 = Radians(az0);
+    az1 = Radians(az1);
+    el0 = Radians(el0);
+    el1 = Radians(el1);
+
+    /* Spherical law of cosines, azimuth == longitude, elevation == latitude */
+    angle = acos(sin(el0) * sin(el1) + cos(el0) * cos(el1) * cos(az0 - az1));
+    return Degrees(angle);
+}
+
 static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
                                 gdouble azstoppos)
 {
@@ -740,6 +753,8 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
     gdouble         time_delta;
     gdouble         step_size;
 
+    gboolean        tol_exceeded_az, tol_exceeded_el;
+    gboolean        tol_exceeded_central_angle;
 
     /* If we are tracking and the target satellite is within
        range, set the rotor position controller knob values to
@@ -842,9 +857,16 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
             }
         }
 
+        /* Use separate az/el tolerance calculations for manual control */
+        tol_exceeded_az = fabs(setaz - rotaz) > ctrl->tolerance;
+        tol_exceeded_el = fabs(setel - rotel) > ctrl->tolerance;
+
+        /* Use central angle in tolerance calculations for auto tracking */
+        tol_exceeded_central_angle = central_angle(setaz, setel, rotaz, rotel) > ctrl->tolerance;
+
         /* if tolerance exceeded */
-        if ((fabs(setaz - rotaz) > ctrl->tolerance) ||
-            (fabs(setel - rotel) > ctrl->tolerance))
+        if (( ctrl->tracking &&  tol_exceeded_central_angle) ||
+            (!ctrl->tracking && (tol_exceeded_az || tol_exceeded_el)))
         {
             if (ctrl->tracking)
             {
@@ -906,8 +928,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                             sat->az = sat->az - 360.0;
                         }
                         if ((sat->el < 0.0) || (sat->el > 180.0) ||
-                            (fabs(setaz - sat->az) > (ctrl->tolerance)) ||
-                            (fabs(setel - sat->el) > (ctrl->tolerance)))
+                            (central_angle(setaz, setel, sat->az, sat->el) > ctrl->tolerance))
                         {
                             time_delta -= step_size;
                         }
