@@ -218,6 +218,99 @@ static gdouble central_angle(gdouble az0, gdouble el0, gdouble az1, gdouble el1)
     return Degrees(angle);
 }
 
+static gboolean is_zenith_nearby(gdouble elevation, gdouble tolerance)
+{
+    if (fabs(90.0 - elevation) <= tolerance * 2.0)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+static void flip(rot_az_type_t aztype, gdouble *azimuth, gdouble *elevation)
+{
+    *elevation = 180.0 - *elevation;
+    if (*azimuth > 180.0)
+        *azimuth -= 180.0;
+    else
+        *azimuth += 180.0;
+
+    if ((aztype == ROT_AZ_TYPE_180) && (*azimuth > 180.0))
+        *azimuth = *azimuth - 360.0;
+}
+
+/**
+ * Calculate shortest path between two azimuths, ignoring rotator end stop.
+ *
+ * \param az0 First azimuth.
+ * \param az1 Second azimuth.
+ * \return Angle between azimuths.
+ */
+static gdouble shortest_azimuth_path(gdouble az0, gdouble az1)
+{
+    gdouble result = fabs(az0 - az1);
+    if (result > 180.0)
+        result = 360.0 - result;
+    return result;
+}
+
+/**
+ * Calculate angle between 2 azimuths, bypassing rotator end stop.
+ *
+ * \param pos0 First position.
+ * \param pos1 Second position.
+ * \param stoppos Rotator end stop position.
+ * \return Angle between positions.
+ */
+static gdouble stoppos_bypass_angle(gdouble pos0, gdouble pos1, gdouble stoppos)
+{
+    gdouble pos0_to_pos1     = shortest_azimuth_path(pos0, pos1);
+    gdouble pos0_to_stoppos  = shortest_azimuth_path(pos0, stoppos);
+    gdouble pos1_to_stoppos  = shortest_azimuth_path(pos1, stoppos);
+
+    if (pos0 == pos1)
+        return 0.0;
+
+    if (pos0 == stoppos || pos1 == stoppos)
+        return pos0_to_pos1;
+
+    /* If end stop is in the middle of shortest path between positions */
+    if ((pos0_to_stoppos < pos0_to_pos1) && (pos1_to_stoppos < pos0_to_pos1))
+        return 360.0 - pos0_to_pos1;  /* Go other way */
+
+    return pos0_to_pos1;
+}
+
+static void handle_zenith_flip(GtkRotCtrl *ctrl, gdouble rotaz, gdouble rotel,
+                               gdouble *setaz, gdouble *setel)
+{
+    gdouble rotangle_wout_flip, rotangle_with_flip, azstop;
+
+    /* If rotator doesn't support elevation flip */
+    if (ctrl->conf->maxel < 180.0)
+        return;
+
+    azstop = ctrl->conf->azstoppos;
+
+    /* Note: We use the sum of azimuth and elevation rotations as metric of how
+     * efficient the maneuver is. There are also other options to optimize
+     * speed or wearing: max(az_rotation, el_rotation), weighting, etc. */
+
+    /* Calculate amount of rotation without extra flip at zenith */
+    rotangle_wout_flip  = fabs(rotel - (*setel));
+    rotangle_wout_flip += stoppos_bypass_angle(rotaz, *setaz, azstop);
+
+    /* Calculate amount of rotation with extra flip at zenith */
+    flip(ctrl->conf->aztype, setaz, setel);
+    rotangle_with_flip  = fabs(rotel - (*setel));
+    rotangle_with_flip += stoppos_bypass_angle(rotaz, *setaz, azstop);
+
+    /* Go with flip if it's more efficient */
+    if (rotangle_with_flip < rotangle_wout_flip)
+        ctrl->flipped = !ctrl->flipped;          /* Save new flip status */
+    else
+        flip(ctrl->conf->aztype, setaz, setel);  /* Undo flip */
+}
+
 static gboolean is_flipped_pass(pass_t * pass, rot_az_type_t type,
                                 gdouble azstoppos)
 {
@@ -788,11 +881,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         /* if this is a flipped pass and the rotor supports it */
         if ((ctrl->flipped) && (ctrl->conf->maxel >= 180.0))
         {
-            setel = 180 - setel;
-            if (setaz > 180)
-                setaz -= 180;
-            else
-                setaz += 180;
+            flip(ctrl->conf->aztype, &setaz, &setel);
 
             while (setaz > ctrl->conf->maxaz)
                 setaz -= 360;
@@ -916,11 +1005,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                         /*update sat->az and sat->el to account for flips and az range */
                         if ((ctrl->flipped) && (ctrl->conf->maxel >= 180.0))
                         {
-                            sat->el = 180.0 - sat->el;
-                            if (sat->az > 180.0)
-                                sat->az -= 180.0;
-                            else
-                                sat->az += 180.0;
+                            flip(ctrl->conf->aztype, &sat->az, &sat->el);
                         }
                         if ((ctrl->conf->aztype == ROT_AZ_TYPE_180) &&
                             (sat->az > 180.0))
@@ -946,6 +1031,11 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                         setel = 180.0;
 
                     setaz = sat->az;
+
+                    /* If we are close to zenith and rotator supports elevation
+                     * flip, try to use it instead of large azimuth rotation */
+                    if (is_zenith_nearby(rotel, ctrl->tolerance))
+                        handle_zenith_flip(ctrl, rotaz, rotel, &setaz, &setel);
                 }
             }
 
