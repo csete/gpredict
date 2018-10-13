@@ -159,11 +159,7 @@ static gboolean rotctld_socket_rw(gint sock, gchar * buff, gchar * buffout,
     gint            written;
     gint            size;
 
-#ifdef WIN32
-    size = strlen(buff) - 1;
-#else
     size = strlen(buff);
-#endif
 
     /* send command */
     written = send(sock, buff, size, 0);
@@ -323,6 +319,7 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: rotctld returned error (%s)"),
                         __FILE__, __LINE__, buffback);
+            retcode = FALSE;
         }
         else
         {
@@ -338,6 +335,7 @@ static gboolean get_pos(GtkRotCtrl * ctrl, gdouble * az, gdouble * el)
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s:%d: rotctld returned bad response (%s)"),
                             __FILE__, __LINE__, buffback);
+                retcode = FALSE;
             }
 
             g_strfreev(vbuff);
@@ -384,6 +382,7 @@ static gboolean set_pos(GtkRotCtrl * ctrl, gdouble az, gdouble el)
                         _
                         ("%s:%d: rotctld returned error %d with az %f el %f(%s)"),
                         __FILE__, __LINE__, retval, az, el, buffback);
+            retcode = FALSE;
         }
     }
 
@@ -437,7 +436,7 @@ static gpointer rotctld_client_thread(gpointer data)
         /* wait 100 ms before sending new command */
         g_usleep(100000);
         if (!get_pos(ctrl, &azi, &ele))
-            ctrl->client.io_error = TRUE;
+            io_error = TRUE;
 
         g_mutex_lock(&ctrl->client.mutex);
         ctrl->client.azi_in = azi;
