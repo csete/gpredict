@@ -380,10 +380,7 @@ static void file_changed(GtkWidget * widget, gpointer data)
         {
             if (!gpredict_legal_char(*j))
             {
-                /* probably not the best solution
-		 */
-		GdkDisplay *bell = gdk_display_get_default();
-		gdk_display_beep(bell);
+		gdk_display_beep(gdk_display_get_default());
                 pos = gtk_editable_get_position(GTK_EDITABLE(widget));
                 gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
             }

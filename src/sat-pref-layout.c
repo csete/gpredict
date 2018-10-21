@@ -194,11 +194,8 @@ static void layout_code_changed(GtkWidget * widget, gpointer data)
             }
             else
             {
-                /* probably not the best solution
-		 */
-		GdkDisplay *bell = gdk_display_get_default();
-		gdk_display_beep(bell);
-                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
+                gdk_display_beep(gdk_display_get_default());
+		pos = gtk_editable_get_position(GTK_EDITABLE(widget));
                 gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
             }
         }
