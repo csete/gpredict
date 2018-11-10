@@ -48,6 +48,8 @@
 #include "sat-pref-qth-data.h"
 #include "sat-pref-qth-editor.h"
 
+#define MAX_ALT 5000           /* maximum altitude for QTH in m */
+
 /*
  * Symbolic refs to be used when calling select_location in order
  * to determine which mode the selection should run in, ie.
@@ -705,7 +707,11 @@ static GtkWidget *create_editor_widgets(GtkTreeView * treeview, gboolean new)
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 6, 1, 1);
 
-    alt = gtk_spin_button_new_with_range(0, 5000, 1);
+    if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_IMPERIAL))
+        alt = gtk_spin_button_new_with_range(0, M_TO_FT(MAX_ALT), 1);
+    else
+        alt = gtk_spin_button_new_with_range(0, MAX_ALT, 1);
+
     gtk_spin_button_set_increments(GTK_SPIN_BUTTON(alt), 1, 100);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(alt), TRUE);
     gtk_widget_set_tooltip_text(alt,
