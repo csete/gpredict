@@ -232,13 +232,15 @@ static gchar   *epoch_to_str(sat_t * sat)
     fmt = sat_cfg_get_str(SAT_CFG_STR_TIME_FORMAT);
 
     /* format either local time or UTC depending on check box */
-    t = mktime(&tms);
     buff = g_try_malloc(51);
 
     if (sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME))
+    {
+        t = timegm(&tms);
         size = strftime(buff, 50, fmt, localtime(&t));
+    }
     else
-        size = strftime(buff, 50, fmt, gmtime(&t));
+        size = strftime(buff, 50, fmt, &tms);
 
     if (size < 50)
         buff[size] = '\0';
