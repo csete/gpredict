@@ -21,6 +21,7 @@
 #endif
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <time.h>
 
 #include "config-keys.h"
 #include "orbit-tools.h"
