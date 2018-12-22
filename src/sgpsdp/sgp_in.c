@@ -214,6 +214,9 @@ Convert_Satellite_Data (char *tle_set, tle_t *tle)
 	strncpy (&buff[1], &tle_set[95], 7);
 	buff[8] = '\0';
 	tle->eo = g_ascii_strtod (buff, NULL);
+    /* avoid division by 0 */
+    if (tle->eo < 1.0e-6)
+        tle->eo = 1.0e-6;
 
 	/* Satellite's Argument of Perigee (degrees) */
 	strncpy (buff, &tle_set[103], 8);
