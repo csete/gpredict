@@ -812,6 +812,12 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
             rotel = ctrl->client.ele_in;
             g_mutex_unlock(&ctrl->client.mutex);
 
+            /* ensure Azimuth angle is 0-360 degrees */
+            while (rotaz < 0.0)
+                rotaz += 360.0;
+            while (rotaz > 360.0)
+                rotaz -= 360.0;
+
             if (error)
             {
                 gtk_label_set_text(GTK_LABEL(ctrl->AzRead), _("ERROR"));
