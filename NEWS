@@ -5,7 +5,7 @@ Changes in version 2.4 (TBD)
 - Fixed rotator error handling to prevent fake feedback
 - Fixed rotator controller on Windows
 - Fixed bug that limited altitude to 5000 feet
-- Fixed timezone bug Epoch string in the satellite info dialog
+- Fixed timezone bug in Epoch string in the satellite info dialog
 - Fixed crash when eccentricity of orbit is exactly 0
 - Ensure Azimuth read from rotator is always between 0-360 degrees
 - Added operational status to list view
