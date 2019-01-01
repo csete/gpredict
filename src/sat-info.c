@@ -19,6 +19,13 @@
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
+
+#ifndef WIN32
+#define _DEFAULT_SOURCE     // see man timegm
+#else
+#define timegm _mkgmtime    // https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/mkgmtime-mkgmtime32-mkgmtime64?view=vs-2017
+#endif
+
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <time.h>
