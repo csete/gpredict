@@ -8,6 +8,7 @@ Changes in version 2.4 (TBD)
 - Fixed timezone bug in Epoch string in the satellite info dialog
 - Fixed crash when eccentricity of orbit is exactly 0
 - Ensure Azimuth read from rotator is always between 0-360 degrees
+- Ensure rotator limits are respected while tracking
 - Added operational status to list view
 
 
