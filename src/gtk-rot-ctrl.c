@@ -43,6 +43,7 @@
 #endif
 
 #include <errno.h>
+#include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
@@ -720,7 +721,6 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
     gtk_widget_set_sensitive(ctrl->ElSet, !ctrl->tracking);
 }
 
-
 /**
  * Rotator controller timeout function
  *
@@ -740,6 +740,8 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
     gdouble         time_delta;
     gdouble         step_size;
 
+#define SAFE_AZI(azi) CLAMP(azi, ctrl->conf->minaz, ctrl->conf->maxaz)
+#define SAFE_ELE(ele) CLAMP(ele, ctrl->conf->minel, ctrl->conf->maxel)
 
     /* If we are tracking and the target satellite is within
        range, set the rotor position controller knob values to
@@ -755,20 +757,20 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
             {
                 if (ctrl->t < ctrl->pass->aos)
                 {
-                    setaz = ctrl->pass->aos_az;
-                    setel = 0;
+                    setaz = SAFE_AZI(ctrl->pass->aos_az);
+                    setel = SAFE_ELE(0.0);
                 }
                 else if (ctrl->t > ctrl->pass->los)
                 {
-                    setaz = ctrl->pass->los_az;
-                    setel = 0;
+                    setaz = SAFE_AZI(ctrl->pass->los_az);
+                    setel = SAFE_ELE(0.0);
                 }
             }
         }
         else
         {
-            setaz = ctrl->target->az;
-            setel = ctrl->target->el;
+            setaz = SAFE_AZI(ctrl->target->az);
+            setel = SAFE_ELE(ctrl->target->el);
         }
         /* if this is a flipped pass and the rotor supports it */
         if ((ctrl->flipped) && (ctrl->conf->maxel >= 180.0))
@@ -798,6 +800,7 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
     }
     else
     {
+        /* the control ranges have already been limited by conf */
         setaz = gtk_rot_knob_get_value(GTK_ROT_KNOB(ctrl->AzSet));
         setel = gtk_rot_knob_get_value(GTK_ROT_KNOB(ctrl->ElSet));
     }
@@ -923,14 +926,8 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                         }
                         step_size /= 2.0;
                     }
-                    setel = sat->el;
-                    if (setel < 0.0)
-                        setel = 0.0;
-
-                    if (setel > 180.0)
-                        setel = 180.0;
-
-                    setaz = sat->az;
+                    setel = SAFE_ELE(sat->el);
+                    setaz = SAFE_AZI(sat->az);
                 }
             }
 
