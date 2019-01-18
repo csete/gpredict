@@ -36,6 +36,7 @@
 #define GROUP           "Radio"
 #define KEY_HOST        "Host"
 #define KEY_PORT        "Port"
+#define KEY_CYCLE       "Cycle"
 #define KEY_LO          "LO"
 #define KEY_LOUP        "LO_UP"
 #define KEY_TYPE        "Type"
@@ -44,6 +45,8 @@
 #define KEY_VFO_UP      "VFO_UP"
 #define KEY_SIG_AOS     "SIGNAL_AOS"
 #define KEY_SIG_LOS     "SIGNAL_LOS"
+
+#define DEFAULT_CYCLE_MS    1000
 
 /**
  * \brief Read radio configuration.
@@ -111,6 +114,25 @@ gboolean radio_conf_read(radio_conf_t * conf)
         g_clear_error(&error);
         g_key_file_free(cfg);
         return FALSE;
+    }
+
+    /* cycle period is only saved if not default */
+    if (g_key_file_has_key(cfg, GROUP, KEY_CYCLE, NULL))
+    {
+        conf->cycle = g_key_file_get_integer(cfg, GROUP, KEY_CYCLE, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading radio conf from %s (%s)."),
+                        __func__, conf->name, error->message);
+            g_clear_error(&error);
+            g_key_file_free(cfg);
+            return FALSE;
+        }
+    }
+    else
+    {
+        conf->cycle = DEFAULT_CYCLE_MS;
     }
 
     /* KEY_LO is optional */
@@ -250,6 +272,11 @@ void radio_conf_save(radio_conf_t * conf)
     g_key_file_set_double(cfg, GROUP, KEY_LOUP, conf->loup);
     g_key_file_set_integer(cfg, GROUP, KEY_TYPE, conf->type);
     g_key_file_set_integer(cfg, GROUP, KEY_PTT, conf->ptt);
+
+    if (conf->cycle == DEFAULT_CYCLE_MS)
+        g_key_file_remove_key(cfg, GROUP, KEY_CYCLE, NULL);
+    else
+        g_key_file_set_integer(cfg, GROUP, KEY_CYCLE, conf->cycle);
 
     if (conf->type == RIG_TYPE_DUPLEX)
     {

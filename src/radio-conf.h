@@ -61,6 +61,7 @@ typedef struct {
     gchar          *name;       /*!< Configuration file name, without .rig. */
     gchar          *host;       /*!< hostname or IP */
     gint            port;       /*!< port number */
+    gint            cycle;      /*!< cycle period in msec */
     gdouble         lo;         /*!< local oscillator freq in Hz (using double for
                                    compatibility with rest of code). Downlink. */
     gdouble         loup;       /*!< local oscillator freq in Hz for uplink. */
