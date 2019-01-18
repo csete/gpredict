@@ -194,7 +194,7 @@ static void layout_code_changed(GtkWidget * widget, gpointer data)
             }
             else
             {
-                gdk_beep();
+                gdk_display_beep(gdk_display_get_default());
                 pos = gtk_editable_get_position(GTK_EDITABLE(widget));
                 gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
             }
