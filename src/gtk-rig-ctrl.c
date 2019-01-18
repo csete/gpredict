@@ -1314,12 +1314,12 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     /* Now, load config */
     primary_rig_selected_cb(GTK_COMBO_BOX(ctrl->DevSel), ctrl);
 
-    /* Timeout */
+    /* cycle period */
     label = gtk_label_new(_("Cycle:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
-    timer = gtk_spin_button_new_with_range(100, 5000, 10);
+    timer = gtk_spin_button_new_with_range(10, 10000, 10);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
     gtk_widget_set_tooltip_text(timer,
                                 _("This parameter controls the delay between "

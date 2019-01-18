@@ -1411,12 +1411,12 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
                      G_CALLBACK(rot_monitor_cb), ctrl);
     gtk_grid_attach(GTK_GRID(table), ctrl->MonitorCheckBox, 1, 1, 1, 1);
 
-    /* Timeout */
+    /* cycle period */
     label = gtk_label_new(_("Cycle:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
-    timer = gtk_spin_button_new_with_range(1000, 10000, 10);
+    timer = gtk_spin_button_new_with_range(10, 10000, 10);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
     gtk_widget_set_tooltip_text(timer,
                                 _("This parameter controls the delay between "
