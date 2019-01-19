@@ -58,7 +58,7 @@ struct _gtk_rot_ctrl {
 
     guint           delay;      /*!< Timeout delay. */
     guint           timerid;    /*!< Timer ID */
-    gdouble         tolerance;  /*!< Error tolerance */
+    gdouble         threshold;  /*!< Motion threshold */
 
     gboolean        tracking;   /*!< Flag set when we are tracking a target. */
     gboolean        monitor;    /*!< Flag indicating that rig is in monitor mode. */

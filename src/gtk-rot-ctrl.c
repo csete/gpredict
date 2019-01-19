@@ -852,8 +852,8 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
         }
 
         /* if tolerance exceeded */
-        if ((fabs(setaz - rotaz) > ctrl->tolerance) ||
-            (fabs(setel - rotel) > ctrl->tolerance))
+        if ((fabs(setaz - rotaz) > ctrl->threshold) ||
+            (fabs(setel - rotel) > ctrl->threshold))
         {
             if (ctrl->tracking)
             {
@@ -915,8 +915,8 @@ static gboolean rot_ctrl_timeout_cb(gpointer data)
                             sat->az = sat->az - 360.0;
                         }
                         if ((sat->el < 0.0) || (sat->el > 180.0) ||
-                            (fabs(setaz - sat->az) > (ctrl->tolerance)) ||
-                            (fabs(setel - sat->el) > (ctrl->tolerance)))
+                            (fabs(setaz - sat->az) > (ctrl->threshold)) ||
+                            (fabs(setel - sat->el) > (ctrl->threshold)))
                         {
                             time_delta -= step_size;
                         }
@@ -1034,7 +1034,7 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
 }
 
 /**
- * Manage tolerance changes.
+ * Manage threshold changes
  *
  * \param spin Pointer to the spin button.
  * \param data Pointer to the GtkRotCtrl widget.
@@ -1042,11 +1042,11 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
  * This function is called when the user changes the value of the
  * tolerance.
  */
-static void toler_changed_cb(GtkSpinButton * spin, gpointer data)
+static void threshold_changed_cb(GtkSpinButton * spin, gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
-    ctrl->tolerance = gtk_spin_button_get_value(spin);
+    ctrl->threshold = gtk_spin_button_get_value(spin);
 }
 
 /**
@@ -1431,21 +1431,20 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     gtk_grid_attach(GTK_GRID(table), label, 2, 2, 1, 1);
 
     /* Tolerance */
-    label = gtk_label_new(_("Tolerance:"));
+    label = gtk_label_new(_("Threshold:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
     toler = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
     gtk_spin_button_set_digits(GTK_SPIN_BUTTON(toler), 2);
     gtk_widget_set_tooltip_text(toler,
-                                _("This parameter controls the tolerance "
-                                  "between the target and rotator values for "
-                                  "the rotator.\n"
+                                _("This parameter sets the threshold that triggers "
+                                  "new motion command to the rotator.\n"
                                   "If the difference between the target and "
                                   "rotator values is smaller than the "
-                                  "tolerance, no new commands are sent"));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->tolerance);
-    g_signal_connect(toler, "value-changed", G_CALLBACK(toler_changed_cb),
+                                  "threshold, no new commands are sent"));
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->threshold);
+    g_signal_connect(toler, "value-changed", G_CALLBACK(threshold_changed_cb),
                      ctrl);
     gtk_grid_attach(GTK_GRID(table), toler, 1, 3, 1, 1);
 
@@ -1539,7 +1538,7 @@ static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
     ctrl->engaged = FALSE;
     ctrl->delay = 1000;
     ctrl->timerid = 0;
-    ctrl->tolerance = 5.0;
+    ctrl->threshold = 5.0;
     ctrl->errcnt = 0;
 
     g_mutex_init(&ctrl->client.mutex);
