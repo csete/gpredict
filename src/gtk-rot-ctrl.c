@@ -1026,6 +1026,8 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
     ctrl->delay = (guint) gtk_spin_button_get_value(spin);
+    if (ctrl->conf)
+        ctrl->conf->cycle = ctrl->delay;
 
     if (ctrl->timerid > 0)
         g_source_remove(ctrl->timerid);
@@ -1047,6 +1049,8 @@ static void threshold_changed_cb(GtkSpinButton * spin, gpointer data)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
 
     ctrl->threshold = gtk_spin_button_get_value(spin);
+    if (ctrl->conf)
+        ctrl->conf->threshold = ctrl->threshold;
 }
 
 /**
@@ -1087,6 +1091,11 @@ static void rot_selected_cb(GtkComboBox * box, gpointer data)
         sat_log_log(SAT_LOG_LEVEL_INFO,
                     _("Loaded new rotator configuration %s"),
                     ctrl->conf->name);
+
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(ctrl->cycle_spin),
+                                  ctrl->conf->cycle);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(ctrl->thld_spin),
+                                  ctrl->conf->threshold);
 
         /* update new ranges of the Az and El controller widgets */
         gtk_rot_knob_set_range(GTK_ROT_KNOB(ctrl->AzSet), ctrl->conf->minaz,
@@ -1322,7 +1331,7 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
 
 static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
 {
-    GtkWidget      *frame, *table, *label, *timer, *toler;
+    GtkWidget      *frame, *table, *label;
     GDir           *dir = NULL; /* directory handle */
     GError         *error = NULL;       /* error flag and info */
     gchar          *dirname;    /* directory name */
@@ -1416,15 +1425,14 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
-    timer = gtk_spin_button_new_with_range(10, 10000, 10);
-    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(timer), 0);
-    gtk_widget_set_tooltip_text(timer,
+    ctrl->cycle_spin = gtk_spin_button_new_with_range(10, 10000, 10);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(ctrl->cycle_spin), 0);
+    gtk_widget_set_tooltip_text(ctrl->cycle_spin,
                                 _("This parameter controls the delay between "
                                   "commands sent to the rotator."));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(timer), ctrl->delay);
-    g_signal_connect(timer, "value-changed", G_CALLBACK(delay_changed_cb),
-                     ctrl);
-    gtk_grid_attach(GTK_GRID(table), timer, 1, 2, 1, 1);
+    g_signal_connect(ctrl->cycle_spin, "value-changed",
+                     G_CALLBACK(delay_changed_cb), ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->cycle_spin, 1, 2, 1, 1);
 
     label = gtk_label_new(_("msec"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
@@ -1435,18 +1443,17 @@ static GtkWidget *create_conf_widgets(GtkRotCtrl * ctrl)
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
-    toler = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
-    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(toler), 2);
-    gtk_widget_set_tooltip_text(toler,
+    ctrl->thld_spin = gtk_spin_button_new_with_range(0.01, 50.0, 0.01);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(ctrl->thld_spin), 2);
+    gtk_widget_set_tooltip_text(ctrl->thld_spin,
                                 _("This parameter sets the threshold that triggers "
                                   "new motion command to the rotator.\n"
                                   "If the difference between the target and "
                                   "rotator values is smaller than the "
                                   "threshold, no new commands are sent"));
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(toler), ctrl->threshold);
-    g_signal_connect(toler, "value-changed", G_CALLBACK(threshold_changed_cb),
-                     ctrl);
-    gtk_grid_attach(GTK_GRID(table), toler, 1, 3, 1, 1);
+    g_signal_connect(ctrl->thld_spin, "value-changed",
+                     G_CALLBACK(threshold_changed_cb), ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->thld_spin, 1, 3, 1, 1);
 
     label = gtk_label_new(_("deg"));
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
@@ -1558,6 +1565,7 @@ static void gtk_rot_ctrl_destroy(GtkWidget * widget)
     /* free configuration */
     if (ctrl->conf != NULL)
     {
+        rotor_conf_save(ctrl->conf);
         g_free(ctrl->conf->name);
         g_free(ctrl->conf->host);
         g_free(ctrl->conf);
