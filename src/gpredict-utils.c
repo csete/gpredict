@@ -1,7 +1,7 @@
 /*
   Gpredict: Real-time satellite tracking and orbit prediction program
 
-  Copyright (C)  2001-2017  Alexandru Csete, OZ9AEC
+  Copyright (C)  2001-2019  Alexandru Csete, OZ9AEC
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -487,84 +487,22 @@ char           *gpredict_strcasestr(const char *s1, const char *s2)
  * @param filename is a pointer the filename string.
  * @return 1 on error and zero on success.
  *
- *  This might one day be in glib but for now it is not a standard function.
- *  Variants of this were throughout the code and it is now consilidated here.
  */
 gboolean gpredict_save_key_file(GKeyFile * cfgdata, const char *filename)
 {
-    gchar          *datastream; /* cfgdata string */
-    gsize           length;     /* length of the data stream */
-    gsize           written;    /* number of bytes actually written */
-    gboolean        err = 0;    /* the error value */
-    GIOChannel     *cfgfile;    /* file */
-    GError         *error = NULL;       /* Error handler */
+    GError         *error = NULL; 
 
-    /* ok, go on and convert the data */
-    datastream = g_key_file_to_data(cfgdata, &length, &error);
-
-    if (error != NULL)
+    if (g_key_file_save_to_file(cfgdata, filename, &error))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Could not create config data (%s)."),
-                    __func__, error->message);
-
+                    _("%s: Error writing config data (%s)."),
+                    __func__,
+                    error != NULL ? error->message : "unknown error");
         g_clear_error(&error);
-
-        err = 1;
+        return 1;
     }
-    else
-    {
-        cfgfile = g_io_channel_new_file(filename, "w", &error);
 
-        if (error != NULL)
-        {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: Could not create config file (%s)."),
-                        __func__, error->message);
-
-            g_clear_error(&error);
-
-            err = 1;
-        }
-        else
-        {
-            g_io_channel_write_chars(cfgfile,
-                                     datastream, length, &written, &error);
-
-            g_io_channel_shutdown(cfgfile, TRUE, NULL);
-            g_io_channel_unref(cfgfile);
-
-            if (error != NULL)
-            {
-                sat_log_log(SAT_LOG_LEVEL_ERROR,
-                            _("%s: Error writing config data (%s)."),
-                            __func__, error->message);
-
-                g_clear_error(&error);
-
-                err = 1;
-            }
-            else if (length != written)
-            {
-                sat_log_log(SAT_LOG_LEVEL_WARN,
-                            _("%s: Wrote only %d out of %d chars."),
-                            __func__, written, length);
-
-                err = 1;
-            }
-            else
-            {
-                sat_log_log(SAT_LOG_LEVEL_INFO,
-                            _("%s: Configuration saved for %s."),
-                            __func__, filename);
-
-                err = 0;
-            }
-        }
-    }
-    g_free(datastream);
-
-    return err;
+    return 0;
 }
 
 
