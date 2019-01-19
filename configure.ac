@@ -36,12 +36,12 @@ else
     AC_MSG_ERROR(Gpredict requires libcurl-dev 7.19 or later)
 fi
 
-# check for glib >2.32
-if pkg-config --atleast-version=2.32 glib-2.0; then
+# check for glib 2.40 or later
+if pkg-config --atleast-version=2.40 glib-2.0; then
     CFLAGS="$CFLAGS"
     LIBS="$LIBS"
 else
-    AC_MSG_ERROR(Gpredict requires libglib-dev 2.32 or later)
+    AC_MSG_ERROR(Gpredict requires libglib-dev 2.40 or later)
 fi
 
 # check for goocanvas (depends on gtk and glib)
