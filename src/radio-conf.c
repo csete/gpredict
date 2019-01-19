@@ -129,6 +129,8 @@ gboolean radio_conf_read(radio_conf_t * conf)
             g_key_file_free(cfg);
             return FALSE;
         }
+        if (conf->cycle < 10)
+            conf->cycle = 10;
     }
     else
     {
