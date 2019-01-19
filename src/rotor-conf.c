@@ -2,7 +2,7 @@
 /*
     Gpredict: Real-time satellite tracking and orbit prediction program
 
-    Copyright (C)  2001-2009  Alexandru Csete.
+    Copyright (C)  2001-2019  Alexandru Csete.
 
     Authors: Alexandru Csete <oz9aec@gmail.com>
 
@@ -37,13 +37,17 @@
 #define GROUP           "Rotator"
 #define KEY_HOST        "Host"
 #define KEY_PORT        "Port"
+#define KEY_CYCLE       "Cycle"
 #define KEY_AZTYPE      "AzType"
 #define KEY_MINAZ       "MinAz"
 #define KEY_MAXAZ       "MaxAz"
 #define KEY_MINEL       "MinEl"
 #define KEY_MAXEL       "MaxEl"
 #define KEY_AZSTOPPOS   "AzStopPos"
+#define KEY_THLD        "Threshold"
 
+#define DEFAULT_CYCLE_MS    1000
+#define DEFAULT_THLD_DEG    5.0
 
 /**
  * \brief Read rotator configuration.
@@ -108,6 +112,47 @@ gboolean rotor_conf_read(rotor_conf_t * conf)
         g_clear_error(&error);
         g_key_file_free(cfg);
         return FALSE;
+    }
+
+    /* cycle period and threshold are only saved if not default */
+    if (g_key_file_has_key(cfg, GROUP, KEY_CYCLE, NULL))
+    {
+        conf->cycle = g_key_file_get_integer(cfg, GROUP, KEY_CYCLE, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading rotor conf from %s (%s)."),
+                        __func__, conf->name, error->message);
+            g_clear_error(&error);
+            g_key_file_free(cfg);
+            return FALSE;
+        }
+        if (conf->cycle < 10)
+            conf->cycle = 10;
+    }
+    else
+    {
+        conf->cycle = DEFAULT_CYCLE_MS;
+    }
+
+    if (g_key_file_has_key(cfg, GROUP, KEY_THLD, NULL))
+    {
+        conf->threshold = g_key_file_get_double(cfg, GROUP, KEY_THLD, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading rotor conf from %s (%s)."),
+                        __func__, conf->name, error->message);
+            g_clear_error(&error);
+            g_key_file_free(cfg);
+            return FALSE;
+        }
+        if (conf->threshold < 0.1)
+            conf->threshold = 0.1;
+    }
+    else
+    {
+        conf->threshold = DEFAULT_THLD_DEG;
     }
 
     conf->aztype = g_key_file_get_integer(cfg, GROUP, KEY_AZTYPE, &error);
@@ -204,6 +249,16 @@ void rotor_conf_save(rotor_conf_t * conf)
     g_key_file_set_double(cfg, GROUP, KEY_MINEL, conf->minel);
     g_key_file_set_double(cfg, GROUP, KEY_MAXEL, conf->maxel);
     g_key_file_set_double(cfg, GROUP, KEY_AZSTOPPOS, conf->azstoppos);
+
+    if (conf->cycle == DEFAULT_CYCLE_MS)
+        g_key_file_remove_key(cfg, GROUP, KEY_CYCLE, NULL);
+    else
+        g_key_file_set_integer(cfg, GROUP, KEY_CYCLE, conf->cycle);
+
+    if (conf->threshold == DEFAULT_THLD_DEG)
+        g_key_file_remove_key(cfg, GROUP, KEY_THLD, NULL);
+    else
+        g_key_file_set_double(cfg, GROUP, KEY_THLD, conf->threshold);
 
     /* build filename */
     confdir = get_hwconf_dir();

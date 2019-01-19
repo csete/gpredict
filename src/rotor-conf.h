@@ -43,13 +43,14 @@ typedef struct {
     gchar          *name;       /*!< Configuration file name, less .rot */
     gchar          *host;       /*!< hostname */
     gint            port;       /*!< port number */
+    gint            cycle;      /*!< cycle period in msec */
     rot_az_type_t   aztype;     /*!< Az type */
     gdouble         minaz;      /*!< Lower azimuth limit */
     gdouble         maxaz;      /*!< Upper azimuth limit */
     gdouble         minel;      /*!< Lower elevation limit */
     gdouble         maxel;      /*!< Upper elevation limit */
-    gdouble         azstoppos;  /*!< absolute position of rotation stops;
-                                 *   will normally be equal to minaz */
+    gdouble         azstoppos;  /*!< absolute position of rotation stops; normally = minaz */
+    gdouble         threshold;  /*!< Angle difference that triggers new motion command */
 } rotor_conf_t;
 
 
