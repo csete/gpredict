@@ -48,6 +48,7 @@ struct _gtk_rig_ctrl {
     GtkWidget      *DevSel;     /*!< Device selector */
     GtkWidget      *DevSel2;    /*!< Second device selector */
     GtkWidget      *LockBut;
+    GtkWidget      *cycle_spin;      /*!< Update timer cycle */
 
     radio_conf_t   *conf;       /*!< Radio configuration */
     radio_conf_t   *conf2;      /*!< Secondary radio configuration */
