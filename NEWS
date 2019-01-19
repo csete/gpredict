@@ -10,6 +10,8 @@ Changes in version 2.4 (TBD)
 - Ensure Azimuth read from rotator is always between 0-360 degrees
 - Ensure rotator limits are respected while tracking
 - Added operational status to list view
+- Restore radio controller cycle time between sessions
+- Restore rotator cycle time and threshold between sessions
 
 
 Changes in version 2.2 (5 Jan 2018)
