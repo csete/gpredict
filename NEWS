@@ -9,6 +9,7 @@ Changes in version 2.4 (TBD)
 - Fixed crash when eccentricity of orbit is exactly 0
 - Ensure Azimuth read from rotator is always between 0-360 degrees
 - Ensure rotator limits are respected while tracking
+- Ensure next events are in chronological order
 - Added operational status to list view
 - Restore radio controller cycle time between sessions
 - Restore rotator cycle time and threshold between sessions
