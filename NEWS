@@ -14,6 +14,7 @@ Changes in version 2.4 (TBD)
 - Restore radio controller cycle time between sessions
 - Restore rotator cycle time and threshold between sessions
 - Require Glib 2.40 or later
+- New module menu icon
 
 
 Changes in version 2.2 (5 Jan 2018)
