@@ -585,8 +585,8 @@ static void load_cat_file(GtkSatSelector * selector, const gchar * fname)
                 {
                     /* error */
                     sat_log_log(SAT_LOG_LEVEL_ERROR,
-                                _("%s:%s: Error reading satellite %d."),
-                                __FILE__, __func__, catnum);
+                                _("%s:%s: Error reading satellite %d (%s)"),
+                                __FILE__, __func__, catnum, fname);
                 }
                 else
                 {
