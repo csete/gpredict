@@ -492,7 +492,7 @@ gboolean gpredict_save_key_file(GKeyFile * cfgdata, const char *filename)
 {
     GError         *error = NULL; 
 
-    if (g_key_file_save_to_file(cfgdata, filename, &error))
+    if (!g_key_file_save_to_file(cfgdata, filename, &error))
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Error writing config data (%s)."),
