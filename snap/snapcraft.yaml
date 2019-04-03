@@ -1,0 +1,28 @@
+name: gpredict
+version: 2.3.54
+summary: Gpredict - satellite tracking
+description: Gpredict is a real time satellite tracking and orbit prediction program for the Linux desktop. It uses the SGP4/SDP4 propagation algorithms together with NORAD two-line element sets (TLE).
+confinement: strict
+grade: stable
+
+environment:
+    GPREDICT_DATA_DIR: $SNAP/share/gpredict/
+
+apps:
+    gpredict:
+        command: desktop-launch gpredict
+        plugs: [network, opengl, home, desktop, gsettings, unity7]
+
+parts:
+    gpredict:
+        plugin: autotools
+        source: ../
+        after: [desktop-gtk3]
+        build-packages:
+            - libgtk-3-dev
+            - libcurl4-openssl-dev
+            - libglib2.0-dev
+            - libgoocanvas-2.0-dev
+        stage-packages:
+            - libcanberra-gtk3-module
+

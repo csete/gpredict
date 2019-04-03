@@ -26,7 +26,7 @@
 #include <build-config.h>
 #endif
 #include <glib.h>
-
+#include <stdlib.h>
 #include "compat.h"
 
 /**
@@ -41,7 +41,8 @@ gchar          *get_data_dir()
     gchar          *dir = NULL;
 
 #ifdef G_OS_UNIX
-    dir = g_strconcat(PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, "data", NULL);
+    char* data_dir = getenv("GPREDICT_DATA_DIR");
+    dir = g_strconcat(data_dir ? data_dir : PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, "data", NULL);
 #else
 #ifdef G_OS_WIN32
     gchar          *buff =
