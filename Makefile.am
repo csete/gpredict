@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	intltool-extract.in   \
 	intltool-merge.in     \
 	intltool-update.in    \
+	snap/snapcraft.yaml   \
 	win32/config.mk       \
 	win32/goocanvasprivate.h \
 	win32/gpredict.rc        \
