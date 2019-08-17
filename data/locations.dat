@@ -631,7 +631,6 @@ Asia;Bangladesh;Sylhet;VGSY;24.900;91.883;34
 Asia;Cambodia;Kompong-Cham;VDKC;12.000;105.450;16
 Asia;Cambodia;Phnom-Penh / Pochentong;VDPP;11.550;104.850;10
 Asia;Cambodia;Siemreap;VDSR;13.367;103.850;15
-Asia;Hong Kong;Hong Kong;VHHH;22.3333;114.1833;24
 Asia;India;Agartala;VEAT;23.883;91.250;15
 Asia;India;Agra;VIAG;27.150;77.967;168
 Asia;India;Ahmadabad;VAAH;23.0667;72.6333;55
@@ -876,7 +875,6 @@ Asia;Laos;Savannakhet;VLSK;16.550;104.650;155
 Asia;Laos;Sayaboury;VLSB;19.233;101.733;326
 Asia;Laos;Thakhek;VLTK;17.383;104.650;52
 Asia;Laos;Vientiane;VLVT;17.950;102.567;171
-Asia;Macau;Taipa;VMMC;22.167;113.567;114
 Asia;Maldives;Gan;VRGN;-0.683;73.150;2
 Asia;Maldives;Male;VRMM;4.200;73.533;2
 Asia;Mongolia;Ulan-Bator;ZMUB;47.850;106.767;0
@@ -914,6 +912,7 @@ Asia;People's Republic of China;Hangzhou;ZSHC;30.2333;120.1667;43
 Asia;People's Republic of China;Hong Kong;VHHH;22.3333;114.1833;24
 Asia;People's Republic of China;Kunming;ZPPP;25.0167;102.6833;1892
 Asia;People's Republic of China;Lanzhou;ZLLL;36.0167;103.75;0
+Asia;People's Republic of China;Macau;VMMC;22.167;113.567;114
 Asia;People's Republic of China;Nanning;ZGNN;22.8167;108.35;73
 Asia;People's Republic of China;Shanghai;ZSSS;31.1667;121.4333;3
 Asia;People's Republic of China;Taiyuan;ZBYN;37.7833;112.55;779
