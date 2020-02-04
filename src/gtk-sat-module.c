@@ -1366,6 +1366,169 @@ void gtk_sat_module_config_cb(GtkWidget * button, gpointer data)
     g_free(name);
 }
 
+/**
+ * Scheduling module.
+ *
+ * @param button The button widget that received the signal.
+ * @param data Pointer the GtkSatModule widget, which should be reconfigured
+ *
+ * This function is called when the user clicks on the "scheduling" minibutton.
+ * The function incokes the mod_cfg_edit funcion, which has the same look and feel
+ * as the dialog used to create a new module.
+ *
+ * NOTE: Don't use button, since we don't know what kind of widget it is
+ *       (it may be button or menu item).
+ */
+void gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data)
+{
+    GtkSatModule   *module = GTK_SAT_MODULE(data);
+    GtkAllocation   alloc;
+    GtkWidget      *toplevel;
+    gchar          *name;
+    gchar          *cfgfile;
+    mod_cfg_status_t retcode;
+    gtk_sat_mod_state_t laststate;
+    gint            w, h;
+
+    (void)button;
+
+    if (module->win != NULL)
+        toplevel = module->win;
+    else
+        toplevel = gtk_widget_get_toplevel(GTK_WIDGET(data));
+
+    name = g_strdup(module->name);
+
+    sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                _("%s: Module %s received CONFIG signal."), __func__, name);
+
+    /* stop timeout */
+    if (!g_source_remove(module->timerid))
+    {
+        /* internal error, since the timerid appears
+           to be invalid.
+         */
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Could not stop timeout callback\n"
+                      "%s: Source ID %d seems invalid."),
+                    __func__, __func__, module->timerid);
+    }
+    else
+    {
+        module->timerid = -1;
+        retcode = mod_cfg_edit(name, module->cfgdata, toplevel);
+        if (retcode == MOD_CFG_OK)
+        {
+            /* save changes */
+            retcode = mod_cfg_save(name, module->cfgdata);
+            if (retcode != MOD_CFG_OK)
+            {
+                /**** FIXME: dialog */
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _
+                            ("%s: Module configuration failed for some reason."),
+                            __func__);
+                /* don't try to reload config since it may be
+                   invalid; keep original */
+            }
+            else
+            {
+                /* store state and size */
+                laststate = module->state;
+                gtk_widget_get_allocation(GTK_WIDGET(module), &alloc);
+                w = alloc.width;
+                h = alloc.height;
+
+                gtk_sat_module_close_cb(NULL, module);
+
+                gchar          *confdir = get_modules_dir();
+
+                cfgfile =
+                    g_strconcat(confdir, G_DIR_SEPARATOR_S, name, ".mod",
+                                NULL);
+                g_free(confdir);
+
+                module = GTK_SAT_MODULE(gtk_sat_module_new(cfgfile));
+                module->state = laststate;
+
+                switch (laststate)
+                {
+
+                case GTK_SAT_MOD_STATE_DOCKED:
+
+                    /* re-open module by adding it to the mod-mgr */
+                    mod_mgr_add_module(GTK_WIDGET(module), TRUE);
+
+                    break;
+
+                case GTK_SAT_MOD_STATE_WINDOW:
+
+                    /* add to module manager */
+                    mod_mgr_add_module(GTK_WIDGET(module), FALSE);
+
+                    /* create window */
+                    module->win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+                    gtk_window_set_title(GTK_WINDOW(module->win),
+                                         module->name);
+                    gtk_window_set_default_size(GTK_WINDOW(module->win), w, h);
+
+                    /** FIXME: window icon and such */
+
+                    /* add module to window */
+                    gtk_container_add(GTK_CONTAINER(module->win),
+                                      GTK_WIDGET(module));
+
+                    /* show window */
+                    gtk_widget_show_all(module->win);
+
+                    break;
+
+                case GTK_SAT_MOD_STATE_FULLSCREEN:
+
+                    /* add to module manager */
+                    mod_mgr_add_module(GTK_WIDGET(module), FALSE);
+
+                    /* create window */
+                    module->win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+                    gtk_window_set_title(GTK_WINDOW(module->win),
+                                         module->name);
+                    gtk_window_set_default_size(GTK_WINDOW(module->win), w, h);
+
+                    /** FIXME: window icon and such */
+
+                    /* add module to window */
+                    gtk_container_add(GTK_CONTAINER(module->win),
+                                      GTK_WIDGET(module));
+
+                    /* show window */
+                    gtk_widget_show_all(module->win);
+
+                    gtk_window_fullscreen(GTK_WINDOW(module->win));
+
+                    break;
+
+                default:
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Module %s has unknown state: %d"),
+                                __func__, name, module->state);
+                    break;
+                }
+
+                g_free(cfgfile);
+            }
+        }
+        else
+        {
+            /* user cancelled => just re-start timer */
+            module->timerid = g_timeout_add(module->timeout,
+                                            gtk_sat_module_timeout_cb, data);
+        }
+    }
+
+    g_free(name);
+}
+
+
 static gboolean empty(gpointer key, gpointer val, gpointer data)
 {
     (void)key;

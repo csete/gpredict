@@ -43,6 +43,8 @@
 extern GtkWidget *app;          /* in main.c */
 
 static void     config_cb(GtkWidget * menuitem, gpointer data);
+/* Added Scheduling */
+static void     scheduling_cb(GtkWidget * menuitem, gpointer data);
 static void     clone_cb(GtkWidget * menuitem, gpointer data);
 static void     docking_state_cb(GtkWidget * menuitem, gpointer data);
 static void     screen_state_cb(GtkWidget * menuitem, gpointer data);
@@ -176,6 +178,11 @@ void gtk_sat_module_popup(GtkSatModule * module)
     menuitem = gtk_separator_menu_item_new();
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
+    /* Scheduling */
+    menuitem = gtk_menu_item_new_with_label(_("Scheduling"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(scheduling_cb), module);
+
     /* Radio Control */
     menuitem = gtk_menu_item_new_with_label(_("Radio Control"));
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
@@ -251,6 +258,40 @@ static void config_cb(GtkWidget * menuitem, gpointer data)
     else
     {
         gtk_sat_module_config_cb(menuitem, data);
+    }
+}
+
+/**
+ * Scheduling module.
+ *
+ * This function is called when the user selects the scheduling
+ * menu item in the GtkSatModule popup menu. It is a simple
+ * wrapper for gtk_sat_module_scheduling_cb
+ *
+ */
+static void scheduling_cb(GtkWidget * menuitem, gpointer data)
+{
+    GtkSatModule   *module = GTK_SAT_MODULE(data);
+
+    if (module->rigctrlwin || module->rotctrlwin)
+    {
+        GtkWidget      *dialog;
+
+        /* FIXME: should offer option to close controllers */
+        dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_OK,
+                                        _
+                                        ("A module can not be configured while the "
+                                         "radio or rotator controller is active.\n\n"
+                                         "Please close the radio and rotator controllers "
+                                         "and try again."));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+    }
+    else
+    {
+        gtk_sat_module_scheduling_cb(menuitem, data);
     }
 }
 
