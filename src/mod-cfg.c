@@ -32,6 +32,7 @@
 #include "config-keys.h"
 #include "gpredict-utils.h"
 #include "gtk-sat-selector.h"
+#include "gtk-sat-module.h"
 #include "mod-cfg.h"
 #include "qth-editor.h"
 #include "sat-cfg.h"
@@ -755,6 +756,7 @@ static GtkWidget *mod_cfg_editor_create(const gchar * modname,
     return dialog;
 }
 
+
 static void mod_cfg_apply(GKeyFile * cfgdata)
 {
     gsize           num;
@@ -1121,4 +1123,250 @@ mod_cfg_status_t mod_cfg_delete(gchar * modname, gboolean needcfm)
     (void)needcfm;
 
     return MOD_CFG_CANCEL;
+}
+
+
+
+/* Create widgets inside scheduling window */
+static GtkWidget *mod_sched_editor_create(const gchar * modname,
+                                        GKeyFile * cfgdata,
+                                        GtkWidget * toplevel, gpointer data)
+{
+
+    GtkSatModule *module = GTK_SAT_MODULE(data);
+
+    GtkWidget      *dialog;
+    GtkWidget      *add;
+    GtkWidget      *grid;
+    GtkWidget      *label;
+    GtkWidget      *swin;
+    GtkWidget      *addbut, *delbut;
+    GtkWidget      *vbox;
+    GtkWidget      *vbox2;
+    gchar          *strbuf;
+    GtkWidget      *frame;
+    GtkWidget      *satview;
+    GtkWidget      *table;
+
+    gboolean        new = (modname != NULL) ? FALSE : TRUE;
+
+    if (new)
+        strbuf = g_strdup(_("Create new module"));
+    else
+        strbuf = g_strdup(_("Edit module"));
+
+    dialog = gtk_dialog_new_with_buttons(strbuf, GTK_WINDOW(toplevel),
+                                         GTK_DIALOG_MODAL |
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         "_Properties", GTK_RESPONSE_HELP,
+                                         "_Cancel", GTK_RESPONSE_CANCEL,
+                                         "_OK", GTK_RESPONSE_OK, NULL);
+    g_free(strbuf);
+
+    gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
+
+    /* window icon */
+    strbuf = icon_file_name("gpredict-sat-pref.png");
+    if (g_file_test(strbuf, G_FILE_TEST_EXISTS))
+        gtk_window_set_icon_from_file(GTK_WINDOW(dialog), strbuf, NULL);
+    g_free(strbuf);
+
+    /* module name */
+    namew = gtk_entry_new();
+
+    if (!new)
+    {
+        /* set module name and make entry insensitive */
+        gtk_entry_set_text(GTK_ENTRY(namew), modname);
+        gtk_widget_set_sensitive(namew, FALSE);
+    }
+    else
+    {
+        /* connect changed signal to text-checker */
+        gtk_entry_set_max_length(GTK_ENTRY(namew), 25);
+        gtk_widget_set_tooltip_text(namew,
+                                    _("Enter a short name for this module.\n"
+                                      "Allowed characters: 0..9, a..z, A..Z, - and _"));
+        /*new tooltip api does not allow for private 
+           _("The name will be used to identify the module "             \
+           "and it is also used a file name for saving the data."        \
+           "Max length is 25 characters."));
+         */
+        /* attach changed signal so that we can enable OK button when
+           a proper name has been entered
+           oh, btw. disable OK button to begin with....
+         */
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, FALSE);
+        g_signal_connect(namew, "changed", G_CALLBACK(name_changed), dialog);
+
+    }
+
+    /* ground station */
+    grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
+    gtk_grid_set_column_homogeneous(GTK_GRID(grid), FALSE);
+
+    label = gtk_label_new(_("Module name"));
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 0, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), namew, 2, 0, 4, 1);
+
+    vbox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    gtk_box_pack_start(GTK_BOX(vbox), grid, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox),
+                       gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
+                       FALSE, FALSE, 10);
+
+    label = gtk_label_new(NULL);
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Satellites</b>"));
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
+
+    /* satellite selector */
+    GtkWidget      *selector = gtk_sat_selector_new(0);
+
+    g_signal_connect(selector, "sat-activated",
+                     G_CALLBACK(sat_activated_cb), NULL);
+
+    /* list of selected satellites */
+    satlist = create_selected_sats_list(cfgdata, new,
+                                        GTK_SAT_SELECTOR(selector));
+    swin = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_NEVER,
+                                   GTK_POLICY_AUTOMATIC);
+    gtk_container_add(GTK_CONTAINER(swin), satlist);
+
+    /* Add and Delete buttons */
+    addbut = gtk_button_new_with_label(" --> ");
+    gtk_widget_set_tooltip_text(addbut, _("Add satellite to list"));
+    g_signal_connect(addbut, "clicked", G_CALLBACK(addbut_clicked_cb),
+                     selector);
+
+    delbut = gtk_button_new_with_label(" <-- ");
+    gtk_widget_set_tooltip_text(delbut, _("Delete satellite from list"));
+    g_signal_connect(delbut, "clicked", G_CALLBACK(delbut_clicked_cb),
+                     selector);
+
+    /* quick sat selector tutorial label */
+    label = gtk_label_new(_("Double click on a satellite "
+                            "to move it to the other box."));
+    gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+    g_object_set(label, "xalign", 0.0f, "yalign", 1.0f, NULL);
+
+    frame = gtk_frame_new(NULL);
+    gtk_container_add(GTK_CONTAINER(frame), swin);
+    
+    grid = gtk_grid_new();
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
+    gtk_grid_set_row_homogeneous(GTK_GRID(grid), TRUE);
+    gtk_grid_attach(GTK_GRID(grid), selector, 0, 0, 4, 8);
+    gtk_grid_attach(GTK_GRID(grid), addbut, 4, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), delbut, 4, 5, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 5, 0, 3, 2);
+    gtk_grid_attach(GTK_GRID(grid), frame, 5, 2, 4, 6);
+
+    gtk_box_pack_start(GTK_BOX(vbox), grid, TRUE, TRUE, 10);
+
+    gtk_widget_show_all(vbox);
+
+    return dialog;
+}
+
+
+/**
+ * Edit scheduling configuration for an existing module.
+ * 
+ * @param modname The name of the module to edit.
+ * @param cfgdata Configuration data for the module.
+ * @param toplevel Pointer to the toplevel window.
+ *
+ * This function allows the user to edit the configuration
+ * of the module specified by modname. The changes are stored
+ * in the cfgdata configuration structure but are not saved
+ * to disc; that has to be done separately using the
+ * mod_cfg_save function. 
+ *
+ */
+mod_cfg_status_t mod_sched_edit(gchar * modname, GKeyFile * cfgdata,
+                              GtkWidget * toplevel, gpointer data)
+{
+    GtkWidget      *dialog;
+    gint            response;
+    gboolean        finished = FALSE;
+    gsize           num = 0;
+    mod_cfg_status_t status = MOD_CFG_CANCEL;
+
+    GtkSatModule *module = GTK_SAT_MODULE(data);
+
+    dialog = mod_sched_editor_create(modname, cfgdata, toplevel, data);
+    gtk_window_set_default_size(GTK_WINDOW(dialog), -1, 600); //400
+
+    while (!finished)
+    {
+        response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+        switch (response)
+        {
+            /* user pressed OK */
+        case GTK_RESPONSE_OK:
+            /* Activate autotrack */
+            module->autotrack = TRUE;
+            update_autotrack(module);
+
+            /* check that user has selected at least one satellite */
+            num =
+                gtk_tree_model_iter_n_children(gtk_tree_view_get_model
+                                               (GTK_TREE_VIEW(satlist)), NULL);
+
+            if (num > 0)
+            {
+
+                /* we have at least one sat selected */
+                mod_cfg_apply(cfgdata);
+                finished = TRUE;
+                status = MOD_CFG_OK;
+            }
+            else
+            {
+                sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                            _("%s: User tried to create module with no sats."),
+                            __func__);
+
+                /* tell user not to do that */
+                GtkWidget      *errdialog;
+
+                errdialog = gtk_message_dialog_new(GTK_WINDOW(toplevel),
+                                                   GTK_DIALOG_MODAL |
+                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                   GTK_MESSAGE_ERROR,
+                                                   GTK_BUTTONS_OK,
+                                                   _
+                                                   ("Please select at least one satellite "
+                                                    "from the list."));
+                gtk_dialog_run(GTK_DIALOG(errdialog));
+                gtk_widget_destroy(errdialog);
+            }
+
+            break;
+
+            /* bring up properties editor */
+        case GTK_RESPONSE_HELP:
+            edit_advanced_settings(GTK_DIALOG(dialog), cfgdata);
+            finished = FALSE;
+            break;
+
+            /* everything else is regarded CANCEL */
+        default:
+            finished = TRUE;
+            break;
+        }
+    }
+
+    /* clean up */
+    gtk_widget_destroy(dialog);
+
+    return status;
 }

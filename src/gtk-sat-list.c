@@ -377,6 +377,13 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
     }
 
     /* create model and finalise treeview */
+    if (satlist->satellites == NULL)
+    {
+        printf("sats is null");
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Invalid GtkSatList!"),
+                    __func__);
+    }
+
     model = create_and_fill_model(satlist->satellites);
     filter = gtk_tree_model_filter_new(model, NULL);
     sortable = gtk_tree_model_sort_new_with_model(filter);
@@ -421,6 +428,7 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
 
     return GTK_WIDGET(satlist);
 }
+
 
 static GtkTreeModel *create_and_fill_model(GHashTable * sats)
 {

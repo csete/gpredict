@@ -142,7 +142,7 @@ typedef enum {
 GType           gtk_sat_list_get_type(void);
 GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata,
                                  GHashTable * sats,
-                                 qth_t * qth, guint32 columns);
+                                 qth_t * qth, guint32 columns);                      
 void            gtk_sat_list_update(GtkWidget * widget);
 void            gtk_sat_list_reconf(GtkWidget * widget, GKeyFile * cfgdat);
 

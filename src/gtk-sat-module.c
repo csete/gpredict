@@ -72,7 +72,7 @@ static void gtk_sat_module_free_sat(gpointer sat)
     gtk_sat_data_free_sat(SAT(sat));
 }
 
-static void update_autotrack(GtkSatModule * module)
+void update_autotrack(GtkSatModule * module)
 {
     GList          *satlist = NULL;
     GList          *iter;
@@ -282,7 +282,6 @@ GType gtk_sat_module_get_type()
 static GtkWidget *create_view(GtkSatModule * module, guint num)
 {
     GtkWidget      *view;
-
     switch (num)
     {
     case GTK_SAT_MOD_VIEW_LIST:
@@ -782,7 +781,7 @@ static gboolean gtk_sat_module_timeout_cb(gpointer module)
 
         /* update target if autotracking is enabled */
         if (mod->autotrack)
-            update_autotrack(mod);
+            update_autotrack(module);
 
         /* send notice to radio and rotator controller */
         if (mod->rigctrl)
@@ -935,14 +934,16 @@ static void gtk_sat_module_read_cfg_data(GtkSatModule * module,
     {
         /* the grid configuration is bogus; override with global default */
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Module layout is invalid: %s. Using default."),
+                    _("%s: Module layout is invalid: %s. Using default (5)."),
                     __func__, buffer);
         g_free(buffer);
         g_strfreev(buffv);
 
-        buffer = sat_cfg_get_str_def(SAT_CFG_STR_MODULE_GRID);
-        buffv = g_strsplit(buffer, ";", 0);
-        length = g_strv_length(buffv);
+        //buffer = sat_cfg_get_str_def(SAT_CFG_STR_MODULE_GRID);
+        //buffv = g_strsplit(buffer, ";", 0);
+        //length = g_strv_length(buffv);
+
+        length = 5;
     }
 
     /* make a debug log entry */
@@ -1373,7 +1374,7 @@ void gtk_sat_module_config_cb(GtkWidget * button, gpointer data)
  * @param data Pointer the GtkSatModule widget, which should be reconfigured
  *
  * This function is called when the user clicks on the "scheduling" minibutton.
- * The function incokes the mod_cfg_edit funcion, which has the same look and feel
+ * The function incokes the mod_sched_edit funcion, which has the same look and feel
  * as the dialog used to create a new module.
  *
  * NOTE: Don't use button, since we don't know what kind of widget it is
@@ -1384,6 +1385,7 @@ void gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data)
     GtkSatModule   *module = GTK_SAT_MODULE(data);
     GtkAllocation   alloc;
     GtkWidget      *toplevel;
+    GtkWidget      *menuitem;
     gchar          *name;
     gchar          *cfgfile;
     mod_cfg_status_t retcode;
@@ -1400,7 +1402,7 @@ void gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data)
     name = g_strdup(module->name);
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s: Module %s received CONFIG signal."), __func__, name);
+                _("%s: Module %s received SCHEDULING signal."), __func__, name);
 
     /* stop timeout */
     if (!g_source_remove(module->timerid))
@@ -1416,11 +1418,15 @@ void gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data)
     else
     {
         module->timerid = -1;
-        retcode = mod_cfg_edit(name, module->cfgdata, toplevel);
+        retcode = mod_sched_edit(name, module->cfgdata, toplevel, data);
         if (retcode == MOD_CFG_OK)
         {
             /* save changes */
             retcode = mod_cfg_save(name, module->cfgdata);
+
+            /* set autotrack */
+            module->autotrack = TRUE;
+
             if (retcode != MOD_CFG_OK)
             {
                 /**** FIXME: dialog */

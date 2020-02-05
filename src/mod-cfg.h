@@ -15,4 +15,8 @@ mod_cfg_status_t mod_cfg_edit(gchar * modname, GKeyFile * cfgdata,
 mod_cfg_status_t mod_cfg_save(gchar * modname, GKeyFile * cfgdata);
 mod_cfg_status_t mod_cfg_delete(gchar * modname, gboolean needcfm);
 
+/* Added for scheduling */
+mod_cfg_status_t mod_sched_edit(gchar * modname, GKeyFile * cfgdata,
+                              GtkWidget * toplevel, gpointer data);
+
 #endif

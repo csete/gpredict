@@ -129,8 +129,9 @@ GtkWidget      *gtk_sat_module_new(const gchar * cfgfile);
 
 void            gtk_sat_module_close_cb(GtkWidget * button, gpointer data);
 void            gtk_sat_module_config_cb(GtkWidget * button, gpointer data);
-/* Added Scheduling module */
+/* Added for Scheduling module */
 void            gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data);
+void            update_autotrack(GtkSatModule * module);
 
 void            gtk_sat_module_reload_sats(GtkSatModule * module);
 void            gtk_sat_module_reconf(GtkSatModule * module, gboolean local);
