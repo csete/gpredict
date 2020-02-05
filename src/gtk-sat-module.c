@@ -1456,6 +1456,7 @@ void gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data)
 
                 module = GTK_SAT_MODULE(gtk_sat_module_new(cfgfile));
                 module->state = laststate;
+                module->autotrack = TRUE;
 
                 switch (laststate)
                 {
@@ -1526,6 +1527,7 @@ void gtk_sat_module_scheduling_cb(GtkWidget * button, gpointer data)
         else
         {
             /* user cancelled => just re-start timer */
+            module->autotrack = TRUE;
             module->timerid = g_timeout_add(module->timeout,
                                             gtk_sat_module_timeout_cb, data);
         }

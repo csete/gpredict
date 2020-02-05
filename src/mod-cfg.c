@@ -1153,14 +1153,14 @@ static GtkWidget *mod_sched_editor_create(const gchar * modname,
     if (new)
         strbuf = g_strdup(_("Create new module"));
     else
-        strbuf = g_strdup(_("Edit module"));
+        strbuf = g_strdup(_("Schedule Satellites"));
 
     dialog = gtk_dialog_new_with_buttons(strbuf, GTK_WINDOW(toplevel),
                                          GTK_DIALOG_MODAL |
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          "_Properties", GTK_RESPONSE_HELP,
                                          "_Cancel", GTK_RESPONSE_CANCEL,
-                                         "_OK", GTK_RESPONSE_OK, NULL);
+                                         "_Save", GTK_RESPONSE_OK, NULL);
     g_free(strbuf);
 
     gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
@@ -1240,12 +1240,12 @@ static GtkWidget *mod_sched_editor_create(const gchar * modname,
 
     /* Add and Delete buttons */
     addbut = gtk_button_new_with_label(" --> ");
-    gtk_widget_set_tooltip_text(addbut, _("Add satellite to list"));
+    gtk_widget_set_tooltip_text(addbut, _("Add satellite to schedule"));
     g_signal_connect(addbut, "clicked", G_CALLBACK(addbut_clicked_cb),
                      selector);
 
     delbut = gtk_button_new_with_label(" <-- ");
-    gtk_widget_set_tooltip_text(delbut, _("Delete satellite from list"));
+    gtk_widget_set_tooltip_text(delbut, _("Delete satellite from schedule"));
     g_signal_connect(delbut, "clicked", G_CALLBACK(delbut_clicked_cb),
                      selector);
 
@@ -1257,7 +1257,7 @@ static GtkWidget *mod_sched_editor_create(const gchar * modname,
 
     frame = gtk_frame_new(NULL);
     gtk_container_add(GTK_CONTAINER(frame), swin);
-    
+
     grid = gtk_grid_new();
     gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
     gtk_grid_set_column_spacing(GTK_GRID(grid), 10);
