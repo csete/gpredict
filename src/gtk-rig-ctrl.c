@@ -84,6 +84,9 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock);
 static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
 static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock);
 static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt);
+static gboolean send_rigctld_commands(GtkRigCtrl * ctrl, gint sock,
+                                      gchar * buff, gchar * buffout,
+                                      gint sizeout);
 
 /*  add thread for hamlib communication */
 gpointer        rigctl_run(gpointer data);
@@ -706,6 +709,17 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
 
     if (ctrl->trsp == NULL)
         return;
+
+    /* Send commands for this transponder (usually to set demodulation mode) */
+    if (ctrl->trsp->command)
+    {
+        gchar           retbuf[256];
+
+        if (!send_rigctld_commands(ctrl, ctrl->sock, ctrl->trsp->command,
+                                   retbuf, sizeof(retbuf)))
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        "Error sending transponder command.");
+    }
 
     /* tune downlink */
     if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->downhigh > 0))
@@ -1444,6 +1458,55 @@ static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
 
     /* Leave critical section! */
     g_mutex_unlock(&ctrl->writelock);
+    return (retval);
+}
+
+/* Send a series of ; separated rigctld commands.
+   Return value will only be TRUE if all commands return TRUE.
+   We stop sending commands on error.
+   buffout will be valid for the last command only.
+   */
+static gboolean send_rigctld_commands(GtkRigCtrl * ctrl, gint sock,
+                                      gchar * buff, gchar * buffout,
+                                      gint sizeout)
+{
+    gboolean        retval = TRUE;
+    gchar           *cmds;
+    gchar           *cmd;
+    gchar           *end;
+    gint            length;
+
+    cmd = g_malloc(strlen(buff) + 2);
+    cmds = buff;
+
+    while ((cmds[0] != '\0') && retval)
+    {
+        /* Calculate length up to ; or '\0' */
+        end = strstr(cmds, ";");
+        if (end == NULL)
+            length = strlen(cmds);
+        else
+            length = end - cmds;
+        if (length > 0)
+        {
+            /* Copy command and append newline and '\0' */
+            strncpy(cmd, cmds, length);
+            cmd[length] = '\n';
+            cmd[length+1] = '\0';
+            /* Send the command. */
+            retval = send_rigctld_command(ctrl, sock, cmd, buffout, sizeout);
+            /* Move past the command to the ; or '\0' */
+            cmds += length;
+        }
+        else
+        {
+            /* Skip ; */
+            cmds++;
+        }
+    }
+
+    g_free(cmd);
+
     return (retval);
 }
 
@@ -2303,39 +2366,45 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
     gboolean        retcode = TRUE;
     gchar           retbuf[10];
 
-    if (ctrl->engaged && ctrl->tracking)
+    /* Don't check tracking, as we want AOS/LOS signalling, even if not
+      adjusting for doppler, which we may not want to do for some demodulators */
+    if (ctrl->engaged)
     {
         if (ctrl->prev_ele < 0.0 && ctrl->target->el >= 0.0)
         {
             /* AOS has occurred */
-            if (ctrl->conf->signal_aos)
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_command)
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "AOS\n",
-                                                retbuf, 10);
+                retcode &= send_rigctld_commands(ctrl, ctrl->sock,
+                                                 ctrl->conf->aos_command,
+                                                 retbuf, sizeof(retbuf));
             }
             if (ctrl->conf2 != NULL)
             {
-                if (ctrl->conf2->signal_aos)
+                if (ctrl->conf2->signal_aos && ctrl->conf2->aos_command)
                 {
-                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "AOS\n",
-                                                    retbuf, 10);
+                    retcode &= send_rigctld_commands(ctrl, ctrl->sock2,
+                                                     ctrl->conf2->aos_command,
+                                                     retbuf, sizeof(retbuf));
                 }
             }
         }
         else if (ctrl->prev_ele >= 0.0 && ctrl->target->el < 0.0)
         {
             /* LOS has occurred */
-            if (ctrl->conf->signal_los)
+            if (ctrl->conf->signal_los && ctrl->conf->los_command)
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "LOS\n",
-                                                retbuf, 10);
+                retcode &= send_rigctld_commands(ctrl, ctrl->sock,
+                                                 ctrl->conf->los_command,
+                                                 retbuf, sizeof(retbuf));
             }
             if (ctrl->conf2 != NULL)
             {
-                if (ctrl->conf2->signal_los)
+                if (ctrl->conf2->signal_los && ctrl->conf2->los_command)
                 {
-                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "LOS\n",
-                                                    retbuf, 10);
+                    retcode &= send_rigctld_commands(ctrl, ctrl->sock2,
+                                                     ctrl->conf2->los_command,
+                                                     retbuf, sizeof(retbuf));
                 }
             }
         }

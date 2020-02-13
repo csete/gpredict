@@ -45,6 +45,8 @@
 #define KEY_VFO_UP      "VFO_UP"
 #define KEY_SIG_AOS     "SIGNAL_AOS"
 #define KEY_SIG_LOS     "SIGNAL_LOS"
+#define KEY_AOS_COMMAND "AOS_COMMAND"
+#define KEY_LOS_COMMAND "LOS_COMMAND"
 
 #define DEFAULT_CYCLE_MS    1000
 
@@ -237,6 +239,10 @@ gboolean radio_conf_read(radio_conf_t * conf)
     conf->signal_aos = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_AOS, NULL);
     conf->signal_los = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_LOS, NULL);
 
+    /* AOS and LOS commands */
+    conf->aos_command = g_key_file_get_string(cfg, GROUP, KEY_AOS_COMMAND, NULL);
+    conf->los_command = g_key_file_get_string(cfg, GROUP, KEY_LOS_COMMAND, NULL);
+
     g_key_file_free(cfg);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Read radio configuration %s"), __func__, conf->name);
@@ -288,6 +294,11 @@ void radio_conf_save(radio_conf_t * conf)
 
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_AOS, conf->signal_aos);
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_LOS, conf->signal_los);
+
+    if (conf->aos_command)
+        g_key_file_set_string(cfg, GROUP, KEY_AOS_COMMAND, conf->aos_command);
+    if (conf->los_command)
+        g_key_file_set_string(cfg, GROUP, KEY_LOS_COMMAND, conf->los_command);
 
     confdir = get_hwconf_dir();
     fname = g_strconcat(confdir, G_DIR_SEPARATOR_S, conf->name, ".rig", NULL);

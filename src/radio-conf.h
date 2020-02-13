@@ -72,6 +72,9 @@ typedef struct {
 
     gboolean        signal_aos; /*!< Send AOS notification to RIG */
     gboolean        signal_los; /*!< Send LOS notification to RIG */
+
+    gchar          *aos_command; /*!< Commands to send to radio on AOS */
+    gchar          *los_command; /*!< Commands to send to radio on LOS */
 } radio_conf_t;
 
 
