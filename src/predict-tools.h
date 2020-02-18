@@ -92,6 +92,7 @@ gdouble find_prev_aos      (sat_t *sat, qth_t *qth, gdouble start);
 
 /* next events */
 pass_t *get_next_pass      (sat_t *sat, qth_t *qth, gdouble maxdt);
+pass_t *get_next_pass_el   (sat_t *sat, qth_t *qth, gdouble maxdt, gdouble min_el);
 GSList *get_next_passes    (sat_t *sat, qth_t *qth, gdouble maxdt, guint num);
 
 /* future events */

@@ -60,6 +60,7 @@
 #include "sat-log.h"
 #include "sat-cfg.h"
 #include "trsp-conf.h"
+#include "gtk-audio.h"
 
 
 #define AZEL_FMTSTR "%7.2f\302\260"
@@ -215,7 +216,7 @@ static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
     gchar          *aoslos;
 
     /* select AOS or LOS time depending on target elevation */
-    if (ctrl->target->el < 0.0)
+    if (ctrl->target->el < ctrl->conf->aos_el)
     {
         targettime = ctrl->target->aos;
         aoslos = g_strdup_printf(_("AOS in"));
@@ -323,13 +324,15 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
             if (ctrl->target->aos > ctrl->pass->aos)
             {
                 free_pass(ctrl->pass);
-                ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
+                ctrl->pass = get_next_pass_el(ctrl->target, ctrl->qth, 3.0,
+                                              ctrl->conf->aos_el);
             }
         }
         else
         {
             /* we don't have any current pass; store the current one */
-            ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
+            ctrl->pass = get_next_pass_el(ctrl->target, ctrl->qth, 3.0,
+                                          ctrl->conf->aos_el);
         }
     }
 
@@ -393,6 +396,12 @@ void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
 {
     sat_t          *sat;
     int             i, n;
+
+    /* This is called indirectly by update_autotrack, when a satellite goes
+       below the horizon. So we need to call check_aos_los here, to give it a
+       chance to signal LOS, otherwise it will be missed, as the current sat
+       will have changed on the next call. */
+    check_aos_los(ctrl);
 
     /* find index in satellite list */
     n = g_slist_length(ctrl->sats);
@@ -667,7 +676,8 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
         /* update next pass */
         if (ctrl->pass != NULL)
             free_pass(ctrl->pass);
-        ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
+        ctrl->pass = get_next_pass_el(ctrl->target, ctrl->qth, 3.0,
+                                      ctrl->conf->aos_el);
 
         /* read transponders for new target */
         load_trsp_list(ctrl);
@@ -2370,9 +2380,12 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
       adjusting for doppler, which we may not want to do for some demodulators */
     if (ctrl->engaged)
     {
-        if (ctrl->prev_ele < 0.0 && ctrl->target->el >= 0.0)
+        if (ctrl->prev_ele < ctrl->conf->aos_el
+            && ctrl->target->el >= ctrl->conf->aos_el)
         {
             /* AOS has occurred */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_wav)
+                audio_play_uri(ctrl->conf->aos_wav);
             if (ctrl->conf->signal_aos && ctrl->conf->aos_command)
             {
                 retcode &= send_rigctld_commands(ctrl, ctrl->sock,
@@ -2389,9 +2402,12 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
                 }
             }
         }
-        else if (ctrl->prev_ele >= 0.0 && ctrl->target->el < 0.0)
+        else if (ctrl->prev_ele >= ctrl->conf->los_el
+                 && ctrl->target->el < ctrl->conf->los_el)
         {
             /* LOS has occurred */
+            if (ctrl->conf->signal_los && ctrl->conf->los_wav)
+                audio_play_uri(ctrl->conf->los_wav);
             if (ctrl->conf->signal_los && ctrl->conf->los_command)
             {
                 retcode &= send_rigctld_commands(ctrl, ctrl->sock,
@@ -3010,8 +3026,12 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     if (rigctrl->target != NULL)
     {
         /* get next pass for target satellite */
-        GTK_RIG_CTRL(widget)->pass = get_next_pass(rigctrl->target,
-                                                   rigctrl->qth, 3.0);
+        GTK_RIG_CTRL(widget)->pass = get_next_pass_el(rigctrl->target,
+                                                      rigctrl->qth,
+                                                      3.0,
+                                                      rigctrl->conf
+                                                        ? rigctrl->conf->aos_el
+                                                        : 0.0);
     }
 
     /* create contents */

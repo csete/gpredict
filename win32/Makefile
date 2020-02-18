@@ -1,15 +1,11 @@
 # Makefile for cross-compiling gpredict for win32 on Linux,
 # using mingw compiler
 
-# configure pkg-config, version from git
 include config.mk
 
 # version string in C code
 VERSION_SHORT = $(GITMAJ).$(GITMIN).$(GITBLD)
 VERSION_LONG = $(GITMAJ).$(GITMIN).0.$(GITBLD)
-
-# cross-compiler prefix
-MGW_PREFIX=i686-w64-mingw32-
 
 # directories
 topsrc = ..
@@ -18,7 +14,7 @@ sgpsdpdir = $(gpreddir)/sgpsdp
 nxjsondir = $(gpreddir)/nxjson
 
 # tools
-CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32 -m32
+CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32
 AS = $(MGW_PREFIX)as
 DLLWRAP = $(MGW_PREFIX)dllwrap
 DLLWRAP_FLAGS = --as=$(AS) --export-all --driver-name $(CC) -s
@@ -28,16 +24,18 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN3
 	--define VERMAJ=$(GITMAJ) --define VERMIN=$(GITMIN) --define VERBLD=$(GITBLD)
 
 # libraries
-GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --libs gtk+-3.0)
-GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --libs glib-2.0 gthread-2.0)
-GOOLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --libs goocanvas-2.0)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) libsgpsdp.lib -lwinmm -lwininet -lws2_32
+GTKLIBS := $(shell pkg-config --define-prefix --libs gtk+-3.0)
+GLIBLIB := $(shell pkg-config --define-prefix --libs glib-2.0 gthread-2.0)
+GOOLIBS := $(shell pkg-config --define-prefix --libs goocanvas-2.0)
+GSTLIBS := $(shell pkg-config --define-prefix --libs gstreamer-1.0)
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) $(GSTLIBS) libsgpsdp.lib -lwinmm -lwininet -lws2_32
 LIBS = -lm
 
 # flags/defines
-GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --cflags gtk+-3.0)
-GOO_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --cflags goocanvas-2.0)
-CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
+GTK_CFLAGS := $(shell pkg-config --define-prefix --cflags gtk+-3.0)
+GOO_CFLAGS := $(shell pkg-config --define-prefix --cflags goocanvas-2.0)
+GST_CFLAGS := $(shell pkg-config --define-prefix --cflags gstreamer-1.0)
+CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS) $(GST_CFLAGS)
 
 # source paths
 vpath %.c $(sgpsdpdir)
@@ -67,8 +65,8 @@ NXJSONSRC = \
 NXJSONOBJ = $(NXJSONSRC:.c=.o)
 
 GOOCANVSRC = \
-        goocanvasatk.c             \
-        goocanvasellipse.c         \
+	goocanvasatk.c             \
+	goocanvasellipse.c         \
 	goocanvasenumtypes.c		\
 	goocanvasgroup.c		\
 	goocanvasimage.c		\
@@ -97,6 +95,7 @@ GPREDICTSRC = \
 	first-time.c \
 	gpredict-help.c \
 	gpredict-utils.c \
+	gtk-audio.c \
 	gtk-azel-plot.c \
     gtk-event-list.c \
     gtk-event-list-popup.c \
@@ -202,11 +201,21 @@ gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
 	cp -rp ../po gpredict/share/gpredict
 	mkdir -p gpredict/$(LOADERS)
 	cp -p loaders.cache gpredict/$(LOADERS)
+	mkdir -p gpredict/$(LOADERS)/loaders
+	cp $(LOADER_DLLS)/libpixbufloader-jpeg*.dll gpredict/$(LOADERS)/loaders
+	cp $(LOADER_DLLS)/libpixbufloader-png*.dll gpredict/$(LOADERS)/loaders
+	cp $(LOADER_DLLS)/libpixbufloader-svg*.dll gpredict/$(LOADERS)/loaders
+	cp -rp $(MINGW_ROOT)/lib/gstreamer-1.0 gpredict/lib
 	cp -rp $(GTKETC) gpredict
 	mkdir -p gpredict/share/glib-2.0
 	cp -rp $(SCHEMAS) gpredict/share/glib-2.0
-	zip -r $@ gpredict
-	rm -rf gpredict
+	mkdir -p gpredict/share/icons/Adwaita
+	cp -rp $(ADWAITA)/scalable gpredict/share/icons/Adwaita/
+	cp -rp $(ADWAITA)/scalable-up-to-32 gpredict/share/icons/Adwaita/
+	cp -rp $(ADWAITA)/index.theme gpredict/share/icons/Adwaita/
+	cp -rp $(ADWAITA)/icon-theme.cache gpredict/share/icons/Adwaita/
+	#zip -r $@ gpredict
+	#rm -rf gpredict
 
 # Use -mconsole to always open a console window when gpredicxt is started
 # Use -mwindows for no console

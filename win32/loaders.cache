@@ -1,14 +1,23 @@
 # GdkPixbuf Image Loader Modules file
-# Automatically generated file, do not edit
-# Created by gdk-pixbuf-query-loaders.exe from gdk-pixbuf-2.30.1
 #
-# LoaderDir = Z:\srv\win32builder\fixed_3104\build\win32/lib/gdk-pixbuf-2.0/2.10.0/loaders
+# We seem to need jpeg for png to work
 #
-"libpixbufloader-svg.dll"
-"svg" 2 "gdk-pixbuf" "Scalable Vector Graphics" "LGPL"
+"lib\\gdk-pixbuf-2.0\\2.10.0\\loaders\\libpixbufloader-jpeg.dll"
+"jpeg" 5 "gdk-pixbuf" "JPEG" "LGPL"
+"image/jpeg" ""
+"jpeg" "jpe" "jpg" ""
+"\377\330" "" 100
+
+"lib\\gdk-pixbuf-2.0\\2.10.0\\loaders\\libpixbufloader-png.dll"
+"png" 5 "gdk-pixbuf" "PNG" "LGPL"
+"image/png" ""
+"png" ""
+"\211PNG\r\n\032\n" "" 100
+
+"lib\\gdk-pixbuf-2.0\\2.10.0\\loaders\\libpixbufloader-svg.dll"
+"svg" 6 "gdk-pixbuf" "Scalable Vector Graphics" "LGPL"
 "image/svg+xml" "image/svg" "image/svg-xml" "image/vnd.adobe.svg+xml" "text/xml-svg" "image/svg+xml-compressed" ""
 "svg" "svgz" "svg.gz" ""
 " <svg" "*    " 100
 " <!DOCTYPE svg" "*             " 100
-
 
