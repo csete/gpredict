@@ -313,6 +313,7 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     guint           start;
     guint           i, j, n, num_points;
     guint32         col;
+    gboolean        start_not_end;
 
     (void)sat;
     (void)qth;
@@ -326,6 +327,10 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     col = mod_cfg_get_int(satmap->cfgdata,
                           MOD_CFG_MAP_SECTION,
                           MOD_CFG_MAP_TRACK_COL, SAT_CFG_INT_MAP_TRACK_COL);
+
+    /* Determine which end arrow heads should be drawn, depending on direction
+       satellite is moving in, which is determined by its inclination. */
+    start_not_end = sat->tle.xincl > 90.0;
 
     /* loop over each SSP */
     for (i = 0; i < n; i++)
@@ -375,6 +380,16 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                                                          CAIRO_LINE_CAP_SQUARE,
                                                          "line-join",
                                                          CAIRO_LINE_JOIN_MITER,
+                                                         "end-arrow",
+                                                         !start_not_end,
+                                                         "start-arrow",
+                                                         start_not_end,
+                                                         "arrow-length",
+                                                         10.0,
+                                                         "arrow-tip-length",
+                                                         8.0,
+                                                         "arrow-width",
+                                                         8.0,
                                                          NULL);
                     goo_canvas_points_unref(gpoints);
                     goo_canvas_item_model_lower(line, obj->marker);
@@ -438,7 +453,13 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                                              "stroke-color-rgba", col,
                                              "line-cap", CAIRO_LINE_CAP_SQUARE,
                                              "line-join",
-                                             CAIRO_LINE_JOIN_MITER, NULL);
+                                             CAIRO_LINE_JOIN_MITER,
+                                             "end-arrow", !start_not_end,
+                                             "start-arrow", start_not_end,
+                                             "arrow-length", 10.0,
+                                             "arrow-tip-length", 8.0,
+                                             "arrow-width", 8.0,
+                                             NULL);
         goo_canvas_points_unref(gpoints);
         goo_canvas_item_model_lower(line, obj->marker);
 
