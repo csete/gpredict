@@ -43,6 +43,7 @@ typedef enum {
     SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK,   /*!< Track mouse cursor on map. */
     SAT_CFG_BOOL_MAP_SHOW_GRID, /*!< Show grid on map. */
     SAT_CFG_BOOL_MAP_KEEP_RATIO,        /*!< Keep original aspect ratio */
+    SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK, /*!< Whether to automatically show ground track for selected satellite */
     SAT_CFG_BOOL_POL_SHOW_QTH_INFO,     /*!< Show QTH info on polar plot */
     SAT_CFG_BOOL_POL_SHOW_NEXT_EV,      /*!< Show next event on polar plot */
     SAT_CFG_BOOL_POL_SHOW_CURS_TRACK,   /*!< Track mouse cursor on polar plot. */

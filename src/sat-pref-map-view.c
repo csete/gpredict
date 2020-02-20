@@ -44,6 +44,7 @@ static GtkWidget *satc, *ssatc, *trackc;
 static GtkWidget *covc, *infofg, *infobg;
 static GtkWidget *terminator, *globe_shadow;
 static GtkWidget *shadow;
+static GtkWidget *auto_ground_track;
 
 /* ground track orbit number selector */
 static GtkWidget *orbit;
@@ -248,6 +249,10 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         gtk_range_set_value(GTK_RANGE(shadow),
                             sat_cfg_get_int_def(SAT_CFG_INT_MAP_SHADOW_ALPHA));
 
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(auto_ground_track),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK));
+
         /* ground track orbits */
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(orbit),
                                   sat_cfg_get_int_def
@@ -328,6 +333,10 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         /* shadow */
         gtk_range_set_value(GTK_RANGE(shadow),
                             sat_cfg_get_int(SAT_CFG_INT_MAP_SHADOW_ALPHA));
+
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(auto_ground_track),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK));
 
         /* ground track orbits */
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(orbit),
@@ -454,6 +463,11 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
                                    (gint)
                                    gtk_range_get_value(GTK_RANGE(shadow)));
 
+            g_key_file_set_boolean(cfg, MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_AUTO_GROUND_TRACK,
+                                   gtk_toggle_button_get_active
+                                   (GTK_TOGGLE_BUTTON(auto_ground_track)));
+
             /* orbit */
             g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
                                    MOD_CFG_MAP_TRACK_NUM,
@@ -539,6 +553,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_set_int(SAT_CFG_INT_MAP_SHADOW_ALPHA,
                             (gint) gtk_range_get_value(GTK_RANGE(shadow)));
 
+            sat_cfg_set_bool(SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK,
+                             gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON
+                                                          (auto_ground_track)));
             /* orbit */
             sat_cfg_set_int(SAT_CFG_INT_MAP_TRACK_NUM,
                             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON
@@ -604,6 +621,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
                                   MOD_CFG_MAP_SHADOW_ALPHA, NULL);
             g_key_file_remove_key(cfg,
                                   MOD_CFG_MAP_SECTION,
+                                  MOD_CFG_MAP_AUTO_GROUND_TRACK, NULL);
+            g_key_file_remove_key(cfg,
+                                  MOD_CFG_MAP_SECTION,
                                   MOD_CFG_MAP_TRACK_NUM, NULL);
             g_key_file_remove_key(cfg,
                                   MOD_CFG_MAP_SECTION,
@@ -633,6 +653,8 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_reset_int(SAT_CFG_INT_MAP_INFO_COL);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_INFO_BGD_COL);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_SHADOW_ALPHA);
+
+            sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK);
 
             /* orbit */
             sat_cfg_reset_int(SAT_CFG_INT_MAP_TRACK_NUM);
@@ -1195,6 +1217,50 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
 }
 
 /**
+ * Create auto ground track display selector widget.
+ *
+ * @param cfg The module configuration or NULL in global mode.
+ * @param vbox The container box in which the widgets should be packed into.
+ *
+ * This function creates the widgets for determining if ground tracks should
+ * be displayed when a satellite is selected.
+ *
+ */
+static void create_auto_ground_track(GKeyFile * cfg, GtkBox * vbox)
+{
+    GtkWidget      *label;
+    GtkWidget      *hbox;
+
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+    gtk_box_set_homogeneous(GTK_BOX(hbox), FALSE);
+    gtk_box_pack_start(vbox, hbox, FALSE, TRUE, 0);
+
+    auto_ground_track = gtk_check_button_new_with_label(
+                                _("Always display ground track for selected satellite"));
+    gtk_widget_set_tooltip_text(auto_ground_track,
+                                _("Ground track will be enabled for a satellite "
+                                "when selected and cleared when another is selected "
+                                "(unless manually enabled via the menu)"));
+    if (cfg != NULL)
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(auto_ground_track),
+                                     mod_cfg_get_bool(cfg,
+                                                      MOD_CFG_MAP_SECTION,
+                                                      MOD_CFG_MAP_AUTO_GROUND_TRACK,
+                                                      SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK));
+    }
+    else
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(auto_ground_track),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK));
+    }
+    g_signal_connect(auto_ground_track, "toggled", G_CALLBACK(content_changed), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), auto_ground_track, FALSE, TRUE, 0);
+
+}
+
+/**
  * Create orbit number selector widget.
  *
  * @param cfg The module configuration or NULL in global mode.
@@ -1355,6 +1421,7 @@ GtkWidget      *sat_pref_map_view_create(GKeyFile * cfg)
     gtk_box_pack_start(GTK_BOX(vbox),
                        gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),
                        FALSE, TRUE, 5);
+    create_auto_ground_track(cfg, GTK_BOX(vbox));
     create_orbit_selector(cfg, GTK_BOX(vbox));
     create_center_selector(cfg, GTK_BOX(vbox));
     gtk_box_pack_start(GTK_BOX(vbox),

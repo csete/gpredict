@@ -74,6 +74,8 @@ static gboolean on_button_press(GooCanvasItem * item,
 static gboolean on_button_release(GooCanvasItem * item,
                                   GooCanvasItem * target,
                                   GdkEventButton * event, gpointer data);
+static void     clear_auto_ground_tracks(gpointer key, gpointer val,
+                                             gpointer data);
 static void     clear_selection(gpointer key, gpointer val, gpointer data);
 static void     load_map_file(GtkSatMap * satmap, float clon);
 static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap);
@@ -823,6 +825,8 @@ static gboolean on_button_release(GooCanvasItem * item,
     gint           *catpoint = NULL;
     sat_map_obj_t  *obj = NULL;
     guint32         col;
+    sat_t          *sat = NULL;
+    gboolean        auto_ground_track;
 
     (void)target;
 
@@ -843,6 +847,18 @@ static gboolean on_button_release(GooCanvasItem * item,
         }
         else
         {
+            auto_ground_track = mod_cfg_get_bool(satmap->cfgdata,
+                                                 MOD_CFG_MAP_SECTION,
+                                                 MOD_CFG_MAP_AUTO_GROUND_TRACK,
+                                                 SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK);
+
+            if (auto_ground_track)
+            {
+                /* Clear auto-enabled ground trackss. */
+                g_hash_table_foreach(satmap->obj, clear_auto_ground_tracks,
+                                     satmap);
+            }
+
             obj->selected = !obj->selected;
 
             if (obj->selected)
@@ -874,6 +890,23 @@ static gboolean on_button_release(GooCanvasItem * item,
             if (obj->oldrcnum == 2)
                 g_object_set(obj->range2, "stroke-color-rgba", col, NULL);
 
+            if (auto_ground_track)
+            {
+                /* Create ground track for newly selected satellite. */
+                sat = SAT(g_hash_table_lookup(satmap->sats, catpoint));
+                if (sat != NULL)
+                {
+                    if (!obj->showtrack)
+                    {
+                        obj->showtrack = TRUE;
+                        /* create ground track */
+                        ground_track_create(satmap, sat, satmap->qth, obj);
+                        /* do not add to satmap->showtracks, that's just for
+                         * sats where it has manually been enabled. */
+                    }
+                }
+            }
+
             /* clear other selections */
             g_hash_table_foreach(satmap->obj, clear_selection, catpoint);
         }
@@ -885,6 +918,34 @@ static gboolean on_button_release(GooCanvasItem * item,
     g_free(catpoint);
 
     return TRUE;
+}
+
+/* Delete ground tracks that were automatically enabled for the selected
+ * satellite. */
+
+static void clear_auto_ground_tracks(gpointer key, gpointer val, gpointer data)
+{
+    GtkSatMap      *satmap = GTK_SAT_MAP(data);
+    sat_map_obj_t  *obj = SAT_MAP_OBJ(val);
+    sat_t          *sat = NULL;
+    gint           *catpoint = key;
+
+    if (obj->selected)
+    {
+        sat = SAT(g_hash_table_lookup(satmap->sats, catpoint));
+        if (sat != NULL)
+        {
+            /* If ground track was auto enabled, this sat will not be in
+             * showtracks hash table. Don't use value in hash table,
+             * just whether it exists */
+            if (!g_hash_table_lookup_extended(satmap->showtracks,
+                                              &(sat->tle.catnr), NULL, NULL))
+            {
+                obj->showtrack = FALSE;
+                ground_track_delete(satmap, sat, satmap->qth, obj, TRUE);
+            }
+        }
+    }
 }
 
 static void clear_selection(gpointer key, gpointer val, gpointer data)

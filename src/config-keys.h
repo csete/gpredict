@@ -113,6 +113,7 @@
 #define MOD_CFG_MAP_SHADOW_ALPHA      "SHADOW_ALPHA"
 #define MOD_CFG_MAP_SHOWTRACKS        "SHOWTRACKS"
 #define MOD_CFG_MAP_HIDECOVS          "HIDECOVS"
+#define MOD_CFG_MAP_AUTO_GROUND_TRACK "AUTO_GROUND_TRACK"
 
 /* polar view specific */
 #define MOD_CFG_POLAR_SECTION          "POLAR"
