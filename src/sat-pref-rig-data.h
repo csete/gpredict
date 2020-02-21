@@ -44,6 +44,8 @@ typedef enum {
     RIG_LIST_COL_LOS_ELEVATION, /*!< LOS elevation */
     RIG_LIST_COL_AOS_COMMAND,   /*!< AOS command */
     RIG_LIST_COL_LOS_COMMAND,   /*!< LOS command */
+    RIG_LIST_COL_AOS_APP,       /*!< AOS application */
+    RIG_LIST_COL_LOS_APP,       /*!< LOS application */
     RIG_LIST_COL_AOS_WAV,       /*!< AOS audio file */
     RIG_LIST_COL_LOS_WAV,       /*!< LOS audio file */
     RIG_LIST_COL_NUM            /*!< The number of fields in the list. */

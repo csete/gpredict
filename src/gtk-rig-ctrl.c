@@ -40,6 +40,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* NETWORK */
 #ifndef WIN32
@@ -2375,6 +2377,7 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
 {
     gboolean        retcode = TRUE;
     gchar           retbuf[10];
+    int             sysret;
 
     /* Don't check tracking, as we want AOS/LOS signalling, even if not
       adjusting for doppler, which we may not want to do for some demodulators */
@@ -2384,9 +2387,17 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
             && ctrl->target->el >= ctrl->conf->aos_el)
         {
             /* AOS has occurred */
-            if (ctrl->conf->signal_aos && ctrl->conf->aos_wav)
+
+            /* Play audio waveform */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_wav
+                && (strlen(ctrl->conf->aos_wav) > 0))
+            {
                 audio_play_uri(ctrl->conf->aos_wav);
-            if (ctrl->conf->signal_aos && ctrl->conf->aos_command)
+            }
+
+            /* Send commands to radio */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_command
+                && (strlen(ctrl->conf->aos_command) > 0))
             {
                 retcode &= send_rigctld_commands(ctrl, ctrl->sock,
                                                  ctrl->conf->aos_command,
@@ -2401,13 +2412,33 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
                                                      retbuf, sizeof(retbuf));
                 }
             }
+
+            /* Run application */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_app
+                && (strlen(ctrl->conf->aos_app) > 0))
+            {
+                sysret = system(ctrl->conf->aos_app);
+                if (sysret != 0)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("AOS application \"%s\" returned %d"),
+                                ctrl->conf->aos_app, sysret);
+                }
+            }
         }
         else if (ctrl->prev_ele >= ctrl->conf->los_el
                  && ctrl->target->el < ctrl->conf->los_el)
         {
             /* LOS has occurred */
-            if (ctrl->conf->signal_los && ctrl->conf->los_wav)
+
+            /* Play audio waveform */
+            if (ctrl->conf->signal_los && ctrl->conf->los_wav
+                && (strlen(ctrl->conf->los_wav) > 0))
+            {
                 audio_play_uri(ctrl->conf->los_wav);
+            }
+
+            /* Send commands to radio */
             if (ctrl->conf->signal_los && ctrl->conf->los_command)
             {
                 retcode &= send_rigctld_commands(ctrl, ctrl->sock,
@@ -2421,6 +2452,19 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
                     retcode &= send_rigctld_commands(ctrl, ctrl->sock2,
                                                      ctrl->conf2->los_command,
                                                      retbuf, sizeof(retbuf));
+                }
+            }
+
+            /* Run application */
+            if (ctrl->conf->signal_los && ctrl->conf->los_app
+                && (strlen(ctrl->conf->los_app) > 0))
+            {
+                sysret = system(ctrl->conf->los_app);
+                if (sysret != 0)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("LOS application \"%s\" returned %d"),
+                                ctrl->conf->los_app, sysret);
                 }
             }
         }

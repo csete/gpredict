@@ -66,6 +66,8 @@ static GtkTreeModel *create_and_fill_model()
                                    G_TYPE_DOUBLE,       // LOS elevation
                                    G_TYPE_STRING,       // AOS command
                                    G_TYPE_STRING,       // LOS command
+                                   G_TYPE_STRING,       // AOS application
+                                   G_TYPE_STRING,       // LOS application
                                    G_TYPE_STRING,       // AOS .wav
                                    G_TYPE_STRING        // LOS .wav
         );
@@ -108,6 +110,8 @@ static GtkTreeModel *create_and_fill_model()
                                        RIG_LIST_COL_LOS_ELEVATION, conf.los_el,
                                        RIG_LIST_COL_AOS_COMMAND, conf.aos_command,
                                        RIG_LIST_COL_LOS_COMMAND, conf.los_command,
+                                       RIG_LIST_COL_AOS_APP, conf.aos_app,
+                                       RIG_LIST_COL_LOS_APP, conf.los_app,
                                        RIG_LIST_COL_AOS_WAV, conf.aos_wav,
                                        RIG_LIST_COL_LOS_WAV, conf.los_wav,
                                        -1);
@@ -433,6 +437,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
         .los_el = 0.0,
         .aos_command = NULL,
         .los_command = NULL,
+        .aos_app = NULL,
+        .los_app = NULL,
         .aos_wav = NULL,
         .los_wav = NULL
     };
@@ -471,6 +477,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LOS_ELEVATION, &conf.los_el,
                            RIG_LIST_COL_AOS_COMMAND, &conf.aos_command,
                            RIG_LIST_COL_LOS_COMMAND, &conf.los_command,
+                           RIG_LIST_COL_AOS_APP, &conf.aos_app,
+                           RIG_LIST_COL_LOS_APP, &conf.los_app,
                            RIG_LIST_COL_AOS_WAV, &conf.aos_wav,
                            RIG_LIST_COL_LOS_WAV, &conf.los_wav,
                            -1);
@@ -514,6 +522,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LOS_ELEVATION, conf.los_el,
                            RIG_LIST_COL_AOS_COMMAND, conf.aos_command,
                            RIG_LIST_COL_LOS_COMMAND, conf.los_command,
+                           RIG_LIST_COL_AOS_APP, conf.aos_app,
+                           RIG_LIST_COL_LOS_APP, conf.los_app,
                            RIG_LIST_COL_AOS_WAV, conf.aos_wav,
                            RIG_LIST_COL_LOS_WAV, conf.los_wav,
                            -1);
@@ -707,6 +717,25 @@ static void create_rig_list()
     gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
 
 
+    /* AOS application */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("AOS Application"),
+                                                     renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_AOS_APP,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* LOS application */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("LOS Application"),
+                                                      renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_LOS_APP,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+
     /* AOS .wav file */
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(_("AOS Audio File"),
@@ -812,6 +841,8 @@ static void add_cb(GtkWidget * button, gpointer data)
         .los_el = 0.0,
         .aos_command = NULL,
         .los_command = NULL,
+        .aos_app = NULL,
+        .los_app = NULL,
         .aos_wav = NULL,
         .los_wav = NULL
     };
@@ -841,6 +872,8 @@ static void add_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LOS_ELEVATION, conf.los_el,
                            RIG_LIST_COL_AOS_COMMAND, conf.aos_command,
                            RIG_LIST_COL_LOS_COMMAND, conf.los_command,
+                           RIG_LIST_COL_AOS_APP, conf.aos_app,
+                           RIG_LIST_COL_LOS_APP, conf.los_app,
                            RIG_LIST_COL_AOS_WAV, conf.aos_wav,
                            RIG_LIST_COL_LOS_WAV, conf.los_wav,
                            -1);
@@ -949,6 +982,8 @@ void sat_pref_rig_ok()
         .los_el = 0.0,
         .aos_command = NULL,
         .los_command = NULL,
+        .aos_app = NULL,
+        .los_app = NULL,
         .aos_wav = NULL,
         .los_wav = NULL
     };
@@ -1001,6 +1036,8 @@ void sat_pref_rig_ok()
                                RIG_LIST_COL_LOS_ELEVATION, &conf.los_el,
                                RIG_LIST_COL_AOS_COMMAND, &conf.aos_command,
                                RIG_LIST_COL_LOS_COMMAND, &conf.los_command,
+                               RIG_LIST_COL_AOS_APP, &conf.aos_app,
+                               RIG_LIST_COL_LOS_APP, &conf.los_app,
                                RIG_LIST_COL_AOS_WAV, &conf.aos_wav,
                                RIG_LIST_COL_LOS_WAV, &conf.los_wav,
                                -1);

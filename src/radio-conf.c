@@ -49,6 +49,8 @@
 #define KEY_LOS_ELEVATION   "LOS_ELEVATION"
 #define KEY_AOS_COMMAND     "AOS_COMMAND"
 #define KEY_LOS_COMMAND     "LOS_COMMAND"
+#define KEY_AOS_APP         "AOS_APP"
+#define KEY_LOS_APP         "LOS_APP"
 #define KEY_AOS_WAV         "AOS_WAV"
 #define KEY_LOS_WAV         "LOS_WAV"
 
@@ -251,6 +253,10 @@ gboolean radio_conf_read(radio_conf_t * conf)
     conf->aos_command = g_key_file_get_string(cfg, GROUP, KEY_AOS_COMMAND, NULL);
     conf->los_command = g_key_file_get_string(cfg, GROUP, KEY_LOS_COMMAND, NULL);
 
+    /* AOS and LOS applications */
+    conf->aos_app = g_key_file_get_string(cfg, GROUP, KEY_AOS_APP, NULL);
+    conf->los_app = g_key_file_get_string(cfg, GROUP, KEY_LOS_APP, NULL);
+
     /* AOS and LOS .wav files */
     conf->aos_wav = g_key_file_get_string(cfg, GROUP, KEY_AOS_WAV, NULL);
     conf->los_wav = g_key_file_get_string(cfg, GROUP, KEY_LOS_WAV, NULL);
@@ -314,6 +320,11 @@ void radio_conf_save(radio_conf_t * conf)
         g_key_file_set_string(cfg, GROUP, KEY_AOS_COMMAND, conf->aos_command);
     if (conf->los_command)
         g_key_file_set_string(cfg, GROUP, KEY_LOS_COMMAND, conf->los_command);
+
+    if (conf->aos_app)
+        g_key_file_set_string(cfg, GROUP, KEY_AOS_APP, conf->aos_app);
+    if (conf->los_app)
+        g_key_file_set_string(cfg, GROUP, KEY_LOS_APP, conf->los_app);
 
     if (conf->aos_wav)
         g_key_file_set_string(cfg, GROUP, KEY_AOS_WAV, conf->aos_wav);

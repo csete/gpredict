@@ -47,6 +47,8 @@ static GtkWidget *aos_el;       /* AOS elevation */
 static GtkWidget *los_el;       /* LOS elevation */
 static GtkWidget *aos_command;  /* AOS command */
 static GtkWidget *los_command;  /* LOS command */
+static GtkWidget *aos_app;      /* AOS application */
+static GtkWidget *los_app;      /* LOS application */
 static GtkWidget *aos_wav;      /* AOS audio file */
 static GtkWidget *los_wav;      /* LOS audio file */
 static GtkWidget *aos_wav_but;  /* AOS audio file select button */
@@ -70,6 +72,8 @@ static void clear_widgets()
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(los_el), 0.0);
     gtk_entry_set_text(GTK_ENTRY(aos_command), "");
     gtk_entry_set_text(GTK_ENTRY(los_command), "");
+    gtk_entry_set_text(GTK_ENTRY(aos_app), "");
+    gtk_entry_set_text(GTK_ENTRY(los_app), "");
     gtk_entry_set_text(GTK_ENTRY(aos_wav), "");
     gtk_entry_set_text(GTK_ENTRY(los_wav), "");
 }
@@ -131,6 +135,14 @@ static void update_widgets(radio_conf_t * conf)
     if (conf->los_command)
         gtk_entry_set_text(GTK_ENTRY(los_command), conf->los_command);
     gtk_widget_set_sensitive(los_command, conf->signal_los);
+
+    /* AOS / LOS applications */
+    if (conf->aos_app)
+        gtk_entry_set_text(GTK_ENTRY(aos_app), conf->aos_app);
+    gtk_widget_set_sensitive(aos_app, conf->signal_aos);
+    if (conf->los_app)
+        gtk_entry_set_text(GTK_ENTRY(los_app), conf->los_app);
+    gtk_widget_set_sensitive(los_app, conf->signal_los);
 
     /* AOS / LOS .wav files */
     if (conf->aos_wav)
@@ -269,6 +281,7 @@ static void aos_changed(GtkWidget * widget, gpointer data)
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(sigaos));
     gtk_widget_set_sensitive(aos_el, active);
     gtk_widget_set_sensitive(aos_command, active);
+    gtk_widget_set_sensitive(aos_app, active);
     gtk_widget_set_sensitive(aos_wav, active);
 }
 
@@ -280,6 +293,7 @@ static void los_changed(GtkWidget * widget, gpointer data)
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(siglos));
     gtk_widget_set_sensitive(los_el, active);
     gtk_widget_set_sensitive(los_command, active);
+    gtk_widget_set_sensitive(los_app, active);
     gtk_widget_set_sensitive(los_wav, active);
 }
 
@@ -590,37 +604,60 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                   "e.g. set_powerstat 0"));
     gtk_grid_attach(GTK_GRID(table), los_command, 1, 12, 3, 1);
 
+    /* AOS application */
+    label = gtk_label_new(_("AOS Application"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 13, 1, 1);
+
+    aos_app = gtk_entry_new();
+    gtk_widget_set_tooltip_text(aos_app,
+                                _("Enter application (shell command) to run on AOS.\n"
+                                  "To run asychronously:\n"
+                                  "  on Linux, add & at the end\n"
+                                  "  on Windows, use start at the begining"));
+    gtk_grid_attach(GTK_GRID(table), aos_app, 1, 13, 3, 1);
+
+    /* LOS application */
+    label = gtk_label_new(_("LOS Application"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 14, 1, 1);
+
+    los_app = gtk_entry_new();
+    gtk_widget_set_tooltip_text(los_app,
+                                _("Enter application (shell command) to run LOS."));
+    gtk_grid_attach(GTK_GRID(table), los_app, 1, 14, 3, 1);
+
     /* AOS audio file */
     label = gtk_label_new(_("AOS Audio File"));
     g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 13, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 15, 1, 1);
 
     aos_wav = gtk_entry_new();
     gtk_widget_set_tooltip_text(aos_wav,
                                 _("Audio (E.g. .wav) file to play on AOS"));
-    gtk_grid_attach(GTK_GRID(table), aos_wav, 1, 13, 2, 1);
+    gtk_grid_attach(GTK_GRID(table), aos_wav, 1, 15, 2, 1);
 
     aos_wav_but = gtk_button_new_with_label(_("Select"));
     gtk_widget_set_tooltip_text(aos_wav_but, _("Click to select a file"));
     g_signal_connect(G_OBJECT(aos_wav_but), "clicked",
                      G_CALLBACK(select_file_cb), aos_wav);
-    gtk_grid_attach(GTK_GRID(table), aos_wav_but, 3, 13, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), aos_wav_but, 3, 15, 1, 1);
 
     /* LOS audio file */
     label = gtk_label_new(_("LOS Audio File"));
     g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 14, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 16, 1, 1);
 
     los_wav = gtk_entry_new();
     gtk_widget_set_tooltip_text(los_wav,
                                 _("Audio (E.g. .wav) file to play on LOS"));
-    gtk_grid_attach(GTK_GRID(table), los_wav, 1, 14, 2, 1);
+    gtk_grid_attach(GTK_GRID(table), los_wav, 1, 16, 2, 1);
 
     los_wav_but = gtk_button_new_with_label(_("Select"));
     gtk_widget_set_tooltip_text(los_wav_but, _("Click to select a file"));
     g_signal_connect(G_OBJECT(los_wav_but), "clicked",
                      G_CALLBACK(select_file_cb), los_wav);
-    gtk_grid_attach(GTK_GRID(table), los_wav_but, 3, 14, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), los_wav_but, 3, 16, 1, 1);
 
     if (conf->name != NULL)
         update_widgets(conf);
@@ -712,6 +749,18 @@ static gboolean apply_changes(radio_conf_t * conf)
         g_free(conf->los_command);
 
     conf->los_command = g_strdup(gtk_entry_get_text(GTK_ENTRY(los_command)));
+
+    /* AOS application */
+    if (conf->aos_app)
+        g_free(conf->aos_app);
+
+    conf->aos_app = g_strdup(gtk_entry_get_text(GTK_ENTRY(aos_app)));
+
+    /* LOS application */
+    if (conf->los_app)
+        g_free(conf->los_app);
+
+    conf->los_app = g_strdup(gtk_entry_get_text(GTK_ENTRY(los_app)));
 
     /* AOS .wav file */
     if (conf->aos_wav)
