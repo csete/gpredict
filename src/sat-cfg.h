@@ -83,7 +83,6 @@ typedef enum {
     SAT_CFG_INT_MAP_GLOBAL_SHADOW_COL,  /*!< Earth shadow colour. */
     SAT_CFG_INT_MAP_TICK_COL,   /*!< Tick labels colour. */
     SAT_CFG_INT_MAP_TRACK_COL,  /*!< Ground Track colour. */
-    SAT_CFG_INT_MAP_TRACK_NUM,  /*!< Number of orbits to show ground track for */
     SAT_CFG_INT_MAP_SHADOW_ALPHA,       /*!< Tranparency of shadow under satellite marker. */
     SAT_CFG_INT_POLAR_REFRESH,  /*!< Polar refresh rate (cycle). */
     SAT_CFG_INT_POLAR_ORIENTATION,      /*!< Orientation of the polar charts. */
@@ -155,6 +154,12 @@ typedef enum {
     SAT_CFG_STR_NUM             /*!< Number of string parameters */
 } sat_cfg_str_e;
 
+/** Symbolic references for double config values. */
+typedef enum {
+    SAT_CFG_DOUBLE_MAP_TRACK_NUM,  /*!< Number of orbits to show ground track for */
+    SAT_CFG_DOUBLE_NUM
+} sat_cfg_double_e;
+
 guint           sat_cfg_load(void);
 guint           sat_cfg_save(void);
 void            sat_cfg_close(void);
@@ -170,5 +175,9 @@ gint            sat_cfg_get_int(sat_cfg_int_e param);
 gint            sat_cfg_get_int_def(sat_cfg_int_e param);
 void            sat_cfg_set_int(sat_cfg_int_e param, gint value);
 void            sat_cfg_reset_int(sat_cfg_int_e param);
+gdouble         sat_cfg_get_double(sat_cfg_double_e param);
+gdouble         sat_cfg_get_double_def(sat_cfg_double_e param);
+void            sat_cfg_set_double(sat_cfg_double_e param, gdouble value);
+void            sat_cfg_reset_double(sat_cfg_double_e param);
 
 #endif

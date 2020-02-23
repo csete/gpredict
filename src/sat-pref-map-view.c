@@ -93,10 +93,20 @@ static void colour_changed(GtkWidget * but, gpointer data)
 
 static void orbit_changed(GtkWidget * spin, gpointer data)
 {
+    gdouble value;
+
     (void)spin;
     (void)data;
 
     dirty = TRUE;
+
+    /* We allow fractional values <2 and integer values above. */
+    value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(orbit));
+    if (value >= 2.0)
+    {
+        /* Round to integer */
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(orbit), (double)(int)value);
+    }
 }
 
 static void center_changed(GtkWidget * spin, gpointer data)
@@ -255,8 +265,8 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
 
         /* ground track orbits */
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(orbit),
-                                  sat_cfg_get_int_def
-                                  (SAT_CFG_INT_MAP_TRACK_NUM));
+                                  sat_cfg_get_double_def
+                                  (SAT_CFG_DOUBLE_MAP_TRACK_NUM));
 
         /* center longitude */
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(center),
@@ -340,7 +350,7 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
 
         /* ground track orbits */
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(orbit),
-                                  sat_cfg_get_int(SAT_CFG_INT_MAP_TRACK_NUM));
+                                  sat_cfg_get_double(SAT_CFG_DOUBLE_MAP_TRACK_NUM));
 
         /* center longitude */
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(center),
@@ -469,10 +479,10 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
                                    (GTK_TOGGLE_BUTTON(auto_ground_track)));
 
             /* orbit */
-            g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
-                                   MOD_CFG_MAP_TRACK_NUM,
-                                   gtk_spin_button_get_value_as_int
-                                   (GTK_SPIN_BUTTON(orbit)));
+            g_key_file_set_double(cfg, MOD_CFG_MAP_SECTION,
+                                  MOD_CFG_MAP_TRACK_NUM,
+                                  gtk_spin_button_get_value
+                                  (GTK_SPIN_BUTTON(orbit)));
 
             /* map center */
             g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
@@ -557,9 +567,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
                              gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON
                                                           (auto_ground_track)));
             /* orbit */
-            sat_cfg_set_int(SAT_CFG_INT_MAP_TRACK_NUM,
-                            gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON
-                                                             (orbit)));
+            sat_cfg_set_double(SAT_CFG_DOUBLE_MAP_TRACK_NUM,
+                               gtk_spin_button_get_value(GTK_SPIN_BUTTON
+                                                         (orbit)));
 
             /* map center */
             sat_cfg_set_int(SAT_CFG_INT_MAP_CENTER,
@@ -657,7 +667,7 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_AUTO_GROUND_TRACK);
 
             /* orbit */
-            sat_cfg_reset_int(SAT_CFG_INT_MAP_TRACK_NUM);
+            sat_cfg_reset_double(SAT_CFG_DOUBLE_MAP_TRACK_NUM);
 
             /* map center */
             sat_cfg_reset_int(SAT_CFG_INT_MAP_CENTER);
@@ -1274,7 +1284,7 @@ static void create_orbit_selector(GKeyFile * cfg, GtkBox * vbox)
 {
     GtkWidget      *label;
     GtkWidget      *hbox;
-    gint            onum;
+    gdouble         onum;
 
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_set_homogeneous(GTK_BOX(hbox), FALSE);
@@ -1283,20 +1293,23 @@ static void create_orbit_selector(GKeyFile * cfg, GtkBox * vbox)
     label = gtk_label_new(_("Display ground track for"));
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
-    orbit = gtk_spin_button_new_with_range(1, 10, 1);
-    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(orbit), 0);
+    orbit = gtk_spin_button_new_with_range(0.5, 10.0, 1.0);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(orbit), 1);
     gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(orbit), TRUE);
+    gtk_widget_set_tooltip_text(orbit,
+                                _("Value can be a fraction between 0.5-1.9 or an integer 2-10"));
+
 
     if (cfg != NULL)
     {
-        onum = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_TRACK_NUM,
-                               SAT_CFG_INT_MAP_TRACK_NUM);
+        onum = mod_cfg_get_double(cfg,
+                                  MOD_CFG_MAP_SECTION,
+                                  MOD_CFG_MAP_TRACK_NUM,
+                                  SAT_CFG_DOUBLE_MAP_TRACK_NUM);
     }
     else
     {
-        onum = sat_cfg_get_int(SAT_CFG_INT_MAP_TRACK_NUM);
+        onum = sat_cfg_get_double(SAT_CFG_DOUBLE_MAP_TRACK_NUM);
     }
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(orbit), onum);
     g_signal_connect(G_OBJECT(orbit), "value-changed",

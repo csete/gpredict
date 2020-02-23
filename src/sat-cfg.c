@@ -109,6 +109,13 @@ typedef struct {
     gchar          *defval;     /*!< The default value */
 } sat_cfg_str_t;
 
+/** Structure representing an double value */
+typedef struct {
+    gchar          *group;      /*!< The configration group */
+    gchar          *key;        /*!< The configuration key */
+    gdouble         defval;     /*!< The default value */
+} sat_cfg_double_t;
+
 /** Array containing the boolean configuration values */
 sat_cfg_bool_t  sat_cfg_bool[SAT_CFG_BOOL_NUM] = {
     {"GLOBAL", "USE_LOCAL_TIME", FALSE},
@@ -161,7 +168,6 @@ sat_cfg_int_t   sat_cfg_int[SAT_CFG_INT_NUM] = {
     {"MODULES", "MAP_EARTH_SHADOW_COLOUR", 0x00000060},
     {"MODULES", "MAP_TICK_COLOUR", 0x7F7F7FC8},
     {"MODULES", "MAP_TRACK_COLOUR", 0xFF1200BB},
-    {"MODULES", "MAP_TRACK_NUM", 3},
     {"MODULES", "MAP_SHADOW_ALPHA", 0xDD},
     {"MODULES", "POLAR_REFRESH", 3},
     {"MODULES", "POLAR_CHART_ORIENT", POLAR_VIEW_NESW},
@@ -243,6 +249,11 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "http://www.celestrak.com/NORAD/elements/weather.txt"},
     {"TLE", "FILE_DIR", NULL},
     {"PREDICT", "SAVE_DIR", NULL}
+};
+
+/** Array containing the double configuration parameters */
+sat_cfg_double_t sat_cfg_double[SAT_CFG_DOUBLE_NUM] = {
+    {"MODULES", "MAP_TRACK_NUM", 3.0},
 };
 
 /* The configuration data buffer */
@@ -725,5 +736,109 @@ void sat_cfg_reset_int(sat_cfg_int_e param)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Unknown INT param index (%d)\n"), __func__, param);
+    }
+}
+
+gdouble sat_cfg_get_double(sat_cfg_double_e param)
+{
+    gdouble         value = 0.0;
+    GError         *error = NULL;
+
+    if (param < SAT_CFG_DOUBLE_NUM)
+    {
+        if (config == NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
+
+            /* return default value */
+            value = sat_cfg_double[param].defval;
+        }
+        else
+        {
+            /* fetch value */
+            value = g_key_file_get_double(config,
+                                           sat_cfg_double[param].group,
+                                           sat_cfg_double[param].key, &error);
+
+            if (error != NULL)
+            {
+                g_clear_error(&error);
+                value = sat_cfg_double[param].defval;
+            }
+        }
+
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown INT param index (%d)\n"), __func__, param);
+    }
+
+    return value;
+}
+
+gdouble sat_cfg_get_double_def(sat_cfg_double_e param)
+{
+    gdouble             value = 0.0;
+
+    if (param < SAT_CFG_DOUBLE_NUM)
+    {
+        value = sat_cfg_double[param].defval;
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown double param index (%d)\n"), __func__, param);
+    }
+
+    return value;
+}
+
+void sat_cfg_set_double(sat_cfg_double_e param, gdouble value)
+{
+    if (param < SAT_CFG_DOUBLE_NUM)
+    {
+        if (config == NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
+        }
+        else
+        {
+            g_key_file_set_double(config,
+                                  sat_cfg_double[param].group,
+                                  sat_cfg_double[param].key, value);
+        }
+
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown double param index (%d)\n"), __func__, param);
+    }
+}
+
+void sat_cfg_reset_double(sat_cfg_double_e param)
+{
+    if (param < SAT_CFG_DOUBLE_NUM)
+    {
+        if (config == NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Module not initialised\n"), __func__);
+        }
+        else
+        {
+            g_key_file_remove_key(config,
+                                  sat_cfg_double[param].group,
+                                  sat_cfg_double[param].key, NULL);
+        }
+
+    }
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s: Unknown double param index (%d)\n"), __func__, param);
     }
 }
