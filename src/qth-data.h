@@ -30,7 +30,7 @@ typedef struct {
     gint            alt;        /*!< Altitude above sea level in meters. */
 } qth_small_t;
 
-enum {
+typedef enum {
     QTH_STATIC_TYPE = 0,
     QTH_GPSD_TYPE
 } qth_data_type;
