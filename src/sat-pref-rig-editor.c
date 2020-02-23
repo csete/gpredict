@@ -148,9 +148,11 @@ static void update_widgets(radio_conf_t * conf)
     if (conf->aos_wav)
         gtk_entry_set_text(GTK_ENTRY(aos_wav), conf->aos_wav);
     gtk_widget_set_sensitive(aos_wav, conf->signal_aos);
+    gtk_widget_set_sensitive(aos_wav_but, conf->signal_aos);
     if (conf->los_wav)
         gtk_entry_set_text(GTK_ENTRY(los_wav), conf->los_wav);
     gtk_widget_set_sensitive(los_wav, conf->signal_los);
+    gtk_widget_set_sensitive(los_wav_but, conf->signal_los);
 }
 
 /*
@@ -283,6 +285,7 @@ static void aos_changed(GtkWidget * widget, gpointer data)
     gtk_widget_set_sensitive(aos_command, active);
     gtk_widget_set_sensitive(aos_app, active);
     gtk_widget_set_sensitive(aos_wav, active);
+    gtk_widget_set_sensitive(aos_wav_but, active);
 }
 
 /* Manage signal LOS change. */
@@ -295,6 +298,7 @@ static void los_changed(GtkWidget * widget, gpointer data)
     gtk_widget_set_sensitive(los_command, active);
     gtk_widget_set_sensitive(los_app, active);
     gtk_widget_set_sensitive(los_wav, active);
+    gtk_widget_set_sensitive(los_wav_but, active);
 }
 
 /**
@@ -590,8 +594,9 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     aos_command = gtk_entry_new();
     gtk_widget_set_tooltip_text(aos_command,
                                 _("Enter commands to send to the radio on AOS, "
-                                  "e.g. set_powerstat 1"));
+                                  "e.g. set_powerstat 1 or AOS"));
     gtk_grid_attach(GTK_GRID(table), aos_command, 1, 11, 3, 1);
+    gtk_widget_set_sensitive(aos_command, FALSE);
 
     /* LOS command */
     label = gtk_label_new(_("LOS Command"));
@@ -601,8 +606,9 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     los_command = gtk_entry_new();
     gtk_widget_set_tooltip_text(los_command,
                                 _("Enter commands to send to the radio on LOS, "
-                                  "e.g. set_powerstat 0"));
+                                  "e.g. set_powerstat 0 or LOS"));
     gtk_grid_attach(GTK_GRID(table), los_command, 1, 12, 3, 1);
+    gtk_widget_set_sensitive(los_command, FALSE);
 
     /* AOS application */
     label = gtk_label_new(_("AOS Application"));
@@ -616,6 +622,7 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                   "  on Linux, add & at the end\n"
                                   "  on Windows, use start at the begining"));
     gtk_grid_attach(GTK_GRID(table), aos_app, 1, 13, 3, 1);
+    gtk_widget_set_sensitive(aos_app, FALSE);
 
     /* LOS application */
     label = gtk_label_new(_("LOS Application"));
@@ -626,6 +633,7 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_widget_set_tooltip_text(los_app,
                                 _("Enter application (shell command) to run LOS."));
     gtk_grid_attach(GTK_GRID(table), los_app, 1, 14, 3, 1);
+    gtk_widget_set_sensitive(los_app, FALSE);
 
     /* AOS audio file */
     label = gtk_label_new(_("AOS Audio File"));
@@ -636,12 +644,14 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_widget_set_tooltip_text(aos_wav,
                                 _("Audio (E.g. .wav) file to play on AOS"));
     gtk_grid_attach(GTK_GRID(table), aos_wav, 1, 15, 2, 1);
+    gtk_widget_set_sensitive(aos_wav, FALSE);
 
     aos_wav_but = gtk_button_new_with_label(_("Select"));
     gtk_widget_set_tooltip_text(aos_wav_but, _("Click to select a file"));
     g_signal_connect(G_OBJECT(aos_wav_but), "clicked",
                      G_CALLBACK(select_file_cb), aos_wav);
     gtk_grid_attach(GTK_GRID(table), aos_wav_but, 3, 15, 1, 1);
+    gtk_widget_set_sensitive(aos_wav_but, FALSE);
 
     /* LOS audio file */
     label = gtk_label_new(_("LOS Audio File"));
@@ -652,12 +662,14 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_widget_set_tooltip_text(los_wav,
                                 _("Audio (E.g. .wav) file to play on LOS"));
     gtk_grid_attach(GTK_GRID(table), los_wav, 1, 16, 2, 1);
+    gtk_widget_set_sensitive(los_wav, FALSE);
 
     los_wav_but = gtk_button_new_with_label(_("Select"));
     gtk_widget_set_tooltip_text(los_wav_but, _("Click to select a file"));
     g_signal_connect(G_OBJECT(los_wav_but), "clicked",
                      G_CALLBACK(select_file_cb), los_wav);
     gtk_grid_attach(GTK_GRID(table), los_wav_but, 3, 16, 1, 1);
+    gtk_widget_set_sensitive(los_wav_but, FALSE);
 
     if (conf->name != NULL)
         update_widgets(conf);
