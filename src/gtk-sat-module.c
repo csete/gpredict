@@ -140,7 +140,10 @@ static void gtk_sat_module_destroy(GtkWidget * widget)
 
     /* stop timeout */
     if (module->timerid > 0)
+    {
         g_source_remove(module->timerid);
+        module->timerid = 0;
+    }
 
     /* destroy time controller */
     if (module->tmgActive)
