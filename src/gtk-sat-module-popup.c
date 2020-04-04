@@ -44,184 +44,6 @@
 
 extern GtkWidget *app;          /* in main.c */
 
-static void     config_cb(GtkWidget * menuitem, gpointer data);
-static void     clone_cb(GtkWidget * menuitem, gpointer data);
-static void     docking_state_cb(GtkWidget * menuitem, gpointer data);
-static void     screen_state_cb(GtkWidget * menuitem, gpointer data);
-static void     sat_selected_cb(GtkWidget * menuitem, gpointer data);
-static void     sky_at_glance_cb(GtkWidget * menuitem, gpointer data);
-static void     tmgr_cb(GtkWidget * menuitem, gpointer data);
-static void     rigctrl_cb(GtkWidget * menuitem, gpointer data);
-static void     rotctrl_cb(GtkWidget * menuitem, gpointer data);
-static void     delete_cb(GtkWidget * menuitem, gpointer data);
-static void     autotrack_cb(GtkCheckMenuItem * menuitem, gpointer data);
-static void     close_cb(GtkWidget * menuitem, gpointer data);
-static void     name_changed(GtkWidget * widget, gpointer data);
-static void     destroy_rotctrl(GtkWidget * window, gpointer data);
-static void     destroy_rigctrl(GtkWidget * window, gpointer data);
-static void     destroy_skg(GtkWidget * window, gpointer data);
-static gint     window_delete(GtkWidget * widget, GdkEvent * event,
-                              gpointer data);
-static gint     sat_nickname_compare(const sat_t * a, const sat_t * b);
-
-
-/**
- * Create and run GtkSatModule popup menu.
- *
- * @param module The module that should have the popup menu attached to it.
- *
- * This function ctreates and executes a popup menu that is related to a
- * GtkSatModule widget. The module must be a valid GtkSatModule, since it makes
- * no sense whatsoever to have this kind of popup menu without a GtkSatModule
- * parent.
- *
- */
-void gtk_sat_module_popup(GtkSatModule * module)
-{
-    GtkWidget      *menu;       /* The pop-up menu */
-    GtkWidget      *satsubmenu; /* Satellite selection submenu */
-    GtkWidget      *menuitem;   /* Widget used to create the menu items */
-    GList          *sats;
-    sat_t          *sat;
-    guint           i, n;
-
-
-    if ((module == NULL) || !IS_GTK_SAT_MODULE(module))
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: %s called with NULL parameter!"),
-                    __FILE__, __LINE__, __func__);
-        return;
-    }
-
-    menu = gtk_menu_new();
-
-    if (module->state == GTK_SAT_MOD_STATE_DOCKED)
-    {
-        menuitem = gtk_menu_item_new_with_label(_("Detach module"));
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-        g_signal_connect(menuitem, "activate",
-                         G_CALLBACK(docking_state_cb), module);
-    }
-    else
-    {
-        menuitem = gtk_menu_item_new_with_label(_("Attach module"));
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-        g_signal_connect(menuitem, "activate",
-                         G_CALLBACK(docking_state_cb), module);
-    }
-
-    if (module->state == GTK_SAT_MOD_STATE_FULLSCREEN)
-    {
-        menuitem = gtk_menu_item_new_with_label(_("Exit full screen"));
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-        g_signal_connect(menuitem, "activate",
-                         G_CALLBACK(screen_state_cb), module);
-    }
-    else
-    {
-        menuitem = gtk_menu_item_new_with_label(_("Full screen"));
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-        g_signal_connect(menuitem, "activate",
-                         G_CALLBACK(screen_state_cb), module);
-    }
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* autotrack */
-    menuitem = gtk_check_menu_item_new_with_label(_("Autotrack"));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
-                                   module->autotrack);
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(autotrack_cb), module);
-
-    /* select satellite submenu */
-    menuitem = gtk_menu_item_new_with_label(_("Select satellite"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    satsubmenu = gtk_menu_new();
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), satsubmenu);
-
-    sats = g_hash_table_get_values(module->satellites);
-    sats = g_list_sort(sats, (GCompareFunc) sat_nickname_compare);
-
-    n = g_list_length(sats);
-    for (i = 0; i < n; i++)
-    {
-        sat = SAT(g_list_nth_data(sats, i));
-        menuitem = gtk_menu_item_new_with_label(sat->nickname);
-        g_object_set_data(G_OBJECT(menuitem), "catnum",
-                          GINT_TO_POINTER(sat->tle.catnr));
-        g_signal_connect(menuitem, "activate", G_CALLBACK(sat_selected_cb),
-                         module);
-        gtk_menu_shell_append(GTK_MENU_SHELL(satsubmenu), menuitem);
-    }
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* sky at a glance */
-    menuitem = gtk_menu_item_new_with_label(_("Sky at a glance"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate",
-                     G_CALLBACK(sky_at_glance_cb), module);
-
-    /* time manager */
-    menuitem = gtk_menu_item_new_with_label(_("Time Controller"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(tmgr_cb), module);
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* Radio Control */
-    menuitem = gtk_menu_item_new_with_label(_("Radio Control"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(rigctrl_cb), module);
-
-    /* Antenna Control */
-    menuitem = gtk_menu_item_new_with_label(_("Antenna Control"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(rotctrl_cb), module);
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* configure */
-    menuitem = gtk_menu_item_new_with_label(_("Configure"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(config_cb), module);
-
-    /* clone */
-    menuitem = gtk_menu_item_new_with_label(_("Clone..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(clone_cb), module);
-
-    /* separator */
-    menuitem = gtk_separator_menu_item_new();
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-
-    /* delete module */
-    menuitem = gtk_menu_item_new_with_label(_("Delete"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(delete_cb), module);
-
-    /* close */
-    menuitem = gtk_menu_item_new_with_label(_("Close"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-    g_signal_connect(menuitem, "activate", G_CALLBACK(close_cb), module);
-
-    gtk_widget_show_all(menu);
-
-    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
-                   0, gdk_event_get_time(NULL));
-}
-
 /**
  * Configure module.
  *
@@ -253,6 +75,53 @@ static void config_cb(GtkWidget * menuitem, gpointer data)
     else
     {
         gtk_sat_module_config_cb(menuitem, data);
+    }
+}
+
+/**
+ * Manage name changes.
+ *
+ * This function is called when the contents of the name entry changes.
+ * The primary purpose of this function is to check whether the char length
+ * of the name is greater than zero, if yes enable the OK button of the dialog.
+ */
+static void name_changed(GtkWidget * widget, gpointer data)
+{
+    const gchar    *text;
+    gchar          *entry, *end, *j;
+    gint            len, pos;
+    GtkWidget      *dialog = GTK_WIDGET(data);
+
+    /* step 1: ensure that only valid characters are entered
+       (stolen from xlog, tnx pg4i)
+     */
+    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
+    if ((len = g_utf8_strlen(entry, -1)) > 0)
+    {
+        end = entry + g_utf8_strlen(entry, -1);
+        for (j = entry; j < end; ++j)
+        {
+            if (!gpredict_legal_char(*j))
+            {
+                gdk_display_beep(gdk_display_get_default());
+                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
+                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
+            }
+        }
+    }
+
+    /* step 2: if name seems all right, enable OK button */
+    text = gtk_entry_get_text(GTK_ENTRY(widget));
+
+    if (g_utf8_strlen(text, -1) > 0)
+    {
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, TRUE);
+    }
+    else
+    {
+        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
+                                          GTK_RESPONSE_OK, FALSE);
     }
 }
 
@@ -792,6 +661,34 @@ static void sat_selected_cb(GtkWidget * menuitem, gpointer data)
     gtk_sat_module_select_sat(module, catnum);
 }
 
+/** Ensure that deleted top-level windows are destroyed */
+static gint window_delete(GtkWidget * widget, GdkEvent * event, gpointer data)
+{
+    (void)widget;
+    (void)event;
+    (void)data;
+
+    return FALSE;
+}
+
+/**
+ * Destroy sky at glance window.
+ *
+ * @param window Pointer to the sky at glance window.
+ * @param data Pointer to the GtkSatModule to which this widget is attached.
+ *
+ * This function is called automatically when the window is destroyed.
+ */
+static void destroy_skg(GtkWidget * window, gpointer data)
+{
+    GtkSatModule   *module = GTK_SAT_MODULE(data);
+
+    (void)window;
+
+    module->skgwin = NULL;
+    module->skg = NULL;
+}
+
 /**
  * Invoke Sky-at-glance.
  *
@@ -865,6 +762,24 @@ static void tmgr_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
+ * Destroy radio control window.
+ *
+ * @param window Pointer to the radio control window.
+ * @param data Pointer to the GtkSatModule to which this controller is attached.
+ *
+ * This function is called automatically when the window is destroyed.
+ */
+static void destroy_rigctrl(GtkWidget * window, gpointer data)
+{
+    GtkSatModule   *module = GTK_SAT_MODULE(data);
+
+    (void)window;               /* avoid unused parameter compiler warning */
+
+    module->rigctrlwin = NULL;
+    module->rigctrl = NULL;
+}
+
+/**
  * Open Radio control window.
  *
  * @param menuitem The menuitem that was selected.
@@ -926,21 +841,21 @@ static void rigctrl_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * Destroy radio control window.
+ * Destroy rotator control window.
  *
- * @param window Pointer to the radio control window.
+ * @param window Pointer to the rotator control window.
  * @param data Pointer to the GtkSatModule to which this controller is attached.
  * 
  * This function is called automatically when the window is destroyed.
  */
-static void destroy_rigctrl(GtkWidget * window, gpointer data)
+static void destroy_rotctrl(GtkWidget * window, gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
 
-    (void)window;               /* avoid unused parameter compiler warning */
+    (void)window;
 
-    module->rigctrlwin = NULL;
-    module->rigctrl = NULL;
+    module->rotctrlwin = NULL;
+    module->rotctrl = NULL;
 }
 
 /**
@@ -1003,52 +918,6 @@ static void rotctrl_cb(GtkWidget * menuitem, gpointer data)
     gtk_container_add(GTK_CONTAINER(module->rotctrlwin), module->rotctrl);
 
     gtk_widget_show_all(module->rotctrlwin);
-}
-
-/**
- * Destroy rotator control window.
- *
- * @param window Pointer to the rotator control window.
- * @param data Pointer to the GtkSatModule to which this controller is attached.
- * 
- * This function is called automatically when the window is destroyed.
- */
-static void destroy_rotctrl(GtkWidget * window, gpointer data)
-{
-    GtkSatModule   *module = GTK_SAT_MODULE(data);
-
-    (void)window;
-
-    module->rotctrlwin = NULL;
-    module->rotctrl = NULL;
-}
-
-/**
- * Destroy sky at glance window.
- *
- * @param window Pointer to the sky at glance window.
- * @param data Pointer to the GtkSatModule to which this widget is attached.
- * 
- * This function is called automatically when the window is destroyed.
- */
-static void destroy_skg(GtkWidget * window, gpointer data)
-{
-    GtkSatModule   *module = GTK_SAT_MODULE(data);
-
-    (void)window;
-
-    module->skgwin = NULL;
-    module->skg = NULL;
-}
-
-/** Ensure that deleted top-level windows are destroyed */
-static gint window_delete(GtkWidget * widget, GdkEvent * event, gpointer data)
-{
-    (void)widget;
-    (void)event;
-    (void)data;
-
-    return FALSE;
 }
 
 /** Autotrack activated */
@@ -1131,53 +1000,6 @@ static void delete_cb(GtkWidget * menuitem, gpointer data)
 }
 
 /**
- * Manage name changes.
- *
- * This function is called when the contents of the name entry changes.
- * The primary purpose of this function is to check whether the char length
- * of the name is greater than zero, if yes enable the OK button of the dialog.
- */
-static void name_changed(GtkWidget * widget, gpointer data)
-{
-    const gchar    *text;
-    gchar          *entry, *end, *j;
-    gint            len, pos;
-    GtkWidget      *dialog = GTK_WIDGET(data);
-
-    /* step 1: ensure that only valid characters are entered
-       (stolen from xlog, tnx pg4i)
-     */
-    entry = gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1);
-    if ((len = g_utf8_strlen(entry, -1)) > 0)
-    {
-        end = entry + g_utf8_strlen(entry, -1);
-        for (j = entry; j < end; ++j)
-        {
-            if (!gpredict_legal_char(*j))
-            {
-                gdk_display_beep(gdk_display_get_default());
-                pos = gtk_editable_get_position(GTK_EDITABLE(widget));
-                gtk_editable_delete_text(GTK_EDITABLE(widget), pos, pos + 1);
-            }
-        }
-    }
-
-    /* step 2: if name seems all right, enable OK button */
-    text = gtk_entry_get_text(GTK_ENTRY(widget));
-
-    if (g_utf8_strlen(text, -1) > 0)
-    {
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                          GTK_RESPONSE_OK, TRUE);
-    }
-    else
-    {
-        gtk_dialog_set_response_sensitive(GTK_DIALOG(dialog),
-                                          GTK_RESPONSE_OK, FALSE);
-    }
-}
-
-/**
  * Snoop window position and size when main window receives configure event.
  *
  * @param widget Pointer to the module window.
@@ -1239,4 +1061,161 @@ gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
 static gint sat_nickname_compare(const sat_t * a, const sat_t * b)
 {
     return gpredict_strcmp(a->nickname, b->nickname);
+}
+
+/**
+ * Create and run GtkSatModule popup menu.
+ *
+ * @param module The module that should have the popup menu attached to it.
+ *
+ * This function ctreates and executes a popup menu that is related to a
+ * GtkSatModule widget. The module must be a valid GtkSatModule, since it makes
+ * no sense whatsoever to have this kind of popup menu without a GtkSatModule
+ * parent.
+ *
+ */
+void gtk_sat_module_popup(GtkSatModule * module)
+{
+    GtkWidget      *menu;       /* The pop-up menu */
+    GtkWidget      *satsubmenu; /* Satellite selection submenu */
+    GtkWidget      *menuitem;   /* Widget used to create the menu items */
+    GList          *sats;
+    sat_t          *sat;
+    guint           i, n;
+
+
+    if ((module == NULL) || !IS_GTK_SAT_MODULE(module))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: %s called with NULL parameter!"),
+                    __FILE__, __LINE__, __func__);
+        return;
+    }
+
+    menu = gtk_menu_new();
+
+    if (module->state == GTK_SAT_MOD_STATE_DOCKED)
+    {
+        menuitem = gtk_menu_item_new_with_label(_("Detach module"));
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+        g_signal_connect(menuitem, "activate",
+                         G_CALLBACK(docking_state_cb), module);
+    }
+    else
+    {
+        menuitem = gtk_menu_item_new_with_label(_("Attach module"));
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+        g_signal_connect(menuitem, "activate",
+                         G_CALLBACK(docking_state_cb), module);
+    }
+
+    if (module->state == GTK_SAT_MOD_STATE_FULLSCREEN)
+    {
+        menuitem = gtk_menu_item_new_with_label(_("Exit full screen"));
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+        g_signal_connect(menuitem, "activate",
+                         G_CALLBACK(screen_state_cb), module);
+    }
+    else
+    {
+        menuitem = gtk_menu_item_new_with_label(_("Full screen"));
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+        g_signal_connect(menuitem, "activate",
+                         G_CALLBACK(screen_state_cb), module);
+    }
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* autotrack */
+    menuitem = gtk_check_menu_item_new_with_label(_("Autotrack"));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
+                                   module->autotrack);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(autotrack_cb), module);
+
+    /* select satellite submenu */
+    menuitem = gtk_menu_item_new_with_label(_("Select satellite"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    satsubmenu = gtk_menu_new();
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), satsubmenu);
+
+    sats = g_hash_table_get_values(module->satellites);
+    sats = g_list_sort(sats, (GCompareFunc) sat_nickname_compare);
+
+    n = g_list_length(sats);
+    for (i = 0; i < n; i++)
+    {
+        sat = SAT(g_list_nth_data(sats, i));
+        menuitem = gtk_menu_item_new_with_label(sat->nickname);
+        g_object_set_data(G_OBJECT(menuitem), "catnum",
+                          GINT_TO_POINTER(sat->tle.catnr));
+        g_signal_connect(menuitem, "activate", G_CALLBACK(sat_selected_cb),
+                         module);
+        gtk_menu_shell_append(GTK_MENU_SHELL(satsubmenu), menuitem);
+    }
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* sky at a glance */
+    menuitem = gtk_menu_item_new_with_label(_("Sky at a glance"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate",
+                     G_CALLBACK(sky_at_glance_cb), module);
+
+    /* time manager */
+    menuitem = gtk_menu_item_new_with_label(_("Time Controller"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(tmgr_cb), module);
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* Radio Control */
+    menuitem = gtk_menu_item_new_with_label(_("Radio Control"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(rigctrl_cb), module);
+
+    /* Antenna Control */
+    menuitem = gtk_menu_item_new_with_label(_("Antenna Control"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(rotctrl_cb), module);
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* configure */
+    menuitem = gtk_menu_item_new_with_label(_("Configure"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(config_cb), module);
+
+    /* clone */
+    menuitem = gtk_menu_item_new_with_label(_("Clone..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(clone_cb), module);
+
+    /* separator */
+    menuitem = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* delete module */
+    menuitem = gtk_menu_item_new_with_label(_("Delete"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(delete_cb), module);
+
+    /* close */
+    menuitem = gtk_menu_item_new_with_label(_("Close"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(close_cb), module);
+
+    gtk_widget_show_all(menu);
+
+    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
+                   0, gdk_event_get_time(NULL));
 }
