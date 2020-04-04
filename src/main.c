@@ -353,7 +353,7 @@ static gboolean gpredict_app_config(GtkWidget * widget,
                                     GdkEventConfigure * event,
                                     gpointer data)
 {
-    gint            x, y;
+    gint            x, y, w, h;
 
     (void)data;
 
@@ -373,11 +373,21 @@ static gboolean gpredict_app_config(GtkWidget * widget,
 #endif
 
     /* don't save off-screen positioning */
-    if (x + event->width < 0 || y + event->height < 0 ||
-        x > gdk_screen_width() || y > gdk_screen_height())
-    {
+    /* gtk_menu_popup got deprecated in 3.22, first available in Ubuntu 18.04 */
+#if GTK_MINOR_VERSION < 22
+    w = gdk_screen_width();
+    h = gdk_screen_height();
+#else
+    GdkRectangle    work_area;
+    gdk_monitor_get_workarea(gdk_display_get_primary_monitor(gdk_display_get_default()),
+                             &work_area);
+    w = work_area.width;
+    h = work_area.height;
+#endif
 
-        return FALSE;           /* carry on normally */
+    if (x < 0 || y < 0 || x + event->width > w || y + event->height > h)
+    {
+        return FALSE;
     }
 
     /* store the position and size */
