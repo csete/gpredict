@@ -1020,8 +1020,7 @@ gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
                                  gpointer data)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(data);
-    GdkRectangle    work_area;
-    gint            x, y;
+    gint            x, y, w, h;
 
     /* data is only useful when window is visible */
     if (gtk_widget_get_visible(widget))
@@ -1039,11 +1038,19 @@ gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
 #endif
 
     /* don't save off-screen positioning */
+    /* gtk_menu_popup got deprecated in 3.22, first available in Ubuntu 18.04 */
+#if GTK_MINOR_VERSION < 22
+    w = gdk_screen_width();
+    h = gdk_screen_height();
+#else
+    GdkRectangle    work_area;
     gdk_monitor_get_workarea(gdk_display_get_primary_monitor(gdk_display_get_default()),
                              &work_area);
+    w = work_area.width;
+    h = work_area.height;
+#endif
 
-    if (x < 0 || y < 0 || x + event->width > work_area.width ||
-        y + event->height > work_area.height)
+    if (x < 0 || y < 0 || x + event->width > w || y + event->height > h)
     {
         return FALSE;
     }
