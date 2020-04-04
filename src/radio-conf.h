@@ -36,7 +36,7 @@
 typedef enum {
     RIG_TYPE_RX = 0,            /*!< Rig can only be used as receiver */
     RIG_TYPE_TX,                /*!< Rig can only be used as transmitter */
-    RIG_TYPE_TRX,               /*!< Rig can be used as RX/TX (simplex only) */
+    RIG_TYPE_TRX,               /*!< Rig can be used as RX/TX (half-duplex only) */
     RIG_TYPE_DUPLEX,            /*!< Rig is a full duplex radio, e.g. IC910 */
     RIG_TYPE_TOGGLE_AUTO,       /*!< Special mode for FT-817, 857 and 897 using auto T/R switch */
     RIG_TYPE_TOGGLE_MAN         /*!< Special mode for FT-817, 857 and 897 using manual T/R switch */

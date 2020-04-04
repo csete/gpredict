@@ -203,11 +203,11 @@ static void render_type(GtkTreeViewColumn * col,
         break;
 
     case RIG_TYPE_TRX:
-        g_object_set(renderer, "text", _("RX + TX"), NULL);
+        g_object_set(renderer, "text", _("Half-duplex"), NULL);
         break;
 
     case RIG_TYPE_DUPLEX:
-        g_object_set(renderer, "text", _("Duplex"), NULL);
+        g_object_set(renderer, "text", _("Full-duplex"), NULL);
         break;
 
     case RIG_TYPE_TOGGLE_AUTO:
