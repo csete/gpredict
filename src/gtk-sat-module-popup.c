@@ -21,9 +21,11 @@
 #include <build-config.h>
 #endif
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <string.h>		// strerror
 
 #include "compat.h"
 #include "config-keys.h"
@@ -1071,56 +1073,59 @@ static void close_cb(GtkWidget * menuitem, gpointer data)
  * Close and permanently delete module.
  *
  * This function is called when the user selects the delete menu
- * item in the GtkSatModule popup menu. First it will close the module
- * with gtk_sat_module_close_cb, which will close the current module,
- * whereafter the module file will be deleted from the disk.
+ * item in the GtkSatModule popup menu.
  */
 static void delete_cb(GtkWidget * menuitem, gpointer data)
 {
-    gchar          *file;
+    GtkSatModule   *module = GTK_SAT_MODULE(data);
+    GtkWidget      *toplevel;
     GtkWidget      *dialog;
+    int             result = 0;
+    gint            response;
+    gchar          *file;
     gchar          *moddir;
 
+	toplevel = gtk_widget_get_toplevel(GTK_WIDGET(data));
     moddir = get_modules_dir();
-    file = g_strconcat(moddir, G_DIR_SEPARATOR_S,
-                       GTK_SAT_MODULE(data)->name, ".mod", NULL);
+    file = g_strconcat(moddir, G_DIR_SEPARATOR_S, module->name, ".mod", NULL);
     g_free(moddir);
 
-    gtk_sat_module_close_cb(menuitem, data);
-
     /* ask user to confirm removal */
-    dialog = gtk_message_dialog_new_with_markup(NULL,   //GTK_WINDOW (parent),
-                                                GTK_DIALOG_MODAL |
-                                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                GTK_MESSAGE_QUESTION,
-                                                GTK_BUTTONS_YES_NO,
-                                                _
-                                                ("This operation will permanently delete\n<b>%s</b>\n"
-                                                 "from the disk.\nDo you you want to proceed?"),
-                                                file);
+    dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),
+                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+                                                _("This operation will permanently delete <b>%s</b> "\
+                                                  "from the disk.\nDo you you want to proceed?"),
+                                                module->name);
 
-    switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+    switch (response)
     {
     case GTK_RESPONSE_YES:
-        if (g_remove(file))
+		gtk_sat_module_close_cb(menuitem, data);
+		result = g_remove(file);
+        if (result)
         {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%d: Failed to delete %s."),
-                        __FILE__, __LINE__, file);
+			
+            sat_log_log(SAT_LOG_LEVEL_ERROR, _("Failed to delete %s: %s"),
+                        file, strerror(errno));
+            dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(toplevel),
+                                                        GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                        GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+                                                        _("An error occurred deleting <b>%s</b>:\n%s"),
+                                                        module->name, strerror(errno));
+			gtk_dialog_run(GTK_DIALOG(dialog));
+			gtk_widget_destroy(dialog);
         }
         else
         {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%d: %s deleted permanently."),
-                        __FILE__, __LINE__, file);
+            sat_log_log(SAT_LOG_LEVEL_INFO, _("%s deleted"), file);
         }
         break;
-
     default:
         break;
     }
-
-    gtk_widget_destroy(dialog);
 
     g_free(file);
 }
