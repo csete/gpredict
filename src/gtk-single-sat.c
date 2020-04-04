@@ -529,10 +529,13 @@ static void gtk_single_sat_popup_cb(GtkWidget * button, gpointer data)
 
     gtk_widget_show_all(menu);
 
-    /* Note: event can be NULL here when called from view_onPopupMenu;
-     *  gdk_event_get_time() accepts a NULL argument */
+    /* gtk_menu_popup got deprecated in 3.22, first available in Ubuntu 18.04 */
+#if GTK_MINOR_VERSION < 22
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
                    0, gdk_event_get_time((GdkEvent *) NULL));
+#else
+    gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
+#endif
 }
 
 /* Refresh internal references to the satellites. */

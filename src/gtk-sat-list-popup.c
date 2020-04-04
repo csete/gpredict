@@ -78,9 +78,13 @@ void gtk_sat_list_popup_exec(sat_t * sat, qth_t * qth, GdkEventButton * event,
 
     gtk_widget_show_all(menu);
 
-    /* Note: event can be NULL here when called from view_onPopupMenu;
-     *  gdk_event_get_time() accepts a NULL argument */
+    /* gtk_menu_popup got deprecated in 3.22, first available in Ubuntu 18.04 */
+#if GTK_MINOR_VERSION < 22
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
                    (event != NULL) ? event->button : 0,
                    gdk_event_get_time((GdkEvent *) event));
+#else
+    (void) event;
+    gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
+#endif
 }
