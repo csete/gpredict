@@ -1019,8 +1019,9 @@ static void delete_cb(GtkWidget * menuitem, gpointer data)
 gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
                                  gpointer data)
 {
-    gint            x, y;
     GtkSatModule   *module = GTK_SAT_MODULE(data);
+    GdkRectangle    work_area;
+    gint            x, y;
 
     /* data is only useful when window is visible */
     if (gtk_widget_get_visible(widget))
@@ -1038,10 +1039,13 @@ gboolean module_window_config_cb(GtkWidget * widget, GdkEventConfigure * event,
 #endif
 
     /* don't save off-screen positioning */
-    if (x + event->width < 0 || y + event->height < 0 ||
-        x > gdk_screen_width() || y > gdk_screen_height())
+    gdk_monitor_get_workarea(gdk_display_get_primary_monitor(gdk_display_get_default()),
+                             &work_area);
+
+    if (x < 0 || y < 0 || x + event->width > work_area.width ||
+        y + event->height > work_area.height)
     {
-        return FALSE;           /* carry on normally */
+        return FALSE;
     }
 
     /* store the position and size */
