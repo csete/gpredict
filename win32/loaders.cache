@@ -11,4 +11,16 @@
 " <svg" "*    " 100
 " <!DOCTYPE svg" "*             " 100
 
+"libpixbufloader-png.dll"
+"png" 5 "gdk-pixbuf" "PNG" "LGPL"
+"image/png" ""
+"png" ""
+"\211PNG\r\n\032\n" "" 100
+
+"libpixbufloader-jpeg.dll"
+"jpeg" 5 "gdk-pixbuf" "JPEG" "LGPL"
+"image/jpeg" ""
+"jpeg" "jpe" "jpg" ""
+"\377\330" "" 100
+
 
