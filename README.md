@@ -1,4 +1,8 @@
 # Gpredict
+| [Wiki](https://github.com/chri87d9/gpredict/wiki)
+| [Website](http://gpredict.oz9aec.net)
+
+
 ![Gpredict](images/gui.jpg)
 Gpredict is a real time satellite tracking and orbit prediction program
 for the Linux desktop. It uses the SGP4/SDP4 propagation algorithms together
