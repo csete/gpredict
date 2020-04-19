@@ -1,3 +1,5 @@
+**This is a fork of gpredict, inteded on "refurbishing" the documentation.**
+
 # Gpredict
 | [Wiki](https://github.com/chri87d9/gpredict/wiki)
 | [Website](http://gpredict.oz9aec.net)
