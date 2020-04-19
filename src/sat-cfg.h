@@ -39,6 +39,7 @@ typedef enum {
     SAT_CFG_BOOL_MOD_STATE,     /*!< Restore module state */
     SAT_CFG_BOOL_RULES_HINT_OBSOLETE,    /*!< Enable rules hint in GtkSatList. */
     SAT_CFG_BOOL_MAP_SHOW_QTH_INFO,     /*!< Show QTH info on map */
+    SAT_CFG_BOOL_MAP_SHOW_TERMINATOR,     /*!< show solar terminator */
     SAT_CFG_BOOL_MAP_SHOW_NEXT_EV,      /*!< Show next event on map */
     SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK,   /*!< Track mouse cursor on map. */
     SAT_CFG_BOOL_MAP_SHOW_GRID, /*!< Show grid on map. */

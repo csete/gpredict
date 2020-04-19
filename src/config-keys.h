@@ -94,6 +94,7 @@
 #define MOD_CFG_MAP_FILE              "MAP_FILE" /* abs. path = home dir */
 #define MOD_CFG_MAP_FONT              "TEXT_FONT"
 #define MOD_CFG_MAP_SHOW_QTH_INFO     "QTH_INFO"
+#define MOD_CFG_MAP_SHOW_TERMINATOR   "SHOW_TERMINATOR"
 #define MOD_CFG_MAP_SHOW_NEXT_EVENT   "NEXT_EVENT"
 #define MOD_CFG_MAP_SHOW_CURS_TRACK   "CURSOR_TRACK"
 #define MOD_CFG_MAP_SHOW_GRID         "SHOW_GRID"
