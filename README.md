@@ -1,5 +1,5 @@
 # Gpredict
-![Gpredict](https://www.flickr.com/photos/csete/28902144392/in/album-72157671566225472)
+![Gpredict](images/gui.jpg)
 Gpredict is a real time satellite tracking and orbit prediction program
 for the Linux desktop. It uses the SGP4/SDP4 propagation algorithms together
 with NORAD two-line element sets (TLE).
