@@ -165,7 +165,7 @@ static void gtk_sat_map_init(GtkSatMap * satmap)
     satmap->height = 0;
     satmap->refresh = 0;
     satmap->counter = 0;
-    satmap->show_terminator = FALSE;
+    satmap->show_terminator = TRUE;
     satmap->qthinfo = FALSE;
     satmap->eventinfo = FALSE;
     satmap->cursinfo = FALSE;

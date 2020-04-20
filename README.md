@@ -1,4 +1,11 @@
+**This is a fork of gpredict, inteded on "refurbishing" the documentation.**
 
+# Gpredict
+| [Wiki](https://github.com/chri87d9/gpredict/wiki)
+| [Website](http://gpredict.oz9aec.net)
+
+
+![Gpredict](images/gui.jpg)
 Gpredict is a real time satellite tracking and orbit prediction program
 for the Linux desktop. It uses the SGP4/SDP4 propagation algorithms together
 with NORAD two-line element sets (TLE).
@@ -21,9 +28,11 @@ Some core features of Gpredict include:
 
 Visit the gpredict homepage at http://gpredict.oz9aec.net/ for more info.
 
+## Install
+**Ubuntu:** Can be installed from standard repo, `sudo apt install gpredict`
 
-Requirements
-------------
+**Arch:** a package can be found in the AUR, `yay gpredict`
+### Requirements
 
 Gpredict is written using the Gtk+ 3 widget set, which is available for most
 Unix like operating systems, Mac and Windows. Following libraries are required
@@ -35,13 +44,14 @@ for successful compilation of Gpredict:
 - Libcurl 7.16 or later
 - Hamlib (runtime only, not required for build)
 
-If you compile Gpredict from source you will also need the development packages
+ If you compile Gpredict from source you will also need the development packages
 often with -dev or -devel in the package name, e.g. libgtk-3-dev. On Debian and
-Ubuntu systems you can install the build dependencies using:
+**Ubuntu** systems you can install the build dependencies using:
 
+```bash
   sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
   sudo apt install pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
-
+```
 
 To build and install gpredict from source, first unpack the source package:
 
@@ -70,8 +80,7 @@ If you want to know more about installation options refer to the INSTALL file
 (not for beginners).
 
 
-Using Gpredict
---------------
+## Using Gpredict
 
 Gpredict comes bundled with some example data and will run "out of the box".
 Once you got the idea of the UI, you can either modify the settings of the
@@ -82,16 +91,7 @@ You are highly encouraged to have a look at the user manual available at
 http://gpredict.oz9aec.net/documents.php
 
 
-User support
-------------
-
-User support is provided through the Gpredict forum hosted by the Libre Space
-Foundation: https://community.libre.space/c/gpredict
-
-
-Terms and conditions
---------------------
-
+## Terms and conditions
 Gpredict is released under the GNU General Public License and comes with
 NO WARRANTY whatsoever. If you have problems installing or using Gpredict,
 feel free to ask for support for example on the Gpredict forum hosted by
