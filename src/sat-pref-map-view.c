@@ -36,7 +36,7 @@ static GtkWidget *thumb;
 static gchar   *mapf = NULL;
 
 /* content selectors */
-static GtkWidget *qth, *next, *curs, *grid;
+static GtkWidget *qth,*term, *next, *curs, *grid;
 
 /* colour selectors */
 static GtkWidget *qthc, *gridc, *tickc;
@@ -198,6 +198,9 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(grid),
                                      sat_cfg_get_bool_def
                                      (SAT_CFG_BOOL_MAP_SHOW_GRID));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(term),
+                                     sat_cfg_get_bool_def
+                                     (SAT_CFG_BOOL_MAP_SHOW_TERMINATOR));
 
         /* colours */
         rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_QTH_COL);
@@ -389,6 +392,10 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
                                    MOD_CFG_MAP_SHOW_GRID,
                                    gtk_toggle_button_get_active
                                    (GTK_TOGGLE_BUTTON(grid)));
+            g_key_file_set_boolean(cfg, MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SHOW_TERMINATOR,
+                                   gtk_toggle_button_get_active
+                                   (GTK_TOGGLE_BUTTON(term)));
 
             /* colours */
             gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(qthc), &gdk_rgba);
@@ -486,6 +493,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_set_bool(SAT_CFG_BOOL_MAP_SHOW_GRID,
                              gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON
                                                           (grid)));
+            sat_cfg_set_bool(SAT_CFG_BOOL_MAP_SHOW_TERMINATOR,
+                             gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON
+                                                          (term)));
 
 
             /* colours */
@@ -574,6 +584,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
                                   MOD_CFG_MAP_SHOW_GRID, NULL);
             g_key_file_remove_key(cfg,
                                   MOD_CFG_MAP_SECTION,
+                                  MOD_CFG_MAP_SHOW_TERMINATOR, NULL);
+            g_key_file_remove_key(cfg,
+                                  MOD_CFG_MAP_SECTION,
                                   MOD_CFG_MAP_QTH_COL, NULL);
             g_key_file_remove_key(cfg,
                                   MOD_CFG_MAP_SECTION,
@@ -621,6 +634,7 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_NEXT_EV);
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK);
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_GRID);
+            sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_TERMINATOR);
 
             /* colours */
             sat_cfg_reset_int(SAT_CFG_INT_MAP_QTH_COL);
@@ -780,6 +794,26 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
     gtk_box_pack_start(vbox, hbox, FALSE, TRUE, 0);
+    /* Solar Terminator */
+    term = gtk_check_button_new_with_label(_("Terminator"));
+    gtk_widget_set_tooltip_text(term,
+                                _("Plot solar terminator"));
+    if (cfg != NULL)
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(term),
+                                     mod_cfg_get_bool(cfg,
+                                                      MOD_CFG_MAP_SECTION,
+                                                      MOD_CFG_MAP_SHOW_TERMINATOR,
+                                                      SAT_CFG_BOOL_MAP_SHOW_TERMINATOR));
+    }
+    else
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(term),
+                                     sat_cfg_get_bool
+                                     (SAT_CFG_BOOL_MAP_SHOW_TERMINATOR));
+    }
+    g_signal_connect(term, "toggled", G_CALLBACK(content_changed), NULL);
+    gtk_box_pack_start(GTK_BOX(hbox), term, FALSE, TRUE, 0);
 
     /* QTH info */
     qth = gtk_check_button_new_with_label(_("QTH Info"));

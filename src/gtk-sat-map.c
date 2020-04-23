@@ -206,6 +206,10 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
                                        MOD_CFG_MAP_SECTION,
                                        MOD_CFG_MAP_SHOW_QTH_INFO,
                                        SAT_CFG_BOOL_MAP_SHOW_QTH_INFO);
+    satmap->show_terminator = mod_cfg_get_bool(cfgdata,
+                                       MOD_CFG_MAP_SECTION,
+                                       MOD_CFG_MAP_SHOW_TERMINATOR,
+                                       SAT_CFG_BOOL_MAP_SHOW_TERMINATOR);
 
     satmap->eventinfo = mod_cfg_get_bool(cfgdata,
                                          MOD_CFG_MAP_SECTION,
@@ -226,6 +230,10 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
                                          MOD_CFG_MAP_SECTION,
                                          MOD_CFG_MAP_KEEP_RATIO,
                                          SAT_CFG_BOOL_MAP_KEEP_RATIO);
+    satmap->show_terminator = mod_cfg_get_bool(cfgdata,
+                                         MOD_CFG_MAP_SECTION,
+                                         MOD_CFG_MAP_SHOW_TERMINATOR,
+                                         SAT_CFG_BOOL_MAP_SHOW_TERMINATOR);
     col = mod_cfg_get_int(cfgdata,
                           MOD_CFG_MAP_SECTION,
                           MOD_CFG_MAP_INFO_BGD_COL,
