@@ -1,5 +1,3 @@
-**This is a fork of gpredict, inteded on "refurbishing" the documentation. I only made the md file, and enabled the day/night terminator**
-
 # Gpredict
 | [Wiki](https://github.com/chri87d9/gpredict/wiki)
 | [Website](http://gpredict.oz9aec.net)
