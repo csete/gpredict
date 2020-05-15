@@ -39,6 +39,7 @@ typedef struct {
     gdouble         baud;       /*!< Baud rate > */
     gboolean        invert;     /*!< Flag indicating whether transponder is inverting. */
     gchar          *mode;       /*!< Mode descriptor. */
+    gchar          *command;    /*!< Command(s) to send to radio when selecting this transponder. */
 } trsp_t;
 
 /* The actual data would then be a singly linked list with pointers to transponder_t structures */

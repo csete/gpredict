@@ -80,12 +80,28 @@ static void update_autotrack(GtkSatModule * module)
     guint           i, n;
     double          next_aos;
     gint            next_sat;
+    double          aos_el;
+    double          los_el;
+    gdouble         maxdt;
+
+    /* Get AOS/LOS elevation for rig */
+    aos_el = 0.0;
+    los_el = 0.0;
+    if (module->rigctrl != NULL)
+    {
+        GtkRigCtrl *ctrl = GTK_RIG_CTRL(module->rigctrl);
+        if ((ctrl != NULL) && (ctrl->conf != NULL))
+        {
+            aos_el = ctrl->conf->aos_el;
+            los_el = ctrl->conf->los_el;
+        }
+    }
 
     if (module->target > 0)
         sat = g_hash_table_lookup(module->satellites, &module->target);
 
     /* do nothing if current target is still above horizon */
-    if (sat != NULL && sat->el > 0.0)
+    if (sat != NULL && sat->el > los_el)
         return;
 
     /* set target to satellite with next AOS */
@@ -98,13 +114,15 @@ static void update_autotrack(GtkSatModule * module)
     next_aos = module->tmgCdnum + 10.f; /* hope there is AOS within 10 days */
     next_sat = module->target;
 
+    maxdt = (gdouble) sat_cfg_get_int(SAT_CFG_INT_PRED_LOOK_AHEAD);
+
     i = 0;
     while (i++ < n)
     {
         sat = (sat_t *) iter->data;
 
         /* if sat is above horizon, select it and we are done */
-        if (sat->el > 0.0)
+        if (sat->el > aos_el)
         {
             next_sat = sat->tle.catnr;
             break;
@@ -113,8 +131,26 @@ static void update_autotrack(GtkSatModule * module)
         /* we have a candidate if AOS is in the future */
         if (sat->aos > module->tmgCdnum && sat->aos < next_aos)
         {
-            next_aos = sat->aos;
-            next_sat = sat->tle.catnr;
+            /* sat->aos is at the horizon, not rigs desired elevation for AOS,
+               so we calculate when the next pass at the desired elevation is */
+            if (aos_el != 0.0)
+            {
+                pass_t *pass;
+
+                /* Should we avoid recalculating this? */
+                pass = get_next_pass_el(sat, module->qth, maxdt, aos_el);
+                if ((pass != NULL) && (pass->aos < next_aos))
+                {
+                    next_aos = pass->aos;
+                    next_sat = sat->tle.catnr;
+                    free_pass (pass);
+                }
+            }
+            else
+            {
+                next_aos = sat->aos;
+                next_sat = sat->tle.catnr;
+            }
         }
 
         iter = iter->next;

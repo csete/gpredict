@@ -40,6 +40,7 @@
 #define KEY_INVERT      "INVERT"
 #define KEY_MODE        "MODE"
 #define KEY_BAUD        "BAUD"
+#define KEY_COMMAND     "COMMAND"
 
 static void check_trsp_freq(trsp_t * trsp)
 {
@@ -180,7 +181,6 @@ GSList *read_transponders(guint catnum)
                         name, groups[i]);
             g_clear_error(&error);
         }
-
         trsp->baud = g_key_file_get_double(cfg, groups[i], KEY_BAUD, &error);
         if (error != NULL)
         {
@@ -188,6 +188,15 @@ GSList *read_transponders(guint catnum)
                         name, groups[i]);
             g_clear_error(&error);
         }
+
+        trsp->command = g_key_file_get_string(cfg, groups[i], KEY_COMMAND, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_INFO, INFO_MSG, __func__, KEY_COMMAND,
+                        name, groups[i]);
+            g_clear_error(&error);
+        }
+
 
         /* add transponder to list */
         trsplist = g_slist_append(trsplist, trsp);
@@ -254,6 +263,8 @@ void write_transponders(guint catnum, GSList * trsp_list)
             g_key_file_set_boolean(trsp_data, trsp->name, KEY_INVERT, TRUE);
         if (trsp->mode)
             g_key_file_set_string(trsp_data, trsp->name, KEY_MODE, trsp->name);
+        if (trsp->command)
+            g_key_file_set_string(trsp_data, trsp->name, KEY_COMMAND, trsp->command);
     }
 
     if (gpredict_save_key_file(trsp_data, trsp_file))

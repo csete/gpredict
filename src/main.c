@@ -23,6 +23,9 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#ifdef HAS_LIBGSTREAMER
+#include <gst/gst.h>
+#endif
 #include <signal.h>
 #include <stdlib.h>
 #ifdef WIN32
@@ -101,6 +104,9 @@ int main(int argc, char *argv[])
     textdomain(PACKAGE);
 #endif
     gtk_init(&argc, &argv);
+#ifdef HAS_LIBGSTREAMER
+    gst_init(&argc, &argv);
+#endif
 
     context = g_option_context_new("");
     g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);

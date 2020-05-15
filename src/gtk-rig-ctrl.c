@@ -40,6 +40,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* NETWORK */
 #ifndef WIN32
@@ -60,6 +62,7 @@
 #include "sat-log.h"
 #include "sat-cfg.h"
 #include "trsp-conf.h"
+#include "gtk-audio.h"
 
 
 #define AZEL_FMTSTR "%7.2f\302\260"
@@ -84,6 +87,9 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock);
 static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
 static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock);
 static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt);
+static gboolean send_rigctld_commands(GtkRigCtrl * ctrl, gint sock,
+                                      gchar * buff, gchar * buffout,
+                                      gint sizeout);
 
 /*  add thread for hamlib communication */
 gpointer        rigctl_run(gpointer data);
@@ -212,7 +218,7 @@ static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
     gchar          *aoslos;
 
     /* select AOS or LOS time depending on target elevation */
-    if (ctrl->target->el < 0.0)
+    if (ctrl->target->el < ctrl->conf->aos_el)
     {
         targettime = ctrl->target->aos;
         aoslos = g_strdup_printf(_("AOS in"));
@@ -320,13 +326,15 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
             if (ctrl->target->aos > ctrl->pass->aos)
             {
                 free_pass(ctrl->pass);
-                ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
+                ctrl->pass = get_next_pass_el(ctrl->target, ctrl->qth, 3.0,
+                                              ctrl->conf->aos_el);
             }
         }
         else
         {
             /* we don't have any current pass; store the current one */
-            ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
+            ctrl->pass = get_next_pass_el(ctrl->target, ctrl->qth, 3.0,
+                                          ctrl->conf->aos_el);
         }
     }
 
@@ -390,6 +398,12 @@ void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
 {
     sat_t          *sat;
     int             i, n;
+
+    /* This is called indirectly by update_autotrack, when a satellite goes
+       below the horizon. So we need to call check_aos_los here, to give it a
+       chance to signal LOS, otherwise it will be missed, as the current sat
+       will have changed on the next call. */
+    check_aos_los(ctrl);
 
     /* find index in satellite list */
     n = g_slist_length(ctrl->sats);
@@ -664,7 +678,8 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
         /* update next pass */
         if (ctrl->pass != NULL)
             free_pass(ctrl->pass);
-        ctrl->pass = get_next_pass(ctrl->target, ctrl->qth, 3.0);
+        ctrl->pass = get_next_pass_el(ctrl->target, ctrl->qth, 3.0,
+                                      ctrl->conf->aos_el);
 
         /* read transponders for new target */
         load_trsp_list(ctrl);
@@ -706,6 +721,17 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
 
     if (ctrl->trsp == NULL)
         return;
+
+    /* Send commands for this transponder (usually to set demodulation mode) */
+    if (ctrl->trsp->command)
+    {
+        gchar           retbuf[256];
+
+        if (!send_rigctld_commands(ctrl, ctrl->sock, ctrl->trsp->command,
+                                   retbuf, sizeof(retbuf)))
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        "Error sending transponder command.");
+    }
 
     /* tune downlink */
     if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->downhigh > 0))
@@ -1444,6 +1470,55 @@ static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
 
     /* Leave critical section! */
     g_mutex_unlock(&ctrl->writelock);
+    return (retval);
+}
+
+/* Send a series of ; separated rigctld commands.
+   Return value will only be TRUE if all commands return TRUE.
+   We stop sending commands on error.
+   buffout will be valid for the last command only.
+   */
+static gboolean send_rigctld_commands(GtkRigCtrl * ctrl, gint sock,
+                                      gchar * buff, gchar * buffout,
+                                      gint sizeout)
+{
+    gboolean        retval = TRUE;
+    gchar           *cmds;
+    gchar           *cmd;
+    gchar           *end;
+    gint            length;
+
+    cmd = g_malloc(strlen(buff) + 2);
+    cmds = buff;
+
+    while ((cmds[0] != '\0') && retval)
+    {
+        /* Calculate length up to ; or '\0' */
+        end = strstr(cmds, ";");
+        if (end == NULL)
+            length = strlen(cmds);
+        else
+            length = end - cmds;
+        if (length > 0)
+        {
+            /* Copy command and append newline and '\0' */
+            strncpy(cmd, cmds, length);
+            cmd[length] = '\n';
+            cmd[length+1] = '\0';
+            /* Send the command. */
+            retval = send_rigctld_command(ctrl, sock, cmd, buffout, sizeout);
+            /* Move past the command to the ; or '\0' */
+            cmds += length;
+        }
+        else
+        {
+            /* Skip ; */
+            cmds++;
+        }
+    }
+
+    g_free(cmd);
+
     return (retval);
 }
 
@@ -2302,40 +2377,94 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
 {
     gboolean        retcode = TRUE;
     gchar           retbuf[10];
+    int             sysret;
 
-    if (ctrl->engaged && ctrl->tracking)
+    /* Don't check tracking, as we want AOS/LOS signalling, even if not
+      adjusting for doppler, which we may not want to do for some demodulators */
+    if (ctrl->engaged)
     {
-        if (ctrl->prev_ele < 0.0 && ctrl->target->el >= 0.0)
+        if (ctrl->prev_ele < ctrl->conf->aos_el
+            && ctrl->target->el >= ctrl->conf->aos_el)
         {
             /* AOS has occurred */
-            if (ctrl->conf->signal_aos)
+
+            /* Play audio waveform */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_wav
+                && (strlen(ctrl->conf->aos_wav) > 0))
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "AOS\n",
-                                                retbuf, 10);
+                audio_play_uri(ctrl->conf->aos_wav);
+            }
+
+            /* Send commands to radio */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_command
+                && (strlen(ctrl->conf->aos_command) > 0))
+            {
+                retcode &= send_rigctld_commands(ctrl, ctrl->sock,
+                                                 ctrl->conf->aos_command,
+                                                 retbuf, sizeof(retbuf));
             }
             if (ctrl->conf2 != NULL)
             {
-                if (ctrl->conf2->signal_aos)
+                if (ctrl->conf2->signal_aos && ctrl->conf2->aos_command)
                 {
-                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "AOS\n",
-                                                    retbuf, 10);
+                    retcode &= send_rigctld_commands(ctrl, ctrl->sock2,
+                                                     ctrl->conf2->aos_command,
+                                                     retbuf, sizeof(retbuf));
+                }
+            }
+
+            /* Run application */
+            if (ctrl->conf->signal_aos && ctrl->conf->aos_app
+                && (strlen(ctrl->conf->aos_app) > 0))
+            {
+                sysret = system(ctrl->conf->aos_app);
+                if (sysret != 0)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("AOS application \"%s\" returned %d"),
+                                ctrl->conf->aos_app, sysret);
                 }
             }
         }
-        else if (ctrl->prev_ele >= 0.0 && ctrl->target->el < 0.0)
+        else if (ctrl->prev_ele >= ctrl->conf->los_el
+                 && ctrl->target->el < ctrl->conf->los_el)
         {
             /* LOS has occurred */
-            if (ctrl->conf->signal_los)
+
+            /* Play audio waveform */
+            if (ctrl->conf->signal_los && ctrl->conf->los_wav
+                && (strlen(ctrl->conf->los_wav) > 0))
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "LOS\n",
-                                                retbuf, 10);
+                audio_play_uri(ctrl->conf->los_wav);
+            }
+
+            /* Send commands to radio */
+            if (ctrl->conf->signal_los && ctrl->conf->los_command)
+            {
+                retcode &= send_rigctld_commands(ctrl, ctrl->sock,
+                                                 ctrl->conf->los_command,
+                                                 retbuf, sizeof(retbuf));
             }
             if (ctrl->conf2 != NULL)
             {
-                if (ctrl->conf2->signal_los)
+                if (ctrl->conf2->signal_los && ctrl->conf2->los_command)
                 {
-                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "LOS\n",
-                                                    retbuf, 10);
+                    retcode &= send_rigctld_commands(ctrl, ctrl->sock2,
+                                                     ctrl->conf2->los_command,
+                                                     retbuf, sizeof(retbuf));
+                }
+            }
+
+            /* Run application */
+            if (ctrl->conf->signal_los && ctrl->conf->los_app
+                && (strlen(ctrl->conf->los_app) > 0))
+            {
+                sysret = system(ctrl->conf->los_app);
+                if (sysret != 0)
+                {
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("LOS application \"%s\" returned %d"),
+                                ctrl->conf->los_app, sysret);
                 }
             }
         }
@@ -2941,8 +3070,12 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     if (rigctrl->target != NULL)
     {
         /* get next pass for target satellite */
-        GTK_RIG_CTRL(widget)->pass = get_next_pass(rigctrl->target,
-                                                   rigctrl->qth, 3.0);
+        GTK_RIG_CTRL(widget)->pass = get_next_pass_el(rigctrl->target,
+                                                      rigctrl->qth,
+                                                      3.0,
+                                                      rigctrl->conf
+                                                        ? rigctrl->conf->aos_el
+                                                        : 0.0);
     }
 
     /* create contents */
