@@ -472,6 +472,61 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
                 }
                 if (gps_read(qth->gps_data) == 0)
                 {
+                    /* handling packet_set inline with
+                       http://gpsd.berlios.de/client-howto.html
+                     */
+                    if (qth->gps_data->set & PACKET_SET)
+                    {
+                        if (qth->gps_data->fix.mode >= MODE_2D)
+                        {
+                            if (qth->lat != qth->gps_data->fix.latitude)
+                            {
+                                qth->lat = qth->gps_data->fix.latitude;
+                                retval = TRUE;
+                            }
+                            if (qth->lon != qth->gps_data->fix.longitude)
+                            {
+                                qth->lon = qth->gps_data->fix.longitude;
+                                retval = TRUE;
+                            }
+                        }
+
+                        if (qth->gps_data->fix.mode == MODE_3D)
+                        {
+                            if (qth->alt != qth->gps_data->fix.altitude)
+                            {
+                                qth->alt = qth->gps_data->fix.altitude;
+                                retval = TRUE;
+                            }
+                        }
+                        else
+                        {
+                            if (qth->alt != 0)
+                            {
+                                qth->alt = 0;
+                                retval = TRUE;
+                            }
+                        }
+                    }
+                }
+            }
+#endif
+            break;
+
+	case 6:		/* for libgps 3.17 */
+#if GPSD_API_MAJOR_VERSION==6
+            while (gps_waiting(qth->gps_data, 0) == 1)
+            {
+                /* see comment from above */
+                /* hopefully not needed but does not hurt anything. */
+                num_loops++;
+                if (num_loops > 1000)
+                {
+                    retval = FALSE;
+                    break;
+                }
+                if (gps_read(qth->gps_data) > 0)
+                {
                     /* handling packet_set inline with 
                        http://gpsd.berlios.de/client-howto.html
                      */
@@ -603,6 +658,29 @@ gboolean qth_data_update_init(qth_t * qth)
         g_free(port);
 #endif
         break;
+    case 6:	/* for libgps 3.17 */
+#if GPSD_API_MAJOR_VERSION==6
+        /* open the connection to gpsd and start the stream */
+        qth->gps_data = g_try_new0(struct gps_data_t, 1);
+
+        port = g_strdup_printf("%d", qth->gpsd_port);
+        if (gps_open(qth->gpsd_server, port, qth->gps_data) == -1)
+        {
+            free(qth->gps_data);
+            qth->gps_data = NULL;
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Could not open gpsd at  %s:%d"),
+                        __func__, qth->gpsd_server, qth->gpsd_port);
+            retval = FALSE;
+        }
+        else
+        {
+            (void)gps_stream(qth->gps_data, WATCH_ENABLE, NULL);
+            retval = TRUE;
+        }
+        g_free(port);
+#endif
+        break;
     default:
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Unsupported gpsd api major version (%d)"),
@@ -639,10 +717,19 @@ void qth_data_update_stop(qth_t * qth)
         switch (GPSD_API_MAJOR_VERSION)
         {
         case 4:
-            gps_close(qth->gps_data);
-            break;
+#if GPSD_API_MAJOR_VERSION==4
+	    gps_close(qth->gps_data);
+#endif
+	    break;
         case 5:
+#if GPSD_API_MAJOR_VERSION==5
+	    gps_close(qth->gps_data);
+#endif
+	    break;
+	case 6:		/* for libgps 3.17 */
+#if GPSD_API_MAJOR_VERSION==6
             gps_close(qth->gps_data);
+#endif
             break;
         default:
             break;
