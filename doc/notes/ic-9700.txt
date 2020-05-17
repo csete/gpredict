@@ -1,0 +1,76 @@
+Setting up gpredict on linux for use with a Icom IC-9700 radio.
+(testing)
+
+settings on the IC-9700: 
+CI-V USB Port: Unlink from[REMOTE]
+CI-V USB Baud Rate: auto 
+CI-V USB Echo Back: OFF 
+CI-V DATA Baud Rate: 19200
+CI-V DATA Echo Back: OFF
+CI-V Address: A2h
+CI-V Transceive: ON
+
+
+When the radio is connected to the PC you should see:
+
+$ lsmod |grep cp
+
+cp210x                 24576 << is the kernel module and memory size, if compiled into the kernel you wont see the module but may still work, try below.
+
+$ lsusb
+
+Bus 001 Device 079: ID 08bb:2901 Texas Instruments PCM2901 Audio Codec
+Bus 001 Device 078: ID 10c4:ea60 Silicon Labs CP210x UART Bridge
+Bus 001 Device 077: ID 10c4:ea60 Silicon Labs CP210x UART Bridge
+Bus 001 Device 076: ID 0451:2046 Texas Instruments, Inc. TUSB2046 Hub
+
+The radio control port is the usually first port:
+
+$ ls /dev/ttyU*
+/dev/ttyUSB0  /dev/ttyUSB1
+
+
+Setting up the daemon from hamlib:
+~/Hamlib/Hamlib/tests $ ./rigctld -m 3081 -r /dev/ttyUSB0 --civaddr \0xA2
+main: #1 vfo_mode=0
+Recommend using --vfo switch for rigctld if client supports it
+rigctl and netrigctl will automatically detect vfo mode
+
+
+The daemon should be running in the background now, "./" is only needed for local execution and testing, if installed from a package:
+$ rigctld -m 3081 -r /dev/ttyUSB0 --civaddr \0xA2
+
+Or you can initiate with "systemd/rc-init" once testing is stable.
+
+
+
+
+Radio config in Gpredict:
+Edit -> Preferences -> Interfaces -> Add New
+
+Name: IC-9700
+Host: localhost
+Port: 4532
+Radio Type:Duplex TRX
+PTT status: None
+VFO Up/Down: Main Up Sub Down
+LO Down: 0
+LO Up: 0
+Signalling: unchecked
+
+in Radiocontrol widget:
+Settings:
+  1. Device: IC-9700
+  2. Device: None
+  Cycle: 1000
+  
+ 
+Note on Cycle:
+Faster is possible due to USB use but the Interrupt on the Waterfall and Radio itself may be more noticeable.
+Currently working well on firmware revision 1.23
+
+(to be enhanced...)
+
+May. 2020, Brett Coady (VK2KYB)
+
+
