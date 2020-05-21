@@ -606,13 +606,17 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
 
     col = mod_cfg_get_int(polv->cfgdata,
                           MOD_CFG_POLAR_SECTION,
-                          MOD_CFG_POLAR_AXIS_COL, SAT_CFG_INT_POLAR_AXIS_COL);
+                          MOD_CFG_POLAR_BGD_COL, SAT_CFG_INT_POLAR_BGD_COL);
 
     polv->bgd = goo_canvas_rect_model_new(root, 0.0, 0.0,
                                           POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE,
-                                          "fill-color-rgba", 0xFFFFFFFF,
+                                          "fill-color-rgba", col,
                                           "stroke-color-rgba", 0xFFFFFFFF,
                                           NULL);
+
+    col = mod_cfg_get_int(polv->cfgdata,
+                          MOD_CFG_POLAR_SECTION,
+                          MOD_CFG_POLAR_AXIS_COL, SAT_CFG_INT_POLAR_AXIS_COL);
 
     /* Add elevation circles at 0, 30 and 60 deg */
     polv->C00 = goo_canvas_ellipse_model_new(root,
