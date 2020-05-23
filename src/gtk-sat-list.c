@@ -309,13 +309,13 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
         }
     }
     if (g_key_file_has_key(satlist->cfgdata,
-                           MOD_CFG_EVENT_LIST_SECTION,
-                           MOD_CFG_EVENT_LIST_SORT_ORDER, NULL))
+                           MOD_CFG_LIST_SECTION,
+                           MOD_CFG_LIST_SORT_ORDER, NULL))
     {
         satlist->sort_order =
             g_key_file_get_integer(satlist->cfgdata,
-                                   MOD_CFG_EVENT_LIST_SECTION,
-                                   MOD_CFG_EVENT_LIST_SORT_ORDER, NULL);
+                                   MOD_CFG_LIST_SECTION,
+                                   MOD_CFG_LIST_SORT_ORDER, NULL);
         if ((satlist->sort_order > 1) || (satlist->sort_order < 0))
             satlist->sort_order = GTK_SORT_ASCENDING;
 
