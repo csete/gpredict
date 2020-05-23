@@ -45,6 +45,8 @@
 #include "sat-pass-dialogs.h"
 #include "sgpsdp/sgp4sdp4.h"
 
+static void     name_toggled(GtkCheckMenuItem * item, gpointer data);
+static void     range_toggled(GtkCheckMenuItem * item, gpointer data);
 static void     coverage_toggled(GtkCheckMenuItem * item, gpointer data);
 static void     track_toggled(GtkCheckMenuItem * item, gpointer data);
 
@@ -99,6 +101,28 @@ void gtk_sat_map_popup_exec(sat_t * sat, qth_t * qth,
     obj = SAT_MAP_OBJ(g_hash_table_lookup(satmap->obj, catnum));
     g_free(catnum);
 
+    /* show name label */
+    menuitem = gtk_check_menu_item_new_with_label(_("Show name"));
+    g_object_set_data(G_OBJECT(menuitem), "sat", sat);
+    g_object_set_data(G_OBJECT(menuitem), "obj", obj);
+    g_object_set_data(G_OBJECT(menuitem), "qth", qth);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
+                                   obj->showname);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(name_toggled),
+                     satmap);
+
+    /* show cov. range */
+    menuitem = gtk_check_menu_item_new_with_label(_("Show footprint"));
+    g_object_set_data(G_OBJECT(menuitem), "sat", sat);
+    g_object_set_data(G_OBJECT(menuitem), "obj", obj);
+    g_object_set_data(G_OBJECT(menuitem), "qth", qth);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem),
+                                   obj->showrange);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(range_toggled),
+                     satmap);
+
     /* highlight cov. area */
     menuitem = gtk_check_menu_item_new_with_label(_("Highlight footprint"));
     g_object_set_data(G_OBJECT(menuitem), "sat", sat);
@@ -148,6 +172,96 @@ void gtk_sat_map_popup_exec(sat_t * sat, qth_t * qth,
     (void) event;
     gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
 #endif
+}
+
+/**
+ * Manage toggling of Name labels.
+ *
+ * @param item The menu item that was toggled.
+ * @param data Pointer to the GtkSatMap structure.
+ *
+ */
+static void name_toggled(GtkCheckMenuItem * item, gpointer data)
+{
+    sat_map_obj_t  *obj = NULL;
+    sat_t          *sat;
+    GtkSatMap      *satmap = GTK_SAT_MAP(data);
+
+    /* get satellite object */
+    obj = SAT_MAP_OBJ(g_object_get_data(G_OBJECT(item), "obj"));
+    sat = SAT(g_object_get_data(G_OBJECT(item), "sat"));
+
+    if (obj == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to get satellite object."),
+                    __FILE__, __LINE__);
+        return;
+    }
+
+    /* toggle flag */
+    obj->showname = !obj->showname;
+    gtk_check_menu_item_set_active(item, obj->showname);
+
+    if (obj->showname)
+    {
+        /* remove it from the storage structure */
+        g_hash_table_remove(satmap->hidenames, &(sat->tle.catnr));
+
+    }
+    else
+    {
+        g_hash_table_insert(satmap->hidenames,
+                            &(sat->tle.catnr), (gpointer) 0x1);
+    }
+
+    /* Force an update to rebuild or remove name labels */
+    gtk_sat_map_update_sat(NULL, sat, satmap);
+}
+
+/**
+ * Manage toggling of Coverage Range.
+ *
+ * @param item The menu item that was toggled.
+ * @param data Pointer to the GtkSatMap structure.
+ *
+ */
+static void range_toggled(GtkCheckMenuItem * item, gpointer data)
+{
+    sat_map_obj_t  *obj = NULL;
+    sat_t          *sat;
+    GtkSatMap      *satmap = GTK_SAT_MAP(data);
+
+    /* get satellite object */
+    obj = SAT_MAP_OBJ(g_object_get_data(G_OBJECT(item), "obj"));
+    sat = SAT(g_object_get_data(G_OBJECT(item), "sat"));
+
+    if (obj == NULL)
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to get satellite object."),
+                    __FILE__, __LINE__);
+        return;
+    }
+
+    /* toggle flag */
+    obj->showrange = !obj->showrange;
+    gtk_check_menu_item_set_active(item, obj->showrange);
+
+    if (obj->showrange)
+    {
+        /* remove it from the storage structure */
+        g_hash_table_remove(satmap->hideranges, &(sat->tle.catnr));
+
+    }
+    else
+    {
+        g_hash_table_insert(satmap->hideranges,
+                            &(sat->tle.catnr), (gpointer) 0x1);
+    }
+
+    /* Force an update to rebuild or remove range polygons */
+    gtk_sat_map_update_sat(NULL, sat, satmap);
 }
 
 /**
@@ -205,12 +319,11 @@ static void coverage_toggled(GtkCheckMenuItem * item, gpointer data)
         covcol = 0x00000000;
     }
 
-    g_object_set(obj->range1, "fill-color-rgba", covcol, NULL);
+    if (obj->range1)
+        g_object_set(obj->range1, "fill-color-rgba", covcol, NULL);
 
-    if (obj->newrcnum == 2)
-    {
+    if (obj->range2)
         g_object_set(obj->range2, "fill-color-rgba", covcol, NULL);
-    }
 }
 
 /**

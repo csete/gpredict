@@ -43,14 +43,16 @@ typedef struct {
  * This data structure represents a satellite object on the map. It consists of a
  * small square representing the position, a label showinf the satellite name, and
  * the range circle. The range circle can have one or two parts, depending on
- * whether it is split or not. The oldrcnum and newrcnum fields are used for
- * keeping track of whether the range circle has one or two parts.
+ * whether it is split or not. The rcnum field is used for keeping track of
+ * whether the range circle has one or two parts.
  *
  */
 typedef struct {
     /* flags */
     gboolean        selected;   /*!< Is satellite selected? */
     gboolean        showtrack;  /*!< Show ground track */
+    gboolean        showname;   /*!< Show name label. */
+    gboolean        showrange;  /*!< Show coverage range. */
     gboolean        showcov;    /*!< Show coverage area. */
     gboolean        istarget;   /*!< is this object the target */
 
@@ -63,8 +65,8 @@ typedef struct {
     GooCanvasItemModel *range2; /*!< Second part of the range circle. */
 
     /* book keeping */
-    guint           oldrcnum;   /*!< Number of RC parts in prev. cycle. */
-    guint           newrcnum;   /*!< Number of RC parts in this cycle. */
+    guint           rcnum;      /*!< Number of RC parts. */
+    gint            catnum;     /*!< Catalogue number of satellite. */
 
     ground_track_t  track_data; /*!< Ground track data. */
     long            track_orbit;        /*!< Orbit when the ground track has been updated. */
@@ -111,6 +113,8 @@ typedef struct {
 
     GHashTable     *obj;        /*!< Canvas items representing each satellite. */
     GHashTable     *showtracks; /*!< A hash of satellites to show tracks for. */
+    GHashTable     *hidenames;  /*!< A hash of satellites to hide name labels for. */
+    GHashTable     *hideranges; /*!< A hash of satellites to hide range for. */
     GHashTable     *hidecovs;   /*!< A hash of satellites to hide coverage for. */
 
     guint           x0;         /*!< X0 of the canvas map. */
@@ -150,6 +154,7 @@ void            gtk_sat_map_lonlat_to_xy(GtkSatMap * m,
 
 void            gtk_sat_map_reload_sats(GtkWidget * satmap, GHashTable * sats);
 void            gtk_sat_map_select_sat(GtkWidget * satmap, gint catnum);
+void            gtk_sat_map_update_sat(gpointer key, gpointer value, gpointer data);
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus

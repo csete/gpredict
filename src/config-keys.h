@@ -112,6 +112,8 @@
 #define MOD_CFG_MAP_KEEP_RATIO        "KEEP_RATIO"
 #define MOD_CFG_MAP_SHADOW_ALPHA      "SHADOW_ALPHA"
 #define MOD_CFG_MAP_SHOWTRACKS        "SHOWTRACKS"
+#define MOD_CFG_MAP_HIDENAMES         "HIDENAMES"
+#define MOD_CFG_MAP_HIDERANGES        "HIDERANGES"
 #define MOD_CFG_MAP_HIDECOVS          "HIDECOVS"
 
 /* polar view specific */
