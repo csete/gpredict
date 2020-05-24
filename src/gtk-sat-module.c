@@ -1262,7 +1262,7 @@ void gtk_sat_module_config_cb(GtkWidget * button, gpointer data)
     }
     else
     {
-        module->timerid = -1;
+        module->timerid = 0;
         retcode = mod_cfg_edit(name, module->cfgdata, toplevel);
         if (retcode == MOD_CFG_OK)
         {
