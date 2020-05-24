@@ -59,6 +59,7 @@ static void     size_allocate_cb(GtkWidget * widget,
 static void     update_map_size(GtkSatMap * satmap);
 static void     update_sat(gpointer key, gpointer value, gpointer data);
 static void     plot_sat(gpointer key, gpointer value, gpointer data);
+static void     free_sat_obj(gpointer key, gpointer value, gpointer data);
 static void     lonlat_to_xy(GtkSatMap * m, gdouble lon, gdouble lat,
                              gfloat * x, gfloat * y);
 static void     xy_to_lonlat(GtkSatMap * m, gfloat x, gfloat y, gfloat * lon,
@@ -176,8 +177,98 @@ static void gtk_sat_map_init(GtkSatMap * satmap)
 
 static void gtk_sat_map_destroy(GtkWidget * widget)
 {
-    gtk_sat_map_store_showtracks(GTK_SAT_MAP(widget));
-    gtk_sat_map_store_hidecovs(GTK_SAT_MAP(widget));
+    GtkSatMap          *satmap = GTK_SAT_MAP(widget);
+    GooCanvasItemModel *root;
+    gint                idx;
+    guint               i;
+
+    /* check widget isn't already destroyed */
+    if (satmap->obj) {
+        /* save config */
+        gtk_sat_map_store_showtracks(GTK_SAT_MAP(widget));
+        gtk_sat_map_store_hidecovs(GTK_SAT_MAP(widget));
+
+        /* sat objects need a reference to the widget to free all alocations */
+        g_hash_table_foreach(satmap->obj, free_sat_obj, satmap);
+        g_hash_table_destroy(satmap->obj);
+        satmap->obj = NULL;
+
+        /* these objects destruct themselves cleanly */
+        g_object_unref(satmap->origmap);
+        satmap->origmap = NULL;
+        g_hash_table_destroy(satmap->showtracks);
+        satmap->showtracks = NULL;
+        g_hash_table_destroy(satmap->hidecovs);
+        satmap->hidecovs = NULL;
+
+        root = goo_canvas_get_root_item_model(GOO_CANVAS(satmap->canvas));
+
+        idx = goo_canvas_item_model_find_child(root, satmap->qthmark);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->qthmark = NULL;
+
+        idx = goo_canvas_item_model_find_child(root, satmap->qthlabel);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->qthlabel = NULL;
+
+        idx = goo_canvas_item_model_find_child(root, satmap->locnam);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->locnam = NULL;
+
+        idx = goo_canvas_item_model_find_child(root, satmap->curs);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->curs = NULL;
+
+        idx = goo_canvas_item_model_find_child(root, satmap->next);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->next = NULL;
+
+        idx = goo_canvas_item_model_find_child(root, satmap->sel);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->sel = NULL;
+
+        idx = goo_canvas_item_model_find_child(root, satmap->terminator);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->terminator = NULL;
+
+        for (i = 0; i < 5; i++)
+        {
+            idx = goo_canvas_item_model_find_child(root, satmap->gridh[i]);
+            if (idx != -1)
+                goo_canvas_item_model_remove_child(root, idx);
+            satmap->gridh[i] = NULL;
+
+            idx = goo_canvas_item_model_find_child(root, satmap->gridhlab[i]);
+            if (idx != -1)
+                goo_canvas_item_model_remove_child(root, idx);
+            satmap->gridhlab[i] = NULL;
+        }
+
+        for (i = 0; i < 11; i++)
+        {
+            idx = goo_canvas_item_model_find_child(root, satmap->gridv[i]);
+            if (idx != -1)
+                goo_canvas_item_model_remove_child(root, idx);
+            satmap->gridv[i] = NULL;
+
+            idx = goo_canvas_item_model_find_child(root, satmap->gridvlab[i]);
+            if (idx != -1)
+                goo_canvas_item_model_remove_child(root, idx);
+            satmap->gridvlab[i] = NULL;
+        }
+
+        idx = goo_canvas_item_model_find_child(root, satmap->map);
+        if (idx != -1)
+            goo_canvas_item_model_remove_child(root, idx);
+        satmap->map = NULL;
+    }
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
@@ -194,7 +285,7 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
     satmap->sats = sats;
     satmap->qth = qth;
 
-    satmap->obj = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
+    satmap->obj = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, g_free);
 
     satmap->refresh = mod_cfg_get_int(cfgdata,
                                       MOD_CFG_MAP_SECTION,
@@ -285,6 +376,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
     gfloat          x, y;
     guint32         col;
 
+    satmap->terminator = NULL;
     root = goo_canvas_group_model_new(NULL, NULL);
 
     /* map dimensions */
@@ -1725,6 +1817,8 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
     obj->istarget = FALSE;
     obj->oldrcnum = 0;
     obj->newrcnum = 0;
+    obj->range2 = NULL;
+    obj->catnum = sat->tle.catnr;
     obj->track_data.latlon = NULL;
     obj->track_data.lines = NULL;
     obj->track_orbit = 0;
@@ -1866,6 +1960,67 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
     g_hash_table_insert(satmap->obj, catnum, obj);
 }
 
+/**
+ * Free a satellite object.
+ *
+ * @param key The hash table key.
+ * @param value Pointer to the satellite.
+ * @param data Pointer to the GtkSatMap widget.
+ *
+ * This function removes the canvas objects allocated by `plot_sat`. It needs
+ * access the the GtkSatMap widget to remove the elements from the canvas and
+ * to pass on to `ground_track_delete`. The function must be called as a
+ * g_hash_table_foreach callback in order to pass in the GtkSatMap.
+ */
+static void free_sat_obj(gpointer key, gpointer value, gpointer data)
+{
+    sat_map_obj_t      *obj = SAT_MAP_OBJ(value);
+    sat_t              *sat = NULL;
+    GtkSatMap          *satmap = GTK_SAT_MAP(data);
+    GooCanvasItemModel *root;
+    gint                idx;
+
+    (void)key;
+
+    root = goo_canvas_get_root_item_model(GOO_CANVAS(satmap->canvas));
+
+    idx = goo_canvas_item_model_find_child(root, obj->marker);
+    if (idx != -1)
+        goo_canvas_item_model_remove_child(root, idx);;
+    obj->marker = NULL;
+
+    idx = goo_canvas_item_model_find_child(root, obj->shadowm);
+    if (idx != -1)
+        goo_canvas_item_model_remove_child(root, idx);;
+    obj->shadowm = NULL;
+
+    idx = goo_canvas_item_model_find_child(root, obj->label);
+    if (idx != -1)
+        goo_canvas_item_model_remove_child(root, idx);
+    obj->label = NULL;
+
+    idx = goo_canvas_item_model_find_child(root, obj->shadowl);
+    if (idx != -1)
+        goo_canvas_item_model_remove_child(root, idx);
+    obj->shadowl = NULL;
+
+    idx = goo_canvas_item_model_find_child(root, obj->range1);
+    if (idx != -1)
+        goo_canvas_item_model_remove_child(root, idx);
+    obj->range1 = NULL;
+
+    idx = goo_canvas_item_model_find_child(root, obj->range2);
+    if (idx != -1)
+        goo_canvas_item_model_remove_child(root, idx);
+    obj->range2 = NULL;
+
+    if (obj->showtrack)
+    {
+        sat = SAT(g_hash_table_lookup(satmap->sats, &obj->catnr));
+        ground_track_delete(satmap, sat, satmap->qth, obj, TRUE);
+    }
+}
+
 /** Update a given satellite. */
 static void update_sat(gpointer key, gpointer value, gpointer data)
 {
@@ -1906,29 +2061,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
     /* get rid of a decayed satellite */
     if (decayed(sat) && obj != NULL)
     {
-        idx = goo_canvas_item_model_find_child(root, obj->marker);
-        if (idx != -1)
-            goo_canvas_item_model_remove_child(root, idx);;
-        idx = goo_canvas_item_model_find_child(root, obj->shadowm);
-        if (idx != -1)
-            goo_canvas_item_model_remove_child(root, idx);;
-        idx = goo_canvas_item_model_find_child(root, obj->label);
-        if (idx != -1)
-            goo_canvas_item_model_remove_child(root, idx);
-        idx = goo_canvas_item_model_find_child(root, obj->shadowl);
-        if (idx != -1)
-            goo_canvas_item_model_remove_child(root, idx);
-        idx = goo_canvas_item_model_find_child(root, obj->range1);
-        if (idx != -1)
-            goo_canvas_item_model_remove_child(root, idx);
-        idx = goo_canvas_item_model_find_child(root, obj->range2);
-        if (idx != -1)
-            goo_canvas_item_model_remove_child(root, idx);
-        g_hash_table_remove(satmap->obj, catnum);
-        if (obj->showtrack)
-            ground_track_update(satmap, sat, satmap->qth, obj, TRUE);
-        g_free(obj);
-
+        free_sat_obj(NULL, obj, satmap);
         g_hash_table_remove(satmap->obj, catnum);
         return;
     }

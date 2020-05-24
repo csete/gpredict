@@ -65,6 +65,7 @@ typedef struct {
     /* book keeping */
     guint           oldrcnum;   /*!< Number of RC parts in prev. cycle. */
     guint           newrcnum;   /*!< Number of RC parts in this cycle. */
+    gint            catnum;     /*!< Catalogue number of satellite. */
 
     ground_track_t  track_data; /*!< Ground track data. */
     long            track_orbit;        /*!< Orbit when the ground track has been updated. */
