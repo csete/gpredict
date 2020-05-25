@@ -2024,7 +2024,7 @@ static void free_sat_obj(gpointer key, gpointer value, gpointer data)
 
     if (obj->showtrack)
     {
-        sat = SAT(g_hash_table_lookup(satmap->sats, &obj->catnr));
+        sat = SAT(g_hash_table_lookup(satmap->sats, &obj->catnum));
         ground_track_delete(satmap, sat, satmap->qth, obj, TRUE);
     }
 }
