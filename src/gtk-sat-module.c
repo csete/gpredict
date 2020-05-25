@@ -134,6 +134,8 @@ static void update_autotrack(GtkSatModule * module)
 static void gtk_sat_module_destroy(GtkWidget * widget)
 {
     GtkSatModule   *module = GTK_SAT_MODULE(widget);
+    GtkWidget      *view;
+    guint           i;
 
     /*save the configuration */
     mod_cfg_save(module->name, module->cfgdata);
@@ -168,6 +170,14 @@ static void gtk_sat_module_destroy(GtkWidget * widget)
         gtk_widget_destroy(module->skgwin);
     }
 
+    /* destroy views */
+    for (i = 0; i < module->nviews; i++)
+    {
+        view = GTK_WIDGET(g_slist_nth_data(module->views, i));
+        gtk_widget_destroy(view);
+    }
+    module->nviews = 0;
+
     /* clean up QTH */
     if (module->qth)
     {
@@ -187,8 +197,6 @@ static void gtk_sat_module_destroy(GtkWidget * widget)
         g_free(module->grid);
         module->grid = NULL;
     }
-
-    /* FIXME: free module->views? */
 
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
