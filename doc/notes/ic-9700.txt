@@ -53,7 +53,7 @@ Host: localhost
 Port: 4532
 Radio Type:Duplex TRX
 PTT status: None
-VFO Up/Down: Main Up Sub Down
+VFO Up/Down: Main Down Sub Up
 LO Down: 0
 LO Up: 0
 Signalling: unchecked

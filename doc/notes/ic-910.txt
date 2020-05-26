@@ -1,0 +1,54 @@
+Setting up gpredict on linux for use with a Icom IC-910 radio.
+
+
+Settings on the IC-910:
+CI-V DATA Baud Rate: 19200
+CI-V Address: 60h
+CI-V transceive: On
+
+
+When the radio is connected to the PC via the CI-V CAT Interface and serial port COM1 it is
+on /dev/ttyS0 or higer number.
+When you are using a usb-serial-rs232-adapter it should be on /dev/ttyUSB0 or higher number.
+
+
+Setting up the daemon from hamlib:
+~/Hamlib/Hamlib/tests $ ./rigctld -m 3044 -r /dev/ttyUSB0 --civaddr \0x60
+main: #1 vfo_mode=0
+Recommend using --vfo switch for rigctld if client supports it
+rigctl and netrigctl will automatically detect vfo mode
+
+
+The daemon should be running in the background now, "./" is only needed for local execution and testing, if installed from a package:
+$ rigctld -m 3044 -r /dev/ttyUSB0 --civaddr \0x60
+
+Or you can initiate with "systemd/rc-init" once testing is stable.
+
+
+
+
+Radio config in Gpredict:
+Edit -> Preferences -> Interfaces -> Add New
+
+Name: IC-910
+Host: localhost
+Port: 4532
+Radio Type:Duplex TRX
+PTT status: None
+VFO Up/Down: Main Down Sub Up
+LO Down: 0
+LO Up: 0
+Signalling: unchecked
+
+in Radiocontrol widget:
+Settings:
+  1. Device: IC-910
+  2. Device: None
+  Cycle: 1000
+  
+
+(to be enhanced...)
+
+May. 2020, Brett Coady (VK2KYB) / Andreas Puschendorf (DL7OAP)
+
+
