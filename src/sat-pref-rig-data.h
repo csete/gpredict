@@ -40,6 +40,14 @@ typedef enum {
     RIG_LIST_COL_LOUP,          /*!< Local oscillato freq (uplink) */
     RIG_LIST_COL_SIGAOS,        /*!< Signal AOS */
     RIG_LIST_COL_SIGLOS,        /*!< Signal LOS */
+    RIG_LIST_COL_AOS_ELEVATION, /*!< AOS elevation */
+    RIG_LIST_COL_LOS_ELEVATION, /*!< LOS elevation */
+    RIG_LIST_COL_AOS_COMMAND,   /*!< AOS command */
+    RIG_LIST_COL_LOS_COMMAND,   /*!< LOS command */
+    RIG_LIST_COL_AOS_APP,       /*!< AOS application */
+    RIG_LIST_COL_LOS_APP,       /*!< LOS application */
+    RIG_LIST_COL_AOS_WAV,       /*!< AOS audio file */
+    RIG_LIST_COL_LOS_WAV,       /*!< LOS audio file */
     RIG_LIST_COL_NUM            /*!< The number of fields in the list. */
 } rig_list_col_t;
 

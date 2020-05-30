@@ -1,33 +1,23 @@
-# Configuration variables governing the build of gpredict for win32
+# Configuration variables governing the build of gpredict for win32 (or win64)
 
-# pkgconfig path, assumes goocanvas-2.0.2 and gtk+-3.10.4 win32 packages
-# unpacked and paths adjusted (pkg-config files) at the same folder level
-# as gpredict. Downloads used:
-# 
-# http://ftp.gnome.org/pub/GNOME/binaries/win32/goocanvas/2.0/
-# download both: goocanvas-2.0.2-win32.zip, goocanvas-dev-2.0.2-win32.zip
-# 
-# http://win32builder.gnome.org/gtk+-bundle_3.10.4-20131202_win32.zip
-# NB: I had to create new .pc files for both gtk+-3.0.pc and gdk.pc
-# (thanks GNOME for missing crucial bits out of builds). My versions
-# are in this folder, and will need unpack paths inserting.
-
-MINGW_ROOT=../../mingw32
-#MINGW_ROOT=../../../tmp/mingw32
-
-PKG_CONFIG_PATH = "$(abspath $(MINGW_ROOT)/lib/pkgconfig)"
+# Choose between 32-bit or 64-bit compiler
+MINGW_ROOT=/mingw32
+MGW_PREFIX=i686-w64-mingw32-
+#MINGW_ROOT=/mingw64
+#MGW_PREFIX=x86_64-w64-mingw32-
 
 # binary dependencies to be deployed with gpredict.exe
 BINDEPS = \
-	$(wildcard $(MINGW_ROOT)/bin/*.dll) \
-	$(MINGW_ROOT)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll
+	$(wildcard $(MINGW_ROOT)/bin/*.dll)
 
-# where to put the loaders.cache file
+# where to put the loaders.cache file and dlls
 LOADERS = lib/gdk-pixbuf-2.0/2.10.0
+LOADER_DLLS =  $(MINGW_ROOT)/$(LOADERS)/loaders/
 
 # other miscellaneous folders to deploy with the binary
 GTKETC  = $(MINGW_ROOT)/etc
 SCHEMAS = $(MINGW_ROOT)/share/glib-2.0/schemas
+ADWAITA = $(MINGW_ROOT)/share/icons/Adwaita
 
 # Autoversioning from nearest git tag, assumes v<x>.<y> tag format.
 

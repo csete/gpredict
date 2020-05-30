@@ -98,3 +98,5 @@
 
 #undef HAS_LIBGPS
 
+/* Define if libgstreamer is available */
+#define HAS_LIBGSTREAMER 1

@@ -61,7 +61,15 @@ static GtkTreeModel *create_and_fill_model()
                                    G_TYPE_DOUBLE,       // LO DOWN
                                    G_TYPE_DOUBLE,       // LO UO
                                    G_TYPE_BOOLEAN,      // AOS signalling
-                                   G_TYPE_BOOLEAN       // LOS signalling
+                                   G_TYPE_BOOLEAN,      // LOS signalling
+                                   G_TYPE_DOUBLE,       // AOS elevation
+                                   G_TYPE_DOUBLE,       // LOS elevation
+                                   G_TYPE_STRING,       // AOS command
+                                   G_TYPE_STRING,       // LOS command
+                                   G_TYPE_STRING,       // AOS application
+                                   G_TYPE_STRING,       // LOS application
+                                   G_TYPE_STRING,       // AOS .wav
+                                   G_TYPE_STRING        // LOS .wav
         );
 
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(liststore),
@@ -98,6 +106,14 @@ static GtkTreeModel *create_and_fill_model()
                                        RIG_LIST_COL_LOUP, conf.loup,
                                        RIG_LIST_COL_SIGAOS, conf.signal_aos,
                                        RIG_LIST_COL_SIGLOS, conf.signal_los,
+                                       RIG_LIST_COL_AOS_ELEVATION, conf.aos_el,
+                                       RIG_LIST_COL_LOS_ELEVATION, conf.los_el,
+                                       RIG_LIST_COL_AOS_COMMAND, conf.aos_command,
+                                       RIG_LIST_COL_LOS_COMMAND, conf.los_command,
+                                       RIG_LIST_COL_AOS_APP, conf.aos_app,
+                                       RIG_LIST_COL_LOS_APP, conf.los_app,
+                                       RIG_LIST_COL_AOS_WAV, conf.aos_wav,
+                                       RIG_LIST_COL_LOS_WAV, conf.los_wav,
                                        -1);
 
                     sat_log_log(SAT_LOG_LEVEL_DEBUG,
@@ -351,6 +367,28 @@ static void render_vfo(GtkTreeViewColumn * col,
     g_free(buff);
 }
 
+/**
+ * Render angle
+ *
+ * This function is used to render an elevation angle in degrees.
+ */
+static void render_angle(GtkTreeViewColumn * col,
+                         GtkCellRenderer * renderer,
+                         GtkTreeModel * model,
+                         GtkTreeIter * iter,
+                         gpointer column)
+{
+    gdouble         number;
+    gchar          *buff;
+    guint           coli = GPOINTER_TO_UINT(column);
+
+    gtk_tree_model_get(model, iter, coli, &number, -1);
+
+    buff = g_strdup_printf("%.1f deg", number);
+    g_object_set(renderer, "text", buff, NULL);
+    g_free(buff);
+}
+
 static void render_signal(GtkTreeViewColumn * col, GtkCellRenderer * renderer,
                           GtkTreeModel * model, GtkTreeIter * iter,
                           gpointer column)
@@ -394,7 +432,15 @@ static void edit_cb(GtkWidget * button, gpointer data)
         .lo = 0.0,
         .loup = 0.0,
         .signal_aos = FALSE,
-        .signal_los = FALSE
+        .signal_los = FALSE,
+        .aos_el = 0.0,
+        .los_el = 0.0,
+        .aos_command = NULL,
+        .los_command = NULL,
+        .aos_app = NULL,
+        .los_app = NULL,
+        .aos_wav = NULL,
+        .los_wav = NULL
     };
 
     /* If there are no entries, we have a bug since the button should 
@@ -426,7 +472,16 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, &conf.lo,
                            RIG_LIST_COL_LOUP, &conf.loup,
                            RIG_LIST_COL_SIGAOS, &conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
+                           RIG_LIST_COL_SIGLOS, &conf.signal_los,
+                           RIG_LIST_COL_AOS_ELEVATION, &conf.aos_el,
+                           RIG_LIST_COL_LOS_ELEVATION, &conf.los_el,
+                           RIG_LIST_COL_AOS_COMMAND, &conf.aos_command,
+                           RIG_LIST_COL_LOS_COMMAND, &conf.los_command,
+                           RIG_LIST_COL_AOS_APP, &conf.aos_app,
+                           RIG_LIST_COL_LOS_APP, &conf.los_app,
+                           RIG_LIST_COL_AOS_WAV, &conf.aos_wav,
+                           RIG_LIST_COL_LOS_WAV, &conf.los_wav,
+                           -1);
     }
     else
     {
@@ -462,7 +517,16 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
+                           RIG_LIST_COL_SIGLOS, conf.signal_los,
+                           RIG_LIST_COL_AOS_ELEVATION, conf.aos_el,
+                           RIG_LIST_COL_LOS_ELEVATION, conf.los_el,
+                           RIG_LIST_COL_AOS_COMMAND, conf.aos_command,
+                           RIG_LIST_COL_LOS_COMMAND, conf.los_command,
+                           RIG_LIST_COL_AOS_APP, conf.aos_app,
+                           RIG_LIST_COL_LOS_APP, conf.los_app,
+                           RIG_LIST_COL_AOS_WAV, conf.aos_wav,
+                           RIG_LIST_COL_LOS_WAV, conf.los_wav,
+                           -1);
     }
 
     /* clean up memory */
@@ -609,8 +673,91 @@ static void create_rig_list()
                                             (RIG_LIST_COL_SIGLOS), NULL);
     gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
 
+    /* AOS elevation */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("AOS Elevation"),
+                                                      renderer,
+                                                      "text",
+                                                      RIG_LIST_COL_AOS_ELEVATION,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_AOS_ELEVATION), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* LOS elevation */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("LOS Elevation"),
+                                                      renderer,
+                                                      "text",
+                                                      RIG_LIST_COL_LOS_ELEVATION,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_angle,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_LOS_ELEVATION), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+
+    /* AOS command */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("AOS Command"),
+                                                     renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_AOS_COMMAND,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* LOS command */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("LOS Command"),
+                                                      renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_LOS_COMMAND,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+
+    /* AOS application */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("AOS Application"),
+                                                     renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_AOS_APP,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* LOS application */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("LOS Application"),
+                                                      renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_LOS_APP,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+
+    /* AOS .wav file */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("AOS Audio File"),
+                                                     renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_AOS_WAV,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* LOS .wav file */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("LOS Audio File"),
+                                                      renderer,
+                                                     "text",
+                                                     RIG_LIST_COL_LOS_WAV,
+                                                     NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+
     g_signal_connect(riglist, "row-activated", G_CALLBACK(row_activated_cb),
                      riglist);
+
 }
 
 /**
@@ -690,6 +837,14 @@ static void add_cb(GtkWidget * button, gpointer data)
         .loup = 0.0,
         .signal_aos = FALSE,
         .signal_los = FALSE,
+        .aos_el = 0.0,
+        .los_el = 0.0,
+        .aos_command = NULL,
+        .los_command = NULL,
+        .aos_app = NULL,
+        .los_app = NULL,
+        .aos_wav = NULL,
+        .los_wav = NULL
     };
 
     /* run rig conf editor */
@@ -712,7 +867,16 @@ static void add_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
+                           RIG_LIST_COL_SIGLOS, conf.signal_los,
+                           RIG_LIST_COL_AOS_ELEVATION, conf.aos_el,
+                           RIG_LIST_COL_LOS_ELEVATION, conf.los_el,
+                           RIG_LIST_COL_AOS_COMMAND, conf.aos_command,
+                           RIG_LIST_COL_LOS_COMMAND, conf.los_command,
+                           RIG_LIST_COL_AOS_APP, conf.aos_app,
+                           RIG_LIST_COL_LOS_APP, conf.los_app,
+                           RIG_LIST_COL_AOS_WAV, conf.aos_wav,
+                           RIG_LIST_COL_LOS_WAV, conf.los_wav,
+                           -1);
 
         g_free(conf.name);
 
@@ -813,7 +977,15 @@ void sat_pref_rig_ok()
         .lo = 0.0,
         .loup = 0.0,
         .signal_aos = FALSE,
-        .signal_los = FALSE
+        .signal_los = FALSE,
+        .aos_el = 0.0,
+        .los_el = 0.0,
+        .aos_command = NULL,
+        .los_command = NULL,
+        .aos_app = NULL,
+        .los_app = NULL,
+        .aos_wav = NULL,
+        .los_wav = NULL
     };
 
     /* delete all .rig files */
@@ -859,7 +1031,16 @@ void sat_pref_rig_ok()
                                RIG_LIST_COL_LO, &conf.lo,
                                RIG_LIST_COL_LOUP, &conf.loup,
                                RIG_LIST_COL_SIGAOS, &conf.signal_aos,
-                               RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
+                               RIG_LIST_COL_SIGLOS, &conf.signal_los,
+                               RIG_LIST_COL_AOS_ELEVATION, &conf.aos_el,
+                               RIG_LIST_COL_LOS_ELEVATION, &conf.los_el,
+                               RIG_LIST_COL_AOS_COMMAND, &conf.aos_command,
+                               RIG_LIST_COL_LOS_COMMAND, &conf.los_command,
+                               RIG_LIST_COL_AOS_APP, &conf.aos_app,
+                               RIG_LIST_COL_LOS_APP, &conf.los_app,
+                               RIG_LIST_COL_AOS_WAV, &conf.aos_wav,
+                               RIG_LIST_COL_LOS_WAV, &conf.los_wav,
+                               -1);
             radio_conf_save(&conf);
 
             /* free conf buffer */

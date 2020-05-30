@@ -72,6 +72,18 @@ typedef struct {
 
     gboolean        signal_aos; /*!< Send AOS notification to RIG */
     gboolean        signal_los; /*!< Send LOS notification to RIG */
+
+    gdouble         aos_el;      /*!< Elevation for AOS to be signalled at */
+    gdouble         los_el;      /*!< Elevation for LOS to be signalled at */
+
+    gchar          *aos_command; /*!< Commands to send to radio on AOS */
+    gchar          *los_command; /*!< Commands to send to radio on LOS */
+
+    gchar          *aos_app;     /*!< Application to run on AOS */
+    gchar          *los_app;     /*!< Application to run on LOS */
+
+    gchar          *aos_wav;     /*!< Audio file (E.g. .wav) to play on AOS */
+    gchar          *los_wav;     /*!< Audio file (E.g. .wav) to play on LOS */
 } radio_conf_t;
 
 

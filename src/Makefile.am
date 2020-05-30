@@ -37,6 +37,7 @@ gpredict_SOURCES = \
     first-time.c first-time.h \
     gpredict-help.c gpredict-help.h \
     gpredict-utils.c gpredict-utils.h \
+    gtk-audio.c gtk-audio.h \
     gtk-azel-plot.c gtk-azel-plot.h \
     gtk-event-list.c gtk-event-list.h \
     gtk-event-list-popup.c gtk-event-list-popup.h \

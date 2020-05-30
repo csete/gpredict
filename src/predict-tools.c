@@ -370,6 +370,33 @@ pass_t         *get_next_pass(sat_t * sat, qth_t * qth, gdouble maxdt)
 }
 
 /**
+ * \brief Predict the next pass that has a minimum elevation.
+ * \param sat Pointer to the satellite data.
+ * \param qth Pointer to the observer data.
+ * \param maxdt The maximum number of days to look ahead.
+ * \param min_ele Minimum elevation.
+ * \return Pointer newly allocated pass_t structure that should be freed
+ *         with free_pass when no longer needed, or NULL if no pass can be
+ *         found.
+ *
+ * This function simply wraps the get_pass function using the current time
+ * as parameter.
+ *
+ * \note the data in sat will be corrupt (future) and must be refreshed
+ *       by the caller, if the caller will need it later on (eg. if the caller
+ *       is GtkSatList).
+ */
+pass_t         *get_next_pass_el(sat_t * sat, qth_t * qth, gdouble maxdt, gdouble min_ele)
+{
+    gdouble         now;
+
+    /* get the current time and call the get_pass function */
+    now = get_current_daynum();
+
+    return get_pass_engine(sat, qth, now, maxdt, min_ele);
+}
+
+/**
  * \brief Predict upcoming passes starting now
  * \param sat Pointer to the satellite data.
  * \param qth Pointer to the observer data.
@@ -441,6 +468,7 @@ pass_t         *get_pass_no_min_el(sat_t * sat_in, qth_t * qth, gdouble start,
  * \param qth Pointer to the location data.
  * \param start Starting time.
  * \param maxdt The maximum number of days to look ahead (0 for no limit).
+ * \param min_el Minimum elevation for the pass.
  * \return Pointer to a newly allocated pass_t structure or NULL if
  *         there was an error.
  *

@@ -52,6 +52,16 @@ else
     AC_MSG_ERROR(Gpredict requires libgoocanvas-2.0-dev)
 fi
 
+# check for gstreamer (optional)
+if pkg-config --atleast-version=1.0 gstreamer-1.0; then
+    CFLAGS="$CFLAGS `pkg-config --cflags gstreamer-1.0`"
+    LIBS="$LIBS `pkg-config --libs gstreamer-1.0`"
+    havelibgstreamer=true;
+    AC_DEFINE(HAS_LIBGSTREAMER, 1, [Define if libgstreamer is available])
+else
+    havelibgstreamer=false;
+fi
+
 # check for libgps (optional)
 if pkg-config --atleast-version=2.90 libgps; then
     CFLAGS="$CFLAGS `pkg-config --cflags libgps`"
@@ -94,6 +104,11 @@ GTHR_V=`pkg-config --modversion gthread-2.0`
 GDK_V=`pkg-config --modversion gdk-3.0`
 GTK_V=`pkg-config --modversion gtk+-3.0`
 GOOC_V=`pkg-config --modversion goocanvas-2.0`
+if test "$havelibgstreamer" = true ; then
+   GST_V=`pkg-config --modversion gstreamer-1.0`
+else
+   GST_V='Not found'
+fi
 CURL_V=`pkg-config --modversion libcurl`
 if test "$havelibgps" = true ; then
    GPS_V=`pkg-config --modversion libgps`
@@ -132,6 +147,7 @@ echo Gthread version.... : $GTHR_V
 echo Gdk version........ : $GDK_V
 echo Gtk+ version....... : $GTK_V
 echo GooCanvas version.. : $GOOC_V
+echo gstreamer version.. : $GST_V
 echo Libcurl version.... : $CURL_V
 if test "$havelibgps" = true ; then
    echo Libgps version..... : $GPS_V
