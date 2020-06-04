@@ -1383,16 +1383,6 @@ void gtk_sat_module_config_cb(GtkWidget * button, gpointer data)
     g_free(name);
 }
 
-static gboolean empty(gpointer key, gpointer val, gpointer data)
-{
-    (void)key;
-    (void)val;
-    (void)data;
-
-    /* TRUE => sat removed from hash table */
-    return TRUE;
-}
-
 /** Reload satellites in view */
 static void reload_sats_in_child(GtkWidget * widget, GtkSatModule * module)
 {
@@ -1453,7 +1443,7 @@ void gtk_sat_module_reload_sats(GtkSatModule * module)
                 __func__, module->name);
 
     /* remove each element from the hash table, but keep the hash table */
-    g_hash_table_foreach_remove(module->satellites, empty, NULL);
+    g_hash_table_remove_all(module->satellites);
 
     /* reset event counter so that next AOS/LOS gets re-calculated */
     module->event_count = 0;
