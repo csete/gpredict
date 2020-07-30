@@ -7,6 +7,8 @@ Changes in version 2.4 (TBD)
 - Fixed bug that limited altitude to 5000 feet
 - Fixed timezone bug in Epoch string in the satellite info dialog
 - Fixed crash when eccentricity of orbit is exactly 0
+- Fixed bug that prevented changing the polar view background
+- Fixed saving the sort order in the satellite list view
 - Ensure Azimuth read from rotator is always between 0-360 degrees
 - Ensure rotator limits are respected while tracking
 - Ensure next events are in chronological order
@@ -76,7 +78,7 @@ Changes in version 1.3 (1 Mar 2011)
 - Fixed bug 2116691: Leave network connection open.
 - Fixed bug 3099314: Rotator Thrashing.
 - Fixed bug 2167508: problems in rotator controller.
-- Update from local files won't work with files in UPPER case 
+- Update from local files won't work with files in UPPER case
 - Fixed bug 3171615: Searching for satellites in the satellite selector
 - Fixed bug 3113190: .desktop file error
 - Address bug 2945538: Pass in polar display going outside the circle
@@ -357,7 +359,7 @@ Changes in version 0.5.0 (29 Jan 2005):
 - Satmap-druid will now open a warning dialog if the number of
   selected satellites is greater than 10 (bug #555595).
 - Fixed positioning and alignment errors in AOS prints. Added orbit
-  number to detailed prints. 
+  number to detailed prints.
 - We now use the standard Gnome data directories (incompatible with
   previous releases). This means, that the 'configure --prefix=...'
   and other directory switches should work now.
@@ -370,7 +372,7 @@ Changes in version 0.5.0 (29 Jan 2005):
 
 Changes in version 0.4.0 (17 Apr 2003):
 
-- TLE files are now stored in user's home directory in 
+- TLE files are now stored in user's home directory in
   $HOME/.gpredict/tle and can be updated automatically at run time.
   The supplied files are identicale to those at celestrak.com except
   that the extensions have been changed from .txt to .tle
