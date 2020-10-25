@@ -2691,9 +2691,9 @@ static void redraw_terminator(GtkSatMap * satmap)
 
     for (longitude = -180; longitude <= 180; ++longitude)
     {
-
-        lx = cos(de2ra * (longitude + sgn(sz) * 90));
-        ly = sin(de2ra * (longitude + sgn(sz) * 90));
+        int centered_longitude = longitude + (satmap->left_side_lon - 180.0);
+        lx = cos(de2ra * (centered_longitude + sgn(sz) * 90));
+        ly = sin(de2ra * (centered_longitude + sgn(sz) * 90));
         /* lz = 0.0; */
 
         rx = ly * sz /* -lz*sy */ ;
@@ -2703,19 +2703,23 @@ static void redraw_terminator(GtkSatMap * satmap)
         gdouble         length = sqrt(rx * rx + ry * ry + rz * rz);
 
         lonlat_to_xy(satmap,
-                     longitude, asin(rz / length) * (1.0 / de2ra), &x, &y);
+                     centered_longitude, asin(rz / length) * (1.0 / de2ra), &x, &y);
+
+        if( 180 == longitude )
+        {
+           // make sure the last point is on the right side
+           x = satmap->x0 + satmap->width;
+        }
 
         line->coords[2 * (longitude + 181)] = x;
         line->coords[2 * (longitude + 181) + 1] = y;
     }
 
-    lonlat_to_xy(satmap, -180.0, sz < 0.0 ? 90.0 : -90.0, &x, &y);
-    line->coords[0] = x;
-    line->coords[1] = y;
+    line->coords[0] = satmap->x0;
+    line->coords[1] = sz < 0.0 ? satmap->y0 : ( satmap->y0 + satmap->height );
 
-    lonlat_to_xy(satmap, 180.0, sz < 0.0 ? 90.0 : -90.0, &x, &y);
-    line->coords[724] = x;
-    line->coords[725] = y;
+    line->coords[724] = satmap->x0 + satmap->width;
+    line->coords[725] = sz < 0.0 ? satmap->y0 : ( satmap->y0 + satmap->height );
 
     g_object_set(satmap->terminator, "points", line, NULL);
     goo_canvas_points_unref(line);
