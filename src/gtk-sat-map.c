@@ -321,6 +321,11 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
                                         MOD_CFG_MAP_SHOW_GRID,
                                         SAT_CFG_BOOL_MAP_SHOW_GRID);
 
+    satmap->show_terminator = mod_cfg_get_bool(cfgdata,
+                                        MOD_CFG_MAP_SECTION,
+                                        MOD_CFG_MAP_SHOW_TERMINATOR,
+                                        SAT_CFG_BOOL_MAP_SHOW_TERMINATOR);
+
     satmap->keepratio = mod_cfg_get_bool(cfgdata,
                                          MOD_CFG_MAP_SECTION,
                                          MOD_CFG_MAP_KEEP_RATIO,
