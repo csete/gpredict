@@ -36,6 +36,9 @@ main: #1 vfo_mode=0
 Recommend using --vfo switch for rigctld if client supports it
 rigctl and netrigctl will automatically detect vfo mode
 
+Be aware of the hamlib 4.1 parameter -x/--uplink switch for GPredict. Will avoid reading freq from the uplink. 
+This will help for a better handling when sweeping over a linear satellite transponder.
+
 
 The daemon should be running in the background now, "./" is only needed for local execution and testing, if installed from a package:
 $ rigctld -m 3081 -r /dev/ttyUSB0 --civaddr \0xA2
