@@ -1558,7 +1558,7 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj,
         points->coords[2 * i] = (double)x;
         points->coords[2 * i + 1] = (double)y;
 
-        if (!(i % tres))
+        if (tres != 0 && !(i % tres))
         {
             /* create a time tick */
             if (ttidx < TRACK_TICK_NUM)
