@@ -396,10 +396,10 @@ void tle_update_from_files(const gchar * dir, const gchar * filter,
             /* store time of update if we have updated something */
             if ((updated > 0) || (newsats > 0))
             {
-                GTimeVal        tval;
+		gint64          now;
 
-                g_get_current_time(&tval);
-                sat_cfg_set_int(SAT_CFG_INT_TLE_LAST_UPDATE, tval.tv_sec);
+		now = g_get_real_time() / G_USEC_PER_SEC;
+                sat_cfg_set_int(SAT_CFG_INT_TLE_LAST_UPDATE, now);
             }
         }
 

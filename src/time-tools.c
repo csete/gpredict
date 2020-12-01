@@ -50,16 +50,15 @@ gdouble
 get_current_daynum ()
 {
     struct tm utc;
-    //struct timeval tmval;
-    GTimeVal tmval;
+    GDateTime *now;
     double daynum;
 
     UTC_Calendar_Now (&utc);
-    //gettimeofday (&tmval, NULL);
-    g_get_current_time (&tmval);
+    now = g_date_time_new_now_local();
     daynum = Julian_Date (&utc);
-    daynum = daynum + (double)tmval.tv_usec/8.64e+10;
- 
+    daynum = daynum + (double)g_date_time_get_microsecond(now)/8.64e+10;
+    g_date_time_unref(now);
+
     return daynum;
 }
 

@@ -7,12 +7,12 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
@@ -171,32 +171,24 @@ void sat_pref_formats_ok()
 static gboolean tfprev_cb(gpointer data)
 {
     const gchar    *fmtstr;
+    GDateTime      *now;
+    gchar          *text;
 
     (void)data;
 
-    GTimeVal        tval;
-    time_t          t;
-    guint           size;
-    gchar           buff[TIME_FORMAT_MAX_LENGTH + 1];
-
-    /* Unix time in sec since 01-Jan-1970 */
-    g_get_current_time(&tval);
-    t = (time_t) tval.tv_sec;
-
     fmtstr = gtk_entry_get_text(GTK_ENTRY(tfentry));
 
-    /* format either local time or UTC depending on check box */
+    /* get either local time or UTC depending on check box */
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tzcheck)))
-        size = strftime(buff, TIME_FORMAT_MAX_LENGTH, fmtstr, localtime(&t));
+	now = g_date_time_new_now_local();
     else
-        size = strftime(buff, TIME_FORMAT_MAX_LENGTH, fmtstr, gmtime(&t));
+	now = g_date_time_new_now_utc();
 
-    if (size < TIME_FORMAT_MAX_LENGTH)
-        buff[size] = '\0';
-    else
-        buff[TIME_FORMAT_MAX_LENGTH] = '\0';
+    text = g_date_time_format(now, fmtstr);
+    gtk_label_set_text(GTK_LABEL(tflabel), text);
 
-    gtk_label_set_text(GTK_LABEL(tflabel), buff);
+    g_date_time_unref(now);
+    g_free(text);
 
     return TRUE;
 }
