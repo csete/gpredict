@@ -206,22 +206,16 @@ void sat_log_set_level(sat_log_level_t level)
 static void manage_debug_message(sat_log_level_t debug_level,
                                  const gchar * message)
 {
-    gchar           msg_time[50];
-    guint           size;
-    GTimeVal        tval;
-    time_t          t;
+    gchar          *msg_time;
+    GDateTime      *now;
     gchar          *msg;
     gsize           written;
     GError         *error = NULL;
 
     /* get the time */
-    g_get_current_time(&tval);
-    t = (time_t) tval.tv_sec;
-    size = strftime(msg_time, 48, "%Y/%m/%d %H:%M:%S", localtime(&t));
-    if (size < 49)
-        msg_time[size] = '\0';
-    else
-        msg_time[49] = '\0';
+    now = g_date_time_new_now_local();
+    msg_time = g_date_time_format(now, "%Y/%m/%d %H:%M:%S");
+    g_date_time_unref(now);
 
     /* send debug messages to stderr */
     if G_UNLIKELY(debug_to_stderr)
@@ -230,6 +224,8 @@ static void manage_debug_message(sat_log_level_t debug_level,
 
     msg = g_strdup_printf("%s%s%d%s%s\n", msg_time, SAT_LOG_MSG_SEPARATOR,
                           debug_level, SAT_LOG_MSG_SEPARATOR, message);
+
+    g_free(msg_time);
 
     /* print debug message */
     if G_LIKELY(initialised)
@@ -256,7 +252,7 @@ static void manage_debug_message(sat_log_level_t debug_level,
 /** Perform log rotation and other maintenance in log directory */
 static void log_rotate()
 {
-    GTimeVal        now;        /* current time */
+    gint64          now;        /* current time */
     glong           age;        /* age for cleaning */
     glong           then;       /* time in sec corresponding to age */
     gchar          *confdir, *dirname, *fname1, *fname2;
@@ -265,13 +261,13 @@ static void log_rotate()
     age = sat_cfg_get_int(SAT_CFG_INT_LOG_CLEAN_AGE);
 
     /* initialise some vars */
-    g_get_current_time(&now);
+    now = g_get_real_time() / G_USEC_PER_SEC;
     confdir = get_user_conf_dir();
     dirname = g_strconcat(confdir, G_DIR_SEPARATOR_S, "logs", NULL);
 
     fname1 = g_strconcat(dirname, G_DIR_SEPARATOR_S, "gpredict.log", NULL);
     fname2 = g_strdup_printf("%s%sgpredict-%ld.log",
-                             dirname, G_DIR_SEPARATOR_S, now.tv_sec);
+                             dirname, G_DIR_SEPARATOR_S, now);
 
     if (age > 0)
     {
@@ -281,7 +277,7 @@ static void log_rotate()
     }
 
     /* calculate age for files that should be removed */
-    then = now.tv_sec - age;
+    then = now - age;
 
     /* cleanup every time as old log files should be deleted if they exist */
     clean_log_dir(dirname, then);

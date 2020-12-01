@@ -78,7 +78,7 @@ struct _gtk_rig_ctrl {
     gdouble         lasttxf;    /*!< Last frequency sent to tranmitter. */
     gdouble         du, dd;     /*!< Last computed up/down Doppler shift; computed in update() */
 
-    glong           last_toggle_tx;     /*!< Last time when exec_toggle_tx_cycle() was executed (seconds)
+    gint64          last_toggle_tx;     /*!< Last time when exec_toggle_tx_cycle() was executed (seconds)
                                            -1 indicates that an update should be performed ASAP */
 
     gint            sock, sock2;        /*!< Sockets for controlling the radio(s). */

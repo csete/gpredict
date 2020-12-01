@@ -416,8 +416,8 @@ static gboolean gpredict_app_config(GtkWidget * widget,
 static gboolean tle_mon_task(gpointer data)
 {
     /*GtkWidget *selector; */
-    glong           last, now, thrld;
-    GTimeVal        tval;
+    glong           last, thrld;
+    gint64          now;
     GtkWidget      *dialog;
     GError         *err = NULL;
 
@@ -433,8 +433,7 @@ static gboolean tle_mon_task(gpointer data)
     last = sat_cfg_get_int(SAT_CFG_INT_TLE_LAST_UPDATE);
 
     /* get current time */
-    g_get_current_time(&tval);
-    now = tval.tv_sec;
+    now = g_get_real_time() / G_USEC_PER_SEC;
 
     /* threshold */
     switch (sat_cfg_get_int(SAT_CFG_INT_TLE_AUTO_UPD_FREQ))
