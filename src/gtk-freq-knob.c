@@ -80,7 +80,7 @@ static void gtk_freq_knob_init(GtkFreqKnob * knob)
     knob->max = 9999999999.0;
 }
 
-static void    *gtk_freq_knob_update(GtkFreqKnob * knob)
+static gboolean gtk_freq_knob_update(GtkFreqKnob * knob)
 {
     gchar           b[11];
     gchar          *buff;
