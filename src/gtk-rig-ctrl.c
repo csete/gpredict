@@ -138,17 +138,23 @@ static void gtk_rig_ctrl_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-static void gtk_rig_ctrl_class_init(GtkRigCtrlClass * class)
+static void gtk_rig_ctrl_class_init(GtkRigCtrlClass * class,
+				    gpointer class_data)
 {
     GtkWidgetClass *widget_class;
+
+    (void)class_data;
 
     widget_class = (GtkWidgetClass *) class;
     parent_class = g_type_class_peek_parent(class);
     widget_class->destroy = gtk_rig_ctrl_destroy;
 }
 
-static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl)
+static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl,
+			      gpointer g_class)
 {
+    (void)g_class;
+
     ctrl->sats = NULL;
     ctrl->target = NULL;
     ctrl->pass = NULL;

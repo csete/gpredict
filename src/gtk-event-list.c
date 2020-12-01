@@ -87,8 +87,10 @@ const gfloat    EVENT_LIST_HEAD_XALIGN[EVENT_LIST_COL_NUMBER] = {
     1.0,                        // time
 };
 
-static void     gtk_event_list_class_init(GtkEventListClass * class);
-static void     gtk_event_list_init(GtkEventList * list);
+static void     gtk_event_list_class_init(GtkEventListClass * class,
+					  gpointer class_data);
+static void     gtk_event_list_init(GtkEventList * list,
+				    gpointer g_class);
 static void     gtk_event_list_destroy(GtkWidget * widget);
 static GtkTreeModel *create_and_fill_model(GHashTable * sats);
 static void     event_list_add_satellites(gpointer key,
@@ -156,16 +158,22 @@ GType gtk_event_list_get_type()
     return gtk_event_list_type;
 }
 
-static void gtk_event_list_class_init(GtkEventListClass * class)
+static void gtk_event_list_class_init(GtkEventListClass * class,
+				      gpointer class_data)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
+
+    (void)class_data;
+
     widget_class->destroy = gtk_event_list_destroy;
     parent_class = g_type_class_peek_parent(class);
 }
 
-static void gtk_event_list_init(GtkEventList * list)
+static void gtk_event_list_init(GtkEventList * list,
+				gpointer g_class)
 {
     (void)list;
+    (void)g_class;
 }
 
 static void gtk_event_list_destroy(GtkWidget * widget)

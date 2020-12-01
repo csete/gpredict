@@ -109,18 +109,23 @@ static void gtk_single_sat_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-static void gtk_single_sat_class_init(GtkSingleSatClass * class)
+static void gtk_single_sat_class_init(GtkSingleSatClass * class,
+				      gpointer class_data)
 {
     GtkWidgetClass *widget_class;
+
+    (void)class_data;
 
     widget_class = (GtkWidgetClass *) class;
     widget_class->destroy = gtk_single_sat_destroy;
     parent_class = g_type_class_peek_parent(class);
 }
 
-static void gtk_single_sat_init(GtkSingleSat * list)
+static void gtk_single_sat_init(GtkSingleSat * list,
+				gpointer g_class)
 {
     (void)list;
+    (void)g_class;
 }
 
 /* Update a field in the GtkSingleSat view. */

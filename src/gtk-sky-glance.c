@@ -69,8 +69,11 @@
 
 static GtkVBoxClass *parent_class = NULL;
 
-static void gtk_sky_glance_init(GtkSkyGlance * skg)
+static void gtk_sky_glance_init(GtkSkyGlance * skg,
+	gpointer g_class)
 {
+    (void)g_class;
+
     skg->sats = NULL;
     skg->qth = NULL;
     skg->passes = NULL;
@@ -147,9 +150,12 @@ static void gtk_sky_glance_destroy(GtkWidget * widget)
 }
 
 
-static void gtk_sky_glance_class_init(GtkSkyGlanceClass * class)
+static void gtk_sky_glance_class_init(GtkSkyGlanceClass * class,
+				      gpointer class_data)
 {
     GtkWidgetClass *widget_class;
+
+    (void)class_data;
 
     widget_class = (GtkWidgetClass *) class;
     widget_class->destroy = gtk_sky_glance_destroy;
