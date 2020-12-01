@@ -51,8 +51,10 @@
 /* Update terminator every 30 seconds */
 #define TERMINATOR_UPDATE_INTERVAL (15.0/86400.0)
 
-static void     gtk_sat_map_class_init(GtkSatMapClass * class);
-static void     gtk_sat_map_init(GtkSatMap * polview);
+static void     gtk_sat_map_class_init(GtkSatMapClass * class,
+				       gpointer class_data);
+static void     gtk_sat_map_init(GtkSatMap * polview,
+				 gpointer g_class);
 static void     gtk_sat_map_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
@@ -138,17 +140,23 @@ GType gtk_sat_map_get_type()
     return gtk_sat_map_type;
 }
 
-static void gtk_sat_map_class_init(GtkSatMapClass * class)
+static void gtk_sat_map_class_init(GtkSatMapClass * class,
+				   gpointer class_data)
 {
     GtkWidgetClass *widget_class;
+
+    (void)class_data;
 
     widget_class = (GtkWidgetClass *) class;
     widget_class->destroy = gtk_sat_map_destroy;
     parent_class = g_type_class_peek_parent(class);
 }
 
-static void gtk_sat_map_init(GtkSatMap * satmap)
+static void gtk_sat_map_init(GtkSatMap * satmap,
+			     gpointer g_class)
 {
+    (void)g_class;
+
     satmap->sats = NULL;
     satmap->qth = NULL;
     satmap->obj = NULL;

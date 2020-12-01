@@ -1533,8 +1533,11 @@ static gboolean have_conf()
     return (i > 0) ? TRUE : FALSE;
 }
 
-static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl)
+static void gtk_rot_ctrl_init(GtkRotCtrl * ctrl,
+			      gpointer g_class)
 {
+    (void)g_class;
+
     ctrl->sats = NULL;
     ctrl->target = NULL;
     ctrl->pass = NULL;
@@ -1584,9 +1587,12 @@ static void gtk_rot_ctrl_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class)
+static void gtk_rot_ctrl_class_init(GtkRotCtrlClass * class,
+				    gpointer class_data)
 {
     GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
+
+    (void)class_data;
 
     widget_class->destroy = gtk_rot_ctrl_destroy;
     parent_class = g_type_class_peek_parent(class);

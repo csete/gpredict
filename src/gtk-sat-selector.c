@@ -76,9 +76,12 @@ static void gtk_sat_selector_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-static void gtk_sat_selector_class_init(GtkSatSelectorClass * class)
+static void gtk_sat_selector_class_init(GtkSatSelectorClass * class,
+					gpointer class_data)
 {
     GtkWidgetClass      *widget_class;
+
+    (void)class_data;
 
     widget_class = (GtkWidgetClass *) class;
     widget_class->destroy = gtk_sat_selector_destroy;
@@ -96,8 +99,11 @@ static void gtk_sat_selector_class_init(GtkSatSelectorClass * class)
 }
 
 /** Initialise satellite selector widget */
-static void gtk_sat_selector_init(GtkSatSelector * selector)
+static void gtk_sat_selector_init(GtkSatSelector * selector,
+				  gpointer g_class)
 {
+    (void)g_class;
+
     selector->models = NULL;
 }
 

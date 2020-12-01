@@ -139,8 +139,10 @@ const gfloat    SAT_LIST_COL_XALIGN[SAT_LIST_COL_NUMBER] = {
     0.0,                        // Operational Status
 };
 
-static void     gtk_sat_list_class_init(GtkSatListClass * class);
-static void     gtk_sat_list_init(GtkSatList * list);
+static void     gtk_sat_list_class_init(GtkSatListClass * class,
+					gpointer class_data);
+static void     gtk_sat_list_init(GtkSatList * list,
+				  gpointer g_class);
 static void     gtk_sat_list_destroy(GtkWidget * widget);
 static GtkTreeModel *create_and_fill_model(GHashTable * sats);
 static void     sat_list_add_satellites(gpointer key, gpointer value,
@@ -246,17 +248,23 @@ GType gtk_sat_list_get_type()
     return gtk_sat_list_type;
 }
 
-static void gtk_sat_list_class_init(GtkSatListClass * class)
+static void gtk_sat_list_class_init(GtkSatListClass * class,
+				    gpointer class_data)
 {
     GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
+
+    (void)class_data;
+
     widget_class->destroy = gtk_sat_list_destroy;
 
     parent_class = g_type_class_peek_parent(class);
 }
 
-static void gtk_sat_list_init(GtkSatList * list)
+static void gtk_sat_list_init(GtkSatList * list,
+			      gpointer g_class)
 {
     (void)list;
+    (void)g_class;
 }
 
 static void gtk_sat_list_destroy(GtkWidget * widget)
