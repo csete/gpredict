@@ -75,6 +75,7 @@ const gchar *authors[] = {
     "William J Beksi, KC2EXL",
     "Xavier Crehueras, EB3CZS",
     "Yaroslav Stavnichiy",
+    "Yasushi SHOJI",
     "",
     "Imagery:",
     "Most of the maps originate from NASA Visible Earth",
