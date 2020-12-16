@@ -411,6 +411,7 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                 lasty = ssp->lon;
             }
             /* else do nothing */
+            else g_free(ssp);
         }
     }
 
