@@ -50,6 +50,7 @@ const gchar *authors[] = {
     "Ilias Daradimos",
     "Jan Simon, DL2ZXA",
     "Jason Uher",
+    "Joachim Euchner",
     "John Magliacane, KD2BD",
     "Libre Space Foundation",
     "Lloyd Brown",
