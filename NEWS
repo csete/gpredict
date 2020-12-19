@@ -9,6 +9,7 @@ Changes in version 2.4 (TBD)
 - Fixed crash when eccentricity of orbit is exactly 0
 - Fixed bug that prevented changing the polar view background
 - Fixed saving the sort order in the satellite list view
+- Fixed several memory leaks in the map view
 - Ensure Azimuth read from rotator is always between 0-360 degrees
 - Ensure rotator limits are respected while tracking
 - Ensure next events are in chronological order
