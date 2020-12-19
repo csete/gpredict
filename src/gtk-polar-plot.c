@@ -28,7 +28,7 @@
  *
  * GtkPolarPlot is a graphical widget that can display a satellite pass
  * in an Az/El polar plot. The widget was originally created to display
- * a single satellite pass in the detailed pass predicition dialog.
+ * a single satellite pass in the detailed pass prediction dialog.
  * 
  * Later, a few utility functions were added in order to make the GtkPolarPlot
  * more dynamic and useful in other contexts too. In addition to a satellite
