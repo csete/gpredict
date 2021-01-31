@@ -50,11 +50,11 @@ else
 fi
 
 # check for goocanvas (depends on gtk and glib)
-if $PKG_CONFIG --atleast-version=2.0 goocanvas-2.0; then
-    CFLAGS="$CFLAGS `$PKG_CONFIG --cflags goocanvas-2.0`"
-    LIBS="$LIBS `$PKG_CONFIG --libs goocanvas-2.0`"
+if $PKG_CONFIG --atleast-version=3.0 goocanvas-3.0; then
+    CFLAGS="$CFLAGS `$PKG_CONFIG --cflags goocanvas-3.0`"
+    LIBS="$LIBS `$PKG_CONFIG --libs goocanvas-3.0`"
 else
-    AC_MSG_ERROR(Gpredict requires libgoocanvas-2.0-dev)
+    AC_MSG_ERROR(Gpredict requires libgoocanvas-3.0-dev)
 fi
 
 # check for libgps (optional)
@@ -98,12 +98,12 @@ GIO_V=`$PKG_CONFIG --modversion gio-2.0`
 GTHR_V=`$PKG_CONFIG --modversion gthread-2.0`
 GDK_V=`$PKG_CONFIG --modversion gdk-3.0`
 GTK_V=`$PKG_CONFIG --modversion gtk+-3.0`
-GOOC_V=`$PKG_CONFIG --modversion goocanvas-2.0`
+GOOC_V=`$PKG_CONFIG --modversion goocanvas-3.0`
 CURL_V=`$PKG_CONFIG --modversion libcurl`
 if test "$havelibgps" = true ; then
    GPS_V=`$PKG_CONFIG --modversion libgps`
 fi
- 
+
 
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
@@ -143,4 +143,3 @@ if test "$havelibgps" = true ; then
 fi
 # echo Enable coverage.... : $enable_coverage
 # echo
-
