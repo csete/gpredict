@@ -1,6 +1,5 @@
-sudo: required
-
-dist: xenial
+os: linux
+dist: focal
 
 language: c
 
