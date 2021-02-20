@@ -49,12 +49,19 @@ else
     AC_MSG_ERROR(Gpredict requires libglib-dev 2.40 or later)
 fi
 
-# check for goocanvas (depends on gtk and glib)
+# check for goocanvas 2 or 3 (depends on gtk and glib)
 if $PKG_CONFIG --atleast-version=2.0 goocanvas-2.0; then
     CFLAGS="$CFLAGS `$PKG_CONFIG --cflags goocanvas-2.0`"
     LIBS="$LIBS `$PKG_CONFIG --libs goocanvas-2.0`"
+    havegoocanvas2=true
 else
-    AC_MSG_ERROR(Gpredict requires libgoocanvas-2.0-dev)
+	if $PKG_CONFIG --atleast-version=3.0 goocanvas-3.0; then
+		CFLAGS="$CFLAGS `$PKG_CONFIG --cflags goocanvas-3.0`"
+		LIBS="$LIBS `$PKG_CONFIG --libs goocanvas-3.0`"
+		havegoocanvas3=true
+	else
+		AC_MSG_ERROR(Gpredict requires libgoocanvas-2.0-dev)
+	fi
 fi
 
 # check for libgps (optional)
@@ -98,8 +105,13 @@ GIO_V=`$PKG_CONFIG --modversion gio-2.0`
 GTHR_V=`$PKG_CONFIG --modversion gthread-2.0`
 GDK_V=`$PKG_CONFIG --modversion gdk-3.0`
 GTK_V=`$PKG_CONFIG --modversion gtk+-3.0`
-GOOC_V=`$PKG_CONFIG --modversion goocanvas-2.0`
 CURL_V=`$PKG_CONFIG --modversion libcurl`
+if test "$havegoocanvas2" = true ;  then
+	GOOC_V=`$PKG_CONFIG --modversion goocanvas-2.0`
+fi
+if test "$havegoocanvas3" = true ;  then
+	GOOC_V=`$PKG_CONFIG --modversion goocanvas-3.0`
+fi
 if test "$havelibgps" = true ; then
    GPS_V=`$PKG_CONFIG --modversion libgps`
 fi
