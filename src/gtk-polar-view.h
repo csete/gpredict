@@ -67,6 +67,7 @@ typedef enum {
 struct _GtkPolarView {
     GtkBox          vbox;
 
+    GtkWidget      *satmod;	    /*!< The parent GtkSatModule widget */
     GtkWidget      *canvas;     /*!< The canvas widget */
 
     GooCanvasItemModel *bgd;
@@ -117,7 +118,7 @@ struct _GtkPolarViewClass {
 
 GType           gtk_polar_view_get_type(void);
 
-GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata,
+GtkWidget      *gtk_polar_view_new(GtkWidget * module, GKeyFile * cfgdata,
                                    GHashTable * sats, qth_t * qth);
 void            gtk_polar_view_update(GtkWidget * widget);
 void            gtk_polar_view_reconf(GtkWidget * widget, GKeyFile * cfgdat);

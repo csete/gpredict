@@ -280,7 +280,7 @@ static void gtk_sat_map_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
+GtkWidget      *gtk_sat_map_new(GtkWidget * module, GKeyFile * cfgdata, GHashTable * sats,
                                 qth_t * qth)
 {
     GtkSatMap      *satmap;
@@ -289,6 +289,7 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
 
     satmap = g_object_new(GTK_TYPE_SAT_MAP, NULL);
 
+    satmap->satmod = module;
     satmap->cfgdata = cfgdata;
     satmap->sats = sats;
     satmap->qth = qth;
