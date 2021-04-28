@@ -72,8 +72,6 @@ void add_pass_menu_items(GtkWidget * menu, sat_t * sat, qth_t * qth,
     /* finally the select menu item */
     menuitem = gtk_menu_item_new_with_label(_("Select"));
     g_object_set_data(G_OBJECT(menuitem), "sat", sat);
-    g_object_set_data(G_OBJECT(menuitem), "qth", qth);
-    g_object_set_data(G_OBJECT(menuitem), "tstamp", tstamp);
     g_signal_connect(menuitem, "activate", G_CALLBACK(sat_select_cb),
                      widget);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
