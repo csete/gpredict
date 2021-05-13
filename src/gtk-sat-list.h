@@ -52,6 +52,8 @@ typedef struct _GtkSatListClass GtkSatListClass;
 struct _gtk_sat_list {
     GtkBox          vbox;
 
+    GtkWidget      *satmod;	    /*!< The parent GtkSatModule widget */
+
     GtkWidget      *treeview;   /*!< the tree view itself */
     GtkWidget      *swin;       /*!< scrolled window */
 
@@ -140,7 +142,7 @@ typedef enum {
 } sat_list_flag_t;
 
 GType           gtk_sat_list_get_type(void);
-GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata,
+GtkWidget      *gtk_sat_list_new(GtkWidget * module, GKeyFile * cfgdata,
                                  GHashTable * sats,
                                  qth_t * qth, guint32 columns);
 void            gtk_sat_list_update(GtkWidget * widget);
