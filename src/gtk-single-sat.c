@@ -180,8 +180,8 @@ static void update_field(GtkSingleSat * ssat, guint i)
         }
         else if (sat->range_rate > 0.0)
         {
-            /* Receeding */
-            buff = g_strdup("Receeding");
+            /* Receding */
+            buff = g_strdup("Receding");
         }
         else if (sat->range_rate < 0.0)
         {
