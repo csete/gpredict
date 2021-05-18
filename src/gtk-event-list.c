@@ -461,7 +461,7 @@ static gboolean event_list_update_sats(GtkTreeModel * model,
         /* update data */
         now = evlist->tstamp;
 
-        if (sat->el > 0.0)
+        if (sat->el > min_ele)
         {
             if (sat->los > 0.0)
             {
