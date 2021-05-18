@@ -355,6 +355,8 @@ static void event_list_add_satellites(gpointer key, gpointer value,
     GtkListStore   *store = GTK_LIST_STORE(user_data);
     GtkTreeIter     item;
     sat_t          *sat = SAT(value);
+    int             min_ele = sat_cfg_get_int(SAT_CFG_INT_PRED_MIN_EL);
+
 
     (void)key;
 
@@ -364,7 +366,7 @@ static void event_list_add_satellites(gpointer key, gpointer value,
                        EVENT_LIST_COL_CATNUM, sat->tle.catnr,
                        EVENT_LIST_COL_AZ, sat->az,
                        EVENT_LIST_COL_EL, sat->el,
-                       EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
+                       EVENT_LIST_COL_EVT, (sat->el >= min_ele) ? TRUE : FALSE,
                        EVENT_LIST_COL_TIME, 0.0,
                        EVENT_LIST_COL_DECAY, !decayed(sat), -1);
 }
@@ -430,6 +432,7 @@ static gboolean event_list_update_sats(GtkTreeModel * model,
     GtkEventList   *evlist = GTK_EVENT_LIST(data);
     guint          *catnum;
     sat_t          *sat;
+    int             min_ele = sat_cfg_get_int(SAT_CFG_INT_PRED_MIN_EL);
     gdouble         number, now;
 
     (void)path;
@@ -485,7 +488,7 @@ static gboolean event_list_update_sats(GtkTreeModel * model,
         gtk_list_store_set(GTK_LIST_STORE(model), iter,
                            EVENT_LIST_COL_AZ, sat->az,
                            EVENT_LIST_COL_EL, sat->el,
-                           EVENT_LIST_COL_EVT, (sat->el >= 0) ? TRUE : FALSE,
+                           EVENT_LIST_COL_EVT, (sat->el >= min_ele) ? TRUE : FALSE,
                            EVENT_LIST_COL_TIME, number,
                            EVENT_LIST_COL_DECAY, !decayed(sat),
                            EVENT_LIST_COL_BOLD,
