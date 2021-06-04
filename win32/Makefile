@@ -8,9 +8,6 @@ include config.mk
 VERSION_SHORT = $(GITMAJ).$(GITMIN).$(GITBLD)
 VERSION_LONG = $(GITMAJ).$(GITMIN).0.$(GITBLD)
 
-# cross-compiler prefix
-MGW_PREFIX=i686-w64-mingw32-
-
 # directories
 topsrc = ..
 gpreddir = $(topsrc)/src
@@ -18,25 +15,25 @@ sgpsdpdir = $(gpreddir)/sgpsdp
 nxjsondir = $(gpreddir)/nxjson
 
 # tools
-CC = $(MGW_PREFIX)gcc -Wall -O2 -mms-bitfields -DWIN32 -m32
-AS = $(MGW_PREFIX)as
-DLLWRAP = $(MGW_PREFIX)dllwrap
+CC = gcc -Wall -O2 -mms-bitfields -DWIN32
+AS = as
+DLLWRAP = dllwrap
 DLLWRAP_FLAGS = --as=$(AS) --export-all --driver-name $(CC) -s
-RC = $(MGW_PREFIX)windres
+RC = windres
 # NB: .rc file create various version formats from the numbers
 RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN32__ \
 	--define VERMAJ=$(GITMAJ) --define VERMIN=$(GITMIN) --define VERBLD=$(GITBLD)
 
 # libraries
-GTKLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --libs gtk+-3.0)
-GLIBLIB := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --libs glib-2.0 gthread-2.0)
-GOOLIBS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --libs goocanvas-2.0)
+GTKLIBS := $(shell pkg-config --define-prefix --libs gtk+-3.0)
+GLIBLIB := $(shell pkg-config --define-prefix --libs glib-2.0 gthread-2.0)
+GOOLIBS := $(shell pkg-config --define-prefix --libs goocanvas-2.0)
 GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) libsgpsdp.lib -lwinmm -lwininet -lws2_32
 LIBS = -lm
 
 # flags/defines
-GTK_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --cflags gtk+-3.0)
-GOO_CFLAGS := $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) pkg-config --define-prefix --cflags goocanvas-2.0)
+GTK_CFLAGS := $(shell pkg-config --define-prefix --cflags gtk+-3.0)
+GOO_CFLAGS := $(shell pkg-config --define-prefix --cflags goocanvas-2.0)
 CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
 
 # source paths
@@ -67,14 +64,14 @@ NXJSONSRC = \
 NXJSONOBJ = $(NXJSONSRC:.c=.o)
 
 GOOCANVSRC = \
-        goocanvasatk.c             \
-        goocanvasellipse.c         \
-	goocanvasenumtypes.c		\
+    goocanvasatk.c          \
+    goocanvasellipse.c      \
+	goocanvasenumtypes.c	\
 	goocanvasgroup.c		\
 	goocanvasimage.c		\
 	goocanvasitem.c			\
-	goocanvasitemmodel.c		\
-	goocanvasitemsimple.c		\
+	goocanvasitemmodel.c	\
+	goocanvasitemsimple.c	\
 	goocanvasmarshal.c		\
 	goocanvaspolyline.c		\
 	goocanvaspath.c			\
@@ -195,6 +192,8 @@ all: libsgpsdp.dll gpredict.exe gpredict-con.exe
 dist: gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip
 
 gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
+	mkdir -p gpredict/doc
+	cp -p ../AUTHORS ../COPYING ../NEWS ../README gpredict/doc
 	mkdir -p gpredict/share/gpredict
 	cp -p libsgpsdp.dll gpredict.exe gpredict-con.exe $(BINDEPS) gpredict
 	cp -rp ../data gpredict/share/gpredict
@@ -205,6 +204,11 @@ gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
 	cp -rp $(GTKETC) gpredict
 	mkdir -p gpredict/share/glib-2.0
 	cp -rp $(SCHEMAS) gpredict/share/glib-2.0
+	mkdir -p gpredict/share/icons/Adwaita
+	cp -rp $(ADWAITA)/scalable gpredict/share/icons/Adwaita/
+	cp -rp $(ADWAITA)/scalable-up-to-32 gpredict/share/icons/Adwaita/
+	cp -rp $(ADWAITA)/index.theme gpredict/share/icons/Adwaita/
+	cp -rp $(ADWAITA)/icon-theme.cache gpredict/share/icons/Adwaita/
 	zip -r $@ gpredict
 	rm -rf gpredict
 
