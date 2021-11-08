@@ -27,6 +27,7 @@
 #endif
 #include <glib.h>
 #include <stdlib.h>
+#include <locale.h>
 #include "compat.h"
 
 /**
@@ -395,4 +396,17 @@ gchar          *hw_file_name(const gchar * hwfile)
     g_free(buff);
 
     return filename;
+}
+
+gchar const* get_locale_thousands_sep()
+{
+	struct lconv *locale;
+
+	locale = localeconv();
+
+	if (!locale) {
+		return NULL;
+	}
+
+	return locale->thousands_sep;
 }
