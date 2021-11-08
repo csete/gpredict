@@ -23,4 +23,6 @@ gchar          *hw_file_name(const gchar * hwfile);
 gchar          *sat_file_name_from_catnum(guint catnum);
 gchar          *sat_file_name_from_catnum_s(gchar * catnum);
 
+gchar    const* get_locale_thousands_sep();
+
 #endif
