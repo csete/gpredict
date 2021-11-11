@@ -41,6 +41,8 @@ static GtkWidget *ptt;          /* PTT */
 static GtkWidget *vfo;          /* VFO Up/Down selector */
 static GtkWidget *lo;           /* local oscillator of downconverter */
 static GtkWidget *loup;         /* local oscillator of upconverter */
+static GtkWidget *defDnFreq;    /* Default downlink frequency */
+static GtkWidget *defUpFreq;    /* Default uplink frequency */
 static GtkWidget *sigaos;       /* AOS signalling */
 static GtkWidget *siglos;       /* LOS signalling */
 
@@ -52,6 +54,8 @@ static void clear_widgets()
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(port), 4532);     /* hamlib default? */
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), 0);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), 0);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(defDnFreq), 145.89);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(defUpFreq), 145.89);
     gtk_combo_box_set_active(GTK_COMBO_BOX(type), RIG_TYPE_RX);
     gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), PTT_TYPE_NONE);
     gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 0);
@@ -99,6 +103,14 @@ static void update_widgets(radio_conf_t * conf)
 
     /* lo up in MHz */
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(loup), conf->loup / 1000000.0);
+
+    /* Default downlink frequency in MHz */
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(defDnFreq),
+                              conf->defDnFreq * 1.0e-6);
+
+    /* Default uplink frequency in Mhz */
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(defUpFreq),
+                              conf->defUpFreq * 1.0e-6);
 
     /* AOS / LOS signalling */
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sigaos), conf->signal_aos);
@@ -421,18 +433,50 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 3, 7, 1, 1);
 
-    /* AOS / LOS signalling */
-    label = gtk_label_new(_("Signalling"));
+    /* Default downlink frequency */
+    label = gtk_label_new(_("Default downlink"));
     g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 8, 1, 1);
 
+    defDnFreq = gtk_spin_button_new_with_range(0, 10000, 0.001);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(defDnFreq), 0);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(defDnFreq), 3);
+    gtk_widget_set_tooltip_text(defDnFreq,
+                                _("Enter the default downlink frequency"));
+    gtk_grid_attach(GTK_GRID(table), defDnFreq, 1, 8, 2, 1);
+
+    label = gtk_label_new(_("MHz"));
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 3, 8, 1, 1);
+
+    /* Default uplink frequency */
+    label = gtk_label_new(_("Default uplink"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 9, 1, 1);
+
+    defUpFreq = gtk_spin_button_new_with_range(0, 10000, 0.001);
+    gtk_spin_button_set_digits(GTK_SPIN_BUTTON(defUpFreq), 3);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(defUpFreq), 123.456);
+    gtk_widget_set_tooltip_text(defUpFreq,
+                                _("Enter the default uplink frequency"));
+    gtk_grid_attach(GTK_GRID(table), defUpFreq, 1, 9, 2, 1);
+
+    label = gtk_label_new(_("MHz"));
+    g_object_set(label, "xalign", 0.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 3, 9, 1, 1);
+
+    /* AOS / LOS signalling */
+    label = gtk_label_new(_("Signalling"));
+    g_object_set(label, "xalign", 1.0, "yalign", 0.5, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 10, 1, 1);
+
     sigaos = gtk_check_button_new_with_label(_("AOS"));
-    gtk_grid_attach(GTK_GRID(table), sigaos, 1, 8, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), sigaos, 1, 10, 1, 1);
     gtk_widget_set_tooltip_text(sigaos,
                                 _("Enable AOS signalling for this radio."));
 
     siglos = gtk_check_button_new_with_label(_("LOS"));
-    gtk_grid_attach(GTK_GRID(table), siglos, 2, 8, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), siglos, 2, 10, 1, 1);
     gtk_widget_set_tooltip_text(siglos,
                                 _("Enable LOS signalling for this radio."));
 
@@ -467,6 +511,14 @@ static gboolean apply_changes(radio_conf_t * conf)
 
     /* lo up freq */
     conf->loup = 1000000.0 * gtk_spin_button_get_value(GTK_SPIN_BUTTON(loup));
+
+    /* default downlink freq */
+    conf->defDnFreq = 1000000.0 *
+                      gtk_spin_button_get_value(GTK_SPIN_BUTTON(defDnFreq));
+
+    /* default uplink freq */
+    conf->defUpFreq = 1000000.0 *
+                      gtk_spin_button_get_value(GTK_SPIN_BUTTON(defUpFreq));
 
     /* rig type */
     conf->type = gtk_combo_box_get_active(GTK_COMBO_BOX(type));

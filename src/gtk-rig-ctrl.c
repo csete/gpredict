@@ -859,6 +859,16 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
             gtk_label_set_text(GTK_LABEL(ctrl->LoUp), buff);
             g_free(buff);
         }
+
+        /* update frequency widgets */
+        gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown),
+                                ctrl->conf->defDnFreq);
+        if (gtk_combo_box_get_active(GTK_COMBO_BOX(ctrl->DevSel2)) == 0)
+        {
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp),
+                                    ctrl->conf->defUpFreq);
+        }
+
     }
     else
     {
@@ -905,6 +915,10 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
             g_free(buff);
         }
 
+        /* reset uplink frequency to what's in ctrl->conf */
+        gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp),
+                                ctrl->conf->defUpFreq);
+
         return;
     }
 
@@ -925,6 +939,10 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
             g_free(buff);
         }
         gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->DevSel2), 0);
+
+        /* update frequency widgets */
+        gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp),
+                                ctrl->conf->defUpFreq);
 
         return;
     }

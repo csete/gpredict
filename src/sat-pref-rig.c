@@ -60,6 +60,8 @@ static GtkTreeModel *create_and_fill_model()
                                    G_TYPE_INT,  // VFO Down
                                    G_TYPE_DOUBLE,       // LO DOWN
                                    G_TYPE_DOUBLE,       // LO UO
+                                   G_TYPE_DOUBLE,       // Default down freq.
+                                   G_TYPE_DOUBLE,       // Default up freq.
                                    G_TYPE_BOOLEAN,      // AOS signalling
                                    G_TYPE_BOOLEAN       // LOS signalling
         );
@@ -96,6 +98,8 @@ static GtkTreeModel *create_and_fill_model()
                                        RIG_LIST_COL_VFODOWN, conf.vfoDown,
                                        RIG_LIST_COL_LO, conf.lo,
                                        RIG_LIST_COL_LOUP, conf.loup,
+                                       RIG_LIST_COL_DEF_UP_FREQ, conf.defUpFreq,
+                                       RIG_LIST_COL_DEF_DN_FREQ, conf.defDnFreq,
                                        RIG_LIST_COL_SIGAOS, conf.signal_aos,
                                        RIG_LIST_COL_SIGLOS, conf.signal_los,
                                        -1);
@@ -293,7 +297,7 @@ static void render_lo(GtkTreeViewColumn * col,
 
     /* convert to MHz */
     number /= 1000000.0;
-    buff = g_strdup_printf("%.0f MHz", number);
+    buff = g_strdup_printf("%.3f MHz", number);
     g_object_set(renderer, "text", buff, NULL);
     g_free(buff);
 }
@@ -393,6 +397,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
         .vfoDown = 0,
         .lo = 0.0,
         .loup = 0.0,
+        .defUpFreq = 0.0,
+        .defDnFreq = 0.0,
         .signal_aos = FALSE,
         .signal_los = FALSE
     };
@@ -425,6 +431,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_VFODOWN, &conf.vfoDown,
                            RIG_LIST_COL_LO, &conf.lo,
                            RIG_LIST_COL_LOUP, &conf.loup,
+                           RIG_LIST_COL_DEF_UP_FREQ, &conf.defUpFreq,
+                           RIG_LIST_COL_DEF_DN_FREQ, &conf.defDnFreq,
                            RIG_LIST_COL_SIGAOS, &conf.signal_aos,
                            RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
     }
@@ -461,6 +469,8 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_VFODOWN, conf.vfoDown,
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
+                           RIG_LIST_COL_DEF_UP_FREQ, conf.defUpFreq,
+                           RIG_LIST_COL_DEF_DN_FREQ, conf.defDnFreq,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
                            RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
     }
@@ -587,6 +597,27 @@ static void create_rig_list()
                                             (RIG_LIST_COL_LOUP), NULL);
     gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
 
+    /* Default downlink frequency */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Downlink"), renderer,
+                                                      "text", RIG_LIST_COL_DEF_DN_FREQ,
+                                                      NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer,
+                                            render_lo,
+                                            GUINT_TO_POINTER(RIG_LIST_COL_DEF_DN_FREQ),
+                                            NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* Default uplink frequency */
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(_("Uplink"), renderer,
+                                                      "text",
+                                                      RIG_LIST_COL_DEF_UP_FREQ, NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_lo,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_DEF_UP_FREQ), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
     /* AOS signalling */
     renderer = gtk_cell_renderer_text_new();
     column =
@@ -688,6 +719,8 @@ static void add_cb(GtkWidget * button, gpointer data)
         .vfoDown = 0,
         .lo = 0.0,
         .loup = 0.0,
+        .defDnFreq = 14589000.0,
+        .defUpFreq = 14589000.0,
         .signal_aos = FALSE,
         .signal_los = FALSE,
     };
@@ -711,6 +744,8 @@ static void add_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_VFODOWN, conf.vfoDown,
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
+                           RIG_LIST_COL_DEF_UP_FREQ, conf.defUpFreq,
+                           RIG_LIST_COL_DEF_DN_FREQ, conf.defDnFreq,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
                            RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
 
@@ -812,6 +847,8 @@ void sat_pref_rig_ok()
         .vfoDown = 0,
         .lo = 0.0,
         .loup = 0.0,
+        .defDnFreq = 14589000.0,
+        .defUpFreq = 14589000.0,
         .signal_aos = FALSE,
         .signal_los = FALSE
     };
@@ -858,6 +895,8 @@ void sat_pref_rig_ok()
                                RIG_LIST_COL_VFODOWN, &conf.vfoDown,
                                RIG_LIST_COL_LO, &conf.lo,
                                RIG_LIST_COL_LOUP, &conf.loup,
+                               RIG_LIST_COL_DEF_UP_FREQ, &conf.defUpFreq,
+                               RIG_LIST_COL_DEF_DN_FREQ, &conf.defDnFreq,
                                RIG_LIST_COL_SIGAOS, &conf.signal_aos,
                                RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
             radio_conf_save(&conf);
