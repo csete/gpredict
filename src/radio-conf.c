@@ -39,6 +39,8 @@
 #define KEY_CYCLE       "Cycle"
 #define KEY_LO          "LO"
 #define KEY_LOUP        "LO_UP"
+#define KEY_DEF_UP_FREQ "DefaultUplinkFreqHz"
+#define KEY_DEF_DN_FREQ "DefaultDownlinkFreqHz"
 #define KEY_TYPE        "Type"
 #define KEY_PTT         "PTT"
 #define KEY_VFO_DOWN    "VFO_DOWN"
@@ -175,6 +177,46 @@ gboolean radio_conf_read(radio_conf_t * conf)
         conf->loup = 0.0;
     }
 
+    /* KEY_DEF_UP_FREQ is optional */
+    if (g_key_file_has_key(cfg, GROUP, KEY_DEF_UP_FREQ, NULL))
+    {
+        conf->defUpFreq =
+            g_key_file_get_double(cfg, GROUP, KEY_DEF_UP_FREQ, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading radio conf from %s (%s)."),
+                        __func__, conf->name, error->message);
+            g_clear_error(&error);
+            g_key_file_free(cfg);
+            return FALSE;
+        }
+    }
+    else
+    {
+        conf->defUpFreq = 145890000.0;
+    }
+
+    /* KEY_DEF_DN_FREQ is optional */
+    if (g_key_file_has_key(cfg, GROUP, KEY_DEF_DN_FREQ, NULL))
+    {
+        conf->defDnFreq =
+            g_key_file_get_double(cfg, GROUP, KEY_DEF_DN_FREQ, &error);
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Error reading radio conf from %s (%s)."),
+                        __func__, conf->name, error->message);
+            g_clear_error(&error);
+            g_key_file_free(cfg);
+            return FALSE;
+        }
+    }
+    else
+    {
+        conf->defDnFreq = 145890000.0;
+    }
+
     /* Radio type */
     conf->type = g_key_file_get_integer(cfg, GROUP, KEY_TYPE, &error);
     if (error != NULL)
@@ -272,6 +314,8 @@ void radio_conf_save(radio_conf_t * conf)
     g_key_file_set_integer(cfg, GROUP, KEY_PORT, conf->port);
     g_key_file_set_double(cfg, GROUP, KEY_LO, conf->lo);
     g_key_file_set_double(cfg, GROUP, KEY_LOUP, conf->loup);
+    g_key_file_set_double(cfg, GROUP, KEY_DEF_UP_FREQ, conf->defUpFreq);
+    g_key_file_set_double(cfg, GROUP, KEY_DEF_DN_FREQ, conf->defDnFreq);
     g_key_file_set_integer(cfg, GROUP, KEY_TYPE, conf->type);
     g_key_file_set_integer(cfg, GROUP, KEY_PTT, conf->ptt);
 
