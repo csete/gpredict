@@ -771,7 +771,7 @@ static void create_sat(gpointer key, gpointer value, gpointer data)
 /**
  * Create a new GtkSkyGlance widget.
  *
- * @param sats Pointer to the hash table containing the asociated satellites.
+ * @param sats Pointer to the hash table containing the associated satellites.
  * @param qth Pointer to the ground station data.
  * @param ts The t0 for the timeline or 0 to use the current date and time.
  */

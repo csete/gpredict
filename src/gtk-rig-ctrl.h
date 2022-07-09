@@ -91,7 +91,7 @@ struct _gtk_rig_ctrl {
     /* threads related stuff */
     /* add mutexes etc, to make threads reentrant! */
     GMutex          writelock;  /*!< Mutex for blocking write operation */
-    GMutex          rig_ctrl_updatelock;        /*!< Mutex wile updating widgets etc */
+    GMutex          rig_ctrl_updatelock;        /*!< Mutex while updating widgets etc */
     GMutex          widgetsync; /*!< Mutex used while leaving (sync stuff) */
     GCond           widgetready;        /*!< Condition when work is done (sync stuff) */
     GAsyncQueue    *rigctlq;    /*!< Message queue to indicate something has changed */

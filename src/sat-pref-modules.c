@@ -45,7 +45,7 @@
  *
  * The widgets must be preloaded with values from config. If a config value
  * is NULL, sensible default values, eg. those from defaults.h should
- * be laoded.
+ * be loaded.
  *
  * @note The "modules" tab is different from the others in that it is used
  *       by both the saf-pref dialog to edit global settings and the mod-cfg

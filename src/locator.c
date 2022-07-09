@@ -279,7 +279,7 @@ int dec2dms (double dec, int *degrees, int *minutes, double *seconds, int *sw) {
  *  notation common on many GPS units.
  *
  *  When passed a value < -180 or > 180, the value will be normalized
- *  within these limits and the sign set apropriately.
+ *  within these limits and the sign set appropriately.
  *
  *  Upon return dec2dmmm guarantees 0 >= \a degrees <= 180,
  *  0.0 >= \a minutes < 60.0.

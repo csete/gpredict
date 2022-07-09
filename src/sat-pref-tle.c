@@ -116,7 +116,7 @@ static void create_auto_update(GtkWidget * vbox)
     g_signal_connect(autom, "toggled", G_CALLBACK(value_changed_cb), NULL);
 }
 
-/* Calback function called when an URL entry in the list has been edited */
+/* Callback function called when an URL entry in the list has been edited */
 static void url_edited_cb(GtkCellRendererText * renderer, gchar * path,
                           gchar * new_text, GtkListStore * tle_store)
 {
@@ -346,7 +346,7 @@ static void create_misc(GtkWidget * vbox)
  *
  * This function is called when the user clicks on the RESET button. The function
  * will get the default values for the parameters and set the dirty and reset flags
- * apropriately. The reset will not have any effect if the user cancels the
+ * appropriately. The reset will not have any effect if the user cancels the
  * dialog.
  */
 static void reset_cb(GtkWidget * button, gpointer data)

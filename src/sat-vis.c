@@ -49,7 +49,7 @@ static gchar *VIS2STR[SAT_VIS_NUM] = {
  *  \param sat The satellite structure.
  *  \param qth The QTH
  *  \param jul_utc The time at which the visibility should be calculated.
- *  \return The visiblity code.
+ *  \return The visibility code.
  *
  */
 sat_vis_t

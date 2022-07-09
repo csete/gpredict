@@ -46,7 +46,7 @@
 /* tle_set is a character string holding the two lines read    */
 /* from a text file containing NASA format Keplerian elements. */
 /* NOTE!!! The stuff about two lines is not quite true.
-   The function assumes that tle_set[0] is the begining
+   The function assumes that tle_set[0] is the beginning
    of the line and that there are 68 elements - see the consumer
 */
 int Checksum_Good(char *tle_set)
@@ -331,10 +331,10 @@ int Get_Next_Tle_Set(char line[3][80], tle_t * tle)
     return (1);
 }
 
-/* Selects the apropriate ephemeris type to be used */
+/* Selects the appropriate ephemeris type to be used */
 /* for predictions according to the data in the TLE */
 /* It also processes values in the tle set so that  */
-/* they are apropriate for the sgp4/sdp4 routines   */
+/* they are appropriate for the sgp4/sdp4 routines   */
 void select_ephemeris(sat_t * sat)
 {
     double          ao, xnodp, dd1, dd2, delo, temp, a1, del1, r1;

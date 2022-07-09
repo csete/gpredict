@@ -539,7 +539,7 @@ static void check_and_set_cell_renderer(GtkTreeViewColumn * column,
 }
 
 /**
- * Render column containg event type.
+ * Render column containing event type.
  *
  * Event type can be AOS or LOS depending on whether the satellite is within
  * range or not. AOS will rendern an "A", LOS will render an "L".

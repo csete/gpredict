@@ -1368,7 +1368,7 @@ static void create_reset_button(GKeyFile * cfg, GtkBox * vbox)
  *
  * The widgets must be preloaded with values from config. If a config value
  * is NULL, sensible default values, eg. those from defaults.h should
- * be laoded.
+ * be loaded.
  */
 GtkWidget      *sat_pref_map_view_create(GKeyFile * cfg)
 {

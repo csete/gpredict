@@ -128,7 +128,7 @@ static void spin_changed_cb(GtkWidget * spinner, gpointer data)
  *
  * This function is called when the user clicks on the RESET button. The function
  * will get the default values for the parameters and set the dirty and reset flags
- * apropriately. The reset will not have any effect if the user cancels the
+ * appropriately. The reset will not have any effect if the user cancels the
  * dialog.
  */
 static void reset_cb(GtkWidget * button, gpointer data)

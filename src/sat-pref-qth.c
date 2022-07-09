@@ -281,7 +281,7 @@ static GtkWidget *create_qth_list()
  *
  * This function creates the data storage necessary for the
  * list view. The newly created tree model is populated with
- * data from the .qth files in the users config diretory.
+ * data from the .qth files in the users config directory.
  * The individual .qth files are read by the read_qth_file
  * function.
  */
@@ -741,14 +741,14 @@ static gboolean clear_default_flags(GtkTreeModel * model, GtkTreePath * path,
     return FALSE;
 }
 
-/* render column containg float
+/* render column containing float
    by using this instead of the default data function, we can
    control the number of decimals and display the coordinates in a
    fancy way, including degree sign and NWSE suffixes.
 
    Please note that this function only affects how the numbers are
    displayed (rendered), the tree_store will still contain the
-   original flaoting point numbers. Very cool!
+   original floating point numbers. Very cool!
 */
 static void float_cell_data_function(GtkTreeViewColumn * col,
                                      GtkCellRenderer * renderer,

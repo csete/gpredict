@@ -403,7 +403,7 @@ void modes_update_from_network()
     CURLcode        res;
 #endif
     FILE           *outfile;
-    guint           success = 0;        /* no. of successfull downloads */
+    guint           success = 0;        /* no. of successful downloads */
 
     server = sat_cfg_get_str(SAT_CFG_STR_TRSP_SERVER);
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
@@ -540,7 +540,7 @@ void trsp_update_from_network(gboolean silent,
     gchar          *cache;
     gchar          *text;
 
-    guint           success = 0;        /* no. of successfull downloads */
+    guint           success = 0;        /* no. of successful downloads */
 
     (void)label2;
 

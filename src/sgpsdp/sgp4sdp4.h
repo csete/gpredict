@@ -80,7 +80,7 @@ typedef struct {
  * \bug It is uncertain whether the units are uniform across all functions.
  */
 typedef struct {
-    double          lat;        /*!< Lattitude [rad] */
+    double          lat;        /*!< Latitude [rad] */
     double          lon;        /*!< Longitude [rad] */
     double          alt;        /*!< Altitude [km]? */
     double          theta;

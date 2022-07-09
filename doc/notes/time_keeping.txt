@@ -9,7 +9,7 @@ difference between these two with the number of minutes per day:
 
 tsince = (sat->jul_utc - sat->jul_epoch) * xmnpd
 
-Similiarly, when predicting passes, a specific Julian date can be obtained from
+Similarly, when predicting passes, a specific Julian date can be obtained from
 tsince by dividing tsince with the number of minutes per day and adding the
 Epoch time as Julian date to it:
 

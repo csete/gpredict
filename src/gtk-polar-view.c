@@ -757,7 +757,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
  * Create a new GtkPolarView widget.
  *
  * @param cfgdata The configuration data of the parent module.
- * @param sats Pointer to the hash table containing the asociated satellites.
+ * @param sats Pointer to the hash table containing the associated satellites.
  * @param qth Pointer to the ground station data.
  */
 GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
