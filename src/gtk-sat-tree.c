@@ -426,7 +426,7 @@ static gint scan_tle_file(const gchar * path, GtkTreeStore * store,
             i++;
         }
 
-        /* close IO chanel; don't care about status */
+        /* close IO channel; don't care about status */
         g_io_channel_shutdown(tlefile, TRUE, NULL);
         g_io_channel_unref(tlefile);
     }
@@ -572,7 +572,7 @@ void gtk_sat_tree_select(GtkSatTree * sat_tree, guint catnum)
  * @param path The GtkTreePath of the current item.
  * @param iter The GtkTreeIter of the current item.
  * @param data Pointer to the GtkSatTree structure.
- * @return Alway FALSE to let the for-each run to till end.
+ * @return Always FALSE to let the for-each run to till end.
  *
  * This function is used as foreach-callback in the gtk_sat_tree_select function.
  * The purpoise of the function is to set the check box to chacked state and add
@@ -637,7 +637,7 @@ static gboolean check_and_select_sat(GtkTreeModel * model,
  * @param path The GtkTreePath of the current item.
  * @param iter The GtkTreeIter of the current item.
  * @param data Pointer to the GtkSatTree structure.
- * @return Alway FALSE to let the for-each run to till end.
+ * @return Always FALSE to let the for-each run to till end.
  *
  * This function is very similar to the check_and_select callback except that it
  * is used only to uncheck a deselected satellite.

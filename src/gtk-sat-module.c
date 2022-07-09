@@ -622,7 +622,7 @@ static void update_child(GtkWidget * child, gdouble tstamp)
  * @param val The hash table value (sat_t structure)
  * @param data User data (the GtkSatModule widget).
  *
- * This function updates the tracking data for a given satelite. It is called by
+ * This function updates the tracking data for a given satellite. It is called by
  * the timeout handler for each element in the hash table.
  */
 static void gtk_sat_module_update_sat(gpointer key, gpointer val,
@@ -663,7 +663,7 @@ static void gtk_sat_module_update_sat(gpointer key, gpointer val,
 
        daynum is the current time in the module.
 
-       The conditional aos < daynum is merely saying that aos occured
+       The conditional aos < daynum is merely saying that aos occurred
        in the past. Therefore it cannot be the next event or aos/los
        for that satellite.
 
@@ -1163,7 +1163,7 @@ void gtk_sat_module_close_cb(GtkWidget * button, gpointer data)
                         __func__, name, retcode);
         }
 
-        /* increase referene count */
+        /* increase reference count */
         g_object_ref(module);
 
         /* remove module from window, destroy window */
@@ -1193,7 +1193,7 @@ void gtk_sat_module_close_cb(GtkWidget * button, gpointer data)
         }
 
 
-        /* increase referene count */
+        /* increase reference count */
         g_object_ref(module);
 
         /* remove module from window, destroy window */
@@ -1214,7 +1214,7 @@ void gtk_sat_module_close_cb(GtkWidget * button, gpointer data)
         break;
     }
 
-    /* appearantly, module will be destroyed when removed from notebook */
+    /* apparently, module will be destroyed when removed from notebook */
     /* gtk_widget_destroy (GTK_WIDGET (module)); */
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Module %s closed."), __func__, name);
@@ -1229,7 +1229,7 @@ void gtk_sat_module_close_cb(GtkWidget * button, gpointer data)
  * @param data Pointer the GtkSatModule widget, which should be reconfigured
  *
  * This function is called when the user clicks on the "configure" minibutton.
- * The function incokes the mod_cfg_edit funcion, which has the same look and feel
+ * The function incokes the mod_cfg_edit function, which has the same look and feel
  * as the dialog used to create a new module.
  *
  * NOTE: Don't use button, since we don't know what kind of widget it is

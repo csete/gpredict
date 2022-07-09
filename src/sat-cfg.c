@@ -90,21 +90,21 @@
 
 /** Structure representing a boolean value */
 typedef struct {
-    gchar          *group;      /*!< The configration group */
+    gchar          *group;      /*!< The configuration group */
     gchar          *key;        /*!< The configuration key */
     gboolean        defval;     /*!< The default value */
 } sat_cfg_bool_t;
 
 /** Structure representing an integer value */
 typedef struct {
-    gchar          *group;      /*!< The configration group */
+    gchar          *group;      /*!< The configuration group */
     gchar          *key;        /*!< The configuration key */
     gint            defval;     /*!< The default value */
 } sat_cfg_int_t;
 
 /** Structure representing a string value */
 typedef struct {
-    gchar          *group;      /*!< The configration group */
+    gchar          *group;      /*!< The configuration group */
     gchar          *key;        /*!< The configuration key */
     gchar          *defval;     /*!< The default value */
 } sat_cfg_str_t;
@@ -348,7 +348,7 @@ guint sat_cfg_load()
 
 /**
  * Save configuration data.
- * @return 0 on success, 1 if an error occured.
+ * @return 0 on success, 1 if an error occurred.
  *
  * This function saves the configuration data currently stored in
  * memory to the gpredict.cfg file.

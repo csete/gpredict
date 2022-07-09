@@ -44,7 +44,7 @@
  *
  * @param catnum The catalog number of the satellite.
  * @param sat Pointer to a valid sat_t structure.
- * @return 0 if successfull, 1 if an I/O error occurred,
+ * @return 0 if successful, 1 if an I/O error occurred,
  *         2 if the TLE data appears to be bad.
  *
  */

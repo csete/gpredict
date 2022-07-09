@@ -62,7 +62,7 @@ Changes in version 2.0 (10 Dec 2017)
 - Fixed track button in rotator controller having no effect
 - Fixed operational status of satellites
 - Fixed wrong icon in time controller
-- Fixed mising ground track for new satellites
+- Fixed missing ground track for new satellites
 - Fixed show next pass shows the current pass
 - Fixed problems with plotting footprints near the poles
 - Fixed satellite nickname not escaped for Pango

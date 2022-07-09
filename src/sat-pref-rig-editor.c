@@ -520,7 +520,7 @@ void sat_pref_rig_editor_run(radio_conf_t * conf)
     gint            response;
     gboolean        finished = FALSE;
 
-    /* crate dialog and add contents */
+    /* create dialog and add contents */
     dialog = gtk_dialog_new_with_buttons(_("Edit radio configuration"),
                                          GTK_WINDOW(window),
                                          GTK_DIALOG_MODAL |

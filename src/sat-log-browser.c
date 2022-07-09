@@ -187,7 +187,7 @@ static int read_debug_file(const gchar * filename)
 
             errorcode = 0;
 
-            /* Close IO chanel; don't care about status.
+            /* Close IO channel; don't care about status.
                Shutdown will flush the stream and close the channel
                as soon as the reference count is dropped. Order matters!
              */
@@ -197,7 +197,7 @@ static int read_debug_file(const gchar * filename)
         }
         else
         {
-            /* an error occured */
+            /* an error occurred */
             sat_log_log(SAT_LOG_LEVEL_ERROR,
                         _("%s:%d: Error open debug log (%s)"),
                         __FILE__, __LINE__, error->message);
@@ -363,7 +363,7 @@ static GtkWidget *create_message_summary()
     gtk_frame_set_label_align(GTK_FRAME(frame), 0.5, 0.5);
     gtk_container_add(GTK_CONTAINER(frame), table);
 
-    /* pack frame into vbox so that it doesn't gets streched vertically */
+    /* pack frame into vbox so that it doesn't gets stretched vertically */
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_pack_start(GTK_BOX(vbox), frame, FALSE, FALSE, 0);
 

@@ -15,7 +15,7 @@ When the radio is connected to the PC you should see:
 
 $ lsmod |grep cp
 
-cp210x                 24576 << is the kernel module and memory size, if compiled into the kernel you wont see the module but may still work, try below.
+cp210x                 24576 << is the kernel module and memory size, if compiled into the kernel you won't see the module but may still work, try below.
 
 $ lsusb
 

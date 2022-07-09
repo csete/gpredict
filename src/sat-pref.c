@@ -62,7 +62,7 @@ static void     button_press_cb(GtkWidget * widget, gpointer nbook);
  * could have the following sub-groups: General, List View, Map View and so on.
  * The tabs of the notebook are invisible, instead a vertical icon list
  * placed on the left of the notebook is used to navigate through the
- * notebook pages. The icon list is actually impemented using pixmap buttons
+ * notebook pages. The icon list is actually implemented using pixmap buttons
  * in a button box. Using something like the GtkIconView would have been better
  * but that seems to be rather useless when packed into a box.
  */

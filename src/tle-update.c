@@ -493,7 +493,7 @@ void tle_update_from_network(gboolean silent,
     const gchar    *fname;
     gchar          *text;
     GError         *err = NULL;
-    guint           success = 0;        /* no. of successfull downloads */
+    guint           success = 0;        /* no. of successful downloads */
 
     /* bail out if we are already in an update process */
     if (g_mutex_trylock(&tle_in_progress) == FALSE)
@@ -799,7 +799,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
 
     /* 
        Normal cases to check
-       1. 3 line tle file as in amatuer.txt from celestrak
+       1. 3 line tle file as in amateur.txt from celestrak
        2. 2 line tle file as in .... from celestrak
 
        corner cases to check 
@@ -1266,7 +1266,7 @@ static void update_tle_in_file(const gchar * ldname,
 
             if (ntle->satname != NULL)
             {
-                /* when a satellite first appears in the elements it is sometimes refered to by the 
+                /* when a satellite first appears in the elements it is sometimes referred to by the 
                    international designator which is awkward after it is given a name */
                 if (!is_computer_generated_name(ntle->satname))
                 {

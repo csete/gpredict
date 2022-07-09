@@ -803,7 +803,7 @@ void sat_pref_qth_editor_run(GtkTreeView * treeview, gboolean new)
     gint            response;
     gboolean        finished = FALSE;
 
-    /* crate dialog and add contents */
+    /* create dialog and add contents */
     dialog = gtk_dialog_new_with_buttons(_("Edit ground station data"),
                                          GTK_WINDOW(window),
                                          GTK_DIALOG_MODAL |

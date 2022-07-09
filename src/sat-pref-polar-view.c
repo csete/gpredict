@@ -988,7 +988,7 @@ void sat_pref_polar_view_ok(GKeyFile * cfg)
  *
  * The widgets must be preloaded with values from config. If a config value
  * is NULL, sensible default values, eg. those from defaults.h should
- * be laoded.
+ * be loaded.
  */
 GtkWidget      *sat_pref_polar_view_create(GKeyFile * cfg)
 {

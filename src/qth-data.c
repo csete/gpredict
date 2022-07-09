@@ -589,7 +589,7 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
 }
 
 /**
- * Initialize whatever structures inside the qth_t stucture for later updates.
+ * Initialize whatever structures inside the qth_t structure for later updates.
  *
  * \param qth the qth data structure to update
  * 
@@ -698,7 +698,7 @@ gboolean qth_data_update_init(qth_t * qth)
 }
 
 /**
- * Shutdown and free structures inside the qth_t stucture were used for updates.
+ * Shutdown and free structures inside the qth_t structure were used for updates.
  *
  * \param qth the qth data structure to update
  * 
@@ -797,7 +797,7 @@ void qth_small_save(qth_t * qth, qth_small_t * qth_small)
 }
 
 /**
- * Validate the contents of a qth structure and correct if neccessary
+ * Validate the contents of a qth structure and correct if necessary
  *
  * \param qth the qth data structure to cleanup
  */

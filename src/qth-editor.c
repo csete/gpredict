@@ -695,7 +695,7 @@ GtkResponseType qth_editor_run(qth_t * qth, GtkWindow * parent)
     gint            response;
     gboolean        finished = FALSE;
 
-    /* crate dialog and add contents */
+    /* create dialog and add contents */
     dialog = gtk_dialog_new_with_buttons(_("Edit ground station data"),
                                          parent,
                                          GTK_DIALOG_MODAL |
@@ -728,7 +728,7 @@ GtkResponseType qth_editor_run(qth_t * qth, GtkWindow * parent)
             }
             else
             {
-                /* and error occured; try again */
+                /* and error occurred; try again */
                 GtkWidget      *errd;
 
                 errd = gtk_message_dialog_new(parent,

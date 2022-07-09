@@ -1294,7 +1294,7 @@ static gboolean mirror_lon(sat_t * sat, gdouble rangelon, gdouble * mlon,
  * This function calculates the "left" side of the range circle and mirrors
  * the points in longitude to create the "right side of the range circle, too.
  * In order to be able to use the footprint points to create a set of subsequent
- * lines conencted to each other (poly-lines) the function may have to perform
+ * lines connected to each other (poly-lines) the function may have to perform
  * one of the following three actions:
  *
  * 1. If the footprint covers the North or South pole, we need to sort the points

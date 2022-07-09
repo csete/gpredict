@@ -40,7 +40,7 @@ This package should contain the following files:
               calculating the observer-centered position of the sun.
 
 7. sgp_time.c: Functions needed to calculate and convert time in various 
-               formats, e.g. Julian, calender etc.
+               formats, e.g. Julian, calendar etc.
 
 8. solar.c: Functions for calculating the position of the sun.
 
@@ -155,7 +155,7 @@ NORAD Spacetrack report #3 is also included: http://celestrack.com/
 Change Log:
 ================
 
-Version 0.1: Was the first relased after local bug-fixing.
+Version 0.1: Was the first released after local bug-fixing.
 
 Version 0.2: Function Date_Time was re-written to include calculation
 of tm_wday and tm_isdst members in the struct tm type value it returns.
