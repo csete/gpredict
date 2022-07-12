@@ -28,14 +28,13 @@ jobs:
     defaults:
       run:
         shell: msys2 {0}
+        working-directory: win32
     steps:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW32
           update: true
-          install: git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3
+          install: base-devel git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3
       - name: CI-Build
-        run: |
-          cd win32
-          make
+        run: make
