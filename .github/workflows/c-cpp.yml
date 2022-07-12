@@ -23,7 +23,7 @@ jobs:
       run: make
     - name: make check
       run: make check
-  winbuild:
+  win32build:
     runs-on: windows-latest
     defaults:
       run:
@@ -36,5 +36,24 @@ jobs:
           msystem: MINGW32
           update: true
           install: base-devel git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3 mingw-w64-i686-goocanvas
-      - name: CI-Build
-        run: make
+      - name: CI32-Build
+        run: | 
+         make
+         make check
+  win64build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+        working-directory: win32
+    steps:
+      - uses: actions/checkout@v2
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-toolchain mingw-w64-x86_64-gtk3 mingw-w64-x86_64-goocanvas
+      - name: CI64-Build
+        run: |
+         make
+         make check
