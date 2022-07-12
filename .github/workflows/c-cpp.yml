@@ -35,6 +35,6 @@ jobs:
         with:
           msystem: MINGW32
           update: true
-          install: base-devel git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3
+          install: base-devel git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3 mingw-w64-goocanvas
       - name: CI-Build
         run: make
