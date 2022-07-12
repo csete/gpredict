@@ -32,10 +32,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: MINGW32
           update: true
-          install: git mingw-w64-x86_64-cc
+          install: git mingw-w64-xi686-cc mingw-w64-i686-toolchain mingw-w64-i686-gtk3
       - name: CI-Build
         run: |
-          echo 'Running in MSYS2!'
-          ./ci-build.sh
+          cd win32
+          make
