@@ -7,15 +7,14 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  linuxbuild:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: dependencies
       run: |
         sudo apt update -qq
+        sudo apt upgrade -y
         sudo apt install -y libtool intltool autoconf automake libcurl4-openssl-dev pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
     - name: autogen
       run: ./autogen.sh
@@ -36,7 +35,7 @@ jobs:
           msystem: MINGW32
           update: true
           install: base-devel git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3 mingw-w64-i686-goocanvas
-      - name: CI32-Build
+      - name: CIw32-Build
         run: | 
          make
          make check
@@ -53,7 +52,7 @@ jobs:
           msystem: MINGW64
           update: true
           install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-toolchain mingw-w64-x86_64-gtk3 mingw-w64-x86_64-goocanvas
-      - name: CI64-Build
+      - name: CIw64-Build
         run: |
          make
          make check
