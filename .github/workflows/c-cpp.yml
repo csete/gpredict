@@ -34,7 +34,7 @@ jobs:
         with:
           msystem: MINGW32
           update: true
-          install: git mingw-w64-xi686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3
+          install: git mingw-w64-i686-gcc mingw-w64-i686-toolchain mingw-w64-i686-gtk3
       - name: CI-Build
         run: |
           cd win32
