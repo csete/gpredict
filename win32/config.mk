@@ -5,7 +5,7 @@
 # as gpredict. Downloads used:
 # 
 # http://ftp.gnome.org/pub/GNOME/binaries/win32/goocanvas/3.0/
-# download both: goocanvas-2.0.2-win32.zip, goocanvas-dev-3.0.0-win32.zip
+# download both: goocanvas-3.0.0-win32.zip, goocanvas-dev-3.0.0-win32.zip
 # 
 # http://win32builder.gnome.org/gtk+-bundle_3.10.4-20131202_win32.zip
 # NB: I had to create new .pc files for both gtk+-3.0.pc and gdk.pc
