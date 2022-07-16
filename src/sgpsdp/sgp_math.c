@@ -203,7 +203,7 @@ int Round(double arg)
     return ((int)floor(arg + 0.5));
 }
 
-/* Returns the floor integer of a double arguement, as double */
+/* Returns the floor integer of a double argument, as double */
 double Int(double arg)
 {
     return (floor(arg));

@@ -628,14 +628,14 @@ static void check_and_set_single_cell_renderer(GtkTreeViewColumn * column,
     }
 }
 
-/* render column containg lat/lon
+/* render column containing lat/lon
    by using this instead of the default data function, we can
    control the number of decimals and display the coordinates in a
    fancy way, including degree sign and NWSE suffixes.
 
    Please note that this function only affects how the numbers are
    displayed (rendered), the tree_store will still contain the
-   original flaoting point numbers. Very cool!
+   original floating point numbers. Very cool!
 */
 static void latlon_cell_data_function(GtkTreeViewColumn * col,
                                       GtkCellRenderer * renderer,
@@ -1320,7 +1320,7 @@ static void view_popup_menu(GtkWidget * treeview, GdkEventButton * event,
  *
  * @param view Pointer to the GtkTreeView object.
  * @param path The path of the row that was activated.
- * @param column The column where the activation occured.
+ * @param column The column where the activation occurred.
  * @param data Pointer to the toplevel window.
  *
  * This function is called when the user double clicks on a pass in the

@@ -43,7 +43,7 @@
  *
  * The widgets must be preloaded with values from config. If a config value
  * is NULL, sensible default values, eg. those from defaults.h should
- * be laoded.
+ * be loaded.
  */
 GtkWidget      *sat_pref_predict_create()
 {

@@ -149,7 +149,7 @@ static void set_combo_tooltip(GtkWidget * combo, gpointer text)
  * Actually, this function only loops over all the children of the GtkComboBox
  * and calls the set_combo_tooltip internal function.
  *
- * @note This works only if the funcion is actually used as callback for the
+ * @note This works only if the function is actually used as callback for the
  *       @a realize signal og the GtkComboBox.
  *
  * @note This great trick has been pointed out by Matthias Clasen, he has done the

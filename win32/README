@@ -9,7 +9,7 @@ Install MSYS2, open a shell and install the Gtk3 and Goocanvas2 packages,
 following the instructions from GTK team:
 https://www.gtk.org/download/windows.php
 
-Once your MSYS2 output folder (/mingw32 or simlar) is accessible from
+Once your MSYS2 output folder (/mingw32 or similar) is accessible from
 this system, adjust the MINGW_ROOT parameter in config.mk to suit.
 
 You should now be able to cross-compile the Win32 version of GPredict
@@ -20,7 +20,7 @@ https://github.com/csete/gpredict/issues/110
 
 
 To build a deployable ZIP archive, use 'make dist', which packages all
-binary DLLs from dependant packages along with gpredict[-con].exe into
+binary DLLs from dependent packages along with gpredict[-con].exe into
 a versioned ZIP.
 
 Good luck!

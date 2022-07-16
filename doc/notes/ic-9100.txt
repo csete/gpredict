@@ -8,7 +8,7 @@ CI-V transceive: On
 
 
 When the radio is connected to the PC via the CI-V CAT Interface and serial port COM1 it is
-on /dev/ttyS0 or higer number.
+on /dev/ttyS0 or higher number.
 When you are using a usb-serial-rs232-adapter it should be on /dev/ttyUSB0 or higher number.
 
 

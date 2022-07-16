@@ -69,7 +69,7 @@ static gboolean tle_upd_running = FALSE;
 static gboolean tle_upd_note_sent = FALSE;
 
 
-/* private funtion prototypes */
+/* private function prototypes */
 static void     gpredict_app_create(void);
 static gint     gpredict_app_delete(GtkWidget *, GdkEvent *, gpointer);
 static void     gpredict_app_destroy(GtkWidget *, gpointer);
@@ -223,7 +223,7 @@ static void gpredict_app_create()
     title = g_strdup(_("Gpredict"));
     icon = logo_file_name("gpredict_icon_color.svg");
 
-    /* ceate window, add title and icon, restore size and position */
+    /* create window, add title and icon, restore size and position */
     app = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     gtk_window_set_title(GTK_WINDOW(app), title);
@@ -290,7 +290,7 @@ static void gpredict_sig_handler(int sig)
  * This function handles the delete event received by the main application
  * window (eg. when the window is closed by the WM). This function simply
  * returns FALSE indicating that the main application window should be
- * destroyed by emiting the destroy signal.
+ * destroyed by emitting the destroy signal.
  *
  */
 static gint gpredict_app_delete(GtkWidget * widget, GdkEvent * event,

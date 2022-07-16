@@ -614,7 +614,7 @@ static GooCanvasItemModel *create_canvas_model(GtkAzelPlot * azel)
 /**
  * Create a new GtkAzelPlot widget.
  * @param cfgdata The configuration data of the parent module.
- * @param sats Pointer to the hash table containing the asociated satellites.
+ * @param sats Pointer to the hash table containing the associated satellites.
  * @param qth Pointer to the ground station data.
  */
 GtkWidget      *gtk_azel_plot_new(qth_t * qth, pass_t * pass)

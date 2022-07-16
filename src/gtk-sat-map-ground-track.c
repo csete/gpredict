@@ -61,7 +61,7 @@ static void     free_ssp(gpointer ssp, gpointer data);
  * @param obj the satellite object.
  *  
  * Gpredict allows the user to require the ground track for any number of orbits
- * ahead. Therfore, the resulting ground track may cross the map boundaries many
+ * ahead. Therefore, the resulting ground track may cross the map boundaries many
  * times, and using one single polyline for the whole ground track would look very
  * silly. To avoid this, the points will be split into several polylines.
  */
@@ -156,7 +156,7 @@ void ground_track_create(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     }
 
     /* Reset satellite structure to eliminate glitches in single sat 
-       view and other places when new ground track is layed out */
+       view and other places when new ground track is laid out */
     predict_calc(sat, qth, satmap->tstamp);
 
     /* reverse GSList */

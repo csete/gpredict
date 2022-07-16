@@ -941,14 +941,14 @@ static void     operational_status_cell_data_function(GtkTreeViewColumn * col,
 
 }
 
-/* Render column containg lat/lon
+/* Render column containing lat/lon
    by using this instead of the default data function, we can
    control the number of decimals and display the coordinates in a
    fancy way, including degree sign and NWSE suffixes.
 
    Please note that this function only affects how the numbers are
    displayed (rendered), the tree_store will still contain the
-   original flaoting point numbers. Very cool!
+   original floating point numbers. Very cool!
 */
 static void latlon_cell_data_function(GtkTreeViewColumn * col,
                                       GtkCellRenderer * renderer,

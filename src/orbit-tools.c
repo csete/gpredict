@@ -67,7 +67,7 @@ get_orbit_type (sat_t *sat)
  *
  *     fabs (sat.meanmotion - 1.0027) < 0.0002
  *
- * Note: Appearantly, the mean motion can deviate much more from 1.0027 than 0.0002
+ * Note: Apparently, the mean motion can deviate much more from 1.0027 than 0.0002
  */
 gboolean
 geostationary  (sat_t *sat)

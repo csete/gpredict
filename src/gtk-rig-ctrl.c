@@ -351,7 +351,7 @@ static void track_downlink(GtkRigCtrl * ctrl)
     if (ctrl->trsp == NULL)
         return;
 
-    /* ensure that we have a useable transponder config */
+    /* ensure that we have a usable transponder config */
     if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->uplow > 0))
     {
         down = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqDown));
@@ -377,7 +377,7 @@ static void track_uplink(GtkRigCtrl * ctrl)
     if (ctrl->trsp == NULL)
         return;
 
-    /* ensure that we have a useable transponder config */
+    /* ensure that we have a usable transponder config */
     if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->uplow > 0))
     {
         up = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqUp));
@@ -2302,7 +2302,7 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
  *         occurred.
  *
  * This function checks whether AOS or LOS just happened and sends the
- * apropriate signal to the RIG if this signalling is enabled.
+ * appropriate signal to the RIG if this signalling is enabled.
  */
 static gboolean check_aos_los(GtkRigCtrl * ctrl)
 {
@@ -2514,7 +2514,7 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
  * TRUE (on). If PTT status is TRUE (on) it will simply set the PTT to FALSE
  * (off).
  *
- * This function assumes that the radio supprot set/get PTT, otherwise it makes
+ * This function assumes that the radio support set/get PTT, otherwise it makes
  * no sense to use it!
  */
 static void manage_ptt_event(GtkRigCtrl * ctrl)

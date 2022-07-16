@@ -106,7 +106,7 @@ gboolean loc_tree_create(const gchar * fname,
        Note that there are several ways to create and add the individual
        columns, especially there are tree_view_insert_col functions, which
        do not require explicit creation of columns. I have chosen to
-       explicitly ceate the columns in order to be able to hide them
+       explicitly create the columns in order to be able to hide them
        according to the flags parameter.
      */
 
@@ -395,7 +395,7 @@ static GtkTreeModel *loc_tree_create_and_fill_model(const gchar * fname)
         if (country)
             g_free(country);
 
-        /* Close IO chanel; don't care about status.
+        /* Close IO channel; don't care about status.
            Shutdown will flush the stream and close the channel
            as soon as the reference count is dropped. Order matters!
          */
@@ -413,13 +413,13 @@ static GtkTreeModel *loc_tree_create_and_fill_model(const gchar * fname)
     return GTK_TREE_MODEL(treestore);
 }
 
-/* render column containg float
+/* render column containing float
    by using this instead of the default data function, we can
    disable lat,lon and alt for the continent and country rows.
 
    Please note that this function only affects how the numbers are
    displayed (rendered), the tree_store will still contain the
-   original flaoting point numbers. Very cool!
+   original floating point numbers. Very cool!
 */
 static void loc_tree_float_cell_data_function(GtkTreeViewColumn * col,
                                               GtkCellRenderer * renderer,

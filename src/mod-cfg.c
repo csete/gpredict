@@ -460,7 +460,7 @@ static gint compare_func(GtkTreeModel * model,
  *
  * @param view Pointer to the GtkTreeView object.
  * @param path The path of the row that was activated.
- * @param column The column where the activation occured.
+ * @param column The column where the activation occurred.
  * @param data Pointer to the GtkSatselector widget.
  *
  * This function is called when the user double clicks on a satellite in the

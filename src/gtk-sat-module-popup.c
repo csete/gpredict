@@ -455,7 +455,7 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
 
     case GTK_SAT_MOD_STATE_WINDOW:
     case GTK_SAT_MOD_STATE_FULLSCREEN:
-        /* increase referene count */
+        /* increase reference count */
         g_object_ref(module);
 
         /* reparent time manager window if visible */
@@ -803,7 +803,7 @@ static void rigctrl_cb(GtkWidget * menuitem, gpointer data)
 
     if (module->rigctrl == NULL)
     {
-        /* gtk_rig_ctrl_new returned NULL becasue no radios are configured */
+        /* gtk_rig_ctrl_new returned NULL because no radios are configured */
         GtkWidget      *dialog;
 
         dialog = gtk_message_dialog_new(GTK_WINDOW(app),
@@ -882,7 +882,7 @@ static void rotctrl_cb(GtkWidget * menuitem, gpointer data)
 
     if (module->rotctrl == NULL)
     {
-        /* gtk_rot_ctrl_new returned NULL becasue no rotators are configured */
+        /* gtk_rot_ctrl_new returned NULL because no rotators are configured */
         GtkWidget      *dialog;
 
         dialog = gtk_message_dialog_new(GTK_WINDOW(app),

@@ -154,7 +154,7 @@ static void search_icon_clicked(GtkEntry *entry, GtkEntryIconPosition icon_pos,
  *
  * @param view Pointer to the GtkTreeView object.
  * @param path The path of the row that was activated.
- * @param column The column where the activation occured.
+ * @param column The column where the activation occurred.
  * @param data Pointer to the GtkSatselector widget.
  *
  * This function is called when the user double clicks on a satellite in the
@@ -912,7 +912,7 @@ gdouble gtk_sat_selector_get_latest_epoch(GtkSatSelector * selector)
  * Search through all the models for the given satellite and set its selected value.
  *
  * @param *selector is the selector that contains the models
- * @param catnr is the catalog numer of satellite.
+ * @param catnr is the catalog number of satellite.
  * @param val is true or false depending on whether that satellite is selected or not.
  */
 static void gtk_sat_selector_mark_engine(GtkSatSelector * selector, gint catnr,
@@ -950,7 +950,7 @@ static void gtk_sat_selector_mark_engine(GtkSatSelector * selector, gint catnr,
  * Search the models for the satellite and set SELECTED to TRUE.
  *
  * @param *selector is the selector that contains the models
- * @param catnr is the catalog numer of satellite.
+ * @param catnr is the catalog number of satellite.
  */
 void gtk_sat_selector_mark_selected(GtkSatSelector * selector, gint catnr)
 {
@@ -961,7 +961,7 @@ void gtk_sat_selector_mark_selected(GtkSatSelector * selector, gint catnr)
  * Searches the models for the satellite and sets SELECTED to FALSE.
  *
  * @param *selector is the selector that contains the models
- * @param catnr is the catalog numer of satellite.
+ * @param catnr is the catalog number of satellite.
  *
  */
 void gtk_sat_selector_mark_unselected(GtkSatSelector * selector, gint catnr)

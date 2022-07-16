@@ -86,9 +86,9 @@ static void     first_time_check_step_08(guint * error);
  * Send both error, warning and verbose debug messages to sat-log during this
  * process.
  *
- * The function returns 0 if everything seems to be ready or 1 if an error occured
+ * The function returns 0 if everything seems to be ready or 1 if an error occurred
  * during on of the steps above. In case of error, the only safe thing is to exit
- * imediately.
+ * immediately.
  *
  * FIXME: Should only have one parameterized function for checking directories.
  */
@@ -584,7 +584,7 @@ static void create_cat_files(guint * error)
             if (g_str_has_suffix(filename, ".cat"))
             {
 
-                /* check whether .cat file exisits in user conf */
+                /* check whether .cat file exists in user conf */
                 gchar          *catfilename = sat_file_name(filename);
 
                 if (!g_file_test(catfilename, G_FILE_TEST_EXISTS))

@@ -480,7 +480,7 @@ static void tmg_time_set(GtkWidget * widget, gpointer data)
  * @param data Pointer to the GtkSatModule structure.
  *
  * This function is called when the user moves the slider.
- * If we are in manual control mode, the function simpley calls
+ * If we are in manual control mode, the function simply calls
  * tmg_time_set(). In the other modes, the function switches over
  * to amnual mode first.
  */
@@ -704,7 +704,7 @@ void tmg_update_widgets(GtkSatModule * mod)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(mod->tmgMin), tim.tm_min);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(mod->tmgSec), tim.tm_sec);
 
-    /* msec: alway 0 in RT and SRT modes */
+    /* msec: always 0 in RT and SRT modes */
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(mod->tmgMsec), 0);
 
     /* calendar */
@@ -746,7 +746,7 @@ static void tmg_cal_add_one_day(GtkSatModule * mod)
     tmg_update_widgets(mod);
 }
 
-/** Substract one day from the calendar */
+/** Subtract one day from the calendar */
 static void tmg_cal_sub_one_day(GtkSatModule * mod)
 {
     gdouble         jd;

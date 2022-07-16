@@ -359,7 +359,7 @@ gdouble gtk_rot_knob_get_min(GtkRotKnob * knob)
  */
 void gtk_rot_knob_set_min(GtkRotKnob * knob, gdouble min)
 {
-    /* just som sanity check we have only 3 digits */
+    /* just some sanity check we have only 3 digits */
     if (min < 1000)
     {
         knob->min = min;
@@ -381,7 +381,7 @@ void gtk_rot_knob_set_min(GtkRotKnob * knob, gdouble min)
  */
 void gtk_rot_knob_set_max(GtkRotKnob * knob, gdouble max)
 {
-    /* just som sanity check we have only 3 digits */
+    /* just some sanity check we have only 3 digits */
     if (max < 1000)
     {
         knob->max = max;
