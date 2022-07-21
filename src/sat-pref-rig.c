@@ -31,9 +31,12 @@
 #include "sat-pref-rig.h"
 #include "sat-pref-rig-data.h"
 #include "sat-pref-rig-editor.h"
+#include "gtk-sat-module.h"
+#include "gtk-rig-ctrl.h"
 
 
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
+extern GtkWidget *nbook;        /* from mod-mgr.c */
 static GtkWidget *addbutton;
 static GtkWidget *editbutton;
 static GtkWidget *delbutton;
@@ -365,6 +368,35 @@ static void render_signal(GtkTreeViewColumn * col, GtkCellRenderer * renderer,
 }
 
 /**
+ * Returns whether conf has been opened by a radio control window, 
+ * in which case any values saved by the sat-pref-rig-editor will be 
+ * overwritten when the rigctrlwin is closed.
+ *
+ * @param radio_conf_t conf - the conf struct in question
+ *
+ * @return gboolean - whether conf has been opened in a rigctrlwin
+ */
+static gboolean conf_open_in_rigctrlwin(radio_conf_t * conf)
+{
+    gint       n, i;
+    GtkWidget *module;
+
+    n = gtk_notebook_get_n_pages(GTK_NOTEBOOK(nbook));
+    for (i = 0; i < n; i++) {
+        module = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nbook), i);
+        
+        if (GTK_SAT_MODULE(module)->rigctrlwin != NULL && 
+            strcmp(GTK_RIG_CTRL(GTK_SAT_MODULE(module)->rigctrl)->conf->name,
+                   conf->name) == 0) {
+            
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
+}
+
+/**
  * Add a new radio configuration
  *
  * @param button Pointer to the Add button.
@@ -442,6 +474,25 @@ static void edit_cb(GtkWidget * button, gpointer data)
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
 
+        return;
+    }
+    
+    if (conf_open_in_rigctrlwin(&conf)) { 
+    	GtkWidget *dialog;
+    	
+        dialog = gtk_message_dialog_new(GTK_WINDOW(window), 
+                                        GTK_DIALOG_MODAL |
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
+                                        _("Close Radio Control Window!\n"
+                                          "Please close the radio control window\n"
+                                          "and attempt again to ensure changes\n"
+                                          "are not overwritten."));
+        g_signal_connect_swapped(dialog, "response", 
+                                 G_CALLBACK(gtk_widget_destroy), dialog);
+        gtk_window_set_title(GTK_WINDOW(dialog), _("WARNING"));
+        gtk_widget_show_all(dialog);
+        
         return;
     }
 
