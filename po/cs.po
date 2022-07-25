@@ -1051,7 +1051,7 @@ msgstr "Míra"
 #: ../src/gtk-sat-list.c:59 ../src/gtk-sat-list.c:92 ../src/gtk-single-sat.c:52
 #: ../src/sat-pref-map-view.c:806 ../src/sat-pref-polar-view.c:424
 msgid "Next Event"
-msgstr "Další údálost"
+msgstr "Další událost"
 
 #: ../src/gtk-sat-list.c:60 ../src/gtk-sat-list.c:93 ../src/gtk-single-sat.c:53
 msgid "Next AOS"
@@ -2544,7 +2544,7 @@ msgstr "Bez transpondérů"
 
 #: ../src/menubar.c:909
 msgid "_Preferences"
-msgstr "_Nastaveni"
+msgstr "_Nastavení"
 
 #: ../src/menubar.c:922
 msgid "_Online help"
@@ -2603,7 +2603,7 @@ msgstr "%s: Modul nemá žádné QTH; použít výchozí."
 #.
 #: ../src/mod-cfg.c:329 ../src/mod-cfg.c:389 ../src/mod-cfg.c:774
 msgid "** DEFAULT **"
-msgstr "** VÝcHOZÍ **"
+msgstr "** VÝCHOZÍ **"
 
 #: ../src/mod-cfg.c:379
 #, c-format
@@ -4038,7 +4038,7 @@ msgstr "Použít N/S/E/W pro zeměpisné souřadnice."
 
 #: ../src/sat-pref-formats.c:122
 msgid "Use Imperial units instead of Metric."
-msgstr "Pouít imperiální jednotky místo metrických"
+msgstr "Použít imperiální jednotky místo metrických"
 
 #: ../src/sat-pref-general.c:52
 msgid "Number Formats"
@@ -4359,7 +4359,7 @@ msgstr "orbity"
 
 #: ../src/sat-pref-map-view.c:1265
 msgid "Center map at longitude"
-msgstr "Vystředit mapu na zem.é délce"
+msgstr "Vystředit mapu na zem. délce"
 
 #: ../src/sat-pref-map-view.c:1270
 msgid "Select longitude. West is negative."
