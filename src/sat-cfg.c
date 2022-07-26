@@ -224,24 +224,24 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
     {"TRSP", "FREQ_FILE", "transmitters/?format=json"},
     {"TRSP", "MODE_FILE", "modes/?format=json"},
     {"TRSP", "PROXY", NULL},
-    {"TLE", "SERVER", "http://www.celestrak.com/NORAD/elements/"},
+    {"TLE", "SERVER", "https://celestrak.org/NORAD/elements/"},
     {"TLE", "FILES", "amateur.txt;cubesat.txt;visual.txt;weather.txt"},
     {"TLE", "PROXY", NULL},
     {"TLE", "URLS",
-     "http://www.amsat.org/amsat/ftp/keps/current/nasabare.txt;"
-     "http://www.celestrak.com/NORAD/elements/amateur.txt;"
-     "http://www.celestrak.com/NORAD/elements/cubesat.txt;"
-     "http://www.celestrak.com/NORAD/elements/galileo.txt;"
-     "http://www.celestrak.com/NORAD/elements/glo-ops.txt;"
-     "http://www.celestrak.com/NORAD/elements/gps-ops.txt;"
-     "http://www.celestrak.com/NORAD/elements/iridium.txt;"
-     "http://www.celestrak.com/NORAD/elements/iridium-NEXT.txt;"
-     "http://www.celestrak.com/NORAD/elements/molniya.txt;"
-     "http://www.celestrak.com/NORAD/elements/noaa.txt;"
-     "http://www.celestrak.com/NORAD/elements/science.txt;"
-     "http://www.celestrak.com/NORAD/elements/tle-new.txt;"
-     "http://www.celestrak.com/NORAD/elements/visual.txt;"
-     "http://www.celestrak.com/NORAD/elements/weather.txt"},
+     "https://www.amsat.org/amsat/ftp/keps/current/nasabare.txt;"
+     "https://celestrak.org/NORAD/elements/amateur.txt;"
+     "https://celestrak.org/NORAD/elements/cubesat.txt;"
+     "https://celestrak.org/NORAD/elements/galileo.txt;"
+     "https://celestrak.org/NORAD/elements/glo-ops.txt;"
+     "https://celestrak.org/NORAD/elements/gps-ops.txt;"
+     "https://celestrak.org/NORAD/elements/iridium.txt;"
+     "https://celestrak.org/NORAD/elements/iridium-NEXT.txt;"
+     "https://celestrak.org/NORAD/elements/molniya.txt;"
+     "https://celestrak.org/NORAD/elements/noaa.txt;"
+     "https://celestrak.org/NORAD/elements/science.txt;"
+     "https://celestrak.org/NORAD/elements/tle-new.txt;"
+     "https://celestrak.org/NORAD/elements/visual.txt;"
+     "https://celestrak.org/NORAD/elements/weather.txt"},
     {"TLE", "FILE_DIR", NULL},
     {"PREDICT", "SAVE_DIR", NULL}
 };
