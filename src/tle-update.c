@@ -598,6 +598,7 @@ void tle_update_from_network(gboolean silent,
 #else
                 curl_easy_setopt(curl, CURLOPT_WRITEDATA, outfile);
                 curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_write_func);
+                curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
                 /* get file */
                 res = curl_easy_perform(curl);
