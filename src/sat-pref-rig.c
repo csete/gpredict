@@ -218,6 +218,10 @@ static void render_type(GtkTreeViewColumn * col,
         g_object_set(renderer, "text", _("FT817/857/897 (man)"), NULL);
         break;
 
+    case RIG_TYPE_SAT:
+        g_object_set(renderer, "text", _("IC9700 (SAT mode)"), NULL);
+        break;
+
     default:
         g_object_set(renderer, "text", _("ERROR"), NULL);
         break;

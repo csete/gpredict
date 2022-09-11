@@ -82,7 +82,7 @@ static void update_widgets(radio_conf_t * conf)
     gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), conf->ptt);
 
     /* vfo up/down */
-    if (conf->type == RIG_TYPE_DUPLEX)
+    if ((conf->type == RIG_TYPE_DUPLEX) || (conf->type == RIG_TYPE_SAT))
     {
         if (conf->vfoUp == VFO_MAIN)
             gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
@@ -116,7 +116,8 @@ static void vfo_changed(GtkWidget * widget, gpointer data)
     (void)data;
 
     if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == 0 &&
-        gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_DUPLEX)
+            ((gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_DUPLEX) ||
+                    gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_SAT))
     {
         /* not good, we need to have proper VFO combi for this type */
         gtk_combo_box_set_active(GTK_COMBO_BOX(widget), 1);
@@ -218,7 +219,8 @@ static void type_changed(GtkWidget * widget, gpointer data)
 
 
     /* VFO consistency */
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) == RIG_TYPE_DUPLEX &&
+    if (((gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_DUPLEX) ||
+         gtk_combo_box_get_active(GTK_COMBO_BOX(type)) == RIG_TYPE_SAT) &&
         gtk_combo_box_get_active(GTK_COMBO_BOX(vfo)) == 0)
     {
         gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
@@ -296,6 +298,7 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                    _("FT817/857/897 (auto)"));
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type),
                                    _("FT817/857/897 (manual)"));
+    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(type), _("Full-duplex SAT mode"));
     gtk_combo_box_set_active(GTK_COMBO_BOX(type), RIG_TYPE_RX);
     g_signal_connect(type, "changed", G_CALLBACK(type_changed), NULL);
     gtk_widget_set_tooltip_markup(type,
@@ -333,7 +336,12 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                     " that switching to TX is done by pressing the"
                                     " SPACE key on the keyboard. Gpredict will "
                                     "then update the TX Doppler before actually"
-                                    " switching to TX."));
+                                    " switching to TX."
+                                    "<b>Full-duplex SAT mode:</b>  The radio is a full-duplex"
+                                    " radio which has a dedicated satellite mode, such "
+                                    "as the IC9700. Gpredict will be continuously tuning both "
+                                    "uplink and downlink simultaneously and not care about "
+                                    "PTT setting.\n\n"));
     gtk_grid_attach(GTK_GRID(table), type, 1, 3, 2, 1);
 
     /* ptt */
@@ -475,7 +483,7 @@ static gboolean apply_changes(radio_conf_t * conf)
     conf->ptt = gtk_combo_box_get_active(GTK_COMBO_BOX(ptt));
 
     /* vfo up/down */
-    if (conf->type == RIG_TYPE_DUPLEX)
+    if ((conf->type == RIG_TYPE_DUPLEX) || conf->type == RIG_TYPE_SAT)
     {
         switch (gtk_combo_box_get_active(GTK_COMBO_BOX(vfo)))
         {

@@ -1489,6 +1489,21 @@ static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
     return retcode;
 }
 
+/* Setup VFOs for satellite operation (simplex or duplex) */
+static gboolean setup_satmode(GtkRigCtrl * ctrl)
+{
+    gchar          *buff;
+    gchar           buffback[256];
+    gboolean        retcode;
+
+    buff = g_strdup("U SATMODE 1\x0a");
+
+    retcode = send_rigctld_command(ctrl, ctrl->sock, buff, buffback, 128);
+    g_free(buff);
+
+    return (check_set_response(buffback, retcode, __func__));
+}
+
 /* Setup VFOs for split operation (simplex or duplex) */
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
@@ -2755,8 +2770,14 @@ static void rigctrl_open(GtkRigCtrl * data)
             break;
 
         case RIG_TYPE_DUPLEX:
-            /* set rig into SAT mode (hamlib needs it even if rig already in SAT) */
+            /* set rig into Split mode (hamlib needs it even if rig already in Split) */
             setup_split(ctrl);
+            exec_duplex_cycle(ctrl);
+            break;
+
+        case RIG_TYPE_SAT:
+            /* set rig into SAT mode (hamlib needs it even if rig already in SAT) */
+            setup_satmode(ctrl);
             exec_duplex_cycle(ctrl);
             break;
 
@@ -2844,6 +2865,10 @@ gpointer rigctl_run(gpointer data)
                 break;
 
             case RIG_TYPE_DUPLEX:
+                exec_duplex_cycle(t_ctrl);
+                break;
+
+            case RIG_TYPE_SAT:
                 exec_duplex_cycle(t_ctrl);
                 break;
 
