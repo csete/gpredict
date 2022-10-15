@@ -1562,8 +1562,10 @@ static void gtk_rot_ctrl_destroy(GtkWidget * widget)
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(widget);
 
     /* stop timer */
-    if (ctrl->timerid > 0)
+    if (ctrl->timerid > 0) {
         g_source_remove(ctrl->timerid);
+        ctrl->timerid = 0;
+    }
 
     /* free configuration */
     if (ctrl->conf != NULL)
