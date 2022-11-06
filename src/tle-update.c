@@ -907,7 +907,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
             case 1:
                 strncpy(tle_working[0], tle_working[1], 80);
                 strncpy(tle_working[1], tle_working[2], 80);
-                strncpy(tle_working[2], linetmp, 80);
+                memcpy(tle_working[2], linetmp, 80);
                 tle_working[2][79] = 0;         // make coverity happy
                 break;
             default:
@@ -965,10 +965,10 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
                 /* put in a dummy name of form yyyy-nnaa base on international id */
                 /* this special form will be overwritten if a three line tle ever has another name */
 
-                strncpy(idstr, &tle_working[0][11], 6);
+                memcpy(idstr, &tle_working[0][11], 6);
                 g_strstrip(idstr);
-                strncpy(idyearstr, &tle_working[0][9], 2);
-                idstr[6] = '\0';
+                memcpy(idyearstr, &tle_working[0][9], 2);
+                idstr[6] = 0;
                 idyearstr[2] = '\0';
                 idyear = g_ascii_strtod(idyearstr, NULL);
 
