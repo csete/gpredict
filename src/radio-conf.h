@@ -72,6 +72,8 @@ typedef struct {
 
     gboolean        signal_aos; /*!< Send AOS notification to RIG */
     gboolean        signal_los; /*!< Send LOS notification to RIG */
+
+    gint            vfo_opt;    /*!< Keep track of vfo_opt being enabled in rigctld */
 } radio_conf_t;
 
 
