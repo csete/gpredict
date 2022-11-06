@@ -717,7 +717,7 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->downhigh > 0))
     {
         freq = ctrl->trsp->downlow +
-            abs(ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
+            labs(ctrl->trsp->downhigh - ctrl->trsp->downlow) / 2;
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), freq);
 
         /* invalidate RIG<->GPREDICT sync */
@@ -728,7 +728,7 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     if ((ctrl->trsp->uplow > 0) && (ctrl->trsp->uphigh > 0))
     {
         freq = ctrl->trsp->uplow +
-            abs(ctrl->trsp->uphigh - ctrl->trsp->uplow) / 2;
+            labs(ctrl->trsp->uphigh - ctrl->trsp->uplow) / 2;
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp), freq);
 
         /* invalidate RIG<->GPREDICT sync */
