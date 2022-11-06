@@ -95,7 +95,6 @@ static void     start_timer(GtkRigCtrl * data);
 
 static GtkBoxClass *parent_class = NULL;
 
-
 static void gtk_rig_ctrl_destroy(GtkWidget * widget)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(widget);
@@ -1499,19 +1498,31 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
     switch (ctrl->conf->vfoUp)
     {
     case VFO_A:
-        buff = g_strdup("S 1 VFOA\x0a");
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup("S VFOB 1 VFOA\x0a");
+        else
+            buff = g_strdup("S 1 VFOA\x0a");
         break;
 
     case VFO_B:
-        buff = g_strdup("S 1 VFOB\x0a");
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup("S VFOA 1 VFOB\x0a");
+        else
+            buff = g_strdup("S 1 VFOB\x0a");
         break;
 
     case VFO_MAIN:
-        buff = g_strdup("S 1 Main\x0a");
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup("S Sub 1 Main\x0a");
+        else
+            buff = g_strdup("S 1 Main\x0a");
         break;
 
     case VFO_SUB:
-        buff = g_strdup("S 1 Sub\x0a");
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup("S Main 1 Sub\x0a");
+        else
+            buff = g_strdup("S 1 Sub\x0a");
         break;
 
     default:
@@ -2253,12 +2264,18 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     if (ctrl->conf->ptt == PTT_TYPE_CAT)
     {
         /* send command get_ptt (t) */
-        buff = g_strdup_printf("t\x0a");
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup_printf("t vfoCurr\x0a");
+        else
+            buff = g_strdup_printf("t\x0a");
     }
     else
     {
         /* send command \get_dcd */
-        buff = g_strdup_printf("%c\x0a", 0x8b);
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup_printf("%c vfoCurr\x0a", 0x8b);
+        else
+            buff = g_strdup_printf("%c\x0a", 0x8b);
     }
 
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
@@ -2282,10 +2299,20 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
     gboolean        retcode;
 
     /* send command */
-    if (ptt == TRUE)
-        buff = g_strdup_printf("T 1\x0aq\x0a");
+    if (ptt == TRUE) 
+    {
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup_printf("T vfoCurr 1\x0aq\x0a");
+        else
+            buff = g_strdup_printf("T 1\x0aq\x0a");
+    }
     else
-        buff = g_strdup_printf("T 0\x0aq\x0a");
+    {
+        if (ctrl->conf->vfo_opt)
+            buff = g_strdup_printf("T vfoCurr 0\x0aq\x0a");
+        else
+            buff = g_strdup_printf("T 0\x0aq\x0a");
+    }
 
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
@@ -2363,7 +2390,10 @@ static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
     gchar           buffback[128];
     gboolean        retcode;
 
-    buff = g_strdup_printf("F %10.0f\x0a", freq);
+    if (ctrl->conf->vfo_opt)
+        buff = g_strdup_printf("F currVFO %10.0f\x0a", freq);
+    else
+        buff = g_strdup_printf("F %10.0f\x0a", freq);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
@@ -2402,6 +2432,9 @@ static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
     gchar           buffback[128];
     gboolean        retcode;
 
+    if (ctrl->conf->vfo_opt)
+    buff = g_strdup_printf("S %s 1 %d\x0a", ctrl->conf->vfoDown==VFO_A?"VFOA":"VFOB", ctrl->conf->vfoDown);
+    else
     buff = g_strdup_printf("S 1 %d\x0a", ctrl->conf->vfoDown);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
@@ -2421,7 +2454,10 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
     gboolean        retcode;
 
     /* send command */
-    buff = g_strdup_printf("S 0 %d\x0a", ctrl->conf->vfoDown);
+    if (ctrl->conf->vfo_opt)
+        buff = g_strdup_printf("S VFOA 0 %d\x0a", ctrl->conf->vfoDown);
+    else
+        buff = g_strdup_printf("S 0 %d\x0a", ctrl->conf->vfoDown);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
@@ -2440,7 +2476,10 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
     gboolean        retcode;
     gboolean        retval = TRUE;
 
-    buff = g_strdup_printf("f\x0a");
+    if (ctrl->conf->vfo_opt)
+        buff = g_strdup_printf("f currVFO\x0a");
+    else
+        buff = g_strdup_printf("f\x0a");
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     retcode = check_get_response(buffback, retcode, __func__);
     if (retcode)
@@ -2451,6 +2490,39 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         else
             retval = FALSE;
         g_strfreev(vbuff);
+    }
+    else
+    {
+        retval = FALSE;
+    }
+
+    g_free(buff);
+    return retval;
+}
+
+/*
+ * Get vfo option
+ *
+ * Returns TRUE if the vfo option enabled was successful, FALSE otherwise
+ */
+static gboolean get_vfo_opt(GtkRigCtrl * ctrl, gint sock)
+{
+    gchar          *buff;
+    gchar           buffback[128];
+    gboolean        retcode;
+    gboolean        retval = TRUE;
+
+    buff = g_strdup_printf("\\set_vfo_opt 1\x0a");
+    send_rigctld_command(ctrl, sock, buff, buffback, 128);
+    // we don't really care about the return from set_vto_opt
+    // we'll check to see if it worked next
+    buff = g_strdup_printf("\\chk_vfo\x0a");
+    retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
+    retcode = check_get_response(buffback, retcode, __func__);
+    if (retcode)
+    {
+        if (buffback[0]=='1') return TRUE;
+        else return FALSE;
     }
     else
     {
@@ -2481,7 +2553,10 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
     }
 
     /* send command */
-    buff = g_strdup_printf("i\x0a");
+    if (ctrl->conf->vfo_opt)
+        buff = g_strdup_printf("i currVFO\x0a");
+    else
+        buff = g_strdup_printf("i\x0a");
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     retcode = check_get_response(buffback, retcode, __func__);
     if (retcode)
@@ -2730,11 +2805,22 @@ static void rigctrl_open(GtkRigCtrl * data)
 
     open_rigctld_socket(ctrl->conf, &(ctrl->sock));
 
+    // check to see if vfo option is enabled
+    ctrl->conf->vfo_opt = get_vfo_opt(ctrl, ctrl->sock);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG,
+            _("%s:%s: VFO opt=%d"), __FILE__,
+            __func__, ctrl->conf->vfo_opt);
+
     /* set initial frequency */
     if (ctrl->conf2 != NULL)
     {
         open_rigctld_socket(ctrl->conf2, &(ctrl->sock2));
         /* set initial dual mode */
+        ctrl->conf2->vfo_opt = get_vfo_opt(ctrl, ctrl->sock);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                _("%s:%s: VFO opt2=%d"), __FILE__,
+                __func__, ctrl->conf2->vfo_opt);
+
         exec_dual_rig_cycle(ctrl);
     }
     else
