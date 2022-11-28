@@ -199,9 +199,10 @@ gboolean radio_conf_read(radio_conf_t * conf)
         return FALSE;
     }
 
-    /* VFO up and down, only if radio is full-duplex */
-    if (conf->type == RIG_TYPE_DUPLEX)
-    {
+    /* VFO up and down, only if radio is full-duplex, auto, manual */
+    if ((conf->type == RIG_TYPE_DUPLEX) ||
+        (conf->type == RIG_TYPE_TOGGLE_AUTO) ||
+        (conf->type == RIG_TYPE_TOGGLE_MAN)) {
         /* downlink */
         if (g_key_file_has_key(cfg, GROUP, KEY_VFO_DOWN, NULL))
         {
@@ -280,8 +281,9 @@ void radio_conf_save(radio_conf_t * conf)
     else
         g_key_file_set_integer(cfg, GROUP, KEY_CYCLE, conf->cycle);
 
-    if (conf->type == RIG_TYPE_DUPLEX)
-    {
+    if ((conf->type == RIG_TYPE_DUPLEX) ||
+        (conf->type == RIG_TYPE_TOGGLE_AUTO) ||
+        (conf->type == RIG_TYPE_TOGGLE_MAN)) {
         g_key_file_set_integer(cfg, GROUP, KEY_VFO_UP, conf->vfoUp);
         g_key_file_set_integer(cfg, GROUP, KEY_VFO_DOWN, conf->vfoDown);
     }

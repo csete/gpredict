@@ -82,17 +82,25 @@ static void update_widgets(radio_conf_t * conf)
     gtk_combo_box_set_active(GTK_COMBO_BOX(ptt), conf->ptt);
 
     /* vfo up/down */
-    if (conf->type == RIG_TYPE_DUPLEX)
-    {
-        if (conf->vfoUp == VFO_MAIN)
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 1);
-        else if (conf->vfoUp == VFO_SUB)
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 2);
-        else if (conf->vfoUp == VFO_A)
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 3);
-        else
-            gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), 4);
+    guint activeVfoSelection = 0;
+    if (((conf->type == RIG_TYPE_DUPLEX) ||
+         (conf->type == RIG_TYPE_TOGGLE_AUTO) ||
+         (conf->type == RIG_TYPE_TOGGLE_MAN))) {
+        switch (conf->type) {
+            case VFO_MAIN:
+                activeVfoSelection = 1;
+                break;
+            case VFO_SUB:
+                activeVfoSelection = 2;
+                break;
+            case VFO_A:
+                activeVfoSelection = 3;
+                break;
+            default:
+                activeVfoSelection = 4;
+        }
     }
+    gtk_combo_box_set_active(GTK_COMBO_BOX(vfo), activeVfoSelection);
 
     /* lo down in MHz */
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(lo), conf->lo / 1000000.0);
@@ -317,8 +325,8 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
                                     "gpredict cannot know whether to tune the "
                                     "RX or the TX).\n\n"
                                     "<b>Full-duplex:</b>  The radio is a full-duplex"
-                                    " radio, such as the IC910H. Gpredict will "
-                                    "be continuously tuning both uplink and "
+                                    " radio, such as the IC910H or IC-9700. Gpredict "
+                                    "will be continuously tuning both uplink and "
                                     "downlink simultaneously and not care about "
                                     "PTT setting.\n\n"
                                     "<b>FT817/857/897 (auto):</b> "
@@ -378,10 +386,11 @@ static GtkWidget *create_editor_widgets(radio_conf_t * conf)
     gtk_widget_set_tooltip_markup(vfo,
                                   _
                                   ("Select which VFO to use for uplink and downlink. "
-                                   "This setting is used for full-duplex radios only, "
+                                   "This setting is used for full-duplex, auto, and manual radios only, "
                                    "such as the IC-910H, FT-847 and the TS-2000.\n\n"
                                    "<b>IC-910H:</b> MAIN\342\206\221 / SUB\342\206\223\n"
                                    "<b>FT-847:</b> SUB\342\206\221 / MAIN\342\206\223\n"
+                                   "<b>IC-9700:</b> SUB\342\206\221 / MAIN\342\206\223\n"
                                    "<b>TS-2000:</b> B\342\206\221 / A\342\206\223"));
     gtk_grid_attach(GTK_GRID(table), vfo, 1, 5, 2, 1);
 
@@ -475,8 +484,9 @@ static gboolean apply_changes(radio_conf_t * conf)
     conf->ptt = gtk_combo_box_get_active(GTK_COMBO_BOX(ptt));
 
     /* vfo up/down */
-    if (conf->type == RIG_TYPE_DUPLEX)
-    {
+    if ((conf->type == RIG_TYPE_DUPLEX) ||
+        (conf->type == RIG_TYPE_TOGGLE_AUTO) ||
+        (conf->type == RIG_TYPE_TOGGLE_MAN)) {
         switch (gtk_combo_box_get_active(GTK_COMBO_BOX(vfo)))
         {
 

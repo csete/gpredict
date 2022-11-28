@@ -55,6 +55,7 @@ struct _gtk_rig_ctrl {
     GSList         *trsplist;   /*!< List of available transponders */
     trsp_t         *trsp;       /*!< Pointer to the current transponder configuration */
     gboolean        trsplock;   /*!< Flag indicating whether uplink and downlink are lockled */
+    gboolean        vfo_opt_supported; /*!< Does the rig support and have the --vfo enabled in Hamlib*/
 
     GSList         *sats;       /*!< List of sats in parent module */
     sat_t          *target;     /*!< Target satellite */
