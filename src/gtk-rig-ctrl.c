@@ -1003,6 +1003,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         ctrl->rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
         setconfig(ctrl);
     }
+    ctrl->conf2 = NULL;
 }
 
 static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
@@ -1488,13 +1489,51 @@ static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
     return retcode;
 }
 
+static int get_vfos(GtkRigCtrl * ctrl, char *rx, char *tx)
+{
+    // fill rx/tx with vfo name plus space if not empty
+    rx = tx = "";
+    switch (ctrl->conf->vfoUp)
+    {
+    case VFO_A:
+        if (ctrl->conf->vfo_opt)
+            {rx = "VFOB ";tx = "VFOA ";}
+        break;
+
+    case VFO_B:
+        if (ctrl->conf->vfo_opt)
+           {rx = "VFOA ";tx = "VFOB ";}
+        break;
+
+    case VFO_MAIN:
+        if (ctrl->conf->vfo_opt)
+            {rx = "Sub";tx = "Main";}
+        break;
+
+    case VFO_SUB:
+        if (ctrl->conf->vfo_opt)
+            {rx = "Main";tx = "Sub";}
+        break;
+
+    default:
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s called but TX VFO is %d and we don't know how to handle it."), __func__,
+                    ctrl->conf->vfoUp);
+        return 1;
+    }
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, "rx=%x, tx=%s\n", rx, tx);
+    return 0;
+}
+
 /* Setup VFOs for split operation (simplex or duplex) */
 static gboolean setup_split(GtkRigCtrl * ctrl)
 {
     gchar          *buff;
     gchar           buffback[256];
     gboolean        retcode;
+    gchar          *rx="", *tx="";
 
+    get_vfos(ctrl, rx, tx);
     switch (ctrl->conf->vfoUp)
     {
     case VFO_A:
@@ -2413,7 +2452,12 @@ static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
     gboolean        retcode;
 
     /* send command */
-    buff = g_strdup_printf("I %10.0f\x0a", freq);
+    printf("set_freq_toggle %d\n", ctrl->conf->vfo_opt);
+    if (ctrl->conf->vfo_opt)
+        buff = g_strdup_printf("I VFOA %10.0f\x0a", freq);
+    else
+        buff = g_strdup_printf("I %10.0f\x0a", freq);
+
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
