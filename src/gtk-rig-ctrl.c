@@ -2304,7 +2304,7 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     {
         /* send command get_ptt (t) */
         if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("t vfoCurr\x0a");
+            buff = g_strdup_printf("t currVFO\x0a");
         else
             buff = g_strdup_printf("t\x0a");
     }
@@ -2312,7 +2312,7 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     {
         /* send command \get_dcd */
         if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("%c vfoCurr\x0a", 0x8b);
+            buff = g_strdup_printf("%c currVFO\x0a", 0x8b);
         else
             buff = g_strdup_printf("%c\x0a", 0x8b);
     }
@@ -2341,14 +2341,14 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
     if (ptt == TRUE) 
     {
         if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("T vfoCurr 1\x0aq\x0a");
+            buff = g_strdup_printf("T currVFO 1\x0aq\x0a");
         else
             buff = g_strdup_printf("T 1\x0aq\x0a");
     }
     else
     {
         if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("T vfoCurr 0\x0aq\x0a");
+            buff = g_strdup_printf("T currVFO 0\x0aq\x0a");
         else
             buff = g_strdup_printf("T 0\x0aq\x0a");
     }
