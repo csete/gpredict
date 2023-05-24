@@ -105,7 +105,9 @@ void predict_calc(sat_t * sat, qth_t * qth, gdouble t)
     age = sat->jul_utc - sat->jul_epoch;
     sat->orbit = (long)floor((sat->tle.xno * xmnpda / twopi +
                               age * sat->tle.bstar * ae) * age +
-                             (sat->tle.xmo + sat->tle.omegao) / twopi) + sat->tle.revnum ;
+                             (sat->tle.xmo + sat->tle.omegao) / twopi)
+      - (long)floor((sat->tle.xmo + sat->tle.omegao) / twopi)
+      + sat->tle.revnum ;
 }
 
 /**
