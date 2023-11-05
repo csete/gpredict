@@ -568,7 +568,10 @@ gboolean qth_data_update(qth_t * qth, gdouble t)
 #endif
             break;
 	case 11:
-#if GPSD_API_MAJOR_VERSION==11          /* for libgps 3.22 */
+	case 12:
+	case 13:
+	case 14:
+#if GPSD_API_MAJOR_VERSION>=11          /* for libgps 3.22 or later */
             while (gps_waiting(qth->gps_data, 0) == 1)
             {
                 /* see comment from above */
@@ -736,7 +739,10 @@ gboolean qth_data_update_init(qth_t * qth)
 #endif
         break;
 	case 11:
-#if GPSD_API_MAJOR_VERSION==11  /* for libgps 3.22 */
+	case 12:
+	case 13:
+	case 14:
+#if GPSD_API_MAJOR_VERSION>=11  /* for libgps 3.22 or later */
         /* open the connection to gpsd and start the stream */
         qth->gps_data = g_try_new0(struct gps_data_t, 1);
 
@@ -808,7 +814,10 @@ void qth_data_update_stop(qth_t * qth)
             gps_close(qth->gps_data);
 #endif
             break;
-	case 11:	/* for libgps 3.22 */
+	case 11:	/* for libgps 3.22 or later */
+	case 12:
+	case 13:
+	case 14:
 #if GPSD_API_MAJOR_VERSION==11
 	   gps_close(qth->gps_data);
 #endif
