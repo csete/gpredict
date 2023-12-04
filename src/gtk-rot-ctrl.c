@@ -28,6 +28,7 @@
  * 
  */
 
+#include "sgpsdp/sgp4sdp4.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
@@ -702,6 +703,50 @@ static GtkWidget *create_el_widgets(GtkRotCtrl * ctrl)
     return frame;
 }
 
+static void filter_text_changed_cb(GtkSearchEntry * entry, gpointer data)
+{
+    GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
+
+    const gchar    *filter = gtk_entry_get_text(GTK_ENTRY(entry));
+    guint           n = g_slist_length(ctrl->sats);
+    guint           i;
+    sat_t          *sat = NULL;
+    guint           cnt = 0;
+
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ctrl->SatSel));
+    if (filter == NULL || filter[0] == '\0')
+    {
+        for (i = 0; i < n; i++)
+        {
+            sat = SAT(g_slist_nth_data(ctrl->sats, i));
+            if (sat)
+            {
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                               sat->nickname);
+                cnt++;
+            }
+        }
+    }
+    else
+    {
+        for (i = 0; i < n; i++)
+        {
+            sat = SAT(g_slist_nth_data(ctrl->sats, i));
+            if (sat && strstr(sat->nickname, filter))
+            {
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                            sat->nickname);
+                cnt++;
+            }
+        }
+    }
+    if (cnt)
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
+        g_signal_emit_by_name(ctrl->SatSel, "changed");
+    }
+}
+
 /**
  * Manage toggle signals (tracking)
  *
@@ -1216,12 +1261,21 @@ static void rot_locked_cb(GtkToggleButton * button, gpointer data)
 static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
 {
     GtkRotCtrl     *ctrl = GTK_ROT_CTRL(data);
-    gint            i;
+    const gchar    *active_text = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(satsel));
+    guint           n;
 
-    i = gtk_combo_box_get_active(satsel);
-    if (i >= 0)
+    if (active_text)
     {
-        ctrl->target = SAT(g_slist_nth_data(ctrl->sats, i));
+        n = g_slist_length(ctrl->sats);
+        for (guint i = 0; i < n; i++)
+        {
+            sat_t * sat = g_slist_nth_data(ctrl->sats, i);
+            if (strcmp(sat->nickname, active_text) == 0)
+            {
+                ctrl->target = sat;
+                break;
+            }
+        }
 
         /* update next pass */
         if (ctrl->pass != NULL)
@@ -1236,10 +1290,6 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Invalid satellite selection: %d"),
-                    __FILE__, __func__, i);
-
         /* clear pass just in case... */
         if (ctrl->pass != NULL)
         {
@@ -1284,14 +1334,22 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
     g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
                      ctrl);
+    g_signal_emit_by_name(ctrl->SatSel, "changed");
     gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 0, 2, 1);
+
+    /* sat selector filter */
+    ctrl->SatSelFilter = gtk_search_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(ctrl->SatSelFilter), _("Filter..."));
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatSelFilter, 2, 0, 2, 1);
+    g_signal_connect(ctrl->SatSelFilter, "search-changed",
+                     G_CALLBACK(filter_text_changed_cb), ctrl);
 
     /* tracking button */
     ctrl->track = gtk_toggle_button_new_with_label(_("Track"));
     gtk_widget_set_tooltip_text(ctrl->track,
                                 _
                                 ("Track the satellite when it is within range"));
-    gtk_grid_attach(GTK_GRID(table), ctrl->track, 2, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->track, 4, 0, 1, 1);
     g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb),
                      ctrl);
 
