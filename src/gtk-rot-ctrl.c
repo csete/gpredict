@@ -28,7 +28,6 @@
  * 
  */
 
-#include "sgpsdp/sgp4sdp4.h"
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
