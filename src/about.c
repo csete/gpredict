@@ -59,6 +59,7 @@ const gchar *authors[] = {
     "Mario Haustein",
     "Martin Pool",
     "Matthew Alberti, KM4EXS",
+    "Michael Black",
     "Michael Tatarinov",
     "Mirko Caserta",
     "Nate Bargmann, N0NB",
