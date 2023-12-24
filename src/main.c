@@ -48,12 +48,17 @@ static gboolean cleantle = FALSE;
 /* Command line flag for cleaning TRSP data */
 static gboolean cleantrsp = FALSE;
 
+/* Start application in fullscreen mode */
+static gboolean fullscreen = FALSE;
+
 /* Command line options. */
 static GOptionEntry entries[] = {
     {"clean-tle", 0, 0, G_OPTION_ARG_NONE, &cleantle,
      "Clean the TLE data in user's configuration directory", NULL},
     {"clean-trsp", 0, 0, G_OPTION_ARG_NONE, &cleantrsp,
      "Clean the transponder data in user's configuration directory", NULL},
+    {"fullscreen", 0, 0, G_OPTION_ARG_NONE, &fullscreen,
+     "Start gpredict in fullscreen mode.", NULL},
     {NULL}
 };
 
@@ -139,6 +144,8 @@ int main(int argc, char *argv[])
     /* create application */
     gpredict_app_create();
     gtk_widget_show_all(app);
+    if (fullscreen)
+		gtk_window_fullscreen(GTK_WINDOW(app));
 
     //sat_debugger_run ();
 
