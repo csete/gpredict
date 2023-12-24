@@ -1,9 +1,7 @@
-AC_INIT([gpredict],
-        m4_esyscmd([./git-version-gen .tarball-version]),
-        [https://community.libre.space/c/gpredict])
+AC_INIT([gpredict],[m4_esyscmd(./git-version-gen .tarball-version)],[https://community.libre.space/c/gpredict])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR(src/main.c)
-AM_CONFIG_HEADER(build-config.h)
+AC_CONFIG_HEADERS(build-config.h)
 AM_INIT_AUTOMAKE([subdir-objects dist-bzip2 no-dist-gzip 1.6])
 
 # ensure Makefiles are updated when Makefile.am is modified
@@ -14,10 +12,10 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # check for programs
 AC_PROG_CC
-AC_ISC_POSIX
-AC_HEADER_STDC
-AC_PROG_INTLTOOL([0.21])
-AM_PROG_LIBTOOL
+AC_SEARCH_LIBS([strerror],[cposix])
+
+IT_PROG_INTLTOOL([0.21])
+LT_INIT
 
 AC_CHECK_HEADERS([sys/time.h unistd.h getopt.h])
 
@@ -82,7 +80,6 @@ AC_SUBST(PACKAGE_LIBS)
 ALL_LINGUAS="cs da de el en_GB en_US es fi fr id it lt ru th uk"
 GETTEXT_PACKAGE=gpredict
 AC_SUBST(GETTEXT_PACKAGE)
-AM_GLIB_GNU_GETTEXT
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,
                    "$GETTEXT_PACKAGE",
                    "definition of GETTEXT_PACKAGE")
@@ -121,7 +118,7 @@ AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
 
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 doc/Makefile
 doc/man/gpredict.1
@@ -138,6 +135,7 @@ data/desktop/Makefile
 data/satdata/Makefile
 po/Makefile.in
 ])
+AC_OUTPUT
 
 echo
 echo SUMMARY:
