@@ -79,7 +79,6 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl);
 static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq);
 static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
 static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq);
-static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock);
 static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock);
 static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
 static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock);
@@ -177,6 +176,7 @@ static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl,
     ctrl->lastrxf = 0.0;
     ctrl->lasttxf = 0.0;
     ctrl->last_toggle_tx = -1;
+    ctrl->vfo_opt_supported = FALSE;
 }
 
 GType gtk_rig_ctrl_get_type()
@@ -1489,40 +1489,76 @@ static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
     return retcode;
 }
 
-static int get_vfos(GtkRigCtrl * ctrl, char *rx, char *tx)
-{
-    // fill rx/tx with vfo name plus space if not empty
-    rx = tx = "";
-    switch (ctrl->conf->vfoUp)
-    {
-    case VFO_A:
-        if (ctrl->conf->vfo_opt)
-            {rx = "VFOB ";tx = "VFOA ";}
-        break;
+/*
+ * Return the string for the supplied VFO.
+ *
+ * Returns a VFO string (VFOA, VFOB, Main, Sub) for the specified VFO enum if VFO mode is enabled.
+ * If VFO mode is not enabled, checked via the isVfoSupported argument, an empty string is returned.
+ */
+static gchar* vfo_str(vfo_t vfo, gboolean isVfoSupported) {
+    // If --VFO mode is not enabled, no need to specify a VFO. Return an empty string.
+    if (!isVfoSupported)
+        return "";
 
-    case VFO_B:
-        if (ctrl->conf->vfo_opt)
-           {rx = "VFOA ";tx = "VFOB ";}
-        break;
-
-    case VFO_MAIN:
-        if (ctrl->conf->vfo_opt)
-            {rx = "Sub";tx = "Main";}
-        break;
-
-    case VFO_SUB:
-        if (ctrl->conf->vfo_opt)
-            {rx = "Main";tx = "Sub";}
-        break;
-
-    default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s called but TX VFO is %d and we don't know how to handle it."), __func__,
-                    ctrl->conf->vfoUp);
-        return 1;
+    // If --VFO mode is enabled, return the VFO string for the provided vfo enum.
+    switch (vfo) {
+        case VFO_A:
+            return "VFOA";
+        case VFO_B:
+            return "VFOB";
+        case VFO_MAIN:
+            return "Main";
+        case VFO_SUB:
+            return "Sub";
+        default:
+            return "currVFO";
     }
-    sat_log_log(SAT_LOG_LEVEL_DEBUG, "rx=%x, tx=%s\n", rx, tx);
-    return 0;
+}
+
+/*
+ * Check if the radio has the --vfo option enabled.
+ *
+ * Returns TRUE if the --vfo option is enabled, FALSE otherwise.
+ */
+static gboolean check_vfo_option(GtkRigCtrl * ctrl, gint sock)
+{
+    gchar          *buff;
+    gchar           buffback[128];
+    gboolean        retcode;
+    gboolean        retval = FALSE;
+
+    // Send command to check if --vfo mode is enabled.
+    buff = g_strdup_printf("\\chk_vfo\x0a");
+    retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
+    retcode = check_get_response(buffback, retcode, __func__);
+
+    // Check if '1' was sent back (indicating --vfo mode is enabled.)
+    if (retcode && (buffback[0]=='1'))
+        retval = TRUE;
+
+    g_free(buff);
+    return retval;
+}
+
+/*
+ * Try to enable the --vfo option for a radio if it is supported.
+ *
+ * Returns TRUE if the --vfo option has been enabled, FALSE otherwise.
+ */
+static gboolean enable_vfo_option(GtkRigCtrl * ctrl, gint sock)
+{
+    gchar          *buff;
+    gchar           buffback[128];
+    gboolean        retval = FALSE;
+
+    buff = g_strdup_printf("\\set_vfo_opt 1\x0a");
+    send_rigctld_command(ctrl, sock, buff, buffback, 128);
+
+    // Check if --vfo mode was successfully enabled.
+    retval = check_vfo_option(ctrl, sock);
+
+    g_free(buff);
+    return retval;
 }
 
 /* Setup VFOs for split operation (simplex or duplex) */
@@ -1533,43 +1569,15 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
     gboolean        retcode;
     gchar          *rx="", *tx="";
 
-    get_vfos(ctrl, rx, tx);
-    switch (ctrl->conf->vfoUp)
-    {
-    case VFO_A:
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup("S VFOB 1 VFOA\x0a");
-        else
-            buff = g_strdup("S 1 VFOA\x0a");
-        break;
-
-    case VFO_B:
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup("S VFOA 1 VFOB\x0a");
-        else
-            buff = g_strdup("S 1 VFOB\x0a");
-        break;
-
-    case VFO_MAIN:
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup("S Sub 1 Main\x0a");
-        else
-            buff = g_strdup("S 1 Main\x0a");
-        break;
-
-    case VFO_SUB:
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup("S Main 1 Sub\x0a");
-        else
-            buff = g_strdup("S 1 Sub\x0a");
-        break;
-
-    default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s called but TX VFO is %d."), __func__,
-                    ctrl->conf->vfoUp);
-        return FALSE;
-    }
+    /* send command to enable split mode
+     * Example: S VFOA 1 VFOB\x0a
+     *     S: Rigctrl set split VFO
+     *     VFOA: Downlink vfo. Omitted if --VFO mode is not enabled in Rigctrl
+     *     1: Enable split (0 would disable split.)
+     *     VFOB: Uplink vfo.
+     *     /x0a: End of command
+     */
+    buff = g_strdup_printf("S %s 1 %s\x0a", vfo_str(ctrl->conf->vfoDown, ctrl->vfo_opt_supported), vfo_str(ctrl->conf->vfoUp, TRUE));
 
     retcode = send_rigctld_command(ctrl, ctrl->sock, buff, buffback, 128);
     g_free(buff);
@@ -2302,11 +2310,13 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
 
     if (ctrl->conf->ptt == PTT_TYPE_CAT)
     {
-        /* send command get_ptt (t) */
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("t currVFO\x0a");
-        else
-            buff = g_strdup_printf("t\x0a");
+        /* send command to enable or disable the PTT
+        * Example: t VFOA 1 \x0a
+        *     t: Rigctrl get PTT command
+        *     VFOA: VFO to get PTT of. In this case the uplink VFO. Omitted if --VFO mode is not enabled in Rigctrl
+        *     /x0a: End of command
+        */
+        buff = g_strdup_printf("t %s\x0a", vfo_str(ctrl->conf->vfoUp, ctrl->vfo_opt_supported));
     }
     else
     {
@@ -2337,21 +2347,15 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
     gchar           buffback[128];
     gboolean        retcode;
 
-    /* send command */
-    if (ptt == TRUE) 
-    {
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("T currVFO 1\x0aq\x0a");
-        else
-            buff = g_strdup_printf("T 1\x0aq\x0a");
-    }
-    else
-    {
-        if (ctrl->conf->vfo_opt)
-            buff = g_strdup_printf("T currVFO 0\x0aq\x0a");
-        else
-            buff = g_strdup_printf("T 0\x0aq\x0a");
-    }
+    /* send command to enable or disable the PTT
+     * Example: T VFOA 1 \x0a
+     *     T: Rigctrl set PTT command
+     *     VFOA: VFO to set PTT on. In this case the uplink VFO. Omitted if --VFO mode is not enabled in Rigctrl
+     *     1: 1 or 0, corresponding to enable PTT and disable PTT respectively
+     *     /x0a: End of command
+     */
+    gchar pttChar = (ptt) ? '1' : '0';
+    buff = g_strdup_printf("T %s %c\x0a", vfo_str(ctrl->conf->vfoUp, ctrl->vfo_opt_supported), pttChar);
 
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
@@ -2429,10 +2433,14 @@ static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
     gchar           buffback[128];
     gboolean        retcode;
 
-    if (ctrl->conf->vfo_opt)
-        buff = g_strdup_printf("F currVFO %10.0f\x0a", freq);
-    else
-        buff = g_strdup_printf("F %10.0f\x0a", freq);
+    /* send command to set downlink frequency
+     * Example: F VFOA 10000000 \x0a
+     *     F: Rigctrl set frequency command
+     *     VFOA: VFO to set the frequency of. In this case the downlink VFO. Omitted if --VFO mode is not enabled in Rigctrl
+     *     10000000: Frequency in Hz
+     *     /x0a: End of command
+     */
+    buff = g_strdup_printf("F %s %10.0f\x0a", vfo_str(ctrl->conf->vfoDown, ctrl->vfo_opt_supported), freq);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
@@ -2445,41 +2453,24 @@ static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
  *
  * Returns TRUE if the operation was successful, FALSE otherwise
  */
-static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
-{
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
+static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq) {
+    gchar * buff;
+    gchar buffback[128];
+    gboolean retcode;
 
-    /* send command */
-    printf("set_freq_toggle %d\n", ctrl->conf->vfo_opt);
-    if (ctrl->conf->vfo_opt)
-        buff = g_strdup_printf("I VFOA %10.0f\x0a", freq);
-    else
+    /* send command to set uplink frequency
+     * Example: F VFOA 10000000 \x0a
+     *     F: Rigctrl set frequency command. If --VFO mode is not enabled, the "I" command is used instead.
+     *        The "I" command has to be used to set the TX frequency when not in --VFO mode.
+     *     VFOA: VFO to set the frequency of. In this case the uplink VFO. Not used with "I" command.
+     *     10000000: Frequency in Hz
+     *     /x0a: End of command
+     */
+    if (ctrl->vfo_opt_supported) {
+        buff = g_strdup_printf("F %s %10.0f\x0a", vfo_str(ctrl->conf->vfoUp, TRUE), freq);
+    } else {
         buff = g_strdup_printf("I %10.0f\x0a", freq);
-
-    retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
-    g_free(buff);
-
-    return (check_set_response(buffback, retcode, __func__));
-
-}
-
-/*
- * Turn on the radios toggle mode
- *
- * Returns TRUE if the operation was successful
- */
-static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
-{
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
-
-    if (ctrl->conf->vfo_opt)
-    buff = g_strdup_printf("S %s 1 %d\x0a", ctrl->conf->vfoDown==VFO_A?"VFOA":"VFOB", ctrl->conf->vfoDown);
-    else
-    buff = g_strdup_printf("S 1 %d\x0a", ctrl->conf->vfoDown);
+    }
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
@@ -2498,10 +2489,15 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
     gboolean        retcode;
 
     /* send command */
-    if (ctrl->conf->vfo_opt)
-        buff = g_strdup_printf("S VFOA 0 %d\x0a", ctrl->conf->vfoDown);
-    else
-        buff = g_strdup_printf("S 0 %d\x0a", ctrl->conf->vfoDown);
+    /* send command to disable split mode
+     * Example: S VFOA 1 VFOB\x0a
+     *     S: Rigctrl set split VFO
+     *     VFOA: Downlink vfo. Omitted if --VFO mode is not enabled in Rigctrl
+     *     0: Disable split (1 would enable split.)
+     *     VFOB: Uplink vfo.
+     *     /x0a: End of command
+     */
+    buff = g_strdup_printf("S %s 0 %s\x0a", vfo_str(ctrl->conf->vfoDown, ctrl->vfo_opt_supported), vfo_str(ctrl->conf->vfoUp, TRUE));
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
@@ -2520,10 +2516,13 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
     gboolean        retcode;
     gboolean        retval = TRUE;
 
-    if (ctrl->conf->vfo_opt)
-        buff = g_strdup_printf("f currVFO\x0a");
-    else
-        buff = g_strdup_printf("f\x0a");
+    /* send command to get downlink frequency
+ * Example: f VFOA \x0a
+ *     f: Rigctrl get frequency command
+ *     VFOA: VFO to get the frequency of. In this case the downlink VFO. Omitted if --VFO mode is not enabled in Rigctrl
+ *     /x0a: End of command
+ */
+    buff = g_strdup_printf("f %s\x0a", vfo_str(ctrl->conf->vfoDown, ctrl->vfo_opt_supported));
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     retcode = check_get_response(buffback, retcode, __func__);
     if (retcode)
@@ -2596,11 +2595,18 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
         return FALSE;
     }
 
-    /* send command */
-    if (ctrl->conf->vfo_opt)
-        buff = g_strdup_printf("i currVFO\x0a");
-    else
+    /* send command to set uplink frequency
+     * Example: f VFOA \x0a
+     *     f: Rigctrl set frequency command. If --VFO mode is not enabled, the "i" command is used instead.
+     *        The "I" command has to be used to get the TX frequency when not in --VFO mode.
+     *     VFOA: VFO to get the frequency of. In this case the uplink VFO. Not used with "i" command.
+     *     /x0a: End of command
+     */
+    if (ctrl->vfo_opt_supported) {
+        buff = g_strdup_printf("f %s\x0a", vfo_str(ctrl->conf->vfoUp, TRUE));
+    } else {
         buff = g_strdup_printf("i\x0a");
+    }
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     retcode = check_get_response(buffback, retcode, __func__);
     if (retcode)
@@ -2869,6 +2875,7 @@ static void rigctrl_open(GtkRigCtrl * data)
     }
     else
     {
+        ctrl->vfo_opt_supported = enable_vfo_option(ctrl, ctrl->sock);
         switch (ctrl->conf->type)
         {
 
@@ -2892,7 +2899,7 @@ static void rigctrl_open(GtkRigCtrl * data)
 
         case RIG_TYPE_TOGGLE_AUTO:
         case RIG_TYPE_TOGGLE_MAN:
-            set_toggle(ctrl, ctrl->sock);
+            setup_split(ctrl);
             ctrl->last_toggle_tx = -1;
             exec_toggle_cycle(ctrl);
             break;
