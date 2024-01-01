@@ -71,7 +71,7 @@ static GSList  *modules = NULL;
 
 
 /* The notebook widget for docked modules */
-static GtkWidget *nbook = NULL;
+GtkWidget *nbook = NULL;
 
 
 static void     update_window_title(void);
