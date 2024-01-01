@@ -197,7 +197,7 @@ static void gtk_event_list_destroy(GtkWidget * widget)
  * @param qth Pointer to the QTH used by this module.
  * @param columns Visible columns (currently not in use).
  */
-GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
+GtkWidget      *gtk_event_list_new(GtkWidget * module, GKeyFile * cfgdata, GHashTable * sats,
                                    qth_t * qth, guint32 columns)
 {
     GtkWidget      *widget;
@@ -212,6 +212,7 @@ GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata, GHashTable * sats,
     widget = g_object_new(GTK_TYPE_EVENT_LIST, NULL);
     evlist = GTK_EVENT_LIST(widget);
 
+    evlist->satmod = module;
     evlist->update = gtk_event_list_update;
 
     evlist->cfgdata = cfgdata;
