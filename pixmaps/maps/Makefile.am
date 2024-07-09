@@ -1,7 +1,6 @@
+gpredict_pixmaps_mapsdir = $(datadir)/pixmaps/gpredict/maps
 
-gpredict_mapsdir = $(datadir)/pixmaps/gpredict/maps
-
-gpredict_maps_DATA = \
+gpredict_pixmaps_maps_DATA = \
     earth_800.png \
     nasa-bmng-01_1024.jpg \
     nasa-bmng-03_1024.jpg \
@@ -18,5 +17,4 @@ gpredict_maps_DATA = \
     nasa-topo_1600.jpg \
     nasa-topo_2048.jpg
 
-EXTRA_DIST = $(gpredict_maps_DATA)
-
+EXTRA_DIST = $(gpredict_pixmaps_maps_DATA)

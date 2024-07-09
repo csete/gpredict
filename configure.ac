@@ -126,12 +126,14 @@ doc/man/Makefile
 src/Makefile
 src/sgpsdp/Makefile
 src/sgpsdp/TR/Makefile
+icons/Makefile
 pixmaps/Makefile
 pixmaps/maps/Makefile
 pixmaps/logos/Makefile
 pixmaps/icons/Makefile
 data/Makefile
 data/desktop/Makefile
+data/metainfo/Makefile
 data/satdata/Makefile
 po/Makefile.in
 ])
