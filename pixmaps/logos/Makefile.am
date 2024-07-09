@@ -1,6 +1,6 @@
-gpredict_logosdir = $(datadir)/pixmaps/gpredict/logos
+gpredict_pixmaps_logosdir = $(datadir)/pixmaps/gpredict/logos
 
-gpredict_logos_DATA = \
+gpredict_pixmaps_logos_DATA = \
     gpredict_horizontal_color.png \
     gpredict_horizontal_color.svg \
     gpredict_horizontal_white.png \
@@ -14,4 +14,4 @@ gpredict_logos_DATA = \
     gpredict_vertical_white.png \
     gpredict_vertical_white.svg
 
-EXTRA_DIST = $(gpredict_logos_DATA)
+EXTRA_DIST = $(gpredict_pixmaps_logos_DATA)

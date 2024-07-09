@@ -2,7 +2,7 @@
 Name=Gpredict
 Comment=Satellite tracker
 Exec=gpredict
-Icon=gpredict-icon
+Icon=gpredict
 Terminal=false
 Type=Application
 Categories=HamRadio;Science;Astronomy;Education;Network;

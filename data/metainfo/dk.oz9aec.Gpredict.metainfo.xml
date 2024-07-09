@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>dk.oz9aec.Gpredict</id>
+  <name>Gpredict</name>
+  <developer_name>Alexandru Csete</developer_name>
+  <summary>Real-time satellite tracking and orbit prediction program</summary>
+  <description>
+    <p>Gpredict is a real time satellite tracking and orbit prediction program written using the Gtk+ widgets.</p>
+    <p>Gpredict is targeted mainly towards ham radio operators but others interested in satellite tracking may find it useful as well.</p>
+  </description>
+  <categories>
+    <category>Astronomy</category>
+    <category>Education</category>
+    <category>HamRadio</category>
+    <category>Network</category>
+    <category>Science</category>
+  </categories>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <provides>
+    <id>gpredict.desktop</id>
+  </provides>
+  <url type="homepage">https://oz9aec.dk/gpredict/</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://live.staticflickr.com/8089/28902144392_8cd36d57fe_b.jpg</image>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">gpredict.desktop</launchable>
+  <content_rating type="oars-1.1" />
+</component>

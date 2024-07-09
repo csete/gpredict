@@ -1,4 +1,4 @@
-SUBDIRS = satdata desktop
+SUBDIRS = satdata desktop metainfo
 
 gpredict_datdir = $(pkgdatadir)/data
 
