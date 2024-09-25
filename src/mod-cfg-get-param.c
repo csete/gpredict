@@ -155,6 +155,38 @@ gchar          *mod_cfg_get_str(GKeyFile * f, const gchar * sec,
     return param;
 }
 
+gdouble mod_cfg_get_double(GKeyFile * f, const gchar * sec, const gchar * key,
+                           sat_cfg_double_e p)
+{
+    GError         *error = NULL;
+    gdouble         param;
+
+    /* check whether parameter is present in GKeyFile */
+    if (g_key_file_has_key(f, sec, key, NULL))
+    {
+        param = g_key_file_get_double(f, sec, key, &error);
+
+        if (error != NULL)
+        {
+            sat_log_log(SAT_LOG_LEVEL_WARN,
+                        _("%s: Failed to read double (%s)"),
+                        __func__, error->message);
+
+            g_clear_error(&error);
+
+            /* get a timeout from global config */
+            param = sat_cfg_get_double(p);
+        }
+    }
+    /* get value from sat-cfg */
+    else
+    {
+        param = sat_cfg_get_double(p);
+    }
+
+    return param;
+}
+
 /**
  * \brief Load an integer list into a hash table that uses the 
  * existinence of datain the hash as a boolean.
