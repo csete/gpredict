@@ -707,7 +707,7 @@ GType gtk_single_sat_get_type()
     return gtk_single_sat_type;
 }
 
-GtkWidget      *gtk_single_sat_new(GKeyFile * cfgdata, GHashTable * sats,
+GtkWidget      *gtk_single_sat_new(GtkWidget * module, GKeyFile * cfgdata, GHashTable * sats,
                                    qth_t * qth, guint32 fields)
 {
     GtkWidget      *widget;
@@ -725,6 +725,7 @@ GtkWidget      *gtk_single_sat_new(GKeyFile * cfgdata, GHashTable * sats,
                                    GTK_ORIENTATION_VERTICAL);
     single_sat = GTK_SINGLE_SAT(widget);
 
+    single_sat->satmod = module;
     single_sat->update = gtk_single_sat_update;
 
     /* Read configuration data. */
