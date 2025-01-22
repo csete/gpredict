@@ -70,8 +70,10 @@ typedef struct {
     vfo_t           vfoDown;    /*!< Downlink VFO for full-duplex radios */
     vfo_t           vfoUp;      /*!< Uplink VFO for full-duplex radios */
 
-    gboolean        signal_aos; /*!< Send AOS notification to RIG */
-    gboolean        signal_los; /*!< Send LOS notification to RIG */
+    gboolean        signal_aos;     /*!< Send AOS notification to RIG */
+    gboolean        signal_los;     /*!< Send LOS notification to RIG */
+    gboolean        signal_aoiq;    /*!< Send AOIQ notification to RIG */
+    gboolean        signal_loiq;    /*!< Send LOIQ notification to RIG */
 
     gint            vfo_opt;    /*!< Keep track of vfo_opt being enabled in rigctld */
 } radio_conf_t;

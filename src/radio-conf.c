@@ -45,6 +45,8 @@
 #define KEY_VFO_UP      "VFO_UP"
 #define KEY_SIG_AOS     "SIGNAL_AOS"
 #define KEY_SIG_LOS     "SIGNAL_LOS"
+#define KEY_SIG_AOIQ    "SIGNAL_AOIQ"
+#define KEY_SIG_LOIQ    "SIGNAL_LOIQ"
 
 #define DEFAULT_CYCLE_MS    1000
 
@@ -236,6 +238,10 @@ gboolean radio_conf_read(radio_conf_t * conf)
     /* Signal AOS and LOS */
     conf->signal_aos = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_AOS, NULL);
     conf->signal_los = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_LOS, NULL);
+    conf->signal_aoiq = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_AOIQ, NULL);
+    conf->signal_loiq = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_LOIQ, NULL);
+
+
 
     g_key_file_free(cfg);
     sat_log_log(SAT_LOG_LEVEL_INFO,
@@ -288,6 +294,10 @@ void radio_conf_save(radio_conf_t * conf)
 
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_AOS, conf->signal_aos);
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_LOS, conf->signal_los);
+    g_key_file_set_boolean(cfg, GROUP, KEY_SIG_AOIQ, conf->signal_aoiq);
+    g_key_file_set_boolean(cfg, GROUP, KEY_SIG_LOIQ, conf->signal_loiq);
+
+
 
     confdir = get_hwconf_dir();
     fname = g_strconcat(confdir, G_DIR_SEPARATOR_S, conf->name, ".rig", NULL);
