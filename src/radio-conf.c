@@ -241,8 +241,6 @@ gboolean radio_conf_read(radio_conf_t * conf)
     conf->signal_aoiq = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_AOIQ, NULL);
     conf->signal_loiq = g_key_file_get_boolean(cfg, GROUP, KEY_SIG_LOIQ, NULL);
 
-
-
     g_key_file_free(cfg);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Read radio configuration %s"), __func__, conf->name);
@@ -296,8 +294,6 @@ void radio_conf_save(radio_conf_t * conf)
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_LOS, conf->signal_los);
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_AOIQ, conf->signal_aoiq);
     g_key_file_set_boolean(cfg, GROUP, KEY_SIG_LOIQ, conf->signal_loiq);
-
-
 
     confdir = get_hwconf_dir();
     fname = g_strconcat(confdir, G_DIR_SEPARATOR_S, conf->name, ".rig", NULL);
