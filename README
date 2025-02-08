@@ -1,4 +1,3 @@
-
 Gpredict is a real time satellite tracking and orbit prediction program
 for the Linux desktop. It uses the SGP4/SDP4 propagation algorithms together
 with NORAD two-line element sets (TLE).
@@ -49,6 +48,7 @@ To build and install gpredict from source, first unpack the source package:
 
 Then change to the gpredict-x.y.z directory and build gpredict:
 
+  autoreconf -i
   ./configure
   make
   make install
@@ -61,6 +61,7 @@ adding --prefix=somedir to the ./configure step. For example
   ./configure --prefix=/home/user/predict
   
 will configure the build to install the files into /home/user/gpredict folder.
+Otherwise it will build to /usr/local/bin/gpredict.
 
 If you are building directly from the git repository, you have to run
 ./autogen.sh instead of of configure. You can pass the same options to the

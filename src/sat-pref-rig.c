@@ -61,7 +61,9 @@ static GtkTreeModel *create_and_fill_model()
                                    G_TYPE_DOUBLE,       // LO DOWN
                                    G_TYPE_DOUBLE,       // LO UO
                                    G_TYPE_BOOLEAN,      // AOS signalling
-                                   G_TYPE_BOOLEAN       // LOS signalling
+                                   G_TYPE_BOOLEAN,      // LOS signalling
+                                   G_TYPE_BOOLEAN,      // AOIQ signalling
+                                   G_TYPE_BOOLEAN       // LOIQ signalling
         );
 
     gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(liststore),
@@ -98,6 +100,8 @@ static GtkTreeModel *create_and_fill_model()
                                        RIG_LIST_COL_LOUP, conf.loup,
                                        RIG_LIST_COL_SIGAOS, conf.signal_aos,
                                        RIG_LIST_COL_SIGLOS, conf.signal_los,
+                                       RIG_LIST_COL_SIGAOIQ, conf.signal_aoiq,
+                                       RIG_LIST_COL_SIGLOIQ, conf.signal_loiq,
                                        -1);
 
                     sat_log_log(SAT_LOG_LEVEL_DEBUG,
@@ -394,7 +398,9 @@ static void edit_cb(GtkWidget * button, gpointer data)
         .lo = 0.0,
         .loup = 0.0,
         .signal_aos = FALSE,
-        .signal_los = FALSE
+        .signal_los = FALSE,
+        .signal_aoiq = FALSE,
+        .signal_loiq = FALSE
     };
 
     /* If there are no entries, we have a bug since the button should 
@@ -426,7 +432,9 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, &conf.lo,
                            RIG_LIST_COL_LOUP, &conf.loup,
                            RIG_LIST_COL_SIGAOS, &conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
+                           RIG_LIST_COL_SIGLOS, &conf.signal_los, 
+                           RIG_LIST_COL_SIGAOIQ, &conf.signal_aoiq,
+                           RIG_LIST_COL_SIGLOIQ, &conf.signal_loiq,-1);
     }
     else
     {
@@ -462,7 +470,9 @@ static void edit_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
+                           RIG_LIST_COL_SIGLOS, conf.signal_los,
+                           RIG_LIST_COL_SIGAOIQ, conf.signal_aoiq,
+                           RIG_LIST_COL_SIGLOIQ, conf.signal_loiq, -1);
     }
 
     /* clean up memory */
@@ -611,6 +621,32 @@ static void create_rig_list()
 
     g_signal_connect(riglist, "row-activated", G_CALLBACK(row_activated_cb),
                      riglist);
+
+    /* AOIQ signalling */
+    renderer = gtk_cell_renderer_text_new();
+    column =
+        gtk_tree_view_column_new_with_attributes(_("Signal AOIQ"), renderer,
+                                                 "text", RIG_LIST_COL_SIGAOIQ,
+                                                 NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_signal,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_SIGAOIQ), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    /* LOIQ signalling */
+    renderer = gtk_cell_renderer_text_new();
+    column =
+        gtk_tree_view_column_new_with_attributes(_("Signal LOIQ"), renderer,
+                                                 "text", RIG_LIST_COL_SIGLOIQ,
+                                                 NULL);
+    gtk_tree_view_column_set_cell_data_func(column, renderer, render_signal,
+                                            GUINT_TO_POINTER
+                                            (RIG_LIST_COL_SIGLOIQ), NULL);
+    gtk_tree_view_insert_column(GTK_TREE_VIEW(riglist), column, -1);
+
+    g_signal_connect(riglist, "row-activated", G_CALLBACK(row_activated_cb),
+                     riglist);
+
 }
 
 /**
@@ -690,6 +726,8 @@ static void add_cb(GtkWidget * button, gpointer data)
         .loup = 0.0,
         .signal_aos = FALSE,
         .signal_los = FALSE,
+        .signal_aoiq = FALSE,
+        .signal_loiq = FALSE
     };
 
     /* run rig conf editor */
@@ -712,7 +750,9 @@ static void add_cb(GtkWidget * button, gpointer data)
                            RIG_LIST_COL_LO, conf.lo,
                            RIG_LIST_COL_LOUP, conf.loup,
                            RIG_LIST_COL_SIGAOS, conf.signal_aos,
-                           RIG_LIST_COL_SIGLOS, conf.signal_los, -1);
+                           RIG_LIST_COL_SIGLOS, conf.signal_los,
+                           RIG_LIST_COL_SIGAOIQ, conf.signal_aoiq,
+                           RIG_LIST_COL_SIGLOIQ, conf.signal_loiq, -1);
 
         g_free(conf.name);
 
@@ -813,7 +853,9 @@ void sat_pref_rig_ok()
         .lo = 0.0,
         .loup = 0.0,
         .signal_aos = FALSE,
-        .signal_los = FALSE
+        .signal_los = FALSE,
+        .signal_aoiq = FALSE,
+        .signal_loiq = FALSE
     };
 
     /* delete all .rig files */
@@ -859,7 +901,9 @@ void sat_pref_rig_ok()
                                RIG_LIST_COL_LO, &conf.lo,
                                RIG_LIST_COL_LOUP, &conf.loup,
                                RIG_LIST_COL_SIGAOS, &conf.signal_aos,
-                               RIG_LIST_COL_SIGLOS, &conf.signal_los, -1);
+                               RIG_LIST_COL_SIGLOS, &conf.signal_los,
+                               RIG_LIST_COL_SIGAOIQ, &conf.signal_aoiq,
+                               RIG_LIST_COL_SIGLOIQ, &conf.signal_loiq, -1);
             radio_conf_save(&conf);
 
             /* free conf buffer */

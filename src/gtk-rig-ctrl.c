@@ -2393,6 +2393,20 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
                                                     retbuf, 10);
                 }
             }
+            /* AOIQ has occurred */
+            if (ctrl->conf->signal_aoiq)
+            {
+                retcode &= send_rigctld_command(ctrl, ctrl->sock, "U IQRECORD 1\n",
+                                                retbuf, 10);
+            }
+            if (ctrl->conf2 != NULL)
+            {
+                if (ctrl->conf2->signal_aoiq)
+                {
+                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "U IQRECORD 1\n",
+                                                    retbuf, 10);
+                }
+            }
         }
         else if (ctrl->prev_ele >= 0.0 && ctrl->target->el < 0.0)
         {
@@ -2410,6 +2424,20 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
                                                     retbuf, 10);
                 }
             }
+            /* LOIQ has occurred */
+            if (ctrl->conf->signal_loiq)
+            {
+                retcode &= send_rigctld_command(ctrl, ctrl->sock, "U IQRECORD 0\n",
+                                                retbuf, 10);
+            }
+            if (ctrl->conf2 != NULL)
+            {
+                if (ctrl->conf2->signal_loiq)
+                {
+                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "U IQRECORD 0\n",
+                                                    retbuf, 10);
+                }
+            }
         }
     }
 
@@ -2417,6 +2445,7 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
 
     return retcode;
 }
+
 
 /*
  * Set frequency in simplex mode

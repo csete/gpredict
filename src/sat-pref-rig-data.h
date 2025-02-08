@@ -40,6 +40,8 @@ typedef enum {
     RIG_LIST_COL_LOUP,          /*!< Local oscillato freq (uplink) */
     RIG_LIST_COL_SIGAOS,        /*!< Signal AOS */
     RIG_LIST_COL_SIGLOS,        /*!< Signal LOS */
+    RIG_LIST_COL_SIGAOIQ,       /*!< Signal AOIQ */
+    RIG_LIST_COL_SIGLOIQ,       /*!< Signal LOIQ */
     RIG_LIST_COL_NUM            /*!< The number of fields in the list. */
 } rig_list_col_t;
 
