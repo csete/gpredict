@@ -2396,14 +2396,14 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
             /* AOIQ has occurred */
             if (ctrl->conf->signal_aoiq)
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "AOIQ\n",
+                retcode &= send_rigctld_command(ctrl, ctrl->sock, "U IQRECORD 1\n",
                                                 retbuf, 10);
             }
             if (ctrl->conf2 != NULL)
             {
                 if (ctrl->conf2->signal_aoiq)
                 {
-                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "AOIQ\n",
+                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "U IQRECORD 1\n",
                                                     retbuf, 10);
                 }
             }
@@ -2427,14 +2427,14 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
             /* LOIQ has occurred */
             if (ctrl->conf->signal_loiq)
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "LOIQ\n",
+                retcode &= send_rigctld_command(ctrl, ctrl->sock, "U IQRECORD 0\n",
                                                 retbuf, 10);
             }
             if (ctrl->conf2 != NULL)
             {
                 if (ctrl->conf2->signal_loiq)
                 {
-                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "LOIQ\n",
+                    retcode &= send_rigctld_command(ctrl, ctrl->sock2, "U IQRECORD 0\n",
                                                     retbuf, 10);
                 }
             }
