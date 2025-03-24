@@ -58,7 +58,7 @@ the required permissions to install gpredict. If you can not or do not want to
 install gpredict as root, you can install gpredict into a custom directory by
 adding --prefix=somedir to the ./configure step. For example
 
-  ./configure --prefix=/home/user/predict
+  ./configure --prefix="$HOME/predict"
   
 will configure the build to install the files into /home/user/gpredict folder.
 
