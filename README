@@ -60,7 +60,7 @@ adding --prefix=somedir to the ./configure step. For example
 
   ./configure --prefix="$HOME/predict"
   
-will configure the build to install the files into /home/user/gpredict folder.
+will configure the build to install the files into /home/user/predict folder.
 
 If you are building directly from the git repository, you have to run
 ./autogen.sh instead of of configure. You can pass the same options to the
