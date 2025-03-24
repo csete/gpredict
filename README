@@ -50,7 +50,7 @@ To build and install gpredict from source, first unpack the source package:
 Then change to the gpredict-x.y.z directory and build gpredict:
 
   ./configure
-  make
+  make -j$(( $(nproc) + 1))
   make install
 
 The last step usually requires you to become root, otherwise you may not have
