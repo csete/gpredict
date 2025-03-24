@@ -39,7 +39,7 @@ If you compile Gpredict from source you will also need the development packages
 often with -dev or -devel in the package name, e.g. libgtk-3-dev. On Debian and
 Ubuntu systems you can install the build dependencies using:
 
-  sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
+  sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev make
   sudo apt install pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
 
 
