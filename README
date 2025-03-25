@@ -39,7 +39,7 @@ If you compile Gpredict from source you will also need the development packages
 often with -dev or -devel in the package name, e.g. libgtk-3-dev. On Debian and
 Ubuntu systems you can install the build dependencies using:
 
-  sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
+  sudo apt install dh-autoreconf intltool libcurl4-openssl-dev make
   sudo apt install pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
 
 
@@ -50,7 +50,7 @@ To build and install gpredict from source, first unpack the source package:
 Then change to the gpredict-x.y.z directory and build gpredict:
 
   ./configure
-  make
+  make -j$(( $(nproc) + 1))
   make install
 
 The last step usually requires you to become root, otherwise you may not have
@@ -58,9 +58,9 @@ the required permissions to install gpredict. If you can not or do not want to
 install gpredict as root, you can install gpredict into a custom directory by
 adding --prefix=somedir to the ./configure step. For example
 
-  ./configure --prefix=/home/user/predict
+  ./configure --prefix="$HOME/predict"
   
-will configure the build to install the files into /home/user/gpredict folder.
+will configure the build to install the files into /home/user/predict folder.
 
 If you are building directly from the git repository, you have to run
 ./autogen.sh instead of of configure. You can pass the same options to the
