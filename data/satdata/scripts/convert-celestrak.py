@@ -13,7 +13,8 @@
 #
 import os
 import string
-import urllib
+import time
+import urllib.request
 
 # Satellite groups
 groups = {
@@ -22,7 +23,6 @@ groups = {
     "galileo" : "Galileo Nav.",
     "glo-ops" : "Glonass Operational",
     "gps-ops" : "GPS Operational",
-    "iridium" : "Iridium",
     "iridium-NEXT" : "Iridium NEXT",
     "molniya" : "Molniya",
     "noaa" : "NOAA",
@@ -89,21 +89,22 @@ nicknames = {
     "43017" : "AO-91"
 }
 
-urlprefix = "http://celestrak.com/NORAD/elements/"
+urlprefix = "https://celestrak.org/NORAD/elements/gp.php?GROUP="
+urlsuffix = "&FORMAT=tle"
 
-
-for group, name in groups.iteritems():
-    webfile = urlprefix + group + ".txt"
+for group, name in groups.items():
+    webfile = urlprefix + group + urlsuffix
     localfile = "./in/" + group + ".txt"
-    print "Fetching " + webfile + " => " + localfile
-    urllib.urlretrieve (webfile, localfile)
+    print("Fetching " + webfile + " => " + localfile)
+    urllib.request.urlretrieve (webfile, localfile)
+    time.sleep(30)
 
 ### CHK ###
 
 # For each input file
-for group, name in groups.iteritems():
+for group, name in groups.items():
 
-    print name+':'
+    print(name+':')
 
     # open TLE file for reading
     tlefile = open('./in/'+group+'.txt', 'r')
@@ -124,7 +125,7 @@ for group, name in groups.iteritems():
 
         # catalog number; strip leading zeroes
         catnum = line2[2:7].lstrip('0')
-        print " ... "+catnum
+        print(" ... " + catnum)
 
         # add satellite to category
         catfile.write(catnum+'\n')

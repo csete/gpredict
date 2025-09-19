@@ -4,13 +4,13 @@
 # 
 import os
 import string
-import urllib
+import urllib.request
 
 
 webfile = 'https://www.amsat.org/amsat/ftp/keps/current/nasabare.txt'
 localfile = './in/amsat.txt'
-print 'Fetching ' + webfile + ' => ' + localfile
-urllib.urlretrieve (webfile, localfile)
+print('Fetching ' + webfile + ' => ' + localfile)
+urllib.request.urlretrieve (webfile, localfile)
 
 tlefile = open(localfile, 'r')
 catfile = open('./out/amateur.cat', 'a')
@@ -29,7 +29,7 @@ while 1:
     satfilename = './tmp/' + catnum + '.sat'
     if os.path.isfile(satfilename): continue
 
-    print " Adding " + catnum + " ..."
+    print(" Adding " + catnum + " ...")
 
     catfile.write(catnum+'\n')
 
