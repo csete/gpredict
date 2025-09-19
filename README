@@ -60,7 +60,7 @@ adding --prefix=somedir to the ./configure step. For example
 
   ./configure --prefix=$HOME/gpredict
   
-will configure the build to install the files into you home directory under
+will configure the build to install the files into your home directory under
 gpredict.
 
 If you are building directly from the git repository, you have to run
