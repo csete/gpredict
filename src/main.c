@@ -559,9 +559,7 @@ static          gpointer update_tle_thread(gpointer data)
 
     tle_upd_running = TRUE;
     tle_update_from_network(TRUE, NULL, NULL, NULL);
-
     mod_mgr_reload_sats();
-
     tle_upd_running = FALSE;
 
     return NULL;
