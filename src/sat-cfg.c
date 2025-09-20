@@ -234,7 +234,6 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "https://celestrak.org/NORAD/elements/galileo.txt;"
      "https://celestrak.org/NORAD/elements/glo-ops.txt;"
      "https://celestrak.org/NORAD/elements/gps-ops.txt;"
-     "https://celestrak.org/NORAD/elements/iridium.txt;"
      "https://celestrak.org/NORAD/elements/iridium-NEXT.txt;"
      "https://celestrak.org/NORAD/elements/molniya.txt;"
      "https://celestrak.org/NORAD/elements/noaa.txt;"
