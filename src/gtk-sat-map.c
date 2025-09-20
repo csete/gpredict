@@ -1629,7 +1629,11 @@ static void sort_points_x(GtkSatMap * satmap, sat_t * sat,
 {
     gsize           size = 2 * sizeof(double);
 
+#if GLIB_CHECK_VERSION(2, 82, 0)
     g_sort_array(points->coords, num, size, compare_coordinates_x, NULL);
+#else
+    g_qsort_with_data(points->coords, num, size, compare_coordinates_x, NULL);
+#endif
 
     /* move point at position 0 to position 1 */
     points->coords[2] = satmap->x0;
@@ -1682,7 +1686,11 @@ static void sort_points_y(GtkSatMap * satmap, sat_t * sat,
     (void)sat;
     size = 2 * sizeof(double);
 
+#if GLIB_CHECK_VERSION(2, 82, 0)
     g_sort_array(points->coords, num, size, compare_coordinates_y, NULL);
+#else
+    g_qsort_with_data(points->coords, num, size, compare_coordinates_y, NULL);
+#endif
 }
 
 /**
