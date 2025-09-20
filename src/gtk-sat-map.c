@@ -1626,9 +1626,7 @@ static void sort_points_x(GtkSatMap * satmap, sat_t * sat,
 {
     gsize           size = 2 * sizeof(double);
 
-    /* call g_qsort_with_data, which warps the qsort function
-       from stdlib */
-    g_qsort_with_data(points->coords, num, size, compare_coordinates_x, NULL);
+    g_sort_array(points->coords, num, size, compare_coordinates_x, NULL);
 
     /* move point at position 0 to position 1 */
     points->coords[2] = satmap->x0;
@@ -1681,9 +1679,7 @@ static void sort_points_y(GtkSatMap * satmap, sat_t * sat,
     (void)sat;
     size = 2 * sizeof(double);
 
-    /* call g_qsort_with_data, which warps the qsort function
-       from stdlib */
-    g_qsort_with_data(points->coords, num, size, compare_coordinates_y, NULL);
+    g_sort_array(points->coords, num, size, compare_coordinates_y, NULL);
 }
 
 /**
