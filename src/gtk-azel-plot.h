@@ -89,6 +89,8 @@ struct _GtkAzelPlot {
     gboolean        qthinfo;    /*!< Show the QTH info. */
     gboolean        cursinfo;   /*!< Track the mouse cursor. */
     gboolean        extratick;  /*!< Show extra ticks */
+
+    GValue          font;       /*!< Default font */
 };
 
 struct _GtkAzelPlotClass {

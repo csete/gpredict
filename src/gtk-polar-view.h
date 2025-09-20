@@ -108,6 +108,8 @@ struct _GtkPolarView {
     gboolean        extratick;  /*!< Show extra ticks */
     gboolean        showtrack;  /*!< Automatically show sky tracks. */
     gboolean        resize;     /*!< Flag indicating that the view has been resized. */
+
+    GValue          font;       /*!< Default font */
 };
 
 struct _GtkPolarViewClass {

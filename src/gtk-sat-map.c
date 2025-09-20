@@ -398,6 +398,9 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
     satmap->x0 = 0;
     satmap->y0 = 0;
 
+    /* default font */
+    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name", &satmap->font);
+
     /* background map */
     satmap->map = goo_canvas_image_model_new(root,
                                              satmap->origmap,
@@ -425,7 +428,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
     satmap->qthlabel = goo_canvas_text_model_new(root, satmap->qth->name,
                                                  x, y + 2, -1,
                                                  GOO_CANVAS_ANCHOR_NORTH,
-                                                 "font", "Sans 8",
+                                                 "font", g_value_get_string(&satmap->font),
                                                  "fill-color-rgba", col, NULL);
 
     /* QTH info */
@@ -437,7 +440,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
                                                satmap->x0 + 2, satmap->y0 + 1,
                                                -1,
                                                GOO_CANVAS_ANCHOR_NORTH_WEST,
-                                               "font", "Sans 8",
+                                               "font", g_value_get_string(&satmap->font),
                                                "fill-color-rgba", col,
                                                "use-markup", TRUE, NULL);
 
@@ -464,7 +467,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
                                              satmap->x0 + satmap->width - 2,
                                              satmap->y0 + 1, -1,
                                              GOO_CANVAS_ANCHOR_NORTH_EAST,
-                                             "font", "Sans 8",
+                                             "font", g_value_get_string(&satmap->font),
                                              "fill-color-rgba", col,
                                              "use-markup", TRUE, NULL);
 
@@ -483,7 +486,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
                                              satmap->y0 + satmap->height - 1,
                                              -1,
                                              GOO_CANVAS_ANCHOR_SOUTH_WEST,
-                                             "font", "Sans 8",
+                                             "font", g_value_get_string(&satmap->font),
                                              "fill-color-rgba", col,
                                              "use-markup", TRUE, NULL);
 
@@ -493,7 +496,7 @@ static GooCanvasItemModel *create_canvas_model(GtkSatMap * satmap)
                                             satmap->y0 + satmap->height - 1,
                                             -1,
                                             GOO_CANVAS_ANCHOR_SOUTH_EAST,
-                                            "font", "Sans 8",
+                                            "font", g_value_get_string(&satmap->font),
                                             "fill-color-rgba", col,
                                             "use-markup", TRUE, NULL);
 
@@ -1897,7 +1900,7 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
                                              y + 3,
                                              -1,
                                              GOO_CANVAS_ANCHOR_NORTH,
-                                             "font", "Sans 8",
+                                             "font", g_value_get_string(&satmap->font),
                                              "fill-color-rgba", shadowcol,
                                              NULL);
     obj->label = goo_canvas_text_model_new(root, sat->nickname,
@@ -1905,7 +1908,7 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
                                            y + 2,
                                            -1,
                                            GOO_CANVAS_ANCHOR_NORTH,
-                                           "font", "Sans 8",
+                                           "font", g_value_get_string(&satmap->font),
                                            "fill-color-rgba", col,
                                            "tooltip", tooltip, NULL);
 
@@ -2449,7 +2452,7 @@ static void draw_grid_lines(GtkSatMap * satmap, GooCanvasItemModel * root)
                                                                     1) *
                                                                    ystep), -1,
                                                         GOO_CANVAS_ANCHOR_NORTH,
-                                                        "font", "Sans 8",
+                                                        "font", g_value_get_string(&satmap->font),
                                                         "fill-color-rgba", col,
                                                         NULL);
         g_free(buf);
@@ -2509,7 +2512,7 @@ static void draw_grid_lines(GtkSatMap * satmap, GooCanvasItemModel * root)
                                                                    satmap->height
                                                                    - 5), -1,
                                                         GOO_CANVAS_ANCHOR_EAST,
-                                                        "font", "Sans 8",
+                                                        "font", g_value_get_string(&satmap->font),
                                                         "fill-color-rgba", col,
                                                         NULL);
         g_free(buf);

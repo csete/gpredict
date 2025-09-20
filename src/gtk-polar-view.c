@@ -610,6 +610,9 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
     polv->cx = POLV_DEFAULT_SIZE / 2;
     polv->cy = POLV_DEFAULT_SIZE / 2;
 
+    /* default font */
+    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name", &polv->font);
+
     col = mod_cfg_get_int(polv->cfgdata,
                           MOD_CFG_POLAR_SECTION,
                           MOD_CFG_POLAR_BGD_COL, SAT_CFG_INT_POLAR_BGD_COL);
@@ -673,7 +676,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                         y,
                                         -1,
                                         anch,
-                                        "font", "Sans 10",
+                                        "font", g_value_get_string(&polv->font),
                                         "fill-color-rgba", col, NULL);
 
     azel_to_xy(polv, 180.0, 0.0, &x, &y);
@@ -683,7 +686,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                         y,
                                         -1,
                                         anch,
-                                        "font", "Sans 10",
+                                        "font", g_value_get_string(&polv->font),
                                         "fill-color-rgba", col, NULL);
 
     azel_to_xy(polv, 90.0, 0.0, &x, &y);
@@ -693,7 +696,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                         y,
                                         -1,
                                         anch,
-                                        "font", "Sans 10",
+                                        "font", g_value_get_string(&polv->font),
                                         "fill-color-rgba", col, NULL);
 
     azel_to_xy(polv, 270.0, 0.0, &x, &y);
@@ -703,7 +706,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                         y,
                                         -1,
                                         anch,
-                                        "font", "Sans 10",
+                                        "font", g_value_get_string(&polv->font),
                                         "fill-color-rgba", col, NULL);
 
     /* cursor text */
@@ -715,8 +718,9 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                            2 * POLV_LINE_EXTRA,
                                            polv->cy + polv->r +
                                            POLV_LINE_EXTRA, -1,
-                                           GOO_CANVAS_ANCHOR_W, "font",
-                                           "Sans 8", "fill-color-rgba", col,
+                                           GOO_CANVAS_ANCHOR_W,
+                                           "font", g_value_get_string(&polv->font),
+                                           "fill-color-rgba", col,
                                            NULL);
 
     /* location info */
@@ -725,8 +729,9 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                              2 * POLV_LINE_EXTRA,
                                              polv->cy - polv->r -
                                              POLV_LINE_EXTRA, -1,
-                                             GOO_CANVAS_ANCHOR_SW, "font",
-                                             "Sans 8", "fill-color-rgba", col,
+                                             GOO_CANVAS_ANCHOR_SW,
+                                             "font", g_value_get_string(&polv->font),
+                                             "fill-color-rgba", col,
                                              NULL);
 
     /* next event */
@@ -735,8 +740,9 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                            2 * POLV_LINE_EXTRA,
                                            polv->cy - polv->r -
                                            POLV_LINE_EXTRA, -1,
-                                           GOO_CANVAS_ANCHOR_E, "font",
-                                           "Sans 8", "fill-color-rgba", col,
+                                           GOO_CANVAS_ANCHOR_E,
+                                           "font", g_value_get_string(&polv->font),
+                                           "fill-color-rgba", col,
                                            "alignment", PANGO_ALIGN_RIGHT,
                                            NULL);
 
@@ -745,8 +751,9 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
                                           polv->cx + polv->r +
                                           2 * POLV_LINE_EXTRA,
                                           polv->cy + polv->r + POLV_LINE_EXTRA,
-                                          -1, GOO_CANVAS_ANCHOR_E, "font",
-                                          "Sans 8", "fill-color-rgba", col,
+                                          -1, GOO_CANVAS_ANCHOR_E,
+                                          "font", g_value_get_string(&polv->font),
+                                          "fill-color-rgba", col,
                                           "alignment", PANGO_ALIGN_RIGHT,
                                           NULL);
 
@@ -1317,7 +1324,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 obj->label =
                     goo_canvas_text_model_new(root, sat->nickname, x, y + 2,
                                               -1, GOO_CANVAS_ANCHOR_NORTH,
-                                              "font", "Sans 8",
+                                              "font", g_value_get_string(&polv->font),
                                               "fill-color-rgba", colour,
                                               "tooltip", tooltip, NULL);
 
@@ -1475,7 +1482,7 @@ static GooCanvasItemModel *create_time_tick(GtkPolarView * pv, gdouble time,
     item = goo_canvas_text_model_new(root, buff,
                                      (gdouble) x, (gdouble) y,
                                      -1, anchor,
-                                     "font", "Sans 7",
+                                     "font", g_value_get_string(&pv->font),
                                      "fill-color-rgba", col, NULL);
 
     return item;

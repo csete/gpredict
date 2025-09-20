@@ -134,6 +134,8 @@ typedef struct {
 
     GdkPixbuf      *origmap;    /*!< Original map kept here for high quality scaling. */
 
+    GValue          font;       /*!< Default font */
+
 } GtkSatMap;
 
 struct _GtkSatMapClass {

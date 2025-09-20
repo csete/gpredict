@@ -104,6 +104,8 @@ struct _GtkSkyGlance {
     GooCanvasItem  *cursor;     /* Vertical line tracking the cursor */
     GooCanvasItem  *timel;      /* Label showing time under cursor */
 
+    GValue          font;       /*!< Default font */
+
 };
 
 struct _GtkSkyGlanceClass {
