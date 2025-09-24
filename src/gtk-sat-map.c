@@ -1851,23 +1851,43 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
                           MOD_CFG_MAP_SAT_COL, SAT_CFG_INT_MAP_SAT_COL);
 
     /* area coverage colour */
-    covcol = mod_cfg_get_int(satmap->cfgdata,
-                             MOD_CFG_MAP_SECTION,
-                             MOD_CFG_MAP_SAT_COV_COL,
-                             SAT_CFG_INT_MAP_SAT_COV_COL);
-    /* coverage color */
     if (obj->showcov)
     {
-        covcol = mod_cfg_get_int(satmap->cfgdata,
+        switch(sat->tle.status) {
+            case OP_STAT_OPERATIONAL:
+                covcol = mod_cfg_get_int(satmap->cfgdata,
+                                 MOD_CFG_MAP_SECTION,
+                                 MOD_CFG_MAP_SAT_COV_COL_FO,
+                                 SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+                                 break;
+            case OP_STAT_PARTIAL:
+                covcol = mod_cfg_get_int(satmap->cfgdata,
+                                 MOD_CFG_MAP_SECTION,
+                                 MOD_CFG_MAP_SAT_COV_COL_PO,
+                                 SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+                                 break;
+            case OP_STAT_NONOP:
+                covcol = mod_cfg_get_int(satmap->cfgdata,
+                                 MOD_CFG_MAP_SECTION,
+                                 MOD_CFG_MAP_SAT_COV_COL_NO,
+                                 SAT_CFG_INT_MAP_SAT_COV_COL_NO);
+                                 break;
+            case OP_STAT_UNKNOWN:
+            case OP_STAT_STDBY:
+            case OP_STAT_SPARE:
+            case OP_STAT_EXTENDED:
+            default:
+                covcol = mod_cfg_get_int(satmap->cfgdata,
                                  MOD_CFG_MAP_SECTION,
                                  MOD_CFG_MAP_SAT_COV_COL,
                                  SAT_CFG_INT_MAP_SAT_COV_COL);
+
+        }
     }
     else
     {
         covcol = 0x00000000;
     }
-
 
     /* shadow colour (only alpha channel) */
     shadowcol = mod_cfg_get_int(satmap->cfgdata,
@@ -2217,15 +2237,42 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 /* coverage color */
                 if (obj->showcov)
                 {
-                    covcol = mod_cfg_get_int(satmap->cfgdata,
-                                             MOD_CFG_MAP_SECTION,
-                                             MOD_CFG_MAP_SAT_COV_COL,
-                                             SAT_CFG_INT_MAP_SAT_COV_COL);
+                    switch(sat->tle.status) {
+                        case OP_STAT_OPERATIONAL:
+                            covcol = mod_cfg_get_int(satmap->cfgdata,
+                                            MOD_CFG_MAP_SECTION,
+                                            MOD_CFG_MAP_SAT_COV_COL_FO,
+                                            SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+                                            break;
+                        case OP_STAT_PARTIAL:
+                            covcol = mod_cfg_get_int(satmap->cfgdata,
+                                            MOD_CFG_MAP_SECTION,
+                                            MOD_CFG_MAP_SAT_COV_COL_PO,
+                                            SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+                                            break;
+                        case OP_STAT_NONOP:
+                            covcol = mod_cfg_get_int(satmap->cfgdata,
+                                            MOD_CFG_MAP_SECTION,
+                                            MOD_CFG_MAP_SAT_COV_COL_NO,
+                                            SAT_CFG_INT_MAP_SAT_COV_COL_NO);
+                                            break;
+                        case OP_STAT_UNKNOWN:
+                        case OP_STAT_STDBY:
+                        case OP_STAT_SPARE:
+                        case OP_STAT_EXTENDED:
+                        default:
+                            covcol = mod_cfg_get_int(satmap->cfgdata,
+                                            MOD_CFG_MAP_SECTION,
+                                            MOD_CFG_MAP_SAT_COV_COL,
+                                            SAT_CFG_INT_MAP_SAT_COV_COL);
+
+                    }
                 }
                 else
                 {
                     covcol = 0x00000000;
                 }
+                
                 obj->range2 = goo_canvas_polyline_model_new(root, FALSE, 0,
                                                             "points", points2,
                                                             "line-width", 1.0,

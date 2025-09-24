@@ -42,6 +42,7 @@ static GtkWidget *qth, *next, *curs, *grid, *terminatoronoff;
 static GtkWidget *qthc, *gridc, *tickc;
 static GtkWidget *satc, *ssatc, *trackc;
 static GtkWidget *covc, *infofg, *infobg;
+static GtkWidget *covc_fo, *covc_po, *covc_no;
 static GtkWidget *terminator, *globe_shadow;
 static GtkWidget *shadow;
 
@@ -229,6 +230,18 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL);
         rgba_from_cfg(rgba, &gdk_rgba);
         gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc), &gdk_rgba);
+        
+        rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+        rgba_from_cfg(rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_fo), &gdk_rgba);
+        
+        rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+        rgba_from_cfg(rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_po), &gdk_rgba);
+        
+        rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL_NO);
+        rgba_from_cfg(rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_no), &gdk_rgba);
 
         rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_INFO_COL);
         rgba_from_cfg(rgba, &gdk_rgba);
@@ -246,7 +259,7 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         rgba_from_cfg(rgba, &gdk_rgba);
         gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(globe_shadow), &gdk_rgba);
 
-        /* shadow */
+        /* shadow alpha */
         gtk_range_set_value(GTK_RANGE(shadow),
                             sat_cfg_get_int_def(SAT_CFG_INT_MAP_SHADOW_ALPHA));
 
@@ -313,6 +326,18 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COV_COL);
         rgba_from_cfg(rgba, &gdk_rgba);
         gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc), &gdk_rgba);
+
+        rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+        rgba_from_cfg(rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_fo), &gdk_rgba);
+        
+        rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+        rgba_from_cfg(rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_po), &gdk_rgba);
+        
+        rgba = sat_cfg_get_int_def(SAT_CFG_INT_MAP_SAT_COV_COL_NO);
+        rgba_from_cfg(rgba, &gdk_rgba);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_no), &gdk_rgba);
 
         rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_INFO_COL);
         rgba_from_cfg(rgba, &gdk_rgba);
@@ -434,6 +459,21 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             rgba = rgba_to_cfg(&gdk_rgba);
             g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
                                    MOD_CFG_MAP_SAT_COV_COL, rgba);
+            
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(covc_fo), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
+            g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SAT_COV_COL_FO, rgba);
+
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(covc_po), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
+            g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SAT_COV_COL_PO, rgba);
+
+            gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(covc_no), &gdk_rgba);
+            rgba = rgba_to_cfg(&gdk_rgba);
+            g_key_file_set_integer(cfg, MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SAT_COV_COL_NO, rgba);
 
             gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(infofg), &gdk_rgba);
             rgba = rgba_to_cfg(&gdk_rgba);
@@ -646,6 +686,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_reset_int(SAT_CFG_INT_MAP_SAT_SEL_COL);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_TRACK_COL);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_SAT_COV_COL);
+            sat_cfg_reset_int(SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+            sat_cfg_reset_int(SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+            sat_cfg_reset_int(SAT_CFG_INT_MAP_SAT_COV_COL_NO);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_INFO_COL);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_INFO_BGD_COL);
             sat_cfg_reset_int(SAT_CFG_INT_MAP_SHADOW_ALPHA);
@@ -923,13 +966,13 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
     GdkRGBA         gdk_rgba;
     guint           rgba;       /* RRGGBBAA encoded colour */
 
-    /* create header */
+    /* create header for Map Colours*/
     label = gtk_label_new(NULL);
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_label_set_markup(GTK_LABEL(label), _("<b>Colours:</b>"));
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Map Colours:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, TRUE, 5);
 
-    /* container */
+    /* container for Map Colours */
     table = gtk_grid_new();
     gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
     gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
@@ -937,7 +980,7 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
     gtk_grid_set_column_spacing(GTK_GRID(table), 10);
     gtk_box_pack_start(vbox, table, FALSE, TRUE, 0);
 
-    /* background */
+    /* ground station */
     label = gtk_label_new(_("Ground Station:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
@@ -1003,155 +1046,13 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
     gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(tickc), &gdk_rgba);
     g_signal_connect(tickc, "color-set", G_CALLBACK(colour_changed), NULL);
 
-    /* satellite */
-    label = gtk_label_new(_("Satellite:"));
-    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
-    satc = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(satc), TRUE);
-    gtk_grid_attach(GTK_GRID(table), satc, 1, 1, 1, 1);
-    gtk_widget_set_tooltip_text(satc, _("Select the satellite colour"));
-    if (cfg != NULL)
-    {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_SAT_COL, SAT_CFG_INT_MAP_SAT_COL);
-    }
-    else
-    {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COL);
-    }
-    rgba_from_cfg(rgba, &gdk_rgba);
-    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(satc), &gdk_rgba);
-    g_signal_connect(satc, "color-set", G_CALLBACK(colour_changed), NULL);
-
-    /* selected satellite */
-    label = gtk_label_new(_("Selected Sat.:"));
-    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 2, 1, 1, 1);
-    ssatc = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(ssatc), TRUE);
-    gtk_grid_attach(GTK_GRID(table), ssatc, 3, 1, 1, 1);
-    gtk_widget_set_tooltip_text(ssatc,
-                                _("Select colour for selected satellites"));
-    if (cfg != NULL)
-    {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_SAT_SEL_COL,
-                               SAT_CFG_INT_MAP_SAT_SEL_COL);
-    }
-    else
-    {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_SEL_COL);
-    }
-    rgba_from_cfg(rgba, &gdk_rgba);
-    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(ssatc), &gdk_rgba);
-    g_signal_connect(ssatc, "color-set", G_CALLBACK(colour_changed), NULL);
-
-    /* tack */
-    label = gtk_label_new(_("Ground Track:"));
-    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 4, 1, 1, 1);
-    trackc = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(trackc), TRUE);
-    gtk_grid_attach(GTK_GRID(table), trackc, 5, 1, 1, 1);
-    gtk_widget_set_tooltip_text(trackc, _("Select ground track colour"));
-    if (cfg != NULL)
-    {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_TRACK_COL,
-                               SAT_CFG_INT_MAP_TRACK_COL);
-    }
-    else
-    {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_TRACK_COL);
-    }
-    rgba_from_cfg(rgba, &gdk_rgba);
-    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(trackc), &gdk_rgba);
-    g_signal_connect(trackc, "color-set", G_CALLBACK(colour_changed), NULL);
-
-    /* coverage */
-    label = gtk_label_new(_("Area Coverage:"));
-    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
-    covc = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(covc), TRUE);
-    gtk_grid_attach(GTK_GRID(table), covc, 1, 2, 1, 1);
-    gtk_widget_set_tooltip_text(covc,
-                                _("Select colour for coverage area.\n"
-                                  "Hint: Make it transparent"));
-    if (cfg != NULL)
-    {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_SAT_COV_COL,
-                               SAT_CFG_INT_MAP_SAT_COV_COL);
-    }
-    else
-    {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COV_COL);
-    }
-    rgba_from_cfg(rgba, &gdk_rgba);
-    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc), &gdk_rgba);
-    g_signal_connect(covc, "color-set", G_CALLBACK(colour_changed), NULL);
-
-    /* Info foreground */
-    label = gtk_label_new(_("Info Text FG:"));
-    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 2, 2, 1, 1);
-    infofg = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(infofg), TRUE);
-    gtk_grid_attach(GTK_GRID(table), infofg, 3, 2, 1, 1);
-    gtk_widget_set_tooltip_text(infofg,
-                                _("Select info text foreground colour"));
-    if (cfg != NULL)
-    {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_INFO_COL, SAT_CFG_INT_MAP_INFO_COL);
-    }
-    else
-    {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_INFO_COL);
-    }
-    rgba_from_cfg(rgba, &gdk_rgba);
-    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(infofg), &gdk_rgba);
-    g_signal_connect(infofg, "color-set", G_CALLBACK(colour_changed), NULL);
-
-
-    /* Info background */
-    label = gtk_label_new(_("Info Text BG:"));
-    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 4, 2, 1, 1);
-    infobg = gtk_color_button_new();
-    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(infobg), TRUE);
-    gtk_grid_attach(GTK_GRID(table), infobg, 5, 2, 1, 1);
-    gtk_widget_set_tooltip_text(infobg,
-                                _("Select info text background colour"));
-    if (cfg != NULL)
-    {
-        rgba = mod_cfg_get_int(cfg,
-                               MOD_CFG_MAP_SECTION,
-                               MOD_CFG_MAP_INFO_BGD_COL,
-                               SAT_CFG_INT_MAP_INFO_BGD_COL);
-    }
-    else
-    {
-        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_INFO_BGD_COL);
-    }
-    rgba_from_cfg(rgba, &gdk_rgba);
-    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(infobg), &gdk_rgba);
-    g_signal_connect(infobg, "color-set", G_CALLBACK(colour_changed), NULL);
-
     /* Solar terminator */
     label = gtk_label_new(_("Solar terminator:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
     terminator = gtk_color_button_new();
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(terminator), TRUE);
-    gtk_grid_attach(GTK_GRID(table), terminator, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), terminator, 1, 1, 1, 1);
     gtk_widget_set_tooltip_text(terminator,
                                 _("Select solar terminator colour"));
     if (cfg != NULL)
@@ -1173,10 +1074,10 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
     /* Earth shadow */
     label = gtk_label_new(_("Global shadow:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 2, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 1, 1, 1);
     globe_shadow = gtk_color_button_new();
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(globe_shadow), TRUE);
-    gtk_grid_attach(GTK_GRID(table), globe_shadow, 3, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), globe_shadow, 3, 1, 1, 1);
     gtk_widget_set_tooltip_text(globe_shadow, _("Select Earth shadow colour"));
     if (cfg != NULL)
     {
@@ -1194,18 +1095,102 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
     g_signal_connect(globe_shadow, "color-set", G_CALLBACK(colour_changed),
                      NULL);
 
-    /* Shadow */
-    label = gtk_label_new(_("Shadow:"));
+    /* create header for satellite colours*/
+    label = gtk_label_new(NULL);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Satellite Colours:</b>"));
+    gtk_box_pack_start(vbox, label, FALSE, TRUE, 5);
+
+    /* container for satellite colours*/
+    table = gtk_grid_new();
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 3);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 10);
+    gtk_box_pack_start(vbox, table, FALSE, TRUE, 0);
+
+    /* satellite */
+    label = gtk_label_new(_("Satellite:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
+    satc = gtk_color_button_new();
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(satc), TRUE);
+    gtk_grid_attach(GTK_GRID(table), satc, 1, 0, 1, 1);
+    gtk_widget_set_tooltip_text(satc, _("Select the satellite colour"));
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_COL, SAT_CFG_INT_MAP_SAT_COL);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COL);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(satc), &gdk_rgba);
+    g_signal_connect(satc, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* selected satellite */
+    label = gtk_label_new(_("Selected Sat.:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 0, 1, 1);
+    ssatc = gtk_color_button_new();
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(ssatc), TRUE);
+    gtk_grid_attach(GTK_GRID(table), ssatc, 3, 0, 1, 1);
+    gtk_widget_set_tooltip_text(ssatc,
+                                _("Select colour for selected satellites"));
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_SEL_COL,
+                               SAT_CFG_INT_MAP_SAT_SEL_COL);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_SEL_COL);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(ssatc), &gdk_rgba);
+    g_signal_connect(ssatc, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* ground track */
+    label = gtk_label_new(_("Ground Track:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 4, 0, 1, 1);
+    trackc = gtk_color_button_new();
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(trackc), TRUE);
+    gtk_grid_attach(GTK_GRID(table), trackc, 5, 0, 1, 1);
+    gtk_widget_set_tooltip_text(trackc, _("Select ground track colour"));
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_TRACK_COL,
+                               SAT_CFG_INT_MAP_TRACK_COL);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_TRACK_COL);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(trackc), &gdk_rgba);
+    g_signal_connect(trackc, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* Satellite Shadow */
+    label = gtk_label_new(_("Satellite Shadow:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<i>Transp.</i>"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 1, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<i>Opaque</i>"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 5, 4, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 5, 2, 1, 1);
+    
     shadow = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 255, 1);
     gtk_scale_set_draw_value(GTK_SCALE(shadow), FALSE);
     if (cfg != NULL)
@@ -1227,9 +1212,181 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
                                   "of the satellites where the colour of the "
                                   "background is light, e.g. the South Pole. "
                                   "Fully transparent is the same as no shadow."));
-    gtk_grid_attach(GTK_GRID(table), shadow, 2, 4, 3, 1);
+    gtk_grid_attach(GTK_GRID(table), shadow, 1, 2, 4, 1);
     g_signal_connect(shadow, "value-changed", G_CALLBACK(shadow_changed),
                      NULL);
+
+    /* Info foreground */
+    label = gtk_label_new(_("Info Text FG:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
+    infofg = gtk_color_button_new();
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(infofg), TRUE);
+    gtk_grid_attach(GTK_GRID(table), infofg, 1, 4, 1, 1);
+    gtk_widget_set_tooltip_text(infofg,
+                                _("Select info text foreground colour"));
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_INFO_COL, SAT_CFG_INT_MAP_INFO_COL);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_INFO_COL);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(infofg), &gdk_rgba);
+    g_signal_connect(infofg, "color-set", G_CALLBACK(colour_changed), NULL);
+
+
+    /* Info background */
+    label = gtk_label_new(_("Info Text BG:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 4, 1, 1);
+    infobg = gtk_color_button_new();
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(infobg), TRUE);
+    gtk_grid_attach(GTK_GRID(table), infobg, 3, 4, 1, 1);
+    gtk_widget_set_tooltip_text(infobg,
+                                _("Select info text background colour"));
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_INFO_BGD_COL,
+                               SAT_CFG_INT_MAP_INFO_BGD_COL);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_INFO_BGD_COL);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(infobg), &gdk_rgba);
+    g_signal_connect(infobg, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* create header for coverage colours*/
+    label = gtk_label_new(NULL);
+    g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Coverage Colours:</b>"));
+    gtk_box_pack_start(vbox, label, FALSE, TRUE, 5);
+
+    /* container for satellite colours*/
+    table = gtk_grid_new();
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 3);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 10);
+    gtk_box_pack_start(vbox, table, FALSE, TRUE, 0);
+    
+    /* Default coverage */
+    label = gtk_label_new(_("Default:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
+    covc = gtk_color_button_new();
+    gtk_grid_attach(GTK_GRID(table), covc, 1, 0, 1, 1);
+    gtk_widget_set_tooltip_text(covc,
+                                _("Select colour for coverage area.\n"
+                                  "Hint: Make it transparent"));
+    
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(covc), TRUE);
+    
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_COV_COL,
+                               SAT_CFG_INT_MAP_SAT_COV_COL);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COV_COL);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc), &gdk_rgba);
+    g_signal_connect(covc, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* Fully Operational Coverage */
+    label = gtk_label_new(_("Fully Operational:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
+    covc_fo = gtk_color_button_new();
+    gtk_grid_attach(GTK_GRID(table), covc_fo, 1, 1, 1, 1);
+    gtk_widget_set_tooltip_text(covc_fo,
+                                _("Select colour for coverage area.\n"
+                                  "Hint: Make it transparent"));
+    
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(covc_fo), TRUE);
+    
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_COV_COL_FO,
+                               SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COV_COL_FO);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_fo), &gdk_rgba);
+    g_signal_connect(covc_fo, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* Partially Operational Coverage */
+    label = gtk_label_new(_("Partially Operational:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 1, 1, 1);
+    covc_po = gtk_color_button_new();
+    gtk_grid_attach(GTK_GRID(table), covc_po, 3, 1, 1, 1);
+    gtk_widget_set_tooltip_text(covc_po,
+                                _("Select colour for coverage area.\n"
+                                  "Hint: Make it transparent"));
+    
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(covc_po), TRUE);
+    
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_COV_COL_PO,
+                               SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COV_COL_PO);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_po), &gdk_rgba);
+    g_signal_connect(covc_po, "color-set", G_CALLBACK(colour_changed), NULL);
+
+    /* Non Operational Coverage */
+    label = gtk_label_new(_("Non-Operational:"));
+    g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), label, 4, 1, 1, 1);
+    covc_no = gtk_color_button_new();
+    gtk_grid_attach(GTK_GRID(table), covc_no, 5, 1, 1, 1);
+    gtk_widget_set_tooltip_text(covc_no,
+                                _("Select colour for coverage area.\n"
+                                  "Hint: Make it transparent"));
+    
+    gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(covc_no), TRUE);
+    
+    if (cfg != NULL)
+    {
+        rgba = mod_cfg_get_int(cfg,
+                               MOD_CFG_MAP_SECTION,
+                               MOD_CFG_MAP_SAT_COV_COL_NO,
+                               SAT_CFG_INT_MAP_SAT_COV_COL_NO);
+    }
+    else
+    {
+        rgba = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COV_COL_NO);
+    }
+    rgba_from_cfg(rgba, &gdk_rgba);
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(covc_no), &gdk_rgba);
+    g_signal_connect(covc_no, "color-set", G_CALLBACK(colour_changed), NULL);
+
+
 }
 
 /**
