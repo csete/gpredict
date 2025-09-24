@@ -73,6 +73,11 @@ void ground_track_create(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     double          t0;         /* time when this_orbit starts */
     double          t;
     ssp_t          *this_ssp;
+    double          track_num;
+    double          target_phase;
+    double          prev_phase;
+    double          total_phase;
+    gboolean        wrap;
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s: Creating ground track for %s"),
@@ -83,76 +88,133 @@ void ground_track_create(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
 
     /* get configuration parameters */
     this_orbit = sat->orbit;
-    max_orbit = sat->orbit - 1 + mod_cfg_get_int(satmap->cfgdata,
-                                                 MOD_CFG_MAP_SECTION,
-                                                 MOD_CFG_MAP_TRACK_NUM,
-                                                 SAT_CFG_INT_MAP_TRACK_NUM);
+    track_num = mod_cfg_get_double(satmap->cfgdata, MOD_CFG_MAP_SECTION,
+                                                    MOD_CFG_MAP_TRACK_NUM,
+                                                    SAT_CFG_DOUBLE_MAP_TRACK_NUM);
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s: Start orbit: %d"), __func__, this_orbit);
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s: End orbit %d"), __func__, max_orbit);
-
-    /* find the time when the current orbit started */
-
-    /* Iterate backwards in time until we reach sat->orbit < this_orbit.
-       Use predict_calc from predict-tools.c as SGP/SDP driver.
-       As a built-in safety, we stop iteration if the orbit crossing is
-       more than 24 hours back in time.
-     */
-    t0 = satmap->tstamp;        //get_current_daynum ();
-    /* use == instead of >= as it is more robust */
-    for (t = t0; (sat->orbit == this_orbit) && ((t + 1.0) > t0); t -= 0.0007)
-        predict_calc(sat, qth, t);
-
-    /* set it so that we are in the same orbit as this_orbit
-       and not a different one */
-    t += 2 * 0.0007;
-    t0 = t;
-    predict_calc(sat, qth, t0);
-
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s: T0: %f (%d)"), __func__, t0, sat->orbit);
-
-    /* calculate (lat,lon) for the required orbits */
-    while ((sat->orbit <= max_orbit) &&
-           (sat->orbit >= this_orbit) && (!decayed(sat)))
+    /* If number of orbits to draw is less than 2, we start the track 25% or an
+     * orbit behind the satellites current position. Otherwise it starts at the
+     * start of the orbit. */
+    if (track_num < 2.0)
     {
-        /* We use 30 sec time steps. If resolution is too fine, the
-           line drawing routine will filter out unnecessary points
-         */
-        t += 0.00035;
-        predict_calc(sat, qth, t);
-
-        /* store this SSP */
-
-        /* Note: g_slist_append() has to traverse the entire list to find the end, which
-           is inefficient when adding multiple elements. Therefore, we use g_slist_prepend()
-           and reverse the entire list when we are done.
-         */
-        this_ssp = g_try_new(ssp_t, 1);
-
-        if (this_ssp == NULL)
+        /* Start a quarter of an orbit ago */
+        if (sat->phase <= 90.0)
         {
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s: MAYDAY: Insufficient memory for ground track!"),
-                        __func__);
-            return;
+            target_phase = sat->phase + 360.0 - 90.0;
+            wrap = TRUE;
+        }
+        else
+        {
+            target_phase = sat->phase - 90.0;
+            wrap = FALSE;
+        }
+        for (t = satmap->tstamp; (wrap && (sat->phase <= 90.0)) || (sat->phase > target_phase); t -= 0.0007)
+            predict_calc(sat, qth, t);
+        t += 0.0007;
+
+        /* Move ahead user-defined number of orbits (or parts of) */
+        prev_phase = sat->phase;
+        total_phase = 0.0;
+        while ((total_phase < 360.0 * track_num) && (!decayed(sat)))
+        {
+            /* We use 30 sec time steps. If resolution is too fine, the
+               line drawing routine will filter out unnecessary points
+             */
+            t += 0.00035;
+            predict_calc(sat, qth, t);
+            if (sat->phase < prev_phase) // have we wrapped?
+                total_phase += sat->phase + 360.0 - prev_phase;
+            else
+                total_phase += sat->phase - prev_phase;
+            prev_phase = sat->phase;
+
+            /* store this SSP */
+            this_ssp = g_try_new(ssp_t, 1);
+            if (this_ssp == NULL)
+            {
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _("%s: MAYDAY: Insufficient memory for ground track!"),
+                            __func__);
+                return;
+            }
+
+            this_ssp->lat = sat->ssplat;
+            this_ssp->lon = sat->ssplon;
+            obj->track_data.latlon =
+                g_slist_prepend(obj->track_data.latlon, this_ssp);
+        }
+    }
+    else
+    {
+        max_orbit = sat->orbit - 1 + (long)track_num;
+
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: Start orbit: %d"), __func__, this_orbit);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: End orbit %d"), __func__, max_orbit);
+
+        /* find the time when the current orbit started */
+
+        /* Iterate backwards in time until we reach sat->orbit < this_orbit.
+           Use predict_calc from predict-tools.c as SGP/SDP driver.
+           As a built-in safety, we stop iteration if the orbit crossing is
+           more than 24 hours back in time.
+         */
+        t0 = satmap->tstamp;        //get_current_daynum ();
+        /* use == instead of >= as it is more robust */
+        for (t = t0; (sat->orbit == this_orbit) && ((t + 1.0) > t0); t -= 0.0007)
+            predict_calc(sat, qth, t);
+
+        /* set it so that we are in the same orbit as this_orbit
+           and not a different one */
+        t += 2 * 0.0007;
+        t0 = t;
+        predict_calc(sat, qth, t0);
+
+        sat_log_log(SAT_LOG_LEVEL_DEBUG,
+                    _("%s: T0: %f (%d)"), __func__, t0, sat->orbit);
+
+        /* calculate (lat,lon) for the required orbits */
+        while ((sat->orbit <= max_orbit) &&
+               (sat->orbit >= this_orbit) && (!decayed(sat)))
+        {
+            /* We use 30 sec time steps. If resolution is too fine, the
+               line drawing routine will filter out unnecessary points
+             */
+            t += 0.00035;
+            predict_calc(sat, qth, t);
+
+            /* store this SSP */
+
+            /* Note: g_slist_append() has to traverse the entire list to find the end, which
+               is inefficient when adding multiple elements. Therefore, we use g_slist_prepend()
+               and reverse the entire list when we are done.
+             */
+            this_ssp = g_try_new(ssp_t, 1);
+
+            if (this_ssp == NULL)
+            {
+                sat_log_log(SAT_LOG_LEVEL_ERROR,
+                            _("%s: MAYDAY: Insufficient memory for ground track!"),
+                            __func__);
+                return;
+            }
+
+            this_ssp->lat = sat->ssplat;
+            this_ssp->lon = sat->ssplon;
+            obj->track_data.latlon =
+                g_slist_prepend(obj->track_data.latlon, this_ssp);
+
         }
 
-        this_ssp->lat = sat->ssplat;
-        this_ssp->lon = sat->ssplon;
-        obj->track_data.latlon =
-            g_slist_prepend(obj->track_data.latlon, this_ssp);
-
-    }
-    /* log if there is a problem with the orbit calculation */
-    if (sat->orbit != (max_orbit + 1))
-    {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Problem computing ground track for %s"),
-                    __func__, sat->nickname);
-        return;
+        /* log if there is a problem with the orbit calculation */
+        if (sat->orbit != (max_orbit + 1))
+        {
+            sat_log_log(SAT_LOG_LEVEL_ERROR,
+                        _("%s: Problem computing ground track for %s"),
+                        __func__, sat->nickname);
+            return;
+        }
     }
 
     /* Reset satellite structure to eliminate glitches in single sat 
@@ -313,6 +375,7 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     guint           start;
     guint           i, j, n, num_points;
     guint32         col;
+    gboolean        start_not_end;
 
     (void)sat;
     (void)qth;
@@ -326,6 +389,10 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     col = mod_cfg_get_int(satmap->cfgdata,
                           MOD_CFG_MAP_SECTION,
                           MOD_CFG_MAP_TRACK_COL, SAT_CFG_INT_MAP_TRACK_COL);
+
+    /* Determine which end arrow heads should be drawn, depending on direction
+       satellite is moving in, which is determined by its inclination. */
+    start_not_end = sat->tle.xincl > 90.0;
 
     /* loop over each SSP */
     for (i = 0; i < n; i++)
@@ -375,6 +442,16 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                                                          CAIRO_LINE_CAP_SQUARE,
                                                          "line-join",
                                                          CAIRO_LINE_JOIN_MITER,
+                                                         "end-arrow",
+                                                         !start_not_end,
+                                                         "start-arrow",
+                                                         start_not_end,
+                                                         "arrow-length",
+                                                         10.0,
+                                                         "arrow-tip-length",
+                                                         8.0,
+                                                         "arrow-width",
+                                                         8.0,
                                                          NULL);
                     goo_canvas_points_unref(gpoints);
                     goo_canvas_item_model_lower(line, obj->marker);
@@ -439,7 +516,13 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                                              "stroke-color-rgba", col,
                                              "line-cap", CAIRO_LINE_CAP_SQUARE,
                                              "line-join",
-                                             CAIRO_LINE_JOIN_MITER, NULL);
+                                             CAIRO_LINE_JOIN_MITER,
+                                             "end-arrow", !start_not_end,
+                                             "start-arrow", start_not_end,
+                                             "arrow-length", 10.0,
+                                             "arrow-tip-length", 8.0,
+                                             "arrow-width", 8.0,
+                                             NULL);
         goo_canvas_points_unref(gpoints);
         goo_canvas_item_model_lower(line, obj->marker);
 

@@ -35,6 +35,8 @@ gint            mod_cfg_get_int(GKeyFile * f, const gchar * sec,
                                 const gchar * key, sat_cfg_int_e p);
 gchar          *mod_cfg_get_str(GKeyFile * f, const gchar * sec,
                                 const gchar * key, sat_cfg_str_e p);
+gdouble         mod_cfg_get_double(GKeyFile * f, const gchar * sec,
+                                const gchar * key, sat_cfg_double_e p);
 void            mod_cfg_get_integer_list_boolean(GKeyFile * cfgdata,
                                                  const gchar * section,
                                                  const gchar * key,
