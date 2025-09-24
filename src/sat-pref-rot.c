@@ -31,9 +31,12 @@
 #include "sat-pref-rot.h"
 #include "sat-pref-rot-data.h"
 #include "sat-pref-rot-editor.h"
+#include "gtk-sat-module.h"
+#include "gtk-rot-ctrl.h"
 
 
 extern GtkWidget *window;       /* dialog window defined in sat-pref.c */
+extern GtkWidget *nbook;        /* from mod-mgr.c */
 static GtkWidget *addbutton;
 static GtkWidget *editbutton;
 static GtkWidget *delbutton;
@@ -85,6 +88,35 @@ static void add_cb(GtkWidget * button, gpointer data)
         if (conf.host != NULL)
             g_free(conf.host);
     }
+}
+
+/**
+ * Returns whether conf has been opened by a rotator control window, 
+ * in which case any values saved by the sat-pref-rot-editor will be 
+ * overwritten when the rotctrlwin is closed.
+ *
+ * @param rotor_conf_t conf - the conf struct in question
+ *
+ * @return gboolean - whether conf has been opened in a rotctrlwin
+ */
+static gboolean conf_open_in_rotctrlwin(rotor_conf_t * conf)
+{
+    gint       n, i;
+    GtkWidget *module;
+
+    n = gtk_notebook_get_n_pages(GTK_NOTEBOOK(nbook));
+    for (i = 0; i < n; i++) {
+        module = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nbook), i);
+        
+        if (GTK_SAT_MODULE(module)->rotctrlwin != NULL && 
+            strcmp(GTK_ROT_CTRL(GTK_SAT_MODULE(module)->rotctrl)->conf->name,
+                   conf->name) == 0) {
+            
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 
 static void edit_cb(GtkWidget * button, gpointer data)
@@ -154,6 +186,25 @@ static void edit_cb(GtkWidget * button, gpointer data)
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
 
+        return;
+    }
+
+    if (conf_open_in_rotctrlwin(&conf)) { 
+    	GtkWidget *dialog;
+    	
+        dialog = gtk_message_dialog_new(GTK_WINDOW(window), 
+                                        GTK_DIALOG_MODAL |
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
+                                        _("Close Rotator Control Window!\n"
+                                          "Please close the rotator control window\n"
+                                          "and attempt again to ensure changes\n"
+                                          "are not overwritten."));
+        g_signal_connect_swapped(dialog, "response", 
+                                 G_CALLBACK(gtk_widget_destroy), dialog);
+        gtk_window_set_title(GTK_WINDOW(dialog), _("WARNING"));
+        gtk_widget_show_all(dialog);
+        
         return;
     }
 
