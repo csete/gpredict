@@ -31,6 +31,7 @@ typedef struct _GtkEventListClass GtkEventListClass;
 struct _gtk_event_list {
     GtkBox          box;
 
+    GtkWidget      *satmod;	    /*!< The parent GtkSatModule widget */
     GtkWidget      *treeview;   /*!< the tree view itself */
     GtkWidget      *swin;       /*!< scrolled window */
 
@@ -77,7 +78,7 @@ typedef enum {
 } event_list_flag_t;
 
 GType           gtk_event_list_get_type(void);
-GtkWidget      *gtk_event_list_new(GKeyFile * cfgdata,
+GtkWidget      *gtk_event_list_new(GtkWidget * module, GKeyFile * cfgdata,
                                    GHashTable * sats,
                                    qth_t * qth, guint32 columns);
 void            gtk_event_list_update(GtkWidget * widget);
