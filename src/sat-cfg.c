@@ -229,18 +229,18 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
     {"TLE", "PROXY", NULL},
     {"TLE", "URLS",
      "https://www.amsat.org/amsat/ftp/keps/current/nasabare.txt;"
-     "https://celestrak.org/NORAD/elements/amateur.txt;"
-     "https://celestrak.org/NORAD/elements/cubesat.txt;"
-     "https://celestrak.org/NORAD/elements/galileo.txt;"
-     "https://celestrak.org/NORAD/elements/glo-ops.txt;"
-     "https://celestrak.org/NORAD/elements/gps-ops.txt;"
-     "https://celestrak.org/NORAD/elements/iridium-NEXT.txt;"
-     "https://celestrak.org/NORAD/elements/molniya.txt;"
-     "https://celestrak.org/NORAD/elements/noaa.txt;"
-     "https://celestrak.org/NORAD/elements/science.txt;"
-     "https://celestrak.org/NORAD/elements/tle-new.txt;"
-     "https://celestrak.org/NORAD/elements/visual.txt;"
-     "https://celestrak.org/NORAD/elements/weather.txt"},
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=amateur&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=cubesat&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=galileo&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=glo-ops&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=gps-ops&FORMAT=tlet;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=iridium-NEXT&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=molniya&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=noaa&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=science&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=last-30-days&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle;"
+     "https://celestrak.org/NORAD/elements/gp.php?GROUP=weather&FORMAT=tle"},
     {"TLE", "FILE_DIR", NULL},
     {"PREDICT", "SAVE_DIR", NULL}
 };
