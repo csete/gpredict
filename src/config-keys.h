@@ -93,6 +93,9 @@
 #define MOD_CFG_MAP_REFRESH           "REFRESH"
 #define MOD_CFG_MAP_FILE              "MAP_FILE" /* abs. path = home dir */
 #define MOD_CFG_MAP_FONT              "TEXT_FONT"
+#define MOD_CFG_MAP_SHOW_SAT_NAME     "SAT_MAME"
+#define MOD_CFG_MAP_SHOW_SAT_FP       "SAT_FOOTPRINT"
+#define MOD_CFG_MAP_SHOW_SAT_MARKER   "SAT_MARKER"
 #define MOD_CFG_MAP_SHOW_QTH_INFO     "QTH_INFO"
 #define MOD_CFG_MAP_SHOW_NEXT_EVENT   "NEXT_EVENT"
 #define MOD_CFG_MAP_SHOW_CURS_TRACK   "CURSOR_TRACK"
@@ -113,7 +116,7 @@
 #define MOD_CFG_MAP_KEEP_RATIO        "KEEP_RATIO"
 #define MOD_CFG_MAP_SHADOW_ALPHA      "SHADOW_ALPHA"
 #define MOD_CFG_MAP_SHOWTRACKS        "SHOWTRACKS"
-#define MOD_CFG_MAP_HIDECOVS          "HIDECOVS"
+#define MOD_CFG_MAP_HIDECOVS          "HIDECOVS"		// FIXME: redundant
 
 /* polar view specific */
 #define MOD_CFG_POLAR_SECTION          "POLAR"

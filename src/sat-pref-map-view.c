@@ -36,7 +36,7 @@ static GtkWidget *thumb;
 static gchar   *mapf = NULL;
 
 /* content selectors */
-static GtkWidget *qth, *next, *curs, *grid, *terminatoronoff;
+static GtkWidget *satname, *satfp, *satmarker, *qth, *next, *curs, *grid, *terminatoronoff;
 
 /* colour selectors */
 static GtkWidget *qthc, *gridc, *tickc;
@@ -185,7 +185,13 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         mapf = sat_cfg_get_str_def(SAT_CFG_STR_MAP_FILE);
         update_map_icon();
 
-        /* extra contents */
+        /* contents */
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satname),
+                                     sat_cfg_get_bool_def(SAT_CFG_BOOL_MAP_SHOW_SAT_NAME));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satfp),
+                                     sat_cfg_get_bool_def(SAT_CFG_BOOL_MAP_SHOW_SAT_FP));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satmarker),
+                                     sat_cfg_get_bool_def(SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER));
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(qth),
                                      sat_cfg_get_bool_def
                                      (SAT_CFG_BOOL_MAP_SHOW_QTH_INFO));
@@ -268,7 +274,13 @@ static void reset_cb(GtkWidget * button, gpointer cfg)
         mapf = sat_cfg_get_str(SAT_CFG_STR_MAP_FILE);
         update_map_icon();
 
-        /* extra contents */
+        /* contents */
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satname),
+                                     sat_cfg_get_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_NAME));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satfp),
+                                     sat_cfg_get_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_FP));
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satmarker),
+                                     sat_cfg_get_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER));
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(qth),
                                      sat_cfg_get_bool
                                      (SAT_CFG_BOOL_MAP_SHOW_QTH_INFO));
@@ -376,7 +388,19 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             g_key_file_set_string(cfg,
                                   MOD_CFG_MAP_SECTION, MOD_CFG_MAP_FILE, mapf);
 
-            /* extra contents */
+            /* contents */
+            g_key_file_set_boolean(cfg,
+                                   MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SHOW_SAT_NAME,
+                                   gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(satname)));
+            g_key_file_set_boolean(cfg,
+                                   MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SHOW_SAT_FP,
+                                   gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(satfp)));
+            g_key_file_set_boolean(cfg,
+                                   MOD_CFG_MAP_SECTION,
+                                   MOD_CFG_MAP_SHOW_SAT_MARKER,
+                                   gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(satmarker)));
             g_key_file_set_boolean(cfg,
                                    MOD_CFG_MAP_SECTION,
                                    MOD_CFG_MAP_SHOW_QTH_INFO,
@@ -483,6 +507,12 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             sat_cfg_set_str(SAT_CFG_STR_MAP_FILE, mapf);
 
             /* extra contents */
+            sat_cfg_set_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_NAME,
+                             gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(satname)));
+            sat_cfg_set_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_FP,
+                             gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(satfp)));
+            sat_cfg_set_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER,
+                             gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(satmarker)));
             sat_cfg_set_bool(SAT_CFG_BOOL_MAP_SHOW_QTH_INFO,
                              gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON
                                                           (qth)));
@@ -572,6 +602,9 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             g_key_file_remove_key(cfg,
                                   MOD_CFG_MAP_SECTION, MOD_CFG_MAP_FILE, NULL);
 
+            g_key_file_remove_key(cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_SHOW_SAT_NAME, NULL);
+            g_key_file_remove_key(cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_SHOW_SAT_FP, NULL);
+            g_key_file_remove_key(cfg, MOD_CFG_MAP_SECTION, MOD_CFG_MAP_SHOW_SAT_MARKER, NULL);
             g_key_file_remove_key(cfg,
                                   MOD_CFG_MAP_SECTION,
                                   MOD_CFG_MAP_SHOW_QTH_INFO, NULL);
@@ -631,7 +664,10 @@ void sat_pref_map_view_ok(GKeyFile * cfg)
             /* background map */
             sat_cfg_reset_str(SAT_CFG_STR_MAP_FILE);
 
-            /* extra contents */
+            /* contents */
+            sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_NAME);
+            sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_FP);
+            sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER);
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_QTH_INFO);
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_NEXT_EV);
             sat_cfg_reset_bool(SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK);
@@ -784,18 +820,78 @@ static void create_map_selector(GKeyFile * cfg, GtkBox * vbox)
 static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
 {
     GtkWidget      *label;
-    GtkWidget      *hbox;
+    GtkWidget      *table;
 
     /* create header */
     label = gtk_label_new(NULL);
     g_object_set(label, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_label_set_markup(GTK_LABEL(label), _("<b>Extra Contents:</b>"));
+    gtk_label_set_markup(GTK_LABEL(label), _("<b>Contents:</b>"));
     gtk_box_pack_start(vbox, label, FALSE, TRUE, 5);
 
-    /* horizontal box to contain the radio buttons */
-    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
-    gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
-    gtk_box_pack_start(vbox, hbox, FALSE, TRUE, 0);
+    /* grid layout for show/hide checkboxes */
+    table = gtk_grid_new();
+    gtk_grid_set_column_homogeneous(GTK_GRID(table), FALSE);
+    gtk_grid_set_row_homogeneous(GTK_GRID(table), TRUE);
+    gtk_grid_set_column_spacing(GTK_GRID(table), 10);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 3);
+    gtk_box_pack_start(vbox, table, FALSE, TRUE, 0);
+
+    /* Satellite name */
+    satname = gtk_check_button_new_with_label(_("Satellite Name"));
+    gtk_widget_set_tooltip_text(satname, _("Show the satellite name on the map"));
+    if (cfg != NULL)
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satname),
+                                     mod_cfg_get_bool(cfg,
+                                                      MOD_CFG_MAP_SECTION,
+                                                      MOD_CFG_MAP_SHOW_SAT_NAME,
+                                                      SAT_CFG_BOOL_MAP_SHOW_SAT_NAME));
+    }
+    else
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satname),
+                                     sat_cfg_get_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_NAME));
+    }
+    g_signal_connect(satname, "toggled", G_CALLBACK(content_changed), NULL);
+    gtk_grid_attach(GTK_GRID(table), satname, 0, 0, 1, 1);
+
+    /* Satellite footprint */
+    satfp = gtk_check_button_new_with_label(_("Satellite Footprint"));
+    gtk_widget_set_tooltip_text(satfp, _("Show the satellite footprint on the map"));
+    if (cfg != NULL)
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satfp),
+                                     mod_cfg_get_bool(cfg,
+                                                      MOD_CFG_MAP_SECTION,
+                                                      MOD_CFG_MAP_SHOW_SAT_FP,
+                                                      SAT_CFG_BOOL_MAP_SHOW_SAT_FP));
+    }
+    else
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satfp),
+                                     sat_cfg_get_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_FP));
+    }
+    g_signal_connect(satfp, "toggled", G_CALLBACK(content_changed), NULL);
+    gtk_grid_attach(GTK_GRID(table), satfp, 1, 0, 1, 1);
+
+    /* Satellite marker */
+    satmarker = gtk_check_button_new_with_label(_("Satellite Marker"));
+    gtk_widget_set_tooltip_text(satmarker, _("Show the satellite marker on the map"));
+    if (cfg != NULL)
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satmarker),
+                                     mod_cfg_get_bool(cfg,
+                                                      MOD_CFG_MAP_SECTION,
+                                                      MOD_CFG_MAP_SHOW_SAT_MARKER,
+                                                      SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER));
+    }
+    else
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(satmarker),
+                                     sat_cfg_get_bool(SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER));
+    }
+    g_signal_connect(satmarker, "toggled", G_CALLBACK(content_changed), NULL);
+    gtk_grid_attach(GTK_GRID(table), satmarker, 2, 0, 1, 1);
 
     /* QTH info */
     qth = gtk_check_button_new_with_label(_("QTH Info"));
@@ -816,7 +912,7 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
                                      (SAT_CFG_BOOL_MAP_SHOW_QTH_INFO));
     }
     g_signal_connect(qth, "toggled", G_CALLBACK(content_changed), NULL);
-    gtk_box_pack_start(GTK_BOX(hbox), qth, FALSE, TRUE, 0);
+    gtk_grid_attach(GTK_GRID(table), qth, 3, 0, 1, 1);
 
     /* Next Event */
     next = gtk_check_button_new_with_label(_("Next Event"));
@@ -838,7 +934,7 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
                                      (SAT_CFG_BOOL_MAP_SHOW_NEXT_EV));
     }
     g_signal_connect(next, "toggled", G_CALLBACK(content_changed), NULL);
-    gtk_box_pack_start(GTK_BOX(hbox), next, FALSE, TRUE, 0);
+    gtk_grid_attach(GTK_GRID(table), next, 0, 1, 1, 1);
 
     /* Cursor position */
     curs = gtk_check_button_new_with_label(_("Cursor Position"));
@@ -860,8 +956,7 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
                                      (SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK));
     }
     g_signal_connect(curs, "toggled", G_CALLBACK(content_changed), NULL);
-    gtk_box_pack_start(GTK_BOX(hbox), curs, FALSE, TRUE, 0);
-
+    gtk_grid_attach(GTK_GRID(table), curs, 1, 1, 1, 1);
 
     /* Grid */
     grid = gtk_check_button_new_with_label(_("Grid Lines"));
@@ -882,8 +977,7 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
                                      (SAT_CFG_BOOL_MAP_SHOW_GRID));
     }
     g_signal_connect(grid, "toggled", G_CALLBACK(content_changed), NULL);
-    gtk_box_pack_start(GTK_BOX(hbox), grid, FALSE, TRUE, 0);
-
+    gtk_grid_attach(GTK_GRID(table), grid, 2, 1, 1, 1);
 
     /* Solar Terminator */
     terminatoronoff = gtk_check_button_new_with_label(_("Solar Terminator"));
@@ -904,7 +998,7 @@ static void create_bool_selectors(GKeyFile * cfg, GtkBox * vbox)
                                    (SAT_CFG_BOOL_MAP_SHOW_TERMINATOR));
     }
     g_signal_connect(terminatoronoff, "toggled", G_CALLBACK(content_changed), NULL);
-    gtk_box_pack_start(GTK_BOX(hbox), terminatoronoff, FALSE, TRUE, 0);
+    gtk_grid_attach(GTK_GRID(table), terminatoronoff, 3, 1, 1, 1);
 }
 
 /**
@@ -1073,14 +1167,14 @@ static void create_colour_selectors(GKeyFile * cfg, GtkBox * vbox)
     g_signal_connect(trackc, "color-set", G_CALLBACK(colour_changed), NULL);
 
     /* coverage */
-    label = gtk_label_new(_("Area Coverage:"));
+    label = gtk_label_new(_("Footprint:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
     covc = gtk_color_button_new();
     gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(covc), TRUE);
     gtk_grid_attach(GTK_GRID(table), covc, 1, 2, 1, 1);
     gtk_widget_set_tooltip_text(covc,
-                                _("Select colour for coverage area.\n"
+                                _("Select colour for satellite footprint area.\n"
                                   "Hint: Make it transparent"));
     if (cfg != NULL)
     {

@@ -51,7 +51,7 @@ typedef struct {
     /* flags */
     gboolean        selected;   /*!< Is satellite selected? */
     gboolean        showtrack;  /*!< Show ground track */
-    gboolean        showcov;    /*!< Show coverage area. */
+    gboolean        showcov;    /*!< Show coverage area. FIXME: redundant*/
     gboolean        istarget;   /*!< is this object the target */
 
     /* graphical elements */
@@ -122,6 +122,9 @@ typedef struct {
     guint           refresh;    /*!< Refresh rate. */
     guint           counter;    /*!< Cycle counter. */
 
+    gboolean        satname;    /*!< Show the satellite name. */
+    gboolean        satfp;      /*!< Show the satellite footprint. */
+    gboolean        satmarker;  /*!< Show the satellite marker. */
     gboolean        show_terminator;    /*!< show solar terminator. */
     gboolean        qthinfo;    /*!< Show the QTH info. */
     gboolean        eventinfo;  /*!< Show info about the next event. */

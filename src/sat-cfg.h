@@ -38,6 +38,9 @@ typedef enum {
     SAT_CFG_BOOL_MOD_WIN_POS,   /*!< Restore size and position of module windows */
     SAT_CFG_BOOL_MOD_STATE,     /*!< Restore module state */
     SAT_CFG_BOOL_RULES_HINT_OBSOLETE,    /*!< Enable rules hint in GtkSatList. */
+    SAT_CFG_BOOL_MAP_SHOW_SAT_NAME,     /*!< Show satellite name on map. */
+    SAT_CFG_BOOL_MAP_SHOW_SAT_FP,       /*!< Show satellite footprint on map. */
+    SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER,   /*!< Show satellite marker on map. */
     SAT_CFG_BOOL_MAP_SHOW_QTH_INFO,     /*!< Show QTH info on map */
     SAT_CFG_BOOL_MAP_SHOW_NEXT_EV,      /*!< Show next event on map */
     SAT_CFG_BOOL_MAP_SHOW_CURS_TRACK,   /*!< Track mouse cursor on map. */

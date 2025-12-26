@@ -52,9 +52,9 @@
 #define TERMINATOR_UPDATE_INTERVAL (15.0/86400.0)
 
 static void     gtk_sat_map_class_init(GtkSatMapClass * class,
-				       gpointer class_data);
+                       gpointer class_data);
 static void     gtk_sat_map_init(GtkSatMap * polview,
-				 gpointer g_class);
+                 gpointer g_class);
 static void     gtk_sat_map_destroy(GtkWidget * widget);
 static void     size_allocate_cb(GtkWidget * widget,
                                  GtkAllocation * allocation, gpointer data);
@@ -142,7 +142,7 @@ GType gtk_sat_map_get_type()
 }
 
 static void gtk_sat_map_class_init(GtkSatMapClass * class,
-				   gpointer class_data)
+                   gpointer class_data)
 {
     GtkWidgetClass *widget_class;
 
@@ -154,7 +154,7 @@ static void gtk_sat_map_class_init(GtkSatMapClass * class,
 }
 
 static void gtk_sat_map_init(GtkSatMap * satmap,
-			     gpointer g_class)
+                 gpointer g_class)
 {
     (void)g_class;
 
@@ -174,6 +174,9 @@ static void gtk_sat_map_init(GtkSatMap * satmap,
     satmap->height = 0;
     satmap->refresh = 0;
     satmap->counter = 0;
+    satmap->satname = FALSE;
+    satmap->satfp = FALSE;
+    satmap->satmarker = FALSE;
     satmap->show_terminator = FALSE;
     satmap->qthinfo = FALSE;
     satmap->eventinfo = FALSE;
@@ -300,6 +303,19 @@ GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata, GHashTable * sats,
                                       MOD_CFG_MAP_REFRESH,
                                       SAT_CFG_INT_MAP_REFRESH);
     satmap->counter = 1;
+
+    satmap->satname = mod_cfg_get_bool(cfgdata,
+                                       MOD_CFG_MAP_SECTION,
+                                       MOD_CFG_MAP_SHOW_SAT_NAME,
+                                       SAT_CFG_BOOL_MAP_SHOW_SAT_NAME);
+    satmap->satfp = mod_cfg_get_bool(cfgdata,
+                                     MOD_CFG_MAP_SECTION,
+                                     MOD_CFG_MAP_SHOW_SAT_FP,
+                                     SAT_CFG_BOOL_MAP_SHOW_SAT_FP);
+    satmap->satmarker = mod_cfg_get_bool(cfgdata,
+                                         MOD_CFG_MAP_SECTION,
+                                         MOD_CFG_MAP_SHOW_SAT_MARKER,
+                                         SAT_CFG_BOOL_MAP_SHOW_SAT_MARKER);
 
     satmap->qthinfo = mod_cfg_get_bool(cfgdata,
                                        MOD_CFG_MAP_SECTION,
@@ -984,6 +1000,9 @@ static gboolean on_button_release(GooCanvasItem * item,
 
             /* clear other selections */
             g_hash_table_foreach(satmap->obj, clear_selection, catpoint);
+            
+            /* update all satellites to update marker visibilities */
+            g_hash_table_foreach(satmap->sats, update_sat, satmap);
         }
         break;
     default:
@@ -1009,12 +1028,9 @@ static void clear_selection(gpointer key, gpointer val, gpointer data)
         /** FIXME: this is only global default; need the satmap here! */
         col = sat_cfg_get_int(SAT_CFG_INT_MAP_SAT_COL);
 
-        g_object_set(obj->marker,
-                     "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
-        g_object_set(obj->label,
-                     "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
+        g_object_set(obj->marker, "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
+        g_object_set(obj->label, "fill-color-rgba", col, "stroke-color-rgba", col, NULL);
         g_object_set(obj->range1, "stroke-color-rgba", col, NULL);
-
         if (obj->oldrcnum == 2)
             g_object_set(obj->range2, "stroke-color-rgba", col, NULL);
     }
@@ -1057,6 +1073,9 @@ void gtk_sat_map_select_sat(GtkWidget * satmap, gint catnum)
 
         /* clear other selections */
         g_hash_table_foreach(smap->obj, clear_selection, catpoint);
+        
+        /* update all satellites to update marker visibilities */
+        g_hash_table_foreach(smap->sats, update_sat, smap);
     }
 
     g_free(catpoint);
@@ -1978,6 +1997,24 @@ static void plot_sat(gpointer key, gpointer value, gpointer data)
 
     /* add sat to hash table */
     g_hash_table_insert(satmap->obj, catnum, obj);
+
+    /* hide objects if so configured */
+    if (!satmap->satname)
+    {
+        g_object_set(obj->label, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+        g_object_set(obj->shadowl, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+    }
+    if (!satmap->satfp)
+    {
+        g_object_set(obj->range1, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+        if (obj->newrcnum == 2)
+            g_object_set(obj->range2, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+    }
+    if (!satmap->satmarker)
+    {
+        g_object_set(obj->marker, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+        g_object_set(obj->shadowm, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+    }
 }
 
 /**
@@ -2215,17 +2252,10 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                                           SAT_CFG_INT_MAP_SAT_COL);
                 }
                 /* coverage color */
-                if (obj->showcov)
-                {
-                    covcol = mod_cfg_get_int(satmap->cfgdata,
-                                             MOD_CFG_MAP_SECTION,
-                                             MOD_CFG_MAP_SAT_COV_COL,
-                                             SAT_CFG_INT_MAP_SAT_COV_COL);
-                }
-                else
-                {
-                    covcol = 0x00000000;
-                }
+                covcol = mod_cfg_get_int(satmap->cfgdata,
+                                         MOD_CFG_MAP_SECTION,
+                                         MOD_CFG_MAP_SAT_COV_COL,
+                                         SAT_CFG_INT_MAP_SAT_COV_COL);
                 obj->range2 = goo_canvas_polyline_model_new(root, FALSE, 0,
                                                             "points", points2,
                                                             "line-width", 1.0,
@@ -2239,6 +2269,10 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                                                             NULL);
                 g_object_set_data(G_OBJECT(obj->range2), "catnum",
                                   GINT_TO_POINTER(*catnum));
+                                  
+                if (!satmap->satfp && !obj->selected)
+                    g_object_set(obj->range2, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+
             }
             else
             {
@@ -2281,6 +2315,20 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
             ground_track_update(satmap, sat, satmap->qth, obj, FALSE);
         }
     }
+
+    /* update marker visibilities */
+    gboolean vis = satmap->satname || obj->selected;
+    g_object_set(obj->label, "visibility", vis ? GOO_CANVAS_ITEM_VISIBLE : GOO_CANVAS_ITEM_INVISIBLE, NULL);
+    g_object_set(obj->shadowl, "visibility", vis ? GOO_CANVAS_ITEM_VISIBLE : GOO_CANVAS_ITEM_INVISIBLE, NULL);
+
+    vis = satmap->satfp || obj->selected;
+    g_object_set(obj->range1, "visibility", vis ? GOO_CANVAS_ITEM_VISIBLE : GOO_CANVAS_ITEM_INVISIBLE, NULL);
+    if (obj->newrcnum == 2)
+        g_object_set(obj->range2, "visibility", vis ? GOO_CANVAS_ITEM_VISIBLE : GOO_CANVAS_ITEM_INVISIBLE, NULL);
+
+    vis = satmap->satmarker || obj->selected;
+    g_object_set(obj->marker, "visibility", vis ? GOO_CANVAS_ITEM_VISIBLE : GOO_CANVAS_ITEM_INVISIBLE, NULL);
+    g_object_set(obj->shadowm, "visibility", vis ? GOO_CANVAS_ITEM_VISIBLE : GOO_CANVAS_ITEM_INVISIBLE, NULL);
 
     g_free(catnum);
 }
