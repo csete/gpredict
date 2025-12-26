@@ -102,6 +102,8 @@ struct _GtkPolarView {
 
     polar_view_swap_t swap;
 
+	gboolean        satname;    /*!< Show satellite name. */
+	gboolean        satmarker;  /*!< Show satellite marker. */
     gboolean        qthinfo;    /*!< Show the QTH info. */
     gboolean        eventinfo;  /*!< Show info about the next event. */
     gboolean        cursinfo;   /*!< Track the mouse cursor. */

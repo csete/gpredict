@@ -44,6 +44,8 @@ typedef enum {
     SAT_CFG_BOOL_MAP_SHOW_GRID, /*!< Show grid on map. */
     SAT_CFG_BOOL_MAP_SHOW_TERMINATOR,   /*!< Show solar terminator on map. */
     SAT_CFG_BOOL_MAP_KEEP_RATIO,        /*!< Keep original aspect ratio */
+    SAT_CFG_BOOL_POL_SHOW_SAT_NAME,     /*!< Show the satellite name */
+    SAT_CFG_BOOL_POL_SHOW_SAT_MARKER,   /*!< Show the satellite marker */
     SAT_CFG_BOOL_POL_SHOW_QTH_INFO,     /*!< Show QTH info on polar plot */
     SAT_CFG_BOOL_POL_SHOW_NEXT_EV,      /*!< Show next event on polar plot */
     SAT_CFG_BOOL_POL_SHOW_CURS_TRACK,   /*!< Track mouse cursor on polar plot. */

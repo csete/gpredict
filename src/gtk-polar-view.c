@@ -112,6 +112,8 @@ static void gtk_polar_view_init(GtkPolarView * polview,
     polview->refresh = 0;
     polview->counter = 0;
     polview->swap = 0;
+    polview->satname = FALSE;
+    polview->satmarker = FALSE;
     polview->qthinfo = FALSE;
     polview->eventinfo = FALSE;
     polview->cursinfo = FALSE;
@@ -800,6 +802,13 @@ GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
                                  MOD_CFG_POLAR_ORIENTATION,
                                  SAT_CFG_INT_POLAR_ORIENTATION);
 
+    polv->satname = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                     MOD_CFG_POLAR_SHOW_SAT_NAME,
+                                     SAT_CFG_BOOL_POL_SHOW_SAT_NAME);
+    polv->satmarker = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
+                                       MOD_CFG_POLAR_SHOW_SAT_MARKER,
+                                       SAT_CFG_BOOL_POL_SHOW_SAT_MARKER);
+
     polv->qthinfo = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
                                      MOD_CFG_POLAR_SHOW_QTH_INFO,
                                      SAT_CFG_BOOL_POL_SHOW_QTH_INFO);
@@ -1359,6 +1368,14 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 /* Finally, create the sky track if necessary */
                 if (obj->showtrack)
                     gtk_polar_view_create_track(polv, obj, sat);
+
+				/* show or hide satellite name and marker */
+				if (!polv->satname)
+					g_object_set(obj->label, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+				if (!polv->satmarker)
+					g_object_set(obj->marker, "visibility", GOO_CANVAS_ITEM_INVISIBLE, NULL);
+
+
             }
             else
             {
