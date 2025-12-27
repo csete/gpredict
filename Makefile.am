@@ -21,8 +21,12 @@ EXTRA_DIST = \
 	intltool-merge.in     \
 	intltool-update.in    \
 	snap/snapcraft.yaml   \
+	win32/build-config.h  \
 	win32/config.mk       \
-	win32/goocanvasprivate.h \
-	win32/gpredict.rc        \
-	win32/Makefile           \
+	win32/gpredict.rc     \
+	win32/Makefile        \
+	win32/README          \
+	win32/resource.h      \
+	win32/win32-fetch.c   \
+	win32/win32-fetch.h   \
 	win32/icons/gpredict-icon.ico
