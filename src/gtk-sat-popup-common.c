@@ -21,6 +21,13 @@
 #include <gtk/gtk.h>
 
 #include "gtk-sat-popup-common.h"
+#include "gtk-sat-module.h"
+#include "gtk-event-list.h"
+#include "gtk-polar-view.h"
+#include "gtk-sat-map.h"
+#include "gtk-single-sat.h"
+#include "gtk-sat-list.h"
+#include "sat-log.h"
 #include "orbit-tools.h"
 #include "predict-tools.h"
 #include "sat-cfg.h"
@@ -53,12 +60,19 @@ void add_pass_menu_items(GtkWidget * menu, sat_t * sat, qth_t * qth,
                      widget);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
-    /* finally the future pass menu item */
+    /* the future pass menu item */
     menuitem = gtk_menu_item_new_with_label(_("Future passes"));
     g_object_set_data(G_OBJECT(menuitem), "sat", sat);
     g_object_set_data(G_OBJECT(menuitem), "qth", qth);
     g_object_set_data(G_OBJECT(menuitem), "tstamp", tstamp);
     g_signal_connect(menuitem, "activate", G_CALLBACK(show_future_passes_cb),
+                     widget);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+
+    /* finally the select menu item */
+    menuitem = gtk_menu_item_new_with_label(_("Select"));
+    g_object_set_data(G_OBJECT(menuitem), "sat", sat);
+    g_signal_connect(menuitem, "activate", G_CALLBACK(sat_select_cb),
                      widget);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 }
@@ -112,6 +126,48 @@ void show_future_passes_cb(GtkWidget * menuitem, gpointer data)
     tstamp = (gdouble *) (g_object_get_data(G_OBJECT(menuitem), "tstamp"));
 
     show_future_passes_dialog(sat, qth, *tstamp, toplevel);
+}
+
+void sat_select_cb(GtkWidget * menuitem, gpointer data)
+{
+    sat_t          *sat;
+    GtkWidget      *satmod;
+
+    if (IS_GTK_SAT_LIST(data))
+    {
+        satmod = GTK_SAT_LIST(data)->satmod;
+    }
+
+    else if (IS_GTK_SAT_MAP(data))
+    {
+        satmod = GTK_SAT_MAP(data)->satmod;
+    }
+
+    else if (IS_GTK_POLAR_VIEW(data))
+    {
+        satmod = GTK_POLAR_VIEW(data)->satmod;
+    }
+
+    else if (IS_GTK_SINGLE_SAT(data))
+    {
+        satmod = GTK_SINGLE_SAT(data)->satmod;
+    }
+
+    else if (IS_GTK_EVENT_LIST(data))
+    {
+        satmod = GTK_EVENT_LIST(data)->satmod;
+    }
+
+    else
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Unknown data type"), __FILE__, __LINE__);
+        return;
+    }
+
+    sat = SAT(g_object_get_data(G_OBJECT(menuitem), "sat"));
+
+    gtk_sat_module_select_sat(GTK_SAT_MODULE(satmod), sat->tle.catnr);
 }
 
 void show_next_pass_dialog(sat_t * sat, qth_t * qth, gdouble tstamp,

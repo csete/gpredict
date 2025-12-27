@@ -15,5 +15,6 @@ void            show_next_pass_dialog(sat_t * sat, qth_t * qth,
 void            show_future_passes_dialog(sat_t * sat, qth_t * qth,
                                           gdouble tstamp,
                                           GtkWindow * toplevel);
+void			sat_select_cb(GtkWidget * menuitem, gpointer data);
 
 #endif

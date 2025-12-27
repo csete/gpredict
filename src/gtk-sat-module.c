@@ -304,27 +304,27 @@ static GtkWidget *create_view(GtkSatModule * module, guint num)
     switch (num)
     {
     case GTK_SAT_MOD_VIEW_LIST:
-        view = gtk_sat_list_new(module->cfgdata,
+        view = gtk_sat_list_new(GTK_WIDGET(module), module->cfgdata,
                                 module->satellites, module->qth, 0);
         break;
 
     case GTK_SAT_MOD_VIEW_MAP:
-        view = gtk_sat_map_new(module->cfgdata,
+        view = gtk_sat_map_new(GTK_WIDGET(module), module->cfgdata,
                                module->satellites, module->qth);
         break;
 
     case GTK_SAT_MOD_VIEW_POLAR:
-        view = gtk_polar_view_new(module->cfgdata,
+        view = gtk_polar_view_new(GTK_WIDGET(module), module->cfgdata,
                                   module->satellites, module->qth);
         break;
 
     case GTK_SAT_MOD_VIEW_SINGLE:
-        view = gtk_single_sat_new(module->cfgdata,
+        view = gtk_single_sat_new(GTK_WIDGET(module), module->cfgdata,
                                   module->satellites, module->qth, 0);
         break;
 
     case GTK_SAT_MOD_VIEW_EVENT:
-        view = gtk_event_list_new(module->cfgdata,
+        view = gtk_event_list_new(GTK_WIDGET(module), module->cfgdata,
                                   module->satellites, module->qth, 0);
         break;
 
@@ -333,7 +333,7 @@ static GtkWidget *create_view(GtkSatModule * module, guint num)
                     _("%s:%d: Invalid child type (%d). Using GtkSatList."),
                     __FILE__, __LINE__, num);
 
-        view = gtk_sat_list_new(module->cfgdata,
+        view = gtk_sat_list_new(GTK_WIDGET(module), module->cfgdata,
                                 module->satellites, module->qth, 0);
         break;
     }

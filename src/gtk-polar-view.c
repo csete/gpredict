@@ -769,7 +769,7 @@ static GooCanvasItemModel *create_canvas_model(GtkPolarView * polv)
  * @param sats Pointer to the hash table containing the associated satellites.
  * @param qth Pointer to the ground station data.
  */
-GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
+GtkWidget      *gtk_polar_view_new(GtkWidget * module, GKeyFile * cfgdata, GHashTable * sats,
                                    qth_t * qth)
 {
     GtkPolarView       *polv;
@@ -777,6 +777,7 @@ GtkWidget      *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats,
 
     polv = GTK_POLAR_VIEW(g_object_new(GTK_TYPE_POLAR_VIEW, NULL));
 
+    polv->satmod = module;
     polv->cfgdata = cfgdata;
     polv->sats = sats;
     polv->qth = qth;

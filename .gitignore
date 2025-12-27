@@ -37,3 +37,7 @@ m4/
 GTAGS
 GRTAGS
 GPATH
+.autotools
+.cproject
+.project
+.settings

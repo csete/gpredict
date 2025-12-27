@@ -280,7 +280,7 @@ static void gtk_sat_list_destroy(GtkWidget * widget)
     (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
 }
 
-GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
+GtkWidget      *gtk_sat_list_new(GtkWidget * module, GKeyFile * cfgdata, GHashTable * sats,
                                  qth_t * qth, guint32 columns)
 {
 //    GtkWidget      *widget;
@@ -295,6 +295,7 @@ GtkWidget      *gtk_sat_list_new(GKeyFile * cfgdata, GHashTable * sats,
 //    widget = g_object_new(GTK_TYPE_SAT_LIST, NULL);
     satlist = GTK_SAT_LIST(g_object_new(GTK_TYPE_SAT_LIST, NULL));
 
+    satlist->satmod = module;
     satlist->update = gtk_sat_list_update;
 
     /* Read configuration data. */

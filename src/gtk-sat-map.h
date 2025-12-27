@@ -78,6 +78,7 @@ typedef struct {
 typedef struct {
     GtkBox          vbox;
 
+    GtkWidget      *satmod;	    /*!< The parent GtkSatModule widget */
     GtkWidget      *canvas;     /*!< The canvas widget. */
 
     GooCanvasItemModel *map;    /*!< The canvas map item. */
@@ -146,7 +147,7 @@ struct _GtkSatMapClass {
 };
 
 GType           gtk_sat_map_get_type(void);
-GtkWidget      *gtk_sat_map_new(GKeyFile * cfgdata,
+GtkWidget      *gtk_sat_map_new(GtkWidget * module, GKeyFile * cfgdata,
                                 GHashTable * sats, qth_t * qth);
 void            gtk_sat_map_update(GtkWidget * widget);
 void            gtk_sat_map_reconf(GtkWidget * widget, GKeyFile * cfgdat);

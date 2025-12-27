@@ -84,6 +84,7 @@ typedef struct _GtkSingleSatClass GtkSingleSatClass;
 struct _gtk_single_sat {
     GtkBox          vbox;
 
+    GtkWidget      *satmod;	    /*!< The parent GtkSatModule widget */
     GtkWidget      *header;     /*!< Header label, ie. satellite name. */
 
     GtkWidget      *labels[SINGLE_SAT_FIELD_NUMBER];    /*!< GtkLabels displaying the data. */
@@ -114,7 +115,7 @@ struct _GtkSingleSatClass {
 };
 
 GType           gtk_single_sat_get_type(void);
-GtkWidget      *gtk_single_sat_new(GKeyFile * cfgdata,
+GtkWidget      *gtk_single_sat_new(GtkWidget * module, GKeyFile * cfgdata,
                                    GHashTable * sats,
                                    qth_t * qth, guint32 fields);
 void            gtk_single_sat_update(GtkWidget * widget);
