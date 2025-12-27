@@ -1,6 +1,9 @@
 
-Changes in version 2.4 (TBD)
+Changes in version 2.4 (27 Dec 2025)
 
+- Added option to show solar terminator on the map view
+- Added option to hide satellite names, markers and footprints on map
+- Added option to hide satellite names and marker on polar view
 - Fixed bug that could prevent TLE update to work on Windows
 - Fixed rotator error handling to prevent fake feedback
 - Fixed rotator controller on Windows
@@ -13,11 +16,15 @@ Changes in version 2.4 (TBD)
 - Ensure Azimuth read from rotator is always between 0-360 degrees
 - Ensure rotator limits are respected while tracking
 - Ensure next events are in chronological order
+- Ensure autotrack respects minimum elevation setting
+- Use system font in graphical views
 - Added operational status to list view
 - Restore radio controller cycle time between sessions
 - Restore rotator cycle time and threshold between sessions
 - Require Glib 2.40 or later
+- Support building with GooCanvas 3
 - New module menu icon
+- Updated bundled satellite data
 
 
 Changes in version 2.2 (5 Jan 2018)
