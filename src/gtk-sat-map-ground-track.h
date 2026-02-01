@@ -27,7 +27,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <goocanvas.h>
 #include <gtk/gtk.h>
 
 #include "gtk-sat-map.h"

@@ -29,7 +29,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <goocanvas.h>
 #include <gtk/gtk.h>
 
 #include "gtk-sat-data.h"
@@ -56,25 +55,25 @@ typedef struct _GtkAzelPlotClass GtkAzelPlotClass;
 struct _GtkAzelPlot {
     GtkBox          box;
 
-    GtkWidget      *canvas;     /*!< The canvas widget */
+    GtkWidget      *canvas;     /*!< The drawing area widget */
 
-    GooCanvasItemModel *bgd;    /*!< Rectangle used to paint background */
-    GooCanvasItemModel *curs;   /*!< cusor info */
-    GooCanvasItemModel *frame;  /*!< frame */
-    GooCanvasItemModel *azg;    /*!< Az graph */
-    GooCanvasItemModel *elg;    /*!< El graph */
-    GooCanvasItemModel *xticksb[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks bottom */
-    GooCanvasItemModel *xtickst[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks top */
-    GooCanvasItemModel *xlabels[AZEL_PLOT_NUM_TICKS];   /*!< x tick labels */
-    GooCanvasItemModel *yticksl[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks left */
-    GooCanvasItemModel *yticksr[AZEL_PLOT_NUM_TICKS];   /*!< x tick marks right */
-    GooCanvasItemModel *ylabelsl[AZEL_PLOT_NUM_TICKS];  /*!< left y tick labels */
-    GooCanvasItemModel *ylabelsr[AZEL_PLOT_NUM_TICKS];  /*!< right y tick labels */
+    /* Colors */
+    guint32         col_axis;   /*!< Axis/frame color */
+    guint32         col_az;     /*!< Azimuth graph color */
+    guint32         col_el;     /*!< Elevation graph color */
 
-    GooCanvasItemModel *xlab[AZEL_PLOT_NUM_TICKS];      /*!< x tick labels */
-    GooCanvasItemModel *azlab[AZEL_PLOT_NUM_TICKS];     /*!< Az tick labels */
-    GooCanvasItemModel *ellab[AZEL_PLOT_NUM_TICKS];     /*!< El tick labels */
-    GooCanvasItemModel *azleg, *elleg, *xleg;   /*!< Az and El legend */
+    /* Text elements */
+    gchar          *curs_text;  /*!< Cursor info text */
+
+    /* Graph data points */
+    gdouble        *az_points;  /*!< Array of azimuth graph points */
+    gdouble        *el_points;  /*!< Array of elevation graph points */
+    gint            num_points; /*!< Number of data points */
+
+    /* Tick labels */
+    gchar          *xlabels[AZEL_PLOT_NUM_TICKS]; /*!< x tick label texts */
+    gchar          *azlabels[AZEL_PLOT_NUM_TICKS]; /*!< Az tick label texts */
+    gchar          *ellabels[AZEL_PLOT_NUM_TICKS]; /*!< El tick label texts */
 
     qth_t          *qth;        /*!< Pointer to current location. */
     pass_t         *pass;
@@ -90,7 +89,7 @@ struct _GtkAzelPlot {
     gboolean        cursinfo;   /*!< Track the mouse cursor. */
     gboolean        extratick;  /*!< Show extra ticks */
 
-    GValue          font;       /*!< Default font */
+    gchar          *font;       /*!< Default font name */
 };
 
 struct _GtkAzelPlotClass {

@@ -28,7 +28,6 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <goocanvas.h>
 #include <gtk/gtk.h>
 
 #include "gtk-sat-data.h"
@@ -69,24 +68,43 @@ typedef enum {
     POLAR_PLOT_POLE_W = 3
 } polar_plot_pole_t;
 
+/** Time tick data for sky track */
+typedef struct {
+    gfloat          x;          /*!< X coordinate */
+    gfloat          y;          /*!< Y coordinate */
+    gchar           text[6];    /*!< Time string */
+} polar_plot_tick_t;
+
 struct _GtkPolarPlot {
     GtkBox          box;
 
-    GtkWidget      *canvas;     /*!< The canvas widget */
+    GtkWidget      *canvas;     /*!< The drawing area widget */
 
-    GooCanvasItemModel *C00, *C30, *C60;        /*!< 0, 30 and 60 deg elevation circles */
-    GooCanvasItemModel *hl, *vl;        /*!< horizontal and vertical lines */
-    GooCanvasItemModel *N, *S, *E, *W;  /*!< North, South, East and West labels */
-    GooCanvasItemModel *locnam; /*!< Location name */
-    GooCanvasItemModel *curs;   /*!< cursor tracking text */
+    /* Colors */
+    guint32         col_bgd;    /*!< Background color */
+    guint32         col_axis;   /*!< Axis color */
+    guint32         col_tick;   /*!< Tick label color */
+    guint32         col_info;   /*!< Info text color */
+    guint32         col_sat;    /*!< Satellite color */
+    guint32         col_track;  /*!< Track color */
+
+    /* Text elements */
+    gchar          *curs_text;  /*!< Cursor tracking text */
 
     pass_t         *pass;
-    GooCanvasItemModel *bgd;    /*!< Background */
-    GooCanvasItemModel *track;  /*!< Sky track. */
-    GooCanvasItemModel *target; /*!< Target object marker */
-    GooCanvasItemModel *ctrl;   /*!< Position marker for the controller */
-    GooCanvasItemModel *rot1, *rot2, *rot3, *rot4;      /*!< Position marker for the rotor */
-    GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
+
+    /* Track points */
+    gdouble        *track_points; /*!< Array of track coordinates */
+    gint            track_count;  /*!< Number of track points */
+    polar_plot_tick_t trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
+
+    /* Target/controller/rotor positions */
+    gdouble         target_az;  /*!< Target azimuth (-1 if hidden) */
+    gdouble         target_el;  /*!< Target elevation (-1 if hidden) */
+    gdouble         ctrl_az;    /*!< Controller azimuth (-1 if hidden) */
+    gdouble         ctrl_el;    /*!< Controller elevation (-1 if hidden) */
+    gdouble         rotor_az;   /*!< Rotor azimuth (-1 if hidden) */
+    gdouble         rotor_el;   /*!< Rotor elevation (-1 if hidden) */
 
     qth_t          *qth;        /*!< Pointer to current location. */
 
@@ -102,7 +120,7 @@ struct _GtkPolarPlot {
     gboolean        cursinfo;   /*!< Track the mouse cursor. */
     gboolean        extratick;  /*!< Show extra ticks */
 
-    GValue          font;       /*!< Default font */
+    gchar          *font;       /*!< Default font name */
 };
 
 struct _GtkPolarPlotClass {

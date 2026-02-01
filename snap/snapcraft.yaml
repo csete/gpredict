@@ -22,7 +22,6 @@ parts:
             - libgtk-3-dev
             - libcurl4-openssl-dev
             - libglib2.0-dev
-            - libgoocanvas-2.0-dev
         stage-packages:
             - libcanberra-gtk3-module
 

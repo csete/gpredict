@@ -205,12 +205,10 @@ static void coverage_toggled(GtkCheckMenuItem * item, gpointer data)
         covcol = 0x00000000;
     }
 
-    g_object_set(obj->range1, "fill-color-rgba", covcol, NULL);
-
-    if (obj->newrcnum == 2)
-    {
-        g_object_set(obj->range2, "fill-color-rgba", covcol, NULL);
-    }
+    (void)covcol;  /* coverage color is applied during on_draw */
+    
+    /* request redraw to update coverage display */
+    gtk_widget_queue_draw(satmap->canvas);
 }
 
 /**

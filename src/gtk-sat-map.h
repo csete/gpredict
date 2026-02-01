@@ -4,7 +4,6 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <goocanvas.h>
 #include <gtk/gtk.h>
 
 #include "gtk-sat-data.h"
@@ -34,14 +33,14 @@ typedef struct {
 /** Data storage for ground tracks */
 typedef struct {
     GSList         *latlon;     /*!< List of ssp_t */
-    GSList         *lines;      /*!< List of GooCanvasPolyLine */
+    GSList         *lines;      /*!< List of line segments (stored as point arrays) */
 } ground_track_t;
 
 /**
  * Satellite object.
  *
  * This data structure represents a satellite object on the map. It consists of a
- * small square representing the position, a label showinf the satellite name, and
+ * small square representing the position, a label showing the satellite name, and
  * the range circle. The range circle can have one or two parts, depending on
  * whether it is split or not. The oldrcnum and newrcnum fields are used for
  * keeping track of whether the range circle has one or two parts.
@@ -54,13 +53,17 @@ typedef struct {
     gboolean        showcov;    /*!< Show coverage area. FIXME: redundant*/
     gboolean        istarget;   /*!< is this object the target */
 
-    /* graphical elements */
-    GooCanvasItemModel *marker; /*!< A small rectangle showing sat pos. */
-    GooCanvasItemModel *shadowm;        /*!< Shadow under satellite marker. */
-    GooCanvasItemModel *label;  /*!< Satellite name. */
-    GooCanvasItemModel *shadowl;        /*!< Shadow under satellite name */
-    GooCanvasItemModel *range1; /*!< First part of the range circle. */
-    GooCanvasItemModel *range2; /*!< Second part of the range circle. */
+    /* graphical elements - stored as coordinates for Cairo drawing */
+    gfloat          x;          /*!< X position of marker */
+    gfloat          y;          /*!< Y position of marker */
+    gchar          *nickname;   /*!< Satellite nickname for label */
+    gchar          *tooltip;    /*!< Tooltip text */
+
+    /* Range circle points */
+    gdouble        *range1_points;  /*!< First part of the range circle points. */
+    gint            range1_count;   /*!< Number of points in range1. */
+    gdouble        *range2_points;  /*!< Second part of the range circle points. */
+    gint            range2_count;   /*!< Number of points in range2. */
 
     /* book keeping */
     guint           oldrcnum;   /*!< Number of RC parts in prev. cycle. */
@@ -78,28 +81,23 @@ typedef struct {
 typedef struct {
     GtkBox          vbox;
 
-    GtkWidget      *canvas;     /*!< The canvas widget. */
-
-    GooCanvasItemModel *map;    /*!< The canvas map item. */
+    GtkWidget      *canvas;     /*!< The drawing area widget. */
 
     gdouble         left_side_lon;      /*!< Left-most longitude (used when center is not 0 lon). */
 
-    GooCanvasItemModel *qthmark;        /*!< QTH marker, e.g. small rectangle. */
-    GooCanvasItemModel *qthlabel;       /*!< Label showing the QTH name. */
+    /* Text elements */
+    gchar          *locnam_text; /*!< Location name text. */
+    gchar          *curs_text;   /*!< Cursor tracking text. */
+    gchar          *next_text;   /*!< Next event text. */
+    gchar          *sel_text;    /*!< Text showing info about the selected satellite. */
 
-    GooCanvasItemModel *locnam; /*!< Location name. */
-    GooCanvasItemModel *curs;   /*!< Cursor tracking text. */
-    GooCanvasItemModel *next;   /*!< Next event text. */
-    GooCanvasItemModel *sel;    /*!< Text showing info about the selected satellite. */
+    /* Grid line positions (calculated during draw) */
+    gboolean        grid_lines_valid;  /*!< Whether grid lines need recalculation */
 
-    GooCanvasItemModel *gridv[11];      /*!< Vertical grid lines, 30 deg resolution. */
-    GooCanvasItemModel *gridvlab[11];   /*!< Vertical grid  labels. */
-    GooCanvasItemModel *gridh[5];       /*!< Horizontal grid lines, 30 deg resolution. */
-    GooCanvasItemModel *gridhlab[5];    /*!< Horizontal grid labels. */
-
-    GooCanvasItemModel *terminator;     /*!< Outline of sun shadow on Earth. */
-
-    gdouble         terminator_last_tstamp;     /*!< Timestamp of the last terminator drawn. Used to prevent redrawing the terminator too often. */
+    /* Terminator points */
+    gdouble        *terminator_points;  /*!< Terminator polyline points. */
+    gint            terminator_count;   /*!< Number of terminator points. */
+    gdouble         terminator_last_tstamp;     /*!< Timestamp of the last terminator drawn. */
 
     gdouble         naos;       /*!< Next event time. */
     gint            ncat;       /*!< Next event catnum. */
@@ -110,7 +108,7 @@ typedef struct {
     GHashTable     *sats;       /*!< Pointer to satellites (owned by parent GtkSatModule). */
     qth_t          *qth;        /*!< Pointer to current location. */
 
-    GHashTable     *obj;        /*!< Canvas items representing each satellite. */
+    GHashTable     *obj;        /*!< Satellite objects (sat_map_obj_t) for each satellite. */
     GHashTable     *showtracks; /*!< A hash of satellites to show tracks for. */
     GHashTable     *hidecovs;   /*!< A hash of satellites to hide coverage for. */
 
@@ -134,10 +132,20 @@ typedef struct {
     gboolean        resize;     /*!< Flag indicating that the map has been resized. */
 
     gchar          *infobgd;    /*!< Background color of info text. */
+    guint32         col_qth;    /*!< QTH marker color. */
+    guint32         col_info;   /*!< Info text color. */
+    guint32         col_grid;   /*!< Grid color. */
+    guint32         col_tick;   /*!< Tick color. */
+    guint32         col_sat;    /*!< Satellite color. */
+    guint32         col_sat_sel; /*!< Selected satellite color. */
+    guint32         col_shadow; /*!< Shadow color. */
+    guint32         col_track;  /*!< Track color. */
+    guint32         col_terminator; /*!< Terminator color. */
 
     GdkPixbuf      *origmap;    /*!< Original map kept here for high quality scaling. */
+    GdkPixbuf      *map;        /*!< Scaled map for current size. */
 
-    GValue          font;       /*!< Default font */
+    gchar          *font;       /*!< Default font name */
 
 } GtkSatMap;
 

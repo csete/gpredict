@@ -5,7 +5,7 @@
 At present, MSYS2 on a Windows system is required to gather dependencies
 before building a Win32 version of gpredict using this build system.
 
-Install MSYS2, open a shell and install the Gtk3 and Goocanvas2 packages,
+Install MSYS2, open a shell and install the Gtk3 packages,
 following the instructions from GTK team:
 https://www.gtk.org/download/windows.php
 

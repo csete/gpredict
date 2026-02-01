@@ -4,7 +4,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
-#include <goocanvas.h>
 #include <gtk/gtk.h>
 
 #include "gtk-sat-data.h"
@@ -29,6 +28,12 @@ extern "C" {
 typedef struct _GtkPolarView GtkPolarView;
 typedef struct _GtkPolarViewClass GtkPolarViewClass;
 
+/** Time tick data for sky track */
+typedef struct {
+    gfloat          x;          /*!< X coordinate */
+    gfloat          y;          /*!< Y coordinate */
+    gchar           text[6];    /*!< Time string */
+} track_tick_t;
 
 /** Satellite object on graph. */
 typedef struct {
@@ -36,10 +41,13 @@ typedef struct {
     gboolean        showtrack;  /*!< Show ground track. */
     gboolean        istarget;   /*!< Is this object the target. */
     pass_t         *pass;       /*!< Details of the current pass. */
-    GooCanvasItemModel *marker; /*!< Item showing position of satellite. */
-    GooCanvasItemModel *label;  /*!< Item showing the satellite name. */
-    GooCanvasItemModel *track;  /*!< Sky track. */
-    GooCanvasItemModel *trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
+    gfloat          x;          /*!< X position of marker */
+    gfloat          y;          /*!< Y position of marker */
+    gchar          *nickname;   /*!< Satellite nickname for label */
+    gchar          *tooltip;    /*!< Tooltip text */
+    GSList         *track_points; /*!< List of track points (each point is two gdoubles: x,y) */
+    track_tick_t    trtick[TRACK_TICK_NUM]; /*!< Time ticks along the sky track */
+    gint            catnum;     /*!< Catalogue number */
 } sat_obj_t;
 
 #define SAT_OBJ(obj) ((sat_obj_t *)obj)
@@ -67,16 +75,21 @@ typedef enum {
 struct _GtkPolarView {
     GtkBox          vbox;
 
-    GtkWidget      *canvas;     /*!< The canvas widget */
+    GtkWidget      *canvas;     /*!< The drawing area widget */
 
-    GooCanvasItemModel *bgd;
-    GooCanvasItemModel *C00, *C30, *C60;        /*!< 0, 30 and 60 deg elevation circles */
-    GooCanvasItemModel *hl, *vl;        /*!< horizontal and vertical lines */
-    GooCanvasItemModel *N, *S, *E, *W;  /*!< North, South, East and West labels */
-    GooCanvasItemModel *locnam; /*!< Location name */
-    GooCanvasItemModel *curs;   /*!< cursor tracking text */
-    GooCanvasItemModel *next;   /*!< next event text */
-    GooCanvasItemModel *sel;    /*!< Text showing info about selected satellite. */
+    /* Colors stored for drawing */
+    guint32         col_bgd;    /*!< Background color */
+    guint32         col_axis;   /*!< Axis color */
+    guint32         col_tick;   /*!< Tick label color */
+    guint32         col_info;   /*!< Info text color */
+    guint32         col_sat;    /*!< Satellite color */
+    guint32         col_sat_sel; /*!< Selected satellite color */
+    guint32         col_track;  /*!< Track color */
+
+    /* Text elements */
+    gchar          *curs_text;  /*!< Cursor tracking text */
+    gchar          *next_text;  /*!< Next event text */
+    gchar          *sel_text;   /*!< Selected satellite info text */
 
     GHashTable     *showtracks_on;
     GHashTable     *showtracks_off;
@@ -90,7 +103,7 @@ struct _GtkPolarView {
     GHashTable     *sats;       /*!< Satellites. */
     qth_t          *qth;        /*!< Pointer to current location. */
 
-    GHashTable     *obj;        /*!< Canvas items representing each visible satellite */
+    GHashTable     *obj;        /*!< Satellite objects (sat_obj_t) for each visible satellite */
 
     guint           cx;         /*!< center X */
     guint           cy;         /*!< center Y */
@@ -111,7 +124,7 @@ struct _GtkPolarView {
     gboolean        showtrack;  /*!< Automatically show sky tracks. */
     gboolean        resize;     /*!< Flag indicating that the view has been resized. */
 
-    GValue          font;       /*!< Default font */
+    gchar          *font;       /*!< Default font name */
 };
 
 struct _GtkPolarViewClass {

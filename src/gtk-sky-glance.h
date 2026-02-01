@@ -30,7 +30,6 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <goocanvas.h>
 #include <gtk/gtk.h>
 #include "gtk-sat-data.h"
 
@@ -57,7 +56,12 @@ typedef struct _GtkSkyGlanceClass GtkSkyGlanceClass;
 typedef struct {
     guint           catnum;     /* Catalog number of satellite */
     pass_t         *pass;       /* Details of the corresponding pass. */
-    GooCanvasItem  *box;        /* Canvas item showing the pass */
+    gdouble         x;          /* X position of box */
+    gdouble         y;          /* Y position of box */
+    gdouble         w;          /* Width of box */
+    gdouble         h;          /* Height of box */
+    guint32         bcol;       /* Border color */
+    guint32         fcol;       /* Fill color */
 } sky_pass_t;
 
 
@@ -68,16 +72,16 @@ typedef struct {
 struct _GtkSkyGlance {
     GtkBox          vbox;
 
-    GtkWidget      *canvas;
+    GtkWidget      *canvas;     /*!< The drawing area widget */
 
     GHashTable     *sats;       /* Local copy of satellites. */
     qth_t          *qth;        /* Pointer to current location. */
 
-    GSList         *passes;     /* Canvas items representing each pass.
-                                 * Each element in the list is of type sky_pass_t.
-                                 */
-    GSList         *satlab;     /* Canvas items showing satellite names. */
+    GSList         *passes;     /* List of sky_pass_t representing each pass. */
+    GSList         *satlab;     /* List of satellite label data (name, color, position). */
 
+    /* Satellite label data structure */
+    /* Each element is a struct { gchar *name; guint32 color; gdouble x, y; } */
 
     guint           x0;
     guint           y0;
@@ -94,20 +98,28 @@ struct _GtkSkyGlance {
                                  */
     gdouble         ts, te;     /* Start and end times (Julian date) */
 
-    GSList         *majors;     /* Major ticks for every hour */
-    GSList         *minors;     /* Minor ticks for every 30 min */
-    GSList         *labels;     /* Tick labels for every hour */
+    /* Time tick data */
+    gint            num_ticks;  /* Number of time ticks */
+    gdouble        *major_x;    /* X positions of major ticks */
+    gdouble        *minor_x;    /* X positions of minor ticks */
+    gchar         **tick_labels; /* Tick label strings */
 
-    GooCanvasItem  *bgd;        /* Canvas background */
-    GooCanvasItem  *footer;     /* Footer area with time ticks and labels */
-    GooCanvasItem  *axisl;      /* Axis label */
-    GooCanvasItem  *cursor;     /* Vertical line tracking the cursor */
-    GooCanvasItem  *timel;      /* Label showing time under cursor */
+    /* Cursor tracking */
+    gdouble         cursor_x;   /* Current cursor X position */
+    gchar          *time_label; /* Time label text at cursor */
 
-    GValue          font;       /*!< Default font */
+    gchar          *font;       /*!< Default font name */
 
 };
 
+/** Satellite label structure for drawing */
+typedef struct {
+    gchar          *name;       /* Satellite name */
+    guint32         color;      /* Label color */
+    gdouble         x;          /* X position */
+    gdouble         y;          /* Y position */
+    gint            anchor;     /* Anchor type: 0=west, 1=east */
+} sat_label_t;
 struct _GtkSkyGlanceClass {
     GtkBoxClass     parent_class;
 };

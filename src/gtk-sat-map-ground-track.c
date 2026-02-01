@@ -34,6 +34,7 @@
 #endif
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <math.h>
 
 #include "config-keys.h"
 #include "gtk-sat-map.h"
@@ -46,10 +47,17 @@
 #include "sgpsdp/sgp4sdp4.h"
 
 
+/** Structure to hold line segment data */
+typedef struct {
+    gdouble        *points;     /*!< Array of x,y coordinate pairs */
+    gint            count;      /*!< Number of points in this segment */
+} line_segment_t;
+
 static void     create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                                  sat_map_obj_t * obj);
 static gboolean ssp_wrap_detected(GtkSatMap * satmap, gdouble x1, gdouble x2);
 static void     free_ssp(gpointer ssp, gpointer data);
+static void     free_line_segment(gpointer data);
 
 
 /**
@@ -214,6 +222,17 @@ void ground_track_update(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     }
 }
 
+/** Free a line segment structure */
+static void free_line_segment(gpointer data)
+{
+    line_segment_t *seg = (line_segment_t *)data;
+    if (seg)
+    {
+        g_free(seg->points);
+        g_free(seg);
+    }
+}
+
 /**
  * Delete the ground track for a satellite.
  *
@@ -226,46 +245,18 @@ void ground_track_update(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
 void ground_track_delete(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                          sat_map_obj_t * obj, gboolean clear_ssp)
 {
-    guint           i, n;
-    gint            j;
-    GooCanvasItemModel *line;
-    GooCanvasItemModel *root;
-
+    (void)satmap;
+    (void)sat;
     (void)qth;
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s: Deleting ground track for %s"),
                 __func__, sat->nickname);
 
-    root = goo_canvas_get_root_item_model(GOO_CANVAS(satmap->canvas));
-
-    /* remove plylines */
+    /* Free line segments */
     if (obj->track_data.lines != NULL)
     {
-        n = g_slist_length(obj->track_data.lines);
-
-        for (i = 0; i < n; i++)
-        {
-            /* get line */
-            line =
-                GOO_CANVAS_ITEM_MODEL(g_slist_nth_data
-                                      (obj->track_data.lines, i));
-
-            /* find its ID and remove it */
-            j = goo_canvas_item_model_find_child(root, line);
-            if (j == -1)
-            {
-                sat_log_log(SAT_LOG_LEVEL_ERROR,
-                            _("%s: Could not find part %d of ground track"),
-                            __func__, j);
-            }
-            else
-            {
-                goo_canvas_item_model_remove_child(root, j);
-            }
-        }
-
-        g_slist_free(obj->track_data.lines);
+        g_slist_free_full(obj->track_data.lines, free_line_segment);
         obj->track_data.lines = NULL;
     }
 
@@ -285,6 +276,12 @@ void ground_track_delete(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
 
         obj->track_orbit = 0;
     }
+
+    /* Request redraw */
+    if (satmap && satmap->canvas)
+    {
+        gtk_widget_queue_draw(satmap->canvas);
+    }
 }
 
 /**
@@ -300,19 +297,16 @@ static void free_ssp(gpointer ssp, gpointer data)
     g_free(ssp);
 }
 
-/** Create polylines. */
+/** Create polylines (line segments) for Cairo drawing. */
 static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                              sat_map_obj_t * obj)
 {
     ssp_t          *ssp, *buff; /* map coordinates */
     double          lastx, lasty;
     GSList         *points = NULL;
-    GooCanvasItemModel *root;
-    GooCanvasItemModel *line;
-    GooCanvasPoints *gpoints;
     guint           start;
     guint           i, j, n, num_points;
-    guint32         col;
+    line_segment_t *segment;
 
     (void)sat;
     (void)qth;
@@ -323,9 +317,6 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
     start = 0;
     num_points = 0;
     n = g_slist_length(obj->track_data.latlon);
-    col = mod_cfg_get_int(satmap->cfgdata,
-                          MOD_CFG_MAP_SECTION,
-                          MOD_CFG_MAP_TRACK_COL, SAT_CFG_INT_MAP_TRACK_COL);
 
     /* loop over each SSP */
     for (i = 0; i < n; i++)
@@ -353,36 +344,24 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                 /* we need at least 2 points to draw a line */
                 if (num_points > 1)
                 {
-                    /* convert SSPs to GooCanvasPoints */
-                    gpoints = goo_canvas_points_new(num_points);
-                    for (j = 0; j < num_points; j++)
+                    /* Create a line segment with points array */
+                    segment = g_try_new(line_segment_t, 1);
+                    if (segment)
                     {
-                        buff = (ssp_t *) g_slist_nth_data(points, j);
-                        gpoints->coords[2 * j] = buff->lon;
-                        gpoints->coords[2 * j + 1] = buff->lat;
+                        segment->count = num_points;
+                        segment->points = g_new(gdouble, num_points * 2);
+
+                        for (j = 0; j < num_points; j++)
+                        {
+                            buff = (ssp_t *)g_slist_nth_data(points, j);
+                            segment->points[2 * j] = buff->lon;
+                            segment->points[2 * j + 1] = buff->lat;
+                        }
+
+                        /* Store segment in sat object */
+                        obj->track_data.lines =
+                            g_slist_append(obj->track_data.lines, segment);
                     }
-
-                    /* create a new polyline using the current set of points */
-                    root =
-                        goo_canvas_get_root_item_model(GOO_CANVAS
-                                                       (satmap->canvas));
-
-                    line = goo_canvas_polyline_model_new(root, FALSE, 0,
-                                                         "points", gpoints,
-                                                         "line-width", 1.0,
-                                                         "stroke-color-rgba",
-                                                         col, "line-cap",
-                                                         CAIRO_LINE_CAP_SQUARE,
-                                                         "line-join",
-                                                         CAIRO_LINE_JOIN_MITER,
-                                                         NULL);
-                    goo_canvas_points_unref(gpoints);
-                    goo_canvas_item_model_lower(line, obj->marker);
-
-                    /* store line in sat object */
-                    obj->track_data.lines =
-                        g_slist_append(obj->track_data.lines, line);
-
                 }
 
                 /* reset parameters and continue with a new set */
@@ -421,34 +400,34 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
 
     if (num_points > 1)
     {
-        /* convert SSPs to GooCanvasPoints */
-        gpoints = goo_canvas_points_new(num_points);
-        for (j = 0; j < num_points; j++)
+        /* Create a line segment with points array */
+        segment = g_try_new(line_segment_t, 1);
+        if (segment)
         {
-            buff = (ssp_t *) g_slist_nth_data(points, j);
-            gpoints->coords[2 * j] = buff->lon;
-            gpoints->coords[2 * j + 1] = buff->lat;
+            segment->count = num_points;
+            segment->points = g_new(gdouble, num_points * 2);
+
+            for (j = 0; j < num_points; j++)
+            {
+                buff = (ssp_t *)g_slist_nth_data(points, j);
+                segment->points[2 * j] = buff->lon;
+                segment->points[2 * j + 1] = buff->lat;
+            }
+
+            /* Store segment in sat object */
+            obj->track_data.lines =
+                g_slist_append(obj->track_data.lines, segment);
         }
-
-        /* create a new polyline using the current set of points */
-        root = goo_canvas_get_root_item_model(GOO_CANVAS(satmap->canvas));
-
-        line = goo_canvas_polyline_model_new(root, FALSE, 0,
-                                             "points", gpoints,
-                                             "line-width", 1.0,
-                                             "stroke-color-rgba", col,
-                                             "line-cap", CAIRO_LINE_CAP_SQUARE,
-                                             "line-join",
-                                             CAIRO_LINE_JOIN_MITER, NULL);
-        goo_canvas_points_unref(gpoints);
-        goo_canvas_item_model_lower(line, obj->marker);
-
-        /* store line in sat object */
-        obj->track_data.lines = g_slist_append(obj->track_data.lines, line);
 
         /* reset parameters and continue with a new set */
         g_slist_foreach(points, free_ssp, NULL);
         g_slist_free(points);
+    }
+
+    /* Request redraw */
+    if (satmap && satmap->canvas)
+    {
+        gtk_widget_queue_draw(satmap->canvas);
     }
 }
 

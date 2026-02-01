@@ -31,7 +31,6 @@ for successful compilation of Gpredict:
 
 - Gtk+ 3 or later
 - GLib 2.32 or later
-- GooCanvas 2 or 3
 - Libcurl 7.16 or later
 - Hamlib (runtime only, not required for build)
 
@@ -40,7 +39,7 @@ often with -dev or -devel in the package name, e.g. libgtk-3-dev. On Debian and
 Ubuntu systems you can install the build dependencies using:
 
   sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
-  sudo apt install pkg-config libglib2.0-dev libgtk-3-dev libgoocanvas-2.0-dev
+  sudo apt install pkg-config libglib2.0-dev libgtk-3-dev
 
 
 To build and install gpredict from source, first unpack the source package:
