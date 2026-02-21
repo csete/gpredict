@@ -105,6 +105,15 @@ int main(int argc, char *argv[])
     bind_textdomain_codeset(PACKAGE, "UTF-8");
     textdomain(PACKAGE);
 #endif
+
+	/* Auto-detect macOS and set GDK backend to Quartz for native rendering */
+#ifdef __APPLE__
+    /* Only set if not already defined by user */
+    if (g_getenv("GDK_BACKEND") == NULL) {
+        g_setenv("GDK_BACKEND", "quartz", 0);
+    }
+#endif
+	
     gtk_init(&argc, &argv);
 
     context = g_option_context_new("");
