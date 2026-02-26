@@ -46,13 +46,6 @@
 #include "sat-log.h"
 #include "sgpsdp/sgp4sdp4.h"
 
-
-/** Structure to hold line segment data */
-typedef struct {
-    gdouble        *points;     /*!< Array of x,y coordinate pairs */
-    gint            count;      /*!< Number of points in this segment */
-} line_segment_t;
-
 static void     create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                                  sat_map_obj_t * obj);
 static gboolean ssp_wrap_detected(GtkSatMap * satmap, gdouble x1, gdouble x2);
@@ -387,7 +380,7 @@ static void create_polylines(GtkSatMap * satmap, sat_t * sat, qth_t * qth,
                 /* add SSP to list */
                 points = g_slist_prepend(points, ssp);
                 lastx = ssp->lon;
-                lasty = ssp->lon;
+                lasty = ssp->lat;
             }
             /* else do nothing */
             else g_free(ssp);

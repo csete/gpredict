@@ -457,8 +457,6 @@ static gboolean on_draw(GtkWidget * widget, cairo_t * cr, gpointer data)
     gchar           hmf = ' ';
     guint32         globe_shadow_col;
     GSList         *line_node;
-    gdouble        *line_points;
-    guint           num_points;
 
     (void)widget;
 
@@ -613,20 +611,18 @@ static gboolean on_draw(GtkWidget * widget, cairo_t * cr, gpointer data)
                 line_node = obj->track_data.lines;
                 while (line_node)
                 {
-                    line_points = (gdouble *)line_node->data;
-                    if (line_points)
+                    line_segment_t *seg = (line_segment_t *)line_node->data;
+
+                    if (seg && seg->points && seg->count > 1)
                     {
-                        num_points = (guint)line_points[0];
-                        if (num_points > 1)
+                        cairo_move_to(cr, seg->points[0], seg->points[1]);
+
+                        for (i = 1; i < (guint)seg->count; i++)
                         {
-                            cairo_move_to(cr, line_points[1], line_points[2]);
-                            for (i = 1; i < num_points; i++)
-                            {
-                                cairo_line_to(cr, line_points[2 * i + 1],
-                                              line_points[2 * i + 2]);
-                            }
-                            cairo_stroke(cr);
+                            cairo_line_to(cr, seg->points[2 * i], 
+                                              seg->points[2 * i + 1]);
                         }
+                        cairo_stroke(cr);
                     }
                     line_node = line_node->next;
                 }
