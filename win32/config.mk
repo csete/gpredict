@@ -29,11 +29,17 @@ MINGW_ROOT=/mingw64
 PKG_CONFIG_PATH = "$(abspath $(MINGW_ROOT)/lib/pkgconfig)"
 
 # binary dependencies to be deployed with gpredict.exe
+# librsvg-2-2.dll and libxml2-16.dll are needed for pixbufloader_svg.dll
+# gspawn-win64-helper.exe and gspawn-win64-helper-console.exe are required for hyperlinks to launch
 BINDEPS = \
 	$(wildcard $(MINGW_ROOT)/bin/*.dll) \
-	$(MINGW_ROOT)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll \
+	$(MINGW_ROOT)/lib/gdk-pixbuf-2.0/2.10.0/loaders/pixbufloader_svg.dll \
 	$(MINGW_ROOT)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-png.dll \
-	$(MINGW_ROOT)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-jpeg.dll
+	$(MINGW_ROOT)/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-jpeg.dll \
+	$(MINGW_ROOT)/bin/librsvg-2-2.dll \
+	$(MINGW_ROOT)/bin/libxml2-16.dll \
+	$(MINGW_ROOT)/bin/gspawn-win64-helper.exe \
+	$(MINGW_ROOT)/bin/gspawn-win64-helper-console.exe
 
 # where to put the loaders.cache file
 LOADERS = lib/gdk-pixbuf-2.0/2.10.0

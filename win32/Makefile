@@ -16,9 +16,6 @@ nxjsondir = $(gpreddir)/nxjson
 
 # tools
 CC = gcc -Wall -O2 -mms-bitfields -DWIN32
-AS = as
-DLLWRAP = dllwrap
-DLLWRAP_FLAGS = --as=$(AS) --export-all --driver-name $(CC) -s
 RC = windres
 # NB: .rc file create various version formats from the numbers
 RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN32__ \
@@ -27,14 +24,12 @@ RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN3
 # libraries
 GTKLIBS := $(shell pkg-config --define-prefix --libs gtk+-3.0)
 GLIBLIB := $(shell pkg-config --define-prefix --libs glib-2.0 gthread-2.0)
-GOOLIBS := $(shell pkg-config --define-prefix --libs goocanvas-3.0)
-GUI_LIBS = $(GTKLIBS) $(GLIBLIB) $(GOOLIBS) libsgpsdp.lib -lwinmm -lwininet -lws2_32
+GUI_LIBS = $(GTKLIBS) $(GLIBLIB) libsgpsdp.lib -lwinmm -lwininet -lws2_32
 LIBS = -lm
 
 # flags/defines
 GTK_CFLAGS := $(shell pkg-config --define-prefix --cflags gtk+-3.0)
-GOO_CFLAGS := $(shell pkg-config --define-prefix --cflags goocanvas-3.0)
-CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir) $(GOO_CFLAGS)
+CFLAGS = -DVERSION_SHORT=$(VERSION_SHORT) -DHAVE_CONFIG_H -DPACKAGE_LOCALE_DIR=\"/\" -I. -I.. -I$(gpreddir)
 
 # source paths
 vpath %.c $(sgpsdpdir)
@@ -63,31 +58,6 @@ NXJSONSRC = \
 
 NXJSONOBJ = $(NXJSONSRC:.c=.o)
 
-GOOCANVSRC = \
-    goocanvasatk.c          \
-    goocanvasellipse.c      \
-	goocanvasenumtypes.c	\
-	goocanvasgroup.c		\
-	goocanvasimage.c		\
-	goocanvasitem.c			\
-	goocanvasitemmodel.c	\
-	goocanvasitemsimple.c	\
-	goocanvasmarshal.c		\
-	goocanvaspolyline.c		\
-	goocanvaspath.c			\
-	goocanvasprivate.h		\
-	goocanvasrect.c			\
-	goocanvasstyle.c		\
-	goocanvastable.c		\
-	goocanvastext.c			\
-	goocanvasutils.c		\
-	goocanvaswidget.c		\
-	goocanvas.c 
-
-
-GOOCANVOBJ = $(GOOCANVSRC:.c=.o)
-
-
 GPREDICTSRC = \
 	about.c \
 	compat.c \
@@ -95,8 +65,8 @@ GPREDICTSRC = \
 	gpredict-help.c \
 	gpredict-utils.c \
 	gtk-azel-plot.c \
-    gtk-event-list.c \
-    gtk-event-list-popup.c \
+	gtk-event-list.c \
+	gtk-event-list-popup.c \
 	gtk-freq-knob.c \
 	gtk-polar-plot.c \
 	gtk-polar-view.c \
@@ -113,7 +83,7 @@ GPREDICTSRC = \
 	gtk-sat-module.c \
 	gtk-sat-module-popup.c \
 	gtk-sat-module-tmg.c \
-    gtk-sat-popup-common.c \
+	gtk-sat-popup-common.c \
 	gtk-sat-selector.c \
 	gtk-single-sat.c \
 	gtk-sky-glance.c \
@@ -184,14 +154,13 @@ OBJS = $(SGPSDPOBJ) $(NXJSONOBJ) $(GPREDICTOBJ)
 	$(CC) -c $(CFLAGS) $(GTK_CFLAGS) $<
 	$(CC) -MM $(CFLAGS) $(GTK_CFLAGS) $< > $*.d 
 
-
 # targets begin
 
 all: libsgpsdp.dll gpredict.exe gpredict-con.exe
 
-dist: gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip
+dist: gpredict-$(VERSION_SHORT).zip
 
-gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
+gpredict-$(VERSION_SHORT).zip: all
 	mkdir -p gpredict/doc
 	cp -p ../AUTHORS ../COPYING ../NEWS ../README gpredict/doc
 	mkdir -p gpredict/share/gpredict
@@ -206,9 +175,14 @@ gpredict-$(GITMAJ).$(GITMIN).$(GITBLD).zip: all
 	cp -rp $(SCHEMAS) gpredict/share/glib-2.0
 	mkdir -p gpredict/share/icons/Adwaita
 	cp -rp $(ADWAITA)/scalable gpredict/share/icons/Adwaita/
-	cp -rp $(ADWAITA)/scalable-up-to-32 gpredict/share/icons/Adwaita/
 	cp -rp $(ADWAITA)/index.theme gpredict/share/icons/Adwaita/
 	cp -rp $(ADWAITA)/icon-theme.cache gpredict/share/icons/Adwaita/
+	
+	# gtk runtime
+	for dll in $(shell ldd ./gpredict.exe | grep /mingw64 | awk '{print $$3}'); do \
+		cp -p "$$dll" gpredict/; \
+	done
+	
 	zip -r $@ gpredict
 	rm -rf gpredict
 
@@ -223,10 +197,6 @@ gpredict.exe gpredict-con.exe: $(OBJS) gpredict_res.o
 gpredict_res.o: gpredict.rc
 	$(RC) $(RCFLAGS) gpredict.rc $@
 
-libgoocanvas.dll: $(GOOCANVOBJ)
-	$(CC) -shared $(CFLAGS) $(GTK_CFLAGS) $(GOOCANVOBJ) $(GTKLIBS) -lm -lmingwex \
-	-Wl,--enable-auto-image-base -Wl,--out-implib,libgoocanvas.lib -o libgoocanvas.dll
-
 libsgpsdp.dll:  $(SGPSDPOBJ)
 	$(CC) -shared $(CFLAGS) $(GTK_CFLAGS) $(SGPSDPOBJ) $(GLIBLIB) -lm -lmingwex \
 	-Wl,--enable-auto-image-base -Wl,--out-implib,libsgpsdp.lib -o libsgpsdp.dll
@@ -234,4 +204,3 @@ libsgpsdp.dll:  $(SGPSDPOBJ)
 clean:
 	rm -f *.o *.d *.def *.a *.lib *.dll *.exe *.zip
 	rm -rf gpredict
-
