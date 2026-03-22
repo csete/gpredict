@@ -1,10 +1,10 @@
-Changes in version 2.5.1 (22 March 2025)
+Changes in version 2.5.1 (22 March 2026)
 
 - Speed up TLE update when updating from network
 - Fix broken scroll wheel in radio and rotator controllers
 
 
-Changes in version 2.5 (22 March 2025)
+Changes in version 2.5 (22 March 2026)
 
 - Implemented drawing function using native GTK3/Cairo drawing
 - Automatically detect macOS and set GDK_BACKEND to Quartz
