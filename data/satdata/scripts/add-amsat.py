@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Add satellites from AMSAT website that were not in the Celestrak database
 # 

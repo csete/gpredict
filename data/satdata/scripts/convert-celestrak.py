@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # This script is used to create the initial satellite data repository by
 # converting Celestrak TLE files into a satellites.dat and .cat files.
