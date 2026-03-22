@@ -528,6 +528,7 @@ GtkWidget      *gtk_rot_knob_new(gdouble min, gdouble max, gdouble val)
 
         g_signal_connect(knob->evtbox[i], "button_press_event",
                          (GCallback) on_button_press, widget);
+        gtk_widget_add_events(GTK_WIDGET(knob->evtbox[i]), GDK_SCROLL_MASK);
         g_signal_connect(knob->evtbox[i], "scroll_event",
                          (GCallback) on_button_scroll, widget);
 
