@@ -1,4 +1,5 @@
 *~
+*.lock
 .version
 .dirstamp
 Makefile
