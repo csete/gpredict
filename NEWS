@@ -1,9 +1,9 @@
-Changes in version 2.5 (next release)
+Changes in version 2.5 (22 March 2025)
 
 - Implemented drawing function using native GTK3/Cairo drawing
 - Automatically detect macOS and set GDK_BACKEND to Quartz
 - Updated Windows build files
-- Fixed potential buffer overflow in transponder updaqte function
+- Fixed potential buffer overflow in transponder update function
 - Updated bundled satellite data
 
 
