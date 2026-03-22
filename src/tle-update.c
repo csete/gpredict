@@ -564,12 +564,6 @@ void tle_update_from_network(gboolean silent,
                 text = g_strdup_printf(_("Fetching %s"), files[i]);
                 gtk_label_set_text(GTK_LABEL(label1), text);
                 g_free(text);
-
-                /* Force the drawing queue to be processed otherwise there will
-                   not be any visual feedback, ie. frozen GUI
-                   - see Gtk+ FAQ http://www.gtk.org/faq/#AEN602
-                 */
-                while (g_main_context_iteration(NULL, FALSE));
             }
 
             /* create local cache file ~/.config/Gpredict/satdata/cache/file-%d.tle */
