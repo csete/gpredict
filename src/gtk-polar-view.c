@@ -40,7 +40,7 @@
 
 #define POLV_DEFAULT_SIZE 100
 #define POLV_DEFAULT_MARGIN 25
-#define MARKER_SIZE_HALF 2
+#define MARKER_SIZE_HALF 3
 
 /* extra size for line outside 0 deg circle (inside margin) */
 #define POLV_LINE_EXTRA 5

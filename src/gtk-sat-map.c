@@ -45,7 +45,7 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
 
-#define MARKER_SIZE_HALF    1
+#define MARKER_SIZE_HALF    3
 
 /* Update terminator every 30 seconds */
 #define TERMINATOR_UPDATE_INTERVAL (15.0/86400.0)
