@@ -287,11 +287,10 @@ void trsp_update_files(gchar * input_file)
                         *key = nx_json_get(json_obj, "mode_id")->int_value;
                         nmode = g_hash_table_lookup(modes_hash, key);
                         if (nmode != NULL)
-                            sprintf(m_trsp.mode, "%s", nmode->modname);
+                            g_strlcpy(m_trsp.mode, nmode->modname, sizeof(m_trsp.mode));
                         else
-                            sprintf(m_trsp.mode, "%lli",
-                                    nx_json_get(json_obj,
-                                                "mode_id")->int_value);
+                            g_snprintf(m_trsp.mode, sizeof(m_trsp.mode), "%lli",
+                                       nx_json_get(json_obj, "mode_id")->int_value);
 
                         m_trsp.invert =
                             nx_json_get(json_obj, "invert")->int_value;
