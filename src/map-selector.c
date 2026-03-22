@@ -22,7 +22,6 @@
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-#include <sys/stat.h>
 
 #include "compat.h"
 #include "map-selector.h"
@@ -76,8 +75,8 @@ static GtkWidget *create_preview_widget(const gchar * selection)
     gchar          *buff;
     gint            w, h;
     gint64          size;
-    struct stat     sb;
-    gchar          *bf = NULL;
+    GStatBuf        sb;
+	gchar          *bf = NULL;
 
 
     label = gtk_label_new(NULL);
@@ -148,8 +147,8 @@ static void update_preview_widget(GtkFileChooser * chooser, gpointer data)
     GdkPixbuf      *obuf, *sbuf;
     gint            w, h;
     gint64          size;
-    struct stat     sb;
-    gchar          *buff = NULL;
+    GStatBuf        sb;
+	gchar          *buff = NULL;
 
 
     sel = gtk_file_chooser_get_preview_filename(chooser);
