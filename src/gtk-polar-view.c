@@ -1009,11 +1009,6 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
     gfloat          x, y;
     gdouble         now;
     gchar          *losstr;
-    gchar          *text;
-    guint           num, i;
-    pass_detail_t  *detail;
-    gdouble        *point;
-    guint           tres, ttidx;
 
     (void)key;
 
