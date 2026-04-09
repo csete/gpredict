@@ -38,6 +38,7 @@ const gchar *authors[] = {
     "A. Maitland Bottoms, AA4HS",
     "A. Walker",
     "Alan Moffet, KE7IJZ",
+    "Andi Chandler",
     "AsciiWolf",
     "Baris Dinc, TA7W",
     "Bastian Germann",
