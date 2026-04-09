@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 14:07+0100\n"
+"POT-Creation-Date: 2026-04-09 10:47+0200\n"
 "PO-Revision-Date: 2017-12-07 02:24+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "X-Generator: Launchpad (build 18521)\n"
 
 #. create window title and file name for window icon
-#: ../src/about.c:107 ../src/main.c:230
+#: ../src/about.c:110 ../src/main.c:239
 msgid "Gpredict"
 msgstr ""
 
-#: ../src/about.c:110
+#: ../src/about.c:113
 msgid "Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
-#: ../src/about.c:123
+#: ../src/about.c:126
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -178,25 +178,23 @@ msgstr ""
 msgid "%s called with gdk_rgba = NULL"
 msgstr ""
 
-#: ../src/gtk-azel-plot.c:556
-msgid "Local Time"
-msgstr "Τοπική ώρα"
-
-#: ../src/gtk-azel-plot.c:566 ../src/gtk-sky-glance.c:527
-#: ../src/pass-to-txt.c:155
-msgid "UTC"
-msgstr ""
-
-#. Az legend
-#: ../src/gtk-azel-plot.c:585 ../src/gtk-event-list.c:52
+#: ../src/gtk-azel-plot.c:355 ../src/gtk-event-list.c:52
 #: ../src/gtk-sat-list.c:52 ../src/sat-pass-dialogs.c:99
 msgid "Az"
 msgstr ""
 
-#. El legend
-#: ../src/gtk-azel-plot.c:594 ../src/gtk-event-list.c:53
+#: ../src/gtk-azel-plot.c:365 ../src/gtk-event-list.c:53
 #: ../src/gtk-sat-list.c:53 ../src/sat-pass-dialogs.c:100
 msgid "El"
+msgstr ""
+
+#: ../src/gtk-azel-plot.c:374
+msgid "Local Time"
+msgstr "Τοπική ώρα"
+
+#: ../src/gtk-azel-plot.c:374 ../src/gtk-sky-glance.c:374
+#: ../src/pass-to-txt.c:155
+msgid "UTC"
 msgstr ""
 
 #: ../src/gtk-event-list.c:50 ../src/gtk-sat-list.c:50
@@ -282,8 +280,8 @@ msgstr ""
 msgid "AOS"
 msgstr ""
 
-#: ../src/gtk-event-list.c:595 ../src/tle-update.c:1362
-#: ../src/trsp-update.c:721
+#: ../src/gtk-event-list.c:595 ../src/tle-update.c:1356
+#: ../src/trsp-update.c:720
 msgid "Never"
 msgstr ""
 
@@ -313,38 +311,38 @@ msgstr ""
 msgid "Use mouse buttons and wheel to change value"
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:399
+#: ../src/gtk-polar-plot.c:378
 #, c-format
 msgid "%s:%d: Incorrect polar plot orientation."
 msgstr ""
 
-#: ../src/gtk-polar-plot.c:472 ../src/gtk-polar-view.c:676
+#: ../src/gtk-polar-plot.c:503 ../src/gtk-polar-view.c:431
 msgid "N"
 msgstr "Β"
 
-#: ../src/gtk-polar-plot.c:482 ../src/gtk-polar-view.c:686
-msgid "S"
-msgstr "Ν"
-
-#: ../src/gtk-polar-plot.c:492 ../src/gtk-polar-view.c:696
+#: ../src/gtk-polar-plot.c:511 ../src/gtk-polar-view.c:439
 msgid "E"
 msgstr "Α"
 
-#: ../src/gtk-polar-plot.c:502 ../src/gtk-polar-view.c:706
+#: ../src/gtk-polar-plot.c:522 ../src/gtk-polar-view.c:447
+msgid "S"
+msgstr "Ν"
+
+#: ../src/gtk-polar-plot.c:530 ../src/gtk-polar-view.c:455
 msgid "W"
 msgstr "Δ"
 
-#: ../src/gtk-polar-view.c:243
+#: ../src/gtk-polar-view.c:911
 #, c-format
-msgid "%s:%d: Could not find satellite (%d) in hash table"
-msgstr ""
+msgid "LOS in %02d:%02d:%02d"
+msgstr "Μη ορατός σε %02d:%02d:%02d"
 
-#: ../src/gtk-polar-view.c:315 ../src/gtk-sat-map.c:965
+#: ../src/gtk-polar-view.c:913
 #, c-format
-msgid "%s:%d: Can not find clicked object (%d) in hash table"
-msgstr ""
+msgid "LOS in %02d:%02d"
+msgstr "Μη ορατός σε %02d:%02d"
 
-#: ../src/gtk-polar-view.c:1027
+#: ../src/gtk-polar-view.c:971
 #, c-format
 msgid ""
 "Next: %s\n"
@@ -353,7 +351,7 @@ msgstr ""
 "Επόμενος: %s\n"
 "σε %02d:%02d:%02d"
 
-#: ../src/gtk-polar-view.c:1030
+#: ../src/gtk-polar-view.c:974
 #, c-format
 msgid ""
 "Next: %s\n"
@@ -362,85 +360,65 @@ msgstr ""
 "Επόμενος: %s\n"
 "σε %02d:%02d"
 
-#: ../src/gtk-polar-view.c:1041 ../src/gtk-sat-map.c:773
+#: ../src/gtk-polar-view.c:982 ../src/gtk-sat-map.c:1003
 #, c-format
 msgid "%s: Can not find NEXT satellite."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1043 ../src/gtk-sat-map.c:775
+#: ../src/gtk-polar-view.c:984 ../src/gtk-sat-map.c:1006
 msgid "Next: ERR"
 msgstr "Επόμενος: ΣΦΑΛΜΑ"
 
-#: ../src/gtk-polar-view.c:1048 ../src/gtk-sat-map.c:780
+#: ../src/gtk-polar-view.c:990 ../src/gtk-sat-map.c:1012
 msgid "Next: N/A"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1081
-#, c-format
-msgid "LOS in %02d:%02d:%02d"
-msgstr "Μη ορατός σε %02d:%02d:%02d"
-
-#: ../src/gtk-polar-view.c:1085
-#, c-format
-msgid "LOS in %02d:%02d"
-msgstr "Μη ορατός σε %02d:%02d"
-
-#: ../src/gtk-polar-view.c:1193
+#: ../src/gtk-polar-view.c:1072
 #, c-format
 msgid ""
 "%s\n"
 "Always in range"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1240
+#: ../src/gtk-polar-view.c:1096
 #, c-format
 msgid "%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1346
-#, c-format
-msgid "%s: marker added to polarview not showing %d."
-msgstr ""
-
-#: ../src/gtk-polar-view.c:1354
-#, c-format
-msgid "%s: label added to polarview not showing %d."
-msgstr ""
-
-#: ../src/gtk-polar-view.c:1384 ../src/gtk-sat-map.c:1832
+#: ../src/gtk-polar-view.c:1157 ../src/gtk-sat-map.c:1733
 #, c-format
 msgid "%s: Cannot allocate memory for satellite %d."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1410 ../src/gtk-polar-view.c:1548
-#, c-format
-msgid "%s:%d: Failed to get satellite pass."
-msgstr ""
-
-#: ../src/gtk-polar-view.c:1420 ../src/gtk-polar-view.c:1562
-#, c-format
-msgid "%s:%d: Pass had no points in it."
-msgstr ""
-
-#: ../src/gtk-polar-view.c:1540 ../src/gtk-polar-view-popup.c:160
-#: ../src/gtk-polar-view-popup.c:213 ../src/gtk-sat-map-popup.c:174
-#: ../src/gtk-sat-map-popup.c:238 ../src/gtk-sat-map-popup.c:285
+#: ../src/gtk-polar-view.c:1178 ../src/gtk-polar-view-popup.c:159
+#: ../src/gtk-polar-view-popup.c:212 ../src/gtk-sat-map-popup.c:174
+#: ../src/gtk-sat-map-popup.c:236 ../src/gtk-sat-map-popup.c:283
 #, c-format
 msgid "%s:%d: Failed to get satellite object."
 msgstr ""
 
-#: ../src/gtk-polar-view.c:1673
+#: ../src/gtk-polar-view.c:1184
+#, c-format
+msgid "%s:%d: Failed to get satellite pass."
+msgstr ""
+
+#: ../src/gtk-polar-view.c:1196
+#, c-format
+msgid "%s:%d: Pass had no points in it."
+msgstr ""
+
+#: ../src/gtk-polar-view.c:1289
 #, c-format
 msgid "%s Requested satellite (%d) is not within range"
 msgstr ""
 
-#: ../src/gtk-polar-view-popup.c:73 ../src/gtk-sat-list-popup.c:61
+#: ../src/gtk-polar-view-popup.c:72 ../src/gtk-sat-list-popup.c:61
 #: ../src/gtk-sat-map-popup.c:75
 msgid "Satellite info"
 msgstr ""
 
 #. show track
-#: ../src/gtk-polar-view-popup.c:101
+#: ../src/gtk-polar-view-popup.c:100
 msgid "Sky track"
 msgstr ""
 
@@ -997,7 +975,7 @@ msgstr ""
 msgid "%s: Error reading TLE line 1 from %s (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-data.c:119 ../src/tle-update.c:1215 ../src/tle-update.c:1224
+#: ../src/gtk-sat-data.c:119 ../src/tle-update.c:1209 ../src/tle-update.c:1218
 #, c-format
 msgid "%s: Error reading TLE line 2 from %s (%s)"
 msgstr ""
@@ -1213,109 +1191,104 @@ msgstr ""
 msgid "%s: GtkSatList has not child with index %d"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:749
+#: ../src/gtk-sat-map.c:983
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d:%s%d%s%d </span>"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:757
+#: ../src/gtk-sat-map.c:989
 #, c-format
 msgid "<span background=\"#%s\"> Next: %s in %s%d%s%d </span>"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1053
+#: ../src/gtk-sat-map.c:1185
 #, c-format
 msgid "%s: Can not find clicked object (%d) in hash table"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1142
+#: ../src/gtk-sat-map.c:1227
 #, c-format
 msgid "%s:%d: Loading map file %s"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1148
+#: ../src/gtk-sat-map.c:1232
 #, c-format
 msgid "%s:%d: Map file found"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1153
+#: ../src/gtk-sat-map.c:1237
 #, c-format
 msgid "%s:%d: Could not find map file %s"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1161
+#: ../src/gtk-sat-map.c:1244
 #, c-format
 msgid "%s:%d: Using default map: %s"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1171
+#: ../src/gtk-sat-map.c:1253
 #, c-format
 msgid "%s:%d: Error loading map file (%s)"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1231
+#: ../src/gtk-sat-map.c:1308
 #, c-format
 msgid "%s: Bad data measuring distance to North Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:1251
+#: ../src/gtk-sat-map.c:1327
 #, c-format
 msgid "%s: Bad data measuring distance to South Pole %f %f."
 msgstr ""
 
-#: ../src/gtk-sat-map.c:2847
+#: ../src/gtk-sat-map.c:2141
 #, c-format
 msgid "LOS in %d minutes"
 msgstr ""
 
-#: ../src/gtk-sat-map.c:2849
+#: ../src/gtk-sat-map.c:2143
 #, c-format
 msgid "AOS in %d minutes"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:78
+#: ../src/gtk-sat-map-ground-track.c:79
 #, c-format
 msgid "%s: Creating ground track for %s"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:92
+#: ../src/gtk-sat-map-ground-track.c:93
 #, c-format
 msgid "%s: Start orbit: %d"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:94
+#: ../src/gtk-sat-map-ground-track.c:95
 #, c-format
 msgid "%s: End orbit %d"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:115
+#: ../src/gtk-sat-map-ground-track.c:116
 #, c-format
 msgid "%s: T0: %f (%d)"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:138
+#: ../src/gtk-sat-map-ground-track.c:139
 #, c-format
 msgid "%s: MAYDAY: Insufficient memory for ground track!"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:153
+#: ../src/gtk-sat-map-ground-track.c:154
 #, c-format
 msgid "%s: Problem computing ground track for %s"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:196
+#: ../src/gtk-sat-map-ground-track.c:197
 #, c-format
 msgid "%s: Updating ground track for %s"
 msgstr ""
 
-#: ../src/gtk-sat-map-ground-track.c:237
+#: ../src/gtk-sat-map-ground-track.c:246
 #, c-format
 msgid "%s: Deleting ground track for %s"
-msgstr ""
-
-#: ../src/gtk-sat-map-ground-track.c:259
-#, c-format
-msgid "%s: Could not find part %d of ground track"
 msgstr ""
 
 #. highlight cov. area
@@ -2118,53 +2091,37 @@ msgstr ""
 msgid "Satellite options / shortcuts"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:442
+#: ../src/gtk-sky-glance.c:374
+msgid "TIME"
+msgstr "ΧΡΟΝΟΣ"
+
+#: ../src/gtk-sky-glance.c:427
 #, c-format
 msgid "%s::%s: Could not retrieve pass_t object"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:454
+#: ../src/gtk-sky-glance.c:434
 #, c-format
-msgid "%s::%s: Showing pass details for %s - we may have a memory leak here"
+msgid "%s::%s: Showing pass details for %s"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:464
-#, c-format
-msgid "%s::%s: Button %d has no function..."
-msgstr ""
-
-#: ../src/gtk-sky-glance.c:520
-msgid "TIME"
-msgstr "ΧΡΟΝΟΣ"
-
-#: ../src/gtk-sky-glance.c:640
+#: ../src/gtk-sky-glance.c:595
 #, c-format
 msgid "%s:%d: Colour index out of valid range (%d)"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:694
+#: ../src/gtk-sky-glance.c:632
 #, c-format
 msgid "%s:%d: %s has %d passes within %.4f days\n"
 msgstr ""
 
-#: ../src/gtk-sky-glance.c:707
+#: ../src/gtk-sky-glance.c:644
 #, c-format
 msgid "%s:%s: Could not allocate memory."
 msgstr ""
 
-#. box tooltip will contain pass summary
-#: ../src/gtk-sky-glance.c:728
-#, c-format
-msgid ""
-"<b>%s</b>\n"
-"AOS: %s  Az:%.0f°\n"
-"TCA: %s  Az:%.0f°  El:%.1f°\n"
-"LOS: %s  Az:%.0f°\n"
-"<i>Click for details</i>"
-msgstr ""
-
 #. no satellites
-#: ../src/gtk-sky-glance.c:787
+#: ../src/gtk-sky-glance.c:734
 msgid "This module has no satellites!"
 msgstr ""
 
@@ -2231,19 +2188,19 @@ msgstr ""
 msgid "just to have a pot"
 msgstr ""
 
-#: ../src/main.c:113
+#: ../src/main.c:122
 msgid ""
 "Gpredict is a graphical real-time satellite tracking and orbit prediction "
 "program.\n"
 "Gpredict does not require any command line options for nominal operation."
 msgstr ""
 
-#: ../src/main.c:119
+#: ../src/main.c:128
 #, c-format
 msgid "Option parsing failed: %s\n"
 msgstr ""
 
-#: ../src/main.c:136
+#: ../src/main.c:145
 #, c-format
 msgid ""
 "User config check failed (code %d). This is fatal.\n"
@@ -2251,32 +2208,32 @@ msgid ""
 "home directory"
 msgstr ""
 
-#: ../src/main.c:443
+#: ../src/main.c:452
 #, c-format
 msgid "%s: Passed a non-null pointer which should never happen.\n"
 msgstr ""
 
-#: ../src/main.c:485
+#: ../src/main.c:494
 #, c-format
 msgid "%s: Time threshold has been passed."
 msgstr ""
 
-#: ../src/main.c:494
+#: ../src/main.c:503
 #, c-format
 msgid "%s: Starting new update thread."
 msgstr ""
 
 #. * FIXME: store thread and destroy on exit? *
-#: ../src/main.c:497
+#: ../src/main.c:506
 msgid "gpredict_tle_update"
 msgstr ""
 
-#: ../src/main.c:502
+#: ../src/main.c:511
 #, c-format
 msgid "%s: Failed to create TLE update thread (%s)"
 msgstr ""
 
-#: ../src/main.c:514
+#: ../src/main.c:523
 msgid ""
 "Your TLE files are getting out of date.\n"
 "You can update them by selecting\n"
@@ -2284,42 +2241,42 @@ msgid ""
 "in the menubar."
 msgstr ""
 
-#: ../src/main.c:543
+#: ../src/main.c:552
 #, c-format
 msgid "%s: Could not find TLE monitoring task (ID = %d)"
 msgstr ""
 
-#: ../src/main.c:586
+#: ../src/main.c:595
 #, c-format
 msgid "%s: Cleaning TLE data in %s"
 msgstr ""
 
-#: ../src/main.c:598 ../src/main.c:642
+#: ../src/main.c:607 ../src/main.c:651
 #, c-format
 msgid "%s: Failed to delete %s"
 msgstr ""
 
-#: ../src/main.c:603 ../src/main.c:647
+#: ../src/main.c:612 ../src/main.c:656
 #, c-format
 msgid "%s: Removed %s"
 msgstr ""
 
-#: ../src/main.c:629
+#: ../src/main.c:638
 #, c-format
 msgid "%s: Cleaning transponder data in %s"
 msgstr ""
 
-#: ../src/map-selector.c:108 ../src/map-selector.c:165
+#: ../src/map-selector.c:107 ../src/map-selector.c:164
 #, c-format
 msgid "%s:%d: Could not stat %s"
 msgstr ""
 
 #. create a new file chooser dialogue in "open file" mode
-#: ../src/map-selector.c:243
+#: ../src/map-selector.c:242
 msgid "Select Map"
 msgstr ""
 
-#: ../src/map-selector.c:259
+#: ../src/map-selector.c:258
 msgid "Image files"
 msgstr "Αρχεία εικόνων"
 
@@ -4827,8 +4784,8 @@ msgstr ""
 msgid "Delete selected radio"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:833 ../src/sat-pref-rot.c:596 ../src/tle-update.c:702
-#: ../src/trsp-update.c:337
+#: ../src/sat-pref-rig.c:833 ../src/sat-pref-rot.c:596 ../src/tle-update.c:696
+#: ../src/trsp-update.c:336
 #, c-format
 msgid "%s: Failed to remove %s"
 msgstr ""
@@ -5498,136 +5455,136 @@ msgstr ""
 msgid "No files to fetch from network"
 msgstr ""
 
-#: ../src/tle-update.c:564 ../src/trsp-update.c:589
+#: ../src/tle-update.c:564 ../src/trsp-update.c:588
 #, c-format
 msgid "Fetching %s"
 msgstr ""
 
-#: ../src/tle-update.c:588 ../src/trsp-update.c:446 ../src/trsp-update.c:615
+#: ../src/tle-update.c:582 ../src/trsp-update.c:445 ../src/trsp-update.c:614
 #, c-format
 msgid "%s: Error fetching %s (%x)"
 msgstr ""
 
-#: ../src/tle-update.c:594 ../src/tle-update.c:615 ../src/trsp-update.c:451
-#: ../src/trsp-update.c:469 ../src/trsp-update.c:620 ../src/trsp-update.c:638
+#: ../src/tle-update.c:588 ../src/tle-update.c:609 ../src/trsp-update.c:450
+#: ../src/trsp-update.c:468 ../src/trsp-update.c:619 ../src/trsp-update.c:637
 #, c-format
 msgid "%s: Successfully fetched %s"
 msgstr ""
 
-#: ../src/tle-update.c:609 ../src/trsp-update.c:464 ../src/trsp-update.c:633
+#: ../src/tle-update.c:603 ../src/trsp-update.c:463 ../src/trsp-update.c:632
 #, c-format
 msgid "%s: Error fetching %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:625 ../src/trsp-update.c:480 ../src/trsp-update.c:649
+#: ../src/tle-update.c:619 ../src/trsp-update.c:479 ../src/trsp-update.c:648
 #, c-format
 msgid "%s: Failed to open %s preventing update"
 msgstr ""
 
-#: ../src/tle-update.c:657 ../src/trsp-update.c:498 ../src/trsp-update.c:682
+#: ../src/tle-update.c:651 ../src/trsp-update.c:497 ../src/trsp-update.c:681
 #, c-format
 msgid "%s: Fetched %d files from network; updating..."
 msgstr ""
 
-#: ../src/tle-update.c:669
+#: ../src/tle-update.c:663
 #, c-format
 msgid "%s: Could not fetch TLE files from network. Aborting."
 msgstr ""
 
-#: ../src/tle-update.c:689
+#: ../src/tle-update.c:683
 #, c-format
 msgid "%s: Error opening %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:831
+#: ../src/tle-update.c:825
 #, c-format
 msgid "%s:%s: There is no category in %s"
 msgstr ""
 
-#: ../src/tle-update.c:841
+#: ../src/tle-update.c:835
 #, c-format
 msgid "%s:%s: There is no category called %s"
 msgstr ""
 
-#: ../src/tle-update.c:858
+#: ../src/tle-update.c:852
 #, c-format
 msgid "%s:%s: Could not reopen .cat file while reading TLE from %s"
 msgstr ""
 
-#: ../src/tle-update.c:916
+#: ../src/tle-update.c:910
 #, c-format
 msgid "%s:%s: Something wrote linesneeded to an illegal value %d"
 msgstr ""
 
-#: ../src/tle-update.c:943
+#: ../src/tle-update.c:937
 #, c-format
 msgid "%s:%s: Processing a three line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:961
+#: ../src/tle-update.c:955
 #, c-format
 msgid "%s:%s: Processing a bare two line TLE"
 msgstr ""
 
-#: ../src/tle-update.c:1014
+#: ../src/tle-update.c:1008
 #, c-format
 msgid "%s:%s: Invalid data for %d"
 msgstr ""
 
-#: ../src/tle-update.c:1065
+#: ../src/tle-update.c:1059
 #, c-format
 msgid "%s:%s: Two different statuses for %d (%s) at the same time."
 msgstr ""
 
-#: ../src/tle-update.c:1119
+#: ../src/tle-update.c:1113
 #, c-format
 msgid "%s:%s: Failed to open %s"
 msgstr ""
 
-#: ../src/tle-update.c:1186
+#: ../src/tle-update.c:1180
 #, c-format
 msgid "%s: No new TLE data found for %d. Satellite might be obsolete."
 msgstr ""
 
-#: ../src/tle-update.c:1198
+#: ../src/tle-update.c:1192
 #, c-format
 msgid "%s: Error loading %s (%s)"
 msgstr ""
 
-#: ../src/tle-update.c:1252
+#: ../src/tle-update.c:1246
 #, c-format
 msgid "%s: Current TLE data for %d appears to be bad"
 msgstr ""
 
-#: ../src/tle-update.c:1277
+#: ../src/tle-update.c:1271
 #, c-format
 msgid "%s: Data for  %d updated for name."
 msgstr ""
 
-#: ../src/tle-update.c:1292
+#: ../src/tle-update.c:1286
 #, c-format
 msgid "%s: Data for  %d updated for nickname."
 msgstr ""
 
-#: ../src/tle-update.c:1309
+#: ../src/tle-update.c:1303
 #, c-format
 msgid "%s: Data for  %d updated for tle."
 msgstr ""
 
-#: ../src/tle-update.c:1327
+#: ../src/tle-update.c:1321
 #, c-format
 msgid "%s: Data for  %d updated for operational status."
 msgstr ""
 
-#: ../src/tle-update.c:1363 ../src/trsp-update.c:722
+#: ../src/tle-update.c:1357 ../src/trsp-update.c:721
 msgid "Monthly"
 msgstr ""
 
-#: ../src/tle-update.c:1364 ../src/trsp-update.c:723
+#: ../src/tle-update.c:1358 ../src/trsp-update.c:722
 msgid "Weekly"
 msgstr ""
 
-#: ../src/tle-update.c:1365 ../src/trsp-update.c:724
+#: ../src/tle-update.c:1359 ../src/trsp-update.c:723
 msgid "Daily"
 msgstr ""
 
@@ -5671,32 +5628,32 @@ msgstr ""
 msgid "MODE %d %s"
 msgstr "ΔΙΑΜΟΡΦΩΣΗ %d %s"
 
-#: ../src/trsp-update.c:375
+#: ../src/trsp-update.c:374
 #, c-format
 msgid "%s: Could not open trsp file for write"
 msgstr ""
 
-#: ../src/trsp-update.c:428
+#: ../src/trsp-update.c:427
 #, c-format
 msgid "%s: Ready to fetch modes list from %s"
 msgstr ""
 
-#: ../src/trsp-update.c:436 ../src/trsp-update.c:605
+#: ../src/trsp-update.c:435 ../src/trsp-update.c:604
 #, c-format
 msgid "%s: File to open %s "
 msgstr ""
 
-#: ../src/trsp-update.c:507 ../src/trsp-update.c:692
+#: ../src/trsp-update.c:506 ../src/trsp-update.c:691
 #, c-format
 msgid "%s: Could not fetch frequency files from network"
 msgstr ""
 
-#: ../src/trsp-update.c:551
+#: ../src/trsp-update.c:550
 #, c-format
 msgid "%s: A frequency update process is already running"
 msgstr ""
 
-#: ../src/trsp-update.c:581
+#: ../src/trsp-update.c:580
 #, c-format
 msgid "%s: Ready to fetch transponder list from %s"
 msgstr ""
