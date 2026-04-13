@@ -39,6 +39,7 @@ struct _gtk_rot_ctrl {
 
     /* other widgets */
     GtkWidget      *SatSel;
+    GtkWidget      *SatSelFilter;
     GtkWidget      *SatCnt;
     GtkWidget      *DevSel;
     GtkWidget      *plot;       /*!< Polar plot widget */
