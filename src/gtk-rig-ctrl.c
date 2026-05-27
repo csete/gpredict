@@ -991,6 +991,7 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         /*  stop worker thread... */
         setconfig(ctrl);
         ctrl->rigctl_thread = NULL;
+        ctrl->conf2 = NULL;
     }
     else
     {
@@ -1003,7 +1004,6 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         ctrl->rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
         setconfig(ctrl);
     }
-    ctrl->conf2 = NULL;
 }
 
 static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
