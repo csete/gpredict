@@ -1,6 +1,7 @@
 Changes in version 2.5.2 (TBD)
 
  - Fixed compilation error on Windows (MSYS64)
+ - Added support for more recent versions of gpsd (#404)
 
 
 Changes in version 2.5.1 (22 March 2026)

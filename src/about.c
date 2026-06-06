@@ -48,6 +48,7 @@ const gchar *authors[] = {
     "Daniel Estevez, EA4GPZ",
     "Dave Hines",
     "David Cureton",
+    "David Frisbee, K4DBF",
     "David VK5DG",
     "Fabian P. Schmidt",
     "Gisle Vanem",
