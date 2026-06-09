@@ -988,8 +988,11 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         gtk_widget_set_sensitive(ctrl->DevSel2, TRUE);
         ctrl->engaged = FALSE;
 
-        /*  stop worker thread... */
+        /*  stop worker thread and wait for it to close sockets */
+        g_mutex_lock(&ctrl->widgetsync);
         setconfig(ctrl);
+        g_cond_wait(&ctrl->widgetready, &ctrl->widgetsync);
+        g_mutex_unlock(&ctrl->widgetsync);
         ctrl->rigctl_thread = NULL;
     }
     else
@@ -1003,7 +1006,6 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
         ctrl->rigctl_thread = g_thread_new("rigctl_run", rigctl_run, ctrl);
         setconfig(ctrl);
     }
-    ctrl->conf2 = NULL;
 }
 
 static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
@@ -2860,7 +2862,7 @@ static void rigctrl_open(GtkRigCtrl * data)
     {
         open_rigctld_socket(ctrl->conf2, &(ctrl->sock2));
         /* set initial dual mode */
-        ctrl->conf2->vfo_opt = get_vfo_opt(ctrl, ctrl->sock);
+        ctrl->conf2->vfo_opt = get_vfo_opt(ctrl, ctrl->sock2);
         sat_log_log(SAT_LOG_LEVEL_DEBUG,
                 _("%s:%s: VFO opt2=%d"), __FILE__,
                 __func__, ctrl->conf2->vfo_opt);
