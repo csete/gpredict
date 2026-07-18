@@ -45,6 +45,37 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "tle-update.h"
 
+/*  from ChatGPT to allow use of ALPHA characters in Object IDs */
+
+static guint
+decode_alpha5_catnr(const char field[5])
+{
+    static const char alpha5[] = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    const char *p;
+    guint suffix;
+    int i;
+
+    for (i = 1; i < 5; i++)
+    {
+        if (field[i] < '0' || field[i] > '9')
+            return 0;
+    }
+
+    suffix = (field[1] - '0') * 1000 +
+             (field[2] - '0') * 100 +
+             (field[3] - '0') * 10 +
+             (field[4] - '0');
+
+    if (field[0] >= '0' && field[0] <= '9')
+        return (field[0] - '0') * 10000 + suffix;
+
+    p = strchr(alpha5, g_ascii_toupper(field[0]));
+    if (p == NULL)
+        return 0;
+
+    return (10 + (guint)(p - alpha5)) * 10000 + suffix;
+}
+
 
 /* private function prototypes */
 #ifndef WIN32
@@ -998,7 +1029,12 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
                 catstr[i - 2] = tle_str[1][i];
             }
             catstr[5] = '\0';
-            catnr = (guint) g_ascii_strtod(catstr, NULL);
+			
+            /* catnr = (guint) g_ascii_strtod(catstr, NULL); */
+
+			/*  from ChatGPT to allow use of ALPHA characters in Object IDs */
+
+			catnr = decode_alpha5_catnr(catstr);
 
 
             if (Get_Next_Tle_Set(tle_str, &tle) != 1)
