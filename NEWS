@@ -1,9 +1,10 @@
-Changes in version 2.5.2 (TBD)
+Changes in version 2.5.2 (20 Jul 2026)
 
  - Fixed compilation error on Windows (MSYS64)
  - Added support for more recent versions of gpsd (#404)
  - Fixed second rig not connecting (#407)
  - Fix data race by reloading satellites in the main thread (#409)
+ - Fix some warning messages at program exit
 
 
 Changes in version 2.5.1 (22 March 2026)
