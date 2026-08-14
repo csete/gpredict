@@ -32,6 +32,8 @@
 #include <build-config.h>
 #endif
 
+#define _GNU_SOURCE             /* needed for strcasestr */
+
 /* NETWORK */
 #ifndef WIN32
 #include <arpa/inet.h>          /* htons() */
@@ -47,7 +49,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
-#include <string.h>             /* strerror() */
+
+#include <string.h>             /* strerror, strcasestr */
 
 #include "compat.h"
 #include "gpredict-utils.h"
@@ -731,7 +734,7 @@ static void filter_text_changed_cb(GtkSearchEntry * entry, gpointer data)
         for (i = 0; i < n; i++)
         {
             sat = SAT(g_slist_nth_data(ctrl->sats, i));
-            if (sat && strstr(sat->nickname, filter))
+            if (sat && strcasestr(sat->nickname, filter))
             {
                 gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
                                             sat->nickname);
