@@ -1,3 +1,8 @@
+Changes in version 2.5.3 (TBD)
+
+ - Remove invalid data from satellites.dat (#413)
+ - Update contributors (#414)
+
 Changes in version 2.5.2 (20 Jul 2026)
 
  - Fixed compilation error on Windows (MSYS64)
