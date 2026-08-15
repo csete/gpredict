@@ -617,6 +617,18 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
                     __FILE__, __func__, trsp->name, ctrl->target->tle.catnr);
     }
 
+    /* limit number of characters to prevent very wide combo box */
+    GList *renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(ctrl->TrspSel));
+    if (renderers != NULL)
+    {
+        g_object_set(renderers->data,
+                     "width-chars", 30,
+                     "max-width-chars", 30,
+                     "ellipsize", PANGO_ELLIPSIZE_END,
+                     NULL);
+        g_list_free(renderers);
+    }
+
     ctrl->trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, 0);
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->TrspSel), 0);
 }
