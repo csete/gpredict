@@ -13,23 +13,23 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-/**
+/*
  * Polar Plot Widget.
  * @ingroup widgets
  *
  * GtkPolarPlot is a graphical widget that can display a satellite pass
  * in an Az/El polar plot. The widget was originally created to display
  * a single satellite pass in the detailed pass prediction dialog.
- * 
+ *
  * Later, a few utility functions were added in order to make the GtkPolarPlot
  * more dynamic and useful in other contexts too. In addition to a satellite
  * pass, GtkPolarPlot can show a target object (small square), a target
@@ -60,11 +60,11 @@
 
 #define MARKER_SIZE_HALF 2
 
-
 static GtkBoxClass *parent_class = NULL;
 
-/** Convert rgba color to cairo-friendly format */
-static void rgba_to_cairo(guint32 rgba, gdouble *r, gdouble *g, gdouble *b, gdouble *a)
+/* Convert rgba color to cairo-friendly format */
+static void rgba_to_cairo(guint32 rgba, gdouble *r, gdouble *g, gdouble *b,
+                          gdouble *a)
 {
     *r = ((rgba >> 24) & 0xFF) / 255.0;
     *g = ((rgba >> 16) & 0xFF) / 255.0;
@@ -72,8 +72,7 @@ static void rgba_to_cairo(guint32 rgba, gdouble *r, gdouble *g, gdouble *b, gdou
     *a = (rgba & 0xFF) / 255.0;
 }
 
-static void gtk_polar_plot_init(GtkPolarPlot * polview,
-				gpointer g_class)
+static void gtk_polar_plot_init(GtkPolarPlot *polview, gpointer g_class)
 {
     (void)g_class;
 
@@ -99,7 +98,7 @@ static void gtk_polar_plot_init(GtkPolarPlot * polview,
     polview->font = NULL;
 }
 
-static void gtk_polar_plot_destroy(GtkWidget * widget)
+static void gtk_polar_plot_destroy(GtkWidget *widget)
 {
     GtkPolarPlot *polv = GTK_POLAR_PLOT(widget);
 
@@ -118,13 +117,13 @@ static void gtk_polar_plot_destroy(GtkWidget * widget)
     g_free(polv->font);
     polv->font = NULL;
 
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy)(widget);
 }
 
-static void gtk_polar_plot_class_init(GtkPolarPlotClass * class,
-				      gpointer class_data)
+static void gtk_polar_plot_class_init(GtkPolarPlotClass *class,
+                                      gpointer class_data)
 {
-    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *)class;
 
     (void)class_data;
 
@@ -134,36 +133,34 @@ static void gtk_polar_plot_class_init(GtkPolarPlotClass * class,
 
 GType gtk_polar_plot_get_type()
 {
-    static GType    gtk_polar_plot_type = 0;
+    static GType gtk_polar_plot_type = 0;
 
     if (!gtk_polar_plot_type)
     {
         static const GTypeInfo gtk_polar_plot_info = {
             sizeof(GtkPolarPlotClass),
-            NULL,               /* base init */
-            NULL,               /* base finalise */
-            (GClassInitFunc) gtk_polar_plot_class_init,
-            NULL,               /* class finalise */
-            NULL,               /* class data */
+            NULL, /* base init */
+            NULL, /* base finalise */
+            (GClassInitFunc)gtk_polar_plot_class_init,
+            NULL, /* class finalise */
+            NULL, /* class data */
             sizeof(GtkPolarPlot),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_polar_plot_init,
-            NULL
-        };
+            5, /* n_preallocs */
+            (GInstanceInitFunc)gtk_polar_plot_init,
+            NULL};
 
-        gtk_polar_plot_type = g_type_register_static(GTK_TYPE_BOX,
-                                                     "GtkPolarPlot",
-                                                     &gtk_polar_plot_info, 0);
+        gtk_polar_plot_type = g_type_register_static(
+            GTK_TYPE_BOX, "GtkPolarPlot", &gtk_polar_plot_info, 0);
     }
 
     return gtk_polar_plot_type;
 }
 
-/** Convert Az/El to canvas based XY coordinates. */
-static void azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el,
-                       gfloat * x, gfloat * y)
+/* Convert Az/El to canvas based XY coordinates. */
+static void azel_to_xy(GtkPolarPlot *p, gdouble az, gdouble el, gfloat *x,
+                       gfloat *y)
 {
-    gdouble         rel;
+    gdouble rel;
 
     if (el < 0.0)
     {
@@ -199,15 +196,15 @@ static void azel_to_xy(GtkPolarPlot * p, gdouble az, gdouble el,
         break;
     }
 
-    *x = (gfloat) (p->cx + rel * sin(az));
-    *y = (gfloat) (p->cy - rel * cos(az));
+    *x = (gfloat)(p->cx + rel * sin(az));
+    *y = (gfloat)(p->cy - rel * cos(az));
 }
 
-/** Convert canvas based coordinates to Az/El. */
-static void xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y,
-                       gfloat * az, gfloat * el)
+/* Convert canvas based coordinates to Az/El. */
+static void xy_to_azel(GtkPolarPlot *p, gfloat x, gfloat y, gfloat *az,
+                       gfloat *el)
 {
-    gfloat          rel;
+    gfloat rel;
 
     /* distance from center to cursor */
     rel = p->r - sqrt((x - p->cx) * (x - p->cx) + (y - p->cy) * (y - p->cy));
@@ -252,13 +249,13 @@ static void xy_to_azel(GtkPolarPlot * p, gfloat x, gfloat y,
     }
 }
 
-static void create_track(GtkPolarPlot * pv)
+static void create_track(GtkPolarPlot *pv)
 {
-    guint           i;
-    pass_detail_t  *detail;
-    guint           num;
-    gfloat          x, y;
-    guint           tres, ttidx;
+    guint i;
+    pass_detail_t *detail;
+    guint num;
+    gfloat x, y;
+    guint tres, ttidx;
 
     /* create points */
     num = g_slist_length(pv->pass->details);
@@ -315,9 +312,8 @@ static void create_track(GtkPolarPlot * pv)
  * This function transforms the pole coordinates (x,y) taking into account
  * the orientation of the polar plot.
  */
-static void
-correct_pole_coor(GtkPolarPlot * polv, polar_plot_pole_t pole,
-                  gfloat * x, gfloat * y, gboolean *anchor_west)
+static void correct_pole_coor(GtkPolarPlot *polv, polar_plot_pole_t pole,
+                              gfloat *x, gfloat *y, gboolean *anchor_west)
 {
     *anchor_west = TRUE;
 
@@ -325,14 +321,10 @@ correct_pole_coor(GtkPolarPlot * polv, polar_plot_pole_t pole,
     {
     case POLAR_PLOT_POLE_N:
         if ((polv->swap == POLAR_PLOT_SENW) || (polv->swap == POLAR_PLOT_SWNE))
-        {
-            /* North and South are swapped */
-            *y = *y + POLV_LINE_EXTRA;
-        }
+            *y = *y + POLV_LINE_EXTRA;  /* North and South are swapped */
         else
-        {
             *y = *y - POLV_LINE_EXTRA;
-        }
+
         break;
 
     case POLAR_PLOT_POLE_E:
@@ -375,19 +367,19 @@ correct_pole_coor(GtkPolarPlot * polv, polar_plot_pole_t pole,
 
     default:
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Incorrect polar plot orientation."),
-                    __FILE__, __LINE__);
+                    _("%s:%d: Incorrect polar plot orientation."), __FILE__,
+                    __LINE__);
         break;
     }
 }
 
 /** Update sky track drawing after size allocate. */
-static void update_track(GtkPolarPlot * pv)
+static void update_track(GtkPolarPlot *pv)
 {
-    guint           num, i;
-    gfloat          x, y;
-    pass_detail_t  *detail;
-    guint           tres, ttidx;
+    guint num, i;
+    gfloat x, y;
+    pass_detail_t *detail;
+    guint tres, ttidx;
 
     if (pv->pass == NULL)
         return;
@@ -446,14 +438,14 @@ static void update_track(GtkPolarPlot * pv)
 
 static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
-    GtkPolarPlot   *polv = GTK_POLAR_PLOT(data);
-    gdouble         r, g, b, a;
-    gfloat          x, y;
-    gboolean        anchor_west;
-    PangoLayout    *layout;
+    GtkPolarPlot *polv = GTK_POLAR_PLOT(data);
+    gdouble r, g, b, a;
+    gfloat x, y;
+    gboolean anchor_west;
+    PangoLayout *layout;
     PangoFontDescription *font_desc;
-    gint            tw, th;
-    guint           i;
+    gint tw, th;
+    guint i;
 
     (void)widget;
 
@@ -463,7 +455,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* Set up font */
     layout = pango_cairo_create_layout(cr);
-    font_desc = pango_font_description_from_string(polv->font ? polv->font : "Sans 9");
+    font_desc =
+        pango_font_description_from_string(polv->font ? polv->font : "Sans 9");
     pango_layout_set_font_description(layout, font_desc);
 
     /* Axis color for circles and lines */
@@ -567,7 +560,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
         cairo_move_to(cr, polv->track_points[0], polv->track_points[1]);
         for (i = 1; i < (guint)polv->track_count; i++)
         {
-            cairo_line_to(cr, polv->track_points[2 * i], polv->track_points[2 * i + 1]);
+            cairo_line_to(cr, polv->track_points[2 * i],
+                          polv->track_points[2 * i + 1]);
         }
         cairo_stroke(cr);
 
@@ -640,10 +634,11 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     return FALSE;
 }
 
-static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event,
+                                 gpointer data)
 {
-    GtkPolarPlot   *polv = GTK_POLAR_PLOT(data);
-    gfloat          az, el;
+    GtkPolarPlot *polv = GTK_POLAR_PLOT(data);
+    gfloat az, el;
 
     (void)widget;
 
@@ -654,7 +649,8 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpoin
         if (el > 0.0)
         {
             g_free(polv->curs_text);
-            polv->curs_text = g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
+            polv->curs_text =
+                g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
         }
         else
         {
@@ -671,10 +667,10 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpoin
 /**
  * Manage new size allocation.
  */
-static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
+static void size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation,
                              gpointer data)
 {
-    GtkPolarPlot   *polv;
+    GtkPolarPlot *polv;
 
     if (gtk_widget_get_realized(widget))
     {
@@ -696,9 +692,9 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
 /**
  * Manage canvas realise signals.
  */
-static void on_canvas_realized(GtkWidget * canvas, gpointer data)
+static void on_canvas_realized(GtkWidget *canvas, gpointer data)
 {
-    GtkAllocation   aloc;
+    GtkAllocation aloc;
 
     gtk_widget_get_allocation(canvas, &aloc);
     size_allocate_cb(canvas, &aloc, data);
@@ -712,10 +708,10 @@ static void on_canvas_realized(GtkWidget * canvas, gpointer data)
  *             pass will be displayed.
  *
  */
-GtkWidget *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
+GtkWidget *gtk_polar_plot_new(qth_t *qth, pass_t *pass)
 {
-    GtkPolarPlot   *polv;
-    GValue          font_value = G_VALUE_INIT;
+    GtkPolarPlot *polv;
+    GValue font_value = G_VALUE_INIT;
 
     polv = GTK_POLAR_PLOT(g_object_new(GTK_TYPE_POLAR_PLOT, NULL));
 
@@ -740,7 +736,8 @@ GtkWidget *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
 
     /* get default font */
     g_value_init(&font_value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name", &font_value);
+    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name",
+                          &font_value);
     polv->font = g_value_dup_string(&font_value);
     g_value_unset(&font_value);
 
@@ -752,14 +749,18 @@ GtkWidget *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
 
     /* create the canvas (drawing area) */
     polv->canvas = gtk_drawing_area_new();
-    gtk_widget_set_size_request(polv->canvas, POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
+    gtk_widget_set_size_request(polv->canvas, POLV_DEFAULT_SIZE,
+                                POLV_DEFAULT_SIZE);
     gtk_widget_add_events(polv->canvas, GDK_POINTER_MOTION_MASK);
 
     /* connect signals */
     g_signal_connect(polv->canvas, "draw", G_CALLBACK(on_draw), polv);
-    g_signal_connect(polv->canvas, "motion-notify-event", G_CALLBACK(on_motion_notify), polv);
-    g_signal_connect(polv->canvas, "size-allocate", G_CALLBACK(size_allocate_cb), polv);
-    g_signal_connect_after(polv->canvas, "realize", G_CALLBACK(on_canvas_realized), polv);
+    g_signal_connect(polv->canvas, "motion-notify-event",
+                     G_CALLBACK(on_motion_notify), polv);
+    g_signal_connect(polv->canvas, "size-allocate",
+                     G_CALLBACK(size_allocate_cb), polv);
+    g_signal_connect_after(polv->canvas, "realize",
+                           G_CALLBACK(on_canvas_realized), polv);
 
     gtk_widget_show(polv->canvas);
 
@@ -778,7 +779,7 @@ GtkWidget *gtk_polar_plot_new(qth_t * qth, pass_t * pass)
  * @param pass Pointer to the new pass data. Use NULL to disable
  *             display of pass.
  */
-void gtk_polar_plot_set_pass(GtkPolarPlot * plot, pass_t * pass)
+void gtk_polar_plot_set_pass(GtkPolarPlot *plot, pass_t *pass)
 {
     /* remove sky track and the pass itself */
     if (plot->pass != NULL)
@@ -806,10 +807,10 @@ void gtk_polar_plot_set_pass(GtkPolarPlot * plot, pass_t * pass)
  * @param plot Pointer to the GtkPolarPlot widget
  * @param az Azimuth of the target object
  * @param el Elevation of the target object
- * 
+ *
  * If either az or el are negative the target object will be hidden
  */
-void gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
+void gtk_polar_plot_set_target_pos(GtkPolarPlot *plot, gdouble az, gdouble el)
 {
     if (plot == NULL)
         return;
@@ -826,10 +827,10 @@ void gtk_polar_plot_set_target_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
  * @param plot Pointer to the GtkPolarPlot widget
  * @param az Azimuth of the controller object
  * @param el Elevation of the controller object
- * 
+ *
  * If either az or el are negative the controller object will be hidden
  */
-void gtk_polar_plot_set_ctrl_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
+void gtk_polar_plot_set_ctrl_pos(GtkPolarPlot *plot, gdouble az, gdouble el)
 {
     if (plot == NULL)
         return;
@@ -846,10 +847,10 @@ void gtk_polar_plot_set_ctrl_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
  * @param plot Pointer to the GtkPolarPlot widget
  * @param az Azimuth of the rotator object
  * @param el Elevation of the rotator object
- * 
+ *
  * If either az or el are negative the controller object will be hidden
  */
-void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
+void gtk_polar_plot_set_rotor_pos(GtkPolarPlot *plot, gdouble az, gdouble el)
 {
     if (plot == NULL)
         return;
@@ -865,9 +866,9 @@ void gtk_polar_plot_set_rotor_pos(GtkPolarPlot * plot, gdouble az, gdouble el)
  *
  * @param plot Pointer to the GtkPolarPlot widget
  * @param show TRUE => show tick. FALSE => don't show
- * 
+ *
  */
-void gtk_polar_plot_show_time_ticks(GtkPolarPlot * plot, gboolean show)
+void gtk_polar_plot_show_time_ticks(GtkPolarPlot *plot, gboolean show)
 {
     (void)plot;
     (void)show;
