@@ -62,6 +62,7 @@ const gchar *authors[] = {
     "Jonathan Holmgren",
     "KaComet",
     "Libre Space Foundation",
+    "Liu Xinyu",
     "Lloyd Brown",
     "LongnoseRob, JI1MNC",
     "Marcel Cimander",
