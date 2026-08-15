@@ -8,30 +8,30 @@
     More details can be found at the project home page:
 
             http://gpredict.oz9aec.net/
- 
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
     (at your option) any later version.
-  
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-  
+
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
 #ifdef HAVE_CONFIG_H
-#  include <build-config.h>
+#include <build-config.h>
 #endif
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 
 #include "about.h"
 #include "compat.h"
 
-
+/* clang-format off */
 const gchar *authors[] = {
     "Alexandru Csete, OZ9AEC, with contributions from:",
     "",
@@ -102,21 +102,23 @@ const gchar *authors[] = {
     "see website http://visibleearth.nasa.gov/",
     NULL
 };
+/* clang-format on */
 
 extern GtkWidget *app;
 
 void about_dialog_create()
 {
-    GtkWidget      *dialog;
-    GdkPixbuf      *icon;
-    gchar          *iconfile;
+    GtkWidget *dialog;
+    GdkPixbuf *icon;
+    gchar *iconfile;
 
     dialog = gtk_about_dialog_new();
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app));
     gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("Gpredict"));
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
-    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
-                                   _("Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"));
+    gtk_about_dialog_set_copyright(
+        GTK_ABOUT_DIALOG(dialog),
+        _("Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"));
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
                                  "http://gpredict.oz9aec.net/");
     gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(dialog),
