@@ -1193,7 +1193,7 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
                                 _("The rate of change for the distance between"
                                   " the satellite and the observer."));
 
-    frame = gtk_frame_new(_("Target"));
+    frame = gtk_frame_new(_("Satellite"));
     gtk_container_add(GTK_CONTAINER(frame), table);
     g_free(buff);
 

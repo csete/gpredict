@@ -1381,7 +1381,7 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
     gtk_grid_attach(GTK_GRID(table), ctrl->SatCnt, 1, 4, 1, 1);
 
-    frame = gtk_frame_new(_("Target"));
+    frame = gtk_frame_new(_("Satellite"));
     gtk_container_add(GTK_CONTAINER(frame), table);
 
     g_free(buff);
