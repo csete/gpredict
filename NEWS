@@ -1,9 +1,10 @@
 Changes in version 2.6 (TBD)
 
- - Removed invalid data from satellites.dat (#413)
- - Updated contributors (#414)
  - Added satellite filter to the radio and rotator controllers (#339)
- - Fixed long transponder names causing widget to become very wide
+ - Removed invalid data from satellites.dat (#413)
+ - Fixed posistioning of North and South labels in the polar view (#415)
+ - Limit width of transponder selector in the radio controller window
+ - Updated contributors (#414)
 
 
 Changes in version 2.5.2 (20 Jul 2026)
