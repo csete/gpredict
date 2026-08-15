@@ -1107,7 +1107,6 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
     g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
-    g_signal_emit_by_name(ctrl->SatSel, "changed");
     gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 1, 3, 1);
 
     /* tracking button */
