@@ -36,7 +36,7 @@
 #endif
 
 #define _GNU_SOURCE
-#include <string.h>             /* strcasestr */
+#include <string.h> /* strcasestr */
 
 #include <gdk/gdkkeysyms.h>
 #include <glib.h>
@@ -46,10 +46,10 @@
 
 /* NETWORK */
 #ifndef WIN32
-#include <arpa/inet.h>          /* htons() */
-#include <netdb.h>              /* gethostbyname() */
-#include <netinet/in.h>         /* struct sockaddr_in */
-#include <sys/socket.h>         /* socket(), connect(), send() */
+#include <arpa/inet.h>  /* htons() */
+#include <netdb.h>      /* gethostbyname() */
+#include <netinet/in.h> /* struct sockaddr_in */
+#include <sys/socket.h> /* socket(), connect(), send() */
 #else
 #include <winsock2.h>
 #endif
@@ -60,47 +60,46 @@
 #include "gtk-rig-ctrl.h"
 #include "predict-tools.h"
 #include "radio-conf.h"
-#include "sat-log.h"
 #include "sat-cfg.h"
+#include "sat-log.h"
 #include "trsp-conf.h"
-
 
 #define AZEL_FMTSTR "%7.2f\302\260"
 #define MAX_ERROR_COUNT 5
-#define WR_DEL 5000             /* delay in usec to wait between write and read commands */
+#define WR_DEL 5000 /* delay in usec to wait between write and read commands */
 
 /* radio control functions */
-static void     exec_rx_cycle(GtkRigCtrl * ctrl);
-static void     exec_tx_cycle(GtkRigCtrl * ctrl);
-static void     exec_trx_cycle(GtkRigCtrl * ctrl);
-static void     exec_toggle_cycle(GtkRigCtrl * ctrl);
-static void     exec_toggle_tx_cycle(GtkRigCtrl * ctrl);
-static void     exec_duplex_cycle(GtkRigCtrl * ctrl);
-static void     exec_duplex_tx_cycle(GtkRigCtrl * ctrl);
-static void     exec_dual_rig_cycle(GtkRigCtrl * ctrl);
-static gboolean check_aos_los(GtkRigCtrl * ctrl);
-static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq);
-static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
-static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq);
-static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock);
-static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock);
-static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq);
-static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock);
-static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt);
+static void exec_rx_cycle(GtkRigCtrl *ctrl);
+static void exec_tx_cycle(GtkRigCtrl *ctrl);
+static void exec_trx_cycle(GtkRigCtrl *ctrl);
+static void exec_toggle_cycle(GtkRigCtrl *ctrl);
+static void exec_toggle_tx_cycle(GtkRigCtrl *ctrl);
+static void exec_duplex_cycle(GtkRigCtrl *ctrl);
+static void exec_duplex_tx_cycle(GtkRigCtrl *ctrl);
+static void exec_dual_rig_cycle(GtkRigCtrl *ctrl);
+static gboolean check_aos_los(GtkRigCtrl *ctrl);
+static gboolean set_freq_simplex(GtkRigCtrl *ctrl, gint sock, gdouble freq);
+static gboolean get_freq_simplex(GtkRigCtrl *ctrl, gint sock, gdouble *freq);
+static gboolean set_freq_toggle(GtkRigCtrl *ctrl, gint sock, gdouble freq);
+static gboolean set_toggle(GtkRigCtrl *ctrl, gint sock);
+static gboolean unset_toggle(GtkRigCtrl *ctrl, gint sock);
+static gboolean get_freq_toggle(GtkRigCtrl *ctrl, gint sock, gdouble *freq);
+static gboolean get_ptt(GtkRigCtrl *ctrl, gint sock);
+static gboolean set_ptt(GtkRigCtrl *ctrl, gint sock, gboolean ptt);
 
 /*  add thread for hamlib communication */
-gpointer        rigctl_run(gpointer data);
-static void     rigctrl_open(GtkRigCtrl * data);
-static void     rigctrl_close(GtkRigCtrl * data);
-static void     setconfig(gpointer data);
-static void     remove_timer(GtkRigCtrl * data);
-static void     start_timer(GtkRigCtrl * data);
+gpointer rigctl_run(gpointer data);
+static void rigctrl_open(GtkRigCtrl *data);
+static void rigctrl_close(GtkRigCtrl *data);
+static void setconfig(gpointer data);
+static void remove_timer(GtkRigCtrl *data);
+static void start_timer(GtkRigCtrl *data);
 
 static GtkBoxClass *parent_class = NULL;
 
-static void gtk_rig_ctrl_destroy(GtkWidget * widget)
+static void gtk_rig_ctrl_destroy(GtkWidget *widget)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(widget);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(widget);
 
     if (ctrl->rigctl_thread != NULL)
     {
@@ -137,23 +136,21 @@ static void gtk_rig_ctrl_destroy(GtkWidget * widget)
         ctrl->trsplist = NULL;
     }
 
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy)(widget);
 }
 
-static void gtk_rig_ctrl_class_init(GtkRigCtrlClass * class,
-				    gpointer class_data)
+static void gtk_rig_ctrl_class_init(GtkRigCtrlClass *class, gpointer class_data)
 {
     GtkWidgetClass *widget_class;
 
     (void)class_data;
 
-    widget_class = (GtkWidgetClass *) class;
+    widget_class = (GtkWidgetClass *)class;
     parent_class = g_type_class_peek_parent(class);
     widget_class->destroy = gtk_rig_ctrl_destroy;
 }
 
-static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl,
-			      gpointer g_class)
+static void gtk_rig_ctrl_init(GtkRigCtrl *ctrl, gpointer g_class)
 {
     (void)g_class;
 
@@ -184,40 +181,37 @@ static void gtk_rig_ctrl_init(GtkRigCtrl * ctrl,
 
 GType gtk_rig_ctrl_get_type()
 {
-    static GType    gtk_rig_ctrl_type = 0;
+    static GType gtk_rig_ctrl_type = 0;
 
     if (!gtk_rig_ctrl_type)
     {
 
         static const GTypeInfo gtk_rig_ctrl_info = {
             sizeof(GtkRigCtrlClass),
-            NULL,               /* base_init */
-            NULL,               /* base_finalize */
-            (GClassInitFunc) gtk_rig_ctrl_class_init,
-            NULL,               /* class_finalize */
-            NULL,               /* class_data */
+            NULL, /* base_init */
+            NULL, /* base_finalize */
+            (GClassInitFunc)gtk_rig_ctrl_class_init,
+            NULL, /* class_finalize */
+            NULL, /* class_data */
             sizeof(GtkRigCtrl),
-            2,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_rig_ctrl_init,
-            NULL
-        };
+            2, /* n_preallocs */
+            (GInstanceInitFunc)gtk_rig_ctrl_init,
+            NULL};
 
-        gtk_rig_ctrl_type = g_type_register_static(GTK_TYPE_BOX,
-                                                   "GtkRigCtrl",
+        gtk_rig_ctrl_type = g_type_register_static(GTK_TYPE_BOX, "GtkRigCtrl",
                                                    &gtk_rig_ctrl_info, 0);
     }
 
     return gtk_rig_ctrl_type;
 }
 
-
-static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
+static void update_count_down(GtkRigCtrl *ctrl, gdouble t)
 {
-    gdouble         targettime;
-    gdouble         delta;
-    gchar          *buff;
-    guint           h, m, s;
-    gchar          *aoslos;
+    gdouble targettime;
+    gdouble delta;
+    gchar *buff;
+    guint h, m, s;
+    gchar *aoslos;
 
     /* select AOS or LOS time depending on target elevation */
     if (ctrl->target->el < 0.0)
@@ -234,25 +228,23 @@ static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
     delta = targettime - t;
 
     /* convert julian date to seconds */
-    s = (guint) (delta * 86400);
+    s = (guint)(delta * 86400);
 
     /* extract hours */
-    h = (guint) floor(s / 3600);
+    h = (guint)floor(s / 3600);
     s -= 3600 * h;
 
     /* extract minutes */
-    m = (guint) floor(s / 60);
+    m = (guint)floor(s / 60);
     s -= 60 * m;
 
     if (h > 0)
-        buff =
-            g_strdup_printf
-            ("<span size='xx-large'><b>%s %02d:%02d:%02d</b></span>", aoslos,
-             h, m, s);
+        buff = g_strdup_printf(
+            "<span size='xx-large'><b>%s %02d:%02d:%02d</b></span>", aoslos, h,
+            m, s);
     else
-        buff =
-            g_strdup_printf("<span size='xx-large'><b>%s %02d:%02d</b></span>",
-                            aoslos, m, s);
+        buff = g_strdup_printf(
+            "<span size='xx-large'><b>%s %02d:%02d</b></span>", aoslos, m, s);
 
     gtk_label_set_markup(GTK_LABEL(ctrl->SatCnt), buff);
 
@@ -267,10 +259,10 @@ static void update_count_down(GtkRigCtrl * ctrl, gdouble t)
  * the satellite data has been updated. The function updates the internal state
  * of the controller and the rigator.
  */
-void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
+void gtk_rig_ctrl_update(GtkRigCtrl *ctrl, gdouble t)
 {
-    gdouble         satfreq;
-    gchar          *buff;
+    gdouble satfreq;
+    gchar *buff;
 
     g_mutex_lock(&ctrl->rig_ctrl_updatelock);
 
@@ -317,7 +309,7 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
 
         /* Doppler shift up */
         satfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqUp));
-        ctrl->du = satfreq * (ctrl->target->range_rate / 299792.4580);  // Hz
+        ctrl->du = satfreq * (ctrl->target->range_rate / 299792.4580); // Hz
         buff = g_strdup_printf("%.0f Hz", ctrl->du);
         gtk_label_set_text(GTK_LABEL(ctrl->SatDopUp), buff);
         g_free(buff);
@@ -341,14 +333,13 @@ void gtk_rig_ctrl_update(GtkRigCtrl * ctrl, gdouble t)
     g_mutex_unlock(&ctrl->rig_ctrl_updatelock);
 }
 
-
 /*
  * Track the downlink frequency by setting the uplink frequency
  * according to the lower limit of the downlink passband.
  */
-static void track_downlink(GtkRigCtrl * ctrl)
+static void track_downlink(GtkRigCtrl *ctrl)
 {
-    gdouble         delta, down, up;
+    gdouble delta, down, up;
 
     if (ctrl->trsp == NULL)
         return;
@@ -372,9 +363,9 @@ static void track_downlink(GtkRigCtrl * ctrl)
  * Track the uplink frequency by setting the downlink frequency
  * according to the offset from the lower limit on the uplink passband.
  */
-static void track_uplink(GtkRigCtrl * ctrl)
+static void track_uplink(GtkRigCtrl *ctrl)
 {
-    gdouble         delta, down, up;
+    gdouble delta, down, up;
 
     if (ctrl->trsp == NULL)
         return;
@@ -394,10 +385,10 @@ static void track_uplink(GtkRigCtrl * ctrl)
     }
 }
 
-void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
+void gtk_rig_ctrl_select_sat(GtkRigCtrl *ctrl, gint catnum)
 {
-    sat_t          *sat;
-    int             i, n;
+    sat_t *sat;
+    int i, n;
 
     /* find index in satellite list */
     n = g_slist_length(ctrl->sats);
@@ -416,9 +407,9 @@ void gtk_rig_ctrl_select_sat(GtkRigCtrl * ctrl, gint catnum)
     }
 }
 
-static void downlink_changed_cb(GtkFreqKnob * knob, gpointer data)
+static void downlink_changed_cb(GtkFreqKnob *knob, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     (void)knob;
 
@@ -426,9 +417,9 @@ static void downlink_changed_cb(GtkFreqKnob * knob, gpointer data)
         track_downlink(ctrl);
 }
 
-static void uplink_changed_cb(GtkFreqKnob * knob, gpointer data)
+static void uplink_changed_cb(GtkFreqKnob *knob, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     (void)knob;
 
@@ -444,12 +435,12 @@ static void uplink_changed_cb(GtkFreqKnob * knob, gpointer data)
  * satellite frequency with the radio frequency below it.
  *
  */
-static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl)
+static GtkWidget *create_downlink_widgets(GtkRigCtrl *ctrl)
 {
-    GtkWidget      *frame;
-    GtkWidget      *vbox;
-    GtkWidget      *hbox1, *hbox2;
-    GtkWidget      *label;
+    GtkWidget *frame;
+    GtkWidget *vbox;
+    GtkWidget *hbox1, *hbox2;
+    GtkWidget *label;
 
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b> Downlink </b>"));
@@ -511,12 +502,12 @@ static GtkWidget *create_downlink_widgets(GtkRigCtrl * ctrl)
  * This function creates and initialises the widgets for displaying the
  * uplink frequency of the satellite and the radio.
  */
-static GtkWidget *create_uplink_widgets(GtkRigCtrl * ctrl)
+static GtkWidget *create_uplink_widgets(GtkRigCtrl *ctrl)
 {
-    GtkWidget      *frame;
-    GtkWidget      *vbox;
-    GtkWidget      *hbox1, *hbox2;
-    GtkWidget      *label;
+    GtkWidget *frame;
+    GtkWidget *vbox;
+    GtkWidget *hbox1, *hbox2;
+    GtkWidget *label;
 
     label = gtk_label_new(NULL);
     gtk_label_set_markup(GTK_LABEL(label), _("<b> Uplink </b>"));
@@ -571,11 +562,10 @@ static GtkWidget *create_uplink_widgets(GtkRigCtrl * ctrl)
     return frame;
 }
 
-
-static void load_trsp_list(GtkRigCtrl * ctrl)
+static void load_trsp_list(GtkRigCtrl *ctrl)
 {
-    trsp_t         *trsp = NULL;
-    guint           i, n;
+    trsp_t *trsp = NULL;
+    guint i, n;
 
     if (ctrl->trsplist != NULL)
     {
@@ -591,8 +581,8 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
     if (ctrl->target == NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s:%s: GtkSatModule has no target satellite."),
-                    __FILE__, __func__);
+                    _("%s:%s: GtkSatModule has no target satellite."), __FILE__,
+                    __func__);
         return;
     }
 
@@ -600,15 +590,15 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
     ctrl->trsplist = read_transponders(ctrl->target->tle.catnr);
     n = g_slist_length(ctrl->trsplist);
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s:%s: Satellite %d has %d transponder modes."),
-                __FILE__, __func__, ctrl->target->tle.catnr, n);
+                _("%s:%s: Satellite %d has %d transponder modes."), __FILE__,
+                __func__, ctrl->target->tle.catnr, n);
 
     if (n == 0)
         return;
 
     for (i = 0; i < n; i++)
     {
-        trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, i);
+        trsp = (trsp_t *)g_slist_nth_data(ctrl->trsplist, i);
         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->TrspSel),
                                        trsp->name);
 
@@ -618,28 +608,26 @@ static void load_trsp_list(GtkRigCtrl * ctrl)
     }
 
     /* limit number of characters to prevent very wide combo box */
-    GList *renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(ctrl->TrspSel));
+    GList *renderers =
+        gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(ctrl->TrspSel));
     if (renderers != NULL)
     {
-        g_object_set(renderers->data,
-                     "width-chars", 30,
-                     "max-width-chars", 30,
-                     "ellipsize", PANGO_ELLIPSIZE_END,
-                     NULL);
+        g_object_set(renderers->data, "width-chars", 30, "max-width-chars", 30,
+                     "ellipsize", PANGO_ELLIPSIZE_END, NULL);
         g_list_free(renderers);
     }
 
-    ctrl->trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, 0);
+    ctrl->trsp = (trsp_t *)g_slist_nth_data(ctrl->trsplist, 0);
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->TrspSel), 0);
 }
 
 static gboolean have_conf()
 {
-    GDir           *dir = NULL; /* directory handle */
-    GError         *error = NULL;       /* error flag and info */
-    gchar          *dirname;    /* directory name */
-    const gchar    *filename;   /* file name */
-    gint            i = 0;
+    GDir *dir = NULL;      /* directory handle */
+    GError *error = NULL;  /* error flag and info */
+    gchar *dirname;        /* directory name */
+    const gchar *filename; /* file name */
+    gint i = 0;
 
     dirname = get_hwconf_dir();
     dir = g_dir_open(dirname, 0, &error);
@@ -657,8 +645,8 @@ static gboolean have_conf()
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to open hwconf dir (%s)"),
-                    __FILE__, __LINE__, error->message);
+                    _("%s:%d: Failed to open hwconf dir (%s)"), __FILE__,
+                    __LINE__, error->message);
         g_clear_error(&error);
     }
 
@@ -669,18 +657,19 @@ static gboolean have_conf()
 }
 
 /* Called when the user selects a new satellite. */
-static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
+static void sat_selected_cb(GtkComboBox *satsel, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    const gchar    *active_text = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(satsel));
-    guint           n;
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+    const gchar *active_text =
+        gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(satsel));
+    guint n;
 
     if (active_text)
     {
         n = g_slist_length(ctrl->sats);
         for (guint i = 0; i < n; i++)
         {
-            sat_t * sat = g_slist_nth_data(ctrl->sats, i);
+            sat_t *sat = g_slist_nth_data(ctrl->sats, i);
             if (strcmp(sat->nickname, active_text) == 0)
             {
                 ctrl->target = sat;
@@ -715,16 +704,17 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
  * @param data Pointer to the GtkRigCtrl structure.
  *
  * This function is called when the user clicks on the Tune button next to the
- * transponder selector. When clicked, the radio controller will set the RX and TX
- * frequencies to the middle of the transponder uplink/downlink bands.
+ * transponder selector. When clicked, the radio controller will set the RX and
+ * TX frequencies to the middle of the transponder uplink/downlink bands.
  *
- * To avoid conflicts with manual frequency changes on the radio, the sync between
- * RIG and GPREDICT is invalidated after the tuning operation is performed.
+ * To avoid conflicts with manual frequency changes on the radio, the sync
+ * between RIG and GPREDICT is invalidated after the tuning operation is
+ * performed.
  */
-static void trsp_tune_cb(GtkButton * button, gpointer data)
+static void trsp_tune_cb(GtkButton *button, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    gdouble         freq;
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+    gdouble freq;
 
     (void)button;
 
@@ -735,7 +725,7 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     if ((ctrl->trsp->downlow > 0) && (ctrl->trsp->downhigh > 0))
     {
         freq = ctrl->trsp->downlow +
-            labs((long)ctrl->trsp->downhigh - (long)ctrl->trsp->downlow) / 2;
+               labs((long)ctrl->trsp->downhigh - (long)ctrl->trsp->downlow) / 2;
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), freq);
 
         /* invalidate RIG<->GPREDICT sync */
@@ -746,7 +736,7 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
     if ((ctrl->trsp->uplow > 0) && (ctrl->trsp->uphigh > 0))
     {
         freq = ctrl->trsp->uplow +
-            labs((long)ctrl->trsp->uphigh - (long)ctrl->trsp->uplow) / 2;
+               labs((long)ctrl->trsp->uphigh - (long)ctrl->trsp->uplow) / 2;
         gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqUp), freq);
 
         /* invalidate RIG<->GPREDICT sync */
@@ -758,10 +748,10 @@ static void trsp_tune_cb(GtkButton * button, gpointer data)
  * Called when a new transponder is selected.
  * It updates ctrl->trsp with the new selection and issues a "tune" event.
  */
-static void trsp_selected_cb(GtkComboBox * box, gpointer data)
+static void trsp_selected_cb(GtkComboBox *box, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    gint            i, n;
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+    gint i, n;
 
     i = gtk_combo_box_get_active(box);
     n = g_slist_length(ctrl->trsplist);
@@ -773,14 +763,15 @@ static void trsp_selected_cb(GtkComboBox * box, gpointer data)
     }
     else if (i < n)
     {
-        ctrl->trsp = (trsp_t *) g_slist_nth_data(ctrl->trsplist, i);
+        ctrl->trsp = (trsp_t *)g_slist_nth_data(ctrl->trsplist, i);
         trsp_tune_cb(NULL, data);
     }
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Inconsistency detected in internal transponder "
-                      "data (%d,%d)"), __func__, i, n);
+                      "data (%d,%d)"),
+                    __func__, i, n);
     }
 }
 
@@ -791,13 +782,14 @@ static void trsp_selected_cb(GtkComboBox * box, gpointer data)
  * @param data Pointer to the GtkRigCtrl structure.
  *
  * This function is called when the user toggles the "Lock Transponder" button.
- * When ON, the uplink and downlink are locked according to the current transponder
- * data, i.e. when user changes the downlink, the uplink will follow automatically
- * taking into account whether the transponder is inverting or not.
+ * When ON, the uplink and downlink are locked according to the current
+ * transponder data, i.e. when user changes the downlink, the uplink will follow
+ * automatically taking into account whether the transponder is inverting or
+ * not.
  */
-static void trsp_lock_cb(GtkToggleButton * button, gpointer data)
+static void trsp_lock_cb(GtkToggleButton *button, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     ctrl->trsplock = gtk_toggle_button_get_active(button);
 
@@ -806,9 +798,9 @@ static void trsp_lock_cb(GtkToggleButton * button, gpointer data)
         track_downlink(ctrl);
 }
 
-static void track_toggle_cb(GtkToggleButton * button, gpointer data)
+static void track_toggle_cb(GtkToggleButton *button, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     ctrl->tracking = gtk_toggle_button_get_active(button);
 
@@ -818,11 +810,11 @@ static void track_toggle_cb(GtkToggleButton * button, gpointer data)
 }
 
 /* Called when the user changes the value of the cycle delay */
-static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
+static void delay_changed_cb(GtkSpinButton *spin, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
-    ctrl->delay = (guint) gtk_spin_button_get_value(spin);
+    ctrl->delay = (guint)gtk_spin_button_get_value(spin);
     if (ctrl->conf)
         ctrl->conf->cycle = ctrl->delay;
 
@@ -830,13 +822,12 @@ static void delay_changed_cb(GtkSpinButton * spin, gpointer data)
         start_timer(ctrl);
 }
 
-static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
+static void primary_rig_selected_cb(GtkComboBox *box, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    gchar          *buff;
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+    gchar *buff;
 
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s:%s: Primary device selected: %d"),
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: Primary device selected: %d"),
                 __FILE__, __func__, gtk_combo_box_get_active(box));
 
     if (ctrl->conf != NULL)
@@ -860,8 +851,8 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
     if (radio_conf_read(ctrl->conf))
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s:%s: Loaded new radio configuration %s"),
-                    __FILE__, __func__, ctrl->conf->name);
+                    _("%s:%s: Loaded new radio configuration %s"), __FILE__,
+                    __func__, ctrl->conf->name);
 
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(ctrl->cycle_spin),
                                   ctrl->conf->cycle);
@@ -881,8 +872,8 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Failed to load radio configuration %s"),
-                    __FILE__, __func__, ctrl->conf->name);
+                    _("%s:%s: Failed to load radio configuration %s"), __FILE__,
+                    __func__, ctrl->conf->name);
 
         g_free(ctrl->conf->name);
         if (ctrl->conf->host)
@@ -892,15 +883,13 @@ static void primary_rig_selected_cb(GtkComboBox * box, gpointer data)
     }
 }
 
-static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
+static void secondary_rig_selected_cb(GtkComboBox *box, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    gchar          *buff;
-    gchar          *name1, *name2;
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+    gchar *buff;
+    gchar *name1, *name2;
 
-
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s:%s: Secondary device selected: %d"),
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: Secondary device selected: %d"),
                 __FILE__, __func__, gtk_combo_box_get_active(box));
 
     if (ctrl->conf2 != NULL)
@@ -966,8 +955,8 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
     if (radio_conf_read(ctrl->conf2))
     {
         sat_log_log(SAT_LOG_LEVEL_INFO,
-                    _("%s:%s: Loaded new radio configuration %s"),
-                    __FILE__, __func__, ctrl->conf2->name);
+                    _("%s:%s: Loaded new radio configuration %s"), __FILE__,
+                    __func__, ctrl->conf2->name);
 
         buff = g_strdup_printf(_("%.0f MHz"), ctrl->conf2->loup / 1.0e6);
         gtk_label_set_text(GTK_LABEL(ctrl->LoUp), buff);
@@ -976,8 +965,8 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Failed to load radio configuration %s"),
-                    __FILE__, __func__, ctrl->conf->name);
+                    _("%s:%s: Failed to load radio configuration %s"), __FILE__,
+                    __func__, ctrl->conf->name);
 
         g_free(ctrl->conf2->name);
         if (ctrl->conf2->host)
@@ -987,9 +976,9 @@ static void secondary_rig_selected_cb(GtkComboBox * box, gpointer data)
     }
 }
 
-static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
+static void rig_engaged_cb(GtkToggleButton *button, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     if (ctrl->conf == NULL)
     {
@@ -1027,15 +1016,15 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
     }
 }
 
-static void filter_text_changed_cb(GtkSearchEntry * entry, gpointer data)
+static void filter_text_changed_cb(GtkSearchEntry *entry, gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
-    const gchar    *filter = gtk_entry_get_text(GTK_ENTRY(entry));
-    guint           n = g_slist_length(ctrl->sats);
-    guint           i;
-    sat_t          *sat = NULL;
-    guint           cnt = 0;
+    const gchar *filter = gtk_entry_get_text(GTK_ENTRY(entry));
+    guint n = g_slist_length(ctrl->sats);
+    guint i;
+    sat_t *sat = NULL;
+    guint cnt = 0;
 
     gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ctrl->SatSel));
     if (filter == NULL || filter[0] == '\0')
@@ -1059,7 +1048,7 @@ static void filter_text_changed_cb(GtkSearchEntry * entry, gpointer data)
             if (sat && strcasestr(sat->nickname, filter))
             {
                 gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
-                                            sat->nickname);
+                                               sat->nickname);
                 cnt++;
             }
         }
@@ -1071,13 +1060,13 @@ static void filter_text_changed_cb(GtkSearchEntry * entry, gpointer data)
     }
 }
 
-static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
+static GtkWidget *create_target_widgets(GtkRigCtrl *ctrl)
 {
-    GtkWidget      *frame, *table, *label, *track;
-    GtkWidget      *tune, *trsplock, *hbox;
-    gchar          *buff;
-    guint           i, n;
-    sat_t          *sat = NULL;
+    GtkWidget *frame, *table, *label, *track;
+    GtkWidget *tune, *trsplock, *hbox;
+    gchar *buff;
+    guint i, n;
+    sat_t *sat = NULL;
 
     buff = g_strdup_printf(AZEL_FMTSTR, 0.0);
 
@@ -1088,7 +1077,8 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
 
     /* sat selector filter */
     ctrl->SatSelFilter = gtk_search_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(ctrl->SatSelFilter), _("Filter..."));
+    gtk_entry_set_placeholder_text(GTK_ENTRY(ctrl->SatSelFilter),
+                                   _("Filter..."));
     gtk_grid_attach(GTK_GRID(table), ctrl->SatSelFilter, 0, 0, 3, 1);
     g_signal_connect(ctrl->SatSelFilter, "search-changed",
                      G_CALLBACK(filter_text_changed_cb), ctrl);
@@ -1106,7 +1096,8 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
 
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
-    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
+                     ctrl);
     gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 1, 3, 1);
 
     /* tracking button */
@@ -1211,10 +1202,10 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     return frame;
 }
 
-static gboolean is_rig_tx_capable(const gchar * confname)
+static gboolean is_rig_tx_capable(const gchar *confname)
 {
-    radio_conf_t   *conf = NULL;
-    gboolean        cantx = FALSE;
+    radio_conf_t *conf = NULL;
+    gboolean cantx = FALSE;
 
     conf = g_try_new(radio_conf_t, 1);
     if (conf == NULL)
@@ -1234,8 +1225,8 @@ static gboolean is_rig_tx_capable(const gchar * confname)
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Error reading radio configuration %s"),
-                    __FILE__, __LINE__, confname);
+                    _("%s:%d: Error reading radio configuration %s"), __FILE__,
+                    __LINE__, confname);
 
         cantx = FALSE;
     }
@@ -1249,27 +1240,26 @@ static gboolean is_rig_tx_capable(const gchar * confname)
 }
 
 /* Sort the list of satellites in the combo box. */
-static gint sat_name_compare(sat_t * a, sat_t * b)
+static gint sat_name_compare(sat_t *a, sat_t *b)
 {
     return (gpredict_strcmp(a->nickname, b->nickname));
 }
 
 /* Sort the list of rigs in the combo box */
-static gint rig_name_compare(const gchar * a, const gchar * b)
+static gint rig_name_compare(const gchar *a, const gchar *b)
 {
     return (gpredict_strcmp(a, b));
 }
 
-static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
+static GtkWidget *create_conf_widgets(GtkRigCtrl *ctrl)
 {
-    GtkWidget      *frame, *table, *label;
-    GDir           *dir = NULL; /* directory handle */
-    GError         *error = NULL;       /* error flag and info */
-    gchar          *dirname;    /* directory name */
-    gchar         **vbuff;
-    const gchar    *filename;   /* file name */
-    gchar          *rigname;
-
+    GtkWidget *frame, *table, *label;
+    GDir *dir = NULL;     /* directory handle */
+    GError *error = NULL; /* error flag and info */
+    gchar *dirname;       /* directory name */
+    gchar **vbuff;
+    const gchar *filename; /* file name */
+    gchar *rigname;
 
     table = gtk_grid_new();
     gtk_container_set_border_width(GTK_CONTAINER(table), 5);
@@ -1295,9 +1285,9 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     if (dir)
     {
         /* read each .rig file */
-        GSList         *rigs = NULL;
-        gint            i;
-        gint            n;
+        GSList *rigs = NULL;
+        gint i;
+        gint n;
 
         while ((filename = g_dir_read_name(dir)))
         {
@@ -1305,7 +1295,7 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
             {
                 vbuff = g_strsplit(filename, ".rig", 0);
                 rigs = g_slist_insert_sorted(rigs, g_strdup(vbuff[0]),
-                                             (GCompareFunc) rig_name_compare);
+                                             (GCompareFunc)rig_name_compare);
                 g_strfreev(vbuff);
             }
         }
@@ -1315,8 +1305,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
             rigname = g_slist_nth_data(rigs, i);
             if (rigname)
             {
-                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
-                                               (ctrl->DevSel), rigname);
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->DevSel),
+                                               rigname);
                 g_free(rigname);
             }
         }
@@ -1325,8 +1315,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to open hwconf dir (%s)"),
-                    __FILE__, __LINE__, error->message);
+                    _("%s:%d: Failed to open hwconf dir (%s)"), __FILE__,
+                    __LINE__, error->message);
         g_clear_error(&error);
     }
 
@@ -1364,8 +1354,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
                 vbuff = g_strsplit(filename, ".rig", 0);
                 if (is_rig_tx_capable(vbuff[0]))
                 {
-                    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT
-                                                   (ctrl->DevSel2), vbuff[0]);
+                    gtk_combo_box_text_append_text(
+                        GTK_COMBO_BOX_TEXT(ctrl->DevSel2), vbuff[0]);
                 }
                 g_strfreev(vbuff);
             }
@@ -1374,8 +1364,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     else
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to open hwconf dir (%s)"),
-                    __FILE__, __LINE__, error->message);
+                    _("%s:%d: Failed to open hwconf dir (%s)"), __FILE__,
+                    __LINE__, error->message);
         g_clear_error(&error);
     }
 
@@ -1421,11 +1411,10 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl * ctrl)
     return frame;
 }
 
-
 /* Create count down widget */
-static GtkWidget *create_count_down_widgets(GtkRigCtrl * ctrl)
+static GtkWidget *create_count_down_widgets(GtkRigCtrl *ctrl)
 {
-    GtkWidget      *frame;
+    GtkWidget *frame;
 
     /* create delta-t label */
     ctrl->SatCnt = gtk_label_new(NULL);
@@ -1448,59 +1437,57 @@ static GtkWidget *create_count_down_widgets(GtkRigCtrl * ctrl)
 /* Copy satellite from hash table to singly linked list. */
 static void store_sats(gpointer key, gpointer value, gpointer user_data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(user_data);
-    sat_t          *sat = SAT(value);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(user_data);
+    sat_t *sat = SAT(value);
 
     (void)key;
 
-    ctrl->sats = g_slist_insert_sorted(ctrl->sats, sat,
-                                       (GCompareFunc) sat_name_compare);
+    ctrl->sats =
+        g_slist_insert_sorted(ctrl->sats, sat, (GCompareFunc)sat_name_compare);
 }
 
-static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
-                                      gchar * buff, gchar * buffout,
-                                      gint sizeout)
+static gboolean _send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff,
+                                      gchar *buffout, gint sizeout)
 {
-    gint            written;
-    gint            size;
+    gint written;
+    gint size;
 
     size = strlen(buff);
 
     sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s:%s: sending %d bytes to rigctld as \"%s\""),
-                __FILE__, __func__, size, buff);
+                _("%s:%s: sending %d bytes to rigctld as \"%s\""), __FILE__,
+                __func__, size, buff);
     /* send command */
     written = send(sock, buff, strlen(buff), 0);
     if (written != size)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: SIZE ERROR %d / %d"), __func__, written, size);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: SIZE ERROR %d / %d"), __func__,
+                    written, size);
     }
     if (written == -1)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: rigctld port closed"), __func__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: rigctld port closed"),
+                    __func__);
         return FALSE;
     }
     /* try to read answer */
     size = recv(sock, buffout, sizeout - 1, 0);
     if (size == -1)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: rigctld port closed"), __func__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: rigctld port closed"),
+                    __func__);
         return FALSE;
     }
 
     buffout[size] = '\0';
     if (size == 0)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Got 0 bytes from rigctld"), __FILE__, __func__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%s: Got 0 bytes from rigctld"),
+                    __FILE__, __func__);
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s:%s: Read %d bytes from rigctld"),
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: Read %d bytes from rigctld"),
                     __FILE__, __func__, size);
     }
     ctrl->wrops++;
@@ -1508,11 +1495,10 @@ static gboolean _send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
     return TRUE;
 }
 
-static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
-                                     gchar * buff, gchar * buffout,
-                                     gint sizeout)
+static gboolean send_rigctld_command(GtkRigCtrl *ctrl, gint sock, gchar *buff,
+                                     gchar *buffout, gint sizeout)
 {
-    gboolean        retval;
+    gboolean retval;
 
     /* Enter critical section! */
     g_mutex_lock(&ctrl->writelock);
@@ -1524,16 +1510,16 @@ static gboolean send_rigctld_command(GtkRigCtrl * ctrl, gint sock,
     return (retval);
 }
 
-static inline gboolean check_set_response(gchar * buffback, gboolean retcode,
-                                          const gchar * function)
+static inline gboolean check_set_response(gchar *buffback, gboolean retcode,
+                                          const gchar *function)
 {
     if (retcode == TRUE)
     {
         if (strncmp(buffback, "RPRT 0", 6) != 0)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%s: %s rigctld returned error (%s)"),
-                        __FILE__, __func__, function, buffback);
+                        _("%s:%s: %s rigctld returned error (%s)"), __FILE__,
+                        __func__, function, buffback);
 
             retcode = FALSE;
         }
@@ -1542,16 +1528,16 @@ static inline gboolean check_set_response(gchar * buffback, gboolean retcode,
     return retcode;
 }
 
-static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
-                                          const gchar * function)
+static inline gboolean check_get_response(gchar *buffback, gboolean retcode,
+                                          const gchar *function)
 {
     if (retcode == TRUE)
     {
         if (strncmp(buffback, "RPRT", 4) == 0)
         {
             sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _("%s:%s: %s rigctld returned error (%s)"),
-                        __FILE__, __func__, function, buffback);
+                        _("%s:%s: %s rigctld returned error (%s)"), __FILE__,
+                        __func__, function, buffback);
 
             retcode = FALSE;
         }
@@ -1560,7 +1546,7 @@ static inline gboolean check_get_response(gchar * buffback, gboolean retcode,
     return retcode;
 }
 
-static int get_vfos(GtkRigCtrl * ctrl, char *rx, char *tx)
+static int get_vfos(GtkRigCtrl *ctrl, char *rx, char *tx)
 {
     // fill rx/tx with vfo name plus space if not empty
     rx = tx = "";
@@ -1568,28 +1554,41 @@ static int get_vfos(GtkRigCtrl * ctrl, char *rx, char *tx)
     {
     case VFO_A:
         if (ctrl->conf->vfo_opt)
-            {rx = "VFOB ";tx = "VFOA ";}
+        {
+            rx = "VFOB ";
+            tx = "VFOA ";
+        }
         break;
 
     case VFO_B:
         if (ctrl->conf->vfo_opt)
-           {rx = "VFOA ";tx = "VFOB ";}
+        {
+            rx = "VFOA ";
+            tx = "VFOB ";
+        }
         break;
 
     case VFO_MAIN:
         if (ctrl->conf->vfo_opt)
-            {rx = "Sub";tx = "Main";}
+        {
+            rx = "Sub";
+            tx = "Main";
+        }
         break;
 
     case VFO_SUB:
         if (ctrl->conf->vfo_opt)
-            {rx = "Main";tx = "Sub";}
+        {
+            rx = "Main";
+            tx = "Sub";
+        }
         break;
 
     default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s called but TX VFO is %d and we don't know how to handle it."), __func__,
-                    ctrl->conf->vfoUp);
+        sat_log_log(
+            SAT_LOG_LEVEL_ERROR,
+            _("%s called but TX VFO is %d and we don't know how to handle it."),
+            __func__, ctrl->conf->vfoUp);
         return 1;
     }
     sat_log_log(SAT_LOG_LEVEL_DEBUG, "rx=%x, tx=%s\n", rx, tx);
@@ -1597,12 +1596,12 @@ static int get_vfos(GtkRigCtrl * ctrl, char *rx, char *tx)
 }
 
 /* Setup VFOs for split operation (simplex or duplex) */
-static gboolean setup_split(GtkRigCtrl * ctrl)
+static gboolean setup_split(GtkRigCtrl *ctrl)
 {
-    gchar          *buff;
-    gchar           buffback[256];
-    gboolean        retcode;
-    gchar          *rx="", *tx="";
+    gchar *buff;
+    gchar buffback[256];
+    gboolean retcode;
+    gchar *rx = "", *tx = "";
 
     get_vfos(ctrl, rx, tx);
     switch (ctrl->conf->vfoUp)
@@ -1636,9 +1635,8 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
         break;
 
     default:
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s called but TX VFO is %d."), __func__,
-                    ctrl->conf->vfoUp);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s called but TX VFO is %d."),
+                    __func__, ctrl->conf->vfoUp);
         return FALSE;
     }
 
@@ -1650,7 +1648,7 @@ static gboolean setup_split(GtkRigCtrl * ctrl)
 
 static gboolean rig_ctrl_timeout_cb(gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     if (ctrl->conf == NULL)
     {
@@ -1662,8 +1660,7 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
 
     if (g_mutex_trylock(&(ctrl->busy)) == FALSE)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s missed the deadline"),
-                    __func__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s missed the deadline"), __func__);
         return TRUE;
     }
 
@@ -1673,22 +1670,22 @@ static gboolean rig_ctrl_timeout_cb(gpointer data)
     return TRUE;
 }
 
-static void exec_rx_cycle(GtkRigCtrl * ctrl)
+static void exec_rx_cycle(GtkRigCtrl *ctrl)
 {
-    gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
-    gboolean        ptt = FALSE;
+    gdouble readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
+    gboolean ptt = FALSE;
 
     /* get PTT status */
     if (ctrl->engaged && ctrl->conf->ptt)
         ptt = get_ptt(ctrl, ctrl->sock);
 
     /* Dial feedback:
-       If radio device is engaged read frequency from radio and compare it to the
-       last set frequency. If different, it means that user has changed frequency
-       on the radio dial => update transponder knob
+       If radio device is engaged read frequency from radio and compare it to
+       the last set frequency. If different, it means that user has changed
+       frequency on the radio dial => update transponder knob
 
-       Note: If ctrl->lastrxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
-       and no need to execute the dial feedback.
+       Note: If ctrl->lastrxf = 0.0 the sync has been invalidated (e.g. user
+       pressed "tune") and no need to execute the dial feedback.
      */
     if ((ctrl->engaged) && (ctrl->lastrxf > 0.0) && (ptt == FALSE))
     {
@@ -1699,9 +1696,9 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
         }
         else if (fabs(readfreq - ctrl->lastrxf) >= 1.0)
         {
-            /* user might have altered radio frequency => update transponder knob */
-            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqDown),
-                                    readfreq);
+            /* user might have altered radio frequency => update transponder
+             * knob */
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqDown), readfreq);
             ctrl->lastrxf = readfreq;
 
             /* doppler shift; only if we are tracking */
@@ -1713,8 +1710,7 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
             {
                 satfreqd = readfreq + ctrl->conf->lo;
             }
-            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown),
-                                    satfreqd);
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), satfreqd);
 
             /* Update uplink if locked to downlink */
             if (ctrl->trsplock)
@@ -1729,8 +1725,9 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
 
     /* now, forward tracking */
 
-    /* If we are tracking, calculate the radio freq by applying both dopper shift
-       and tranverter LO frequency. If we are not tracking, apply only LO frequency.
+    /* If we are tracking, calculate the radio freq by applying both dopper
+       shift and tranverter LO frequency. If we are not tracking, apply only LO
+       frequency.
      */
     satfreqd = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqDown));
     satfrequ = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqUp));
@@ -1765,10 +1762,10 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
             /* give radio a chance to set frequency */
             g_usleep(WR_DEL);
 
-            /* The actual frequency might be different from what we have set because
-               the tuning step is larger than what we work with (e.g. FT-817 has a
-               smallest tuning step of 10 Hz). Therefore we read back the actual
-               frequency from the rig. */
+            /* The actual frequency might be different from what we have set
+               because the tuning step is larger than what we work with (e.g.
+               FT-817 has a smallest tuning step of 10 Hz). Therefore we read
+               back the actual frequency from the rig. */
             get_freq_simplex(ctrl, ctrl->sock, &tmpfreq);
             ctrl->lastrxf = tmpfreq;
 
@@ -1796,10 +1793,10 @@ static void exec_rx_cycle(GtkRigCtrl * ctrl)
     ctrl->lastrxptt = ptt;
 }
 
-static void exec_tx_cycle(GtkRigCtrl * ctrl)
+static void exec_tx_cycle(GtkRigCtrl *ctrl)
 {
-    gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
-    gboolean        ptt = TRUE;
+    gdouble readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
+    gboolean ptt = TRUE;
 
     /* get PTT status */
     if (ctrl->engaged && ctrl->conf->ptt)
@@ -1808,12 +1805,12 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
     }
 
     /* Dial feedback:
-       If radio device is engaged read frequency from radio and compare it to the
-       last set frequency. If different, it means that user has changed frequency
-       on the radio dial => update transponder knob
+       If radio device is engaged read frequency from radio and compare it to
+       the last set frequency. If different, it means that user has changed
+       frequency on the radio dial => update transponder knob
 
-       Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
-       and no need to execute the dial feedback.
+       Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user
+       pressed "tune") and no need to execute the dial feedback.
      */
     if ((ctrl->engaged) && (ctrl->lasttxf > 0.0) && (ptt == TRUE))
     {
@@ -1824,7 +1821,8 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
         }
         else if (fabs(readfreq - ctrl->lasttxf) >= 1.0)
         {
-            /* user might have altered radio frequency => update transponder knob */
+            /* user might have altered radio frequency => update transponder
+             * knob */
             gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqUp), readfreq);
             ctrl->lasttxf = readfreq;
 
@@ -1852,8 +1850,9 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
 
     /* now, forward tracking */
 
-    /* If we are tracking, calculate the radio freq by applying both dopper shift
-       and tranverter LO frequency. If we are not tracking, apply only LO frequency.
+    /* If we are tracking, calculate the radio freq by applying both dopper
+       shift and tranverter LO frequency. If we are not tracking, apply only LO
+       frequency.
      */
     satfreqd = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqDown));
     satfrequ = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqUp));
@@ -1888,10 +1887,10 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
             /* give radio a chance to set frequency */
             g_usleep(WR_DEL);
 
-            /* The actual frequency migh be different from what we have set because
-               the tuning step is larger than what we work with (e.g. FT-817 has a
-               smallest tuning step of 10 Hz). Therefore we read back the actual
-               frequency from the rig. */
+            /* The actual frequency migh be different from what we have set
+               because the tuning step is larger than what we work with (e.g.
+               FT-817 has a smallest tuning step of 10 Hz). Therefore we read
+               back the actual frequency from the rig. */
             get_freq_simplex(ctrl, ctrl->sock, &tmpfreq);
             ctrl->lasttxf = tmpfreq;
 
@@ -1920,13 +1919,13 @@ static void exec_tx_cycle(GtkRigCtrl * ctrl)
     ctrl->lasttxptt = ptt;
 }
 
-static void exec_trx_cycle(GtkRigCtrl * ctrl)
+static void exec_trx_cycle(GtkRigCtrl *ctrl)
 {
     exec_rx_cycle(ctrl);
     exec_tx_cycle(ctrl);
 }
 
-static void exec_toggle_cycle(GtkRigCtrl * ctrl)
+static void exec_toggle_cycle(GtkRigCtrl *ctrl)
 {
     exec_rx_cycle(ctrl);
 
@@ -1936,10 +1935,10 @@ static void exec_toggle_cycle(GtkRigCtrl * ctrl)
      */
     if (ctrl->conf->type == RIG_TYPE_TOGGLE_AUTO)
     {
-	gint64          current_time;
+        gint64 current_time;
 
         /* get the current time */
-	current_time = g_get_real_time() / G_USEC_PER_SEC;
+        current_time = g_get_real_time() / G_USEC_PER_SEC;
 
         if ((ctrl->last_toggle_tx == -1) ||
             ((current_time - ctrl->last_toggle_tx) >= 10))
@@ -1970,10 +1969,10 @@ static void exec_toggle_cycle(GtkRigCtrl * ctrl)
  * For these kind of radios there is no dial-feedback for the TX frequency.
  */
 
-static void exec_toggle_tx_cycle(GtkRigCtrl * ctrl)
+static void exec_toggle_tx_cycle(GtkRigCtrl *ctrl)
 {
-    gdouble         tmpfreq;
-    gboolean        ptt = TRUE;
+    gdouble tmpfreq;
+    gboolean ptt = TRUE;
 
     if (ctrl->engaged && ctrl->conf->ptt)
     {
@@ -2005,21 +2004,20 @@ static void exec_toggle_tx_cycle(GtkRigCtrl * ctrl)
         /* store the last sent frequency even if an error occurred */
         ctrl->lasttxf = tmpfreq;
     }
-
 }
 
-static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
+static void exec_duplex_tx_cycle(GtkRigCtrl *ctrl)
 {
-    gdouble         readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
-    gboolean        dialchanged = FALSE;
+    gdouble readfreq = 0.0, tmpfreq, satfreqd, satfrequ;
+    gboolean dialchanged = FALSE;
 
     /* Dial feedback:
-       If radio device is engaged read frequency from radio and compare it to the
-       last set frequency. If different, it means that user has changed frequency
-       on the radio dial => update transponder knob
+       If radio device is engaged read frequency from radio and compare it to
+       the last set frequency. If different, it means that user has changed
+       frequency on the radio dial => update transponder knob
 
-       Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user pressed "tune")
-       and no need to execute the dial feedback.
+       Note: If ctrl->lasttxf = 0.0 the sync has been invalidated (e.g. user
+       pressed "tune") and no need to execute the dial feedback.
      */
     if ((ctrl->engaged) && (ctrl->lasttxf > 0.0))
     {
@@ -2034,7 +2032,8 @@ static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
         {
             dialchanged = TRUE;
 
-            /* user might have altered radio frequency => update transponder knob */
+            /* user might have altered radio frequency => update transponder
+             * knob */
             gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqUp), readfreq);
             ctrl->lasttxf = readfreq;
 
@@ -2064,8 +2063,9 @@ static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
         return;
     }
 
-    /* If we are tracking, calculate the radio freq by applying both dopper shift
-       and tranverter LO frequency. If we are not tracking, apply only LO frequency.
+    /* If we are tracking, calculate the radio freq by applying both dopper
+       shift and tranverter LO frequency. If we are not tracking, apply only LO
+       frequency.
      */
     satfreqd = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqDown));
     satfrequ = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqUp));
@@ -2099,10 +2099,10 @@ static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
             /* give radio a chance to set frequency */
             g_usleep(WR_DEL);
 
-            /* The actual frequency migh be different from what we have set because
-               the tuning step is larger than what we work with (e.g. FT-817 has a
-               smallest tuning step of 10 Hz). Therefore we read back the actual
-               frequency from the rig. */
+            /* The actual frequency migh be different from what we have set
+               because the tuning step is larger than what we work with (e.g.
+               FT-817 has a smallest tuning step of 10 Hz). Therefore we read
+               back the actual frequency from the rig. */
             get_freq_toggle(ctrl, ctrl->sock, &tmpfreq);
             ctrl->lasttxf = tmpfreq;
         }
@@ -2113,16 +2113,16 @@ static void exec_duplex_tx_cycle(GtkRigCtrl * ctrl)
     }
 }
 
-static void exec_duplex_cycle(GtkRigCtrl * ctrl)
+static void exec_duplex_cycle(GtkRigCtrl *ctrl)
 {
     exec_rx_cycle(ctrl);
     exec_duplex_tx_cycle(ctrl);
 }
 
-static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
+static void exec_dual_rig_cycle(GtkRigCtrl *ctrl)
 {
-    gdouble         tmpfreq, readfreq, satfreqd, satfrequ;
-    gboolean        dialchanged = FALSE;
+    gdouble tmpfreq, readfreq, satfreqd, satfrequ;
+    gboolean dialchanged = FALSE;
 
     /* Execute downlink cycle using ctrl->conf */
     if (ctrl->engaged && (ctrl->lastrxf > 0.0))
@@ -2139,9 +2139,9 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
         {
             dialchanged = TRUE;
 
-            /* user might have altered radio frequency => update transponder knob */
-            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqDown),
-                                    readfreq);
+            /* user might have altered radio frequency => update transponder
+             * knob */
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqDown), readfreq);
             ctrl->lastrxf = readfreq;
 
             /* doppler shift; only if we are tracking */
@@ -2153,8 +2153,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
             {
                 satfreqd = readfreq + ctrl->conf->lo;
             }
-            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown),
-                                    satfreqd);
+            gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->SatFreqDown), satfreqd);
 
             /* Update uplink if locked to downlink */
             if (ctrl->trsplock)
@@ -2192,7 +2191,8 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                 /* give radio a chance to set frequency */
                 g_usleep(WR_DEL);
 
-                /* The actual frequency migh be different from what we have set */
+                /* The actual frequency migh be different from what we have set
+                 */
                 get_freq_simplex(ctrl, ctrl->sock2, &tmpfreq);
                 ctrl->lasttxf = tmpfreq;
             }
@@ -2201,7 +2201,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                 ctrl->errcnt++;
             }
         }
-    }                           /* dialchanged on downlink */
+    } /* dialchanged on downlink */
     else
     {
         /* if no dial change on downlink perform forward tracking on downlink
@@ -2232,7 +2232,8 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                 /* give radio a chance to set frequency */
                 g_usleep(WR_DEL);
 
-                /* The actual frequency migh be different from what we have set */
+                /* The actual frequency migh be different from what we have set
+                 */
                 get_freq_simplex(ctrl, ctrl->sock, &tmpfreq);
                 ctrl->lastrxf = tmpfreq;
             }
@@ -2283,7 +2284,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
         }
 
         if (dialchanged)
-        {                       /* on uplink */
+        { /* on uplink */
             /* update downlink */
             satfreqd =
                 gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->SatFreqDown));
@@ -2298,8 +2299,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                                         satfreqd - ctrl->conf->lo);
             }
 
-            tmpfreq =
-                gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
+            tmpfreq = gtk_freq_knob_get_value(GTK_FREQ_KNOB(ctrl->RigFreqDown));
 
             /* if device is engaged, send freq command to radio */
             if ((ctrl->engaged) && (fabs(ctrl->lastrxf - tmpfreq) >= 1.0))
@@ -2312,7 +2312,8 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                     /* give radio a chance to set frequency */
                     g_usleep(WR_DEL);
 
-                    /* The actual frequency migh be different from what we have set */
+                    /* The actual frequency migh be different from what we have
+                     * set */
                     get_freq_simplex(ctrl, ctrl->sock, &tmpfreq);
                     ctrl->lastrxf = tmpfreq;
                 }
@@ -2321,7 +2322,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                     ctrl->errcnt++;
                 }
             }
-        }                       /* dialchanged on uplink */
+        } /* dialchanged on uplink */
         else
         {
             /* perform forward tracking on uplink */
@@ -2330,7 +2331,7 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
             {
                 gtk_freq_knob_set_value(GTK_FREQ_KNOB(ctrl->RigFreqUp),
                                         satfrequ + ctrl->du -
-                                        ctrl->conf2->loup);
+                                            ctrl->conf2->loup);
             }
             else
             {
@@ -2351,7 +2352,8 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                     /* give radio a chance to set frequency */
                     g_usleep(WR_DEL);
 
-                    /* The actual frequency might be different from what we have set. */
+                    /* The actual frequency might be different from what we have
+                     * set. */
                     get_freq_simplex(ctrl, ctrl->sock2, &tmpfreq);
                     ctrl->lasttxf = tmpfreq;
                 }
@@ -2360,16 +2362,16 @@ static void exec_dual_rig_cycle(GtkRigCtrl * ctrl)
                     ctrl->errcnt++;
                 }
             }
-        }                       /* else dialchange on uplink */
-    }                           /* else dialchange on downlink */
+        } /* else dialchange on uplink */
+    } /* else dialchange on downlink */
 }
 
-static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
+static gboolean get_ptt(GtkRigCtrl *ctrl, gint sock)
 {
-    gchar          *buff, **vbuff;
-    gchar           buffback[128];
-    gboolean        retcode;
-    guint64         pttstat = 0;
+    gchar *buff, **vbuff;
+    gchar buffback[128];
+    gboolean retcode;
+    guint64 pttstat = 0;
 
     if (ctrl->conf->ptt == PTT_TYPE_CAT)
     {
@@ -2393,7 +2395,7 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     {
         vbuff = g_strsplit(buffback, "\n", 3);
         if (vbuff[0])
-            pttstat = g_ascii_strtoull(vbuff[0], NULL, 0);      //FIXME base = 0 ok?
+            pttstat = g_ascii_strtoull(vbuff[0], NULL, 0); // FIXME base = 0 ok?
         g_strfreev(vbuff);
     }
 
@@ -2402,14 +2404,14 @@ static gboolean get_ptt(GtkRigCtrl * ctrl, gint sock)
     return (pttstat == 1) ? TRUE : FALSE;
 }
 
-static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
+static gboolean set_ptt(GtkRigCtrl *ctrl, gint sock, gboolean ptt)
 {
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
+    gchar *buff;
+    gchar buffback[128];
+    gboolean retcode;
 
     /* send command */
-    if (ptt == TRUE) 
+    if (ptt == TRUE)
     {
         if (ctrl->conf->vfo_opt)
             buff = g_strdup_printf("T currVFO 1\x0aq\x0a");
@@ -2428,7 +2430,6 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
     g_free(buff);
 
     return (check_set_response(buffback, retcode, __func__));
-
 }
 
 /*
@@ -2441,10 +2442,10 @@ static gboolean set_ptt(GtkRigCtrl * ctrl, gint sock, gboolean ptt)
  * This function checks whether AOS or LOS just happened and sends the
  * appropriate signal to the RIG if this signalling is enabled.
  */
-static gboolean check_aos_los(GtkRigCtrl * ctrl)
+static gboolean check_aos_los(GtkRigCtrl *ctrl)
 {
-    gboolean        retcode = TRUE;
-    gchar           retbuf[10];
+    gboolean retcode = TRUE;
+    gchar retbuf[10];
 
     if (ctrl->engaged && ctrl->tracking)
     {
@@ -2453,8 +2454,8 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
             /* AOS has occurred */
             if (ctrl->conf->signal_aos)
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "AOS\n",
-                                                retbuf, 10);
+                retcode &=
+                    send_rigctld_command(ctrl, ctrl->sock, "AOS\n", retbuf, 10);
             }
             if (ctrl->conf2 != NULL)
             {
@@ -2470,8 +2471,8 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
             /* LOS has occurred */
             if (ctrl->conf->signal_los)
             {
-                retcode &= send_rigctld_command(ctrl, ctrl->sock, "LOS\n",
-                                                retbuf, 10);
+                retcode &=
+                    send_rigctld_command(ctrl, ctrl->sock, "LOS\n", retbuf, 10);
             }
             if (ctrl->conf2 != NULL)
             {
@@ -2494,11 +2495,11 @@ static gboolean check_aos_los(GtkRigCtrl * ctrl)
  *
  * Returns TRUE if the operation was successful, FALSE otherwise
  */
-static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
+static gboolean set_freq_simplex(GtkRigCtrl *ctrl, gint sock, gdouble freq)
 {
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
+    gchar *buff;
+    gchar buffback[128];
+    gboolean retcode;
 
     if (ctrl->conf->vfo_opt)
         buff = g_strdup_printf("F currVFO %10.0f\x0a", freq);
@@ -2510,17 +2511,16 @@ static gboolean set_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble freq)
     return (check_set_response(buffback, retcode, __func__));
 }
 
-
 /*
  * Set frequency in toggle mode
  *
  * Returns TRUE if the operation was successful, FALSE otherwise
  */
-static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
+static gboolean set_freq_toggle(GtkRigCtrl *ctrl, gint sock, gdouble freq)
 {
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
+    gchar *buff;
+    gchar buffback[128];
+    gboolean retcode;
 
     /* send command */
     printf("set_freq_toggle %d\n", ctrl->conf->vfo_opt);
@@ -2533,7 +2533,6 @@ static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
     g_free(buff);
 
     return (check_set_response(buffback, retcode, __func__));
-
 }
 
 /*
@@ -2541,16 +2540,18 @@ static gboolean set_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble freq)
  *
  * Returns TRUE if the operation was successful
  */
-static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
+static gboolean set_toggle(GtkRigCtrl *ctrl, gint sock)
 {
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
+    gchar *buff;
+    gchar buffback[128];
+    gboolean retcode;
 
     if (ctrl->conf->vfo_opt)
-    buff = g_strdup_printf("S %s 1 %d\x0a", ctrl->conf->vfoDown==VFO_A?"VFOA":"VFOB", ctrl->conf->vfoDown);
+        buff = g_strdup_printf("S %s 1 %d\x0a",
+                               ctrl->conf->vfoDown == VFO_A ? "VFOA" : "VFOB",
+                               ctrl->conf->vfoDown);
     else
-    buff = g_strdup_printf("S 1 %d\x0a", ctrl->conf->vfoDown);
+        buff = g_strdup_printf("S 1 %d\x0a", ctrl->conf->vfoDown);
     retcode = send_rigctld_command(ctrl, sock, buff, buffback, 128);
     g_free(buff);
 
@@ -2562,11 +2563,11 @@ static gboolean set_toggle(GtkRigCtrl * ctrl, gint sock)
  *
  * Returns TRUE if the operation was successful
  */
-static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
+static gboolean unset_toggle(GtkRigCtrl *ctrl, gint sock)
 {
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
+    gchar *buff;
+    gchar buffback[128];
+    gboolean retcode;
 
     /* send command */
     if (ctrl->conf->vfo_opt)
@@ -2584,12 +2585,12 @@ static gboolean unset_toggle(GtkRigCtrl * ctrl, gint sock)
  *
  * Returns TRUE if the operation was successful, FALSE otherwise
  */
-static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
+static gboolean get_freq_simplex(GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 {
-    gchar          *buff, **vbuff;
-    gchar           buffback[128];
-    gboolean        retcode;
-    gboolean        retval = TRUE;
+    gchar *buff, **vbuff;
+    gchar buffback[128];
+    gboolean retcode;
+    gboolean retval = TRUE;
 
     if (ctrl->conf->vfo_opt)
         buff = g_strdup_printf("f currVFO\x0a");
@@ -2620,12 +2621,12 @@ static gboolean get_freq_simplex(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
  *
  * Returns TRUE if the vfo option enabled was successful, FALSE otherwise
  */
-static gboolean get_vfo_opt(GtkRigCtrl * ctrl, gint sock)
+static gboolean get_vfo_opt(GtkRigCtrl *ctrl, gint sock)
 {
-    gchar          *buff;
-    gchar           buffback[128];
-    gboolean        retcode;
-    gboolean        retval = TRUE;
+    gchar *buff;
+    gchar buffback[128];
+    gboolean retcode;
+    gboolean retval = TRUE;
 
     buff = g_strdup_printf("\\set_vfo_opt 1\x0a");
     send_rigctld_command(ctrl, sock, buff, buffback, 128);
@@ -2636,8 +2637,10 @@ static gboolean get_vfo_opt(GtkRigCtrl * ctrl, gint sock)
     retcode = check_get_response(buffback, retcode, __func__);
     if (retcode)
     {
-        if (buffback[0]=='1') return TRUE;
-        else return FALSE;
+        if (buffback[0] == '1')
+            return TRUE;
+        else
+            return FALSE;
     }
     else
     {
@@ -2653,17 +2656,17 @@ static gboolean get_vfo_opt(GtkRigCtrl * ctrl, gint sock)
  *
  * Returns TRUE if the operation was successful, FALSE otherwise
  */
-static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
+static gboolean get_freq_toggle(GtkRigCtrl *ctrl, gint sock, gdouble *freq)
 {
-    gchar          *buff, **vbuff;
-    gchar           buffback[128];
-    gboolean        retcode;
-    gboolean        retval = TRUE;
+    gchar *buff, **vbuff;
+    gchar buffback[128];
+    gboolean retcode;
+    gboolean retval = TRUE;
 
     if (freq == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: NULL storage."), __FILE__, __LINE__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%d: NULL storage."), __FILE__,
+                    __LINE__);
         return FALSE;
     }
 
@@ -2707,17 +2710,17 @@ static gboolean get_freq_toggle(GtkRigCtrl * ctrl, gint sock, gdouble * freq)
  * This function assumes that the radio support set/get PTT, otherwise it makes
  * no sense to use it!
  */
-static void manage_ptt_event(GtkRigCtrl * ctrl)
+static void manage_ptt_event(GtkRigCtrl *ctrl)
 {
-    guint           timeout = 1;
-    gboolean        ptt = FALSE;
+    guint timeout = 1;
+    gboolean ptt = FALSE;
 
     /* wait for controller to be idle or until the timeout triggers */
     while (timeout < 5)
     {
         if (g_mutex_trylock(&(ctrl->busy)) == TRUE)
         {
-            timeout = 17;       /* use an arbitrary value that is large enough */
+            timeout = 17; /* use an arbitrary value that is large enough */
         }
         else
         {
@@ -2730,14 +2733,15 @@ static void manage_ptt_event(GtkRigCtrl * ctrl)
     if (timeout == 17)
     {
         /* timeout did not expire, we've got the controller lock */
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s: Acquired controller lock"), __func__);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Acquired controller lock"),
+                    __func__);
 
         if (ctrl->engaged == FALSE)
         {
             sat_log_log(SAT_LOG_LEVEL_INFO,
                         _("%s: Controller not engaged; PTT event ignored "
-                          "(Hint: Enable the Engage button)"), __func__);
+                          "(Hint: Enable the Engage button)"),
+                        __func__);
         }
         else
         {
@@ -2769,21 +2773,20 @@ static void manage_ptt_event(GtkRigCtrl * ctrl)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("%s: Failed to acquire controller lock; PTT event "
-                      "not handled"), __func__);
+                      "not handled"),
+                    __func__);
     }
-
 }
-
 
 /*
  * Catch events when the user presses the SPACE key on the keyboard.
  * This is used to toggle betweer RX/TX when using FT817/857/897 in manual mode.
  */
-static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
+static gboolean key_press_cb(GtkWidget *widget, GdkEventKey *pKey,
                              gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(widget);
-    gboolean        event_managed = FALSE;
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(widget);
+    gboolean event_managed = FALSE;
 
     (void)data;
 
@@ -2791,7 +2794,8 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
     {
         switch (pKey->keyval)
         {
-            /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete list */
+            /* keyvals not in API docs. See <gdk/gdkkeysyms.h> for a complete
+             * list */
         case GDK_KEY_space:
             sat_log_log(SAT_LOG_LEVEL_INFO,
                         _("%s: Detected SPACEBAR pressed event"), __func__);
@@ -2805,10 +2809,10 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
             break;
 
         default:
-            sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                        _
-                        ("%s:%s: Keypress value %i not managed by this function"),
-                        __FILE__, __func__, pKey->keyval);
+            sat_log_log(
+                SAT_LOG_LEVEL_DEBUG,
+                _("%s:%s: Keypress value %i not managed by this function"),
+                __FILE__, __func__, pKey->keyval);
             break;
         }
     }
@@ -2816,17 +2820,17 @@ static gboolean key_press_cb(GtkWidget * widget, GdkEventKey * pKey,
     return event_managed;
 }
 
-static gboolean open_rigctld_socket(radio_conf_t * conf, gint * sock)
+static gboolean open_rigctld_socket(radio_conf_t *conf, gint *sock)
 {
     struct sockaddr_in ServAddr;
     struct hostent *h;
-    gint            status;
+    gint status;
 
     *sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (*sock < 0)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Failed to create socket"), __func__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Failed to create socket"),
+                    __func__);
         *sock = 0;
         return FALSE;
     }
@@ -2836,41 +2840,38 @@ static gboolean open_rigctld_socket(radio_conf_t * conf, gint * sock)
                     _("%s: Network socket created successfully"), __func__);
     }
 
-    memset(&ServAddr, 0, sizeof(ServAddr));     /* Zero out structure */
-    ServAddr.sin_family = AF_INET;      /* Internet address family */
+    memset(&ServAddr, 0, sizeof(ServAddr)); /* Zero out structure */
+    ServAddr.sin_family = AF_INET;          /* Internet address family */
     h = gethostbyname(conf->host);
     memcpy((char *)&ServAddr.sin_addr.s_addr, h->h_addr_list[0], h->h_length);
-    ServAddr.sin_port = htons(conf->port);      /* Server port */
+    ServAddr.sin_port = htons(conf->port); /* Server port */
 
     /* establish connection */
     status = connect(*sock, (struct sockaddr *)&ServAddr, sizeof(ServAddr));
     if (status < 0)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s: Failed to connect to %s:%d"),
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Failed to connect to %s:%d"),
                     __func__, conf->host, conf->port);
         *sock = 0;
         return FALSE;
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                    _("%s: Connection opened to %s:%d"),
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s: Connection opened to %s:%d"),
                     __func__, conf->host, conf->port);
     }
 
     return TRUE;
 }
 
-static gboolean close_rigctld_socket(gint * sock)
+static gboolean close_rigctld_socket(gint *sock)
 {
-    gint            written;
+    gint written;
 
     written = send(*sock, "q\x0a", 2, 0);
     if (written != 2)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Sent 2 bytes but sent %d."),
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%s: Sent 2 bytes but sent %d."),
                     __FILE__, __func__, written);
     }
 #ifndef WIN32
@@ -2886,9 +2887,9 @@ static gboolean close_rigctld_socket(gint * sock)
     return TRUE;
 }
 
-static void rigctrl_close(GtkRigCtrl * data)
+static void rigctrl_close(GtkRigCtrl *data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     ctrl->lastrxptt = FALSE;
     ctrl->lasttxptt = TRUE;
@@ -2910,9 +2911,9 @@ static void rigctrl_close(GtkRigCtrl * data)
     close_rigctld_socket(&(ctrl->sock));
 }
 
-static void rigctrl_open(GtkRigCtrl * data)
+static void rigctrl_open(GtkRigCtrl *data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     ctrl->wrops = 0;
 
@@ -2922,9 +2923,8 @@ static void rigctrl_open(GtkRigCtrl * data)
 
     // check to see if vfo option is enabled
     ctrl->conf->vfo_opt = get_vfo_opt(ctrl, ctrl->sock);
-    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-            _("%s:%s: VFO opt=%d"), __FILE__,
-            __func__, ctrl->conf->vfo_opt);
+    sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: VFO opt=%d"), __FILE__, __func__,
+                ctrl->conf->vfo_opt);
 
     /* set initial frequency */
     if (ctrl->conf2 != NULL)
@@ -2932,9 +2932,8 @@ static void rigctrl_open(GtkRigCtrl * data)
         open_rigctld_socket(ctrl->conf2, &(ctrl->sock2));
         /* set initial dual mode */
         ctrl->conf2->vfo_opt = get_vfo_opt(ctrl, ctrl->sock2);
-        sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                _("%s:%s: VFO opt2=%d"), __FILE__,
-                __func__, ctrl->conf2->vfo_opt);
+        sat_log_log(SAT_LOG_LEVEL_DEBUG, _("%s:%s: VFO opt2=%d"), __FILE__,
+                    __func__, ctrl->conf2->vfo_opt);
 
         exec_dual_rig_cycle(ctrl);
     }
@@ -2956,7 +2955,8 @@ static void rigctrl_open(GtkRigCtrl * data)
             break;
 
         case RIG_TYPE_DUPLEX:
-            /* set rig into SAT mode (hamlib needs it even if rig already in SAT) */
+            /* set rig into SAT mode (hamlib needs it even if rig already in
+             * SAT) */
             setup_split(ctrl);
             exec_duplex_cycle(ctrl);
             break;
@@ -2980,14 +2980,15 @@ static void rigctrl_open(GtkRigCtrl * data)
 /* Communication thread for hamlib rigctld */
 gpointer rigctl_run(gpointer data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    GtkRigCtrl     *t_ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *t_ctrl = GTK_RIG_CTRL(data);
 
     while (1)
     {
         t_ctrl = GTK_RIG_CTRL(g_async_queue_pop(ctrl->rigctlq));
         ctrl = t_ctrl;
-        while (g_main_context_iteration(NULL, FALSE));
+        while (g_main_context_iteration(NULL, FALSE))
+            ;
 
         if (t_ctrl == NULL)
         {
@@ -3057,8 +3058,8 @@ gpointer rigctl_run(gpointer data)
                 /* invalid mode */
                 sat_log_log(SAT_LOG_LEVEL_ERROR,
                             _("%s:%s: Invalid radio type %d. Setting type to "
-                              "RIG_TYPE_RX"), __FILE__, __func__,
-                            t_ctrl->conf->type);
+                              "RIG_TYPE_RX"),
+                            __FILE__, __func__, t_ctrl->conf->type);
                 t_ctrl->conf->type = RIG_TYPE_RX;
             }
         }
@@ -3071,15 +3072,15 @@ gpointer rigctl_run(gpointer data)
                                          FALSE);
             t_ctrl->engaged = FALSE;
             t_ctrl->errcnt = 0;
-            sat_log_log(SAT_LOG_LEVEL_ERROR,
-                        _
-                        ("%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
-                        __FILE__, __func__, MAX_ERROR_COUNT);
+            sat_log_log(
+                SAT_LOG_LEVEL_ERROR,
+                _("%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
+                __FILE__, __func__, MAX_ERROR_COUNT);
 
-            //g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
+            // g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
         }
 
-        //g_print ("       WROPS = %d\n", ctrl->wrops);
+        // g_print ("       WROPS = %d\n", ctrl->wrops);
     }
 
     if (t_ctrl->sock > 0)
@@ -3091,9 +3092,9 @@ gpointer rigctl_run(gpointer data)
     return NULL;
 }
 
-void start_timer(GtkRigCtrl * data)
+void start_timer(GtkRigCtrl *data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     /*  start timeout timer here ("Cycle")! */
     if (ctrl->timerid > 0)
@@ -3103,9 +3104,9 @@ void start_timer(GtkRigCtrl * data)
         gdk_threads_add_timeout(ctrl->delay, rig_ctrl_timeout_cb, ctrl);
 }
 
-void remove_timer(GtkRigCtrl * data)
+void remove_timer(GtkRigCtrl *data)
 {
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     /* stop timer */
     if (ctrl->timerid > 0)
@@ -3116,7 +3117,7 @@ void remove_timer(GtkRigCtrl * data)
 void setconfig(gpointer data)
 {
     /* something has changed... */
-    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
     if (ctrl != NULL)
     {
@@ -3124,12 +3125,11 @@ void setconfig(gpointer data)
     }
 }
 
-
-GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
+GtkWidget *gtk_rig_ctrl_new(GtkSatModule *module)
 {
-    GtkRigCtrl     *rigctrl;
-    GtkWidget      *widget;
-    GtkWidget      *table;
+    GtkRigCtrl *rigctrl;
+    GtkWidget *widget;
+    GtkWidget *table;
 
     if (!have_conf())
         return NULL;
@@ -3137,8 +3137,7 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     widget = g_object_new(GTK_TYPE_RIG_CTRL, NULL);
     rigctrl = GTK_RIG_CTRL(widget);
 
-    g_signal_connect(widget, "key-press-event", G_CALLBACK(key_press_cb),
-                     NULL);
+    g_signal_connect(widget, "key-press-event", G_CALLBACK(key_press_cb), NULL);
 
     g_hash_table_foreach(module->satellites, store_sats, widget);
     GTK_RIG_CTRL(widget)->target = SAT(g_slist_nth_data(rigctrl->sats, 0));
@@ -3148,8 +3147,8 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     if (rigctrl->target != NULL)
     {
         /* get next pass for target satellite */
-        GTK_RIG_CTRL(widget)->pass = get_next_pass(rigctrl->target,
-                                                   rigctrl->qth, 3.0);
+        GTK_RIG_CTRL(widget)->pass =
+            get_next_pass(rigctrl->target, rigctrl->qth, 3.0);
     }
 
     /* create contents */
@@ -3157,15 +3156,15 @@ GtkWidget      *gtk_rig_ctrl_new(GtkSatModule * module)
     gtk_grid_set_row_spacing(GTK_GRID(table), 5);
     gtk_grid_set_column_spacing(GTK_GRID(table), 5);
     gtk_container_set_border_width(GTK_CONTAINER(table), 10);
-    gtk_grid_attach(GTK_GRID(table), create_downlink_widgets(rigctrl),
-                    0, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), create_uplink_widgets(rigctrl),
-                    1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), create_target_widgets(rigctrl),
-                    0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), create_downlink_widgets(rigctrl), 0, 0, 1,
+                    1);
+    gtk_grid_attach(GTK_GRID(table), create_uplink_widgets(rigctrl), 1, 0, 1,
+                    1);
+    gtk_grid_attach(GTK_GRID(table), create_target_widgets(rigctrl), 0, 1, 1,
+                    1);
     gtk_grid_attach(GTK_GRID(table), create_conf_widgets(rigctrl), 1, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(table), create_count_down_widgets(rigctrl),
-                    0, 2, 2, 1);
+    gtk_grid_attach(GTK_GRID(table), create_count_down_widgets(rigctrl), 0, 2,
+                    2, 1);
 
     gtk_container_add(GTK_CONTAINER(rigctrl), table);
 
