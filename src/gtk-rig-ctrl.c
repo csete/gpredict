@@ -35,6 +35,9 @@
 #include <build-config.h>
 #endif
 
+#define _GNU_SOURCE
+#include <string.h>             /* strcasestr */
+
 #include <gdk/gdkkeysyms.h>
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -657,13 +660,21 @@ static gboolean have_conf()
 static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
 {
     GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
-    gint            i;
+    const gchar    *active_text = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(satsel));
+    guint           n;
 
-    i = gtk_combo_box_get_active(satsel);
-    if (i >= 0)
+    if (active_text)
     {
-        ctrl->target = SAT(g_slist_nth_data(ctrl->sats, i));
-
+        n = g_slist_length(ctrl->sats);
+        for (guint i = 0; i < n; i++)
+        {
+            sat_t * sat = g_slist_nth_data(ctrl->sats, i);
+            if (strcmp(sat->nickname, active_text) == 0)
+            {
+                ctrl->target = sat;
+                break;
+            }
+        }
         ctrl->prev_ele = ctrl->target->el;
 
         /* update next pass */
@@ -676,10 +687,6 @@ static void sat_selected_cb(GtkComboBox * satsel, gpointer data)
     }
     else
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%s: Invalid satellite selection: %d"),
-                    __FILE__, __func__, i);
-
         /* clear pass just in case... */
         if (ctrl->pass != NULL)
         {
@@ -1008,6 +1015,50 @@ static void rig_engaged_cb(GtkToggleButton * button, gpointer data)
     }
 }
 
+static void filter_text_changed_cb(GtkSearchEntry * entry, gpointer data)
+{
+    GtkRigCtrl     *ctrl = GTK_RIG_CTRL(data);
+
+    const gchar    *filter = gtk_entry_get_text(GTK_ENTRY(entry));
+    guint           n = g_slist_length(ctrl->sats);
+    guint           i;
+    sat_t          *sat = NULL;
+    guint           cnt = 0;
+
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ctrl->SatSel));
+    if (filter == NULL || filter[0] == '\0')
+    {
+        for (i = 0; i < n; i++)
+        {
+            sat = SAT(g_slist_nth_data(ctrl->sats, i));
+            if (sat)
+            {
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                               sat->nickname);
+                cnt++;
+            }
+        }
+    }
+    else
+    {
+        for (i = 0; i < n; i++)
+        {
+            sat = SAT(g_slist_nth_data(ctrl->sats, i));
+            if (sat && strcasestr(sat->nickname, filter))
+            {
+                gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
+                                            sat->nickname);
+                cnt++;
+            }
+        }
+    }
+    if (cnt)
+    {
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
+        g_signal_emit_by_name(ctrl->SatSel, "changed");
+    }
+}
+
 static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
 {
     GtkWidget      *frame, *table, *label, *track;
@@ -1023,6 +1074,13 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     gtk_grid_set_column_spacing(GTK_GRID(table), 5);
     gtk_grid_set_row_spacing(GTK_GRID(table), 5);
 
+    /* sat selector filter */
+    ctrl->SatSelFilter = gtk_search_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(ctrl->SatSelFilter), _("Filter..."));
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatSelFilter, 0, 0, 3, 1);
+    g_signal_connect(ctrl->SatSelFilter, "search-changed",
+                     G_CALLBACK(filter_text_changed_cb), ctrl);
+
     /* sat selector */
     ctrl->SatSel = gtk_combo_box_text_new();
     n = g_slist_length(ctrl->sats);
@@ -1036,9 +1094,9 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
 
     gtk_combo_box_set_active(GTK_COMBO_BOX(ctrl->SatSel), 0);
     gtk_widget_set_tooltip_text(ctrl->SatSel, _("Select target object"));
-    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
-                     ctrl);
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 0, 3, 1);
+    g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb), ctrl);
+    g_signal_emit_by_name(ctrl->SatSel, "changed");
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 1, 3, 1);
 
     /* tracking button */
     track = gtk_toggle_button_new_with_label(_("Track"));
@@ -1046,7 +1104,7 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
                                 _("Track the satellite transponder.\n"
                                   "Enabling this button will apply Doppler "
                                   "correction to the frequency of the radio."));
-    gtk_grid_attach(GTK_GRID(table), track, 3, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), track, 3, 1, 1, 1);
     g_signal_connect(track, "toggled", G_CALLBACK(track_toggle_cb), ctrl);
 
     /* Transponder selector, tune, and trsplock buttons */
@@ -1055,7 +1113,7 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     load_trsp_list(ctrl);
     g_signal_connect(ctrl->TrspSel, "changed", G_CALLBACK(trsp_selected_cb),
                      ctrl);
-    gtk_grid_attach(GTK_GRID(table), ctrl->TrspSel, 0, 1, 3, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->TrspSel, 0, 2, 3, 1);
 
     /* buttons */
     tune = gtk_button_new_with_label(_("T"));
@@ -1087,31 +1145,31 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_pack_start(GTK_BOX(hbox), tune, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), trsplock, TRUE, TRUE, 0);
-    gtk_grid_attach(GTK_GRID(table), hbox, 3, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), hbox, 3, 2, 1, 1);
 
     /* Azimuth */
     label = gtk_label_new(_("Az:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
     ctrl->SatAz = gtk_label_new(buff);
-    g_object_set(ctrl->SatAz, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatAz, 1, 2, 1, 1);
+    g_object_set(ctrl->SatAz, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatAz, 1, 3, 1, 1);
 
     /* Elevation */
     label = gtk_label_new(_("El:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
     ctrl->SatEl = gtk_label_new(buff);
-    g_object_set(ctrl->SatEl, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatEl, 1, 3, 1, 1);
+    g_object_set(ctrl->SatEl, "xalign", 0.0f, "yalign", 0.5f, NULL);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatEl, 1, 4, 1, 1);
 
     /* Range */
     label = gtk_label_new(_(" Range:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 2, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 3, 1, 1);
     ctrl->SatRng = gtk_label_new("0 km");
     g_object_set(ctrl->SatRng, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatRng, 3, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatRng, 3, 3, 1, 1);
 
     gtk_widget_set_tooltip_text(label,
                                 _("This is the current distance between the "
@@ -1123,10 +1181,10 @@ static GtkWidget *create_target_widgets(GtkRigCtrl * ctrl)
     /* Range rate */
     label = gtk_label_new(_(" Rate:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 2, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 2, 4, 1, 1);
     ctrl->SatRngRate = gtk_label_new("0.0 km/s");
     g_object_set(ctrl->SatRngRate, "xalign", 0.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatRngRate, 3, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatRngRate, 3, 4, 1, 1);
 
     gtk_widget_set_tooltip_text(label,
                                 _("The rate of change for the distance between"

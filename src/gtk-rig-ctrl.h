@@ -44,6 +44,7 @@ struct _gtk_rig_ctrl {
 
     /* other widgets */
     GtkWidget      *SatSel;     /*!< Satellite selector */
+    GtkWidget      *SatSelFilter;   /*!< Satellite selector filter */
     GtkWidget      *TrspSel;    /*!< Transponder selector */
     GtkWidget      *DevSel;     /*!< Device selector */
     GtkWidget      *DevSel2;    /*!< Second device selector */
