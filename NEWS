@@ -1,7 +1,10 @@
-Changes in version 2.5.3 (TBD)
+Changes in version 2.6 (TBD)
 
- - Remove invalid data from satellites.dat (#413)
- - Update contributors (#414)
+ - Removed invalid data from satellites.dat (#413)
+ - Updated contributors (#414)
+ - Added satellite filter to the radio and rotator controllers (#339)
+ - Fixed long transponder names causing widget to become very wide
+
 
 Changes in version 2.5.2 (20 Jul 2026)
 
