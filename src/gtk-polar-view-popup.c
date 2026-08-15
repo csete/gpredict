@@ -30,8 +30,8 @@
 #include <gtk/gtk.h>
 
 #include "config-keys.h"
-#include "gtk-polar-view.h"
 #include "gtk-polar-view-popup.h"
+#include "gtk-polar-view.h"
 #include "gtk-sat-popup-common.h"
 #include "mod-cfg-get-param.h"
 #include "orbit-tools.h"
@@ -43,8 +43,7 @@
 #include "sgpsdp/sgp4sdp4.h"
 #include "time-tools.h"
 
-
-static void     track_toggled(GtkCheckMenuItem * item, gpointer data);
+static void track_toggled(GtkCheckMenuItem *item, gpointer data);
 
 /* static void target_toggled (GtkCheckMenuItem *item, gpointer data); */
 
@@ -57,13 +56,13 @@ static void     track_toggled(GtkCheckMenuItem * item, gpointer data);
  * @param event The mouse-click related event info
  * @param toplevel The toplevel window or NULL.
  */
-void gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth, GtkPolarView * pview,
-                               GdkEventButton * event, GtkWidget * toplevel)
+void gtk_polar_view_popup_exec(sat_t *sat, qth_t *qth, GtkPolarView *pview,
+                               GdkEventButton *event, GtkWidget *toplevel)
 {
-    GtkWidget      *menu;
-    GtkWidget      *menuitem;
-    sat_obj_t      *obj = NULL;
-    gint           *catnum;
+    GtkWidget *menu;
+    GtkWidget *menuitem;
+    sat_obj_t *obj = NULL;
+    gint *catnum;
 
     menu = gtk_menu_new();
 
@@ -111,13 +110,16 @@ void gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth, GtkPolarView * pview,
         gtk_widget_set_sensitive(menuitem, FALSE);
 
     /* target */
-    /*      menuitem = gtk_check_menu_item_new_with_label (_("Set as target")); */
+    /*      menuitem = gtk_check_menu_item_new_with_label (_("Set as target"));
+     */
     /*      g_object_set_data (G_OBJECT (menuitem), "sat", sat); */
     /*      g_object_set_data (G_OBJECT (menuitem), "qth", qth); */
     /*      g_object_set_data (G_OBJECT (menuitem), "obj", obj); */
     /*      gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem); */
-    /*      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), obj->istarget); */
-    /*      g_signal_connect (menuitem, "activate", G_CALLBACK (target_toggled), pview); */
+    /*      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem),
+     * obj->istarget); */
+    /*      g_signal_connect (menuitem, "activate", G_CALLBACK (target_toggled),
+     * pview); */
 
     gtk_widget_show_all(menu);
 
@@ -125,9 +127,9 @@ void gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth, GtkPolarView * pview,
 #if GTK_MINOR_VERSION < 22
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
                    (event != NULL) ? event->button : 0,
-                   gdk_event_get_time((GdkEvent *) event));
+                   gdk_event_get_time((GdkEvent *)event));
 #else
-    (void) event;
+    (void)event;
     gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
 #endif
 }
@@ -139,14 +141,14 @@ void gtk_polar_view_popup_exec(sat_t * sat, qth_t * qth, GtkPolarView * pview,
  * @param data Pointer to the GtkPolarView structure.
  *
  */
-static void track_toggled(GtkCheckMenuItem * item, gpointer data)
+static void track_toggled(GtkCheckMenuItem *item, gpointer data)
 {
-    GtkPolarView   *pv = GTK_POLAR_VIEW(data);
-    sat_obj_t      *obj = NULL;
-    sat_t          *sat;
+    GtkPolarView *pv = GTK_POLAR_VIEW(data);
+    sat_obj_t *obj = NULL;
+    sat_t *sat;
 
     /* qth_t              *qth; Unused */
-    gint           *catnum;
+    gint *catnum;
 
     /* get satellite object */
     obj = SAT_OBJ(g_object_get_data(G_OBJECT(item), "obj"));
@@ -156,8 +158,8 @@ static void track_toggled(GtkCheckMenuItem * item, gpointer data)
     if (obj == NULL)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
-                    _("%s:%d: Failed to get satellite object."),
-                    __FILE__, __LINE__);
+                    _("%s:%d: Failed to get satellite object."), __FILE__,
+                    __LINE__);
         return;
     }
 
