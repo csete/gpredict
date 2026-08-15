@@ -10,17 +10,17 @@
   More details can be found at the project home page:
 
   http://gpredict.oz9aec.net/
- 
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
@@ -50,10 +50,9 @@
 
 #define MARKER_SIZE 5
 
-
 static GtkBoxClass *parent_class = NULL;
 
-static void gtk_azel_plot_destroy(GtkWidget * widget)
+static void gtk_azel_plot_destroy(GtkWidget *widget)
 {
     GtkAzelPlot *azel = GTK_AZEL_PLOT(widget);
     guint i;
@@ -80,11 +79,11 @@ static void gtk_azel_plot_destroy(GtkWidget * widget)
     g_free(azel->font);
     azel->font = NULL;
 
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy)(widget);
 }
 
-static void gtk_azel_plot_class_init(GtkAzelPlotClass * class,
-				     gpointer class_data)
+static void gtk_azel_plot_class_init(GtkAzelPlotClass *class,
+                                     gpointer class_data)
 {
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(class);
 
@@ -92,11 +91,9 @@ static void gtk_azel_plot_class_init(GtkAzelPlotClass * class,
 
     widget_class->destroy = gtk_azel_plot_destroy;
     parent_class = g_type_class_peek_parent(class);
-
 }
 
-static void gtk_azel_plot_init(GtkAzelPlot * azel,
-			       gpointer g_class)
+static void gtk_azel_plot_init(GtkAzelPlot *azel, gpointer g_class)
 {
     (void)g_class;
 
@@ -121,67 +118,65 @@ static void gtk_azel_plot_init(GtkAzelPlot * azel,
 
 GType gtk_azel_plot_get_type()
 {
-    static GType    gtk_azel_plot_type = 0;
+    static GType gtk_azel_plot_type = 0;
 
     if (!gtk_azel_plot_type)
     {
         static const GTypeInfo gtk_azel_plot_info = {
             sizeof(GtkAzelPlotClass),
-            NULL,               /* base init */
-            NULL,               /* base finalise */
-            (GClassInitFunc) gtk_azel_plot_class_init,
-            NULL,               /* class finalise */
-            NULL,               /* class data */
+            NULL, /* base init */
+            NULL, /* base finalise */
+            (GClassInitFunc)gtk_azel_plot_class_init,
+            NULL, /* class finalise */
+            NULL, /* class data */
             sizeof(GtkAzelPlot),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_azel_plot_init,
-            NULL
-        };
+            5, /* n_preallocs */
+            (GInstanceInitFunc)gtk_azel_plot_init,
+            NULL};
 
-        gtk_azel_plot_type = g_type_register_static(GTK_TYPE_BOX,
-                                                    "GtkAzelPlot",
+        gtk_azel_plot_type = g_type_register_static(GTK_TYPE_BOX, "GtkAzelPlot",
                                                     &gtk_azel_plot_info, 0);
     }
 
     return gtk_azel_plot_type;
 }
 
-static void az_to_xy(GtkAzelPlot * p, gdouble t, gdouble az, gdouble * x,
-                     gdouble * y)
+static void az_to_xy(GtkAzelPlot *p, gdouble t, gdouble az, gdouble *x,
+                     gdouble *y)
 {
-    gdouble         tpp;        /* time per pixel */
-    gdouble         dpp;        /* degrees per pixel */
+    gdouble tpp; /* time per pixel */
+    gdouble dpp; /* degrees per pixel */
 
     /* time */
     tpp = (p->pass->los - p->pass->aos) / (p->xmax - p->x0);
     *x = p->x0 + (t - p->pass->aos) / tpp;
 
     /* Az */
-    dpp = (gdouble) (p->maxaz / (p->y0 - p->ymax));
-    *y = (gdouble) (p->y0 - az / dpp);
+    dpp = (gdouble)(p->maxaz / (p->y0 - p->ymax));
+    *y = (gdouble)(p->y0 - az / dpp);
 }
 
-static void el_to_xy(GtkAzelPlot * p, gdouble t, gdouble el, gdouble * x,
-                     gdouble * y)
+static void el_to_xy(GtkAzelPlot *p, gdouble t, gdouble el, gdouble *x,
+                     gdouble *y)
 {
-    gdouble         tpp;        /* time per pixel */
-    gdouble         dpp;        /* degrees per pixel */
+    gdouble tpp; /* time per pixel */
+    gdouble dpp; /* degrees per pixel */
 
     /* time */
     tpp = (p->pass->los - p->pass->aos) / (p->xmax - p->x0);
     *x = p->x0 + (t - p->pass->aos) / tpp;
 
     /* El */
-    dpp = (gdouble) (90.0 / (p->y0 - p->ymax));
-    *y = (gdouble) (p->y0 - el / dpp);
+    dpp = (gdouble)(90.0 / (p->y0 - p->ymax));
+    *y = (gdouble)(p->y0 - el / dpp);
 }
 
 /** Convert canvas based coordinates to Az/El. */
-static void xy_to_graph(GtkAzelPlot * p, gfloat x, gfloat y, gdouble * t,
-                        gdouble * az, gdouble * el)
+static void xy_to_graph(GtkAzelPlot *p, gfloat x, gfloat y, gdouble *t,
+                        gdouble *az, gdouble *el)
 {
-    gdouble         tpp;        /* time per pixel */
-    gdouble         dpp;        /* degrees per pixel */
+    gdouble tpp; /* time per pixel */
+    gdouble dpp; /* degrees per pixel */
 
     /* time */
     tpp = (p->pass->los - p->pass->aos) / (p->xmax - p->x0);
@@ -253,13 +248,13 @@ static void calculate_tick_labels(GtkAzelPlot *azel)
 
         /* Az tick labels */
         g_free(azel->azlabels[i]);
-        azel->azlabels[i] = g_strdup_printf("%.0f\302\260",
-                              azel->maxaz / (AZEL_PLOT_NUM_TICKS + 1) * (i + 1));
+        azel->azlabels[i] = g_strdup_printf(
+            "%.0f\302\260", azel->maxaz / (AZEL_PLOT_NUM_TICKS + 1) * (i + 1));
 
         /* El tick labels */
         g_free(azel->ellabels[i]);
-        azel->ellabels[i] = g_strdup_printf("%.0f\302\260",
-                            90.0 / (AZEL_PLOT_NUM_TICKS + 1) * (i + 1));
+        azel->ellabels[i] = g_strdup_printf(
+            "%.0f\302\260", 90.0 / (AZEL_PLOT_NUM_TICKS + 1) * (i + 1));
     }
 }
 
@@ -280,7 +275,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     /* Frame */
     cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
     cairo_set_line_width(cr, 1.0);
-    cairo_rectangle(cr, azel->x0, azel->ymax, azel->xmax - azel->x0, azel->y0 - azel->ymax);
+    cairo_rectangle(cr, azel->x0, azel->ymax, azel->xmax - azel->x0,
+                    azel->y0 - azel->ymax);
     cairo_stroke(cr);
 
     xstep = (azel->xmax - azel->x0) / (AZEL_PLOT_NUM_TICKS + 1);
@@ -309,7 +305,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* Set up font */
     layout = pango_cairo_create_layout(cr);
-    font_desc = pango_font_description_from_string(azel->font ? azel->font : "Sans 9");
+    font_desc =
+        pango_font_description_from_string(azel->font ? azel->font : "Sans 9");
     pango_layout_set_font_description(layout, font_desc);
 
     /* Draw tick labels */
@@ -323,7 +320,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
             cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
             pango_layout_set_text(layout, azel->xlabels[i], -1);
             pango_layout_get_pixel_size(layout, &tw, &th);
-            cairo_move_to(cr, azel->x0 + (i + 1) * xstep - tw / 2, azel->y0 + 5);
+            cairo_move_to(cr, azel->x0 + (i + 1) * xstep - tw / 2,
+                          azel->y0 + 5);
             pango_cairo_show_layout(cr, layout);
         }
 
@@ -333,7 +331,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
             cairo_set_source_rgba(cr, 0.0, 0.0, 0.75, 1.0);
             pango_layout_set_text(layout, azel->azlabels[i], -1);
             pango_layout_get_pixel_size(layout, &tw, &th);
-            cairo_move_to(cr, azel->x0 - 5 - tw, azel->y0 - (i + 1) * ystep - th / 2);
+            cairo_move_to(cr, azel->x0 - 5 - tw,
+                          azel->y0 - (i + 1) * ystep - th / 2);
             pango_cairo_show_layout(cr, layout);
         }
 
@@ -343,7 +342,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
             cairo_set_source_rgba(cr, 0.75, 0.0, 0.0, 1.0);
             pango_layout_set_text(layout, azel->ellabels[i], -1);
             pango_layout_get_pixel_size(layout, &tw, &th);
-            cairo_move_to(cr, azel->xmax + 5, azel->y0 - (i + 1) * ystep - th / 2);
+            cairo_move_to(cr, azel->xmax + 5,
+                          azel->y0 - (i + 1) * ystep - th / 2);
             pango_cairo_show_layout(cr, layout);
         }
     }
@@ -371,11 +371,14 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     /* x legend */
     {
         int tw, th;
-        const gchar *xleg = sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME) ? _("Local Time") : _("UTC");
+        const gchar *xleg = sat_cfg_get_bool(SAT_CFG_BOOL_USE_LOCAL_TIME)
+                                ? _("Local Time")
+                                : _("UTC");
         cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
         pango_layout_set_text(layout, xleg, -1);
         pango_layout_get_pixel_size(layout, &tw, &th);
-        cairo_move_to(cr, azel->x0 + (azel->xmax - azel->x0) / 2 - tw / 2, azel->height - 5 - th);
+        cairo_move_to(cr, azel->x0 + (azel->xmax - azel->x0) / 2 - tw / 2,
+                      azel->height - 5 - th);
         pango_cairo_show_layout(cr, layout);
     }
 
@@ -401,7 +404,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
         cairo_move_to(cr, azel->az_points[0], azel->az_points[1]);
         for (i = 1; i < (guint)azel->num_points; i++)
         {
-            cairo_line_to(cr, azel->az_points[2 * i], azel->az_points[2 * i + 1]);
+            cairo_line_to(cr, azel->az_points[2 * i],
+                          azel->az_points[2 * i + 1]);
         }
         cairo_stroke(cr);
     }
@@ -414,7 +418,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
         cairo_move_to(cr, azel->el_points[0], azel->el_points[1]);
         for (i = 1; i < (guint)azel->num_points; i++)
         {
-            cairo_line_to(cr, azel->el_points[2 * i], azel->el_points[2 * i + 1]);
+            cairo_line_to(cr, azel->el_points[2 * i],
+                          azel->el_points[2 * i + 1]);
         }
         cairo_stroke(cr);
     }
@@ -422,12 +427,13 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     return FALSE;
 }
 
-static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event,
+                                 gpointer data)
 {
-    GtkAzelPlot    *azel = GTK_AZEL_PLOT(data);
-    gdouble         t, az, el;
-    gfloat          x, y;
-    gchar           buff[10];
+    GtkAzelPlot *azel = GTK_AZEL_PLOT(data);
+    gdouble t, az, el;
+    gfloat x, y;
+    gchar buff[10];
 
     (void)widget;
 
@@ -436,15 +442,15 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpoin
         x = event->x;
         y = event->y;
 
-        if ((x > azel->x0) && (x < azel->xmax) &&
-            (y > azel->ymax) && (y < azel->y0))
+        if ((x > azel->x0) && (x < azel->xmax) && (y > azel->ymax) &&
+            (y < azel->y0))
         {
             xy_to_graph(azel, x, y, &t, &az, &el);
             daynum_to_str(buff, 10, "%H:%M:%S", t);
 
             g_free(azel->curs_text);
-            azel->curs_text = g_strdup_printf("T: %s, AZ: %.0f\302\260, EL: %.0f\302\260",
-                                buff, az, el);
+            azel->curs_text = g_strdup_printf(
+                "T: %s, AZ: %.0f\302\260, EL: %.0f\302\260", buff, az, el);
         }
         else
         {
@@ -457,7 +463,7 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpoin
     return TRUE;
 }
 
-static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
+static void size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation,
                              gpointer data)
 {
     GtkAzelPlot *azel = GTK_AZEL_PLOT(data);
@@ -486,12 +492,12 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
  * @param qth Pointer to the ground station data.
  * @param pass Pointer to the satellite pass to display.
  */
-GtkWidget *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
+GtkWidget *gtk_azel_plot_new(qth_t *qth, pass_t *pass)
 {
-    GtkAzelPlot    *azel;
-    guint           i, n;
-    pass_detail_t  *detail;
-    GValue          font_value = G_VALUE_INIT;
+    GtkAzelPlot *azel;
+    guint i, n;
+    pass_detail_t *detail;
+    GValue font_value = G_VALUE_INIT;
 
     azel = GTK_AZEL_PLOT(g_object_new(GTK_TYPE_AZEL_PLOT, NULL));
     azel->qth = qth;
@@ -509,7 +515,8 @@ GtkWidget *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
 
     /* get default font */
     g_value_init(&font_value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name", &font_value);
+    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name",
+                          &font_value);
     azel->font = g_value_dup_string(&font_value);
     g_value_unset(&font_value);
 
@@ -544,12 +551,15 @@ GtkWidget *gtk_azel_plot_new(qth_t * qth, pass_t * pass)
 
     /* create the drawing area */
     azel->canvas = gtk_drawing_area_new();
-    gtk_widget_set_size_request(azel->canvas, AZEL_DEFAULT_SIZE, AZEL_DEFAULT_SIZE);
+    gtk_widget_set_size_request(azel->canvas, AZEL_DEFAULT_SIZE,
+                                AZEL_DEFAULT_SIZE);
     gtk_widget_add_events(azel->canvas, GDK_POINTER_MOTION_MASK);
 
     g_signal_connect(azel->canvas, "draw", G_CALLBACK(on_draw), azel);
-    g_signal_connect(azel->canvas, "motion-notify-event", G_CALLBACK(on_motion_notify), azel);
-    g_signal_connect(azel->canvas, "size-allocate", G_CALLBACK(size_allocate_cb), azel);
+    g_signal_connect(azel->canvas, "motion-notify-event",
+                     G_CALLBACK(on_motion_notify), azel);
+    g_signal_connect(azel->canvas, "size-allocate",
+                     G_CALLBACK(size_allocate_cb), azel);
 
     gtk_widget_show(azel->canvas);
     gtk_box_pack_start(GTK_BOX(azel), azel->canvas, TRUE, TRUE, 0);
