@@ -430,7 +430,7 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     correct_pole_coor(polv, POLAR_VIEW_POLE_N, &x, &y, &anchor_south, &anchor_east);
     pango_layout_set_text(layout, _("N"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
-    cairo_move_to(cr, x - tw / 2, anchor_south ? y : y - th);
+    cairo_move_to(cr, x - tw / 2, anchor_south ? y - th : y);
     pango_cairo_show_layout(cr, layout);
 
     /* E label */
@@ -446,7 +446,7 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     correct_pole_coor(polv, POLAR_VIEW_POLE_S, &x, &y, &anchor_south, &anchor_east);
     pango_layout_set_text(layout, _("S"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
-    cairo_move_to(cr, x - tw / 2, anchor_south ? y : y - th);
+    cairo_move_to(cr, x - tw / 2, anchor_south ? y - th : y);
     pango_cairo_show_layout(cr, layout);
 
     /* W label */
