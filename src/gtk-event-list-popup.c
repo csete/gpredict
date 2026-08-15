@@ -25,19 +25,19 @@
     along with this program; if not, visit http://www.fsf.org/
 */
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
 #include "config-keys.h"
 #include "gtk-event-list-popup.h"
 #include "gtk-sat-popup-common.h"
-#include "sat-cfg.h"
-#include "sat-log.h"
 #include "orbit-tools.h"
 #include "predict-tools.h"
+#include "sat-cfg.h"
 #include "sat-info.h"
+#include "sat-log.h"
 #include "sat-pass-dialogs.h"
 #include "sgpsdp/sgp4sdp4.h"
 
@@ -48,13 +48,13 @@
  * @param event The mouse-click related event info.
  * @param toplevel The top level window.
  */
-void gtk_event_list_popup_exec(sat_t * sat, qth_t * qth,
-                               GdkEventButton * event, GtkEventList * list)
+void gtk_event_list_popup_exec(sat_t *sat, qth_t *qth, GdkEventButton *event,
+                               GtkEventList *list)
 {
-    GtkWidget      *menu;
-    GtkWidget      *menuitem;
-    GtkWidget      *label;
-    gchar          *buff;
+    GtkWidget *menu;
+    GtkWidget *menuitem;
+    GtkWidget *label;
+    gchar *buff;
 
     menu = gtk_menu_new();
 
@@ -63,11 +63,9 @@ void gtk_event_list_popup_exec(sat_t * sat, qth_t * qth,
     label = gtk_label_new(NULL);
 
     /** FIXME **/
-    g_object_set(G_OBJECT(label),
-                 "halign", GTK_ALIGN_CENTER,
-                 "valign", GTK_ALIGN_CENTER,
-                 NULL);
-    //gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
+    g_object_set(G_OBJECT(label), "halign", GTK_ALIGN_CENTER, "valign",
+                 GTK_ALIGN_CENTER, NULL);
+    // gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0.5);
     /* only available since 3.16, so no Trusty support
     gtk_label_set_xalign(GTK_LABEL(label), 0.5);
     gtk_label_set_yalign(GTK_LABEL(label), 0.5);
@@ -81,8 +79,7 @@ void gtk_event_list_popup_exec(sat_t * sat, qth_t * qth,
     /* attach data to menuitem and connect callback */
     g_object_set_data(G_OBJECT(menuitem), "sat", sat);
     g_object_set_data(G_OBJECT(menuitem), "qth", qth);
-    g_signal_connect(menuitem, "activate",
-                     G_CALLBACK(show_sat_info_menu_cb),
+    g_signal_connect(menuitem, "activate", G_CALLBACK(show_sat_info_menu_cb),
                      gtk_widget_get_toplevel(GTK_WIDGET(list)));
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
@@ -100,9 +97,9 @@ void gtk_event_list_popup_exec(sat_t * sat, qth_t * qth,
 #if GTK_MINOR_VERSION < 22
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL,
                    (event != NULL) ? event->button : 0,
-                   gdk_event_get_time((GdkEvent *) event));
+                   gdk_event_get_time((GdkEvent *)event));
 #else
-    (void) event;
+    (void)event;
     gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
 #endif
 }
