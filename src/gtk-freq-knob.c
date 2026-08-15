@@ -21,11 +21,12 @@
 #include <build-config.h>
 #endif
 
-#include "compat.h"
-#include "gtk-freq-knob.h"
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <math.h>
+
+#include "compat.h"
+#include "gtk-freq-knob.h"
 
 G_LOCK_DEFINE_STATIC(updatelock);
 
