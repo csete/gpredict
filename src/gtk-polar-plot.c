@@ -313,17 +313,24 @@ static void create_track(GtkPolarPlot *pv)
  * the orientation of the polar plot.
  */
 static void correct_pole_coor(GtkPolarPlot *polv, polar_plot_pole_t pole,
-                              gfloat *x, gfloat *y, gboolean *anchor_west)
+                              gfloat *x, gfloat *y, gboolean *anchor_south,
+                              gboolean *anchor_west)
 {
+    *anchor_south = FALSE;
     *anchor_west = TRUE;
 
     switch (pole)
     {
     case POLAR_PLOT_POLE_N:
         if ((polv->swap == POLAR_PLOT_SENW) || (polv->swap == POLAR_PLOT_SWNE))
-            *y = *y + POLV_LINE_EXTRA;  /* North and South are swapped */
+        {
+            *y = *y + POLV_LINE_EXTRA; /* North and South are swapped */
+        }
         else
+        {
             *y = *y - POLV_LINE_EXTRA;
+            *anchor_south = TRUE;
+        }
 
         break;
 
@@ -345,6 +352,7 @@ static void correct_pole_coor(GtkPolarPlot *polv, polar_plot_pole_t pole,
         {
             /* North and South are swapped */
             *y = *y - POLV_LINE_EXTRA;
+            *anchor_south = TRUE;
         }
         else
         {
@@ -441,7 +449,7 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
     GtkPolarPlot *polv = GTK_POLAR_PLOT(data);
     gdouble r, g, b, a;
     gfloat x, y;
-    gboolean anchor_west;
+    gboolean anchor_south, anchor_west;
     PangoLayout *layout;
     PangoFontDescription *font_desc;
     gint tw, th;
@@ -492,40 +500,38 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* N label */
     azel_to_xy(polv, 0.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_PLOT_POLE_N, &x, &y, &anchor_west);
+    correct_pole_coor(polv, POLAR_PLOT_POLE_N, &x, &y, &anchor_south,
+                      &anchor_west);
     pango_layout_set_text(layout, _("N"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
-    cairo_move_to(cr, x - tw / 2, y - th);
+    cairo_move_to(cr, x - tw / 2, anchor_south ? y - th : y);
     pango_cairo_show_layout(cr, layout);
 
     /* E label */
     azel_to_xy(polv, 90.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_PLOT_POLE_E, &x, &y, &anchor_west);
+    correct_pole_coor(polv, POLAR_PLOT_POLE_E, &x, &y, &anchor_south,
+                      &anchor_west);
     pango_layout_set_text(layout, _("E"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
-    if (anchor_west)
-        cairo_move_to(cr, x, y - th / 2);
-    else
-        cairo_move_to(cr, x - tw, y - th / 2);
+    cairo_move_to(cr, anchor_west ? x : x - tw, y - th / 2);
     pango_cairo_show_layout(cr, layout);
 
     /* S label */
     azel_to_xy(polv, 180.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_PLOT_POLE_S, &x, &y, &anchor_west);
+    correct_pole_coor(polv, POLAR_PLOT_POLE_S, &x, &y, &anchor_south,
+                      &anchor_west);
     pango_layout_set_text(layout, _("S"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
-    cairo_move_to(cr, x - tw / 2, y);
+    cairo_move_to(cr, x - tw / 2, anchor_south ? y - th : y);
     pango_cairo_show_layout(cr, layout);
 
     /* W label */
     azel_to_xy(polv, 270.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_PLOT_POLE_W, &x, &y, &anchor_west);
+    correct_pole_coor(polv, POLAR_PLOT_POLE_W, &x, &y, &anchor_south,
+                      &anchor_west);
     pango_layout_set_text(layout, _("W"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
-    if (anchor_west)
-        cairo_move_to(cr, x, y - th / 2);
-    else
-        cairo_move_to(cr, x - tw, y - th / 2);
+    cairo_move_to(cr, anchor_west ? x : x - tw, y - th / 2);
     pango_cairo_show_layout(cr, layout);
 
     /* Location name (if enabled) */
