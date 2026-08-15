@@ -8,17 +8,17 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, visit http://www.fsf.org/
 */
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <math.h>
 
 #ifdef HAVE_CONFIG_H
@@ -27,8 +27,8 @@
 
 #include "config-keys.h"
 #include "gpredict-utils.h"
-#include "gtk-polar-view.h"
 #include "gtk-polar-view-popup.h"
+#include "gtk-polar-view.h"
 #include "gtk-sat-data.h"
 #include "mod-cfg-get-param.h"
 #include "orbit-tools.h"
@@ -45,12 +45,13 @@
 /* extra size for line outside 0 deg circle (inside margin) */
 #define POLV_LINE_EXTRA 5
 
-static void     update_sat(gpointer key, gpointer value, gpointer data);
+static void update_sat(gpointer key, gpointer value, gpointer data);
 
 static GtkBoxClass *parent_class = NULL;
 
-/** Convert rgba color to cairo-friendly format */
-static void rgba_to_cairo(guint32 rgba, gdouble *r, gdouble *g, gdouble *b, gdouble *a)
+/* Convert rgba color to cairo-friendly format */
+static void rgba_to_cairo(guint32 rgba, gdouble *r, gdouble *g, gdouble *b,
+                          gdouble *a)
 {
     *r = ((rgba >> 24) & 0xFF) / 255.0;
     *g = ((rgba >> 16) & 0xFF) / 255.0;
@@ -58,27 +59,23 @@ static void rgba_to_cairo(guint32 rgba, gdouble *r, gdouble *g, gdouble *b, gdou
     *a = (rgba & 0xFF) / 255.0;
 }
 
-static void gtk_polar_view_store_showtracks(GtkPolarView * pv)
+static void gtk_polar_view_store_showtracks(GtkPolarView *pv)
 {
-    mod_cfg_set_integer_list_boolean(pv->cfgdata,
-                                     pv->showtracks_on,
+    mod_cfg_set_integer_list_boolean(pv->cfgdata, pv->showtracks_on,
                                      MOD_CFG_POLAR_SECTION,
                                      MOD_CFG_POLAR_SHOWTRACKS);
-    mod_cfg_set_integer_list_boolean(pv->cfgdata,
-                                     pv->showtracks_off,
+    mod_cfg_set_integer_list_boolean(pv->cfgdata, pv->showtracks_off,
                                      MOD_CFG_POLAR_SECTION,
                                      MOD_CFG_POLAR_HIDETRACKS);
 }
 
-static void gtk_polar_view_load_showtracks(GtkPolarView * pv)
+static void gtk_polar_view_load_showtracks(GtkPolarView *pv)
 {
-    mod_cfg_get_integer_list_boolean(pv->cfgdata,
-                                     MOD_CFG_POLAR_SECTION,
+    mod_cfg_get_integer_list_boolean(pv->cfgdata, MOD_CFG_POLAR_SECTION,
                                      MOD_CFG_POLAR_HIDETRACKS,
                                      pv->showtracks_off);
 
-    mod_cfg_get_integer_list_boolean(pv->cfgdata,
-                                     MOD_CFG_POLAR_SECTION,
+    mod_cfg_get_integer_list_boolean(pv->cfgdata, MOD_CFG_POLAR_SECTION,
                                      MOD_CFG_POLAR_SHOWTRACKS,
                                      pv->showtracks_on);
 }
@@ -97,7 +94,7 @@ static void free_sat_obj(gpointer data)
     }
 }
 
-static void gtk_polar_view_destroy(GtkWidget * widget)
+static void gtk_polar_view_destroy(GtkWidget *widget)
 {
     GtkPolarView *polv = GTK_POLAR_VIEW(widget);
 
@@ -133,13 +130,13 @@ static void gtk_polar_view_destroy(GtkWidget * widget)
         polv->showtracks_off = NULL;
     }
 
-    (*GTK_WIDGET_CLASS(parent_class)->destroy) (widget);
+    (*GTK_WIDGET_CLASS(parent_class)->destroy)(widget);
 }
 
-static void gtk_polar_view_class_init(GtkPolarViewClass * class,
-				      gpointer class_data)
+static void gtk_polar_view_class_init(GtkPolarViewClass *class,
+                                      gpointer class_data)
 {
-    GtkWidgetClass *widget_class = (GtkWidgetClass *) class;
+    GtkWidgetClass *widget_class = (GtkWidgetClass *)class;
 
     (void)class_data;
 
@@ -148,8 +145,7 @@ static void gtk_polar_view_class_init(GtkPolarViewClass * class,
     parent_class = g_type_class_peek_parent(class);
 }
 
-static void gtk_polar_view_init(GtkPolarView * polview,
-				gpointer g_class)
+static void gtk_polar_view_init(GtkPolarView *polview, gpointer g_class)
 {
     (void)g_class;
 
@@ -180,36 +176,34 @@ static void gtk_polar_view_init(GtkPolarView * polview,
 
 GType gtk_polar_view_get_type()
 {
-    static GType    gtk_polar_view_type = 0;
+    static GType gtk_polar_view_type = 0;
 
     if (!gtk_polar_view_type)
     {
         static const GTypeInfo gtk_polar_view_info = {
             sizeof(GtkPolarViewClass),
-            NULL,               /* base init */
-            NULL,               /* base finalise */
-            (GClassInitFunc) gtk_polar_view_class_init,
-            NULL,               /* class finalise */
-            NULL,               /* class data */
+            NULL, /* base init */
+            NULL, /* base finalise */
+            (GClassInitFunc)gtk_polar_view_class_init,
+            NULL, /* class finalise */
+            NULL, /* class data */
             sizeof(GtkPolarView),
-            5,                  /* n_preallocs */
-            (GInstanceInitFunc) gtk_polar_view_init,
-            NULL
-        };
+            5, /* n_preallocs */
+            (GInstanceInitFunc)gtk_polar_view_init,
+            NULL};
 
-        gtk_polar_view_type = g_type_register_static(GTK_TYPE_BOX,
-                                                     "GtkPolarView",
-                                                     &gtk_polar_view_info, 0);
+        gtk_polar_view_type = g_type_register_static(
+            GTK_TYPE_BOX, "GtkPolarView", &gtk_polar_view_info, 0);
     }
 
     return gtk_polar_view_type;
 }
 
-/** Convert Az/El to canvas based XY coordinates. */
-static void azel_to_xy(GtkPolarView * p, gdouble az, gdouble el, gfloat * x,
-                       gfloat * y)
+/* Convert Az/El to canvas based XY coordinates. */
+static void azel_to_xy(GtkPolarView *p, gdouble az, gdouble el, gfloat *x,
+                       gfloat *y)
 {
-    gdouble         rel;
+    gdouble rel;
 
     if (el < 0.0)
     {
@@ -247,15 +241,15 @@ static void azel_to_xy(GtkPolarView * p, gdouble az, gdouble el, gfloat * x,
         break;
     }
 
-    *x = (gfloat) (p->cx + rel * sin(az));
-    *y = (gfloat) (p->cy - rel * cos(az));
+    *x = (gfloat)(p->cx + rel * sin(az));
+    *y = (gfloat)(p->cy - rel * cos(az));
 }
 
-/** Convert canvas based coordinates to Az/El. */
-static void xy_to_azel(GtkPolarView * p, gfloat x, gfloat y, gfloat * az,
-                       gfloat * el)
+/* Convert canvas based coordinates to Az/El. */
+static void xy_to_azel(GtkPolarView *p, gfloat x, gfloat y, gfloat *az,
+                       gfloat *el)
 {
-    gfloat          rel;
+    gfloat rel;
 
     /* distance from center to cursor */
     rel = p->r - sqrt((x - p->cx) * (x - p->cx) + (y - p->cy) * (y - p->cy));
@@ -301,12 +295,10 @@ static void xy_to_azel(GtkPolarView * p, gfloat x, gfloat y, gfloat * az,
     }
 }
 
-/**
- * Transform pole coordinates.
- */
-static void
-correct_pole_coor(GtkPolarView * polv, polar_view_pole_t pole,
-                  gfloat * x, gfloat * y, gboolean *anchor_south, gboolean *anchor_east)
+/* Transform pole coordinates. */
+static void correct_pole_coor(GtkPolarView *polv, polar_view_pole_t pole,
+                              gfloat *x, gfloat *y, gboolean *anchor_south,
+                              gboolean *anchor_east)
 {
     *anchor_south = FALSE;
     *anchor_east = FALSE;
@@ -368,19 +360,19 @@ correct_pole_coor(GtkPolarView * polv, polar_view_pole_t pole,
 
 static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 {
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    gdouble         r, g, b, a;
-    gfloat          x, y;
-    gboolean        anchor_south, anchor_east;
-    PangoLayout    *layout;
+    GtkPolarView *polv = GTK_POLAR_VIEW(data);
+    gdouble r, g, b, a;
+    gfloat x, y;
+    gboolean anchor_south, anchor_east;
+    PangoLayout *layout;
     PangoFontDescription *font_desc;
-    gint            tw, th;
-    GHashTableIter  iter;
-    gpointer        key, value;
-    sat_obj_t      *obj;
-    GSList         *node;
-    gdouble        *point;
-    guint           i;
+    gint tw, th;
+    GHashTableIter iter;
+    gpointer key, value;
+    sat_obj_t *obj;
+    GSList *node;
+    gdouble *point;
+    guint i;
 
     (void)widget;
 
@@ -391,7 +383,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* Set up font */
     layout = pango_cairo_create_layout(cr);
-    font_desc = pango_font_description_from_string(polv->font ? polv->font : "Sans 9");
+    font_desc =
+        pango_font_description_from_string(polv->font ? polv->font : "Sans 9");
     pango_layout_set_font_description(layout, font_desc);
 
     /* Axis color for circles and lines */
@@ -427,7 +420,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* N label */
     azel_to_xy(polv, 0.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_VIEW_POLE_N, &x, &y, &anchor_south, &anchor_east);
+    correct_pole_coor(polv, POLAR_VIEW_POLE_N, &x, &y, &anchor_south,
+                      &anchor_east);
     pango_layout_set_text(layout, _("N"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
     cairo_move_to(cr, x - tw / 2, anchor_south ? y - th : y);
@@ -435,7 +429,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* E label */
     azel_to_xy(polv, 90.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_VIEW_POLE_E, &x, &y, &anchor_south, &anchor_east);
+    correct_pole_coor(polv, POLAR_VIEW_POLE_E, &x, &y, &anchor_south,
+                      &anchor_east);
     pango_layout_set_text(layout, _("E"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
     cairo_move_to(cr, anchor_east ? x - tw : x, y - th / 2);
@@ -443,7 +438,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* S label */
     azel_to_xy(polv, 180.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_VIEW_POLE_S, &x, &y, &anchor_south, &anchor_east);
+    correct_pole_coor(polv, POLAR_VIEW_POLE_S, &x, &y, &anchor_south,
+                      &anchor_east);
     pango_layout_set_text(layout, _("S"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
     cairo_move_to(cr, x - tw / 2, anchor_south ? y - th : y);
@@ -451,7 +447,8 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
     /* W label */
     azel_to_xy(polv, 270.0, 0.0, &x, &y);
-    correct_pole_coor(polv, POLAR_VIEW_POLE_W, &x, &y, &anchor_south, &anchor_east);
+    correct_pole_coor(polv, POLAR_VIEW_POLE_W, &x, &y, &anchor_south,
+                      &anchor_east);
     pango_layout_set_text(layout, _("W"), -1);
     pango_layout_get_pixel_size(layout, &tw, &th);
     cairo_move_to(cr, anchor_east ? x - tw : x, y - th / 2);
@@ -568,8 +565,9 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
                     rgba_to_cairo(polv->col_sat, &r, &g, &b, &a);
 
                 cairo_set_source_rgba(cr, r, g, b, a);
-                cairo_rectangle(cr, obj->x - MARKER_SIZE_HALF, obj->y - MARKER_SIZE_HALF,
-                                2 * MARKER_SIZE_HALF, 2 * MARKER_SIZE_HALF);
+                cairo_rectangle(cr, obj->x - MARKER_SIZE_HALF,
+                                obj->y - MARKER_SIZE_HALF, 2 * MARKER_SIZE_HALF,
+                                2 * MARKER_SIZE_HALF);
                 cairo_fill(cr);
             }
 
@@ -598,11 +596,11 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
 
 static sat_obj_t *find_sat_at_pos(GtkPolarView *polv, gfloat mx, gfloat my)
 {
-    GHashTableIter  iter;
-    gpointer        key, value;
-    sat_obj_t      *obj;
-    gfloat          dx, dy;
-    const gfloat    hit_radius = 10.0;
+    GHashTableIter iter;
+    gpointer key, value;
+    sat_obj_t *obj;
+    gfloat dx, dy;
+    const gfloat hit_radius = 10.0;
 
     if (polv->obj == NULL)
         return NULL;
@@ -619,12 +617,13 @@ static sat_obj_t *find_sat_at_pos(GtkPolarView *polv, gfloat mx, gfloat my)
     return NULL;
 }
 
-static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event,
+                                gpointer data)
 {
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    sat_obj_t      *obj;
-    sat_t          *sat = NULL;
-    gint           *catpoint = NULL;
+    GtkPolarView *polv = GTK_POLAR_VIEW(data);
+    sat_obj_t *obj;
+    sat_t *sat = NULL;
+    gint *catpoint = NULL;
 
     (void)widget;
 
@@ -657,8 +656,9 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
         sat = SAT(g_hash_table_lookup(polv->sats, catpoint));
         if (sat != NULL)
         {
-            gtk_polar_view_popup_exec(sat, polv->qth, polv, event,
-                                      gtk_widget_get_toplevel(GTK_WIDGET(polv)));
+            gtk_polar_view_popup_exec(
+                sat, polv->qth, polv, event,
+                gtk_widget_get_toplevel(GTK_WIDGET(polv)));
         }
         g_free(catpoint);
         break;
@@ -672,9 +672,9 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 
 static void clear_selection(gpointer key, gpointer val, gpointer data)
 {
-    gint           *old = key;
-    gint           *new = data;
-    sat_obj_t      *obj = SAT_OBJ(val);
+    gint *old = key;
+    gint *new = data;
+    sat_obj_t *obj = SAT_OBJ(val);
 
     if ((*old != *new) && (obj->selected))
     {
@@ -682,11 +682,12 @@ static void clear_selection(gpointer key, gpointer val, gpointer data)
     }
 }
 
-static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event,
+                                  gpointer data)
 {
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    sat_obj_t      *obj;
-    gint           *catpoint;
+    GtkPolarView *polv = GTK_POLAR_VIEW(data);
+    sat_obj_t *obj;
+    gint *catpoint;
 
     (void)widget;
 
@@ -720,10 +721,11 @@ static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event, gpoi
     return TRUE;
 }
 
-static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event,
+                                 gpointer data)
 {
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    gfloat          az, el;
+    GtkPolarView *polv = GTK_POLAR_VIEW(data);
+    gfloat az, el;
 
     (void)widget;
 
@@ -734,7 +736,8 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpoin
         if (el > 0.0)
         {
             g_free(polv->curs_text);
-            polv->curs_text = g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
+            polv->curs_text =
+                g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
         }
         else
         {
@@ -748,7 +751,7 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event, gpoin
     return TRUE;
 }
 
-static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
+static void size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation,
                              gpointer data)
 {
     (void)widget;
@@ -756,18 +759,18 @@ static void size_allocate_cb(GtkWidget * widget, GtkAllocation * allocation,
     GTK_POLAR_VIEW(data)->resize = TRUE;
 }
 
-static void on_canvas_realized(GtkWidget * canvas, gpointer data)
+static void on_canvas_realized(GtkWidget *canvas, gpointer data)
 {
-    GtkAllocation   aloc;
+    GtkAllocation aloc;
 
     gtk_widget_get_allocation(canvas, &aloc);
     size_allocate_cb(canvas, &aloc, data);
 }
 
-GtkWidget *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth)
+GtkWidget *gtk_polar_view_new(GKeyFile *cfgdata, GHashTable *sats, qth_t *qth)
 {
-    GtkPolarView   *polv;
-    GValue          font_value = G_VALUE_INIT;
+    GtkPolarView *polv;
+    GValue font_value = G_VALUE_INIT;
 
     polv = GTK_POLAR_VIEW(g_object_new(GTK_TYPE_POLAR_VIEW, NULL));
 
@@ -775,14 +778,17 @@ GtkWidget *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth
     polv->sats = sats;
     polv->qth = qth;
 
-    polv->obj = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, free_sat_obj);
-    polv->showtracks_on = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
-    polv->showtracks_off = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
+    polv->obj =
+        g_hash_table_new_full(g_int_hash, g_int_equal, g_free, free_sat_obj);
+    polv->showtracks_on =
+        g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
+    polv->showtracks_off =
+        g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
 
     /* get settings */
-    polv->refresh = mod_cfg_get_int(cfgdata, MOD_CFG_POLAR_SECTION,
-                                    MOD_CFG_POLAR_REFRESH,
-                                    SAT_CFG_INT_POLAR_REFRESH);
+    polv->refresh =
+        mod_cfg_get_int(cfgdata, MOD_CFG_POLAR_SECTION, MOD_CFG_POLAR_REFRESH,
+                        SAT_CFG_INT_POLAR_REFRESH);
 
     polv->showtrack = mod_cfg_get_bool(cfgdata, MOD_CFG_POLAR_SECTION,
                                        MOD_CFG_POLAR_SHOW_TRACK_AUTO,
@@ -820,24 +826,32 @@ GtkWidget *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth
     gtk_polar_view_load_showtracks(polv);
 
     /* get colors */
-    polv->col_bgd = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                    MOD_CFG_POLAR_BGD_COL, SAT_CFG_INT_POLAR_BGD_COL);
-    polv->col_axis = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_AXIS_COL, SAT_CFG_INT_POLAR_AXIS_COL);
-    polv->col_tick = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_TICK_COL, SAT_CFG_INT_POLAR_TICK_COL);
-    polv->col_info = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                     MOD_CFG_POLAR_INFO_COL, SAT_CFG_INT_POLAR_INFO_COL);
-    polv->col_sat = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                    MOD_CFG_POLAR_SAT_COL, SAT_CFG_INT_POLAR_SAT_COL);
+    polv->col_bgd =
+        mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
+                        MOD_CFG_POLAR_BGD_COL, SAT_CFG_INT_POLAR_BGD_COL);
+    polv->col_axis =
+        mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
+                        MOD_CFG_POLAR_AXIS_COL, SAT_CFG_INT_POLAR_AXIS_COL);
+    polv->col_tick =
+        mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
+                        MOD_CFG_POLAR_TICK_COL, SAT_CFG_INT_POLAR_TICK_COL);
+    polv->col_info =
+        mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
+                        MOD_CFG_POLAR_INFO_COL, SAT_CFG_INT_POLAR_INFO_COL);
+    polv->col_sat =
+        mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
+                        MOD_CFG_POLAR_SAT_COL, SAT_CFG_INT_POLAR_SAT_COL);
     polv->col_sat_sel = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                        MOD_CFG_POLAR_SAT_SEL_COL, SAT_CFG_INT_POLAR_SAT_SEL_COL);
-    polv->col_track = mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
-                                      MOD_CFG_POLAR_TRACK_COL, SAT_CFG_INT_POLAR_TRACK_COL);
+                                        MOD_CFG_POLAR_SAT_SEL_COL,
+                                        SAT_CFG_INT_POLAR_SAT_SEL_COL);
+    polv->col_track =
+        mod_cfg_get_int(polv->cfgdata, MOD_CFG_POLAR_SECTION,
+                        MOD_CFG_POLAR_TRACK_COL, SAT_CFG_INT_POLAR_TRACK_COL);
 
     /* get default font */
     g_value_init(&font_value, G_TYPE_STRING);
-    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name", &font_value);
+    g_object_get_property(G_OBJECT(gtk_settings_get_default()), "gtk-font-name",
+                          &font_value);
     polv->font = g_value_dup_string(&font_value);
     g_value_unset(&font_value);
 
@@ -850,17 +864,24 @@ GtkWidget *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth
     /* create the canvas (drawing area) */
     polv->canvas = gtk_drawing_area_new();
     gtk_widget_set_has_tooltip(polv->canvas, TRUE);
-    gtk_widget_set_size_request(polv->canvas, POLV_DEFAULT_SIZE, POLV_DEFAULT_SIZE);
-    gtk_widget_add_events(polv->canvas, GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK |
-                          GDK_BUTTON_RELEASE_MASK);
+    gtk_widget_set_size_request(polv->canvas, POLV_DEFAULT_SIZE,
+                                POLV_DEFAULT_SIZE);
+    gtk_widget_add_events(polv->canvas, GDK_POINTER_MOTION_MASK |
+                                            GDK_BUTTON_PRESS_MASK |
+                                            GDK_BUTTON_RELEASE_MASK);
 
     /* connect signals */
     g_signal_connect(polv->canvas, "draw", G_CALLBACK(on_draw), polv);
-    g_signal_connect(polv->canvas, "motion-notify-event", G_CALLBACK(on_motion_notify), polv);
-    g_signal_connect(polv->canvas, "button-press-event", G_CALLBACK(on_button_press), polv);
-    g_signal_connect(polv->canvas, "button-release-event", G_CALLBACK(on_button_release), polv);
-    g_signal_connect(polv->canvas, "size-allocate", G_CALLBACK(size_allocate_cb), polv);
-    g_signal_connect_after(polv->canvas, "realize", G_CALLBACK(on_canvas_realized), polv);
+    g_signal_connect(polv->canvas, "motion-notify-event",
+                     G_CALLBACK(on_motion_notify), polv);
+    g_signal_connect(polv->canvas, "button-press-event",
+                     G_CALLBACK(on_button_press), polv);
+    g_signal_connect(polv->canvas, "button-release-event",
+                     G_CALLBACK(on_button_release), polv);
+    g_signal_connect(polv->canvas, "size-allocate",
+                     G_CALLBACK(size_allocate_cb), polv);
+    g_signal_connect_after(polv->canvas, "realize",
+                           G_CALLBACK(on_canvas_realized), polv);
 
     gtk_widget_show(polv->canvas);
     gtk_box_pack_start(GTK_BOX(polv), polv->canvas, TRUE, TRUE, 0);
@@ -868,9 +889,9 @@ GtkWidget *gtk_polar_view_new(GKeyFile * cfgdata, GHashTable * sats, qth_t * qth
     return GTK_WIDGET(polv);
 }
 
-static void update_polv_size(GtkPolarView * polv)
+static void update_polv_size(GtkPolarView *polv)
 {
-    GtkAllocation   allocation;
+    GtkAllocation allocation;
 
     if (gtk_widget_get_realized(GTK_WIDGET(polv)))
     {
@@ -886,25 +907,25 @@ static void update_polv_size(GtkPolarView * polv)
     }
 }
 
-/** Convert LOS timestamp to human readable countdown string */
-static gchar *los_time_to_str(GtkPolarView * polv, sat_t * sat)
+/* Convert LOS timestamp to human readable countdown string */
+static gchar *los_time_to_str(GtkPolarView *polv, sat_t *sat)
 {
-    guint           h, m, s;
-    gdouble         number, now;
-    gchar          *text = NULL;
+    guint h, m, s;
+    gdouble number, now;
+    gchar *text = NULL;
 
     now = polv->tstamp;
     number = sat->los - now;
 
     /* convert julian date to seconds */
-    s = (guint) (number * 86400);
+    s = (guint)(number * 86400);
 
     /* extract hours */
-    h = (guint) floor(s / 3600);
+    h = (guint)floor(s / 3600);
     s -= 3600 * h;
 
     /* extract minutes */
-    m = (guint) floor(s / 60);
+    m = (guint)floor(s / 60);
     s -= 60 * m;
 
     if (h > 0)
@@ -915,14 +936,14 @@ static gchar *los_time_to_str(GtkPolarView * polv, sat_t * sat)
     return text;
 }
 
-void gtk_polar_view_update(GtkWidget * widget)
+void gtk_polar_view_update(GtkWidget *widget)
 {
-    GtkPolarView   *polv = GTK_POLAR_VIEW(widget);
-    gdouble         number, now;
-    gchar          *buff;
-    guint           h, m, s;
-    sat_t          *sat = NULL;
-    gint           *catnr;
+    GtkPolarView *polv = GTK_POLAR_VIEW(widget);
+    gdouble number, now;
+    gchar *buff;
+    guint h, m, s;
+    sat_t *sat = NULL;
+    gint *catnr;
 
     if (polv->resize)
     {
@@ -961,10 +982,10 @@ void gtk_polar_view_update(GtkWidget * widget)
                     now = polv->tstamp;
                     number = polv->naos - now;
 
-                    s = (guint) (number * 86400);
-                    h = (guint) floor(s / 3600);
+                    s = (guint)(number * 86400);
+                    h = (guint)floor(s / 3600);
                     s -= 3600 * h;
-                    m = (guint) floor(s / 60);
+                    m = (guint)floor(s / 60);
                     s -= 60 * m;
 
                     if (h > 0)
@@ -979,7 +1000,9 @@ void gtk_polar_view_update(GtkWidget * widget)
                 }
                 else
                 {
-                    sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Can not find NEXT satellite."), __func__);
+                    sat_log_log(SAT_LOG_LEVEL_ERROR,
+                                _("%s: Can not find NEXT satellite."),
+                                __func__);
                     g_free(polv->next_text);
                     polv->next_text = g_strdup(_("Next: ERR"));
                 }
@@ -1002,13 +1025,13 @@ void gtk_polar_view_update(GtkWidget * widget)
 
 static void update_sat(gpointer key, gpointer value, gpointer data)
 {
-    gint           *catnum;
-    sat_t          *sat = SAT(value);
-    GtkPolarView   *polv = GTK_POLAR_VIEW(data);
-    sat_obj_t      *obj = NULL;
-    gfloat          x, y;
-    gdouble         now;
-    gchar          *losstr;
+    gint *catnum;
+    sat_t *sat = SAT(value);
+    GtkPolarView *polv = GTK_POLAR_VIEW(data);
+    sat_obj_t *obj = NULL;
+    gfloat x, y;
+    gdouble now;
+    gchar *losstr;
 
     (void)key;
 
@@ -1069,32 +1092,38 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
             if (sat->los > 0.0)
                 losstr = los_time_to_str(polv, sat);
             else
-                losstr = g_strdup_printf(_("%s\nAlways in range"), sat->nickname);
+                losstr =
+                    g_strdup_printf(_("%s\nAlways in range"), sat->nickname);
 
             /* update tooltip */
             g_free(obj->tooltip);
-            obj->tooltip = g_markup_printf_escaped("<b>%s</b>\nAz: %5.1f\302\260\nEl: %5.1f\302\260\n%s",
-                                                   sat->nickname, sat->az, sat->el, losstr);
+            obj->tooltip = g_markup_printf_escaped(
+                "<b>%s</b>\nAz: %5.1f\302\260\nEl: %5.1f\302\260\n%s",
+                sat->nickname, sat->az, sat->el, losstr);
 
             /* update selection info */
             if (obj->selected)
             {
                 g_free(polv->sel_text);
-                polv->sel_text = g_strdup_printf("%s\n%s", sat->nickname, losstr);
+                polv->sel_text =
+                    g_strdup_printf("%s\n%s", sat->nickname, losstr);
             }
 
             /* Check if pass needs update */
             if (obj->pass)
             {
                 /** FIXME: threshold */
-                gboolean qth_upd = qth_small_dist(polv->qth, (obj->pass->qth_comp)) > 1.0;
-                gboolean time_upd = !((obj->pass->aos <= now) && (obj->pass->los >= now));
+                gboolean qth_upd =
+                    qth_small_dist(polv->qth, (obj->pass->qth_comp)) > 1.0;
+                gboolean time_upd =
+                    !((obj->pass->aos <= now) && (obj->pass->los >= now));
 
                 if (qth_upd || time_upd)
                 {
-                    sat_log_log(SAT_LOG_LEVEL_DEBUG,
-                                _("%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"),
-                                __FILE__, __func__, *catnum, qth_upd, time_upd);
+                    sat_log_log(
+                        SAT_LOG_LEVEL_DEBUG,
+                        _("%s:%s: Updating satellite pass SAT:%d Q:%d T:%d\n"),
+                        __FILE__, __func__, *catnum, qth_upd, time_upd);
 
                     /* Free old track and pass */
                     g_slist_free_full(obj->track_points, g_free);
@@ -1112,7 +1141,7 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
             }
 
             g_free(losstr);
-            g_free(catnum);     // FIXME: why free here, what about else?
+            g_free(catnum); // FIXME: why free here, what about else?
         }
         else
         {
@@ -1128,9 +1157,11 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 obj->nickname = g_strdup(sat->nickname);
                 obj->track_points = NULL;
 
-                if (g_hash_table_lookup_extended(polv->showtracks_on, catnum, NULL, NULL))
+                if (g_hash_table_lookup_extended(polv->showtracks_on, catnum,
+                                                 NULL, NULL))
                     obj->showtrack = TRUE;
-                else if (g_hash_table_lookup_extended(polv->showtracks_off, catnum, NULL, NULL))
+                else if (g_hash_table_lookup_extended(polv->showtracks_off,
+                                                      catnum, NULL, NULL))
                     obj->showtrack = FALSE;
                 else
                     obj->showtrack = polv->showtrack;
@@ -1138,8 +1169,9 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
                 obj->istarget = FALSE;
 
                 /* create tooltip */
-                obj->tooltip = g_markup_printf_escaped("<b>%s</b>\nAz: %5.1f\302\260\nEl: %5.1f\302\260\n",
-                                                       sat->nickname, sat->az, sat->el);
+                obj->tooltip = g_markup_printf_escaped(
+                    "<b>%s</b>\nAz: %5.1f\302\260\nEl: %5.1f\302\260\n",
+                    sat->nickname, sat->az, sat->el);
 
                 /* get info about the current pass */
                 obj->pass = get_current_pass(sat, polv->qth, now);
@@ -1163,25 +1195,29 @@ static void update_sat(gpointer key, gpointer value, gpointer data)
     }
 }
 
-void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj, sat_t * sat)
+void gtk_polar_view_create_track(GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 {
-    guint           num, i;
-    pass_detail_t  *detail;
-    gfloat          x, y;
-    gdouble        *point;
-    guint           tres, ttidx;
+    guint num, i;
+    pass_detail_t *detail;
+    gfloat x, y;
+    gdouble *point;
+    guint tres, ttidx;
 
     (void)sat;
 
     if (obj == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%d: Failed to get satellite object."), __FILE__, __LINE__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to get satellite object."), __FILE__,
+                    __LINE__);
         return;
     }
 
     if (obj->pass == NULL)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%d: Failed to get satellite pass."), __FILE__, __LINE__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR,
+                    _("%s:%d: Failed to get satellite pass."), __FILE__,
+                    __LINE__);
         return;
     }
 
@@ -1193,7 +1229,8 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj, sat_t * sat
     num = g_slist_length(obj->pass->details);
     if (num == 0)
     {
-        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%d: Pass had no points in it."), __FILE__, __LINE__);
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%d: Pass had no points in it."),
+                    __FILE__, __LINE__);
         return;
     }
 
@@ -1237,7 +1274,8 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj, sat_t * sat
 
                 obj->trtick[ttidx].x = tx;
                 obj->trtick[ttidx].y = y;
-                daynum_to_str(obj->trtick[ttidx].text, 6, "%H:%M", detail->time);
+                daynum_to_str(obj->trtick[ttidx].text, 6, "%H:%M",
+                              detail->time);
             }
             ttidx++;
         }
@@ -1251,7 +1289,7 @@ void gtk_polar_view_create_track(GtkPolarView * pv, sat_obj_t * obj, sat_t * sat
     obj->track_points = g_slist_append(obj->track_points, point);
 }
 
-void gtk_polar_view_delete_track(GtkPolarView * pv, sat_obj_t * obj, sat_t * sat)
+void gtk_polar_view_delete_track(GtkPolarView *pv, sat_obj_t *obj, sat_t *sat)
 {
     (void)pv;
     (void)sat;
@@ -1266,18 +1304,18 @@ void gtk_polar_view_delete_track(GtkPolarView * pv, sat_obj_t * obj, sat_t * sat
     }
 }
 
-void gtk_polar_view_reload_sats(GtkWidget * polv, GHashTable * sats)
+void gtk_polar_view_reload_sats(GtkWidget *polv, GHashTable *sats)
 {
     GTK_POLAR_VIEW(polv)->sats = sats;
     GTK_POLAR_VIEW(polv)->naos = 0.0;
     GTK_POLAR_VIEW(polv)->ncat = 0;
 }
 
-void gtk_polar_view_select_sat(GtkWidget * widget, gint catnum)
+void gtk_polar_view_select_sat(GtkWidget *widget, gint catnum)
 {
-    GtkPolarView   *polv = GTK_POLAR_VIEW(widget);
-    gint           *catpoint = NULL;
-    sat_obj_t      *obj = NULL;
+    GtkPolarView *polv = GTK_POLAR_VIEW(widget);
+    gint *catpoint = NULL;
+    sat_obj_t *obj = NULL;
 
     catpoint = g_try_new0(gint, 1);
     *catpoint = catnum;
