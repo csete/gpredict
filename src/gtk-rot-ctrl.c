@@ -1321,6 +1321,13 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     gtk_grid_set_column_spacing(GTK_GRID(table), 5);
     gtk_grid_set_row_spacing(GTK_GRID(table), 5);
 
+    /* satellite filter */
+    ctrl->SatSelFilter = gtk_search_entry_new();
+    gtk_entry_set_placeholder_text(GTK_ENTRY(ctrl->SatSelFilter), _("Filter..."));
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatSelFilter, 0, 0, 2, 1);
+    g_signal_connect(ctrl->SatSelFilter, "search-changed",
+                     G_CALLBACK(filter_text_changed_cb), ctrl);
+
     /* sat selector */
     ctrl->SatSel = gtk_combo_box_text_new();
     n = g_slist_length(ctrl->sats);
@@ -1337,49 +1344,42 @@ static GtkWidget *create_target_widgets(GtkRotCtrl * ctrl)
     g_signal_connect(ctrl->SatSel, "changed", G_CALLBACK(sat_selected_cb),
                      ctrl);
     g_signal_emit_by_name(ctrl->SatSel, "changed");
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 0, 2, 1);
-
-    /* sat selector filter */
-    ctrl->SatSelFilter = gtk_search_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(ctrl->SatSelFilter), _("Filter..."));
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatSelFilter, 2, 0, 2, 1);
-    g_signal_connect(ctrl->SatSelFilter, "search-changed",
-                     G_CALLBACK(filter_text_changed_cb), ctrl);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatSel, 0, 1, 2, 1);
 
     /* tracking button */
     ctrl->track = gtk_toggle_button_new_with_label(_("Track"));
     gtk_widget_set_tooltip_text(ctrl->track,
                                 _
                                 ("Track the satellite when it is within range"));
-    gtk_grid_attach(GTK_GRID(table), ctrl->track, 4, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->track, 4, 1, 1, 1);
     g_signal_connect(ctrl->track, "toggled", G_CALLBACK(track_toggle_cb),
                      ctrl);
 
     /* Azimuth */
     label = gtk_label_new(_("Az:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
 
     ctrl->AzSat = gtk_label_new(buff);
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->AzSat, 1, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->AzSat, 1, 2, 1, 1);
 
     /* Elevation */
     label = gtk_label_new(_("El:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
 
     ctrl->ElSat = gtk_label_new(buff);
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->ElSat, 1, 2, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->ElSat, 1, 3, 1, 1);
 
     /* count down */
     label = gtk_label_new(_("\316\224T:"));
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), label, 0, 4, 1, 1);
     ctrl->SatCnt = gtk_label_new("00:00:00");
     g_object_set(label, "xalign", 1.0f, "yalign", 0.5f, NULL);
-    gtk_grid_attach(GTK_GRID(table), ctrl->SatCnt, 1, 3, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), ctrl->SatCnt, 1, 4, 1, 1);
 
     frame = gtk_frame_new(_("Target"));
     gtk_container_add(GTK_CONTAINER(frame), table);
