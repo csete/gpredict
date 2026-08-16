@@ -23,8 +23,8 @@ groups = {
     "glo-ops" : "Glonass Operational",
     "gps-ops" : "GPS Operational",
     "iridium-NEXT" : "Iridium NEXT",
-    "molniya" : "Molniya",
-    "noaa" : "NOAA",
+#    "molniya" : "Molniya",
+#    "noaa" : "NOAA",
     "science" : "Space & Earth Science",
     "visual" : "Brightest",
     "weather" : "Weather Satellites"

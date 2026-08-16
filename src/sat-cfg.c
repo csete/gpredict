@@ -240,8 +240,6 @@ sat_cfg_str_t   sat_cfg_str[SAT_CFG_STR_NUM] = {
      "https://celestrak.org/NORAD/elements/gp.php?GROUP=glo-ops&FORMAT=tle;"
      "https://celestrak.org/NORAD/elements/gp.php?GROUP=gps-ops&FORMAT=tlet;"
      "https://celestrak.org/NORAD/elements/gp.php?GROUP=iridium-NEXT&FORMAT=tle;"
-     "https://celestrak.org/NORAD/elements/gp.php?GROUP=molniya&FORMAT=tle;"
-     "https://celestrak.org/NORAD/elements/gp.php?GROUP=noaa&FORMAT=tle;"
      "https://celestrak.org/NORAD/elements/gp.php?GROUP=science&FORMAT=tle;"
      "https://celestrak.org/NORAD/elements/gp.php?GROUP=last-30-days&FORMAT=tle;"
      "https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle;"

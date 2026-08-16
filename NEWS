@@ -8,6 +8,7 @@ Changes in version 2.6 (TBD)
  - Fixed missing Next Event in the polar view (#417)
  - Limit width of transponder selector in the radio controller window
  - Updated contributors (#414)
+ - Removed NOAA and Mlniya satellite groups (no longer available)
 
 
 Changes in version 2.5.2 (20 Jul 2026)
