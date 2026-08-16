@@ -3,6 +3,7 @@ Changes in version 2.6 (TBD)
  - Added satellite filter to the radio and rotator controllers (#339)
  - Removed invalid data from satellites.dat (#413)
  - Fixed posistioning of North and South labels in the polar views (#415)
+ - Fixed wrong display of polar plot orintation setting in config dialog
  - Limit width of transponder selector in the radio controller window
  - Updated contributors (#414)
 
