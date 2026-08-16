@@ -335,7 +335,7 @@ static void create_orient_selector(GKeyFile * cfg, GtkBox * vbox)
     }
     else
     {
-        sat_cfg_get_int(SAT_CFG_INT_POLAR_ORIENTATION);
+        orient = sat_cfg_get_int(SAT_CFG_INT_POLAR_ORIENTATION);
     }
 
     switch (orient)
