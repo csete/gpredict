@@ -486,7 +486,7 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
         pango_layout_set_text(layout, polv->next_text, -1);
         pango_layout_get_pixel_size(layout, &tw, &th);
         cairo_move_to(cr, polv->cx + polv->r + 2 * POLV_LINE_EXTRA - tw,
-                      polv->cy - polv->r - POLV_LINE_EXTRA - th);
+                      polv->cy - polv->r - POLV_LINE_EXTRA - th/2);
         pango_cairo_show_layout(cr, layout);
         pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
     }

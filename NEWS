@@ -5,6 +5,7 @@ Changes in version 2.6 (TBD)
  - Fixed posistioning of North and South labels in the polar views (#415)
  - Fixed wrong display of polar plot orintation setting in config dialog
  - Fixed missing cursor elevation in polar views (#416)
+ - Fixed missing Next Event in the polar view (#417)
  - Limit width of transponder selector in the radio controller window
  - Updated contributors (#414)
 
