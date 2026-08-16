@@ -65,6 +65,8 @@ typedef struct {
     gdouble         lo;         /*!< local oscillator freq in Hz (using double for
                                    compatibility with rest of code). Downlink. */
     gdouble         loup;       /*!< local oscillator freq in Hz for uplink. */
+    gdouble         defUpFreq;  /*!< Default uplink in Hertz */
+    gdouble         defDnFreq;  /*!< Default downlink frequency in Hertz */
     rig_type_t      type;       /*!< Radio type */
     ptt_type_t      ptt;        /*!< PTT type (needed for RX, TX, and TRX) */
     vfo_t           vfoDown;    /*!< Downlink VFO for full-duplex radios */

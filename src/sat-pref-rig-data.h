@@ -38,6 +38,8 @@ typedef enum {
     RIG_LIST_COL_VFODOWN,       /*!< VFO down */
     RIG_LIST_COL_LO,            /*!< Local oscillator freq (downlink) */
     RIG_LIST_COL_LOUP,          /*!< Local oscillato freq (uplink) */
+    RIG_LIST_COL_DEF_UP_FREQ,   /*!< Default uplink frequency */
+    RIG_LIST_COL_DEF_DN_FREQ,   /*!< Default downlink frequency */
     RIG_LIST_COL_SIGAOS,        /*!< Signal AOS */
     RIG_LIST_COL_SIGLOS,        /*!< Signal LOS */
     RIG_LIST_COL_NUM            /*!< The number of fields in the list. */
