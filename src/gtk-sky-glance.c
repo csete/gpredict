@@ -325,9 +325,15 @@ static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer data)
         /* Time label */
         if (skg->time_label)
         {
+            gint delta_x = 5; // initial margin
             pango_layout_set_text(layout, skg->time_label, -1);
-            pango_layout_get_pixel_size(layout, &tw, &th);
-            cairo_move_to(cr, skg->x0 + 5, skg->y0);
+            if (skg->cursor_x > skg->w / 2)
+            {
+                /* move label to the right side of the cursor */
+                pango_layout_get_pixel_size(layout, &tw, &th);
+                delta_x -= (tw + 10);
+            }
+            cairo_move_to(cr, skg->cursor_x + delta_x, skg->y0);
             pango_cairo_show_layout(cr, layout);
         }
     }
