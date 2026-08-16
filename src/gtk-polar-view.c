@@ -737,7 +737,7 @@ static gboolean on_motion_notify(GtkWidget *widget, GdkEventMotion *event,
         {
             g_free(polv->curs_text);
             polv->curs_text =
-                g_strdup_printf("AZ %.0f\302\260\nEL %.0f\302\260", az, el);
+                g_strdup_printf("AZ: %.0f\302\260   EL: %.0f\302\260", az, el);
         }
         else
         {
