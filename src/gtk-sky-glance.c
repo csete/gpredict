@@ -57,7 +57,7 @@
 #define SKG_DEFAULT_WIDTH       600
 #define SKG_DEFAULT_HEIGHT      300
 #define SKG_PIX_PER_SAT         10
-#define SKG_MARGIN              15
+#define SKG_MARGIN              20
 #define SKG_FOOTER              50
 #define SKG_CURSOR_WIDTH        0.5
 
