@@ -1,4 +1,4 @@
-Changes in version 2.6 (TBD)
+Changes in version 2.6 (16 Aug 2026)
 
  - Added satellite filter to the radio and rotator controllers (#339)
  - Removed invalid data from satellites.dat (#413)
