@@ -964,7 +964,7 @@ static void delete_cb(GtkWidget * menuitem, gpointer data)
                                                 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                                 GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
                                                 _("This operation will permanently delete <b>%s</b> "\
-                                                  "from the disk.\nDo you you want to proceed?"),
+                                                  "from the disk.\nDo you want to proceed?"),
                                                 module->name);
 
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
