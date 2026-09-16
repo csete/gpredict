@@ -1618,7 +1618,7 @@ msgstr "Gpredict Control del Rotor: %s"
 #, fuzzy, c-format
 msgid ""
 "This operation will permanently delete <b>%s</b> from the disk.\n"
-"Do you you want to proceed?"
+"Do you want to proceed?"
 msgstr ""
 "Esta operación borrará permanentemente\n"
 "<b>%s</b>\n"

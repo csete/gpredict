@@ -1548,7 +1548,7 @@ msgstr ""
 #, c-format
 msgid ""
 "This operation will permanently delete <b>%s</b> from the disk.\n"
-"Do you you want to proceed?"
+"Do you want to proceed?"
 msgstr ""
 
 #: ../src/gtk-sat-module-popup.c:980
