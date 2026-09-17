@@ -24,7 +24,6 @@ src/gtk-sat-module-popup.c
 src/gtk-sat-module-tmg.c
 src/gtk-sat-popup-common.c
 src/gtk-sat-selector.c
-src/gtk-sat-tree.c
 src/gtk-single-sat.c
 src/gtk-sky-glance.c
 src/gui.c
