@@ -2995,6 +2995,30 @@ static void rigctrl_open(GtkRigCtrl *data)
     }
 }
 
+/* Marshals the auto-disengage UI update onto the main thread. The
+   actual cleanup (socket close, timer removal) is done by the caller
+   on the worker thread before this runs; this function only touches
+   GTK widgets, which must never be called from a non-main thread. The
+   "toggled" signal is blocked while updating the button so this does
+   not re-trigger rig_engaged_cb's own disengage branch (which expects
+   to run on user-initiated Engage/Disengage, on the main thread, and
+   would otherwise self-deadlock if reached from here -- see the
+   MAX_ERROR_COUNT handling in rigctl_run for why this exists). */
+static gboolean rig_auto_disengage_ui_cb(gpointer data)
+{
+    GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
+
+    g_signal_handlers_block_by_func(ctrl->LockBut, rig_engaged_cb, ctrl);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ctrl->LockBut), FALSE);
+    g_signal_handlers_unblock_by_func(ctrl->LockBut, rig_engaged_cb, ctrl);
+
+    gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
+    gtk_widget_set_sensitive(ctrl->DevSel2, TRUE);
+    ctrl->rigctl_thread = NULL;
+
+    return FALSE;
+}
+
 /* Communication thread for hamlib rigctld */
 gpointer rigctl_run(gpointer data)
 {
@@ -3085,17 +3109,34 @@ gpointer rigctl_run(gpointer data)
         /* perform error count checking */
         if (t_ctrl->errcnt >= MAX_ERROR_COUNT)
         {
-            /* disengage device */
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(t_ctrl->LockBut),
-                                         FALSE);
-            t_ctrl->engaged = FALSE;
-            t_ctrl->errcnt = 0;
             sat_log_log(
                 SAT_LOG_LEVEL_ERROR,
                 _("%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"),
                 __FILE__, __func__, MAX_ERROR_COUNT);
 
-            // g_print ("ERROR. WROPS = %d\n", ctrl->wrops);
+            /* Do the disengage cleanup directly here, on this thread,
+               instead of calling gtk_toggle_button_set_active(). That
+               call would synchronously re-enter this same thread via
+               rig_engaged_cb's disengage branch, which does
+               g_cond_wait() waiting for a signal that only the *else*
+               branch further up in this same function can send --
+               code that can never run until this call returns. The
+               result was a permanent self-deadlock: this thread parks
+               forever, rigctrl_close() (which resets ctrl->sock to 0)
+               never runs, and every subsequent Engage silently reuses
+               the dead socket instead of reconnecting. */
+            t_ctrl->engaged = FALSE;
+            t_ctrl->errcnt = 0;
+
+            if (t_ctrl->sock > 0)
+                rigctrl_close(t_ctrl);
+
+            if (t_ctrl->timerid)
+                remove_timer(t_ctrl);
+
+            g_idle_add(rig_auto_disengage_ui_cb, t_ctrl);
+
+            break;
         }
 
         // g_print ("       WROPS = %d\n", ctrl->wrops);
