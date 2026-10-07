@@ -1,3 +1,10 @@
+Changes in version 2.7 (TBD)
+
+ - Fixed bug causing the rotator position fields never to update after Engage (#423)
+ - Increased radio and rotator timer limits to 30 seconds (#424)
+ - Updated French translation (#419)
+
+
 Changes in version 2.6 (16 Aug 2026)
 
  - Added satellite filter to the radio and rotator controllers (#339)
