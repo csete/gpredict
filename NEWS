@@ -2,6 +2,7 @@ Changes in version 2.7 (TBD)
 
  - Fixed bug causing the rotator position fields never to update after Engage (#423)
  - Increased radio and rotator timer limits to 30 seconds (#424)
+ - Added option to configure default frequencies for radios (#274)
  - Updated French translation (#419)
 
 
