@@ -218,8 +218,8 @@ void Convert_Satellite_Data(char *tle_set, tle_t * tle)
     tle->xmo = g_ascii_strtod(buff, NULL);
 
     /* Satellite's Mean Motion (rev/day) */
-    strncpy(buff, &tle_set[121], 10);
-    buff[10] = '\0';
+    strncpy(buff, &tle_set[121], 11);
+    buff[11] = '\0';
     tle->xno = g_ascii_strtod(buff, NULL);
 
     /* Satellite's Revolution number at epoch */
