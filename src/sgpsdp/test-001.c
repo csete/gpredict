@@ -119,6 +119,14 @@ int main(void)
     printf("%s", tle_str[1]);
     printf("%s", tle_str[2]);
 
+    /* the mean motion field is eleven characters wide */
+    if (fabs(sat.tle.xno - 16.05824518) > 1.0e-9)
+    {
+        printf("Mean motion read as %.8f (expected 16.05824518)\n",
+               sat.tle.xno);
+        return 1;
+    }
+
     select_ephemeris(&sat);
 
     printf("\nDEEP_SPACE_EPHEM: %d (expected 0)\n\n",
