@@ -54,6 +54,7 @@ const gchar *authors[] = {
     "Fabian P. Schmidt",
     "Gisle Vanem",
     "Henry Hallam",
+    "Honorius Neogy",
     "Ilias Daradimos",
     "Jan Simon, DL2ZXA",
     "Jason Uher",
