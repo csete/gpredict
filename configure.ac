@@ -77,6 +77,10 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,
                    "$GETTEXT_PACKAGE",
                    "definition of GETTEXT_PACKAGE")
 
+# define ENABLE_NLS if $USE_NLS = yes
+if test "$USE_NLS" = "yes" ; then
+	AC_DEFINE(ENABLE_NLS, 1, [Define if NLS is enabled])
+fi
 
 # compiler flags to enable generating coverage report
 # using gcov
