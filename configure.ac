@@ -72,10 +72,13 @@ AC_SUBST(PACKAGE_LIBS)
 # Note that other progs only have ALL_LINGUAS and AM_GLIB_GNU_GETTEXT
 ALL_LINGUAS="cs da de el en_GB en_US es fi fr id it lt ru th uk"
 GETTEXT_PACKAGE=gpredict
+AM_GNU_GETTEXT([external])
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,
                    "$GETTEXT_PACKAGE",
                    "definition of GETTEXT_PACKAGE")
+AM_GNU_GETTEXT_REQUIRE_VERSION([0.21])
+AM_XGETTEXT_OPTION([--from-code=UTF-8])
 
 # define ENABLE_NLS if $USE_NLS = yes
 if test "$USE_NLS" = "yes" ; then
