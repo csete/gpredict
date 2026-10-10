@@ -1,5 +1,5 @@
 gpredict_satdir = $(pkgdatadir)/data/satdata
 
-gpredict_sat_DATA = satellites.dat *.cat
+gpredict_sat_DATA = satellites.dat $(top_srcdir)/data/satdata/*.cat
 
 EXTRA_DIST = $(gpredict_sat_DATA)
