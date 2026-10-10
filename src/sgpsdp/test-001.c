@@ -67,6 +67,22 @@ const dataset_t expected[TEST_STEPS] = {
 };
 
 
+/* check digit of a 69 character TLE line, as computed by Checksum_Good() */
+static char line_checksum(const char *line)
+{
+    int             i, sum = 0;
+
+    for (i = 0; i < 68; i++)
+    {
+        if ((line[i] >= '0') && (line[i] <= '9'))
+            sum += line[i] - '0';
+        else if (line[i] == '-')
+            sum += 1;
+    }
+
+    return (char)('0' + sum % 10);
+}
+
 char            tle_str[3][80];
 sat_t           sat;
 
@@ -125,6 +141,39 @@ int main(void)
         printf("Mean motion read as %.8f (expected 16.05824518)\n",
                sat.tle.xno);
         return 1;
+    }
+
+    /* a letter in the epoch field must be rejected, even when it
+       replaced a 0 and the checksum still holds */
+    {
+        char            tle_set[139];
+
+        memcpy(tle_set, tle_str[1], 69);
+        memcpy(&tle_set[69], tle_str[2], 69);
+        tle_set[138] = '\0';
+
+        if (!Good_Elements(tle_set))
+        {
+            printf("Good_Elements() rejected the unmodified TLE\n");
+            return 1;
+        }
+
+        tle_set[27] = 'O';      /* epoch 80275.98708465 -> 80275.987O8465 */
+        if (Good_Elements(tle_set))
+        {
+            printf("Good_Elements() accepted a letter in the epoch\n");
+            return 1;
+        }
+
+        tle_set[27] = '0';
+        tle_set[20] = ' ';      /* day of year 5, padded with spaces */
+        tle_set[21] = ' ';
+        tle_set[68] = line_checksum(tle_set);
+        if (!Good_Elements(tle_set))
+        {
+            printf("Good_Elements() rejected a space-padded day of year\n");
+            return 1;
+        }
     }
 
     select_ephemeris(&sat);

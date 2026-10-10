@@ -76,6 +76,46 @@ int Checksum_Good(char *tle_set)
     return (checksum == check_digit);
 }
 
+/* Checks that the epoch field in columns 19-32 of line 1 (YYDDD.FFFFFFFF)
+   holds a number that Convert_Satellite_Data() can read in full: digits,
+   with spaces allowed only where they are padding, i.e. in place of the
+   leading zeros of the day of year and after the last fraction digit.
+   Checksum_Good() counts a letter as 0, so a letter that replaced a 0
+   would otherwise pass and the epoch would be read up to the letter. */
+static int Epoch_Good(char *tle_set)
+{
+    int             i;
+
+    /* year */
+    if (!g_ascii_isdigit(tle_set[18]) || !g_ascii_isdigit(tle_set[19]))
+        return (0);
+
+    /* day of year; the two leading digits may be padded with spaces */
+    for (i = 20; i < 22; i++)
+        if (!g_ascii_isdigit(tle_set[i]) && (tle_set[i] != ' '))
+            return (0);
+    if ((tle_set[20] != ' ') && (tle_set[21] == ' '))
+        return (0);
+    if (!g_ascii_isdigit(tle_set[22]))
+        return (0);
+
+    /* fraction of day; at least one digit, trailing spaces allowed */
+    if (!g_ascii_isdigit(tle_set[24]))
+        return (0);
+    for (i = 25; i < 32; i++)
+    {
+        if (tle_set[i] == ' ')
+            break;
+        if (!g_ascii_isdigit(tle_set[i]))
+            return (0);
+    }
+    for (; i < 32; i++)
+        if (tle_set[i] != ' ')
+            return (0);
+
+    return (1);
+}
+
 /* Carries out various checks on a TLE set to verify its validity */
 /* tle_set is a character string holding the two lines read    */
 /* from a text file containing NASA format Keplerian elements. */
@@ -98,6 +138,9 @@ int Good_Elements(char *tle_set)
         (tle_set[106] != '.') ||
         (tle_set[115] != '.') ||
         (tle_set[123] != '.') || (strncmp(&tle_set[61], " 0 ", 3) != 0))
+        return (0);
+    /* Check that the epoch is a well-formed number */
+    if (!Epoch_Good(tle_set))
         return (0);
 
     return (1);
