@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gpredict\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-16 16:02+0200\n"
+"POT-Creation-Date: 2026-10-11 11:10+0200\n"
 "PO-Revision-Date: 2017-12-07 02:24+0000\n"
 "Last-Translator: Alexandru Csete <oz9aec@gmail.com>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "X-Generator: Launchpad (build 18521)\n"
 
 #. create window title and file name for window icon
-#: ../src/about.c:117 ../src/main.c:240
+#: ../src/about.c:119 ../src/main.c:240
 msgid "Gpredict"
 msgstr ""
 
-#: ../src/about.c:121
+#: ../src/about.c:123
 msgid "Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
-#: ../src/about.c:134
+#: ../src/about.c:136
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -198,7 +198,7 @@ msgstr "Τοπική ώρα"
 msgid "UTC"
 msgstr ""
 
-#: ../src/gtk-event-list.c:52 ../src/gtk-rig-ctrl.c:1198
+#: ../src/gtk-event-list.c:52 ../src/gtk-rig-ctrl.c:1219
 #: ../src/gtk-rot-ctrl.c:1376 ../src/gtk-sat-list.c:50
 #: ../src/gtk-sat-tree.c:177
 msgid "Satellite"
@@ -274,12 +274,12 @@ msgid "%s: Satellite #%d removed from list."
 msgstr ""
 
 #: ../src/gtk-event-list.c:535 ../src/sat-pass-dialogs.c:59
-#: ../src/sat-pref-rig-editor.c:434
+#: ../src/sat-pref-rig-editor.c:478
 msgid "LOS"
 msgstr ""
 
 #: ../src/gtk-event-list.c:539 ../src/sat-pass-dialogs.c:57
-#: ../src/sat-pref-rig-editor.c:429
+#: ../src/sat-pref-rig-editor.c:473
 msgid "AOS"
 msgstr ""
 
@@ -425,126 +425,126 @@ msgstr ""
 msgid "Sky track"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:220
+#: ../src/gtk-rig-ctrl.c:223
 #, c-format
 msgid "AOS in"
 msgstr "Ορατό σε"
 
-#: ../src/gtk-rig-ctrl.c:225
+#: ../src/gtk-rig-ctrl.c:228
 #, c-format
 msgid "LOS in"
 msgstr "Μη ορατό σε"
 
-#: ../src/gtk-rig-ctrl.c:446
+#: ../src/gtk-rig-ctrl.c:449
 msgid "<b> Downlink </b>"
 msgstr "<b> Λήψη </b>"
 
 #. Downlink doppler
 #. Uplink doppler
-#: ../src/gtk-rig-ctrl.c:463 ../src/gtk-rig-ctrl.c:530
+#: ../src/gtk-rig-ctrl.c:466 ../src/gtk-rig-ctrl.c:533
 msgid "Doppler:"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:465 ../src/gtk-rig-ctrl.c:532
+#: ../src/gtk-rig-ctrl.c:468 ../src/gtk-rig-ctrl.c:535
 msgid ""
 "The Doppler shift according to the range rate and the currently selected "
 "downlink frequency"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:478 ../src/gtk-rig-ctrl.c:545
+#: ../src/gtk-rig-ctrl.c:481 ../src/gtk-rig-ctrl.c:548
 msgid "LO:"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:513
+#: ../src/gtk-rig-ctrl.c:516
 msgid "<b> Uplink </b>"
 msgstr "<b> Εκπομπή </b>"
 
-#: ../src/gtk-rig-ctrl.c:584
+#: ../src/gtk-rig-ctrl.c:587
 #, c-format
 msgid "%s:%s: GtkSatModule has no target satellite."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:593
+#: ../src/gtk-rig-ctrl.c:596
 #, c-format
 msgid "%s:%s: Satellite %d has %d transponder modes."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:606
+#: ../src/gtk-rig-ctrl.c:609
 #, c-format
 msgid "%s:%s: Read transponder '%s' for satellite %d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:648 ../src/gtk-rig-ctrl.c:1318
-#: ../src/gtk-rig-ctrl.c:1367 ../src/gtk-rot-ctrl.c:1444
-#: ../src/gtk-rot-ctrl.c:1575 ../src/sat-pref-rig.c:128
+#: ../src/gtk-rig-ctrl.c:651 ../src/gtk-rig-ctrl.c:1339
+#: ../src/gtk-rig-ctrl.c:1388 ../src/gtk-rot-ctrl.c:1444
+#: ../src/gtk-rot-ctrl.c:1575 ../src/sat-pref-rig.c:132
 #: ../src/sat-pref-rot.c:321
 #, c-format
 msgid "%s:%d: Failed to open hwconf dir (%s)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:772
+#: ../src/gtk-rig-ctrl.c:775
 #, c-format
 msgid "%s: Inconsistency detected in internal transponder data (%d,%d)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:830
+#: ../src/gtk-rig-ctrl.c:833
 #, c-format
 msgid "%s:%s: Primary device selected: %d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:844 ../src/gtk-rig-ctrl.c:1214
+#: ../src/gtk-rig-ctrl.c:847 ../src/gtk-rig-ctrl.c:1235
 #, c-format
 msgid "%s:%d: Failed to allocate memory for radio config"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:854 ../src/gtk-rig-ctrl.c:958
+#: ../src/gtk-rig-ctrl.c:857 ../src/gtk-rig-ctrl.c:979
 #, c-format
 msgid "%s:%s: Loaded new radio configuration %s"
 msgstr ""
 
 #. update LO widgets
-#: ../src/gtk-rig-ctrl.c:861 ../src/gtk-rig-ctrl.c:867
-#: ../src/gtk-rig-ctrl.c:910 ../src/gtk-rig-ctrl.c:930
-#: ../src/gtk-rig-ctrl.c:961
+#: ../src/gtk-rig-ctrl.c:864 ../src/gtk-rig-ctrl.c:870
+#: ../src/gtk-rig-ctrl.c:923 ../src/gtk-rig-ctrl.c:947
+#: ../src/gtk-rig-ctrl.c:982
 #, c-format
 msgid "%.0f MHz"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:875 ../src/gtk-rig-ctrl.c:968
+#: ../src/gtk-rig-ctrl.c:888 ../src/gtk-rig-ctrl.c:989
 #, c-format
 msgid "%s:%s: Failed to load radio configuration %s"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:892
+#: ../src/gtk-rig-ctrl.c:905
 #, c-format
 msgid "%s:%s: Secondary device selected: %d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:947
+#: ../src/gtk-rig-ctrl.c:968
 #, c-format
 msgid "%s:%s: Failed to allocate memory for radio config"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:987 ../src/gtk-rig-ctrl.c:1656
+#: ../src/gtk-rig-ctrl.c:1008 ../src/gtk-rig-ctrl.c:1677
 #: ../src/gtk-rot-ctrl.c:1234
 #, c-format
 msgid "%s: Controller does not have a valid configuration"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1081 ../src/gtk-rot-ctrl.c:1320
+#: ../src/gtk-rig-ctrl.c:1102 ../src/gtk-rot-ctrl.c:1320
 msgid "Filter..."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1098 ../src/gtk-rot-ctrl.c:1337
+#: ../src/gtk-rig-ctrl.c:1119 ../src/gtk-rot-ctrl.c:1337
 msgid "Select target object"
 msgstr ""
 
 #. tracking button
-#: ../src/gtk-rig-ctrl.c:1104 ../src/gtk-rot-ctrl.c:1344
+#: ../src/gtk-rig-ctrl.c:1125 ../src/gtk-rot-ctrl.c:1344
 msgid "Track"
 msgstr "Κλείδωμα"
 
-#: ../src/gtk-rig-ctrl.c:1106
+#: ../src/gtk-rig-ctrl.c:1127
 msgid ""
 "Track the satellite transponder.\n"
 "Enabling this button will apply Doppler correction to the frequency of the "
@@ -554,16 +554,16 @@ msgstr ""
 "Ενεργοποιώντας αυτό το κουμπί θα ρυθμίζεται η απόκλιση συχνότητας (Doppler) "
 "στον δέκτη."
 
-#: ../src/gtk-rig-ctrl.c:1114
+#: ../src/gtk-rig-ctrl.c:1135
 msgid "Select a transponder"
 msgstr "Επέλεξε μεταδότη"
 
 #. buttons
-#: ../src/gtk-rig-ctrl.c:1121
+#: ../src/gtk-rig-ctrl.c:1142
 msgid "T"
 msgstr "Σ"
 
-#: ../src/gtk-rig-ctrl.c:1123
+#: ../src/gtk-rig-ctrl.c:1144
 msgid ""
 "Tune the radio to this transponder. The uplink and downlink will be set to "
 "the center of the transponder passband. In case of beacons, only the "
@@ -573,11 +573,11 @@ msgstr ""
 "ρυθμιστούν στο κέντρο της συχνότητας του μεταδότη. Σε περίπτωση σήματος "
 "φάρου  θα συντονιστεί μόνο η λήψη."
 
-#: ../src/gtk-rig-ctrl.c:1130
+#: ../src/gtk-rig-ctrl.c:1151
 msgid "L"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1132
+#: ../src/gtk-rig-ctrl.c:1153
 msgid ""
 "Lock the uplink and the downlink to each other. Whenever you change the "
 "downlink (in the controller or on the dial, the uplink will track it "
@@ -590,47 +590,47 @@ msgid ""
 msgstr ""
 
 #. Azimuth
-#: ../src/gtk-rig-ctrl.c:1153 ../src/gtk-rot-ctrl.c:1351
+#: ../src/gtk-rig-ctrl.c:1174 ../src/gtk-rot-ctrl.c:1351
 msgid "Az:"
 msgstr ""
 
 #. Elevation
-#: ../src/gtk-rig-ctrl.c:1161 ../src/gtk-rot-ctrl.c:1360
+#: ../src/gtk-rig-ctrl.c:1182 ../src/gtk-rot-ctrl.c:1360
 msgid "El:"
 msgstr ""
 
 #. Range
-#: ../src/gtk-rig-ctrl.c:1169
+#: ../src/gtk-rig-ctrl.c:1190
 msgid " Range:"
 msgstr " Απόσταση:"
 
-#: ../src/gtk-rig-ctrl.c:1177 ../src/gtk-rig-ctrl.c:1180
+#: ../src/gtk-rig-ctrl.c:1198 ../src/gtk-rig-ctrl.c:1201
 msgid "This is the current distance between the satellite and the observer."
 msgstr ""
 "Αυτή είναι η τρέχουσα απόσταση μεταξύ του δορυφόρου και του παρατηρητή."
 
 #. Range rate
-#: ../src/gtk-rig-ctrl.c:1184
+#: ../src/gtk-rig-ctrl.c:1205
 msgid " Rate:"
 msgstr " Ρυθμός:"
 
-#: ../src/gtk-rig-ctrl.c:1192 ../src/gtk-rig-ctrl.c:1195
+#: ../src/gtk-rig-ctrl.c:1213 ../src/gtk-rig-ctrl.c:1216
 msgid ""
 "The rate of change for the distance between the satellite and the observer."
 msgstr ""
 "Ο ρυθμός μεταβολής της απόστασης μεταξύ του δορυφόρου και του παρατηρητή."
 
-#: ../src/gtk-rig-ctrl.c:1228
+#: ../src/gtk-rig-ctrl.c:1249
 #, c-format
 msgid "%s:%d: Error reading radio configuration %s"
 msgstr ""
 
 #. Primary device
-#: ../src/gtk-rig-ctrl.c:1270
+#: ../src/gtk-rig-ctrl.c:1291
 msgid "1. Device:"
 msgstr "1. Συσκευή:"
 
-#: ../src/gtk-rig-ctrl.c:1276
+#: ../src/gtk-rig-ctrl.c:1297
 msgid ""
 "Select primary radio device.This device will be used for downlink and uplink "
 "unless you select a secondary device for uplink"
@@ -639,11 +639,11 @@ msgstr ""
 "εκπομπή και για λήψη εκτός και αν οριστεί δευτερεύουσα συσκευή για εκπομπή."
 
 #. Secondary device
-#: ../src/gtk-rig-ctrl.c:1331
+#: ../src/gtk-rig-ctrl.c:1352
 msgid "2. Device:"
 msgstr "2. Συσκευή:"
 
-#: ../src/gtk-rig-ctrl.c:1337
+#: ../src/gtk-rig-ctrl.c:1358
 msgid ""
 "Select secondary radio device\n"
 "This device will be used for uplink"
@@ -651,180 +651,180 @@ msgstr ""
 "Δευτερεύουσα ραδιοσυσκευή\n"
 "Η συσκευή αυτή θα χρησιμοποιηθεί για εκπομπή"
 
-#: ../src/gtk-rig-ctrl.c:1342 ../src/sat-pref-rig.c:254
-#: ../src/sat-pref-rig.c:263 ../src/sat-pref-rig-editor.c:345
+#: ../src/gtk-rig-ctrl.c:1363 ../src/sat-pref-rig.c:258
+#: ../src/sat-pref-rig.c:267 ../src/sat-pref-rig-editor.c:357
 msgid "None"
 msgstr ""
 
 #. Engage button
-#: ../src/gtk-rig-ctrl.c:1380 ../src/gtk-rot-ctrl.c:1458
+#: ../src/gtk-rig-ctrl.c:1401 ../src/gtk-rot-ctrl.c:1458
 msgid "Engage"
 msgstr "Σύνδεση"
 
-#: ../src/gtk-rig-ctrl.c:1382
+#: ../src/gtk-rig-ctrl.c:1403
 msgid "Engage the selected radio device"
 msgstr "Σύνδεση στην επιλεγμένη ραδιοσυσκευή"
 
 #. cycle period
-#: ../src/gtk-rig-ctrl.c:1388 ../src/gtk-rot-ctrl.c:1474
+#: ../src/gtk-rig-ctrl.c:1409 ../src/gtk-rot-ctrl.c:1474
 msgid "Cycle:"
 msgstr "Σύνδεση:"
 
-#: ../src/gtk-rig-ctrl.c:1395
+#: ../src/gtk-rig-ctrl.c:1416
 msgid "This parameter controls the delay between commands sent to the rig."
 msgstr ""
 "Η παράμετρος αυτή ορίζει κάθε πότε θα στέλνονται δεδομένα στην ραδιοσυσκευή."
 
-#: ../src/gtk-rig-ctrl.c:1401 ../src/gtk-rot-ctrl.c:1487
+#: ../src/gtk-rig-ctrl.c:1422 ../src/gtk-rot-ctrl.c:1487
 msgid "msec"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1405 ../src/gtk-rot-ctrl.c:1515
+#: ../src/gtk-rig-ctrl.c:1426 ../src/gtk-rot-ctrl.c:1515
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: ../src/gtk-rig-ctrl.c:1422
+#: ../src/gtk-rig-ctrl.c:1443
 msgid "<span size='large'><b>ΔT: 00:00:00</b></span>"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1425
+#: ../src/gtk-rig-ctrl.c:1446
 msgid "The time remaining until the next AOS or LOS event"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1458
+#: ../src/gtk-rig-ctrl.c:1479
 #, c-format
 msgid "%s:%s: sending %d bytes to rigctld as \"%s\""
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1464 ../src/gtk-rot-ctrl.c:169
+#: ../src/gtk-rig-ctrl.c:1485 ../src/gtk-rot-ctrl.c:169
 #, c-format
 msgid "%s: SIZE ERROR %d / %d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1469 ../src/gtk-rig-ctrl.c:1477
+#: ../src/gtk-rig-ctrl.c:1490 ../src/gtk-rig-ctrl.c:1498
 #, c-format
 msgid "%s: rigctld port closed"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1485
+#: ../src/gtk-rig-ctrl.c:1506
 #, c-format
 msgid "%s:%s: Got 0 bytes from rigctld"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1490
+#: ../src/gtk-rig-ctrl.c:1511
 #, c-format
 msgid "%s:%s: Read %d bytes from rigctld"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1521 ../src/gtk-rig-ctrl.c:1539
+#: ../src/gtk-rig-ctrl.c:1542 ../src/gtk-rig-ctrl.c:1560
 #, c-format
 msgid "%s:%s: %s rigctld returned error (%s)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1590
+#: ../src/gtk-rig-ctrl.c:1611
 #, c-format
 msgid "%s called but TX VFO is %d and we don't know how to handle it."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1638
+#: ../src/gtk-rig-ctrl.c:1659
 #, c-format
 msgid "%s called but TX VFO is %d."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:1663
+#: ../src/gtk-rig-ctrl.c:1684
 #, c-format
 msgid "%s missed the deadline"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2668 ../src/gtk-rot-ctrl.c:304
+#: ../src/gtk-rig-ctrl.c:2689 ../src/gtk-rot-ctrl.c:304
 #, c-format
 msgid "%s:%d: NULL storage."
 msgstr ""
 
 #. timeout did not expire, we've got the controller lock
-#: ../src/gtk-rig-ctrl.c:2736
+#: ../src/gtk-rig-ctrl.c:2757
 #, c-format
 msgid "%s: Acquired controller lock"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2742
+#: ../src/gtk-rig-ctrl.c:2763
 #, c-format
 msgid ""
 "%s: Controller not engaged; PTT event ignored (Hint: Enable the Engage "
 "button)"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2754
+#: ../src/gtk-rig-ctrl.c:2775
 #, c-format
 msgid "%s: PTT is OFF => Set TX freq and PTT=ON"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2764
+#: ../src/gtk-rig-ctrl.c:2785
 #, c-format
 msgid "%s: PTT is ON = Set PTT=OFF"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2775
+#: ../src/gtk-rig-ctrl.c:2796
 #, c-format
 msgid "%s: Failed to acquire controller lock; PTT event not handled"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2801
+#: ../src/gtk-rig-ctrl.c:2822
 #, c-format
 msgid "%s: Detected SPACEBAR pressed event"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2814
+#: ../src/gtk-rig-ctrl.c:2835
 #, c-format
 msgid "%s:%s: Keypress value %i not managed by this function"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2832
+#: ../src/gtk-rig-ctrl.c:2853
 #, c-format
 msgid "%s: Failed to create socket"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2840 ../src/gtk-rot-ctrl.c:85
+#: ../src/gtk-rig-ctrl.c:2861 ../src/gtk-rot-ctrl.c:85
 #, c-format
 msgid "%s: Network socket created successfully"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2853
+#: ../src/gtk-rig-ctrl.c:2874
 #, c-format
 msgid "%s: Failed to connect to %s:%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2860 ../src/gtk-rot-ctrl.c:121
+#: ../src/gtk-rig-ctrl.c:2881 ../src/gtk-rot-ctrl.c:121
 #, c-format
 msgid "%s: Connection opened to %s:%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2874 ../src/gtk-rot-ctrl.c:136
+#: ../src/gtk-rig-ctrl.c:2895 ../src/gtk-rot-ctrl.c:136
 #, c-format
 msgid "%s:%s: Sent 2 bytes but sent %d."
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2926
+#: ../src/gtk-rig-ctrl.c:2947
 #, c-format
 msgid "%s:%s: VFO opt=%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2935
+#: ../src/gtk-rig-ctrl.c:2956
 #, c-format
 msgid "%s:%s: VFO opt2=%d"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:2996
+#: ../src/gtk-rig-ctrl.c:3041
 #, c-format
 msgid "%s:%s: ERROR: NO VALID ctrl-struct"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:3060
+#: ../src/gtk-rig-ctrl.c:3105
 #, c-format
 msgid "%s:%s: Invalid radio type %d. Setting type to RIG_TYPE_RX"
 msgstr ""
 
-#: ../src/gtk-rig-ctrl.c:3077
+#: ../src/gtk-rig-ctrl.c:3117
 #, c-format
 msgid "%s:%s: MAX_ERROR_COUNT (%d) reached. Disengaging device!"
 msgstr ""
@@ -879,7 +879,7 @@ msgstr ""
 
 #: ../src/gtk-rot-ctrl.c:869 ../src/gtk-rot-ctrl.c:870
 #: ../src/gtk-sat-module-popup.c:817 ../src/gtk-sat-module-popup.c:897
-#: ../src/sat-log-browser.c:55 ../src/sat-log.c:61 ../src/sat-pref-rig.c:222
+#: ../src/sat-log-browser.c:55 ../src/sat-log.c:61 ../src/sat-pref-rig.c:226
 msgid "ERROR"
 msgstr "ΣΦΑΛΜΑ"
 
@@ -1656,7 +1656,7 @@ msgstr ""
 #. delete module
 #. delete button; don't forget to delete file....
 #: ../src/gtk-sat-module-popup.c:1219 ../src/sat-pref-qth.c:510
-#: ../src/sat-pref-rig.c:748 ../src/sat-pref-rot.c:352
+#: ../src/sat-pref-rig.c:783 ../src/sat-pref-rot.c:352
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -3016,7 +3016,7 @@ msgstr ""
 #. QTH name
 #. Config name
 #: ../src/qth-editor.c:483 ../src/sat-pref-qth.c:157
-#: ../src/sat-pref-qth-editor.c:592 ../src/sat-pref-rig-editor.c:241
+#: ../src/sat-pref-qth-editor.c:592 ../src/sat-pref-rig-editor.c:253
 #: ../src/sat-pref-rot-editor.c:171
 msgid "Name"
 msgstr "Όνομα"
@@ -3167,24 +3167,25 @@ msgid ""
 "Please try again using a different name."
 msgstr ""
 
-#: ../src/radio-conf.c:73 ../src/radio-conf.c:264 ../src/rotor-conf.c:71
+#: ../src/radio-conf.c:75 ../src/radio-conf.c:306 ../src/rotor-conf.c:71
 #, c-format
 msgid "%s: NULL configuration name!"
 msgstr ""
 
-#: ../src/radio-conf.c:88 ../src/rotor-conf.c:86
+#: ../src/radio-conf.c:90 ../src/rotor-conf.c:86
 #, c-format
 msgid "%s: Could not load file %s\n"
 msgstr ""
 
-#: ../src/radio-conf.c:101 ../src/radio-conf.c:112 ../src/radio-conf.c:126
-#: ../src/radio-conf.c:147 ../src/radio-conf.c:166 ../src/radio-conf.c:183
-#: ../src/radio-conf.c:195 ../src/radio-conf.c:213 ../src/radio-conf.c:228
+#: ../src/radio-conf.c:103 ../src/radio-conf.c:114 ../src/radio-conf.c:128
+#: ../src/radio-conf.c:149 ../src/radio-conf.c:168 ../src/radio-conf.c:188
+#: ../src/radio-conf.c:208 ../src/radio-conf.c:225 ../src/radio-conf.c:237
+#: ../src/radio-conf.c:255 ../src/radio-conf.c:270
 #, c-format
 msgid "%s: Error reading radio conf from %s (%s)."
 msgstr ""
 
-#: ../src/radio-conf.c:242
+#: ../src/radio-conf.c:284
 #, c-format
 msgid "%s: Read radio configuration %s"
 msgstr ""
@@ -4519,7 +4520,7 @@ msgid "%s:%d: This appears to be the default QTH."
 msgstr ""
 
 #. add button
-#: ../src/sat-pref-qth.c:498 ../src/sat-pref-rig.c:738
+#: ../src/sat-pref-qth.c:498 ../src/sat-pref-rig.c:773
 msgid "Add new"
 msgstr ""
 
@@ -4528,7 +4529,7 @@ msgid "Add a new ground station to the list"
 msgstr ""
 
 #. edit button
-#: ../src/sat-pref-qth.c:504 ../src/sat-pref-rig.c:743
+#: ../src/sat-pref-qth.c:504 ../src/sat-pref-rig.c:778
 #: ../src/sat-pref-rot.c:348
 msgid "Edit"
 msgstr "Επεξεργασία"
@@ -4657,150 +4658,159 @@ msgstr ""
 msgid "Refresh single-sat view every"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:104 ../src/sat-pref-rot.c:297
+#: ../src/sat-pref-rig.c:108 ../src/sat-pref-rot.c:297
 #, c-format
 msgid "%s:%d: Read %s"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:117 ../src/sat-pref-rot.c:310
+#: ../src/sat-pref-rig.c:121 ../src/sat-pref-rot.c:310
 #, c-format
 msgid "%s:%d: Failed to read %s"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:198 ../src/sat-pref-rig-editor.c:291
+#: ../src/sat-pref-rig.c:202 ../src/sat-pref-rig-editor.c:303
 msgid "RX only"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:202 ../src/sat-pref-rig-editor.c:292
+#: ../src/sat-pref-rig.c:206 ../src/sat-pref-rig-editor.c:304
 msgid "TX only"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:206 ../src/sat-pref-rig-editor.c:293
+#: ../src/sat-pref-rig.c:210 ../src/sat-pref-rig-editor.c:305
 msgid "Half-duplex"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:210 ../src/sat-pref-rig-editor.c:294
+#: ../src/sat-pref-rig.c:214 ../src/sat-pref-rig-editor.c:306
 msgid "Full-duplex"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:214 ../src/sat-pref-rig-editor.c:296
+#: ../src/sat-pref-rig.c:218 ../src/sat-pref-rig-editor.c:308
 msgid "FT817/857/897 (auto)"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:218
+#: ../src/sat-pref-rig.c:222
 msgid "FT817/857/897 (man)"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:257
+#: ../src/sat-pref-rig.c:261
 msgid "PTT"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:260
+#: ../src/sat-pref-rig.c:264
 msgid "DCD"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:405 ../src/sat-pref-rot.c:118
+#: ../src/sat-pref-rig.c:411 ../src/sat-pref-rot.c:118
 #, c-format
 msgid "%s:%s: Edit button should have been disabled."
 msgstr ""
 
-#: ../src/sat-pref-rig.c:440
+#: ../src/sat-pref-rig.c:448
 msgid ""
 "Select the radio you want to edit\n"
 "and try again!"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:504 ../src/sat-pref-rot.c:451
+#: ../src/sat-pref-rig.c:514 ../src/sat-pref-rot.c:451
 msgid "Config Name"
 msgstr "Όνομα"
 
 #. Host
-#: ../src/sat-pref-rig.c:514 ../src/sat-pref-rig-editor.c:256
+#: ../src/sat-pref-rig.c:524 ../src/sat-pref-rig-editor.c:268
 #: ../src/sat-pref-rot.c:458 ../src/sat-pref-rot-editor.c:189
 msgid "Host"
 msgstr "Υπολογιστής"
 
 #. port
-#: ../src/sat-pref-rig.c:521 ../src/sat-pref-rig-editor.c:272
+#: ../src/sat-pref-rig.c:531 ../src/sat-pref-rig-editor.c:284
 #: ../src/sat-pref-rot.c:465 ../src/sat-pref-rot-editor.c:205
 msgid "Port"
 msgstr "Θύρα"
 
-#: ../src/sat-pref-rig.c:528
+#: ../src/sat-pref-rig.c:538
 msgid "Rig Type"
 msgstr "Τύπος Ασυρμάτου"
 
-#: ../src/sat-pref-rig.c:539
+#: ../src/sat-pref-rig.c:549
 msgid "PTT Status"
 msgstr "Κατάσταση PTT"
 
-#: ../src/sat-pref-rig.c:549
+#: ../src/sat-pref-rig.c:559
 msgid "VFO Up"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:560
+#: ../src/sat-pref-rig.c:570
 msgid "VFO Down"
 msgstr ""
 
 #. Downconverter LO frequency
-#: ../src/sat-pref-rig.c:571 ../src/sat-pref-rig-editor.c:389
+#: ../src/sat-pref-rig.c:581 ../src/sat-pref-rig-editor.c:401
 msgid "LO Down"
 msgstr ""
 
 #. Upconverter LO frequency
-#: ../src/sat-pref-rig.c:582 ../src/sat-pref-rig-editor.c:407
+#: ../src/sat-pref-rig.c:592 ../src/sat-pref-rig-editor.c:419
 msgid "LO Up"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:593
+#: ../src/sat-pref-rig.c:602
+#, fuzzy
+msgid "Downlink"
+msgstr "<b> Λήψη </b>"
+
+#: ../src/sat-pref-rig.c:613
+msgid "Uplink"
+msgstr ""
+
+#: ../src/sat-pref-rig.c:624
 msgid "Signal AOS"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:604
+#: ../src/sat-pref-rig.c:635
 msgid "Signal LOS"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:635 ../src/sat-pref-rot.c:200
+#: ../src/sat-pref-rig.c:666 ../src/sat-pref-rot.c:200
 #, c-format
 msgid "%s:%s: Delete button should have been disabled."
 msgstr ""
 
-#: ../src/sat-pref-rig.c:657
+#: ../src/sat-pref-rig.c:688
 msgid ""
 "Select the radio you want to delete\n"
 "and try again!"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:739
+#: ../src/sat-pref-rig.c:774
 msgid "Add a new radio to the list"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:744
+#: ../src/sat-pref-rig.c:779
 msgid "Edit selected radio"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:749
+#: ../src/sat-pref-rig.c:784
 msgid "Delete selected radio"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:833 ../src/sat-pref-rot.c:596 ../src/tle-update.c:696
+#: ../src/sat-pref-rig.c:870 ../src/sat-pref-rot.c:596 ../src/tle-update.c:696
 #: ../src/trsp-update.c:336
 #, c-format
 msgid "%s: Failed to remove %s"
 msgstr ""
 
-#: ../src/sat-pref-rig.c:875
+#: ../src/sat-pref-rig.c:914
 #, c-format
 msgid "%s: Failed to get RIG %s"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:249
+#: ../src/sat-pref-rig-editor.c:261
 msgid ""
 "Enter a short name for this configuration, e.g. IC910-1.\n"
 "Allowed characters: 0..9, a..z, A..Z, - and _"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:264
+#: ../src/sat-pref-rig-editor.c:276
 msgid ""
 "Enter the host where rigctld is running. You can use both host name and IP "
 "address, e.g. 192.168.1.100\n"
@@ -4808,20 +4818,20 @@ msgid ""
 "If gpredict and rigctld are running on the same computer use localhost"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:280
+#: ../src/sat-pref-rig-editor.c:292
 msgid "Enter the port number where rigctld is listening"
 msgstr ""
 
 #. radio type
-#: ../src/sat-pref-rig-editor.c:285
+#: ../src/sat-pref-rig-editor.c:297
 msgid "Radio type"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:298
+#: ../src/sat-pref-rig-editor.c:310
 msgid "FT817/857/897 (manual)"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:302
+#: ../src/sat-pref-rig-editor.c:314
 msgid ""
 "<b>RX only:</b>  The radio shall only be used as receiver. If <i>Monitor PTT "
 "status</i> is checked the doppler tuning will be suspended while PTT is ON "
@@ -4851,19 +4861,19 @@ msgid ""
 msgstr ""
 
 #. ptt
-#: ../src/sat-pref-rig-editor.c:340
+#: ../src/sat-pref-rig-editor.c:352
 msgid "PTT status"
 msgstr "Κατάσταση PTT"
 
-#: ../src/sat-pref-rig-editor.c:346
+#: ../src/sat-pref-rig-editor.c:358
 msgid "Read PTT"
 msgstr "Ανάγνωση PTT"
 
-#: ../src/sat-pref-rig-editor.c:347
+#: ../src/sat-pref-rig-editor.c:359
 msgid "Read DCD"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:351
+#: ../src/sat-pref-rig-editor.c:363
 msgid ""
 "Select PTT type.\n"
 "\n"
@@ -4881,31 +4891,31 @@ msgid ""
 msgstr ""
 
 #. VFO Up/Down
-#: ../src/sat-pref-rig-editor.c:362
+#: ../src/sat-pref-rig-editor.c:374
 msgid "VFO Up/Down"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:367
+#: ../src/sat-pref-rig-editor.c:379
 msgid "Not applicable"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:369
+#: ../src/sat-pref-rig-editor.c:381
 msgid "MAIN ↑ / SUB ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:371
+#: ../src/sat-pref-rig-editor.c:383
 msgid "SUB ↑ / MAIN ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:373
+#: ../src/sat-pref-rig-editor.c:385
 msgid "A ↑ / B ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:375
+#: ../src/sat-pref-rig-editor.c:387
 msgid "B ↑ / A ↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:380
+#: ../src/sat-pref-rig-editor.c:392
 msgid ""
 "Select which VFO to use for uplink and downlink. This setting is used for "
 "full-duplex radios only, such as the IC-910H, FT-847 and the TS-2000.\n"
@@ -4915,34 +4925,55 @@ msgid ""
 "<b>TS-2000:</b> B↑ / A↓"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:398
+#: ../src/sat-pref-rig-editor.c:410
 msgid ""
 "Enter the frequency of the local oscillator  of the downconverter, if any."
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:402 ../src/sat-pref-rig-editor.c:420
+#: ../src/sat-pref-rig-editor.c:414 ../src/sat-pref-rig-editor.c:432
+#: ../src/sat-pref-rig-editor.c:448 ../src/sat-pref-rig-editor.c:464
 msgid "MHz"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:416
+#: ../src/sat-pref-rig-editor.c:428
 msgid "Enter the frequency of the local oscillator of the upconverter, if any."
 msgstr ""
 
+#. Default downlink frequency
+#: ../src/sat-pref-rig-editor.c:437
+#, fuzzy
+msgid "Default downlink"
+msgstr "Προεπιλεγμένο"
+
+#: ../src/sat-pref-rig-editor.c:445
+msgid "Enter the default downlink frequency"
+msgstr ""
+
+#. Default uplink frequency
+#: ../src/sat-pref-rig-editor.c:453
+#, fuzzy
+msgid "Default uplink"
+msgstr "Προεπιλεγμένο"
+
+#: ../src/sat-pref-rig-editor.c:461
+msgid "Enter the default uplink frequency"
+msgstr ""
+
 #. AOS / LOS signalling
-#: ../src/sat-pref-rig-editor.c:425
+#: ../src/sat-pref-rig-editor.c:469
 msgid "Signalling"
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:432
+#: ../src/sat-pref-rig-editor.c:476
 msgid "Enable AOS signalling for this radio."
 msgstr ""
 
-#: ../src/sat-pref-rig-editor.c:437
+#: ../src/sat-pref-rig-editor.c:481
 msgid "Enable LOS signalling for this radio."
 msgstr ""
 
 #. create dialog and add contents
-#: ../src/sat-pref-rig-editor.c:524
+#: ../src/sat-pref-rig-editor.c:576
 msgid "Edit radio configuration"
 msgstr ""
 
