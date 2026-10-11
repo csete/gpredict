@@ -97,6 +97,9 @@ static void start_timer(GtkRigCtrl *data);
 
 static GtkBoxClass *parent_class = NULL;
 
+/* callback ID needed to block/unblock signal */
+static gulong rig_engaged_cb_id = 0;
+
 static void gtk_rig_ctrl_destroy(GtkWidget *widget)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL(widget);
@@ -1398,8 +1401,8 @@ static GtkWidget *create_conf_widgets(GtkRigCtrl *ctrl)
     ctrl->LockBut = gtk_toggle_button_new_with_label(_("Engage"));
     gtk_widget_set_tooltip_text(ctrl->LockBut,
                                 _("Engage the selected radio device"));
-    g_signal_connect(ctrl->LockBut, "toggled", G_CALLBACK(rig_engaged_cb),
-                     ctrl);
+    rig_engaged_cb_id =
+        g_signal_connect(ctrl->LockBut, "toggled", G_CALLBACK(rig_engaged_cb), ctrl);
     gtk_grid_attach(GTK_GRID(table), ctrl->LockBut, 2, 0, 1, 1);
 
     /* cycle period */
@@ -3008,9 +3011,9 @@ static gboolean rig_auto_disengage_ui_cb(gpointer data)
 {
     GtkRigCtrl *ctrl = GTK_RIG_CTRL(data);
 
-    g_signal_handlers_block_by_func(ctrl->LockBut, rig_engaged_cb, ctrl);
+    g_signal_handler_block(ctrl->LockBut, rig_engaged_cb_id);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ctrl->LockBut), FALSE);
-    g_signal_handlers_unblock_by_func(ctrl->LockBut, rig_engaged_cb, ctrl);
+    g_signal_handler_unblock(ctrl->LockBut, rig_engaged_cb_id);
 
     gtk_widget_set_sensitive(ctrl->DevSel, TRUE);
     gtk_widget_set_sensitive(ctrl->DevSel2, TRUE);
