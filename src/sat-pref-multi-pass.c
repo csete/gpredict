@@ -135,7 +135,8 @@ GtkWidget      *sat_pref_multi_pass_create()
 
     for (i = 0; i < MULTI_PASS_COL_NUMBER; i++)
     {
-        check[i] = gtk_check_button_new_with_label(MULTI_PASS_COL_HINT[i]);
+        check[i] =
+            gtk_check_button_new_with_label(gettext(MULTI_PASS_COL_HINT[i]));
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check[i]),
                                      flags & (1 << i));
         g_signal_connect(check[i], "toggled", G_CALLBACK(toggle_cb),

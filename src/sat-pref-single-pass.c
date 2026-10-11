@@ -138,7 +138,8 @@ GtkWidget      *sat_pref_single_pass_create()
     flags = sat_cfg_get_int(SAT_CFG_INT_PRED_SINGLE_COL);
     for (i = 0; i < SINGLE_PASS_COL_NUMBER; i++)
     {
-        check[i] = gtk_check_button_new_with_label(SINGLE_PASS_COL_HINT[i]);
+        check[i] =
+            gtk_check_button_new_with_label(gettext(SINGLE_PASS_COL_HINT[i]));
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check[i]),
                                      flags & (1 << i));
         g_signal_connect(check[i], "toggled",
