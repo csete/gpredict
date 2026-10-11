@@ -42,6 +42,7 @@ const gchar *authors[] = {
     "AsciiWolf",
     "Baris Dinc, TA7W",
     "Bastian Germann",
+    "Bob Mattaliano, N6RFM",
     "Charles Suprin, AA1VS",
     "Chloë DeCicco",
     "Dale Mellor",

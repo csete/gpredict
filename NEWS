@@ -5,6 +5,8 @@ Changes in version 2.7 (TBD)
  - Increased radio and rotator timer limits to 30 seconds (#424)
  - Added option to configure default frequencies for radios (#274)
  - Fixed broken native language support (#429)
+ - Fixed radio control self-deadlock on rigctld connection errors (#425)
+ - Reject a TLE whose epoch field contains a letter (#427)
  - Updated French translation (#419)
 
 
