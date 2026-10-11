@@ -8,6 +8,7 @@ Changes in version 2.7 (TBD)
  - Fixed radio control self-deadlock on rigctld connection errors (#425)
  - Reject a TLE whose epoch field contains a letter (#427)
  - Updated French translation (#419)
+ - Updated Danish translation
 
 
 Changes in version 2.6 (16 Aug 2026)
