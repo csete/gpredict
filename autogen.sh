@@ -39,6 +39,8 @@ rm -f config.cache
 # (containing a local copy of libintl code), and therefore has a slightly different Makefile.
 echo "- glib-gettextize."	&& \
   glib-gettextize --copy --force 	&& \
+echo "- autopoint."		&& \
+  autopoint --force	&& \
 echo "- libtoolize."		&& \
   libtoolize --force	&& \
 echo "- intltoolize."		&& \

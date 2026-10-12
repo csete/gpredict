@@ -39,7 +39,7 @@ often with -dev or -devel in the package name, e.g. libgtk-3-dev. On Debian and
 Ubuntu systems you can install the build dependencies using:
 
   sudo apt install libtool intltool autoconf automake libcurl4-openssl-dev
-  sudo apt install pkg-config libglib2.0-dev libgtk-3-dev
+  sudo apt install pkg-config libglib2.0-dev libgtk-3-dev autopoint
 
 
 To build and install gpredict from source, first unpack the source package:
