@@ -29,7 +29,10 @@ jobs:
         run: ./autogen.sh
 
       - name: Build
-        run: make
+        run: make -j2
 
       - name: Run tests
         run: make check
+
+      - name: Check distribution
+        run: make -j2 distcheck

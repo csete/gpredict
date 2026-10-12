@@ -1,18 +1,14 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src doc icons pixmaps data po
 
-BUILT_SOURCES = $(top_srcdir)/.version
-$(top_srcdir)/.version:
+BUILT_SOURCES = $(top_builddir)/.version
+MOSTLYCLEANFILES = $(top_builddir)/.version
+$(top_builddir)/.version:
 	echo $(VERSION) > $@-t && mv $@-t $@
 dist-hook:
 	echo $(VERSION) > $(distdir)/.tarball-version
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(INSTALL_DATA) $(top_srcdir)/AUTHORS $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(top_srcdir)/NEWS $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(top_srcdir)/README $(DESTDIR)$(pkgdatadir)
-	$(INSTALL_DATA) $(top_srcdir)/COPYING $(DESTDIR)$(pkgdatadir)
+pkgdata_DATA = AUTHORS NEWS README COPYING
 
 EXTRA_DIST = \
 	autogen.sh            \
