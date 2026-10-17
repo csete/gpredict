@@ -422,6 +422,7 @@ static gpointer rotctld_client_thread(gpointer data)
             azi = ctrl->client.azi_out;
             ele = ctrl->client.ele_out;
             new_trg = ctrl->client.new_trg;
+            ctrl->client.new_trg = FALSE;
         }
         g_mutex_unlock(&ctrl->client.mutex);
 
@@ -441,7 +442,8 @@ static gpointer rotctld_client_thread(gpointer data)
         g_mutex_lock(&ctrl->client.mutex);
         ctrl->client.azi_in = azi;
         ctrl->client.ele_in = ele;
-        ctrl->client.new_trg = new_trg;
+        if (new_trg)
+            ctrl->client.new_trg = TRUE;
         ctrl->client.io_error = io_error;
         g_mutex_unlock(&ctrl->client.mutex);
 
