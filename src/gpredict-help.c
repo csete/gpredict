@@ -35,12 +35,38 @@
 extern GtkWidget *app;
 
 /**
+ * Get the full path of a text file in the gpredict system directory
+ * @param filename The basic file name
+ * @return Newly allocated path that must be freed with g_free()
+ *
+ * This function is intended for files like NEWS, COPYING, etc.
+ * Note that on windows these files have .txt suffix, while on Unix they
+ * do not.
+ */
+gchar *gpredict_help_txt_file_name(const gchar *filename)
+{
+    gchar *fname;
+
+#ifdef G_OS_UNIX
+    fname = g_strconcat(PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, filename, NULL);
+#endif
+#ifdef G_OS_WIN32
+    gchar *instdir;
+
+    instdir = g_win32_get_package_installation_directory_of_module(NULL);
+    fname = g_strconcat(instdir, G_DIR_SEPARATOR_S, "doc", G_DIR_SEPARATOR_S,
+                        filename, ".txt", NULL);
+    g_free(instdir);
+#endif
+
+    return fname;
+}
+
+/**
  * Show a text file in the gpredict system directory
  * @param filename The basic file name
  *
  * This function is intended to display files like NEWS, COPYING, etc.
- * Note that on windows these files have .txt suffix, while on Unix they
- * do not.
  */
 void gpredict_help_show_txt(const gchar *filename)
 {
@@ -52,18 +78,10 @@ void gpredict_help_show_txt(const gchar *filename)
     GError *error = NULL;
     gchar *fname;
     gchar *buff;
+    gchar *title;
     gsize length;
 
-    /* get system data directory */
-#ifdef G_OS_UNIX
-    fname = g_strconcat(PACKAGE_DATA_DIR, G_DIR_SEPARATOR_S, filename, NULL);
-#endif
-#ifdef G_OS_WIN32
-    buff = g_win32_get_package_installation_directory_of_module(NULL);
-    fname = g_strconcat(buff, G_DIR_SEPARATOR_S, "doc", G_DIR_SEPARATOR_S,
-                        filename, ".txt", NULL);
-    g_free(buff);
-#endif
+    fname = gpredict_help_txt_file_name(filename);
 
     /* load file into buffer */
     chan = g_io_channel_new_file(fname, "r", &error);
@@ -116,8 +134,10 @@ void gpredict_help_show_txt(const gchar *filename)
     gtk_container_add(GTK_CONTAINER(swin), view);
 
     /* create and show dialogue with textbuffer */
-    dialog = gtk_dialog_new_with_buttons(_("Gpredict Info"), GTK_WINDOW(app), 0,
+    title = g_strdup_printf(_("Gpredict Info: %s"), filename);
+    dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(app), 0,
                                          "_Close", GTK_RESPONSE_ACCEPT, NULL);
+    g_free(title);
     gtk_widget_set_size_request(dialog, -1, 450);
     buff = icon_file_name("gpredict-icon.png");
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), buff, NULL);
