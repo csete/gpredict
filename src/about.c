@@ -30,113 +30,126 @@
 
 #include "about.h"
 #include "compat.h"
+#include "gpredict-help.h"
+#include "sat-log.h"
 
-/* clang-format off */
-const gchar *authors[] = {
-    "Alexandru Csete, OZ9AEC, with contributions from:",
-    "",
-    "A. Maitland Bottoms, AA4HS",
-    "A. Walker",
-    "Alan Moffet, KE7IJZ",
-    "Andi Chandler, G7SCI",
-    "AsciiWolf",
-    "Baris Dinc, TA7W",
-    "Bastian Germann",
-    "Bob Mattaliano, N6RFM",
-    "Charles Suprin, AA1VS",
-    "Chloë DeCicco",
-    "Dale Mellor",
-    "Daniel Estevez, EA4GPZ",
-    "DarkStar",
-    "Dave Hines",
-    "David Cureton",
-    "David Frisbee, K4DBF",
-    "David VK5DG",
-    "Fabian P. Schmidt",
-    "Gisle Vanem",
-    "Henry Hallam",
-    "Honorius Neogy",
-    "Ilias Daradimos",
-    "Jan Simon, DL2ZXA",
-    "Jason Uher",
-    "Joachim Euchner",
-    "John Magliacane, KD2BD",
-    "Jonathan Holmgren",
-    "KaComet",
-    "Libre Space Foundation",
-    "Liu Xinyu",
-    "Lloyd Brown",
-    "LongnoseRob, JI1MNC",
-    "Marcel Cimander",
-    "Mario Haustein",
-    "Martin Pool",
-    "Matthew Alberti, KM4EXS",
-    "Matthew Hassell",
-    "Michael Black",
-    "Michael Tatarinov",
-    "Milad Fa",
-    "Mirko Caserta",
-    "Nate Bargmann, N0NB",
-    "Neoklis Kyriazis, 5B4AZ",
-    "Nerijus Bendžiūnas",
-    "Nicholas DeCicco",
-    "Patrick Dohmen, DL4PD",
-    "Patrick Strasser, OE6PSE",
-    "Paul Schulz, VK5FPAW",
-    "Phil Ashby, 2E0IPX",
-    "Philipp Lopaur",
-    "S. R. Sampson",
-    "Satoshi Yasuda, 7M3TJZ",
-    "Sayafdine Said",
-    "Sean Svihla",
-    "Stefan Lobas",
-    "Stephane Fillod",
-    "Tim Brooks",
-    "Tobias Nießen",
-    "Tom Jones",
-    "T.S. Kelso",
-    "Valentin Yakovenkov",
-    "Wahaj18",
-    "William J Beksi, KC2EXL",
-    "Xavier Crehueras, EB3CZS",
-    "Yaroslav Stavnichiy",
-    "Yasushi SHOJI",
-    "",
-    "Imagery:",
-    "Most of the maps originate from NASA Visible Earth",
-    "see website http://visibleearth.nasa.gov/",
+/* Credits shown if the AUTHORS file can not be read */
+static const gchar *fallback_authors[] = {
+    "Alexandru Csete, OZ9AEC, and contributors",
     NULL
 };
-/* clang-format on */
+
+/* Last year of the copyright period shown in the about dialog */
+#define COPYRIGHT_YEAR "2026"
 
 extern GtkWidget *app;
+
+/**
+ * Read the list of authors from the AUTHORS file.
+ *
+ * Each line of the file becomes one line in the credits, with the "- "
+ * list markers removed. Leading and trailing empty lines are dropped.
+ *
+ * @return NULL-terminated string array to be freed with g_strfreev(), or
+ *         NULL if the file could not be read.
+ */
+static gchar **read_authors(void)
+{
+    GError *error = NULL;
+    GPtrArray *lines;
+    gchar **raw;
+    gchar *fname;
+    gchar *contents;
+    gchar *line;
+    guint i;
+
+    fname = gpredict_help_txt_file_name("AUTHORS");
+    if (!g_file_get_contents(fname, &contents, NULL, &error))
+    {
+        sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s: Failed to load %s (%s)"),
+                    __func__, fname, error->message);
+        g_clear_error(&error);
+        g_free(fname);
+        return NULL;
+    }
+    g_free(fname);
+
+    raw = g_strsplit(contents, "\n", -1);
+    g_free(contents);
+
+    lines = g_ptr_array_new_with_free_func(g_free);
+    for (i = 0; raw[i] != NULL; i++)
+    {
+        line = g_strstrip(raw[i]);
+        if (g_str_has_prefix(line, "- "))
+            line += 2;
+
+        /* skip leading empty lines */
+        if (lines->len == 0 && line[0] == '\0')
+            continue;
+
+        g_ptr_array_add(lines, g_strdup(line));
+    }
+    g_strfreev(raw);
+
+    /* drop trailing empty lines */
+    while (lines->len > 0 &&
+           ((gchar *) g_ptr_array_index(lines, lines->len - 1))[0] == '\0')
+        g_ptr_array_remove_index(lines, lines->len - 1);
+
+    g_ptr_array_add(lines, NULL);
+
+    return (gchar **) g_ptr_array_free(lines, FALSE);
+}
 
 void about_dialog_create()
 {
     GtkWidget *dialog;
-    GdkPixbuf *icon;
+    GdkPixbuf *logo;
     gchar *iconfile;
+    gchar *logofile;
+    gchar *copyright;
+    gchar **authors;
 
     dialog = gtk_about_dialog_new();
+
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app));
     gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), _("Gpredict"));
-    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
-    gtk_about_dialog_set_copyright(
+    gtk_about_dialog_set_comments(
         GTK_ABOUT_DIALOG(dialog),
-        _("Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"));
+        _("real time satellite tracking and orbit prediction program"));
+    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
+    copyright = g_strdup_printf(
+        _("Copyright (C) 2001-%s Alexandru Csete OZ9AEC and contributors"),
+        COPYRIGHT_YEAR);
+    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), copyright);
+    g_free(copyright);
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog),
-                                 "http://gpredict.oz9aec.net/");
+                                 "https://oz9aec.dk/gpredict");
     gtk_about_dialog_set_license_type(GTK_ABOUT_DIALOG(dialog),
                                       GTK_LICENSE_GPL_2_0);
-    iconfile = logo_file_name("gpredict_icon_color.svg");
-    icon = gdk_pixbuf_new_from_file_at_size(iconfile, 128, 128, NULL);
-    gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), icon);
+
+    logofile = logo_file_name("gpredict_icon_color.svg");
+    logo = gdk_pixbuf_new_from_file_at_size(logofile, 128, 128, NULL);
+    g_free(logofile);
+    if (logo)
+    {
+        gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), logo);
+        g_object_unref(logo);
+    }
+
+    iconfile = icon_file_name("gpredict-icon.png");
     gtk_window_set_icon_from_file(GTK_WINDOW(dialog), iconfile, NULL);
     g_free(iconfile);
-    g_object_unref(icon);
-    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(dialog), authors);
+
+    authors = read_authors();
+    gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(dialog),
+                                 authors ? (const gchar **) authors :
+                                 fallback_authors);
+    g_strfreev(authors);
     gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(dialog),
                                             _("translator-credits"));
+
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 }
