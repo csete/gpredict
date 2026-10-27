@@ -27,6 +27,15 @@ msgstr ""
 msgid "Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"
 msgstr ""
 
+#: ../src/about.c:123
+#, c-format
+msgid "Copyright (C) 2001-%s Alexandru Csete OZ9AEC and contributors"
+msgstr "Copyright (C) 2001-%s Alexandru Csete OZ9AEC a přispěvatelé"
+
+#: ../src/about.c:120
+msgid "real time satellite tracking and orbit prediction program"
+msgstr "program pro sledování satelitů a předpověď drah v reálném čase"
+
 #: ../src/about.c:136
 msgid "translator-credits"
 msgstr ""
@@ -150,6 +159,11 @@ msgstr "%s: Chyba při čtení %s (%s)"
 #: ../src/gpredict-help.c:119
 msgid "Gpredict Info"
 msgstr "Informace Gpredict"
+
+#: ../src/gpredict-help.c:137
+#, c-format
+msgid "Gpredict Info: %s"
+msgstr "Informace Gpredict: %s"
 
 #: ../src/gpredict-utils.c:241 ../src/gpredict-utils.c:280
 #: ../src/gpredict-utils.c:328 ../src/gpredict-utils.c:370
@@ -2507,7 +2521,7 @@ msgstr "_Nastavení"
 
 #: ../src/menubar.c:922
 msgid "_Online help"
-msgstr ""
+msgstr "Online nápo_věda"
 
 #: ../src/menubar.c:931
 msgid "_License"
@@ -2516,6 +2530,10 @@ msgstr "_Licence"
 #: ../src/menubar.c:936
 msgid "_News"
 msgstr "_Novinky"
+
+#: ../src/menubar.c:948
+msgid "A_uthors"
+msgstr "_Autoři"
 
 #: ../src/menubar.c:943
 msgid "_About Gpredict"
