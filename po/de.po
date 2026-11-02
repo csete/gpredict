@@ -28,6 +28,15 @@ msgstr "Gpredict"
 msgid "Copyright (C) 2001-2019 Alexandru Csete OZ9AEC and contributors"
 msgstr "Copyright (C) 2001-2017 Alexandru Csete OZ9AEC und Mitwirkende."
 
+#: ../src/about.c:123
+#, c-format
+msgid "Copyright (C) 2001-%s Alexandru Csete OZ9AEC and contributors"
+msgstr "Copyright (C) 2001-%s Alexandru Csete OZ9AEC und Mitwirkende"
+
+#: ../src/about.c:120
+msgid "real time satellite tracking and orbit prediction program"
+msgstr "Echtzeit-Satellitenverfolgungs- und Umlaufbahnberechnungsprogramm"
+
 #: ../src/about.c:136
 msgid "translator-credits"
 msgstr ""
@@ -158,6 +167,11 @@ msgstr "%s: Fehler beim Lesen von %s (%s)"
 #: ../src/gpredict-help.c:119
 msgid "Gpredict Info"
 msgstr "Gpredict Info"
+
+#: ../src/gpredict-help.c:137
+#, c-format
+msgid "Gpredict Info: %s"
+msgstr "Gpredict-Info: %s"
 
 #: ../src/gpredict-utils.c:241 ../src/gpredict-utils.c:280
 #: ../src/gpredict-utils.c:328 ../src/gpredict-utils.c:370
@@ -1662,11 +1676,11 @@ msgstr "%s:%d: %s wurde aufgerufen mit NULL Parameter!"
 
 #: ../src/gtk-sat-module-popup.c:1110
 msgid "Detach module"
-msgstr "Modul trennen"
+msgstr "Modul entkoppeln"
 
 #: ../src/gtk-sat-module-popup.c:1117
 msgid "Attach module"
-msgstr "Modul hinzufügen"
+msgstr "Modul koppeln"
 
 #: ../src/gtk-sat-module-popup.c:1125
 msgid "Exit full screen"
@@ -1674,7 +1688,7 @@ msgstr "Vollbildmodus beenden"
 
 #: ../src/gtk-sat-module-popup.c:1132
 msgid "Full screen"
-msgstr "Vollbild"
+msgstr "Vollbildmodus"
 
 #. autotrack
 #: ../src/gtk-sat-module-popup.c:1143
@@ -1731,7 +1745,7 @@ msgstr "Schließen"
 #: ../src/gtk-sat-module-tmg.c:62
 #, c-format
 msgid "%s: Time Controller for %s is already active"
-msgstr "%s: Zeitsimulation für %s ist bereits aktiv."
+msgstr "%s: Zeitsimulation für %s ist bereits aktiv"
 
 #: ../src/gtk-sat-module-tmg.c:90
 msgid "Play forward"
@@ -1759,7 +1773,7 @@ msgstr "Zurücksetzen"
 
 #: ../src/gtk-sat-module-tmg.c:129
 msgid "Reset to current date and time"
-msgstr "Setze das aktuelle Datum und die aktuelle Zeit zurück."
+msgstr "Setze auf das aktuelle Datum und die aktuelle Zeit zurück"
 
 #: ../src/gtk-sat-module-tmg.c:136 ../src/gtk-sat-module-tmg.c:735
 msgid "<b>Real-Time</b>"
@@ -1786,7 +1800,7 @@ msgstr "Min.:"
 
 #: ../src/gtk-sat-module-tmg.c:186
 msgid "Use this control to set the minutes"
-msgstr "Benutzen Sie dieses Feld um die Minuten zu setzen."
+msgstr "Benutzen Sie dieses Feld um die Minuten zu setzen"
 
 #. seconds
 #: ../src/gtk-sat-module-tmg.c:193
@@ -1795,7 +1809,7 @@ msgstr "Sek.:"
 
 #: ../src/gtk-sat-module-tmg.c:203
 msgid "Use this control to set the seconds"
-msgstr "Benutzen Sie dieses Feld um die Sekunden zu setzen."
+msgstr "Benutzen Sie dieses Feld um die Sekunden zu setzen"
 
 #. milliseconds
 #: ../src/gtk-sat-module-tmg.c:210
@@ -1804,7 +1818,7 @@ msgstr "mSek.:"
 
 #: ../src/gtk-sat-module-tmg.c:220
 msgid "Use this control to set the milliseconds"
-msgstr "Benutzen Sie dieses Feld um die Millisekunden zu setzen."
+msgstr "Benutzen Sie dieses Feld um die Millisekunden zu setzen"
 
 #. time throttle
 #: ../src/gtk-sat-module-tmg.c:227
@@ -1939,12 +1953,12 @@ msgstr "%s:%s: Das Öffnen des Satellitenverzeichnisses schlug fehl %s."
 #: ../src/gtk-sat-selector.c:787
 #, c-format
 msgid "%s:%s: Read %d satellites into MAIN group."
-msgstr "%s:%s: %d Satelliten der MAIN Gruppe werden gelesen"
+msgstr "%s:%s: %d Satelliten der MAIN Gruppe werden gelesen."
 
 #: ../src/gtk-sat-selector.c:904
 #, c-format
 msgid "%s: Error getting %dth satellite"
-msgstr "%s: Fehler beim Holen vom %dten Satellit."
+msgstr "%s: Fehler beim Holen vom %dten Satellit"
 
 #: ../src/gtk-sat-tree.c:199 ../src/mod-cfg.c:531
 msgid "Epoch"
@@ -1961,7 +1975,7 @@ msgstr "Erweitern"
 
 #: ../src/gtk-sat-tree.c:244
 msgid "Expand all nodes in the tree to make it searchable"
-msgstr "Erweitern SIe alle Knoten im Baum um ihn durchsuchbar zu machen"
+msgstr "Erweitern Sie alle Knoten im Baum um ihn durchsuchbar zu machen"
 
 #: ../src/gtk-sat-tree.c:247
 msgid "Collapse"
@@ -2472,9 +2486,9 @@ msgid ""
 "Satellites skipped:\t 0\n"
 "Missing Satellites:\t 0\n"
 msgstr ""
-"Aktualisierte Satelliten:\t         0\n"
-"Übersprungene Satelliten:       \t 0\n"
-"Fehlende Satelliten:        \t         0\n"
+"Aktualisierte Satelliten:\t 0\n"
+"Übersprungene Satelliten:\t 0\n"
+"Fehlende Satelliten:\t 0\n"
 
 #. create file chooser
 #: ../src/menubar.c:668
@@ -2527,19 +2541,16 @@ msgid "_Quit"
 msgstr "_Beenden"
 
 #: ../src/menubar.c:891
-#, fuzzy
 msgid "Update TLE data from _network"
 msgstr "TLE-Aktualisierung aus _Netz"
 
 #: ../src/menubar.c:896
-#, fuzzy
 msgid "Update TLE data from local _files"
-msgstr "TLE-Aktualisierung aus _Datei"
+msgstr "TLE-Aktualisierung aus lokalen _Dateien"
 
 #: ../src/menubar.c:901
-#, fuzzy
 msgid "Update transponder data"
-msgstr "_Transponder-Daten aktualisieren"
+msgstr "Transponder-Daten aktualisieren"
 
 #: ../src/menubar.c:909
 msgid "_Preferences"
@@ -2556,6 +2567,10 @@ msgstr "_Lizenz"
 #: ../src/menubar.c:936
 msgid "_News"
 msgstr "_Neuigkeiten"
+
+#: ../src/menubar.c:948
+msgid "A_uthors"
+msgstr "_Mitwirkende"
 
 #: ../src/menubar.c:943
 msgid "_About Gpredict"
@@ -2728,7 +2743,7 @@ msgstr "%s: %s wiederherstellen fehlgeschlagen"
 #: ../src/mod-mgr.c:167
 #, c-format
 msgid "%s: No modules have to be restored."
-msgstr "%s: Keine Module müssen wiederhergestellt werden"
+msgstr "%s: Keine Module müssen wiederhergestellt werden."
 
 #: ../src/mod-mgr.c:205
 #, c-format

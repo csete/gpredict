@@ -814,7 +814,7 @@ static void menubar_help_cb(GtkWidget * widget, gpointer data)
                                       "video tutorials are available from the \n"
                                       "Gpredict website:"));
 
-    button = gtk_link_button_new("http://gpredict.oz9aec.net/documents.php");
+    button = gtk_link_button_new("https://oz9aec.dk/gpredict/documents.php");
     gtk_widget_show(button);
 
     gtk_box_pack_start(GTK_BOX
@@ -839,6 +839,14 @@ static void menubar_news_cb(GtkWidget * widget, gpointer data)
     (void)data;
 
     gpredict_help_show_txt("NEWS");
+}
+
+static void menubar_authors_cb(GtkWidget * widget, gpointer data)
+{
+    (void)widget;
+    (void)data;
+
+    gpredict_help_show_txt("AUTHORS");
 }
 
 static void menubar_about_cb(GtkWidget * widget, gpointer data)
@@ -948,6 +956,10 @@ static void create_help_menu_items(GtkMenuShell * menu,
 
     menu_item = gtk_menu_item_new_with_mnemonic(_("_News"));
     g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_news_cb), NULL);
+    gtk_menu_shell_append(menu, menu_item);
+
+    menu_item = gtk_menu_item_new_with_mnemonic(_("A_uthors"));
+    g_signal_connect(menu_item, "activate", G_CALLBACK(menubar_authors_cb), NULL);
     gtk_menu_shell_append(menu, menu_item);
 
     menu_item = gtk_separator_menu_item_new();
