@@ -177,7 +177,7 @@ static gboolean rotctld_socket_rw(gint sock, gchar *buff, gchar *buffout,
     }
 
     /* try to read answer */
-    size = recv(sock, buffout, sizeout, 0);
+    size = recv(sock, buffout, sizeout - 1, 0);
 
     if (size == -1)
     {
