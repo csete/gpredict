@@ -40,8 +40,7 @@ extern GtkWidget *app;
  * @return Newly allocated path that must be freed with g_free()
  *
  * This function is intended for files like NEWS, COPYING, etc.
- * Note that on windows these files have .txt suffix, while on Unix they
- * do not.
+ * On Windows these files are in the doc directory of the installation.
  */
 gchar *gpredict_help_txt_file_name(const gchar *filename)
 {
@@ -55,7 +54,7 @@ gchar *gpredict_help_txt_file_name(const gchar *filename)
 
     instdir = g_win32_get_package_installation_directory_of_module(NULL);
     fname = g_strconcat(instdir, G_DIR_SEPARATOR_S, "doc", G_DIR_SEPARATOR_S,
-                        filename, ".txt", NULL);
+                        filename, NULL);
     g_free(instdir);
 #endif
 
