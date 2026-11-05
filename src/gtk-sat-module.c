@@ -238,6 +238,7 @@ static void gtk_sat_module_init(GtkSatModule * module,
     module->lastSkgUpd = 0.0;
 
     module->state = GTK_SAT_MOD_STATE_DOCKED;
+    module->state_before_fullscreen = GTK_SAT_MOD_STATE_DOCKED;
 
     g_mutex_init(&module->busy);
 
@@ -1047,6 +1048,16 @@ GtkWidget *gtk_sat_module_new(const gchar * cfgfile)
         module->state = GTK_SAT_MOD_STATE_DOCKED;
     }
 
+    /* Restored fullscreen already has a top-level window; exit to WINDOW. */
+    if (module->state == GTK_SAT_MOD_STATE_FULLSCREEN)
+    {
+        module->state_before_fullscreen = GTK_SAT_MOD_STATE_WINDOW;
+    }
+    else
+    {
+        module->state_before_fullscreen = module->state;
+    }
+
     /* time keeping */
     module->rtNow = get_current_daynum();
     module->rtPrev = get_current_daynum();
@@ -1355,6 +1366,8 @@ void gtk_sat_module_config_cb(GtkWidget * button, gpointer data)
                     /* add module to window */
                     gtk_container_add(GTK_CONTAINER(module->win),
                                       GTK_WIDGET(module));
+
+                    module->state_before_fullscreen = GTK_SAT_MOD_STATE_WINDOW;
 
                     /* show window */
                     gtk_widget_show_all(module->win);

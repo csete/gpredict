@@ -82,6 +82,7 @@ struct _gtk_sat_module {
     guint32         timeout;    /*!< Timeout value [msec] */
 
     gtk_sat_mod_state_t state;  /*!< The state of the module. */
+    gtk_sat_mod_state_t state_before_fullscreen;    /*!< State to restore after leaving fullscreen. */
 
     guint           timerid;    /*!< The timeout ID (FIXME: REMOVE) */
     GMutex          busy;       /*!< Flag indicating whether timeout has
