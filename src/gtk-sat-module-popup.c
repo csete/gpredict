@@ -499,8 +499,9 @@ static void docking_state_cb(GtkWidget * menuitem, gpointer data)
 /**
  * Toggle screen state.
  *
- * This function is intended to toggle between FULLSCREEN
- * and WINDOW state.
+ * Toggle between FULLSCREEN and the module's previous state (DOCKED or
+ * WINDOW). Leaving fullscreen restores that state so a docked module is
+ * re-attached instead of left undocked.
  */
 static void screen_state_cb(GtkWidget * menuitem, gpointer data)
 {
@@ -514,6 +515,9 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
     switch (GTK_SAT_MODULE(module)->state)
     {
     case GTK_SAT_MOD_STATE_DOCKED:
+
+        GTK_SAT_MODULE(module)->state_before_fullscreen =
+            GTK_SAT_MOD_STATE_DOCKED;
 
         /* increase reference count of module */
         g_object_ref(module);
@@ -565,6 +569,9 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
         break;
 
     case GTK_SAT_MOD_STATE_WINDOW:
+        GTK_SAT_MODULE(module)->state_before_fullscreen =
+            GTK_SAT_MOD_STATE_WINDOW;
+
         /* change internal state */
         GTK_SAT_MODULE(module)->state = GTK_SAT_MOD_STATE_FULLSCREEN;
         gtk_window_fullscreen(GTK_WINDOW(GTK_SAT_MODULE(module)->win));
@@ -573,6 +580,36 @@ static void screen_state_cb(GtkWidget * menuitem, gpointer data)
         break;
 
     case GTK_SAT_MOD_STATE_FULLSCREEN:
+        /* Re-dock when fullscreen was entered from the notebook. */
+        if (GTK_SAT_MODULE(module)->state_before_fullscreen ==
+            GTK_SAT_MOD_STATE_DOCKED)
+        {
+            g_object_ref(module);
+
+            if (GTK_SAT_MODULE(module)->tmgActive)
+            {
+                gtk_window_set_transient_for(GTK_WINDOW
+                                             (GTK_SAT_MODULE(module)->tmgWin),
+                                             GTK_WINDOW(app));
+            }
+
+            gtk_container_remove(GTK_CONTAINER(GTK_SAT_MODULE(module)->win),
+                                 module);
+            gtk_widget_destroy(GTK_SAT_MODULE(module)->win);
+            GTK_SAT_MODULE(module)->win = NULL;
+
+            mod_mgr_dock_module(module);
+
+            GTK_SAT_MODULE(module)->state = GTK_SAT_MOD_STATE_DOCKED;
+
+            g_key_file_set_integer(GTK_SAT_MODULE(module)->cfgdata,
+                                   MOD_CFG_GLOBAL_SECTION,
+                                   MOD_CFG_STATE, GTK_SAT_MOD_STATE_DOCKED);
+
+            g_object_unref(module);
+            break;
+        }
+
         /* change internal state */
         GTK_SAT_MODULE(module)->state = GTK_SAT_MOD_STATE_WINDOW;
         gtk_window_unfullscreen(GTK_WINDOW(GTK_SAT_MODULE(module)->win));
