@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>dk.oz9aec.Gpredict</id>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <id>net.oz9aec.Gpredict</id>
   <name>Gpredict</name>
   <developer id="net.oz9aec">
     <name>Alexandru Csete</name>
@@ -10,26 +12,37 @@
     <p>Gpredict is a real time satellite tracking and orbit prediction program written using the Gtk+ widgets.</p>
     <p>Gpredict is targeted mainly towards ham radio operators but others interested in satellite tracking may find it useful as well.</p>
   </description>
-  <categories>
-    <category>Astronomy</category>
-    <category>Education</category>
-    <category>HamRadio</category>
-    <category>Network</category>
-    <category>Science</category>
-  </categories>
-  <metadata_license>CC-BY-SA-3.0</metadata_license>
-  <project_license>GPL-2.0+</project_license>
-  <provides>
-    <id>gpredict.desktop</id>
-  </provides>
   <url type="homepage">https://oz9aec.dk/gpredict/</url>
   <url type="bugtracker">https://github.com/csete/gpredict/issues</url>
   <url type="vcs-browser">https://github.com/csete/gpredict</url>
+  <launchable type="desktop-id">net.oz9aec.Gpredict.desktop</launchable>
+  <provides>
+    <id>gpredict.desktop</id>
+  </provides>
+  <content_rating type="oars-1.1"/>
   <screenshots>
     <screenshot type="default">
       <image>https://live.staticflickr.com/8089/28902144392_8cd36d57fe_b.jpg</image>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">gpredict.desktop</launchable>
-  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="2.7.0" date="2026-11-01">
+      <url>https://github.com/csete/gpredict/releases#release-v2.7</url>
+    </release>
+    <release version="2.6.0" date="2026-08-16">
+      <url>https://github.com/csete/gpredict/releases#release-v2.6</url>
+    </release>
+    <release version="2.5.2" date="2026-07-20">
+      <url>https://github.com/csete/gpredict/releases#release-v2.5.2</url>
+    </release>
+    <release version="2.5.1" date="2026-03-22">
+      <url>https://github.com/csete/gpredict/releases#release-v2.5.1</url>
+    </release>
+    <release version="2.5" date="2026-03-22">
+      <url>https://github.com/csete/gpredict/releases#release-v2.5</url>
+    </release>
+    <release version="2.4" date="2025-11-27">
+      <url>https://github.com/csete/gpredict/releases#release-v2.4</url>
+    </release>
+  </releases>
 </component>
