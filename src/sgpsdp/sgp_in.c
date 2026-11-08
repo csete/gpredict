@@ -146,6 +146,41 @@ int Good_Elements(char *tle_set)
     return (1);
 }
 
+/* Decode a 5-character NORAD catalog field.
+   All-digit fields (leading spaces allowed) keep the historic
+   atoi() behavior. IDs >= 100000 use Alpha-5; I and O are
+   skipped as first characters so they are not confused with 1 and 0. */
+int Convert_Sat_Catnr(const char *catstr)
+{
+    char            first;
+    int             base, i;
+
+    if (catstr == NULL)
+        return 0;
+
+    first = catstr[0];
+    if (g_ascii_isdigit(first) || (first == ' '))
+        return atoi(catstr);
+
+    first = g_ascii_toupper(first);
+    if ((first >= 'A') && (first <= 'H'))
+        base = 10 + (first - 'A');
+    else if ((first >= 'J') && (first <= 'N'))
+        base = 18 + (first - 'J');
+    else if ((first >= 'P') && (first <= 'Z'))
+        base = 23 + (first - 'P');
+    else
+        return 0;
+
+    for (i = 1; i < 5; i++)
+    {
+        if (!g_ascii_isdigit(catstr[i]))
+            return 0;
+    }
+
+    return (base * 10000 + atoi(&catstr[1]));
+}
+
 /* Converts the strings in a raw two-line element set  */
 /* to their intended numerical values. No processing   */
 /* of these values is done, e.g. from deg to rads etc. */
@@ -157,7 +192,7 @@ void Convert_Satellite_Data(char *tle_set, tle_t * tle)
     /* Satellite's catalogue number */
     strncpy(buff, &tle_set[2], 5);
     buff[5] = '\0';
-    tle->catnr = atoi(buff);
+    tle->catnr = Convert_Sat_Catnr(buff);
 
     /* International Designator for satellite */
     strncpy(tle->idesg, &tle_set[9], 8);

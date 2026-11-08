@@ -295,6 +295,7 @@ void            ClearFlag(int flag);
 /* sgp_in.c */
 int             Checksum_Good(char *tle_set);
 int             Good_Elements(char *tle_set);
+int             Convert_Sat_Catnr(const char *catstr);
 void            Convert_Satellite_Data(char *tle_set, tle_t * tle);
 int             Get_Next_Tle_Set(char lines[3][80], tle_t * tle);
 void            select_ephemeris(sat_t * sat);
