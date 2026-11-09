@@ -176,6 +176,42 @@ int main(void)
         }
     }
 
+    /* Alpha-5 catalog numbers (IDs >= 100000). */
+    {
+        char            a5_str[3][80];
+        tle_t           a5_tle;
+
+        if (Convert_Sat_Catnr("25544") != 25544)
+        {
+            printf("Convert_Sat_Catnr(25544) returned %d\n",
+                   Convert_Sat_Catnr("25544"));
+            return 1;
+        }
+        if (Convert_Sat_Catnr("a1286") != 101286)
+        {
+            printf("Convert_Sat_Catnr(a1286) returned %d (expected 101286)\n",
+                   Convert_Sat_Catnr("a1286"));
+            return 1;
+        }
+
+        strcpy(a5_str[0], "OBJECT A1286");
+        strcpy(a5_str[1],
+               "1 A1286U 26249D   26310.97532605  .00001678  00000-0  14252-3 0  9998");
+        strcpy(a5_str[2],
+               "2 A1286  45.2801 232.2047 0090652 210.3603 149.2004 14.99515474   207");
+        if (Get_Next_Tle_Set(a5_str, &a5_tle) != 1)
+        {
+            printf("Get_Next_Tle_Set() rejected an Alpha-5 catalog TLE\n");
+            return 1;
+        }
+        if (a5_tle.catnr != 101286)
+        {
+            printf("Alpha-5 catalog A1286 read as %d (expected 101286)\n",
+                   a5_tle.catnr);
+            return 1;
+        }
+    }
+
     select_ephemeris(&sat);
 
     printf("\nDEEP_SPACE_EPHEM: %d (expected 0)\n\n",

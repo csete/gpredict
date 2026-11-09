@@ -998,7 +998,7 @@ static gint read_fresh_tle(const gchar * dir, const gchar * fnam,
                 catstr[i - 2] = tle_str[1][i];
             }
             catstr[5] = '\0';
-            catnr = (guint) g_ascii_strtod(catstr, NULL);
+            catnr = (guint) Convert_Sat_Catnr(catstr);
 
 
             if (Get_Next_Tle_Set(tle_str, &tle) != 1)
