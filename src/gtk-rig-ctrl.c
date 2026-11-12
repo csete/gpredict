@@ -35,8 +35,7 @@
 #include <build-config.h>
 #endif
 
-#define _GNU_SOURCE
-#include <string.h> /* strcasestr */
+#include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <glib.h>
@@ -1066,7 +1065,7 @@ static void filter_text_changed_cb(GtkSearchEntry *entry, gpointer data)
         for (i = 0; i < n; i++)
         {
             sat = SAT(g_slist_nth_data(ctrl->sats, i));
-            if (sat && strcasestr(sat->nickname, filter))
+            if (sat && gpredict_strcasestr(sat->nickname, filter))
             {
                 gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
                                                sat->nickname);
