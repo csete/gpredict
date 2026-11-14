@@ -46,7 +46,7 @@
 #include <build-config.h>
 #endif
 
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
 #include "win32-fetch.h"
 #else
 #include <curl/curl.h>
@@ -94,7 +94,7 @@ typedef struct {
     guint           numtrsp;    /* Number of transponders. */
 } new_trsp_t;
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
 /* private function prototypes */
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
@@ -404,7 +404,7 @@ void modes_update_from_network()
     gchar          *file_url;
     gchar          *locfile;
     gchar          *userconfdir;
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
     int             res;
 #else
     CURL           *curl;
@@ -417,7 +417,7 @@ void modes_update_from_network()
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
     modes_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_MODE_FILE);
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
     /* initialise curl */
     curl = curl_easy_init();
     if (proxy != NULL)
@@ -430,7 +430,7 @@ void modes_update_from_network()
     /* get files */
     /* set URL */
     file_url = g_strconcat(server, modes_file, NULL);
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
     curl_easy_setopt(curl, CURLOPT_URL, file_url);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Ready to fetch modes list from %s"),
@@ -447,7 +447,7 @@ void modes_update_from_network()
     outfile = g_fopen(locfile, "wb");
     if (outfile != NULL)
     {
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
         res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
         if (res != 0)
         {
@@ -495,7 +495,7 @@ void modes_update_from_network()
     g_free(proxy);
     g_free(modes_file);
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
     curl_easy_cleanup(curl);
 #endif
 
@@ -537,7 +537,7 @@ void trsp_update_from_network(gboolean silent,
     gchar          *file_url;
     gchar          *locfile_trsp;
     gchar          *userconfdir;
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
     int             res;
 #else
     CURL           *curl;
@@ -570,7 +570,7 @@ void trsp_update_from_network(gboolean silent,
     proxy = sat_cfg_get_str(SAT_CFG_STR_TRSP_PROXY);
     freq_file = sat_cfg_get_str(SAT_CFG_STR_TRSP_FREQ_FILE);
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
     /* initialise curl */
     curl = curl_easy_init();
     if (proxy != NULL)
@@ -583,7 +583,7 @@ void trsp_update_from_network(gboolean silent,
     /* get files */
     /* set URL */
     file_url = g_strconcat(server, freq_file, NULL);
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
     curl_easy_setopt(curl, CURLOPT_URL, file_url);
     sat_log_log(SAT_LOG_LEVEL_INFO,
                 _("%s: Ready to fetch transponder list from %s"),
@@ -616,7 +616,7 @@ void trsp_update_from_network(gboolean silent,
     outfile = g_fopen(locfile_trsp, "wb");
     if (outfile != NULL)
     {
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
         res = win32_fetch(file_url, outfile, proxy, "gpredict/win32");
         if (res != 0)
         {
@@ -679,7 +679,7 @@ void trsp_update_from_network(gboolean silent,
     g_free(freq_file);
     g_free(proxy);
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
     curl_easy_cleanup(curl);
 #endif
 
@@ -704,7 +704,7 @@ void trsp_update_from_network(gboolean silent,
     g_mutex_unlock(&trsp_in_progress);
 }
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
 /**
  * Write TRSP data block to file.
  * 

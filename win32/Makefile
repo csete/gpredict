@@ -15,7 +15,7 @@ sgpsdpdir = $(gpreddir)/sgpsdp
 nxjsondir = $(gpreddir)/nxjson
 
 # tools
-CC = gcc -Wall -O2 -mms-bitfields -DWIN32
+CC = gcc -Wall -O2 -mms-bitfields -DWIN32 -DHAVE_WIN32_FETCH
 RC = windres
 # NB: .rc file create various version formats from the numbers
 RCFLAGS = --define __WIN32__ --define __WIN95__ --define MSRC --define __GNUWIN32__ \

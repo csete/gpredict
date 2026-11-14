@@ -32,7 +32,7 @@
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
 #include "win32-fetch.h"
 #else
 #include <curl/curl.h>
@@ -47,7 +47,7 @@
 
 
 /* private function prototypes */
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
 #endif
@@ -480,7 +480,7 @@ void tle_update_from_network(gboolean silent,
     gchar          *curfile;
     gchar          *locfile;
     gchar          *userconfdir;
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
     int             res;
 #else
     CURL           *curl;
@@ -538,7 +538,7 @@ void tle_update_from_network(gboolean silent,
         if (!silent && (progress != NULL))
             start = gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progress));
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
         /* initialise curl */
         curl = curl_easy_init();
         if (proxy != NULL)
@@ -553,7 +553,7 @@ void tle_update_from_network(gboolean silent,
         {
             /* set URL */
             curfile = g_strdup(files[i]);
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
             curl_easy_setopt(curl, CURLOPT_URL, curfile);
 #endif
 
@@ -574,7 +574,7 @@ void tle_update_from_network(gboolean silent,
             outfile = g_fopen(locfile, "wb");
             if (outfile != NULL)
             {
-#ifdef WIN32
+#ifdef HAVE_WIN32_FETCH
                 res = win32_fetch(curfile, outfile, proxy, "gpredict/win32");
                 if (res != 0)
                 {
@@ -640,7 +640,7 @@ void tle_update_from_network(gboolean silent,
             g_free(locfile);
         }
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
         curl_easy_cleanup(curl);
 #endif
 
@@ -704,7 +704,7 @@ void tle_update_from_network(gboolean silent,
     g_mutex_unlock(&tle_in_progress);
 }
 
-#ifndef WIN32
+#ifndef HAVE_WIN32_FETCH
 /**
  * Write TLE data block to file.
  *
