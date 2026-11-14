@@ -210,7 +210,7 @@ int Check_Date(struct tm *cdate)
 /* expressed in Coordinated Universal Time (UTC).     */
 /* This function is not present in WIN32              */
 
-#ifdef WIN32
+#ifdef _WIN32
 struct tm      *gmtime_r(const time_t * timer, struct tm *result)
 {
     struct tm      *local_result;
