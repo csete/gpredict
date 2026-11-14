@@ -69,6 +69,14 @@ autogen.sh script as you would to the configure script.
 If you want to know more about installation options refer to the INSTALL file
 (not for beginners).
 
+Windows
+-------
+
+Native MSYS2/MinGW-w64 builds and Linux cross-builds (which the CI uses
+to produce Windows artifacts) are documented in doc/BUILDING-WINDOWS.md;
+the sysroot/packaging helpers live in tools/. The legacy win32/Makefile
+flow is described in win32/README.
+
 
 Using Gpredict
 --------------
