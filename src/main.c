@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <signal.h>
 #include <stdlib.h>
-#ifdef WIN32
+#ifdef _WIN32
 #include <winsock2.h>
 #endif
 
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
     /* launch TLE monitoring task; 10 min interval */
     tle_mon_id = g_timeout_add(600000, tle_mon_task, NULL);
 
-#ifdef WIN32
+#ifdef _WIN32
     // Initializing Windozze Sockets
     InitWinSock2();
 #endif
@@ -175,14 +175,14 @@ int main(int argc, char *argv[])
     sat_log_close();
     sat_cfg_close();
 
-#ifdef WIN32
+#ifdef _WIN32
     CloseWinSock2();
 #endif
 
     return 0;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 /* This code was given from MSDN */
 static void InitWinSock2(void)
 {

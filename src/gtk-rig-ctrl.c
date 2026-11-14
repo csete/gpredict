@@ -36,7 +36,7 @@
 #endif
 
 #define _GNU_SOURCE
-#include <string.h> /* strcasestr */
+#include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 #include <glib.h>
@@ -45,7 +45,7 @@
 #include <math.h>
 
 /* NETWORK */
-#ifndef WIN32
+#ifndef _WIN32
 #include <arpa/inet.h>  /* htons() */
 #include <netdb.h>      /* gethostbyname() */
 #include <netinet/in.h> /* struct sockaddr_in */
@@ -1066,7 +1066,7 @@ static void filter_text_changed_cb(GtkSearchEntry *entry, gpointer data)
         for (i = 0; i < n; i++)
         {
             sat = SAT(g_slist_nth_data(ctrl->sats, i));
-            if (sat && strcasestr(sat->nickname, filter))
+            if (sat && gpredict_strcasestr(sat->nickname, filter))
             {
                 gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
                                                sat->nickname);
@@ -2924,7 +2924,7 @@ static gboolean close_rigctld_socket(gint *sock)
         sat_log_log(SAT_LOG_LEVEL_ERROR, _("%s:%s: Sent 2 bytes but sent %d."),
                     __FILE__, __func__, written);
     }
-#ifndef WIN32
+#ifndef _WIN32
     shutdown(*sock, SHUT_RDWR);
     close(*sock);
 #else

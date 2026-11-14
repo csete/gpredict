@@ -35,7 +35,7 @@
 #define _GNU_SOURCE /* needed for strcasestr */
 
 /* NETWORK */
-#ifndef WIN32
+#ifndef _WIN32
 #include <arpa/inet.h>  /* htons() */
 #include <netdb.h>      /* gethostbyname() */
 #include <netinet/in.h> /* struct sockaddr_in */
@@ -50,7 +50,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#include <string.h> /* strerror, strcasestr */
+#include <string.h> /* strerror */
 
 #include "compat.h"
 #include "gpredict-utils.h"
@@ -91,7 +91,7 @@ static gint rotctld_socket_open(const gchar *host, gint port)
     {
         sat_log_log(SAT_LOG_LEVEL_ERROR,
                     _("Name resolution of rotctld server %s failed."), host);
-#ifdef WIN32
+#ifdef _WIN32
         closesocket(sock);
 #else
         close(sock);
@@ -110,7 +110,7 @@ static gint rotctld_socket_open(const gchar *host, gint port)
                     _("Connection to rotctld server at %s:%d failed: %s"), host,
                     port, strerror(errno));
 
-#ifdef WIN32
+#ifdef _WIN32
         closesocket(sock);
 #else
         close(sock);
@@ -137,7 +137,7 @@ static void rotctld_socket_close(gint *sock)
                     __FILE__, __func__, written);
     }
 
-#ifndef WIN32
+#ifndef _WIN32
     shutdown(*sock, SHUT_RDWR);
     close(*sock);
 #else
@@ -733,7 +733,7 @@ static void filter_text_changed_cb(GtkSearchEntry *entry, gpointer data)
         for (i = 0; i < n; i++)
         {
             sat = SAT(g_slist_nth_data(ctrl->sats, i));
-            if (sat && strcasestr(sat->nickname, filter))
+            if (sat && gpredict_strcasestr(sat->nickname, filter))
             {
                 gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ctrl->SatSel),
                                                sat->nickname);
