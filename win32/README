@@ -1,5 +1,8 @@
 ### Win32 build notes ###
 
+**Preferred path (maintained):** native build with MSYS2 autotools —
+see [`doc/BUILDING-WINDOWS.md`](../doc/BUILDING-WINDOWS.md).
+
 # Phil Ashby, Dec 2017 - Jan 2018
 
 At present, MSYS2 on a Windows system is required to gather dependencies
