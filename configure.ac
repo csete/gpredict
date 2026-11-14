@@ -69,6 +69,35 @@ fi
 # functions are in libc, on MinGW/Windows they live in ws2_32.
 AC_SEARCH_LIBS([htons],[ws2_32])
 
+# Windows builds: link the GUI subsystem (no console window on
+# double-click) and embed the app icon + version info from
+# win32/gpredict.rc, mirroring what win32/Makefile does. Note that
+# autotools running inside MSYS2 reports the host as *-*-msys, so
+# *mingw* alone would miss the native build.
+case "$host" in
+    *mingw*|*msys*|*cygwin*)
+        gp_cv_windows=yes
+        AC_CHECK_TOOL([WINDRES], [windres], [:])
+        ;;
+    *)
+        gp_cv_windows=no
+        ;;
+esac
+AM_CONDITIONAL([MINGW], [test "$gp_cv_windows" = yes])
+AM_CONDITIONAL([W32RES],
+               [test "$gp_cv_windows" = yes && test "x$WINDRES" != "x:"])
+
+dnl numeric pieces of $VERSION for the VERSIONINFO resource (cut/tr to
+dnl keep autoconf's m4 from eating bracketed sed regexes; tag-less
+dnl checkouts yield VERSION=UNKNOWN -> 0.0.0)
+gp_major=`echo "x$VERSION" | cut -d. -f1 | tr -dc '0-9'`
+gp_minor=`echo "x$VERSION" | cut -d. -f2 | tr -dc '0-9'`
+test -n "$gp_major" || gp_major=0
+test -n "$gp_minor" || gp_minor=0
+AC_SUBST([VERMAJ], [$gp_major])
+AC_SUBST([VERMIN], [$gp_minor])
+AC_SUBST([VERBLD], [0])
+
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 

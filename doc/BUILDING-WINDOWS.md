@@ -88,6 +88,7 @@ looks the way it does:
 | `strcasestr()` is a glibc extension, absent from the Windows CRT | Call sites in `gtk-rig-ctrl.c`/`gtk-rot-ctrl.c` use the existing portable `gpredict_strcasestr()` helper |
 | `timegm()` is not declared on Windows unless included as `_mkgmtime` | `sat-info.c` `#define timegm _mkgmtime` guard now triggers on `_WIN32` |
 | Winsock2 functions need `ws2_32` on Windows but not on Unix | `configure.ac` uses `AC_SEARCH_LIBS([htons],[ws2_32])` |
+| Double-clicking `gpredict.exe` popped up a console window and showed no file icon | On a MinGW host the autotools build links with `-mwindows` and compiles the pre-existing `win32/gpredict.rc` (icon + version info) with `windres` into the exe (`src/Makefile.am`) |
 
 `gmtime_r()` (`sgpsdp/sgp_time.c`) is shimmed on Windows via the same
 `_WIN32` guard; the UCRT also provides it, so the shim is harmless.
