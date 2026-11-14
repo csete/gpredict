@@ -35,7 +35,6 @@
 #include <build-config.h>
 #endif
 
-#define _GNU_SOURCE
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>

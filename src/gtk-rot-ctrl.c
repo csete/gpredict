@@ -32,8 +32,6 @@
 #include <build-config.h>
 #endif
 
-#define _GNU_SOURCE /* needed for strcasestr */
-
 /* NETWORK */
 #ifndef _WIN32
 #include <arpa/inet.h>  /* htons() */

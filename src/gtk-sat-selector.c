@@ -18,9 +18,6 @@
   along with this program; if not, visit http://www.fsf.org/
 */
 
-/* need _gnu_source to have strcasestr defined */
-#define _GNU_SOURCE
-
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
