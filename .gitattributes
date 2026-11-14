@@ -1,0 +1,5 @@
+# Shell/python helpers run under MSYS bash on Windows runners too:
+# keep them LF everywhere.
+*.sh text eol=lf
+*.py text eol=lf
+tools/* text eol=lf
