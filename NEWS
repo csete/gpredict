@@ -1,3 +1,11 @@
+Changes in version 2.8 (TBD)
+
+ - Added support for Alpha-5 NORAD catalog numbers in TLE data (#444, #446)
+ - Fixed Windows build (#110, #448, #449)
+ - Foxed restoration of previous dock state when leaving fullscreen (#441, #443)
+ - Updated the about dialog and help menu (#442)
+ - Leave room for the terminating NUL in rotctld replies (#435, #440)
+
 Changes in version 2.7 (1 Nov 2026)
 
  - Fixed bug causing the rotator position fields never to update after Engage (#423)
