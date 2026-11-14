@@ -65,6 +65,10 @@ else
     havelibgps=false;
 fi
 
+# winsock2 (rigctld/rotctld TCP clients): on Unix the BSD socket
+# functions are in libc, on MinGW/Windows they live in ws2_32.
+AC_SEARCH_LIBS([htons],[ws2_32])
+
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
