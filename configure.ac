@@ -1,5 +1,5 @@
 AC_INIT([gpredict],[m4_esyscmd(./git-version-gen .tarball-version)],[https://community.libre.space/c/gpredict])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_SRCDIR(src/main.c)
 AC_CONFIG_HEADERS(build-config.h)
 AM_INIT_AUTOMAKE([subdir-objects dist-bzip2 no-dist-gzip 1.6])
