@@ -23,12 +23,6 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, visit http://www.fsf.org/
 */
-#include <glib.h>
-#include <glib/gi18n.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <string.h>
-
 #ifdef HAVE_CONFIG_H
 #include <build-config.h>
 #endif
@@ -37,6 +31,12 @@
 #else
 #include <curl/curl.h>
 #endif
+
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include <string.h>
 
 #include "compat.h"
 #include "gpredict-utils.h"
@@ -50,6 +50,17 @@
 #ifndef HAVE_WIN32_FETCH
 static size_t   my_write_func(void *ptr, size_t size, size_t nmemb,
                               FILE * stream);
+
+/* In an MSVC _DEBUG build the application uses a different CRT than a
+   release-built GLib, so a FILE opened with g_fopen is not valid when
+   passed to fwrite in the curl write callback below and the download
+   crashes. Use the application's own fopen there instead. Skip this if
+   GLib already maps g_fopen to fopen itself. */
+#if defined(_MSC_VER) && defined(_DEBUG)
+#ifndef g_fopen
+#define g_fopen(file, mode) fopen (file, mode)
+#endif
+#endif
 #endif
 static gint     read_fresh_tle(const gchar * dir, const gchar * fnam,
                                GHashTable * data);
